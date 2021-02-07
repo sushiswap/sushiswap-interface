@@ -1,9 +1,15 @@
-import { ChainId, JSBI, Percent, Token, WETH } from '@uniswap/sdk'
+import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
 
-export const ROUTER_ADDRESS = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+export const ROUTER_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+  [ChainId.RINKEBY]: '0x78651262A36342c4Ab878ec312D2c1A9494ADDf5',
+  [ChainId.ROPSTEN]: '0x78651262A36342c4Ab878ec312D2c1A9494ADDf5',
+  [ChainId.GÖRLI]: '0xC0fBF54bbf3f5ef013559905AF214648e8e50010',
+  [ChainId.KOVAN]: '0xB6167233BF964ea7701691aC3970186145C810d2'
+}
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
