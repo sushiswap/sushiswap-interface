@@ -18,8 +18,6 @@ export enum PairState {
 }
 
 export function usePairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
-  // console.log('USER PAIRS?', currencies)
-
   const { chainId } = useActiveWeb3React()
 
   const tokens = useMemo(
@@ -31,16 +29,9 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
     [chainId, currencies]
   )
 
-  // console.log('TOKENS?', tokens)
-
   const pairAddresses = useMemo(
     () =>
       tokens.map(([tokenA, tokenB]) => {
-        console.log({
-          tokenA,
-          tokenB,
-          pair: tokenA && tokenB ? Pair.getAddress(tokenA, tokenB) : undefined
-        })
         return tokenA && tokenB && !tokenA.equals(tokenB) ? Pair.getAddress(tokenA, tokenB) : undefined
       }),
     [tokens]
