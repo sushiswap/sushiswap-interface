@@ -1,6 +1,6 @@
 {
-  "name": "@uniswap/interface",
-  "description": "Uniswap Interface",
+  "name": "@sushiswap/interface",
+  "description": "SushiSwap Interface",
   "homepage": ".",
   "private": true,
   "devDependencies": {
