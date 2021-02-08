@@ -4,6 +4,7 @@
  */
 export const UNSUPPORTED_LIST_URLS: string[] = []
 
+const SUSHI_LIST = 'https://raw.githubusercontent.com/sushiswapclassic/token-list/master/sushiswap.tokenlist.json'
 const COMPOUND_LIST = 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const AAVE_LIST = 'tokenlist.aave.eth'
@@ -20,6 +21,7 @@ const GEMINI_LIST = 'https://www.gemini.com/uniswap/manifest.json'
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] = [
+  SUSHI_LIST,
   COMPOUND_LIST,
   AAVE_LIST,
   SYNTHETIX_LIST,
@@ -37,4 +39,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [GEMINI_LIST]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST]
