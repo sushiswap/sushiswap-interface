@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 
-import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
+import { fortmatic, injected, portis, lattice, walletconnect, walletlink } from '../connectors'
 
 export const ROUTER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
@@ -38,6 +38,7 @@ export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
 
 const UNI_ADDRESS = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+
 export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MAINNET]: new Token(ChainId.MAINNET, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
   [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, UNI_ADDRESS, 18, 'UNI', 'Uniswap'),
@@ -141,6 +142,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,
     color: '#4196FC',
+    mobile: true
+  },
+  LATTICE: {
+    connector: lattice,
+    name: 'Lattice',
+    iconName: 'gridPlusWallet.png',
+    description: 'Connect to GridPlus Wallet.',
+    href: null,
+    color: '#40a9ff',
     mobile: true
   },
   WALLET_LINK: {
