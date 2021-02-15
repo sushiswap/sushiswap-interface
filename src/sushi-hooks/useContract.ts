@@ -71,7 +71,7 @@ export const MAKER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.KOVAN]: '0x1638339758C050B5b207cD4B531d861a52066ba2'
 }
 
-// TODO: Move to SDK
+// TODO: Move to SDK (Need to deploy on other networks as well)
 export const TIMELOCK_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x9a8541Ddf3a932a9A922B607e9CF7301f1d47bD1',
   [ChainId.ROPSTEN]: '',
@@ -141,7 +141,6 @@ export function useTimelockContract(): Contract | null {
 
 // TODO: Leaving these alone for now, since I'm unsure of whether these should
 // live in sushiswap/sdk or somewhere else. Sync with Bart on BentoBox.
-
 export function useBentoBoxContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined

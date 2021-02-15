@@ -1,14 +1,37 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { ethers } from 'ethers'
 import { useSushiContract, useSushiBarContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { useActiveWeb3React } from '../hooks'
 
 const { BigNumber } = ethers
 
 const useSushiBar = () => {
+  const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const sushiContract = useSushiContract(true)
   const barContract = useSushiBarContract(true)
+
+  const [allowance, setAllowance] = useState(BigNumber.from(0))
+
+  const fetchAllowance = useCallback(async () => {
+    if (account) {
+      try {
+        const allowance = await sushiContract?.allowance(account, barContract?.address)
+        setAllowance(BigNumber.from(allowance))
+      } catch {
+        setAllowance(BigNumber.from(0))
+      }
+    }
+  }, [account, barContract, sushiContract])
+
+  useEffect(() => {
+    if (account && barContract && sushiContract) {
+      fetchAllowance()
+    }
+    const refreshInterval = setInterval(fetchAllowance, 10000)
+    return () => clearInterval(refreshInterval)
+  }, [account, barContract, fetchAllowance, sushiContract])
 
   const approve = useCallback(async () => {
     try {
@@ -51,7 +74,7 @@ const useSushiBar = () => {
     [addTransaction, barContract]
   )
 
-  return { approve, enter, leave }
+  return { allowance, approve, enter, leave }
 }
 
 export default useSushiBar
