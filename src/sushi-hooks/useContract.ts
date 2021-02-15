@@ -109,7 +109,7 @@ export function useRouterContract(): Contract | null {
   return useContract(address, ROUTER_ABI, false)
 }
 
-export function useSushiBarContract(): Contract | null {
+export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
   if (chainId) {
@@ -120,7 +120,7 @@ export function useSushiBarContract(): Contract | null {
       case ChainId.ROPSTEN:
     }
   }
-  return useContract(address, SUSHIBAR_ABI, false)
+  return useContract(address, SUSHIBAR_ABI, withSignerIfPossible)
 }
 
 export function useMakerContract(): Contract | null {
