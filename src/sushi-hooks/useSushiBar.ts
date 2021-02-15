@@ -1,13 +1,23 @@
 import { useCallback } from 'react'
 import { ethers } from 'ethers'
-import { useSushiBarContract } from './useContract'
+import { useSushiContract, useSushiBarContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 const { BigNumber } = ethers
 
 const useSushiBar = () => {
   const addTransaction = useTransactionAdder()
+  const sushiContract = useSushiContract(true)
   const barContract = useSushiBarContract(true)
+
+  const approve = useCallback(async () => {
+    try {
+      const tx = await sushiContract?.approve(barContract?.address, ethers.constants.MaxUint256.toString())
+      return addTransaction(tx, { summary: 'Approve' })
+    } catch (e) {
+      return e
+    }
+  }, [addTransaction, barContract, sushiContract])
 
   const enter = useCallback(
     async (amount: string) => {
@@ -41,7 +51,7 @@ const useSushiBar = () => {
     [addTransaction, barContract]
   )
 
-  return { enter, leave }
+  return { approve, enter, leave }
 }
 
 export default useSushiBar
