@@ -45,7 +45,7 @@ export function useMulticallContract(): Contract | null {
   return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
 }
 
-export function useSushiContract(): Contract | null {
+export function useSushiContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
   if (chainId) {
@@ -58,7 +58,7 @@ export function useSushiContract(): Contract | null {
         break
     }
   }
-  return useContract(address, SUSHI_ABI, false)
+  return useContract(address, SUSHI_ABI, withSignerIfPossible)
 }
 
 export function useMasterChefContract(): Contract | null {
