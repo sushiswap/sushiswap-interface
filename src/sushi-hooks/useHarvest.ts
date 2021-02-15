@@ -13,17 +13,12 @@ const useHarvest = (pid: number) => {
   }
 
   const handleHarvest = useCallback(async () => {
-    await harvest(masterChefContract, pid)
-      .then(tx => {
-        return addTransaction(tx, { summary: 'Harvest' })
-      })
-      .catch(e => {
-        // User denied transaction signature on MetaMask.
-        if (e.message.includes('User denied')) {
-          return e
-        }
-        return e
-      })
+    try {
+      const tx = await harvest(masterChefContract, pid)
+      return addTransaction(tx, { summary: 'Harvest' })
+    } catch (e) {
+      return e
+    }
   }, [addTransaction, masterChefContract, pid])
 
   return { onHarvest: handleHarvest }

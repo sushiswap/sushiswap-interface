@@ -15,17 +15,12 @@ const useApproveXSushi = () => {
   }
 
   const handleApprove = useCallback(async () => {
-    await approve(sushiContract, barContract)
-      .then(tx => {
-        return addTransaction(tx, { summary: 'Approve' })
-      })
-      .catch(e => {
-        // User denied transaction signature on MetaMask.
-        if (e.message.includes('User denied')) {
-          return e
-        }
-        return e
-      })
+    try {
+      const tx = await approve(sushiContract, barContract)
+      return addTransaction(tx, { summary: 'Approve' })
+    } catch (e) {
+      return e
+    }
   }, [addTransaction, barContract, sushiContract])
 
   return { onApprove: handleApprove }

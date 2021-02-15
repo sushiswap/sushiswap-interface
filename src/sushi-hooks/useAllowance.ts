@@ -19,8 +19,7 @@ const useAllowance = (lpAddress: string) => {
     spender: string | undefined
   ): Promise<string> => {
     try {
-      const allowance: string = await contract?.allowance(owner, spender)
-      return allowance
+      return await contract?.allowance(owner, spender)
     } catch (e) {
       return '0'
     }

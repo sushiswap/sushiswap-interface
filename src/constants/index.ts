@@ -35,7 +35,13 @@ export const YFI = new Token(ChainId.MAINNET, '0x0bc529c00C6401aEF6D220BE8C6Ea16
 export const CREAM = new Token(ChainId.MAINNET, '0x2ba592F78dB6436527729929AAf6c908497cB200', 18, 'CREAM', 'Cream')
 export const BAC = new Token(ChainId.MAINNET, '0x3449FC1Cd036255BA1EB19d65fF4BA2b8903A69a', 18, 'BAC', 'Basis Cash')
 export const FXS = new Token(ChainId.MAINNET, '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', 18, 'FXS', 'Frax Share')
-export const CRV = new Token(ChainId.MAINNET, '0xD533a949740bb3306d119CC777fa900bA034cd52', 18, 'CRV', 'Curve Dao Token')
+export const CRV = new Token(
+  ChainId.MAINNET,
+  '0xD533a949740bb3306d119CC777fa900bA034cd52',
+  18,
+  'CRV',
+  'Curve Dao Token'
+)
 export const ALPHA = new Token(ChainId.MAINNET, '0xa1faa113cbE53436Df28FF0aEe54275c13B40975', 18, 'ALPHA', 'AlphaToken')
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
@@ -50,9 +56,27 @@ export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
 // const UNI_ADDRESS = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 
 export const UNI: { [chainId in ChainId]: Token } = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken'),
+  [ChainId.MAINNET]: new Token(
+    ChainId.MAINNET,
+    '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+    18,
+    'SUSHI',
+    'SushiToken'
+  ),
+  [ChainId.RINKEBY]: new Token(
+    ChainId.RINKEBY,
+    '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c',
+    18,
+    'SUSHI',
+    'SushiToken'
+  ),
+  [ChainId.ROPSTEN]: new Token(
+    ChainId.ROPSTEN,
+    '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c',
+    18,
+    'SUSHI',
+    'SushiToken'
+  ),
   [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken'),
   [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken')
 }
@@ -79,7 +103,22 @@ const WETH_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, SUSHI, YAM, WBTC, RUNE, CREAM, BAC, FXS, CRV, ALPHA]
+  [ChainId.MAINNET]: [
+    ...WETH_ONLY[ChainId.MAINNET],
+    DAI,
+    USDC,
+    USDT,
+    WBTC,
+    SUSHI,
+    YAM,
+    WBTC,
+    RUNE,
+    CREAM,
+    BAC,
+    FXS,
+    CRV,
+    ALPHA
+  ]
   // [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR, WBTC]
 }
 

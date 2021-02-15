@@ -20,17 +20,12 @@ const useEnterBar = () => {
 
   const handle = useCallback(
     async (amount: string) => {
-      await enter(barContract, amount)
-        .then(tx => {
-          return addTransaction(tx, { summary: 'Enter SushiBar' })
-        })
-        .catch(e => {
-          // User denied transaction signature on MetaMask.
-          if (e.message.includes('User denied')) {
-            return e
-          }
-          return e
-        })
+      try {
+        const tx = await enter(barContract, amount)
+        return addTransaction(tx, { summary: 'Enter SushiBar' })
+      } catch (e) {
+        return e
+      }
     },
     [addTransaction, barContract]
   )

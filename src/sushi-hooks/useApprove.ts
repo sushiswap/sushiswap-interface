@@ -18,17 +18,12 @@ const useApprove = (lpAddress: string) => {
   }
 
   const handleApprove = useCallback(async () => {
-    await approve(lpContract, masterChefContract)
-      .then(tx => {
-        return addTransaction(tx, { summary: 'Approve' })
-      })
-      .catch(e => {
-        // User denied transaction signature on MetaMask.
-        if (e.message.includes('User denied')) {
-          return e
-        }
-        return e
-      })
+    try {
+      const tx = await approve(lpContract, masterChefContract)
+      return addTransaction(tx, { summary: 'Approve' })
+    } catch (e) {
+      return e
+    }
   }, [addTransaction, lpContract, masterChefContract])
 
   return { onApprove: handleApprove }

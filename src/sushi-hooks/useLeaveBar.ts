@@ -19,17 +19,12 @@ const useLeaveBar = () => {
 
   const handle = useCallback(
     async (amount: string) => {
-      await leave(barContract, amount)
-        .then(tx => {
-          return addTransaction(tx, { summary: 'Leave SushiBar' })
-        })
-        .catch(e => {
-          // User denied transaction signature on MetaMask.
-          if (e.message.includes('User denied')) {
-            return e
-          }
-          return e
-        })
+      try {
+        const tx = await leave(barContract, amount)
+        return addTransaction(tx, { summary: 'Leave SushiBar' })
+      } catch (e) {
+        return e
+      }
     },
     [addTransaction, barContract]
   )
