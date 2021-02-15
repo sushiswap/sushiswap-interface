@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
-import { BigNumber } from '@ethersproject/bignumber'
-//import { useActiveWeb3React } from '../hooks'
+import { ethers } from 'ethers'
 import { useSushiBarContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
+
+const { BigNumber } = ethers
 
 const useSushiBar = () => {
   const addTransaction = useTransactionAdder()

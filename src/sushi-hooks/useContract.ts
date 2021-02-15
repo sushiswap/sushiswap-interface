@@ -5,7 +5,7 @@ import SUSHI_ABI from '../constants/sushiAbis/sushi.json'
 import MASTERCHEF_ABI from '../constants/sushiAbis/masterchef.json'
 import FACTORY_ABI from '../constants/sushiAbis/factory.json'
 import ROUTER_ABI from '../constants/sushiAbis/router.json'
-import SUSHIBAR_ABI from '../constants/sushiAbis/bar.json'
+import BAR_ABI from '../constants/sushiAbis/bar.json'
 import MAKER_ABI from '../constants/sushiAbis/maker.json'
 import TIMELOCK_ABI from '../constants/sushiAbis/timelock.json'
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
@@ -20,6 +20,65 @@ import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from '../hooks/index'
+
+// TODO: Sync with Omakase on plan for Sushi Hooks, seems like intention
+// is to extract this as reusable package at some point.
+
+// These maps should probably be moved into the SDK since they will be 
+// consumed by UI, and potentially independent libs like sushi hooks
+// so a single source of truth would be preferable.
+
+// TODO: Move to SDK
+export const SUSHI_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+  [ChainId.ROPSTEN]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710',
+  [ChainId.RINKEBY]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710',
+  [ChainId.GÖRLI]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710',
+  [ChainId.KOVAN]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710'
+}
+
+// TODO: Move to SDK
+export const MASTERCHEF_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
+  [ChainId.ROPSTEN]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28',
+  [ChainId.RINKEBY]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28',
+  [ChainId.GÖRLI]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28',
+  [ChainId.KOVAN]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28'
+}
+
+// Factory address already in SDK
+import { FACTORY_ADDRESS } from '@sushiswap/sdk'
+
+// TODO: Router address has been moved to SDK but needs re-publishing 
+// and removing from constants
+import { ROUTER_ADDRESS } from '../constants'
+
+// TODO: Move to SDK
+export const BAR_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
+  [ChainId.ROPSTEN]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11',
+  [ChainId.RINKEBY]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11',
+  [ChainId.GÖRLI]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11',
+  [ChainId.KOVAN]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11'
+}
+
+// TODO: Move to SDK
+export const MAKER_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xE11fc0B43ab98Eb91e9836129d1ee7c3Bc95df50',
+  [ChainId.ROPSTEN]: '0x1638339758C050B5b207cD4B531d861a52066ba2',
+  [ChainId.RINKEBY]: '0x1638339758C050B5b207cD4B531d861a52066ba2',
+  [ChainId.GÖRLI]: '0x1638339758C050B5b207cD4B531d861a52066ba2',
+  [ChainId.KOVAN]: '0x1638339758C050B5b207cD4B531d861a52066ba2'
+}
+
+// TODO: Move to SDK
+export const TIMELOCK_ADDRESS: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0x9a8541Ddf3a932a9A922B607e9CF7301f1d47bD1',
+  [ChainId.ROPSTEN]: '',
+  [ChainId.RINKEBY]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.KOVAN]: ''
+}
 
 // returns null on errors
 export function useContract(
@@ -45,111 +104,43 @@ export function useMulticallContract(): Contract | null {
   return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
 }
 
-export function useSushiContract(withSignerIfPossible?: boolean): Contract | null {
+export function useSushiContract(withSignerIfPossible = true): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x81db9c598b3ebbdc92426422fc0a1d06e77195ec'
-        break
-    }
-  }
-  return useContract(address, SUSHI_ABI, withSignerIfPossible)
+  return useContract(chainId && SUSHI_ADDRESS[chainId], SUSHI_ABI, withSignerIfPossible)
 }
 
 export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xFF281cEF43111A83f09C656734Fa03E6375d432A'
-        break
-    }
-  }
-  return useContract(address, MASTERCHEF_ABI, withSignerIfPossible)
+  return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
-        break
-    }
-  }
-  return useContract(address, FACTORY_ABI, false)
+  return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
 }
 
 export function useRouterContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
-        break
-    }
-  }
-  return useContract(address, ROUTER_ABI, false)
+  return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, false)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272'
-        break
-      case ChainId.ROPSTEN:
-    }
-  }
-  return useContract(address, SUSHIBAR_ABI, withSignerIfPossible)
+  return useContract(chainId && BAR_ADDRESS[chainId], BAR_ABI, withSignerIfPossible)
 }
 
 export function useMakerContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xE11fc0B43ab98Eb91e9836129d1ee7c3Bc95df50'
-        break
-      case ChainId.ROPSTEN:
-    }
-  }
-  return useContract(address, MAKER_ABI, false)
+  return useContract(chainId && MAKER_ADDRESS[chainId], MAKER_ABI, false)
 }
 
 export function useTimelockContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x9a8541ddf3a932a9a922b607e9cf7301f1d47bd1'
-        break
-      case ChainId.ROPSTEN:
-    }
-  }
-  return useContract(address, TIMELOCK_ABI, false)
+  return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
+
+// TODO: Leaving these alone for now, since I'm unsure of whether these should
+// live in sushiswap/sdk or somewhere else. Sync with Bart on BentoBox.
 
 export function useBentoBoxContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
