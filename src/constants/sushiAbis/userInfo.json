@@ -1,0 +1,132 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "token", "type": "address" }],
+    "name": "getETHRate",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMyInfoInUSDT",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "block", "type": "uint256" },
+          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+          { "internalType": "uint256", "name": "eth_rate", "type": "uint256" },
+          { "internalType": "uint256", "name": "sushiBalance", "type": "uint256" },
+          { "internalType": "address", "name": "delegates", "type": "address" },
+          { "internalType": "uint256", "name": "currentVotes", "type": "uint256" },
+          { "internalType": "uint256", "name": "nonces", "type": "uint256" }
+        ],
+        "internalType": "struct UserInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "uint256", "name": "lastRewardBlock", "type": "uint256" },
+          { "internalType": "uint256", "name": "accSushiPerShare", "type": "uint256" },
+          { "internalType": "uint256", "name": "balance", "type": "uint256" },
+          { "internalType": "uint256", "name": "totalSupply", "type": "uint256" },
+          { "internalType": "uint256", "name": "uniBalance", "type": "uint256" },
+          { "internalType": "uint256", "name": "uniTotalSupply", "type": "uint256" },
+          { "internalType": "uint256", "name": "uniAllowance", "type": "uint256" },
+          { "internalType": "uint256", "name": "reserve0", "type": "uint256" },
+          { "internalType": "uint256", "name": "reserve1", "type": "uint256" },
+          { "internalType": "uint256", "name": "token0rate", "type": "uint256" },
+          { "internalType": "uint256", "name": "token1rate", "type": "uint256" },
+          { "internalType": "uint256", "name": "rewardDebt", "type": "uint256" },
+          { "internalType": "uint256", "name": "pending", "type": "uint256" }
+        ],
+        "internalType": "struct UserPoolInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "who", "type": "address" },
+      { "internalType": "address", "name": "currency", "type": "address" }
+    ],
+    "name": "getUserInfo",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "block", "type": "uint256" },
+          { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+          { "internalType": "uint256", "name": "eth_rate", "type": "uint256" },
+          { "internalType": "uint256", "name": "sushiBalance", "type": "uint256" },
+          { "internalType": "address", "name": "delegates", "type": "address" },
+          { "internalType": "uint256", "name": "currentVotes", "type": "uint256" },
+          { "internalType": "uint256", "name": "nonces", "type": "uint256" }
+        ],
+        "internalType": "struct UserInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "uint256", "name": "lastRewardBlock", "type": "uint256" },
+          { "internalType": "uint256", "name": "accSushiPerShare", "type": "uint256" },
+          { "internalType": "uint256", "name": "balance", "type": "uint256" },
+          { "internalType": "uint256", "name": "totalSupply", "type": "uint256" },
+          { "internalType": "uint256", "name": "uniBalance", "type": "uint256" },
+          { "internalType": "uint256", "name": "uniTotalSupply", "type": "uint256" },
+          { "internalType": "uint256", "name": "uniAllowance", "type": "uint256" },
+          { "internalType": "uint256", "name": "reserve0", "type": "uint256" },
+          { "internalType": "uint256", "name": "reserve1", "type": "uint256" },
+          { "internalType": "uint256", "name": "token0rate", "type": "uint256" },
+          { "internalType": "uint256", "name": "token1rate", "type": "uint256" },
+          { "internalType": "uint256", "name": "rewardDebt", "type": "uint256" },
+          { "internalType": "uint256", "name": "pending", "type": "uint256" }
+        ],
+        "internalType": "struct UserPoolInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "uniFactory_", "type": "address" },
+      { "internalType": "address", "name": "masterChef_", "type": "address" },
+      { "internalType": "address", "name": "sushi_", "type": "address" },
+      { "internalType": "address", "name": "WETH_", "type": "address" }
+    ],
+    "name": "setContracts",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

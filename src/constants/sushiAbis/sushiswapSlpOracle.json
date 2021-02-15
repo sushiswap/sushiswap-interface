@@ -1,0 +1,69 @@
+[
+  {
+    "inputs": [],
+    "name": "PERIOD",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "contract IUniswapV2Pair", "name": "pair", "type": "address" },
+      { "internalType": "uint32", "name": "blockTimestamp", "type": "uint32" }
+    ],
+    "name": "_get",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "callerInfo",
+    "outputs": [{ "internalType": "contract IUniswapV2Pair", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes", "name": "data", "type": "bytes" }],
+    "name": "get",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "contract IUniswapV2Pair", "name": "pair", "type": "address" }],
+    "name": "getDataParameter",
+    "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "contract IUniswapV2Pair", "name": "", "type": "address" }],
+    "name": "pairs",
+    "outputs": [
+      { "internalType": "uint256", "name": "priceCumulativeLast", "type": "uint256" },
+      { "internalType": "uint32", "name": "blockTimestampLast", "type": "uint32" },
+      {
+        "components": [{ "internalType": "uint224", "name": "_x", "type": "uint224" }],
+        "internalType": "struct FixedPoint.uq112x112",
+        "name": "priceAverage",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes", "name": "data", "type": "bytes" }],
+    "name": "peek",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
