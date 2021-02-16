@@ -24,51 +24,51 @@ import { useActiveWeb3React } from '../hooks/index'
 // TODO: Sync with Omakase on plan for Sushi Hooks, seems like intention
 // is to extract this as reusable package at some point.
 
-// These maps should probably be moved into the SDK since they will be 
+// These maps should probably be moved into the SDK since they will be
 // consumed by UI, and potentially independent libs like sushi hooks
 // so a single source of truth would be preferable.
 
 // TODO: Move to SDK
 export const SUSHI_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
-  [ChainId.ROPSTEN]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710',
-  [ChainId.RINKEBY]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710',
-  [ChainId.GÖRLI]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710',
-  [ChainId.KOVAN]: '0xa891eaD217Bd6766d8B855D0E8453B7dc2887710'
+  [ChainId.ROPSTEN]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B',
+  [ChainId.RINKEBY]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B',
+  [ChainId.GÖRLI]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B',
+  [ChainId.KOVAN]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B'
 }
 
 // TODO: Move to SDK
 export const MASTERCHEF_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
-  [ChainId.ROPSTEN]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28',
-  [ChainId.RINKEBY]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28',
-  [ChainId.GÖRLI]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28',
-  [ChainId.KOVAN]: '0xec3247Bf2e8CfbfeFd54cecA0b714d2393e86b28'
+  [ChainId.ROPSTEN]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
+  [ChainId.RINKEBY]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
+  [ChainId.GÖRLI]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
+  [ChainId.KOVAN]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d'
 }
 
 // Factory address already in SDK
 import { FACTORY_ADDRESS } from '@sushiswap/sdk'
 
-// TODO: Router address has been moved to SDK but needs re-publishing 
+// TODO: Router address has been moved to SDK but needs re-publishing
 // and removing from constants
 import { ROUTER_ADDRESS } from '../constants'
 
 // TODO: Move to SDK
 export const BAR_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
-  [ChainId.ROPSTEN]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11',
-  [ChainId.RINKEBY]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11',
-  [ChainId.GÖRLI]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11',
-  [ChainId.KOVAN]: '0x46203C1fb7c7fB282dC2AE7C9747d5E7EBF5aB11'
+  [ChainId.ROPSTEN]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC',
+  [ChainId.RINKEBY]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC',
+  [ChainId.GÖRLI]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC',
+  [ChainId.KOVAN]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC'
 }
 
 // TODO: Move to SDK
 export const MAKER_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xE11fc0B43ab98Eb91e9836129d1ee7c3Bc95df50',
-  [ChainId.ROPSTEN]: '0x1638339758C050B5b207cD4B531d861a52066ba2',
-  [ChainId.RINKEBY]: '0x1638339758C050B5b207cD4B531d861a52066ba2',
-  [ChainId.GÖRLI]: '0x1638339758C050B5b207cD4B531d861a52066ba2',
-  [ChainId.KOVAN]: '0x1638339758C050B5b207cD4B531d861a52066ba2'
+  [ChainId.ROPSTEN]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B',
+  [ChainId.RINKEBY]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B',
+  [ChainId.GÖRLI]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B',
+  [ChainId.KOVAN]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B'
 }
 
 // TODO: Move to SDK (Need to deploy on other networks as well)
