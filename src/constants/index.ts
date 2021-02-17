@@ -3,14 +3,6 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, lattice, walletconnect, walletlink } from '../connectors'
 
-export const ROUTER_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
-  [ChainId.RINKEBY]: '0x78651262A36342c4Ab878ec312D2c1A9494ADDf5',
-  [ChainId.ROPSTEN]: '0x78651262A36342c4Ab878ec312D2c1A9494ADDf5',
-  [ChainId.GÖRLI]: '0xC0fBF54bbf3f5ef013559905AF214648e8e50010',
-  [ChainId.KOVAN]: '0xB6167233BF964ea7701691aC3970186145C810d2'
-}
-
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export { PRELOADED_PROPOSALS } from './proposals'
@@ -51,10 +43,10 @@ export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
 
 export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0xf095b8Fd7845a0631FcE1A7FAf05F6ED56Ade87c', 18, 'SUSHI', 'SushiToken')
+  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
+  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
+  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
+  [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken')
 }
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
