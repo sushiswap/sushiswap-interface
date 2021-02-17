@@ -147,10 +147,10 @@ export function useBentoBoxContract(): Contract | null {
   if (chainId) {
     switch (chainId) {
       case ChainId.MAINNET:
-        address = '0xFBBe6BD840aFfc96547854a1F821d797a8c662D9'
+        address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
         break
       case ChainId.ROPSTEN:
-        address = '0x066b83CE269aa9851704d30Ce7e838a8B772b340'
+        address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
         break
     }
   }
