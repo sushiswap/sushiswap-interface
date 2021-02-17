@@ -24,7 +24,7 @@ export function useAllPendingSushi() {
     () =>
       data?.reduce<number>((memo, { result }) => {
         if (result?.[0] && result[0].gt(BigNumber.from(0))) {
-          memo += result[0].toNumber()
+          memo += result[0].div(BigNumber.from(10).pow(18)).toNumber()
         }
         return memo
       }, 0) ?? 0,

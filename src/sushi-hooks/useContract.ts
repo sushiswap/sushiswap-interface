@@ -21,6 +21,13 @@ import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from '../hooks/index'
 
+// Factory address already in SDK
+import { FACTORY_ADDRESS } from '@sushiswap/sdk'
+
+// TODO: Router address has been moved to SDK but needs re-publishing
+// and removing from constants
+import { ROUTER_ADDRESS } from '../constants'
+
 // TODO: Sync with Omakase on plan for Sushi Hooks, seems like intention
 // is to extract this as reusable package at some point.
 
@@ -45,13 +52,6 @@ export const MASTERCHEF_ADDRESS: { [chainId in ChainId]: string } = {
   [ChainId.GÖRLI]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
   [ChainId.KOVAN]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d'
 }
-
-// Factory address already in SDK
-import { FACTORY_ADDRESS } from '@sushiswap/sdk'
-
-// TODO: Router address has been moved to SDK but needs re-publishing
-// and removing from constants
-import { ROUTER_ADDRESS } from '../constants'
 
 // TODO: Move to SDK
 export const BAR_ADDRESS: { [chainId in ChainId]: string } = {
