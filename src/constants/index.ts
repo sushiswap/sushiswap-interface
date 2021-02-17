@@ -3,14 +3,6 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, lattice, walletconnect, walletlink } from '../connectors'
 
-export const ROUTER_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
-  [ChainId.RINKEBY]: '0x027Bb5f9205360aC628C33508c3f182320A44525',
-  [ChainId.ROPSTEN]: '0x027Bb5f9205360aC628C33508c3f182320A44525',
-  [ChainId.GÖRLI]: '0x027Bb5f9205360aC628C33508c3f182320A44525',
-  [ChainId.KOVAN]: '0x027Bb5f9205360aC628C33508c3f182320A44525'
-}
-
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export { PRELOADED_PROPOSALS } from './proposals'
