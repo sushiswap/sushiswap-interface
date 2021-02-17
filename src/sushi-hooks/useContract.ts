@@ -22,63 +22,15 @@ import { getContract } from '../utils'
 import { useActiveWeb3React } from '../hooks/index'
 
 // Factory address already in SDK
-import { FACTORY_ADDRESS } from '@sushiswap/sdk'
-
-// TODO: Router address has been moved to SDK but needs re-publishing
-// and removing from constants
-import { ROUTER_ADDRESS } from '../constants'
-
-// TODO: Sync with Omakase on plan for Sushi Hooks, seems like intention
-// is to extract this as reusable package at some point.
-
-// These maps should probably be moved into the SDK since they will be
-// consumed by UI, and potentially independent libs like sushi hooks
-// so a single source of truth would be preferable.
-
-// TODO: Move to SDK
-export const SUSHI_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
-  [ChainId.ROPSTEN]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B',
-  [ChainId.RINKEBY]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B',
-  [ChainId.GÖRLI]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B',
-  [ChainId.KOVAN]: '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B'
-}
-
-// TODO: Move to SDK
-export const MASTERCHEF_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
-  [ChainId.ROPSTEN]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
-  [ChainId.RINKEBY]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
-  [ChainId.GÖRLI]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d',
-  [ChainId.KOVAN]: '0x921f083A931E74ba2A8ba55a4881a3c58f4f271d'
-}
-
-// TODO: Move to SDK
-export const BAR_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
-  [ChainId.ROPSTEN]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC',
-  [ChainId.RINKEBY]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC',
-  [ChainId.GÖRLI]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC',
-  [ChainId.KOVAN]: '0x86E403D507815138F749DFd5C9680a5178b3fEbC'
-}
-
-// TODO: Move to SDK
-export const MAKER_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0xE11fc0B43ab98Eb91e9836129d1ee7c3Bc95df50',
-  [ChainId.ROPSTEN]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B',
-  [ChainId.RINKEBY]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B',
-  [ChainId.GÖRLI]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B',
-  [ChainId.KOVAN]: '0x2dC7d393151D5205610501F2DA11ee52f07c731B'
-}
-
-// TODO: Move to SDK (Need to deploy on other networks as well)
-export const TIMELOCK_ADDRESS: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0x9a8541Ddf3a932a9A922B607e9CF7301f1d47bD1',
-  [ChainId.ROPSTEN]: '',
-  [ChainId.RINKEBY]: '',
-  [ChainId.GÖRLI]: '',
-  [ChainId.KOVAN]: ''
-}
+import {
+  FACTORY_ADDRESS,
+  SUSHI_ADDRESS,
+  MASTERCHEF_ADDRESS,
+  BAR_ADDRESS,
+  MAKER_ADDRESS,
+  TIMELOCK_ADDRESS,
+  ROUTER_ADDRESS
+} from '@sushiswap/sdk'
 
 // returns null on errors
 export function useContract(
