@@ -31,6 +31,8 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import Vote from './Vote'
 import VotePage from './Vote/VotePage'
 
+import TestBed from '../sushi-hooks/TestBed'
+
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -89,6 +91,7 @@ export default function App() {
           <TopLevelModals />
           <Web3ReactManager>
             <Switch>
+              {process.env.NODE_ENV === 'development' && <Route exact strict path="/testbed" component={TestBed} />}
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
