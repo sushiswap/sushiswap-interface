@@ -20,6 +20,8 @@ export const MKR = new Token(ChainId.MAINNET, '0x9f8F72aA9304c8B593d555F12eF6589
 export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
 export const WBTC = new Token(ChainId.MAINNET, '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', 8, 'WBTC', 'Wrapped BTC')
 
+// TODO: Are these even needed? If they are paired with ETH I'd expect not.
+// Sync with Jiro on this...
 export const SUSHI = new Token(ChainId.MAINNET, '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 18, 'SUSHI', 'SushiToken')
 export const YAM = new Token(ChainId.MAINNET, '0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16', 18, 'YAM', 'YAM')
 export const RUNE = new Token(ChainId.MAINNET, '0x3155BA85D5F96b2d030a4966AF206230e46849cb', 18, 'RUNE', 'RUNE.ETH')
@@ -29,6 +31,9 @@ export const BAC = new Token(ChainId.MAINNET, '0x3449FC1Cd036255BA1EB19d65fF4BA2
 export const FXS = new Token(ChainId.MAINNET, '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', 18, 'FXS', 'Frax Share')
 export const CRV = new Token(ChainId.MAINNET, '0xD533a949740bb3306d119CC777fa900bA034cd52', 18, 'CRV', 'Curve Dao Token')
 export const ALPHA = new Token(ChainId.MAINNET, '0xa1faa113cbE53436Df28FF0aEe54275c13B40975', 18, 'ALPHA', 'AlphaToken')
+
+// Binance specific
+export const BUSD = new Token(ChainId.MAINNET, '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', 18, 'BUSD', 'Binance USD')
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
@@ -46,7 +51,9 @@ export const UNI: { [chainId in ChainId]: Token } = {
   [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
   [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
   [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
-  [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken')
+  [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'),
+  [ChainId.BSC]: new Token(ChainId.BSC, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken'), // Not deployed
+  [ChainId.BSC_TESTNET]: new Token(ChainId.BSC_TESTNET, '0x63058b298f1d083beDcC2Dd77Aa4667909aC357B', 18, 'SUSHI', 'SushiToken') // Not deployed
 }
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
@@ -65,14 +72,18 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.ROPSTEN]: [WETH[ChainId.ROPSTEN]],
   [ChainId.RINKEBY]: [WETH[ChainId.RINKEBY]],
   [ChainId.GÖRLI]: [WETH[ChainId.GÖRLI]],
-  [ChainId.KOVAN]: [WETH[ChainId.KOVAN]]
+  [ChainId.KOVAN]: [WETH[ChainId.KOVAN]],
+  [ChainId.BSC]: [WETH[ChainId.BSC]],
+  [ChainId.BSC_TESTNET]: [WETH[ChainId.BSC_TESTNET]]
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, SUSHI, YAM, WBTC, RUNE, CREAM, BAC, FXS, CRV, ALPHA]
-  // [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR, WBTC]
+  // [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR, WBTC] // OG
+  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, SUSHI, YAM, WBTC, RUNE, CREAM, BAC, FXS, CRV, ALPHA],
+  [ChainId.BSC]: [...WETH_ONLY[ChainId.BSC], BUSD],
+  [ChainId.BSC_TESTNET]: [...WETH_ONLY[ChainId.BSC_TESTNET], BUSD]
 }
 
 /**
@@ -88,13 +99,17 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC]
+  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC],
+  [ChainId.BSC]: [...WETH_ONLY[ChainId.BSC], BUSD],
+  [ChainId.BSC_TESTNET]: [...WETH_ONLY[ChainId.BSC_TESTNET], BUSD]
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WETH_ONLY,
-  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC]
+  [ChainId.MAINNET]: [...WETH_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC],
+  [ChainId.BSC]: [...WETH_ONLY[ChainId.BSC], BUSD],
+  [ChainId.BSC_TESTNET]: [...WETH_ONLY[ChainId.BSC_TESTNET], BUSD]
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {

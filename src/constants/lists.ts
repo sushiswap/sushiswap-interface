@@ -4,6 +4,8 @@
  */
 export const UNSUPPORTED_LIST_URLS: string[] = []
 
+const BSC_LIST = 'https://gist.githubusercontent.com/matthewlilley/24fcb5d56534c2b30ae28ce0273ade90/raw/6bef04a6f055fdd209f2c4ccfcea2decfb20098d/menu.json'
+
 const SUSHI_LIST = 'https://raw.githubusercontent.com/sushiswapclassic/token-list/master/sushiswap.tokenlist.json'
 //const COMPOUND_LIST = 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json'
 //const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
@@ -17,11 +19,12 @@ const SUSHI_LIST = 'https://raw.githubusercontent.com/sushiswapclassic/token-lis
 //const CMC_ALL_LIST = 'defi.cmc.eth'
 //const CMC_STABLECOIN = 'stablecoin.cmc.eth'
 //const KLEROS_LIST = 't2crtokens.eth'
-//const GEMINI_LIST = 'https://www.gemini.com/uniswap/manifest.json'
+const GEMINI_LIST = 'https://www.gemini.com/uniswap/manifest.json'
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] = [
-  SUSHI_LIST,
+  // SUSHI_LIST,
+  BSC_LIST,
   // COMPOUND_LIST,
   // AAVE_LIST,
   // SYNTHETIX_LIST,
@@ -39,4 +42,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [SUSHI_LIST]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [BSC_LIST]
