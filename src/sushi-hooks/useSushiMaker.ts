@@ -28,17 +28,7 @@ const useMaker = () => {
   const serveAll = useCallback(async () => {
     const poolLength = await masterChefContract?.functions.poolLength()
     const pids = [...Array(poolLength - 1).keys()].filter(
-      pid =>
-        pid != 29 &&
-        pid != 30 &&
-        pid != 33 &&
-        pid != 45 &&
-        pid != 61 &&
-        pid != 62 &&
-        pid != 102 &&
-        pid != 124 &&
-        pid != 125 &&
-        pid != 126
+      pid => ![29, 30, 33, 45, 61, 62, 102, 124, 125, 126].includes(pid)
     )
     // todo: support multi-chain:
     // usdt: mainnet: 0xdAC17F958D2ee523a2206206994597C13D831ec7, ropsten: 0x292c703A980fbFce4708864Ae6E8C40584DAF323
