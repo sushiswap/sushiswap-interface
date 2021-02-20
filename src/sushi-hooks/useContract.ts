@@ -81,9 +81,9 @@ export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | 
   return useContract(chainId && BAR_ADDRESS[chainId], BAR_ABI, withSignerIfPossible)
 }
 
-export function useMakerContract(): Contract | null {
+export function useMakerContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MAKER_ADDRESS[chainId], MAKER_ABI, false)
+  return useContract(chainId && MAKER_ADDRESS[chainId], MAKER_ABI, withSignerIfPossible)
 }
 
 export function useTimelockContract(): Contract | null {

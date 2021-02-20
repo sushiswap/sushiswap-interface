@@ -217,7 +217,6 @@ export default function Manage({
           <CardNoise />
         </VoteCard>
       )}
-
       {stakingInfo && (
         <>
           <StakingModal
@@ -238,6 +237,25 @@ export default function Manage({
           />
         </>
       )}
+
+      <>
+        <StakingModal
+          isOpen={showStakingModal}
+          onDismiss={() => setShowStakingModal(false)}
+          stakingInfo={stakingInfo}
+          userLiquidityUnstaked={userLiquidityUnstaked}
+        />
+        <UnstakingModal
+          isOpen={showUnstakingModal}
+          onDismiss={() => setShowUnstakingModal(false)}
+          stakingInfo={stakingInfo}
+        />
+        <ClaimRewardModal
+          isOpen={showClaimRewardModal}
+          onDismiss={() => setShowClaimRewardModal(false)}
+          stakingInfo={stakingInfo}
+        />
+      </>
 
       <PositionInfo gap="lg" justify="center" dim={showAddLiquidityButton}>
         <BottomSection gap="lg" justify="center">
