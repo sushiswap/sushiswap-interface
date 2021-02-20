@@ -24,7 +24,7 @@ const useMaker = () => {
     [addTransaction, makerContract]
   )
 
-  // get Maker Info
+  // get Maker Info: Pools and ethRate
   const getMakerInfo = useCallback(async () => {
     const poolLength = await masterChefContract?.functions.poolLength()
     const pids = [...Array(poolLength - 1).keys()].filter(
@@ -103,7 +103,7 @@ const useMaker = () => {
     }
   }, [addTransaction, getMakerInfo, makerContract?.methods])
 
-  return { serve, serveAll }
+  return { serve, serveAll, getMakerInfo }
 }
 
 export default useMaker
