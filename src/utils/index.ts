@@ -16,14 +16,21 @@ export function isAddress(value: any): string | false {
   }
 }
 
+// TODO: Fix block scanners for multinetwork
 const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   1: '',
   3: 'ropsten.',
   4: 'rinkeby.',
   5: 'goerli.',
   42: 'kovan.',
-  56: '',
-  97: 'testnet.'
+  250: '', // fantom
+  4002: '', // fantom testnet
+  137: '', // matic
+  80001: '', // matic testnet
+  100: '', // xdai
+  56: '', // bsc
+  97: '', // bsc testnet
+  79377087078960: '', // arbitrum
 }
 
 export function getEtherscanLink(
