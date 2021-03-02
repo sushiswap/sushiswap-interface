@@ -1,4 +1,4 @@
-import { UNI } from './../../constants/index'
+import { SUSHI } from './../../constants/index'
 import { TokenAmount, JSBI, ChainId } from '@sushiswap/sdk'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useEffect, useState } from 'react'
@@ -80,7 +80,7 @@ export function useUserUnclaimedAmount(account: string | null | undefined): Toke
   const userClaimData = useUserClaimData(account)
   const canClaim = useUserHasAvailableClaim(account)
 
-  const uni = chainId ? UNI[chainId] : undefined
+  const uni = chainId ? SUSHI[chainId] : undefined
   if (!uni) return undefined
   if (!canClaim || !userClaimData) {
     return new TokenAmount(uni, JSBI.BigInt(0))
@@ -112,7 +112,7 @@ export function useClaimCallback(
         .claim(...args, { value: null, gasLimit: calculateGasMargin(estimatedGasLimit) })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Claimed ${unClaimedAmount?.toSignificant(4)} UNI`,
+            summary: `Claimed ${unClaimedAmount?.toSignificant(4)} SUSHI`,
             claim: { recipient: account }
           })
           return response.hash

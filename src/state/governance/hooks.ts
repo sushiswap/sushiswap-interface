@@ -1,4 +1,4 @@
-import { UNI, PRELOADED_PROPOSALS } from './../../constants/index'
+import { SUSHI, PRELOADED_PROPOSALS } from './../../constants/index'
 import { TokenAmount } from '@sushiswap/sdk'
 import { isAddress } from 'ethers/lib/utils'
 import { useGovernanceContract, useUniContract } from '../../hooks/useContract'
@@ -160,7 +160,7 @@ export function useUserVotes(): TokenAmount | undefined {
   const uniContract = useUniContract()
 
   // check for available votes
-  const uni = chainId ? UNI[chainId] : undefined
+  const uni = chainId ? SUSHI[chainId] : undefined
   const votes = useSingleCallResult(uniContract, 'getCurrentVotes', [account ?? undefined])?.result?.[0]
   return votes && uni ? new TokenAmount(uni, votes) : undefined
 }
@@ -171,7 +171,7 @@ export function useUserVotesAsOfBlock(block: number | undefined): TokenAmount | 
   const uniContract = useUniContract()
 
   // check for available votes
-  const uni = chainId ? UNI[chainId] : undefined
+  const uni = chainId ? SUSHI[chainId] : undefined
   const votes = useSingleCallResult(uniContract, 'getPriorVotes', [account ?? undefined, block ?? undefined])
     ?.result?.[0]
   return votes && uni ? new TokenAmount(uni, votes) : undefined
