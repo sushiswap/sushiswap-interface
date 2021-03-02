@@ -1,4 +1,4 @@
-import { ChainId, TokenAmount } from '@sushiswap/sdk'
+import { ChainId, TokenAmount, Currency } from '@sushiswap/sdk'
 import React, { useState } from 'react'
 import { Text } from 'rebass'
 import { NavLink } from 'react-router-dom'
@@ -164,6 +164,7 @@ const HideSmall = styled.span`
 const NetworkCard = styled(YellowCard)`
   border-radius: 12px;
   padding: 8px 12px;
+  white-space: nowrap;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     margin: 0;
     margin-right: 0.5rem;
@@ -297,8 +298,13 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Görli',
   [ChainId.KOVAN]: 'Kovan',
+  [ChainId.FANTOM]: 'Fantom',
+  [ChainId.FANTOM_TESTNET]: 'Fantom Testnet',
+  [ChainId.MATIC]: 'Matic',
+  [ChainId.MATIC_TESTNET]: 'Matic Testnet',
+  [ChainId.XDAI]: 'xDai',
   [ChainId.BSC]: 'BSC',
-  [ChainId.BSC_TESTNET]: 'BSCTEST'
+  [ChainId.BSC_TESTNET]: 'BSC Testnet'
 }
 
 export default function Header() {
@@ -381,7 +387,7 @@ export default function Header() {
               <CardNoise />
             </UNIWrapper>
           )}
-          {!availableClaim && aggregateBalance && (
+          {!availableClaim && aggregateBalance && chainId && [1, 3, 4, 5, 42].includes(chainId) && (
             <UNIWrapper onClick={() => setShowUniBalanceModal(true)}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
                 {account && (
@@ -408,9 +414,9 @@ export default function Header() {
             </UNIWrapper>
           )}
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
-            {account && userEthBalance ? (
+            {account && chainId && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                {userEthBalance?.toSignificant(4)} ETH
+                {userEthBalance?.toSignificant(4)} {Currency.getNativeCurrencySymbol(chainId)}
               </BalanceText>
             ) : null}
             <Web3Status />
