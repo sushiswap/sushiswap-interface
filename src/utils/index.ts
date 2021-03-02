@@ -116,7 +116,7 @@ const chains : ChainObject = {
     builder: builders.etherscan
   },
   [ChainId.MATIC]: {
-    chainName: '',
+    chainName: 'mainnet',
     builder: builders.matic
   },
   [ChainId.MATIC_TESTNET]: {
@@ -136,7 +136,7 @@ const chains : ChainObject = {
     builder: builders.xdai
   },
   [ChainId.BSC]: {
-    chainName: 'bsc',
+    chainName: '',
     builder: builders.bscscan
   },
   [ChainId.BSC_TESTNET]: {
