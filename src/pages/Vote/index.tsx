@@ -16,7 +16,7 @@ import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { UNI, ZERO_ADDRESS } from '../../constants'
 import { JSBI, TokenAmount, ChainId } from '@sushiswap/sdk'
-import { shortenAddress, getEtherscanLink } from '../../utils'
+import { shortenAddress, getExplorerLink } from '../../utils'
 import Loader from '../../components/Loader'
 import FormattedCurrencyAmount from '../../components/FormattedCurrencyAmount'
 import { useModalOpen, useToggleDelegateModal } from '../../state/application/hooks'
@@ -195,7 +195,7 @@ export default function Vote() {
                 </TYPE.body>
                 <AddressButton>
                   <StyledExternalLink
-                    href={getEtherscanLink(ChainId.MAINNET, userDelegatee, 'address')}
+                    href={getExplorerLink(ChainId.MAINNET, userDelegatee, 'address')}
                     style={{ margin: '0 4px' }}
                   >
                     {userDelegatee === account ? 'Self' : shortenAddress(userDelegatee)}
