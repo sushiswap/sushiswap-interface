@@ -8,9 +8,15 @@ import { LatticeConnector } from '@web3-react/lattice-connector'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 
+// TODO: Need to create a map for these & not read single items from ENV...
 const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
 const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
+
+// TODO: ...
+// const RPC: {[chainId in ChainId]: string} = {
+//   [ChainId.MAINNET]: 'https://mainnet.infura.io/v3/ed2f09b2bafe468ebe3ac5a357539135',
+// }
 
 export const NETWORK_CHAIN_ID: number = parseInt(process.env.REACT_APP_CHAIN_ID ?? '1')
 
@@ -28,7 +34,20 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [1, 3, 4, 5, 42, 56, 97]
+  supportedChainIds: [
+    1, // mainnet 
+    3, // ropsten
+    4, // rinkeby
+    5, // goreli
+    42, // kovan
+    250, // fantom
+    4002, // fantom testnet
+    137, // matic
+    80001, // matic testnet
+    100, // xdai
+    56, // binance smart chain
+    97 // binance smart chain testnet
+  ]
 })
 
 // mainnet only
