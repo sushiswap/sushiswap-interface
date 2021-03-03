@@ -21,6 +21,7 @@ import { Dots } from '../../components/swap/styleds'
 import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/earn/styled'
 import { useStakingInfo } from '../../state/stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
+import { transparentize } from 'polished'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -28,7 +29,8 @@ const PageWrapper = styled(AutoColumn)`
 `
 
 const VoteCard = styled(DataCard)`
-  background: radial-gradient(76.02% 75.41% at 1.84% 0%, #27ae60 0%, #000000 100%);
+  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
+  /* border: 1px solid ${({ theme }) => theme.text4}; */
   overflow: hidden;
 `
 
@@ -129,15 +131,15 @@ export default function Pool() {
       <PageWrapper>
         <SwapPoolTabs active={'pool'} />
         <VoteCard>
-          <CardBGImage />
-          <CardNoise />
           <CardSection>
             <AutoColumn gap="md">
               <RowBetween>
-                <TYPE.white fontWeight={600}>Liquidity provider rewards</TYPE.white>
+                <TYPE.white fontWeight={600} color={theme.text1}>
+                  Liquidity provider rewards
+                </TYPE.white>
               </RowBetween>
               <RowBetween>
-                <TYPE.white fontSize={14}>
+                <TYPE.white fontSize={14} color={theme.text1}>
                   {`Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.`}
                 </TYPE.white>
               </RowBetween>
@@ -150,8 +152,6 @@ export default function Pool() {
               </ExternalLink> */}
             </AutoColumn>
           </CardSection>
-          <CardBGImage />
-          <CardNoise />
         </VoteCard>
 
         <AutoColumn gap="lg" justify="center">
