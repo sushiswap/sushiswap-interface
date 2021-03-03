@@ -210,7 +210,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
           <RowFixed gap="8px">
             <ButtonEmpty
               padding="6px 8px"
-              borderRadius="12px"
+              borderRadius="20px"
               width="fit-content"
               onClick={() => setShowMore(!showMore)}
             >

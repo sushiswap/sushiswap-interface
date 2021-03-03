@@ -67,7 +67,7 @@ const ResponsiveButtonSecondary = styled(ButtonSecondary)`
 const EmptyProposals = styled.div`
   border: 1px solid ${({ theme }) => theme.text4};
   padding: 16px 12px;
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.borderRadius};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -170,7 +170,7 @@ export default function Pool() {
                   id="join-pool-button"
                   as={Link}
                   padding="6px 8px"
-                  borderRadius="12px"
+                  borderRadius="20px"
                   to="/add/ETH"
                 >
                   <Text fontWeight={500} fontSize={16}>
