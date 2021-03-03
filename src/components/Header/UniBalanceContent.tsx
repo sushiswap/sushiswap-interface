@@ -63,8 +63,6 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
   return (
     <ContentWrapper gap="lg">
       <ModalUpper>
-        <CardBGImage />
-        <CardNoise />
         <CardSection gap="md">
           <RowBetween>
             <TYPE.white color="white">Your SUSHI Breakdown</TYPE.white>
@@ -105,7 +103,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
         <CardSection gap="sm">
           <AutoColumn gap="md">
             <RowBetween>
-              <TYPE.white color="white">UNI price:</TYPE.white>
+              <TYPE.white color="white">SUSHI price:</TYPE.white>
               <TYPE.white color="white">${uniPrice?.toFixed(2) ?? '-'}</TYPE.white>
             </RowBetween>
             {/* <RowBetween>
