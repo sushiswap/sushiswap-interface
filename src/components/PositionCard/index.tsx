@@ -37,9 +37,11 @@ export const HoverCard = styled(Card)`
   }
 `
 const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
-  border: none;
-  background: ${({ theme, bgColor }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `};
+  /* border: 1px solid ${({ theme }) => theme.text4}; */
+  border: none
+  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
+  /* background: ${({ theme, bgColor }) =>
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `}; */
   position: relative;
   overflow: hidden;
 `
@@ -194,7 +196,6 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
 
   return (
     <StyledPositionCard border={border} bgColor={backgroundColor}>
-      <CardNoise />
       <AutoColumn gap="12px">
         <FixedHeightRow>
           <AutoRow gap="8px">
