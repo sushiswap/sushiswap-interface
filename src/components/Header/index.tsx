@@ -10,7 +10,8 @@ import styled from 'styled-components'
 // import Logo from '../../assets/svg/logo.svg'
 // import LogoDark from '../../assets/svg/logo_white.svg'
 
-import Logo from '../../assets/svg/logo.svg'
+import Logo from '../../assets/images/logo.png'
+import LogoHover from '../../assets/svg/logo_hover.svg'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useDarkModeManager } from '../../state/user/hooks'
@@ -123,7 +124,7 @@ const AccountElement = styled.div<{ active: boolean }>`
   flex-direction: row;
   align-items: center;
   background-color: ${({ theme, active }) => (!active ? theme.bg1 : theme.bg3)};
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.borderRadius};
   white-space: nowrap;
   width: 100%;
   cursor: pointer;
@@ -139,7 +140,7 @@ const UNIAmount = styled(AccountElement)`
   height: 36px;
   font-weight: 500;
   background-color: ${({ theme }) => theme.bg3};
-  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
+  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #f537c3 0%, #00abff 100%), #edeef2;
 `
 
 const UNIWrapper = styled.span`
@@ -163,7 +164,7 @@ const HideSmall = styled.span`
 `
 
 const NetworkCard = styled(YellowCard)`
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.borderRadius};
   padding: 8px 12px;
   white-space: nowrap;
   ${({ theme }) => theme.mediaWidth.upToSmall`
@@ -196,13 +197,19 @@ const Title = styled.a`
   }
 `
 
-const UniIcon = styled.div`
+const StaticIcon = styled.div`
+  padding-left: 4px;
+  position: absolute;
   display: flex;
   align-items: center;
-  transition: transform 0.3s ease;
   :hover {
-    transform: rotate(-5deg);
+    opacity: 0;
   }
+`
+const HoverIcon = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
 `
 
 const activeClassName = 'ACTIVE'
@@ -223,7 +230,7 @@ const StyledNavLink = styled(NavLink).attrs({
   font-weight: 500;
 
   &.${activeClassName} {
-    border-radius: 12px;
+    border-radius: ${({ theme }) => theme.borderRadius};
     font-weight: 600;
     color: ${({ theme }) => theme.text1};
   }
@@ -250,7 +257,7 @@ const StyledExternalLink = styled(ExternalLink).attrs({
   font-weight: 500;
 
   &.${activeClassName} {
-    border-radius: 12px;
+    border-radius: ${({ theme }) => theme.borderRadius};
     font-weight: 600;
     color: ${({ theme }) => theme.text1};
   }
@@ -277,7 +284,7 @@ export const StyledMenuButton = styled.button`
   background-color: ${({ theme }) => theme.bg3};
   margin-left: 8px;
   padding: 0.15rem 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 20px;
 
   :hover,
   :focus {
@@ -339,10 +346,12 @@ export default function Header() {
       </Modal>
       <HeaderRow>
         <Title href=".">
-          <UniIcon>
-            {/* <img width={'24px'} src={darkMode ? LogoDark : Logo} alt="logo" /> */}
-            <img width={'24px'} src={Logo} alt="logo" />
-          </UniIcon>
+          <HoverIcon>
+            <img width={'48px'} src={LogoHover} alt="logo" />
+          </HoverIcon>
+          <StaticIcon>
+            <img width={'40px'} src={Logo} alt="logo" />
+          </StaticIcon>
         </Title>
         <HeaderLinks>
           <StyledNavLink id={`swap-nav-link`} to={'/swap'}>

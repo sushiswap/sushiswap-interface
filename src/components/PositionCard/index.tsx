@@ -12,7 +12,7 @@ import { useTokenBalance } from '../../state/wallet/hooks'
 import { ExternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import { unwrappedToken } from '../../utils/wrappedCurrency'
-import { ButtonPrimary, ButtonSecondary, ButtonEmpty } from '../Button'
+import { ButtonPrimary, ButtonSecondary, ButtonEmpty, ButtonPrimaryNormal } from '../Button'
 import { transparentize } from 'polished'
 import { CardNoise } from '../earn/styled'
 
@@ -37,9 +37,11 @@ export const HoverCard = styled(Card)`
   }
 `
 const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
-  border: none;
-  background: ${({ theme, bgColor }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `};
+  /* border: 1px solid ${({ theme }) => theme.text4}; */
+  border: none
+  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
+  /* background: ${({ theme, bgColor }) =>
+    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `}; */
   position: relative;
   overflow: hidden;
 `
@@ -194,7 +196,6 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
 
   return (
     <StyledPositionCard border={border} bgColor={backgroundColor}>
-      <CardNoise />
       <AutoColumn gap="12px">
         <FixedHeightRow>
           <AutoRow gap="8px">
@@ -210,7 +211,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
           <RowFixed gap="8px">
             <ButtonEmpty
               padding="6px 8px"
-              borderRadius="12px"
+              borderRadius="20px"
               width="fit-content"
               onClick={() => setShowMore(!showMore)}
             >
@@ -306,7 +307,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             </ButtonSecondary> */}
             {userDefaultPoolBalance && JSBI.greaterThan(userDefaultPoolBalance.raw, BIG_INT_ZERO) && (
               <RowBetween marginTop="10px">
-                <ButtonPrimary
+                <ButtonPrimaryNormal
                   padding="8px"
                   borderRadius="8px"
                   as={Link}
@@ -314,8 +315,8 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                   width="48%"
                 >
                   Add
-                </ButtonPrimary>
-                <ButtonPrimary
+                </ButtonPrimaryNormal>
+                <ButtonPrimaryNormal
                   padding="8px"
                   borderRadius="8px"
                   as={Link}
@@ -323,7 +324,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                   to={`/remove/${currencyId(currency0)}/${currencyId(currency1)}`}
                 >
                   Remove
-                </ButtonPrimary>
+                </ButtonPrimaryNormal>
               </RowBetween>
             )}
             {stakedBalance && JSBI.greaterThan(stakedBalance.raw, BIG_INT_ZERO) && (

@@ -254,7 +254,7 @@ export function CurrencySearch({
               <Row align="center" width="100%" justify="center">
                 <ButtonLight
                   width="fit-content"
-                  borderRadius="12px"
+                  borderRadius="20px"
                   padding="8px 12px"
                   onClick={() => setShowExpanded(!showExpanded)}
                 >
@@ -276,7 +276,7 @@ export function CurrencySearch({
           <Row align="center" width="100%" justify="center" style={{ position: 'absolute', bottom: '80px', left: 0 }}>
             <ButtonLight
               width="fit-content"
-              borderRadius="12px"
+              borderRadius="20px"
               padding="8px 12px"
               onClick={() => setShowExpanded(!showExpanded)}
             >
