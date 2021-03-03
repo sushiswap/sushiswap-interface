@@ -50,6 +50,7 @@
     "cids": "^1.0.0",
     "copy-to-clipboard": "^3.2.0",
     "cross-env": "^7.0.2",
+    "customize-cra": "^0.9.1",
     "cypress": "^4.11.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
@@ -57,6 +58,8 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "ethers": "^5.0.7",
+    "framer-motion": "^3.3.0",
+    "fuse.js": "^6.4.6",
     "i18next": "^15.0.9",
     "i18next-browser-languagedetector": "^3.0.1",
     "i18next-xhr-backend": "^2.0.1",
@@ -104,9 +107,7 @@
     "build": "CI= GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "build:styles": "postcss src/tailwind.css -o src/styles.css",
     "prebuild": "NODE_ENV=production npm run build:styles",
-    "prestart": "npm run build:styles",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
   },
   "eslintConfig": {
@@ -127,23 +128,5 @@
       "last 1 safari version"
     ]
   },
-  "license": "GPL-3.0-or-later",
-  "dependencies": {
-    "@fontsource/poppins": "^4.2.0",
-    "@fullhuman/postcss-purgecss": "^2.3.0",
-    "@headlessui/react": "^0.3.0",
-    "@sushiswap/sushi-data": "^1.0.5",
-    "@tailwindcss/aspect-ratio": "^0.2.0",
-    "@tailwindcss/forms": "^0.2.1",
-    "@tailwindcss/postcss7-compat": "^2.0.2",
-    "@tailwindcss/typography": "^0.3.1",
-    "@uniswap/default-token-list": "^2.0.0",
-    "autoprefixer": "^9.8.6",
-    "customize-cra": "^0.9.1",
-    "framer-motion": "^3.3.0",
-    "fuse.js": "^6.4.6",
-    "postcss": "^7.0.35",
-    "postcss-cli": "^7.1.1",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
-  }
+  "license": "GPL-3.0-or-later"
 }
