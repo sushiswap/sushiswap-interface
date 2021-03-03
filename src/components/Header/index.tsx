@@ -10,7 +10,8 @@ import styled from 'styled-components'
 // import Logo from '../../assets/svg/logo.svg'
 // import LogoDark from '../../assets/svg/logo_white.svg'
 
-import Logo from '../../assets/svg/logo.svg'
+import Logo from '../../assets/images/logo.png'
+import LogoHover from '../../assets/svg/logo_hover.svg'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useDarkModeManager } from '../../state/user/hooks'
@@ -196,13 +197,19 @@ const Title = styled.a`
   }
 `
 
-const UniIcon = styled.div`
+const StaticIcon = styled.div`
+  padding-left: 4px;
+  position: absolute;
   display: flex;
   align-items: center;
-  transition: transform 0.3s ease;
   :hover {
-    transform: rotate(-5deg);
+    opacity: 0;
   }
+`
+const HoverIcon = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
 `
 
 const activeClassName = 'ACTIVE'
@@ -338,10 +345,12 @@ export default function Header() {
       </Modal>
       <HeaderRow>
         <Title href=".">
-          <UniIcon>
-            {/* <img width={'24px'} src={darkMode ? LogoDark : Logo} alt="logo" /> */}
-            <img width={'24px'} src={Logo} alt="logo" />
-          </UniIcon>
+          <HoverIcon>
+            <img width={'48px'} src={LogoHover} alt="logo" />
+          </HoverIcon>
+          <StaticIcon>
+            <img width={'40px'} src={Logo} alt="logo" />
+          </StaticIcon>
         </Title>
         <HeaderLinks>
           <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
