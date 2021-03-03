@@ -1,5 +1,5 @@
 import { isTradeBetter } from 'utils/trades'
-import { Currency, CurrencyAmount, Pair, Token, Trade } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Pair, Token, Trade, ChainId } from '@sushiswap/sdk'
 import flatMap from 'lodash.flatmap'
 import { useMemo } from 'react'
 
@@ -11,58 +11,64 @@ import { useActiveWeb3React } from './index'
 import { useUnsupportedTokens } from './Tokens'
 import { useUserSingleHopOnly } from 'state/user/hooks'
 
+function generateAllRoutePairs(tokenA?: Token, tokenB?: Token, chainId?: ChainId): [Token, Token][] {
+  const bases: Token[] = chainId ? BASES_TO_CHECK_TRADES_AGAINST[chainId] : [];
+  const customBases = chainId !== undefined ? CUSTOM_BASES[chainId] : undefined;
+  const customBasesA = customBases && tokenA ? customBases[tokenA.address] ?? [] : [];
+  const customBasesB = customBases && tokenB ? customBases[tokenB.address] ?? [] : [];
+
+  const allBases = [...new Set([...bases, ...customBasesA, ...customBasesB])];
+
+  const basePairs: [Token, Token][] = [];
+  for (let i = 0; i < allBases.length; i++) {
+    for (let j = i + 1; j < allBases.length; j++) {
+      basePairs.push([allBases[i], allBases[j]]);
+    }
+  }
+
+  return [
+    // the direct pair
+    [tokenA, tokenB],
+    // token A against all bases
+    ...allBases.map((base): [Token | undefined, Token] => [tokenA, base]),
+    // token B against all bases
+    ...allBases.map((base): [Token | undefined, Token] => [tokenB, base]),
+    // each base against all bases
+    ...basePairs
+  ]
+    .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
+    .filter(([t0, t1]) => t0.address !== t1.address)
+    .filter(([tokenA, tokenB]) => {
+      if (!chainId) return true;
+      const restrictedBases = CUSTOM_BASES[chainId];
+      if (!restrictedBases) return true;
+
+      const restrictedBasesA: Token[] | undefined = restrictedBases[tokenA.address];
+      const restrictedBasesB: Token[] | undefined = restrictedBases[tokenB.address];
+
+      if (!restrictedBasesA && !restrictedBasesB) return true;
+
+      if (restrictedBasesA && !restrictedBasesA.find(base => tokenB.equals(base))) return false;
+      if (restrictedBasesB && !restrictedBasesB.find(base => tokenA.equals(base))) return false;
+
+      return true;
+    })
+}
+
 function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
   const { chainId } = useActiveWeb3React()
-
-  const bases: Token[] = chainId ? BASES_TO_CHECK_TRADES_AGAINST[chainId] : []
 
   const [tokenA, tokenB] = chainId
     ? [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
     : [undefined, undefined]
 
-  const basePairs: [Token, Token][] = useMemo(
-    () =>
-      flatMap(bases, (base): [Token, Token][] => bases.map(otherBase => [base, otherBase])).filter(
-        ([t0, t1]) => t0.address !== t1.address
-      ),
-    [bases]
-  )
+  const allPairCombinations: [Token, Token][] = useMemo(() => generateAllRoutePairs(tokenA, tokenB, chainId), [
+    tokenA,
+    tokenB,
+    chainId
+  ]);
 
-  const allPairCombinations: [Token, Token][] = useMemo(
-    () =>
-      tokenA && tokenB
-        ? [
-            // the direct pair
-            [tokenA, tokenB],
-            // token A against all bases
-            ...bases.map((base): [Token, Token] => [tokenA, base]),
-            // token B against all bases
-            ...bases.map((base): [Token, Token] => [tokenB, base]),
-            // each base against all bases
-            ...basePairs
-          ]
-            .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
-            .filter(([t0, t1]) => t0.address !== t1.address)
-            .filter(([tokenA, tokenB]) => {
-              if (!chainId) return true
-              const customBases = CUSTOM_BASES[chainId]
-              if (!customBases) return true
-
-              const customBasesA: Token[] | undefined = customBases[tokenA.address]
-              const customBasesB: Token[] | undefined = customBases[tokenB.address]
-
-              if (!customBasesA && !customBasesB) return true
-
-              if (customBasesA && !customBasesA.find(base => tokenB.equals(base))) return false
-              if (customBasesB && !customBasesB.find(base => tokenA.equals(base))) return false
-
-              return true
-            })
-        : [],
-    [tokenA, tokenB, bases, basePairs, chainId]
-  )
-
-  const allPairs = usePairs(allPairCombinations)
+  const allPairs = usePairs(allPairCombinations);
 
   // only pass along valid pairs, non-duplicated pairs
   return useMemo(
