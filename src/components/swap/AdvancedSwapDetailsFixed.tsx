@@ -1,4 +1,5 @@
 import { Trade, TradeType } from '@sushiswap/sdk'
+import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Field } from '../../state/swap/actions'
@@ -23,6 +24,7 @@ const InfoLink = styled(ExternalLink)`
 
 function TradeSummary({ trade, allowedSlippage }: { trade: Trade | undefined; allowedSlippage: number }) {
   const theme = useContext(ThemeContext)
+  const { chainId } = useActiveWeb3React()
   const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
   const isExactIn = trade?.tradeType === TradeType.EXACT_INPUT
   const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage)
@@ -72,7 +74,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade | undefined; al
             <TYPE.black fontSize={14} color={theme.text3}>
               {realizedLPFee
                 ? realizedLPFee
-                  ? `${realizedLPFee.toSignificant(4)} ${trade?.inputAmount.currency.symbol}`
+                  ? `${realizedLPFee.toSignificant(4)} ${trade?.inputAmount.currency.getSymbol(chainId)}`
                   : '-'
                 : ''}
             </TYPE.black>
