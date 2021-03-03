@@ -83,6 +83,10 @@ const HeaderControls = styled.div`
     border-radius: 12px 12px 0 0;
     background-color: ${({ theme }) => theme.bg1};
   `};
+
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    padding: 5px;
+  `}
 `
 
 const HeaderElement = styled.div`
@@ -97,6 +101,10 @@ const HeaderElement = styled.div`
   ${({ theme }) => theme.mediaWidth.upToMedium`
    flex-direction: row-reverse;
     align-items: center;
+
+    & > *:not(:first-child) {
+      margin-left: 2px;
+    }
   `};
 `
 
