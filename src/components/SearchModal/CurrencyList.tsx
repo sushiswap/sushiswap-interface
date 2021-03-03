@@ -112,11 +112,11 @@ function CurrencyRow({
     >
       <CurrencyLogo currency={currency} size={'24px'} />
       <Column>
-        <Text title={currency.name} fontWeight={500}>
+        <Text title={currency.getName(chainId)} fontWeight={500}>
           {currency.getSymbol(chainId)}
         </Text>
         <TYPE.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
-          {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
+          {currency.getName(chainId)} {!isOnSelectedList && customAdded && '• Added by user'}
         </TYPE.darkGray>
       </Column>
       <TokenTags currency={currency} />

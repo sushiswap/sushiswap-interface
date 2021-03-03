@@ -400,7 +400,7 @@ export default function Header() {
               <CardNoise />
             </UNIWrapper>
           )}
-          {!availableClaim && aggregateBalance && chainId && SUSHI[chainId] && (
+          {!availableClaim && aggregateBalance && chainId && [1, 3, 4, 5, 42].includes(chainId) && (
             <UNIWrapper onClick={() => setShowUniBalanceModal(true)}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
                 {account && (
