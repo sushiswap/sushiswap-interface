@@ -28,14 +28,12 @@ const builders = {
   },
 
   fantom: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = `https://explorer.${chainName ? `${chainName}.` : ''}fantom.network`
+    const prefix = 'https://ftmscan.com'
     switch (type) {
-      case 'token':
-        return `${prefix}/assets/${data}`
-      case 'address':
-        return `${prefix}/address/${data}`
+      case 'transaction':
+        return `${prefix}/tx/${data}`
       default:
-        return `${prefix}/${type}s/${data}`
+        return `${prefix}/${type}/${data}`
     }
   },
 
