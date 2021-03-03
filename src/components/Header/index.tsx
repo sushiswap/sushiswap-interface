@@ -305,7 +305,8 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.MATIC_TESTNET]: 'Matic Testnet',
   [ChainId.XDAI]: 'xDai',
   [ChainId.BSC]: 'BSC',
-  [ChainId.BSC_TESTNET]: 'BSC Testnet'
+  [ChainId.BSC_TESTNET]: 'BSC Testnet',
+  [ChainId.MOONBASE]: 'Moonbase'
 }
 
 export default function Header() {

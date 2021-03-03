@@ -19,17 +19,17 @@ export function isAddress(value: any): string | false {
 const builders = {
   etherscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://${chainName ? `${chainName}.` : ''}etherscan.io`
-    switch(type){
+    switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
       default:
         return `${prefix}/${type}/${data}`
     }
-  }, 
+  },
 
   fantom: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://explorer.${chainName ? `${chainName}.` : ''}fantom.network`
-    switch(type){
+    switch (type) {
       case 'token':
         return `${prefix}/assets/${data}`
       case 'address':
@@ -41,7 +41,7 @@ const builders = {
 
   xdai: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://blockscout.com/poa/xdai`
-    switch(type){
+    switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
       case 'token':
@@ -53,7 +53,7 @@ const builders = {
 
   bscscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://${chainName ? `${chainName}.` : ''}bscscan.com`
-    switch(type){
+    switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
       default:
@@ -63,7 +63,7 @@ const builders = {
 
   matic: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://explorer-${chainName}.maticvigil.com`
-    switch(type){
+    switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
       case 'token':
@@ -74,9 +74,9 @@ const builders = {
   },
 
   // token is not yet supported for arbitrum
-  arbitrum: (chainName: string,  data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+  arbitrum: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://explorer.offchainlabs.com/#`
-    switch(type){
+    switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
       case 'token':
@@ -84,17 +84,28 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+  moonbase: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://moonbeam-explorer.netlify.app'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      case 'address':
+        return `${prefix}/address/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
 interface ChainObject {
-  [chainId: number] : {
-    chainName: string, 
-    builder: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => string 
+  [chainId: number]: {
+    chainName: string
+    builder: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => string
   }
 }
 
-const chains : ChainObject = {
+const chains: ChainObject = {
   [ChainId.MAINNET]: {
     chainName: '',
     builder: builders.etherscan
@@ -146,6 +157,10 @@ const chains : ChainObject = {
   [ChainId.ARBITRUM]: {
     chainName: 'arbitrum',
     builder: builders.arbitrum
+  },
+  [ChainId.MOONBASE]: {
+    chainName: '',
+    builder: builders.moonbase
   }
 }
 

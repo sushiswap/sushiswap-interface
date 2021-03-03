@@ -1,6 +1,6 @@
 import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
-import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
-// import DEFAULT_TOKEN_LIST from './sushiswap-default.tokenlist.json'
+// import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
+import DEFAULT_TOKEN_LIST from './sushiswap-default.tokenlist.json'
 import { ChainId, Token } from '@sushiswap/sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
@@ -50,7 +50,8 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.XDAI]: {},
   [ChainId.BSC]: {},
   [ChainId.BSC_TESTNET]: {},
-  [ChainId.ARBITRUM]: {}
+  [ChainId.ARBITRUM]: {},
+  [ChainId.MOONBASE]: {}
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -114,6 +115,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     56: { ...map1[56], ...map2[56] }, // bsc
     97: { ...map1[97], ...map2[97] }, // bsc testnet
     79377087078960: { ...map1[79377087078960], ...map2[79377087078960] }, // arbitrum
+    1287: { ...map1[1287], ...map2[1287] } // moonbase
   }
 }
 

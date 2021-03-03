@@ -35,7 +35,7 @@ export function getNetworkLibrary(): Web3Provider {
 
 export const injected = new InjectedConnector({
   supportedChainIds: [
-    1, // mainnet 
+    1, // mainnet
     3, // ropsten
     4, // rinkeby
     5, // goreli
@@ -46,7 +46,8 @@ export const injected = new InjectedConnector({
     80001, // matic testnet
     100, // xdai
     56, // binance smart chain
-    97 // binance smart chain testnet
+    97, // binance smart chain testnet
+    1287 // moonbase
   ]
 })
 

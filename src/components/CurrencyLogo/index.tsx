@@ -38,7 +38,8 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MATIC_TESTNET]: MaticLogo,
   [ChainId.XDAI]: xDaiLogo,
   [ChainId.BSC]: BinanceCoinLogo,
-  [ChainId.BSC_TESTNET]: BinanceCoinLogo
+  [ChainId.BSC_TESTNET]: BinanceCoinLogo,
+  [ChainId.MOONBASE]: EthereumLogo
 }
 
 export default function CurrencyLogo({
