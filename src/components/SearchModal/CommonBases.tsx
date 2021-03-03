@@ -53,7 +53,7 @@ export default function CommonBases({
         >
           <CurrencyLogo currency={ETHER} style={{ marginRight: 8 }} />
           <Text fontWeight={500} fontSize={16}>
-            ETH
+            {Currency.getNativeCurrencySymbol(chainId)}
           </Text>
         </BaseWrapper>
         {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
@@ -62,7 +62,7 @@ export default function CommonBases({
             <BaseWrapper onClick={() => !selected && onSelect(token)} disable={selected} key={token.address}>
               <CurrencyLogo currency={token} style={{ marginRight: 8 }} />
               <Text fontWeight={500} fontSize={16}>
-                {token.symbol}
+                {token.getSymbol(chainId)}
               </Text>
             </BaseWrapper>
           )

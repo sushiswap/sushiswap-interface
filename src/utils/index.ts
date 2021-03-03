@@ -16,36 +16,146 @@ export function isAddress(value: any): string | false {
   }
 }
 
-const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
-  1: '',
-  3: 'ropsten.',
-  4: 'rinkeby.',
-  5: 'goerli.',
-  42: 'kovan.'
+const builders = {
+  etherscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}etherscan.io`
+    switch(type){
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  }, 
+
+  fantom: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://explorer.${chainName ? `${chainName}.` : ''}fantom.network`
+    switch(type){
+      case 'token':
+        return `${prefix}/assets/${data}`
+      case 'address':
+        return `${prefix}/address/${data}`
+      default:
+        return `${prefix}/${type}s/${data}`
+    }
+  },
+
+  xdai: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://blockscout.com/poa/xdai`
+    switch(type){
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      case 'token':
+        return `${prefix}/tokens/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  bscscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}bscscan.com`
+    switch(type){
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  matic: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://explorer-${chainName}.maticvigil.com`
+    switch(type){
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      case 'token':
+        return `${prefix}/tokens/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  // token is not yet supported for arbitrum
+  arbitrum: (chainName: string,  data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://explorer.offchainlabs.com/#`
+    switch(type){
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      case 'token':
+        return prefix
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  }
 }
 
-export function getEtherscanLink(
+interface ChainObject {
+  [chainId: number] : {
+    chainName: string, 
+    builder: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => string 
+  }
+}
+
+const chains : ChainObject = {
+  [ChainId.MAINNET]: {
+    chainName: '',
+    builder: builders.etherscan
+  },
+  [ChainId.ROPSTEN]: {
+    chainName: 'ropsten',
+    builder: builders.etherscan
+  },
+  [ChainId.RINKEBY]: {
+    chainName: 'rinkeby',
+    builder: builders.etherscan
+  },
+  [ChainId.GÖRLI]: {
+    chainName: 'goerli',
+    builder: builders.etherscan
+  },
+  [ChainId.KOVAN]: {
+    chainName: 'kovan',
+    builder: builders.etherscan
+  },
+  [ChainId.MATIC]: {
+    chainName: 'mainnet',
+    builder: builders.matic
+  },
+  [ChainId.MATIC_TESTNET]: {
+    chainName: 'mumbai',
+    builder: builders.matic
+  },
+  [ChainId.FANTOM]: {
+    chainName: '',
+    builder: builders.fantom
+  },
+  [ChainId.FANTOM_TESTNET]: {
+    chainName: 'testnet',
+    builder: builders.fantom
+  },
+  [ChainId.XDAI]: {
+    chainName: 'xdai',
+    builder: builders.xdai
+  },
+  [ChainId.BSC]: {
+    chainName: '',
+    builder: builders.bscscan
+  },
+  [ChainId.BSC_TESTNET]: {
+    chainName: 'testnet',
+    builder: builders.bscscan
+  },
+  [ChainId.ARBITRUM]: {
+    chainName: 'arbitrum',
+    builder: builders.arbitrum
+  }
+}
+
+export function getExplorerLink(
   chainId: ChainId,
   data: string,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
-  const prefix = `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
-
-  switch (type) {
-    case 'transaction': {
-      return `${prefix}/tx/${data}`
-    }
-    case 'token': {
-      return `${prefix}/token/${data}`
-    }
-    case 'block': {
-      return `${prefix}/block/${data}`
-    }
-    case 'address':
-    default: {
-      return `${prefix}/address/${data}`
-    }
-  }
+  const chain = chains[chainId]
+  return chain.builder(chain.chainName, data, type)
 }
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end

@@ -12,7 +12,7 @@ import useTheme from 'hooks/useTheme'
 import { ButtonPrimary } from 'components/Button'
 import { SectionBreak } from 'components/swap/styleds'
 import { useAddUserToken } from 'state/user/hooks'
-import { getEtherscanLink } from 'utils'
+import { getExplorerLink } from 'utils'
 import { useActiveWeb3React } from 'hooks'
 import { ExternalLink } from '../../theme/components'
 import { useCombinedInactiveList } from 'state/lists/hooks'
@@ -87,7 +87,7 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                   <TYPE.darkGray fontWeight={300}>{token.name}</TYPE.darkGray>
                 </AutoRow>
                 {chainId && (
-                  <ExternalLink href={getEtherscanLink(chainId, token.address, 'address')}>
+                  <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
                     <AddressText>{token.address}</AddressText>
                   </ExternalLink>
                 )}

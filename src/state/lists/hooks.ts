@@ -1,5 +1,6 @@
 import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
-import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list'
+import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
+// import DEFAULT_TOKEN_LIST from './sushiswap-default.tokenlist.json'
 import { ChainId, Token } from '@sushiswap/sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
@@ -41,7 +42,15 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.RINKEBY]: {},
   [ChainId.ROPSTEN]: {},
   [ChainId.GÖRLI]: {},
-  [ChainId.MAINNET]: {}
+  [ChainId.MAINNET]: {},
+  [ChainId.FANTOM]: {},
+  [ChainId.FANTOM_TESTNET]: {},
+  [ChainId.MATIC]: {},
+  [ChainId.MATIC_TESTNET]: {},
+  [ChainId.XDAI]: {},
+  [ChainId.BSC]: {},
+  [ChainId.BSC_TESTNET]: {},
+  [ChainId.ARBITRUM]: {}
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -92,11 +101,19 @@ export function useAllLists(): {
 
 function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddressMap {
   return {
-    1: { ...map1[1], ...map2[1] },
-    3: { ...map1[3], ...map2[3] },
-    4: { ...map1[4], ...map2[4] },
-    5: { ...map1[5], ...map2[5] },
-    42: { ...map1[42], ...map2[42] }
+    1: { ...map1[1], ...map2[1] }, // mainnet
+    3: { ...map1[3], ...map2[3] }, // ropsten
+    4: { ...map1[4], ...map2[4] }, // rinkeby
+    5: { ...map1[5], ...map2[5] }, // goerli
+    42: { ...map1[42], ...map2[42] }, // kovan
+    250: { ...map1[250], ...map2[250] }, // fantom
+    4002: { ...map1[4002], ...map2[4002] }, // fantom testnet
+    137: { ...map1[137], ...map2[137] }, // matic
+    80001: { ...map1[80001], ...map2[80001] }, // matic testnet
+    100: { ...map1[100], ...map2[100] }, // xdai
+    56: { ...map1[56], ...map2[56] }, // bsc
+    97: { ...map1[97], ...map2[97] }, // bsc testnet
+    79377087078960: { ...map1[79377087078960], ...map2[79377087078960] }, // arbitrum
   }
 }
 

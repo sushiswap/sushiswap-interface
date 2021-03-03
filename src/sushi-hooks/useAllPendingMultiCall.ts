@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useSingleContractMultipleData, useSingleCallResult } from '../state/multicall/hooks'
+import { useSingleContractMultipleData, useSingleCallResult, NEVER_RELOAD } from '../state/multicall/hooks'
 import { useMasterChefContract } from './useContract'
 import { useActiveWeb3React } from '../hooks'
 import { BigNumber } from 'ethers'
@@ -7,7 +7,7 @@ import { BigNumber } from 'ethers'
 export function useAllPendingSushi() {
   const { account } = useActiveWeb3React()
   const masterChef = useMasterChefContract()
-  const numberOfPools = useSingleCallResult(masterChef, 'poolLength')
+  const numberOfPools = useSingleCallResult(masterChef, 'poolLength', undefined, NEVER_RELOAD)
 
   const args = useMemo(
     () =>

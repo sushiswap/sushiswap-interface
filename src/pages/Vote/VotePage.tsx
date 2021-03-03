@@ -15,8 +15,8 @@ import ReactMarkdown from 'react-markdown'
 import VoteModal from '../../components/vote/VoteModal'
 import { TokenAmount, JSBI } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../../hooks'
-import { AVERAGE_BLOCK_TIME_IN_SECS, COMMON_CONTRACT_NAMES, UNI, ZERO_ADDRESS } from '../../constants'
-import { isAddress, getEtherscanLink } from '../../utils'
+import { AVERAGE_BLOCK_TIME_IN_SECS, COMMON_CONTRACT_NAMES, SUSHI, ZERO_ADDRESS } from '../../constants'
+import { isAddress, getExplorerLink } from '../../utils'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleDelegateModal, useToggleVoteModal, useBlockNumber } from '../../state/application/hooks'
 import DelegateModal from '../../components/vote/DelegateModal'
@@ -154,7 +154,10 @@ export default function VotePage({
     proposalData &&
     proposalData.status === 'active'
 
-  const uniBalance: TokenAmount | undefined = useTokenBalance(account ?? undefined, chainId ? UNI[chainId] : undefined)
+  const uniBalance: TokenAmount | undefined = useTokenBalance(
+    account ?? undefined,
+    chainId ? SUSHI[chainId] : undefined
+  )
   const userDelegatee: string | undefined = useUserDelegatee()
 
   // in blurb link to home page if they are able to unlock
@@ -167,7 +170,7 @@ export default function VotePage({
   const linkIfAddress = (content: string) => {
     if (isAddress(content) && chainId) {
       const commonName = COMMON_CONTRACT_NAMES[content] ?? content
-      return <ExternalLink href={getEtherscanLink(chainId, content, 'address')}>{commonName}</ExternalLink>
+      return <ExternalLink href={getExplorerLink(chainId, content, 'address')}>{commonName}</ExternalLink>
     }
     return <span>{content}</span>
   }
@@ -295,7 +298,7 @@ export default function VotePage({
         <AutoColumn gap="md">
           <TYPE.mediumHeader fontWeight={600}>Proposer</TYPE.mediumHeader>
           <ProposerAddressLink
-            href={proposalData?.proposer && chainId ? getEtherscanLink(chainId, proposalData?.proposer, 'address') : ''}
+            href={proposalData?.proposer && chainId ? getExplorerLink(chainId, proposalData?.proposer, 'address') : ''}
           >
             <ReactMarkdown source={proposalData?.proposer} />
           </ProposerAddressLink>

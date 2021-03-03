@@ -52,7 +52,7 @@ interface PositionCardProps {
 }
 
 export function MinimalPositionCard({ pair, showUnwrapped = false, border }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const currency0 = showUnwrapped ? pair.token0 : unwrappedToken(pair.token0)
   const currency1 = showUnwrapped ? pair.token1 : unwrappedToken(pair.token1)
@@ -95,7 +95,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               <RowFixed>
                 <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
                 <Text fontWeight={500} fontSize={20}>
-                  {currency0.symbol}/{currency1.symbol}
+                  {currency0.getSymbol(chainId)}/{currency1.getSymbol(chainId)}
                 </Text>
               </RowFixed>
               <RowFixed>
@@ -115,7 +115,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               </FixedHeightRow>
               <FixedHeightRow>
                 <Text fontSize={16} fontWeight={500}>
-                  {currency0.symbol}:
+                  {currency0.getSymbol(chainId)}:
                 </Text>
                 {token0Deposited ? (
                   <RowFixed>
@@ -129,7 +129,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
               </FixedHeightRow>
               <FixedHeightRow>
                 <Text fontSize={16} fontWeight={500}>
-                  {currency1.symbol}:
+                  {currency1.getSymbol(chainId)}:
                 </Text>
                 {token1Deposited ? (
                   <RowFixed>
@@ -160,7 +160,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
 }
 
 export default function FullPositionCard({ pair, border, stakedBalance }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const currency0 = unwrappedToken(pair.token0)
   const currency1 = unwrappedToken(pair.token1)
@@ -200,7 +200,11 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
           <AutoRow gap="8px">
             <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={20} />
             <Text fontWeight={500} fontSize={20}>
-              {!currency0 || !currency1 ? <Dots>Loading</Dots> : `${currency0.symbol}/${currency1.symbol}`}
+              {!currency0 || !currency1 ? (
+                <Dots>Loading</Dots>
+              ) : (
+                `${currency0.getSymbol(chainId)}/${currency1.getSymbol(chainId)}`
+              )}
             </Text>
           </AutoRow>
           <RowFixed gap="8px">
@@ -248,7 +252,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             <FixedHeightRow>
               <RowFixed>
                 <Text fontSize={16} fontWeight={500}>
-                  Pooled {currency0.symbol}:
+                  Pooled {currency0?.getSymbol(chainId)}:
                 </Text>
               </RowFixed>
               {token0Deposited ? (
@@ -266,7 +270,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             <FixedHeightRow>
               <RowFixed>
                 <Text fontSize={16} fontWeight={500}>
-                  Pooled {currency1.symbol}:
+                  Pooled {currency1?.getSymbol(chainId)}:
                 </Text>
               </RowFixed>
               {token1Deposited ? (
@@ -292,14 +296,14 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               </Text>
             </FixedHeightRow>
 
-            <ButtonSecondary padding="8px" borderRadius="8px">
+            {/* <ButtonSecondary padding="8px" borderRadius="8px">
               <ExternalLink
                 style={{ width: '100%', textAlign: 'center' }}
                 href={`https://uniswap.info/account/${account}`}
               >
                 View accrued fees and analytics<span style={{ fontSize: '11px' }}>↗</span>
               </ExternalLink>
-            </ButtonSecondary>
+            </ButtonSecondary> */}
             {userDefaultPoolBalance && JSBI.greaterThan(userDefaultPoolBalance.raw, BIG_INT_ZERO) && (
               <RowBetween marginTop="10px">
                 <ButtonPrimary
