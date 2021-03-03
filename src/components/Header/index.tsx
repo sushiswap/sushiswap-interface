@@ -33,6 +33,7 @@ import { Dots } from '../swap/styleds'
 import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
+import { SUSHI } from '../../constants'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -365,9 +366,11 @@ export default function Header() {
           {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
             Vote
           </StyledNavLink> */}
-          <StyledExternalLink id={`stake-nav-link`} href={'https://analytics.sushiswap.fi'}>
-            Analytics <span style={{ fontSize: '11px' }}>↗</span>
-          </StyledExternalLink>
+          {chainId && (
+            <StyledExternalLink id={`stake-nav-link`} href={'https://analytics.sushiswap.fi'}>
+              Analytics <span style={{ fontSize: '11px' }}>↗</span>
+            </StyledExternalLink>
+          )}
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>
@@ -387,7 +390,7 @@ export default function Header() {
               <CardNoise />
             </UNIWrapper>
           )}
-          {!availableClaim && aggregateBalance && chainId && [1, 3, 4, 5, 42].includes(chainId) && (
+          {!availableClaim && aggregateBalance && chainId && SUSHI[chainId] && (
             <UNIWrapper onClick={() => setShowUniBalanceModal(true)}>
               <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
                 {account && (
