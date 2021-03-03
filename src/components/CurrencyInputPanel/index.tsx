@@ -79,10 +79,18 @@ const InputPanel = styled.div<{ hideInput?: boolean }>`
   z-index: 1;
 `
 
-const Container = styled.div<{ hideInput: boolean }>`
-  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '20px')};
-  border: 1px solid ${({ theme }) => theme.bg2};
+const Container = styled.div<{
+  hideInput: boolean
+  cornerRadiusTopNone?: boolean
+  cornerRadiusBottomNone?: boolean
+  containerBackground?: string
+}>`
+  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '12px')};
+  border-radius: ${({ cornerRadiusTopNone }) => cornerRadiusTopNone && '0 0 12px 12px'};
+  border-radius: ${({ cornerRadiusBottomNone }) => cornerRadiusBottomNone && '12px 12px 0 0'};
+  /*border: 1px solid ${({ theme }) => theme.bg2};*/
   background-color: ${({ theme }) => theme.bg1};
+  background-color: ${({ containerBackground }) => containerBackground};
 `
 
 const StyledTokenName = styled.span<{ active?: boolean }>`
@@ -93,6 +101,8 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 
 const StyledBalanceMax = styled.button`
   height: 28px;
+  padding-right: 8px;
+  padding-left: 8px;
   background-color: ${({ theme }) => theme.primary5};
   border: 1px solid ${({ theme }) => theme.primary5};
   border-radius: ${({ theme }) => theme.borderRadius};
@@ -131,6 +141,9 @@ interface CurrencyInputPanelProps {
   id: string
   showCommonBases?: boolean
   customBalanceText?: string
+  cornerRadiusBottomNone?: boolean
+  cornerRadiusTopNone?: boolean
+  containerBackground?: string
 }
 
 export default function CurrencyInputPanel({
@@ -148,12 +161,15 @@ export default function CurrencyInputPanel({
   otherCurrency,
   id,
   showCommonBases,
-  customBalanceText
+  customBalanceText,
+  cornerRadiusBottomNone,
+  cornerRadiusTopNone,
+  containerBackground
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
 
   const [modalOpen, setModalOpen] = useState(false)
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const theme = useTheme()
 
@@ -163,17 +179,22 @@ export default function CurrencyInputPanel({
 
   return (
     <InputPanel id={id}>
-      <Container hideInput={hideInput}>
+      <Container
+        hideInput={hideInput}
+        cornerRadiusBottomNone={cornerRadiusBottomNone}
+        cornerRadiusTopNone={cornerRadiusTopNone}
+        containerBackground={containerBackground}
+      >
         {!hideInput && (
           <LabelRow>
             <RowBetween>
-              <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
+              <TYPE.body color={theme.text3} fontWeight={500} fontSize={14}>
                 {label}
               </TYPE.body>
               {account && (
                 <TYPE.body
                   onClick={onMax}
-                  color={theme.text2}
+                  color={theme.text3}
                   fontWeight={500}
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
@@ -226,7 +247,7 @@ export default function CurrencyInputPanel({
                     ? currency.symbol.slice(0, 4) +
                       '...' +
                       currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
-                    : currency?.getSymbol(chainId)) || t('selectToken')}
+                    : currency?.symbol) || t('selectToken')}
                 </StyledTokenName>
               )}
               {!disableCurrencySelect && <StyledDropDown selected={!!currency} />}

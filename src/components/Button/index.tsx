@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { darken, lighten } from 'polished'
 
 import { RowBetween } from '../Row'
@@ -38,22 +38,31 @@ const Base = styled(RebassButton)<{
   }
 `
 
+const sheen = keyframes`{
+  100% {
+    transform: rotateZ(60deg) translate(1em, -23em);
+  }
+}`
+
 export const ButtonPrimary = styled(Base)`
-  background-color: ${({ theme }) => theme.primary1};
+  /* background-color: ${({ theme }) => theme.primary1}; */
+  overflow:hidden;
+  background: linear-gradient(to right, #2172e5 , #ff007a);
+  background-origin: border-box;
   color: white;
   &:focus {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primary1)};
-    background-color: ${({ theme }) => darken(0.05, theme.primary1)};
-  }
-  &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.primary1)};
+    /*background: ${({ theme }) => darken(0.05, theme.primary1)};*/
+    background: linear-gradient(to right, #2172e5 , #ff007a);
   }
   &:active {
     box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primary1)};
-    background-color: ${({ theme }) => darken(0.1, theme.primary1)};
+    /*background: ${({ theme }) => darken(0.1, theme.primary1)};*/
+    background: linear-gradient(to right, #2172e5 , #ff007a);
   }
   &:disabled {
-    background-color: ${({ theme, altDisabledStyle, disabled }) =>
+    pointer-events: none;
+    background: ${({ theme, altDisabledStyle, disabled }) =>
       altDisabledStyle ? (disabled ? theme.bg3 : theme.primary1) : theme.bg3};
     color: ${({ theme, altDisabledStyle, disabled }) =>
       altDisabledStyle ? (disabled ? theme.text3 : 'white') : theme.text3};
@@ -62,6 +71,25 @@ export const ButtonPrimary = styled(Base)`
     border: 1px solid transparent;
     outline: none;
     opacity: ${({ altDisabledStyle }) => (altDisabledStyle ? '0.5' : '1')};
+  }
+  &:hover {
+    /*background: ${({ theme }) => darken(0.05, theme.primary1)};*/
+    background: linear-gradient(to right, #2172e5 , #ff007a);
+    background-origin: border-box;
+    &::after {
+      animation: ${sheen} 0.5s forwards;
+    }
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    bottom: -50%;
+    left: -120%;
+    background: linear-gradient(to bottom, rgba(229, 172, 142, 0), rgba(255,255,255,0.5) 50%, rgba(229, 172, 142, 0));
+    transform: rotateZ(60deg) translate(-5em, 7.5em);
   }
 `
 
