@@ -367,7 +367,7 @@ export default function Header() {
             Vote
           </StyledNavLink> */}
           {chainId && (
-            <StyledExternalLink id={`stake-nav-link`} href={'https://analytics.sushiswap.fi'}>
+            <StyledExternalLink id={`stake-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>
             </StyledExternalLink>
           )}

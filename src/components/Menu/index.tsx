@@ -109,7 +109,7 @@ export default function Menu() {
             <Info size={14} />
             About
           </MenuItem>
-          <MenuItem id="link" href="https://docs.sushiswap.fi">
+          <MenuItem id="link" href="https://docs.sushi.com">
             <BookOpen size={14} />
             Docs
           </MenuItem>
@@ -121,7 +121,7 @@ export default function Menu() {
             <MessageCircle size={14} />
             Discord
           </MenuItem>
-          <MenuItem id="link" href="https://analytics.sushiswap.fi/">
+          <MenuItem id="link" href="https://analytics.sushi.com/">
             <PieChart size={14} />
             Analytics
           </MenuItem>

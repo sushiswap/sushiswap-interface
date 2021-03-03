@@ -117,7 +117,7 @@ export default function UniBalanceContent({ setShowUniBalanceModal }: { setShowU
               <TYPE.white color="white">{totalSupply?.toFixed(0, { groupSeparator: ',' })}</TYPE.white>
             </RowBetween>
             {uni && uni.chainId === ChainId.MAINNET ? (
-              <ExternalLink href={`https://analytics.sushiswap.fi/tokens/${uni.address}`}>
+              <ExternalLink href={`https://analytics.sushi.com/tokens/${uni.address}`}>
                 View SUSHI Analytics
               </ExternalLink>
             ) : null}

@@ -109,7 +109,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
           {!showRoute && (
             <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
               <InfoLink
-                href={'https://analytics.sushiswap.fi/pairs/' + trade.route.pairs[0].liquidityToken.address}
+                href={'https://analytics.sushi.com/pairs/' + trade.route.pairs[0].liquidityToken.address}
                 target="_blank"
               >
                 View pair analytics ↗
