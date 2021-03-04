@@ -91,6 +91,8 @@ export interface AdvancedSwapDetailsProps {
 }
 
 export function AdvancedSwapDetailsFixed({ trade }: AdvancedSwapDetailsProps) {
+  const { chainId } = useActiveWeb3React()
+
   const theme = useContext(ThemeContext)
 
   const [allowedSlippage] = useUserSlippageTolerance()
@@ -100,7 +102,7 @@ export function AdvancedSwapDetailsFixed({ trade }: AdvancedSwapDetailsProps) {
   return (
     <AutoColumn gap="0px">
       <TradeSummary trade={trade} allowedSlippage={allowedSlippage} />
-      {trade && !showRoute ? (
+      {chainId === 1 && trade && !showRoute ? (
         <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
           <InfoLink
             href={'https://analytics.sushi.com/pairs/' + trade?.route.pairs[0].liquidityToken.address}
