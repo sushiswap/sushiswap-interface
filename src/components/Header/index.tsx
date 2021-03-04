@@ -83,6 +83,10 @@ const HeaderControls = styled.div`
     border-radius: 12px 12px 0 0;
     background-color: ${({ theme }) => theme.bg1};
   `};
+
+  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+    padding: 5px;
+  `}
 `
 
 const HeaderElement = styled.div`
@@ -95,8 +99,12 @@ const HeaderElement = styled.div`
   }
 
   ${({ theme }) => theme.mediaWidth.upToMedium`
-   flex-direction: row-reverse;
+    flex-direction: row-reverse;
     align-items: center;
+
+    & > *:not(:first-child) {
+      margin-left: 4px;
+    }
   `};
 `
 
@@ -299,6 +307,10 @@ export const StyledMenuButton = styled.button`
   > * {
     stroke: ${({ theme }) => theme.text1};
   }
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    margin-left: 4px;
+  `};
 `
 
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {

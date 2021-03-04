@@ -26,7 +26,7 @@ const StyledMenuButton = styled.button`
   height: 35px;
   background-color: ${({ theme }) => theme.bg3};
 
-  padding: 0.15rem 0.5rem;
+  padding: 0.15rem 0.4rem;
   border-radius: ${({ theme }) => theme.borderRadius};
 
   :hover,
@@ -49,6 +49,10 @@ const StyledMenu = styled.div`
   position: relative;
   border: none;
   text-align: left;
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    margin-left: 0.2rem;
+  `};
 `
 
 const MenuFlyout = styled.span`
