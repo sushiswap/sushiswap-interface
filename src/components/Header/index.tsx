@@ -35,6 +35,7 @@ import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
 import { SUSHI } from '../../constants'
+import LanguageSwitch from '../LanguageSwitch'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -451,6 +452,7 @@ export default function Header() {
           <StyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
           </StyledMenuButton>
+          <LanguageSwitch />
           <Menu />
         </HeaderElementWrap>
       </HeaderControls>
