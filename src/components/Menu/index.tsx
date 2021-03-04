@@ -50,7 +50,7 @@ const StyledMenu = styled.div`
   border: none;
   text-align: left;
 
-  ${({ theme }) => theme.mediaWidth.upToMedium`
+  ${({ theme }) => theme.mediaWidth.upToExtra2Small`
     margin-left: 0.2rem;
   `};
 `
