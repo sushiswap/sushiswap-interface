@@ -7,6 +7,7 @@ import { LatticeConnector } from '@web3-react/lattice-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
+import { ChainId } from '@sushiswap/sdk'
 
 // TODO: Need to create a map for these & not read single items from ENV...
 const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
@@ -18,14 +19,28 @@ const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
 //   [ChainId.MAINNET]: 'https://mainnet.infura.io/v3/ed2f09b2bafe468ebe3ac5a357539135',
 // }
 
-export const NETWORK_CHAIN_ID: number = parseInt(process.env.REACT_APP_CHAIN_ID ?? '1')
+// export const NETWORK_CHAIN_ID: number = parseInt(process.env.REACT_APP_CHAIN_ID ?? '1')
 
-if (typeof NETWORK_URL === 'undefined') {
-  throw new Error(`REACT_APP_NETWORK_URL must be a defined environment variable`)
+// if (typeof NETWORK_URL === 'undefined') {
+//   throw new Error(`REACT_APP_NETWORK_URL must be a defined environment variable`)
+// }
+
+const INFURA_API_KEY = process.env.INFURA_API_KEY
+
+if (!INFURA_API_KEY) {
+  throw new Error(`INFURA_API_KEY must be a defined environment variable`)
+}
+
+const rpcs = {
+  [ChainId.MAINNET]: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
+  [ChainId.ROPSTEN]: `https://ropsten.infura.io/v3/${INFURA_API_KEY}`,
+  [ChainId.RINKEBY]: `https://rinkeby.infura.io/v3/${INFURA_API_KEY}`,
+  [ChainId.GÖRLI]: `https://goerli.infura.io/v3/${INFURA_API_KEY}`,
+  [ChainId.KOVAN]: `https://kovan.infura.io/v3/${INFURA_API_KEY}`
 }
 
 export const network = new NetworkConnector({
-  urls: { [NETWORK_CHAIN_ID]: NETWORK_URL }
+  urls: rpcs
 })
 
 let networkLibrary: Web3Provider | undefined
@@ -53,7 +68,7 @@ export const injected = new InjectedConnector({
 
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
-  rpc: { 1: NETWORK_URL },
+  rpc: rpcs,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: 15000
@@ -61,8 +76,8 @@ export const walletconnect = new WalletConnectConnector({
 
 // mainnet only
 export const lattice = new LatticeConnector({
-  chainId: NETWORK_CHAIN_ID,
-  url: NETWORK_URL,
+  chainId: 1,
+  url: rpcs[ChainId.MAINNET],
   appName: 'SushiSwap'
 })
 
@@ -80,7 +95,7 @@ export const portis = new PortisConnector({
 
 // mainnet only
 export const walletlink = new WalletLinkConnector({
-  url: NETWORK_URL,
+  url: rpcs[ChainId.MAINNET],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png'
 })
