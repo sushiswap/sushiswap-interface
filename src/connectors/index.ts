@@ -9,13 +9,10 @@ import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 import { ChainId } from '@sushiswap/sdk'
 
-const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
-const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
-
-const INFURA_API_KEY = process.env.INFURA_API_KEY
+const INFURA_API_KEY = process.env.REACT_APP_INFURA_API_KEY
 
 if (!INFURA_API_KEY) {
-  throw new Error(`INFURA_API_KEY must be a defined environment variable`)
+  throw new Error(`INFURA_API_KEY ${INFURA_API_KEY} must be a defined environment variable`)
 }
 
 const RPC = {
@@ -35,6 +32,7 @@ const RPC = {
 }
 
 export const network = new NetworkConnector({
+  defaultChainId: 1,
   urls: RPC
 })
 
@@ -63,7 +61,9 @@ export const injected = new InjectedConnector({
 
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
-  rpc: RPC,
+  rpc: {
+    [ChainId.MAINNET]: RPC[ChainId.MAINNET]
+  },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: 15000
@@ -78,13 +78,13 @@ export const lattice = new LatticeConnector({
 
 // mainnet only
 export const fortmatic = new FortmaticConnector({
-  apiKey: FORMATIC_KEY ?? '',
+  apiKey: process.env.REACT_APP_FORTMATIC_API_KEY ?? '',
   chainId: 1
 })
 
 // mainnet only
 export const portis = new PortisConnector({
-  dAppId: PORTIS_ID ?? '',
+  dAppId: process.env.REACT_APP_PORTIS_ID ?? '',
   networks: [1]
 })
 

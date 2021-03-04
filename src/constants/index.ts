@@ -240,7 +240,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     name: 'Open in Coinbase Wallet',
     iconName: 'coinbaseWalletIcon.svg',
     description: 'Open in Coinbase Wallet app.',
-    href: 'https://go.cb-w.com/mtUDhEZPy1',
+    href: 'https://go.cb-w.com',
     color: '#315CF5',
     mobile: true,
     mobileOnly: true

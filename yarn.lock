@@ -2605,15 +2605,15 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-1.4.2.tgz#065a6613f842ab7ac6d12878072b59327bffa296"
   integrity sha512-Khd2i6Bob9uk7dCgVkhUioEoxRP28m6aj25MegAHvnJyxZPVzZDhxSkeL6wdv5MeAp2DwHkYqUq03KDfVTTP4Q==
 
-"@sushiswap/default-token-list@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-2.0.0.tgz#7366b0995f403a2fbc8f725bb471059672857a18"
-  integrity sha512-KaPWK/L8NYEX6B9ZUhOxaOvUh1M6KFMlFW/3PeSX8dVSNzt5dQJ7RVLETCd6EgLgaLJqe/7WVBQfYX0KS7TUxA==
+"@sushiswap/default-token-list@^3.1.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-3.2.0.tgz#fe3fe9c991872abdf5647dc6ad52eb4a7e1ebfff"
+  integrity sha512-fXNyZXqG0ZnbdJu1iAVUcbJk0zH20G95+5l5c+5CJJE8EMG6naeAd/U/ali9cl0/R/1JFmbwBgCIlHb1wFOelA==
 
-"@sushiswap/sdk@^5.0.0-canary.1":
-  version "5.0.0-canary.1"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.1.tgz#8919ef69c07f028be954b31dfb2c9ae41f619ddf"
-  integrity sha512-b2/8Nk02Ho4p1CnMrNr7Zo6OiB5SOMaeaT8gHnRgWxFdOHrzLScE+WEiS6utCZRP0NT1UQyBU7OM7GjUz6u4yg==
+"@sushiswap/sdk@^5.0.0-canary.2":
+  version "5.0.0-canary.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.2.tgz#8ea978f7c3afaf62b386181c6e430f8039777719"
+  integrity sha512-WaDiaZLQg/vFE34vnrKpUl/rgWo/YRjkwT35p2I02aTjBjKlVtPaLf3IQ/WHFWr20sUXd8VsDZfyQyFx7/B0kw==
   dependencies:
     "@uniswap/v2-core" "^1.0.0"
     big.js "^5.2.2"
@@ -3325,7 +3325,7 @@
     tiny-invariant "^1.0.6"
     tiny-warning "^1.0.3"
 
-"@web3-react/fortmatic-connector@^6.1.0":
+"@web3-react/fortmatic-connector@^6.1.6":
   version "6.1.6"
   resolved "https://registry.yarnpkg.com/@web3-react/fortmatic-connector/-/fortmatic-connector-6.1.6.tgz#99836c4ff4428432e34ed859b55c5842b02726a5"
   integrity sha512-AKiEVvKlZPpRj5pADXyucl2FBt3ymf7PSsRhraHeI8hJCfCEACQ2+bq7okvJq9sNqaeUKukzwUYJmgBYn0qkYQ==
@@ -3335,7 +3335,7 @@
     fortmatic "^1.0.0"
     tiny-invariant "^1.0.6"
 
-"@web3-react/injected-connector@^6.0.0":
+"@web3-react/injected-connector@^6.0.7":
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/@web3-react/injected-connector/-/injected-connector-6.0.7.tgz#1e0be23f51fa07fe6547fe986768a46b74c3a426"
   integrity sha512-Y7aJSz6pg+MWKtvdyuqyy6LWuH+4Tqtph1LWfiyVms9II9ar/9B/de4R8wh4wjg91wmHkU+D75yP09E/Soh2RA==
@@ -3344,7 +3344,7 @@
     "@web3-react/types" "^6.0.7"
     tiny-warning "^1.0.3"
 
-"@web3-react/lattice-connector@^6.1.0":
+"@web3-react/lattice-connector@^6.1.9":
   version "6.1.9"
   resolved "https://registry.yarnpkg.com/@web3-react/lattice-connector/-/lattice-connector-6.1.9.tgz#f99ca5f91582bddd553eefac5df83ee83211575f"
   integrity sha512-uG2P1CcdOZcpMM4JtuQetCDxdqfPi8bq33MpDGM9nrWuT5Sw1N6K60YSr6doAnocZUVX2nzGnO3eL0xwkxAfeQ==
@@ -3354,7 +3354,7 @@
     "@web3-react/types" "^6.0.7"
     eth-lattice-keyring "^0.2.7"
 
-"@web3-react/portis-connector@^6.1.0":
+"@web3-react/portis-connector@^6.1.9":
   version "6.1.9"
   resolved "https://registry.yarnpkg.com/@web3-react/portis-connector/-/portis-connector-6.1.9.tgz#33216ce320d2c6d6e75d0c42c6e977b7a157ad4a"
   integrity sha512-dYP1b6a1Y91t9xEu1NrlGvLwuAqYEuVfAerZtVkVf3JZ3O5TiQyVt7O7KWPPg4WsqQ8JEqOrZcE/2bmozP47mA==
@@ -3369,7 +3369,7 @@
   resolved "https://registry.yarnpkg.com/@web3-react/types/-/types-6.0.7.tgz#34a6204224467eedc6123abaf55fbb6baeb2809f"
   integrity sha512-ofGmfDhxmNT1/P/MgVa8IKSkCStFiyvXe+U5tyZurKdrtTDFU+wJ/LxClPDtFerWpczNFPUSrKcuhfPX1sI6+A==
 
-"@web3-react/walletconnect-connector@^6.1.0":
+"@web3-react/walletconnect-connector@^6.1.9":
   version "6.1.9"
   resolved "https://registry.yarnpkg.com/@web3-react/walletconnect-connector/-/walletconnect-connector-6.1.9.tgz#3459ccf2a2ac7ae8f155645d29a517712afeb731"
   integrity sha512-gPtcFFRAnRgqhmBjhH+dtuG3cx23X+JOX+mRO1D7dN+8yxLZhLhjOZlJFECH5hkC20KMM/sk+rq2yy6Vqp76PQ==
@@ -3379,7 +3379,7 @@
     "@web3-react/types" "^6.0.7"
     tiny-invariant "^1.0.6"
 
-"@web3-react/walletlink-connector@^6.1.0":
+"@web3-react/walletlink-connector@^6.1.9":
   version "6.1.9"
   resolved "https://registry.yarnpkg.com/@web3-react/walletlink-connector/-/walletlink-connector-6.1.9.tgz#3b27b79057ea3865b447a2ecdd3807d094f34061"
   integrity sha512-0kgb28CsUp5k0MVdl3bk5FUSvgDl5psXyRLrXi2WFeHToOJTQnmMstVo9/1Mj36zaYHuSUcdcyLKnLGoabSivQ==
