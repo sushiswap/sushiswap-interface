@@ -78,7 +78,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade | undefined; al
                   : '-'
                 : ''}
             </TYPE.black>
-            <QuestionHelper text="A portion of each trade (0.30%) goes to liquidity providers (LP) as a protocol incentive." />
+            <QuestionHelper text="A portion of each trade (0.25%) goes to liquidity providers (LP) as a protocol incentive, and (0.05%) to xSUSHI holders." />
           </RowFixed>
         </RowBetween>
       </AutoColumn>
