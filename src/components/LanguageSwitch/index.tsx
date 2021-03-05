@@ -1,68 +1,17 @@
-import React, { useRef } from 'react'
+import React, { useRef, memo } from 'react'
 import styled from 'styled-components'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 import { useTranslation } from 'react-i18next'
+import { StyledMenu, MenuFlyout, StyledMenuButton } from 'components/StyledMenu'
 
-const StyledMenuButton = styled.button`
+const ExtendedStyledMenuButton = styled(StyledMenuButton)`
   font-size: 1.25rem;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
-  height: 35px;
-  background-color: ${({ theme }) => theme.bg3};
-
-  padding: 0.15rem 0.4rem;
-  border-radius: ${({ theme }) => theme.borderRadius};
-
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-    background-color: ${({ theme }) => theme.bg4};
-  }
-
-  svg {
-    margin-top: 2px;
-  }
 `
 
-const StyledMenu = styled.div`
-  margin-left: 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: none;
-  text-align: left;
-
-  ${({ theme }) => theme.mediaWidth.upToExtra2Small`
-    margin-left: 0.2rem;
-  `};
-`
-
-const MenuFlyout = styled.span`
+const ExtendedMenuFlyout = styled(MenuFlyout)`
   min-width: 10rem;
-  background-color: ${({ theme }) => theme.bg3};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
-  border-radius: ${({ theme }) => theme.borderRadius};
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  position: absolute;
-  top: 4rem;
-  right: 0rem;
-  z-index: 100;
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -17.25rem;
-  `};
 `
 
 const MenuItem = styled.span`
@@ -135,7 +84,7 @@ const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: stri
   }
 }
 
-export default function LanguageSwitch() {
+function LanguageSwitch() {
   const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.LANGUAGE)
   const toggle = useToggleModal(ApplicationModal.LANGUAGE)
@@ -150,9 +99,9 @@ export default function LanguageSwitch() {
 
   return (
     <StyledMenu ref={node}>
-      <StyledMenuButton onClick={toggle}>{LANGUAGES[i18n.language].flag}</StyledMenuButton>
+      <ExtendedStyledMenuButton onClick={toggle}>{LANGUAGES[i18n.language].flag}</ExtendedStyledMenuButton>
       {open && (
-        <MenuFlyout>
+        <ExtendedMenuFlyout>
           {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
             <MenuItem onClick={() => changeLanguage(key)} key={key}>
               <MenuItemFlag>{flag}</MenuItemFlag> {language}{' '}
@@ -163,8 +112,10 @@ export default function LanguageSwitch() {
               )}
             </MenuItem>
           ))}
-        </MenuFlyout>
+        </ExtendedMenuFlyout>
       )}
     </StyledMenu>
   )
 }
+
+export default memo(LanguageSwitch)
