@@ -128,5 +128,8 @@
     ]
   },
   "license": "GPL-3.0-or-later",
-  "dependencies": {}
+  "dependencies": {
+    "@uniswap/sdk": "^3.0.3",
+    "eth-permit": "^0.1.9"
+  }
 }

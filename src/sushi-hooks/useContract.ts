@@ -16,6 +16,8 @@ import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
 import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
 import PENDING_ABI from '../constants/sushiAbis/pending.json'
 import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
+import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
+import SUSHIROLL_ABI from '@sushiswap/core/build/abi/SushiRoll.json'
 
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
@@ -32,6 +34,11 @@ import {
   ROUTER_ADDRESS
 } from '@sushiswap/sdk'
 
+// Need factory address from Uni as well
+import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
+
+// withSignerIfPossible equals true emulates the web3 .call({account: address})
+// use withSignerIfPossible if the functions need the current wallet address to sign
 // returns null on errors
 export function useContract(
   address: string | undefined | false,
@@ -213,4 +220,17 @@ export function useBentoHelperContract(): Contract | null {
     }
   }
   return useContract(address, BENTOHELPER_ABI, false)
+}
+
+export function useUniV2FactoryContract(): Contract | null {
+  return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
+}
+
+export function useSushiRollContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(
+    chainId === ChainId.MAINNET ? '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B' : undefined,
+    SUSHIROLL_ABI,
+    true
+  )
 }
