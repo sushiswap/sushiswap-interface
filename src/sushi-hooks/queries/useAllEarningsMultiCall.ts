@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { useSingleContractMultipleData, useSingleCallResult, NEVER_RELOAD } from '../state/multicall/hooks'
-import { useMasterChefContract } from './useContract'
-import { useActiveWeb3React } from '../hooks'
+import { useSingleContractMultipleData, useSingleCallResult, NEVER_RELOAD } from '../../state/multicall/hooks'
+import { useMasterChefContract } from '../useContract'
+import { useActiveWeb3React } from '../../hooks'
 import { BigNumber } from 'ethers'
 
 export function useAllPendingSushi() {

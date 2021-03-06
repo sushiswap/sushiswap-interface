@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from '../hooks'
-import { isAddress } from '../utils'
-import ERC20_ABI from '../constants/abis/erc20.json'
-import { useContract, useMasterChefContract } from './useContract'
+import { useActiveWeb3React } from '../../hooks'
+import { isAddress } from '../../utils'
+import ERC20_ABI from '../../constants/abis/erc20.json'
+import { useContract, useMasterChefContract } from '../useContract'
 
 const useAllowance = (lpAddress: string) => {
   const [allowance, setAllowance] = useState(BigNumber.from(0))

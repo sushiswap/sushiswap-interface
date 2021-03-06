@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from '../hooks'
-import { useSushiContract, useSaaveContract } from './useContract'
+import { useActiveWeb3React } from '../../hooks'
+import { useSushiContract, useSaaveContract } from '../useContract'
 
-import Fraction from '../constants/Fraction'
+import Fraction from '../../constants/Fraction'
 
 const useAllowance = () => {
   const [allowance, setAllowance] = useState('0')

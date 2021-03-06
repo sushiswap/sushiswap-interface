@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { Contract, ethers } from 'ethers'
 
-import { useSushiContract, useSaaveContract } from './useContract'
-import { useTransactionAdder } from '../state/transactions/hooks'
+import { useSushiContract, useSaaveContract } from '../useContract'
+import { useTransactionAdder } from '../../state/transactions/hooks'
 
 const useApprove = () => {
   //const { account } = useActiveWeb3React()

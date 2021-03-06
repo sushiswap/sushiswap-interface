@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { Contract, ethers } from 'ethers'
 //import { useActiveWeb3React } from '../hooks'
-import { isAddress } from '../utils'
-import ERC20_ABI from '../constants/abis/erc20.json'
-import { useContract, useMasterChefContract } from './useContract'
-import { useTransactionAdder } from '../state/transactions/hooks'
+import { isAddress } from '../../utils'
+import ERC20_ABI from '../../constants/abis/erc20.json'
+import { useContract, useMasterChefContract } from '../useContract'
+import { useTransactionAdder } from '../../state/transactions/hooks'
 
 const useApprove = (lpAddress: string) => {
   //const { account } = useActiveWeb3React()

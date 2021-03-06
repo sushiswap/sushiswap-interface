@@ -12,9 +12,9 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance from '../../sushi-hooks/useTokenBalance'
-import useAllowanceSaave from '../../sushi-hooks/useAllowanceSaave'
-import useApproveSaave from '../../sushi-hooks/useApproveSaave'
+import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import useAllowanceSaave from '../../sushi-hooks/allowances/useAllowanceSaave'
+import useApproveSaave from '../../sushi-hooks/approves/useApproveSaave'
 
 import useSaave from '../../sushi-hooks/useSaave'
 

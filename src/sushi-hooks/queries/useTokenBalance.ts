@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from '../hooks'
-import ERC20_ABI from '../constants/abis/erc20.json'
-import { useContract } from './useContract'
-import { useBlockNumber } from '../state/application/hooks'
-import { isAddress } from '../utils'
+import { useActiveWeb3React } from '../../hooks'
+import ERC20_ABI from '../../constants/abis/erc20.json'
+import { useContract } from '../useContract'
+import { useBlockNumber } from '../../state/application/hooks'
+import { isAddress } from '../../utils'
 
-import Fraction from '../constants/Fraction'
+import Fraction from '../../constants/Fraction'
 
 const useTokenBalance = (tokenAddress: string) => {
   const [balance, setBalance] = useState<string>('0')

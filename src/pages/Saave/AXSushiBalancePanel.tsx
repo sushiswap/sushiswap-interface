@@ -11,7 +11,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance from '../../sushi-hooks/useTokenBalance'
+import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
