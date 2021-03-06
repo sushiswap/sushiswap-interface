@@ -17,6 +17,8 @@ import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
 import PENDING_ABI from '../constants/sushiAbis/pending.json'
 import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
 
+import SAAVE_ABI from '../constants/sushiAbis/saave.json'
+
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from '../hooks/index'
@@ -89,6 +91,20 @@ export function useMakerContract(): Contract | null {
 export function useTimelockContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
+}
+
+// experimental:
+export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0x364762C00b32c4b448f39efaA9CeFC67a25603ff'
+        break
+    }
+  }
+  return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 
 // TODO: Leaving these alone for now, since I'm unsure of whether these should
