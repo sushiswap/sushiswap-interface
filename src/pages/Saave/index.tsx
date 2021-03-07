@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 
-import { WrapperNoPadding } from '../../components/swap/styleds'
+//import { WrapperNoPadding } from '../../components/swap/styleds'
+import { useDarkModeManager } from '../../state/user/hooks'
 import AppBody from '../AppBody'
 import SaaveHeader from './SaaveHeader'
 import { Wrapper } from '../../components/swap/styleds'
@@ -28,6 +29,7 @@ const VoteCard = styled(DataCard)`
 
 export default function Saave() {
   const theme = useContext(ThemeContext)
+  const darkMode = useDarkModeManager()
 
   return (
     <>
@@ -46,18 +48,22 @@ export default function Saave() {
                 </TYPE.white>
               </RowBetween>
               <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
+                style={{ color: `${darkMode ? 'white' : 'black'}`, textDecoration: 'underline' }}
                 target="_blank"
                 href="https://app.ens.domains/name/saave.eth"
               >
-                <TYPE.white fontSize={14}>Keys Burned: 2022.03.04 at 22:05</TYPE.white>
+                <TYPE.white fontSize={14} color={theme.text1}>
+                  Keys Burned: 2022.03.04 at 22:05
+                </TYPE.white>
               </ExternalLink>
               <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
+                style={{ color: `${darkMode ? 'white' : 'black'}`, textDecoration: 'underline' }}
                 target="_blank"
                 href="https://etherscan.io/address/0x364762c00b32c4b448f39efaa9cefc67a25603ff#code"
               >
-                <TYPE.white fontSize={14}>Read the contract</TYPE.white>
+                <TYPE.white fontSize={14} color={theme.text1}>
+                  Read the contract
+                </TYPE.white>
               </ExternalLink>
             </AutoColumn>
           </CardSection>
