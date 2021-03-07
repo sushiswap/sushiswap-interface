@@ -4,23 +4,26 @@ import { useSushiContract, useSushiBarContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
 
+import Fraction from '../constants/Fraction'
+
 const { BigNumber } = ethers
 
 const useSushiBar = () => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
-  const sushiContract = useSushiContract(true)
-  const barContract = useSushiBarContract(true)
+  const sushiContract = useSushiContract(true) // withSigner
+  const barContract = useSushiBarContract(true) // withSigner
 
-  const [allowance, setAllowance] = useState(BigNumber.from(0))
+  const [allowance, setAllowance] = useState('0')
 
   const fetchAllowance = useCallback(async () => {
     if (account) {
       try {
         const allowance = await sushiContract?.allowance(account, barContract?.address)
-        setAllowance(BigNumber.from(allowance))
+        const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
+        setAllowance(formatted)
       } catch {
-        setAllowance(BigNumber.from(0))
+        setAllowance('0')
       }
     }
   }, [account, barContract, sushiContract])
@@ -43,13 +46,10 @@ const useSushiBar = () => {
   }, [addTransaction, barContract, sushiContract])
 
   const enter = useCallback(
+    // todo: this should be updated with BigNumber as opposed to string
     async (amount: string) => {
       try {
-        const tx = await barContract?.enter(
-          BigNumber.from(amount)
-            .mul(BigNumber.from(10).pow(18))
-            .toString()
-        )
+        const tx = await barContract?.enter(ethers.utils.parseUnits(amount))
         return addTransaction(tx, { summary: 'Enter SushiBar' })
       } catch (e) {
         return e
@@ -59,15 +59,14 @@ const useSushiBar = () => {
   )
 
   const leave = useCallback(
+    // todo: this should be updated with BigNumber as opposed to string
     async (amount: string) => {
+      console.log('barContract:', barContract)
       try {
-        const tx = await barContract?.leave(
-          BigNumber.from(amount)
-            .mul(BigNumber.from(10).pow(18))
-            .toString()
-        )
+        const tx = await barContract?.leave(ethers.utils.parseUnits(amount))
         return addTransaction(tx, { summary: 'Leave SushiBar' })
       } catch (e) {
+        console.log('leave_error:', e)
         return e
       }
     },

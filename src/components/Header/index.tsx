@@ -388,6 +388,9 @@ export default function Header() {
           {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
             Vote
           </StyledNavLink> */}
+          <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
+            Stake
+          </StyledNavLink>
           {chainId && (
             <StyledExternalLink id={`stake-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>
