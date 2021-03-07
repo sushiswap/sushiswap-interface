@@ -108,14 +108,14 @@ export function AdvancedSwapDetailsFixed({ trade }: AdvancedSwapDetailsProps) {
             href={'https://analytics.sushi.com/pairs/' + trade?.route.pairs[0].liquidityToken.address}
             target="_blank"
           >
-            View pair analytics ↗
+            View Pair Analytics ↗
           </InfoLink>
         </AutoColumn>
       ) : (
         !showRoute && (
           <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
             <InfoLink href={'https://analytics.sushi.com/'} target="_blank">
-              View analytics ↗
+              View Analytics ↗
             </InfoLink>
           </AutoColumn>
         )
