@@ -35,7 +35,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade | undefined; al
         <RowBetween>
           <RowFixed>
             <TYPE.black fontSize={14} fontWeight={400} color={theme.text3}>
-              {isExactIn ? 'Min received' : 'Max sold'}
+              {isExactIn ? 'Min Received' : 'Max Sold'}
             </TYPE.black>
           </RowFixed>
           <RowFixed>
