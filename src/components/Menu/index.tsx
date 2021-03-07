@@ -127,7 +127,7 @@ export default function Menu() {
             <Info size={14} />
             About
           </MenuItem>
-          <MenuItem id="link" href="https://docs.sushi.com">
+          <MenuItem id="link" href="https://sushiswap.gitbook.io/sushiswap/">
             <BookOpen size={14} />
             Docs
           </MenuItem>
