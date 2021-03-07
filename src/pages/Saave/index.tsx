@@ -37,7 +37,7 @@ export default function Saave() {
             <AutoColumn gap="md">
               <RowBetween>
                 <TYPE.white fontWeight={600} color={theme.text1}>
-                  Stack your yields in one transaction
+                  SAAVE: Stack your yields in one transaction
                 </TYPE.white>
               </RowBetween>
               <RowBetween>

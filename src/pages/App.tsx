@@ -31,6 +31,8 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import Vote from './Vote'
 import VotePage from './Vote/VotePage'
 
+// Additional Tools
+import Tools from './Tools'
 import Saave from './Saave'
 
 const AppWrapper = styled.div`
@@ -91,6 +93,7 @@ export default function App() {
           <TopLevelModals />
           <Web3ReactManager>
             <Switch>
+              <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
