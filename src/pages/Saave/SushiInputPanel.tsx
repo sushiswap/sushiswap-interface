@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react'
 import { Currency, Pair } from '@sushiswap/sdk'
 import styled from 'styled-components'
 import { darken } from 'polished'
+import { formatBalance } from '../../utils'
 
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { RowBetween } from '../../components/Row'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { TYPE } from '../../theme'
@@ -13,9 +13,6 @@ import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
 import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
-import useAllowanceSaave from '../../sushi-hooks/allowances/useAllowanceSaave'
-import useApproveSaave from '../../sushi-hooks/approves/useApproveSaave'
-
 import useSaave from '../../sushi-hooks/useSaave'
 
 const InputRow = styled.div<{ selected: boolean }>`
@@ -147,13 +144,10 @@ export default function CurrencyInputPanel({
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const allowance = useAllowanceSaave()
-  //console.log('allowance:', allowance)
+  const { allowance, approve, saave } = useSaave()
 
-  const sushiBalance = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
-
-  const { onApprove } = useApproveSaave()
-  const { saave } = useSaave()
+  const sushiBalanceFraction = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
+  const sushiBalance = sushiBalanceFraction.toString()
 
   // handle approval
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -161,7 +155,7 @@ export default function CurrencyInputPanel({
     //console.log("SEEKING APPROVAL");
     try {
       setRequestedApproval(true)
-      const txHash = await onApprove()
+      const txHash = await approve()
       console.log(txHash)
       // user rejected tx or didn't go thru
       if (!txHash) {
@@ -170,7 +164,7 @@ export default function CurrencyInputPanel({
     } catch (e) {
       console.log(e)
     }
-  }, [onApprove, setRequestedApproval])
+  }, [approve, setRequestedApproval])
 
   // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
@@ -178,7 +172,7 @@ export default function CurrencyInputPanel({
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
   // wrapped onUserInput to clear signatures
-  const onUserDepositInput = useCallback((depositValue: string) => {
+  const onUserDepositInput = useCallback((depositValue: any) => {
     setDepositValue(depositValue)
   }, [])
   // used for max input button

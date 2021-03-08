@@ -171,7 +171,7 @@ export default function CurrencyInputPanel({
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
   // wrapped onUserInput to clear signatures
-  const onUserDepositInput = useCallback((depositValue: string) => {
+  const onUserDepositInput = useCallback((depositValue: any) => {
     setDepositValue(depositValue)
   }, [])
   // used for max input button

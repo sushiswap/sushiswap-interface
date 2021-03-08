@@ -21,6 +21,7 @@ const useTokenBalance = (tokenAddress: string) => {
       //console.log('token_contract:', contract)
       const balance = await contract?.balanceOf(owner)
       const decimals = await contract?.decimals()
+      // todo: return as BigNumber as opposed toString since information will
       return Fraction.from(BigNumber.from(balance), BigNumber.from(10).pow(decimals)).toString()
     } catch (e) {
       return '0'
