@@ -114,6 +114,16 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+
+  fuji: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://cchain.explorer.avax-test.network'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
@@ -180,6 +190,10 @@ const chains: ChainObject = {
   [ChainId.MOONBASE]: {
     chainName: '',
     builder: builders.moonbase
+  },
+  [ChainId.FUJI]: {
+    chainName: '',
+    builder: builders.fuji
   }
 }
 

@@ -1,4 +1,4 @@
-# Sushiswap Interface
+# SushiSwap Interface
 
 [![Styled With Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
 
@@ -11,7 +11,7 @@ An open source interface for SushiSwap -- a protocol for decentralized exchange 
 - Reddit: [/r/SushiSwap](https://www.reddit.com/r/SushiSwap)
 - Discord: [SushiSwap](https://discord.gg/Y7TF6QA)
 
-## Accessing the Sushiswap Interface
+## Accessing the SushiSwap Interface
 
 To access the Sushiswap Interface, use an IPFS gateway link from the
 [latest release](https://github.com/sushiswap/sushiswap-interface/releases/latest),

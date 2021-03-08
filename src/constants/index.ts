@@ -78,7 +78,9 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.BSC]: [WETH[ChainId.BSC]],
   [ChainId.BSC_TESTNET]: [WETH[ChainId.BSC_TESTNET]],
   [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
-  [ChainId.MOONBASE]: [WETH[ChainId.MOONBASE]]
+  [ChainId.MOONBASE]: [WETH[ChainId.MOONBASE]],
+  [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
+  [ChainId.FUJI]: [WETH[ChainId.FUJI]]
 }
 
 // Default Ethereum chain tokens

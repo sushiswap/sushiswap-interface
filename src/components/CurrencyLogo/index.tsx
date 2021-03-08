@@ -12,7 +12,7 @@ import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
 import { useActiveWeb3React } from '../../hooks'
-
+import AvalancheLogo from '../../assets/images/avalanche-logo.png'
 const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
@@ -40,7 +40,8 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.XDAI]: xDaiLogo,
   [ChainId.BSC]: BinanceCoinLogo,
   [ChainId.BSC_TESTNET]: BinanceCoinLogo,
-  [ChainId.MOONBASE]: MoonbeamLogo
+  [ChainId.MOONBASE]: MoonbeamLogo,
+  [ChainId.FUJI]: AvalancheLogo
 }
 
 export default function CurrencyLogo({
