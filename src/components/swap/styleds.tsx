@@ -10,6 +10,10 @@ export const Wrapper = styled.div`
   padding: 1rem;
 `
 
+export const WrapperNoPadding = styled.div`
+  position: relative;
+`
+
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
   padding: 2px;
 

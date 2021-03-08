@@ -7,25 +7,27 @@ import { LatticeConnector } from '@web3-react/lattice-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
+import { ChainId } from '@sushiswap/sdk'
 
-// TODO: Need to create a map for these & not read single items from ENV...
-const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
-const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
-const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
-
-// TODO: ...
-// const RPC: {[chainId in ChainId]: string} = {
-//   [ChainId.MAINNET]: 'https://mainnet.infura.io/v3/ed2f09b2bafe468ebe3ac5a357539135',
-// }
-
-export const NETWORK_CHAIN_ID: number = parseInt(process.env.REACT_APP_CHAIN_ID ?? '1')
-
-if (typeof NETWORK_URL === 'undefined') {
-  throw new Error(`REACT_APP_NETWORK_URL must be a defined environment variable`)
+const RPC = {
+  [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
+  [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
+  [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
+  [ChainId.GÖRLI]: 'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
+  [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
+  [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
+  [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
+  [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
+  [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
+  [ChainId.XDAI]: 'https://rpc.xdaichain.com',
+  [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
+  [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-2-s3.binance.org:8545',
+  [ChainId.MOONBASE]: 'https://rpc.testnet.moonbeam.network'
 }
 
 export const network = new NetworkConnector({
-  urls: { [NETWORK_CHAIN_ID]: NETWORK_URL }
+  defaultChainId: 1,
+  urls: RPC
 })
 
 let networkLibrary: Web3Provider | undefined
@@ -53,7 +55,9 @@ export const injected = new InjectedConnector({
 
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
-  rpc: { 1: NETWORK_URL },
+  rpc: {
+    [ChainId.MAINNET]: RPC[ChainId.MAINNET]
+  },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: 15000
@@ -61,26 +65,26 @@ export const walletconnect = new WalletConnectConnector({
 
 // mainnet only
 export const lattice = new LatticeConnector({
-  chainId: NETWORK_CHAIN_ID,
-  url: NETWORK_URL,
+  chainId: 1,
+  url: RPC[ChainId.MAINNET],
   appName: 'SushiSwap'
 })
 
 // mainnet only
 export const fortmatic = new FortmaticConnector({
-  apiKey: FORMATIC_KEY ?? '',
+  apiKey: process.env.REACT_APP_FORTMATIC_API_KEY ?? '',
   chainId: 1
 })
 
 // mainnet only
 export const portis = new PortisConnector({
-  dAppId: PORTIS_ID ?? '',
+  dAppId: process.env.REACT_APP_PORTIS_ID ?? '',
   networks: [1]
 })
 
 // mainnet only
 export const walletlink = new WalletLinkConnector({
-  url: NETWORK_URL,
+  url: RPC[ChainId.MAINNET],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png'
 })
