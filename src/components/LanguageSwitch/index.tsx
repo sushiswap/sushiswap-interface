@@ -43,7 +43,7 @@ const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: stri
     flag: '🇩🇪',
     language: 'German'
   },
-  it: {
+  'it-IT': {
     flag: '🇮🇹',
     language: 'Italian'
   },
@@ -97,9 +97,14 @@ function LanguageSwitch() {
     })
   }
 
+  let language = i18n.language
+  if (!LANGUAGES.hasOwnProperty(language)) {
+    language = 'en'
+  }
+
   return (
     <StyledMenu ref={node}>
-      <ExtendedStyledMenuButton onClick={toggle}>{LANGUAGES[i18n.language].flag}</ExtendedStyledMenuButton>
+      <ExtendedStyledMenuButton onClick={toggle}>{LANGUAGES[language].flag}</ExtendedStyledMenuButton>
       {open && (
         <ExtendedMenuFlyout>
           {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
