@@ -8,11 +8,13 @@ import FantomLogo from '../../assets/images/fantom-logo.png'
 import MaticLogo from '../../assets/images/matic-logo.png'
 import xDaiLogo from '../../assets/images/xdai-logo.png'
 import MoonbeamLogo from '../../assets/images/moonbeam-logo.png'
+import AvalancheLogo from '../../assets/images/avalanche-logo.png'
+import HecoLogo from '../../assets/images/heco-logo.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
 import { useActiveWeb3React } from '../../hooks'
-import AvalancheLogo from '../../assets/images/avalanche-logo.png'
+
 const getTokenLogoURL = (address: string) =>
   `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
 
@@ -41,7 +43,10 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.BSC]: BinanceCoinLogo,
   [ChainId.BSC_TESTNET]: BinanceCoinLogo,
   [ChainId.MOONBASE]: MoonbeamLogo,
-  [ChainId.FUJI]: AvalancheLogo
+  [ChainId.AVALANCHE]: AvalancheLogo,
+  [ChainId.FUJI]: AvalancheLogo,
+  [ChainId.HECO]: HecoLogo,
+  [ChainId.HECO_TESTNET]: HecoLogo
 }
 
 export default function CurrencyLogo({
