@@ -8,6 +8,24 @@ import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER, ROUTER_
 import { TokenAddressMap } from '../state/lists/hooks'
 import ethers from 'ethers'
 
+import Fraction from '../constants/Fraction'
+
+export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
+  console.log('formatFromBalance:', value, decimals)
+  if (value) {
+    return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
+  } else {
+    return ''
+  }
+}
+export const formatToBalance = (value: string | undefined, decimals = 18) => {
+  if (value) {
+    return { value: ethers.utils.parseUnits(value, decimals), decimals: decimals }
+  } else {
+    return { value: BigNumber.from(0), decimals: decimals }
+  }
+}
+
 export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
   const formatted = ethers.utils.formatUnits(value, decimals)
   if (maxFraction > 0) {
