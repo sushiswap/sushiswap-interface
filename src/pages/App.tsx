@@ -1,7 +1,10 @@
 import React, { Suspense } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import { ChainId } from '@sushiswap/sdk'
+import { useActiveWeb3React } from '../hooks/index'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
+
 import AddressClaimModal from '../components/claim/AddressClaimModal'
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
@@ -82,6 +85,7 @@ function TopLevelModals() {
 }
 
 export default function App() {
+  const { chainId } = useActiveWeb3React()
   return (
     <Suspense fallback={null}>
       <Route component={GoogleAnalyticsReporter} />
@@ -104,8 +108,8 @@ export default function App() {
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
               {/* Custom Pages */}
-              <Route exact strict path="/stake" component={SushiBar} />
-              <Route exact strict path="/sushibar" component={SushiBar} />
+              {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
+              <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
