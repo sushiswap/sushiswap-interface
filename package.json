@@ -128,5 +128,8 @@
     ]
   },
   "license": "GPL-3.0-or-later",
-  "dependencies": {}
+  "dependencies": {
+    "@toruslabs/torus-embed": "^1.9.10",
+    "@web3-react/torus-connector": "^6.1.9"
+  }
 }
