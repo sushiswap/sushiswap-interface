@@ -12,17 +12,17 @@ import { useUnsupportedTokens } from './Tokens'
 import { useUserSingleHopOnly } from 'state/user/hooks'
 
 function generateAllRoutePairs(tokenA?: Token, tokenB?: Token, chainId?: ChainId): [Token, Token][] {
-  const bases: Token[] = chainId ? BASES_TO_CHECK_TRADES_AGAINST[chainId] : [];
-  const customBases = chainId !== undefined ? CUSTOM_BASES[chainId] : undefined;
-  const customBasesA = customBases && tokenA ? customBases[tokenA.address] ?? [] : [];
-  const customBasesB = customBases && tokenB ? customBases[tokenB.address] ?? [] : [];
+  const bases: Token[] = chainId ? BASES_TO_CHECK_TRADES_AGAINST[chainId] : []
+  const customBases = chainId !== undefined ? CUSTOM_BASES[chainId] : undefined
+  const customBasesA = customBases && tokenA ? customBases[tokenA.address] ?? [] : []
+  const customBasesB = customBases && tokenB ? customBases[tokenB.address] ?? [] : []
 
-  const allBases = [...new Set([...bases, ...customBasesA, ...customBasesB])];
+  const allBases = [...new Set([...bases, ...customBasesA, ...customBasesB])]
 
-  const basePairs: [Token, Token][] = [];
+  const basePairs: [Token, Token][] = []
   for (let i = 0; i < allBases.length; i++) {
     for (let j = i + 1; j < allBases.length; j++) {
-      basePairs.push([allBases[i], allBases[j]]);
+      basePairs.push([allBases[i], allBases[j]])
     }
   }
 
@@ -39,19 +39,19 @@ function generateAllRoutePairs(tokenA?: Token, tokenB?: Token, chainId?: ChainId
     .filter((tokens): tokens is [Token, Token] => Boolean(tokens[0] && tokens[1]))
     .filter(([t0, t1]) => t0.address !== t1.address)
     .filter(([tokenA, tokenB]) => {
-      if (!chainId) return true;
-      const restrictedBases = CUSTOM_BASES[chainId];
-      if (!restrictedBases) return true;
+      if (!chainId) return true
+      const restrictedBases = CUSTOM_BASES[chainId]
+      if (!restrictedBases) return true
 
-      const restrictedBasesA: Token[] | undefined = restrictedBases[tokenA.address];
-      const restrictedBasesB: Token[] | undefined = restrictedBases[tokenB.address];
+      const restrictedBasesA: Token[] | undefined = restrictedBases[tokenA.address]
+      const restrictedBasesB: Token[] | undefined = restrictedBases[tokenB.address]
 
-      if (!restrictedBasesA && !restrictedBasesB) return true;
+      if (!restrictedBasesA && !restrictedBasesB) return true
 
-      if (restrictedBasesA && !restrictedBasesA.find(base => tokenB.equals(base))) return false;
-      if (restrictedBasesB && !restrictedBasesB.find(base => tokenA.equals(base))) return false;
+      if (restrictedBasesA && !restrictedBasesA.find(base => tokenB.equals(base))) return false
+      if (restrictedBasesB && !restrictedBasesB.find(base => tokenA.equals(base))) return false
 
-      return true;
+      return true
     })
 }
 
@@ -66,9 +66,9 @@ function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
     tokenA,
     tokenB,
     chainId
-  ]);
+  ])
 
-  const allPairs = usePairs(allPairCombinations);
+  const allPairs = usePairs(allPairCombinations)
 
   // only pass along valid pairs, non-duplicated pairs
   return useMemo(
