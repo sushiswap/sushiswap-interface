@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Currency, Pair } from '@sushiswap/sdk'
+import { Pair } from '@sushiswap/sdk'
 import styled from 'styled-components'
 import { darken } from 'polished'
 
@@ -12,6 +12,9 @@ import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
 import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatFromBalance, formatToBalance } from '../../utils'
+
 import useSushiBar from '../../sushi-hooks/useSushiBar'
 
 const InputRow = styled.div<{ selected: boolean }>`
@@ -146,7 +149,9 @@ export default function CurrencyInputPanel({
   const { allowance, approve, leave } = useSushiBar()
   console.log('sushibar_allowance:', allowance)
 
-  const xSushiBalance = useTokenBalance('0x8798249c2e607446efb7ad49ec89dd1865ff4272')
+  const xSushiBalanceBigInt = useTokenBalance('0x8798249c2e607446efb7ad49ec89dd1865ff4272')
+  const xSushiBalance = formatFromBalance(xSushiBalanceBigInt?.value, xSushiBalanceBigInt?.decimals)
+  const decimals = xSushiBalanceBigInt?.decimals
 
   // handle approval
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -170,16 +175,17 @@ export default function CurrencyInputPanel({
 
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
-  // wrapped onUserInput to clear signatures
-  const onUserDepositInput = useCallback((depositValue: string) => {
+  const [maxSelected, setMaxSelected] = useState(false)
+  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+    setMaxSelected(max)
     setDepositValue(depositValue)
   }, [])
   // used for max input button
-  const maxDepositAmountInput = xSushiBalance
+  const maxDepositAmountInput = xSushiBalanceBigInt
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(maxDepositAmountInput)
-  }, [maxDepositAmountInput, onUserDepositInput])
+    maxDepositAmountInput && onUserDepositInput(xSushiBalance, true)
+  }, [maxDepositAmountInput, onUserDepositInput, xSushiBalance])
 
   return (
     <>
@@ -239,7 +245,11 @@ export default function CurrencyInputPanel({
                 }
                 onClick={async () => {
                   setPendingTx(true)
-                  await leave(depositValue)
+                  if (maxSelected) {
+                    await leave(maxDepositAmountInput)
+                  } else {
+                    await leave(formatToBalance(depositValue, decimals))
+                  }
                   setPendingTx(false)
                 }}
               >

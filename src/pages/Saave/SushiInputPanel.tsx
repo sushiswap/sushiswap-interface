@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import { Currency, Pair } from '@sushiswap/sdk'
 import styled from 'styled-components'
 import { darken } from 'polished'
-import { formatBalance } from '../../utils'
 
 import { RowBetween } from '../../components/Row'
 import { Input as NumericalInput } from '../../components/NumericalInput'
@@ -12,7 +11,10 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import useTokenBalance, { BalanceProps } from '../../sushi-hooks/queries/useTokenBalance'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formatFromBalance, formatToBalance } from '../../utils'
+
 import useSaave from '../../sushi-hooks/useSaave'
 
 const InputRow = styled.div<{ selected: boolean }>`
@@ -146,8 +148,11 @@ export default function CurrencyInputPanel({
 
   const { allowance, approve, saave } = useSaave()
 
-  const sushiBalanceFraction = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
-  const sushiBalance = sushiBalanceFraction.toString()
+  const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
+  const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
+  const decimals = sushiBalanceBigInt?.decimals
+
+  console.log('sushiBalance:', sushiBalance, sushiBalanceBigInt, decimals)
 
   // handle approval
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -171,16 +176,19 @@ export default function CurrencyInputPanel({
 
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
-  // wrapped onUserInput to clear signatures
-  const onUserDepositInput = useCallback((depositValue: any) => {
+  const [maxSelected, setMaxSelected] = useState(false)
+  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+    setMaxSelected(max)
     setDepositValue(depositValue)
   }, [])
   // used for max input button
-  const maxDepositAmountInput = sushiBalance
+  const maxDepositAmountInput = sushiBalanceBigInt
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(maxDepositAmountInput)
-  }, [maxDepositAmountInput, onUserDepositInput])
+    maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
+  }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
+
+  console.log('state:', depositValue, maxSelected)
 
   return (
     <>
@@ -236,11 +244,17 @@ export default function CurrencyInputPanel({
                   pendingTx ||
                   !sushiBalance ||
                   Number(depositValue) === 0 ||
+                  // todo this should be a bigInt comparison
                   Number(depositValue) > Number(sushiBalance)
                 }
                 onClick={async () => {
                   setPendingTx(true)
-                  await saave(depositValue)
+                  console.log('onClick, maxSelected:', maxSelected)
+                  if (maxSelected) {
+                    await saave(maxDepositAmountInput)
+                  } else {
+                    await saave(formatToBalance(depositValue, decimals))
+                  }
                   setPendingTx(false)
                 }}
               >

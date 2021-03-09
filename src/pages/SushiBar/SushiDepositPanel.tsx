@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
 import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import { formatFromBalance, formatToBalance } from '../../utils'
+
 import useSushiBar from '../../sushi-hooks/useSushiBar'
 
 const InputRow = styled.div<{ selected: boolean }>`
@@ -146,7 +148,9 @@ export default function CurrencyInputPanel({
   const { allowance, approve, enter } = useSushiBar()
   console.log('sushibar_allowance:', allowance)
 
-  const sushiBalance = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
+  const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
+  const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
+  const decimals = sushiBalanceBigInt?.decimals
 
   // handle approval
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -170,16 +174,17 @@ export default function CurrencyInputPanel({
 
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
-  // wrapped onUserInput to clear signatures
-  const onUserDepositInput = useCallback((depositValue: any) => {
+  const [maxSelected, setMaxSelected] = useState(false)
+  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+    setMaxSelected(max)
     setDepositValue(depositValue)
   }, [])
   // used for max input button
-  const maxDepositAmountInput = sushiBalance
+  const maxDepositAmountInput = sushiBalanceBigInt
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(maxDepositAmountInput)
-  }, [maxDepositAmountInput, onUserDepositInput])
+    maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
+  }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
 
   return (
     <>
@@ -239,7 +244,11 @@ export default function CurrencyInputPanel({
                 }
                 onClick={async () => {
                   setPendingTx(true)
-                  await enter(depositValue)
+                  if (maxSelected) {
+                    await enter(maxDepositAmountInput)
+                  } else {
+                    await enter(formatToBalance(depositValue, decimals))
+                  }
                   setPendingTx(false)
                 }}
               >

@@ -4,6 +4,7 @@ import { useSaaveContract, useSushiContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 import { useActiveWeb3React } from '../hooks'
+import { BalanceProps } from './queries/useTokenBalance'
 import Fraction from '../constants/Fraction'
 const { BigNumber } = ethers
 
@@ -47,13 +48,22 @@ const useMaker = () => {
 
   // Saave Sushi - xSUSHI - aXSUSHI
   const saave = useCallback(
-    async (amount: string) => {
-      console.log('saaveContract', saaveContract)
-      try {
-        const tx = await saaveContract?.saave(ethers.utils.parseUnits(amount))
-        return addTransaction(tx, { summary: 'SUSHI → xSUSHI → aXSUSHI' })
-      } catch (e) {
-        return e
+    async (amount: BalanceProps | undefined) => {
+      if (amount?.value) {
+        // console.log(
+        //   'saave_amount:',
+        //   BigNumber.from(amount?.value).div(BigNumber.from(10).pow(amount?.decimals)),
+        //   BigNumber.from(amount?.value).mul(BigNumber.from(10).pow(amount?.decimals)),
+        //   BigNumber.from(amount?.value),
+        //   amount?.value,
+        //   ethers.utils.parseUnits('1', amount?.decimals)
+        // )
+        try {
+          const tx = await saaveContract?.saave(amount?.value)
+          return addTransaction(tx, { summary: 'SUSHI → xSUSHI → aXSUSHI' })
+        } catch (e) {
+          return e
+        }
       }
     },
     [addTransaction, saaveContract]
