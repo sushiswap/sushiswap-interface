@@ -99,13 +99,13 @@ export default function Pool() {
               <ButtonRow>
                 <ResponsiveExternalLink href={''}>
                   <ButtonSecondary padding="6px 8px" borderRadius="20px">
-                    Request a Tool
+                    Request Tool
                   </ButtonSecondary>
                 </ResponsiveExternalLink>
                 <ResponsiveExternalLink href={''}>
                   <ButtonPrimaryNormal padding="6px 8px" borderRadius="20px">
                     <Text fontWeight={500} fontSize={16}>
-                      Submit a Tool
+                      Submit Tool
                     </Text>
                   </ButtonPrimaryNormal>
                 </ResponsiveExternalLink>
