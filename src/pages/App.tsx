@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import { ChainId } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../hooks/index'
 import styled from 'styled-components'
@@ -82,23 +82,8 @@ function TopLevelModals() {
   return <AddressClaimModal isOpen={open} onDismiss={toggle} />
 }
 
-const MainnetRoutes = () => {
-  const { chainId } = useActiveWeb3React()
-  return (
-    <>
-      {chainId === ChainId.MAINNET ? (
-        <>
-          <Route exact strict path="/stake" component={SushiBar} />
-          <Route exact strict path="/sushibar" component={SushiBar} />
-        </>
-      ) : (
-        <Route component={RedirectPathToSwapOnly} />
-      )}
-    </>
-  )
-}
-
 export default function App() {
+  const { chainId } = useActiveWeb3React()
   return (
     <Suspense fallback={null}>
       <Route component={GoogleAnalyticsReporter} />
@@ -118,8 +103,8 @@ export default function App() {
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
               {/* Custom Pages */}
-              <Route exact strict path="/stake" component={MainnetRoutes} />
-              <Route exact strict path="/sushibar" component={MainnetRoutes} />
+              {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
+              <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
