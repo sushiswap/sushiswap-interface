@@ -13,8 +13,10 @@ import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
 import { CardSection, DataCard } from '../../components/earn/styled'
 import { RowBetween } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
-import { TYPE } from '../../theme'
+import { TYPE, ExternalLink } from '../../theme'
 import { transparentize } from 'polished'
+
+import { useActiveWeb3React } from '../../hooks'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 420px;
@@ -29,6 +31,7 @@ const VoteCard = styled(DataCard)`
 
 export default function Saave() {
   const theme = useContext(ThemeContext)
+  const { account } = useActiveWeb3React()
   //const darkMode = useDarkModeManager()
 
   return (
@@ -45,13 +48,33 @@ export default function Saave() {
               <RowBetween>
                 <div>
                   <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
-                    {`Stake your SUSHI into xSUSHI for 15% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
+                    {`Stake your SUSHI into xSUSHI for ~15% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
                   </TYPE.white>
                   <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
                     {`xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional to your share of the SushiBar.`}
                   </TYPE.white>
                 </div>
               </RowBetween>
+              <ExternalLink
+                style={{ color: 'white', textDecoration: 'underline' }}
+                target="_blank"
+                href="https://analytics.sushi.com/bar"
+              >
+                <TYPE.white fontSize={14} color={theme.text1}>
+                  View SushiBar Stats <span style={{ fontSize: '11px' }}>↗</span>
+                </TYPE.white>
+              </ExternalLink>
+              {account && (
+                <ExternalLink
+                  style={{ color: 'white', textDecoration: 'underline' }}
+                  target="_blank"
+                  href={'http://analytics.sushi.com/users/' + account}
+                >
+                  <TYPE.white fontSize={14} color={theme.text1}>
+                    View your SushiBar Portfolio <span style={{ fontSize: '11px' }}>↗</span>
+                  </TYPE.white>
+                </ExternalLink>
+              )}
             </AutoColumn>
           </CardSection>
         </VoteCard>
