@@ -32,6 +32,8 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 //import VotePage from './Vote/VotePage'
 
 import SushiBar from './SushiBar'
+import Bento from './Bento'
+import Kashi from './Kashi'
 
 // Additional Tools
 import Tools from './Tools'
@@ -95,6 +97,9 @@ export default function App() {
           <TopLevelModals />
           <Web3ReactManager>
             <Switch>
+              {/* BentoApps */}
+              <Route exact strict path="/bento" component={Bento} />
+              <Route exact strict path="/bento/kashi" component={Kashi} />
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />

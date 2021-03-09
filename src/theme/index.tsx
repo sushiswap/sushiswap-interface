@@ -54,6 +54,8 @@ export function colors(darkMode: boolean): Colors {
     bg3: darkMode ? '#2a3a50' : '#EDEEF2',
     bg4: darkMode ? '#3a506f' : '#CED0D9',
     bg5: darkMode ? '#6C7284' : '#888D9B',
+    bg6: darkMode ? '#232636' : '#CED0D9', // bentobox base
+    bg7: darkMode ? '#19212e' : '#FFFFFF', // bentobox dark card
 
     //specialty colors
     modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
