@@ -136,6 +136,8 @@ export const IBETH = new Token(
   'ibETHv2',
   'Interest Bearing Ether v2'
 )
+export const PONT = new Token(ChainId.MAINNET, '0xcb46C550539ac3DB72dc7aF7c89B11c306C727c2', 9, 'pONT', 'Poly Ontology Token')
+export const PWING = new Token(ChainId.MAINNET, '0xDb0f18081b505A7DE20B18ac41856BCB4Ba86A1a', 9, 'pWING', 'Poly Ontology Wing Token')
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -148,7 +150,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [BAB.address]: [BAC, WETH[ChainId.MAINNET]],
     [HBTC.address]: [CREAM, WETH[ChainId.MAINNET]],
     [FRAX.address]: [FXS, WETH[ChainId.MAINNET]],
-    [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]]
+    [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
+    [PONT.address]: [PWING, WETH[ChainId.MAINNET]]
   }
 }
 
