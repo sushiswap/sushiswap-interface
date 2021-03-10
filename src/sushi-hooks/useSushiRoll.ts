@@ -5,6 +5,7 @@ import { ethers } from 'ethers'
 import LPToken from '../types/LPToken'
 import { useSushiRollContract } from './useContract'
 import { useActiveWeb3React } from '../hooks'
+import ReactGA from 'react-ga'
 
 const useSushiRoll = () => {
   const { library, account } = useActiveWeb3React()
@@ -13,33 +14,43 @@ const useSushiRoll = () => {
 
   const migrate = useCallback(
     async (lpToken: LPToken, amount: ethers.BigNumber) => {
-      const deadline = Math.floor(new Date().getTime() / 1000) + ttl
-      const args = [
-        lpToken.tokenA.address,
-        lpToken.tokenB.address,
-        amount,
-        ethers.constants.Zero,
-        ethers.constants.Zero,
-        deadline
-      ]
-      const gasLimit = await sushiRoll?.estimateGas.migrate(...args)
-      return sushiRoll?.migrate(...args, {
-        gasLimit: gasLimit?.mul(120).div(100)
-      })
+      if (sushiRoll) {
+        const deadline = Math.floor(new Date().getTime() / 1000) + ttl
+        const args = [
+          lpToken.tokenA.address,
+          lpToken.tokenB.address,
+          amount,
+          ethers.constants.Zero,
+          ethers.constants.Zero,
+          deadline
+        ]
+
+        const gasLimit = await sushiRoll.estimateGas.migrate(...args)
+        const tx = sushiRoll.migrate(...args, {
+          gasLimit: gasLimit.mul(120).div(100)
+        })
+
+        ReactGA.event({
+          category: 'Migrate',
+          action: 'Uniswap->Sushiswap',
+          label: 'migrate'
+        })
+
+        return tx
+      }
     },
     [sushiRoll, ttl]
   )
 
   const migrateWithPermit = useCallback(
     async (lpToken: LPToken, amount: ethers.BigNumber) => {
-      if (account) {
+      if (account && sushiRoll) {
         const deadline = Math.floor(new Date().getTime() / 1000) + ttl
         const permit = await signERC2612Permit(
           library,
           lpToken.address,
           account,
-          // TODO extract to constant
-          '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B',
+          sushiRoll.address,
           amount.toString(),
           deadline
         )
@@ -54,10 +65,18 @@ const useSushiRoll = () => {
           permit.r,
           permit.s
         ]
-        const gasLimit = await sushiRoll?.estimateGas.migrateWithPermit(...args)
-        return sushiRoll?.migrateWithPermit(...args, {
-          gasLimit: gasLimit?.mul(120).div(100)
+        const gasLimit = await sushiRoll.estimateGas.migrateWithPermit(...args)
+        const tx = await sushiRoll.migrateWithPermit(...args, {
+          gasLimit: gasLimit.mul(120).div(100)
         })
+
+        ReactGA.event({
+          category: 'Migrate',
+          action: 'Uniswap->Sushiswap',
+          label: 'migrateWithPermit'
+        })
+
+        return tx
       }
     },
     [account, library, sushiRoll, ttl]

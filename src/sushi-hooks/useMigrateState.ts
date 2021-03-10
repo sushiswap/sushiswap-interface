@@ -3,11 +3,13 @@ import useLPTokensState, { LPTokensState } from './useLPTokensState'
 import useSushiRoll from './useSushiRoll'
 import { useActiveWeb3React } from '../hooks'
 import { useIsTransactionPending, useTransactionAdder } from '../state/transactions/hooks'
-import { ethers } from 'ethers'
+import { parseUnits } from '@ethersproject/units'
 
 export type MigrateMode = 'permit' | 'approve'
 
 export interface MigrateState extends LPTokensState {
+  amount: string
+  setAmount: (amount: string) => void
   mode?: MigrateMode
   setMode: (_mode?: MigrateMode) => void
   onMigrate: () => Promise<void>
@@ -20,9 +22,9 @@ const useMigrateState: () => MigrateState = () => {
   const { library, account } = useActiveWeb3React()
   const state = useLPTokensState()
   const { migrate, migrateWithPermit } = useSushiRoll()
-  const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState<MigrateMode>()
   const [migrating, setMigrating] = useState(false)
+  const [amount, setAmount] = useState('')
   const addTransaction = useTransactionAdder()
   const [pendingMigrationHash, setPendingMigrationHash] = useState<string | null>(null)
   const isMigrationPending = useIsTransactionPending(pendingMigrationHash ?? undefined)
@@ -37,23 +39,25 @@ const useMigrateState: () => MigrateState = () => {
     if (mode && state.selectedLPToken && account && library) {
       setMigrating(true)
       try {
+        const units = parseUnits(amount || '0', state.selectedLPToken.decimals)
         const func = mode === 'approve' ? migrate : migrateWithPermit
+        const tx = await func(state.selectedLPToken, units)
+        await tx.wait()
+        await state.updateLPTokens()
 
-        // TODO amount
-        const tx = await func(state.selectedLPToken, ethers.utils.parseUnits('10', 18))
-
-        addTransaction(tx, { summary: `Migrate ${state.selectedLPToken.symbol} liquidity to V2` })
+        addTransaction(tx, { summary: `Migrate Uniswap ${state.selectedLPToken.symbol} liquidity to Sushiswap` })
         setPendingMigrationHash(tx.hash)
         state.setSelectedLPToken(undefined)
-      } catch (e) {
+      } finally {
         setMigrating(false)
       }
     }
-  }, [mode, state, account, library, migrate, migrateWithPermit, addTransaction])
+  }, [mode, state, account, library, amount, migrate, migrateWithPermit, addTransaction])
 
   return {
     ...state,
-    loading: state.loading || loading,
+    amount,
+    setAmount,
     mode,
     setMode,
     onMigrate,

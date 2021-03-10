@@ -21,7 +21,7 @@ import SUSHIROLL_ABI from '@sushiswap/core/build/abi/SushiRoll.json'
 
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
-import { useActiveWeb3React } from '../hooks/index'
+import { useActiveWeb3React } from '../hooks'
 
 // Factory address already in SDK
 import {
@@ -228,9 +228,16 @@ export function useUniV2FactoryContract(): Contract | null {
 
 export function useSushiRollContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(
-    chainId === ChainId.MAINNET ? '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B' : undefined,
-    SUSHIROLL_ABI,
-    true
-  )
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
+        break
+      case ChainId.ROPSTEN:
+        address = '0x4bc61507f3a88ff191d2691bf18b116995a25bb9'
+        break
+    }
+  }
+  return useContract(address, SUSHIROLL_ABI, true)
 }

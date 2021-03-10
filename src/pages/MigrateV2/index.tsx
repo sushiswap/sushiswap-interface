@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { BodyWrapper } from '../AppBody'
 import { AutoColumn } from '../../components/Column'
 import { BackArrow, CloseIcon, TYPE } from '../../theme'
 import QuestionHelper from '../../components/QuestionHelper'
 import { AutoRow, RowFixed } from '../../components/Row'
-import { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { LightCard } from '../../components/Card'
 import { Dots } from '../../components/swap/styleds'
@@ -16,8 +16,63 @@ import useMigrateState, { MigrateState } from '../../sushi-hooks/useMigrateState
 import { FixedHeightRow } from '../../components/PositionCard'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Text } from 'rebass'
+import { Input as NumericalInput } from '../../components/NumericalInput'
+import { MaxButton } from '../Pool/styleds'
+import { ChevronRight } from 'react-feather'
+import { formatUnits, parseUnits } from '@ethersproject/units'
+import { ZERO_ADDRESS } from '../../constants'
+import MetamaskError from '../../types/MetamaskError'
+import { useSushiRollContract } from '../../sushi-hooks/useContract'
+
+const Border = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  background-color: ${({ theme }) => theme.bg2};
+`
 
 const ZERO = JSBI.BigInt(0)
+
+const AmountInput = ({ state }: { state: MigrateState }) => {
+  const onPressMax = useCallback(() => {
+    if (state.selectedLPToken) {
+      let balance = state.selectedLPToken.balance.raw
+      if (state.selectedLPToken.address === ZERO_ADDRESS) {
+        // Subtract 0.01 ETH for gas fee
+        const fee = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
+        balance = JSBI.greaterThan(balance, fee) ? JSBI.subtract(balance, fee) : ZERO
+      }
+
+      state.setAmount(formatUnits(balance.toString(), state.selectedLPToken.decimals))
+    }
+  }, [state])
+
+  useEffect(() => {
+    if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
+      state.setAmount('')
+    }
+  }, [state.mode, state.lpTokens.length, state.selectedLPToken])
+
+  if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
+    return <span />
+  }
+
+  return (
+    <>
+      <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Amount of Tokens</TYPE.mediumHeader>
+      <LightCard>
+        <FixedHeightRow>
+          <NumericalInput value={state.amount} onUserInput={val => state.setAmount(val)} />
+          <MaxButton onClick={onPressMax} width="10px">
+            MAX
+          </MaxButton>
+        </FixedHeightRow>
+      </LightCard>
+      <Border />
+    </>
+  )
+}
 
 interface PositionCardProps {
   tokenA: Token
@@ -25,9 +80,10 @@ interface PositionCardProps {
   address: string
   onClick: () => void
   onDismiss: () => void
+  isSelected: boolean
 }
 
-const LPTokenSelect = ({ tokenA, tokenB, onClick, onDismiss }: PositionCardProps) => {
+const LPTokenSelect = ({ tokenA, tokenB, onClick, onDismiss, isSelected }: PositionCardProps) => {
   const theme = useContext(ThemeContext)
 
   return (
@@ -36,9 +92,9 @@ const LPTokenSelect = ({ tokenA, tokenB, onClick, onDismiss }: PositionCardProps
         <FixedHeightRow>
           <RowFixed onClick={onClick}>
             <DoubleCurrencyLogo currency0={tokenA} currency1={tokenB} margin={true} size={20} />
-            <Text fontWeight={500} fontSize={20} style={{ marginLeft: '' }}>
+            <TYPE.body fontWeight={500} style={{ marginLeft: '' }}>
               {`${tokenA.symbol}/${tokenB.symbol}`}
-            </Text>
+            </TYPE.body>
             <Text
               fontSize={12}
               fontWeight={500}
@@ -52,7 +108,7 @@ const LPTokenSelect = ({ tokenA, tokenB, onClick, onDismiss }: PositionCardProps
               V2
             </Text>
           </RowFixed>
-          <CloseIcon onClick={onDismiss} />
+          {isSelected ? <CloseIcon onClick={onDismiss} /> : <ChevronRight onClick={onClick} />}
         </FixedHeightRow>
       </AutoColumn>
     </LightCard>
@@ -65,117 +121,185 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
   const items = [
     {
       key: 'permit',
-      text: 'Non-hardware Wallet'
+      text: 'Non-hardware Wallet',
+      description: 'Migration is done in one-click using your signature(permit)'
     },
-    { key: 'approve', text: 'Hardware Wallet' }
+    { key: 'approve', text: 'Hardware Wallet', description: 'You need to first approve LP tokens and then migrate it' }
   ]
 
   return (
     <>
-      {items.reduce((acc: any, { key, text }: any) => {
+      <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Wallet Type</TYPE.mediumHeader>
+      {items.reduce((acc: any, { key, text, description }: any) => {
         if (state.mode === undefined || key === state.mode)
           acc.push(
             <LightCard key={key}>
               <AutoColumn gap="12px">
-                <FixedHeightRow>
-                  <RowFixed onClick={() => state.setMode(key)}>
-                    <Text fontWeight={500} fontSize={20} style={{ marginLeft: '' }}>
-                      {text}
-                    </Text>
-                  </RowFixed>
-                  <CloseIcon onClick={unsetMode} />
-                </FixedHeightRow>
+                <RowFixed>
+                  <AutoRow onClick={() => state.setMode(key)}>
+                    <AutoRow marginBottom="2px">
+                      <TYPE.body fontWeight={500}>{text}</TYPE.body>
+                    </AutoRow>
+                    <AutoRow>
+                      <TYPE.darkGray fontSize=".75rem">{description}</TYPE.darkGray>
+                    </AutoRow>
+                  </AutoRow>
+                  {key === state.mode ? <CloseIcon onClick={unsetMode} /> : <ChevronRight onClick={unsetMode} />}
+                </RowFixed>
               </AutoColumn>
             </LightCard>
           )
         return acc
       }, [])}
+      <Border />
     </>
   )
 }
 
 const MigrateButtons = ({ state }: { state: MigrateState }) => {
-  const [approval, approve] = useApproveCallback(
-    state.selectedLPToken?.balance,
-    '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
-  )
-
+  const [error, setError] = useState<MetamaskError>({})
+  const sushiRollContract = useSushiRollContract()
+  const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
   const noLiquidityTokens = !!state.selectedLPToken?.balance && state.selectedLPToken?.balance.equalTo(ZERO)
   const isSuccessfullyMigrated = !!state.pendingMigrationHash && noLiquidityTokens
+  const isButtonDisabled = !state.amount
+
+  useEffect(() => {
+    setError({})
+  }, [state.selectedLPToken])
 
   if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
     return <span />
   }
 
+  const insufficientAmount = JSBI.lessThan(
+    state.selectedLPToken.balance.raw,
+    JSBI.BigInt(parseUnits(state.amount || '0', state.selectedLPToken.decimals).toString())
+  )
+
+  const onPress = async () => {
+    setError({})
+    try {
+      await state.onMigrate()
+    } catch (e) {
+      console.log(e)
+      setError(e)
+    }
+  }
+
+  console.log(approval)
+
   return (
     <AutoColumn gap="20px">
-      <div style={{ display: 'flex' }}>
-        {state.mode === 'approve' && (
-          <AutoColumn gap="12px" style={{ flex: '1', marginRight: 12 }}>
-            <ButtonConfirmed
-              confirmed={approval === ApprovalState.APPROVED}
-              disabled={approval !== ApprovalState.NOT_APPROVED}
-              onClick={approve}
-            >
-              {approval === ApprovalState.PENDING ? (
-                <Dots>Approving</Dots>
-              ) : approval === ApprovalState.APPROVED ? (
-                'Approved'
-              ) : (
-                'Approve'
-              )}
-            </ButtonConfirmed>
+      <LightCard>
+        <AutoRow style={{ flex: '1', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+          <TYPE.body fontSize=".875rem" fontWeight={500}>
+            {state.selectedLPToken.symbol}
+          </TYPE.body>
+          <TYPE.body fontSize=".875rem" fontWeight={500}>
+            {state.amount}
+          </TYPE.body>
+        </AutoRow>
+        {insufficientAmount ? (
+          <AutoColumn gap="12px" style={{ flex: '1' }}>
+            <TYPE.darkGray fontSize=".875rem" style={{ textAlign: 'center' }}>
+              Insufficient Balance
+            </TYPE.darkGray>
           </AutoColumn>
+        ) : state.loading ? (
+          <Dots>Loading</Dots>
+        ) : (
+          <AutoRow>
+            {state.mode === 'approve' && (
+              <AutoColumn gap="12px" style={{ flex: '1', marginRight: 12 }}>
+                <ButtonConfirmed
+                  onClick={approve}
+                  confirmed={approval === ApprovalState.APPROVED}
+                  disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
+                  altDisabledStyle={approval === ApprovalState.PENDING}
+                >
+                  {approval === ApprovalState.PENDING ? (
+                    <Dots>Approving</Dots>
+                  ) : approval === ApprovalState.APPROVED ? (
+                    'Approved'
+                  ) : (
+                    'Approve'
+                  )}
+                </ButtonConfirmed>
+              </AutoColumn>
+            )}
+            <AutoColumn gap="12px" style={{ flex: '1' }}>
+              <ButtonConfirmed
+                confirmed={isSuccessfullyMigrated}
+                disabled={
+                  isSuccessfullyMigrated ||
+                  noLiquidityTokens ||
+                  state.isMigrationPending ||
+                  (state.mode === 'approve' && approval !== ApprovalState.APPROVED) ||
+                  state.migrating ||
+                  isButtonDisabled
+                }
+                onClick={onPress}
+              >
+                {isSuccessfullyMigrated ? 'Success' : state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
+              </ButtonConfirmed>
+            </AutoColumn>
+          </AutoRow>
         )}
-        <AutoColumn gap="12px" style={{ flex: '1' }}>
-          <ButtonConfirmed
-            confirmed={isSuccessfullyMigrated}
-            disabled={
-              isSuccessfullyMigrated ||
-              noLiquidityTokens ||
-              state.isMigrationPending ||
-              (state.mode === 'approve' && approval !== ApprovalState.APPROVED) ||
-              state.migrating
-            }
-            onClick={state.onMigrate}
-          >
-            {isSuccessfullyMigrated ? 'Success' : state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
-          </ButtonConfirmed>
-        </AutoColumn>
-      </div>
-      <TYPE.small style={{ textAlign: 'center' }}>
+        {error.message && error.code !== 4001 && (
+          <TYPE.body color="red" fontWeight={500} fontSize="0.875rem" marginTop="1.5rem" textAlign="center">
+            {error.message}
+          </TYPE.body>
+        )}
+      </LightCard>
+      <TYPE.darkGray fontSize="0.75rem" textAlign="center">
         {`Your Uniswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
-      </TYPE.small>
+      </TYPE.darkGray>
     </AutoColumn>
   )
 }
 
 const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
-  if (!state.mode) {
-    return <span />
-  }
+  let content: JSX.Element
 
-  if (state.lpTokens.length === 0) {
-    return <EmptyState message="No V2 Liquidity found." />
+  if (!state.mode) {
+    content = <span />
+  } else if (state.lpTokens.length === 0) {
+    content = <EmptyState message="No V2 Liquidity found." />
+  } else {
+    content = (
+      <>
+        {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
+          if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
+            acc.push(
+              <LPTokenSelect
+                key={lpToken.address}
+                tokenA={lpToken.tokenA}
+                tokenB={lpToken.tokenB}
+                address={lpToken.address}
+                onClick={() => {
+                  state.setAmount('')
+                  state.setSelectedLPToken(lpToken)
+                }}
+                onDismiss={() => {
+                  state.setAmount('')
+                  state.setSelectedLPToken(undefined)
+                }}
+                isSelected={state.selectedLPToken === lpToken}
+              />
+            )
+          }
+          return acc
+        }, [])}
+      </>
+    )
   }
 
   return (
     <>
-      {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
-        if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
-          acc.push(
-            <LPTokenSelect
-              key={lpToken.address}
-              tokenA={lpToken.tokenA}
-              tokenB={lpToken.tokenB}
-              address={lpToken.address}
-              onClick={() => state.setSelectedLPToken(lpToken)}
-              onDismiss={() => state.setSelectedLPToken(undefined)}
-            />
-          )
-        }
-        return acc
-      }, [])}
+      <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your Uniswap Liquidity</TYPE.mediumHeader>
+      {content}
+      <Border />
     </>
   )
 }
@@ -190,15 +314,14 @@ const MigrateV2 = () => {
       <AutoColumn gap="16px">
         <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
           <BackArrow to="/pool" />
-          <TYPE.mediumHeader>Migrate V2 Liquidity</TYPE.mediumHeader>
+          <TYPE.mediumHeader>Migrate Uniswap Liquidity</TYPE.mediumHeader>
           <div>
             <QuestionHelper text="Migrate your Uniswap LP tokens to SushiSwap LP tokens." />
           </div>
         </AutoRow>
-        <TYPE.body style={{ marginBottom: 8, fontWeight: 400 }}>
-          For each pool shown below, click migrate to remove your liquidity from Uniswap V2 and deposit it into
-          Sushiswap V2.
-        </TYPE.body>
+        <TYPE.darkGray style={{ marginBottom: 8, fontWeight: 400 }}>
+          For each pool shown below, click migrate to remove your liquidity from Uniswap and deposit it into Sushiswap.
+        </TYPE.darkGray>
 
         {!account ? (
           <LightCard padding="40px">
@@ -216,6 +339,7 @@ const MigrateV2 = () => {
           <>
             <MigrateModeSelect state={state} />
             <UniswapLiquidityPairs state={state} />
+            <AmountInput state={state} />
             <MigrateButtons state={state} />
           </>
         )}
