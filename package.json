@@ -128,5 +128,7 @@
     ]
   },
   "license": "GPL-3.0-or-later",
-  "dependencies": {}
+  "dependencies": {
+    "@web3-react/torus-connector": "^6.1.9"
+  }
 }
