@@ -89,3 +89,8 @@ export const walletlink = new WalletLinkConnector({
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png'
 })
+
+// mainnet only
+export const torus = new TorusConnector({
+  chainId: 1
+})

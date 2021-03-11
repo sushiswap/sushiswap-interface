@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 
-import { fortmatic, injected, portis, lattice, walletconnect, walletlink } from '../connectors'
+import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
@@ -261,6 +261,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Login using Portis hosted wallet',
     href: null,
     color: '#4A6C9B',
+    mobile: true
+  },
+  Torus: {
+    connector: torus,
+    name: 'Torus',
+    iconName: 'torusIcon.png',
+    description: 'Login using Torus hosted wallet',
+    href: null,
+    color: '#315CF5',
     mobile: true
   }
 }
