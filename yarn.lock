@@ -2669,7 +2669,7 @@
   dependencies:
     deepmerge "^4.2.2"
 
-"@toruslabs/torus-embed@^1.8.0", "@toruslabs/torus-embed@^1.9.10":
+"@toruslabs/torus-embed@^1.8.0":
   version "1.9.11"
   resolved "https://registry.yarnpkg.com/@toruslabs/torus-embed/-/torus-embed-1.9.11.tgz#7c797fd52fbfc8655f174a685d6bfef85915d328"
   integrity sha512-IkhM2BFehaDHMKOz2xEfu4lmxYwNnYZogJ638hvDvoGRtORZm4wchERBi41EHBLZTMMZ14KmdxnI0g/PGEv0mA==
