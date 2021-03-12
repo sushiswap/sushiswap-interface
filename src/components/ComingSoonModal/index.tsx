@@ -87,7 +87,7 @@ export default function ComingSoonModal() {
         <ModalLower>
         <AutoRow gap="8px" justify="center">
           <TYPE.largeHeader color='white'>
-            Kash Margin Trading <br/>
+            Kashi Margin Trading <br/>
             in BentoBox App
           </TYPE.largeHeader>
           <TYPE.subHeader fontWeight={600} fontSize={16} color="gray">
