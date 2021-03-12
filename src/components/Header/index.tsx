@@ -297,7 +297,11 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.XDAI]: 'xDai',
   [ChainId.BSC]: 'BSC',
   [ChainId.BSC_TESTNET]: 'BSC Testnet',
-  [ChainId.MOONBASE]: 'Moonbase'
+  [ChainId.MOONBASE]: 'Moonbase',
+  [ChainId.AVALANCHE]: 'Avalanche',
+  [ChainId.FUJI]: 'Fuji',
+  [ChainId.HECO]: 'HECO',
+  [ChainId.HECO_TESTNET]: 'HECO Testnet'
 }
 
 export default function Header() {
@@ -360,8 +364,13 @@ export default function Header() {
           {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
             Vote
           </StyledNavLink> */}
+          {chainId === ChainId.MAINNET && (
+            <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
+              Stake
+            </StyledNavLink>
+          )}
           {chainId && (
-            <StyledExternalLink id={`stake-nav-link`} href={'https://analytics.sushi.com'}>
+            <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>
             </StyledExternalLink>
           )}

@@ -2,19 +2,21 @@ import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 
 //import { WrapperNoPadding } from '../../components/swap/styleds'
-import { useDarkModeManager } from '../../state/user/hooks'
+//import { useDarkModeManager } from '../../state/user/hooks'
 import AppBody from '../AppBody'
-import SaaveHeader from './SaaveHeader'
+import SaaveHeader from './SushiBarHeader'
 import { Wrapper } from '../../components/swap/styleds'
 
-import SushiInputPanel from './SushiInputPanel'
-import AXSushiBalancePanel from './AXSushiBalancePanel'
+import SushiDepositPanel from './SushiDepositPanel'
+import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
 
 import { CardSection, DataCard } from '../../components/earn/styled'
 import { RowBetween } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
 import { TYPE, ExternalLink } from '../../theme'
 import { transparentize } from 'polished'
+
+import { useActiveWeb3React } from '../../hooks'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 420px;
@@ -29,7 +31,8 @@ const VoteCard = styled(DataCard)`
 
 export default function Saave() {
   const theme = useContext(ThemeContext)
-  const darkMode = useDarkModeManager()
+  const { account } = useActiveWeb3React()
+  //const darkMode = useDarkModeManager()
 
   return (
     <>
@@ -39,32 +42,39 @@ export default function Saave() {
             <AutoColumn gap="md">
               <RowBetween>
                 <TYPE.white fontWeight={600} color={theme.text1}>
-                  SAAVE: Stack your yields in one transaction
+                  SushiBar: Make SUSHI work for you
                 </TYPE.white>
               </RowBetween>
               <RowBetween>
-                <TYPE.white fontSize={14} color={theme.text2}>
-                  {`Stake your SUSHI into xSUSHI for 15% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click.`}
-                </TYPE.white>
+                <div>
+                  <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
+                    {`Stake your SUSHI into xSUSHI for ~15% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
+                  </TYPE.white>
+                  <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
+                    {`xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional to your share of the SushiBar.`}
+                  </TYPE.white>
+                </div>
               </RowBetween>
               <ExternalLink
-                style={{ color: `${darkMode ? 'white' : 'black'}`, textDecoration: 'underline' }}
+                style={{ color: 'white', textDecoration: 'underline' }}
                 target="_blank"
-                href="https://app.ens.domains/name/saave.eth"
+                href="https://analytics.sushi.com/bar"
               >
                 <TYPE.white fontSize={14} color={theme.text1}>
-                  Keys Burned: 2022.03.04 at 22:05
+                  View SushiBar Stats <span style={{ fontSize: '11px' }}>↗</span>
                 </TYPE.white>
               </ExternalLink>
-              <ExternalLink
-                style={{ color: `${darkMode ? 'white' : 'black'}`, textDecoration: 'underline' }}
-                target="_blank"
-                href="https://etherscan.io/address/0x364762c00b32c4b448f39efaa9cefc67a25603ff#code"
-              >
-                <TYPE.white fontSize={14} color={theme.text1}>
-                  Read the contract
-                </TYPE.white>
-              </ExternalLink>
+              {account && (
+                <ExternalLink
+                  style={{ color: 'white', textDecoration: 'underline' }}
+                  target="_blank"
+                  href={'http://analytics.sushi.com/users/' + account}
+                >
+                  <TYPE.white fontSize={14} color={theme.text1}>
+                    View your SushiBar Portfolio <span style={{ fontSize: '11px' }}>↗</span>
+                  </TYPE.white>
+                </ExternalLink>
+              )}
             </AutoColumn>
           </CardSection>
         </VoteCard>
@@ -72,7 +82,7 @@ export default function Saave() {
           <SaaveHeader />
           <Wrapper id="swap-page">
             <AutoColumn style={{ paddingBottom: '10px' }}>
-              <SushiInputPanel
+              <SushiDepositPanel
                 label={''}
                 disableCurrencySelect={true}
                 customBalanceText={'Available to deposit: '}
@@ -80,10 +90,12 @@ export default function Saave() {
                 buttonText="Deposit"
                 cornerRadiusBottomNone={true}
               />
-              <AXSushiBalancePanel
-                label={'aXSUSHI Balance'}
+              <XSushiWithdrawlPanel
+                label={''}
                 disableCurrencySelect={true}
-                id="ax-token-balance"
+                customBalanceText={'Available to withdraw: '}
+                id="withdraw-liquidity-token"
+                buttonText="Withdraw"
                 cornerRadiusTopNone={true}
               />
             </AutoColumn>

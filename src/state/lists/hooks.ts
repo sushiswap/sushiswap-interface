@@ -50,7 +50,11 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.BSC]: {},
   [ChainId.BSC_TESTNET]: {},
   [ChainId.ARBITRUM]: {},
-  [ChainId.MOONBASE]: {}
+  [ChainId.MOONBASE]: {},
+  [ChainId.AVALANCHE]: {},
+  [ChainId.FUJI]: {},
+  [ChainId.HECO]: {},
+  [ChainId.HECO_TESTNET]: {}
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -114,7 +118,11 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     56: { ...map1[56], ...map2[56] }, // bsc
     97: { ...map1[97], ...map2[97] }, // bsc testnet
     79377087078960: { ...map1[79377087078960], ...map2[79377087078960] }, // arbitrum
-    1287: { ...map1[1287], ...map2[1287] } // moonbase
+    1287: { ...map1[1287], ...map2[1287] }, // moonbase
+    128: { ...map1[128], ...map2[128] }, // heco
+    256: { ...map1[256], ...map2[256] }, // heco testnet
+    43114: { ...map1[43114], ...map2[43114] }, // avax mainnet
+    43113: { ...map1[43113], ...map2[43113] } // avax testnet fuji
   }
 }
 

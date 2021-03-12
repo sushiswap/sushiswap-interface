@@ -8,6 +8,8 @@ import FantomLogo from '../../assets/images/fantom-logo.png'
 import MaticLogo from '../../assets/images/matic-logo.png'
 import xDaiLogo from '../../assets/images/xdai-logo.png'
 import MoonbeamLogo from '../../assets/images/moonbeam-logo.png'
+import AvalancheLogo from '../../assets/images/avalanche-logo.png'
+import HecoLogo from '../../assets/images/heco-logo.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
@@ -40,7 +42,11 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.XDAI]: xDaiLogo,
   [ChainId.BSC]: BinanceCoinLogo,
   [ChainId.BSC_TESTNET]: BinanceCoinLogo,
-  [ChainId.MOONBASE]: MoonbeamLogo
+  [ChainId.MOONBASE]: MoonbeamLogo,
+  [ChainId.AVALANCHE]: AvalancheLogo,
+  [ChainId.FUJI]: AvalancheLogo,
+  [ChainId.HECO]: HecoLogo,
+  [ChainId.HECO_TESTNET]: HecoLogo
 }
 
 export default function CurrencyLogo({

@@ -5,7 +5,6 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
 
 import Fraction from '../constants/Fraction'
-import { BalanceProps } from './queries/useTokenBalance'
 
 const { BigNumber } = ethers
 
@@ -48,14 +47,12 @@ const useSushiBar = () => {
 
   const enter = useCallback(
     // todo: this should be updated with BigNumber as opposed to string
-    async (amount: BalanceProps | undefined) => {
-      if (amount?.value) {
-        try {
-          const tx = await barContract?.enter(amount?.value)
-          return addTransaction(tx, { summary: 'Enter SushiBar' })
-        } catch (e) {
-          return e
-        }
+    async (amount: string) => {
+      try {
+        const tx = await barContract?.enter(ethers.utils.parseUnits(amount))
+        return addTransaction(tx, { summary: 'Enter SushiBar' })
+      } catch (e) {
+        return e
       }
     },
     [addTransaction, barContract]
@@ -63,15 +60,14 @@ const useSushiBar = () => {
 
   const leave = useCallback(
     // todo: this should be updated with BigNumber as opposed to string
-    async (amount: BalanceProps | undefined) => {
-      if (amount?.value) {
-        try {
-          const tx = await barContract?.leave(amount?.value)
-          //const tx = await barContract?.leave(ethers.utils.parseUnits(amount)) // where amount is string
-          return addTransaction(tx, { summary: 'Enter SushiBar' })
-        } catch (e) {
-          return e
-        }
+    async (amount: string) => {
+      console.log('barContract:', barContract)
+      try {
+        const tx = await barContract?.leave(ethers.utils.parseUnits(amount))
+        return addTransaction(tx, { summary: 'Leave SushiBar' })
+      } catch (e) {
+        console.log('leave_error:', e)
+        return e
       }
     },
     [addTransaction, barContract]

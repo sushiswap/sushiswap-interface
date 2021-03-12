@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from '../hooks'
-import { useMasterChefContract, usePendingContract } from './useContract'
-import { useBlockNumber } from '../state/application/hooks'
+import { useActiveWeb3React } from '../../hooks'
+import { useMasterChefContract, usePendingContract } from '../useContract'
+import { useBlockNumber } from '../../state/application/hooks'
 
 const useAllPending = () => {
   const [balance, setBalance] = useState<number | undefined>()

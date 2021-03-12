@@ -106,6 +106,18 @@ export function useSaaveContract(withSignerIfPossible?: boolean): Contract | nul
   }
   return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
+export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289'
+        break
+    }
+  }
+  return useContract(address, SAAVE_ABI, withSignerIfPossible)
+}
 
 // TODO: Leaving these alone for now, since I'm unsure of whether these should
 // live in sushiswap/sdk or somewhere else. Sync with Bart on BentoBox.

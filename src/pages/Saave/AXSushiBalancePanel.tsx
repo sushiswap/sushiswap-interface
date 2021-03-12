@@ -11,7 +11,8 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance from '../../sushi-hooks/useTokenBalance'
+import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import { formatFromBalance } from '../../utils'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -113,7 +114,8 @@ export default function CurrencyInputPanel({
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const aXSushiBalance = useTokenBalance('0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a')
+  const aXSushiBalanceBigInt = useTokenBalance('0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a')
+  const aXSushiBalance = formatFromBalance(aXSushiBalanceBigInt?.value, aXSushiBalanceBigInt?.decimals)
   console.log('aXSushiBalance:', aXSushiBalance)
 
   return (

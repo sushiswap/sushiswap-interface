@@ -11,11 +11,10 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance, { BalanceProps } from '../../sushi-hooks/queries/useTokenBalance'
-import { BigNumber } from '@ethersproject/bignumber'
+import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
 
-import useSaave from '../../sushi-hooks/useSaave'
+import useSushiBar from '../../sushi-hooks/useSushiBar'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -146,13 +145,12 @@ export default function CurrencyInputPanel({
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { allowance, approve, saave } = useSaave()
+  const { allowance, approve, enter } = useSushiBar()
+  console.log('sushibar_allowance:', allowance)
 
   const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
   const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
   const decimals = sushiBalanceBigInt?.decimals
-
-  console.log('sushiBalance:', sushiBalance, sushiBalanceBigInt, decimals)
 
   // handle approval
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -187,8 +185,6 @@ export default function CurrencyInputPanel({
   const handleMaxDeposit = useCallback(() => {
     maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
   }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
-
-  console.log('state:', depositValue, maxSelected)
 
   return (
     <>
@@ -233,7 +229,7 @@ export default function CurrencyInputPanel({
               </>
             )}
             {!allowance || Number(allowance) === 0 ? (
-              <ButtonSelect onClick={handleApprove}>
+              <ButtonSelect onClick={handleApprove} disabled={requestedApproval}>
                 <Aligner>
                   <StyledButtonName>Approve</StyledButtonName>
                 </Aligner>
@@ -244,39 +240,23 @@ export default function CurrencyInputPanel({
                   pendingTx ||
                   !sushiBalance ||
                   Number(depositValue) === 0 ||
-                  // todo this should be a bigInt comparison
                   Number(depositValue) > Number(sushiBalance)
                 }
                 onClick={async () => {
                   setPendingTx(true)
-                  console.log('onClick, maxSelected:', maxSelected)
                   if (maxSelected) {
-                    await saave(maxDepositAmountInput)
+                    await enter(maxDepositAmountInput)
                   } else {
-                    await saave(formatToBalance(depositValue, decimals))
+                    await enter(formatToBalance(depositValue, decimals))
                   }
                   setPendingTx(false)
                 }}
               >
                 <Aligner>
-                  <StyledButtonName>SAAVE</StyledButtonName>
+                  <StyledButtonName>Deposit</StyledButtonName>
                 </Aligner>
               </ButtonSelect>
             )}
-            {/* <ButtonSelect
-              disabled={
-                pendingTx || !sushiBalance || Number(depositValue) === 0 || Number(depositValue) > Number(sushiBalance)
-              }
-              onClick={async () => {
-                setPendingTx(true)
-                await saave(depositValue)
-                setPendingTx(false)
-              }}
-            >
-              <Aligner>
-                <StyledButtonName>Saave</StyledButtonName>
-              </Aligner>
-            </ButtonSelect> */}
           </InputRow>
         </Container>
       </InputPanel>

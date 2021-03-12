@@ -6,7 +6,25 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER, ROUTER_ADDRESS } from '@sushiswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
-import ethers from 'ethers'
+import { ethers } from 'ethers'
+
+import Fraction from '../constants/Fraction'
+
+export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
+  console.log('formatFromBalance:', value, decimals)
+  if (value) {
+    return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
+  } else {
+    return ''
+  }
+}
+export const formatToBalance = (value: string | undefined, decimals = 18) => {
+  if (value) {
+    return { value: ethers.utils.parseUnits(value, decimals), decimals: decimals }
+  } else {
+    return { value: BigNumber.from(0), decimals: decimals }
+  }
+}
 
 export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
   const formatted = ethers.utils.formatUnits(value, decimals)
@@ -114,6 +132,26 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+
+  avalanche: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://cchain.explorer.avax${chainName ? `-${chainName}` : ''}.network`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  heco: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}hecoinfo.com`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
@@ -180,6 +218,22 @@ const chains: ChainObject = {
   [ChainId.MOONBASE]: {
     chainName: '',
     builder: builders.moonbase
+  },
+  [ChainId.AVALANCHE]: {
+    chainName: '',
+    builder: builders.avalanche
+  },
+  [ChainId.FUJI]: {
+    chainName: 'test',
+    builder: builders.avalanche
+  },
+  [ChainId.HECO]: {
+    chainName: '',
+    builder: builders.heco
+  },
+  [ChainId.HECO_TESTNET]: {
+    chainName: 'testnet',
+    builder: builders.heco
   }
 }
 
