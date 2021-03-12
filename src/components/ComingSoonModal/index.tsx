@@ -91,7 +91,7 @@ export default function ComingSoonModal() {
             in BentoBox
           </TYPE.largeHeader>
           <TYPE.subHeader fontWeight={600} fontSize={16} color="gray">
-            BentoBox is a reveolutionary way from SUSHI<br/> to interact with apps on L1 in a highly<br/> gas-efficient manner.
+            BentoBox is a revolutionary way from SUSHI<br/> to interact with apps on L1 in a highly<br/> gas-efficient manner.
           </TYPE.subHeader>
           <TYPE.white fontWeight={400}>
             The first app in the BentoBox system is Kashi, a<br/> gas-optimised lending and margin trading platform with risk-isolated pairs.
