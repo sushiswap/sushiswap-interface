@@ -4,6 +4,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { LatticeConnector } from '@web3-react/lattice-connector'
+import { TorusConnector } from '@web3-react/torus-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
@@ -95,4 +96,9 @@ export const walletlink = new WalletLinkConnector({
   url: RPC[ChainId.MAINNET],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png'
+})
+
+// mainnet only
+export const torus = new TorusConnector({
+  chainId: 1
 })
