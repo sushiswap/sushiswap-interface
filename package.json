@@ -98,8 +98,7 @@
     "styled-components": "^4.2.0",
     "typescript": "^3.8.3",
     "use-count-up": "^2.2.5",
-    "wcag-contrast": "^3.0.0",
-    "@toruslabs/torus-embed": "^1.9.10"
+    "wcag-contrast": "^3.0.0"
   },
   "resolutions": {
     "@walletconnect/web3-provider": "1.1.1-alpha.0"
