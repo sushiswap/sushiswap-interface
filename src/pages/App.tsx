@@ -40,6 +40,8 @@ import SushiBar from './SushiBar'
 import Tools from './Tools'
 import Saave from './Saave'
 
+import ComingSoonModal from '../components/ComingSoonModal'
+
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -97,6 +99,7 @@ export default function App() {
           <Popups />
           <Polling />
           <TopLevelModals />
+          <ComingSoonModal />
           <Web3ReactManager>
             <Switch>
               {/* Tools */}
