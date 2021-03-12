@@ -96,7 +96,7 @@ export default function ComingSoonModal() {
               in BentoBox App
             </TYPE.largeHeader>
             <TYPE.subHeader fontWeight={600} fontSize={16} color="gray">
-              BentoBox is a reveolutionary way from SUSHI
+              BentoBox is a revolutionary way from SUSHI
               <br /> to interact with apps on L1 in a highly
               <br /> gas-efficient manner.
             </TYPE.subHeader>
