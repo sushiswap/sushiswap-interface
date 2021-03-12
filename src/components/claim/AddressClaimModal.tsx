@@ -124,7 +124,7 @@ export default function AddressClaimModal({ isOpen, onDismiss }: { isOpen: boole
               disabled={!isAddress(parsedAddress ?? '') || !hasAvailableClaim}
               padding="16px 16px"
               width="100%"
-              borderRadius="20px"
+              borderRadius="12px"
               mt="1rem"
               onClick={onClaim}
             >
@@ -182,7 +182,7 @@ export default function AddressClaimModal({ isOpen, onDismiss }: { isOpen: boole
             )}
             {attempting && hash && !claimConfirmed && chainId && hash && (
               <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} style={{ zIndex: 99 }}>
-                View transaction on Etherscan
+                View transaction on explorer
               </ExternalLink>
             )}
           </AutoColumn>

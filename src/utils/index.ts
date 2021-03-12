@@ -132,6 +132,26 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+
+  avalanche: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://cchain.explorer.avax${chainName ? `-${chainName}` : ''}.network`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  heco: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}hecoinfo.com`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
@@ -198,6 +218,22 @@ const chains: ChainObject = {
   [ChainId.MOONBASE]: {
     chainName: '',
     builder: builders.moonbase
+  },
+  [ChainId.AVALANCHE]: {
+    chainName: '',
+    builder: builders.avalanche
+  },
+  [ChainId.FUJI]: {
+    chainName: 'test',
+    builder: builders.avalanche
+  },
+  [ChainId.HECO]: {
+    chainName: '',
+    builder: builders.heco
+  },
+  [ChainId.HECO_TESTNET]: {
+    chainName: 'testnet',
+    builder: builders.heco
   }
 }
 

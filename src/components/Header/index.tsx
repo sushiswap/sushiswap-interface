@@ -325,7 +325,11 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.XDAI]: 'xDai',
   [ChainId.BSC]: 'BSC',
   [ChainId.BSC_TESTNET]: 'BSC Testnet',
-  [ChainId.MOONBASE]: 'Moonbase'
+  [ChainId.MOONBASE]: 'Moonbase',
+  [ChainId.AVALANCHE]: 'Avalanche',
+  [ChainId.FUJI]: 'Fuji',
+  [ChainId.HECO]: 'HECO',
+  [ChainId.HECO_TESTNET]: 'HECO Testnet'
 }
 
 export default function Header() {
