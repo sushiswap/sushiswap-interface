@@ -22,7 +22,11 @@ const RPC = {
   [ChainId.XDAI]: 'https://rpc.xdaichain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
   [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-2-s3.binance.org:8545',
-  [ChainId.MOONBASE]: 'https://rpc.testnet.moonbeam.network'
+  [ChainId.MOONBASE]: 'https://rpc.testnet.moonbeam.network',
+  [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
+  [ChainId.FUJI]: 'https://api.avax-test.network/ext/bc/C/rpc',
+  [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
+  [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com'
 }
 
 export const network = new NetworkConnector({
