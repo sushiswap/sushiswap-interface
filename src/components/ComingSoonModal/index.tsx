@@ -72,7 +72,7 @@ export default function ComingSoonModal() {
           <StyledPlus />
           <AutoColumn gap="md">
             <RowBetween>
-              <div><img width="66px" height="auto" src={BentoBox} /><TYPE.mediumHeader>BentoBox</TYPE.mediumHeader></div>
+              <div><img width="66px" height="auto" src={BentoBox} /><TYPE.mediumHeader color='white'>BentoBox</TYPE.mediumHeader></div>
               <div><img width="80px" height="auto" src={Kashi} /></div>
             </RowBetween>
           </AutoColumn>
@@ -84,7 +84,7 @@ export default function ComingSoonModal() {
         </ModalUpper>
         <ModalLower>
         <AutoRow gap="8px" justify="center">
-          <TYPE.largeHeader>
+          <TYPE.largeHeader color='white'>
             Kash Margin Trading <br/>
             in BentoBox App
           </TYPE.largeHeader>
