@@ -71,13 +71,8 @@ export default function ComingSoonModal() {
           <StyledPlus />
           <AutoColumn gap="md">
             <RowBetween>
-              <div>
-                <img width="66px" height="auto" src={BentoBox} />
-                <TYPE.mediumHeader color="white">BentoBox</TYPE.mediumHeader>
-              </div>
-              <div>
-                <img width="80px" height="auto" src={Kashi} />
-              </div>
+              <div><img width="66px" height="auto" src={BentoBox} /><TYPE.mediumHeader color='white'>BentoBox</TYPE.mediumHeader></div>
+              <div><img width="80px" height="auto" src={Kashi} /></div>
             </RowBetween>
           </AutoColumn>
           <StyledClose
@@ -90,21 +85,18 @@ export default function ComingSoonModal() {
           <StyledComingSoon src={ComingSoonImage} />
         </ModalUpper>
         <ModalLower>
-          <AutoRow gap="8px" justify="center">
-            <TYPE.largeHeader color="white">
-              Kashi Margin Trading <br />
-              in BentoBox App
-            </TYPE.largeHeader>
-            <TYPE.subHeader fontWeight={600} fontSize={16} color="gray">
-              BentoBox is a revolutionary way from SUSHI
-              <br /> to interact with apps on L1 in a highly
-              <br /> gas-efficient manner.
-            </TYPE.subHeader>
-            <TYPE.white fontWeight={400}>
-              The first app in the BentoBox system is Kashi, a<br /> gas-optimised margin trading platform with
-              <br /> risk-isolated lending pairs and short positions.
-            </TYPE.white>
-          </AutoRow>
+        <AutoRow gap="8px" justify="center">
+          <TYPE.largeHeader color='white'>
+            Kashi Lending and Margin <br/> Trading
+            in BentoBox
+          </TYPE.largeHeader>
+          <TYPE.subHeader fontWeight={600} fontSize={16} color="gray">
+            BentoBox is a reveolutionary way from SUSHI<br/> to interact with apps on L1 in a highly<br/> gas-efficient manner.
+          </TYPE.subHeader>
+          <TYPE.white fontWeight={400}>
+            The first app in the BentoBox system is Kashi, a<br/> gas-optimised lending and margin trading platform with risk-isolated pairs.
+          </TYPE.white>
+        </AutoRow>
         </ModalLower>
       </Wrapper>
     </Modal>
