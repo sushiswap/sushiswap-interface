@@ -386,25 +386,16 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/sushi'}>
-            SUSHI
-          </StyledNavLink> */}
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Vote
-          </StyledNavLink> */}
           {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
               Stake
             </StyledNavLink>
           )}
-          <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
-            Apps
-          </StyledNavLink>
-          {/* {chainId === ChainId.MAINNET && (
+          {chainId === ChainId.ROPSTEN && (
             <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
-              BentoApps
+              Apps
             </StyledNavLink>
-          )} */}
+          )}
           {chainId && (
             <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>

@@ -110,10 +110,12 @@ export default function App() {
             <Switch>
               {process.env.NODE_ENV === 'development' && <Route exact strict path="/testbed" component={TestBed} />}
               {/* BentoApps */}
-              <Route exact strict path="/bento" component={Bento} />
-              <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />
-              <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
-              <Route exact strict path="/bento/balances" component={BentoBalances} />
+              {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento" component={Bento} />}
+              {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />}
+              {chainId === ChainId.ROPSTEN && (
+                <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+              )}
+              {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/balances" component={BentoBalances} />}
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
