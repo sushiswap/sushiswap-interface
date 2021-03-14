@@ -1,19 +1,20 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
+import useTheme from '../../../hooks/useTheme'
+import { useTranslation } from 'react-i18next'
 import { darken } from 'polished'
 
+import { TYPE } from '../../../theme'
+import { RowBetween } from '../../../components/Row'
 import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Dots } from '../../Pool/styleds'
 
 import { useActiveWeb3React } from '../../../hooks'
-//import { useTranslation } from 'react-i18next'
-//import useTheme from '../../../hooks/useTheme'
-
 import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
 import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
-//import useBentoBox from '../../../sushi-hooks/useBentoBox'
 import useKashi from '../../../sushi-hooks/useKashi'
+
 import useTokenBalance, { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../../utils'
 
@@ -184,6 +185,8 @@ export default function CurrencyInputPanel({
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
           tokenBalanceBigInt={bentoBalance}
+          cornerRadiusBottomNone={cornerRadiusBottomNone}
+          cornerRadiusTopNone={cornerRadiusTopNone}
         />
       ) : (
         <SelectedInputPanel
@@ -195,6 +198,8 @@ export default function CurrencyInputPanel({
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
           tokenBalanceBigInt={walletBalance}
+          cornerRadiusBottomNone={cornerRadiusBottomNone}
+          cornerRadiusTopNone={cornerRadiusTopNone}
         />
       )}
     </>
@@ -230,9 +235,9 @@ const SelectedInputPanel = ({
   setBalanceFrom,
   tokenBalanceBigInt
 }: SelectedInputPanelProps) => {
-  //const { t } = useTranslation()
+  const { t } = useTranslation()
   const { account } = useActiveWeb3React()
-  //const theme = useTheme()
+  const theme = useTheme()
 
   const { depositAddCollateral, addCollateral } = useKashi()
 
@@ -265,22 +270,32 @@ const SelectedInputPanel = ({
 
   return (
     <>
-      {/* Deposit Input */}
-      <div className="flex justify-between items-center px-1">
-        <div className="text-sm text-gray-300">
-          Borrow <span className="font-semibold">{tokenSymbol}</span>
-        </div>
-        <div className="text-sm text-gray-300">
-          Max: {tokenBalance} {tokenSymbol}
-        </div>
-      </div>
       <InputPanel id={id}>
         <Container
           hideInput={hideInput}
           cornerRadiusBottomNone={cornerRadiusBottomNone}
           cornerRadiusTopNone={cornerRadiusTopNone}
         >
-          {!hideInput && <></>}
+          {!hideInput && (
+            <LabelRow>
+              <RowBetween>
+                <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
+                  Borrow {tokenSymbol}
+                </TYPE.body>
+                {account && (
+                  <TYPE.body
+                    onClick={handleMaxDeposit}
+                    color={theme.text2}
+                    fontWeight={500}
+                    fontSize={14}
+                    style={{ display: 'inline', cursor: 'pointer' }}
+                  >
+                    Max: {tokenBalance} {tokenSymbol}
+                  </TYPE.body>
+                )}
+              </RowBetween>
+            </LabelRow>
+          )}
           <InputRow style={hideInput ? { padding: '0', borderRadius: '8px' } : {}} selected={disableCurrencySelect}>
             {!hideInput && (
               <>

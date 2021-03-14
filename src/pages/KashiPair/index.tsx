@@ -33,7 +33,7 @@ const StyledArrowLeft = styled(ArrowLeft)`
 `
 
 const PageWrapper = styled(AutoColumn)`
-  max-width: 500px; /* 480px */
+  max-width: 480px; /* 480px */
   width: 100%;
 `
 
@@ -74,9 +74,9 @@ interface TabsBodyProps {
 function TabsBody({ section, collateral, asset, pairAddress }: TabsBodyProps) {
   switch (section) {
     case 'supply':
-      return <Supply tokenAddress={collateral.address} tokenSymbol={collateral.symbol} pairAddress={pairAddress} />
+      return <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
     case 'borrow':
-      return <Borrow tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+      return <Borrow collateral={collateral} asset={asset} pairAddress={pairAddress} />
     case 'leverage':
       return <Leverage />
     default:
@@ -195,7 +195,7 @@ export default function KashiPair({
                 </div>
               </div>
               {/* User Balances */}
-              <div
+              {/* <div
                 className="pt-2 pb-4 px-6"
                 style={{
                   //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
@@ -245,7 +245,7 @@ export default function KashiPair({
                     <div className="text-xs sm:text-base font-semibold text-gray-800">{pair && '-'}</div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/* Tabs */}
               <div
                 className="py-4 px-6"

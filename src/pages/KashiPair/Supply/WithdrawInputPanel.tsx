@@ -1,19 +1,20 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
+import useTheme from '../../../hooks/useTheme'
+import { useTranslation } from 'react-i18next'
 import { darken } from 'polished'
 
+import { TYPE } from '../../../theme'
+import { RowBetween } from '../../../components/Row'
 import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Dots } from '../../Pool/styleds'
 
 import { useActiveWeb3React } from '../../../hooks'
-//import { useTranslation } from 'react-i18next'
-//import useTheme from '../../../hooks/useTheme'
-
 import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
-import useKashiBalances from '../../../sushi-hooks/queries/useKashiBalances'
-//import useBentoBox from '../../../sushi-hooks/useBentoBox'
+import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
 import useKashi from '../../../sushi-hooks/useKashi'
+
 import useTokenBalance, { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../../utils'
 
@@ -169,8 +170,8 @@ export default function CurrencyInputPanel({
 }: CurrencyInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
 
-  const kashiBalances = useKashiBalances(pairAddress)
-  console.log('kashiBalance:', kashiBalances)
+  const walletBalance = useTokenBalance(tokenAddress)
+  const bentoBalance = useBentoBalance(tokenAddress)
 
   return (
     <>
@@ -183,7 +184,9 @@ export default function CurrencyInputPanel({
           id="supply-collateral-token"
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={kashiBalances?.collateral}
+          tokenBalanceBigInt={bentoBalance}
+          cornerRadiusBottomNone={cornerRadiusBottomNone}
+          cornerRadiusTopNone={cornerRadiusTopNone}
         />
       ) : (
         <SelectedInputPanel
@@ -194,7 +197,9 @@ export default function CurrencyInputPanel({
           id="supply-collateral-token"
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={kashiBalances?.collateral}
+          tokenBalanceBigInt={walletBalance}
+          cornerRadiusBottomNone={cornerRadiusBottomNone}
+          cornerRadiusTopNone={cornerRadiusTopNone}
         />
       )}
     </>
@@ -230,11 +235,11 @@ const SelectedInputPanel = ({
   setBalanceFrom,
   tokenBalanceBigInt
 }: SelectedInputPanelProps) => {
-  //const { t } = useTranslation()
+  const { t } = useTranslation()
   const { account } = useActiveWeb3React()
-  //const theme = useTheme()
+  const theme = useTheme()
 
-  const { removeWithdrawCollateral, removeCollateral } = useKashi()
+  const { depositAddCollateral, addCollateral } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
@@ -265,29 +270,41 @@ const SelectedInputPanel = ({
 
   return (
     <>
-      {/* Deposit Input */}
-      <div className="flex justify-between items-center px-1 pt-2">
-        <div className="text-sm text-gray-300">
-          Widthdraw <span className="font-semibold">{tokenSymbol}</span> to{' '}
-          <span>
-            {balanceFrom === 'bento' ? (
-              <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
-            ) : (
-              balanceFrom === 'wallet' && <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
-            )}
-          </span>
-        </div>
-        <div className="text-sm text-gray-300">
-          Collateral: {tokenBalance} {tokenSymbol}
-        </div>
-      </div>
       <InputPanel id={id}>
         <Container
           hideInput={hideInput}
           cornerRadiusBottomNone={cornerRadiusBottomNone}
           cornerRadiusTopNone={cornerRadiusTopNone}
         >
-          {!hideInput && <></>}
+          {!hideInput && (
+            <LabelRow>
+              <RowBetween>
+                <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
+                  Withdraw <span className="font-semibold">{tokenSymbol}</span> to{' '}
+                  <span>
+                    {balanceFrom === 'bento' ? (
+                      <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
+                    ) : (
+                      balanceFrom === 'wallet' && (
+                        <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
+                      )
+                    )}
+                  </span>
+                </TYPE.body>
+                {account && (
+                  <TYPE.body
+                    onClick={handleMaxDeposit}
+                    color={theme.text2}
+                    fontWeight={500}
+                    fontSize={14}
+                    style={{ display: 'inline', cursor: 'pointer' }}
+                  >
+                    Max: {tokenBalance} {tokenSymbol}
+                  </TYPE.body>
+                )}
+              </RowBetween>
+            </LabelRow>
+          )}
           <InputRow style={hideInput ? { padding: '0', borderRadius: '8px' } : {}} selected={disableCurrencySelect}>
             {!hideInput && (
               <>
@@ -323,15 +340,15 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await removeWithdrawCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await depositAddCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await removeWithdrawCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await depositAddCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await removeCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await addCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await removeCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await addCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   }
                   setPendingTx(false)
