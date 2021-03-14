@@ -34,13 +34,19 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
 
+import TestBed from '../sushi-hooks/TestBed'
+
 import SushiBar from './SushiBar'
 import Bento from './Bento'
-import Kashi from './Kashi'
+import BentoBalances from './BentoBalances'
+import KashiPairs from './KashiPairs'
+import KashiPair from './KashiPair'
 
 // Additional Tools
 import Tools from './Tools'
 import Saave from './Saave'
+
+import ComingSoonModal from '../components/ComingSoonModal'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -99,15 +105,19 @@ export default function App() {
           <Popups />
           <Polling />
           <TopLevelModals />
+          <ComingSoonModal />
           <Web3ReactManager>
             <Switch>
+              {process.env.NODE_ENV === 'development' && <Route exact strict path="/testbed" component={TestBed} />}
               {/* BentoApps */}
               <Route exact strict path="/bento" component={Bento} />
-              <Route exact strict path="/bento/kashi" component={Kashi} />
+              <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />
+              <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+              <Route exact strict path="/bento/balances" component={BentoBalances} />
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
-              {/* Custom Pages */}
+              {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}

@@ -4,8 +4,10 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { useActiveWeb3React } from '../../hooks'
 import ERC20_ABI from '../../constants/abis/erc20.json'
 import { useContract } from '../useContract'
-import { useBlockNumber } from '../../state/application/hooks'
+//import { useBlockNumber } from '../../state/application/hooks'
 import { isAddress } from '../../utils'
+
+import useTransactionStatus from '../useTransactionStatus'
 
 //import Fraction from '../../constants/Fraction'
 
@@ -17,7 +19,9 @@ export interface BalanceProps {
 const useTokenBalance = (tokenAddress: string) => {
   const [balance, setBalance] = useState<BalanceProps>({ value: BigNumber.from(0), decimals: 18 })
   const { account } = useActiveWeb3React()
-  const currentBlockNumber = useBlockNumber()
+  //const currentBlockNumber = useBlockNumber()
+  // allows balance to update given transaction updates
+  const currentTransactionStatus = useTransactionStatus()
   const addressCheckSum = isAddress(tokenAddress)
   const tokenContract = useContract(addressCheckSum, ERC20_ABI, false)
 
@@ -26,6 +30,7 @@ const useTokenBalance = (tokenAddress: string) => {
       //console.log('token_contract:', contract)
       const balance = await contract?.balanceOf(owner)
       const decimals = await contract?.decimals()
+
       return { value: BigNumber.from(balance), decimals: decimals }
       //todo: return as BigNumber as opposed toString since information will
       //return Fraction.from(BigNumber.from(balance), BigNumber.from(10).pow(decimals)).toString()
@@ -44,7 +49,7 @@ const useTokenBalance = (tokenAddress: string) => {
     if (account && tokenContract) {
       fetchBalance()
     }
-  }, [account, setBalance, currentBlockNumber, tokenAddress, fetchBalance, tokenContract])
+  }, [account, setBalance, currentTransactionStatus, tokenAddress, fetchBalance, tokenContract])
 
   return balance
 }

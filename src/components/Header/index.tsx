@@ -325,7 +325,11 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.XDAI]: 'xDai',
   [ChainId.BSC]: 'BSC',
   [ChainId.BSC_TESTNET]: 'BSC Testnet',
-  [ChainId.MOONBASE]: 'Moonbase'
+  [ChainId.MOONBASE]: 'Moonbase',
+  [ChainId.AVALANCHE]: 'Avalanche',
+  [ChainId.FUJI]: 'Fuji',
+  [ChainId.HECO]: 'HECO',
+  [ChainId.HECO_TESTNET]: 'HECO Testnet'
 }
 
 export default function Header() {
@@ -393,11 +397,14 @@ export default function Header() {
               Stake
             </StyledNavLink>
           )}
-          {chainId === ChainId.MAINNET && (
+          <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
+            Apps
+          </StyledNavLink>
+          {/* {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
               BentoApps
             </StyledNavLink>
-          )}
+          )} */}
           {chainId && (
             <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>
@@ -458,9 +465,9 @@ export default function Header() {
           </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
-          <StyledMenuButton onClick={() => toggleDarkMode()}>
+          {/* <StyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </StyledMenuButton>
+          </StyledMenuButton> */}
           <Menu />
         </HeaderElementWrap>
       </HeaderControls>

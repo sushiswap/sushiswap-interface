@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import ethers from 'ethers'
+import { ethers } from 'ethers'
 import { useSaaveContract, useSushiContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 

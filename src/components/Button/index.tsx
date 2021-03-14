@@ -170,6 +170,7 @@ export const ButtonSecondary = styled(Base)`
   background-color: transparent;
   font-size: 16px;
   border-radius: ${({ theme }) => theme.borderRadius};
+  border-radius: ${({ borderRadius }) => borderRadius};
   padding: ${({ padding }) => (padding ? padding : '10px')};
 
   &:focus {

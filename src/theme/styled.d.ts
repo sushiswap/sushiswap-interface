@@ -49,6 +49,7 @@ export interface Colors {
   blue1: Color
 
   borderRadius: string
+  darkMode: boolean
 }
 
 export interface Grids {

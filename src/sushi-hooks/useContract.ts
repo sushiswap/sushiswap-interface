@@ -1,6 +1,8 @@
 import { Contract } from '@ethersproject/contracts'
 import { ChainId } from '@sushiswap/sdk'
 import { useMemo } from 'react'
+
+import ERC20_ABI from '../constants/sushiAbis/erc20.json'
 import SUSHI_ABI from '../constants/sushiAbis/sushi.json'
 import MASTERCHEF_ABI from '../constants/sushiAbis/masterchef.json'
 import FACTORY_ABI from '../constants/sushiAbis/factory.json'
@@ -8,14 +10,17 @@ import ROUTER_ABI from '../constants/sushiAbis/router.json'
 import BAR_ABI from '../constants/sushiAbis/bar.json'
 import MAKER_ABI from '../constants/sushiAbis/maker.json'
 import TIMELOCK_ABI from '../constants/sushiAbis/timelock.json'
-import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
 import BASEINFO_ABI from '../constants/sushiAbis/baseInfo.json'
 import USERINFO_ABI from '../constants/sushiAbis/userInfo.json'
 import MAKERINFO_ABI from '../constants/sushiAbis/makerInfo.json'
 import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
 import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
 import PENDING_ABI from '../constants/sushiAbis/pending.json'
-import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
+
+import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
+import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
+import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper2.json'
+import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
 
 import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 
@@ -56,6 +61,10 @@ export function useContract(
 export function useMulticallContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
+}
+
+export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+  return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
@@ -135,6 +144,55 @@ export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | 
     }
   }
   return useContract(address, BENTOBOX_ABI, withSignerIfPossible)
+}
+
+export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
+        break
+      case ChainId.ROPSTEN:
+        address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
+        //address = '0xd43960bF734ACaFE8BDb6DCF53212eF58a5FA4f3'
+        break
+    }
+  }
+  return useContract(address, KASHIPAIR_ABI, withSignerIfPossible)
+}
+
+export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = ''
+        break
+      case ChainId.ROPSTEN:
+        address = '0x8013a86d098c722890b1666575a20a41825e9c34'
+        break
+    }
+  }
+  return useContract(address, KASHIPAIRHELPER_ABI, withSignerIfPossible)
+}
+
+export function useBentoHelperContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      // case ChainId.MAINNET:
+      //   address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
+      //   break
+      case ChainId.ROPSTEN:
+        address = '0x24f2ee10c05ad21ed6870c5c8a34a36a5f8fdc69'
+        break
+    }
+  }
+  return useContract(address, BENTOHELPER_ABI, false)
 }
 
 export function useBaseInfoContract(): Contract | null {
@@ -225,20 +283,4 @@ export function usePendingContract(): Contract | null {
     }
   }
   return useContract(address, PENDING_ABI, false)
-}
-
-export function useBentoHelperContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x74420A0a3828796694Dc9ac5ce35419e8fBb6dec'
-        break
-    }
-  }
-  return useContract(address, BENTOHELPER_ABI, false)
 }

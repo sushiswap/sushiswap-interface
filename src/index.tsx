@@ -19,6 +19,8 @@ import UserUpdater from './state/user/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
 
+import './styles.css'
+
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
 if (!!window.ethereum) {

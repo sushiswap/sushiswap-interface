@@ -6,7 +6,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER, ROUTER_ADDRESS } from '@sushiswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
-import ethers from 'ethers'
+import { ethers } from 'ethers'
+import Numeral from 'numeral'
 
 import Fraction from '../constants/Fraction'
 
@@ -54,6 +55,91 @@ export function isAddress(value: any): string | false {
     return false
   }
 }
+export function isAddressString(value: any): string {
+  try {
+    return getAddress(value)
+  } catch {
+    return ''
+  }
+}
+
+// Vision Formatting
+export const toK = (num: string) => {
+  return Numeral(num).format('0.[00]a')
+}
+
+// using a currency library here in case we want to add more in future
+const priceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2
+})
+
+export const formattedNum = (number: any, usd = false) => {
+  if (isNaN(number) || number === '' || number === undefined) {
+    return usd ? '$0.00' : 0
+  }
+  const num = parseFloat(number)
+
+  if (num > 500000000) {
+    return (usd ? '$' : '') + toK(num.toFixed(0))
+  }
+
+  if (num === 0) {
+    if (usd) {
+      return '$0.00'
+    }
+    return 0
+  }
+
+  if (num < 0.0001 && num > 0) {
+    return usd ? '< $0.0001' : '< 0.0001'
+  }
+
+  if (num > 1000) {
+    return usd
+      ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+      : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+  }
+
+  if (usd) {
+    if (num < 0.1) {
+      return '$' + Number(parseFloat(String(num)).toFixed(4))
+    } else {
+      const usdString = priceFormatter.format(num)
+      return '$' + usdString.slice(1, usdString.length)
+    }
+  }
+
+  return Number(parseFloat(String(num)).toFixed(5))
+}
+
+export function formattedPercent(percent: any) {
+  percent = parseFloat(percent)
+  if (!percent || percent === 0) {
+    return '0%'
+  }
+  if (percent < 0.0001 && percent > 0) {
+    return '< 0.0001%'
+  }
+  if (percent < 0 && percent > -0.0001) {
+    return '< 0.0001%'
+  }
+  const fixedPercent = percent.toFixed(2)
+  if (fixedPercent === '0.00') {
+    return '0%'
+  }
+  if (fixedPercent > 0) {
+    if (fixedPercent > 100) {
+      return `${percent?.toFixed(0).toLocaleString()}%`
+    } else {
+      return `${fixedPercent}%`
+    }
+  } else {
+    return `${fixedPercent}%`
+  }
+}
+// Multichain Explorer
 
 const builders = {
   etherscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
@@ -132,6 +218,26 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+
+  avalanche: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://cchain.explorer.avax${chainName ? `-${chainName}` : ''}.network`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  heco: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}hecoinfo.com`
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
@@ -198,6 +304,22 @@ const chains: ChainObject = {
   [ChainId.MOONBASE]: {
     chainName: '',
     builder: builders.moonbase
+  },
+  [ChainId.AVALANCHE]: {
+    chainName: '',
+    builder: builders.avalanche
+  },
+  [ChainId.FUJI]: {
+    chainName: 'test',
+    builder: builders.avalanche
+  },
+  [ChainId.HECO]: {
+    chainName: '',
+    builder: builders.heco
+  },
+  [ChainId.HECO_TESTNET]: {
+    chainName: 'testnet',
+    builder: builders.heco
   }
 }
 

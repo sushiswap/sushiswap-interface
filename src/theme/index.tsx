@@ -10,6 +10,8 @@ import { useIsDarkMode } from '../state/user/hooks'
 import { Text, TextProps } from 'rebass'
 import { Colors } from './styled'
 
+import BentoBackground from '../assets/kashi/bento-background.jpg'
+
 export * from './components'
 
 const MEDIA_WIDTHS = {
@@ -85,7 +87,8 @@ export function colors(darkMode: boolean): Colors {
     yellow2: '#F3841E',
     blue1: '#0094ec',
 
-    borderRadius: '20px'
+    borderRadius: '20px',
+    darkMode: darkMode
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',
@@ -122,9 +125,11 @@ export function theme(darkMode: boolean): DefaultTheme {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const darkMode = useIsDarkMode()
+  //const darkMode = useIsDarkMode()
+  const darkMode = true
 
   const themeObject = useMemo(() => theme(darkMode), [darkMode])
+  //console.log('themeObject:', themeObject)
 
   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>
 }
@@ -148,6 +153,9 @@ export const TYPE = {
   },
   body(props: TextProps) {
     return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />
+  },
+  extraLargeHeader(props: TextProps) {
+    return <TextWrapper fontWeight={600} fontSize={30} {...props} />
   },
   largeHeader(props: TextProps) {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />
@@ -229,9 +237,28 @@ html {
 
 body {
   min-height: 100vh;
-  background-position: 0 -30vh;
-  background-repeat: no-repeat;
+  /* background-image: ${({ theme }) =>
+    theme.darkMode
+      ? `radial-gradient(rgba(29, 45, 65, 1), rgba(29, 45, 65, 0.8), rgba(29, 45, 65, 0.2)), url(${BentoBackground});`
+      : `none`}; */
+  background-size: cover;
+}
+
+body::after {    
+  content: "";
   background-image: ${({ theme }) =>
     `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.8, '#db4690')} 0%, ${transparentize(1, '#db4690')} 100%)`};
+
+  min-height: 100vh;
+  background-position: 0 -30vh;
+  background-repeat: no-repeat;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  opacity: 1;
 }
+
 `

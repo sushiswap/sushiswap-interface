@@ -1,0 +1,21 @@
+export const PEGGED_ORACLE = '0x1E8B2C9aA29360Bf0B7B385Cc82073000Af9BAAf'
+export const COMPOUND_ORACLE = '0x531e4F1E231714087b1AF3B6eB1caB3aE4E86343'
+export const CHAINLINK_ORACLE = '0x63651bbd40701dC61F55ac81081dDaF818626080'
+export const SIMPLE_SLPTWAP0_ORACLE = '0xca304Ac28409ad748E1455f87eDdaB179B0e3a30'
+export const SIMPLE_SLPTWAP1_ORACLE = '0x4a74B1AAE5E3BBEE6F63889227528c333153EF78'
+export const COMPOSITE_ORACLE = '0x396DDeFC9450AB4BE20A0fB769701884783C279C'
+
+const ORACLE_NAMES = {
+  [PEGGED_ORACLE.toLowerCase()]: 'Pegged',
+  [COMPOUND_ORACLE.toLowerCase()]: 'Compound',
+  [CHAINLINK_ORACLE.toLowerCase()]: 'Chainlink',
+  [SIMPLE_SLPTWAP0_ORACLE.toLowerCase()]: 'SLP-0',
+  [SIMPLE_SLPTWAP1_ORACLE.toLowerCase()]: 'SLP-1',
+  [COMPOSITE_ORACLE.toLowerCase()]: 'Composite'
+}
+
+const getOracleName = (address: string) => {
+  return ORACLE_NAMES[address.toLowerCase()]
+}
+
+export default getOracleName
