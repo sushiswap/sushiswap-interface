@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 
-import { fortmatic, injected, portis, lattice, walletconnect, walletlink } from '../connectors'
+import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
@@ -78,7 +78,11 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.BSC]: [WETH[ChainId.BSC]],
   [ChainId.BSC_TESTNET]: [WETH[ChainId.BSC_TESTNET]],
   [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
-  [ChainId.MOONBASE]: [WETH[ChainId.MOONBASE]]
+  [ChainId.MOONBASE]: [WETH[ChainId.MOONBASE]],
+  [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
+  [ChainId.FUJI]: [WETH[ChainId.FUJI]],
+  [ChainId.HECO]: [WETH[ChainId.HECO]],
+  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]]
 }
 
 // Default Ethereum chain tokens
@@ -136,6 +140,20 @@ export const IBETH = new Token(
   'ibETHv2',
   'Interest Bearing Ether v2'
 )
+export const PONT = new Token(
+  ChainId.MAINNET,
+  '0xcb46C550539ac3DB72dc7aF7c89B11c306C727c2',
+  9,
+  'pONT',
+  'Poly Ontology Token'
+)
+export const PWING = new Token(
+  ChainId.MAINNET,
+  '0xDb0f18081b505A7DE20B18ac41856BCB4Ba86A1a',
+  9,
+  'pWING',
+  'Poly Ontology Wing Token'
+)
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -148,7 +166,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [BAB.address]: [BAC, WETH[ChainId.MAINNET]],
     [HBTC.address]: [CREAM, WETH[ChainId.MAINNET]],
     [FRAX.address]: [FXS, WETH[ChainId.MAINNET]],
-    [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]]
+    [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
+    [PONT.address]: [PWING, WETH[ChainId.MAINNET]]
   }
 }
 
@@ -261,6 +280,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Login using Portis hosted wallet',
     href: null,
     color: '#4A6C9B',
+    mobile: true
+  },
+  Torus: {
+    connector: torus,
+    name: 'Torus',
+    iconName: 'torusIcon.png',
+    description: 'Login using Torus hosted wallet',
+    href: null,
+    color: '#315CF5',
     mobile: true
   }
 }

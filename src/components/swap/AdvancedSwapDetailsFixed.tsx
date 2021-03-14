@@ -35,7 +35,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade | undefined; al
         <RowBetween>
           <RowFixed>
             <TYPE.black fontSize={14} fontWeight={400} color={theme.text3}>
-              {isExactIn ? 'Min received' : 'Max sold'}
+              {isExactIn ? 'Min Received' : 'Max Sold'}
             </TYPE.black>
           </RowFixed>
           <RowFixed>
@@ -108,14 +108,14 @@ export function AdvancedSwapDetailsFixed({ trade }: AdvancedSwapDetailsProps) {
             href={'https://analytics.sushi.com/pairs/' + trade?.route.pairs[0].liquidityToken.address}
             target="_blank"
           >
-            View pair analytics ↗
+            View Pair Analytics ↗
           </InfoLink>
         </AutoColumn>
       ) : (
         !showRoute && (
           <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
             <InfoLink href={'https://analytics.sushi.com/'} target="_blank">
-              View analytics ↗
+              View Analytics ↗
             </InfoLink>
           </AutoColumn>
         )

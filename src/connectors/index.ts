@@ -4,6 +4,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { LatticeConnector } from '@web3-react/lattice-connector'
+import { TorusConnector } from '@web3-react/torus-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
@@ -22,7 +23,11 @@ const RPC = {
   [ChainId.XDAI]: 'https://rpc.xdaichain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
   [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-2-s3.binance.org:8545',
-  [ChainId.MOONBASE]: 'https://rpc.testnet.moonbeam.network'
+  [ChainId.MOONBASE]: 'https://rpc.testnet.moonbeam.network',
+  [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
+  [ChainId.FUJI]: 'https://api.avax-test.network/ext/bc/C/rpc',
+  [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
+  [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com'
 }
 
 export const network = new NetworkConnector({
@@ -49,7 +54,11 @@ export const injected = new InjectedConnector({
     100, // xdai
     56, // binance smart chain
     97, // binance smart chain testnet
-    1287 // moonbase
+    1287, // moonbase
+    43114, // avalanche
+    43113, // fuji
+    128, // heco
+    256 // heco testnet
   ]
 })
 
@@ -87,4 +96,9 @@ export const walletlink = new WalletLinkConnector({
   url: RPC[ChainId.MAINNET],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png'
+})
+
+// mainnet only
+export const torus = new TorusConnector({
+  chainId: 1
 })

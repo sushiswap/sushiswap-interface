@@ -19,6 +19,8 @@ import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
 import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
 import SUSHIROLL_ABI from '@sushiswap/core/build/abi/SushiRoll.json'
 
+import SAAVE_ABI from '../constants/sushiAbis/saave.json'
+
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from '../hooks'
@@ -96,6 +98,32 @@ export function useMakerContract(): Contract | null {
 export function useTimelockContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
+}
+
+// experimental:
+export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0x364762C00b32c4b448f39efaA9CeFC67a25603ff'
+        break
+    }
+  }
+  return useContract(address, SAAVE_ABI, withSignerIfPossible)
+}
+export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289'
+        break
+    }
+  }
+  return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 
 // TODO: Leaving these alone for now, since I'm unsure of whether these should
