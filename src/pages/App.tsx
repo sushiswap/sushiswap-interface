@@ -41,6 +41,7 @@ import Bento from './Bento'
 import BentoBalances from './BentoBalances'
 import KashiPairs from './KashiPairs'
 import KashiPair from './KashiPair'
+import KashiPositions from './KashiPositions'
 
 // Additional Tools
 import Tools from './Tools'
@@ -114,6 +115,9 @@ export default function App() {
               {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />}
               {chainId === ChainId.ROPSTEN && (
                 <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+              )}
+              {chainId === ChainId.ROPSTEN && (
+                <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
               )}
               {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/balances" component={BentoBalances} />}
               {/* Tools */}

@@ -10,10 +10,6 @@ import { BaseCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
 
-import USDCIcon from '../../assets/kashi/tokens/usdc-square.png'
-import DaiIcon from '../../assets/kashi/tokens/dai-square.png'
-import ChainlinkIcon from '../../assets/kashi/oracles/chainlink.png'
-
 import Supply from './Supply'
 import Borrow from './Borrow'
 import Leverage from './Leverage'
@@ -25,6 +21,7 @@ import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedNum } from '../../utils'
 
 import { BarChart, User, Search, ArrowLeft } from 'react-feather'
+import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 
 //import Charts from './Charts'
 
@@ -107,20 +104,21 @@ export default function KashiPair({
               <div></div>
               <nav className="-mb-px flex space-x-4">
                 <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
-                  <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
+                  <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
                     <div className="whitespace-nowrap text-base mr-2">Markets</div>
                     <BarChart size={16} />
                   </div>
                 </Link>
                 <Link to="/bento/kashi/positions" className="border-transparent py-2 px-1 border-b-2">
-                  <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
+                  <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
                     <div className="whitespace-nowrap text-base mr-2">Positions</div>
                     <User size={16} />
                   </div>
                 </Link>
                 <Link to="/bento/balances" className="border-transparent py-2 px-1 border-b-2">
-                  <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
+                  <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
                     <div className="whitespace-nowrap text-base mr-2">My Bento</div>
+                    <img src={BentoBoxLogo} className="w-6" />
                   </div>
                 </Link>
               </nav>
@@ -248,7 +246,7 @@ export default function KashiPair({
               </div> */}
               {/* Tabs */}
               <div
-                className="py-4 px-6"
+                className="py-2 px-6"
                 style={{
                   //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
