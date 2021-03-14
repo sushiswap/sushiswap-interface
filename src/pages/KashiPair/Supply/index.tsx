@@ -9,7 +9,7 @@ import SupplyInputPanel from './SupplyInputPanel'
 import WithdrawInputPanel from './WithdrawInputPanel'
 
 import useKashiPairHelper from '../../../sushi-hooks/queries/useKashiPairHelper'
-import { formattedNum } from '../../../utils'
+import { formattedNum, formattedPercent } from '../../../utils'
 
 export const PluginBody = styled.div`
   position: relative;
@@ -30,29 +30,27 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
     <>
       <WrapperNoPadding id="stake-page">
         <AutoColumn gap="sm">
-          <div className="px-2">
-            <div className="flex"></div>
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-300">Total Market Supplied</div>
+          <div className="px-2 grid grid-cols-3 gap-2">
+            <div className="col-span-1 items-start">
               <div className="flex">
-                <div className="text-sm text-gray-300">
+                <div className="text-xs sm:text-sm text-gray-300">Supply APR</div>
+                <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
+              </div>
+              <div className="text-2xl sm:text-4xl font-semibold">{formattedPercent('125')}</div>
+            </div>
+            <div className="col-span-2 mt-5">
+              <div className="flex justify-between">
+                <div className="text-xs sm:text-sm text-gray-300">Market Supply:</div>
+                <div className="text-xs sm:text-sm text-gray-300">
                   {formattedNum(kashi?.pair?.[0]?.details.total.asset.usdString, true)}
                 </div>
-                <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
               </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-300">Your Total Supplied</div>
-              <div className="flex">
-                <div className="text-sm text-gray-300">
+              <div className="flex justify-between">
+                <div className="text-xs sm:text-sm text-gray-300">Your Supply:</div>
+                <div className="text-xs sm:text-sm text-gray-300">
                   {formattedNum(kashi?.pair?.[0]?.user.asset.usdString, true)}
                 </div>
-                <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
               </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-gray-300">Supply APR</div>
-              <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
             </div>
           </div>
           <div>
