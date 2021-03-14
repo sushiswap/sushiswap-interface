@@ -13,7 +13,6 @@ export interface MigrateState extends LPTokensState {
   mode?: MigrateMode
   setMode: (_mode?: MigrateMode) => void
   onMigrate: () => Promise<void>
-  migrating: boolean
   pendingMigrationHash: string | null
   isMigrationPending: boolean
 }
@@ -23,7 +22,6 @@ const useMigrateState: () => MigrateState = () => {
   const state = useLPTokensState()
   const { migrate, migrateWithPermit } = useSushiRoll()
   const [mode, setMode] = useState<MigrateMode>()
-  const [migrating, setMigrating] = useState(false)
   const [amount, setAmount] = useState('')
   const addTransaction = useTransactionAdder()
   const [pendingMigrationHash, setPendingMigrationHash] = useState<string | null>(null)
@@ -37,20 +35,16 @@ const useMigrateState: () => MigrateState = () => {
 
   const onMigrate = useCallback(async () => {
     if (mode && state.selectedLPToken && account && library) {
-      setMigrating(true)
-      try {
-        const units = parseUnits(amount || '0', state.selectedLPToken.decimals)
-        const func = mode === 'approve' ? migrate : migrateWithPermit
-        const tx = await func(state.selectedLPToken, units)
-        await tx.wait()
-        await state.updateLPTokens()
+      const units = parseUnits(amount || '0', state.selectedLPToken.decimals)
+      const func = mode === 'approve' ? migrate : migrateWithPermit
+      const tx = await func(state.selectedLPToken, units)
 
-        addTransaction(tx, { summary: `Migrate Uniswap ${state.selectedLPToken.symbol} liquidity to Sushiswap` })
-        setPendingMigrationHash(tx.hash)
-        state.setSelectedLPToken(undefined)
-      } finally {
-        setMigrating(false)
-      }
+      addTransaction(tx, { summary: `Migrate Uniswap ${state.selectedLPToken.symbol} liquidity to Sushiswap` })
+      setPendingMigrationHash(tx.hash)
+
+      await tx.wait()
+      state.setSelectedLPToken(undefined)
+      await state.updateLPTokens()
     }
   }, [mode, state, account, library, amount, migrate, migrateWithPermit, addTransaction])
 
@@ -61,7 +55,6 @@ const useMigrateState: () => MigrateState = () => {
     mode,
     setMode,
     onMigrate,
-    migrating,
     pendingMigrationHash,
     isMigrationPending
   }

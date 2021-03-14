@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { BodyWrapper } from '../AppBody'
 import { AutoColumn } from '../../components/Column'
-import { BackArrow, CloseIcon, TYPE } from '../../theme'
+import { BackArrow, CloseIcon, CustomLightSpinner, TYPE } from '../../theme'
 import QuestionHelper from '../../components/QuestionHelper'
 import { AutoRow, RowFixed } from '../../components/Row'
 import styled, { ThemeContext } from 'styled-components'
@@ -9,7 +9,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { LightCard } from '../../components/Card'
 import { Dots } from '../../components/swap/styleds'
 import { EmptyState } from '../MigrateV1/EmptyState'
-import { JSBI, Token } from '@sushiswap/sdk'
+import { JSBI } from '@sushiswap/sdk'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { ButtonConfirmed } from '../../components/Button'
 import useMigrateState, { MigrateState } from '../../sushi-hooks/useMigrateState'
@@ -23,6 +23,8 @@ import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ZERO_ADDRESS } from '../../constants'
 import MetamaskError from '../../types/MetamaskError'
 import { useSushiRollContract } from '../../sushi-hooks/useContract'
+import Circle from '../../assets/images/blue-loader.svg'
+import LPToken from '../../types/LPToken'
 
 const Border = styled.div`
   width: 100%;
@@ -52,7 +54,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
       state.setAmount('')
     }
-  }, [state.mode, state.lpTokens.length, state.selectedLPToken])
+  }, [state])
 
   if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
     return <span />
@@ -75,25 +77,24 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 }
 
 interface PositionCardProps {
-  tokenA: Token
-  tokenB: Token
-  address: string
-  onClick: () => void
+  lpToken: LPToken
+  onClick: (lpToken: LPToken) => void
   onDismiss: () => void
   isSelected: boolean
+  updating: boolean
 }
 
-const LPTokenSelect = ({ tokenA, tokenB, onClick, onDismiss, isSelected }: PositionCardProps) => {
+const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: PositionCardProps) => {
   const theme = useContext(ThemeContext)
-
+  // console.log(updating)
   return (
     <LightCard>
       <AutoColumn gap="12px">
         <FixedHeightRow>
-          <RowFixed onClick={onClick}>
-            <DoubleCurrencyLogo currency0={tokenA} currency1={tokenB} margin={true} size={20} />
+          <RowFixed onClick={() => onClick(lpToken)}>
+            <DoubleCurrencyLogo currency0={lpToken.tokenA} currency1={lpToken.tokenB} margin={true} size={20} />
             <TYPE.body fontWeight={500} style={{ marginLeft: '' }}>
-              {`${tokenA.symbol}/${tokenB.symbol}`}
+              {`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}
             </TYPE.body>
             <Text
               fontSize={12}
@@ -108,7 +109,13 @@ const LPTokenSelect = ({ tokenA, tokenB, onClick, onDismiss, isSelected }: Posit
               V2
             </Text>
           </RowFixed>
-          {isSelected ? <CloseIcon onClick={onDismiss} /> : <ChevronRight onClick={onClick} />}
+          {updating ? (
+            <CustomLightSpinner src={Circle} alt="loader" size="20px" />
+          ) : isSelected ? (
+            <CloseIcon onClick={onDismiss} />
+          ) : (
+            <ChevronRight onClick={() => onClick(lpToken)} />
+          )}
         </FixedHeightRow>
       </AutoColumn>
     </LightCard>
@@ -161,7 +168,6 @@ const MigrateButtons = ({ state }: { state: MigrateState }) => {
   const sushiRollContract = useSushiRollContract()
   const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
   const noLiquidityTokens = !!state.selectedLPToken?.balance && state.selectedLPToken?.balance.equalTo(ZERO)
-  const isSuccessfullyMigrated = !!state.pendingMigrationHash && noLiquidityTokens
   const isButtonDisabled = !state.amount
 
   useEffect(() => {
@@ -186,8 +192,6 @@ const MigrateButtons = ({ state }: { state: MigrateState }) => {
       setError(e)
     }
   }
-
-  console.log(approval)
 
   return (
     <AutoColumn gap="20px">
@@ -230,18 +234,15 @@ const MigrateButtons = ({ state }: { state: MigrateState }) => {
             )}
             <AutoColumn gap="12px" style={{ flex: '1' }}>
               <ButtonConfirmed
-                confirmed={isSuccessfullyMigrated}
                 disabled={
-                  isSuccessfullyMigrated ||
                   noLiquidityTokens ||
                   state.isMigrationPending ||
                   (state.mode === 'approve' && approval !== ApprovalState.APPROVED) ||
-                  state.migrating ||
                   isButtonDisabled
                 }
                 onClick={onPress}
               >
-                {isSuccessfullyMigrated ? 'Success' : state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
+                {state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
               </ButtonConfirmed>
             </AutoColumn>
           </AutoRow>
@@ -261,6 +262,18 @@ const MigrateButtons = ({ state }: { state: MigrateState }) => {
 
 const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
   let content: JSX.Element
+  const onClick = useCallback(
+    lpToken => {
+      state.setAmount('')
+      state.setSelectedLPToken(lpToken)
+    },
+    [state]
+  )
+
+  const onDismiss = useCallback(() => {
+    state.setAmount('')
+    state.setSelectedLPToken(undefined)
+  }, [state])
 
   if (!state.mode) {
     content = <span />
@@ -273,19 +286,12 @@ const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
           if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
             acc.push(
               <LPTokenSelect
+                lpToken={lpToken}
                 key={lpToken.address}
-                tokenA={lpToken.tokenA}
-                tokenB={lpToken.tokenB}
-                address={lpToken.address}
-                onClick={() => {
-                  state.setAmount('')
-                  state.setSelectedLPToken(lpToken)
-                }}
-                onDismiss={() => {
-                  state.setAmount('')
-                  state.setSelectedLPToken(undefined)
-                }}
+                onClick={onClick}
+                onDismiss={onDismiss}
                 isSelected={state.selectedLPToken === lpToken}
+                updating={state.updatingLPTokens}
               />
             )
           }

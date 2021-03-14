@@ -235,7 +235,7 @@ export function useSushiRollContract(): Contract | null {
         address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
         break
       case ChainId.ROPSTEN:
-        address = '0x4bc61507f3a88ff191d2691bf18b116995a25bb9'
+        address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
         break
     }
   }

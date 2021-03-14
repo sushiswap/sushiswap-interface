@@ -65,6 +65,7 @@ const useSushiRoll = () => {
           permit.r,
           permit.s
         ]
+
         const gasLimit = await sushiRoll.estimateGas.migrateWithPermit(...args)
         const tx = await sushiRoll.migrateWithPermit(...args, {
           gasLimit: gasLimit.mul(120).div(100)
