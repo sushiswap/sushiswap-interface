@@ -37,7 +37,13 @@ const useKashiSummary = () => {
     //   helper: kashiPairHelperContract?.address
     // })
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
-    const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
+
+    const uni = await kashiPairHelperContract?.pollPairs(account, ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a'])
+    console.log('uni:', uni, uni[1][0].assetAPR.toNumber)
+
+    //const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
+    //todo remove aprPrecision accounting for factor of 100
+    const aprPrecision = BigNumber.from(1000000)
 
     //console.log('kashiPairHelperContract:', aprPrecision)
     //console.log('pairUserDetails:', pairUserDetails)
@@ -73,8 +79,8 @@ const useKashiSummary = () => {
             oracle: pairUserDetails[1][i].oracleExchangeRate
           },
           apr: {
-            asset: Fraction.from(pairUserDetails[1][i].assetAPR, aprPrecision).toString(),
-            borrow: Fraction.from(pairUserDetails[1][i].borrowAPR, aprPrecision).toString()
+            asset: Fraction.from(pairUserDetails[1][i].assetAPR, BigNumber.from(aprPrecision)).toString(),
+            borrow: Fraction.from(pairUserDetails[1][i].borrowAPR, BigNumber.from(aprPrecision)).toString()
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
@@ -92,7 +98,7 @@ const useKashiSummary = () => {
       userBorrowedPairCount: BigNumber.from(pairUserDetails[0].borrowPairCount).toNumber(),
       pairs: allPairDetails
     }
-    console.log('allDetails:', allDetails)
+    console.log('allDetails:', allDetails, pairUserDetails)
 
     setSummary(allDetails)
   }, [account, bentoBoxContract, kashiPairContract?.address, kashiPairHelperContract])

@@ -172,7 +172,8 @@ export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Cont
         address = ''
         break
       case ChainId.ROPSTEN:
-        address = '0x8013a86d098c722890b1666575a20a41825e9c34'
+        address = '0xAe338e484372e4487B5438421c48342c100c9E16'
+        //address = '0x8013a86d098c722890b1666575a20a41825e9c34'
         break
     }
   }

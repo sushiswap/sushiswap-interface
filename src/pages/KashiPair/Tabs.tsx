@@ -10,7 +10,7 @@ interface TabsProps {
 const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {
   const [darkMode] = useDarkModeManager()
   return (
-    <div className="-mb-px flex space-x-4 bg-gray-900 rounded-lg" aria-label="Tabs">
+    <div className="-mb-px flex space-x-4" aria-label="Tabs">
       {tabs.map((tab: any) => {
         return (
           <button
@@ -21,14 +21,10 @@ const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {
             className={
               `${
                 selected === tab.id
-                  ? `${
-                      darkMode
-                        ? 'text-white hover:text-white rounded-lg bg-gray-300'
-                        : 'text-gray-800 hover:text-gray-800 bg-gray-300 rounded-lg m-1'
-                    }`
+                  ? `${darkMode ? 'text-white hover:text-white' : 'text-white hover:text-gray-600'}`
                   : `${darkMode ? 'text-gray-600 hover:text-gray-700' : 'text-gray-400 hover:text-gray-700'}`
               }` +
-              ' border-transparent whitespace-nowrap py-1 px-1 font-medium text-base focus:outline-none font-semibold'
+              ' border-transparent whitespace-nowrap py-2 px-1 font-medium text-base focus:outline-none font-semibold'
             }
           >
             {tab.title}
