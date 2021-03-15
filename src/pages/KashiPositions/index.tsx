@@ -127,23 +127,23 @@ const Options = () => {
     <div className="flex justify-between pb-2 px-7">
       <div className="block">
         <nav className="-mb-px flex space-x-4">
-          <a href="#" className="border-transparent py-2 px-1 border-b-2">
+          <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
             <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
               <div className="whitespace-nowrap text-lg mr-2 text-white">Markets</div>
               <BarChart size={16} />
             </div>
-          </a>
-          <a href="#" className="border-transparent py-2 px-1 border-b-2">
+          </Link>
+          <Link to="/bento/kashi/positions" className="border-transparent py-2 px-1 border-b-2">
             <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
               <div className="whitespace-nowrap text-lg mr-2">Positions</div>
               <User size={16} />
             </div>
-          </a>
-          <a href="#" className="border-transparent py-2 px-1 border-b-2">
+          </Link>
+          <Link to="/bento/balances" className="border-transparent py-2 px-1 border-b-2">
             <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
               <div className="whitespace-nowrap text-lg mr-2">My Bento</div>
             </div>
-          </a>
+          </Link>
         </nav>
       </div>
       <div className="w-1/2">
