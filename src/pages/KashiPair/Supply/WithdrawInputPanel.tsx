@@ -13,6 +13,7 @@ import { useActiveWeb3React } from '../../../hooks'
 import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
 import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
+import useKashiBalances from '../../../sushi-hooks/queries/useKashiBalances'
 import useKashi from '../../../sushi-hooks/useKashi'
 
 import useTokenBalance, { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
@@ -173,6 +174,8 @@ export default function CurrencyInputPanel({
   const walletBalance = useTokenBalance(tokenAddress)
   const bentoBalance = useBentoBalance(tokenAddress)
 
+  const kashiBalances = useKashiBalances(pairAddress)
+
   return (
     <>
       {balanceFrom && balanceFrom === 'bento' ? (
@@ -184,7 +187,7 @@ export default function CurrencyInputPanel({
           id="supply-collateral-token"
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={bentoBalance}
+          tokenBalanceBigInt={kashiBalances?.asset}
           cornerRadiusBottomNone={cornerRadiusBottomNone}
           cornerRadiusTopNone={cornerRadiusTopNone}
         />
@@ -197,7 +200,7 @@ export default function CurrencyInputPanel({
           id="supply-collateral-token"
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={walletBalance}
+          tokenBalanceBigInt={kashiBalances?.asset}
           cornerRadiusBottomNone={cornerRadiusBottomNone}
           cornerRadiusTopNone={cornerRadiusTopNone}
         />
@@ -239,7 +242,7 @@ const SelectedInputPanel = ({
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { depositAddCollateral, addCollateral } = useKashi()
+  const { removeAsset, removeWithdrawAsset } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
@@ -299,7 +302,7 @@ const SelectedInputPanel = ({
                     fontSize={14}
                     style={{ display: 'inline', cursor: 'pointer' }}
                   >
-                    Max: {tokenBalance} {tokenSymbol}
+                    Supplied: {tokenBalance} {tokenSymbol}
                   </TYPE.body>
                 )}
               </RowBetween>
@@ -340,15 +343,15 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await depositAddCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await removeWithdrawAsset(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await depositAddCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await removeWithdrawAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await addCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await removeAsset(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await addCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await removeAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   }
                   setPendingTx(false)

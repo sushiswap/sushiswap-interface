@@ -103,13 +103,14 @@ const useKashi = () => {
   // Add Asset from bentobox
   const addAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
+
+      const tokenAddress = isAddressString(address)
+      const pairCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+
       try {
-        const tokenAddress = isAddressString(address)
-        const pairCheckSum = isAddressString(pairAddress)
-        const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
-
-        const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
-
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_ADD_ASSET],
           [0],
@@ -128,21 +129,84 @@ const useKashi = () => {
   // deposit into bento from wallet and add asset to pair
   const depositAddAsset = useCallback(
     async (pairAddress: string, address:string, amount: BalanceProps) => {
-      try {
-        const tokenAddress = isAddressString(address)
-        const pairCheckSum = isAddressString(pairAddress)
-        const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const tokenAddress = isAddressString(address)
+      const pairCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_BENTO_DEPOSIT, ACTION_ADD_ASSET],
           [0, 0],
           [
-            ethers.utils.defaultAbiCoder.encode(['address', 'address', 'int256'], [tokenAddress, account, amount?.value]),
-            ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
+            ethers.utils.defaultAbiCoder.encode(
+              ['address', 'address', 'int256', 'int256'],
+              [tokenAddress, account, amount?.value, 0]),
+            ethers.utils.defaultAbiCoder.encode(
+              ['int256', 'address', 'bool'],
+              [-2, account, false])
           ]
         )
 
         return addTransaction(tx, { summary: 'Deposit -> Add Asset'} )
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
+  // Remove Asset to bentobox
+  const removeAsset = useCallback(
+    async (pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(address)
+
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+
+      try {
+        const tx = await kashiPairCloneContract?.cook(
+          [ACTION_REMOVE_ASSET],
+          [0],
+          [ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [share, account])]
+        )
+
+        return addTransaction(tx, { summary: 'Remove Asset'} )
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
+  // Remove Asset and withdraw to wallet
+  const removeWithdrawAsset = useCallback(
+    async (pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(address)
+
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+
+      try {
+        const tx = await kashiPairCloneContract?.cook(
+          [ACTION_REMOVE_ASSET, ACTION_BENTO_WITHDRAW],
+          [0],
+          [
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [share, account]),
+            ethers.utils.defaultAbiCoder.encode(
+              ['address', 'address', 'int256', 'int256'],
+              [tokenAddress, account, 0, -1]
+            )
+          ]
+        )
+
+        return addTransaction(tx, { summary: 'Remove -> Withdraw Asset'} )
       } catch (e) {
         console.log(e)
         return e
@@ -312,14 +376,82 @@ const useKashi = () => {
     [account, addTransaction, library]
   )
 
+  // repay borrowed amount
+  const repayFromBento = useCallback(
+    async (pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(pairAddress)
+
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+
+      try {
+        const tx = await kashiPairCloneContract?.cook(
+          [ACTION_REPAY],
+          [0],
+          [ethers.utils.defaultAbiCoder.encode(['uint256', 'address', 'bool'], [share, account, false])]
+        )
+
+        return addTransaction(tx, { summary: 'Repay From Bento'} )
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
+  // repay borrowed amount from wallet
+  const repay = useCallback(
+    async(pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(pairAddress)
+
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+
+      try {
+        const tx = await kashiPairContract?.cook(
+          [ACTION_GET_REPAY_SHARE, ACTION_BENTO_DEPOSIT, ACTION_REPAY],
+          [0, 0, 0],
+          [
+            ethers.utils.defaultAbiCoder.encode(['int256'], [share]),
+            ethers.utils.defaultAbiCoder.encode(
+              ['address', 'address', 'int256', 'int256'],
+              [tokenAddress, account, 0, -1]
+            ),
+            ethers.utils.defaultAbiCoder.encode(
+              ['int256', 'address', 'bool'],
+              [share, account, false]
+            )
+          ]
+        )
+
+        return addTransaction(tx, { summary: 'Repay'})
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
   return {
     kashiApproved,
     approve,
+    addAsset,
+    depositAddAsset,
+    removeAsset,
+    removeWithdrawAsset,
     addCollateral,
     depositAddCollateral,
     removeWithdrawCollateral,
     removeCollateral,
-    borrow
+    borrow,
+    repayFromBento,
+    repay
   }
 }
 

@@ -16,6 +16,8 @@ const TestBed = () => {
   const summary = useBentoBalances()
   console.log(summary)
 
+  /*const bentoBoxContract = useBentoBoxContract(true) // withSigner
+  console.log(await bentoBoxContract?.)*/
   return <></>
 }
 

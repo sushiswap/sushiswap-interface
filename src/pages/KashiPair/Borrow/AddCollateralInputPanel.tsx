@@ -355,7 +355,7 @@ const SelectedInputPanel = ({
                 }}
               >
                 <Aligner>
-                  <StyledButtonName>Borrow</StyledButtonName>
+                  <StyledButtonName>Add</StyledButtonName>
                 </Aligner>
               </ButtonSelect>
             )}

@@ -13,6 +13,7 @@ import { useActiveWeb3React } from '../../../hooks'
 import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
 import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
+import useKashiBalances from '../../../sushi-hooks/queries/useKashiBalances'
 import useKashi from '../../../sushi-hooks/useKashi'
 
 import useTokenBalance, { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
@@ -173,6 +174,8 @@ export default function CurrencyInputPanel({
   const walletBalance = useTokenBalance(tokenAddress)
   const bentoBalance = useBentoBalance(tokenAddress)
 
+  const kashiBalances = useKashiBalances(pairAddress)
+
   return (
     <>
       {balanceFrom && balanceFrom === 'bento' ? (
@@ -184,7 +187,7 @@ export default function CurrencyInputPanel({
           id="supply-collateral-token"
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={bentoBalance}
+          tokenBalanceBigInt={kashiBalances?.collateral}
           cornerRadiusBottomNone={cornerRadiusBottomNone}
           cornerRadiusTopNone={cornerRadiusTopNone}
         />
@@ -197,7 +200,7 @@ export default function CurrencyInputPanel({
           id="supply-collateral-token"
           balanceFrom={balanceFrom}
           setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={walletBalance}
+          tokenBalanceBigInt={kashiBalances?.collateral}
           cornerRadiusBottomNone={cornerRadiusBottomNone}
           cornerRadiusTopNone={cornerRadiusTopNone}
         />
@@ -299,7 +302,7 @@ const SelectedInputPanel = ({
                     fontSize={14}
                     style={{ display: 'inline', cursor: 'pointer' }}
                   >
-                    Max: {tokenBalance} {tokenSymbol}
+                    Deposited: {tokenBalance} {tokenSymbol}
                   </TYPE.body>
                 )}
               </RowBetween>
