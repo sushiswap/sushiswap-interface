@@ -155,21 +155,9 @@ export const PWING = new Token(
   'Poly Ontology Wing Token'
 )
 
-export const NFTX = new Token(
-  ChainId.MAINNET,
-  '0x87d73E916D7057945c9BcD8cdd94e42A6F47f776',
-  18,
-  'NFTX',
-  'NFTX'
-)
+export const NFTX = new Token(ChainId.MAINNET, '0x87d73E916D7057945c9BcD8cdd94e42A6F47f776', 18, 'NFTX', 'NFTX')
 
-export const UMA = new Token(
-  ChainId.MAINNET,
-  '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828',
-  18,
-  'UMA',
-  'UMA'
-)
+export const UMA = new Token(ChainId.MAINNET, '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828', 18, 'UMA', 'UMA')
 
 export const UMA_CALL = new Token(
   ChainId.MAINNET,
