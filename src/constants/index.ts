@@ -155,6 +155,30 @@ export const PWING = new Token(
   'Poly Ontology Wing Token'
 )
 
+export const NFTX = new Token(
+  ChainId.MAINNET,
+  '0x87d73E916D7057945c9BcD8cdd94e42A6F47f776',
+  18,
+  'NFTX',
+  'NFTX'
+)
+
+export const UMA = new Token(
+  ChainId.MAINNET,
+  '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828',
+  18,
+  'UMA',
+  'UMA'
+)
+
+export const UMA_CALL = new Token(
+  ChainId.MAINNET,
+  '0x1062aD0E59fa67fa0b27369113098cC941Dd0D5F',
+  18,
+  'UMA',
+  'UMA 35 Call [30 Apr 2021]'
+)
+
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
@@ -167,14 +191,15 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [HBTC.address]: [CREAM, WETH[ChainId.MAINNET]],
     [FRAX.address]: [FXS, WETH[ChainId.MAINNET]],
     [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
-    [PONT.address]: [PWING, WETH[ChainId.MAINNET]]
+    [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
+    [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]]
   }
 }
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC],
+  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, NFTX],
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB]
 }

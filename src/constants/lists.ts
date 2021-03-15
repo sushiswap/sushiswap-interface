@@ -6,6 +6,7 @@ export const UNSUPPORTED_LIST_URLS: string[] = []
 
 const COMPOUND_LIST = 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
+const NFTX_LIST = 'https://nftx.ethereumdb.com/v1/tokenlist/'
 const AAVE_LIST = 'tokenlist.aave.eth'
 const SYNTHETIX_LIST = 'synths.snx.eth'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
@@ -25,6 +26,7 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   AAVE_LIST,
   SYNTHETIX_LIST,
   UMA_LIST,
+  NFTX_LIST,
   WRAPPED_LIST,
   SET_LIST,
   OPYN_LIST,
