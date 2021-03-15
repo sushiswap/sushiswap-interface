@@ -34,23 +34,6 @@ const ACTION_BENTO_SETAPPROVAL = 24
 // Any external call (except to BentoBox)
 const ACTION_CALL = 30
 
-/*export const convertToShares = (tokenAddress: string, amount: BigNumber, roundUp: bool) => {
-  const tokenCheckSum = isAddressString(tokenAddress)
-
-  const bentoBoxContract = useBentoBoxContract(true) // withSigner
-  share = await bentoBoxContract?.toShare(tokenCheckSum, amount, roundUp)
-
-  console.log('amount: {}, share: {}', amount, share)
-
-  return share
-
-  if (bentoAmount.eq(BigNumber.from(0))) {
-    return value
-  }
-  return value.mul(bentoShare).div(bentoAmount)
-
-}*/
-
 const useKashi = () => {
   const { account, library } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
@@ -170,13 +153,14 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+      const totalAsset = await kashiPairCloneContract?.totalAsset()
+      const part = amount?.value.mul(totalAsset.base).div(totalAsset.elastic)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_REMOVE_ASSET],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [share, account])]
+          [ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [part, account])]
         )
 
         return addTransaction(tx, { summary: 'Remove Asset'} )
@@ -196,14 +180,15 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+      const totalAsset = await kashiPairCloneContract?.totalAsset()
+      const part = amount?.value.mul(totalAsset.base).div(totalAsset.elastic)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_REMOVE_ASSET, ACTION_BENTO_WITHDRAW],
           [0],
           [
-            ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [share, account]),
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [part, account]),
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
               [tokenAddress, account, 0, -1]
@@ -223,12 +208,11 @@ const useKashi = () => {
   // Add as collateral from bentobox
   const addCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
-      const collateralAddressCheckSum = isAddressString(address)
-
+      const tokenAddress = isAddressString(address)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(collateralAddressCheckSum, amount.value, false)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -250,12 +234,10 @@ const useKashi = () => {
   // Token needs to approve bentobox first
   const depositAddCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
-      const collateralAddressCheckSum = isAddressString(address)
+      const tokenAddress = isAddressString(address)
 
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
-
-      console.log('logging:', kashiPairCloneContract, collateralAddressCheckSum, pairAddressCheckSum)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -264,7 +246,7 @@ const useKashi = () => {
           [
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
-              [collateralAddressCheckSum, account, amount?.value, 0]
+              [tokenAddress, account, amount?.value, 0]
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ]
@@ -283,19 +265,12 @@ const useKashi = () => {
   // Token needs to approve bentobox first
   const removeWithdrawCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
-      const collateralAddressCheckSum = isAddressString(address)
+      const tokenAddress = isAddressString(address)
 
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      //const balances = await bentoHelperContract?.getBalances(account, [collateralAddressCheckSum])
-      //console.log('balances:', balances)
-
-      //console.log('share_inputs:', amount.value, balances[0].bentoShare, balances[0].bentoAmount)
-      //const share = amount.value.mul(balances[0].bentoShare).div(balances[0].bentoAmount)
-      //console.log('share:', share)
-
-      const share = await bentoBoxContract?.toShare(collateralAddressCheckSum, amount.value, false)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -305,7 +280,7 @@ const useKashi = () => {
             ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [share, account]),
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
-              [collateralAddressCheckSum, account, 0, share]
+              [tokenAddress, account, 0, share]
             )
           ]
         )
@@ -322,15 +297,12 @@ const useKashi = () => {
   // remove collateral into bentobox
   const removeCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
-      const collateralAddressCheckSum = isAddressString(address)
+      const tokenAddress = isAddressString(address)
 
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(collateralAddressCheckSum, amount.value, false)
-
-      //const share = convertToShares(amount.value, balances[0].bentoShare, balances[0].bentoAmount)
-      console.log('!!!share:', share)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -351,28 +323,44 @@ const useKashi = () => {
   // borrow into bentobox
   const borrow = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
-      const tokenCheckSum = isAddressString(address)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
-
-      //const balances = await bentoHelperContract?.getBalances(account, [collateralAddressCheckSum])
-      //const share = amount.value.mul(balances[0].bentoShare).div(balances[0].bentoAmount)
-
-      const share = await bentoBoxContract?.toShare(tokenCheckSum, amount.value, false)
-
-
-      console.log('!!!share: {}', share)
-
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_BORROW],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [share, account])]
+          [ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [amount?.value, account])]
         )
 
         return addTransaction(tx, { summary: 'Borrow' })
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
+  // borrow into wallet
+  const borrowWithdraw = useCallback(
+    async (pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(address)
+
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      try {
+        const tx = await kashiPairCloneContract?.cook(
+          [ACTION_BORROW, ACTION_BENTO_WITHDRAW],
+          [0, 0],
+          [
+            ethers.utils.defaultAbiCoder.encode(['uint256', 'address'], [amount?.value, account]),
+            ethers.utils.defaultAbiCoder.encode(['address', 'address', 'int256', 'int256'], [tokenAddress, account, 0, -2])
+          ]
+        )
+
+        return addTransaction(tx, { summary: 'Borrow -> Withdraw' })
       } catch (e) {
         console.log(e)
         return e
@@ -389,20 +377,8 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      //const kashiSummary = KashiSummary(pairAddress)//useKashiPairHelper(pairAddressCheckSum)
-      //console.log('!!!kashi: ', kashiSummary)
-
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
-      console.log('!!totalBorrow: ', totalBorrow)
-
       const part = amount?.value.mul(totalBorrow.base).div(totalBorrow.elastic)
-
-      console.log('!!!part: ', part)
-
-
-      console.log('amount: ', amount.value)
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, true)
-      console.log('share: ', share)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -468,6 +444,7 @@ const useKashi = () => {
     removeWithdrawCollateral,
     removeCollateral,
     borrow,
+    borrowWithdraw,
     repayFromBento,
     repay
   }

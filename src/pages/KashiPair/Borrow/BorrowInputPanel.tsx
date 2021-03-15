@@ -239,7 +239,7 @@ const SelectedInputPanel = ({
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { borrow } = useKashi()
+  const { borrow, borrowWithdraw } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
@@ -331,9 +331,9 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await borrow(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await borrowWithdraw(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await borrow(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
