@@ -79,8 +79,8 @@ const useKashiSummary = () => {
             oracle: pairUserDetails[1][i].oracleExchangeRate
           },
           apr: {
-            asset: Fraction.from(pairUserDetails[1][i].assetAPR, BigNumber.from(aprPrecision)).toString(),
-            borrow: Fraction.from(pairUserDetails[1][i].borrowAPR, BigNumber.from(aprPrecision)).toString()
+            asset: pairUserDetails[1][i].assetAPR / 1e6,
+            borrow: pairUserDetails[1][i].borrowAPR / 1e6
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
