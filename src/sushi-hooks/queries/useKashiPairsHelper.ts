@@ -11,6 +11,7 @@ import _ from 'lodash'
 
 const useKashiSummary = () => {
   const { library, account } = useActiveWeb3React()
+  
 
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
@@ -19,6 +20,7 @@ const useKashiSummary = () => {
   const [summary, setSummary] = useState<any>()
   const fetchLendingPairs = useCallback(async () => {
     // todo: remove hardcode
+    console.log("Kashi pair contract", kashiPairContract?.address)
     const filter = bentoBoxContract?.filters.LogDeploy(kashiPairContract?.address, null)
     // todo: remove assert
     const events = await bentoBoxContract?.queryFilter(filter!)
@@ -36,10 +38,18 @@ const useKashiSummary = () => {
     //   pairs: pairAddresses,
     //   helper: kashiPairHelperContract?.address
     // })
+
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
 
+    console.log({ account, pairs: ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a']})
+
     const uni = await kashiPairHelperContract?.pollPairs(account, ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a'])
-    console.log('uni:', uni, uni[1][0].assetAPR.toNumber)
+    
+    console.log('UNI', {
+      uni,
+      assetAPR: uni[1][0].assetAPR.toNumber(),
+      borrowAPR: uni[1][0].borrowAPR.toString()
+    })
 
     //const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
     //todo remove aprPrecision accounting for factor of 100
@@ -91,6 +101,8 @@ const useKashiSummary = () => {
         }
       }
     })
+
+    console.log({ allPairDetails })
 
     const allDetails = {
       pairsCount: allPairDetails?.length,
