@@ -186,13 +186,13 @@ export const UMA_CALL = new Token(
 export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
   [ChainId.MAINNET]: {
     [AMPL.address]: [DAI, WETH[ChainId.MAINNET]],
-    [DUCK.address]: [USDP],
-    [BAB.address]: [BAC],
-    [HBTC.address]: [CREAM, WETH[ChainId.MAINNET],
-    [FRAX.address]: [FXS],
-    [IBETH.address]: [ALPHA],
-    [PONT.address]: [PWING],
-    [UMA_CALL.address]: [UMA]
+    [DUCK.address]: [USDP, WETH[ChainId.MAINNET]],
+    [BAB.address]: [BAC, WETH[ChainId.MAINNET]],
+    [HBTC.address]: [CREAM, WETH[ChainId.MAINNET]],
+    [FRAX.address]: [FXS, WETH[ChainId.MAINNET]],
+    [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
+    [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
+    [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]]
   }
 }
 
