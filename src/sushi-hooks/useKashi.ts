@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect } from 'react'
 import { useBentoBoxContract, useBentoHelperContract, useKashiPairContract } from './useContract'
+import useKashiPairHelper from './queries/useKashiPairHelper'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
 
@@ -57,6 +58,10 @@ const useKashi = () => {
   const bentoHelperContract = useBentoHelperContract()
   const bentoBoxContract = useBentoBoxContract(true) // withSigner
   const kashiPairContract = useKashiPairContract(true) // withSigner
+
+  const KashiSummary = (address: string) => {
+    return useKashiPairHelper(address)
+  }
 
   // Check if Kashi is approved
   const [kashiApproved, setKashiApproved] = useState(false)
@@ -384,13 +389,26 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+      //const kashiSummary = KashiSummary(pairAddress)//useKashiPairHelper(pairAddressCheckSum)
+      //console.log('!!!kashi: ', kashiSummary)
+
+      const totalBorrow = await kashiPairCloneContract?.totalBorrow()
+      console.log('!!totalBorrow: ', totalBorrow)
+
+      const part = amount?.value.mul(totalBorrow.base).div(totalBorrow.elastic)
+
+      console.log('!!!part: ', part)
+
+
+      console.log('amount: ', amount.value)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, true)
+      console.log('share: ', share)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_REPAY],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['uint256', 'address', 'bool'], [share, account, false])]
+          [ethers.utils.defaultAbiCoder.encode(['uint256', 'address', 'bool'], [part, account, false])]
         )
 
         return addTransaction(tx, { summary: 'Repay From Bento'} )
