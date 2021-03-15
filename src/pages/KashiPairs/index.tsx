@@ -170,8 +170,8 @@ const Pairs = ({ pairs }: any) => {
       <StyledBaseCard>
         <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
           <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
-          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Supply</div>
-          <div className="text-right hidden md:block hover:text-gray-400">Borrow</div>
+          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
+          <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
           <div className="text-right hover:text-gray-400 item-center align-middle">
             Oracle
             <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
