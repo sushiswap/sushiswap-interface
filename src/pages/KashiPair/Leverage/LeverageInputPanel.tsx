@@ -16,6 +16,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { formatFromBalance, formatToBalance } from '../../../utils'
 
 import useSaave from '../../../sushi-hooks/useSaave'
+import useKashi from '../../../sushi-hooks/useKashi'
 
 import LeverageDetails from './LeverageDetails'
 
@@ -149,6 +150,8 @@ export default function CurrencyInputPanel({
   const theme = useTheme()
 
   const { allowance, approve, saave } = useSaave()
+
+  const { short } = useKashi()
 
   const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
   const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)

@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react'
-import { useBentoBoxContract, useBentoHelperContract, useKashiPairContract } from './useContract'
+import { useBentoBoxContract, useBentoHelperContract, useKashiPairContract, useSushiSwapSwapper } from './useContract'
 import useKashiPairHelper from './queries/useKashiPairHelper'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
@@ -11,6 +11,9 @@ import { isAddressString, getContract } from '../utils'
 import { ethers } from 'ethers'
 import { BalanceProps } from './queries/useTokenBalance'
 import { BigNumber } from '@ethersproject/bignumber'
+
+import { BASE_SWAPPER } from '../constants'
+import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
@@ -35,16 +38,12 @@ const ACTION_BENTO_SETAPPROVAL = 24
 const ACTION_CALL = 30
 
 const useKashi = () => {
-  const { account, library } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
   const bentoHelperContract = useBentoHelperContract()
   const bentoBoxContract = useBentoBoxContract(true) // withSigner
   const kashiPairContract = useKashiPairContract(true) // withSigner
-
-  const KashiSummary = (address: string) => {
-    return useKashiPairHelper(address)
-  }
 
   // Check if Kashi is approved
   const [kashiApproved, setKashiApproved] = useState(false)
@@ -67,7 +66,7 @@ const useKashi = () => {
     }
     const refreshInterval = setInterval(fetchKashiApproval, 10000)
     return () => clearInterval(refreshInterval)
-  }, [account, fetchKashiApproval, bentoBoxContract, kashiPairContract])
+  }, [account, fetchKashiApproval, bentoBoxContract, kashiPairContract, chainId])
 
   // Approve Kashi in BentoBox
   const approve = useCallback(async () => {
@@ -432,6 +431,56 @@ const useKashi = () => {
     [account, addTransaction, library]
   )
 
+  const short = useCallback(
+    async(pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(pairAddress)
+
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const kashiPairContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      const swapperAddress = isAddressString(BASE_SWAPPER[chainId!])
+      const swapperContract = getContract(swapperAddress, BASE_SWAPPER_ABI, library!, account!)
+
+      const exchangeRate = await kashiPairContract?.exchangeRate()
+      const slippage = BigNumber.from('20') // 0.05%
+      const minReturnedShare = amount.value.mul(exchangeRate.sub(exchangeRate.div(slippage))).div(ethers.utils.parseEther('1')) // the divide should be the token's decimals
+
+      // should pass these in from somewhere else instead of calling the contract
+      let assetAddress = await kashiPairContract?.asset()
+      let collateralAddress = await kashiPairContract?.collateral()
+
+      let data = swapperContract.interface.encodeFunctionData("swap", [
+        assetAddress,
+        collateralAddress,
+        account,
+        "0",
+        minReturnedShare
+      ])
+
+      console.log('!!! aye !!: ', data.slice(0, -64))
+
+      console.log('amount: ', amount.value)
+
+      try {
+        const tx = await kashiPairContract?.cook(
+            [ACTION_BORROW, ACTION_BENTO_TRANSFER, ACTION_CALL, ACTION_ADD_COLLATERAL],
+            [0, 0, 0, 0],
+            [
+              // Remove collateral for user to Swapper contract (maxShare)
+              ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [amount.value, account]),
+              ethers.utils.defaultAbiCoder.encode(['address', 'address', 'int256'], [assetAddress, swapperAddress, -2]),
+              ethers.utils.defaultAbiCoder.encode(['address', 'bytes', 'bool', 'bool', 'uint8'], [swapperAddress, data.slice(0, -64), false, true, 2]),
+              ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
+            ]
+        )
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
   return {
     kashiApproved,
     approve,
@@ -446,7 +495,8 @@ const useKashi = () => {
     borrow,
     borrowWithdraw,
     repayFromBento,
-    repay
+    repay,
+    short
   }
 }
 
