@@ -18,6 +18,8 @@ import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { assert } from 'console'
 import getOracleName from 'sushi-hooks/queries/getOracleNames'
 
+import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
+
 import { formattedPercent } from '../../utils'
 
 // const isAddress = (value: string) => {
@@ -128,20 +130,21 @@ const Options = () => {
       <div className="block">
         <nav className="-mb-px flex space-x-4">
           <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
-            <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
-              <div className="whitespace-nowrap text-lg mr-2">Markets</div>
+            <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
+              <div className="whitespace-nowrap text-base mr-2">Markets</div>
               <BarChart size={16} />
             </div>
           </Link>
           <Link to="/bento/kashi/positions" className="border-transparent py-2 px-1 border-b-2">
-            <div className="flex items-center text-gray-500 font-semibold">
-              <div className="whitespace-nowrap text-lg mr-2 text-white">Positions</div>
+            <div className="flex items-center text-gray-500 font-medium">
+              <div className="whitespace-nowrap text-base mr-2 text-white">Positions</div>
               <User size={16} />
             </div>
           </Link>
           <Link to="/bento/balances" className="border-transparent py-2 px-1 border-b-2">
-            <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
-              <div className="whitespace-nowrap text-lg mr-2">My Bento</div>
+            <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
+              <div className="whitespace-nowrap text-base mr-2">My Bento</div>
+              <img src={BentoBoxLogo} className="w-6" />
             </div>
           </Link>
         </nav>
@@ -170,8 +173,8 @@ const Pairs = ({ pairs }: any) => {
       <StyledBaseCard>
         <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
           <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
-          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Supply</div>
-          <div className="text-right hidden md:block hover:text-gray-400">Borrow</div>
+          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
+          <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
           <div className="text-right hover:text-gray-400 item-center align-middle">
             Oracle
             <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
