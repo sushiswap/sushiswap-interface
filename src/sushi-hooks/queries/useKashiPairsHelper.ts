@@ -41,21 +41,8 @@ const useKashiSummary = () => {
 
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
 
-<<<<<<< HEAD
-    console.log({ account, pairs: ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a']})
-
-    const uni = await kashiPairHelperContract?.pollPairs(account, ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a'])
-    
-    console.log('UNI', {
-      uni,
-      assetAPR: uni[1][0].assetAPR.toNumber(),
-      borrowAPR: uni[1][0].borrowAPR.toString()
-    })
-
-=======
->>>>>>> 599ac2c7621f393db57527716c53b2df4804429f
     //const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
-
+    
     const allPairDetails = pairAddresses?.map((address, i) => {
       return {
         address: address,
