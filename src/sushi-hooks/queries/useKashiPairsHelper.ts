@@ -11,6 +11,7 @@ import _ from 'lodash'
 
 const useKashiSummary = () => {
   const { library, account } = useActiveWeb3React()
+  
 
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
@@ -26,7 +27,7 @@ const useKashiSummary = () => {
     // TODO: remove hardcode from testing
     const pairAddresses = events?.map(event => event.args?.[2])
     //const pairAddresses = ['0x6e9d0853e65f06fab1d5d7d4f78c49bf3595fcb4', '0x6e9d0853e65f06fab1d5d7d4f78c49bf3595fcb4']
-    //console.log('pairAddresses:', pairAddresses)
+    console.log('pairAddresses:', pairAddresses)
 
     const pairDetails = await kashiPairHelperContract?.getPairs(pairAddresses)
     // console.log('pairDetails:', pairDetails)
@@ -36,8 +37,18 @@ const useKashiSummary = () => {
     //   pairs: pairAddresses,
     //   helper: kashiPairHelperContract?.address
     // })
+    console.log("account", { account })
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
-    const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
+
+    const uni = await kashiPairHelperContract?.pollPairs(account, ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a'])
+    console.log('UNI', {
+      assetAPR: uni[1][0].assetAPR.toString() / 1e6,
+      borrowAPR: uni[1][0].borrowAPR.toString() / 1e6
+    })
+
+    //const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
+    //todo remove aprPrecision accounting for factor of 100
+    const aprPrecision = BigNumber.from(1000000)
 
     //console.log('kashiPairHelperContract:', aprPrecision)
     //console.log('pairUserDetails:', pairUserDetails)
@@ -73,8 +84,8 @@ const useKashiSummary = () => {
             oracle: pairUserDetails[1][i].oracleExchangeRate
           },
           apr: {
-            asset: Fraction.from(pairUserDetails[1][i].assetAPR, aprPrecision).toString(),
-            borrow: Fraction.from(pairUserDetails[1][i].borrowAPR, aprPrecision).toString()
+            asset: pairUserDetails[1][i].assetAPR / 1e6,
+            borrow: pairUserDetails[1][i].borrowAPR / 1e6
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
@@ -92,7 +103,7 @@ const useKashiSummary = () => {
       userBorrowedPairCount: BigNumber.from(pairUserDetails[0].borrowPairCount).toNumber(),
       pairs: allPairDetails
     }
-    console.log('allDetails:', allDetails)
+    console.log('allDetails:', allDetails, pairUserDetails)
 
     setSummary(allDetails)
   }, [account, bentoBoxContract, kashiPairContract?.address, kashiPairHelperContract])
