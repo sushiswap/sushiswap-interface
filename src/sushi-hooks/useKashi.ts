@@ -457,10 +457,6 @@ const useKashi = () => {
         minReturnedShare
       ])
 
-      console.log('!!! aye !!: ', data.slice(0, -64))
-
-      console.log('amount: ', amount.value)
-
       try {
         const tx = await kashiPairContract?.cook(
             [ACTION_BORROW, ACTION_BENTO_TRANSFER, ACTION_CALL, ACTION_ADD_COLLATERAL],
