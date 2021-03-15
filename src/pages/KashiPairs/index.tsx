@@ -128,7 +128,7 @@ const Options = () => {
       <div className="block">
         <nav className="-mb-px flex space-x-4">
           <a href="#" className="border-transparent py-2 px-1 border-b-2">
-            <div className="flex items-center text-gray-500 hover:text-gray-400 font-semibold">
+            <div className="flex items-center text-gray-500 font-semibold">
               <div className="whitespace-nowrap text-lg mr-2 text-white">Markets</div>
               <BarChart size={16} />
             </div>
