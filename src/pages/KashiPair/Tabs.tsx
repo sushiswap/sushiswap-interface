@@ -8,7 +8,7 @@ interface Tab {
 
 interface TabsProps {
   tabs: Tab[]
-  selected: boolean
+  selected: string
   setSelected: (id: string) => void
 }
 
