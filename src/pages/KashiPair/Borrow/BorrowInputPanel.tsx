@@ -11,7 +11,6 @@ import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useAppro
 import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
 import useKashi from '../../../sushi-hooks/useKashi'
 import { formatFromBalance, formatToBalance } from '../../../utils'
-import useMaxBorrowable from 'sushi-hooks/useMaxBorrowable'
 
 import {
   InputRow,
@@ -48,7 +47,6 @@ export default function BorrowInputPanel({
   const theme = useTheme()
 
   const { borrow, borrowWithdraw } = useKashi()
-  const { safeMaxBorrowableLeft, safeMaxBorrowableLeftPossible } = useMaxBorrowable(pairAddress)
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(bentoBalance?.value, bentoBalance?.decimals)
@@ -72,9 +70,8 @@ export default function BorrowInputPanel({
   const maxDepositAmountInput = bentoBalance
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput &&
-      onUserBorrowInput((safeMaxBorrowableLeftPossible / Math.pow(10, tokenDecimals)).toString(), true)
-  }, [maxDepositAmountInput, onUserBorrowInput, safeMaxBorrowableLeftPossible, tokenDecimals])
+    maxDepositAmountInput && onUserBorrowInput(max, true)
+  }, [maxDepositAmountInput, onUserBorrowInput, max, tokenDecimals])
 
   console.log('state:', depositValue, maxSelected)
 

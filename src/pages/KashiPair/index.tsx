@@ -9,21 +9,16 @@ import { useActiveWeb3React } from '../../hooks'
 import { BaseCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
-
 import Supply from './Supply'
 import Borrow from './Borrow'
 import Leverage from './Leverage'
-
 import Tabs from './Tabs'
-
 import useKashiPairHelper from '../../sushi-hooks/queries/useKashiPairHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedNum } from '../../utils'
-
 import { BarChart, User, Search, ArrowLeft } from 'react-feather'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import { ethers } from 'ethers'
-import useMaxBorrowable from 'sushi-hooks/useMaxBorrowable'
 
 //import Charts from './Charts'
 
@@ -206,6 +201,7 @@ export default function KashiPair({
                     healthPercentage={pair.user.health.percentage}
                     collateralUSD={pair.user.collateral.usdString}
                     borrowUSD={pair.user.borrow.usdString}
+                    max={pair.user.borrow.max}
                   />
                 )}
                 {/* {pair && section === 'leverage' && <Leverage />} */}
