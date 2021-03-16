@@ -71,7 +71,7 @@ export default function BorrowInputPanel({
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
     maxDepositAmountInput && onUserBorrowInput(max, true)
-  }, [maxDepositAmountInput, onUserBorrowInput, max, tokenDecimals])
+  }, [maxDepositAmountInput, onUserBorrowInput, max])
 
   console.log('state:', depositValue, maxSelected)
 
