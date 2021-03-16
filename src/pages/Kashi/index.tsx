@@ -82,7 +82,7 @@ export default function KashiPairs() {
             <div className="flex justify-between pb-2 px-7">
               <div className="block">
                 <nav className="-mb-px flex space-x-4">
-                  <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
+                  <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
                     <div className="flex items-center text-gray-500 font-medium">
                       <div className="whitespace-nowrap text-base mr-2 text-white">Markets</div>
                       <BarChart size={16} />
@@ -135,7 +135,7 @@ export default function KashiPairs() {
                   pairs.map((pair: any) => {
                     return (
                       <div key={pair.address}>
-                        <Link to={'/bento/kashi/pair/' + String(pair.address).toLowerCase()} className="block">
+                        <Link to={'/bento/kashi/' + String(pair.address).toLowerCase()} className="block">
                           <div
                             className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
                             style={{ background: '#19212e', borderRadius: '12px' }}

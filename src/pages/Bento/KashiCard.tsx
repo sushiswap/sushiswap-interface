@@ -52,7 +52,7 @@ const KashiCard = () => {
       </Text> */}
           <div className="w-full">
             {kashiApproved && kashiApproved === true ? (
-              <Link to={'/bento/kashi/pairs'}>
+              <Link to={'/bento/kashi'}>
                 <ButtonSecondary padding="10px 8px" margin="0px" borderRadius="6px">
                   <Text fontWeight={500} fontSize={16}>
                     Enter
@@ -66,7 +66,7 @@ const KashiCard = () => {
                     Enable Kashi
                   </Text>
                 </ButtonSecondary>
-                <Link to={'/bento/kashi/pairs'}>
+                <Link to={'/bento/kashi'}>
                   <ButtonEmpty padding="4px 2px" margin="0px" borderRadius="6px">
                     <Text fontWeight={500} fontSize={16}>
                       Preview

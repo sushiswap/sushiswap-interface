@@ -39,7 +39,7 @@ import Test from './Test'
 import SushiBar from './SushiBar'
 import Bento from './Bento'
 import BentoBalances from './BentoBalances'
-import KashiPairs from './KashiPairs'
+import Kashi from './Kashi'
 import KashiPair from './KashiPair'
 import KashiPositions from './KashiPositions'
 
@@ -113,13 +113,13 @@ export default function App() {
                 {process.env.NODE_ENV === 'development' && <Route exact strict path="/test" component={Test} />}
                 {/* BentoApps */}
                 {chainId === ChainId.ROPSTEN && (
-                  <>
+                  <Switch>
                     <Route exact strict path="/bento" component={Bento} />
-                    <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />
+                    <Route exact strict path="/bento/kashi" component={Kashi} />
                     <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
-                    <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+                    <Route exact strict path="/bento/kashi/:pairAddress" component={KashiPair} />
                     <Route exact strict path="/bento/balances" component={BentoBalances} />
-                  </>
+                  </Switch>
                 )}
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />
