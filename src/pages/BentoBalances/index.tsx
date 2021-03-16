@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { ExternalLink, TYPE, HideSmall } from '../../theme'
 import { Text } from 'rebass'
@@ -75,6 +75,7 @@ overflow: hidden;
 `
 
 export default function BentoBalances() {
+  const history = useHistory()
   const theme = useContext(ThemeContext)
   const { account } = useActiveWeb3React()
 
@@ -82,15 +83,26 @@ export default function BentoBalances() {
   const balances = useBentoBalances()
   const totalDeposits = '$ -'
 
+  console.log('history:', history)
+
   return (
     <>
       <PageWrapper>
         <AutoColumn gap="md" justify="center">
           <AutoColumn gap="md" style={{ width: '100%' }}>
             <div className="flex md:hidden pb-4 justify-between">
-              <Link to="/bento" className="mr-2">
+              <button
+                onClick={() => {
+                  if (history.length < 3) {
+                    history.push('/bento')
+                  } else {
+                    history.goBack()
+                  }
+                }}
+                className="mr-2"
+              >
                 <ChevronLeft strokeWidth={2} size={24} />
-              </Link>
+              </button>
               <div className="flex float-right">
                 <img src={BentoBoxLogo} className="w-10 mr-2" />
                 <div className="font-semibold">My Bento Balances</div>
@@ -98,9 +110,18 @@ export default function BentoBalances() {
             </div>
             <div className="flex justify-between items-center">
               <div className="hidden md:flex ml-4 items-center">
-                <Link to="/bento" className="mr-2">
+                <button
+                  onClick={() => {
+                    if (history.length < 3) {
+                      history.push('/bento')
+                    } else {
+                      history.goBack()
+                    }
+                  }}
+                  className="mr-2"
+                >
                   <ChevronLeft strokeWidth={2} size={24} />
-                </Link>
+                </button>
                 <img src={BentoBoxLogo} className="w-10 mr-2" />
                 <div className="font-semibold text-lg">My Bento Balances</div>
               </div>
