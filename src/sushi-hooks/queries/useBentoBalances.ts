@@ -14,8 +14,8 @@ import sushiData from '@sushiswap/sushi-data'
 import getMainnetAddress from './getMainnetAddress'
 
 import useTransactionStatus from '../useTransactionStatus'
-
 import Fraction from '../../constants/Fraction'
+import _ from 'lodash'
 
 const useBentoBalances = () => {
   const { library, account } = useActiveWeb3React()
@@ -122,7 +122,7 @@ const useBentoBalances = () => {
       }
     })
     //console.log('balancesWithDetails:', balancesWithDetails)
-    setBalances(balancesWithDetails)
+    setBalances(_.orderBy(balancesWithDetails, ['name'], ['asc']))
   }, [account, bentoBoxContract, bentoHelperContract, kashiPairContract?.address, kashiPairHelperContract, library])
 
   useEffect(() => {
