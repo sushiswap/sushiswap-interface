@@ -160,7 +160,7 @@ export default function KashiPairs() {
                               <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
                             </div>
                             <div className="text-right hidden md:block pl-4">{pair.collateral.symbol}</div>
-                            <div className="text-right hidden md:block">{pair.asset.symbo}</div>
+                            <div className="text-right hidden md:block">{pair.asset.symbol}</div>
                             <div className="text-right">{pair.oracle.name}</div>
                             <div className="text-right">{formattedPercent(pair.details.apr.borrow)}</div>
                             <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
