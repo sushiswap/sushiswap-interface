@@ -4,7 +4,7 @@ import { AutoColumn } from '../../../components/Column'
 import QuestionHelper from '../../../components/QuestionHelper'
 import SupplyInputPanel from './SupplyInputPanel'
 import WithdrawInputPanel from './WithdrawInputPanel'
-import useKashiPairHelper from '../../../sushi-hooks/queries/useKashiPairHelper'
+import useKashiPair from '../../../contexts/kashi'
 import { formattedNum, formattedPercent } from '../../../utils'
 
 interface SupplyProps {
@@ -14,7 +14,7 @@ interface SupplyProps {
 }
 
 export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: SupplyProps) {
-  const kashi = useKashiPairHelper(pairAddress)
+  const kashi = useKashiPair(pairAddress)
   console.log('pairDetails:', kashi)
 
   const assetSymbol = kashi?.pair?.[0].asset.symbol

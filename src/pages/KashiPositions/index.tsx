@@ -2,33 +2,15 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
-
-import { useActiveWeb3React } from '../../hooks'
 import { transparentize } from 'polished'
-
 import { DarkCard, BaseCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
-
 import { BarChart, User, Search } from 'react-feather'
-import { ethers } from 'ethers'
-
-import useKashiPairsHelper from '../../sushi-hooks/queries/useKashiPairsHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
-import { assert } from 'console'
-import getOracleName from 'sushi-hooks/queries/getOracleNames'
-
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
-
 import { formattedPercent, formattedNum } from '../../utils'
-
-// const isAddress = (value: string) => {
-//   try {
-//     return ethers.utils.getAddress(value.toLowerCase())
-//   } catch {
-//     return false
-//   }
-// }
+import { useKashiPairs, useKashiCounts } from 'contexts/kashi'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 800px;
@@ -43,13 +25,13 @@ const StyledBaseCard = styled(BaseCard)`
 `
 
 export default function Pool() {
-  const { account } = useActiveWeb3React()
-  const summary = useKashiPairsHelper()
+  const counts = useKashiCounts()
+  const pairs = useKashiPairs()
 
-  const supplyPositions = summary?.pairs.filter(function(pair: any) {
+  const supplyPositions = pairs.filter(function(pair: any) {
     return pair.user.asset.value.gt(0)
   })
-  const borrowPositions = summary?.pairs.filter(function(pair: any) {
+  const borrowPositions = pairs.filter(function(pair: any) {
     return pair.user.borrow.value.gt(0)
   })
 
@@ -58,11 +40,8 @@ export default function Pool() {
       <PageWrapper>
         <SwapPoolTabs active={'pool'} />
         <div className="flex-col space-y-8">
-          <Summary
-            suppliedPairCount={summary?.userSuppliedPairCount}
-            borrowedPairCount={summary?.userBorrowedPairCount}
-          />
-          <Title count={summary?.pairsCount} />
+          <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
+          <Title count={counts.markets} />
           <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
         </div>
       </PageWrapper>

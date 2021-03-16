@@ -13,7 +13,7 @@ import Supply from './Supply'
 import Borrow from './Borrow'
 import Leverage from './Leverage'
 import Tabs from './Tabs'
-import useKashiPairHelper from '../../sushi-hooks/queries/useKashiPairHelper'
+import { useKashiPair } from '../../contexts/kashi'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedNum } from '../../utils'
 import { BarChart, User, Search, ArrowLeft } from 'react-feather'
@@ -66,8 +66,8 @@ export default function KashiPair({
   const [section, setSection] = useState('supply')
   const { chainId } = useActiveWeb3React()
 
-  const summary = useKashiPairHelper(pairAddress)
-  const pair = summary?.pair[0]
+  const pair = useKashiPair(pairAddress)
+  console.log('kashi pair', pair)
 
   const collateral = {
     address: pair?.collateral.address,
