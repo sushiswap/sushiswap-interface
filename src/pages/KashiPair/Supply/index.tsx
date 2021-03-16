@@ -34,7 +34,7 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
             <div className="col-span-1 items-start">
               <div className="flex">
                 <div className="text-xs sm:text-sm text-gray-300">Supply APR</div>
-                <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
+                <QuestionHelper text="The amount of asset you have supplied to this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
               </div>
               <div className="text-2xl sm:text-4xl font-semibold">{formattedPercent(supplyAPY)}</div>
             </div>
