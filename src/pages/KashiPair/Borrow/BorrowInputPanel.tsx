@@ -18,6 +18,7 @@ import useKashi from '../../../sushi-hooks/useKashi'
 import useTokenBalance, { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../../utils'
 import useMaxBorrowable from 'sushi-hooks/useMaxBorrowable'
+import { ethers } from 'ethers'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -244,9 +245,9 @@ const SelectedInputPanel = ({
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+  const onUserBorrowInput = useCallback((borrowValue: string, max = false) => {
     setMaxSelected(max)
-    setDepositValue(depositValue)
+    setDepositValue(borrowValue)
   }, [])
 
   // disable buttons if pendingTx, todo: styles could be improved
@@ -255,8 +256,9 @@ const SelectedInputPanel = ({
   const maxDepositAmountInput = tokenBalanceBigInt
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
-  }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
+    maxDepositAmountInput &&
+      onUserBorrowInput((safeMaxBorrowableLeftPossible / Math.pow(10, tokenDecimals)).toString(), true)
+  }, [maxDepositAmountInput, onUserBorrowInput, safeMaxBorrowableLeftPossible])
 
   console.log('state:', depositValue, maxSelected)
 
@@ -295,7 +297,7 @@ const SelectedInputPanel = ({
                   className="token-amount-input"
                   value={depositValue}
                   onUserInput={val => {
-                    onUserDepositInput(val)
+                    onUserBorrowInput(val)
                   }}
                 />
                 {account && label !== 'To' && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
