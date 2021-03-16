@@ -32,13 +32,7 @@ export default function Stake() {
     <>
       <WrapperNoPadding id="stake-page">
         <AutoColumn>
-          <LeverageInputPanel
-            label={'Short DAI Against USDC'}
-            disableCurrencySelect={true}
-            customBalanceText={'Available to deposit: '}
-            id="stake-liquidity-token"
-            buttonText="Short"
-          />
+          <LeverageInputPanel id="stake-liquidity-token" />
         </AutoColumn>
       </WrapperNoPadding>
     </>

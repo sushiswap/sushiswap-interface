@@ -28,14 +28,14 @@ import {
   StyledBalanceMax
 } from '../styled'
 
-interface CurrencyInputPanelProps {
+interface SupplyInputPanelProps {
   id: string
   tokenAddress: string
   pairAddress: string
   tokenSymbol: string
 }
 
-export default function CurrencyInputPanel({ tokenAddress, pairAddress, tokenSymbol }: CurrencyInputPanelProps) {
+export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbol }: SupplyInputPanelProps) {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
 

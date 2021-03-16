@@ -258,7 +258,7 @@ const SelectedInputPanel = ({
   const handleMaxDeposit = useCallback(() => {
     maxDepositAmountInput &&
       onUserBorrowInput((safeMaxBorrowableLeftPossible / Math.pow(10, tokenDecimals)).toString(), true)
-  }, [maxDepositAmountInput, onUserBorrowInput, safeMaxBorrowableLeftPossible])
+  }, [maxDepositAmountInput, onUserBorrowInput, safeMaxBorrowableLeftPossible, tokenDecimals])
 
   console.log('state:', depositValue, maxSelected)
 
