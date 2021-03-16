@@ -122,8 +122,8 @@ const useKashiSummary = (address: string) => {
             oracle: pairUserDetails[1][i].oracleExchangeRate
           },
           apr: {
-            asset: pairUserDetails[1][i].assetAPR,
-            borrow: pairUserDetails[1][i].borrowAPR
+            asset: pairUserDetails[1][i].assetAPR / 1e6,
+            borrow: pairUserDetails[1][i].borrowAPR / 1e6
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
