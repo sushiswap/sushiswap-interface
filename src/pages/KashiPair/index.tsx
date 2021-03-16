@@ -79,6 +79,8 @@ export default function KashiPair({
   }
   const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
 
+  console.log('PAIR', pair)
+
   return (
     <>
       <PageWrapper>
@@ -164,7 +166,7 @@ export default function KashiPair({
                       <div className="flex">
                         <div className="text-xs sm:text-base font-semibold text-gray-400 mr-2">Net APY:</div>
                         <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
-                          -3.25%
+                          {/* -3.25% */}
                         </div>
                       </div>
                     </div>
@@ -177,58 +179,6 @@ export default function KashiPair({
                   </div>
                 </div>
               </div>
-              {/* User Balances */}
-              {/* <div
-                className="pt-2 pb-4 px-6"
-                style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
-                  borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
-                }}
-              >
-                <div className="text-sm sm:text-base text-gray-500 font-semibold pb-2">Your balances</div>
-                <div className="grid grid-cols-3 gap-2 items-center">
-                  <div className="flex-col">
-                    <div className="flex items-center">
-                      <div className="text-gray-400 text-xs sm:text-base font-semibold">Supplied: </div>
-                      <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
-                    </div>
-                    <div className="flex items-baseline">
-                      <div className="text-sm sm:text-lg font-bold mr-2">
-                        {pair && `≈ ${formattedNum(pair.user.collateral.usdString, true)}`}
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-base font-semibold" style={{ color: '#6ca8ff' }}>
-                      {pair && `${formattedNum(pair.user.collateral.string) + ' ' + pair.collateral.symbol}`}
-                    </div>
-                  </div>
-                  <div className="flex-col">
-                    <div className="flex items-center">
-                      <div className="text-gray-400 text-xs sm:text-base font-semibold">Borrowed: </div>
-                      <QuestionHelper text="The amount of assets you have borrowed from this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
-                    </div>
-                    <div className="flex items-baseline">
-                      <div className="text-sm sm:text-lg font-bold mr-2">
-                        {pair && `≈ ${formattedNum(pair.user.asset.usdString, true)}`}
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
-                      {pair && `${formattedNum(pair.user.asset.string) + ' ' + pair.asset.symbol}`}
-                    </div>
-                  </div>
-                  <div className="flex-col">
-                    <div className="flex items-center">
-                      <div className="text-gray-400 text-xs sm:text-base font-semibold">Net Worth: </div>
-                      <QuestionHelper text="The amount of assets you have borrowed from this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
-                    </div>
-                    <div className="flex items-baseline">
-                      <div className="text-sm sm:text-lg font-bold mr-2">
-                        {pair && `≈ ${formattedNum(pair.user?.netWorth?.usdString, true)}`}
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-base font-semibold text-gray-800">{pair && '-'}</div>
-                  </div>
-                </div>
-              </div> */}
               {/* Tabs */}
               <div
                 className="py-2 px-6"
