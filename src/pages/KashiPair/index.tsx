@@ -163,20 +163,21 @@ export default function KashiPair({
                       <div className="text-base sm:text-2xl font-bold">
                         {pair && `${pair.collateral.symbol + '/' + pair.asset.symbol}`}
                       </div>
-                      <div className="flex">
+                      <div className="text-sm text-gray-400">{pair && `${pair.oracle.name}`}</div>
+                      {/* <div className="flex">
                         <div className="text-xs sm:text-base font-semibold text-gray-400 mr-2">Net APY:</div>
                         <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
                           {/* -3.25% */}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
-                  <div className="hidden sm:block">
+                  {/* <div className="hidden sm:block">
                     <div>
                       <div className="text-base sm:text-lg font-bold">{pair && 'Chainlink'}</div>
                       <div className="text-xs sm:text-base font-semibold text-gray-400">Oracle ↗</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* Tabs */}
