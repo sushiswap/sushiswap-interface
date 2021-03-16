@@ -99,13 +99,11 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
-
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_ADD_ASSET],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, account, false])]
+          [ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [amount.value, account, false])]
         )
 
         return addTransaction(tx, { summary: 'Add Asset' })
@@ -114,7 +112,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, bentoBoxContract, library]
+    [account, addTransaction, library]
   )
 
   // deposit into bento from wallet and add asset to pair

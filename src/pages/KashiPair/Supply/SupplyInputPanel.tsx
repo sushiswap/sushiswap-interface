@@ -299,7 +299,7 @@ const SelectedInputPanel = ({
                     fontSize={14}
                     style={{ display: 'inline', cursor: 'pointer' }}
                   >
-                    Max: {tokenBalance} {tokenSymbol}
+                    Balance: {tokenBalance} {tokenSymbol}
                   </TYPE.body>
                 )}
               </RowBetween>
