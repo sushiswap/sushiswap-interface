@@ -78,7 +78,11 @@ export default function KashiPair({
   const summary = useKashiPairHelper(pairAddress)
   const pair = summary?.pair[0]
 
-  const collateral = { address: pair?.collateral.address, symbol: pair?.collateral.symbol }
+  const collateral = {
+    address: pair?.collateral.address,
+    symbol: pair?.collateral.symbol,
+    decimals: pair?.asset.decimals
+  }
   const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
 
   return (
