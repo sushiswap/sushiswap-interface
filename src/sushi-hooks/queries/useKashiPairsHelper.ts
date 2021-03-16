@@ -66,6 +66,12 @@ const useKashiSummary = () => {
     )
 
     const allPairDetails = pairAddresses?.map((address, i) => {
+      const collateralUSD = Number(
+        tokensWithPricing.find(token => token?.address === pairDetails[i].collateral)?.['price']
+      )
+      const assetUSD = Number(tokensWithPricing.find(token => token?.address === pairDetails[i].asset)?.['price'])
+
+      console.log('pairPricing:', collateralUSD, assetUSD)
       return {
         address: address,
         oracle: {
@@ -96,7 +102,7 @@ const useKashiSummary = () => {
                   BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
                   BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
                 ).toString()
-              ) * Number(tokensWithPricing.find(token => token?.address === pairDetails[i].collateral))
+              ) * collateralUSD
           },
           asset: {
             value: pairUserDetails[1][i].totalAssetAmount,
@@ -110,7 +116,7 @@ const useKashiSummary = () => {
                   BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
                   BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                 ).toString()
-              ) * Number(tokensWithPricing.find(token => token?.address === pairDetails[i].asset))
+              ) * assetUSD
           },
           borrow: {
             value: pairUserDetails[1][i].totalBorrowAmount,
@@ -124,7 +130,7 @@ const useKashiSummary = () => {
                   BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
                   BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                 ).toString()
-              ) * Number(tokensWithPricing.find(token => token?.address === pairDetails[i].asset))
+              ) * assetUSD
           },
           rate: {
             current: pairUserDetails[1][i].currentExchangeRate,
@@ -149,7 +155,7 @@ const useKashiSummary = () => {
                   BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
                   BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
                 ).toString()
-              ) * Number(tokensWithPricing.find(token => token?.address === pairDetails[i].collateral))
+              ) * collateralUSD
           },
           asset: {
             value: pairUserDetails[1][i].userAssetAmount,
@@ -163,7 +169,7 @@ const useKashiSummary = () => {
                   BigNumber.from(pairUserDetails[1][i].userAssetAmount),
                   BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                 ).toString()
-              ) * Number(tokensWithPricing.find(token => token?.address === pairDetails[i].asset))
+              ) * assetUSD
           },
           borrow: {
             value: pairUserDetails[1][i].userBorrowAmount,
@@ -177,7 +183,7 @@ const useKashiSummary = () => {
                   BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
                   BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                 ).toString()
-              ) * Number(tokensWithPricing.find(token => token?.address === pairDetails[i].asset))
+              ) * assetUSD
           }
         }
       }

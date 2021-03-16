@@ -20,7 +20,7 @@ import getOracleName from 'sushi-hooks/queries/getOracleNames'
 
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 
-import { formattedPercent } from '../../utils'
+import { formattedPercent, formattedNum } from '../../utils'
 
 // const isAddress = (value: string) => {
 //   try {
@@ -47,10 +47,10 @@ export default function Pool() {
   const summary = useKashiPairsHelper()
 
   const supplyPositions = summary?.pairs.filter(function(pair: any) {
-    return pair.user.asset.gt(0)
+    return pair.user.asset.value.gt(0)
   })
   const borrowPositions = summary?.pairs.filter(function(pair: any) {
-    return pair.user.borrow.gt(0)
+    return pair.user.borrow.value.gt(0)
   })
 
   return (
@@ -250,7 +250,12 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                         </div>
                         <div>{pair.oracle.name}</div>
                       </div>
-                      <div className="text-right">{pair.asset.symbol}</div>
+                      <div className="text-right">
+                        <div>
+                          {pair.user.asset.string} {pair.asset.symbol}
+                        </div>
+                        <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.asset.usdString, true)}</div>
+                      </div>
                       <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
                     </div>
                   </Link>
