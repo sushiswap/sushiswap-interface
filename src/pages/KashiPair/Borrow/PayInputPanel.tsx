@@ -5,14 +5,11 @@ import { TYPE } from '../../../theme'
 import { RowBetween } from '../../../components/Row'
 import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Dots } from '../../Pool/styleds'
-
 import { useActiveWeb3React } from '../../../hooks'
 import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
 import useKashiBalances from '../../../sushi-hooks/queries/useKashiBalances'
 import useKashi from '../../../sushi-hooks/useKashi'
-
-import { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../../utils'
 
 import {
