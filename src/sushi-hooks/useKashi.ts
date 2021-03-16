@@ -74,7 +74,9 @@ const useKashi = () => {
     return () => clearInterval(refreshInterval)
   }, [account, fetchKashiApproval, bentoBoxContract, kashiPairContract, kashiPairHelperContract, chainId])
 
-  // Approve Kashi in BentoBox
+  // Description: Approve Kashi for BentoBox
+  // Type: Master Contract
+  // Action: Approve
   const approve = useCallback(async () => {
     try {
       const tx = await bentoBoxContract?.setMasterContractApproval(
@@ -92,7 +94,9 @@ const useKashi = () => {
     }
   }, [account, addTransaction, bentoBoxContract, kashiPairContract?.address])
 
-  // Add Asset from bentobox
+  // Description: Add Asset from BentoBox
+  // Type: Asset
+  // Actions: Add
   const addAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(address)
@@ -115,7 +119,9 @@ const useKashi = () => {
     [account, addTransaction, library]
   )
 
-  // deposit into bento from wallet and add asset to pair
+  // Deposit into Bento from wallet and add asset
+  // Type: Asset
+  // Actions: Deposit, Add
   const depositAddAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(address)
@@ -144,7 +150,9 @@ const useKashi = () => {
     [account, addTransaction, library]
   )
 
-  // Remove Asset to bentobox
+  // Description: Remove asset to BentoBox
+  // Type: Asset
+  // Action: Remove
   const removeAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
@@ -181,7 +189,9 @@ const useKashi = () => {
     [account, addTransaction, kashiPairHelperContract, library]
   )
 
-  // Remove Asset and withdraw to wallet
+  // Description: Remove Asset and withdraw to wallet
+  // Type: Asset
+  // Action: Remove, Withdraw
   const removeWithdrawAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
@@ -224,7 +234,9 @@ const useKashi = () => {
     [account, addTransaction, kashiPairHelperContract, library]
   )
 
-  // Add as collateral from bentobox
+  // Description: Add collateral from bentobox
+  // Type: Collateral
+  // Action: Add
   const addCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(address)
@@ -249,8 +261,10 @@ const useKashi = () => {
     [account, addTransaction, bentoBoxContract, library]
   )
 
-  // Deposit into bentbox from wallet, add as collateral
+  // Description: Deposit into bentbox from wallet, add as collateral
   // Token needs to approve bentobox first
+  // Type: Collateral
+  // Action: Deposit, Add
   const depositAddCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(address)
@@ -280,8 +294,10 @@ const useKashi = () => {
     [account, addTransaction, library]
   )
 
-  // remove into bentbox, withdraw into wallet
+  // Description: remove into bentbox, withdraw into wallet
   // Token needs to approve bentobox first
+  // Type: Collateral
+  // Action: Remove, Withdraw
   const removeWithdrawCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
@@ -319,7 +335,9 @@ const useKashi = () => {
     [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
   )
 
-  // remove collateral into bentobox
+  // Description: remove collateral into bentobox
+  // Type: Collateral
+  // Action: Remove
   const removeCollateral = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
@@ -351,7 +369,9 @@ const useKashi = () => {
     [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
   )
 
-  // borrow into bentobox
+  // Description: borrow into bentobox
+  // Type: Asset
+  // Action: Borrow
   const borrow = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const pairAddressCheckSum = isAddressString(pairAddress)
@@ -404,7 +424,9 @@ const useKashi = () => {
     [account, addTransaction, kashiPairHelperContract, library]
   )
 
-  // borrow into wallet
+  // Description: borrow into wallet
+  // Type: Asset
+  // Actions: Borrow, Withdraw
   const borrowWithdraw = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
@@ -466,6 +488,8 @@ const useKashi = () => {
   )
 
   // repay borrowed amount
+  // Type: Asset
+  // Actions: Repay
   const repayFromBento = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       // TODO: if amount ends up being 0, we need to prevent the tx from happening and display message
@@ -509,6 +533,8 @@ const useKashi = () => {
   )
 
   // repay borrowed amount from wallet
+  // Type: Asset
+  // Actions: Deposit, Repay
   const repay = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(pairAddress)
@@ -555,6 +581,8 @@ const useKashi = () => {
     [account, addTransaction, kashiPairHelperContract, library]
   )
 
+  // Type: Collateral, Asset
+  // Action: Short
   const short = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(pairAddress)
