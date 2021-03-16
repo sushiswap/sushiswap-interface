@@ -13,12 +13,6 @@ import RemoveCollateral from './RemoveCollateralInputPanel'
 
 import { formattedNum, formattedPercent } from '../../../utils'
 
-export const PluginBody = styled.div`
-  position: relative;
-  width: 100%;
-  background: ${({ theme }) => theme.bg1};
-`
-
 interface TokenProps {
   address: string
   symbol: string
@@ -62,17 +56,11 @@ export default function Supply({ collateral, asset, pairAddress }: SupplyProps) 
               tokenAddress={collateral.address}
               tokenSymbol={collateral.symbol}
               pairAddress={pairAddress}
-              disableCurrencySelect={true}
-              id="supply-collateral-token"
-              cornerRadiusBottomNone={true}
             />
             <RemoveCollateral
               tokenAddress={collateral.address}
               tokenSymbol={collateral.symbol}
               pairAddress={pairAddress}
-              disableCurrencySelect={true}
-              id="withdraw-collateral-token"
-              cornerRadiusTopNone={true}
             />
           </div>
           <div className="flex justify-between items-center px-1">
@@ -84,18 +72,8 @@ export default function Supply({ collateral, asset, pairAddress }: SupplyProps) 
               tokenSymbol={asset.symbol}
               tokenDecimals={asset.decimals}
               pairAddress={pairAddress}
-              disableCurrencySelect={true}
-              id="supply-collateral-token"
-              cornerRadiusBottomNone={true}
             />
-            <PayInputPanel
-              tokenAddress={asset.address}
-              tokenSymbol={asset.symbol}
-              pairAddress={pairAddress}
-              disableCurrencySelect={true}
-              id="withdraw-collateral-token"
-              cornerRadiusTopNone={true}
-            />
+            <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
           </div>
         </AutoColumn>
       </WrapperNoPadding>
