@@ -55,16 +55,16 @@ const useKashiSummary = (address: string) => {
     console.log('assetUSD:', assetUSD)
 
     const allPairDetails = pairAddresses.map((address, i) => {
-      const maxBorrowableOracle = pairUserDetails[1][0].oracleExchangeRate.gt(BigNumber.from(0))
-        ? pairUserDetails[1][0].userCollateralAmount
+      const maxBorrowableOracle = pairUserDetails[1][i].oracleExchangeRate.gt(BigNumber.from(0))
+        ? pairUserDetails[1][i].userCollateralAmount
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
             .div(pairUserDetails[1][0].oracleExchangeRate)
         : BigNumber.from(0)
 
-      const maxBorrowableStored = pairUserDetails[1][0].currentExchangeRate.gt(BigNumber.from(0))
-        ? pairUserDetails[1][0].userCollateralAmount
+      const maxBorrowableStored = pairUserDetails[1][i].currentExchangeRate.gt(BigNumber.from(0))
+        ? pairUserDetails[1][i].userCollateralAmount
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
@@ -72,6 +72,16 @@ const useKashiSummary = (address: string) => {
         : BigNumber.from(0)
 
       const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
+
+      const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
+
+      const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
+      const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalBorrowAmount.lt(
+        safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+      )
+        ? pairUserDetails[1][i].totalBorrowAmount
+        : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
 
       return {
         address: address,
@@ -185,6 +195,10 @@ const useKashiSummary = (address: string) => {
               ) * assetUSD
           },
           borrow: {
+            max: Fraction.from(
+              safeMaxBorrowableLeftPossible,
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString(),
             value: pairUserDetails[1][i].userBorrowAmount,
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userBorrowAmount),

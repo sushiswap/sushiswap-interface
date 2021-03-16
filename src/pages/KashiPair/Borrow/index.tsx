@@ -26,6 +26,7 @@ interface SupplyProps {
   healthPercentage: string
   collateralUSD: string
   borrowUSD: string
+  max: string
 }
 export default function Supply({
   collateral,
@@ -33,7 +34,8 @@ export default function Supply({
   pairAddress,
   healthPercentage,
   collateralUSD,
-  borrowUSD
+  borrowUSD,
+  max
 }: SupplyProps) {
   return (
     <>
@@ -82,6 +84,7 @@ export default function Supply({
               tokenSymbol={asset.symbol}
               tokenDecimals={asset.decimals}
               pairAddress={pairAddress}
+              max={max}
             />
             <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
           </div>

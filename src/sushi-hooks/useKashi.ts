@@ -381,31 +381,7 @@ const useKashi = () => {
 
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
-        const maxBorrowableOracle = pairUserDetails[1][0].oracleExchangeRate.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userCollateralAmount
-              .mul(BigNumber.from('1000000000000000000'))
-              .div(BigNumber.from(100))
-              .mul(BigNumber.from(75))
-              .div(pairUserDetails[1][0].oracleExchangeRate)
-          : BigNumber.from(0)
-
-        const maxBorrowableStored = pairUserDetails[1][0].currentExchangeRate.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userCollateralAmount
-              .mul(BigNumber.from('1000000000000000000'))
-              .div(BigNumber.from(100))
-              .mul(BigNumber.from(75))
-              .div(pairUserDetails[1][0].currentExchangeRate)
-          : BigNumber.from(0)
-
-        const maxBorrowable = maxBorrowableStored.lte(maxBorrowableOracle) ? maxBorrowableStored : maxBorrowableOracle
-
-        const safeMaxBorrow = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
-
-        const userBorrowAmount = pairUserDetails[1][0].userBorrowAmount
-        borrowAmount = userBorrowAmount.gte(safeMaxBorrow) ? BigNumber.from(0) : safeMaxBorrow.sub(userBorrowAmount)
-
-        console.log('!!! ', borrowAmount)
+        borrowAmount = pairUserDetails.user.borrow.max
       }
 
       try {
@@ -438,31 +414,7 @@ const useKashi = () => {
 
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
-        const maxBorrowableOracle = pairUserDetails[1][0].oracleExchangeRate.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userCollateralAmount
-              .mul(BigNumber.from('1000000000000000000'))
-              .div(BigNumber.from(100))
-              .mul(BigNumber.from(75))
-              .div(pairUserDetails[1][0].oracleExchangeRate)
-          : BigNumber.from(0)
-
-        const maxBorrowableStored = pairUserDetails[1][0].currentExchangeRate.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userCollateralAmount
-              .mul(BigNumber.from('1000000000000000000'))
-              .div(BigNumber.from(100))
-              .mul(BigNumber.from(75))
-              .div(pairUserDetails[1][0].currentExchangeRate)
-          : BigNumber.from(0)
-
-        const maxBorrowable = maxBorrowableStored.lte(maxBorrowableOracle) ? maxBorrowableStored : maxBorrowableOracle
-
-        const safeMaxBorrow = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
-
-        const userBorrowAmount = pairUserDetails[1][0].userBorrowAmount
-        borrowAmount = userBorrowAmount.gte(safeMaxBorrow) ? BigNumber.from(0) : safeMaxBorrow.sub(userBorrowAmount)
-
-        console.log('!!! ', borrowAmount)
+        borrowAmount = pairUserDetails.user.borrow.max
       }
 
       try {

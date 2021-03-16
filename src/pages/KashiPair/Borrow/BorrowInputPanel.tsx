@@ -29,13 +29,15 @@ interface BorrowInputPanelProps {
   tokenAddress: string
   tokenDecimals: number
   pairAddress: string
+  max: string
 }
 
 export default function BorrowInputPanel({
   tokenSymbol,
   tokenAddress,
   tokenDecimals,
-  pairAddress
+  pairAddress,
+  max
 }: BorrowInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
 
@@ -93,7 +95,7 @@ export default function BorrowInputPanel({
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  Max: {safeMaxBorrowableLeftPossible / Math.pow(10, tokenDecimals)} {tokenSymbol}
+                  Max: {max} {tokenSymbol}
                 </TYPE.body>
               )}
             </RowBetween>
