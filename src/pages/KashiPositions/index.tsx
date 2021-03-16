@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
@@ -46,7 +46,12 @@ export default function Pool() {
   const { account } = useActiveWeb3React()
   const summary = useKashiPairsHelper()
 
-  console.log('summary:', summary)
+  const supplyPositions = summary?.pairs.filter(function(pair: any) {
+    return pair.user.asset.gt(0)
+  })
+  const borrowPositions = summary?.pairs.filter(function(pair: any) {
+    return pair.user.borrow.gt(0)
+  })
 
   return (
     <>
@@ -58,10 +63,7 @@ export default function Pool() {
             borrowedPairCount={summary?.userBorrowedPairCount}
           />
           <Title count={summary?.pairsCount} />
-          <div>
-            <Options />
-            <Pairs pairs={summary?.pairs} />
-          </div>
+          <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
         </div>
       </PageWrapper>
     </>
@@ -123,7 +125,35 @@ const Title = ({ count }: any) => {
   return <div className="text-3xl font-semibold text-center">{count} Kashi Markets</div>
 }
 
-const Options = () => {
+interface PositionsDashboardProps {
+  supplyPositions: any
+  borrowPositions: any
+}
+
+const PositionsDashboard = ({ supplyPositions, borrowPositions }: PositionsDashboardProps) => {
+  const [selected, setSelected] = useState<string>('supply')
+  return (
+    <div>
+      <Options
+        supplyPositionsCount={supplyPositions?.length}
+        borrowPositionsCount={borrowPositions?.length}
+        selected={selected}
+        setSelected={setSelected}
+      />
+      {selected && selected === 'supply' && <SupplyPositions supplyPositions={supplyPositions} />}
+      {selected && selected === 'borrow' && <BorrowPositions borrowPositions={supplyPositions} />}
+    </div>
+  )
+}
+
+interface OptionsProps {
+  supplyPositionsCount: number
+  borrowPositionsCount: number
+  selected?: string
+  setSelected?: any
+}
+
+const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSelected }: OptionsProps) => {
   const theme = useContext(ThemeContext)
   return (
     <div className="flex justify-between pb-2 px-7">
@@ -149,17 +179,40 @@ const Options = () => {
           </Link>
         </nav>
       </div>
-      <div className="w-1/2">
-        <div className="relative">
-          <input
-            className="py-2 px-4 rounded-full w-full focus:outline-none"
-            style={{ background: `${transparentize(0.6, theme.bg1)}` }}
-            //onChange={e => search(e.target.value)}
-            //value={term}
-            placeholder="Search by name, symbol, address"
-          />
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <Search size={16} />
+      <div className="w-1/2 flex justify-between">
+        <div></div>
+        <div className="flex items-center">
+          <div className="flex items-center space-x-2 mr-4">
+            <div
+              className="px-2 py-1 font-semibold rounded"
+              style={{ background: transparentize(0.6, theme.bg1), color: '#6ca8ff' }}
+            >
+              {supplyPositionsCount}
+            </div>
+            <button
+              className={
+                selected === 'supply' ? 'text-white cursor-pointer' : 'text-gray-500 hover:text-gray-400 cursor-pointer'
+              }
+              onClick={() => setSelected('supply')}
+            >
+              Supply Pairs
+            </button>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div
+              className="px-2 py-1 font-semibold rounded"
+              style={{ background: transparentize(0.6, theme.bg1), color: '#de5597' }}
+            >
+              {borrowPositionsCount}
+            </div>
+            <button
+              className={
+                selected === 'borrow' ? 'text-white cursor-pointer' : 'text-gray-500 hover:text-gray-400 cursor-pointer'
+              }
+              onClick={() => setSelected('borrow')}
+            >
+              Borrow Pairs
+            </button>
           </div>
         </div>
       </div>
@@ -167,37 +220,45 @@ const Options = () => {
   )
 }
 
-const Pairs = ({ pairs }: any) => {
+const SupplyPositions = ({ supplyPositions }: any) => {
   return (
     <>
       <StyledBaseCard>
-        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
-          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
-          <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
-          <div className="text-right hover:text-gray-400 item-center align-middle">
-            Oracle
-            <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
-          </div>
+        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-4 text-sm font-semibold text-gray-500">
+          <div className="hover:text-gray-400 col-span-2 md:col-span-2">Market</div>
+          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Supplying</div>
           <div className="text-right hover:text-gray-400">Supply APY</div>
-          <div className="text-right hover:text-gray-400">Borrow APY</div>
         </div>
         <div className="flex-col space-y-2">
-          {pairs &&
-            pairs.length > 0 &&
-            pairs.map((pair: any) => {
+          {supplyPositions &&
+            supplyPositions.length > 0 &&
+            supplyPositions.map((pair: any) => {
               return (
-                <Pair
-                  key={pair.address}
-                  pairAddress={String(pair.address).toLowerCase()}
-                  collateralIcon={getTokenIcon(pair.collateral.address)}
-                  assetIcon={getTokenIcon(pair.asset.address)}
-                  collateralName={pair.collateral.symbol}
-                  assetName={pair.asset.symbol}
-                  oracleName={pair.oracle.name}
-                  collateralAPY={pair.details.apr.borrow}
-                  assetAPY={pair.details.apr.asset}
-                />
+                <>
+                  <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
+                    <div
+                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-4 text-sm font-semibold"
+                      style={{ background: '#19212e', borderRadius: '12px' }}
+                    >
+                      <div className="flex space-x-2 col-span-2 md:col-span-1">
+                        <img src={getTokenIcon(pair.collateral.address)} className="w-12 y-12 rounded-lg" />
+                        <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
+                      </div>
+                      <div className="text-left hidden md:block pl-4">
+                        <div>
+                          {pair.collateral.symbol} / {pair.asset.symbol}
+                        </div>
+                        <div>{pair.oracle.name}</div>
+                      </div>
+                      <div className="text-right">
+                        {formattedPercent(pair.details.apr.asset)} {pair.asset.symbol}
+                      </div>
+                      <div className="text-right">
+                        {formattedPercent(pair.details.apr.asset)} {pair.asset.symbol}
+                      </div>
+                    </div>
+                  </Link>
+                </>
               )
             })}
         </div>
@@ -206,45 +267,50 @@ const Pairs = ({ pairs }: any) => {
   )
 }
 
-interface PairProps {
-  pairAddress: string
-  collateralIcon: any
-  assetIcon: any
-  collateralName: string
-  assetName: string
-  oracleName: string
-  collateralAPY: string
-  assetAPY: string
-}
-
-const Pair = ({
-  pairAddress,
-  collateralIcon,
-  assetIcon,
-  collateralName,
-  assetName,
-  oracleName,
-  collateralAPY,
-  assetAPY
-}: PairProps) => {
+const BorrowPositions = ({ borrowPositions }: any) => {
   return (
     <>
-      <Link to={'/bento/kashi/pair/' + pairAddress} className="block">
-        <div
-          className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
-          style={{ background: '#19212e', borderRadius: '12px' }}
-        >
-          <div className="flex space-x-2 col-span-2 md:col-span-1">
-            <img src={collateralIcon} className="w-12 y-12 rounded-lg" />
-            <img src={assetIcon} className="w-12 y-12 rounded-lg" />
-          </div>
-          <div className="text-right hidden md:block pl-4">{collateralName}</div>
-          <div className="text-right hidden md:block">{assetName}</div>
-          <div className="text-right">{oracleName}</div>
-          <div className="text-right">{formattedPercent(collateralAPY)}</div>
-          <div className="text-right">{formattedPercent(assetAPY)}</div>
+      <StyledBaseCard>
+        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
+          <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
+          <div className="hover:text-gray-400 col-span-2 md:col-span-1"></div>
+          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Borrowing</div>
+          <div className="text-right hover:text-gray-400">Collateral</div>
+          <div className="text-right hover:text-gray-400">Limit Used</div>
+          <div className="text-right hover:text-gray-400">Borrow APR</div>
         </div>
-      </Link>
+        <div className="flex-col space-y-2">
+          {borrowPositions &&
+            borrowPositions.length > 0 &&
+            borrowPositions.map((pair: any) => {
+              return (
+                <>
+                  <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
+                    <div
+                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
+                      style={{ background: '#19212e', borderRadius: '12px' }}
+                    >
+                      <div className="flex space-x-2 col-span-1 md:col-span-1">
+                        <img src={getTokenIcon(pair.collateral.address)} className="w-12 y-12 rounded-lg" />
+                        <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
+                      </div>
+                      <div className="text-left hidden md:block pl-4">
+                        <div>
+                          {pair.collateral.symbol} / {pair.collateral.symbol}
+                        </div>
+                        <div>{pair.oracle.name}</div>
+                      </div>
+                      <div className="text-right">{pair.collateral.symbol}</div>
+                      <div className="text-right">{pair.asset.symbol}</div>
+                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
+                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
+                    </div>
+                  </Link>
+                </>
+              )
+            })}
+        </div>
+      </StyledBaseCard>
     </>
   )
 }
