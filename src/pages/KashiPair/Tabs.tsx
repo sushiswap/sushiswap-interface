@@ -1,10 +1,15 @@
 import React from 'react'
 import { useDarkModeManager } from '../../state/user/hooks'
 
+interface Tab {
+  id: string
+  title: string
+}
+
 interface TabsProps {
-  tabs: any
-  selected: any
-  setSelected: any
+  tabs: Tab[]
+  selected: string
+  setSelected: (id: string) => void
 }
 
 const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {

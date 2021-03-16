@@ -60,12 +60,6 @@ interface TokenProps {
   address: string
   symbol: string
 }
-interface TabsBodyProps {
-  section: string
-  collateral: TokenProps
-  asset: TokenProps
-  pairAddress: string
-}
 
 export default function KashiPair({
   match: {
@@ -239,17 +233,14 @@ export default function KashiPair({
               <div
                 className="py-2 px-6"
                 style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
                 <Tabs tabs={tabs} selected={section} setSelected={setSection} />
               </div>
-              {/* Tabs Body */}
               <div
                 className="py-4 px-6"
                 style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
