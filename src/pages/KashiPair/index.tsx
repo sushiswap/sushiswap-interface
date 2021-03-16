@@ -22,6 +22,8 @@ import { formattedNum } from '../../utils'
 
 import { BarChart, User, Search, ArrowLeft } from 'react-feather'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
+import { ethers } from 'ethers'
+import useMaxBorrowable from 'sushi-hooks/useMaxBorrowable'
 
 //import Charts from './Charts'
 
@@ -78,8 +80,6 @@ export default function KashiPair({
     decimals: pair?.asset.decimals
   }
   const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
-
-  console.log('PAIR', pair)
 
   return (
     <>
@@ -168,7 +168,7 @@ export default function KashiPair({
                         <div className="text-xs sm:text-base font-semibold text-gray-400 mr-2">Net APY:</div>
                         <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
                           {/* -3.25% */}
-                        </div>
+                      {/* </div>
                       </div> */}
                     </div>
                   </div>
@@ -199,7 +199,14 @@ export default function KashiPair({
                   <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
                 )}
                 {pair && section === 'borrow' && (
-                  <Borrow collateral={collateral} asset={asset} pairAddress={pairAddress} />
+                  <Borrow
+                    collateral={collateral}
+                    asset={asset}
+                    pairAddress={pairAddress}
+                    healthPercentage={pair.user.health.percentage}
+                    collateralUSD={pair.user.collateral.usdString}
+                    borrowUSD={pair.user.borrow.usdString}
+                  />
                 )}
                 {/* {pair && section === 'leverage' && <Leverage />} */}
               </div>

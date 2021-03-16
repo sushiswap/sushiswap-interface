@@ -24,8 +24,17 @@ interface SupplyProps {
   asset: TokenProps
   pairAddress: string
   healthPercentage: string
+  collateralUSD: string
+  borrowUSD: string
 }
-export default function Supply({ collateral, asset, pairAddress, healthPercentage }: SupplyProps) {
+export default function Supply({
+  collateral,
+  asset,
+  pairAddress,
+  healthPercentage,
+  collateralUSD,
+  borrowUSD
+}: SupplyProps) {
   return (
     <>
       <WrapperNoPadding id="stake-page">
@@ -41,11 +50,11 @@ export default function Supply({ collateral, asset, pairAddress, healthPercentag
             <div className="col-span-2 mt-5">
               <div className="flex justify-between">
                 <div className="text-xs sm:text-sm text-gray-300">Your collateral:</div>
-                <div className="text-xs sm:text-sm text-gray-300">{formattedNum('500', true)}</div>
+                <div className="text-xs sm:text-sm text-gray-300">{formattedNum(collateralUSD, true)}</div>
               </div>
               <div className="flex justify-between">
                 <div className="text-xs sm:text-sm text-gray-300">Your borrowed:</div>
-                <div className="text-xs sm:text-sm text-gray-300">{formattedNum('500', true)}</div>
+                <div className="text-xs sm:text-sm text-gray-300">{formattedNum(borrowUSD, true)}</div>
               </div>
             </div>
           </div>
