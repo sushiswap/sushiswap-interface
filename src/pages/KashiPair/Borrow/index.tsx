@@ -23,8 +23,9 @@ interface SupplyProps {
   collateral: TokenProps
   asset: TokenProps
   pairAddress: string
+  healthPercentage: string
 }
-export default function Supply({ collateral, asset, pairAddress }: SupplyProps) {
+export default function Supply({ collateral, asset, pairAddress, healthPercentage }: SupplyProps) {
   return (
     <>
       <WrapperNoPadding id="stake-page">
@@ -35,7 +36,7 @@ export default function Supply({ collateral, asset, pairAddress }: SupplyProps) 
                 <div className="text-xs sm:text-sm text-gray-300">Borrow Used</div>
                 <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
               </div>
-              <div className="text-2xl sm:text-4xl font-semibold">{formattedPercent('75')}</div>
+              <div className="text-2xl sm:text-4xl font-semibold">{formattedPercent(healthPercentage)}</div>
             </div>
             <div className="col-span-2 mt-5">
               <div className="flex justify-between">

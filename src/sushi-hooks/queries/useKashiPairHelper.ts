@@ -55,6 +55,24 @@ const useKashiSummary = (address: string) => {
     console.log('assetUSD:', assetUSD)
 
     const allPairDetails = pairAddresses.map((address, i) => {
+      const maxBorrowableOracle = pairUserDetails[1][0].oracleExchangeRate.gt(BigNumber.from(0))
+        ? pairUserDetails[1][0].userCollateralAmount
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pairUserDetails[1][0].oracleExchangeRate)
+        : BigNumber.from(0)
+
+      const maxBorrowableStored = pairUserDetails[1][0].currentExchangeRate.gt(BigNumber.from(0))
+        ? pairUserDetails[1][0].userCollateralAmount
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pairUserDetails[1][0].currentExchangeRate)
+        : BigNumber.from(0)
+
+      const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
+
       return {
         address: address,
         oracle: {
@@ -128,6 +146,16 @@ const useKashiSummary = (address: string) => {
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
         user: {
+          health: {
+            percentage: pairUserDetails[1][i].totalBorrowAmount
+              ? Fraction.from(
+                  BigNumber.from('1000000000000000000')
+                    .mul(pairUserDetails[1][i].userBorrowAmount)
+                    .div(maxBorrowable),
+                  BigNumber.from(10).pow(18)
+                ).toString()
+              : BigNumber.from(0)
+          },
           collateral: {
             value: pairUserDetails[1][i].userCollateralAmount,
             string: Fraction.from(
@@ -178,7 +206,8 @@ const useKashiSummary = (address: string) => {
       pairsCount: allPairDetails.length,
       userSuppliedPairCount: BigNumber.from(pairUserDetails[0].suppliedPairCount).toNumber(),
       userBorrowedPairCount: BigNumber.from(pairUserDetails[0].borrowPairCount).toNumber(),
-      pair: allPairDetails
+      pair: allPairDetails,
+      pairUserDetails
     }
     console.log('allDetails:', allDetails)
 
