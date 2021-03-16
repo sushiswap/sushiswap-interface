@@ -22,6 +22,7 @@ export const PluginBody = styled.div`
 interface TokenProps {
   address: string
   symbol: string
+  decimals: number
 }
 
 interface SupplyProps {
@@ -81,6 +82,7 @@ export default function Supply({ collateral, asset, pairAddress }: SupplyProps) 
             <BorrowInputPanel
               tokenAddress={asset.address}
               tokenSymbol={asset.symbol}
+              tokenDecimals={asset.decimals}
               pairAddress={pairAddress}
               disableCurrencySelect={true}
               id="supply-collateral-token"

@@ -67,19 +67,6 @@ interface TabsBodyProps {
   pairAddress: string
 }
 
-// eslint-disable-next-line react/prop-types
-function TabsBody({ section, collateral, asset, pairAddress }: TabsBodyProps) {
-  switch (section) {
-    case 'supply':
-      return <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
-    case 'borrow':
-      return <Borrow collateral={collateral} asset={asset} pairAddress={pairAddress} />
-    case 'leverage':
-      return <Leverage />
-    default:
-      return null
-  }
-}
 export default function KashiPair({
   match: {
     params: { pairAddress }
@@ -91,8 +78,12 @@ export default function KashiPair({
   const summary = useKashiPairHelper(pairAddress)
   const pair = summary?.pair[0]
 
-  const collateral = { address: pair?.collateral.address, symbol: pair?.collateral.symbol }
-  const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol }
+  const collateral = {
+    address: pair?.collateral.address,
+    symbol: pair?.collateral.symbol,
+    decimals: pair?.asset.decimals
+  }
+  const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
 
   return (
     <>
@@ -262,7 +253,13 @@ export default function KashiPair({
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
-                {pair && <TabsBody section={section} collateral={collateral} asset={asset} pairAddress={pairAddress} />}
+                {pair && section === 'supply' && (
+                  <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+                )}
+                {pair && section === 'borrow' && (
+                  <Borrow collateral={collateral} asset={asset} pairAddress={pairAddress} />
+                )}
+                {pair && section === 'leverage' && <Leverage />}
               </div>
               <div className="py-4 px-6"></div>
             </StyledBaseCard>

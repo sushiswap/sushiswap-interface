@@ -17,6 +17,7 @@ import useKashi from '../../../sushi-hooks/useKashi'
 
 import useTokenBalance, { BalanceProps } from '../../../sushi-hooks/queries/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../../utils'
+import useMaxBorrowable from 'sushi-hooks/useMaxBorrowable'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -147,9 +148,10 @@ const StyledBalanceMax = styled.button`
 `
 interface CurrencyInputPanelProps {
   label?: string
-  tokenAddress: string
-  pairAddress: string
   tokenSymbol?: string
+  tokenAddress: string
+  tokenDecimals: number
+  pairAddress: string
   disableCurrencySelect?: boolean
   hideInput?: boolean
   id: string
@@ -159,9 +161,10 @@ interface CurrencyInputPanelProps {
 
 export default function CurrencyInputPanel({
   label = '',
-  tokenAddress,
-  pairAddress,
   tokenSymbol,
+  tokenAddress,
+  tokenDecimals,
+  pairAddress,
   disableCurrencySelect = false,
   hideInput = false,
   id,
@@ -175,33 +178,19 @@ export default function CurrencyInputPanel({
 
   return (
     <>
-      {balanceFrom && balanceFrom === 'bento' ? (
-        <SelectedInputPanel
-          tokenAddress={tokenAddress}
-          tokenSymbol={tokenSymbol}
-          pairAddress={pairAddress}
-          disableCurrencySelect={true}
-          id="supply-collateral-token"
-          balanceFrom={balanceFrom}
-          setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={bentoBalance}
-          cornerRadiusBottomNone={cornerRadiusBottomNone}
-          cornerRadiusTopNone={cornerRadiusTopNone}
-        />
-      ) : (
-        <SelectedInputPanel
-          tokenAddress={tokenAddress}
-          tokenSymbol={tokenSymbol}
-          pairAddress={pairAddress}
-          disableCurrencySelect={true}
-          id="supply-collateral-token"
-          balanceFrom={balanceFrom}
-          setBalanceFrom={setBalanceFrom}
-          tokenBalanceBigInt={walletBalance}
-          cornerRadiusBottomNone={cornerRadiusBottomNone}
-          cornerRadiusTopNone={cornerRadiusTopNone}
-        />
-      )}
+      <SelectedInputPanel
+        tokenDecimals={tokenDecimals}
+        tokenAddress={tokenAddress}
+        tokenSymbol={tokenSymbol}
+        pairAddress={pairAddress}
+        disableCurrencySelect={true}
+        id="supply-collateral-token"
+        balanceFrom={balanceFrom}
+        setBalanceFrom={setBalanceFrom}
+        tokenBalanceBigInt={balanceFrom && balanceFrom === 'bento' ? bentoBalance : balanceFrom}
+        cornerRadiusBottomNone={cornerRadiusBottomNone}
+        cornerRadiusTopNone={cornerRadiusTopNone}
+      />
     </>
   )
 }
@@ -209,6 +198,7 @@ export default function CurrencyInputPanel({
 interface SelectedInputPanelProps {
   label?: string
   tokenAddress: string
+  tokenDecimals: number
   pairAddress: string
   tokenSymbol?: string
   disableCurrencySelect?: boolean
@@ -225,6 +215,7 @@ const SelectedInputPanel = ({
   label = '',
   tokenAddress,
   tokenSymbol,
+  tokenDecimals,
   pairAddress,
   disableCurrencySelect = false,
   hideInput = false,
@@ -240,6 +231,7 @@ const SelectedInputPanel = ({
   const theme = useTheme()
 
   const { borrow, borrowWithdraw } = useKashi()
+  const { safeMaxBorrowableLeft, safeMaxBorrowableLeftPossible } = useMaxBorrowable(pairAddress)
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
@@ -290,7 +282,7 @@ const SelectedInputPanel = ({
                     fontSize={14}
                     style={{ display: 'inline', cursor: 'pointer' }}
                   >
-                    Max: {tokenBalance} {tokenSymbol}
+                    Max: {safeMaxBorrowableLeftPossible / Math.pow(10, tokenDecimals)} {tokenSymbol}
                   </TYPE.body>
                 )}
               </RowBetween>
