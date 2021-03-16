@@ -11,6 +11,8 @@ function useMaxBorrowable(pairAddress: string) {
   const { account } = useActiveWeb3React()
 
   const [max, setMax] = useState({
+    maxBorrowable: 0,
+    safeMaxBorrowable: 0,
     safeMaxBorrowableLeft: 0,
     safeMaxBorrowableLeftPossible: 0
   })
@@ -64,7 +66,7 @@ function useMaxBorrowable(pairAddress: string) {
 
       console.log({ safeMaxBorrowableLeftPossible })
 
-      setMax({ safeMaxBorrowableLeft, safeMaxBorrowableLeftPossible })
+      setMax({ maxBorrowable, safeMaxBorrowable, safeMaxBorrowableLeft, safeMaxBorrowableLeftPossible })
     }
     getMax()
   }, [account, pairAddress, kashiPairHelperContract])
