@@ -19,14 +19,6 @@ import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 
 import { formattedPercent } from '../../utils'
 
-// const isAddress = (value: string) => {
-//   try {
-//     return ethers.utils.getAddress(value.toLowerCase())
-//   } catch {
-//     return false
-//   }
-// }
-
 const PageWrapper = styled(AutoColumn)`
   max-width: 800px;
   width: 100%;
@@ -44,7 +36,6 @@ export default function KashiPairs() {
   const summary = useKashiPairsHelper()
   const theme = useContext(ThemeContext)
   console.log('summary:', summary)
-
   return (
     <>
       <PageWrapper>
