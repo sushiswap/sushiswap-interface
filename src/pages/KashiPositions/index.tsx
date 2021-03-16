@@ -250,12 +250,8 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                         </div>
                         <div>{pair.oracle.name}</div>
                       </div>
-                      <div className="text-right">
-                        {formattedPercent(pair.details.apr.asset)} {pair.asset.symbol}
-                      </div>
-                      <div className="text-right">
-                        {formattedPercent(pair.details.apr.asset)} {pair.asset.symbol}
-                      </div>
+                      <div className="text-right">{pair.asset.symbol}</div>
+                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
                     </div>
                   </Link>
                 </>
