@@ -242,7 +242,7 @@ const SelectedInputPanel = ({
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { depositAddCollateral, addCollateral } = useKashi()
+  const { removeWithdrawCollateral, removeCollateral } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
@@ -343,15 +343,15 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await depositAddCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await removeWithdrawCollateral(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await depositAddCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await removeWithdrawCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await addCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await removeCollateral(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await addCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await removeCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   }
                   setPendingTx(false)

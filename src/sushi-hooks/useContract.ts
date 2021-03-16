@@ -21,6 +21,7 @@ import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
 import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
 import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper2.json'
 import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
+import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 
 import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 
@@ -193,6 +194,22 @@ export function useBentoHelperContract(): Contract | null {
     }
   }
   return useContract(address, BENTOHELPER_ABI, false)
+}
+
+export function useSushiSwapSwapper(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0x0'
+        break
+      case ChainId.ROPSTEN:
+        address = '0x9836A766D65d27824e9764C07658e9779761f48b'
+        break
+    }
+  }
+  return useContract(address, BASE_SWAPPER_ABI, false)
 }
 
 export function useBaseInfoContract(): Contract | null {

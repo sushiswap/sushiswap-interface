@@ -331,15 +331,15 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await borrowWithdraw(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await borrowWithdraw(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await borrow(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await borrow(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await borrow(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await borrow(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   }
                   setPendingTx(false)

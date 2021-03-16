@@ -343,15 +343,15 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await removeWithdrawAsset(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await removeWithdrawAsset(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await removeWithdrawAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await removeWithdrawAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await removeAsset(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await removeAsset(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await removeAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await removeAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   }
                   setPendingTx(false)

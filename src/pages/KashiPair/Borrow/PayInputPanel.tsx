@@ -332,15 +332,15 @@ const SelectedInputPanel = ({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await repay(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await repay(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await repay(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await repay(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await repayFromBento(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await repayFromBento(pairAddress, tokenAddress, maxDepositAmountInput, true)
                     } else {
-                      await repayFromBento(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await repayFromBento(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }
                   }
                   setPendingTx(false)
