@@ -49,11 +49,11 @@ const tabs = [
   {
     title: 'Borrow',
     id: 'borrow'
-  },
-  {
-    title: 'Leverage',
-    id: 'leverage'
   }
+  // {
+  //   title: 'Leverage',
+  //   id: 'leverage'
+  // }
 ]
 
 interface TokenProps {
@@ -259,7 +259,7 @@ export default function KashiPair({
                 {pair && section === 'borrow' && (
                   <Borrow collateral={collateral} asset={asset} pairAddress={pairAddress} />
                 )}
-                {pair && section === 'leverage' && <Leverage />}
+                {/* {pair && section === 'leverage' && <Leverage />} */}
               </div>
               <div className="py-4 px-6"></div>
             </StyledBaseCard>
