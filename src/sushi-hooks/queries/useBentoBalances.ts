@@ -11,6 +11,11 @@ import ERC20_ABI from '../../constants/abis/erc20.json'
 import { isAddressString, getContract } from '../../utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import sushiData from '@sushiswap/sushi-data'
+import getMainnetAddress from './getMainnetAddress'
+
+import useTransactionStatus from '../useTransactionStatus'
+
+import Fraction from '../../constants/Fraction'
 
 const useBentoBalances = () => {
   const { library, account } = useActiveWeb3React()
@@ -19,6 +24,8 @@ const useBentoBalances = () => {
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
   const kashiPairHelperContract = useKashiPairHelperContract()
+
+  const currentTransactionStatus = useTransactionStatus()
 
   const [balances, setBalances] = useState<any>()
   const fetchBentoBalances = useCallback(async () => {
@@ -64,7 +71,7 @@ const useBentoBalances = () => {
         }
       })
     )
-    console.log('tokensWithDetails:', tokensWithDetails)
+    //console.log('tokensWithDetails:', tokensWithDetails)
 
     // todo: break if subgraph goes down
     const exchangeEthPrice = await sushiData.exchange.ethPrice()
@@ -73,7 +80,7 @@ const useBentoBalances = () => {
         try {
           const tokenExchangeDetails = await sushiData.exchange.token({
             // eslint-disable-next-line @typescript-eslint/camelcase
-            token_address: address
+            token_address: getMainnetAddress(address)
           })
           return tokenExchangeDetails?.derivedETH * exchangeEthPrice
         } catch (e) {
@@ -81,41 +88,48 @@ const useBentoBalances = () => {
         }
       })
     )
-    console.log('tokensWithPricing:', tokensWithPricing, exchangeEthPrice)
+    //console.log('tokensWithPricing:', tokensWithPricing, exchangeEthPrice)
 
     const balances = await bentoHelperContract?.getBalances(account, tokens)
-    console.log('balances:', balances, bentoHelperContract)
+    //console.log('balances:', balances, bentoHelperContract)
 
-    // const balancesWithDetails = tokens.map((tokenAddress, i) => {
-    //   const amount = BigNumber.from(balances[0].bentoShare).isZero()
-    //     ? BigNumber.from(0)
-    //     : BigNumber.from(balances[0].bentoBalance)
-    //         .mul(BigNumber.from(balances[0].bentoAmount))
-    //         .div(BigNumber.from(balances[0].bentoShare))
-    //   const usdValue = amount.mul(
-    //     BigNumber.from(tokensWithPricing[i]).mul(BigNumber.from(10).pow(tokensWithDetails[i]?.decimals))
-    //   )
-    //   return {
-    //     address: tokenAddress,
-    //     name: tokensWithDetails[i]?.name,
-    //     symbol: tokensWithDetails[i]?.symbol,
-    //     decimals: tokensWithDetails[i]?.decimals,
-    //     amount: amount,
-    //     usdAmountBigInt: usdValue
-    //   }
-    // })
+    const balancesWithDetails = tokens.map((tokenAddress, i) => {
+      const amount = BigNumber.from(balances[i].bentoShare).isZero()
+        ? BigNumber.from(0)
+        : BigNumber.from(balances[i].bentoBalance)
+            .mul(BigNumber.from(balances[i].bentoAmount))
+            .div(BigNumber.from(balances[i].bentoShare))
 
-    setBalances(balances)
-
-    // get TokenDetails
-    //return events?.map(event => event.args?.[2] as Address)
+      // attempt to calculate usdValue, token might not exist on sushiswap mainnet oracle
+      // todo: this needs refactor for better precision
+      const amountUSD = tokensWithPricing[i]
+        ? Number(Fraction.from(amount, BigNumber.from(10).pow(tokensWithDetails[i]?.decimals)).toString()) *
+          Number(tokensWithPricing[i]) // todo: object is possibly null
+        : 0
+      return {
+        address: tokenAddress,
+        name: tokensWithDetails[i]?.name,
+        symbol: tokensWithDetails[i]?.symbol,
+        decimals: tokensWithDetails[i]?.decimals,
+        amount: {
+          // in Balance Interface
+          value: amount,
+          decimals: tokensWithDetails[i]?.decimals
+        },
+        amountUSD: amountUSD, // experimental
+        priceUSD: tokensWithPricing[i]
+        //usdAmountBigInt: usdValue
+      }
+    })
+    //console.log('balancesWithDetails:', balancesWithDetails)
+    setBalances(balancesWithDetails)
   }, [account, bentoBoxContract, bentoHelperContract, kashiPairContract?.address, kashiPairHelperContract, library])
 
   useEffect(() => {
     if (account && bentoBoxContract && library) {
       fetchBentoBalances()
     }
-  }, [account, bentoBoxContract, fetchBentoBalances, library])
+  }, [account, bentoBoxContract, fetchBentoBalances, currentTransactionStatus, library])
 
   return balances
 }
