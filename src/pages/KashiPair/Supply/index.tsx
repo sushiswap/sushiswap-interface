@@ -4,7 +4,7 @@ import { AutoColumn } from '../../../components/Column'
 import QuestionHelper from '../../../components/QuestionHelper'
 import SupplyInputPanel from './SupplyInputPanel'
 import WithdrawInputPanel from './WithdrawInputPanel'
-import useKashiPair from '../../../contexts/kashi'
+import { useKashiPair } from '../../../contexts/kashi'
 import { formattedNum, formattedPercent } from '../../../utils'
 
 interface SupplyProps {
