@@ -149,17 +149,24 @@ export default function KashiPairs() {
                   summary.pairs.length > 0 &&
                   summary.pairs.map((pair: any) => {
                     return (
-                      <Pair
-                        key={pair.address}
-                        pairAddress={String(pair.address).toLowerCase()}
-                        collateralIcon={getTokenIcon(pair.collateral.address)}
-                        assetIcon={getTokenIcon(pair.asset.address)}
-                        collateralName={pair.collateral.symbol}
-                        assetName={pair.asset.symbol}
-                        oracleName={pair.oracle.name}
-                        collateralAPY={pair.details.apr.borrow}
-                        assetAPY={pair.details.apr.asset}
-                      />
+                      <div key={pair.address}>
+                        <Link to={'/bento/kashi/pair/' + String(pair.address).toLowerCase()} className="block">
+                          <div
+                            className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
+                            style={{ background: '#19212e', borderRadius: '12px' }}
+                          >
+                            <div className="flex space-x-2 col-span-2 md:col-span-1">
+                              <img src={getTokenIcon(pair.collateral.address)} className="w-12 y-12 rounded-lg" />
+                              <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
+                            </div>
+                            <div className="text-right hidden md:block pl-4">{pair.collateral.symbol}</div>
+                            <div className="text-right hidden md:block">{pair.asset.symbo}</div>
+                            <div className="text-right">{pair.oracle.name}</div>
+                            <div className="text-right">{formattedPercent(pair.details.apr.borrow)}</div>
+                            <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
+                          </div>
+                        </Link>
+                      </div>
                     )
                   })}
               </div>
@@ -167,49 +174,6 @@ export default function KashiPairs() {
           </div>
         </div>
       </PageWrapper>
-    </>
-  )
-}
-
-interface PairProps {
-  pairAddress: string
-  collateralIcon: any
-  assetIcon: any
-  collateralName: string
-  assetName: string
-  oracleName: string
-  collateralAPY: string
-  assetAPY: string
-}
-
-const Pair = ({
-  pairAddress,
-  collateralIcon,
-  assetIcon,
-  collateralName,
-  assetName,
-  oracleName,
-  collateralAPY,
-  assetAPY
-}: PairProps) => {
-  return (
-    <>
-      <Link to={'/bento/kashi/pair/' + pairAddress} className="block">
-        <div
-          className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
-          style={{ background: '#19212e', borderRadius: '12px' }}
-        >
-          <div className="flex space-x-2 col-span-2 md:col-span-1">
-            <img src={collateralIcon} className="w-12 y-12 rounded-lg" />
-            <img src={assetIcon} className="w-12 y-12 rounded-lg" />
-          </div>
-          <div className="text-right hidden md:block pl-4">{collateralName}</div>
-          <div className="text-right hidden md:block">{assetName}</div>
-          <div className="text-right">{oracleName}</div>
-          <div className="text-right">{formattedPercent(collateralAPY)}</div>
-          <div className="text-right">{formattedPercent(assetAPY)}</div>
-        </div>
-      </Link>
     </>
   )
 }
