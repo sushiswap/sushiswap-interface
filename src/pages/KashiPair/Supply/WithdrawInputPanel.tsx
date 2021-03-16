@@ -71,7 +71,7 @@ export default function WithdrawInputPanel({
   const maxDepositAmountInput = assetBalance
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(assetBalance, true)
+    maxDepositAmountInput && onUserDepositInput(assetBalance?.value, true)
   }, [maxDepositAmountInput, onUserDepositInput, assetBalance])
 
   console.log('state:', depositValue, maxSelected)
