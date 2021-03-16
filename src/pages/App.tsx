@@ -34,7 +34,7 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
 
-import TestBed from '../sushi-hooks/TestBed'
+import Test from './Test'
 
 import SushiBar from './SushiBar'
 import Bento from './Bento'
@@ -109,7 +109,7 @@ export default function App() {
           <ComingSoonModal />
           <Web3ReactManager>
             <Switch>
-              {process.env.NODE_ENV === 'development' && <Route exact strict path="/testbed" component={TestBed} />}
+              {process.env.NODE_ENV === 'development' && <Route exact strict path="/test" component={Test} />}
               {/* BentoApps */}
               {chainId === ChainId.ROPSTEN && (
                 <>
