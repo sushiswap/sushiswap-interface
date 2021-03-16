@@ -96,13 +96,13 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      //const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount.value, false)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_ADD_ASSET],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [amount.value, account, false])]
+          [ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, account, false])]
         )
 
         return addTransaction(tx, { summary: 'Add Asset'} )
@@ -151,31 +151,25 @@ const useKashi = () => {
   const removeAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+
       const bentoTotalAsset = await bentoBoxContract?.totals(address)
       const totalAsset = await kashiPairCloneContract?.totalAsset()
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
-      
+
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
       let allShare = totalAsset.elastic.add(borrowShares)
 
       let fraction = share.mul(totalAsset.base).div(allShare)
 
-
+      console.log('!!!decimals: ', amount.decimals)
       console.log('!!!amount: ', amount.value)
       console.log('!!!share: ', share)
       console.log('borrowShares: ', borrowShares)
       console.log('allShare: ', allShare)
       console.log('fraction: ', fraction)
-
-      //let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
-
-      //let fraction = share.mul(totalAsset.elastic).div(totalAsset.base)
-
-
 
       /*if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
@@ -209,14 +203,23 @@ const useKashi = () => {
   const removeWithdrawAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const bentoTotalAsset = await bentoBoxContract?.totals(address)
       const totalAsset = await kashiPairCloneContract?.totalAsset()
-      let part = amount?.value.mul(totalAsset.base).div(totalAsset.elastic)
+      const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
-      if (max) {
+
+      let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
+      let allShare = totalAsset.elastic.add(borrowShares)
+
+      let fraction = share.mul(totalAsset.base).div(allShare)
+
+      let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
+
+      /*if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
         part = pairUserDetails[1][0].userAssetAmount.gt(BigNumber.from(0))
@@ -224,9 +227,7 @@ const useKashi = () => {
               .mul(totalAsset.base)
               .div(totalAsset.elastic)
           : BigNumber.from(0)
-      }
-
-      let removedPart = part.eq(BigNumber.from(0)) ? amount?.value : part
+      }*/
 
       try {
         const tx = await kashiPairCloneContract?.cook(

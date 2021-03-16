@@ -176,6 +176,8 @@ export default function CurrencyInputPanel({
 
   const kashiBalances = useKashiBalances(pairAddress)
 
+  console.log('!!!! kashiBalances: ', kashiBalances)
+
   return (
     <>
       {balanceFrom && balanceFrom === 'bento' ? (
