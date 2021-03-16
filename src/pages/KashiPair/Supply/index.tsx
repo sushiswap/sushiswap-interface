@@ -1,27 +1,18 @@
-import React, { useCallback, useState } from 'react'
-import styled from 'styled-components'
-
+import React from 'react'
 import { WrapperNoPadding } from '../../../components/swap/styleds'
-
 import { AutoColumn } from '../../../components/Column'
 import QuestionHelper from '../../../components/QuestionHelper'
 import SupplyInputPanel from './SupplyInputPanel'
 import WithdrawInputPanel from './WithdrawInputPanel'
-
 import useKashiPairHelper from '../../../sushi-hooks/queries/useKashiPairHelper'
 import { formattedNum, formattedPercent } from '../../../utils'
-
-export const PluginBody = styled.div`
-  position: relative;
-  width: 100%;
-  background: ${({ theme }) => theme.bg1};
-`
 
 interface SupplyProps {
   tokenAddress: string
   tokenSymbol: string
   pairAddress: string
 }
+
 export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: SupplyProps) {
   const kashi = useKashiPairHelper(pairAddress)
   console.log('pairDetails:', kashi)
@@ -55,20 +46,16 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
           </div>
           <div>
             <SupplyInputPanel
+              id="supply-collateral-token"
               tokenAddress={tokenAddress}
               tokenSymbol={tokenSymbol}
               pairAddress={pairAddress}
-              disableCurrencySelect={true}
-              id="supply-collateral-token"
-              cornerRadiusBottomNone={true}
             />
             <WithdrawInputPanel
+              id="withdraw-collateral-token"
               tokenAddress={tokenAddress}
               tokenSymbol={tokenSymbol}
               pairAddress={pairAddress}
-              disableCurrencySelect={true}
-              id="withdraw-collateral-token"
-              cornerRadiusTopNone={true}
             />
           </div>
         </AutoColumn>
