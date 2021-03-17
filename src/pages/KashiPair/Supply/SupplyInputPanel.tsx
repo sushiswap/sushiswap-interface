@@ -41,10 +41,10 @@ export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbo
 
   const theme = useTheme()
 
-  const [balanceFrom, setBalanceFrom] = useState<any>('bento')
-
   const walletBalance = useTokenBalance(tokenAddress)
   const bentoBalance = useBentoBalance(tokenAddress)
+
+  const [balanceFrom, setBalanceFrom] = useState<any>(bentoBalance > 0 ? 'bento' : 'wallet')
 
   const balance = balanceFrom && balanceFrom === 'bento' ? bentoBalance : walletBalance
 

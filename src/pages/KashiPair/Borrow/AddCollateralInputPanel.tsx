@@ -36,10 +36,10 @@ export default function AddCollateralInputPanel({
   tokenSymbol,
   pairAddress
 }: AddCollateralInputPanelProps) {
-  const [balanceFrom, setBalanceFrom] = useState<any>('bento')
-
   const walletBalance = useTokenBalance(tokenAddress)
   const bentoBalance = useBentoBalance(tokenAddress)
+
+  const [balanceFrom, setBalanceFrom] = useState<any>(bentoBalance > 0 ? 'bento' : 'wallet')
 
   const balance = balanceFrom && balanceFrom === 'bento' ? bentoBalance : walletBalance
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { WrapperNoPadding } from '../../../components/swap/styleds'
 
@@ -28,6 +27,7 @@ interface SupplyProps {
   borrowUSD: string
   max: string
 }
+
 export default function Supply({
   collateral,
   asset,
