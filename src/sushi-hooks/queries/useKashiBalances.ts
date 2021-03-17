@@ -38,11 +38,11 @@ const useKashiBalances = (pairAddress: string) => {
       },
       asset: {
         value: pairUserDetails[1][i].userAssetAmount,
-        decimals: pairDetails[i].collateralDecimals
+        decimals: pairDetails[i].assetDecimals
       },
       borrow: {
         value: pairUserDetails[1][i].userBorrowAmount,
-        decimals: pairDetails[i].collateralDecimals
+        decimals: pairDetails[i].assetDecimals
       }
     }
     setBalances(balances)
