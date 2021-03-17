@@ -19,6 +19,7 @@ import UserUpdater from './state/user/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
 
+import '@fontsource/dm-sans'
 import './styles.css'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)

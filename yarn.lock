@@ -1844,6 +1844,11 @@
     "@ethersproject/properties" "^5.0.7"
     "@ethersproject/strings" "^5.0.8"
 
+"@fontsource/dm-sans@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@fontsource/dm-sans/-/dm-sans-4.2.2.tgz#72601e1ced27468a5fb84853806f5611722961ca"
+  integrity sha512-dW370yx7ZF5/wot4+gdZs+uXQFJ1hxtbwz4M7Kgtca98IMxyLUtS2wRgmIKqNLYGX+lJq2OHJS8xZtj7Dvw2rw==
+
 "@graphql-typed-document-node/core@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
