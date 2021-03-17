@@ -147,7 +147,9 @@ export default function KashiPairs() {
                             <div className="text-right hidden md:block">{pair.asset.symbol}</div>
                             <div className="text-right">{pair.oracle.name}</div>
                             <div className="text-right">{formattedPercent(pair.details.apr.currentSupplyAPR)}</div>
-                            <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
+                            <div className="text-right">
+                              {formattedPercent(pair.details.apr.currentInterestPerYear)}
+                            </div>
                           </div>
                         </Link>
                       </div>
