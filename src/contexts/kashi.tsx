@@ -101,6 +101,29 @@ const pairAddresses = [
   '0x19F855526eb5Bc7C90690f88aF98bC870edEbcCc'
 ]
 
+const MINIMUM_TARGET_UTILIZATION = BigNumber.from('700000000000000000') // 70%
+const MAXIMUM_TARGET_UTILIZATION = BigNumber.from('800000000000000000') // 80%
+const UTILIZATION_PRECISION = BigNumber.from('1000000000000000000')
+const FULL_UTILIZATION = BigNumber.from('1000000000000000000')
+const FULL_UTILIZATION_MINUS_MAX = FULL_UTILIZATION.sub(MAXIMUM_TARGET_UTILIZATION)
+const STARTING_INTEREST_PER_YEAR = BigNumber.from(68493150675)
+  .mul(BigNumber.from(60))
+  .mul(BigNumber.from(60))
+  .mul(BigNumber.from(24))
+  .mul(BigNumber.from(365)) // approx 1% APR
+const MINIMUM_INTEREST_PER_YEAR = BigNumber.from(17123287665)
+  .mul(BigNumber.from(60))
+  .mul(BigNumber.from(60))
+  .mul(BigNumber.from(24))
+  .mul(BigNumber.from(365)) // approx 0.25% APR
+const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(68493150675000)
+  .mul(BigNumber.from(60))
+  .mul(BigNumber.from(60))
+  .mul(BigNumber.from(24))
+  .mul(BigNumber.from(365)) // approx 1000% APR
+const INTEREST_ELASTICITY = BigNumber.from('28800000000000000000000000000000000000000') // Half or double in 28800 seconds (8 hours) if linear
+const FACTOR_PRECISION = BigNumber.from('1000000000000000000')
+
 function takeFee(amount: BigNumber) {
   return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
 }
@@ -181,9 +204,70 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           .div(BigNumber.from('1000000000000000000'))
       }
 
+      const currentBorrowAmount = pairUserDetails[1][i].totalBorrowAmount.add(
+        accrue(pairUserDetails[1][i].totalBorrowAmount)
+      )
+
       const currentUserBorrowAmount = pairUserDetails[1][i].userBorrowAmount.add(
         takeFee(accrue(pairUserDetails[1][i].userBorrowAmount))
       )
+
+      const utilization = currentBorrowAmount.gt(BigNumber.from(0))
+        ? currentBorrowAmount
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(pairUserDetails[1][i].totalAssetAmount.add(currentBorrowAmount))
+        : BigNumber.from(0)
+
+      function interestAccrue(interest: BigNumber) {
+        if (pairUserDetails[1][i].totalBorrowAmount.eq(BigNumber.from(0))) {
+          return STARTING_INTEREST_PER_YEAR
+        }
+
+        let currentInterest = interest
+
+        const elapsedTime = BigNumber.from(Date.now())
+          .div(BigNumber.from(1000))
+          .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+
+        if (elapsedTime.eq(BigNumber.from(0))) {
+          return currentInterest
+        }
+
+        if (utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
+          const underFactor = MINIMUM_TARGET_UTILIZATION.sub(utilization)
+            .mul(FACTOR_PRECISION)
+            .div(MINIMUM_TARGET_UTILIZATION)
+          const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor.mul(elapsedTime)))
+          currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
+
+          if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
+            currentInterest = MINIMUM_INTEREST_PER_YEAR // 0.25% APR minimum
+          }
+        } else if (utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
+          const overFactor = utilization
+            .sub(MAXIMUM_TARGET_UTILIZATION)
+            .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
+          const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor.mul(elapsedTime)))
+          currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
+          if (currentInterest.lt(MAXIMUM_INTEREST_PER_YEAR)) {
+            currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
+          }
+        }
+        return currentInterest
+      }
+
+      const interestPerYear = pairUserDetails[1][i].accrueInfo.interestPerSecond
+        .mul(BigNumber.from(60))
+        .mul(BigNumber.from(60))
+        .mul(BigNumber.from(24))
+        .mul(BigNumber.from(365))
+
+      const currentInterestPerYear = interestAccrue(interestPerYear)
+
+      const currentSupplyAPR = Fraction.from(
+        takeFee(currentInterestPerYear.mul(utilization)).div(BigNumber.from(10).pow(BigNumber.from(18))),
+        BigNumber.from(10).pow(BigNumber.from(16))
+      ).toString()
 
       return {
         id: address,
@@ -254,7 +338,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           },
           apr: {
             asset: pairUserDetails[1][i].assetAPR / 1e6,
-            borrow: pairUserDetails[1][i].borrowAPR / 1e6
+            borrow: pairUserDetails[1][i].borrowAPR / 1e6,
+            supplyAPR: Fraction.from(
+              takeFee(interestPerYear.mul(utilization)).div(BigNumber.from('1000000000000000000')),
+              BigNumber.from('10000000000000000')
+            ).toString(),
+            currentSupplyAPR
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
