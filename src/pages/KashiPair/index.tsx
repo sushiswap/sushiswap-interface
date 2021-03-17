@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChainId } from '@sushiswap/sdk'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import { Link, RouteComponentProps, useParams, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from '../../hooks'
@@ -63,7 +63,10 @@ export default function KashiPair({
     params: { pairAddress }
   }
 }: RouteComponentProps<{ pairAddress: string }>) {
-  const [section, setSection] = useState('supply')
+  const location = useLocation()
+
+  const [section, setSection] = useState(new URLSearchParams(location.search).get('tab') || 'supply')
+
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
