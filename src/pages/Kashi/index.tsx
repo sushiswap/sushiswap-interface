@@ -152,6 +152,11 @@ export default function KashiPairs() {
                             </div>
                           </div>
                         </Link>
+                        {process.env.NODE_ENV !== 'production' && (
+                          <div className="mt-2 py-4 px-4" style={{ background: '#19212e', borderRadius: '12px' }}>
+                            <pre>{JSON.stringify(pair, null, 2)}</pre>
+                          </div>
+                        )}
                       </div>
                     )
                   })}

@@ -203,7 +203,13 @@ export default function KashiPair({
                 )}
                 {/* {pair && section === 'leverage' && <Leverage />} */}
               </div>
-              <div className="py-4 px-6"></div>
+              <div className="py-4 px-6">
+                {process.env.NODE_ENV !== 'production' && (
+                  <div className="py-4 px-4" style={{ background: '#19212e', borderRadius: '12px' }}>
+                    <pre>{JSON.stringify(pair, null, 2)}</pre>
+                  </div>
+                )}
+              </div>
             </StyledBaseCard>
           </div>
         </div>
