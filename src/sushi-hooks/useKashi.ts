@@ -128,8 +128,6 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      console.log('!!!amount: ', amount?.value)
-
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_BENTO_DEPOSIT, ACTION_ADD_ASSET],
