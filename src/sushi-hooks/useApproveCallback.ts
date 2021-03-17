@@ -42,15 +42,15 @@ export function useApproveCallback(tokenAddress?: string, spender?: string): [Ap
   const tokenContract = useTokenContract(tokenAddress)
   const addTransaction = useTransactionAdder()
 
-  console.log('approval logs:', {
-    account: account,
-    currentAllowance: currentAllowance,
-    pendingApproval: pendingApproval,
-    tokenAddress: tokenAddress,
-    spender: spender,
-    approvalState: approvalState,
-    tokenContract: tokenContract
-  })
+  // console.log('approval logs:', {
+  //   account: account,
+  //   currentAllowance: currentAllowance,
+  //   pendingApproval: pendingApproval,
+  //   tokenAddress: tokenAddress,
+  //   spender: spender,
+  //   approvalState: approvalState,
+  //   tokenContract: tokenContract
+  // })
 
   const approve = useCallback(async (): Promise<void> => {
     console.log('approvalState:', approvalState)

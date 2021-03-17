@@ -5,13 +5,15 @@ import { useBentoBoxContract, useKashiPairContract, useKashiPairHelperContract }
 import Fraction from '../../constants/Fraction'
 
 import getOracleName from './getOracleNames'
+import getMainnetAddress from './getMainnetAddress'
 import { BigNumber } from '@ethersproject/bignumber'
+
+import sushiData from '@sushiswap/sushi-data'
 import _ from 'lodash'
 // import getOracleNames from './getOracleNames'
 
 const useKashiSummary = () => {
   const { library, account } = useActiveWeb3React()
-  
 
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
@@ -27,7 +29,7 @@ const useKashiSummary = () => {
     // TODO: remove hardcode from testing
     const pairAddresses = events?.map(event => event.args?.[2])
     //const pairAddresses = ['0x6e9d0853e65f06fab1d5d7d4f78c49bf3595fcb4', '0x6e9d0853e65f06fab1d5d7d4f78c49bf3595fcb4']
-    console.log('pairAddresses:', pairAddresses)
+    //console.log('pairAddresses:', pairAddresses)
 
     const pairDetails = await kashiPairHelperContract?.getPairs(pairAddresses)
     // console.log('pairDetails:', pairDetails)
@@ -37,25 +39,39 @@ const useKashiSummary = () => {
     //   pairs: pairAddresses,
     //   helper: kashiPairHelperContract?.address
     // })
-    console.log("account", { account })
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
 
-    const uni = await kashiPairHelperContract?.pollPairs(account, ['0x2E082FBe03d87EFf58cC58b35b89b2539c9d868a'])
-    console.log('UNI', {
-      assetAPR: uni[1][0].assetAPR.toString() / 1e6,
-      borrowAPR: uni[1][0].borrowAPR.toString() / 1e6
+    // Get tokens from pairs
+    const tokensWithDuplicates: any[] = []
+    pairDetails.map((pair: { collateral: string; asset: string }) => {
+      tokensWithDuplicates.push(pair.collateral)
+      tokensWithDuplicates.push(pair.asset)
     })
+    const tokens = Array.from(new Set(tokensWithDuplicates))
 
-    //const aprPrecision = await kashiPairHelperContract?.APY_PRECISION()
-    //todo remove aprPrecision accounting for factor of 100
-    const aprPrecision = BigNumber.from(1000000)
-
-    //console.log('kashiPairHelperContract:', aprPrecision)
-    //console.log('pairUserDetails:', pairUserDetails)
-
-    //console.log('details:', pairUserDetails[0])
+    // Todo: experimental pricing data for each token
+    const exchangeEthPrice = await sushiData.exchange.ethPrice()
+    const tokensWithPricing = await Promise.all(
+      tokens.map(async (address: string) => {
+        try {
+          const tokenExchangeDetails = await sushiData.exchange.token({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            token_address: getMainnetAddress(address)
+          })
+          return { address: address, price: tokenExchangeDetails?.derivedETH * exchangeEthPrice }
+        } catch (e) {
+          return null
+        }
+      })
+    )
 
     const allPairDetails = pairAddresses?.map((address, i) => {
+      const collateralUSD = Number(
+        tokensWithPricing.find(token => token?.address === pairDetails[i].collateral)?.['price']
+      )
+      const assetUSD = Number(tokensWithPricing.find(token => token?.address === pairDetails[i].asset)?.['price'])
+
+      console.log('pairPricing:', collateralUSD, assetUSD)
       return {
         address: address,
         oracle: {
@@ -74,10 +90,47 @@ const useKashiSummary = () => {
           decimals: pairDetails[i].assetDecimals
         },
         details: {
-          total: {
-            collateral: pairUserDetails[1][i].totalCollateralAmount,
-            asset: pairUserDetails[1][i].totalAssetAmount,
-            borrow: pairUserDetails[1][i].totalBorrowAmount
+          collateral: {
+            value: pairUserDetails[1][i].totalCollateralAmount,
+            string: Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
+              BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+            ).toString(),
+            usdString:
+              Number(
+                Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
+                  BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+                ).toString()
+              ) * collateralUSD
+          },
+          asset: {
+            value: pairUserDetails[1][i].totalAssetAmount,
+            string: Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString(),
+            usdString:
+              Number(
+                Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString()
+              ) * assetUSD
+          },
+          borrow: {
+            value: pairUserDetails[1][i].totalBorrowAmount,
+            string: Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString(),
+            usdString:
+              Number(
+                Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString()
+              ) * assetUSD
           },
           rate: {
             current: pairUserDetails[1][i].currentExchangeRate,
@@ -90,9 +143,48 @@ const useKashiSummary = () => {
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
         user: {
-          collateral: pairUserDetails[1][i].userCollateralAmount,
-          asset: pairUserDetails[1][i].userAssetAmount,
-          borrow: pairUserDetails[1][i].userBorrowAmount
+          collateral: {
+            value: pairUserDetails[1][i].userCollateralAmount,
+            string: Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
+              BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+            ).toString(),
+            usdString:
+              Number(
+                Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
+                  BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+                ).toString()
+              ) * collateralUSD
+          },
+          asset: {
+            value: pairUserDetails[1][i].userAssetAmount,
+            string: Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].userAssetAmount),
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString(),
+            usdString:
+              Number(
+                Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].userAssetAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString()
+              ) * assetUSD
+          },
+          borrow: {
+            value: pairUserDetails[1][i].userBorrowAmount,
+            string: Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString(),
+            usdString:
+              Number(
+                Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString()
+              ) * assetUSD
+          }
         }
       }
     })

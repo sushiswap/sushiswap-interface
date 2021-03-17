@@ -1,12 +1,9 @@
-import { Trade, TradeType } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
-import { Field } from '../../../state/swap/actions'
-import { TYPE, ExternalLink } from '../../../theme'
+import { ThemeContext } from 'styled-components'
+import { TYPE } from '../../../theme'
 import { AutoColumn } from '../../../components/Column'
 import QuestionHelper from '../../../components/QuestionHelper'
-import { RowBetween, RowFixed, AutoRow } from '../../../components/Row'
+import { RowBetween, RowFixed } from '../../../components/Row'
 
 const LeverageDetails = () => {
   const theme = useContext(ThemeContext)

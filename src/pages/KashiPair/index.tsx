@@ -9,19 +9,16 @@ import { useActiveWeb3React } from '../../hooks'
 import { BaseCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
-
 import Supply from './Supply'
 import Borrow from './Borrow'
 import Leverage from './Leverage'
-
 import Tabs from './Tabs'
-
 import useKashiPairHelper from '../../sushi-hooks/queries/useKashiPairHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedNum } from '../../utils'
-
 import { BarChart, User, Search, ArrowLeft } from 'react-feather'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
+import { ethers } from 'ethers'
 
 //import Charts from './Charts'
 
@@ -49,37 +46,18 @@ const tabs = [
   {
     title: 'Borrow',
     id: 'borrow'
-  },
-  {
-    title: 'Leverage',
-    id: 'leverage'
   }
+  // {
+  //   title: 'Leverage',
+  //   id: 'leverage'
+  // }
 ]
 
 interface TokenProps {
   address: string
   symbol: string
 }
-interface TabsBodyProps {
-  section: string
-  collateral: TokenProps
-  asset: TokenProps
-  pairAddress: string
-}
 
-// eslint-disable-next-line react/prop-types
-function TabsBody({ section, collateral, asset, pairAddress }: TabsBodyProps) {
-  switch (section) {
-    case 'supply':
-      return <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
-    case 'borrow':
-      return <Borrow collateral={collateral} asset={asset} pairAddress={pairAddress} />
-    case 'leverage':
-      return <Leverage />
-    default:
-      return null
-  }
-}
 export default function KashiPair({
   match: {
     params: { pairAddress }
@@ -91,8 +69,12 @@ export default function KashiPair({
   const summary = useKashiPairHelper(pairAddress)
   const pair = summary?.pair[0]
 
-  const collateral = { address: pair?.collateral.address, symbol: pair?.collateral.symbol }
-  const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol }
+  const collateral = {
+    address: pair?.collateral.address,
+    symbol: pair?.collateral.symbol,
+    decimals: pair?.asset.decimals
+  }
+  const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
 
   return (
     <>
@@ -176,93 +158,53 @@ export default function KashiPair({
                       <div className="text-base sm:text-2xl font-bold">
                         {pair && `${pair.collateral.symbol + '/' + pair.asset.symbol}`}
                       </div>
-                      <div className="flex">
+                      <div className="text-sm text-gray-400">{pair && `${pair.oracle.name}`}</div>
+                      {/* <div className="flex">
                         <div className="text-xs sm:text-base font-semibold text-gray-400 mr-2">Net APY:</div>
                         <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
-                          -3.25%
-                        </div>
-                      </div>
+                          {/* -3.25% */}
+                      {/* </div>
+                      </div> */}
                     </div>
                   </div>
-                  <div className="hidden sm:block">
+                  {/* <div className="hidden sm:block">
                     <div>
                       <div className="text-base sm:text-lg font-bold">{pair && 'Chainlink'}</div>
                       <div className="text-xs sm:text-base font-semibold text-gray-400">Oracle ↗</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
-              {/* User Balances */}
-              {/* <div
-                className="pt-2 pb-4 px-6"
-                style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
-                  borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
-                }}
-              >
-                <div className="text-sm sm:text-base text-gray-500 font-semibold pb-2">Your balances</div>
-                <div className="grid grid-cols-3 gap-2 items-center">
-                  <div className="flex-col">
-                    <div className="flex items-center">
-                      <div className="text-gray-400 text-xs sm:text-base font-semibold">Supplied: </div>
-                      <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
-                    </div>
-                    <div className="flex items-baseline">
-                      <div className="text-sm sm:text-lg font-bold mr-2">
-                        {pair && `≈ ${formattedNum(pair.user.collateral.usdString, true)}`}
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-base font-semibold" style={{ color: '#6ca8ff' }}>
-                      {pair && `${formattedNum(pair.user.collateral.string) + ' ' + pair.collateral.symbol}`}
-                    </div>
-                  </div>
-                  <div className="flex-col">
-                    <div className="flex items-center">
-                      <div className="text-gray-400 text-xs sm:text-base font-semibold">Borrowed: </div>
-                      <QuestionHelper text="The amount of assets you have borrowed from this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
-                    </div>
-                    <div className="flex items-baseline">
-                      <div className="text-sm sm:text-lg font-bold mr-2">
-                        {pair && `≈ ${formattedNum(pair.user.asset.usdString, true)}`}
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
-                      {pair && `${formattedNum(pair.user.asset.string) + ' ' + pair.asset.symbol}`}
-                    </div>
-                  </div>
-                  <div className="flex-col">
-                    <div className="flex items-center">
-                      <div className="text-gray-400 text-xs sm:text-base font-semibold">Net Worth: </div>
-                      <QuestionHelper text="The amount of assets you have borrowed from this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
-                    </div>
-                    <div className="flex items-baseline">
-                      <div className="text-sm sm:text-lg font-bold mr-2">
-                        {pair && `≈ ${formattedNum(pair.user?.netWorth?.usdString, true)}`}
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-base font-semibold text-gray-800">{pair && '-'}</div>
-                  </div>
-                </div>
-              </div> */}
               {/* Tabs */}
               <div
                 className="py-2 px-6"
                 style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
                 <Tabs tabs={tabs} selected={section} setSelected={setSection} />
               </div>
-              {/* Tabs Body */}
               <div
                 className="py-4 px-6"
                 style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
-                {pair && <TabsBody section={section} collateral={collateral} asset={asset} pairAddress={pairAddress} />}
+                {pair && section === 'supply' && (
+                  <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+                )}
+                {pair && section === 'borrow' && (
+                  <Borrow
+                    collateral={collateral}
+                    asset={asset}
+                    pairAddress={pairAddress}
+                    healthPercentage={pair.user.health.percentage}
+                    collateralUSD={pair.user.collateral.usdString}
+                    borrowUSD={pair.user.borrow.usdString}
+                    max={pair.user.borrow.max}
+                  />
+                )}
+                {/* {pair && section === 'leverage' && <Leverage />} */}
               </div>
               <div className="py-4 px-6"></div>
             </StyledBaseCard>

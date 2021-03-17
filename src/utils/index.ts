@@ -12,7 +12,7 @@ import Numeral from 'numeral'
 import Fraction from '../constants/Fraction'
 
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
-  console.log('formatFromBalance:', value, decimals)
+  //console.log('formatFromBalance:', value, decimals)
   if (value) {
     return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
   } else {

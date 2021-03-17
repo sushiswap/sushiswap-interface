@@ -5,6 +5,7 @@ import { useBentoBoxContract, useKashiPairContract, useKashiPairHelperContract }
 
 import useTransactionStatus from '../useTransactionStatus'
 import getOracleName from './getOracleNames'
+import getMainnetAddress from './getMainnetAddress'
 
 import { isAddressString } from '../../utils'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -35,29 +36,53 @@ const useKashiSummary = (address: string) => {
 
     //console.log('pairUserDetails_inputs:', account, pairAddresses)
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
-    console.log('pairUserDetails:', pairUserDetails)
+    //console.log('pairUserDetails:', pairUserDetails)
+    //console.log('details:', pairDetails[0].collateral)
 
-    console.log('details:', pairDetails[0].collateral)
     // Get SushiSwap Exchange pricing data for USD estimates
     const collateralSushiData = await sushiData.exchange.token({
-      // TODO: remove hardcode for mainnet
       // eslint-disable-next-line @typescript-eslint/camelcase
-      token_address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
-      //token_address: String(pairDetails[0].collateral).toLowerCase()
+      token_address: getMainnetAddress(pairDetails?.[0].collateral)
     })
     const assetSushiData = await sushiData.exchange.token({
-      // TODO: remove hardcode for mainnet
       // eslint-disable-next-line @typescript-eslint/camelcase
-      token_address: '0x6b175474e89094c44da98b954eedeac495271d0f'
-      //token_address: String(pairDetails[0].asset).toLowerCase()
+      token_address: getMainnetAddress(pairDetails?.[0].asset)
     })
     const exchangeEthPrice = await sushiData.exchange.ethPrice()
     const collateralUSD = collateralSushiData?.derivedETH * exchangeEthPrice
     const assetUSD = assetSushiData?.derivedETH * exchangeEthPrice
-    //console.log('collateralUSD:', collateralUSD)
-    //console.log('assetUSD:', assetUSD)
+    console.log('collateralUSD:', collateralUSD)
+    console.log('assetUSD:', assetUSD)
 
     const allPairDetails = pairAddresses.map((address, i) => {
+      const maxBorrowableOracle = pairUserDetails[1][i].oracleExchangeRate.gt(BigNumber.from(0))
+        ? pairUserDetails[1][i].userCollateralAmount
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pairUserDetails[1][0].oracleExchangeRate)
+        : BigNumber.from(0)
+
+      const maxBorrowableStored = pairUserDetails[1][i].currentExchangeRate.gt(BigNumber.from(0))
+        ? pairUserDetails[1][i].userCollateralAmount
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pairUserDetails[1][0].currentExchangeRate)
+        : BigNumber.from(0)
+
+      const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
+
+      const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
+
+      const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
+      const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalBorrowAmount.lt(
+        safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+      )
+        ? pairUserDetails[1][i].totalBorrowAmount
+        : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
       return {
         address: address,
         oracle: {
@@ -125,12 +150,22 @@ const useKashiSummary = (address: string) => {
             oracle: pairUserDetails[1][i].oracleExchangeRate
           },
           apr: {
-            asset: pairUserDetails[1][i].assetAPR,
-            borrow: pairUserDetails[1][i].borrowAPR
+            asset: pairUserDetails[1][i].assetAPR / 1e6,
+            borrow: pairUserDetails[1][i].borrowAPR / 1e6
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
         user: {
+          health: {
+            percentage: pairUserDetails[1][i].totalBorrowAmount
+              ? Fraction.from(
+                  BigNumber.from('1000000000000000000')
+                    .mul(pairUserDetails[1][i].userBorrowAmount)
+                    .div(maxBorrowable),
+                  BigNumber.from(10).pow(18)
+                ).toString()
+              : BigNumber.from(0)
+          },
           collateral: {
             value: pairUserDetails[1][i].userCollateralAmount,
             string: Fraction.from(
@@ -160,6 +195,10 @@ const useKashiSummary = (address: string) => {
               ) * assetUSD
           },
           borrow: {
+            max: Fraction.from(
+              safeMaxBorrowableLeftPossible,
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString(),
             value: pairUserDetails[1][i].userBorrowAmount,
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
@@ -181,7 +220,8 @@ const useKashiSummary = (address: string) => {
       pairsCount: allPairDetails.length,
       userSuppliedPairCount: BigNumber.from(pairUserDetails[0].suppliedPairCount).toNumber(),
       userBorrowedPairCount: BigNumber.from(pairUserDetails[0].borrowPairCount).toNumber(),
-      pair: allPairDetails
+      pair: allPairDetails,
+      pairUserDetails
     }
     console.log('allDetails:', allDetails)
 

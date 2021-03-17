@@ -34,7 +34,7 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
 
-import TestBed from '../sushi-hooks/TestBed'
+import Test from './Test'
 
 import SushiBar from './SushiBar'
 import Bento from './Bento'
@@ -109,17 +109,17 @@ export default function App() {
           <ComingSoonModal />
           <Web3ReactManager>
             <Switch>
-              {process.env.NODE_ENV === 'development' && <Route exact strict path="/testbed" component={TestBed} />}
+              {process.env.NODE_ENV === 'development' && <Route exact strict path="/test" component={Test} />}
               {/* BentoApps */}
-              {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento" component={Bento} />}
-              {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />}
               {chainId === ChainId.ROPSTEN && (
-                <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+                <>
+                  <Route exact strict path="/bento" component={Bento} />
+                  <Route exact strict path="/bento/kashi/pairs" component={KashiPairs} />
+                  <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
+                  <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+                  <Route exact strict path="/bento/balances" component={BentoBalances} />
+                </>
               )}
-              {chainId === ChainId.ROPSTEN && (
-                <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
-              )}
-              {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/balances" component={BentoBalances} />}
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
@@ -128,7 +128,7 @@ export default function App() {
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}
               <Route exact strict path="/swap" component={Swap} />
-              <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
+              {/* <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} /> */}
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
               <Route exact strict path="/find" component={PoolFinder} />

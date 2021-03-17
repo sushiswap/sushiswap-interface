@@ -16,14 +16,15 @@ import TokenWithdrawPanel from './TokenWithdrawPanel'
 
 import { useActiveWeb3React } from '../../hooks'
 import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
-import useBentoBalance from '../../sushi-hooks/queries/useBentoBalance'
+//import useBentoBalance from '../../sushi-hooks/queries/useBentoBalance'
 import { formatFromBalance } from '../../utils'
 
-import useTokenInfo from '../../sushi-hooks/queries/useTokenInfo'
+//import useTokenInfo from '../../sushi-hooks/queries/useTokenInfo'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
-import EthereumIcon from '../../assets/kashi/tokens/eth-square.png'
+
+import { formattedNum } from '../../utils'
 
 import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
 
@@ -34,37 +35,6 @@ export const FixedHeightRow = styled(RowBetween)`
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
-`
-
-const VoteCard = styled(DataCard)`
-  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  overflow: hidden;
-`
-
-const TitleRow = styled(RowBetween)`
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    flex-wrap: wrap;
-    gap: 12px;
-    width: 100%;
-    flex-direction: column-reverse;
-  `};
-`
-
-const ButtonRow = styled(RowFixed)`
-  gap: 8px;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    width: 100%;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-  `};
-`
-
-const ResponsiveExternalLink = styled(ExternalLink)`
-  width: fit-content;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    width: 48%;
-  `};
 `
 
 const StyledBaseCard = styled(BaseCard)`
@@ -81,9 +51,12 @@ export default function BentoBalances() {
 
   // todo: include totalDeposits in balances
   const balances = useBentoBalances()
-  const totalDeposits = '$ -'
+  //console.log('balances:', balances)
 
-  console.log('history:', history)
+  const totalDepositsUSD = balances?.reduce((total: number, balance: { amountUSD: number }) => {
+    return total + balance.amountUSD
+  }, 0)
+  //console.log('totalDepositsUSD:', totalDepositsUSD)
 
   return (
     <>
@@ -146,12 +119,18 @@ export default function BentoBalances() {
               <div className="p-2 sm:p-4">
                 <div className="flex justify-between px-2 pb-4">
                   <div className="font-medium text-base text-gray-500">Total Deposits:</div>
-                  <div className="font-medium text-base text-gray-500">{totalDeposits}</div>
+                  <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
                 </div>
                 {balances &&
                   balances.map((balance: any, i: number) => {
                     // todo: remove increment for testing purposes
-                    return <TokenBalance tokenAddress={balance.token} key={balance.token + '_' + i} />
+                    return (
+                      <TokenBalance
+                        tokenAddress={balance.address}
+                        tokenDetails={balance}
+                        key={balance.address + '_' + i}
+                      />
+                    )
                   })}
               </div>
             </StyledBaseCard>
@@ -163,13 +142,16 @@ export default function BentoBalances() {
 }
 interface TokenBalanceProps {
   tokenAddress: string
+  tokenDetails: any
 }
 
-const TokenBalance = ({ tokenAddress }: TokenBalanceProps) => {
+const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
   const [expand, setExpand] = useState<boolean>(false)
-  const tokenDetails = useTokenInfo(tokenAddress)
-  const tokenBalanceBigInt = useBentoBalance(tokenAddress)
-  const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
+  //const tokenDetails = useTokenInfo(tokenAddress)
+  //const tokenBalanceBigInt = useBentoBalance(tokenAddress)
+  //const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
+  //console.log('tokenDetails:', tokenDetails)
+  const tokenBalance = formatFromBalance(tokenDetails?.amount?.value, tokenDetails?.amount?.decimals)
 
   return (
     <DarkCard padding={'0px'} marginBottom={'5px'}>
@@ -179,8 +161,13 @@ const TokenBalance = ({ tokenAddress }: TokenBalanceProps) => {
           <div className="hidden sm:block  font-semibold text-base md:text-lg">{tokenDetails && tokenDetails.name}</div>
         </div>
         <div className="flex items-center">
-          <div className="font-medium text-base md:text-lg mr-4">
-            {tokenBalance} {tokenDetails && tokenDetails.symbol}{' '}
+          <div>
+            <div className="font-medium text-base md:text-lg mr-4 text-right">
+              {tokenBalance} {tokenDetails && tokenDetails.symbol}{' '}
+            </div>
+            <div className="font-medium text-gray-600 text-xs md:text-sm mr-4 text-right">
+              ≈ {formattedNum(tokenDetails.amountUSD, true)}
+            </div>
           </div>
           {expand ? (
             <MinusSquare strokeWidth={2} size={24} onClick={() => setExpand(!expand)} />
