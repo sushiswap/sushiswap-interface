@@ -76,6 +76,8 @@ export default function KashiPair({
   }
   const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
 
+  if (!pair) return null
+
   return (
     <>
       <PageWrapper>

@@ -30,6 +30,7 @@ export default function KashiPairs() {
   const pairs = useKashiPairs()
   console.log('pairs:', pairs)
   console.log('counts', counts)
+  if (!pairs) return null
   return (
     <>
       <PageWrapper>

@@ -35,6 +35,8 @@ export default function Pool() {
     return pair.user.borrow.value.gt(0)
   })
 
+  if (!supplyPositions.length || !borrowPositions.length) return null
+
   return (
     <>
       <PageWrapper>
