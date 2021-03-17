@@ -45,7 +45,7 @@ const KashiCard = () => {
       <DarkCard padding="1rem">
         <AutoColumn gap="sm" justify="center">
           <div className="relative w-full">
-            <img src={KashiNeonSign} style={{ marginTop: '-4rem' }} className="m-auto w-2/3 sm:w-full" />
+            <img src={KashiNeonSign} style={{ marginTop: '-4rem' }} className="block m-auto w-2/3 sm:w-full" />
           </div>
           {/* <Text fontWeight={600} fontSize={16}>
         Margin Trading

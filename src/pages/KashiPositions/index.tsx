@@ -40,12 +40,13 @@ export default function Pool() {
   return (
     <>
       <PageWrapper>
-        <SwapPoolTabs active={'pool'} />
-        <div className="flex-col space-y-8">
-          <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
-          <Title count={counts.markets} />
-          <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
-        </div>
+        <AutoColumn style={{ width: '100%' }}>
+          <div className="flex-col space-y-8">
+            <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
+            <Title count={counts.markets} />
+            <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
+          </div>
+        </AutoColumn>
       </PageWrapper>
     </>
   )
@@ -137,7 +138,7 @@ interface OptionsProps {
 const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSelected }: OptionsProps) => {
   const theme = useContext(ThemeContext)
   return (
-    <div className="flex justify-between pb-2 px-7">
+    <div className="flex-col md:flex md:justify-between pb-2 px-7">
       <div className="block">
         <nav className="-mb-px flex space-x-4">
           <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
@@ -160,8 +161,7 @@ const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSele
           </Link>
         </nav>
       </div>
-      <div className="w-1/2 flex justify-between">
-        <div></div>
+      <div className="w-full flex md:w-1/2 md:justify-end">
         <div className="flex items-center">
           <div className="flex items-center space-x-2 mr-4">
             <div
@@ -205,10 +205,10 @@ const SupplyPositions = ({ supplyPositions }: any) => {
   return (
     <>
       <StyledBaseCard>
-        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-4 text-sm font-semibold text-gray-500">
+        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-5 text-sm font-semibold text-gray-500">
           <div className="hover:text-gray-400 col-span-2 md:col-span-2">Market</div>
-          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Supplying</div>
-          <div className="text-right hover:text-gray-400">Supply APY</div>
+          <div className="text-right pl-4 col-span-2 hover:text-gray-400">Supplying</div>
+          <div className="text-right hover:text-gray-400">APY</div>
         </div>
         <div className="flex-col space-y-2">
           {supplyPositions &&
@@ -218,7 +218,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                 <>
                   <Link to={'/bento/kashi/' + pair.address} className="block" key={pair.address}>
                     <div
-                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-4 text-sm font-semibold"
+                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-5 text-sm font-semibold"
                       style={{ background: '#19212e', borderRadius: '12px' }}
                     >
                       <div className="flex space-x-2 col-span-2 md:col-span-1">
@@ -231,7 +231,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                         </div>
                         <div>{pair.oracle.name}</div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right col-span-2">
                         <div>
                           {pair.user.asset.string} {pair.asset.symbol}
                         </div>
