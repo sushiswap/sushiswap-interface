@@ -19,9 +19,25 @@ interface Reducer {
   payload: any
 }
 
-// TODO: Type...
+// TODO: typing for data structure...
 interface KashiPair {
   id: string
+  address: string
+  collateral: {
+    address: string
+    symbol: string
+    decimals: number
+  }
+  asset: {
+    address: string
+    symbol: string
+    decimals: number
+  }
+  oracle: {
+    name: string
+  }
+  details: any
+  user: any
 }
 
 interface State {
@@ -38,7 +54,13 @@ const initialState: State = {
   pairs: []
 }
 
-export const KashiContext = createContext<any>(undefined)
+export const KashiContext = createContext<{
+  state: State
+  dispatch: React.Dispatch<any>
+}>({
+  state: initialState,
+  dispatch: () => null
+})
 
 const reducer: React.Reducer<State, Reducer> = (state, action) => {
   switch (action.type) {

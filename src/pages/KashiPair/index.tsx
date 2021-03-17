@@ -67,14 +67,6 @@ export default function KashiPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
-  console.log('kashi pair', pair)
-
-  const collateral = {
-    address: pair?.collateral.address,
-    symbol: pair?.collateral.symbol,
-    decimals: pair?.asset.decimals
-  }
-  const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
 
   if (!pair) return null
 
@@ -193,12 +185,12 @@ export default function KashiPair({
                 }}
               >
                 {pair && section === 'supply' && (
-                  <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+                  <Supply tokenAddress={pair.asset.address} tokenSymbol={pair.asset.symbol} pairAddress={pairAddress} />
                 )}
                 {pair && section === 'borrow' && (
                   <Borrow
-                    collateral={collateral}
-                    asset={asset}
+                    collateral={pair.collateral}
+                    asset={pair.asset}
                     pairAddress={pairAddress}
                     healthPercentage={pair.user.health.percentage}
                     collateralUSD={pair.user.collateral.usdString}

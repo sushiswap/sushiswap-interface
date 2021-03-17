@@ -28,8 +28,7 @@ export default function KashiPairs() {
   const theme = useContext(ThemeContext)
   const counts = useKashiCounts()
   const pairs = useKashiPairs()
-  console.log('pairs:', pairs)
-  console.log('counts', counts)
+
   if (!pairs) return null
   return (
     <>
@@ -131,9 +130,8 @@ export default function KashiPairs() {
                 <div className="text-right hover:text-gray-400">Borrow APY</div>
               </div>
               <div className="flex-col space-y-2">
-                {pairs &&
-                  pairs.length > 0 &&
-                  pairs.map((pair: any) => {
+                {pairs.length > 0 &&
+                  pairs.map(pair => {
                     return (
                       <div key={pair.address}>
                         <Link to={'/bento/kashi/' + String(pair.address).toLowerCase()} className="block">

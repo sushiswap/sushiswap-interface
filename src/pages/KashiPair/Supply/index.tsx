@@ -14,17 +14,16 @@ interface SupplyProps {
 }
 
 export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: SupplyProps) {
-  const kashi = useKashiPair(pairAddress)
-  console.log('pairDetails:', kashi)
+  const pair = useKashiPair(pairAddress)
 
-  const assetSymbol = kashi?.pair?.[0].asset.symbol
-  const supplyAPY = kashi?.pair?.[0]?.details.apr.asset
+  const assetSymbol = pair?.asset.symbol
+  const supplyAPY = pair?.details.apr.asset
 
-  const marketSupply = kashi?.pair?.[0].details.total.asset.string
-  const marketSupplyUSD = kashi?.pair?.[0].details.total.asset.usdString
+  const marketSupply = pair?.details.total.asset.string
+  const marketSupplyUSD = pair?.details.total.asset.usdString
 
-  const userSupply = kashi?.pair?.[0]?.user.asset.string
-  const userSupplyUSD = kashi?.pair?.[0]?.user.asset.usdString
+  const userSupply = pair?.user.asset.string
+  const userSupplyUSD = pair?.user.asset.usdString
 
   return (
     <>
