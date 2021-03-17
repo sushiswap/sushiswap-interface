@@ -166,27 +166,17 @@ const useKashi = () => {
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
-      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
-      let allShare = totalAsset.elastic.add(borrowShares)
-
-      let fraction = share.mul(totalAsset.base).div(allShare)
-
-      console.log('!!!decimals: ', amount.decimals)
-      console.log('!!!amount: ', amount.value)
-      console.log('!!!share: ', share)
-      console.log('borrowShares: ', borrowShares)
-      console.log('allShare: ', allShare)
-      console.log('fraction: ', fraction)
-
-      /*if (max) {
+      if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        fraction = pairUserDetails[1][0].userAssetAmount.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userAssetAmount
+        share = pairUserDetails[1][0].userAssetAmount
               .mul(totalAsset.base)
               .div(totalAsset.elastic)
-          : BigNumber.from(0)
-      }*/
+      }
+
+      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
+      let allShare = totalAsset.elastic.add(borrowShares)
+      let fraction = share.mul(totalAsset.base).div(allShare)
 
       let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
@@ -221,22 +211,19 @@ const useKashi = () => {
 
 
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+      if (max) {
+        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
+
+        share = pairUserDetails[1][0].userAssetAmount
+              .mul(totalAsset.base)
+              .div(totalAsset.elastic)
+      }
+
       let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
       let allShare = totalAsset.elastic.add(borrowShares)
-
       let fraction = share.mul(totalAsset.base).div(allShare)
 
       let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
-
-      /*if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
-        part = pairUserDetails[1][0].userAssetAmount.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userAssetAmount
-              .mul(totalAsset.base)
-              .div(totalAsset.elastic)
-          : BigNumber.from(0)
-      }*/
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -492,8 +479,6 @@ const useKashi = () => {
       // if part = 0 then use amount as long as amount isn't 0, check for amount being 0 above
       const repayPart = part.eq(BigNumber.from(0)) ? amount?.value : part
 
-      console.log('!!!part: ', repayPart)
-
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_REPAY],
@@ -533,8 +518,6 @@ const useKashi = () => {
 
       // if part == 0 then use amount as long as amount isn't 0, check for amount being 0 above
       const repayPart = part.eq(BigNumber.from(0)) ? amount?.value : part
-
-      console.log('!!!part: ', repayPart)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
