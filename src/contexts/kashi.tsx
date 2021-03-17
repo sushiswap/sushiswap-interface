@@ -2,7 +2,7 @@ import { useActiveWeb3React } from 'hooks'
 import useInterval from 'hooks/useInterval'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useKashiPairHelperContract } from 'sushi-hooks/useContract'
-import { BigNumber } from '@ethersproject/bignumber'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import Fraction from '../constants/Fraction'
 import sushiData from '@sushiswap/sushi-data'
 import getOracleName from '../sushi-hooks/queries/getOracleNames'
@@ -101,6 +101,10 @@ const pairAddresses = [
   '0x19F855526eb5Bc7C90690f88aF98bC870edEbcCc'
 ]
 
+function takeFee(amount: BigNumber) {
+  return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
+}
+
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -164,6 +168,22 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       )
         ? pairUserDetails[1][i].totalBorrowAmount
         : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
+      function accrue(amount: BigNumber) {
+        return amount
+          .mul(
+            pairUserDetails[1][i].accrueInfo.interestPerSecond.mul(
+              BigNumber.from(Date.now())
+                .div(BigNumber.from(1000))
+                .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+            )
+          )
+          .div(BigNumber.from('1000000000000000000'))
+      }
+
+      const currentUserBorrowAmount = pairUserDetails[1][i].userBorrowAmount.add(
+        takeFee(accrue(pairUserDetails[1][i].userBorrowAmount))
+      )
 
       return {
         id: address,
@@ -242,10 +262,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           health: {
             percentage: pairUserDetails[1][i].totalBorrowAmount.gt(BigNumber.from(0))
               ? Fraction.from(
-                  BigNumber.from('1000000000000000000')
-                    .mul(pairUserDetails[1][i].userBorrowAmount)
-                    .div(maxBorrowable),
-                  BigNumber.from(10).pow(18)
+                  currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(maxBorrowable),
+                  BigNumber.from(10).pow(16)
                 ).toString()
               : BigNumber.from(0)
           },
