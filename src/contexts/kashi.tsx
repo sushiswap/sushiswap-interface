@@ -349,7 +349,10 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               BigNumber.from('10000000000000000')
             ).toString(),
             currentSupplyAPR,
-            currentInterestPerYear: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(BigNumber.from(16)))
+            currentInterestPerYear: Fraction.from(
+              currentInterestPerYear,
+              BigNumber.from(10).pow(BigNumber.from(16))
+            ).toString()
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
