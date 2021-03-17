@@ -424,7 +424,7 @@ code {
 img,
 svg,
 object {
-  display: block;
+  /* display: block; */
   vertical-align: middle;
 }
 
