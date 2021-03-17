@@ -121,11 +121,16 @@ const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(68493150675000)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(24))
   .mul(BigNumber.from(365)) // approx 1000% APR
+
 const INTEREST_ELASTICITY = BigNumber.from('28800000000000000000000000000000000000000') // Half or double in 28800 seconds (8 hours) if linear
 const FACTOR_PRECISION = BigNumber.from('1000000000000000000')
 
 function takeFee(amount: BigNumber) {
   return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
+}
+
+function addBorrowFee(amount: BigNumber) {
+  return amount.mul(BigNumber.from(10005)).div(BigNumber.from(10000))
 }
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
@@ -164,6 +169,26 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     console.log('assetUSD:', assetUSD)
 
     const pairs = pairAddresses.map((address, i) => {
+      function accrue(amount: BigNumber) {
+        return amount
+          .mul(
+            pairUserDetails[1][i].accrueInfo.interestPerSecond.mul(
+              BigNumber.from(Date.now())
+                .div(BigNumber.from(1000))
+                .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+            )
+          )
+          .div(BigNumber.from('1000000000000000000'))
+      }
+
+      const currentBorrowAmount = pairUserDetails[1][i].totalBorrowAmount.add(
+        accrue(pairUserDetails[1][i].totalBorrowAmount)
+      )
+
+      const currentUserBorrowAmount = pairUserDetails[1][i].userBorrowAmount.add(
+        takeFee(accrue(pairUserDetails[1][i].userBorrowAmount))
+      )
+
       const maxBorrowableOracle = pairUserDetails[1][i].oracleExchangeRate.gt(BigNumber.from(0))
         ? pairUserDetails[1][i].userCollateralAmount
             .mul(BigNumber.from('1000000000000000000'))
@@ -191,26 +216,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       )
         ? pairUserDetails[1][i].totalBorrowAmount
         : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
-
-      function accrue(amount: BigNumber) {
-        return amount
-          .mul(
-            pairUserDetails[1][i].accrueInfo.interestPerSecond.mul(
-              BigNumber.from(Date.now())
-                .div(BigNumber.from(1000))
-                .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
-            )
-          )
-          .div(BigNumber.from('1000000000000000000'))
-      }
-
-      const currentBorrowAmount = pairUserDetails[1][i].totalBorrowAmount.add(
-        accrue(pairUserDetails[1][i].totalBorrowAmount)
-      )
-
-      const currentUserBorrowAmount = pairUserDetails[1][i].userBorrowAmount.add(
-        takeFee(accrue(pairUserDetails[1][i].userBorrowAmount))
-      )
 
       const utilization = currentBorrowAmount.gt(BigNumber.from(0))
         ? currentBorrowAmount
@@ -349,7 +354,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         },
         user: {
           health: {
-            percentage: pairUserDetails[1][i].totalBorrowAmount.gt(BigNumber.from(0))
+            percentage: maxBorrowable.gt(BigNumber.from(0))
               ? Fraction.from(
                   currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(maxBorrowable),
                   BigNumber.from(10).pow(16)
