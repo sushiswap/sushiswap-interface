@@ -2,22 +2,15 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
-
-import { useActiveWeb3React } from '../../hooks'
 import { transparentize } from 'polished'
-
 import { DarkCard, BaseCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
-
 import { BarChart, User, Search } from 'react-feather'
-
-import useKashiPairsHelper from '../../sushi-hooks/queries/useKashiPairsHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
-
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
-
 import { formattedPercent } from '../../utils'
+import { useKashiPairs, useKashiCounts } from '../../contexts/kashi'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 800px;
@@ -32,10 +25,11 @@ const StyledBaseCard = styled(BaseCard)`
 `
 
 export default function KashiPairs() {
-  const { account } = useActiveWeb3React()
-  const summary = useKashiPairsHelper()
   const theme = useContext(ThemeContext)
-  console.log('summary:', summary)
+  const counts = useKashiCounts()
+  const pairs = useKashiPairs()
+
+  if (!pairs) return null
   return (
     <>
       <PageWrapper>
@@ -47,7 +41,7 @@ export default function KashiPairs() {
                 <div className="flex-none">
                   <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
                     <div className="items-center text-center">
-                      <div className="text-2xl font-semibold">{summary?.userSuppliedPairCount || 0}</div>
+                      <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
                       <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
                         Pairs Supplied
                       </div>
@@ -70,7 +64,7 @@ export default function KashiPairs() {
                 <div className="flex-none">
                   <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
                     <div className="items-center text-center">
-                      <div className="text-2xl font-semibold">{summary?.userBorrowedPairCount || 0}</div>
+                      <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
                       <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
                         Pairs Borrowed
                       </div>
@@ -83,12 +77,12 @@ export default function KashiPairs() {
               </div>
             </StyledBaseCard>
           </div>
-          <div className="text-3xl font-semibold text-center">{summary?.pairsCount} Kashi Markets</div>
+          <div className="text-3xl font-semibold text-center">{counts.markets} Kashi Markets</div>
           <div>
             <div className="flex justify-between pb-2 px-7">
               <div className="block">
                 <nav className="-mb-px flex space-x-4">
-                  <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
+                  <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
                     <div className="flex items-center text-gray-500 font-medium">
                       <div className="whitespace-nowrap text-base mr-2 text-white">Markets</div>
                       <BarChart size={16} />
@@ -128,7 +122,7 @@ export default function KashiPairs() {
                 <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
                 <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
                 <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
-                <div className="text-right hover:text-gray-400 item-center align-middle">
+                <div className="flex text-right hover:text-gray-400 item-center justify-end">
                   Oracle
                   <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
                 </div>
@@ -136,12 +130,11 @@ export default function KashiPairs() {
                 <div className="text-right hover:text-gray-400">Borrow APY</div>
               </div>
               <div className="flex-col space-y-2">
-                {summary?.pairs &&
-                  summary.pairs.length > 0 &&
-                  summary.pairs.map((pair: any) => {
+                {pairs.length > 0 &&
+                  pairs.map(pair => {
                     return (
                       <div key={pair.address}>
-                        <Link to={'/bento/kashi/pair/' + String(pair.address).toLowerCase()} className="block">
+                        <Link to={'/bento/kashi/' + String(pair.address).toLowerCase()} className="block">
                           <div
                             className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
                             style={{ background: '#19212e', borderRadius: '12px' }}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChainId } from '@sushiswap/sdk'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import { Link, RouteComponentProps, useParams, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from '../../hooks'
@@ -13,7 +13,7 @@ import Supply from './Supply'
 import Borrow from './Borrow'
 import Leverage from './Leverage'
 import Tabs from './Tabs'
-import useKashiPairHelper from '../../sushi-hooks/queries/useKashiPairHelper'
+import { useKashiPair } from '../../contexts/kashi'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedNum } from '../../utils'
 import { BarChart, User, Search, ArrowLeft } from 'react-feather'
@@ -63,18 +63,15 @@ export default function KashiPair({
     params: { pairAddress }
   }
 }: RouteComponentProps<{ pairAddress: string }>) {
-  const [section, setSection] = useState('supply')
+  const location = useLocation()
+
+  const [section, setSection] = useState(new URLSearchParams(location.search).get('tab') || 'supply')
+
   const { chainId } = useActiveWeb3React()
 
-  const summary = useKashiPairHelper(pairAddress)
-  const pair = summary?.pair[0]
+  const pair = useKashiPair(pairAddress)
 
-  const collateral = {
-    address: pair?.collateral.address,
-    symbol: pair?.collateral.symbol,
-    decimals: pair?.asset.decimals
-  }
-  const asset = { address: pair?.asset.address, symbol: pair?.asset.symbol, decimals: pair?.asset.decimals }
+  if (!pair) return null
 
   return (
     <>
@@ -85,7 +82,7 @@ export default function KashiPair({
               {/* <StyledArrowLeft /> */}
               <div></div>
               <nav className="-mb-px flex space-x-4">
-                <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
+                <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
                   <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
                     <div className="whitespace-nowrap text-base mr-2">Markets</div>
                     <BarChart size={16} />
@@ -191,12 +188,12 @@ export default function KashiPair({
                 }}
               >
                 {pair && section === 'supply' && (
-                  <Supply tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+                  <Supply tokenAddress={pair.asset.address} tokenSymbol={pair.asset.symbol} pairAddress={pairAddress} />
                 )}
                 {pair && section === 'borrow' && (
                   <Borrow
-                    collateral={collateral}
-                    asset={asset}
+                    collateral={pair.collateral}
+                    asset={pair.asset}
                     pairAddress={pairAddress}
                     healthPercentage={pair.user.health.percentage}
                     collateralUSD={pair.user.collateral.usdString}

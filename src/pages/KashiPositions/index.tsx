@@ -2,33 +2,15 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
-
-import { useActiveWeb3React } from '../../hooks'
 import { transparentize } from 'polished'
-
 import { DarkCard, BaseCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
-
 import { BarChart, User, Search } from 'react-feather'
-import { ethers } from 'ethers'
-
-import useKashiPairsHelper from '../../sushi-hooks/queries/useKashiPairsHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
-import { assert } from 'console'
-import getOracleName from 'sushi-hooks/queries/getOracleNames'
-
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
-
 import { formattedPercent, formattedNum } from '../../utils'
-
-// const isAddress = (value: string) => {
-//   try {
-//     return ethers.utils.getAddress(value.toLowerCase())
-//   } catch {
-//     return false
-//   }
-// }
+import { useKashiPairs, useKashiCounts } from 'contexts/kashi'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 800px;
@@ -43,26 +25,25 @@ const StyledBaseCard = styled(BaseCard)`
 `
 
 export default function Pool() {
-  const { account } = useActiveWeb3React()
-  const summary = useKashiPairsHelper()
+  const counts = useKashiCounts()
+  const pairs = useKashiPairs()
 
-  const supplyPositions = summary?.pairs.filter(function(pair: any) {
+  const supplyPositions = pairs.filter(function(pair: any) {
     return pair.user.asset.value.gt(0)
   })
-  const borrowPositions = summary?.pairs.filter(function(pair: any) {
+  const borrowPositions = pairs.filter(function(pair: any) {
     return pair.user.borrow.value.gt(0)
   })
+
+  if (!supplyPositions.length || !borrowPositions.length) return null
 
   return (
     <>
       <PageWrapper>
         <SwapPoolTabs active={'pool'} />
         <div className="flex-col space-y-8">
-          <Summary
-            suppliedPairCount={summary?.userSuppliedPairCount}
-            borrowedPairCount={summary?.userBorrowedPairCount}
-          />
-          <Title count={summary?.pairsCount} />
+          <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
+          <Title count={counts.markets} />
           <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
         </div>
       </PageWrapper>
@@ -159,7 +140,7 @@ const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSele
     <div className="flex justify-between pb-2 px-7">
       <div className="block">
         <nav className="-mb-px flex space-x-4">
-          <Link to="/bento/kashi/pairs" className="border-transparent py-2 px-1 border-b-2">
+          <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
             <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
               <div className="whitespace-nowrap text-base mr-2">Markets</div>
               <BarChart size={16} />
@@ -235,7 +216,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
             supplyPositions.map((pair: any) => {
               return (
                 <>
-                  <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
+                  <Link to={'/bento/kashi/' + pair.address} className="block" key={pair.address}>
                     <div
                       className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-4 text-sm font-semibold"
                       style={{ background: '#19212e', borderRadius: '12px' }}

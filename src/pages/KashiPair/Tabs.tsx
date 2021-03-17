@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router'
 import { useDarkModeManager } from '../../state/user/hooks'
 
 interface Tab {
@@ -14,6 +15,7 @@ interface TabsProps {
 
 const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {
   const [darkMode] = useDarkModeManager()
+  const history = useHistory()
   return (
     <div className="-mb-px flex space-x-4" aria-label="Tabs">
       {tabs.map((tab: any) => {
@@ -21,6 +23,9 @@ const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {
           <button
             key={tab.id}
             onClick={() => {
+              const params = new URLSearchParams()
+              params.append('tab', tab.id)
+              history.push({ search: params.toString() })
               setSelected(tab.id)
             }}
             className={
