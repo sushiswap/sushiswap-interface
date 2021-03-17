@@ -26,12 +26,14 @@ interface RemoveCollateralInputPanelProps {
   tokenAddress: string
   pairAddress: string
   tokenSymbol?: string
+  max: string
 }
 
 export default function RemoveCollateralInputPanel({
   tokenAddress,
   pairAddress,
-  tokenSymbol
+  tokenSymbol,
+  max
 }: RemoveCollateralInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
 
@@ -64,8 +66,8 @@ export default function RemoveCollateralInputPanel({
   const maxDepositAmountInput = kashiBalances?.collateral
   //const atMaxDepositAmount = true
   const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
-  }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
+    maxDepositAmountInput && onUserDepositInput(max, true)
+  }, [maxDepositAmountInput, onUserDepositInput, max])
 
   console.log('state:', depositValue, maxSelected)
 
