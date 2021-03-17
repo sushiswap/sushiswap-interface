@@ -130,6 +130,7 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@fontsource/dm-sans": "^4.2.2",
     "@sushiswap/sushi-data": "^1.0.7",
     "@types/numeral": "^2.0.1",
     "numeral": "^2.0.6"

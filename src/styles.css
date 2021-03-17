@@ -140,10 +140,10 @@ button,
 input,
 select,
 textarea {
-  font-family: inherit; /* 1 */
-  font-size: 100%; /* 1 */
-  line-height: 1.15; /* 1 */
-  margin: 0; /* 2 */
+  /* font-family: inherit; 
+  font-size: 100%; 
+  line-height: 1.15;  */
+  margin: 0; 
 }
 
 /**
@@ -568,6 +568,10 @@ img {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .flex-1 {

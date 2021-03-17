@@ -191,11 +191,18 @@ export const TYPE = {
 
 export const FixedGlobalStyle = createGlobalStyle`
 html, input, textarea, button {
+  font-family: "DM Sans", sans-serif;
+  font-display: fallback;
+}
+input, textarea {
   font-family: 'Inter', sans-serif;
   font-display: fallback;
 }
 @supports (font-variation-settings: normal) {
-  html, input, textarea, button {
+  html, button {
+    font-family: "DM Sans", sans-serif;
+  }
+  input, textarea {
     font-family: 'Inter var', sans-serif;
   }
 }
