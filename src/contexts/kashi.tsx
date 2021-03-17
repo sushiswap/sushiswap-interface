@@ -156,11 +156,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     // Get SushiSwap Exchange pricing data for USD estimates
     const collateralSushiData = await sushiData.exchange.token({
       // eslint-disable-next-line @typescript-eslint/camelcase
-      token_address: getMainnetAddress(pairDetails[0].collateral)
+      token_address: getMainnetAddress(pairDetails?.[0]?.collateral)
     })
     const assetSushiData = await sushiData.exchange.token({
       // eslint-disable-next-line @typescript-eslint/camelcase
-      token_address: getMainnetAddress(pairDetails[0].asset)
+      token_address: getMainnetAddress(pairDetails?.[0]?.asset)
     })
     const exchangeEthPrice = await sushiData.exchange.ethPrice()
     const collateralUSD = collateralSushiData?.derivedETH * exchangeEthPrice
