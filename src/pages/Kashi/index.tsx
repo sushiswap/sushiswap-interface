@@ -122,7 +122,7 @@ export default function KashiPairs() {
                 <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
                 <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
                 <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
-                <div className="text-right hover:text-gray-400 item-center align-middle">
+                <div className="flex text-right hover:text-gray-400 item-center justify-end">
                   Oracle
                   <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
                 </div>
