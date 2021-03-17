@@ -156,22 +156,27 @@ const useKashi = () => {
   const removeAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const bentoTotalAsset = await bentoBoxContract?.totals(address)
       const totalAsset = await kashiPairCloneContract?.totalAsset()
-      let part = amount?.value.mul(totalAsset.base).div(totalAsset.elastic)
+      const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
+      let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        part = pairUserDetails[1][0].userAssetAmount.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userBorrowAmount.mul(totalAsset.base).div(totalAsset.elastic)
-          : BigNumber.from(0)
+        share = pairUserDetails[1][0].userAssetAmount
+              .mul(totalAsset.base)
+              .div(totalAsset.elastic)
       }
 
-      const removedPart = part.eq(BigNumber.from(0)) ? amount?.value : part
+      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
+      let allShare = totalAsset.elastic.add(borrowShares)
+      let fraction = share.mul(totalAsset.base).div(allShare)
+
+      let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -195,22 +200,28 @@ const useKashi = () => {
   const removeWithdrawAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       const tokenAddress = isAddressString(address)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const bentoTotalAsset = await bentoBoxContract?.totals(address)
       const totalAsset = await kashiPairCloneContract?.totalAsset()
-      let part = amount?.value.mul(totalAsset.base).div(totalAsset.elastic)
+      const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
+
+      let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        part = pairUserDetails[1][0].userAssetAmount.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userBorrowAmount.mul(totalAsset.base).div(totalAsset.elastic)
-          : BigNumber.from(0)
+        share = pairUserDetails[1][0].userAssetAmount
+              .mul(totalAsset.base)
+              .div(totalAsset.elastic)
       }
 
-      const removedPart = part.eq(BigNumber.from(0)) ? amount?.value : part
+      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
+      let allShare = totalAsset.elastic.add(borrowShares)
+      let fraction = share.mul(totalAsset.base).div(allShare)
+
+      let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -466,8 +477,6 @@ const useKashi = () => {
       // if part = 0 then use amount as long as amount isn't 0, check for amount being 0 above
       const repayPart = part.eq(BigNumber.from(0)) ? amount?.value : part
 
-      console.log('!!!part: ', repayPart)
-
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_REPAY],
@@ -508,8 +517,6 @@ const useKashi = () => {
       // if part == 0 then use amount as long as amount isn't 0, check for amount being 0 above
       const repayPart = part.eq(BigNumber.from(0)) ? amount?.value : part
 
-      console.log('!!!part: ', repayPart)
-
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_GET_REPAY_SHARE, ACTION_BENTO_DEPOSIT, ACTION_REPAY],
@@ -538,12 +545,12 @@ const useKashi = () => {
   const short = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(pairAddress)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
-      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
-
       const swapperAddress = isAddressString(BASE_SWAPPER[chainId!])
+
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
       const swapperContract = getContract(swapperAddress, BASE_SWAPPER_ABI, library!, account!)
+      const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
       const exchangeRate = await kashiPairCloneContract?.exchangeRate()
       const slippage = BigNumber.from('20') // 0.05%
@@ -578,6 +585,65 @@ const useKashi = () => {
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ]
         )
+
+        return addTransaction(tx, { summary: 'Short'})
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
+  const unwind = useCallback(
+    async(pairAddress: string, address: string, amount: BalanceProps) => {
+      const tokenAddress = isAddressString(pairAddress)
+      const pairAddressCheckSum = isAddressString(pairAddress)
+      const swapperAddress = isAddressString(BASE_SWAPPER[chainId!])
+
+      const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
+      const swapperContract = getContract(swapperAddress, BASE_SWAPPER_ABI, library!, account!)
+      const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
+
+      const exchangeRate = await kashiPairCloneContract?.exchangeRate()
+      const slippage = BigNumber.from('20') // 0.05%
+      //const minReturnedShare = amount.value.mul(exchangeRate.sub(exchangeRate.div(slippage))).div(ethers.utils.parseEther('1')) // the divide should be the token's decimals
+
+      const maxShare = amount.value.mul(BigNumber.from('1000000000000000000')).div(exchangeRate)
+      const maxShareAfterSlippage = maxShare.add(maxShare.mul(BigNumber.from('5')).div(BigNumber.from(100)))
+
+      console.log('ex: ', exchangeRate)
+      console.log('!!!maxShare: ', maxShareAfterSlippage)
+
+      const totalBorrow = await kashiPairCloneContract?.totalBorrow()
+      const part = maxShare.mul(totalBorrow.base).div(totalBorrow.elastic)
+
+      console.log('part: ', part)
+
+      let assetAddress = await kashiPairCloneContract?.asset()
+      let collateralAddress = await kashiPairCloneContract?.collateral()
+
+      let data = swapperContract.interface.encodeFunctionData("swap", [
+        collateralAddress,
+        assetAddress,
+        account,
+        "0",
+        maxShareAfterSlippage,
+      ])
+
+      try {
+        const tx = await kashiPairCloneContract?.cook(
+          [ACTION_REMOVE_COLLATERAL, ACTION_GET_REPAY_SHARE, ACTION_CALL, ACTION_REPAY, ACTION_ADD_COLLATERAL],
+          [0, 0, 0, 0],
+          [
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [maxShareAfterSlippage, swapperAddress]),
+            ethers.utils.defaultAbiCoder.encode(['int256'], [part]),
+            ethers.utils.defaultAbiCoder.encode(['address', 'bytes', 'bool', 'bool', 'uint8'], [swapperAddress, data.slice(0, -64), true, false, 2]),
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, account, false]),
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
+          ]
+        )
+        return addTransaction(tx, { summary: 'Unwind'})
       } catch (e) {
         console.log(e)
         return e
@@ -601,7 +667,8 @@ const useKashi = () => {
     borrowWithdraw,
     repayFromBento,
     repay,
-    short
+    short,
+    unwind
   }
 }
 
