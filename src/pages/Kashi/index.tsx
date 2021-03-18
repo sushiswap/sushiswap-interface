@@ -36,7 +36,7 @@ export default function KashiPairs() {
             {/* Mobile Layout Stats */}
             <div className="flex flex-col space-y-2 sm:hidden">
               <div className="flex-grow">
-                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
                     <div className="text-2xl font-semibold">$0.00</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -46,7 +46,7 @@ export default function KashiPairs() {
                 </DarkCard>
               </div>
               <div className="flex flex-row space-x-2">
-                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
                     <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -57,7 +57,7 @@ export default function KashiPairs() {
                     <div className="h-2 flex-1" style={{ background: '#6ca8ff' }} />
                   </div>
                 </DarkCard>
-                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
                     <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -73,7 +73,7 @@ export default function KashiPairs() {
             {/* Desktop Layout Stats */}
             <div className="hidden sm:flex sm:flex-row sm:space-x-4">
               <div className="flex-none">
-                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
                     <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -86,7 +86,7 @@ export default function KashiPairs() {
                 </DarkCard>
               </div>
               <div className="flex-grow">
-                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
                     <div className="text-2xl font-semibold">$0.00</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -96,7 +96,7 @@ export default function KashiPairs() {
                 </DarkCard>
               </div>
               <div className="flex-none">
-                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
                     <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>

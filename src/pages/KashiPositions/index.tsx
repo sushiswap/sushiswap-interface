@@ -59,7 +59,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
         {/* Mobile Layout Stats */}
         <div className="flex flex-col space-y-2 sm:hidden">
           <div className="flex-grow">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">$0.00</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -69,7 +69,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
             </DarkCard>
           </div>
           <div className="flex flex-row space-x-2">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">{suppliedPairCount || 0}</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -80,7 +80,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
                 <div className="h-2 flex-1" style={{ background: '#6ca8ff' }} />
               </div>
             </DarkCard>
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">{borrowedPairCount}</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -96,7 +96,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
         {/* Desktop Layout Stats */}
         <div className="hidden sm:flex sm:flex-row sm:space-x-4">
           <div className="flex-none">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">{suppliedPairCount || 0}</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -109,7 +109,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
             </DarkCard>
           </div>
           <div className="flex-grow">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">$0.00</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -119,7 +119,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
             </DarkCard>
           </div>
           <div className="flex-none">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">{borrowedPairCount}</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>

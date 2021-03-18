@@ -433,7 +433,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     })
   }, [account, getPairs, kashiPairHelperContract])
 
-  useInterval(pollPairs, 10000)
+  useInterval(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
 
   return <KashiContext.Provider value={{ state, dispatch }}>{children}</KashiContext.Provider>
 }
