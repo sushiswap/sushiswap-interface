@@ -1,18 +1,16 @@
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
 import { transparentize } from 'polished'
 import { DarkCard, BaseCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
-import QuestionHelper from '../../components/QuestionHelper'
-import { BarChart, User, Search } from 'react-feather'
+//import QuestionHelper from '../../components/QuestionHelper'
+import { BarChart, User } from 'react-feather'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import { formattedPercent, formattedNum } from '../../utils'
 import { useKashiPairs, useKashiCounts } from 'contexts/kashi'
 
-const PageWrapper = styled(AutoColumn)`
+const PageWrapper = styled.div`
   max-width: 800px;
   width: 100%;
 `
@@ -40,7 +38,6 @@ export default function Pool() {
   return (
     <>
       <PageWrapper>
-        <SwapPoolTabs active={'pool'} />
         <div className="flex-col space-y-8">
           <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
           <Title count={counts.markets} />
@@ -59,11 +56,49 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
   return (
     <div className="w-full md:w-2/3 m-auto">
       <StyledBaseCard>
-        <div className="flex space-x-4">
-          <div className="flex-none">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+        {/* Mobile Layout Stats */}
+        <div className="flex flex-col space-y-2 sm:hidden">
+          <div className="flex-grow">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
-                <div className="text-2xl font-semibold">{suppliedPairCount}</div>
+                <div className="text-2xl font-semibold">$0.00</div>
+                <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+                  Net Worth
+                </div>
+              </div>
+            </DarkCard>
+          </div>
+          <div className="flex flex-row space-x-2">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
+              <div className="items-center text-center">
+                <div className="text-2xl font-semibold">{suppliedPairCount || 0}</div>
+                <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+                  Pairs Supplied
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-2 flex">
+                <div className="h-2 flex-1" style={{ background: '#6ca8ff' }} />
+              </div>
+            </DarkCard>
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
+              <div className="items-center text-center">
+                <div className="text-2xl font-semibold">{borrowedPairCount}</div>
+                <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+                  Pairs Borrowed
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-2 flex">
+                <div className="h-2 flex-1" style={{ background: '#de5597' }} />
+              </div>
+            </DarkCard>
+          </div>
+        </div>
+        {/* Desktop Layout Stats */}
+        <div className="hidden sm:flex sm:flex-row sm:space-x-4">
+          <div className="flex-none">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
+              <div className="items-center text-center">
+                <div className="text-2xl font-semibold">{suppliedPairCount || 0}</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
                   Pairs Supplied
                 </div>
@@ -74,7 +109,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
             </DarkCard>
           </div>
           <div className="flex-grow">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">$0.00</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -84,7 +119,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
             </DarkCard>
           </div>
           <div className="flex-none">
-            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+            <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
               <div className="items-center text-center">
                 <div className="text-2xl font-semibold">{borrowedPairCount}</div>
                 <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
@@ -103,7 +138,7 @@ const Summary = ({ suppliedPairCount, borrowedPairCount }: SummaryProps) => {
 }
 
 const Title = ({ count }: any) => {
-  return <div className="text-3xl font-semibold text-center">{count} Kashi Markets</div>
+  return <div className="text-2xl md:text-3xl font-semibold text-center">{count} Kashi Markets</div>
 }
 
 interface PositionsDashboardProps {
@@ -137,8 +172,8 @@ interface OptionsProps {
 const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSelected }: OptionsProps) => {
   const theme = useContext(ThemeContext)
   return (
-    <div className="flex justify-between pb-2 px-7">
-      <div className="block">
+    <div className="flex flex-col md:flex-row justify-between pb-2 px-2 md:px-7">
+      <div className="block px-4">
         <nav className="-mb-px flex space-x-4">
           <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
             <div className="flex items-center text-gray-500 hover:text-gray-400 font-medium">
@@ -160,10 +195,10 @@ const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSele
           </Link>
         </nav>
       </div>
-      <div className="w-1/2 flex justify-between">
-        <div></div>
-        <div className="flex items-center">
-          <div className="flex items-center space-x-2 mr-4">
+      <div className="w-full flex md:w-1/2 md:justify-end">
+        {/* Desktop Styles */}
+        <div className="hidden w-full px-4 md:flex items-center md:justify-end">
+          <div className="py-3 md:py-0 flex items-center space-x-2 mr-4">
             <div
               className="px-2 py-1 font-semibold rounded"
               style={{ background: transparentize(0.6, theme.bg1), color: '#6ca8ff' }}
@@ -196,6 +231,43 @@ const Options = ({ supplyPositionsCount, borrowPositionsCount, selected, setSele
             </button>
           </div>
         </div>
+        {/* Mobile Styles */}
+        <div className="md:hidden w-full grid grid-cols-2 gap-4">
+          <button
+            className="px-4 py-3 md:py-0 flex justify-between items-center space-x-2 rounded-lg"
+            style={{ background: `${selected === 'supply' ? transparentize(0.6, theme.bg1) : ''}` }}
+            onClick={() => setSelected('supply')}
+          >
+            <div className="px-3 py-1 font-semibold rounded text-white" style={{ background: '#6ca8ff' }}>
+              {supplyPositionsCount}
+            </div>
+            <div
+              className={
+                `${selected === 'supply' ? 'text-white cursor-pointer' : 'text-gray-500 hover:text-gray-400'}` +
+                ' text-sm cursor-pointer'
+              }
+            >
+              Supplying
+            </div>
+          </button>
+          <button
+            className="px-4 py-3 sm:py-0 flex justify-between items-center space-x-2 rounded-lg"
+            style={{ background: `${selected === 'borrow' ? transparentize(0.6, theme.bg1) : ''}` }}
+            onClick={() => setSelected('borrow')}
+          >
+            <div className="px-3 py-1 font-semibold rounded text-white" style={{ background: '#de5597' }}>
+              {borrowPositionsCount}
+            </div>
+            <div
+              className={
+                `${selected === 'borrow' ? 'text-white cursor-pointer' : 'text-gray-500 hover:text-gray-400'}` +
+                ' text-sm cursor-pointer'
+              }
+            >
+              Borrowing
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -205,10 +277,11 @@ const SupplyPositions = ({ supplyPositions }: any) => {
   return (
     <>
       <StyledBaseCard>
-        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-4 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-2 md:col-span-2">Market</div>
-          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Supplying</div>
-          <div className="text-right hover:text-gray-400">Supply APY</div>
+        <div className="pb-4 px-4 grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold text-gray-500">
+          <div className="hover:text-gray-400 col-span-2 sm:col-span-1">Market</div>
+          <div className="hidden sm:block"></div>
+          <div className="text-right pl-4 hover:text-gray-400">Supplying</div>
+          <div className="text-right hover:text-gray-400">APY</div>
         </div>
         <div className="flex-col space-y-2">
           {supplyPositions &&
@@ -218,14 +291,17 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                 <>
                   <Link to={'/bento/kashi/' + pair.address} className="block" key={pair.address}>
                     <div
-                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-4 text-sm font-semibold"
+                      className="py-4 px-4 items-center align-center grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold"
                       style={{ background: '#19212e', borderRadius: '12px' }}
                     >
-                      <div className="flex space-x-2 col-span-2 md:col-span-1">
-                        <img src={getTokenIcon(pair.collateral.address)} className="w-12 y-12 rounded-lg" />
-                        <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
+                      <div className="flex space-x-2 col-span-2 sm:col-span-1">
+                        <img
+                          src={getTokenIcon(pair.collateral.address)}
+                          className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                        />
+                        <img src={getTokenIcon(pair.asset.address)} className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg" />
                       </div>
-                      <div className="text-left hidden md:block pl-4">
+                      <div className="text-left hidden sm:block pl-4">
                         <div>
                           {pair.collateral.symbol} / {pair.asset.symbol}
                         </div>
@@ -233,7 +309,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                       </div>
                       <div className="text-right">
                         <div>
-                          {pair.user.asset.string} {pair.asset.symbol}
+                          {formattedNum(pair.user.asset.string, false)} {pair.asset.symbol}
                         </div>
                         <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.asset.usdString, true)}</div>
                       </div>
@@ -253,13 +329,13 @@ const BorrowPositions = ({ borrowPositions }: any) => {
   return (
     <>
       <StyledBaseCard>
-        <div className="pb-4 px-4 grid grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
-          <div className="hover:text-gray-400 col-span-2 md:col-span-1"></div>
-          <div className="text-right hidden md:block pl-4 hover:text-gray-400">Borrowing</div>
+        <div className="pb-4 px-4 grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold text-gray-500">
+          <div className="hover:text-gray-400 col-span-1 md:col-span-1">Market</div>
+          <div className="hidden sm:block"></div>
+          <div className="text-right pl-4 hover:text-gray-400">Borrowing</div>
           <div className="text-right hover:text-gray-400">Collateral</div>
-          <div className="text-right hover:text-gray-400">Limit Used</div>
-          <div className="text-right hover:text-gray-400">Borrow APR</div>
+          <div className="hidden sm:block text-right hover:text-gray-400">Limit Used</div>
+          <div className="hidden sm:block text-right hover:text-gray-400">Borrow APR</div>
         </div>
         <div className="flex-col space-y-2">
           {borrowPositions &&
@@ -269,23 +345,50 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                 <>
                   <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
                     <div
-                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
+                      className="py-4 px-4 items-center align-center grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold"
                       style={{ background: '#19212e', borderRadius: '12px' }}
                     >
-                      <div className="flex space-x-2 col-span-1 md:col-span-1">
-                        <img src={getTokenIcon(pair.collateral.address)} className="w-12 y-12 rounded-lg" />
-                        <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
+                      <div className="flex space-x-2 col-span-1">
+                        <img
+                          src={getTokenIcon(pair.collateral.address)}
+                          className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                        />
+                        <img src={getTokenIcon(pair.asset.address)} className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg" />
                       </div>
-                      <div className="text-left hidden md:block pl-4">
+                      <div className="text-left hidden sm:block pl-4">
                         <div>
-                          {pair.collateral.symbol} / {pair.collateral.symbol}
+                          {pair.collateral.symbol} / {pair.asset.symbol}
                         </div>
                         <div>{pair.oracle.name}</div>
                       </div>
-                      <div className="text-right">{pair.collateral.symbol}</div>
-                      <div className="text-right">{pair.asset.symbol}</div>
-                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
-                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
+                      <div className="text-right">
+                        <div>
+                          {formattedNum(pair.user.borrow.string, false)} {pair.asset.symbol}
+                        </div>
+                        <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.borrow.usdString, true)}</div>
+                      </div>
+                      <div className="text-right">
+                        <div>
+                          {formattedNum(pair.user.collateral.string, false)} {pair.collateral.symbol}
+                        </div>
+                        <div className="text-gray-500 text-sm">
+                          ≈ {formattedNum(pair.user.collateral.usdString, true)}
+                        </div>
+                      </div>
+                      <div className="hidden sm:block text-right">{formattedPercent(pair.user.health.percentage)}</div>
+                      <div className="hidden sm:block text-right">{formattedPercent(pair.details.apr.borrow)}</div>
+                      <div className="sm:hidden text-right col-span-3">
+                        <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
+                          <div className="flex">
+                            <div className="text-gray-500 mr-2">Limit Used: </div>
+                            <div>{formattedPercent(pair.user.health.percentage)}</div>
+                          </div>
+                          <div className="flex">
+                            <div className="text-gray-500 mr-2">Borrow APY: </div>
+                            <div>{formattedPercent(pair.details.apr.borrow)}</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 </>

@@ -23,11 +23,11 @@ const CONVERSION = {
 }
 
 const getMainnetAddress = (address: string) => {
-  const MAINNET_ADDRESS = CONVERSION[address.toLowerCase()]
+  const MAINNET_ADDRESS = CONVERSION[address?.toLowerCase()]
   if (!MAINNET_ADDRESS) {
-    return address.toLowerCase()
+    return address?.toLowerCase()
   } else {
-    return MAINNET_ADDRESS.toLowerCase()
+    return MAINNET_ADDRESS?.toLowerCase()
   }
 }
 

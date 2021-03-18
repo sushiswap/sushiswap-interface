@@ -292,6 +292,15 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         BigNumber.from(10).pow(BigNumber.from(16))
       ).toString()
 
+      // todo: if totalAssetAmount === 0 is userAssetAmount assumed to be 0?
+      const userSupply = pairUserDetails[1][i].totalAssetAmount.gt(BigNumber.from(0))
+        ? pairUserDetails[1][i].userAssetAmount.add(
+            pairUserDetails[1][i].userAssetAmount
+              .div(pairUserDetails[1][i].totalAssetAmount)
+              .mul(pairUserDetails[1][i].totalBorrowAmount)
+          )
+        : BigNumber.from(0)
+
       return {
         id: address,
         address: address,
@@ -353,6 +362,20 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                   ).toString()
                 ) * assetUSD
+            },
+            supply: {
+              value: pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+              string: Fraction.from(
+                pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+              ).toString(),
+              usdString:
+                Number(
+                  Fraction.from(
+                    pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+                    BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                  ).toString()
+                ) * assetUSD
             }
           },
           rate: {
@@ -397,6 +420,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
                 ).toString()
               ) * collateralUSD
+          },
+          supply: {
+            value: userSupply,
+            string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)),
+            usdString:
+              Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD
           },
           asset: {
             value: pairUserDetails[1][i].userAssetAmount,
@@ -443,7 +472,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     })
   }, [account, getPairs, kashiPairHelperContract])
 
-  useInterval(pollPairs, 10000)
+  useInterval(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
 
   return <KashiContext.Provider value={{ state, dispatch }}>{children}</KashiContext.Provider>
 }
