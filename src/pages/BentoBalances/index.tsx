@@ -63,7 +63,7 @@ export default function BentoBalances() {
       <PageWrapper>
         <AutoColumn gap="md" justify="center">
           <AutoColumn gap="md" style={{ width: '100%' }}>
-            <div className="flex md:hidden pb-4 justify-between">
+            <div className="px-6 pb-2 md:px-2 md:pb-4 flex md:hidden justify-between">
               <button
                 onClick={() => {
                   if (history.length < 3) {
@@ -72,11 +72,12 @@ export default function BentoBalances() {
                     history.goBack()
                   }
                 }}
-                className="mr-2"
+                className="mr-2 p-2 rounded-full"
+                style={{ background: `${transparentize(0.6, theme.bg1)}` }}
               >
                 <ChevronLeft strokeWidth={2} size={24} />
               </button>
-              <div className="flex float-right">
+              <div className="flex float-right items-center">
                 <img src={BentoBoxLogo} className="w-10 mr-2" />
                 <div className="font-semibold">My Bento Balances</div>
               </div>
@@ -91,17 +92,18 @@ export default function BentoBalances() {
                       history.goBack()
                     }
                   }}
-                  className="mr-2"
+                  className="mr-4 p-2 rounded-full"
+                  style={{ background: `${transparentize(0.6, theme.bg1)}` }}
                 >
                   <ChevronLeft strokeWidth={2} size={24} />
                 </button>
                 <img src={BentoBoxLogo} className="w-10 mr-2" />
                 <div className="font-semibold text-lg">My Bento Balances</div>
               </div>
-              <div className="w-full md:w-1/2">
+              <div className="px-4 md:px-0 w-full md:w-1/2">
                 <div className="relative">
                   <input
-                    className="py-2 px-4 rounded-full w-full focus:outline-none"
+                    className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
                     style={{ background: `${transparentize(0.6, theme.bg1)}` }}
                     //onChange={e => search(e.target.value)}
                     //value={term}
@@ -177,9 +179,9 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
         </div>
       </div>
       {expand && (
-        <div className="p-2 space-y-2 sm:p-4 sm:flex sm:space-x-2 sm:space-y-0">
+        <div className="p-2 space-y-4 sm:p-4 sm:flex sm:space-x-2 sm:space-y-0">
           <div className="w-full text-center">
-            <div className="pb-2 text-lg font-semibold text-gray-400">Deposit to Bento</div>
+            <div className="pb-2 text-base font-semibold text-gray-400">Deposit to Bento</div>
             <TokenDepositPanel
               id={tokenAddress}
               tokenAddress={tokenAddress}
@@ -188,7 +190,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
             />
           </div>
           <div className="w-full text-center">
-            <div className="pb-2 text-lg font-semibold text-gray-400">Withdraw to Wallet</div>
+            <div className="pb-2 text-base font-semibold text-gray-400">Withdraw to Wallet</div>
             <TokenWithdrawPanel
               id={tokenAddress}
               tokenAddress={tokenAddress}

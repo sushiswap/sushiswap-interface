@@ -45,7 +45,7 @@ export default function Pool() {
       <PageWrapper>
         <AutoColumn gap="md" justify="center">
           <AutoColumn gap="md" style={{ width: '100%' }}>
-            <div className="flex justify-between pb-2 items-center px-4">
+            <div className="px-6 md:px-4 flex justify-between pb-2 items-center">
               <div>
                 <div className="hidden md:block text-2xl font-semibold">BentoBox Apps</div>
               </div>
@@ -60,7 +60,7 @@ export default function Pool() {
                 <div>Connect Wallet</div>
               )}
             </div>
-            <div className="pb-2 md:pb-4">
+            <div className="px-4 pb-2 md:px-0 md:pb-4">
               <VoteCard>
                 <CardSection>
                   <AutoColumn gap="md">
