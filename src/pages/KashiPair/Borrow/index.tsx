@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { WrapperNoPadding } from '../../../components/swap/styleds'
 
@@ -26,8 +25,10 @@ interface SupplyProps {
   healthPercentage: string
   collateralUSD: string
   borrowUSD: string
-  max: string
+  maxRemove: string
+  maxBorrow: string
 }
+
 export default function Supply({
   collateral,
   asset,
@@ -35,7 +36,8 @@ export default function Supply({
   healthPercentage,
   collateralUSD,
   borrowUSD,
-  max
+  maxRemove,
+  maxBorrow
 }: SupplyProps) {
   return (
     <>
@@ -73,6 +75,7 @@ export default function Supply({
               tokenAddress={collateral.address}
               tokenSymbol={collateral.symbol}
               pairAddress={pairAddress}
+              max={maxRemove}
             />
           </div>
           <div className="flex justify-between items-center px-1">
@@ -84,7 +87,7 @@ export default function Supply({
               tokenSymbol={asset.symbol}
               tokenDecimals={asset.decimals}
               pairAddress={pairAddress}
-              max={max}
+              max={maxBorrow}
             />
             <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
           </div>

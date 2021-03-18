@@ -1,18 +1,16 @@
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
 import { transparentize } from 'polished'
 import { DarkCard, BaseCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
-import QuestionHelper from '../../components/QuestionHelper'
-import { BarChart, User, Search } from 'react-feather'
+//import QuestionHelper from '../../components/QuestionHelper'
+import { BarChart, User } from 'react-feather'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import { formattedPercent, formattedNum } from '../../utils'
 import { useKashiPairs, useKashiCounts } from 'contexts/kashi'
 
-const PageWrapper = styled(AutoColumn)`
+const PageWrapper = styled.div`
   max-width: 800px;
   width: 100%;
 `
@@ -40,13 +38,11 @@ export default function Pool() {
   return (
     <>
       <PageWrapper>
-        <AutoColumn style={{ width: '100%' }}>
-          <div className="flex-col space-y-8">
-            <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
-            <Title count={counts.markets} />
-            <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
-          </div>
-        </AutoColumn>
+        <div className="flex-col space-y-8">
+          <Summary suppliedPairCount={counts.pairsSupplied} borrowedPairCount={counts.pairsBorrowed} />
+          <Title count={counts.markets} />
+          <PositionsDashboard supplyPositions={supplyPositions} borrowPositions={borrowPositions} />
+        </div>
       </PageWrapper>
     </>
   )

@@ -198,16 +198,30 @@ export default function KashiPair({
                     healthPercentage={pair.user.health.percentage}
                     collateralUSD={pair.user.collateral.usdString}
                     borrowUSD={pair.user.borrow.usdString}
-                    max={pair.user.borrow.max}
+                    maxRemove={pair.user.collateral.max}
+                    maxBorrow={pair.user.borrow.max}
                   />
                 )}
                 {/* {pair && section === 'leverage' && <Leverage />} */}
               </div>
-              <div className="py-4 px-6"></div>
             </StyledBaseCard>
           </div>
         </div>
       </PageWrapper>
+      <div>
+        {process.env.NODE_ENV !== 'production' && (
+          <pre
+            style={{
+              background: '#19212e',
+              borderRadius: '12px',
+              margin: '16px',
+              padding: '16px'
+            }}
+          >
+            {JSON.stringify(pair, null, 2)}
+          </pre>
+        )}
+      </div>
     </>
   )
 }

@@ -217,6 +217,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         ? pairUserDetails[1][i].totalBorrowAmount
         : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
 
+      const safeMaxRemovable = pairUserDetails[1][i].userCollateralAmount.gt(BigNumber.from(0))
+        ? pairUserDetails[1][i].userCollateralAmount.sub(
+            pairUserDetails[1][i].userCollateralAmount
+              .mul(safeMaxBorrowable.sub(safeMaxBorrowableLeft))
+              .div(safeMaxBorrowable)
+          )
+        : BigNumber.from(0)
+
       const utilization = currentBorrowAmount.gt(BigNumber.from(0))
         ? currentBorrowAmount
             .mul(BigNumber.from('1000000000000000000'))
@@ -349,7 +357,10 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               BigNumber.from('10000000000000000')
             ).toString(),
             currentSupplyAPR,
-            currentInterestPerYear: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(BigNumber.from(16)))
+            currentInterestPerYear: Fraction.from(
+              currentInterestPerYear,
+              BigNumber.from(10).pow(BigNumber.from(16))
+            ).toString()
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
@@ -363,6 +374,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               : BigNumber.from(0)
           },
           collateral: {
+            max: Fraction.from(safeMaxRemovable, BigNumber.from(10).pow(pairDetails[i].collateralDecimals)).toString(),
             value: pairUserDetails[1][i].userCollateralAmount,
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
