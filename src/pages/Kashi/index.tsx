@@ -174,8 +174,14 @@ export default function KashiPairs() {
                           style={{ background: '#19212e', borderRadius: '12px' }}
                         >
                           <div className="flex space-x-2 col-span-2 md:col-span-1">
-                            <img src={getTokenIcon(pair.collateral.address)} className="w-12 y-12 rounded-lg" />
-                            <img src={getTokenIcon(pair.asset.address)} className="w-12 y-12 rounded-lg" />
+                            <img
+                              src={getTokenIcon(pair.collateral.address)}
+                              className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                            />
+                            <img
+                              src={getTokenIcon(pair.asset.address)}
+                              className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                            />
                           </div>
                           <div className="text-right hidden md:block pl-4">{pair.collateral.symbol}</div>
                           <div className="text-right hidden md:block">{pair.asset.symbol}</div>
