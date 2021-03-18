@@ -58,23 +58,21 @@ export default function WithdrawInputPanel({
   const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
   // track and parse user input for Deposit Input
-  const [depositValue, setDepositValue] = useState('')
+  const [withdrawValue, setWithdrawValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+
+  const onUserWithdrawInput = useCallback((value: string, max = false) => {
     setMaxSelected(max)
-    setDepositValue(depositValue)
+    setWithdrawValue(value)
   }, [])
 
-  // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
-  // used for max input button
-  const maxDepositAmountInput = assetBalance
-  //const atMaxDepositAmount = true
-  const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(assetBalance?.value, true)
-  }, [maxDepositAmountInput, onUserDepositInput, assetBalance])
 
-  console.log('state:', depositValue, maxSelected)
+  const maxWithdrawAmountInput = assetBalance
+
+  const handleMaxDeposit = useCallback(() => {
+    maxWithdrawAmountInput && onUserWithdrawInput(tokenBalance, true)
+  }, [maxWithdrawAmountInput, onUserWithdrawInput, tokenBalance])
 
   return (
     <>
@@ -111,9 +109,9 @@ export default function WithdrawInputPanel({
             <>
               <NumericalInput
                 className="token-amount-input"
-                value={depositValue}
+                value={withdrawValue}
                 onUserInput={val => {
-                  onUserDepositInput(val)
+                  onUserWithdrawInput(val)
                 }}
               />
               {account && label !== 'To' && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
@@ -132,28 +130,28 @@ export default function WithdrawInputPanel({
                 disabled={
                   pendingTx ||
                   !tokenBalance ||
-                  Number(depositValue) === 0 ||
+                  Number(withdrawValue) === 0 ||
                   // todo this should be a bigInt comparison
-                  Number(depositValue) > Number(tokenBalance)
+                  Number(withdrawValue) > Number(tokenBalance)
                 }
                 onClick={async () => {
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await removeWithdrawAsset(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await removeWithdrawAsset(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
                       await removeWithdrawAsset(
                         pairAddress,
                         tokenAddress,
-                        formatToBalance(depositValue, decimals),
+                        formatToBalance(withdrawValue, decimals),
                         false
                       )
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await removeAsset(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await removeAsset(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
-                      await removeAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
+                      await removeAsset(pairAddress, tokenAddress, formatToBalance(withdrawValue, decimals), false)
                     }
                   }
                   setPendingTx(false)

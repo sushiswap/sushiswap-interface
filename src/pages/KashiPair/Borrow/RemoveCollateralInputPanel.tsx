@@ -55,7 +55,7 @@ export default function RemoveCollateralInputPanel({
   // track and parse user input for Deposit Input
   const [depositValue, setDepositValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+  const onUserRemoveInput = useCallback((depositValue: string, max = false) => {
     setMaxSelected(max)
     setDepositValue(depositValue)
   }, [])
@@ -63,11 +63,11 @@ export default function RemoveCollateralInputPanel({
   // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
   // used for max input button
-  const maxDepositAmountInput = kashiBalances?.collateral
+  const maxRemoveAmountInput = max
   //const atMaxDepositAmount = true
-  const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(max, true)
-  }, [maxDepositAmountInput, onUserDepositInput, max])
+  const handleMaxRemove = useCallback(() => {
+    maxRemoveAmountInput && onUserRemoveInput(max, true)
+  }, [onUserRemoveInput, max, maxRemoveAmountInput])
 
   console.log('state:', depositValue, maxSelected)
 
@@ -91,7 +91,7 @@ export default function RemoveCollateralInputPanel({
               </TYPE.body>
               {account && (
                 <TYPE.body
-                  onClick={handleMaxDeposit}
+                  onClick={handleMaxRemove}
                   color={theme.text2}
                   fontWeight={500}
                   fontSize={14}
@@ -108,10 +108,10 @@ export default function RemoveCollateralInputPanel({
                 className="token-amount-input"
                 value={depositValue}
                 onUserInput={val => {
-                  onUserDepositInput(val)
+                  onUserRemoveInput(val)
                 }}
               />
-              {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
+              {account && <StyledBalanceMax onClick={handleMaxRemove}>MAX</StyledBalanceMax>}
             </>
             {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
               <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
@@ -135,7 +135,7 @@ export default function RemoveCollateralInputPanel({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await removeWithdrawCollateral(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await removeWithdrawCollateral(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
                     } else {
                       await removeWithdrawCollateral(
                         pairAddress,
@@ -146,7 +146,7 @@ export default function RemoveCollateralInputPanel({
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await removeCollateral(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await removeCollateral(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
                     } else {
                       await removeCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
                     }

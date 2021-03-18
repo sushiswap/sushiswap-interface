@@ -217,6 +217,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         ? pairUserDetails[1][i].totalBorrowAmount
         : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
 
+      // console.log(pairUserDetails[1][i].userCollateralAmount)
+
       const safeMaxRemovable = pairUserDetails[1][i].userCollateralAmount.gt(BigNumber.from(0))
         ? pairUserDetails[1][i].userCollateralAmount.sub(
             pairUserDetails[1][i].userCollateralAmount
@@ -224,6 +226,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               .div(safeMaxBorrowable)
           )
         : BigNumber.from(0)
+
+      // const safeMaxRemovable = pairUserDetails[1][i].userCollateralAmount.gt(BigNumber.from(0))
+      //   ? pairUserDetails[1][i].userCollateralAmount.sub(
+      //       pairUserDetails[1][i].userCollateralAmount
+      //         .div(safeMaxBorrowableLeft)
+      //         .mul(safeMaxBorrowable.sub(safeMaxBorrowableLeft))
+      //     )
+      //   : BigNumber.from(0)
 
       const utilization = currentBorrowAmount.gt(BigNumber.from(0))
         ? currentBorrowAmount

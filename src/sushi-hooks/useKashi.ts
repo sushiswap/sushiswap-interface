@@ -22,6 +22,7 @@ import { BASE_SWAPPER } from '../constants'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 import { ChainId } from '@sushiswap/sdk'
 import { getSigner } from '../utils'
+import { useKashiPairs } from 'contexts/kashi'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
@@ -107,6 +108,8 @@ const useKashi = () => {
   const bentoBoxContract = useBentoBoxContract(true) // withSigner
   const kashiPairContract = useKashiPairContract(true) // withSigner
   const kashiPairHelperContract = useKashiPairHelperContract()
+
+  const pairs = useKashiPairs()
 
   // Check if Kashi is approved
   const [kashiApproved, setKashiApproved] = useState(false)
@@ -428,10 +431,13 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const pair = pairs.find(pair => pair.address === pairAddress)
+
       let amountToWithdraw = amount.value
       if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        amountToWithdraw = pairUserDetails[1][0].userCollateralAmount
+        if (pair) {
+          amountToWithdraw = pair.user.collateral.max
+        }
       }
 
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
@@ -682,7 +688,7 @@ const useKashi = () => {
       //const minReturnedShare = amount.value.mul(exchangeRate.sub(exchangeRate.div(slippage))).div(ethers.utils.parseEther('1')) // the divide should be the token's decimals
 
       const maxShare = amount.value.mul(BigNumber.from('1000000000000000000')).div(exchangeRate)
-      const maxShareAfterSlippage = maxShare.add(maxShare.mul(BigNumber.from('5')).div(BigNumber.from(100)))
+      const maxShareAfterSlippage = maxShare.add(maxShare.mul(BigNumber.from(5)).div(BigNumber.from(100)))
 
       console.log('ex: ', exchangeRate)
       console.log('!!!maxShare: ', maxShareAfterSlippage)
@@ -695,7 +701,11 @@ const useKashi = () => {
       const assetAddress = await kashiPairCloneContract?.asset()
       const collateralAddress = await kashiPairCloneContract?.collateral()
 
+<<<<<<< HEAD
       const data = swapperContract.interface.encodeFunctionData('swap', [
+=======
+      let data = swapperContract.interface.encodeFunctionData('swap', [
+>>>>>>> 86209eb4a3fdbf1fbdefcdc0a5079b6dcf7e44fc
         collateralAddress,
         assetAddress,
         account,
