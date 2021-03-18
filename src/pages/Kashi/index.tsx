@@ -33,7 +33,45 @@ export default function KashiPairs() {
       <div className="flex-col space-y-8">
         <div className="w-full md:w-2/3 m-auto">
           <StyledBaseCard>
-            <div className="flex space-x-4">
+            {/* Mobile Layout Stats */}
+            <div className="flex flex-col space-y-2 sm:hidden">
+              <div className="flex-grow">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                  <div className="items-center text-center">
+                    <div className="text-2xl font-semibold">$0.00</div>
+                    <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+                      Net Worth
+                    </div>
+                  </div>
+                </DarkCard>
+              </div>
+              <div className="flex flex-row space-x-2">
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                  <div className="items-center text-center">
+                    <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
+                    <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+                      Pairs Supplied
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 w-full h-2 flex">
+                    <div className="h-2 flex-1" style={{ background: '#6ca8ff' }} />
+                  </div>
+                </DarkCard>
+                <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
+                  <div className="items-center text-center">
+                    <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
+                    <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+                      Pairs Borrowed
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 w-full h-2 flex">
+                    <div className="h-2 flex-1" style={{ background: '#de5597' }} />
+                  </div>
+                </DarkCard>
+              </div>
+            </div>
+            {/* Desktop Layout Stats */}
+            <div className="hidden sm:flex sm:flex-row sm:space-x-4">
               <div className="flex-none">
                 <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px">
                   <div className="items-center text-center">
@@ -73,10 +111,10 @@ export default function KashiPairs() {
             </div>
           </StyledBaseCard>
         </div>
-        <div className="text-3xl font-semibold text-center">{counts.markets} Kashi Markets</div>
+        <div className="text-2xl md:text-3xl font-semibold text-center">{counts.markets} Kashi Markets</div>
         <div>
-          <div className="md:flex justify-between pb-2 px-7">
-            <div className="block w-full sm:w-1/2">
+          <div className="flex flex-col md:flex-row justify-between pb-2 px-2 md:px-7">
+            <div className="block px-4">
               <nav className="-mb-px flex space-x-4">
                 <Link to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
                   <div className="flex items-center text-gray-500 font-medium">
@@ -98,10 +136,10 @@ export default function KashiPairs() {
                 </Link>
               </nav>
             </div>
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2">
               <div className="relative">
                 <input
-                  className="py-2 px-4 rounded-full w-full focus:outline-none"
+                  className="py-3 px-4 rounded-full w-full focus:outline-none"
                   style={{ background: `${transparentize(0.6, theme.bg1)}` }}
                   //onChange={e => search(e.target.value)}
                   //value={term}
@@ -146,19 +184,23 @@ export default function KashiPairs() {
                           <div className="text-right">{formattedPercent(pair.details.apr.currentInterestPerYear)}</div>
                         </div>
                       </Link>
-                      {/* {process.env.NODE_ENV !== 'production' && (
-                          <div
-                            style={{
-                              background: '#19212e',
-                              borderRadius: '12px',
-                              marginTop: '16px',
-                              padding: '16px',
-                              width: '100%'
-                            }}
-                          >
-                            <pre>{JSON.stringify(pair, null, 2)}</pre>
-                          </div>
-                        )} */}
+                      {process.env.NODE_ENV !== 'production' && (
+                        <div
+                          style={{
+                            background: '#19212e',
+                            borderRadius: '12px',
+                            marginTop: '10px',
+                            padding: '16px',
+                            width: '100%',
+                            overflowX: 'scroll',
+                            fontSize: '10px'
+                          }}
+                        >
+                          <pre>
+                            <code>{JSON.stringify(pair, null, 2)}</code>
+                          </pre>
+                        </div>
+                      )}
                     </div>
                   )
                 })}
