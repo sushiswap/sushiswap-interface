@@ -19,6 +19,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 
 import { BASE_SWAPPER } from '../constants'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
+import { useKashiPairs } from 'contexts/kashi'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
@@ -50,6 +51,8 @@ const useKashi = () => {
   const bentoBoxContract = useBentoBoxContract(true) // withSigner
   const kashiPairContract = useKashiPairContract(true) // withSigner
   const kashiPairHelperContract = useKashiPairHelperContract()
+
+  const pairs = useKashiPairs()
 
   // Check if Kashi is approved
   const [kashiApproved, setKashiApproved] = useState(false)
@@ -167,9 +170,7 @@ const useKashi = () => {
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        share = pairUserDetails[1][0].userAssetAmount
-              .mul(totalAsset.base)
-              .div(totalAsset.elastic)
+        share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
 
       let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
@@ -207,14 +208,11 @@ const useKashi = () => {
       const totalAsset = await kashiPairCloneContract?.totalAsset()
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
-
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        share = pairUserDetails[1][0].userAssetAmount
-              .mul(totalAsset.base)
-              .div(totalAsset.elastic)
+        share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
 
       let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
@@ -356,10 +354,13 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const pair = pairs.find(pair => pair.address === pairAddress)
+
       let amountToWithdraw = amount.value
       if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        amountToWithdraw = pairUserDetails[1][0].userCollateralAmount
+        if (pair) {
+          amountToWithdraw = pair.user.collateral.max
+        }
       }
 
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
@@ -586,7 +587,7 @@ const useKashi = () => {
           ]
         )
 
-        return addTransaction(tx, { summary: 'Short'})
+        return addTransaction(tx, { summary: 'Short' })
       } catch (e) {
         console.log(e)
         return e
@@ -596,7 +597,7 @@ const useKashi = () => {
   )
 
   const unwind = useCallback(
-    async(pairAddress: string, address: string, amount: BalanceProps) => {
+    async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(pairAddress)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const swapperAddress = isAddressString(BASE_SWAPPER[chainId!])
@@ -610,7 +611,7 @@ const useKashi = () => {
       //const minReturnedShare = amount.value.mul(exchangeRate.sub(exchangeRate.div(slippage))).div(ethers.utils.parseEther('1')) // the divide should be the token's decimals
 
       const maxShare = amount.value.mul(BigNumber.from('1000000000000000000')).div(exchangeRate)
-      const maxShareAfterSlippage = maxShare.add(maxShare.mul(BigNumber.from('5')).div(BigNumber.from(100)))
+      const maxShareAfterSlippage = maxShare.add(maxShare.mul(BigNumber.from(5)).div(BigNumber.from(100)))
 
       console.log('ex: ', exchangeRate)
       console.log('!!!maxShare: ', maxShareAfterSlippage)
@@ -623,12 +624,12 @@ const useKashi = () => {
       let assetAddress = await kashiPairCloneContract?.asset()
       let collateralAddress = await kashiPairCloneContract?.collateral()
 
-      let data = swapperContract.interface.encodeFunctionData("swap", [
+      let data = swapperContract.interface.encodeFunctionData('swap', [
         collateralAddress,
         assetAddress,
         account,
-        "0",
-        maxShareAfterSlippage,
+        '0',
+        maxShareAfterSlippage
       ])
 
       try {
@@ -638,12 +639,15 @@ const useKashi = () => {
           [
             ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [maxShareAfterSlippage, swapperAddress]),
             ethers.utils.defaultAbiCoder.encode(['int256'], [part]),
-            ethers.utils.defaultAbiCoder.encode(['address', 'bytes', 'bool', 'bool', 'uint8'], [swapperAddress, data.slice(0, -64), true, false, 2]),
+            ethers.utils.defaultAbiCoder.encode(
+              ['address', 'bytes', 'bool', 'bool', 'uint8'],
+              [swapperAddress, data.slice(0, -64), true, false, 2]
+            ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, account, false]),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ]
         )
-        return addTransaction(tx, { summary: 'Unwind'})
+        return addTransaction(tx, { summary: 'Unwind' })
       } catch (e) {
         console.log(e)
         return e

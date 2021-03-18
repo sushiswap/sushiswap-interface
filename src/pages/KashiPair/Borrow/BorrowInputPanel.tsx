@@ -48,8 +48,6 @@ export default function BorrowInputPanel({
 
   const { borrow, borrowWithdraw } = useKashi()
 
-  //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
-  const tokenBalance = formatFromBalance(bentoBalance?.value, bentoBalance?.decimals)
   const decimals = bentoBalance?.decimals
 
   // check whether the user has approved BentoBox on the token
@@ -57,23 +55,20 @@ export default function BorrowInputPanel({
   const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
   // track and parse user input for Deposit Input
-  const [depositValue, setDepositValue] = useState('')
+  const [borrowValue, setBorrowValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserBorrowInput = useCallback((borrowValue: string, max = false) => {
+  const onUserBorrowInput = useCallback((value: string, max = false) => {
     setMaxSelected(max)
-    setDepositValue(borrowValue)
+    setBorrowValue(value)
   }, [])
 
-  // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
-  // used for max input button
-  const maxDepositAmountInput = bentoBalance
-  //const atMaxDepositAmount = true
-  const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserBorrowInput(max, true)
-  }, [maxDepositAmountInput, onUserBorrowInput, max])
 
-  console.log('state:', depositValue, maxSelected)
+  const maxBorrowAmountInput = bentoBalance
+
+  const handleMaxBorrow = useCallback(() => {
+    maxBorrowAmountInput && onUserBorrowInput(max, true)
+  }, [maxBorrowAmountInput, onUserBorrowInput, max])
 
   return (
     <>
@@ -86,7 +81,7 @@ export default function BorrowInputPanel({
               </TYPE.body>
               {account && (
                 <TYPE.body
-                  onClick={handleMaxDeposit}
+                  onClick={handleMaxBorrow}
                   color={theme.text2}
                   fontWeight={500}
                   fontSize={14}
@@ -101,12 +96,12 @@ export default function BorrowInputPanel({
             <>
               <NumericalInput
                 className="token-amount-input"
-                value={depositValue}
+                value={borrowValue}
                 onUserInput={val => {
                   onUserBorrowInput(val)
                 }}
               />
-              {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
+              {account && <StyledBalanceMax onClick={handleMaxBorrow}>MAX</StyledBalanceMax>}
             </>
             {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
               <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
@@ -119,26 +114,26 @@ export default function BorrowInputPanel({
             )}
             {approvalA === ApprovalState.APPROVED && (
               <ButtonSelect
-                disabled={
-                  pendingTx ||
-                  !tokenBalance ||
-                  Number(depositValue) === 0 ||
-                  // todo this should be a bigInt comparison
-                  Number(depositValue) > Number(tokenBalance)
-                }
+                // disabled={
+                //   pendingTx ||
+                //   !tokenBalance ||
+                //   Number(depositValue) === 0 ||
+                //   // todo this should be a bigInt comparison
+                //   Number(depositValue) > Number(tokenBalance)
+                // }
                 onClick={async () => {
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await borrowWithdraw(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
                     } else {
-                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
+                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(borrowValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await borrow(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await borrow(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
                     } else {
-                      await borrow(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
+                      await borrow(pairAddress, tokenAddress, formatToBalance(borrowValue, decimals), false)
                     }
                   }
                   setPendingTx(false)
