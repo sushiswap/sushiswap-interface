@@ -701,11 +701,7 @@ const useKashi = () => {
       const assetAddress = await kashiPairCloneContract?.asset()
       const collateralAddress = await kashiPairCloneContract?.collateral()
 
-<<<<<<< HEAD
       const data = swapperContract.interface.encodeFunctionData('swap', [
-=======
-      let data = swapperContract.interface.encodeFunctionData('swap', [
->>>>>>> 86209eb4a3fdbf1fbdefcdc0a5079b6dcf7e44fc
         collateralAddress,
         assetAddress,
         account,
