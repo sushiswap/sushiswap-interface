@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect } from 'react'
+
 import {
   useBentoBoxContract,
   useBentoHelperContract,
@@ -19,6 +20,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 
 import { BASE_SWAPPER } from '../constants'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
+import { ChainId } from '@sushiswap/sdk'
+import { getSigner } from '../utils'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
@@ -41,6 +44,60 @@ const ACTION_BENTO_SETAPPROVAL = 24
 
 // Any external call (except to BentoBox)
 const ACTION_CALL = 30
+
+async function signMasterContractApproval(
+  bentoBoxContract: ethers.Contract | null,
+  masterContract: ethers.Contract | null,
+  user: string,
+  library: ethers.providers.Web3Provider,
+  approved: boolean,
+  chainId: ChainId | undefined,
+  nonce: undefined
+) {
+  const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
+  if (!nonce) {
+    console.log('Fetching nonce...')
+    nonce = await bentoBoxContract?.nonces(user)
+    console.log(nonce)
+  }
+  const message = {
+    warning,
+    user,
+    masterContract,
+    approved,
+    nonce
+  }
+
+  // EIP712Domain(string name,uint256 chainId,address verifyingContract)
+  // SetMasterContractApproval(string warning,address user,address masterContract,bool approved,uint256 nonce)
+  const typedData = {
+    types: {
+      // EIP712Domain: [
+      //   { name: 'name', type: 'string' },
+      //   { name: 'chainId', type: 'uint256' },
+      //   { name: 'verifyingContract', type: 'address' }
+      // ],
+      SetMasterContractApproval: [
+        { name: 'warning', type: 'string' },
+        { name: 'user', type: 'address' },
+        { name: 'masterContract', type: 'address' },
+        { name: 'approved', type: 'bool' },
+        { name: 'nonce', type: 'uint256' }
+      ]
+    },
+    primaryType: 'SetMasterContractApproval',
+    domain: {
+      name: 'BentoBox V1',
+      chainId: chainId,
+      verifyingContract: bentoBoxContract?.address
+    },
+    message: message
+  }
+  console.log('typedData:', typedData)
+
+  const signer = getSigner(library, user)
+  return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
+}
 
 const useKashi = () => {
   const { account, library, chainId } = useActiveWeb3React()
@@ -82,7 +139,7 @@ const useKashi = () => {
       const tx = await bentoBoxContract?.setMasterContractApproval(
         account,
         kashiPairContract?.address,
-        true,
+        false,
         0,
         ethers.constants.HashZero,
         ethers.constants.HashZero
@@ -93,6 +150,26 @@ const useKashi = () => {
       return e
     }
   }, [account, addTransaction, bentoBoxContract, kashiPairContract?.address])
+
+  // Description: Approve MasterContract for BentoBox  - eip217
+  const approveMaster = useCallback(async () => {
+    try {
+      const tx = await signMasterContractApproval(
+        bentoBoxContract,
+        kashiPairContract,
+        account!,
+        library!,
+        false,
+        chainId,
+        undefined
+      )
+      console.log(tx)
+      //preturn addTransaction(tx, { summary: 'Enable Kashi' })
+    } catch (e) {
+      console.log(e)
+      return e
+    }
+  }, [account, bentoBoxContract, chainId, kashiPairContract, library])
 
   // Description: Add Asset from BentoBox
   // Type: Asset
@@ -167,16 +244,14 @@ const useKashi = () => {
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        share = pairUserDetails[1][0].userAssetAmount
-              .mul(totalAsset.base)
-              .div(totalAsset.elastic)
+        share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
 
-      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
-      let allShare = totalAsset.elastic.add(borrowShares)
-      let fraction = share.mul(totalAsset.base).div(allShare)
+      const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
+      const allShare = totalAsset.elastic.add(borrowShares)
+      const fraction = share.mul(totalAsset.base).div(allShare)
 
-      let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
+      const removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -191,7 +266,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, kashiPairHelperContract, library]
+    [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
   )
 
   // Description: Remove Asset and withdraw to wallet
@@ -207,21 +282,18 @@ const useKashi = () => {
       const totalAsset = await kashiPairCloneContract?.totalAsset()
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
-
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
 
-        share = pairUserDetails[1][0].userAssetAmount
-              .mul(totalAsset.base)
-              .div(totalAsset.elastic)
+        share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
 
-      let borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
-      let allShare = totalAsset.elastic.add(borrowShares)
-      let fraction = share.mul(totalAsset.base).div(allShare)
+      const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
+      const allShare = totalAsset.elastic.add(borrowShares)
+      const fraction = share.mul(totalAsset.base).div(allShare)
 
-      let removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
+      const removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -242,7 +314,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, kashiPairHelperContract, library]
+    [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
   )
 
   // Description: Add collateral from bentobox
@@ -586,17 +658,17 @@ const useKashi = () => {
           ]
         )
 
-        return addTransaction(tx, { summary: 'Short'})
+        return addTransaction(tx, { summary: 'Short' })
       } catch (e) {
         console.log(e)
         return e
       }
     },
-    [account, addTransaction, library]
+    [account, addTransaction, chainId, kashiPairHelperContract, library]
   )
 
   const unwind = useCallback(
-    async(pairAddress: string, address: string, amount: BalanceProps) => {
+    async (pairAddress: string, address: string, amount: BalanceProps) => {
       const tokenAddress = isAddressString(pairAddress)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const swapperAddress = isAddressString(BASE_SWAPPER[chainId!])
@@ -620,15 +692,15 @@ const useKashi = () => {
 
       console.log('part: ', part)
 
-      let assetAddress = await kashiPairCloneContract?.asset()
-      let collateralAddress = await kashiPairCloneContract?.collateral()
+      const assetAddress = await kashiPairCloneContract?.asset()
+      const collateralAddress = await kashiPairCloneContract?.collateral()
 
-      let data = swapperContract.interface.encodeFunctionData("swap", [
+      const data = swapperContract.interface.encodeFunctionData('swap', [
         collateralAddress,
         assetAddress,
         account,
-        "0",
-        maxShareAfterSlippage,
+        '0',
+        maxShareAfterSlippage
       ])
 
       try {
@@ -638,23 +710,27 @@ const useKashi = () => {
           [
             ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [maxShareAfterSlippage, swapperAddress]),
             ethers.utils.defaultAbiCoder.encode(['int256'], [part]),
-            ethers.utils.defaultAbiCoder.encode(['address', 'bytes', 'bool', 'bool', 'uint8'], [swapperAddress, data.slice(0, -64), true, false, 2]),
+            ethers.utils.defaultAbiCoder.encode(
+              ['address', 'bytes', 'bool', 'bool', 'uint8'],
+              [swapperAddress, data.slice(0, -64), true, false, 2]
+            ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, account, false]),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ]
         )
-        return addTransaction(tx, { summary: 'Unwind'})
+        return addTransaction(tx, { summary: 'Unwind' })
       } catch (e) {
         console.log(e)
         return e
       }
     },
-    [account, chainId, library]
+    [account, addTransaction, chainId, kashiPairHelperContract, library]
   )
 
   return {
     kashiApproved,
     approve,
+    approveMaster,
     addAsset,
     depositAddAsset,
     removeAsset,

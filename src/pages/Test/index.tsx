@@ -1,7 +1,7 @@
 import React from 'react'
 import useKashi from '../../sushi-hooks/useKashi'
-import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
-import { BigNumber } from '@ethersproject/bignumber'
+//import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
+//import { BigNumber } from '@ethersproject/bignumber'
 
 const TestBed = () => {
   // const { kashiApproved, approve, approveAsset, approveCollateral, depositAddCollateral } = useKashi()
@@ -10,8 +10,11 @@ const TestBed = () => {
   //   '0xc2118d4d90b274016cB7a54c03EF52E6c537D957'
   // )
 
-  const summary = useBentoBalances()
-  console.log(summary)
+  const { approveMaster } = useKashi()
+  approveMaster()
+
+  //const summary = useBentoBalances()
+  //console.log(summary)
 
   /*const bentoBoxContract = useBentoBoxContract(true) // withSigner
   console.log(await bentoBoxContract?.)*/

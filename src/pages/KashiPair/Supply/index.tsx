@@ -19,11 +19,11 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
   const assetSymbol = pair?.asset.symbol
   const supplyAPY = pair?.details.apr.asset
 
-  const marketSupply = pair?.details.total.asset.string
-  const marketSupplyUSD = pair?.details.total.asset.usdString
+  const marketSupply = pair?.details.total.supply.string
+  const marketSupplyUSD = pair?.details.total.supply.usdString
 
-  const userSupply = pair?.user.asset.string
-  const userSupplyUSD = pair?.user.asset.usdString
+  const userSupply = pair?.user.supply.string
+  const userSupplyUSD = pair?.user.supply.usdString
 
   return (
     <>
