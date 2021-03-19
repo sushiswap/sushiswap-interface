@@ -140,7 +140,8 @@ export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | 
       //   address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
       //   break
       case ChainId.ROPSTEN:
-        address = '0xccb146728f6D94Fe22D1030E7FA369bd33916824'
+        address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
+        //address = '0xccb146728f6D94Fe22D1030E7FA369bd33916824'
         break
     }
   }
@@ -156,8 +157,8 @@ export function useKashiPairContract(withSignerIfPossible?: boolean): Contract |
       //   address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
       //   break
       case ChainId.ROPSTEN:
-        address = '0xD57469335E06eD52B57278A0Ff4ECB62bAd05e99'
-        //address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
+        //address = '0xD57469335E06eD52B57278A0Ff4ECB62bAd05e99'
+        address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
         //address = '0xd43960bF734ACaFE8BDb6DCF53212eF58a5FA4f3'
         break
     }
@@ -174,8 +175,8 @@ export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Cont
         address = ''
         break
       case ChainId.ROPSTEN:
-        address = '0xe3BfB820d18cc5c9cC371b1e1d5199CBFCf69B64'
-        //address = '0xAe338e484372e4487B5438421c48342c100c9E16'
+        //address = '0xe3BfB820d18cc5c9cC371b1e1d5199CBFCf69B64'
+        address = '0xAe338e484372e4487B5438421c48342c100c9E16'
         break
     }
   }
@@ -191,8 +192,8 @@ export function useBentoHelperContract(): Contract | null {
       //   address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
       //   break
       case ChainId.ROPSTEN:
-        address = '0x56CA07C11A38B868dBdA58a9762069e025B73dc1'
-        //address = '0x24f2ee10c05ad21ed6870c5c8a34a36a5f8fdc69'
+        //address = '0x56CA07C11A38B868dBdA58a9762069e025B73dc1'
+        address = '0x24f2ee10c05ad21ed6870c5c8a34a36a5f8fdc69'
         break
     }
   }

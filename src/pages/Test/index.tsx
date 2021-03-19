@@ -11,7 +11,7 @@ const TestBed = () => {
   // )
 
   const { approveMaster } = useKashi()
-  approveMaster()
+  //approveMaster()
 
   //const summary = useBentoBalances()
   //console.log(summary)
