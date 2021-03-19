@@ -1,17 +1,20 @@
 import React, { useState, useCallback } from 'react'
-import useTheme from '../../../hooks/useTheme'
+import useTheme from 'hooks/useTheme'
 import { useTranslation } from 'react-i18next'
-import { TYPE } from '../../../theme'
-import { RowBetween } from '../../../components/Row'
-import { Input as NumericalInput } from '../../../components/NumericalInput'
-import { Dots } from '../../Pool/styleds'
-import { useActiveWeb3React } from '../../../hooks'
-import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
-import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
-import useKashi from '../../../sushi-hooks/useKashi'
-import useTokenBalance from '../../../sushi-hooks/queries/useTokenBalance'
-import { formatFromBalance, formatToBalance } from '../../../utils'
+
+import { TYPE } from 'theme'
+import { RowBetween } from 'components/Row'
+import { Input as NumericalInput } from 'components/NumericalInput'
+import { Dots } from '../../../Pool/styleds'
+
+import { useActiveWeb3React } from 'hooks'
+import { useBentoBoxContract } from 'sushi-hooks/useContract'
+import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
+import useBentoBalance from 'sushi-hooks/queries/useBentoBalance'
+import useKashi from 'sushi-hooks/useKashi'
+
+import useTokenBalance from 'sushi-hooks/queries/useTokenBalance'
+import { formatFromBalance, formatToBalance } from 'utils'
 
 import {
   InputRow,
@@ -25,17 +28,19 @@ import {
   StyledBalanceMax
 } from '../styled'
 
-interface AddCollateralInputPanelProps {
+interface SupplyInputPanelProps {
+  id: string
   tokenAddress: string
   pairAddress: string
-  tokenSymbol?: string
+  tokenSymbol: string
 }
 
-export default function AddCollateralInputPanel({
-  tokenAddress,
-  tokenSymbol,
-  pairAddress
-}: AddCollateralInputPanelProps) {
+export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbol }: SupplyInputPanelProps) {
+  const { t } = useTranslation()
+  const { account } = useActiveWeb3React()
+
+  const theme = useTheme()
+
   const walletBalance = useTokenBalance(tokenAddress)
   const bentoBalance = useBentoBalance(tokenAddress)
 
@@ -43,11 +48,7 @@ export default function AddCollateralInputPanel({
 
   const balance = balanceFrom && balanceFrom === 'bento' ? bentoBalance : walletBalance
 
-  const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
-  const theme = useTheme()
-
-  const { depositAddCollateral, addCollateral } = useKashi()
+  const { depositAddAsset, addAsset } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(balance?.value, balance?.decimals)
@@ -78,19 +79,17 @@ export default function AddCollateralInputPanel({
 
   return (
     <>
-      <InputPanel id="add-collateral-input-panel">
-        <Container cornerRadiusBottomNone={true}>
+      <InputPanel id="supply-input">
+        <Container cornerRadiusBottomNone={true} cornerRadiusTopNone={false}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
-                Add <span className="font-semibold">{tokenSymbol}</span> from{' '}
+                Supply <span className="font-semibold">{tokenSymbol}</span> from{' '}
                 <span>
                   {balanceFrom === 'bento' ? (
                     <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
                   ) : (
-                    balanceFrom === 'wallet' && (
-                      <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
-                    )
+                    <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
                   )}
                 </span>
               </TYPE.body>
@@ -102,7 +101,7 @@ export default function AddCollateralInputPanel({
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  Max: {tokenBalance} {tokenSymbol}
+                  Balance: {tokenBalance} {tokenSymbol}
                 </TYPE.body>
               )}
             </RowBetween>
@@ -140,22 +139,22 @@ export default function AddCollateralInputPanel({
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await depositAddCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await depositAddAsset(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await depositAddCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await depositAddAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await addCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await addAsset(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await addCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await addAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   }
                   setPendingTx(false)
                 }}
               >
                 <Aligner>
-                  <StyledButtonName>Add</StyledButtonName>
+                  <StyledButtonName>Supply</StyledButtonName>
                 </Aligner>
               </ButtonSelect>
             )}

@@ -40,15 +40,15 @@ import SushiBar from './SushiBar'
 import Bento from './Bento'
 import BentoBalances from './BentoBalances'
 import Kashi from './Kashi'
-import KashiPair from './KashiPair'
-import KashiPositions from './KashiPositions'
+import KashiPair from './Kashi/Pair'
+import KashiPositions from './Kashi/Positions'
 
 // Additional Tools
 import Tools from './Tools'
 import Saave from './Saave'
 
 import ComingSoonModal from '../components/ComingSoonModal'
-import { KashiProvider } from '../contexts/kashi'
+import { KashiProvider } from '../context/kashi'
 
 const AppWrapper = styled.div`
   display: flex;

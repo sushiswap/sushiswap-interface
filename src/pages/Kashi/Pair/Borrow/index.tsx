@@ -1,16 +1,16 @@
 import React from 'react'
 
-import { WrapperNoPadding } from '../../../components/swap/styleds'
+import { WrapperNoPadding } from '../../../../components/swap/styleds'
 
-import { AutoColumn } from '../../../components/Column'
-import QuestionHelper from '../../../components/QuestionHelper'
+import { AutoColumn } from '../../../../components/Column'
+import QuestionHelper from '../../../../components/QuestionHelper'
 
 import BorrowInputPanel from './BorrowInputPanel'
 import PayInputPanel from './PayInputPanel'
 import AddCollateral from './AddCollateralInputPanel'
 import RemoveCollateral from './RemoveCollateralInputPanel'
 
-import { formattedNum, formattedPercent } from '../../../utils'
+import { formattedNum, formattedPercent } from '../../../../utils'
 
 interface TokenProps {
   address: string

@@ -50,6 +50,9 @@ export function colors(darkMode: boolean): Colors {
     text4: darkMode ? '#565A69' : '#C3C5CB',
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
 
+    mediumEmphesisText: '#7f7f7f',
+    highEmphesisText: '#bfbfbf',
+
     // backgrounds / greys
     bg1: darkMode ? '#18212e' : '#FFFFFF',
     bg2: darkMode ? '#202d3f' : '#F7F8FA',

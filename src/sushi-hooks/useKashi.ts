@@ -22,7 +22,7 @@ import { BASE_SWAPPER } from '../constants'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 import { ChainId } from '@sushiswap/sdk'
 import { getSigner } from '../utils'
-import { useKashiPairs } from 'contexts/kashi'
+import { useKashiPairs } from 'context/kashi'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1

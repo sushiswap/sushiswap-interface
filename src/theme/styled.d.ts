@@ -13,6 +13,9 @@ export interface Colors {
   text4: Color
   text5: Color
 
+  mediumEmphesisText: Color
+  highEmphesisText: Color
+
   // backgrounds / greys
   bg1: Color
   bg2: Color

@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-
-import { WrapperNoPadding } from '../../../components/swap/styleds'
-
-import { AutoColumn } from '../../../components/Column'
+import { WrapperNoPadding } from 'components/swap/styleds'
+import { AutoColumn } from 'components/Column'
 import LeverageInputPanel from './LeverageInputPanel'
 
 export const PluginBody = styled.div`

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { ThemeContext } from 'styled-components'
-import { TYPE } from '../../../theme'
-import { AutoColumn } from '../../../components/Column'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { RowBetween, RowFixed } from '../../../components/Row'
+import { TYPE } from 'theme'
+import { AutoColumn } from 'components/Column'
+import QuestionHelper from 'components/QuestionHelper'
+import { RowBetween, RowFixed } from 'components/Row'
 
 const LeverageDetails = () => {
   const theme = useContext(ThemeContext)

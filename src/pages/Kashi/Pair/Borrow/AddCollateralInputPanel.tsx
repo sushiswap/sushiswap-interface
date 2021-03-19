@@ -1,20 +1,17 @@
 import React, { useState, useCallback } from 'react'
-import useTheme from '../../../hooks/useTheme'
+import useTheme from '../../../../hooks/useTheme'
 import { useTranslation } from 'react-i18next'
-
-import { TYPE } from '../../../theme'
-import { RowBetween } from '../../../components/Row'
-import { Input as NumericalInput } from '../../../components/NumericalInput'
-import { Dots } from '../../Pool/styleds'
-
-import { useActiveWeb3React } from '../../../hooks'
-import { useBentoBoxContract } from '../../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../../sushi-hooks/useApproveCallback'
-import useBentoBalance from '../../../sushi-hooks/queries/useBentoBalance'
-import useKashi from '../../../sushi-hooks/useKashi'
-
-import useTokenBalance from '../../../sushi-hooks/queries/useTokenBalance'
-import { formatFromBalance, formatToBalance } from '../../../utils'
+import { TYPE } from '../../../../theme'
+import { RowBetween } from '../../../../components/Row'
+import { Input as NumericalInput } from '../../../../components/NumericalInput'
+import { Dots } from '../../../Pool/styleds'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useBentoBoxContract } from '../../../../sushi-hooks/useContract'
+import { ApprovalState, useApproveCallback } from '../../../../sushi-hooks/useApproveCallback'
+import useBentoBalance from '../../../../sushi-hooks/queries/useBentoBalance'
+import useKashi from '../../../../sushi-hooks/useKashi'
+import useTokenBalance from '../../../../sushi-hooks/queries/useTokenBalance'
+import { formatFromBalance, formatToBalance } from '../../../../utils'
 
 import {
   InputRow,
@@ -28,19 +25,17 @@ import {
   StyledBalanceMax
 } from '../styled'
 
-interface SupplyInputPanelProps {
-  id: string
+interface AddCollateralInputPanelProps {
   tokenAddress: string
   pairAddress: string
-  tokenSymbol: string
+  tokenSymbol?: string
 }
 
-export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbol }: SupplyInputPanelProps) {
-  const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
-
-  const theme = useTheme()
-
+export default function AddCollateralInputPanel({
+  tokenAddress,
+  tokenSymbol,
+  pairAddress
+}: AddCollateralInputPanelProps) {
   const walletBalance = useTokenBalance(tokenAddress)
   const bentoBalance = useBentoBalance(tokenAddress)
 
@@ -48,7 +43,11 @@ export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbo
 
   const balance = balanceFrom && balanceFrom === 'bento' ? bentoBalance : walletBalance
 
-  const { depositAddAsset, addAsset } = useKashi()
+  const { t } = useTranslation()
+  const { account } = useActiveWeb3React()
+  const theme = useTheme()
+
+  const { depositAddCollateral, addCollateral } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(balance?.value, balance?.decimals)
@@ -79,17 +78,19 @@ export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbo
 
   return (
     <>
-      <InputPanel id="supply-input">
-        <Container cornerRadiusBottomNone={true} cornerRadiusTopNone={false}>
+      <InputPanel id="add-collateral-input-panel">
+        <Container cornerRadiusBottomNone={true}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
-                Supply <span className="font-semibold">{tokenSymbol}</span> from{' '}
+                Add <span className="font-semibold">{tokenSymbol}</span> from{' '}
                 <span>
                   {balanceFrom === 'bento' ? (
                     <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
                   ) : (
-                    <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
+                    balanceFrom === 'wallet' && (
+                      <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
+                    )
                   )}
                 </span>
               </TYPE.body>
@@ -101,7 +102,7 @@ export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbo
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  Balance: {tokenBalance} {tokenSymbol}
+                  Max: {tokenBalance} {tokenSymbol}
                 </TYPE.body>
               )}
             </RowBetween>
@@ -139,22 +140,22 @@ export default function SupplyInputPanel({ tokenAddress, pairAddress, tokenSymbo
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await depositAddAsset(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await depositAddCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await depositAddAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await depositAddCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await addAsset(pairAddress, tokenAddress, maxDepositAmountInput)
+                      await addCollateral(pairAddress, tokenAddress, maxDepositAmountInput)
                     } else {
-                      await addAsset(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
+                      await addCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals))
                     }
                   }
                   setPendingTx(false)
                 }}
               >
                 <Aligner>
-                  <StyledButtonName>Supply</StyledButtonName>
+                  <StyledButtonName>Add</StyledButtonName>
                 </Aligner>
               </ButtonSelect>
             )}

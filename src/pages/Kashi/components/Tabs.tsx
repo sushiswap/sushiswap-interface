@@ -1,6 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router'
-import { useDarkModeManager } from '../../state/user/hooks'
+import { useDarkModeManager } from 'state/user/hooks'
 
 interface Tab {
   id: string

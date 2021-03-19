@@ -20,7 +20,7 @@ interface Reducer {
 }
 
 // TODO: typing for data structure...
-interface KashiPair {
+export interface KashiPair {
   id: string
   address: string
   collateral: {
@@ -102,20 +102,27 @@ const pairAddresses = [
 ]
 
 const MINIMUM_TARGET_UTILIZATION = BigNumber.from('700000000000000000') // 70%
+
 const MAXIMUM_TARGET_UTILIZATION = BigNumber.from('800000000000000000') // 80%
+
 const UTILIZATION_PRECISION = BigNumber.from('1000000000000000000')
+
 const FULL_UTILIZATION = BigNumber.from('1000000000000000000')
+
 const FULL_UTILIZATION_MINUS_MAX = FULL_UTILIZATION.sub(MAXIMUM_TARGET_UTILIZATION)
+
 const STARTING_INTEREST_PER_YEAR = BigNumber.from(68493150675)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(24))
   .mul(BigNumber.from(365)) // approx 1% APR
+
 const MINIMUM_INTEREST_PER_YEAR = BigNumber.from(17123287665)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(24))
   .mul(BigNumber.from(365)) // approx 0.25% APR
+
 const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(68493150675000)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(60))
@@ -123,6 +130,7 @@ const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(68493150675000)
   .mul(BigNumber.from(365)) // approx 1000% APR
 
 const INTEREST_ELASTICITY = BigNumber.from('28800000000000000000000000000000000000000') // Half or double in 28800 seconds (8 hours) if linear
+
 const FACTOR_PRECISION = BigNumber.from('1000000000000000000')
 
 function takeFee(amount: BigNumber) {
@@ -226,14 +234,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               .div(safeMaxBorrowable)
           )
         : BigNumber.from(0)
-
-      // const safeMaxRemovable = pairUserDetails[1][i].userCollateralAmount.gt(BigNumber.from(0))
-      //   ? pairUserDetails[1][i].userCollateralAmount.sub(
-      //       pairUserDetails[1][i].userCollateralAmount
-      //         .div(safeMaxBorrowableLeft)
-      //         .mul(safeMaxBorrowable.sub(safeMaxBorrowableLeft))
-      //     )
-      //   : BigNumber.from(0)
 
       const utilization = currentBorrowAmount.gt(BigNumber.from(0))
         ? currentBorrowAmount
@@ -474,7 +474,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   useInterval(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
 
-  return <KashiContext.Provider value={{ state, dispatch }}>{children}</KashiContext.Provider>
+  return (
+    <KashiContext.Provider
+      value={{
+        state,
+        dispatch
+      }}
+    >
+      {children}
+    </KashiContext.Provider>
+  )
 }
 
 export function useKashiCounts() {

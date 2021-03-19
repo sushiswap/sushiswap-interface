@@ -1,25 +1,22 @@
 import React, { useState } from 'react'
 import { ChainId } from '@sushiswap/sdk'
-import { Link, RouteComponentProps, useParams, useLocation } from 'react-router-dom'
+import { Link, RouteComponentProps, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from 'hooks'
 
 // Components
-import { BaseCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
-import QuestionHelper from '../../components/QuestionHelper'
+import { BaseCard } from 'components/Card'
+import { AutoColumn } from 'components/Column'
 import Supply from './Supply'
 import Borrow from './Borrow'
-import Leverage from './Leverage'
-import Tabs from './Tabs'
-import { useKashiPair } from '../../contexts/kashi'
-import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
-import { formattedNum } from '../../utils'
-import { BarChart, User, Search, ArrowLeft } from 'react-feather'
-import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
-import { ethers } from 'ethers'
+import Tabs from '../components/Tabs'
+import { useKashiPair } from 'context/kashi'
+import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
+import { BarChart, User, ArrowLeft } from 'react-feather'
+import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
+import { Debugger } from 'components/Debugger'
 //import Charts from './Charts'
 
 const StyledArrowLeft = styled(ArrowLeft)`
@@ -209,18 +206,7 @@ export default function KashiPair({
         </div>
       </PageWrapper>
       <div>
-        {process.env.NODE_ENV !== 'production' && (
-          <pre
-            style={{
-              background: '#19212e',
-              borderRadius: '12px',
-              margin: '16px',
-              padding: '16px'
-            }}
-          >
-            {JSON.stringify(pair, null, 2)}
-          </pre>
-        )}
+        <Debugger data={pair} />
       </div>
     </>
   )
