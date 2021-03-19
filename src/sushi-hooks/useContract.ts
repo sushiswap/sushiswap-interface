@@ -140,7 +140,7 @@ export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | 
       //   address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
       //   break
       case ChainId.ROPSTEN:
-        address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
+        address = '0xccb146728f6D94Fe22D1030E7FA369bd33916824'
         //address = '0xccb146728f6D94Fe22D1030E7FA369bd33916824'
         break
     }
@@ -193,7 +193,7 @@ export function useBentoHelperContract(): Contract | null {
       //   break
       case ChainId.ROPSTEN:
         //address = '0x56CA07C11A38B868dBdA58a9762069e025B73dc1'
-        address = '0x24f2ee10c05ad21ed6870c5c8a34a36a5f8fdc69'
+        address = '0xe3BfB820d18cc5c9cC371b1e1d5199CBFCf69B64'
         break
     }
   }
