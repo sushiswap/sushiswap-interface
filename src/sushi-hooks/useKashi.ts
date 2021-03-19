@@ -183,11 +183,13 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_ADD_ASSET],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [amount.value, account, false])]
+          [ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, account, false])]
         )
 
         return addTransaction(tx, { summary: 'Add Asset' })
@@ -196,7 +198,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, library]
+    [account, addTransaction, bentoBoxContract, library]
   )
 
   // Deposit into Bento from wallet and add asset
@@ -208,6 +210,8 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_BENTO_DEPOSIT, ACTION_ADD_ASSET],
@@ -215,7 +219,7 @@ const useKashi = () => {
           [
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
-              [tokenAddress, account, amount?.value, 0]
+              [tokenAddress, account, share, 0]
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ]
@@ -227,7 +231,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, library]
+    [account, addTransaction, bentoBoxContract, library]
   )
 
   // Description: Remove asset to BentoBox
@@ -246,14 +250,11 @@ const useKashi = () => {
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
         share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
-
       const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
       const allShare = totalAsset.elastic.add(borrowShares)
       const fraction = share.mul(totalAsset.base).div(allShare)
-
       const removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
       try {
