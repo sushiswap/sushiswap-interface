@@ -135,11 +135,21 @@ const useKashi = () => {
   // Type: Master Contract
   // Action: Approve
   const approve = useCallback(async () => {
+    // const signature = await signMasterContractApproval(
+    //   bentoBoxContract,
+    //   kashiPairContract?.address,
+    //   account!,
+    //   library!,
+    //   true,
+    //   chainId,
+    //   undefined
+    // )
+    // const permit = ethers.utils.splitSignature(signature)
     try {
       const tx = await bentoBoxContract?.setMasterContractApproval(
         account,
         kashiPairContract?.address,
-        false,
+        true,
         0,
         ethers.constants.HashZero,
         ethers.constants.HashZero
