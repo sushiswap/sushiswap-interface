@@ -7,7 +7,7 @@ import WithdrawInputPanel from './WithdrawInputPanel'
 import { useKashiPair } from 'context/kashi'
 import { formattedNum, formattedPercent } from 'utils'
 
-import Input from '../../components/Input'
+import { KashiActions } from '../../components'
 
 interface SupplyProps {
   tokenAddress: string
@@ -61,16 +61,6 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
             </div>
           </div>
           <div className="pt-2">
-            {/* <Input
-              action="Supply"
-              tokenAddress={tokenAddress}
-              tokenSymbol={tokenSymbol}
-              pairAddress={pairAddress}
-              direction="from"
-              label="Balance"
-              value="0"
-            /> */}
-
             <SupplyInputPanel
               id="supply-collateral-token"
               tokenAddress={tokenAddress}

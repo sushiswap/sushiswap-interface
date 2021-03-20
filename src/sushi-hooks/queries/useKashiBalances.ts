@@ -22,6 +22,7 @@ const useKashiBalances = (pairAddress: string) => {
     const pairDetails = await kashiPairHelperContract?.getPairs([pairAddressChecksum])
     console.log('kashi_pairDetails:', pairDetails)
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressChecksum])
+
     const i = 0 // since only dealing with array of length 1
 
     console.log(

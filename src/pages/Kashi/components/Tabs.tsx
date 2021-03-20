@@ -1,48 +1,71 @@
-import React from 'react'
-import { useHistory } from 'react-router'
-import { useDarkModeManager } from 'state/user/hooks'
+import 'react-tabs/style/react-tabs.css'
 
-interface Tab {
-  id: string
-  title: string
-}
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import styled from 'styled-components'
 
-interface TabsProps {
-  tabs: Tab[]
-  selected: string
-  setSelected: (id: string) => void
-}
+export const PrimaryTabs = styled(Tabs)`
+  padding: 32px;
+  .react-tabs__tab-list {
+    display: flex;
+    border-radius: 20px;
+    background: ${({ theme }) => theme.mediumDarkPurple};
+    font-size: 20px;
+    font-weight: 700;
+    padding: 4px;
+    border: 0;
+  }
+  .react-tabs__tab {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    bottom: 0;
+    color: ${({ theme }) => theme.mediumEmphesisText};
+    padding: 16px 12px;
+  }
+  .react-tabs__tab--selected {
+    background: ${({ theme }) => theme.baseCard};
+    color: ${({ theme }) => theme.white};
+    margin: 0;
+    border: 0;
+    bottom: 0;
+  }
+  .react-tabs__tab:focus:after {
+    background: none;
+  }
+`
 
-const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {
-  const [darkMode] = useDarkModeManager()
-  const history = useHistory()
-  return (
-    <div className="-mb-px flex space-x-4" aria-label="Tabs">
-      {tabs.map((tab: any) => {
-        return (
-          <button
-            key={tab.id}
-            onClick={() => {
-              const params = new URLSearchParams()
-              params.append('tab', tab.id)
-              history.push({ search: params.toString() })
-              setSelected(tab.id)
-            }}
-            className={
-              `${
-                selected === tab.id
-                  ? `${darkMode ? 'text-white hover:text-white' : 'text-white hover:text-gray-600'}`
-                  : `${darkMode ? 'text-gray-600 hover:text-gray-700' : 'text-gray-400 hover:text-gray-700'}`
-              }` +
-              ' border-transparent whitespace-nowrap py-2 px-1 font-medium text-base focus:outline-none font-semibold'
-            }
-          >
-            {tab.title}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
-
-export default Tabs
+export const SecondaryTabs = styled(Tabs)`
+  .react-tabs__tab-list {
+    display: flex;
+    font-size: 16px;
+    font-weight: 700;
+    border: 0;
+    background: none;
+  }
+  .react-tabs__tab {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    background: ${({ theme }) => theme.extraDarkPurple};
+    border-radius: 10px;
+    bottom: 0;
+    color: ${({ theme }) => theme.lowEmphesisText};
+    padding: 8px 12px;
+  }
+  .react-tabs__tab:not(:first-child) {
+    margin-left: 8px;
+  }
+  .react-tabs__tab--selected {
+    background: ${({ theme }) => theme.mediumDarkPurple};
+    color: ${({ theme }) => theme.white};
+    margin: 0;
+    border: 0;
+    bottom: 0;
+  }
+  .react-tabs__tab:focus:after {
+    background: none;
+  }
+`

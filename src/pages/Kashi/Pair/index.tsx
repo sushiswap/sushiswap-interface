@@ -4,51 +4,49 @@ import { Link, RouteComponentProps, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from 'hooks'
-
-// Components
 import { BaseCard } from 'components/Card'
 import { AutoColumn } from 'components/Column'
+import { Debugger } from 'components/Debugger'
 import Supply from './Supply'
 import Borrow from './Borrow'
-import Tabs from '../components/Tabs'
 import { useKashiPair } from 'context/kashi'
 import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
 import { BarChart, User, ArrowLeft } from 'react-feather'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
-
-import { Debugger } from 'components/Debugger'
+import { KashiActions } from '../components'
 //import Charts from './Charts'
+
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { PrimaryTabs, SecondaryTabs } from '../components'
+import QuestionHelper from 'components/QuestionHelper'
+import { TYPE } from 'theme'
+import { RowBetween } from 'components/Row'
 
 const StyledArrowLeft = styled(ArrowLeft)`
   color: ${({ theme }) => theme.text1};
 `
 
 const PageWrapper = styled(AutoColumn)`
-  max-width: 480px; /* 480px */
+  max-width: 720px; /* 480px */
   width: 100%;
 `
 
 const StyledBaseCard = styled(BaseCard)`
   border: none
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
   position: relative;
   overflow: hidden;
+  padding: 0;
+  border-radius: 35px 20px 35px 20px;
 `
 
-const tabs = [
-  {
-    title: 'Supply',
-    id: 'supply'
-  },
-  {
-    title: 'Borrow',
-    id: 'borrow'
-  }
-  // {
-  //   title: 'Leverage',
-  //   id: 'leverage'
-  // }
-]
+const StyledCardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  background: ${({ theme }) => theme.mediumDarkPurple};
+  border-radius: 30px 20px 0px 0px;
+  padding: 32px;
+  border-bottom: 7px solid ${({ theme }) => theme.primaryPink};
+`
 
 interface TokenProps {
   address: string
@@ -99,15 +97,8 @@ export default function KashiPair({
                 </Link>
               </nav>
             </div>
-            <StyledBaseCard padding={'0px'}>
-              {/* Header */}
-              <div
-                className="py-4 px-6"
-                style={{
-                  //borderRight: '2px solid rgba(0, 0, 0, 0.1)',
-                  borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
-                }}
-              >
+            <StyledBaseCard>
+              <StyledCardHeader>
                 <div className="grid grid-cols-3 gap-2 items-center">
                   <div className="flex space-x-2 mr-4">
                     <a
@@ -149,10 +140,16 @@ export default function KashiPair({
                   </div>
                   <div className="col-span-2 sm:col-span-1 flex justify-between items-center">
                     <div>
-                      <div className="text-base sm:text-2xl font-bold">
+                      <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} lineHeight={1} fontWeight={700}>
                         {pair && `${pair.collateral.symbol + '/' + pair.asset.symbol}`}
+                      </TYPE.extraLargeHeader>
+                      <div style={{ display: 'flex' }}>
+                        <TYPE.body color="mediumEmphesisText" fontSize={14} fontWeight={700}>
+                          Oracle: {pair && pair.oracle.name}
+                        </TYPE.body>
+                        {/* <QuestionHelper text="" /> */}
                       </div>
-                      <div className="text-sm text-gray-400">{pair && `${pair.oracle.name}`}</div>
+
                       {/* <div className="flex">
                         <div className="text-xs sm:text-base font-semibold text-gray-400 mr-2">Net APY:</div>
                         <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
@@ -168,15 +165,79 @@ export default function KashiPair({
                     </div>
                   </div> */}
                 </div>
-              </div>
+              </StyledCardHeader>
               {/* Tabs */}
+
+              <PrimaryTabs forceRenderTabPanel defaultIndex={0}>
+                <TabList>
+                  <Tab>Supply</Tab>
+                  <Tab>Borrow</Tab>
+                  <Tab>Leverage</Tab>
+                </TabList>
+                <TabPanel>
+                  <SecondaryTabs forceRenderTabPanel>
+                    <TabList>
+                      <Tab>Deposit {pair.collateral.symbol}</Tab>
+                      <Tab>Withdraw {pair.collateral.symbol}</Tab>
+                    </TabList>
+                    <TabPanel>
+                      <KashiActions
+                        tokenAddress={pair.collateral.address}
+                        tokenSymbol={pair.collateral.symbol}
+                        pairAddress={pairAddress}
+                        action="Deposit"
+                        direction="From"
+                        label="Balance"
+                        value="0"
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <KashiActions
+                        tokenAddress={pair.collateral.address}
+                        tokenSymbol={pair.collateral.symbol}
+                        pairAddress={pairAddress}
+                        action="Withdraw"
+                        direction="Into"
+                        label="Balance"
+                        value="0"
+                      />
+                    </TabPanel>
+                  </SecondaryTabs>
+                </TabPanel>
+                <TabPanel>
+                  <SecondaryTabs forceRenderTabPanel>
+                    <TabList>
+                      <Tab>Borrow {pair.asset.symbol}</Tab>
+                      <Tab>Payback {pair.asset.symbol}</Tab>
+                    </TabList>
+                    <TabPanel>
+                      <p>
+                        Protagonist, from the 20th Century. Delivery boy. Many times great-uncle to Professor Hubert
+                        Farnsworth. Suitor of Leela.
+                      </p>
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/en/thumb/2/28/Philip_Fry.png/175px-Philip_Fry.png"
+                        alt="Philip J. Fry"
+                      />
+                    </TabPanel>
+                    <TabPanel>
+                      <p>Mutant cyclops. Captain of the Planet Express Ship. Love interest of Fry.</p>
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Turanga_Leela.png/150px-Turanga_Leela.png"
+                        alt="Turanga Leela"
+                      />
+                    </TabPanel>
+                  </SecondaryTabs>
+                </TabPanel>
+              </PrimaryTabs>
+
               <div
                 className="py-2 px-6"
                 style={{
                   borderBottom: '2px solid rgba(0, 0, 0, 0.1)'
                 }}
               >
-                <Tabs tabs={tabs} selected={section} setSelected={setSection} />
+                {/* <Tabs tabs={tabs} selected={section} setSelected={setSection} /> */}
               </div>
               <div
                 className="py-4 px-6"

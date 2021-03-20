@@ -25,6 +25,7 @@
     "@types/react-dom": "^16.9.7",
     "@types/react-redux": "^7.1.8",
     "@types/react-router-dom": "^5.0.0",
+    "@types/react-tabs": "^2.3.2",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
     "@types/rebass": "^4.0.5",
@@ -133,6 +134,7 @@
     "@fontsource/dm-sans": "^4.2.2",
     "@sushiswap/sushi-data": "^1.0.7",
     "@types/numeral": "^2.0.1",
-    "numeral": "^2.0.6"
+    "numeral": "^2.0.6",
+    "react-tabs": "^3.2.1"
   }
 }

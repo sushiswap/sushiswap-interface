@@ -37,17 +37,21 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import Test from './Test'
 
 import SushiBar from './SushiBar'
+
 import Bento from './Bento'
 import BentoBalances from './BentoBalances'
+
 import Kashi from './Kashi'
 import KashiPair from './Kashi/Pair'
 import KashiPositions from './Kashi/Positions'
 
 // Additional Tools
 import Tools from './Tools'
+
 import Saave from './Saave'
 
 import ComingSoonModal from '../components/ComingSoonModal'
+
 import { KashiProvider } from '../context/kashi'
 
 const AppWrapper = styled.div`

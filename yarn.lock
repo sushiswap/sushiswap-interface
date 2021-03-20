@@ -2985,10 +2985,10 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-table@^7.0.29":
-  version "7.0.29"
-  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.29.tgz#af2c82f2d6a39be5bc0f191b30501309a8db0949"
-  integrity sha512-RCGVKGlTDv3jbj37WJ5HhN3sPb0W/2rqlvyGUtvawnnyrxgI2BGgASvU93rq2jwanVp5J9l1NYAeiGlNhdaBGw==
+"@types/react-tabs@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@types/react-tabs/-/react-tabs-2.3.2.tgz#99fb6866bbc6912d44f7bbc99eca03fbbd217960"
+  integrity sha512-QfMelaJSdMcp+CenKhATp12XFFqqUcLXILgwpX3dgWfVYNZPtsLXZDDCRsVn+kwmBOWB+DFPKpQorxbUhnXINw==
   dependencies:
     "@types/react" "*"
 
@@ -14520,7 +14520,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.0, prop-types@^15.5.4, prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -15090,10 +15090,13 @@ react-style-singleton@^2.1.0:
     invariant "^2.2.4"
     tslib "^1.0.0"
 
-react-table@^7.6.3:
-  version "7.6.3"
-  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.6.3.tgz#76434392b3f62344bdb704f5b227c2f29c1ffb14"
-  integrity sha512-hfPF13zDLxPMpLKzIKCE8RZud9T/XrRTsaCIf8zXpWZIZ2juCl7qrGpo3AQw9eAetXV5DP7s2GDm+hht7qq5Dw==
+react-tabs@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/react-tabs/-/react-tabs-3.2.1.tgz#b0ce1e8b9f68bca82292ddecfb6480c9042bcb48"
+  integrity sha512-M7ERQvJgBVLTyojFmC3G4tpaJuMmUtsnYenVQm2oA1NjDrGXq1UuzHgxhVTDwimkJcKEbzgWCybXFSHQ/+2bsA==
+  dependencies:
+    clsx "^1.1.0"
+    prop-types "^15.5.0"
 
 react-use-gesture@^6.0.14:
   version "6.0.14"
