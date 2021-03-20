@@ -19,7 +19,7 @@ export const FixedHeightRow = styled(RowBetween)`
 
 const KashiCard = () => {
   const { account } = useActiveWeb3React()
-  const { kashiApproved, approve } = useKashi()
+  const { kashiApproved, approveMaster } = useKashi()
 
   // handle approval
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -27,7 +27,7 @@ const KashiCard = () => {
     //console.log("SEEKING APPROVAL");
     try {
       setRequestedApproval(true)
-      const txHash = await approve()
+      const txHash = await approveMaster()
       console.log(txHash)
       // user rejected tx or didn't go thru
       if (!txHash) {
@@ -36,7 +36,7 @@ const KashiCard = () => {
     } catch (e) {
       console.log(e)
     }
-  }, [approve, setRequestedApproval])
+  }, [approveMaster, setRequestedApproval])
 
   console.log('kashiApproved:', kashiApproved)
 

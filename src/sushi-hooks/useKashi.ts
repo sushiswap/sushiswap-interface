@@ -15,6 +15,7 @@ import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
 import { isAddressString, getContract } from '../utils'
 
 import { ethers } from 'ethers'
+
 import { BalanceProps } from './queries/useTokenBalance'
 import { BigNumber } from '@ethersproject/bignumber'
 
@@ -48,18 +49,16 @@ const ACTION_CALL = 30
 
 async function signMasterContractApproval(
   bentoBoxContract: ethers.Contract | null,
-  masterContract: ethers.Contract | null,
+  masterContract: string | undefined,
   user: string,
   library: ethers.providers.Web3Provider,
   approved: boolean,
   chainId: ChainId | undefined,
-  nonce: undefined
+  nonce: any
 ) {
   const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
   if (!nonce) {
-    console.log('Fetching nonce...')
     nonce = await bentoBoxContract?.nonces(user)
-    console.log(nonce)
   }
   const message = {
     warning,
@@ -69,10 +68,9 @@ async function signMasterContractApproval(
     nonce
   }
 
-  // EIP712Domain(string name,uint256 chainId,address verifyingContract)
-  // SetMasterContractApproval(string warning,address user,address masterContract,bool approved,uint256 nonce)
   const typedData = {
     types: {
+      // // ethers _signTypedData assumes EIP712
       // EIP712Domain: [
       //   { name: 'name', type: 'string' },
       //   { name: 'chainId', type: 'uint256' },
@@ -95,7 +93,6 @@ async function signMasterContractApproval(
     message: message
   }
   console.log('typedData:', typedData)
-
   const signer = getSigner(library, user)
   return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
 }
@@ -156,23 +153,36 @@ const useKashi = () => {
 
   // Description: Approve MasterContract for BentoBox  - eip217
   const approveMaster = useCallback(async () => {
+    const signature = await signMasterContractApproval(
+      bentoBoxContract,
+      kashiPairContract?.address,
+      account!,
+      library!,
+      true,
+      chainId,
+      undefined
+    )
+    const permit = ethers.utils.splitSignature(signature)
+    console.log('permit:', permit)
+    console.log('comparison:', 0, ethers.constants.HashZero, ethers.constants.HashZero)
+
     try {
-      const tx = await signMasterContractApproval(
-        bentoBoxContract,
-        kashiPairContract,
-        account!,
-        library!,
-        false,
-        chainId,
-        undefined
+      const tx = await kashiPairContract?.cook(
+        [ACTION_BENTO_SETAPPROVAL],
+        [0],
+        [
+          ethers.utils.defaultAbiCoder.encode(
+            ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
+            [account, kashiPairContract?.address, true, permit.v, permit.r, permit.s]
+          )
+        ]
       )
-      console.log(tx)
-      //preturn addTransaction(tx, { summary: 'Enable Kashi' })
+      return addTransaction(tx, { summary: 'Enable Kashi' })
     } catch (e) {
       console.log(e)
       return e
     }
-  }, [account, bentoBoxContract, chainId, kashiPairContract, library])
+  }, [account, addTransaction, bentoBoxContract, chainId, kashiPairContract, library])
 
   // Description: Add Asset from BentoBox
   // Type: Asset
