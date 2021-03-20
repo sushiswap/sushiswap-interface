@@ -149,7 +149,7 @@ const useKashi = () => {
       const tx = await bentoBoxContract?.setMasterContractApproval(
         account,
         kashiPairContract?.address,
-        false,
+        true,
         0,
         ethers.constants.HashZero,
         ethers.constants.HashZero
