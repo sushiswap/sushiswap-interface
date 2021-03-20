@@ -7,7 +7,8 @@ import { Dots } from '../../../Pool/styleds'
 import { useActiveWeb3React } from 'hooks'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import useKashiBalances from 'sushi-hooks/queries/useKashiBalances'
+import { useKashiPair } from 'context/kashi'
+//import useKashiBalances from 'sushi-hooks/queries/useKashiBalances'
 import useKashi from 'sushi-hooks/useKashi'
 import { formatFromBalance, formatToBalance } from 'utils'
 
@@ -40,9 +41,8 @@ export default function WithdrawInputPanel({
 }: WithdrawInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
 
-  const kashiBalances = useKashiBalances(pairAddress)
-
-  const assetBalance = kashiBalances?.asset
+  const kashiBalances = useKashiPair(pairAddress)
+  const assetBalance = kashiBalances?.user.supply.balance
 
   const { account } = useActiveWeb3React()
   const theme = useTheme()

@@ -1,5 +1,5 @@
 import { useActiveWeb3React } from 'hooks'
-import useInterval from 'hooks/useInterval'
+import useIntervalTransaction from 'hooks/useIntervalTransaction'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useKashiPairHelperContract } from 'sushi-hooks/useContract'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
@@ -416,7 +416,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             value: userSupply,
             string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)),
             usdString:
-              Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD
+              Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD,
+            balance: {
+              value: userSupply,
+              decimals: pairDetails[i].assetDecimals
+            }
           },
           asset: {
             value: pairUserDetails[1][i].userAssetAmount,
@@ -463,7 +467,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     })
   }, [account, getPairs, kashiPairHelperContract])
 
-  useInterval(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
+  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 10000 : 10000)
 
   return (
     <KashiContext.Provider
