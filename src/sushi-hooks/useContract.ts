@@ -157,8 +157,8 @@ export function useKashiPairContract(withSignerIfPossible?: boolean): Contract |
       //   address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
       //   break
       case ChainId.ROPSTEN:
-        //address = '0xD57469335E06eD52B57278A0Ff4ECB62bAd05e99'
-        address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
+        address = '0xD57469335E06eD52B57278A0Ff4ECB62bAd05e99'
+        //address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
         //address = '0xd43960bF734ACaFE8BDb6DCF53212eF58a5FA4f3'
         break
     }
