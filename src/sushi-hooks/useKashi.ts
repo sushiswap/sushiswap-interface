@@ -230,7 +230,7 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, true)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -270,7 +270,15 @@ const useKashi = () => {
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
+        const userSupplyAmount = pairUserDetails[1][0].totalAssetAmount.gt(BigNumber.from(0))
+          ? pairUserDetails[1][0].userAssetAmount.add(
+              pairUserDetails[1][0].userAssetAmount
+                .mul(pairUserDetails[1][0].totalBorrowAmount)
+                .div(pairUserDetails[1][0].totalAssetAmount)
+            )
+          : BigNumber.from(0)
+        share = await bentoBoxContract?.toShare(tokenAddress, userSupplyAmount, true)
+        //share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
       const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
       const allShare = totalAsset.elastic.add(borrowShares)
@@ -309,8 +317,15 @@ const useKashi = () => {
       let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
-        share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
+        const userSupplyAmount = pairUserDetails[1][0].totalAssetAmount.gt(BigNumber.from(0))
+          ? pairUserDetails[1][0].userAssetAmount.add(
+              pairUserDetails[1][0].userAssetAmount
+                .mul(pairUserDetails[1][0].totalBorrowAmount)
+                .div(pairUserDetails[1][0].totalAssetAmount)
+            )
+          : BigNumber.from(0)
+        share = await bentoBoxContract?.toShare(tokenAddress, userSupplyAmount, true)
+        //share = pairUserDetails[1][0].userAssetAmount.mul(totalAsset.base).div(totalAsset.elastic)
       }
 
       const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)

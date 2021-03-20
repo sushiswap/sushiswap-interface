@@ -44,6 +44,8 @@ export default function WithdrawInputPanel({
   const kashiBalances = useKashiPair(pairAddress)
   const assetBalance = kashiBalances?.user.supply.balance
 
+  console.log('assetBalance:', kashiBalances?.user)
+
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 

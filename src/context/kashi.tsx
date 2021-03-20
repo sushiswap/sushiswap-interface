@@ -287,10 +287,43 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       const userSupply = pairUserDetails[1][i].totalAssetAmount.gt(BigNumber.from(0))
         ? pairUserDetails[1][i].userAssetAmount.add(
             pairUserDetails[1][i].userAssetAmount
-              .div(pairUserDetails[1][i].totalAssetAmount)
               .mul(pairUserDetails[1][i].totalBorrowAmount)
+              .div(pairUserDetails[1][i].totalAssetAmount)
           )
         : BigNumber.from(0)
+
+      // const test = pairUserDetails[1][i].userAssetAmount
+      //   .mul(pairUserDetails[1][i].totalBorrowAmount)
+      //   .div(pairUserDetails[1][i].totalAssetAmount)
+      // console.log('userSupply:', address, {
+      //   userAssetAmount: Fraction.from(
+      //     pairUserDetails[1][i].userAssetAmount,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   totalAssetAmount: Fraction.from(
+      //     pairUserDetails[1][i].totalAssetAmount,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   totalBorrowAmount: Fraction.from(
+      //     pairUserDetails[1][i].totalBorrowAmount,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   userSupply: Fraction.from(
+      //     userSupply,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   userSupplyRaw: pairUserDetails[1][i].userAssetAmount.add(
+      //     pairUserDetails[1][i].userAssetAmount.div(pairUserDetails[1][i].totalAssetAmount)
+      //   ),
+      //   test: Fraction.from(test, BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))).toString()
+      // })
+      // Test Cases:
+      // userAssetAmount + (userAssetAmount / totalAssetAmount) * totalBorrowAmount
+      // 18.95653793 + (18.95653793 / 511.83397452) * 28.18237205
+      // totalAssetAmount: '511.83397452'
+      // totalBorrowAmount: '28.18237205'
+      // userAssetAmount: '18.95653793'
+      // userSupply: '18.95653793'
 
       return {
         id: address,
@@ -414,7 +447,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           },
           supply: {
             value: userSupply,
-            string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)),
+            string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)).toString(),
             usdString:
               Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD,
             balance: {
