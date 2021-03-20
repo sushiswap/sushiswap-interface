@@ -50,9 +50,6 @@ export function colors(darkMode: boolean): Colors {
     text4: darkMode ? '#565A69' : '#C3C5CB',
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
 
-    mediumEmphesisText: '#7f7f7f',
-    highEmphesisText: '#bfbfbf',
-
     // backgrounds / greys
     bg1: darkMode ? '#18212e' : '#FFFFFF',
     bg2: darkMode ? '#202d3f' : '#F7F8FA',
@@ -91,11 +88,22 @@ export function colors(darkMode: boolean): Colors {
     blue1: '#0094ec',
 
     borderRadius: '20px',
-    darkMode: darkMode
+    darkMode: darkMode,
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',
     // blue5: darkMode ? '#153d6f70' : '#EBF4FF',
+
+    // BentoBox/Kashi
+    lowEmphesisText: '#575757',
+    mediumEmphesisText: '#7f7f7f',
+    highEmphesisText: '#bfbfbf',
+    mediumDarkPurple: '#1d212f',
+    extraDarkPurple: '#1a1d29',
+    primaryPink: 'rgb(221, 85, 151)',
+    baseCard: '#222636',
+    alertYellow: '#bfbf31',
+    primaryBlue: 'rgb(108, 168, 255)'
   }
 }
 
@@ -235,7 +243,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
-  
 }
 `
 

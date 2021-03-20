@@ -13,9 +13,6 @@ export interface Colors {
   text4: Color
   text5: Color
 
-  mediumEmphesisText: Color
-  highEmphesisText: Color
-
   // backgrounds / greys
   bg1: Color
   bg2: Color
@@ -53,6 +50,17 @@ export interface Colors {
 
   borderRadius: string
   darkMode: boolean
+
+  // BentoBox/Kashi
+  lowEmphesisText: Color
+  mediumEmphesisText: Color
+  highEmphesisText: Color
+  mediumDarkPurple: Color
+  extraDarkPurple: Color
+  primaryPink: Color
+  primaryBlue: Color
+  baseCard: Color
+  alertYellow: Color
 }
 
 export interface Grids {
