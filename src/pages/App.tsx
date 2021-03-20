@@ -134,15 +134,15 @@ export default function App() {
                     <Route exact strict path="/bento/balances" component={BentoBalances} />
                   </Switch>
                 )} */}
-                {chainId === ChainId.MAINNET && <Route exact strict path="/bento" component={Bento} />}
-                {chainId === ChainId.MAINNET && <Route exact strict path="/bento/kashi" component={Kashi} />}
-                {chainId === ChainId.MAINNET && (
+                {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento" component={Bento} />}
+                {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/kashi" component={Kashi} />}
+                {chainId === ChainId.ROPSTEN && (
                   <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
                 )}
-                {chainId === ChainId.MAINNET && (
+                {chainId === ChainId.ROPSTEN && (
                   <Route exact strict path="/bento/kashi/:pairAddress" component={KashiPair} />
                 )}
-                {chainId === ChainId.MAINNET && <Route exact strict path="/bento/balances" component={BentoBalances} />}
+                {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/balances" component={BentoBalances} />}
                 <WithPadding>
                   {/* Tools */}
                   <Route exact strict path="/tools" component={Tools} />
