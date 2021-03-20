@@ -287,7 +287,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       const userSupply = pairUserDetails[1][i].totalAssetAmount.gt(BigNumber.from(0))
         ? pairUserDetails[1][i].userAssetAmount.add(
             pairUserDetails[1][i].userAssetAmount
-              .mul(pairUserDetails[1][i].totalBorrowAmount)
+              .mul(pairUserDetails[1][i].totalBorrowAmount) // change resolution by mul first!
               .div(pairUserDetails[1][i].totalAssetAmount)
           )
         : BigNumber.from(0)
@@ -500,7 +500,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     })
   }, [account, getPairs, kashiPairHelperContract])
 
-  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 10000 : 10000)
+  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
 
   return (
     <KashiContext.Provider
