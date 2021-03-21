@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import styled, { ThemeContext } from 'styled-components'
+import { transparentize } from 'polished'
 
 import { WrapperNoPadding } from '../../../../components/swap/styleds'
 
@@ -38,6 +40,8 @@ export default function Supply({
 //maxRemove,
 //maxBorrow
 SupplyProps) {
+  const theme = useContext(ThemeContext)
+
   const pair = useKashiPair(pairAddress)
   const assetSymbol = pair?.asset.symbol
   const collateralSymbol = pair?.collateral.symbol
@@ -58,6 +62,8 @@ SupplyProps) {
   //const exchangeRate = pair?.details.rate.current
 
   console.log('interestPerYear:', interestPerYear)
+
+  const [section, setSection] = useState<'Borrow' | 'Repay'>('Borrow')
 
   return (
     <>
@@ -105,37 +111,57 @@ SupplyProps) {
                   <div className="text-xs sm:text-sm text-gray-300">{formattedPercent(interestPerYear)}</div>
                 </div>
               </div>
-              {/* <div className="flex justify-between">
-                <div className="text-xs sm:text-sm text-gray-300">Your collateral:</div>
-                <div className="text-xs sm:text-sm text-gray-300">{formattedNum(collateralUSD, true)}</div>
-              </div> */}
-              {/* <div className="flex justify-between">
-                <div className="text-xs sm:text-sm text-gray-300">Your borrowed:</div>
-                <div className="text-xs sm:text-sm text-gray-300">{formattedNum(borrowUSD, true)}</div>
-              </div> */}
             </div>
           </div>
-          <div className="flex justify-between items-center px-1 pt-2">
-            <div className="text-base font-semibold text-gray-300">Borrow</div>
+          {/* Switch */}
+          <div
+            className="mt-4 mb-2 flex justify-between items-center py-1 px-1 rounded-xl space-x-2"
+            style={{ background: transparentize(0.5, `${theme.extraDarkPurple}`) }}
+          >
+            <button
+              className="w-full rounded-xl py-3 focus:outline-none"
+              onClick={() => {
+                setSection('Borrow')
+              }}
+              style={
+                section === 'Borrow' ? { background: transparentize(0.1, '#21293a'), border: '1px solid #2d2f45' } : {}
+              }
+            >
+              <div className="text-base font-semibold text-gray-300 text-center">Borrow</div>
+            </button>
+            <button
+              className="w-full rounded-xl py-3 focus:outline-none"
+              onClick={() => {
+                setSection('Repay')
+              }}
+              style={
+                section === 'Repay' ? { background: transparentize(0.1, '#21293a'), border: '1px solid #2d2f45' } : {}
+              }
+            >
+              <div className="text-base font-semibold text-gray-300 text-center">Repay</div>
+            </button>
           </div>
           <div>
-            <AddCollateral
-              tokenAddress={collateral.address}
-              tokenSymbol={collateral.symbol}
-              pairAddress={pairAddress}
-            />
-            <BorrowInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
-          </div>
-          <div className="flex justify-between items-center px-1">
-            <div className="text-base font-semibold text-gray-300">Repay</div>
-          </div>
-          <div>
-            <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
-            <RemoveCollateral
-              tokenAddress={collateral.address}
-              tokenSymbol={collateral.symbol}
-              pairAddress={pairAddress}
-            />
+            {section === 'Borrow' && (
+              <>
+                <AddCollateral
+                  tokenAddress={collateral.address}
+                  tokenSymbol={collateral.symbol}
+                  pairAddress={pairAddress}
+                />
+                <BorrowInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+              </>
+            )}
+            {section === 'Repay' && (
+              <>
+                <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+                <RemoveCollateral
+                  tokenAddress={collateral.address}
+                  tokenSymbol={collateral.symbol}
+                  pairAddress={pairAddress}
+                />
+              </>
+            )}
           </div>
         </AutoColumn>
       </WrapperNoPadding>
