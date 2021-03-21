@@ -165,27 +165,31 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   const collateralBalance = sourceOrDestination === 'BentoBox' ? bentoCollateralBalance : walletCollateralBalance
 
-  const balance = action === 'Deposit' || action === 'Withdraw' ? assetBalance : collateralBalance
-
   const [value, setValue] = useState('')
 
   const [pendingTx, setPendingTx] = useState(false)
 
-  const onMax = useCallback(() => {
+  const getMax = useCallback(() => {
     if (action === 'Deposit') {
-      setValue(formatFromBalance(assetBalance.value, assetBalance.decimals))
+      return formatFromBalance(assetBalance?.value, assetBalance?.decimals)
     } else if (action === 'Withdraw') {
-      setValue(formatFromBalance(pair.user.supply.value, pair.asset.decimals))
+      return formatFromBalance(pair.user.supply.value, pair.asset.decimals)
     } else if (action === 'Borrow') {
-      setValue(pair.user.borrow.max.string)
+      return pair.user.borrow.max.string
     } else if (action === 'Repay') {
       // Max repayment?
     } else if (action === 'Add Collateral') {
-      setValue(formatFromBalance(collateralBalance.value, collateralBalance.decimals))
+      return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {
-      setValue(pair.user.collateral.max.string)
+      return pair.user.collateral.max.string
     }
-  }, [action, assetBalance, collateralBalance, pair])
+  }, [action, pair, assetBalance, collateralBalance])
+
+  const onMax = useCallback(() => {
+    setValue(getMax())
+  }, [getMax])
+
+  const actionLimit = getMax()
 
   const onClick = async function() {
     setPendingTx(true)
@@ -252,7 +256,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
                 fontSize={16}
                 style={{ display: 'inline', cursor: 'pointer' }}
               >
-                {label}: {formatFromBalance(balance?.value, balance?.decimals)}
+                {label}: {actionLimit}
               </TYPE.body>
             </RowBetween>
           </LabelRow>
