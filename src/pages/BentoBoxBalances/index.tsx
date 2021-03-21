@@ -1,32 +1,25 @@
 import React, { useContext, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { ExternalLink, TYPE, HideSmall } from '../../theme'
-import { Text } from 'rebass'
-import { AutoRow, RowBetween, RowFixed } from '../../components/Row'
-import { ButtonEmpty } from '../../components/Button'
+import { TYPE } from '../../theme'
+import { RowBetween } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
-import { CardSection, DataCard } from '../../components/earn/styled'
-import { DarkCard, BaseCard } from '../../components/Card'
-import { transparentize } from 'polished'
+import { DarkCard } from '../../components/Card'
 import TokenDepositPanel from './TokenDepositPanel'
 import TokenWithdrawPanel from './TokenWithdrawPanel'
-import { useActiveWeb3React } from '../../hooks'
 import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
 import { formatFromBalance } from '../../utils'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import { formattedNum } from '../../utils'
 import { PlusSquare, MinusSquare } from 'react-feather'
-import { Card, CardHeader, Navigation } from '../Kashi/components'
-import KashiLogo from 'assets/images/kashi-kanji-wires.png'
+import { Card, CardHeader } from '../Kashi/components'
 import Layout from '../Kashi/components/Layout'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
 `
 
-const PageWrapper = styled(AutoColumn)`
+const PageWrapper = styled.div`
   height: 100%;
   width: 100%;
   max-width: 1280px;
@@ -41,15 +34,6 @@ export default function BentoBalances() {
   return (
     <>
       <PageWrapper>
-        <RowBetween padding="0 16px 8px" align="flex-end">
-          <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
-            <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
-            <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
-              Kashi
-            </TYPE.extraLargeHeader>
-          </div>
-          <Navigation />
-        </RowBetween>
         <Layout>
           <AutoColumn gap="md" justify="center">
             <AutoColumn gap="md" style={{ width: '100%' }}>

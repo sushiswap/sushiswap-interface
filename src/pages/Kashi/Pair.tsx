@@ -15,7 +15,7 @@ import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import Layout from './components/Layout'
 
-const PageWrapper = styled(AutoColumn)`
+const PageWrapper = styled.div`
   height: 100%;
   width: 100%;
   max-width: 1280px;
@@ -36,7 +36,7 @@ export default function KashiPair({
 
   return (
     <PageWrapper>
-      <RowBetween padding="0 16px 8px" align="flex-end">
+      {/* <RowBetween padding="0 16px 8px" align="flex-end">
         <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
           <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
           <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
@@ -44,7 +44,7 @@ export default function KashiPair({
           </TYPE.extraLargeHeader>
         </div>
         <Navigation />
-      </RowBetween>
+      </RowBetween> */}
       <Layout
         right={
           <>

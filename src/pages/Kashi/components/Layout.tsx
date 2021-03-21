@@ -1,8 +1,9 @@
 import React from 'react'
-import { Card, TeardropCard } from './Card'
+import { Card, TeardropCard, Navigation } from '.'
 import styled from 'styled-components'
 import { TYPE } from 'theme'
-
+import KashiLogo from 'assets/images/kashi-kanji-wires.png'
+import { RowBetween } from 'components/Row'
 // function Column() {
 //   return (
 //     <Card
@@ -67,20 +68,31 @@ interface LayoutProps {
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      <Left>
-        <TYPE.largeHeader fontWeight={700}>Lorem Ipsum</TYPE.largeHeader>
-        <TYPE.body fontWeight={700}>Lorem Ipsum</TYPE.body>
-        Button
-      </Left>
-      <Center>{children}</Center>
-      {right && <Right>{right}</Right>}
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <RowBetween padding="0 16px 8px" align="flex-end">
+        <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
+          <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
+          <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
+            Kashi
+          </TYPE.extraLargeHeader>
+        </div>
+        <Navigation />
+      </RowBetween>
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          height: '100%'
+        }}
+      >
+        <Left>
+          <TYPE.largeHeader fontWeight={700}>Lorem Ipsum</TYPE.largeHeader>
+          <TYPE.body fontWeight={700}>Lorem Ipsum</TYPE.body>
+          Button
+        </Left>
+        <Center>{children}</Center>
+        {right && <Right>{right}</Right>}
+      </div>
     </div>
   )
 }
