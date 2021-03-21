@@ -19,14 +19,17 @@ import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import { formattedNum } from '../../utils'
 import { PlusSquare, MinusSquare } from 'react-feather'
 import { Card, CardHeader, Navigation } from '../Kashi/components'
+import KashiLogo from 'assets/images/kashi-kanji-wires.png'
+import Layout from './components/Layout'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
 `
 
 const PageWrapper = styled(AutoColumn)`
-  max-width: 800px;
+  height: 100%;
   width: 100%;
+  max-width: 1280px;
 `
 
 export default function BentoBalances() {
@@ -38,53 +41,66 @@ export default function BentoBalances() {
   return (
     <>
       <PageWrapper>
-        <RowBetween padding="0 16px 22px">
-          <div>
-            <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
+        <RowBetween padding="0 16px 8px" align="flex-end">
+          <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
+            <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
+            <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
               Kashi
             </TYPE.extraLargeHeader>
           </div>
           <Navigation />
         </RowBetween>
-        <AutoColumn gap="md" justify="center">
-          <AutoColumn gap="md" style={{ width: '100%' }}>
-            <Card>
-              <CardHeader>
-                <RowBetween>
-                  <div className="flex items-center">
-                    <img src={BentoBoxLogo} className="w-12 mr-2" />
-                    <TYPE.extraLargeHeader color={theme.highEmphesisText} fontSize={36} fontWeight={700} lineHeight={1}>
-                      My Bento Balances
-                    </TYPE.extraLargeHeader>
-                  </div>
-                  <div className="flex items-center">
-                    <TYPE.body color={theme.mediumEmphesisText} fontSize={18} fontWeight={700}>
-                      TOTAL ASSET VALUE:
-                    </TYPE.body>
-                    <TYPE.body color={theme.highEmphesisText} fontSize={24} fontWeight={700} style={{ marginLeft: 8 }}>
-                      ≈{formattedNum(totalDepositsUSD, true)}
-                    </TYPE.body>
-                  </div>
-                </RowBetween>
-              </CardHeader>
-              <div style={{ padding: '32px' }}>
-                <AutoColumn gap="10px">
-                  {balances &&
-                    balances.map((balance: any, i: number) => {
-                      // todo: remove increment for testing purposes
-                      return (
-                        <TokenBalance
-                          tokenAddress={balance.address}
-                          tokenDetails={balance}
-                          key={balance.address + '_' + i}
-                        />
-                      )
-                    })}
-                </AutoColumn>
-              </div>
-            </Card>
+        <Layout>
+          <AutoColumn gap="md" justify="center">
+            <AutoColumn gap="md" style={{ width: '100%' }}>
+              <Card>
+                <CardHeader>
+                  <RowBetween>
+                    <div className="flex items-center">
+                      <img src={BentoBoxLogo} className="w-12 mr-2" />
+                      <TYPE.extraLargeHeader
+                        color={theme.highEmphesisText}
+                        fontSize={36}
+                        fontWeight={700}
+                        lineHeight={1}
+                      >
+                        My Bento Balances
+                      </TYPE.extraLargeHeader>
+                    </div>
+                    <div className="flex items-center">
+                      <TYPE.body color={theme.mediumEmphesisText} fontSize={18} fontWeight={700}>
+                        TOTAL ASSET VALUE:
+                      </TYPE.body>
+                      <TYPE.body
+                        color={theme.highEmphesisText}
+                        fontSize={24}
+                        fontWeight={700}
+                        style={{ marginLeft: 8 }}
+                      >
+                        ≈{formattedNum(totalDepositsUSD, true)}
+                      </TYPE.body>
+                    </div>
+                  </RowBetween>
+                </CardHeader>
+                <div style={{ padding: '32px' }}>
+                  <AutoColumn gap="10px">
+                    {balances &&
+                      balances.map((balance: any, i: number) => {
+                        // todo: remove increment for testing purposes
+                        return (
+                          <TokenBalance
+                            tokenAddress={balance.address}
+                            tokenDetails={balance}
+                            key={balance.address + '_' + i}
+                          />
+                        )
+                      })}
+                  </AutoColumn>
+                </div>
+              </Card>
+            </AutoColumn>
           </AutoColumn>
-        </AutoColumn>
+        </Layout>
       </PageWrapper>
     </>
   )
