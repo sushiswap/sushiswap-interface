@@ -7,15 +7,18 @@ import { AutoColumn } from 'components/Column'
 import { Debugger } from 'components/Debugger'
 import { useKashiPair } from 'kashi/context'
 import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
-import { KashiAction, Navigation, Card, CardHeader, PrimaryTabs, SecondaryTabs } from './components'
+import { KashiAction, Navigation, TeardropCard, CardHeader, PrimaryTabs, SecondaryTabs } from './components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 
+import Layout from './components/Layout'
+
 const PageWrapper = styled(AutoColumn)`
-  max-width: 800px;
+  height: 100%;
   width: 100%;
+  max-width: 1280px;
 `
 
 export default function KashiPair({
@@ -33,15 +36,15 @@ export default function KashiPair({
 
   return (
     <PageWrapper>
-      <RowBetween padding="0 16px 22px">
+      {/* <RowBetween padding="0 16px 22px">
         <div>
           <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
             Kashi
           </TYPE.extraLargeHeader>
         </div>
         <Navigation />
-      </RowBetween>
-      <Card>
+      </RowBetween> */}
+      <Layout>
         <CardHeader market={!tabIndex ? 'Supply' : 'Borrow'} border>
           <div className="grid grid-cols-3 gap-2 items-center">
             <div className="flex space-x-2 mr-4">
@@ -162,7 +165,7 @@ export default function KashiPair({
             </AutoColumn>
           </TabPanel>
         </PrimaryTabs>
-      </Card>
+      </Layout>
     </PageWrapper>
   )
 }

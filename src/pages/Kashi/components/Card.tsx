@@ -7,6 +7,14 @@ export const Card = styled(BaseCard)`
   position: relative;
   overflow: hidden;
   padding: 0;
+  border-radius: 20px;
+`
+
+export const TeardropCard = styled(BaseCard)`
+  border: none
+  position: relative;
+  overflow: hidden;
+  padding: 0;
   border-radius: 35px 20px 35px 20px;
 `
 

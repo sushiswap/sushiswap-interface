@@ -4,6 +4,14 @@ import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
 import { BigNumber } from '@ethersproject/bignumber'
 
 import { useKashiPair } from 'kashi/context'
+import Layout from 'pages/Kashi/components/Layout'
+import styled from 'styled-components'
+
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  max-width: 1280px;
+`
 
 const TestBed = () => {
   // const { kashiApproved, approve, approveAsset, approveCollateral, depositAddCollateral } = useKashi()
@@ -23,7 +31,11 @@ const TestBed = () => {
 
   /*const bentoBoxContract = useBentoBoxContract(true) // withSigner
   console.log(await bentoBoxContract?.)*/
-  return <></>
+  return (
+    <Container>
+      <Layout />
+    </Container>
+  )
 }
 
 export default TestBed
