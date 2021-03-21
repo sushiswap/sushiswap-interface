@@ -325,6 +325,32 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       // userAssetAmount: '18.95653793'
       // userSupply: '18.95653793'
 
+      // Supply + Collateral - Borrrow
+      const pairNetWorth =
+        Number(
+          Fraction.from(
+            pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+            BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+          ).toString()
+        ) *
+          assetUSD +
+        Number(
+          Fraction.from(
+            BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
+            BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+          ).toString()
+        ) *
+          collateralUSD -
+        Number(
+          Fraction.from(
+            BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+            BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+          ).toString()
+        ) *
+          assetUSD
+
+      //const pairNetAPY =
+
       return {
         id: address,
         address: address,
@@ -430,6 +456,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
         user: {
+          pairNetWorth: {
+            usdString: pairNetWorth
+          },
           health: {
             percentage: maxBorrowable.gt(BigNumber.from(0))
               ? Fraction.from(

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { ChainId } from '@sushiswap/sdk'
 import { Link, RouteComponentProps, useLocation } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from 'hooks'
 
@@ -17,6 +17,8 @@ import { BarChart, User, ArrowLeft } from 'react-feather'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 import { Debugger } from 'components/Debugger'
+import { formattedNum } from 'utils'
+import { theme } from 'theme'
 //import Charts from './Charts'
 
 const StyledArrowLeft = styled(ArrowLeft)`
@@ -60,6 +62,8 @@ export default function KashiPair({
     params: { pairAddress }
   }
 }: RouteComponentProps<{ pairAddress: string }>) {
+  const theme = useContext(ThemeContext)
+
   const location = useLocation()
 
   const [section, setSection] = useState(new URLSearchParams(location.search).get('tab') || 'supply')
@@ -147,18 +151,23 @@ export default function KashiPair({
                       />
                     </a>
                   </div>
-                  <div className="col-span-2 sm:col-span-1 flex justify-between items-center">
+                  <div className="col-span-2 flex justify-between items-center w-full">
                     <div>
                       <div className="text-base sm:text-2xl font-bold">
                         {pair && `${pair.collateral.symbol + '/' + pair.asset.symbol}`}
                       </div>
                       <div className="text-sm text-gray-400">{pair && `${pair.oracle.name}`}</div>
-                      {/* <div className="flex">
-                        <div className="text-xs sm:text-base font-semibold text-gray-400 mr-2">Net APY:</div>
-                        <div className="text-xs sm:text-base font-semibold" style={{ color: '#de5597' }}>
-                          {/* -3.25% */}
-                      {/* </div>
-                      </div> */}
+                    </div>
+                    <div className="items-baseline text-right">
+                      <div className="text-base text-gray-400">Net Worth</div>
+                      <div
+                        className="text-sm text-gray-400"
+                        style={{
+                          color: `${pair.user.pairNetWorth.usdString > 0 ? theme.primaryBlue : theme.primaryPink}`
+                        }}
+                      >
+                        ≈ {formattedNum(pair.user.pairNetWorth.usdString, true)}
+                      </div>
                     </div>
                   </div>
                   {/* <div className="hidden sm:block">
