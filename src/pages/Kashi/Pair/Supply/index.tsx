@@ -40,7 +40,7 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
                 <div className="text-xs sm:text-sm text-gray-300">Supply APR</div>
                 <QuestionHelper text="The amount of asset you have supplied to this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
               </div>
-              <div className="text-2xl sm:text-4xl font-semibold">{formattedPercent(supplyAPY)}</div>
+              <div className="text-2xl sm:text-3xl font-semibold">{formattedPercent(supplyAPY)}</div>
             </div>
             <div className="col-span-2">
               <div className="flex justify-between">
@@ -53,7 +53,7 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
                 </div>
               </div>
               <div className="flex justify-between">
-                <div className="text-xs sm:text-sm text-gray-300">Utilization:</div>
+                <div className="text-xs sm:text-sm text-gray-300">Market Utilization:</div>
                 <div className="text-right">
                   <div className="text-xs sm:text-sm text-gray-300">{formattedPercent(utilization)}</div>
                 </div>
@@ -61,7 +61,7 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
               <div className="flex justify-between">
                 <div>
                   <div className="text-xs sm:text-sm text-gray-300">Your Supply:</div>
-                  <div className="text-xs text-gray-500">({formattedPercent(userProportion)})</div>
+                  <div className="text-xs text-gray-500">({formattedPercent(userProportion)} of Market)</div>
                 </div>
                 <div className="text-right">
                   <div className="text-xs sm:text-sm text-gray-300">

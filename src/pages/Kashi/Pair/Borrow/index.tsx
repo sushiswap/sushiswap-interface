@@ -10,6 +10,7 @@ import PayInputPanel from './PayInputPanel'
 import AddCollateral from './AddCollateralInputPanel'
 import RemoveCollateral from './RemoveCollateralInputPanel'
 
+import { useKashiPair } from 'context/kashi'
 import { formattedNum, formattedPercent } from '../../../../utils'
 
 interface TokenProps {
@@ -22,23 +23,43 @@ interface SupplyProps {
   collateral: TokenProps
   asset: TokenProps
   pairAddress: string
-  healthPercentage: string
-  collateralUSD: string
-  borrowUSD: string
-  maxRemove: string
-  maxBorrow: string
+  //collateralUSD: string
+  //borrowUSD: string
+  //maxRemove: string
+  //maxBorrow: string
 }
 
 export default function Supply({
   collateral,
   asset,
-  pairAddress,
-  healthPercentage,
-  collateralUSD,
-  borrowUSD,
-  maxRemove,
-  maxBorrow
-}: SupplyProps) {
+  pairAddress
+}: //collateralUSD,
+//borrowUSD,
+//maxRemove,
+//maxBorrow
+SupplyProps) {
+  const pair = useKashiPair(pairAddress)
+  const assetSymbol = pair?.asset.symbol
+  const collateralSymbol = pair?.collateral.symbol
+
+  const healthPercentage = pair?.user.health.percentage
+
+  const borrowAPY = pair?.details.apr.borrow
+
+  const userCollateral = pair?.user.collateral.string
+  const userCollateralUSD = pair?.user.collateral.usdString
+  const userBorrow = pair?.user.borrow.string
+  const userBorrowUSD = pair?.user.borrow.usdString
+
+  const maxRemove = pair?.user.collateral.max
+  const maxBorrow = pair?.user.borrow.max
+  const maxBorrowUSD = pair?.user.borrow.maxUSD
+
+  const interestPerYear = pair?.details.apr.currentInterestPerYear
+  //const exchangeRate = pair?.details.rate.current
+
+  console.log('interestPerYear:', interestPerYear)
+
   return (
     <>
       <WrapperNoPadding id="stake-page">
@@ -49,17 +70,50 @@ export default function Supply({
                 <div className="text-xs sm:text-sm text-gray-300">Borrow Used</div>
                 <QuestionHelper text="The amount of collateral you have supplied for this Kashi Pair. The dollar value is estimated using the Sushiswap Oracle." />
               </div>
-              <div className="text-2xl sm:text-4xl font-semibold">{formattedPercent(healthPercentage)}</div>
+              <div className="text-2xl sm:text-3xl font-semibold">{formattedPercent(healthPercentage)}</div>
             </div>
             <div className="col-span-2 mt-5">
               <div className="flex justify-between">
-                <div className="text-xs sm:text-sm text-gray-300">Your collateral:</div>
-                <div className="text-xs sm:text-sm text-gray-300">{formattedNum(collateralUSD, true)}</div>
+                <div className="text-xs sm:text-sm text-gray-300">Your Collateral:</div>
+                <div className="text-right">
+                  <div className="text-xs sm:text-sm text-gray-300">
+                    {formattedNum(userCollateral, false)} {collateralSymbol}
+                    <span className="text-xs text-gray-500 ml-1">(≈{formattedNum(userCollateralUSD, true)})</span>
+                  </div>
+                </div>
               </div>
               <div className="flex justify-between">
+                <div className="text-xs sm:text-sm text-gray-300">Your Borrowed:</div>
+                <div className="text-right">
+                  <div className="text-xs sm:text-sm text-gray-300">
+                    {formattedNum(userBorrow, false)} {assetSymbol}
+                    <span className="text-xs text-gray-500 ml-1">(≈{formattedNum(userBorrowUSD, true)})</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="text-xs sm:text-sm text-gray-300">Left to Borrow:</div>
+                <div className="text-right">
+                  <div className="text-xs sm:text-sm text-gray-300">
+                    {formattedNum(maxBorrow, false)} {assetSymbol}
+                    <span className="text-xs text-gray-500 ml-1">(≈{formattedNum(maxBorrowUSD, true)})</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="text-xs sm:text-sm text-gray-300">Annual Interest:</div>
+                <div className="text-right">
+                  <div className="text-xs sm:text-sm text-gray-300">{formattedPercent(interestPerYear)}</div>
+                </div>
+              </div>
+              {/* <div className="flex justify-between">
+                <div className="text-xs sm:text-sm text-gray-300">Your collateral:</div>
+                <div className="text-xs sm:text-sm text-gray-300">{formattedNum(collateralUSD, true)}</div>
+              </div> */}
+              {/* <div className="flex justify-between">
                 <div className="text-xs sm:text-sm text-gray-300">Your borrowed:</div>
                 <div className="text-xs sm:text-sm text-gray-300">{formattedNum(borrowUSD, true)}</div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex justify-between items-center px-1 pt-2">

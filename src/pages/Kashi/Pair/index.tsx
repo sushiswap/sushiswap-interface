@@ -192,11 +192,11 @@ export default function KashiPair({
                     collateral={pair.collateral}
                     asset={pair.asset}
                     pairAddress={pairAddress}
-                    healthPercentage={pair.user.health.percentage}
-                    collateralUSD={pair.user.collateral.usdString}
-                    borrowUSD={pair.user.borrow.usdString}
-                    maxRemove={pair.user.collateral.max}
-                    maxBorrow={pair.user.borrow.max}
+                    //healthPercentage={pair.user.health.percentage}
+                    //collateralUSD={pair.user.collateral.usdString}
+                    //borrowUSD={pair.user.borrow.usdString}
+                    //maxRemove={pair.user.collateral.max}
+                    //maxBorrow={pair.user.borrow.max}
                   />
                 )}
                 {/* {pair && section === 'leverage' && <Leverage />} */}

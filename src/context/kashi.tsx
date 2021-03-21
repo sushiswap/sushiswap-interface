@@ -488,6 +488,13 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               safeMaxBorrowableLeftPossible,
               BigNumber.from(10).pow(pairDetails[i].assetDecimals)
             ).toString(),
+            maxUSD:
+              Number(
+                Fraction.from(
+                  safeMaxBorrowableLeftPossible,
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString()
+              ) * assetUSD,
             value: pairUserDetails[1][i].userBorrowAmount,
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
