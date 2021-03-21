@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import useTheme from 'hooks/useTheme'
 import { TYPE } from 'theme'
 import { Warning, Dots } from '.'
-import { ButtonBlue } from 'components/Button'
+import { ButtonBlue, ButtonPink } from 'components/Button'
 import { RowBetween } from 'components/Row'
 import { AutoColumn } from 'components/Column'
 import { Input as NumericalInput } from 'components/NumericalInput'
@@ -187,6 +187,40 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     }
   }, [action, assetBalance, collateralBalance, pair])
 
+  const onClick = async function() {
+    setPendingTx(true)
+    if (sourceOrDestination === 'Wallet') {
+      if (action === 'Deposit') {
+        await depositAddAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Withdraw') {
+        await removeWithdrawAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Borrow') {
+        await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Repay') {
+        await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Add Collateral') {
+        await depositAddCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Remove Collateral') {
+        await removeWithdrawCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      }
+    } else if (sourceOrDestination === 'BentoBox') {
+      if (action === 'Deposit') {
+        await addAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Withdraw') {
+        await removeAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Borrow') {
+        await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Repay') {
+        await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Add Collateral') {
+        await addCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      } else if (action === 'Remove Collateral') {
+        await removeCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+      }
+    }
+    setPendingTx(false)
+  }
+
   return (
     <Wrapper>
       <TYPE.largeHeader color={theme.highEmphesisText} fontWeight={700} fontSize={36}>
@@ -244,59 +278,14 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
         {/* <div>Transaction Review...</div> */}
 
-        {value !== '' && approvalState === ApprovalState.APPROVED && (
-          <ButtonBlue
-            borderRadius="10px"
-            padding="10px"
-            onClick={async () => {
-              setPendingTx(true)
-              if (sourceOrDestination === 'Wallet') {
-                if (action === 'Deposit') {
-                  await depositAddAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Withdraw') {
-                  await removeWithdrawAsset(
-                    pair.address,
-                    pair.asset.address,
-                    formatToBalance(value, pair.asset.decimals)
-                  )
-                } else if (action === 'Borrow') {
-                  await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Repay') {
-                  await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Add Collateral') {
-                  await depositAddCollateral(
-                    pair.address,
-                    pair.asset.address,
-                    formatToBalance(value, pair.asset.decimals)
-                  )
-                } else if (action === 'Remove Collateral') {
-                  await removeWithdrawCollateral(
-                    pair.address,
-                    pair.asset.address,
-                    formatToBalance(value, pair.asset.decimals)
-                  )
-                }
-              } else if (sourceOrDestination === 'BentoBox') {
-                if (action === 'Deposit') {
-                  await addAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Withdraw') {
-                  await removeAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Borrow') {
-                  await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Repay') {
-                  await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Add Collateral') {
-                  await addCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                } else if (action === 'Remove Collateral') {
-                  await removeCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-                }
-              }
-              setPendingTx(false)
-            }}
-            disabled={pendingTx}
-          >
+        {action === 'Deposit' || action === 'Withdraw' ? (
+          <ButtonBlue borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
             {action}
           </ButtonBlue>
+        ) : (
+          <ButtonPink borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
+            {action}
+          </ButtonPink>
         )}
       </AutoColumn>
     </Wrapper>
