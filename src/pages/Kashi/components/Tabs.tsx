@@ -31,7 +31,7 @@ const Tabs = ({ tabs, selected, setSelected }: TabsProps) => {
             className={
               `${
                 selected === tab.id
-                  ? `${darkMode ? 'text-white hover:text-white' : 'text-white hover:text-gray-600'}`
+                  ? `${darkMode ? 'text-white' : 'text-white'}`
                   : `${darkMode ? 'text-gray-600 hover:text-gray-700' : 'text-gray-400 hover:text-gray-700'}`
               }` +
               ' border-transparent whitespace-nowrap py-2 px-1 font-medium text-base focus:outline-none font-semibold'
