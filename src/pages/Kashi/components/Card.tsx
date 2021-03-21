@@ -24,8 +24,9 @@ export const CardHeader = styled.div<{ border?: boolean; market?: string }>`
   background: ${({ theme }) => theme.mediumDarkPurple};
   border-radius: 30px 20px 0px 0px;
   padding: 32px 32px 26px;
-  border-bottom: ${({ market, border, theme }) =>
-    border ? `6px solid ${market === 'Supply' ? theme.primaryBlue : theme.primaryPink}` : 'transparent'};
+  border-bottom: 6px solid
+    ${({ market, border, theme }) =>
+      border ? `${market === 'Supply' ? theme.primaryBlue : theme.primaryPink}` : 'transparent'};
 `
 
 export default Card
