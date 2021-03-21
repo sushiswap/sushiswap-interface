@@ -1,16 +1,16 @@
 import React, { useState, useCallback } from 'react'
-import useTheme from '../../../../hooks/useTheme'
-import { useTranslation } from 'react-i18next'
-import { TYPE } from '../../../../theme'
-import { RowBetween } from '../../../../components/Row'
-import { Input as NumericalInput } from '../../../../components/NumericalInput'
+import useTheme from 'hooks/useTheme'
+import { TYPE } from 'theme'
+import { RowBetween } from 'components/Row'
+import { Input as NumericalInput } from 'components/NumericalInput'
 import { Dots } from '../../../Pool/styleds'
-import { useActiveWeb3React } from '../../../../hooks'
-import { useBentoBoxContract } from '../../../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../../../sushi-hooks/useApproveCallback'
-import useKashiBalances from '../../../../sushi-hooks/queries/useKashiBalances'
-import useKashi from '../../../../sushi-hooks/useKashi'
-import { formatFromBalance, formatToBalance } from '../../../../utils'
+import { useActiveWeb3React } from 'hooks'
+import { useBentoBoxContract } from 'sushi-hooks/useContract'
+import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
+import { useKashiPair } from 'context/kashi'
+//import useKashiBalances from 'sushi-hooks/queries/useKashiBalances'
+import useKashi from 'sushi-hooks/useKashi'
+import { formatFromBalance, formatToBalance } from 'utils'
 
 import {
   InputRow,
@@ -20,64 +20,66 @@ import {
   InputPanel,
   Container,
   StyledButtonName,
+  StyledSwitch,
   StyledBalanceMax
 } from '../styled'
 
-interface PayInputPanelProps {
-  label?: string
+interface RemoveInputPanelProps {
   tokenAddress: string
   tokenSymbol?: string
   pairAddress: string
 }
 
-export default function PayInputPanel({ tokenAddress, pairAddress, tokenSymbol }: PayInputPanelProps) {
+export default function RemoveInputPanel({ tokenAddress, tokenSymbol, pairAddress }: RemoveInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
-
-  const kashiBalances = useKashiBalances(pairAddress)
-  console.log('kashiBalance:', kashiBalances)
-
-  const { t } = useTranslation()
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { repayFromBento, repay } = useKashi()
+  const { repay, repayFromBento } = useKashi()
 
-  //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
-  const tokenBalance = formatFromBalance(kashiBalances?.borrow?.value, kashiBalances?.borrow?.decimals)
-  const decimals = kashiBalances?.borrow?.decimals
+  const kashiBalances = useKashiPair(pairAddress)
+  const assetBalance = kashiBalances?.user.borrow.balance
+  const tokenBalance = formatFromBalance(assetBalance?.value, assetBalance?.decimals)
+  const decimals = assetBalance?.decimals
 
   // check whether the user has approved BentoBox on the token
   const bentoBoxContract = useBentoBoxContract()
   const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
   // track and parse user input for Deposit Input
-  const [depositValue, setDepositValue] = useState('')
+  const [repayValue, setRepayValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserDepositInput = useCallback((depositValue: string, max = false) => {
+
+  const onUserWithdrawInput = useCallback((value: string, max = false) => {
     setMaxSelected(max)
-    setDepositValue(depositValue)
+    setRepayValue(value)
   }, [])
 
-  // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
-  // used for max input button
-  const maxDepositAmountInput = kashiBalances?.borrow
-  //const atMaxDepositAmount = true
-  const handleMaxDeposit = useCallback(() => {
-    maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
-  }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
 
-  console.log('state:', depositValue, maxSelected)
+  const maxWithdrawAmountInput = assetBalance
+
+  const handleMaxDeposit = useCallback(() => {
+    maxWithdrawAmountInput && onUserWithdrawInput(tokenBalance, true)
+  }, [maxWithdrawAmountInput, onUserWithdrawInput, tokenBalance])
 
   return (
     <>
-      {/* Deposit Input */}
-      <InputPanel id="pay-input-panel">
-        <Container cornerRadiusBottomNone={false} cornerRadiusTopNone={true}>
+      <InputPanel>
+        <Container cornerRadiusTopNone={true} cornerRadiusBottomNone={false}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
-                Pay back {tokenSymbol}
+                Repay <span className="font-semibold">{tokenSymbol}</span> from{' '}
+                <span>
+                  {balanceFrom === 'bento' ? (
+                    <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
+                  ) : (
+                    balanceFrom === 'wallet' && (
+                      <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
+                    )
+                  )}
+                </span>
               </TYPE.body>
               {account && (
                 <TYPE.body
@@ -87,7 +89,7 @@ export default function PayInputPanel({ tokenAddress, pairAddress, tokenSymbol }
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  Max owed: {tokenBalance} {tokenSymbol}
+                  Borrowed: {tokenBalance} {tokenSymbol}
                 </TYPE.body>
               )}
             </RowBetween>
@@ -96,9 +98,9 @@ export default function PayInputPanel({ tokenAddress, pairAddress, tokenSymbol }
             <>
               <NumericalInput
                 className="token-amount-input"
-                value={depositValue}
+                value={repayValue}
                 onUserInput={val => {
-                  onUserDepositInput(val)
+                  onUserWithdrawInput(val)
                 }}
               />
               {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
@@ -117,30 +119,30 @@ export default function PayInputPanel({ tokenAddress, pairAddress, tokenSymbol }
                 disabled={
                   pendingTx ||
                   !tokenBalance ||
-                  Number(depositValue) === 0 ||
+                  Number(repayValue) === 0 ||
                   // todo this should be a bigInt comparison
-                  Number(depositValue) > Number(tokenBalance)
+                  Number(repayValue) > Number(tokenBalance)
                 }
                 onClick={async () => {
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await repay(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await repay(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
-                      await repay(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
+                      await repay(pairAddress, tokenAddress, formatToBalance(repayValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await repayFromBento(pairAddress, tokenAddress, maxDepositAmountInput, true)
+                      await repayFromBento(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
-                      await repayFromBento(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
+                      await repayFromBento(pairAddress, tokenAddress, formatToBalance(repayValue, decimals), false)
                     }
                   }
                   setPendingTx(false)
                 }}
               >
                 <Aligner>
-                  <StyledButtonName>Pay</StyledButtonName>
+                  <StyledButtonName>Repay</StyledButtonName>
                 </Aligner>
               </ButtonSelect>
             )}

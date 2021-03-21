@@ -572,26 +572,22 @@ const useKashi = () => {
   const repayFromBento = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
       // TODO: if amount ends up being 0, we need to prevent the tx from happening and display message
-
-      const tokenAddress = isAddressString(pairAddress)
-
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
       let part = amount?.value.mul(totalBorrow.base).div(totalBorrow.elastic)
-
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
         part = pairUserDetails[1][0].userBorrowAmount.gt(BigNumber.from(0))
           ? pairUserDetails[1][0].userBorrowAmount.mul(totalBorrow.base).div(totalBorrow.elastic)
           : BigNumber.from(0)
       }
-
       // if part = 0 then use amount as long as amount isn't 0, check for amount being 0 above
       const repayPart = part.eq(BigNumber.from(0)) ? amount?.value : part
+
+      console.log('repayPart_bento:', repayPart)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -614,24 +610,23 @@ const useKashi = () => {
   // Actions: Deposit, Repay
   const repay = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps, max: boolean) => {
-      const tokenAddress = isAddressString(pairAddress)
-
+      const tokenAddress = isAddressString(address)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
-      let part = amount?.value.mul(totalBorrow.base).div(totalBorrow.elastic)
 
+      let part = amount?.value.mul(totalBorrow.base).div(totalBorrow.elastic)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-
         part = pairUserDetails[1][0].userBorrowAmount.gt(BigNumber.from(0))
           ? pairUserDetails[1][0].userBorrowAmount.mul(totalBorrow.base).div(totalBorrow.elastic)
           : BigNumber.from(0)
       }
-
-      // if part == 0 then use amount as long as amount isn't 0, check for amount being 0 above
+      // if part = 0 then use amount as long as amount isn't 0, check for amount being 0 above
       const repayPart = part.eq(BigNumber.from(0)) ? amount?.value : part
+
+      console.log('repayPart_wallet:', repayPart)
 
       try {
         const tx = await kashiPairCloneContract?.cook(

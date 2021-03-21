@@ -513,6 +513,10 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 ).toString()
               ) * assetUSD,
             value: pairUserDetails[1][i].userBorrowAmount,
+            balance: {
+              value: pairUserDetails[1][i].userBorrowAmount,
+              decimals: pairDetails[i].assetDecimals
+            },
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
               BigNumber.from(10).pow(pairDetails[i].assetDecimals)
