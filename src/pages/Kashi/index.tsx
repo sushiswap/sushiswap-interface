@@ -1,15 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import styled, { ThemeContext } from 'styled-components'
+import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { Debugger } from 'components/Debugger'
 import { BaseCard } from '../../components/Card'
 import QuestionHelper from '../../components/QuestionHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedPercent } from '../../utils'
-import { useKashiPairs, KashiPair } from '../../context/kashi'
+import { useKashiPairs } from 'kashi/context'
 
-import { Header, SplitPane, Navigation, Search, Container } from './components'
+import { Header, SplitPane, Navigation, Search } from './components'
 
 const PageWrapper = styled.div`
   max-width: 800px;
@@ -30,14 +30,7 @@ export default function KashiPairs() {
 
   return (
     <>
-      {/* <Container left={<div>KASHI</div>}>
-        <SplitPane left={<a>Markets</a>} right={<Navigation />} />
-      </Container> */}
       <PageWrapper>
-        {/* <Container left={<div>LEFT</div>} right={<div>RIGHT</div>}>
-        CONTENT
-      </Container> */}
-
         <div className="flex-col space-y-8">
           <Header />
           <div>

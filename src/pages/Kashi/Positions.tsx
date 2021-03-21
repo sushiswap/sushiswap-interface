@@ -2,15 +2,15 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
-import { BaseCard } from '../../../components/Card'
+import { BaseCard } from 'components/Card'
 //import QuestionHelper from '../../components/QuestionHelper'
 import { BarChart, User } from 'react-feather'
-import getTokenIcon from '../../../sushi-hooks/queries/getTokenIcons'
+import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../../assets/kashi/bento-symbol.svg'
-import { formattedPercent, formattedNum } from '../../../utils'
-import { useKashiCounts, useKashiPairs } from 'context/kashi'
+import { formattedPercent, formattedNum } from '../../utils'
+import { useKashiCounts, useKashiPairs } from 'kashi/context'
 
-import { Header, Navigation, SplitPane } from '../components'
+import { Header, Navigation, SplitPane } from './components'
 
 const PageWrapper = styled.div`
   max-width: 800px;

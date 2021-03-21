@@ -2,12 +2,24 @@ import { useActiveWeb3React } from 'hooks'
 import useInterval from 'hooks/useInterval'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useKashiPairHelperContract } from 'sushi-hooks/useContract'
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../constants/Fraction'
 import sushiData from '@sushiswap/sushi-data'
 import getOracleName from '../sushi-hooks/queries/getOracleNames'
 import getMainnetAddress from '../sushi-hooks/queries/getMainnetAddress'
 import { ethers } from 'ethers'
+import {
+  MINIMUM_TARGET_UTILIZATION,
+  MAXIMUM_TARGET_UTILIZATION,
+  UTILIZATION_PRECISION,
+  FULL_UTILIZATION,
+  FULL_UTILIZATION_MINUS_MAX,
+  STARTING_INTEREST_PER_YEAR,
+  MINIMUM_INTEREST_PER_YEAR,
+  MAXIMUM_INTEREST_PER_YEAR,
+  INTEREST_ELASTICITY,
+  FACTOR_PRECISION
+} from './constants'
 
 enum ActionType {
   SET = 'SET',
@@ -17,6 +29,14 @@ enum ActionType {
 interface Reducer {
   type: ActionType
   payload: any
+}
+
+function takeFee(amount: BigNumber) {
+  return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
+}
+
+function addBorrowFee(amount: BigNumber) {
+  return amount.mul(BigNumber.from(10005)).div(BigNumber.from(10000))
 }
 
 // TODO: typing for data structure...
@@ -101,46 +121,6 @@ const pairAddresses = [
   '0x19F855526eb5Bc7C90690f88aF98bC870edEbcCc'
 ]
 
-const MINIMUM_TARGET_UTILIZATION = BigNumber.from('700000000000000000') // 70%
-
-const MAXIMUM_TARGET_UTILIZATION = BigNumber.from('800000000000000000') // 80%
-
-const UTILIZATION_PRECISION = BigNumber.from('1000000000000000000')
-
-const FULL_UTILIZATION = BigNumber.from('1000000000000000000')
-
-const FULL_UTILIZATION_MINUS_MAX = FULL_UTILIZATION.sub(MAXIMUM_TARGET_UTILIZATION)
-
-const STARTING_INTEREST_PER_YEAR = BigNumber.from(68493150675)
-  .mul(BigNumber.from(60))
-  .mul(BigNumber.from(60))
-  .mul(BigNumber.from(24))
-  .mul(BigNumber.from(365)) // approx 1% APR
-
-const MINIMUM_INTEREST_PER_YEAR = BigNumber.from(17123287665)
-  .mul(BigNumber.from(60))
-  .mul(BigNumber.from(60))
-  .mul(BigNumber.from(24))
-  .mul(BigNumber.from(365)) // approx 0.25% APR
-
-const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(68493150675000)
-  .mul(BigNumber.from(60))
-  .mul(BigNumber.from(60))
-  .mul(BigNumber.from(24))
-  .mul(BigNumber.from(365)) // approx 1000% APR
-
-const INTEREST_ELASTICITY = BigNumber.from('28800000000000000000000000000000000000000') // Half or double in 28800 seconds (8 hours) if linear
-
-const FACTOR_PRECISION = BigNumber.from('1000000000000000000')
-
-function takeFee(amount: BigNumber) {
-  return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
-}
-
-function addBorrowFee(amount: BigNumber) {
-  return amount.mul(BigNumber.from(10005)).div(BigNumber.from(10000))
-}
-
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -173,8 +153,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const exchangeEthPrice = await sushiData.exchange.ethPrice()
     const collateralUSD = collateralSushiData?.derivedETH * exchangeEthPrice
     const assetUSD = assetSushiData?.derivedETH * exchangeEthPrice
-    console.log('collateralUSD:', collateralUSD)
-    console.log('assetUSD:', assetUSD)
+    // console.log('collateralUSD:', collateralUSD)
+    // console.log('assetUSD:', assetUSD)
 
     const pairs = pairAddresses.map((address, i) => {
       function accrue(amount: BigNumber) {

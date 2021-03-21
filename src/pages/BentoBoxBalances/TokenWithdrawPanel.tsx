@@ -177,12 +177,12 @@ export default function CurrencyInputPanel({
     maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
   }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
 
-  console.log(
-    'state:',
-    depositValue,
-    maxSelected,
-    approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING
-  )
+  // console.log(
+  //   'state:',
+  //   depositValue,
+  //   maxSelected,
+  //   approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING
+  // )
 
   return (
     <>

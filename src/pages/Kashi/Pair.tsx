@@ -1,0 +1,227 @@
+import React, { useState } from 'react'
+import { ChainId } from '@sushiswap/sdk'
+import { RouteComponentProps } from 'react-router-dom'
+import styled from 'styled-components'
+import { useActiveWeb3React } from 'hooks'
+import { AutoColumn } from 'components/Column'
+import { Debugger } from 'components/Debugger'
+import { useKashiPair } from 'kashi/context'
+import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
+import { KashiAction, Navigation, Card, CardHeader, PrimaryTabs, SecondaryTabs } from './components'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { TYPE } from 'theme'
+import { AutoRow, RowBetween } from 'components/Row'
+import { formattedNum, formattedPercent } from 'utils'
+
+const PageWrapper = styled(AutoColumn)`
+  max-width: 800px;
+  width: 100%;
+`
+
+export default function KashiPair({
+  match: {
+    params: { pairAddress }
+  }
+}: RouteComponentProps<{ pairAddress: string }>) {
+  const [tabIndex, setTabIndex] = useState(0)
+
+  const { chainId } = useActiveWeb3React()
+
+  const pair = useKashiPair(pairAddress)
+
+  if (!pair) return null
+
+  return (
+    <PageWrapper>
+      <RowBetween padding="0 16px 22px">
+        <div>
+          <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
+            Kashi
+          </TYPE.extraLargeHeader>
+        </div>
+        <Navigation />
+      </RowBetween>
+      <Card>
+        <CardHeader market={!tabIndex ? 'Supply' : 'Borrow'} border>
+          <div className="grid grid-cols-3 gap-2 items-center">
+            <div className="flex space-x-2 mr-4">
+              <a
+                href={
+                  `${
+                    chainId === ChainId.MAINNET
+                      ? 'https://www.etherscan.io/address/'
+                      : chainId === ChainId.ROPSTEN
+                      ? 'https://ropsten.etherscan.io/address/'
+                      : null
+                  }` + pair?.collateral.address
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src={pair && getTokenIcon(pair?.collateral.address)}
+                  className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                />
+              </a>
+              <a
+                href={
+                  `${
+                    chainId === ChainId.MAINNET
+                      ? 'https://www.etherscan.io/address/'
+                      : chainId === ChainId.ROPSTEN
+                      ? 'https://ropsten.etherscan.io/address/'
+                      : null
+                  }` + pair?.asset.address
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src={pair && getTokenIcon(pair?.asset.address)} className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg" />
+              </a>
+            </div>
+            <div className="col-span-2 sm:col-span-1 flex justify-between items-center">
+              <div>
+                <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} lineHeight={1} fontWeight={700}>
+                  {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
+                </TYPE.extraLargeHeader>
+                <AutoRow>
+                  <TYPE.small color="mediumEmphesisText" fontSize={12} fontWeight={700} style={{ marginRight: 4 }}>
+                    Oracle:
+                  </TYPE.small>
+                  <TYPE.small color="highEmphesisText" fontSize={12} fontWeight={700}>
+                    {pair && pair.oracle.name}
+                  </TYPE.small>
+                  {/* <QuestionHelper text="" /> */}
+                </AutoRow>
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+
+        <Stats tabIndex={tabIndex} pair={pair} />
+
+        <PrimaryTabs
+          forceRenderTabPanel
+          defaultIndex={0}
+          selectedIndex={tabIndex}
+          onSelect={index => setTabIndex(index)}
+        >
+          <TabList>
+            <Tab>Supply</Tab>
+            <Tab>Borrow</Tab>
+            <Tab>Leverage</Tab>
+          </TabList>
+          <TabPanel>
+            <SecondaryTabs forceRenderTabPanel>
+              <TabList>
+                <Tab>Deposit {pair.asset.symbol}</Tab>
+                <Tab>Withdraw {pair.asset.symbol}</Tab>
+              </TabList>
+              <TabPanel>
+                <KashiAction pair={pair} action="Deposit" direction="From" label="Balance" />
+              </TabPanel>
+              <TabPanel>
+                <KashiAction pair={pair} action="Withdraw" direction="Into" label="Balance" />
+              </TabPanel>
+            </SecondaryTabs>
+          </TabPanel>
+          <TabPanel>
+            <SecondaryTabs forceRenderTabPanel>
+              <TabList>
+                <Tab>Borrow {pair.asset.symbol}</Tab>
+                <Tab>Payback {pair.asset.symbol}</Tab>
+              </TabList>
+              <TabPanel>
+                <KashiAction pair={pair} action="Borrow" direction="To" label="Balance" />
+              </TabPanel>
+              <TabPanel>
+                <KashiAction pair={pair} action="Repay" direction="From" label="Balance" />
+              </TabPanel>
+            </SecondaryTabs>
+          </TabPanel>
+          <TabPanel style={{ padding: 64 }}>
+            <AutoColumn gap="md" justify="center">
+              <TYPE.mediumHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
+                Coming Soon!
+              </TYPE.mediumHeader>
+            </AutoColumn>
+          </TabPanel>
+        </PrimaryTabs>
+      </Card>
+    </PageWrapper>
+  )
+}
+
+function Stats({ tabIndex, pair }: { tabIndex: number; pair: any }) {
+  return tabIndex === 0 ? (
+    <RowBetween style={{ padding: '32px 48px 0' }} align="top">
+      <div>
+        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
+          Supply Balance
+        </TYPE.mediumHeader>
+        <TYPE.extraLargeHeader color="primaryBlue" fontSize={28} fontWeight={700}>
+          {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
+        </TYPE.extraLargeHeader>
+        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
+          ≈ {formattedNum(pair.user.supply.usdString, true)}
+        </TYPE.small>
+      </div>
+      <div>
+        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
+          Market Supply
+        </TYPE.mediumHeader>
+        <TYPE.extraLargeHeader color="highEmphesisText" fontSize={28} fontWeight={700}>
+          {formattedNum(pair.details.total.supply.string)} {pair.asset.symbol}
+        </TYPE.extraLargeHeader>
+        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
+          ≈ {formattedNum(pair.details.total.supply.usdString, true)}
+        </TYPE.small>
+      </div>
+      <div style={{ textAlign: 'right' }}>
+        <div>
+          <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
+            Supply APR
+          </TYPE.mediumHeader>
+          <TYPE.extraLargeHeader color="highEmphesisText" fontSize={28} fontWeight={700}>
+            {formattedPercent(pair.details.apr.currentSupplyAPR)}
+          </TYPE.extraLargeHeader>
+        </div>
+      </div>
+    </RowBetween>
+  ) : (
+    <RowBetween style={{ padding: '32px 48px 0' }} align="top">
+      <div>
+        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
+          Collateral Balance
+        </TYPE.mediumHeader>
+        <TYPE.extraLargeHeader color="primaryBlue" fontSize={28} fontWeight={700}>
+          {formattedNum(pair.user.collateral.string)} {pair.collateral.symbol}
+        </TYPE.extraLargeHeader>
+        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
+          ≈ {formattedNum(pair.user.collateral.usdString, true)}
+        </TYPE.small>
+      </div>
+      <div>
+        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
+          Borrow Balance
+        </TYPE.mediumHeader>
+        <TYPE.extraLargeHeader color="primaryPink" fontSize={28} fontWeight={700}>
+          {formattedNum(pair.user.borrow.string)} {pair.asset.symbol}
+        </TYPE.extraLargeHeader>
+        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
+          ≈ {formattedNum(pair.user.borrow.usdString, true)}
+        </TYPE.small>
+      </div>
+      <div style={{ textAlign: 'right' }}>
+        <div>
+          <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
+            Borrow APR
+          </TYPE.mediumHeader>
+          <TYPE.extraLargeHeader color="highEmphesisText" fontSize={28} fontWeight={700}>
+            {formattedPercent(pair.details.apr.currentInterestPerYear)}
+          </TYPE.extraLargeHeader>
+        </div>
+      </div>
+    </RowBetween>
+  )
+}

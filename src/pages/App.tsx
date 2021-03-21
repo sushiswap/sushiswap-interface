@@ -38,10 +38,10 @@ import Test from './Test'
 
 import SushiBar from './SushiBar'
 
-import Bento from './Bento'
-import BentoBalances from './BentoBalances'
+import Bento from './BentoBox'
+import BentoBalances from './BentoBoxBalances'
 
-import Kashi from './Kashi'
+import KashiPairs from './Kashi'
 import KashiPair from './Kashi/Pair'
 import KashiPositions from './Kashi/Positions'
 
@@ -52,7 +52,7 @@ import Saave from './Saave'
 
 import ComingSoonModal from '../components/ComingSoonModal'
 
-import { KashiProvider } from '../context/kashi'
+import { KashiProvider } from 'kashi/context'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -132,10 +132,10 @@ export default function App() {
                 {chainId === ChainId.ROPSTEN && (
                   <Switch>
                     <Route exact strict path="/bento" component={Bento} />
-                    <Route exact strict path="/bento/kashi" component={Kashi} />
+                    <Route exact strict path="/bento/balances" component={BentoBalances} />
+                    <Route exact strict path="/bento/kashi" component={KashiPairs} />
                     <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
                     <Route exact strict path="/bento/kashi/:pairAddress" component={KashiPair} />
-                    <Route exact strict path="/bento/balances" component={BentoBalances} />
                   </Switch>
                 )}
                 <WithPadding>

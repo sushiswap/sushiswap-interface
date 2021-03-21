@@ -188,7 +188,7 @@ export default function CurrencyInputPanel({
     maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
   }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
 
-  console.log('state:', depositValue, maxSelected)
+  // console.log('state:', depositValue, maxSelected)
 
   return (
     <>

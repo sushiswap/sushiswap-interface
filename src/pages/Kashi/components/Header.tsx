@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { DarkCard, BaseCard } from 'components/Card'
-import { useKashiCounts } from 'context/kashi'
+import { useKashiCounts } from 'kashi/context'
 
 const StyledBaseCard = styled(BaseCard)`
   border: none
