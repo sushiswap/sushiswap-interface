@@ -50,6 +50,8 @@ const Center = styled(TeardropCard)`
   margin: 0 8px;
   display: flex;
   flex-direction: column;
+
+  // overflow-y: scroll;
 `
 
 const Right = styled(Aside)`

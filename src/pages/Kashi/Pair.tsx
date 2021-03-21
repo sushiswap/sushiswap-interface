@@ -166,11 +166,11 @@ export default function KashiPair({
             </SecondaryTabs>
           </TabPanel>
           <TabPanel style={{ padding: 64 }}>
-            <AutoColumn gap="md" justify="center">
+            <div>
               <TYPE.mediumHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
                 Coming Soon!
               </TYPE.mediumHeader>
-            </AutoColumn>
+            </div>
           </TabPanel>
         </PrimaryTabs>
       </Layout>
