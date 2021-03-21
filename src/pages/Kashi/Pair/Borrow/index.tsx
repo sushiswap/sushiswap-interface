@@ -134,13 +134,7 @@ SupplyProps) {
             <div className="text-sm text-gray-300">Borrow</div>
           </div>
           <div>
-            {/* <BorrowInputPanel
-              tokenAddress={asset.address}
-              tokenSymbol={asset.symbol}
-              tokenDecimals={asset.decimals}
-              pairAddress={pairAddress}
-              max={maxBorrowBalance}
-            /> */}
+            <BorrowInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
             <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
           </div>
         </AutoColumn>

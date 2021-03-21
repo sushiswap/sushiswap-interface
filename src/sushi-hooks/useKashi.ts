@@ -427,6 +427,7 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      // TODO: based on granularity, this might not be the most updated max
       const pair = pairs.find(pair => pair.address === pairAddress)
       let amountToWithdraw = amount.value
       if (max) {
@@ -502,10 +503,11 @@ const useKashi = () => {
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       let borrowAmount = amount?.value
-
+      const pair = pairs.find(pair => pair.address === pairAddress)
       if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        borrowAmount = pairUserDetails.user.borrow.max
+        if (pair) {
+          borrowAmount = pair.user.borrow.max.value
+        }
       }
 
       try {
@@ -521,7 +523,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, kashiPairHelperContract, library]
+    [account, addTransaction, library, pairs]
   )
 
   // Description: borrow into wallet
@@ -535,10 +537,11 @@ const useKashi = () => {
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       let borrowAmount = amount?.value
-
+      const pair = pairs.find(pair => pair.address === pairAddress)
       if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        borrowAmount = pairUserDetails.user.borrow.max
+        if (pair) {
+          borrowAmount = pair.user.borrow.max.value
+        }
       }
 
       try {
@@ -560,7 +563,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, kashiPairHelperContract, library]
+    [account, addTransaction, library, pairs]
   )
 
   // repay borrowed amount

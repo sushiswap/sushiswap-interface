@@ -24,13 +24,13 @@ import {
   StyledBalanceMax
 } from '../styled'
 
-interface WithdrawInputPanelProps {
+interface RemoveInputPanelProps {
   tokenAddress: string
   tokenSymbol?: string
   pairAddress: string
 }
 
-export default function WithdrawInputPanel({ tokenAddress, tokenSymbol, pairAddress }: WithdrawInputPanelProps) {
+export default function RemoveInputPanel({ tokenAddress, tokenSymbol, pairAddress }: RemoveInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
   const { account } = useActiveWeb3React()
   const theme = useTheme()

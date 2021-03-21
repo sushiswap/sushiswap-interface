@@ -1,16 +1,16 @@
 import React, { useState, useCallback } from 'react'
-import useTheme from '../../../../hooks/useTheme'
-import { useTranslation } from 'react-i18next'
-import { TYPE } from '../../../../theme'
-import { RowBetween } from '../../../../components/Row'
-import { Input as NumericalInput } from '../../../../components/NumericalInput'
+import useTheme from 'hooks/useTheme'
+import { TYPE } from 'theme'
+import { RowBetween } from 'components/Row'
+import { Input as NumericalInput } from 'components/NumericalInput'
 import { Dots } from '../../../Pool/styleds'
-import { useActiveWeb3React } from '../../../../hooks'
-import { useBentoBoxContract } from '../../../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../../../sushi-hooks/useApproveCallback'
-import useBentoBalance from '../../../../sushi-hooks/queries/useBentoBalance'
-import useKashi from '../../../../sushi-hooks/useKashi'
-import { formatFromBalance, formatToBalance } from '../../../../utils'
+import { useActiveWeb3React } from 'hooks'
+import { useBentoBoxContract } from 'sushi-hooks/useContract'
+import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
+import { useKashiPair } from 'context/kashi'
+//import useKashiBalances from 'sushi-hooks/queries/useKashiBalances'
+import useKashi from 'sushi-hooks/useKashi'
+import { formatFromBalance, formatToBalance } from 'utils'
 
 import {
   InputRow,
@@ -20,74 +20,76 @@ import {
   InputPanel,
   Container,
   StyledButtonName,
+  StyledSwitch,
   StyledBalanceMax
 } from '../styled'
 
 interface BorrowInputPanelProps {
-  tokenSymbol: string
   tokenAddress: string
-  tokenDecimals: number
+  tokenSymbol?: string
   pairAddress: string
-  max: string
 }
 
-export default function BorrowInputPanel({
-  tokenSymbol,
-  tokenAddress,
-  tokenDecimals,
-  pairAddress,
-  max
-}: BorrowInputPanelProps) {
+export default function BorrowInputPanel({ tokenAddress, tokenSymbol, pairAddress }: BorrowInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
-
-  const bentoBalance = useBentoBalance(tokenAddress)
-
-  const { t } = useTranslation()
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { borrow, borrowWithdraw } = useKashi()
+  const { borrowWithdraw, borrow } = useKashi()
 
-  const decimals = bentoBalance?.decimals
+  const kashiBalances = useKashiPair(pairAddress)
+  const assetBalance = kashiBalances?.user.borrow.max.balance
+  const tokenBalance = formatFromBalance(assetBalance?.value, assetBalance?.decimals)
+  const decimals = assetBalance?.decimals
 
   // check whether the user has approved BentoBox on the token
   const bentoBoxContract = useBentoBoxContract()
   const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
   // track and parse user input for Deposit Input
-  const [borrowValue, setBorrowValue] = useState('')
+  const [withdrawValue, setWithdrawValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserBorrowInput = useCallback((value: string, max = false) => {
+
+  const onUserWithdrawInput = useCallback((value: string, max = false) => {
     setMaxSelected(max)
-    setBorrowValue(value)
+    setWithdrawValue(value)
   }, [])
 
   const [pendingTx, setPendingTx] = useState(false)
 
-  const maxBorrowAmountInput = bentoBalance
+  const maxWithdrawAmountInput = assetBalance
 
-  const handleMaxBorrow = useCallback(() => {
-    maxBorrowAmountInput && onUserBorrowInput(max, true)
-  }, [maxBorrowAmountInput, onUserBorrowInput, max])
+  const handleMaxDeposit = useCallback(() => {
+    maxWithdrawAmountInput && onUserWithdrawInput(tokenBalance, true)
+  }, [maxWithdrawAmountInput, onUserWithdrawInput, tokenBalance])
 
   return (
     <>
-      <InputPanel id="borrow-input-panel">
-        <Container cornerRadiusBottomNone={true}>
+      <InputPanel>
+        <Container cornerRadiusTopNone={false} cornerRadiusBottomNone={true}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
-                Borrow {tokenSymbol}
+                Borrow <span className="font-semibold">{tokenSymbol}</span> to{' '}
+                <span>
+                  {balanceFrom === 'bento' ? (
+                    <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
+                  ) : (
+                    balanceFrom === 'wallet' && (
+                      <StyledSwitch onClick={() => setBalanceFrom('bento')}>Wallet</StyledSwitch>
+                    )
+                  )}
+                </span>
               </TYPE.body>
               {account && (
                 <TYPE.body
-                  onClick={handleMaxBorrow}
+                  onClick={handleMaxDeposit}
                   color={theme.text2}
                   fontWeight={500}
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  Max: {max} {tokenSymbol}
+                  Safe Max: {tokenBalance} {tokenSymbol}
                 </TYPE.body>
               )}
             </RowBetween>
@@ -96,12 +98,12 @@ export default function BorrowInputPanel({
             <>
               <NumericalInput
                 className="token-amount-input"
-                value={borrowValue}
+                value={withdrawValue}
                 onUserInput={val => {
-                  onUserBorrowInput(val)
+                  onUserWithdrawInput(val)
                 }}
               />
-              {account && <StyledBalanceMax onClick={handleMaxBorrow}>MAX</StyledBalanceMax>}
+              {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
             </>
             {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
               <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
@@ -114,26 +116,26 @@ export default function BorrowInputPanel({
             )}
             {approvalA === ApprovalState.APPROVED && (
               <ButtonSelect
-                // disabled={
-                //   pendingTx ||
-                //   !tokenBalance ||
-                //   Number(depositValue) === 0 ||
-                //   // todo this should be a bigInt comparison
-                //   Number(depositValue) > Number(tokenBalance)
-                // }
+                disabled={
+                  pendingTx ||
+                  !tokenBalance ||
+                  Number(withdrawValue) === 0 ||
+                  // todo this should be a bigInt comparison
+                  Number(withdrawValue) > Number(tokenBalance)
+                }
                 onClick={async () => {
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
+                      await borrowWithdraw(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
-                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(borrowValue, decimals), false)
+                      await borrowWithdraw(pairAddress, tokenAddress, formatToBalance(withdrawValue, decimals), false)
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await borrow(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
+                      await borrow(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
-                      await borrow(pairAddress, tokenAddress, formatToBalance(borrowValue, decimals), false)
+                      await borrow(pairAddress, tokenAddress, formatToBalance(withdrawValue, decimals), false)
                     }
                   }
                   setPendingTx(false)
