@@ -167,8 +167,6 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   const balance = action === 'Deposit' || action === 'Withdraw' ? assetBalance : collateralBalance
 
-  console.log(bentoAssetBalance.value.toString(), bentoAssetBalance.value.toString())
-
   const [value, setValue] = useState('')
 
   const [pendingTx, setPendingTx] = useState(false)
