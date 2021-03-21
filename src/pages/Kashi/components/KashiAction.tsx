@@ -156,12 +156,21 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     removeCollateral
   } = useKashi()
 
-  const walletBalance = useTokenBalance(pair.asset.address)
-  const bentoBalance = useBentoBalance(pair.asset.address)
-
   const [sourceOrDestination, setSourceOrDestination] = useState<'BentoBox' | 'Wallet'>('BentoBox')
 
-  const balance = sourceOrDestination === 'BentoBox' ? bentoBalance : walletBalance
+  const bentoAssetBalance = useBentoBalance(pair.asset.address)
+
+  const walletAssetBalance = useTokenBalance(pair.asset.address)
+
+  const bentoCollateralBalance = useBentoBalance(pair.collateral.address)
+
+  const walletCollateralBalance = useTokenBalance(pair.collateral.address)
+
+  const assetBalance = sourceOrDestination === 'BentoBox' ? bentoAssetBalance : walletAssetBalance
+
+  const collateralBalance = sourceOrDestination === 'BentoBox' ? bentoCollateralBalance : walletCollateralBalance
+
+  const balance = action === 'Depoist' || action === 'Withdraw' ? assetBalance : collateralBalance
 
   const [value, setValue] = useState('')
 
@@ -169,15 +178,19 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   const onMax = useCallback(() => {
     if (action === 'Deposit') {
-      setValue(formatFromBalance(balance.value, balance.decimals))
+      setValue(formatFromBalance(assetBalance.value, assetBalance.decimals))
     } else if (action === 'Withdraw') {
       setValue(formatFromBalance(pair.user.supply.value, pair.asset.decimals))
     } else if (action === 'Borrow') {
-      setValue(pair.user.borrow.max)
+      setValue(pair.user.borrow.max.string)
+    } else if (action === 'Repay') {
+      // Max repayment?
+    } else if (action === 'Add Collateral') {
+      setValue(formatFromBalance(collateralBalance.value, collateralBalance.decimals))
     } else if (action === 'Remove Collateral') {
-      setValue(pair.user.collateral.max)
+      setValue(pair.user.collateral.max.string)
     }
-  }, [action, balance, pair])
+  }, [action, assetBalance, collateralBalance, pair])
 
   return (
     <Wrapper>
@@ -210,15 +223,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
                 fontSize={16}
                 style={{ display: 'inline', cursor: 'pointer' }}
               >
-                {label}:{' '}
-                {formatFromBalance(
-                  sourceOrDestination === 'BentoBox' ? bentoBalance?.value : walletBalance?.value,
-                  sourceOrDestination === 'BentoBox' ? bentoBalance?.decimals : walletBalance?.decimals
-                )}
-                {/* {sourceOrDestination === 'Wallet' &&
-                  action === 'Withdraw' &&
-                  formatFromBalance(walletBalance?.value, walletBalance?.decimals)}{' '}
-                {pair.asset.symbol} */}
+                {label}: {formatFromBalance(balance?.value, balance?.decimals)}
               </TYPE.body>
             </RowBetween>
           </LabelRow>

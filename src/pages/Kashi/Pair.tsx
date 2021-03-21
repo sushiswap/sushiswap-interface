@@ -108,6 +108,7 @@ export default function KashiPair({
         >
           <TabList>
             <Tab>Supply</Tab>
+            <Tab>Collateral</Tab>
             <Tab>Borrow</Tab>
             <Tab>Leverage</Tab>
           </TabList>
@@ -128,11 +129,25 @@ export default function KashiPair({
           <TabPanel>
             <SecondaryTabs forceRenderTabPanel>
               <TabList>
+                <Tab>Add {pair.collateral.symbol}</Tab>
+                <Tab>Remove {pair.collateral.symbol}</Tab>
+              </TabList>
+              <TabPanel>
+                <KashiAction pair={pair} action="Add Collateral" direction="From" label="Balance" />
+              </TabPanel>
+              <TabPanel>
+                <KashiAction pair={pair} action="Remove Collateral" direction="Into" label="Balance" />
+              </TabPanel>
+            </SecondaryTabs>
+          </TabPanel>
+          <TabPanel>
+            <SecondaryTabs forceRenderTabPanel>
+              <TabList>
                 <Tab>Borrow {pair.asset.symbol}</Tab>
                 <Tab>Payback {pair.asset.symbol}</Tab>
               </TabList>
               <TabPanel>
-                <KashiAction pair={pair} action="Borrow" direction="To" label="Balance" />
+                <KashiAction pair={pair} action="Borrow" direction="To" label="Limit" />
               </TabPanel>
               <TabPanel>
                 <KashiAction pair={pair} action="Repay" direction="From" label="Balance" />
