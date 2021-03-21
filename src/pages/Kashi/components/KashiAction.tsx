@@ -123,12 +123,7 @@ const Wrapper = styled.div`
 `
 
 interface KashiActions {
-  // pairAddress: string
-  // tokenAddress: string
-  // tokenSymbol: string
-  // tokenDecimals: number
   pair: any
-
   action: string
   direction: string
   label: string
@@ -170,7 +165,9 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   const collateralBalance = sourceOrDestination === 'BentoBox' ? bentoCollateralBalance : walletCollateralBalance
 
-  const balance = action === 'Depoist' || action === 'Withdraw' ? assetBalance : collateralBalance
+  const balance = action === 'Deposit' || action === 'Withdraw' ? assetBalance : collateralBalance
+
+  console.log(bentoAssetBalance.value.toString(), bentoAssetBalance.value.toString())
 
   const [value, setValue] = useState('')
 
