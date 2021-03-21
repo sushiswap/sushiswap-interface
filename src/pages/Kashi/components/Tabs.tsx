@@ -1,4 +1,5 @@
 import 'react-tabs/style/react-tabs.css'
+import React from 'react'
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import styled from 'styled-components'

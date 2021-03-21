@@ -41,7 +41,7 @@ import SushiBar from './SushiBar'
 import Bento from './BentoBox'
 import BentoBalances from './BentoBoxBalances'
 
-import KashiPairs from './Kashi'
+import Kashi from './Kashi'
 import KashiPair from './Kashi/Pair'
 import KashiPositions from './Kashi/Positions'
 
@@ -129,7 +129,7 @@ export default function App() {
               <Switch>
                 {process.env.NODE_ENV === 'development' && <Route exact strict path="/test" component={Test} />}
                 {/* BentoApps */}
-                {chainId === ChainId.ROPSTEN && (
+                {/* {chainId === ChainId.ROPSTEN && (
                   <Switch>
                     <Route exact strict path="/bento" component={Bento} />
                     <Route exact strict path="/bento/balances" component={BentoBalances} />
@@ -137,7 +137,16 @@ export default function App() {
                     <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
                     <Route exact strict path="/bento/kashi/:pairAddress" component={KashiPair} />
                   </Switch>
+                )} */}
+                {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento" component={Bento} />}
+                {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/kashi" component={Kashi} />}
+                {chainId === ChainId.ROPSTEN && (
+                  <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
                 )}
+                {chainId === ChainId.ROPSTEN && (
+                  <Route exact strict path="/bento/kashi/:pairAddress" component={KashiPair} />
+                )}
+                {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/balances" component={BentoBalances} />}
                 <WithPadding>
                   {/* Tools */}
                   <Route exact strict path="/tools" component={Tools} />

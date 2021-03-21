@@ -33,10 +33,7 @@ export default function Positions() {
   const borrowPositions = pairs.filter(function(pair: any) {
     return pair.user.borrow.value.gt(0)
   })
-
   const [selected, setSelected] = useState<'supply' | 'borrow'>('supply')
-
-  if (!supplyPositions.length || !borrowPositions.length) return null
 
   return (
     <>
@@ -74,7 +71,7 @@ function PositionsToggle({ selected, setSelected }: PositionsToggle) {
         <div className="py-3 md:py-0 flex items-center space-x-2 mr-4">
           <div
             className="px-2 py-1 font-semibold rounded"
-            style={{ background: transparentize(0.6, theme.bg1), color: '#6ca8ff' }}
+            style={{ background: transparentize(0.6, theme.bg1), color: `${theme.primaryBlue}` }}
           >
             {counts.pairsSupplied}
           </div>
@@ -90,7 +87,7 @@ function PositionsToggle({ selected, setSelected }: PositionsToggle) {
         <div className="flex items-center space-x-2">
           <div
             className="px-2 py-1 font-semibold rounded"
-            style={{ background: transparentize(0.6, theme.bg1), color: '#de5597' }}
+            style={{ background: transparentize(0.6, theme.bg1), color: `${theme.primaryPink}` }}
           >
             {counts.pairsBorrowed}
           </div>
@@ -111,7 +108,7 @@ function PositionsToggle({ selected, setSelected }: PositionsToggle) {
           style={{ background: `${selected === 'supply' ? transparentize(0.6, theme.bg1) : ''}` }}
           onClick={() => setSelected('supply')}
         >
-          <div className="px-3 py-1 font-semibold rounded text-white" style={{ background: '#6ca8ff' }}>
+          <div className="px-3 py-1 font-semibold rounded text-white" style={{ background: `${theme.primaryBlue}` }}>
             {counts.pairsSupplied}
           </div>
           <div
@@ -128,7 +125,7 @@ function PositionsToggle({ selected, setSelected }: PositionsToggle) {
           style={{ background: `${selected === 'borrow' ? transparentize(0.6, theme.bg1) : ''}` }}
           onClick={() => setSelected('borrow')}
         >
-          <div className="px-3 py-1 font-semibold rounded text-white" style={{ background: '#de5597' }}>
+          <div className="px-3 py-1 font-semibold rounded text-white" style={{ background: `${theme.primaryPink}` }}>
             {counts.pairsBorrowed}
           </div>
           <div
@@ -147,51 +144,75 @@ function PositionsToggle({ selected, setSelected }: PositionsToggle) {
 
 // TODO: Use table component
 const SupplyPositions = ({ supplyPositions }: any) => {
+  const theme = useContext(ThemeContext)
   return (
     <>
       <StyledBaseCard>
-        <div className="pb-4 px-4 grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-2 sm:col-span-1">Market</div>
-          <div className="hidden sm:block"></div>
-          <div className="text-right pl-4 hover:text-gray-400">Supplying</div>
-          <div className="text-right hover:text-gray-400">APY</div>
-        </div>
+        {supplyPositions && supplyPositions.length > 0 ? (
+          <div className="pb-4 px-4 grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold text-gray-500">
+            <div className="hover:text-gray-400 col-span-2 sm:col-span-1">Market</div>
+            <div className="hidden sm:block"></div>
+            <div className="text-right pl-4 hover:text-gray-400">Supplying</div>
+            <div className="text-right hover:text-gray-400">APR</div>
+          </div>
+        ) : (
+          <div className="items-center text-center p-6 w-full">
+            <div className="text-2xl font-semibold text-gray-400 pb-2">You have no open lending positions.</div>
+            <div className="text-base font-base text-gray-400">
+              Swing by once you have lent assets to various markets
+            </div>
+            <div className="flex mx-auto justify-center">
+              <Link
+                to={'/bento/kashi'}
+                className="my-8 px-3 py-2 text-base font-medium rounded-md shadow-sm text-white"
+                style={{ background: `${theme.primaryBlue}` }}
+              >
+                View Markets
+              </Link>
+            </div>
+          </div>
+        )}
         <div className="flex-col space-y-2">
-          {supplyPositions &&
-            supplyPositions.length > 0 &&
-            supplyPositions.map((pair: any) => {
-              return (
-                <>
-                  <Link to={'/bento/kashi/' + pair.address} className="block" key={pair.address}>
-                    <div
-                      className="py-4 px-4 items-center align-center grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold"
-                      style={{ background: '#19212e', borderRadius: '12px' }}
-                    >
-                      <div className="flex space-x-2 col-span-2 sm:col-span-1">
-                        <img
-                          src={getTokenIcon(pair.collateral.address)}
-                          className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
-                        />
-                        <img src={getTokenIcon(pair.asset.address)} className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg" />
-                      </div>
-                      <div className="text-left hidden sm:block pl-4">
-                        <div>
-                          {pair.collateral.symbol} / {pair.asset.symbol}
+          <>
+            {supplyPositions &&
+              supplyPositions.length > 0 &&
+              supplyPositions.map((pair: any) => {
+                return (
+                  <>
+                    <Link to={'/bento/kashi/' + pair.address} className="block" key={pair.address}>
+                      <div
+                        className="py-4 px-4 items-center align-center grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold"
+                        style={{ background: '#19212e', borderRadius: '12px' }}
+                      >
+                        <div className="flex space-x-2 col-span-2 sm:col-span-1">
+                          <img
+                            src={getTokenIcon(pair.collateral.address)}
+                            className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                          />
+                          <img
+                            src={getTokenIcon(pair.asset.address)}
+                            className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                          />
                         </div>
-                        <div>{pair.oracle.name}</div>
-                      </div>
-                      <div className="text-right">
-                        <div>
-                          {formattedNum(pair.user.asset.string, false)} {pair.asset.symbol}
+                        <div className="text-left hidden sm:block pl-4">
+                          <div>
+                            {pair.collateral.symbol} / {pair.asset.symbol}
+                          </div>
+                          <div>{pair.oracle.name}</div>
                         </div>
-                        <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.asset.usdString, true)}</div>
+                        <div className="text-right">
+                          <div>
+                            {formattedNum(pair.user.asset.string, false)} {pair.asset.symbol}
+                          </div>
+                          <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.asset.usdString, true)}</div>
+                        </div>
+                        <div className="text-right">{formattedPercent(pair.details.apr.currentSupplyAPR)}</div>
                       </div>
-                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
-                    </div>
-                  </Link>
-                </>
-              )
-            })}
+                    </Link>
+                  </>
+                )
+              })}
+          </>
         </div>
       </StyledBaseCard>
     </>
@@ -200,24 +221,44 @@ const SupplyPositions = ({ supplyPositions }: any) => {
 
 // TODO: Use table component
 const BorrowPositions = ({ borrowPositions }: any) => {
+  const theme = useContext(ThemeContext)
   return (
     <>
       <StyledBaseCard>
-        <div className="pb-4 px-4 grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-1 md:col-span-1">Market</div>
-          <div className="hidden sm:block"></div>
-          <div className="text-right pl-4 hover:text-gray-400">Borrowing</div>
-          <div className="text-right hover:text-gray-400">Collateral</div>
-          <div className="hidden sm:block text-right hover:text-gray-400">Limit Used</div>
-          <div className="hidden sm:block text-right hover:text-gray-400">Borrow APR</div>
-        </div>
+        {borrowPositions && borrowPositions.length > 0 ? (
+          <div className="pb-4 px-4 grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold text-gray-500">
+            <div className="hover:text-gray-400 col-span-1 md:col-span-1">Market</div>
+            <div className="hidden sm:block"></div>
+            <div className="text-right pl-4 hover:text-gray-400">Borrowing</div>
+            <div className="text-right hover:text-gray-400">Collateral</div>
+            <div className="hidden sm:block text-right hover:text-gray-400">Limit Used</div>
+            <div className="hidden sm:block text-right hover:text-gray-400">Borrow APR</div>
+          </div>
+        ) : (
+          <div className="items-center text-center p-6 w-full">
+            <div className="text-2xl font-semibold text-gray-400 pb-2">You have no open borrow positions.</div>
+            <div className="text-base font-base text-gray-400">
+              Swing by once you have borrowed assets from various markets
+            </div>
+            <div className="flex mx-auto justify-center">
+              <Link
+                to={'/bento/kashi'}
+                className="my-8 px-3 py-2 text-base font-medium rounded-md shadow-sm text-white"
+                style={{ background: `${theme.primaryPink}` }}
+              >
+                View Markets
+              </Link>
+            </div>
+          </div>
+        )}
+
         <div className="flex-col space-y-2">
           {borrowPositions &&
             borrowPositions.length > 0 &&
             borrowPositions.map((pair: any) => {
               return (
                 <>
-                  <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
+                  <Link to={'/bento/kashi/' + pair.address + '?tab=borrow'} className="block" key={pair.address}>
                     <div
                       className="py-4 px-4 items-center align-center grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold"
                       style={{ background: '#19212e', borderRadius: '12px' }}
@@ -250,7 +291,9 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                         </div>
                       </div>
                       <div className="hidden sm:block text-right">{formattedPercent(pair.user.health.percentage)}</div>
-                      <div className="hidden sm:block text-right">{formattedPercent(pair.details.apr.borrow)}</div>
+                      <div className="hidden sm:block text-right">
+                        {formattedPercent(pair.details.apr.currentInterestPerYear)}
+                      </div>
                       <div className="sm:hidden text-right col-span-3">
                         <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
                           <div className="flex">
@@ -259,7 +302,7 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                           </div>
                           <div className="flex">
                             <div className="text-gray-500 mr-2">Borrow APY: </div>
-                            <div>{formattedPercent(pair.details.apr.borrow)}</div>
+                            <div>{formattedPercent(pair.details.apr.currentInterestPerYear)}</div>
                           </div>
                         </div>
                       </div>

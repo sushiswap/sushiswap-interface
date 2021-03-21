@@ -1,5 +1,5 @@
 import { useActiveWeb3React } from 'hooks'
-import useInterval from 'hooks/useInterval'
+import useIntervalTransaction from 'hooks/useIntervalTransaction'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useKashiPairHelperContract } from 'sushi-hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -232,7 +232,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           .div(BigNumber.from(1000))
           .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
 
-        if (elapsedTime.eq(BigNumber.from(0))) {
+        if (elapsedTime.lte(BigNumber.from(0))) {
           return currentInterest
         }
 
@@ -252,7 +252,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
           const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor.mul(elapsedTime)))
           currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
-          if (currentInterest.lt(MAXIMUM_INTEREST_PER_YEAR)) {
+          if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
             currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
           }
         }
@@ -276,10 +276,69 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       const userSupply = pairUserDetails[1][i].totalAssetAmount.gt(BigNumber.from(0))
         ? pairUserDetails[1][i].userAssetAmount.add(
             pairUserDetails[1][i].userAssetAmount
+              .mul(pairUserDetails[1][i].totalBorrowAmount) // change resolution by mul first!
               .div(pairUserDetails[1][i].totalAssetAmount)
-              .mul(pairUserDetails[1][i].totalBorrowAmount)
           )
         : BigNumber.from(0)
+
+      // const test = pairUserDetails[1][i].userAssetAmount
+      //   .mul(pairUserDetails[1][i].totalBorrowAmount)
+      //   .div(pairUserDetails[1][i].totalAssetAmount)
+      // console.log('userSupply:', address, {
+      //   userAssetAmount: Fraction.from(
+      //     pairUserDetails[1][i].userAssetAmount,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   totalAssetAmount: Fraction.from(
+      //     pairUserDetails[1][i].totalAssetAmount,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   totalBorrowAmount: Fraction.from(
+      //     pairUserDetails[1][i].totalBorrowAmount,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   userSupply: Fraction.from(
+      //     userSupply,
+      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+      //   ).toString(),
+      //   userSupplyRaw: pairUserDetails[1][i].userAssetAmount.add(
+      //     pairUserDetails[1][i].userAssetAmount.div(pairUserDetails[1][i].totalAssetAmount)
+      //   ),
+      //   test: Fraction.from(test, BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))).toString()
+      // })
+      // Test Cases:
+      // userAssetAmount + (userAssetAmount / totalAssetAmount) * totalBorrowAmount
+      // 18.95653793 + (18.95653793 / 511.83397452) * 28.18237205
+      // totalAssetAmount: '511.83397452'
+      // totalBorrowAmount: '28.18237205'
+      // userAssetAmount: '18.95653793'
+      // userSupply: '18.95653793'
+
+      // Supply + Collateral - Borrrow
+      const pairNetWorth =
+        Number(
+          Fraction.from(
+            pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+            BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+          ).toString()
+        ) *
+          assetUSD +
+        Number(
+          Fraction.from(
+            BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
+            BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+          ).toString()
+        ) *
+          collateralUSD -
+        Number(
+          Fraction.from(
+            BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+            BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+          ).toString()
+        ) *
+          assetUSD
+
+      //const pairNetAPY =
 
       return {
         id: address,
@@ -356,6 +415,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                   ).toString()
                 ) * assetUSD
+            },
+            // utilization: total Borrow / total Assets
+            utilization: {
+              string:
+                Number(
+                  Fraction.from(
+                    pairUserDetails[1][i].totalBorrowAmount,
+                    pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount)
+                  ).toString()
+                ) * 100
             }
           },
           rate: {
@@ -370,14 +439,15 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               BigNumber.from('10000000000000000')
             ).toString(),
             currentSupplyAPR,
-            currentInterestPerYear: Fraction.from(
-              currentInterestPerYear,
-              BigNumber.from(10).pow(BigNumber.from(16))
-            ).toString()
+            currentInterestPerYear: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(16)).toString(),
+            interestPerYear: Fraction.from(interestPerYear, BigNumber.from(10).pow(16)).toString()
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
         user: {
+          pairNetWorth: {
+            usdString: pairNetWorth
+          },
           health: {
             percentage: maxBorrowable.gt(BigNumber.from(0))
               ? Fraction.from(
@@ -387,7 +457,17 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               : BigNumber.from(0)
           },
           collateral: {
-            max: Fraction.from(safeMaxRemovable, BigNumber.from(10).pow(pairDetails[i].collateralDecimals)).toString(),
+            max: {
+              value: safeMaxRemovable,
+              balance: {
+                value: safeMaxRemovable,
+                decimals: pairDetails[i].collateralDecimals
+              },
+              string: Fraction.from(
+                safeMaxRemovable,
+                BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+              ).toString()
+            },
             value: pairUserDetails[1][i].userCollateralAmount,
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
@@ -399,13 +479,21 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
                   BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
                 ).toString()
-              ) * collateralUSD
+              ) * collateralUSD,
+            balance: {
+              value: pairUserDetails[1][i].userCollateralAmount,
+              decimals: pairDetails[i].collateralDecimals
+            }
           },
           supply: {
             value: userSupply,
-            string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)),
+            string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)).toString(),
             usdString:
-              Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD
+              Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD,
+            balance: {
+              value: userSupply,
+              decimals: pairDetails[i].assetDecimals
+            }
           },
           asset: {
             value: pairUserDetails[1][i].userAssetAmount,
@@ -422,11 +510,29 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               ) * assetUSD
           },
           borrow: {
-            max: Fraction.from(
-              safeMaxBorrowableLeftPossible,
-              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-            ).toString(),
+            max: {
+              value: safeMaxBorrowableLeftPossible,
+              balance: {
+                value: safeMaxBorrowableLeftPossible,
+                decimals: pairDetails[i].assetDecimals
+              },
+              string: Fraction.from(
+                safeMaxBorrowableLeftPossible,
+                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+              ).toString()
+            },
+            maxUSD:
+              Number(
+                Fraction.from(
+                  safeMaxBorrowableLeftPossible,
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString()
+              ) * assetUSD,
             value: pairUserDetails[1][i].userBorrowAmount,
+            balance: {
+              value: pairUserDetails[1][i].userBorrowAmount,
+              decimals: pairDetails[i].assetDecimals
+            },
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
               BigNumber.from(10).pow(pairDetails[i].assetDecimals)
@@ -452,7 +558,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     })
   }, [account, getPairs, kashiPairHelperContract])
 
-  useInterval(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
+  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
 
   return (
     <KashiContext.Provider
