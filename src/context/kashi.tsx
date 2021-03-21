@@ -400,6 +400,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                   ).toString()
                 ) * assetUSD
+            },
+            // utilization: total Borrow / total Assets
+            utilization: {
+              string:
+                Number(
+                  Fraction.from(
+                    pairUserDetails[1][i].totalBorrowAmount,
+                    pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount)
+                  ).toString()
+                ) * 100
             }
           },
           rate: {

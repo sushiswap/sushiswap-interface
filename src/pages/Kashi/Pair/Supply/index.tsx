@@ -24,8 +24,11 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
   const marketSupply = pair?.details.total.supply.string
   const marketSupplyUSD = pair?.details.total.supply.usdString
 
+  const utilization = pair?.details.total.utilization.string
+
   const userSupply = pair?.user.supply.string
   const userSupplyUSD = pair?.user.supply.usdString
+  const userProportion = (Number(userSupply) / Number(marketSupply)) * 100
 
   return (
     <>
@@ -50,7 +53,16 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
                 </div>
               </div>
               <div className="flex justify-between">
-                <div className="text-xs sm:text-sm text-gray-300">Your Supply:</div>
+                <div className="text-xs sm:text-sm text-gray-300">Utilization:</div>
+                <div className="text-right">
+                  <div className="text-xs sm:text-sm text-gray-300">{formattedPercent(utilization)}</div>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div>
+                  <div className="text-xs sm:text-sm text-gray-300">Your Supply:</div>
+                  <div className="text-xs text-gray-500">({formattedPercent(userProportion)})</div>
+                </div>
                 <div className="text-right">
                   <div className="text-xs sm:text-sm text-gray-300">
                     {formattedNum(userSupply, false)} {assetSymbol}
