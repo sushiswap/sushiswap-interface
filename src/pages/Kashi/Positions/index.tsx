@@ -154,7 +154,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
           <div className="hover:text-gray-400 col-span-2 sm:col-span-1">Market</div>
           <div className="hidden sm:block"></div>
           <div className="text-right pl-4 hover:text-gray-400">Supplying</div>
-          <div className="text-right hover:text-gray-400">APY</div>
+          <div className="text-right hover:text-gray-400">APR</div>
         </div>
         <div className="flex-col space-y-2">
           {supplyPositions &&
@@ -186,7 +186,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                         </div>
                         <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.asset.usdString, true)}</div>
                       </div>
-                      <div className="text-right">{formattedPercent(pair.details.apr.asset)}</div>
+                      <div className="text-right">{formattedPercent(pair.details.apr.currentSupplyAPR)}</div>
                     </div>
                   </Link>
                 </>
@@ -217,7 +217,7 @@ const BorrowPositions = ({ borrowPositions }: any) => {
             borrowPositions.map((pair: any) => {
               return (
                 <>
-                  <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
+                  <Link to={'/bento/kashi/' + pair.address} className="block" key={pair.address}>
                     <div
                       className="py-4 px-4 items-center align-center grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold"
                       style={{ background: '#19212e', borderRadius: '12px' }}
@@ -250,7 +250,9 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                         </div>
                       </div>
                       <div className="hidden sm:block text-right">{formattedPercent(pair.user.health.percentage)}</div>
-                      <div className="hidden sm:block text-right">{formattedPercent(pair.details.apr.borrow)}</div>
+                      <div className="hidden sm:block text-right">
+                        {formattedPercent(pair.details.apr.currentInterestPerYear)}
+                      </div>
                       <div className="sm:hidden text-right col-span-3">
                         <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
                           <div className="flex">
@@ -259,7 +261,7 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                           </div>
                           <div className="flex">
                             <div className="text-gray-500 mr-2">Borrow APY: </div>
-                            <div>{formattedPercent(pair.details.apr.borrow)}</div>
+                            <div>{formattedPercent(pair.details.apr.currentInterestPerYear)}</div>
                           </div>
                         </div>
                       </div>
