@@ -12,7 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
-
+import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import Layout from './components/Layout'
 
 const PageWrapper = styled(AutoColumn)`
@@ -36,14 +36,15 @@ export default function KashiPair({
 
   return (
     <PageWrapper>
-      {/* <RowBetween padding="0 16px 22px">
-        <div>
-          <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
+      <RowBetween padding="0 16px 8px" align="flex-end">
+        <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
+          <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
+          <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
             Kashi
           </TYPE.extraLargeHeader>
         </div>
         <Navigation />
-      </RowBetween> */}
+      </RowBetween>
       <Layout>
         <CardHeader market={!tabIndex ? 'Supply' : 'Borrow'} border>
           <div className="grid grid-cols-3 gap-2 items-center">

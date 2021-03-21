@@ -95,6 +95,7 @@ export function colors(darkMode: boolean): Colors {
     // blue5: darkMode ? '#153d6f70' : '#EBF4FF',
 
     // BentoBox/Kashi
+    extraHighEmphesisText: '#e3e3e3',
     lowEmphesisText: '#575757',
     mediumEmphesisText: '#7f7f7f',
     highEmphesisText: '#bfbfbf',

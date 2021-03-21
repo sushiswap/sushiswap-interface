@@ -55,6 +55,7 @@ export interface Colors {
   lowEmphesisText: Color
   mediumEmphesisText: Color
   highEmphesisText: Color
+  extraHighEmphesisText: Color
   mediumDarkPurple: Color
   extraDarkPurple: Color
   primaryPink: Color
