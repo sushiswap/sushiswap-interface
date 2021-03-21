@@ -80,10 +80,7 @@ export default function Layout({ left = undefined, children = undefined, right =
         Button
       </Left>
       <Center>{children}</Center>
-      <Right>
-        <TYPE.largeHeader fontWeight={700}>Lorem Ipsum</TYPE.largeHeader>
-        <TYPE.body fontWeight={700}>Lorem Ipsum</TYPE.body>
-      </Right>
+      {right && <Right>{right}</Right>}
     </div>
   )
 }

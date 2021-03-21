@@ -45,7 +45,14 @@ export default function KashiPair({
         </div>
         <Navigation />
       </RowBetween>
-      <Layout>
+      <Layout
+        right={
+          <>
+            <TYPE.largeHeader fontWeight={700}>Lorem Ipsum</TYPE.largeHeader>
+            <TYPE.body fontWeight={700}>Lorem Ipsum</TYPE.body>
+          </>
+        }
+      >
         <CardHeader market={!tabIndex ? 'Supply' : 'Borrow'} border>
           <div className="grid grid-cols-3 gap-2 items-center">
             <div className="flex space-x-2 mr-4">
