@@ -2,7 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { DarkCard, BaseCard } from 'components/Card'
-import { useKashiCounts } from 'context/kashi'
+import { useKashiCounts, useKashiPairs } from 'context/kashi'
+import { formattedNum } from 'utils'
+import _ from 'lodash'
 
 const StyledBaseCard = styled(BaseCard)`
   border: none
@@ -13,6 +15,13 @@ const StyledBaseCard = styled(BaseCard)`
 
 export default function Header() {
   const counts = useKashiCounts()
+  const pairs = useKashiPairs()
+
+  const totalNetWorth = _.sumBy(pairs, function(o) {
+    return o.user.pairNetWorth.usdString
+  })
+  //console.log('totalNetWorth:', totalNetWorth)
+
   return (
     <div>
       <div className="flex-col space-y-8">
@@ -22,7 +31,7 @@ export default function Header() {
               <div className="flex-grow">
                 <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
-                    <div className="text-2xl font-semibold">$0.00</div>
+                    <div className="text-2xl font-semibold">≈{formattedNum(totalNetWorth, true)}</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
                       Net Worth
                     </div>
@@ -72,7 +81,7 @@ export default function Header() {
               <div className="flex-grow">
                 <DarkCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
                   <div className="items-center text-center">
-                    <div className="text-2xl font-semibold">$0.00</div>
+                    <div className="text-2xl font-semibold">≈{formattedNum(totalNetWorth, true)}</div>
                     <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
                       Net Worth
                     </div>
