@@ -235,7 +235,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
             </>
           </InputRow>
 
-          <Warning predicate={true}>Some warning...</Warning>
+          {/* <Warning predicate={true}>Some warning...</Warning> */}
         </>
         {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
@@ -247,7 +247,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
           </ButtonBlue>
         )}
 
-        <div>Transaction Review...</div>
+        {/* <div>Transaction Review...</div> */}
 
         {value !== '' && approvalState === ApprovalState.APPROVED && (
           <ButtonBlue
