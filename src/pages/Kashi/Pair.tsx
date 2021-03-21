@@ -54,7 +54,7 @@ export default function KashiPair({
         }
       >
         <CardHeader market={!tabIndex ? 'Supply' : 'Borrow'} border>
-          <div className="grid grid-cols-3 gap-2 items-center">
+          <div className="flex items-center">
             <div className="flex space-x-2 mr-4">
               <a
                 href={
@@ -90,7 +90,7 @@ export default function KashiPair({
                 <img src={pair && getTokenIcon(pair?.asset.address)} className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg" />
               </a>
             </div>
-            <div className="col-span-2 sm:col-span-1 flex justify-between items-center">
+            <div className="flex justify-between items-center">
               <div>
                 <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} lineHeight={1} fontWeight={700}>
                   {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
