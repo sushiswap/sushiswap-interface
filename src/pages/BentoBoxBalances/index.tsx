@@ -20,7 +20,7 @@ import { formattedNum } from '../../utils'
 import { PlusSquare, MinusSquare } from 'react-feather'
 import { Card, CardHeader, Navigation } from '../Kashi/components'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
-import Layout from './components/Layout'
+import Layout from '../Kashi/components/Layout'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
