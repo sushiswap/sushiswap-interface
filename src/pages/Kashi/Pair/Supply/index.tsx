@@ -19,7 +19,7 @@ export default function Supply({ tokenAddress, tokenSymbol, pairAddress }: Suppl
   const pair = useKashiPair(pairAddress)
 
   const assetSymbol = pair?.asset.symbol
-  const supplyAPY = pair?.details.apr.asset
+  const supplyAPY = pair?.details.apr.currentSupplyAPR
 
   const marketSupply = pair?.details.total.supply.string
   const marketSupplyUSD = pair?.details.total.supply.usdString

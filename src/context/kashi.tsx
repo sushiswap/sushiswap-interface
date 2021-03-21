@@ -443,7 +443,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
                   BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
                 ).toString()
-              ) * collateralUSD
+              ) * collateralUSD,
+            balance: {
+              value: pairUserDetails[1][i].userCollateralAmount,
+              decimals: pairDetails[i].collateralDecimals
+            }
           },
           supply: {
             value: userSupply,

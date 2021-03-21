@@ -7,7 +7,7 @@ import { Dots } from '../../../Pool/styleds'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useBentoBoxContract } from '../../../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../../../sushi-hooks/useApproveCallback'
-import useKashiBalances from '../../../../sushi-hooks/queries/useKashiBalances'
+import { useKashiPair } from 'context/kashi'
 import useKashi from '../../../../sushi-hooks/useKashi'
 import { formatFromBalance, formatToBalance } from '../../../../utils'
 import {
@@ -37,16 +37,16 @@ export default function RemoveCollateralInputPanel({
 }: RemoveCollateralInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
 
-  const kashiBalances = useKashiBalances(pairAddress)
-
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
   const { removeWithdrawCollateral, removeCollateral } = useKashi()
 
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
-  const tokenBalance = formatFromBalance(kashiBalances?.collateral?.value, kashiBalances?.collateral?.decimals)
-  const decimals = kashiBalances?.collateral?.decimals
+  const kashiBalances = useKashiPair(pairAddress)
+  const assetBalance = kashiBalances?.user.collateral.balance
+  const tokenBalance = formatFromBalance(assetBalance.value, assetBalance.decimals)
+  const decimals = assetBalance.decimals
 
   // check whether the user has approved BentoBox on the token
   const bentoBoxContract = useBentoBoxContract()
