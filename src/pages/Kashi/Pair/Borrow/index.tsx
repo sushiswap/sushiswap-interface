@@ -116,7 +116,7 @@ SupplyProps) {
             </div>
           </div>
           <div className="flex justify-between items-center px-1 pt-2">
-            <div className="text-sm text-gray-300">Collateral</div>
+            <div className="text-base font-semibold text-gray-300">Borrow</div>
           </div>
           <div>
             <AddCollateral
@@ -124,18 +124,18 @@ SupplyProps) {
               tokenSymbol={collateral.symbol}
               pairAddress={pairAddress}
             />
+            <BorrowInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
+          </div>
+          <div className="flex justify-between items-center px-1">
+            <div className="text-base font-semibold text-gray-300">Repay</div>
+          </div>
+          <div>
+            <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
             <RemoveCollateral
               tokenAddress={collateral.address}
               tokenSymbol={collateral.symbol}
               pairAddress={pairAddress}
             />
-          </div>
-          <div className="flex justify-between items-center px-1">
-            <div className="text-sm text-gray-300">Borrow</div>
-          </div>
-          <div>
-            <BorrowInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
-            <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
           </div>
         </AutoColumn>
       </WrapperNoPadding>

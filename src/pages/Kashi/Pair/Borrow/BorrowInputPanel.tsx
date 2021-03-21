@@ -66,7 +66,7 @@ export default function BorrowInputPanel({ tokenAddress, tokenSymbol, pairAddres
   return (
     <>
       <InputPanel>
-        <Container cornerRadiusTopNone={false} cornerRadiusBottomNone={true}>
+        <Container cornerRadiusTopNone={true}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>

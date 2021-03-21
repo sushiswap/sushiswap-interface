@@ -66,7 +66,7 @@ export default function RemoveInputPanel({ tokenAddress, tokenSymbol, pairAddres
   return (
     <>
       <InputPanel>
-        <Container cornerRadiusTopNone={true} cornerRadiusBottomNone={false}>
+        <Container cornerRadiusBottomNone={true}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>

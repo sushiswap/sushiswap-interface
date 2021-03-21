@@ -243,7 +243,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           .div(BigNumber.from(1000))
           .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
 
-        if (elapsedTime.eq(BigNumber.from(0))) {
+        if (elapsedTime.lte(BigNumber.from(0))) {
           return currentInterest
         }
 
@@ -263,7 +263,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
           const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor.mul(elapsedTime)))
           currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
-          if (currentInterest.lt(MAXIMUM_INTEREST_PER_YEAR)) {
+          if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
             currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
           }
         }
@@ -424,10 +424,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               BigNumber.from('10000000000000000')
             ).toString(),
             currentSupplyAPR,
-            currentInterestPerYear: Fraction.from(
-              currentInterestPerYear,
-              BigNumber.from(10).pow(BigNumber.from(16))
-            ).toString()
+            currentInterestPerYear: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(16)).toString(),
+            interestPerYear: Fraction.from(interestPerYear, BigNumber.from(10).pow(16)).toString()
           },
           borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
         },
