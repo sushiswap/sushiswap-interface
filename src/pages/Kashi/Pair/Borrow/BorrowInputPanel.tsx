@@ -83,7 +83,7 @@ export default function BorrowInputPanel({ tokenAddress, tokenSymbol, pairAddres
               </TYPE.body>
               {account && (
                 <TYPE.body
-                  onClick={handleMaxDeposit}
+                  // onClick={handleMaxDeposit}
                   color={theme.text2}
                   fontWeight={500}
                   fontSize={14}
@@ -103,7 +103,7 @@ export default function BorrowInputPanel({ tokenAddress, tokenSymbol, pairAddres
                   onUserWithdrawInput(val)
                 }}
               />
-              {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
+              {/* {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>} */}
             </>
             {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
               <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
