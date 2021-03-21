@@ -1,15 +1,17 @@
 import React, { useState, useCallback } from 'react'
-import useTheme from '../../../../hooks/useTheme'
-import { TYPE } from '../../../../theme'
-import { RowBetween } from '../../../../components/Row'
-import { Input as NumericalInput } from '../../../../components/NumericalInput'
+import useTheme from 'hooks/useTheme'
+import { TYPE } from 'theme'
+import { RowBetween } from 'components/Row'
+import { Input as NumericalInput } from 'components/NumericalInput'
 import { Dots } from '../../../Pool/styleds'
-import { useActiveWeb3React } from '../../../../hooks'
-import { useBentoBoxContract } from '../../../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../../../sushi-hooks/useApproveCallback'
+import { useActiveWeb3React } from 'hooks'
+import { useBentoBoxContract } from 'sushi-hooks/useContract'
+import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
 import { useKashiPair } from 'context/kashi'
-import useKashi from '../../../../sushi-hooks/useKashi'
-import { formatFromBalance, formatToBalance } from '../../../../utils'
+//import useKashiBalances from 'sushi-hooks/queries/useKashiBalances'
+import useKashi from 'sushi-hooks/useKashi'
+import { formatFromBalance, formatToBalance } from 'utils'
+
 import {
   InputRow,
   ButtonSelect,
@@ -22,63 +24,53 @@ import {
   StyledBalanceMax
 } from '../styled'
 
-interface RemoveCollateralInputPanelProps {
+interface WithdrawInputPanelProps {
   tokenAddress: string
-  pairAddress: string
   tokenSymbol?: string
-  max: string
+  pairAddress: string
 }
 
-export default function RemoveCollateralInputPanel({
-  tokenAddress,
-  pairAddress,
-  tokenSymbol,
-  max
-}: RemoveCollateralInputPanelProps) {
+export default function WithdrawInputPanel({ tokenAddress, tokenSymbol, pairAddress }: WithdrawInputPanelProps) {
   const [balanceFrom, setBalanceFrom] = useState<any>('bento')
-
   const { account } = useActiveWeb3React()
   const theme = useTheme()
 
-  const { removeWithdrawCollateral, removeCollateral } = useKashi()
+  const { removeCollateral, removeWithdrawCollateral } = useKashi()
 
-  //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const kashiBalances = useKashiPair(pairAddress)
-  const assetBalance = kashiBalances?.user.collateral.balance
-  const tokenBalance = formatFromBalance(assetBalance.value, assetBalance.decimals)
-  const decimals = assetBalance.decimals
+  const assetBalance = kashiBalances?.user.collateral.max.balance
+  const tokenBalance = formatFromBalance(assetBalance?.value, assetBalance?.decimals)
+  const decimals = assetBalance?.decimals
 
   // check whether the user has approved BentoBox on the token
   const bentoBoxContract = useBentoBoxContract()
   const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
   // track and parse user input for Deposit Input
-  const [depositValue, setDepositValue] = useState('')
+  const [withdrawValue, setWithdrawValue] = useState('')
   const [maxSelected, setMaxSelected] = useState(false)
-  const onUserRemoveInput = useCallback((depositValue: string, max = false) => {
+
+  const onUserWithdrawInput = useCallback((value: string, max = false) => {
     setMaxSelected(max)
-    setDepositValue(depositValue)
+    setWithdrawValue(value)
   }, [])
 
-  // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
-  // used for max input button
-  const maxRemoveAmountInput = max
-  //const atMaxDepositAmount = true
-  const handleMaxRemove = useCallback(() => {
-    maxRemoveAmountInput && onUserRemoveInput(max, true)
-  }, [onUserRemoveInput, max, maxRemoveAmountInput])
 
-  console.log('state:', depositValue, maxSelected)
+  const maxWithdrawAmountInput = assetBalance
+
+  const handleMaxDeposit = useCallback(() => {
+    maxWithdrawAmountInput && onUserWithdrawInput(tokenBalance, true)
+  }, [maxWithdrawAmountInput, onUserWithdrawInput, tokenBalance])
 
   return (
     <>
-      <InputPanel id="remove-collateral-input-panel">
-        <Container cornerRadiusTopNone={true}>
+      <InputPanel>
+        <Container cornerRadiusTopNone={true} cornerRadiusBottomNone={false}>
           <LabelRow>
             <RowBetween>
               <TYPE.body color={theme.text2} fontWeight={500} fontSize={14}>
-                Remove <span className="font-semibold">{tokenSymbol}</span> to{' '}
+                Withdraw <span className="font-semibold">{tokenSymbol}</span> to{' '}
                 <span>
                   {balanceFrom === 'bento' ? (
                     <StyledSwitch onClick={() => setBalanceFrom('wallet')}>Bento</StyledSwitch>
@@ -91,13 +83,13 @@ export default function RemoveCollateralInputPanel({
               </TYPE.body>
               {account && (
                 <TYPE.body
-                  onClick={handleMaxRemove}
+                  onClick={handleMaxDeposit}
                   color={theme.text2}
                   fontWeight={500}
                   fontSize={14}
                   style={{ display: 'inline', cursor: 'pointer' }}
                 >
-                  Deposited: {tokenBalance} {tokenSymbol}
+                  Safe: {tokenBalance} {tokenSymbol}
                 </TYPE.body>
               )}
             </RowBetween>
@@ -106,12 +98,12 @@ export default function RemoveCollateralInputPanel({
             <>
               <NumericalInput
                 className="token-amount-input"
-                value={depositValue}
+                value={withdrawValue}
                 onUserInput={val => {
-                  onUserRemoveInput(val)
+                  onUserWithdrawInput(val)
                 }}
               />
-              {account && <StyledBalanceMax onClick={handleMaxRemove}>MAX</StyledBalanceMax>}
+              {account && <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>}
             </>
             {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
               <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
@@ -127,35 +119,35 @@ export default function RemoveCollateralInputPanel({
                 disabled={
                   pendingTx ||
                   !tokenBalance ||
-                  Number(depositValue) === 0 ||
+                  Number(withdrawValue) === 0 ||
                   // todo this should be a bigInt comparison
-                  Number(depositValue) > Number(tokenBalance)
+                  Number(withdrawValue) > Number(tokenBalance)
                 }
                 onClick={async () => {
                   setPendingTx(true)
                   if (balanceFrom === 'wallet') {
                     if (maxSelected) {
-                      await removeWithdrawCollateral(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
+                      await removeWithdrawCollateral(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
                       await removeWithdrawCollateral(
                         pairAddress,
                         tokenAddress,
-                        formatToBalance(depositValue, decimals),
+                        formatToBalance(withdrawValue, decimals),
                         false
                       )
                     }
                   } else if (balanceFrom === 'bento') {
                     if (maxSelected) {
-                      await removeCollateral(pairAddress, tokenAddress, formatToBalance(max, decimals), true)
+                      await removeCollateral(pairAddress, tokenAddress, maxWithdrawAmountInput, true)
                     } else {
-                      await removeCollateral(pairAddress, tokenAddress, formatToBalance(depositValue, decimals), false)
+                      await removeCollateral(pairAddress, tokenAddress, formatToBalance(withdrawValue, decimals), false)
                     }
                   }
                   setPendingTx(false)
                 }}
               >
                 <Aligner>
-                  <StyledButtonName>Remove</StyledButtonName>
+                  <StyledButtonName>Withdraw</StyledButtonName>
                 </Aligner>
               </ButtonSelect>
             )}

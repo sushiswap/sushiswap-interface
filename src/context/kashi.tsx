@@ -441,7 +441,17 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               : BigNumber.from(0)
           },
           collateral: {
-            max: Fraction.from(safeMaxRemovable, BigNumber.from(10).pow(pairDetails[i].collateralDecimals)).toString(),
+            max: {
+              value: safeMaxRemovable,
+              balance: {
+                value: safeMaxRemovable,
+                decimals: pairDetails[i].collateralDecimals
+              },
+              string: Fraction.from(
+                safeMaxRemovable,
+                BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+              ).toString()
+            },
             value: pairUserDetails[1][i].userCollateralAmount,
             string: Fraction.from(
               BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
@@ -484,10 +494,17 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               ) * assetUSD
           },
           borrow: {
-            max: Fraction.from(
-              safeMaxBorrowableLeftPossible,
-              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-            ).toString(),
+            max: {
+              value: safeMaxBorrowableLeftPossible,
+              balance: {
+                value: safeMaxBorrowableLeftPossible,
+                decimals: pairDetails[i].assetDecimals
+              },
+              string: Fraction.from(
+                safeMaxBorrowableLeftPossible,
+                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+              ).toString()
+            },
             maxUSD:
               Number(
                 Fraction.from(

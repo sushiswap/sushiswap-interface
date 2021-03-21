@@ -51,9 +51,8 @@ SupplyProps) {
   const userBorrow = pair?.user.borrow.string
   const userBorrowUSD = pair?.user.borrow.usdString
 
-  const maxRemove = pair?.user.collateral.max
-  const maxBorrow = pair?.user.borrow.max
   const maxBorrowUSD = pair?.user.borrow.maxUSD
+  const maxBorrow = pair?.user.borrow.max.string
 
   const interestPerYear = pair?.details.apr.currentInterestPerYear
   //const exchangeRate = pair?.details.rate.current
@@ -129,20 +128,19 @@ SupplyProps) {
               tokenAddress={collateral.address}
               tokenSymbol={collateral.symbol}
               pairAddress={pairAddress}
-              max={maxRemove}
             />
           </div>
           <div className="flex justify-between items-center px-1">
             <div className="text-sm text-gray-300">Borrow</div>
           </div>
           <div>
-            <BorrowInputPanel
+            {/* <BorrowInputPanel
               tokenAddress={asset.address}
               tokenSymbol={asset.symbol}
               tokenDecimals={asset.decimals}
               pairAddress={pairAddress}
-              max={maxBorrow}
-            />
+              max={maxBorrowBalance}
+            /> */}
             <PayInputPanel tokenAddress={asset.address} tokenSymbol={asset.symbol} pairAddress={pairAddress} />
           </div>
         </AutoColumn>

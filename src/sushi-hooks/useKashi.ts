@@ -427,12 +427,13 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      const pair = pairs.find(pair => pair.address === pairAddress)
       let amountToWithdraw = amount.value
       if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        amountToWithdraw = pairUserDetails[1][0].userCollateralAmount
+        if (pair) {
+          amountToWithdraw = pair.user.collateral.max.value
+        }
       }
-
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
 
       try {
@@ -454,7 +455,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
+    [account, addTransaction, bentoBoxContract, library, pairs]
   )
 
   // Description: remove collateral into bentobox
@@ -468,14 +469,12 @@ const useKashi = () => {
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       const pair = pairs.find(pair => pair.address === pairAddress)
-
       let amountToWithdraw = amount.value
       if (max) {
         if (pair) {
-          amountToWithdraw = pair.user.collateral.max
+          amountToWithdraw = pair.user.collateral.max.value
         }
       }
-
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
 
       try {
@@ -491,7 +490,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
+    [account, addTransaction, bentoBoxContract, library, pairs]
   )
 
   // Description: borrow into bentobox
