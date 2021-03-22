@@ -98,7 +98,7 @@ export default function KashiPair({
                     Liquidation price:
                   </TYPE.body>
                   <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    {formattedNum(pair.user.borrow.max.string, true)} {pair.asset.symbol}
+                    ???
                   </TYPE.body>
                 </RowBetween>
                 <RowBetween>

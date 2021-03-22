@@ -295,15 +295,16 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
         {/* <div>Transaction Review...</div> */}
 
-        {action === 'Deposit' || action === 'Withdraw' ? (
-          <ButtonBlue borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
-            {action}
-          </ButtonBlue>
-        ) : (
-          <ButtonPink borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
-            {action}
-          </ButtonPink>
-        )}
+        {value !== '' &&
+          (action === 'Deposit' || action === 'Withdraw' ? (
+            <ButtonBlue borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
+              {action}
+            </ButtonBlue>
+          ) : (
+            <ButtonPink borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
+              {action}
+            </ButtonPink>
+          ))}
       </AutoColumn>
     </Wrapper>
   )
