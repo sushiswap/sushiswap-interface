@@ -170,7 +170,7 @@ export const TYPE = {
     return <TextWrapper fontWeight={700} fontSize={[20, 28, 36]} color={'extraHighEmphesisText'} {...props} />
   },
   largeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={700} fontSize={[16, 22, 28]} {...props} color={'highEmphesisText'} />
+    return <TextWrapper fontWeight={700} fontSize={[16, 22, 28]} color={'highEmphesisText'} {...props} />
   },
   mediumHeader(props: TextProps) {
     return <TextWrapper fontWeight={700} fontSize={[14, 16, 18]} color={'mediumEmphesisText'} {...props} />
