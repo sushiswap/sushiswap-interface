@@ -50,8 +50,75 @@ export default function KashiPair({
       <Layout
         right={
           <>
-            <TYPE.largeHeader fontWeight={700}>Lorem Ipsum</TYPE.largeHeader>
-            <TYPE.body fontWeight={700}>Lorem Ipsum</TYPE.body>
+            <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+              Net Worth in this Pair
+            </TYPE.body>
+            <TYPE.body color="extraHighEmphesisText" fontWeight={700} fontSize={28}>
+              {formattedNum(pair.user.pairNetWorth.usdString, true)} USD
+            </TYPE.body>
+            {tabIndex === 0 ? (
+              <>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Debt Ceiling:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    ???
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Utilization rate:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    {formattedPercent(pair.details.total.utilization.string)}
+                  </TYPE.body>
+                </RowBetween>
+              </>
+            ) : (
+              <>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Borrow Limit Rate:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    {pair.user.health.percentage}
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Left to borrow:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    {formattedNum(pair.user.borrow.max.string, true)} {pair.asset.symbol}
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Liquidation price:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    {formattedNum(pair.user.borrow.max.string, true)} {pair.asset.symbol}
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Loan to Value:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    75%
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                    Utilization rate:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                    {formattedPercent(pair.details.total.utilization.string)}
+                  </TYPE.body>
+                </RowBetween>
+              </>
+            )}
           </>
         }
       >
