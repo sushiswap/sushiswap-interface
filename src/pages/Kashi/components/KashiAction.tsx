@@ -167,6 +167,8 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   const [value, setValue] = useState('')
 
+  const [max, setMax] = useState(false)
+
   const [pendingTx, setPendingTx] = useState(false)
 
   const getMax = useCallback(() => {
@@ -181,11 +183,13 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {
+      console.log('MAX REMOVE', pair.user.collateral.max.string)
       return pair.user.collateral.max.string
     }
   }, [action, pair, assetBalance, collateralBalance])
 
   const onMax = useCallback(() => {
+    setMax(true)
     setValue(getMax())
   }, [getMax])
 
@@ -203,9 +207,17 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
       } else if (action === 'Repay') {
         await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Add Collateral') {
-        await depositAddCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await depositAddCollateral(
+          pair.address,
+          pair.collateral.address,
+          formatToBalance(value, pair.collateral.decimals)
+        )
       } else if (action === 'Remove Collateral') {
-        await removeWithdrawCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await removeWithdrawCollateral(
+          pair.address,
+          pair.collateral.address,
+          formatToBalance(value, pair.collateral.decimals)
+        )
       }
     } else if (sourceOrDestination === 'BentoBox') {
       if (action === 'Deposit') {
@@ -217,9 +229,10 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
       } else if (action === 'Repay') {
         await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Add Collateral') {
-        await addCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await addCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
       } else if (action === 'Remove Collateral') {
-        await removeCollateral(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        console.log('Remove collateral', formatToBalance(value, pair.collateral.decimals))
+        await removeCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
       }
     }
     setPendingTx(false)

@@ -473,9 +473,10 @@ const useKashi = () => {
       let amountToWithdraw = amount.value
       if (max) {
         if (pair) {
-          amountToWithdraw = pair.user.collateral.max.value
+          amountToWithdraw = pair.user.collateral.max
         }
       }
+
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
 
       try {

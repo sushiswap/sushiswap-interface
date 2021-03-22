@@ -34,6 +34,8 @@ export default function KashiPair({
 
   if (!pair) return null
 
+  console.log({ pair })
+
   return (
     <PageWrapper>
       {/* <RowBetween padding="0 16px 8px" align="flex-end">
@@ -165,13 +167,7 @@ export default function KashiPair({
               </TabPanel>
             </SecondaryTabs>
           </TabPanel>
-          <TabPanel style={{ padding: 64 }}>
-            <div>
-              <TYPE.mediumHeader color="highEmphesisText" fontSize={36} fontWeight={700}>
-                Coming Soon!
-              </TYPE.mediumHeader>
-            </div>
-          </TabPanel>
+          <TabPanel></TabPanel>
         </PrimaryTabs>
       </Layout>
     </PageWrapper>
