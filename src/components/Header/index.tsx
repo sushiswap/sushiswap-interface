@@ -34,7 +34,12 @@ import { Dots } from '../swap/styleds'
 import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
-import { SUSHI } from '../../constants'
+import LanguageSwitch from '../LanguageSwitch'
+import { StyledMenuButton } from 'components/StyledMenu'
+
+const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+  margin-left: 8px;
+`
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -280,39 +285,6 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 `}
 `
 
-export const StyledMenuButton = styled.button`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
-  height: 35px;
-  background-color: ${({ theme }) => theme.bg3};
-  margin-left: 8px;
-  padding: 0.15rem 0.5rem;
-  border-radius: 20px;
-
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-    background-color: ${({ theme }) => theme.bg4};
-  }
-
-  svg {
-    margin-top: 2px;
-  }
-  > * {
-    stroke: ${({ theme }) => theme.text1};
-  }
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    margin-left: 4px;
-  `};
-`
-
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
@@ -457,9 +429,10 @@ export default function Header() {
           </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
-          <StyledMenuButton onClick={() => toggleDarkMode()}>
+          <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </StyledMenuButton>
+          </ExtendedStyledMenuButton>
+          <LanguageSwitch />
           <Menu />
         </HeaderElementWrap>
       </HeaderControls>
