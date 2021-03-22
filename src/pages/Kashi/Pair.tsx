@@ -82,7 +82,7 @@ export default function KashiPair({
                     Borrow Limit Rate:
                   </TYPE.body>
                   <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    {pair.user.health.percentage}
+                    {formattedPercent(pair.user.health.percentage)}
                   </TYPE.body>
                 </RowBetween>
                 <RowBetween>
