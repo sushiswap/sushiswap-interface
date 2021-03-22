@@ -34,7 +34,7 @@ export default function KashiPair({
 
   if (!pair) return null
 
-  console.log({ pair })
+  // console.log({ pair })
 
   return (
     <PageWrapper>
@@ -90,7 +90,7 @@ export default function KashiPair({
                     Left to borrow:
                   </TYPE.body>
                   <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    {formattedNum(pair.user.borrow.max.string, true)} {pair.asset.symbol}
+                    {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
                   </TYPE.body>
                 </RowBetween>
                 <RowBetween>
