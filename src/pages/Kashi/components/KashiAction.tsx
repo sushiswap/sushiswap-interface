@@ -179,7 +179,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Borrow') {
       return pair.user.borrow.max.string
     } else if (action === 'Repay') {
-      // Max repayment?
+      return pair.user.borrow.string
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {
@@ -294,16 +294,25 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
             )}
           </ButtonBlue>
         )}
-
         {/* <div>Transaction Review...</div> */}
-
-        {value !== '' &&
+        {console.log({ actionLimit })}
+        {approvalState === ApprovalState.APPROVED &&
           (action === 'Deposit' || action === 'Withdraw' ? (
-            <ButtonBlue borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
+            <ButtonBlue
+              borderRadius="10px"
+              padding="10px"
+              onClick={onClick}
+              disabled={pendingTx || !!actionLimit || value === ''}
+            >
               {action}
             </ButtonBlue>
           ) : (
-            <ButtonPink borderRadius="10px" padding="10px" onClick={onClick} disabled={pendingTx}>
+            <ButtonPink
+              borderRadius="10px"
+              padding="10px"
+              onClick={onClick}
+              disabled={pendingTx || !!actionLimit || value === ''}
+            >
               {action}
             </ButtonPink>
           ))}
