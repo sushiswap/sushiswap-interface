@@ -122,14 +122,14 @@ const Wrapper = styled.div`
   max-width: 850px;
 `
 
-interface KashiActions {
+interface KashiActionProps {
   pair: any
   action: string
   direction: string
   label: string
 }
 
-export default function KashiActions({ pair, action, direction, label }: KashiActions) {
+export default function KashiActions({ pair, action, direction, label }: KashiActionProps) {
   const theme = useTheme()
   const { account } = useActiveWeb3React()
   const bentoBoxContract = useBentoBoxContract()
@@ -295,14 +295,14 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
           </ButtonBlue>
         )}
         {/* <div>Transaction Review...</div> */}
-        {console.log({ actionLimit })}
+
         {approvalState === ApprovalState.APPROVED &&
           (action === 'Deposit' || action === 'Withdraw' ? (
             <ButtonBlue
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || !!actionLimit || value === ''}
+              disabled={pendingTx || !actionLimit || value === ''}
             >
               {action}
             </ButtonBlue>
@@ -311,7 +311,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || !!actionLimit || value === ''}
+              disabled={pendingTx || !actionLimit || value === ''}
             >
               {action}
             </ButtonPink>

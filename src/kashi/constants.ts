@@ -10,19 +10,19 @@ export const FULL_UTILIZATION = BigNumber.from('1000000000000000000')
 
 export const FULL_UTILIZATION_MINUS_MAX = FULL_UTILIZATION.sub(MAXIMUM_TARGET_UTILIZATION)
 
-export const STARTING_INTEREST_PER_YEAR = BigNumber.from(68493150675)
+export const STARTING_INTEREST_PER_YEAR = BigNumber.from(317097920)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(24))
   .mul(BigNumber.from(365)) // approx 1% APR
 
-export const MINIMUM_INTEREST_PER_YEAR = BigNumber.from(17123287665)
+export const MINIMUM_INTEREST_PER_YEAR = BigNumber.from(79274480)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(24))
   .mul(BigNumber.from(365)) // approx 0.25% APR
 
-export const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(68493150675000)
+export const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(317097920000)
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(60))
   .mul(BigNumber.from(24))
