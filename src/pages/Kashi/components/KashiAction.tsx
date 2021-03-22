@@ -241,7 +241,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
   return (
     <Wrapper>
       <TYPE.largeHeader color={theme.highEmphesisText} fontWeight={700} fontSize={36}>
-        {action} {pair.asset.symbol}
+        {action} {action === 'Deposit' || action === 'Withdraw' ? pair.asset.symbol : pair.collateral.symbol}
       </TYPE.largeHeader>
       <AutoColumn gap="md">
         <>
