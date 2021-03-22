@@ -183,7 +183,6 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {
-      console.log('MAX REMOVE', pair.user.collateral.max.string)
       return pair.user.collateral.max.string
     }
   }, [action, pair, assetBalance, collateralBalance])
@@ -241,7 +240,10 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
   return (
     <Wrapper>
       <TYPE.largeHeader color={theme.highEmphesisText} fontWeight={700} fontSize={36}>
-        {action} {action === 'Deposit' || action === 'Withdraw' ? pair.asset.symbol : pair.collateral.symbol}
+        {action}{' '}
+        {action === 'Deposit' || action === 'Withdraw' || action === 'Borrow' || action === 'Repay'
+          ? pair.asset.symbol
+          : pair.collateral.symbol}
       </TYPE.largeHeader>
       <AutoColumn gap="md">
         <>
