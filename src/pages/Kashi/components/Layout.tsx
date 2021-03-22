@@ -60,6 +60,12 @@ const Right = styled(Aside)`
   `};
 `
 
+const Kashi = styled.div`
+  display: flex;
+  align-items: center;
+  padding-bottom: 8px;
+`
+
 interface LayoutProps {
   left?: JSX.Element
   children?: React.ReactChild | React.ReactChild[]
@@ -70,12 +76,10 @@ export default function Layout({ left = undefined, children = undefined, right =
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <RowBetween padding="0 16px 8px" align="flex-end">
-        <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
+        <Kashi>
           <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
-          <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
-            Kashi
-          </TYPE.extraLargeHeader>
-        </div>
+          <TYPE.extraLargeHeader color="extraHighEmphesisText">Kashi</TYPE.extraLargeHeader>
+        </Kashi>
         <Navigation />
       </RowBetween>
       <div
@@ -86,8 +90,8 @@ export default function Layout({ left = undefined, children = undefined, right =
         }}
       >
         <Left>
-          <TYPE.largeHeader fontWeight={700}>Lorem Ipsum</TYPE.largeHeader>
-          <TYPE.body fontWeight={700}>Lorem Ipsum</TYPE.body>
+          <TYPE.largeHeader>Lorem Ipsum</TYPE.largeHeader>
+          <TYPE.body>Lorem Ipsum</TYPE.body>
           Button
         </Left>
         <Center>{children}</Center>

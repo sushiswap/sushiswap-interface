@@ -16,6 +16,7 @@ import useBentoBalance from 'sushi-hooks/queries/useBentoBalance'
 import useKashi from 'sushi-hooks/useKashi'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import { formatToBalance, formatFromBalance } from 'utils'
+import isEmpty from 'lodash/isEmpty'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -239,17 +240,17 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   return (
     <Wrapper>
-      <TYPE.largeHeader color={theme.highEmphesisText} fontWeight={700} fontSize={36}>
+      <TYPE.extraLargeHeader color={theme.highEmphesisText}>
         {action}{' '}
         {action === 'Deposit' || action === 'Withdraw' || action === 'Borrow' || action === 'Repay'
           ? pair.asset.symbol
           : pair.collateral.symbol}
-      </TYPE.largeHeader>
+      </TYPE.extraLargeHeader>
       <AutoColumn gap="md">
         <>
           <LabelRow>
             <RowBetween>
-              <TYPE.body color={theme.mediumEmphesisText} fontWeight={700} fontSize={16}>
+              <TYPE.body color={theme.mediumEmphesisText}>
                 <span>
                   <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                 </span>
@@ -265,12 +266,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
                   </StyledSwitch>
                 </span>
               </TYPE.body>
-              <TYPE.body
-                color={theme.mediumEmphesisText}
-                fontWeight={700}
-                fontSize={16}
-                style={{ display: 'inline', cursor: 'pointer' }}
-              >
+              <TYPE.body color={theme.mediumEmphesisText} style={{ display: 'inline', cursor: 'pointer' }}>
                 {label}: {actionLimit}
               </TYPE.body>
             </RowBetween>
@@ -302,7 +298,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || !actionLimit || value === ''}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value)}
             >
               {action}
             </ButtonBlue>
@@ -311,7 +307,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || !actionLimit || value === ''}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value)}
             >
               {action}
             </ButtonPink>

@@ -14,6 +14,9 @@ export const PrimaryTabs = styled(Tabs)`
     font-weight: 700;
     padding: 4px;
     border: 0;
+    ${({ theme }) => theme.mediaWidth.upToMedium`
+    font-size: 14px;
+    `};
   }
   .react-tabs__tab {
     display: flex;
@@ -44,6 +47,9 @@ export const SecondaryTabs = styled(Tabs)`
     font-weight: 700;
     border: 0;
     background: none;
+    ${({ theme }) => theme.mediaWidth.upToMedium`
+    font-size: 12px;
+  `};
   }
   .react-tabs__tab {
     display: flex;

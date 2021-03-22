@@ -164,16 +164,16 @@ export const TYPE = {
     return <TextWrapper fontWeight={500} color={'white'} {...props} />
   },
   body(props: TextProps) {
-    return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />
+    return <TextWrapper fontWeight={800} fontSize={[12, 14, 16]} color={'highEmphesisText'} {...props} />
   },
   extraLargeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={600} fontSize={36} {...props} />
+    return <TextWrapper fontWeight={700} fontSize={[18, 36]} color={'extraHighEmphesisText'} {...props} />
   },
   largeHeader(props: TextProps) {
-    return <TextWrapper fontWeight={600} fontSize={24} {...props} />
+    return <TextWrapper fontWeight={700} fontSize={[14, 28]} {...props} />
   },
   mediumHeader(props: TextProps) {
-    return <TextWrapper fontWeight={500} fontSize={20} {...props} />
+    return <TextWrapper fontWeight={700} fontSize={[9, 18]} {...props} />
   },
   subHeader(props: TextProps) {
     return <TextWrapper fontWeight={400} fontSize={14} {...props} />

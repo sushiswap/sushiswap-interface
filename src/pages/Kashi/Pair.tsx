@@ -161,16 +161,14 @@ export default function KashiPair({
             </div>
             <div className="flex justify-between items-center">
               <div>
-                <TYPE.extraLargeHeader color="highEmphesisText" fontSize={36} lineHeight={1} fontWeight={700}>
+                <TYPE.extraLargeHeader color="highEmphesisText">
                   {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
                 </TYPE.extraLargeHeader>
                 <AutoRow>
-                  <TYPE.small color="mediumEmphesisText" fontSize={12} fontWeight={700} style={{ marginRight: 4 }}>
+                  <TYPE.small color="mediumEmphesisText" style={{ marginRight: 4 }}>
                     Oracle:
                   </TYPE.small>
-                  <TYPE.small color="highEmphesisText" fontSize={12} fontWeight={700}>
-                    {pair && pair.oracle.name}
-                  </TYPE.small>
+                  <TYPE.small color="highEmphesisText">{pair && pair.oracle.name}</TYPE.small>
                   {/* <QuestionHelper text="" /> */}
                 </AutoRow>
               </div>
@@ -245,70 +243,50 @@ function Stats({ tabIndex, pair }: { tabIndex: number; pair: any }) {
   return tabIndex === 0 ? (
     <RowBetween style={{ padding: '32px 48px 0' }} align="top">
       <div>
-        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
-          Supply Balance
-        </TYPE.mediumHeader>
-        <TYPE.extraLargeHeader color="primaryBlue" fontSize={28} fontWeight={700}>
+        <TYPE.mediumHeader color="mediumEmphesisText">Supply Balance</TYPE.mediumHeader>
+        <TYPE.largeHeader color="primaryBlue">
           {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
-        </TYPE.extraLargeHeader>
-        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
-          ≈ {formattedNum(pair.user.supply.usdString, true)}
-        </TYPE.small>
+        </TYPE.largeHeader>
+        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.supply.usdString, true)}</TYPE.body>
       </div>
       <div>
-        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
-          Market Supply
-        </TYPE.mediumHeader>
-        <TYPE.extraLargeHeader color="highEmphesisText" fontSize={28} fontWeight={700}>
+        <TYPE.mediumHeader color="mediumEmphesisText">Market Supply</TYPE.mediumHeader>
+        <TYPE.largeHeader color="highEmphesisText">
           {formattedNum(pair.details.total.supply.string)} {pair.asset.symbol}
-        </TYPE.extraLargeHeader>
-        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
-          ≈ {formattedNum(pair.details.total.supply.usdString, true)}
-        </TYPE.small>
+        </TYPE.largeHeader>
+        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.details.total.supply.usdString, true)}</TYPE.body>
       </div>
       <div style={{ textAlign: 'right' }}>
         <div>
-          <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
-            Supply APR
-          </TYPE.mediumHeader>
-          <TYPE.extraLargeHeader color="highEmphesisText" fontSize={28} fontWeight={700}>
+          <TYPE.mediumHeader color="mediumEmphesisText">Supply APR</TYPE.mediumHeader>
+          <TYPE.largeHeader color="highEmphesisText">
             {formattedPercent(pair.details.apr.currentSupplyAPR)}
-          </TYPE.extraLargeHeader>
+          </TYPE.largeHeader>
         </div>
       </div>
     </RowBetween>
   ) : (
     <RowBetween style={{ padding: '32px 48px 0' }} align="top">
       <div>
-        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
-          Collateral Balance
-        </TYPE.mediumHeader>
-        <TYPE.extraLargeHeader color="primaryBlue" fontSize={28} fontWeight={700}>
+        <TYPE.mediumHeader color="mediumEmphesisText">Collateral Balance</TYPE.mediumHeader>
+        <TYPE.largeHeader color="primaryBlue">
           {formattedNum(pair.user.collateral.string)} {pair.collateral.symbol}
-        </TYPE.extraLargeHeader>
-        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
-          ≈ {formattedNum(pair.user.collateral.usdString, true)}
-        </TYPE.small>
+        </TYPE.largeHeader>
+        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.collateral.usdString, true)}</TYPE.body>
       </div>
       <div>
-        <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
-          Borrow Balance
-        </TYPE.mediumHeader>
-        <TYPE.extraLargeHeader color="primaryPink" fontSize={28} fontWeight={700}>
+        <TYPE.mediumHeader color="mediumEmphesisText">Borrow Balance</TYPE.mediumHeader>
+        <TYPE.largeHeader color="primaryPink">
           {formattedNum(pair.user.borrow.string)} {pair.asset.symbol}
-        </TYPE.extraLargeHeader>
-        <TYPE.small color="highEmphesisText" fontSize={18} fontWeight={700}>
-          ≈ {formattedNum(pair.user.borrow.usdString, true)}
-        </TYPE.small>
+        </TYPE.largeHeader>
+        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.borrow.usdString, true)}</TYPE.body>
       </div>
       <div style={{ textAlign: 'right' }}>
         <div>
-          <TYPE.mediumHeader color="mediumEmphesisText" fontSize={18} fontWeight={700}>
-            Borrow APR
-          </TYPE.mediumHeader>
-          <TYPE.extraLargeHeader color="highEmphesisText" fontSize={28} fontWeight={700}>
+          <TYPE.mediumHeader color="mediumEmphesisText">Borrow APR</TYPE.mediumHeader>
+          <TYPE.largeHeader color="highEmphesisText">
             {formattedPercent(pair.details.apr.currentInterestPerYear)}
-          </TYPE.extraLargeHeader>
+          </TYPE.largeHeader>
         </div>
       </div>
     </RowBetween>
