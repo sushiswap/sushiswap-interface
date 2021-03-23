@@ -95,9 +95,9 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
       const [pairsSupplied, pairsBorrowed] = info
       return {
         ...state,
-        pairsSupplied: pairsSupplied.toString(),
-        markets: pairs.length,
-        pairsBorrowed: pairsBorrowed.toString(),
+        pairsSupplied: pairsSupplied?.toString(),
+        markets: pairs?.length,
+        pairsBorrowed: pairsBorrowed?.toString(),
         pairs
       }
     default:
@@ -133,417 +133,432 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     //console.log('details:', pairDetails[0].collateral)
 
     // Get SushiSwap Exchange pricing data for USD estimates
-    const collateralSushiData = await sushiData.exchange.token({
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      token_address: getMainnetAddress(pairDetails?.[0]?.collateral)
-    })
-    const assetSushiData = await sushiData.exchange.token({
-      // eslint-disable-next-line @typescript-eslint/camelcase
-      token_address: getMainnetAddress(pairDetails?.[0]?.asset)
-    })
+    let collateralSushiData
+    try {
+      collateralSushiData = await sushiData.exchange.token({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        token_address: getMainnetAddress(pairDetails?.[0]?.collateral)
+      })
+    } catch (e) {
+      console.log(e)
+      collateralSushiData = { derivedETH: 0 }
+    }
+    let assetSushiData
+    try {
+      assetSushiData = await sushiData.exchange.token({
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        token_address: getMainnetAddress(pairDetails?.[0]?.asset)
+      })
+    } catch (e) {
+      console.log(e)
+      assetSushiData = { derivedETH: 0 }
+    }
     const exchangeEthPrice = await sushiData.exchange.ethPrice()
     const collateralUSD = collateralSushiData?.derivedETH * exchangeEthPrice
     const assetUSD = assetSushiData?.derivedETH * exchangeEthPrice
     // console.log('collateralUSD:', collateralUSD)
     // console.log('assetUSD:', assetUSD)
 
-    const pairs = pairAddresses.map((address, i) => {
-      function accrue(amount: BigNumber) {
-        return amount
-          .mul(
-            pairUserDetails[1][i].accrueInfo.interestPerSecond.mul(
-              BigNumber.from(Date.now())
-                .div(BigNumber.from(1000))
-                .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+    const pairs =
+      pairUserDetails &&
+      pairUserDetails[1] &&
+      pairAddresses.map((address, i) => {
+        function accrue(amount: BigNumber) {
+          return amount
+            .mul(
+              pairUserDetails[1][i].accrueInfo.interestPerSecond.mul(
+                BigNumber.from(Date.now())
+                  .div(BigNumber.from(1000))
+                  .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+              )
             )
-          )
-          .div(BigNumber.from('1000000000000000000'))
-      }
-
-      const currentBorrowAmount = pairUserDetails[1][i].totalBorrowAmount.add(
-        accrue(pairUserDetails[1][i].totalBorrowAmount)
-      )
-
-      const currentUserBorrowAmount = pairUserDetails[1][i].userBorrowAmount.add(
-        takeFee(accrue(pairUserDetails[1][i].userBorrowAmount))
-      )
-
-      const maxBorrowableOracle = pairUserDetails[1][i].oracleExchangeRate.gt(BigNumber.from(0))
-        ? pairUserDetails[1][i].userCollateralAmount
-            .mul(BigNumber.from('1000000000000000000'))
-            .div(BigNumber.from(100))
-            .mul(BigNumber.from(75))
-            .div(pairUserDetails[1][0].oracleExchangeRate)
-        : BigNumber.from(0)
-
-      const maxBorrowableStored = pairUserDetails[1][i].currentExchangeRate.gt(BigNumber.from(0))
-        ? pairUserDetails[1][i].userCollateralAmount
-            .mul(BigNumber.from('1000000000000000000'))
-            .div(BigNumber.from(100))
-            .mul(BigNumber.from(75))
-            .div(pairUserDetails[1][0].currentExchangeRate)
-        : BigNumber.from(0)
-
-      const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
-
-      const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
-
-      const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
-
-      const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalBorrowAmount.lt(
-        safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
-      )
-        ? pairUserDetails[1][i].totalBorrowAmount
-        : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
-
-      // console.log(pairUserDetails[1][i].userCollateralAmount)
-
-      const safeMaxRemovable = pairUserDetails[1][i].userCollateralAmount.gt(BigNumber.from(0))
-        ? pairUserDetails[1][i].userCollateralAmount.sub(
-            pairUserDetails[1][i].userCollateralAmount
-              .mul(safeMaxBorrowable.sub(safeMaxBorrowableLeft))
-              .div(safeMaxBorrowable)
-          )
-        : BigNumber.from(0)
-
-      const utilization = currentBorrowAmount.gt(BigNumber.from(0))
-        ? currentBorrowAmount
-            .mul(BigNumber.from('1000000000000000000'))
-            .div(pairUserDetails[1][i].totalAssetAmount.add(currentBorrowAmount))
-        : BigNumber.from(0)
-
-      function interestAccrue(interest: BigNumber) {
-        if (pairUserDetails[1][i].totalBorrowAmount.eq(BigNumber.from(0))) {
-          return STARTING_INTEREST_PER_YEAR
+            .div(BigNumber.from('1000000000000000000'))
         }
 
-        let currentInterest = interest
+        const currentBorrowAmount = pairUserDetails[1][i].totalBorrowAmount.add(
+          accrue(pairUserDetails[1][i].totalBorrowAmount)
+        )
 
-        const elapsedTime = BigNumber.from(Date.now())
-          .div(BigNumber.from(1000))
-          .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+        const currentUserBorrowAmount = pairUserDetails[1][i].userBorrowAmount.add(
+          takeFee(accrue(pairUserDetails[1][i].userBorrowAmount))
+        )
 
-        if (elapsedTime.lte(BigNumber.from(0))) {
+        const maxBorrowableOracle = pairUserDetails[1][i].oracleExchangeRate.gt(BigNumber.from(0))
+          ? pairUserDetails[1][i].userCollateralAmount
+              .mul(BigNumber.from('1000000000000000000'))
+              .div(BigNumber.from(100))
+              .mul(BigNumber.from(75))
+              .div(pairUserDetails[1][0].oracleExchangeRate)
+          : BigNumber.from(0)
+
+        const maxBorrowableStored = pairUserDetails[1][i].currentExchangeRate.gt(BigNumber.from(0))
+          ? pairUserDetails[1][i].userCollateralAmount
+              .mul(BigNumber.from('1000000000000000000'))
+              .div(BigNumber.from(100))
+              .mul(BigNumber.from(75))
+              .div(pairUserDetails[1][0].currentExchangeRate)
+          : BigNumber.from(0)
+
+        const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
+
+        const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
+
+        const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
+        const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalBorrowAmount.lt(
+          safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+        )
+          ? pairUserDetails[1][i].totalBorrowAmount
+          : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
+        // console.log(pairUserDetails[1][i].userCollateralAmount)
+
+        const safeMaxRemovable = pairUserDetails[1][i].userCollateralAmount.gt(BigNumber.from(0))
+          ? pairUserDetails[1][i].userCollateralAmount.sub(
+              pairUserDetails[1][i].userCollateralAmount
+                .mul(safeMaxBorrowable.sub(safeMaxBorrowableLeft))
+                .div(safeMaxBorrowable)
+            )
+          : BigNumber.from(0)
+
+        const utilization = currentBorrowAmount.gt(BigNumber.from(0))
+          ? currentBorrowAmount
+              .mul(BigNumber.from('1000000000000000000'))
+              .div(pairUserDetails[1][i].totalAssetAmount.add(currentBorrowAmount))
+          : BigNumber.from(0)
+
+        function interestAccrue(interest: BigNumber) {
+          if (pairUserDetails[1][i].totalBorrowAmount.eq(BigNumber.from(0))) {
+            return STARTING_INTEREST_PER_YEAR
+          }
+
+          let currentInterest = interest
+
+          const elapsedTime = BigNumber.from(Date.now())
+            .div(BigNumber.from(1000))
+            .sub(pairUserDetails[1][i].accrueInfo.lastAccrued)
+
+          if (elapsedTime.lte(BigNumber.from(0))) {
+            return currentInterest
+          }
+
+          if (utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
+            const underFactor = MINIMUM_TARGET_UTILIZATION.sub(utilization)
+              .mul(FACTOR_PRECISION)
+              .div(MINIMUM_TARGET_UTILIZATION)
+            const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor.mul(elapsedTime)))
+            currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
+
+            if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
+              currentInterest = MINIMUM_INTEREST_PER_YEAR // 0.25% APR minimum
+            }
+          } else if (utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
+            const overFactor = utilization
+              .sub(MAXIMUM_TARGET_UTILIZATION)
+              .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
+            const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor.mul(elapsedTime)))
+            currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
+            if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
+              currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
+            }
+          }
           return currentInterest
         }
 
-        if (utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-          const underFactor = MINIMUM_TARGET_UTILIZATION.sub(utilization)
-            .mul(FACTOR_PRECISION)
-            .div(MINIMUM_TARGET_UTILIZATION)
-          const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor.mul(elapsedTime)))
-          currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
+        const interestPerYear = pairUserDetails[1][i].accrueInfo.interestPerSecond
+          .mul(BigNumber.from(60))
+          .mul(BigNumber.from(60))
+          .mul(BigNumber.from(24))
+          .mul(BigNumber.from(365))
 
-          if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
-            currentInterest = MINIMUM_INTEREST_PER_YEAR // 0.25% APR minimum
-          }
-        } else if (utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
-          const overFactor = utilization
-            .sub(MAXIMUM_TARGET_UTILIZATION)
-            .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
-          const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor.mul(elapsedTime)))
-          currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
-          if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
-            currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
-          }
-        }
-        return currentInterest
-      }
+        const currentInterestPerYear = interestAccrue(interestPerYear)
 
-      const interestPerYear = pairUserDetails[1][i].accrueInfo.interestPerSecond
-        .mul(BigNumber.from(60))
-        .mul(BigNumber.from(60))
-        .mul(BigNumber.from(24))
-        .mul(BigNumber.from(365))
+        const currentSupplyAPR = Fraction.from(
+          takeFee(currentInterestPerYear.mul(utilization)).div(BigNumber.from(10).pow(BigNumber.from(18))),
+          BigNumber.from(10).pow(BigNumber.from(16))
+        ).toString()
 
-      const currentInterestPerYear = interestAccrue(interestPerYear)
+        // todo: if totalAssetAmount === 0 is userAssetAmount assumed to be 0?
+        const userSupply = pairUserDetails[1][i].totalAssetAmount.gt(BigNumber.from(0))
+          ? pairUserDetails[1][i].userAssetAmount.add(
+              pairUserDetails[1][i].userAssetAmount
+                .mul(pairUserDetails[1][i].totalBorrowAmount) // change resolution by mul first!
+                .div(pairUserDetails[1][i].totalAssetAmount)
+            )
+          : BigNumber.from(0)
 
-      const currentSupplyAPR = Fraction.from(
-        takeFee(currentInterestPerYear.mul(utilization)).div(BigNumber.from(10).pow(BigNumber.from(18))),
-        BigNumber.from(10).pow(BigNumber.from(16))
-      ).toString()
+        // const test = pairUserDetails[1][i].userAssetAmount
+        //   .mul(pairUserDetails[1][i].totalBorrowAmount)
+        //   .div(pairUserDetails[1][i].totalAssetAmount)
+        // console.log('userSupply:', address, {
+        //   userAssetAmount: Fraction.from(
+        //     pairUserDetails[1][i].userAssetAmount,
+        //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+        //   ).toString(),
+        //   totalAssetAmount: Fraction.from(
+        //     pairUserDetails[1][i].totalAssetAmount,
+        //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+        //   ).toString(),
+        //   totalBorrowAmount: Fraction.from(
+        //     pairUserDetails[1][i].totalBorrowAmount,
+        //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+        //   ).toString(),
+        //   userSupply: Fraction.from(
+        //     userSupply,
+        //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
+        //   ).toString(),
+        //   userSupplyRaw: pairUserDetails[1][i].userAssetAmount.add(
+        //     pairUserDetails[1][i].userAssetAmount.div(pairUserDetails[1][i].totalAssetAmount)
+        //   ),
+        //   test: Fraction.from(test, BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))).toString()
+        // })
+        // Test Cases:
+        // userAssetAmount + (userAssetAmount / totalAssetAmount) * totalBorrowAmount
+        // 18.95653793 + (18.95653793 / 511.83397452) * 28.18237205
+        // totalAssetAmount: '511.83397452'
+        // totalBorrowAmount: '28.18237205'
+        // userAssetAmount: '18.95653793'
+        // userSupply: '18.95653793'
 
-      // todo: if totalAssetAmount === 0 is userAssetAmount assumed to be 0?
-      const userSupply = pairUserDetails[1][i].totalAssetAmount.gt(BigNumber.from(0))
-        ? pairUserDetails[1][i].userAssetAmount.add(
-            pairUserDetails[1][i].userAssetAmount
-              .mul(pairUserDetails[1][i].totalBorrowAmount) // change resolution by mul first!
-              .div(pairUserDetails[1][i].totalAssetAmount)
-          )
-        : BigNumber.from(0)
+        // Supply + Collateral - Borrrow
+        const pairNetWorth =
+          Number(
+            Fraction.from(
+              pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString()
+          ) *
+            assetUSD +
+          Number(
+            Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
+              BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+            ).toString()
+          ) *
+            collateralUSD -
+          Number(
+            Fraction.from(
+              BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+            ).toString()
+          ) *
+            assetUSD
 
-      // const test = pairUserDetails[1][i].userAssetAmount
-      //   .mul(pairUserDetails[1][i].totalBorrowAmount)
-      //   .div(pairUserDetails[1][i].totalAssetAmount)
-      // console.log('userSupply:', address, {
-      //   userAssetAmount: Fraction.from(
-      //     pairUserDetails[1][i].userAssetAmount,
-      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
-      //   ).toString(),
-      //   totalAssetAmount: Fraction.from(
-      //     pairUserDetails[1][i].totalAssetAmount,
-      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
-      //   ).toString(),
-      //   totalBorrowAmount: Fraction.from(
-      //     pairUserDetails[1][i].totalBorrowAmount,
-      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
-      //   ).toString(),
-      //   userSupply: Fraction.from(
-      //     userSupply,
-      //     BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))
-      //   ).toString(),
-      //   userSupplyRaw: pairUserDetails[1][i].userAssetAmount.add(
-      //     pairUserDetails[1][i].userAssetAmount.div(pairUserDetails[1][i].totalAssetAmount)
-      //   ),
-      //   test: Fraction.from(test, BigNumber.from(10).pow(BigNumber.from(pairDetails[i].assetDecimals))).toString()
-      // })
-      // Test Cases:
-      // userAssetAmount + (userAssetAmount / totalAssetAmount) * totalBorrowAmount
-      // 18.95653793 + (18.95653793 / 511.83397452) * 28.18237205
-      // totalAssetAmount: '511.83397452'
-      // totalBorrowAmount: '28.18237205'
-      // userAssetAmount: '18.95653793'
-      // userSupply: '18.95653793'
+        //const pairNetAPY =
 
-      // Supply + Collateral - Borrrow
-      const pairNetWorth =
-        Number(
-          Fraction.from(
-            pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
-            BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-          ).toString()
-        ) *
-          assetUSD +
-        Number(
-          Fraction.from(
-            BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
-            BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
-          ).toString()
-        ) *
-          collateralUSD -
-        Number(
-          Fraction.from(
-            BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
-            BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-          ).toString()
-        ) *
-          assetUSD
-
-      //const pairNetAPY =
-
-      return {
-        id: address,
-        address: address,
-        oracle: {
-          address: pairDetails[i].oracle,
-          name: getOracleName(pairDetails[i].oracle),
-          data: pairDetails[i].oracleData
-        },
-        collateral: {
-          address: pairDetails[i].collateral,
-          symbol: pairDetails[i].collateralSymbol,
-          decimals: pairDetails[i].collateralDecimals
-        },
-        asset: {
-          address: pairDetails[i].asset,
-          symbol: pairDetails[i].assetSymbol,
-          decimals: pairDetails[i].assetDecimals
-        },
-        details: {
-          total: {
+        return {
+          id: address,
+          address: address,
+          oracle: {
+            address: pairDetails[i].oracle,
+            name: getOracleName(pairDetails[i].oracle),
+            data: pairDetails[i].oracleData
+          },
+          collateral: {
+            address: pairDetails[i].collateral,
+            symbol: pairDetails[i].collateralSymbol,
+            decimals: pairDetails[i].collateralDecimals
+          },
+          asset: {
+            address: pairDetails[i].asset,
+            symbol: pairDetails[i].assetSymbol,
+            decimals: pairDetails[i].assetDecimals
+          },
+          details: {
+            total: {
+              collateral: {
+                value: pairUserDetails[1][i].totalCollateralAmount,
+                string: Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
+                  BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+                ).toString(),
+                usdString:
+                  Number(
+                    Fraction.from(
+                      BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
+                      BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+                    ).toString()
+                  ) * collateralUSD
+              },
+              asset: {
+                value: pairUserDetails[1][i].totalAssetAmount,
+                string: Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString(),
+                usdString:
+                  Number(
+                    Fraction.from(
+                      BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
+                      BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                    ).toString()
+                  ) * assetUSD
+              },
+              borrow: {
+                value: pairUserDetails[1][i].totalBorrowAmount,
+                string: Fraction.from(
+                  BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString(),
+                usdString:
+                  Number(
+                    Fraction.from(
+                      BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
+                      BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                    ).toString()
+                  ) * assetUSD
+              },
+              supply: {
+                value: pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+                string: Fraction.from(
+                  pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                ).toString(),
+                usdString:
+                  Number(
+                    Fraction.from(
+                      pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
+                      BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                    ).toString()
+                  ) * assetUSD
+              },
+              // utilization: total Borrow / total Assets
+              utilization: {
+                string:
+                  Number(
+                    Fraction.from(
+                      pairUserDetails[1][i].totalBorrowAmount,
+                      pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount)
+                    ).toString()
+                  ) * 100
+              }
+            },
+            rate: {
+              current: pairUserDetails[1][i].currentExchangeRate,
+              oracle: pairUserDetails[1][i].oracleExchangeRate
+            },
+            apr: {
+              asset: pairUserDetails[1][i].assetAPR / 1e6,
+              borrow: pairUserDetails[1][i].borrowAPR / 1e6,
+              supplyAPR: Fraction.from(
+                takeFee(interestPerYear.mul(utilization)).div(BigNumber.from('1000000000000000000')),
+                BigNumber.from('10000000000000000')
+              ).toString(),
+              currentSupplyAPR,
+              currentInterestPerYear: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(16)).toString(),
+              interestPerYear: Fraction.from(interestPerYear, BigNumber.from(10).pow(16)).toString()
+            },
+            borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
+          },
+          user: {
+            pairNetWorth: {
+              usdString: pairNetWorth
+            },
+            health: {
+              percentage: maxBorrowable.gt(BigNumber.from(0))
+                ? Fraction.from(
+                    currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(maxBorrowable),
+                    BigNumber.from(10).pow(16)
+                  ).toString()
+                : BigNumber.from(0)
+            },
             collateral: {
-              value: pairUserDetails[1][i].totalCollateralAmount,
+              max: {
+                value: safeMaxRemovable,
+                balance: {
+                  value: safeMaxRemovable,
+                  decimals: pairDetails[i].collateralDecimals
+                },
+                string: Fraction.from(
+                  safeMaxRemovable,
+                  BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
+                ).toString()
+              },
+              value: pairUserDetails[1][i].userCollateralAmount,
               string: Fraction.from(
-                BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
+                BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
                 BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
               ).toString(),
               usdString:
                 Number(
                   Fraction.from(
-                    BigNumber.from(pairUserDetails[1][i].totalCollateralAmount),
+                    BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
                     BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
                   ).toString()
-                ) * collateralUSD
+                ) * collateralUSD,
+              balance: {
+                value: pairUserDetails[1][i].userCollateralAmount,
+                decimals: pairDetails[i].collateralDecimals
+              }
+            },
+            supply: {
+              value: userSupply,
+              string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)).toString(),
+              usdString:
+                Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD,
+              balance: {
+                value: userSupply,
+                decimals: pairDetails[i].assetDecimals
+              }
             },
             asset: {
-              value: pairUserDetails[1][i].totalAssetAmount,
+              value: pairUserDetails[1][i].userAssetAmount,
               string: Fraction.from(
-                BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
+                BigNumber.from(pairUserDetails[1][i].userAssetAmount),
                 BigNumber.from(10).pow(pairDetails[i].assetDecimals)
               ).toString(),
               usdString:
                 Number(
                   Fraction.from(
-                    BigNumber.from(pairUserDetails[1][i].totalAssetAmount),
+                    BigNumber.from(pairUserDetails[1][i].userAssetAmount),
                     BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                   ).toString()
                 ) * assetUSD
             },
             borrow: {
-              value: pairUserDetails[1][i].totalBorrowAmount,
-              string: Fraction.from(
-                BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
-                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-              ).toString(),
-              usdString:
-                Number(
-                  Fraction.from(
-                    BigNumber.from(pairUserDetails[1][i].totalBorrowAmount),
-                    BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-                  ).toString()
-                ) * assetUSD
-            },
-            supply: {
-              value: pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
-              string: Fraction.from(
-                pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
-                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-              ).toString(),
-              usdString:
-                Number(
-                  Fraction.from(
-                    pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount),
-                    BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-                  ).toString()
-                ) * assetUSD
-            },
-            // utilization: total Borrow / total Assets
-            utilization: {
-              string:
-                Number(
-                  Fraction.from(
-                    pairUserDetails[1][i].totalBorrowAmount,
-                    pairUserDetails[1][i].totalAssetAmount.add(pairUserDetails[1][i].totalBorrowAmount)
-                  ).toString()
-                ) * 100
-            }
-          },
-          rate: {
-            current: pairUserDetails[1][i].currentExchangeRate,
-            oracle: pairUserDetails[1][i].oracleExchangeRate
-          },
-          apr: {
-            asset: pairUserDetails[1][i].assetAPR / 1e6,
-            borrow: pairUserDetails[1][i].borrowAPR / 1e6,
-            supplyAPR: Fraction.from(
-              takeFee(interestPerYear.mul(utilization)).div(BigNumber.from('1000000000000000000')),
-              BigNumber.from('10000000000000000')
-            ).toString(),
-            currentSupplyAPR,
-            currentInterestPerYear: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(16)).toString(),
-            interestPerYear: Fraction.from(interestPerYear, BigNumber.from(10).pow(16)).toString()
-          },
-          borrowInterestPerSecond: pairUserDetails[1][i].borrowAPR
-        },
-        user: {
-          pairNetWorth: {
-            usdString: pairNetWorth
-          },
-          health: {
-            percentage: maxBorrowable.gt(BigNumber.from(0))
-              ? Fraction.from(
-                  currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(maxBorrowable),
-                  BigNumber.from(10).pow(16)
-                ).toString()
-              : BigNumber.from(0)
-          },
-          collateral: {
-            max: {
-              value: safeMaxRemovable,
-              balance: {
-                value: safeMaxRemovable,
-                decimals: pairDetails[i].collateralDecimals
-              },
-              string: Fraction.from(
-                safeMaxRemovable,
-                BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
-              ).toString()
-            },
-            value: pairUserDetails[1][i].userCollateralAmount,
-            string: Fraction.from(
-              BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
-              BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
-            ).toString(),
-            usdString:
-              Number(
-                Fraction.from(
-                  BigNumber.from(pairUserDetails[1][i].userCollateralAmount),
-                  BigNumber.from(10).pow(pairDetails[i].collateralDecimals)
-                ).toString()
-              ) * collateralUSD,
-            balance: {
-              value: pairUserDetails[1][i].userCollateralAmount,
-              decimals: pairDetails[i].collateralDecimals
-            }
-          },
-          supply: {
-            value: userSupply,
-            string: Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals)).toString(),
-            usdString:
-              Number(Fraction.from(userSupply, BigNumber.from(10).pow(pairDetails[i].assetDecimals))) * assetUSD,
-            balance: {
-              value: userSupply,
-              decimals: pairDetails[i].assetDecimals
-            }
-          },
-          asset: {
-            value: pairUserDetails[1][i].userAssetAmount,
-            string: Fraction.from(
-              BigNumber.from(pairUserDetails[1][i].userAssetAmount),
-              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-            ).toString(),
-            usdString:
-              Number(
-                Fraction.from(
-                  BigNumber.from(pairUserDetails[1][i].userAssetAmount),
-                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-                ).toString()
-              ) * assetUSD
-          },
-          borrow: {
-            max: {
-              value: safeMaxBorrowableLeftPossible,
-              balance: {
+              max: {
                 value: safeMaxBorrowableLeftPossible,
-                decimals: pairDetails[i].assetDecimals
-              },
-              string: Fraction.from(
-                safeMaxBorrowableLeftPossible,
-                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-              ).toString()
-            },
-            maxUSD:
-              Number(
-                Fraction.from(
+                balance: {
+                  value: safeMaxBorrowableLeftPossible,
+                  decimals: pairDetails[i].assetDecimals
+                },
+                string: Fraction.from(
                   safeMaxBorrowableLeftPossible,
                   BigNumber.from(10).pow(pairDetails[i].assetDecimals)
                 ).toString()
-              ) * assetUSD,
-            value: pairUserDetails[1][i].userBorrowAmount,
-            balance: {
+              },
+              maxUSD:
+                Number(
+                  Fraction.from(
+                    safeMaxBorrowableLeftPossible,
+                    BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                  ).toString()
+                ) * assetUSD,
               value: pairUserDetails[1][i].userBorrowAmount,
-              decimals: pairDetails[i].assetDecimals
-            },
-            string: Fraction.from(
-              BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
-              BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-            ).toString(),
-            usdString:
-              Number(
-                Fraction.from(
-                  BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
-                  BigNumber.from(10).pow(pairDetails[i].assetDecimals)
-                ).toString()
-              ) * assetUSD
+              balance: {
+                value: pairUserDetails[1][i].userBorrowAmount,
+                decimals: pairDetails[i].assetDecimals
+              },
+              string: Fraction.from(
+                BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+                BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+              ).toString(),
+              usdString:
+                Number(
+                  Fraction.from(
+                    BigNumber.from(pairUserDetails[1][i].userBorrowAmount),
+                    BigNumber.from(10).pow(pairDetails[i].assetDecimals)
+                  ).toString()
+                ) * assetUSD
+            }
           }
         }
-      }
-    })
+      })
 
     dispatch({
       type: ActionType.SET,
       payload: {
-        info: pairUserDetails[0],
+        info: pairUserDetails?.[0] ? pairUserDetails[0] : [],
         pairs
       }
     })
