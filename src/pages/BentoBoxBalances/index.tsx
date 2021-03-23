@@ -145,12 +145,7 @@ interface TokenBalanceProps {
 
 const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
   const [expand, setExpand] = useState<boolean>(false)
-  //const tokenDetails = useTokenInfo(tokenAddress)
-  //const tokenBalanceBigInt = useBentoBalance(tokenAddress)
-  //const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
-  //console.log('tokenDetails:', tokenDetails)
   const tokenBalance = formatFromBalance(tokenDetails?.amount?.value, tokenDetails?.amount?.decimals)
-
   return (
     <DarkCard padding={'0px'} marginBottom={'10px'}>
       <div className="p-2 sm:p-4 flex justify-between">
