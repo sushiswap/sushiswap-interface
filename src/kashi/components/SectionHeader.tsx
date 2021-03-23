@@ -50,7 +50,7 @@ const SectionHeader = ({ portfolio = false, children }: any) => {
         <div className="flex justify-between items-center">
           <div className="hidden md:flex ml-4 items-center md:w-2/5">
             <div className="w-full">
-              <div className="font-semibold text-lg px-4 pb-4">
+              <div className="font-semibold text-lg px-4 pb-2">
                 {(() => {
                   switch (pathname) {
                     case '/bento/kashi':
