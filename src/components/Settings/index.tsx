@@ -68,8 +68,16 @@ const ModalContentWrapper = styled.div`
   border-radius: 20px;
 `
 
+const ExtendedMenuFlyout = styled(MenuFlyout)`
+  min-width: 20.125rem;
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    min-width: 18.125rem;
+  `};
+`
+
 export default function SettingsTab() {
-  const node = useRef<HTMLDivElement>()
+  const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
   const toggle = useToggleSettingsMenu()
 
@@ -88,8 +96,7 @@ export default function SettingsTab() {
   useOnClickOutside(node, open ? toggle : undefined)
 
   return (
-    // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
-    <StyledMenu ref={node as any}>
+    <StyledMenu ref={node}>
       <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)} maxHeight={100}>
         <ModalContentWrapper>
           <AutoColumn gap="lg">
@@ -138,7 +145,7 @@ export default function SettingsTab() {
         ) : null}
       </StyledMenuButton>
       {open && (
-        <MenuFlyout>
+        <ExtendedMenuFlyout>
           <AutoColumn gap="md" style={{ padding: '1rem' }}>
             <Text fontWeight={600} fontSize={14}>
               Transaction Settings
@@ -189,7 +196,7 @@ export default function SettingsTab() {
               />
             </RowBetween>
           </AutoColumn>
-        </MenuFlyout>
+        </ExtendedMenuFlyout>
       )}
     </StyledMenu>
   )
