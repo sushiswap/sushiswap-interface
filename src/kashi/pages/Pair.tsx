@@ -7,18 +7,18 @@ import { AutoColumn } from 'components/Column'
 import { Debugger } from 'components/Debugger'
 import { useKashiPair } from 'kashi/context'
 import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
-import { KashiAction, Navigation, TeardropCard, CardHeader, PrimaryTabs, SecondaryTabs } from './components'
+import { KashiAction, Navigation, TeardropCard, CardHeader, PrimaryTabs, SecondaryTabs } from '../../kashi/components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
-import Layout from './components/Layout'
+import { InfoCard, Layout } from '../../kashi/components'
+import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 
 const PageWrapper = styled.div`
-  height: 100%;
-  width: 100%;
   max-width: 1280px;
+  width: 100%;
 `
 
 export default function KashiPair({
@@ -38,16 +38,16 @@ export default function KashiPair({
 
   return (
     <PageWrapper>
-      {/* <RowBetween padding="0 16px 8px" align="flex-end">
-        <div style={{ display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
-          <img src={KashiLogo} style={{ width: '116px', marginRight: '12px' }} />
-          <TYPE.extraLargeHeader color="extraHighEmphesisText" fontSize={36} fontWeight={700}>
-            Kashi
-          </TYPE.extraLargeHeader>
-        </div>
-        <Navigation />
-      </RowBetween> */}
       <Layout
+        left={
+          <InfoCard
+            backgroundImage={DepositGraphic}
+            title={'Deposit tokens into BentoBox for all the yields.'}
+            description={
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            }
+          />
+        }
         right={
           <>
             <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
@@ -161,14 +161,14 @@ export default function KashiPair({
             </div>
             <div className="flex justify-between items-center">
               <div>
-                <TYPE.extraLargeHeader color="highEmphesisText">
+                <TYPE.extraLargeHeader color="highEmphesisText" lineHeight={1}>
                   {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
                 </TYPE.extraLargeHeader>
                 <AutoRow>
-                  <TYPE.small color="mediumEmphesisText" style={{ marginRight: 4 }}>
+                  <TYPE.subHeader color="mediumEmphesisText" style={{ marginRight: 4 }}>
                     Oracle:
-                  </TYPE.small>
-                  <TYPE.small color="highEmphesisText">{pair && pair.oracle.name}</TYPE.small>
+                  </TYPE.subHeader>
+                  <TYPE.subHeader color="highEmphesisText">{pair && pair.oracle.name}</TYPE.subHeader>
                   {/* <QuestionHelper text="" /> */}
                 </AutoRow>
               </div>

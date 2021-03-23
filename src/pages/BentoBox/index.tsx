@@ -65,7 +65,7 @@ export default function Bento() {
                 <CardSection>
                   <AutoColumn gap="md">
                     <RowBetween>
-                      <TYPE.white fontSize={14} color={theme.text2}>
+                      <TYPE.white fontSize={14} color={theme.highEmphesisText}>
                         {`BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In order to use any one of the decentralized apps below you'll need to first enable them and deposit any erc20 asset to your Bentobox balance.`}
                       </TYPE.white>
                     </RowBetween>

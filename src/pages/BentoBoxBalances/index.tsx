@@ -1,73 +1,136 @@
 import React, { useContext, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { TYPE } from '../../theme'
-import { RowBetween } from '../../components/Row'
+import { ExternalLink, TYPE, HideSmall } from '../../theme'
+import { Text } from 'rebass'
+
+import { RowBetween, RowFixed } from '../../components/Row'
+import { ButtonEmpty } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
-import { DarkCard } from '../../components/Card'
+import { CardSection, DataCard } from '../../components/earn/styled'
+import { DarkCard, BaseCard } from '../../components/Card'
+import { transparentize } from 'polished'
+
 import TokenDepositPanel from './TokenDepositPanel'
 import TokenWithdrawPanel from './TokenWithdrawPanel'
+
+import { useActiveWeb3React } from '../../hooks'
 import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
-import { formatFromBalance } from '../../utils'
+//import useBentoBalance from '../../sushi-hooks/queries/useBentoBalance'
+import { formatFromBalance, formattedNum } from '../../utils'
+
+//import useTokenInfo from '../../sushi-hooks/queries/useTokenInfo'
+import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
+
+import ReponsiveGrid, { Secondary, Primary } from '../../kashi/components/ResponsiveGrid'
+import { InfoCard, FixedScrollable, Layout } from '../../kashi/components'
+
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
-import { formattedNum } from '../../utils'
-import { PlusSquare, MinusSquare } from 'react-feather'
-import { Card, CardHeader } from '../Kashi/components'
-import Layout from '../Kashi/components/Layout'
+import BentoBoxImage from '../../assets/kashi/bento-illustration.png'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
 `
 
-const PageWrapper = styled.div`
-  height: 100%;
-  width: 100%;
+const PageWrapper = styled(AutoColumn)`
   max-width: 1280px;
+  width: 100%;
+`
+
+const StyledBaseCard = styled(BaseCard)`
+border: none
+/*background: ${({ theme }) => transparentize(0.6, theme.bg1)};*/
+background: ${({ theme }) => theme.baseCard};
+position: relative;
+overflow: hidden;
 `
 
 export default function BentoBalances() {
+  const history = useHistory()
   const theme = useContext(ThemeContext)
+  const { account } = useActiveWeb3React()
+
+  // todo: include totalDeposits in balances
   const balances = useBentoBalances()
+  //console.log('balances:', balances)
+
   const totalDepositsUSD = balances?.reduce((total: number, balance: { amountUSD: number }) => {
     return total + balance.amountUSD
   }, 0)
+  //console.log('totalDepositsUSD:', totalDepositsUSD)
+
   return (
     <>
       <PageWrapper>
-        <Layout>
+        <Layout
+          left={
+            <InfoCard
+              backgroundImage={BentoBoxImage}
+              title={'Deposit tokens into BentoBox for all the yields.'}
+              description={
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+              }
+            />
+          }
+        >
           <AutoColumn gap="md" justify="center">
-            <AutoColumn gap="md" style={{ width: '100%' }}>
-              <Card>
-                <CardHeader>
-                  <RowBetween>
-                    <div className="flex items-center">
-                      <img src={BentoBoxLogo} className="w-12 mr-2" />
-                      <TYPE.extraLargeHeader
-                        color={theme.highEmphesisText}
-                        fontSize={36}
-                        fontWeight={700}
-                        lineHeight={1}
-                      >
-                        My Bento Balances
-                      </TYPE.extraLargeHeader>
+            <AutoColumn
+              gap="md"
+              style={{
+                width: '100%',
+                paddingTop: '1rem',
+                background: `${theme.mediumDarkPurple}`,
+                borderRadius: '12px 12px 12px 12px'
+              }}
+            >
+              <div className="px-6 pb-2 md:px-2 md:pb-4 flex md:hidden justify-between">
+                <div className="flex float-right items-center">
+                  <div className="font-semibold">My Bento Balances</div>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="hidden md:flex ml-4 items-center">
+                  <button
+                    onClick={() => {
+                      if (history.length < 3) {
+                        history.push('/bento')
+                      } else {
+                        history.goBack()
+                      }
+                    }}
+                    className="mr-4 p-2 rounded-full"
+                    style={{ background: theme.baseCard }}
+                  >
+                    <ChevronLeft strokeWidth={2} size={24} />
+                  </button>
+                  <img src={BentoBoxLogo} className="w-10 mr-2" />
+                  <div className="font-semibold text-lg">My Bento Balances</div>
+                </div>
+                <div className="px-4 w-full md:w-1/2">
+                  <div className="relative">
+                    <input
+                      className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
+                      style={{ background: theme.baseCard }}
+                      //onChange={e => search(e.target.value)}
+                      //value={term}
+                      placeholder="Search by name, symbol, address"
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      <Search size={16} />
                     </div>
-                    <div className="flex items-center">
-                      <TYPE.body color={theme.mediumEmphesisText} fontSize={18} fontWeight={700}>
-                        TOTAL ASSET VALUE:
-                      </TYPE.body>
-                      <TYPE.body
-                        color={theme.highEmphesisText}
-                        fontSize={24}
-                        fontWeight={700}
-                        style={{ marginLeft: 8 }}
-                      >
-                        ≈{formattedNum(totalDepositsUSD, true)}
-                      </TYPE.body>
-                    </div>
-                  </RowBetween>
-                </CardHeader>
-                <div style={{ padding: '32px' }}>
-                  <AutoColumn gap="10px">
+                  </div>
+                </div>
+              </div>
+
+              {/* List of Tools */}
+              <StyledBaseCard padding={'0px'}>
+                <div className="p-2 sm:p-4">
+                  <div className="flex justify-between px-2 pb-4">
+                    <div className="font-medium text-base text-gray-500">Total Deposits:</div>
+                    <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
+                  </div>
+                  <FixedScrollable>
                     {balances &&
                       balances.map((balance: any, i: number) => {
                         // todo: remove increment for testing purposes
@@ -79,9 +142,9 @@ export default function BentoBalances() {
                           />
                         )
                       })}
-                  </AutoColumn>
+                  </FixedScrollable>
                 </div>
-              </Card>
+              </StyledBaseCard>
             </AutoColumn>
           </AutoColumn>
         </Layout>
@@ -128,7 +191,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
       {expand && (
         <div className="p-2 space-y-4 sm:p-4 sm:flex sm:space-x-2 sm:space-y-0">
           <div className="w-full text-center">
-            <div className="pb-2 text-base font-semibold text-gray-400">Deposit to Bento</div>
+            {/* <div className="pb-2 text-base font-semibold text-gray-400">Deposit to Bento</div> */}
             <TokenDepositPanel
               id={tokenAddress}
               tokenAddress={tokenAddress}
@@ -137,7 +200,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
             />
           </div>
           <div className="w-full text-center">
-            <div className="pb-2 text-base font-semibold text-gray-400">Withdraw to Wallet</div>
+            {/* <div className="pb-2 text-base font-semibold text-gray-400">Withdraw to Wallet</div> */}
             <TokenWithdrawPanel
               id={tokenAddress}
               tokenAddress={tokenAddress}

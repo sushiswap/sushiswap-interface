@@ -4,7 +4,7 @@ import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
 import { BigNumber } from '@ethersproject/bignumber'
 
 import { useKashiPair } from 'kashi/context'
-import Layout from 'pages/Kashi/components/Layout'
+import Layout from 'kashi/components/Layout'
 import styled from 'styled-components'
 
 const Container = styled.div`

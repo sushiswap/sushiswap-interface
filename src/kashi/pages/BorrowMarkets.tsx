@@ -1,44 +1,57 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
-import { Debugger } from 'components/Debugger'
+//import { Debugger } from 'components/Debugger'
 import { BaseCard } from '../../components/Card'
 import QuestionHelper from '../../components/QuestionHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedPercent } from '../../utils'
-import { useKashiPairs } from 'kashi/context'
+import { useKashiPairs } from '../context'
 
-import { Header, SplitPane, Navigation, Search } from './components'
+import { InfoCard, SectionHeader, Layout } from '../components'
+
+import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 
 const PageWrapper = styled.div`
-  max-width: 800px;
+  max-width: 1280px;
   width: 100%;
 `
 
-const StyledBaseCard = styled(BaseCard)`
+const StyledBaseCard = styled(BaseCard)<{ cornerRadiusTopNone: boolean }>`
   border: none
   background: ${({ theme }) => transparentize(0.6, theme.bg1)};
   position: relative;
   overflow: hidden;
+  border-radius: ${({ cornerRadiusTopNone }) => cornerRadiusTopNone && '0 0 12px 12px'};
 `
 
 export default function KashiPairs() {
+  const theme = useContext(ThemeContext)
   const pairs = useKashiPairs()
 
   if (!pairs) return null
 
   return (
-    <>
-      <PageWrapper>
+    <PageWrapper>
+      <Layout
+        left={
+          <InfoCard
+            backgroundImage={DepositGraphic}
+            title={'Deposit tokens into BentoBox for all the yields.'}
+            description={
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            }
+          />
+        }
+      >
         <div className="flex-col space-y-8">
-          <Header />
           <div>
-            <SplitPane left={<Navigation />} right={<Search />} />
+            <SectionHeader />
             {/* TODO: Use table component */}
-            <StyledBaseCard>
+            <StyledBaseCard cornerRadiusTopNone={true}>
               <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
-                <div className="hover:text-gray-400 col-span-2 md:col-span-1">Market</div>
+                <div className="hover:text-gray-400 col-span-2 md:col-span-1">Borrowing</div>
                 <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
                 <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
                 <div className="flex text-right hover:text-gray-400 item-center justify-end">
@@ -53,16 +66,15 @@ export default function KashiPairs() {
                   pairs.map(pair => {
                     return (
                       <div key={pair.address}>
-                        <Link to={'/bento/kashi/' + String(pair.address).toLowerCase()} className="block">
+                        <Link
+                          to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '?tab=borrow'}
+                          className="block"
+                        >
                           <div
                             className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
                             style={{ background: '#19212e', borderRadius: '12px' }}
                           >
                             <div className="flex space-x-2 col-span-2 md:col-span-1">
-                              <img
-                                src={getTokenIcon(pair.collateral.address)}
-                                className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
-                              />
                               <img
                                 src={getTokenIcon(pair.asset.address)}
                                 className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
@@ -77,7 +89,7 @@ export default function KashiPairs() {
                             </div>
                           </div>
                         </Link>
-                        <Debugger data={pair} />
+                        {/* <Debugger data={pair} /> */}
                       </div>
                     )
                   })}
@@ -85,7 +97,7 @@ export default function KashiPairs() {
             </StyledBaseCard>
           </div>
         </div>
-      </PageWrapper>
-    </>
+      </Layout>
+    </PageWrapper>
   )
 }
