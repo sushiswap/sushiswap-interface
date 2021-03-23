@@ -41,7 +41,7 @@ export default function Positions() {
             />
           }
         >
-          <div className="flex-col space-y-8">
+          <div className="flex-col space-y-8" style={{ minHeight: '35rem' }}>
             <div>
               <SectionHeader portfolio={true}>
                 <PositionsToggle selected={selected} setSelected={setSelected} />

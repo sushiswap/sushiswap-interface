@@ -43,7 +43,7 @@ export default function KashiPairs() {
           />
         }
       >
-        <div className="flex-col space-y-8">
+        <div className="flex-col space-y-8" style={{ minHeight: '35rem' }}>
           <div>
             <SectionHeader />
             {/* TODO: Use table component */}
