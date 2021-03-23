@@ -470,7 +470,9 @@ const useKashi = () => {
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       const pair = pairs.find(pair => pair.address === pairAddress)
+
       let amountToWithdraw = amount.value
+
       if (max) {
         if (pair) {
           amountToWithdraw = pair.user.collateral.max

@@ -31,15 +31,15 @@ export default function Layout({ left = undefined, children = undefined, right =
     <>
       <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-12 gap-4`}>
         <div className="flex col-span-3 justify-center lg:justify-start">
-          <Kashi>
-            <img src={KashiLogo} className="w-10 y-10 sm:w-20 sm:y-20" />
+          <div className="flex items-center pb-3">
+            <img src={KashiLogo} className="w-10 y-10 sm:w-20 sm:y-20 lg:w-28 lg:y-28" />
             <TYPE.extraLargeHeader color="extraHighEmphesisText" lineHeight={1}>
               Kashi
             </TYPE.extraLargeHeader>
-          </Kashi>
+          </div>
         </div>
         <div className="flex col-span-9 items-end">
-          <div className="w-full flex justify-center lg:justify-between">
+          <div className="w-full flex justify-center lg:justify-between pb-1">
             <div className="hidden lg:block">
               <MarketsNavigation />
             </div>

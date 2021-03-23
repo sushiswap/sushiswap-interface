@@ -48,8 +48,8 @@ export const SecondaryTabs = styled(Tabs)`
     border: 0;
     background: none;
     ${({ theme }) => theme.mediaWidth.upToMedium`
-    font-size: 12px;
-  `};
+      font-size: 12px;
+    `};
   }
   .react-tabs__tab {
     display: flex;
