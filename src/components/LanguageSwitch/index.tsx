@@ -26,6 +26,7 @@ const ExtendedMenuFlyout = styled(MenuFlyout)`
     max-height: 232px;
     overflow: auto;
     min-width: 11rem;
+    top: -16.5rem;
   `};
 `
 

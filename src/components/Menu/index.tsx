@@ -45,26 +45,36 @@ const MenuItemInternal = styled(StyledInternalLink)`
   }
 `
 
+const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+  margin-right: 6px;
+`
+
+const ExtendedMenuFlyout = styled(MenuFlyout)`
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    top: -16.5rem;
+    margin-right: 6px;
+  `};
+`
+
 const CODE_LINK = 'https://github.com/sushiswap/sushiswap-interface'
 
 export default function Menu() {
   const { account } = useActiveWeb3React()
 
-  const node = useRef<HTMLDivElement>()
+  const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.MENU)
   const toggle = useToggleModal(ApplicationModal.MENU)
   useOnClickOutside(node, open ? toggle : undefined)
   const openClaimModal = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
 
   return (
-    // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
-    <StyledMenu ref={node as any}>
-      <StyledMenuButton onClick={toggle}>
+    <StyledMenu ref={node}>
+      <ExtendedStyledMenuButton onClick={toggle}>
         <StyledMenuIcon />
-      </StyledMenuButton>
+      </ExtendedStyledMenuButton>
 
       {open && (
-        <MenuFlyout>
+        <ExtendedMenuFlyout>
           <MenuItem id="link" href="#">
             <Info size={14} />
             About
@@ -94,7 +104,7 @@ export default function Menu() {
               Claim UNI
             </ButtonPrimary>
           )} */}
-        </MenuFlyout>
+        </ExtendedMenuFlyout>
       )}
     </StyledMenu>
   )
