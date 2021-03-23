@@ -9,10 +9,10 @@ import { formattedPercent, formattedNum } from '../../../utils'
 
 const StyledBaseCard = styled(BaseCard)`
   border: none;
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
+  background: ${({ theme }) => theme.baseCard};
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 15px 15px;
 `
 
 // TODO: Use table component
@@ -55,7 +55,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                     <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
                       <div
                         className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold"
-                        style={{ background: '#19212e', borderRadius: '12px' }}
+                        style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
                       >
                         <div className="flex space-x-2 col-span-2 sm:col-span-1">
                           <img

@@ -1,30 +1,17 @@
 import React, { useContext, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { ExternalLink, TYPE, HideSmall } from '../../theme'
-import { Text } from 'rebass'
-
-import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonEmpty } from '../../components/Button'
+import { RowBetween } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
-import { CardSection, DataCard } from '../../components/earn/styled'
 import { DarkCard, BaseCard } from '../../components/Card'
 import { transparentize } from 'polished'
-
 import TokenDepositPanel from './TokenDepositPanel'
 import TokenWithdrawPanel from './TokenWithdrawPanel'
-
 import { useActiveWeb3React } from '../../hooks'
 import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
-//import useBentoBalance from '../../sushi-hooks/queries/useBentoBalance'
 import { formatFromBalance, formattedNum } from '../../utils'
-
-//import useTokenInfo from '../../sushi-hooks/queries/useTokenInfo'
 import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
-
-import ReponsiveGrid, { Secondary, Primary } from '../../kashi/components/ResponsiveGrid'
 import { InfoCard, FixedScrollable, Layout } from '../../kashi/components'
-
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import BentoBoxImage from '../../assets/kashi/bento-illustration.png'
@@ -39,11 +26,11 @@ const PageWrapper = styled(AutoColumn)`
 `
 
 const StyledBaseCard = styled(BaseCard)`
-border: none
-/*background: ${({ theme }) => transparentize(0.6, theme.bg1)};*/
-background: ${({ theme }) => theme.baseCard};
-position: relative;
-overflow: hidden;
+  border: none;
+  background: ${({ theme }) => theme.baseCard};
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 15px 15px;
 `
 
 export default function BentoBalances() {
@@ -123,7 +110,6 @@ export default function BentoBalances() {
                 </div>
               </div>
 
-              {/* List of Tools */}
               <StyledBaseCard padding={'0px'}>
                 <div className="p-2 sm:p-4">
                   <div className="flex justify-between px-2 pb-4">
@@ -166,7 +152,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
   const tokenBalance = formatFromBalance(tokenDetails?.amount?.value, tokenDetails?.amount?.decimals)
 
   return (
-    <DarkCard padding={'0px'} marginBottom={'5px'}>
+    <DarkCard padding={'0px'} marginBottom={'10px'}>
       <div className="p-2 sm:p-4 flex justify-between">
         <div className="flex items-center">
           <img src={getTokenIcon(tokenAddress)} className="w-10 sm:w-14 rounded-lg mr-4" />

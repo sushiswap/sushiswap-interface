@@ -8,10 +8,7 @@ import QuestionHelper from '../../components/QuestionHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import { formattedPercent } from '../../utils'
 import { useKashiPairs } from '../../kashi/context'
-
-import ResponsiveGrid, { Secondary, Primary } from '../../kashi/components/ResponsiveGrid'
 import { InfoCard, SectionHeader, Layout } from '../../kashi/components'
-
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 
 const PageWrapper = styled.div`
@@ -21,10 +18,10 @@ const PageWrapper = styled.div`
 
 const StyledBaseCard = styled(BaseCard)<{ cornerRadiusTopNone: boolean }>`
   border: none
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
+  background: ${({ theme }) => theme.baseCard};
   position: relative;
   overflow: hidden;
-  border-radius: ${({ cornerRadiusTopNone }) => cornerRadiusTopNone && '0 0 12px 12px'};
+  border-radius: ${({ cornerRadiusTopNone }) => (cornerRadiusTopNone ? '0 0 15px 15px' : '15px')};
 `
 
 export default function KashiPairs() {
@@ -74,7 +71,7 @@ export default function KashiPairs() {
                         >
                           <div
                             className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
-                            style={{ background: '#19212e', borderRadius: '12px' }}
+                            style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
                           >
                             <div className="flex space-x-2 col-span-2 md:col-span-1">
                               <img

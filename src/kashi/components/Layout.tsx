@@ -5,12 +5,9 @@ import { TYPE } from 'theme'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import MarketsNavigation from './MarketsNavigation'
 import { BaseCard } from 'components/Card'
-
-const Kashi = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 8px;
-`
+import { NavLink, useLocation } from 'react-router-dom'
+import { BarChart, User } from 'react-feather'
+import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -18,15 +15,8 @@ interface LayoutProps {
   right?: JSX.Element
 }
 
-const KashiImage = styled.img`
-  width: 116px;
-  margin-right: 12px;
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    width: 58px;
-  `};
-`
-
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
+  const location = useLocation()
   return (
     <>
       <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-12 gap-4`}>
@@ -39,11 +29,80 @@ export default function Layout({ left = undefined, children = undefined, right =
           </div>
         </div>
         <div className="flex col-span-9 items-end">
-          <div className="w-full flex justify-center lg:justify-between pb-1">
+          <div className="w-full flex justify-center lg:justify-between pb-2 px-6">
             <div className="hidden lg:block">
-              <MarketsNavigation />
+              <nav className="-mb-px flex space-x-4 justify-center pb-2 md:pb-0 md:justify-start ">
+                <NavLink to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
+                  <div
+                    className={
+                      'flex items-center font-medium ' +
+                      (location.pathname === '/bento/kashi' ? 'text-white' : 'text-gray-500')
+                    }
+                  >
+                    <div className={'whitespace-nowrap text-base mr-2'}>All</div>
+                  </div>
+                </NavLink>
+                <NavLink to="/bento/kashi/supply" className="border-transparent py-2 px-1 border-b-2">
+                  <div
+                    className={
+                      'flex items-center font-medium ' +
+                      (location.pathname === '/bento/kashi/supply' ? 'text-white' : 'text-gray-500')
+                    }
+                  >
+                    <div className="whitespace-nowrap text-base mr-2">Supply</div>
+                  </div>
+                </NavLink>
+                <NavLink to="/bento/kashi/borrow" className="border-transparent py-2 px-1 border-b-2">
+                  <div
+                    className={
+                      'flex items-center font-medium ' +
+                      (location.pathname === '/bento/kashi/borrow' ? 'text-white' : 'text-gray-500')
+                    }
+                  >
+                    <div className="whitespace-nowrap text-base mr-2">Borrow</div>
+                  </div>
+                </NavLink>
+              </nav>
             </div>
-            <Navigation />
+            <nav className="-mb-px flex space-x-4 justify-center pb-2 md:pb-0 md:justify-start float-right">
+              <NavLink to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
+                <div
+                  className={
+                    'flex items-center font-medium ' +
+                    (location.pathname === '/bento/kashi' ||
+                    location.pathname === '/bento/kashi/supply' ||
+                    location.pathname === '/bento/kashi/borrow'
+                      ? 'text-white'
+                      : 'text-gray-500')
+                  }
+                >
+                  <div className={'whitespace-nowrap text-base mr-2'}>Markets</div>
+                  <BarChart size={16} />
+                </div>
+              </NavLink>
+              <NavLink to="/bento/kashi/positions" className="border-transparent py-2 px-1 border-b-2">
+                <div
+                  className={
+                    'flex items-center font-medium ' +
+                    (location.pathname === '/bento/kashi/positions' ? 'text-white' : 'text-gray-500')
+                  }
+                >
+                  <div className="whitespace-nowrap text-base mr-2">Positions</div>
+                  <User size={16} />
+                </div>
+              </NavLink>
+              <NavLink to="/bento/balances" className="border-transparent py-2 px-1 border-b-2">
+                <div
+                  className={
+                    'flex items-center font-medium ' +
+                    (location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500')
+                  }
+                >
+                  <div className="whitespace-nowrap text-base mr-2">My Bento</div>
+                  <img src={BentoBoxLogo} className="w-6" />
+                </div>
+              </NavLink>
+            </nav>
           </div>
         </div>
       </div>
