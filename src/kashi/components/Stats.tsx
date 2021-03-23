@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Card from 'components/Card'
 import { useKashiCounts, useKashiPairs } from 'kashi/context'
-import { formattedNum } from 'utils'
-import _ from 'lodash'
+import sumBy from 'lodash/sumBy'
+import millify from 'millify'
 
 export const BaseCard = styled(Card)`
   background-color: ${({ theme }) => theme.baseCard};
@@ -12,17 +12,15 @@ export const BaseCard = styled(Card)`
 export default function Header() {
   const counts = useKashiCounts()
   const pairs = useKashiPairs()
-
-  const totalNetWorth = _.sumBy(pairs, function(o) {
-    return o.user.pairNetWorth.usdString
-  })
-
+  const netWorth = useMemo(() => {
+    return millify(sumBy(pairs, pair => pair.user.pairNetWorth.usdString))
+  }, [pairs])
   return (
     <div className="flex flex-row space-x-4">
       <div className="flex-grow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
-            <div className="text-2xl font-semibold">≈{formattedNum(totalNetWorth, true)}</div>
+            <div className="text-2xl font-semibold">≈ {netWorth}</div>
             <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
               Net Worth
             </div>
