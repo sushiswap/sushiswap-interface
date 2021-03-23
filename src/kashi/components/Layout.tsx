@@ -25,17 +25,15 @@ export default function Layout({ left = undefined, children = undefined, right =
             <div className="font-semibold text-2xl">Kashi</div>
           </div>
         </div>
-        <div className="flex items-end">
-          <div className="w-full flex justify-between px-6 md:px-4">
-            <div className="hidden lg:block">
-              <MarketsNavigation />
-            </div>
-            <div className="flex lg:hidden items-center pb-2">
-              <img src={KashiLogo} className="block w-10 h-7 sm:w-14 sm:h-10 mr-2" />
-              <div className="hidden sm:block font-semibold text-2xl">Kashi</div>
-            </div>
-            <Navigation />
+        <div className="col-span-9 w-full flex justify-between px-6">
+          <div className="hidden lg:block">
+            <MarketsNavigation />
           </div>
+          <div className="flex lg:hidden items-center pb-2">
+            <img src={KashiLogo} className="block w-10 h-7 sm:w-14 sm:h-10 mr-2" />
+            <div className="hidden sm:block font-semibold text-2xl">Kashi</div>
+          </div>
+          <Navigation />
         </div>
       </div>
       <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-12 gap-4`}>
