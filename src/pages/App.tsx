@@ -20,19 +20,13 @@ import {
   RedirectOldAddLiquidityPathStructure,
   RedirectToAddLiquidity
 } from './AddLiquidity/redirects'
-//import Earn from './Earn'
-//import Manage from './Earn/Manage'
-//import MigrateV1 from './MigrateV1'
-//import MigrateV1Exchange from './MigrateV1/MigrateV1Exchange'
 import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
-import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
-//import Vote from './Vote'
-//import VotePage from './Vote/VotePage'
+import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 
 import Test from './Test'
 
@@ -69,7 +63,6 @@ const HeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   justify-content: space-between;
-  // border-bottom: 1px solid rgb(26, 29, 41);
 `
 
 const BodyWrapper = styled.div`
@@ -94,12 +87,6 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
-function TopLevelModals() {
-  const open = useModalOpen(ApplicationModal.ADDRESS_CLAIM)
-  const toggle = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-  return <AddressClaimModal isOpen={open} onDismiss={toggle} />
-}
-
 export default function App() {
   const { chainId } = useActiveWeb3React()
   return (
@@ -114,7 +101,6 @@ export default function App() {
         <BodyWrapper>
           <Popups />
           <Polling />
-          <ComingSoonModal />
           <Web3ReactManager>
             <KashiProvider>
               <Switch>

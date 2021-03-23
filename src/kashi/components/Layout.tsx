@@ -1,13 +1,9 @@
 import React from 'react'
 import { TeardropCard, Navigation } from '.'
-import styled from 'styled-components'
 import { TYPE } from 'theme'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import MarketsNavigation from './MarketsNavigation'
 import { BaseCard } from 'components/Card'
-import { NavLink, useLocation } from 'react-router-dom'
-import { BarChart, User } from 'react-feather'
-import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 interface LayoutProps {
   left?: JSX.Element
