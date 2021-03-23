@@ -20,7 +20,7 @@ export default function Header() {
       <div className="flex-grow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
-            <div className="text-2xl font-semibold">≈ {netWorth}</div>
+            <div className="text-2xl font-semibold">≈ ${netWorth}</div>
             <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
               Net Worth
             </div>
