@@ -52,7 +52,12 @@ const SupplyPositions = ({ supplyPositions }: any) => {
               supplyPositions.map((pair: any) => {
                 return (
                   <>
-                    <Link to={'/bento/kashi/pair/' + pair.address} className="block" key={pair.address}>
+                    <Link
+                      to={'/bento/kashi/pair/' + pair.address}
+                      className="block"
+                      key={pair.address}
+                      style={{ color: theme.highEmphesisText }}
+                    >
                       <div
                         className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold"
                         style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
