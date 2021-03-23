@@ -10,7 +10,8 @@ import { useIsDarkMode } from '../state/user/hooks'
 import { Text, TextProps } from 'rebass'
 import { Colors } from './styled'
 
-import BentoBackground from '../assets/kashi/bento-background.jpg'
+//import BentoBackground from '../assets/kashi/bento-background.jpg'
+import BrickWallBackground from '../assets/kashi/brickwall.png'
 
 export * from './components'
 
@@ -258,11 +259,12 @@ html {
 
 body {
   min-height: 100vh;
-  /* background-image: ${({ theme }) =>
+  /*background-image: ${({ theme }) =>
     theme.darkMode
-      ? `radial-gradient(rgba(29, 45, 65, 1), rgba(29, 45, 65, 0.8), rgba(29, 45, 65, 0.2)), url(${BentoBackground});`
-      : `none`}; */
-  background-size: cover;
+      ? `radial-gradient(rgba(29, 45, 65, 1), rgba(29, 45, 65, 0.8), rgba(29, 45, 65, 0.2)), url(${BrickWallBackground});`
+      : `none`}; 
+  background-repeat: repeat */
+  /* background-size: cover; */
 }
 
 body::after {    
