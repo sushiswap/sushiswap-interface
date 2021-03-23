@@ -3,7 +3,9 @@ import { ChainId } from '@sushiswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
+import useTheme from 'hooks/useTheme'
 import { AutoColumn } from 'components/Column'
+import Card from 'components/Card'
 import { Debugger } from 'components/Debugger'
 import { useKashiPair } from 'kashi/context'
 import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
@@ -31,6 +33,7 @@ export default function KashiPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
+  const theme = useTheme()
 
   if (!pair) return null
 
@@ -53,71 +56,75 @@ export default function KashiPair({
             <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
               Net Worth in this Pair
             </TYPE.body>
-            <TYPE.body color="extraHighEmphesisText" fontWeight={700} fontSize={28}>
+            <TYPE.body color="extraHighEmphesisText" fontWeight={700} fontSize={28} marginBottom={18}>
               {formattedNum(pair.user.pairNetWorth.usdString, true)} USD
             </TYPE.body>
             {tabIndex === 0 ? (
-              <>
+              <Card backgroundColor={theme.extraDarkPurple}>
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
                     Debt Ceiling:
                   </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                  <TYPE.body color="highEmphesisText" fontSize={16}>
                     ???
                   </TYPE.body>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
+                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
                     Utilization rate:
                   </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
+                  <TYPE.body color="highEmphesisText" fontSize={16}>
                     {formattedPercent(pair.details.total.utilization.string)}
                   </TYPE.body>
                 </RowBetween>
-              </>
+              </Card>
             ) : (
-              <>
-                <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
-                    Borrow Limit Rate:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    {formattedPercent(pair.user.health.percentage)}
-                  </TYPE.body>
-                </RowBetween>
-                <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
-                    Left to borrow:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
-                  </TYPE.body>
-                </RowBetween>
-                <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
-                    Liquidation price:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    ???
-                  </TYPE.body>
-                </RowBetween>
-                <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
-                    Loan to Value:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    75%
-                  </TYPE.body>
-                </RowBetween>
-                <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontWeight={700} fontSize={18}>
-                    Utilization rate:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-                    {formattedPercent(pair.details.total.utilization.string)}
-                  </TYPE.body>
-                </RowBetween>
-              </>
+              <div>
+                <Card backgroundColor={theme.extraDarkPurple}>
+                  <RowBetween>
+                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                      Borrow Limit Rate:
+                    </TYPE.body>
+                    <TYPE.body color="highEmphesisText" fontSize={16}>
+                      {formattedPercent(pair.user.health.percentage)}
+                    </TYPE.body>
+                  </RowBetween>
+                  <RowBetween>
+                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                      Left to borrow:
+                    </TYPE.body>
+                    <TYPE.body color="highEmphesisText" fontSize={16}>
+                      {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
+                    </TYPE.body>
+                  </RowBetween>
+                  <RowBetween>
+                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                      Liquidation price:
+                    </TYPE.body>
+                    <TYPE.body color="highEmphesisText" fontSize={16}>
+                      ???
+                    </TYPE.body>
+                  </RowBetween>
+                </Card>
+                <Card backgroundColor="transparent">
+                  <RowBetween>
+                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                      Loan to Value:
+                    </TYPE.body>
+                    <TYPE.body color="highEmphesisText" fontSize={16}>
+                      75%
+                    </TYPE.body>
+                  </RowBetween>
+                  <RowBetween>
+                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                      Utilization rate:
+                    </TYPE.body>
+                    <TYPE.body color="highEmphesisText" fontSize={16}>
+                      {formattedPercent(pair.details.total.utilization.string)}
+                    </TYPE.body>
+                  </RowBetween>
+                </Card>
+              </div>
             )}
           </>
         }

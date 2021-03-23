@@ -17,8 +17,7 @@ const SectionHeader = ({ portfolio = false, children }: any) => {
           width: '100%',
           paddingTop: '1rem',
           paddingBottom: '1rem',
-          background: `${theme.mediumDarkPurple}`,
-          borderRadius: '12px 12px 0 0'
+          background: `${theme.mediumDarkPurple}`
         }}
       >
         {/* Mobile */}
