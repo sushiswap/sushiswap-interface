@@ -12,7 +12,7 @@ import { InfoCard, SectionHeader, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 
 const PageWrapper = styled.div`
-  max-width: 1280px;
+  max-width: 1200px;
   width: 100%;
 `
 
@@ -43,7 +43,7 @@ export default function KashiPairs() {
           />
         }
       >
-        <div className="flex-col space-y-8">
+        <div className="flex-col space-y-8" style={{ minHeight: '35rem' }}>
           <div>
             <SectionHeader />
             {/* TODO: Use table component */}

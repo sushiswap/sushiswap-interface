@@ -6,7 +6,7 @@ import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 export default function Navigation() {
   const location = useLocation()
   return (
-    <nav className="-mb-px flex space-x-4 justify-center pb-2 md:pb-0 md:justify-start float-right">
+    <nav className="-mb-px flex space-x-2 justify-center pb-2 md:pb-0 md:justify-start float-right">
       <NavLink to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
         <div
           className={

@@ -69,17 +69,31 @@ const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  padding-top: 40px;
   align-items: center;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 10;
+
   ${({ theme }) => theme.mediaWidth.upToSmall`
+    padding-top: 10px;
+    // padding: 16px;
+    // padding-top: 1rem;
+  `};
+
+  z-index: 1;
+`
+
+const WithPadding = styled.div`
   padding: 16px;
-  padding-top: 2rem;
-`};
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
   z-index: 1;
 `
 
@@ -122,30 +136,30 @@ export default function App() {
                   <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
                 )}
                 {chainId === ChainId.ROPSTEN && <Route exact strict path="/bento/balances" component={BentoBalances} />}
-
-                {/* Tools */}
-                <Route exact strict path="/tools" component={Tools} />
-                <Route exact strict path="/saave" component={Saave} />
-                {/* Pages */}
-                {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
-                <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
-                {/* Pages */}
-                <Route exact strict path="/swap" component={Swap} />
-                <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
-                <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
-                <Route exact strict path="/find" component={PoolFinder} />
-                <Route exact strict path="/pool" component={Pool} />
-                <Route exact strict path="/create" component={RedirectToAddLiquidity} />
-                <Route exact path="/add" component={AddLiquidity} />
-                <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-                <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-                <Route exact path="/create" component={AddLiquidity} />
-                <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-                <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-                <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
-                <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
-                <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-
+                <WithPadding>
+                  {/* Tools */}
+                  <Route exact strict path="/tools" component={Tools} />
+                  <Route exact strict path="/saave" component={Saave} />
+                  {/* Pages */}
+                  {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
+                  <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
+                  {/* Pages */}
+                  <Route exact strict path="/swap" component={Swap} />
+                  <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+                  <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
+                  <Route exact strict path="/find" component={PoolFinder} />
+                  <Route exact strict path="/pool" component={Pool} />
+                  <Route exact strict path="/create" component={RedirectToAddLiquidity} />
+                  <Route exact path="/add" component={AddLiquidity} />
+                  <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                  <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                  <Route exact path="/create" component={AddLiquidity} />
+                  <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                  <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                  <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
+                  <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
+                  <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+                </WithPadding>
                 <Route component={RedirectPathToSwapOnly} />
               </Switch>
             </KashiProvider>

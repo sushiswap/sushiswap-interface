@@ -111,6 +111,9 @@
     "build": "CI= GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "build:styles": "postcss tailwind.css -o src/styles.css",
+    "prebuild": "NODE_ENV=production npm run build:styles",
+    "prestart": "npm run build:styles",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
   },
   "eslintConfig": {
@@ -137,6 +140,18 @@
     "@sushiswap/sushi-data": "^1.0.7",
     "@types/numeral": "^2.0.1",
     "numeral": "^2.0.6",
-    "react-tabs": "^3.2.1"
+    "react-tabs": "^3.2.1",
+    "@fullhuman/postcss-purgecss": "^2.3.0",
+    "@headlessui/react": "^0.3.0",
+    "@tailwindcss/aspect-ratio": "^0.2.0",
+    "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "@tailwindcss/typography": "^0.3.1",
+    "autoprefixer": "^9.8.6",
+    "customize-cra": "^0.9.1",
+    "framer-motion": "^3.3.0",
+    "postcss": "^7.0.35",
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
   }
 }

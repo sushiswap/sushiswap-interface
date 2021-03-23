@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Card from 'components/Card'
 import { useKashiCounts, useKashiPairs } from 'kashi/context'
+import { formattedNum } from 'utils'
 import sumBy from 'lodash/sumBy'
 import millify from 'millify'
 
