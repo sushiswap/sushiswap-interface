@@ -69,7 +69,7 @@ const HeaderWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   justify-content: space-between;
-  border-bottom: 1px solid rgb(26, 29, 41);
+  // border-bottom: 1px solid rgb(26, 29, 41);
 `
 
 const BodyWrapper = styled.div`
