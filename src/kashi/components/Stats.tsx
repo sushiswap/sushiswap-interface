@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import Card from 'components/Card'
 import { useKashiCounts, useKashiPairs } from 'kashi/context'
+import { formattedNum } from 'utils'
 import sumBy from 'lodash/sumBy'
 import millify from 'millify'
 
@@ -20,7 +21,7 @@ export default function Header() {
       <div className="flex-grow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
-            <div className="text-2xl font-semibold">≈ {netWorth}</div>
+            <div className="text-2xl font-semibold">≈ {formattedNum(netWorth, true)}</div>
             <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
               Net Worth
             </div>
