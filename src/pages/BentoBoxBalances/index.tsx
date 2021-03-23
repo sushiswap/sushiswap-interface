@@ -21,7 +21,7 @@ export const FixedHeightRow = styled(RowBetween)`
 `
 
 const PageWrapper = styled(AutoColumn)`
-  max-width: 1280px;
+  max-width: 1200px;
   width: 100%;
 `
 
