@@ -260,12 +260,18 @@ html {
 
 body {
   min-height: 100vh;
+  /*background-image: ${({ theme }) =>
+    theme.darkMode
+      ? `radial-gradient(rgba(29, 45, 65, 1), rgba(29, 45, 65, 0.8), rgba(29, 45, 65, 0.2)), url(${BrickWallBackground});`
+      : `none`}; 
+  background-repeat: repeat */
+  /* background-size: cover; */
 }
 
 body::after {    
   content: "";
   background-image: ${({ theme }) =>
-    `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.8, '#db4690')} 0%, ${transparentize(1, '#db4690')} 100%)`};
+    `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.8, '#dd5597')} 0%, ${transparentize(1, '#dd5597')} 100%)`};
 
   min-height: 100vh;
   background-position: 0 -30vh;
