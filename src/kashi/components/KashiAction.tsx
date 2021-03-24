@@ -311,10 +311,17 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
           <div>
             Est. Borrow Limimt Rate {formattedPercent(pair.user.health.percentage)} {' -> '}
             {formattedPercent(
-              Fraction.from(
-                pair.currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(safeMaxBorrowable),
-                BigNumber.from(10).pow(16)
-              ).toString()
+              Math.min(
+                Number(
+                  pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                    ? Fraction.from(
+                        pair.currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(safeMaxBorrowable),
+                        BigNumber.from(10).pow(16)
+                      ).toString()
+                    : 0
+                ),
+                100
+              )
             )}
           </div>
         </div>
@@ -373,10 +380,12 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
             {formattedPercent(
               Math.min(
                 Number(
-                  Fraction.from(
-                    pair.currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(safeMaxBorrowable),
-                    BigNumber.from(10).pow(16)
-                  ).toString()
+                  pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                    ? Fraction.from(
+                        pair.currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(safeMaxBorrowable),
+                        BigNumber.from(10).pow(16)
+                      ).toString()
+                    : 0
                 ),
                 100
               )
@@ -411,6 +420,8 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     }
     return false
   }, [action, assetBalance, value, pair])
+
+  const warning = getWarningPredicate()
 
   const onClick = async function() {
     setPendingTx(true)
@@ -496,7 +507,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
             </>
           </InputRow>
 
-          <Warning predicate={getWarningPredicate()}>{getWarningMessage()}</Warning>
+          <Warning predicate={warning}>{getWarningMessage()}</Warning>
         </>
         {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
@@ -508,7 +519,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
           </ButtonBlue>
         )}
 
-        {value !== '' && (
+        {!warning && value !== '' && value !== '0' && (
           <div>
             <div>Transaction Review</div>
             {getTransactionReview()}
@@ -523,7 +534,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || getWarningPredicate()}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || warning}
             >
               {action}
             </ButtonBlue>
@@ -532,7 +543,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || getWarningPredicate()}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || warning}
             >
               {action}
             </ButtonPink>
