@@ -14,16 +14,16 @@ interface LayoutProps {
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   return (
     <>
-      <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-10 gap-4`}>
-        <div className="flex col-span-2 justify-center lg:justify-start">
+      <div className={`md:px-4 grid grid-cols-10 gap-4`}>
+        <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
           <div className="flex items-center pb-3">
-            <img src={KashiLogo} className="w-10 y-10 sm:w-20 sm:y-20 lg:w-28 lg:y-28" />
+            <img src={KashiLogo} className="w-20 y-20 h-12 lg:w-28 lg:h-20 lg:y-28 mr-2" />
             <TYPE.extraLargeHeader color="extraHighEmphesisText" lineHeight={1}>
               Kashi
             </TYPE.extraLargeHeader>
           </div>
         </div>
-        <div className="flex col-span-8 items-end">
+        <div className="flex items-end col-span-10 lg:col-span-8 ">
           <div className="w-full flex justify-center lg:justify-between pb-2 px-6">
             <div className="hidden lg:block">
               <MarketsNavigation />
@@ -32,10 +32,10 @@ export default function Layout({ left = undefined, children = undefined, right =
           </div>
         </div>
       </div>
-      <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-10 gap-4`}>
-        {left && <div className={`col-span-12 lg:col-span-2`}>{left}</div>}
-        <TeardropCard className={`col-span-12 ${right ? 'lg:col-span-5' : 'lg:col-span-8'}`}>{children}</TeardropCard>
-        {right && <Card className="col-span-12 lg:col-span-3">{right}</Card>}
+      <div className={`md:px-4 grid grid-cols-10 gap-4`}>
+        {left && <div className={`col-span-10 lg:col-span-2`}>{left}</div>}
+        <TeardropCard className={`col-span-10 ${right ? 'lg:col-span-5' : 'lg:col-span-8'}`}>{children}</TeardropCard>
+        {right && <Card className="col-span-10 lg:col-span-3">{right}</Card>}
       </div>
     </>
   )
