@@ -12,7 +12,7 @@ import { InfoCard, SectionHeader, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 
 const PageWrapper = styled.div`
-  max-width: 1200px;
+  max-width: 1280px;
   width: 100%;
 `
 
