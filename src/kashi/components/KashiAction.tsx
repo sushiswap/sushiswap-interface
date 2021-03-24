@@ -9,7 +9,6 @@ import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
-import { darken } from 'polished'
 import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
 import useTokenBalance from 'sushi-hooks/queries/useTokenBalance'
 import useBentoBalance from 'sushi-hooks/queries/useBentoBalance'
@@ -17,6 +16,7 @@ import useKashi from 'sushi-hooks/useKashi'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import { formatToBalance, formatFromBalance } from 'utils'
 import isEmpty from 'lodash/isEmpty'
+import { BigNumber } from '@ethersproject/bignumber'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -197,6 +197,33 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   const actionLimit = getMax()
 
+  const getTransactionReview = useCallback(() => {
+    return 'Transaction Review...'
+  }, [value])
+
+  const getWarningMessage = useCallback<() => string>(() => {
+    if (action === 'Repay') {
+      return 'Please make sure you have sufficient balance to pay back and then try again.'
+    } else if (action === 'Borrow') {
+      return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
+      // return 'You have insufficient collateral. Please enter a smaller amount,  add more collateral, or repay now.'
+    } else if (action === 'Remove Collateral') {
+      return 'This asset is needed to support borrowed assets. Please add more collateral or repay now.'
+    }
+    return ''
+  }, [action])
+
+  const getWarningPredicate = useCallback<() => boolean>(() => {
+    if (action === 'Repay') {
+      return assetBalance?.value.lt(formatToBalance(value, pair.asset.decimals).value)
+    } else if (action === 'Borrow') {
+      return pair.user.borrow.max.value.lt(BigNumber.from(0))
+    } else if (action === 'Remove Collateral') {
+      return pair.user.collateral.max.value.lt(formatToBalance(value, pair.collateral.decimals).value)
+    }
+    return false
+  }, [action, assetBalance, value, pair])
+
   const onClick = async function() {
     setPendingTx(true)
     if (sourceOrDestination === 'Wallet') {
@@ -281,7 +308,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
             </>
           </InputRow>
 
-          {/* <Warning predicate={true}>Some warning...</Warning> */}
+          <Warning predicate={getWarningPredicate()}>{getWarningMessage()}</Warning>
         </>
         {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
@@ -292,6 +319,9 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
             )}
           </ButtonBlue>
         )}
+
+        {value !== '' && <div>{getTransactionReview()}</div>}
+
         {/* <div>Transaction Review...</div> */}
 
         {approvalState === ApprovalState.APPROVED &&
