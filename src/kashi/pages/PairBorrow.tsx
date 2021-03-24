@@ -23,6 +23,15 @@ const PageWrapper = styled.div`
   width: 100%;
 `
 
+export const LabelRow = styled.div`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: center;
+  color: ${({ theme }) => theme.mediumEmphesisText};
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 0.75rem 0;
+`
+
 export default function KashiPair({
   match: {
     params: { pairAddress }
@@ -224,7 +233,35 @@ export default function KashiPair({
               </TabPanel>
             </SecondaryTabs>
           </TabPanel>
-          <TabPanel></TabPanel>
+          <TabPanel>
+            <div className="relative pt-10">
+              <div className="sm:text-center">
+                <TYPE.extraLargeHeader color="highEmphesisText" lineHeight={1}>
+                  Coming Soon
+                </TYPE.extraLargeHeader>
+                <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-500">
+                  We're working on refining the leverage experience to give our users the largest selection of long
+                  short positions on various tokens. Stay tuned.
+                </p>
+              </div>
+              <div className="mt-12 mx-auto ">
+                <div className="mt-4 sm:mt-0 sm:ml-3 flex space-x-4">
+                  <button
+                    style={{ background: theme.primaryBlue }}
+                    className="block w-full rounded-md border border-transparent px-5 py-3 text-base font-medium text-white shadow focus:outline-none sm:px-10"
+                  >
+                    Explore Lending
+                  </button>
+                  <button
+                    style={{ background: theme.primaryPink }}
+                    className="block w-full rounded-md border border-transparent px-5 py-3  text-base font-medium text-white shadow focus:outline-none sm:px-10"
+                  >
+                    Go to Borrow
+                  </button>
+                </div>
+              </div>
+            </div>
+          </TabPanel>
         </PrimaryTabs>
       </Layout>
     </PageWrapper>
