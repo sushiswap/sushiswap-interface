@@ -66,7 +66,7 @@ export default function KashiPairs() {
                     return (
                       <div key={pair.address}>
                         <Link
-                          to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '?tab=supply'}
+                          to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/supply'}
                           className="block"
                           style={{ color: theme.highEmphesisText }}
                         >

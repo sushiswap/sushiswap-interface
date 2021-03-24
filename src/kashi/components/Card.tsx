@@ -8,7 +8,7 @@ export const Card = styled(BaseCard)<{ background?: Color }>`
   overflow: hidden;
   padding: 0;
   border-radius: 20px;
-  padding: 32px;
+  padding: 33px;
   background: ${({ background = 'mediumDarkPurple' }) => background};
 `
 

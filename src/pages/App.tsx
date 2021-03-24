@@ -38,6 +38,8 @@ import BentoBalances from './BentoBoxBalances'
 // Feat kashi
 import Kashi from '../kashi/pages'
 import KashiPair from '../kashi/pages/Pair'
+import KashiPairSupply from '../kashi/pages/PairSupply'
+import KashiPairBorrow from '../kashi/pages/PairBorrow'
 import KashiPositions from '../kashi/pages//Positions'
 import SupplyMarkets from '../kashi/pages/SupplyMarkets'
 import BorrowMarkets from '../kashi/pages/BorrowMarkets'
@@ -108,6 +110,8 @@ export default function App() {
                 <Route exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
                 <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
                 <Route exact strict path="/bento/kashi/pair/:pairAddress" component={KashiPair} />
+                <Route exact strict path="/bento/kashi/pair/:pairAddress/supply" component={KashiPairSupply} />
+                <Route exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={KashiPairBorrow} />
                 <Route exact strict path="/bento/balances" component={BentoBalances} />
 
                 {/* Tools */}

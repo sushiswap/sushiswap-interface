@@ -54,7 +54,7 @@ const BorrowPositions = ({ borrowPositions }: any) => {
               return (
                 <>
                   <Link
-                    to={'/bento/kashi/pair/' + pair.address + '?tab=borrow'}
+                    to={'/bento/kashi/pair/' + pair.address + '/borrow'}
                     className="block"
                     key={pair.address}
                     style={{ color: theme.highEmphesisText }}
