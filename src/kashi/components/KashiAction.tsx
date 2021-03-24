@@ -399,8 +399,10 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
   }, [action, value, pair])
 
   const getWarningMessage = useCallback(() => {
-    if (action === 'Repay') {
-      return 'Please make sure you have sufficient balance to pay back and then try again.'
+    if (action === 'Deposit' || action === 'Repay' || action === 'Add Collateral') {
+      return `Please make sure your ${sourceOrDestination} balance is sufficient to ${action.toLowerCase()} and then try again.`
+    } else if (action === 'Withdraw') {
+      return `Please make sure your supply balance is sufficient to withdraw and then try again.`
     } else if (action === 'Borrow') {
       return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
       // return 'You have insufficient collateral. Please enter a smaller amount,  add more collateral, or repay now.'
@@ -408,20 +410,22 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
       return 'This asset is needed to support borrowed assets. Please add more collateral or repay now.'
     }
     return null
-  }, [action])
+  }, [action, sourceOrDestination])
 
   const getWarningPredicate = useCallback<() => boolean>(() => {
-    if (action === 'Repay') {
+    if (action === 'Deposit' || action === 'Repay') {
       return assetBalance?.value.lt(formatToBalance(value, pair.asset.decimals).value)
+    } else if (action === 'Withdraw') {
+      return pair.user.supply.value.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Borrow') {
       return pair.user.borrow.max.value.lt(BigNumber.from(0))
+    } else if (action === 'Add Collateral') {
+      return collateralBalance?.value.lt(formatToBalance(value, pair.collateral.decimals).value)
     } else if (action === 'Remove Collateral') {
       return pair.user.collateral.max.value.lt(formatToBalance(value, pair.collateral.decimals).value)
     }
     return false
-  }, [action, assetBalance, value, pair])
-
-  const warning = getWarningPredicate()
+  }, [action, assetBalance, collateralBalance, value, pair])
 
   const onClick = async function() {
     setPendingTx(true)
@@ -502,12 +506,12 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
           <InputRow>
             <>
-              <NumericalInput value={value} onUserInput={setValue} max={actionLimit} />
+              <NumericalInput value={value} onUserInput={setValue} />
               {account && <StyledBalanceMax onClick={onMax}>MAX</StyledBalanceMax>}
             </>
           </InputRow>
 
-          <Warning predicate={warning}>{getWarningMessage()}</Warning>
+          <Warning predicate={getWarningPredicate()}>{getWarningMessage()}</Warning>
         </>
         {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
@@ -519,14 +523,12 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
           </ButtonBlue>
         )}
 
-        {!warning && value !== '' && value !== '0' && (
+        {!getWarningPredicate() && value !== '' && value !== '0' && (
           <div>
             <div>Transaction Review</div>
             {getTransactionReview()}
           </div>
         )}
-
-        {/* <div>Transaction Review...</div> */}
 
         {approvalState === ApprovalState.APPROVED &&
           (action === 'Deposit' || action === 'Withdraw' ? (
@@ -534,7 +536,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || warning}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || getWarningPredicate()}
             >
               {action}
             </ButtonBlue>
@@ -543,7 +545,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || warning}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || getWarningPredicate()}
             >
               {action}
             </ButtonPink>
