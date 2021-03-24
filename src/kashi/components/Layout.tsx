@@ -16,18 +16,14 @@ export default function Layout({ left = undefined, children = undefined, right =
       <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-10 gap-4`}>
         <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
           <div className="flex items-center pb-3">
-            <img src={KashiLogo} className="w-20 y-20 h-12 lg:w-28 lg:h-20 lg:y-28 mr-2" />
+            <img src={KashiLogo} className="w-20 lg:w-28 mr-2" />
             <div className="font-semibold text-2xl">Kashi</div>
           </div>
         </div>
-        <div className="flex items-end col-span-10 lg:col-span-8">
-          <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
+        <div className="flex items-end col-span-10 lg:col-span-8 ">
+          <div className="w-full flex justify-center lg:justify-between pb-2 px-6">
             <div className="hidden lg:block">
               <MarketsNavigation />
-            </div>
-            <div className="flex lg:hidden items-center pb-2">
-              <img src={KashiLogo} className="block w-14 h-10 mr-2" />
-              <div className="hidden sm:block font-semibold text-2xl">Kashi</div>
             </div>
             <Navigation />
           </div>
