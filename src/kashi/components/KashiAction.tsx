@@ -269,12 +269,12 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
   return (
     <Wrapper>
-      <TYPE.extraLargeHeader color={theme.highEmphesisText}>
+      <TYPE.largeHeader color={theme.highEmphesisText}>
         {action}{' '}
         {action === 'Deposit' || action === 'Withdraw' || action === 'Borrow' || action === 'Repay'
           ? pair.asset.symbol
           : pair.collateral.symbol}
-      </TYPE.extraLargeHeader>
+      </TYPE.largeHeader>
       <AutoColumn gap="md">
         <>
           <LabelRow>
