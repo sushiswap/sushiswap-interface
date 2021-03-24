@@ -347,6 +347,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       return {
         id: address,
         address: address,
+        currentUserBorrowAmount,
+        maxBorrowable,
+        safeMaxBorrowable,
+        safeMaxBorrowableLeft,
+        safeMaxBorrowableLeftPossible,
         oracle: {
           address: pairDetails[i].oracle,
           name: getOracleName(pairDetails[i].oracle),

@@ -14,9 +14,10 @@ import useTokenBalance from 'sushi-hooks/queries/useTokenBalance'
 import useBentoBalance from 'sushi-hooks/queries/useBentoBalance'
 import useKashi from 'sushi-hooks/useKashi'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
-import { formatToBalance, formatFromBalance } from 'utils'
+import { formatToBalance, formatFromBalance, formattedPercent, formattedNum } from 'utils'
 import isEmpty from 'lodash/isEmpty'
 import { BigNumber } from '@ethersproject/bignumber'
+import Fraction from 'constants/Fraction'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -178,7 +179,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Withdraw') {
       return formatFromBalance(pair.user.supply.value, pair.asset.decimals)
     } else if (action === 'Borrow') {
-      return pair.user.borrow.max.string
+      return pair.user.borrow.max.value.gt(BigNumber.from(0)) ? pair.user.borrow.max.string : '0'
     } else if (action === 'Repay') {
       return assetBalance?.value.gt(pair.user.borrow.value)
         ? pair.user.borrow.string
@@ -186,7 +187,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {
-      return pair.user.collateral.max.string
+      return pair.user.collateral.max.value.gt(BigNumber.from(0)) ? pair.user.collateral.max.string : '0'
     }
   }, [action, pair, assetBalance, collateralBalance])
 
@@ -198,10 +199,197 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
   const actionLimit = getMax()
 
   const getTransactionReview = useCallback(() => {
-    return 'Transaction Review...'
-  }, [value])
+    if (action === 'Deposit') {
+      return (
+        <div>
+          Balance {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
+          {' -> '}
+          {formattedNum(Number(pair.user.supply.string) + Number(value))} {pair.asset.symbol}
+        </div>
+      )
+    } else if (action === 'Withdraw') {
+      return (
+        <div>
+          Balance {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
+          {' -> '}
+          {formattedNum(Number(pair.user.supply.string) - Number(value))} {pair.asset.symbol}
+        </div>
+      )
+    } else if (action === 'Borrow') {
+      return (
+        <div>
+          <div>
+            Est. Borrow Limit {formattedNum(Math.max(0, Number(pair.user.borrow.max.string)))} {pair.asset.symbol}
+            {' -> '}
+            {Math.max(0, Number(pair.user.borrow.max.string) - Number(value))} {pair.asset.symbol}
+          </div>
+          <div>
+            Est. Borrow Limimt Rate {formattedPercent(pair.user.health.percentage)} {' -> '}
+            {formattedPercent(
+              Math.min(
+                100,
+                Number(
+                  Fraction.from(
+                    pair.currentUserBorrowAmount
+                      .add(formatToBalance(value, pair.asset.decimals).value)
+                      .mul(BigNumber.from('1000000000000000000'))
+                      .div(pair.maxBorrowable),
+                    BigNumber.from(10).pow(16)
+                  ).toString()
+                )
+              )
+            )}
+          </div>
+        </div>
+      )
+    } else if (action === 'Repay') {
+      return (
+        <div>
+          <div>
+            Est. Borrow Limit {formattedNum(Math.max(0, Number(pair.user.borrow.max.string)))} {pair.asset.symbol}
+            {' -> '}
+            {Math.min(
+              Number(pair.user.borrow.max.string) + Number(value),
+              Number(Fraction.from(pair.safeMaxBorrowable, BigNumber.from(10).pow(BigNumber.from(pair.asset.decimals))))
+            )}{' '}
+            {pair.asset.symbol}
+          </div>
+          <div>
+            Est. Borrow Limimt Rate {formattedPercent(pair.user.health.percentage)} {' -> '}
+            {formattedPercent(
+              Math.max(
+                0,
+                Number(
+                  Fraction.from(
+                    pair.currentUserBorrowAmount
+                      .sub(formatToBalance(value, pair.asset.decimals).value)
+                      .mul(BigNumber.from('1000000000000000000'))
+                      .div(pair.maxBorrowable),
+                    BigNumber.from(10).pow(16)
+                  ).toString()
+                )
+              )
+            )}
+          </div>
+        </div>
+      )
+    } else if (action === 'Add Collateral') {
+      const maxBorrowableOracle = pair.details.rate.oracle.gt(BigNumber.from(0))
+        ? pair.user.collateral.value
+            .add(formatToBalance(value, pair.collateral.decimals).value)
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pair.details.rate.oracle)
+        : BigNumber.from(0)
 
-  const getWarningMessage = useCallback<() => string>(() => {
+      const maxBorrowableStored = pair.details.rate.current.gt(BigNumber.from(0))
+        ? pair.user.collateral.value
+            .add(formatToBalance(value, pair.collateral.decimals).value)
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pair.details.rate.current)
+        : BigNumber.from(0)
+
+      const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
+
+      const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
+
+      return (
+        <div>
+          <div>
+            Collateral Balance {pair.user.collateral.string} {' -> '}
+            {Number(pair.user.collateral.string) + Number(value)}
+          </div>
+          <div>
+            Est. Borrow Limit {formattedNum(Math.max(0, Number(pair.user.borrow.max.string)))} {pair.asset.symbol}
+            {' -> '}
+            {Fraction.from(safeMaxBorrowable, BigNumber.from(10).pow(pair.asset.decimals)).toString()}{' '}
+            {pair.asset.symbol}
+          </div>
+          <div>
+            Est. Borrow Limimt Rate {formattedPercent(pair.user.health.percentage)} {' -> '}
+            {formattedPercent(
+              Fraction.from(
+                pair.currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(safeMaxBorrowable),
+                BigNumber.from(10).pow(16)
+              ).toString()
+            )}
+          </div>
+        </div>
+      )
+    } else if (action === 'Remove Collateral') {
+      const maxBorrowableOracle = pair.details.rate.oracle.gt(BigNumber.from(0))
+        ? pair.user.collateral.value
+            .sub(formatToBalance(value, pair.collateral.decimals).value)
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pair.details.rate.oracle)
+        : BigNumber.from(0)
+
+      const maxBorrowableStored = pair.details.rate.current.gt(BigNumber.from(0))
+        ? pair.user.collateral.value
+            .sub(formatToBalance(value, pair.collateral.decimals).value)
+            .mul(BigNumber.from('1000000000000000000'))
+            .div(BigNumber.from(100))
+            .mul(BigNumber.from(75))
+            .div(pair.details.rate.current)
+        : BigNumber.from(0)
+
+      const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
+
+      const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
+
+      const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pair.user.borrow.value)
+
+      return (
+        <div>
+          <div>
+            Collateral Balance {pair.user.collateral.string} {' -> '}
+            {Math.max(Number(pair.user.collateral.string) - Number(value), 0)}
+          </div>
+          <div>
+            Est. Borrow Limit{' '}
+            {formattedNum(
+              Math.max(
+                0,
+                Number(Fraction.from(safeMaxBorrowableLeft, BigNumber.from(10).pow(pair.asset.decimals)).toString())
+              )
+            )}{' '}
+            {pair.asset.symbol}
+            {' -> '}
+            {formattedNum(
+              Math.max(
+                0,
+                Number(Fraction.from(safeMaxBorrowableLeft, BigNumber.from(10).pow(pair.asset.decimals)).toString())
+              )
+            )}{' '}
+            {pair.asset.symbol}
+          </div>
+          <div>
+            Est. Borrow Limimt Rate {formattedPercent(pair.user.health.percentage)} {' -> '}
+            {formattedPercent(
+              Math.min(
+                Number(
+                  Fraction.from(
+                    pair.currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(safeMaxBorrowable),
+                    BigNumber.from(10).pow(16)
+                  ).toString()
+                ),
+                100
+              )
+            )}
+          </div>
+        </div>
+      )
+    }
+
+    return null
+  }, [action, value, pair])
+
+  const getWarningMessage = useCallback(() => {
     if (action === 'Repay') {
       return 'Please make sure you have sufficient balance to pay back and then try again.'
     } else if (action === 'Borrow') {
@@ -210,7 +398,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Remove Collateral') {
       return 'This asset is needed to support borrowed assets. Please add more collateral or repay now.'
     }
-    return ''
+    return null
   }, [action])
 
   const getWarningPredicate = useCallback<() => boolean>(() => {
@@ -296,14 +484,14 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
                 </span>
               </TYPE.body>
               <TYPE.body color={theme.mediumEmphesisText} style={{ display: 'inline', cursor: 'pointer' }}>
-                {label}: {actionLimit}
+                {label}: {Math.max(0, actionLimit)}
               </TYPE.body>
             </RowBetween>
           </LabelRow>
 
           <InputRow>
             <>
-              <NumericalInput value={value} onUserInput={setValue} />
+              <NumericalInput value={value} onUserInput={setValue} max={actionLimit} />
               {account && <StyledBalanceMax onClick={onMax}>MAX</StyledBalanceMax>}
             </>
           </InputRow>
@@ -320,7 +508,12 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
           </ButtonBlue>
         )}
 
-        {value !== '' && <div>{getTransactionReview()}</div>}
+        {value !== '' && (
+          <div>
+            <div>Transaction Review</div>
+            {getTransactionReview()}
+          </div>
+        )}
 
         {/* <div>Transaction Review...</div> */}
 
@@ -330,7 +523,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value)}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || getWarningPredicate()}
             >
               {action}
             </ButtonBlue>
@@ -339,7 +532,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               borderRadius="10px"
               padding="10px"
               onClick={onClick}
-              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value)}
+              disabled={pendingTx || isEmpty(actionLimit) || isEmpty(value) || getWarningPredicate()}
             >
               {action}
             </ButtonPink>
