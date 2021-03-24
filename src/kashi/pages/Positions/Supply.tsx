@@ -53,7 +53,7 @@ const SupplyPositions = ({ supplyPositions }: any) => {
                 return (
                   <>
                     <Link
-                      to={'/bento/kashi/pair/' + pair.address}
+                      to={'/bento/kashi/pair/' + pair.address + '/supply'}
                       className="block"
                       key={pair.address}
                       style={{ color: theme.highEmphesisText }}
