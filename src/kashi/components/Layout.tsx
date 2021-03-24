@@ -13,7 +13,7 @@ interface LayoutProps {
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   return (
     <>
-      <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-10 gap-4`}>
+      <div className={`md:px-4 grid grid-cols-10 lg:grid-cols-10 gap-4`}>
         <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
           <div className="flex items-center pb-3">
             <img src={KashiLogo} className="w-20 lg:w-28 mr-2" />
@@ -29,10 +29,10 @@ export default function Layout({ left = undefined, children = undefined, right =
           </div>
         </div>
       </div>
-      <div className={`md:px-4 grid grid-cols-1 lg:grid-cols-10 gap-4`}>
-        {left && <div className={`col-span-12 lg:col-span-2`}>{left}</div>}
-        <TeardropCard className={`col-span-12 ${right ? 'lg:col-span-5' : 'lg:col-span-8'}`}>{children}</TeardropCard>
-        {right && <Card className="col-span-12 lg:col-span-3">{right}</Card>}
+      <div className={`md:px-4 grid grid-cols-10 lg:grid-cols-10 gap-4`}>
+        {left && <div className={`col-span-10 lg:col-span-2`}>{left}</div>}
+        <TeardropCard className={`col-span-10 ${right ? 'lg:col-span-5' : 'lg:col-span-8'}`}>{children}</TeardropCard>
+        {right && <Card className="col-span-10 lg:col-span-3">{right}</Card>}
       </div>
     </>
   )

@@ -68,14 +68,40 @@ export default function KashiPair({
             <TYPE.body color="extraHighEmphesisText" fontWeight={700} fontSize={28} marginBottom={18}>
               {formattedNum(pair.user.pairNetWorth.usdString, true)} USD
             </TYPE.body>
-            {tabIndex === 0 ? (
+            <div>
               <Card backgroundColor={theme.extraDarkPurple}>
                 <RowBetween>
                   <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                    Debt Ceiling:
+                    Borrow Limit Rate:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontSize={16}>
+                    {formattedPercent(pair.user.health.percentage)}
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                    Left to borrow:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontSize={16}>
+                    {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
+                  </TYPE.body>
+                </RowBetween>
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                    Liquidation price:
                   </TYPE.body>
                   <TYPE.body color="highEmphesisText" fontSize={16}>
                     ???
+                  </TYPE.body>
+                </RowBetween>
+              </Card>
+              <Card backgroundColor="transparent">
+                <RowBetween>
+                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
+                    Loan to Value:
+                  </TYPE.body>
+                  <TYPE.body color="highEmphesisText" fontSize={16}>
+                    75%
                   </TYPE.body>
                 </RowBetween>
                 <RowBetween>
@@ -87,58 +113,11 @@ export default function KashiPair({
                   </TYPE.body>
                 </RowBetween>
               </Card>
-            ) : (
-              <div>
-                <Card backgroundColor={theme.extraDarkPurple}>
-                  <RowBetween>
-                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                      Borrow Limit Rate:
-                    </TYPE.body>
-                    <TYPE.body color="highEmphesisText" fontSize={16}>
-                      {formattedPercent(pair.user.health.percentage)}
-                    </TYPE.body>
-                  </RowBetween>
-                  <RowBetween>
-                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                      Left to borrow:
-                    </TYPE.body>
-                    <TYPE.body color="highEmphesisText" fontSize={16}>
-                      {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
-                    </TYPE.body>
-                  </RowBetween>
-                  <RowBetween>
-                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                      Liquidation price:
-                    </TYPE.body>
-                    <TYPE.body color="highEmphesisText" fontSize={16}>
-                      ???
-                    </TYPE.body>
-                  </RowBetween>
-                </Card>
-                <Card backgroundColor="transparent">
-                  <RowBetween>
-                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                      Loan to Value:
-                    </TYPE.body>
-                    <TYPE.body color="highEmphesisText" fontSize={16}>
-                      75%
-                    </TYPE.body>
-                  </RowBetween>
-                  <RowBetween>
-                    <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                      Utilization rate:
-                    </TYPE.body>
-                    <TYPE.body color="highEmphesisText" fontSize={16}>
-                      {formattedPercent(pair.details.total.utilization.string)}
-                    </TYPE.body>
-                  </RowBetween>
-                </Card>
-              </div>
-            )}
+            </div>
           </>
         }
       >
-        <CardHeader market={!tabIndex ? 'Supply' : 'Borrow'} border>
+        <CardHeader market="Borrow" border>
           <div className="flex items-center">
             <div className="flex space-x-2 mr-4">
               <a
@@ -192,7 +171,30 @@ export default function KashiPair({
           </div>
         </CardHeader>
 
-        <Stats tabIndex={tabIndex} pair={pair} />
+        <RowBetween style={{ padding: '32px 48px 0' }} align="top">
+          <div>
+            <TYPE.mediumHeader color="mediumEmphesisText">Collateral Balance</TYPE.mediumHeader>
+            <TYPE.largeHeader color="primaryBlue">
+              {formattedNum(pair.user.collateral.string)} {pair.collateral.symbol}
+            </TYPE.largeHeader>
+            <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.collateral.usdString, true)}</TYPE.body>
+          </div>
+          <div>
+            <TYPE.mediumHeader color="mediumEmphesisText">Borrow Balance</TYPE.mediumHeader>
+            <TYPE.largeHeader color="primaryPink">
+              {formattedNum(pair.user.borrow.string)} {pair.asset.symbol}
+            </TYPE.largeHeader>
+            <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.borrow.usdString, true)}</TYPE.body>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div>
+              <TYPE.mediumHeader color="mediumEmphesisText">Borrow APR</TYPE.mediumHeader>
+              <TYPE.largeHeader color="highEmphesisText">
+                {formattedPercent(pair.details.apr.currentInterestPerYear)}
+              </TYPE.largeHeader>
+            </div>
+          </div>
+        </RowBetween>
 
         <PrimaryTabs
           forceRenderTabPanel
@@ -265,59 +267,5 @@ export default function KashiPair({
         </PrimaryTabs>
       </Layout>
     </PageWrapper>
-  )
-}
-
-function Stats({ tabIndex, pair }: { tabIndex: number; pair: any }) {
-  return tabIndex === 0 ? (
-    <RowBetween style={{ padding: '32px 48px 0' }} align="top">
-      <div>
-        <TYPE.mediumHeader color="mediumEmphesisText">Supply Balance</TYPE.mediumHeader>
-        <TYPE.largeHeader color="primaryBlue">
-          {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
-        </TYPE.largeHeader>
-        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.supply.usdString, true)}</TYPE.body>
-      </div>
-      <div>
-        <TYPE.mediumHeader color="mediumEmphesisText">Market Supply</TYPE.mediumHeader>
-        <TYPE.largeHeader color="highEmphesisText">
-          {formattedNum(pair.details.total.supply.string)} {pair.asset.symbol}
-        </TYPE.largeHeader>
-        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.details.total.supply.usdString, true)}</TYPE.body>
-      </div>
-      <div style={{ textAlign: 'right' }}>
-        <div>
-          <TYPE.mediumHeader color="mediumEmphesisText">Supply APR</TYPE.mediumHeader>
-          <TYPE.largeHeader color="highEmphesisText">
-            {formattedPercent(pair.details.apr.currentSupplyAPR)}
-          </TYPE.largeHeader>
-        </div>
-      </div>
-    </RowBetween>
-  ) : (
-    <RowBetween style={{ padding: '32px 48px 0' }} align="top">
-      <div>
-        <TYPE.mediumHeader color="mediumEmphesisText">Collateral Balance</TYPE.mediumHeader>
-        <TYPE.largeHeader color="primaryBlue">
-          {formattedNum(pair.user.collateral.string)} {pair.collateral.symbol}
-        </TYPE.largeHeader>
-        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.collateral.usdString, true)}</TYPE.body>
-      </div>
-      <div>
-        <TYPE.mediumHeader color="mediumEmphesisText">Borrow Balance</TYPE.mediumHeader>
-        <TYPE.largeHeader color="primaryPink">
-          {formattedNum(pair.user.borrow.string)} {pair.asset.symbol}
-        </TYPE.largeHeader>
-        <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.borrow.usdString, true)}</TYPE.body>
-      </div>
-      <div style={{ textAlign: 'right' }}>
-        <div>
-          <TYPE.mediumHeader color="mediumEmphesisText">Borrow APR</TYPE.mediumHeader>
-          <TYPE.largeHeader color="highEmphesisText">
-            {formattedPercent(pair.details.apr.currentInterestPerYear)}
-          </TYPE.largeHeader>
-        </div>
-      </div>
-    </RowBetween>
   )
 }
