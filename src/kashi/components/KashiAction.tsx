@@ -180,7 +180,9 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Borrow') {
       return pair.user.borrow.max.string
     } else if (action === 'Repay') {
-      return pair.user.borrow.string
+      return assetBalance?.value.gt(pair.user.borrow.value)
+        ? pair.user.borrow.string
+        : formatFromBalance(assetBalance?.value, assetBalance?.decimals)
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {

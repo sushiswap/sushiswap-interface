@@ -235,7 +235,7 @@ export default function KashiPair({
                 <KashiAction pair={pair} action="Borrow" direction="To" label="Limit" />
               </TabPanel>
               <TabPanel>
-                <KashiAction pair={pair} action="Repay" direction="From" label="Balance" />
+                <KashiAction pair={pair} action="Repay" direction="From" label="Max" />
               </TabPanel>
             </SecondaryTabs>
           </TabPanel>
