@@ -245,21 +245,19 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
               {formattedPercent(
                 Math.min(
                   100,
-                  Number(
-                    Math.min(
-                      Number(
-                        pair.currentUserBorrowAmount.gt(BigNumber.from(0))
-                          ? Fraction.from(
-                              pair.currentUserBorrowAmount
-                                .add(formatToBalance(value, pair.asset.decimals).value)
-                                .mul(BigNumber.from('1000000000000000000'))
-                                .div(pair.maxBorrowable),
-                              BigNumber.from(10).pow(16)
-                            ).toString()
-                          : 0
-                      ),
-                      100
-                    )
+                  Math.min(
+                    Number(
+                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                        ? Fraction.from(
+                            pair.currentUserBorrowAmount
+                              .add(formatToBalance(value, pair.asset.decimals).value)
+                              .mul(BigNumber.from('1000000000000000000'))
+                              .div(pair.maxBorrowable),
+                            BigNumber.from(10).pow(16)
+                          ).toString()
+                        : 0
+                    ),
+                    95
                   )
                 )
               )}
@@ -293,13 +291,15 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                 Math.max(
                   0,
                   Number(
-                    Fraction.from(
-                      pair.currentUserBorrowAmount
-                        .sub(formatToBalance(value, pair.asset.decimals).value)
-                        .mul(BigNumber.from('1000000000000000000'))
-                        .div(pair.maxBorrowable),
-                      BigNumber.from(10).pow(16)
-                    ).toString()
+                    pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                      ? Fraction.from(
+                          pair.currentUserBorrowAmount
+                            .sub(formatToBalance(value, pair.asset.decimals).value)
+                            .mul(BigNumber.from('1000000000000000000'))
+                            .div(pair.maxBorrowable),
+                          BigNumber.from(10).pow(16)
+                        ).toString()
+                      : 0
                   )
                 )
               )}
@@ -463,7 +463,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
       return `Please make sure your supply balance is sufficient to withdraw and then try again.`
     } else if (action === 'Borrow') {
       if (pair.user.collateral.value.eq(BigNumber.from(0))) {
-        return 'You have insufficient collateral. Please enter a smaller amount,  add more collateral, or repay now.'
+        return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
       }
       if (pair.user.borrow.max.value.lt(BigNumber.from(0))) {
         return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
@@ -495,11 +495,11 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
       if (action === 'Deposit') {
         await depositAddAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Withdraw') {
-        await removeWithdrawAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await removeWithdrawAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Borrow') {
-        await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Repay') {
-        await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Add Collateral') {
         await depositAddCollateral(
           pair.address,
@@ -510,23 +510,29 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
         await removeWithdrawCollateral(
           pair.address,
           pair.collateral.address,
-          formatToBalance(value, pair.collateral.decimals)
+          formatToBalance(value, pair.collateral.decimals),
+          max
         )
       }
     } else if (sourceOrDestination === 'BentoBox') {
       if (action === 'Deposit') {
         await addAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Withdraw') {
-        await removeAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await removeAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Borrow') {
-        await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Repay') {
-        await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Add Collateral') {
         await addCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
       } else if (action === 'Remove Collateral') {
         console.log('Remove collateral', formatToBalance(value, pair.collateral.decimals))
-        await removeCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
+        await removeCollateral(
+          pair.address,
+          pair.collateral.address,
+          formatToBalance(value, pair.collateral.decimals),
+          max
+        )
       }
     }
     setPendingTx(false)

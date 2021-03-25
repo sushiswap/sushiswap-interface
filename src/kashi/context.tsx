@@ -206,11 +206,20 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
       const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
 
-      const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalBorrowAmount.lt(
+      // const safeMaxBorrowableLeftPossible2 = BigInt.min(pair.safeMaxBorrowable - pair.currentUserBorrowAmount, pair.totalBorrowable.amount.value)
+
+      const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalAssetAmount.lt(
         safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
       )
-        ? pairUserDetails[1][i].totalBorrowAmount
+        ? pairUserDetails[1][i].totalAssetAmount
         : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
+
+      // const safeMaxBorrowableLeftPossible2 = BigNumber.from(, pair.totalBorrowable.amount.value)
+
+      console.log({
+        totalBorrowAmount: pairUserDetails[1][i].totalBorrowAmount.toString(),
+        userBorrowAmount: pairUserDetails[1][i].userBorrowAmount.toString()
+      })
 
       // console.log(pairUserDetails[1][i].userCollateralAmount)
 
@@ -340,6 +349,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           assetUSD
 
       //const pairNetAPY =
+
+      console.log({
+        currentUserBorrowAmount: currentUserBorrowAmount.toString(),
+        maxBorrowable: maxBorrowable.toString(),
+        safeMaxBorrowable: safeMaxBorrowable.toString(),
+        safeMaxBorrowableLeft: safeMaxBorrowableLeft.toString(),
+        safeMaxBorrowableLeftPossible: safeMaxBorrowableLeftPossible.toString()
+      })
 
       return {
         id: address,
