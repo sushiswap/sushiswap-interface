@@ -12,7 +12,12 @@ interface LayoutProps {
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   return (
-    <>
+    <div
+      style={{
+        maxWidth: '1280px',
+        width: '100%'
+      }}
+    >
       <div className={`md:px-4 grid grid-cols-10 gap-4`}>
         <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
           <div className="flex items-center pb-3">
@@ -34,6 +39,6 @@ export default function Layout({ left = undefined, children = undefined, right =
         <TeardropCard className={`col-span-10 ${right ? 'lg:col-span-5' : 'lg:col-span-8'}`}>{children}</TeardropCard>
         {right && <Card className="col-span-10 lg:col-span-3">{right}</Card>}
       </div>
-    </>
+    </div>
   )
 }
