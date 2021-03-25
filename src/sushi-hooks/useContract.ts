@@ -19,7 +19,7 @@ import PENDING_ABI from '../constants/sushiAbis/pending.json'
 
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
 import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
-import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper2.json'
+import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper3.json'
 import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 
@@ -136,9 +136,9 @@ export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | 
   let address: string | undefined
   if (chainId) {
     switch (chainId) {
-      // case ChainId.MAINNET:
-      //   address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
-      //   break
+      case ChainId.MAINNET:
+        address = '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966'
+        break
       case ChainId.ROPSTEN:
         address = '0xccb146728f6D94Fe22D1030E7FA369bd33916824'
         //address = '0xccb146728f6D94Fe22D1030E7FA369bd33916824'
@@ -153,9 +153,9 @@ export function useKashiPairContract(withSignerIfPossible?: boolean): Contract |
   let address: string | undefined
   if (chainId) {
     switch (chainId) {
-      // case ChainId.MAINNET:
-      //   address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
-      //   break
+      case ChainId.MAINNET:
+        address = '0x74A81CB5b6996d9347b864b9a1492a6509e51e65'
+        break
       case ChainId.ROPSTEN:
         address = '0xD57469335E06eD52B57278A0Ff4ECB62bAd05e99'
         //address = '0x009e9cFaD18132D9fB258984196191BdB6D58CFF'
@@ -171,9 +171,9 @@ export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Cont
   let address: string | undefined
   if (chainId) {
     switch (chainId) {
-      case ChainId.MAINNET:
-        address = ''
-        break
+      // case ChainId.MAINNET:
+      //   address = ''
+      //   break
       case ChainId.ROPSTEN:
         //address = '0xe3BfB820d18cc5c9cC371b1e1d5199CBFCf69B64'
         address = '0xAe338e484372e4487B5438421c48342c100c9E16'
@@ -188,11 +188,10 @@ export function useBentoHelperContract(): Contract | null {
   let address: string | undefined
   if (chainId) {
     switch (chainId) {
-      // case ChainId.MAINNET:
-      //   address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
-      //   break
+      case ChainId.MAINNET:
+        address = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
+        break
       case ChainId.ROPSTEN:
-        //address = '0x56CA07C11A38B868dBdA58a9762069e025B73dc1'
         address = '0xe3BfB820d18cc5c9cC371b1e1d5199CBFCf69B64'
         break
     }
@@ -206,7 +205,7 @@ export function useSushiSwapSwapper(): Contract | null {
   if (chainId) {
     switch (chainId) {
       case ChainId.MAINNET:
-        address = '0x0'
+        address = '0x1766733112408b95239aD1951925567CB1203084'
         break
       case ChainId.ROPSTEN:
         address = '0x9836A766D65d27824e9764C07658e9779761f48b'
