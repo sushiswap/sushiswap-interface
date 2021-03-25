@@ -229,13 +229,20 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
               Math.min(
                 100,
                 Number(
-                  Fraction.from(
-                    pair.currentUserBorrowAmount
-                      .add(formatToBalance(value, pair.asset.decimals).value)
-                      .mul(BigNumber.from('1000000000000000000'))
-                      .div(pair.maxBorrowable),
-                    BigNumber.from(10).pow(16)
-                  ).toString()
+                  Math.min(
+                    Number(
+                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                        ? Fraction.from(
+                            pair.currentUserBorrowAmount
+                              .add(formatToBalance(value, pair.asset.decimals).value)
+                              .mul(BigNumber.from('1000000000000000000'))
+                              .div(pair.maxBorrowable),
+                            BigNumber.from(10).pow(16)
+                          ).toString()
+                        : 0
+                    ),
+                    100
+                  )
                 )
               )
             )}
@@ -404,13 +411,17 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Withdraw') {
       return `Please make sure your supply balance is sufficient to withdraw and then try again.`
     } else if (action === 'Borrow') {
-      return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
-      // return 'You have insufficient collateral. Please enter a smaller amount,  add more collateral, or repay now.'
+      if (pair.user.collateral.value.eq(BigNumber.from(0))) {
+        return 'You have insufficient collateral. Please enter a smaller amount,  add more collateral, or repay now.'
+      }
+      if (pair.user.borrow.max.value.lt(BigNumber.from(0))) {
+        return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
+      }
     } else if (action === 'Remove Collateral') {
       return 'This asset is needed to support borrowed assets. Please add more collateral or repay now.'
     }
     return null
-  }, [action, sourceOrDestination])
+  }, [action, sourceOrDestination, pair])
 
   const getWarningPredicate = useCallback<() => boolean>(() => {
     if (action === 'Deposit' || action === 'Repay') {
@@ -418,7 +429,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
     } else if (action === 'Withdraw') {
       return pair.user.supply.value.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Borrow') {
-      return pair.user.borrow.max.value.lt(BigNumber.from(0))
+      return pair.user.collateral.value.eq(BigNumber.from(0)) || pair.user.borrow.max.value.lte(BigNumber.from(0))
     } else if (action === 'Add Collateral') {
       return collateralBalance?.value.lt(formatToBalance(value, pair.collateral.decimals).value)
     } else if (action === 'Remove Collateral') {
