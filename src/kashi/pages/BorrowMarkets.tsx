@@ -4,7 +4,7 @@ import styled, { ThemeContext } from 'styled-components'
 import { BaseCard } from '../../components/Card'
 import QuestionHelper from '../../components/QuestionHelper'
 import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
-import { formattedPercent } from '../../utils'
+import { formattedPercent, formattedNum } from '../../utils'
 import { useKashiPairs } from '../context'
 
 import { InfoCard, SectionHeader, Layout } from '../components'
@@ -67,17 +67,41 @@ export default function KashiPairs() {
                           className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
                           style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
                         >
-                          <div className="flex space-x-2 col-span-2 md:col-span-1">
-                            <img
-                              src={getTokenIcon(pair.asset.address)}
-                              className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
-                            />
+                          <div className="flex col-span-2 md:col-span-1 items-center">
+                            <div className="flex space-x-2">
+                              <img
+                                src={getTokenIcon(pair.collateral.address)}
+                                className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                              />
+                              <img
+                                src={getTokenIcon(pair.asset.address)}
+                                className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                              />
+                            </div>
+                            <div className="items-end">
+                              <div className="text-left hidden md:block pl-4">{pair.collateral.symbol} /</div>
+                              <div className="text-left hidden md:block pl-4">{pair.asset.symbol}</div>
+                            </div>
                           </div>
                           <div className="text-right hidden md:block pl-4">{pair.collateral.symbol}</div>
-                          <div className="text-right hidden md:block">{pair.asset.symbol}</div>
+                          <div className="text-right text-white hidden md:block">{pair.asset.symbol}</div>
                           <div className="text-right">{pair.oracle.name}</div>
-                          <div className="text-right">{formattedPercent(pair.details.apr.currentSupplyAPR)}</div>
-                          <div className="text-right">{formattedPercent(pair.details.apr.currentInterestPerYear)}</div>
+                          <div className="text-right">
+                            <div>
+                              {formattedNum(pair.details.total.borrow.string)} {pair.asset.symbol}
+                            </div>
+                            <div className="text-gray-500">
+                              ≈ {formattedNum(pair.details.total.borrow.usdString, true)}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div>
+                              {formattedNum(pair.details.total.asset.string)} {pair.asset.symbol}
+                            </div>
+                            <div className="text-gray-500">
+                              ≈ {formattedNum(pair.details.total.asset.usdString, true)}
+                            </div>
+                          </div>
                         </div>
                       </Link>
                       {/* <Debugger data={pair} /> */}

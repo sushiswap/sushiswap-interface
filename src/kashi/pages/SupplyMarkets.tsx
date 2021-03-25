@@ -57,7 +57,7 @@ export default function KashiPairs() {
               </div>
               <div className="text-right hover:text-gray-400">Lending APR</div>
               <div className="text-right hover:text-gray-400">Utilization</div>
-              <div className="text-right hover:text-gray-400">Total Loaned</div>
+              <div className="text-right hover:text-gray-400">Total Supplied</div>
             </div>
             <div className="flex-col space-y-2">
               {pairs.length > 0 &&
