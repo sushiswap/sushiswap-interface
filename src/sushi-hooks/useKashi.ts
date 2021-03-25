@@ -109,7 +109,7 @@ const useKashi = () => {
   const pairs = useKashiPairs()
 
   // Fetch Pair Addresses for logging
-  const getAddresses = useCallback(async () => {
+  const getPairsAddresses = useCallback(async () => {
     const filter = bentoBoxContract?.filters.LogDeploy(kashiPairContract?.address, null)
     //console.log('filter:', filter)
     const events = await bentoBoxContract?.queryFilter(filter!)
@@ -780,7 +780,7 @@ const useKashi = () => {
   )
 
   return {
-    getAddresses,
+    getPairsAddresses,
     kashiApproved,
     approve,
     approveMaster,
