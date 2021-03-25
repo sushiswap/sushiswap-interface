@@ -6,7 +6,7 @@ import { ButtonBlue, ButtonPink } from 'components/Button'
 import { RowBetween } from 'components/Row'
 import { AutoColumn } from 'components/Column'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight } from 'react-feather'
+import { ArrowDownRight, Type } from 'react-feather'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
@@ -536,7 +536,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
 
         {!getWarningPredicate() && value !== '' && value !== '0' && (
           <div>
-            <div>Transaction Review</div>
+            <TYPE.mediumLargeHeader color={theme.highEmphesisText}>Transaction Review</TYPE.mediumLargeHeader>
             {getTransactionReview()}
           </div>
         )}
