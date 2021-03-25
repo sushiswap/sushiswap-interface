@@ -43,15 +43,15 @@ export default function KashiPairs() {
           {/* TODO: Use table component */}
           <StyledBaseCard cornerRadiusTopNone={true}>
             <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
-              <div className="hover:text-gray-400 col-span-2 md:col-span-1">Borrowing</div>
+              <div className="hover:text-gray-400 col-span-2 md:col-span-1">Pair</div>
               <div className="text-right hidden md:block pl-4 hover:text-gray-400">Collateral</div>
-              <div className="text-right hidden md:block hover:text-gray-400">Asset</div>
+              <div className="text-right hidden md:block hover:text-gray-400">Borrow</div>
               <div className="flex text-right hover:text-gray-400 item-center justify-end">
                 Oracle
                 <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
               </div>
-              <div className="text-right hover:text-gray-400">Supply APY</div>
-              <div className="text-right hover:text-gray-400">Borrow APY</div>
+              <div className="text-right hover:text-gray-400">Total Borrowed</div>
+              <div className="text-right hover:text-gray-400">Available</div>
             </div>
             <div className="flex-col space-y-2">
               {pairs.length > 0 &&
