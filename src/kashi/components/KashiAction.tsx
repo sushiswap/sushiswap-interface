@@ -131,12 +131,17 @@ interface KashiActionProps {
   label: string
 }
 
-export default function KashiActions({ pair, action, direction, label }: KashiActionProps) {
+export default function KashiAction({ pair, action, direction, label }: KashiActionProps) {
   const theme = useTheme()
   const { account } = useActiveWeb3React()
   const bentoBoxContract = useBentoBoxContract()
 
-  const [approvalState, approve] = useApproveCallback(pair.asset.address, bentoBoxContract?.address)
+  const token =
+    action === 'Deposit' || action === 'Withdraw' || action === 'Borrow' || action === 'Repay'
+      ? pair.asset
+      : pair.collateral
+
+  const [approvalState, approve] = useApproveCallback(token.address, bentoBoxContract?.address)
 
   const {
     depositAddAsset,
@@ -530,10 +535,7 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
   return (
     <Wrapper>
       <TYPE.largeHeader color={theme.highEmphesisText}>
-        {action}{' '}
-        {action === 'Deposit' || action === 'Withdraw' || action === 'Borrow' || action === 'Repay'
-          ? pair.asset.symbol
-          : pair.collateral.symbol}
+        {action} {token.symbol}
       </TYPE.largeHeader>
       <AutoColumn gap="md">
         <>
@@ -573,9 +575,9 @@ export default function KashiActions({ pair, action, direction, label }: KashiAc
         {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
             {approvalState === ApprovalState.PENDING ? (
-              <Dots>Approving {pair.asset.symbol}</Dots>
+              <Dots>Approving {token.symbol}</Dots>
             ) : (
-              `Approve ${pair.asset.symbol}`
+              `Approve ${token.symbol}`
             )}
           </ButtonBlue>
         )}
