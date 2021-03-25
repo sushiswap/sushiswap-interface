@@ -62,53 +62,35 @@ export default function KashiPair({
         }
         right={
           <>
-            <TYPE.body color="highEmphesisText" fontWeight={700} fontSize={18}>
-              Net Worth in this Pair
-            </TYPE.body>
-            <TYPE.body color="extraHighEmphesisText" fontWeight={700} fontSize={28} marginBottom={18}>
+            <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
+            <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
               {formattedNum(pair.user.pairNetWorth.usdString, true)} USD
-            </TYPE.body>
+            </TYPE.largeHeader>
             <div>
               <Card backgroundColor={theme.extraDarkPurple}>
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                    Borrow Limit Rate:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontSize={16}>
-                    {formattedPercent(pair.user.health.percentage)}
-                  </TYPE.body>
+                  <TYPE.body color="mediumEmphesisText">Borrow Limit Rate:</TYPE.body>
+                  <TYPE.body color="highEmphesisText">{formattedPercent(pair.user.health.percentage)}</TYPE.body>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                    Left to borrow:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontSize={16}>
+                  <TYPE.body color="mediumEmphesisText">Left to borrow:</TYPE.body>
+                  <TYPE.body color="highEmphesisText">
                     {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
                   </TYPE.body>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                    Liquidation price:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontSize={16}>
-                    ???
-                  </TYPE.body>
+                  <TYPE.body color="mediumEmphesisText">Liquidation price:</TYPE.body>
+                  <TYPE.body color="highEmphesisText">???</TYPE.body>
                 </RowBetween>
               </Card>
               <Card backgroundColor="transparent">
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                    Loan to Value:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontSize={16}>
-                    75%
-                  </TYPE.body>
+                  <TYPE.body color="mediumEmphesisText">Loan to Value:</TYPE.body>
+                  <TYPE.body color="highEmphesisText">75%</TYPE.body>
                 </RowBetween>
                 <RowBetween>
-                  <TYPE.body color="mediumEmphesisText" fontSize={16}>
-                    Utilization rate:
-                  </TYPE.body>
-                  <TYPE.body color="highEmphesisText" fontSize={16}>
+                  <TYPE.body color="mediumEmphesisText">Utilization rate:</TYPE.body>
+                  <TYPE.body color="highEmphesisText">
                     {formattedPercent(pair.details.total.utilization.string)}
                   </TYPE.body>
                 </RowBetween>
