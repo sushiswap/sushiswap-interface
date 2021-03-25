@@ -19,7 +19,7 @@ import PENDING_ABI from '../constants/sushiAbis/pending.json'
 
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
 import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
-import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper2.json'
+import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper3.json'
 import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 
