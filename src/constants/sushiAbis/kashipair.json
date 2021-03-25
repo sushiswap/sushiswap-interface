@@ -130,6 +130,13 @@
     "name": "Transfer",
     "type": "event"
   },
+  {
+    "inputs": [],
+    "name": "DOMAIN_SEPARATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
   { "inputs": [], "name": "accrue", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
   {
     "inputs": [],
@@ -262,18 +269,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "contract IERC20", "name": "collateral_", "type": "address" },
-      { "internalType": "contract IERC20", "name": "asset_", "type": "address" },
-      { "internalType": "contract IOracle", "name": "oracle_", "type": "address" },
-      { "internalType": "bytes", "name": "oracleData_", "type": "bytes" }
-    ],
-    "name": "getInitData",
-    "outputs": [{ "internalType": "bytes", "name": "data", "type": "bytes" }],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
     "inputs": [{ "internalType": "bytes", "name": "data", "type": "bytes" }],
     "name": "init",
     "outputs": [],
@@ -282,18 +277,8 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" },
-      { "internalType": "bool", "name": "open", "type": "bool" }
-    ],
-    "name": "isSolvent",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address[]", "name": "users", "type": "address[]" },
-      { "internalType": "uint256[]", "name": "borrowParts", "type": "uint256[]" },
+      { "internalType": "uint256[]", "name": "maxBorrowParts", "type": "uint256[]" },
       { "internalType": "address", "name": "to", "type": "address" },
       { "internalType": "contract ISwapper", "name": "swapper", "type": "address" },
       { "internalType": "bool", "name": "open", "type": "bool" }

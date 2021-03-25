@@ -6,6 +6,7 @@ import { useKashiPairHelperContract } from 'sushi-hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../constants/Fraction'
 import sushiData from '@sushiswap/sushi-data'
+import { ChainId } from '@sushiswap/sdk'
 import getOracleName from '../sushi-hooks/queries/getOracleNames'
 import getMainnetAddress from '../sushi-hooks/queries/getMainnetAddress'
 import { ethers } from 'ethers'
@@ -19,7 +20,8 @@ import {
   MINIMUM_INTEREST_PER_YEAR,
   MAXIMUM_INTEREST_PER_YEAR,
   INTEREST_ELASTICITY,
-  FACTOR_PRECISION
+  FACTOR_PRECISION,
+  CLONE_ADDRESSES
 } from './constants'
 
 enum ActionType {
@@ -106,23 +108,18 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
   }
 }
 
-const pairAddresses = [
-  '0x5a0625c24Ddd563e758958f189FC9e52ABaa9023',
-  '0xa78DCeb43f1F0683b2e00EFB8C7Ae1a7F741b7d4',
-  '0xA8EC1b99d7c86177cb1C96E6F932741D57E36672',
-  '0x132DE32FD54734123F041AA934eFD10F1C827848'
-]
-
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+
+  const pairAddresses = CLONE_ADDRESSES[chainId || 1]
 
   const kashiPairHelperContract = useKashiPairHelperContract()
 
   const getPairs = useCallback(async () => {
     return kashiPairHelperContract?.getPairs(pairAddresses)
-  }, [kashiPairHelperContract])
+  }, [kashiPairHelperContract, pairAddresses])
 
   const pollPairs = useCallback(async () => {
     const pairDetails: any = await getPairs()
@@ -160,7 +157,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     //console.log('tokensWithDetails:', tokensWithDetails)
     //console.log('pricing:', pricing)
 
-    const pairs = pairAddresses.map((address, i) => {
+    const pairs = pairAddresses?.map((address, i) => {
       // Find pricing information
       const asset = pricing.find(pair => pair.address === pairDetails[i].asset)
       const assetUSD = asset.priceUSD
@@ -565,7 +562,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         pairs
       }
     })
-  }, [account, getPairs, kashiPairHelperContract])
+  }, [account, getPairs, kashiPairHelperContract, pairAddresses])
 
   useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
 
