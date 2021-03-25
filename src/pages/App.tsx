@@ -101,15 +101,14 @@ export default function App() {
               <Switch>
                 {process.env.NODE_ENV === 'development' && <Route exact strict path="/test" component={Test} />}
                 {/* BentoApps */}
-
                 <Route exact strict path="/bento" component={Bento} />
+                <Route exact strict path="/bento/kashi" render={() => <Redirect to="/bento/kashi/supply" />} />
                 <Route exact strict path="/bento/kashi/supply" component={SupplyMarkets} />
                 <Route exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
                 <Route exact strict path="/bento/kashi/positions" component={KashiPositions} />
                 <Route exact strict path="/bento/kashi/pair/:pairAddress/supply" component={KashiPairSupply} />
                 <Route exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={KashiPairBorrow} />
                 <Route exact strict path="/bento/balances" component={BentoBalances} />
-
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />
                 <Route exact strict path="/saave" component={Saave} />
