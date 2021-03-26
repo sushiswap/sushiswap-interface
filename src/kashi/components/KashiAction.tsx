@@ -19,6 +19,8 @@ import isEmpty from 'lodash/isEmpty'
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from 'constants/Fraction'
 
+import { GradientDot } from '../components'
+
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
@@ -239,11 +241,32 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           </div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedPercent(pair.user.health.percentage)}
-              {' → '}
-              {formattedPercent(
-                Math.min(
+            <div className="flex items-center">
+              <TYPE.mediumHeader color={theme.mediumEmphesisText}>
+                {formattedPercent(pair.user.health.percentage)}
+                {' → '}
+                {formattedPercent(
+                  Math.min(
+                    100,
+                    Math.min(
+                      Number(
+                        pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                          ? Fraction.from(
+                              pair.currentUserBorrowAmount
+                                .add(formatToBalance(value, pair.asset.decimals).value)
+                                .mul(BigNumber.from('1000000000000000000'))
+                                .div(pair.maxBorrowable),
+                              BigNumber.from(10).pow(16)
+                            ).toString()
+                          : 0
+                      ),
+                      95
+                    )
+                  )
+                )}
+              </TYPE.mediumHeader>
+              <GradientDot
+                percent={Math.min(
                   100,
                   Math.min(
                     Number(
@@ -259,9 +282,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                     ),
                     95
                   )
-                )
-              )}
-            </TYPE.mediumHeader>
+                )}
+              />
+            </div>
           </div>
         </div>
       )
@@ -284,11 +307,29 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           </div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>{' '}
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedPercent(pair.user.health.percentage)}
-              {' → '}
-              {formattedPercent(
-                Math.max(
+            <div className="flex items-center">
+              <TYPE.mediumHeader color={theme.mediumEmphesisText}>
+                {formattedPercent(pair.user.health.percentage)}
+                {' → '}
+                {formattedPercent(
+                  Math.max(
+                    0,
+                    Number(
+                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                        ? Fraction.from(
+                            pair.currentUserBorrowAmount
+                              .sub(formatToBalance(value, pair.asset.decimals).value)
+                              .mul(BigNumber.from('1000000000000000000'))
+                              .div(pair.maxBorrowable),
+                            BigNumber.from(10).pow(16)
+                          ).toString()
+                        : 0
+                    )
+                  )
+                )}
+              </TYPE.mediumHeader>
+              <GradientDot
+                percent={Math.max(
                   0,
                   Number(
                     pair.currentUserBorrowAmount.gt(BigNumber.from(0))
@@ -301,9 +342,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                         ).toString()
                       : 0
                   )
-                )
-              )}
-            </TYPE.mediumHeader>
+                )}
+              />
+            </div>
           </div>
         </div>
       )
@@ -351,10 +392,27 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           </div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used </TYPE.mediumHeader>
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedPercent(pair.user.health.percentage)} {' → '}
-              {formattedPercent(
-                Math.min(
+            <div className="flex items-center">
+              <TYPE.mediumHeader color={theme.mediumEmphesisText}>
+                {formattedPercent(pair.user.health.percentage)} {' → '}
+                {formattedPercent(
+                  Math.min(
+                    Number(
+                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                        ? Fraction.from(
+                            pair.currentUserBorrowAmount
+                              .mul(BigNumber.from('1000000000000000000'))
+                              .div(safeMaxBorrowable),
+                            BigNumber.from(10).pow(16)
+                          ).toString()
+                        : 0
+                    ),
+                    100
+                  )
+                )}
+              </TYPE.mediumHeader>
+              <GradientDot
+                percent={Math.min(
                   Number(
                     pair.currentUserBorrowAmount.gt(BigNumber.from(0))
                       ? Fraction.from(
@@ -366,9 +424,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                       : 0
                   ),
                   100
-                )
-              )}
-            </TYPE.mediumHeader>
+                )}
+              />
+            </div>
           </div>
         </div>
       )
@@ -429,11 +487,28 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           </div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedPercent(pair.user.health.percentage)}
-              {' → '}
-              {formattedPercent(
-                Math.min(
+            <div className="flex items-center">
+              <TYPE.mediumHeader color={theme.mediumEmphesisText}>
+                {formattedPercent(pair.user.health.percentage)}
+                {' → '}
+                {formattedPercent(
+                  Math.min(
+                    Number(
+                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                        ? Fraction.from(
+                            pair.currentUserBorrowAmount
+                              .mul(BigNumber.from('1000000000000000000'))
+                              .div(safeMaxBorrowable),
+                            BigNumber.from(10).pow(16)
+                          ).toString()
+                        : 0
+                    ),
+                    100
+                  )
+                )}
+              </TYPE.mediumHeader>
+              <GradientDot
+                percentage={Math.min(
                   Number(
                     pair.currentUserBorrowAmount.gt(BigNumber.from(0))
                       ? Fraction.from(
@@ -445,16 +520,33 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                       : 0
                   ),
                   100
-                )
-              )}
-            </TYPE.mediumHeader>
+                )}
+              />
+            </div>
           </div>
         </div>
       )
     }
 
     return null
-  }, [action, value, pair])
+  }, [
+    action,
+    theme.mediumEmphesisText,
+    pair.user.supply.string,
+    pair.user.borrow.max.string,
+    pair.user.borrow.value,
+    pair.user.health.percentage,
+    pair.user.collateral.value,
+    pair.user.collateral.string,
+    pair.asset.symbol,
+    pair.asset.decimals,
+    pair.currentUserBorrowAmount,
+    pair.maxBorrowable,
+    pair.safeMaxBorrowable,
+    pair.details.rate,
+    pair.collateral.decimals,
+    value
+  ])
 
   const getWarningMessage = useCallback(() => {
     if (action === 'Deposit' || action === 'Repay' || action === 'Add Collateral') {
