@@ -116,9 +116,6 @@ export const formattedNum = (number: any, usd = false) => {
 
 export function gradientColor(percent: any) {
   percent = parseFloat(percent)
-  if (!percent) {
-    return '#ff3a31'
-  }
   if (percent < 100 && percent >= 90) {
     return '#ff3a31'
   }
@@ -147,6 +144,9 @@ export function gradientColor(percent: any) {
     return '#73ce42'
   }
   if (percent < 10 && percent >= 0) {
+    return '#4ed864'
+  }
+  if (percent == 0) {
     return '#4ed864'
   }
   return '#ff3a31'
