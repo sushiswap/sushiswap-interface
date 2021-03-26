@@ -80,12 +80,12 @@ export default function KashiPairs() {
               </div>
               <div
                 className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
-                onClick={() => requestSort('borrow.symbol')}
+                onClick={() => requestSort('asset.symbol')}
               >
                 <div className="flex items-center float-right">
                   <div className="mr-2">Borrow</div>
                   {sortConfig &&
-                    sortConfig.key === 'borrow.symbol' &&
+                    sortConfig.key === 'asset.symbol' &&
                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                       (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                 </div>
