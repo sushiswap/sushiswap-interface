@@ -24,6 +24,7 @@ import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 import { ChainId } from '@sushiswap/sdk'
 import { getSigner } from '../utils'
 import { useKashiPairs } from 'kashi/context'
+import { WETH } from '../kashi/constants'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
@@ -236,11 +237,33 @@ const useKashi = () => {
   // Actions: Deposit, Add
   const depositAddAsset = useCallback(
     async (pairAddress: string, address: string, amount: BalanceProps) => {
-      const tokenAddress = isAddressString(address)
+      let tokenAddress = isAddressString(address)
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, true)
+      //const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, true)
+
+      let ethAmt = BigNumber.from(0)
+      if (chainId && tokenAddress == WETH[chainId]) {
+        const ether = ethers.utils.formatEther(amount?.value)
+        console.log('!!!')
+        console.log(ether)
+        ethAmt = ethers.utils.parseEther(ether)
+        tokenAddress = '0x0000000000000000000000000000000000000000'
+      }
+
+      console.log('!!!')
+      console.log(ethAmt)
+
+        /*const etherAmt = ethers.utils.formatEther(amount?.value)
+        const tx = await bentoBoxContract?.deposit(
+          '0x0000000000000000000000000000000000000000',
+          account,
+          account,
+          amount?.value,
+          0,
+          { value: ethers.utils.parseEther(etherAmt) }
+        )*/
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -249,10 +272,11 @@ const useKashi = () => {
           [
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
-              [tokenAddress, account, share, 0]
+              [tokenAddress, account, amount?.value, 0]
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
-          ]
+          ],
+          { value: amount?.value }
         )
 
         return addTransaction(tx, { summary: 'Deposit -> Add Asset' })

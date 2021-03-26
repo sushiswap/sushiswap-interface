@@ -24,15 +24,15 @@ const useBentoBox = () => {
         try {
           //ethers.constants.HashZero
           if (tokenAddressChecksum == WETH[chainId]) {
-            const etherAmt = ethers.utils.formatEther(amount?.value)
             const tx = await bentoBoxContract?.deposit(
               '0x0000000000000000000000000000000000000000',
               account,
               account,
               amount?.value,
               0,
-              { value: ethers.utils.parseEther(etherAmt) }
+              { value: amount?.value }
             )
+            console.log(tx)
             return addTransaction(tx, { summary: 'Deposit to Bentobox' })
           } else {
             const tx = await bentoBoxContract?.deposit(tokenAddressChecksum, account, account, amount?.value, 0)
