@@ -2,6 +2,7 @@ import { ChainId } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks'
 
 // todo: move these into sushiswap/assets/square
+import INCH from '../../assets/kashi/tokens/1inch-square.png'
 import AAVE from '../../assets/kashi/tokens/aave-square.png'
 import BAT from '../../assets/kashi/tokens/bat-square.png'
 import COMP from '../../assets/kashi/tokens/comp-square.png'
@@ -21,6 +22,7 @@ import UNKNOWN from '../../assets/kashi/tokens/unknown.png'
 
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
   [ChainId.MAINNET]: {
+    [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
     [String('0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9').toLowerCase()]: AAVE,
     [String('0xc00e94Cb662C3520282E6f5717214004A7f26888').toLowerCase()]: COMP,
     [String('0x6B175474E89094C44Da98b954EedeAC495271d0F').toLowerCase()]: DAI,
