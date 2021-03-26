@@ -26,7 +26,11 @@ export default function Navigation() {
         <div
           className={
             'flex items-center font-medium ' +
-            (location.pathname === '/bento/kashi/positions' ? 'text-white' : 'text-gray-500')
+            (location.pathname === '/bento/kashi/positions' ||
+            location.pathname === '/bento/kashi/positions/supply' ||
+            location.pathname === '/bento/kashi/positions/borrow'
+              ? 'text-white'
+              : 'text-gray-500')
           }
         >
           <User size={16} />
