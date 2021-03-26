@@ -9,6 +9,8 @@ import { AutoColumn } from '../../components/Column'
 import { DarkCard } from '../../components/Card'
 
 import { useActiveWeb3React } from '../../hooks'
+import Web3Status from 'components/Web3Status'
+
 import useKashi from '../../sushi-hooks/useKashi'
 
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
@@ -51,29 +53,33 @@ const KashiCard = () => {
         Margin Trading
       </Text> */}
           <div className="w-full">
-            {kashiApproved && kashiApproved === true ? (
-              <Link to={'/bento/kashi/supply'}>
-                <ButtonSecondary padding="10px 8px" margin="0px" borderRadius="6px">
-                  <Text fontWeight={500} fontSize={16}>
-                    Enter
-                  </Text>
-                </ButtonSecondary>
-              </Link>
-            ) : (
-              <>
-                <ButtonSecondary padding="10px 8px" margin="0px" borderRadius="6px" onClick={handleApprove}>
-                  <Text fontWeight={500} fontSize={16}>
-                    Enable Kashi
-                  </Text>
-                </ButtonSecondary>
+            {account ? (
+              kashiApproved && kashiApproved === true ? (
                 <Link to={'/bento/kashi/supply'}>
-                  <ButtonEmpty padding="4px 2px" margin="0px" borderRadius="6px">
+                  <ButtonSecondary padding="10px 8px" margin="0px" borderRadius="6px">
                     <Text fontWeight={500} fontSize={16}>
-                      Preview
+                      Enter
                     </Text>
-                  </ButtonEmpty>
+                  </ButtonSecondary>
                 </Link>
-              </>
+              ) : (
+                <>
+                  <ButtonSecondary padding="10px 8px" margin="0px" borderRadius="6px" onClick={handleApprove}>
+                    <Text fontWeight={500} fontSize={16}>
+                      Enable Kashi
+                    </Text>
+                  </ButtonSecondary>
+                  <Link to={'/bento/kashi/supply'}>
+                    <ButtonEmpty padding="4px 2px" margin="0px" borderRadius="6px">
+                      <Text fontWeight={500} fontSize={16}>
+                        Preview
+                      </Text>
+                    </ButtonEmpty>
+                  </Link>
+                </>
+              )
+            ) : (
+              <Web3Status />
             )}
           </div>
         </AutoColumn>

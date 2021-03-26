@@ -137,21 +137,21 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@fontsource/dm-sans": "^4.2.2",
-    "@sushiswap/sushi-data": "^1.0.7",
-    "@types/numeral": "^2.0.1",
-    "numeral": "^2.0.6",
-    "react-tabs": "^3.2.1",
     "@fullhuman/postcss-purgecss": "^2.3.0",
     "@headlessui/react": "^0.3.0",
+    "@sushiswap/sushi-data": "^1.0.7",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.2.1",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "@tailwindcss/typography": "^0.3.1",
+    "@types/numeral": "^2.0.1",
     "autoprefixer": "^9.8.6",
     "customize-cra": "^0.9.1",
     "framer-motion": "^3.3.0",
+    "numeral": "^2.0.6",
     "postcss": "^7.0.35",
     "postcss-cli": "^7.1.1",
+    "react-tabs": "^3.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
   }
 }

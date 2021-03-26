@@ -12,6 +12,7 @@ import { transparentize } from 'polished'
 import KashiCard from './KashiCard'
 
 import { useActiveWeb3React } from '../../hooks'
+import Web3Status from 'components/Web3Status'
 
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 
@@ -66,7 +67,7 @@ export default function Bento() {
                   <AutoColumn gap="md">
                     <RowBetween>
                       <TYPE.white fontSize={14} color={theme.highEmphesisText}>
-                        {`BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In order to use any one of the decentralized apps below you'll need to first enable them and deposit any erc20 asset to your Bentobox balance.`}
+                        {`BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In order to use any one of the decentralized apps below you'll need to first enable them and deposit any ERC20 asset to your BentoBox balance.`}
                       </TYPE.white>
                     </RowBetween>
                   </AutoColumn>
@@ -77,7 +78,7 @@ export default function Bento() {
             <StyledBaseCard style={{ minHeight: '20rem' }}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <KashiCard />
-                <OutlineCard height="14rem" />
+                <OutlineCard minHeight="14rem" height="100%" />
                 <div className="hidden sm:block">
                   <OutlineCard height="10rem" />
                 </div>
