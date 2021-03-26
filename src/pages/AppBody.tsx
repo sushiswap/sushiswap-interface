@@ -12,6 +12,7 @@ const WithPadding = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 1;
+  min-height: 100vh;
 `
 
 export const BodyWrapper = styled.div`
