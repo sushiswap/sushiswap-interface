@@ -70,11 +70,11 @@ const SupplyPositions = ({ supplyPositions }: any) => {
             </div>
             <div className="flex mx-auto justify-center">
               <Link
-                to={'/bento/kashi'}
+                to={'/bento/kashi/supply'}
                 className="my-8 px-3 py-2 text-base font-medium rounded-md shadow-sm text-white"
                 style={{ background: `${theme.primaryBlue}` }}
               >
-                View Markets
+                View Supply Markets
               </Link>
             </div>
           </div>

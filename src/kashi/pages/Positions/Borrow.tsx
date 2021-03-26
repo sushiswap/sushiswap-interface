@@ -37,11 +37,11 @@ const BorrowPositions = ({ borrowPositions }: any) => {
             </div>
             <div className="flex mx-auto justify-center">
               <Link
-                to={'/bento/kashi'}
+                to={'/bento/kashi/borrow'}
                 className="my-8 px-3 py-2 text-base font-medium rounded-md shadow-sm text-white"
                 style={{ background: `${theme.primaryPink}` }}
               >
-                View Markets
+                View Borrow Markets
               </Link>
             </div>
           </div>
