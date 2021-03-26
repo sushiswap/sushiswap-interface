@@ -18,18 +18,18 @@ export default function Header() {
     return millify(sumBy(pairs, pair => pair.user.pairNetWorth.usdString))
   }, [pairs])
   return (
-    <div className="flex flex-row space-x-4">
+    <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
       <div className="flex-grow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
-            <div className="text-2xl font-semibold">≈ ${netWorth}</div>
+            <div className="text-2xl font-semibold">≈${netWorth}</div>
             <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
               Net Worth
             </div>
           </div>
         </BaseCard>
       </div>
-      <Link className="flex-none text-white" to="/bento/kashi/positions/supply">
+      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/supply">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
@@ -42,7 +42,7 @@ export default function Header() {
           </div>
         </BaseCard>
       </Link>
-      <Link className="flex-none text-white" to="/bento/kashi/positions/borrow">
+      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/borrow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
