@@ -672,6 +672,8 @@ const useKashi = () => {
         tokenAddress = '0x0000000000000000000000000000000000000000'
       }
 
+      //onsole.log("ethAmt:", ethAmt);
+
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_GET_REPAY_SHARE, ACTION_BENTO_DEPOSIT, ACTION_REPAY],

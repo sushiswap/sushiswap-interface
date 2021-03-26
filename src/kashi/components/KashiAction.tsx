@@ -250,15 +250,13 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                     100,
                     Math.min(
                       Number(
-                        pair.currentUserBorrowAmount.gt(BigNumber.from(0))
-                          ? Fraction.from(
-                              pair.currentUserBorrowAmount
-                                .add(formatToBalance(value, pair.asset.decimals).value)
-                                .mul(BigNumber.from('1000000000000000000'))
-                                .div(pair.maxBorrowable),
-                              BigNumber.from(10).pow(16)
-                            ).toString()
-                          : 0
+                        Fraction.from(
+                          pair.currentUserBorrowAmount
+                            .add(formatToBalance(value, pair.asset.decimals).value)
+                            .mul(BigNumber.from('1000000000000000000'))
+                            .div(pair.maxBorrowable),
+                          BigNumber.from(10).pow(16)
+                        ).toString()
                       ),
                       95
                     )
