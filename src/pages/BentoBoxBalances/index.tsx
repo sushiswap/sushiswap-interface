@@ -16,6 +16,9 @@ import getTokenIcon from '../../sushi-hooks/queries/getTokenIcons'
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 import BentoBoxImage from '../../assets/kashi/bento-illustration.png'
 
+import useFuse from 'sushi-hooks/useFuse'
+import useSortableData from 'sushi-hooks/useSortableData'
+
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
 `
@@ -40,12 +43,22 @@ export default function BentoBalances() {
 
   // todo: include totalDeposits in balances
   const balances = useBentoBalances()
-  //console.log('balances:', balances)
+  console.log('balances:', balances)
 
   const totalDepositsUSD = balances?.reduce((total: number, balance: { amountUSD: number }) => {
     return total + balance.amountUSD
   }, 0)
   //console.log('totalDepositsUSD:', totalDepositsUSD)
+
+  // Search Setup
+  const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }
+  const { result, search, term } = useFuse({
+    data: balances && balances.length > 0 ? balances : [],
+    options
+  })
+  const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
+  // Sorting Setup
+  const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
 
   return (
     <>
@@ -99,8 +112,8 @@ export default function BentoBalances() {
                     <input
                       className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
                       style={{ background: theme.baseCard }}
-                      //onChange={e => search(e.target.value)}
-                      //value={term}
+                      onChange={e => search(e.target.value)}
+                      value={term}
                       placeholder="Search by name, symbol, address"
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -117,8 +130,9 @@ export default function BentoBalances() {
                     <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
                   </div>
                   <FixedScrollable>
-                    {balances &&
-                      balances.map((balance: any, i: number) => {
+                    {items &&
+                      items.length > 0 &&
+                      items.map((balance: any, i: number) => {
                         // todo: remove increment for testing purposes
                         return (
                           <TokenBalance
