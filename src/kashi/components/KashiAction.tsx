@@ -508,7 +508,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                 )}
               </TYPE.mediumHeader>
               <GradientDot
-                percentage={Math.min(
+                percent={Math.min(
                   Number(
                     pair.currentUserBorrowAmount.gt(BigNumber.from(0))
                       ? Fraction.from(

@@ -19,6 +19,8 @@ import { InfoCard, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 import { Link2 } from 'react-feather'
 
+import { GradientDot } from '../components'
+
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
@@ -59,13 +61,16 @@ export default function KashiPair({
         <>
           <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
-            {formattedNum(pair.user.pairNetWorth.usdString, true)} USD
+            ≈ {formattedNum(pair.user.pairNetWorth.usdString, true)}
           </TYPE.largeHeader>
           <div>
             <Card backgroundColor={theme.extraDarkPurple}>
               <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Borrow Limit Used:</TYPE.body>
-                <TYPE.body color="highEmphesisText">{formattedPercent(pair.user.health.percentage)}</TYPE.body>
+                <div className="flex items-center">
+                  <TYPE.body color="highEmphesisText">{formattedPercent(pair.user.health.percentage)}</TYPE.body>
+                  <GradientDot percent={pair.user.health.percentage} />
+                </div>
               </RowBetween>
               <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Left to borrow:</TYPE.body>

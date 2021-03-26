@@ -2,6 +2,7 @@ import React from 'react'
 import { gradientColor } from 'utils'
 
 const GradientDot = ({ percent }: any) => {
+  console.log('percent:', percent)
   return (
     <>
       <span
