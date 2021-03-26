@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from '../hooks/index'
+import { useActiveWeb3React } from '../hooks'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 
@@ -30,6 +30,7 @@ import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
+import Swap2 from '../prototype/pages/Swap2'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
@@ -110,6 +111,7 @@ export default function App() {
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}
               <Route exact strict path="/swap" component={Swap} />
+              <Route exact strict path="/swap2" component={Swap2} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
