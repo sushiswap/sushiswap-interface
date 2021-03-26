@@ -1,7 +1,7 @@
 import React from 'react'
-import { gradientColor } from 'utils'
+import { gradientColor, gradientColorAsc } from 'utils'
 
-const GradientDot = ({ percent }: any) => {
+const GradientDot = ({ percent, desc = true }: any) => {
   console.log('percent:', percent)
   return (
     <>
@@ -12,7 +12,7 @@ const GradientDot = ({ percent }: any) => {
           width: '0.5rem',
           borderRadius: '9999px',
           marginLeft: '0.5rem',
-          background: `${gradientColor(percent)}`
+          background: `${desc ? gradientColor(percent) : gradientColorAsc(percent)}`
         }}
       ></span>
     </>

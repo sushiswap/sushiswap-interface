@@ -17,7 +17,6 @@ import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import { InfoCard, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
-import { Link2 } from 'react-feather'
 
 import { GradientDot } from '../components'
 
@@ -89,10 +88,22 @@ export default function KashiPair({
                 <TYPE.body color="highEmphesisText">75%</TYPE.body>
               </RowBetween>
               <RowBetween>
+                <TYPE.body color="mediumEmphesisText">Market Available:</TYPE.body>
+                <div className="flex items-center">
+                  <TYPE.body color="highEmphesisText">
+                    {formattedNum(pair.details.total.asset.string)} {pair.asset.symbol}
+                  </TYPE.body>
+                  <GradientDot percent={pair.details.total.asset.string} desc={false} />
+                </div>
+              </RowBetween>
+              <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Utilization rate:</TYPE.body>
-                <TYPE.body color="highEmphesisText">
-                  {formattedPercent(pair.details.total.utilization.string)}
-                </TYPE.body>
+                <div className="flex items-center">
+                  <TYPE.body color="highEmphesisText">
+                    {formattedPercent(pair.details.total.utilization.string)}
+                  </TYPE.body>
+                  <GradientDot percent={pair.details.total.utilization.string} />
+                </div>
               </RowBetween>
             </Card>
           </div>
