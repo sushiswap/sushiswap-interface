@@ -14,6 +14,8 @@ import { formattedNum, formattedPercent } from 'utils'
 import { InfoCard, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 
+import { GradientDot } from '../components'
+
 export default function KashiPair({
   match: {
     params: { pairAddress }
@@ -45,7 +47,7 @@ export default function KashiPair({
         <>
           <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
-            {formattedNum(pair.user.pairNetWorth.usdString, true)} USD
+            ≈ {formattedNum(pair.user.pairNetWorth.usdString, true)}
           </TYPE.largeHeader>
           <Card backgroundColor={theme.extraDarkPurple}>
             <RowBetween>
@@ -55,8 +57,13 @@ export default function KashiPair({
               </TYPE.body>
             </RowBetween>
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Utilization rate:</TYPE.body>
-              <TYPE.body color="highEmphesisText">{formattedPercent(pair.details.total.utilization.string)}</TYPE.body>
+              <TYPE.body color="mediumEmphesisText">Utilization:</TYPE.body>
+              <div className="flex items-center">
+                <TYPE.body color="highEmphesisText">
+                  {formattedPercent(pair.details.total.utilization.string)}
+                </TYPE.body>
+                <GradientDot percent={pair.details.total.utilization.string} desc={false} />
+              </div>
             </RowBetween>
           </Card>
         </>
