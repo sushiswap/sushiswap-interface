@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChainId } from '@sushiswap/sdk'
-import { RouteComponentProps } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
@@ -17,6 +17,7 @@ import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import { InfoCard, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
+import { Link2 } from 'react-feather'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -219,18 +220,20 @@ export default function KashiPair({
             </div>
             <div className="mt-12 mx-auto ">
               <div className="mt-4 sm:mt-0 sm:ml-3 flex space-x-4">
-                <button
+                <Link
+                  to={'/bento/kashi/pair/' + pairAddress + '/supply'}
                   style={{ background: theme.primaryBlue }}
-                  className="block w-full rounded-md border border-transparent px-5 py-3 text-base font-medium text-white shadow focus:outline-none sm:px-10"
+                  className="block w-full text-center rounded-md border border-transparent px-5 py-3 text-base font-medium text-white shadow focus:outline-none sm:px-10"
                 >
                   Explore Lending
-                </button>
-                <button
+                </Link>
+                <Link
+                  to={'/bento/kashi/borrow'}
                   style={{ background: theme.primaryPink }}
-                  className="block w-full rounded-md border border-transparent px-5 py-3  text-base font-medium text-white shadow focus:outline-none sm:px-10"
+                  className="block w-full text-center rounded-md border border-transparent px-5 py-3  text-base font-medium text-white shadow focus:outline-none sm:px-10"
                 >
-                  Go to Borrow
-                </button>
+                  Borrow Markets
+                </Link>
               </div>
             </div>
           </div>
