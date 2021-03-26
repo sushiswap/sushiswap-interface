@@ -50,7 +50,9 @@ export default function KashiPair({
           <Card backgroundColor={theme.extraDarkPurple}>
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Debt Ceiling:</TYPE.body>
-              <TYPE.body color="highEmphesisText">???</TYPE.body>
+              <TYPE.body color="highEmphesisText">
+                {formattedNum(pair.details.total.borrow.string)} {pair.asset.symbol}
+              </TYPE.body>
             </RowBetween>
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Utilization rate:</TYPE.body>

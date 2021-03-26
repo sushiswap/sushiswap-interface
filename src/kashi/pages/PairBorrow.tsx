@@ -73,10 +73,10 @@ export default function KashiPair({
                   {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
                 </TYPE.body>
               </RowBetween>
-              <RowBetween>
+              {/* <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Liquidation price:</TYPE.body>
                 <TYPE.body color="highEmphesisText">???</TYPE.body>
-              </RowBetween>
+              </RowBetween> */}
             </Card>
             <Card backgroundColor="transparent">
               <RowBetween>
@@ -197,7 +197,7 @@ export default function KashiPair({
           <SecondaryTabs forceRenderTabPanel>
             <TabList>
               <Tab>Borrow {pair.asset.symbol}</Tab>
-              <Tab>Payback {pair.asset.symbol}</Tab>
+              <Tab>Repay {pair.asset.symbol}</Tab>
             </TabList>
             <TabPanel>
               <KashiAction pair={pair} action="Borrow" direction="To" label="Limit" />
