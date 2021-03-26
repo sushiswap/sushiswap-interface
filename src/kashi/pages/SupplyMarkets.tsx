@@ -11,6 +11,10 @@ import { useKashiPairs } from '../../kashi/context'
 import { InfoCard, SectionHeader, Layout } from '../../kashi/components'
 
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
+import useFuse from 'sushi-hooks/useFuse'
+import useSortableData from 'sushi-hooks/useSortableData'
+
+import { Debugger } from 'components/Debugger'
 
 const PageWrapper = styled.div`
   max-width: 1280px;
@@ -29,7 +33,19 @@ export default function KashiPairs() {
   const theme = useContext(ThemeContext)
   const pairs = useKashiPairs()
 
-  if (!pairs) return null
+  // setup search
+  console.log('pairs:', pairs)
+  const options = { keys: ['symbol', 'name', 'address'] }
+  const { result, search, term } = useFuse({
+    data: pairs && pairs.length > 0 ? pairs : [],
+    options
+  })
+  const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
+
+  // Sorting Setup
+  const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
+
+  console.log('items:', items)
 
   return (
     <Layout
@@ -45,23 +61,52 @@ export default function KashiPairs() {
     >
       <div className="flex-col space-y-8" style={{ minHeight: '35rem' }}>
         <div>
-          <SectionHeader />
+          <SectionHeader search={search} term={term} />
           {/* TODO: Use table component */}
           <StyledBaseCard cornerRadiusTopNone={true}>
             <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
-              <div className="hover:text-gray-400 col-span-2 md:col-span-1">Pair</div>
-              <div className="text-right hidden md:block pl-4 hover:text-gray-400">Lending</div>
-              <div className="flex text-right hover:text-gray-400 item-center justify-end">
+              <div
+                className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer"
+                onClick={() => requestSort('symbol')}
+              >
+                Pair
+              </div>
+              <div
+                className="text-right hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
+                onClick={() => requestSort('asset.symbol')}
+              >
+                Lending
+              </div>
+              <div
+                className="flex text-right hover:text-gray-400 item-center justify-end cursor-pointer"
+                onClick={() => requestSort('oracle.name')}
+              >
                 Oracle
                 <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
               </div>
-              <div className="text-right hover:text-gray-400">Lending APR</div>
-              <div className="text-right hover:text-gray-400">Utilization</div>
-              <div className="text-right hover:text-gray-400">Total Supplied</div>
+              <div
+                className="text-right hover:text-gray-400 cursor-pointer"
+                onClick={() => requestSort('details.apr.currentSupplyAPR')}
+              >
+                Lending APR
+              </div>
+              <div
+                className="text-right hover:text-gray-400 cursor-pointer"
+                onClick={() => requestSort('details.total.utilization.string')}
+              >
+                Utilization
+              </div>
+              <div
+                className="text-right hover:text-gray-400 cursor-pointer"
+                onClick={() => requestSort('details.total.supply.usdString')}
+              >
+                Total Supplied
+              </div>
             </div>
             <div className="flex-col space-y-2">
-              {pairs.length > 0 &&
-                pairs.map(pair => {
+              {items &&
+                items.length > 0 &&
+                items.map(pair => {
                   return (
                     <div key={pair.address}>
                       <Link
@@ -103,7 +148,7 @@ export default function KashiPairs() {
                           </div>
                         </div>
                       </Link>
-                      {/* <Debugger data={pair} /> */}
+                      {/* {process.env.NODE_ENV === 'development' && <Debugger data={pair} />} */}
                     </div>
                   )
                 })}

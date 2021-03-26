@@ -329,6 +329,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         return {
           id: address,
           address: address,
+          name: pairDetails[i].collateralSymbol + '-' + pairDetails[i].assetSymbol + ' MediumRiskPair',
+          symbol: pairDetails[i].collateralSymbol + '/' + pairDetails[i].assetSymbol,
           currentUserBorrowAmount,
           maxBorrowable,
           safeMaxBorrowable,
@@ -549,7 +551,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     }
   }, [account, getPairs, kashiPairHelperContract, pairAddresses])
 
-  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
+  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 10000 : 10000)
 
   return (
     <KashiContext.Provider

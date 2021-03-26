@@ -5,7 +5,7 @@ import { AutoColumn } from '../../components/Column'
 
 import { Search, Stats, MarketsNavigation, Navigation, SplitPane } from '.'
 
-const SectionHeader = ({ portfolio = false, children }: any) => {
+const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
   const theme = useContext(ThemeContext)
   const { pathname } = useLocation()
   return (
@@ -65,7 +65,7 @@ const SectionHeader = ({ portfolio = false, children }: any) => {
                   }
                 })()}
               </div>
-              {portfolio ? children : <Search />}
+              {portfolio ? children : <Search term={term} search={search} />}
             </div>
           </div>
           <div className="px-4 w-full md:w-3/5">
