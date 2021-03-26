@@ -111,9 +111,9 @@ export default function KashiPair({
           </div>
           <div className="flex justify-between items-center">
             <div>
-              <TYPE.extraLargeHeader color="highEmphesisText" lineHeight={1}>
+              <TYPE.largeHeader color="highEmphesisText" lineHeight={1}>
                 {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
-              </TYPE.extraLargeHeader>
+              </TYPE.largeHeader>
               <AutoRow>
                 <TYPE.subHeader color="mediumEmphesisText" style={{ marginRight: 4 }}>
                   Oracle:
