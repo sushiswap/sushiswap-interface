@@ -21,7 +21,7 @@ export default function Layout({ left = undefined, children = undefined, right =
       <div className={`md:px-4 grid grid-cols-10 gap-4`}>
         <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
           <div className="flex items-center pb-3">
-            <img src={KashiLogo} className="w-20 lg:w-28 mr-2" />
+            <img src={KashiLogo} className="block w-20 lg:w-28 mr-2" />
             <div className="font-semibold text-2xl">Kashi</div>
           </div>
         </div>

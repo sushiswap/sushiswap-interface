@@ -44,7 +44,7 @@ export default function Navigation() {
             (location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500')
           }
         >
-          <img src={BentoBoxLogo} className="w-6" />
+          <img src={BentoBoxLogo} className="block w-6" />
           <div className="whitespace-nowrap text-base ml-2">My Bento</div>
         </div>
       </NavLink>

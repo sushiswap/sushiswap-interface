@@ -144,7 +144,10 @@ export default function KashiPair({
               target="_blank"
               rel="noreferrer"
             >
-              <img src={pair && getTokenIcon(pair?.asset.address)} className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg" />
+              <img
+                src={pair && getTokenIcon(pair?.asset.address)}
+                className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+              />
             </a>
           </div>
           <div className="flex justify-between items-center">

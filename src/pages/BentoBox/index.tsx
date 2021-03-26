@@ -47,15 +47,13 @@ export default function Bento() {
         <AutoColumn gap="md" justify="center">
           <AutoColumn gap="md" style={{ width: '100%' }}>
             <div className="px-6 md:px-4 flex justify-between pb-2 items-center">
-              <div>
-                <div className="hidden md:block text-2xl font-semibold">BentoBox Apps</div>
+              <div className="text-2xl font-semibold">
+                <div className="hidden md:block">BentoBox Apps</div>
               </div>
               {account ? (
-                <Link to="/bento/balances">
-                  <div className="flex">
-                    <img src={BentoBoxLogo} className="w-10 mr-2" />
-                    <div className="font-normal">My Bento</div>
-                  </div>
+                <Link to="/bento/balances" className="inline-block flex float-right text-right items-center">
+                  <img src={BentoBoxLogo} className="block w-10 mr-2" />
+                  <div className="font-normal">My Bento</div>
                 </Link>
               ) : (
                 <div>Connect Wallet</div>

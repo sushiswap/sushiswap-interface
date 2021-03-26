@@ -148,11 +148,11 @@ export default function KashiPairs() {
                             <div className="flex space-x-2">
                               <img
                                 src={getTokenIcon(pair.collateral.address)}
-                                className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                                className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
                               />
                               <img
                                 src={getTokenIcon(pair.asset.address)}
-                                className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                                className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
                               />
                             </div>
                             <div className="sm:items-end">

@@ -104,7 +104,7 @@ export default function BentoBalances() {
                   >
                     <ChevronLeft strokeWidth={2} size={24} />
                   </button>
-                  <img src={BentoBoxLogo} className="w-10 mr-2" />
+                  <img src={BentoBoxLogo} className="block w-10 mr-2" />
                   <div className="font-semibold text-lg">My Bento Balances</div>
                 </div>
                 <div className="px-4 w-full md:w-1/2">
@@ -164,7 +164,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
     <DarkCard padding={'0px'} marginBottom={'10px'}>
       <div className="p-2 sm:p-4 flex justify-between">
         <div className="flex items-center">
-          <img src={getTokenIcon(tokenAddress)} className="w-10 sm:w-14 rounded-lg mr-4" />
+          <img src={getTokenIcon(tokenAddress)} className="block w-10 sm:w-14 rounded-lg mr-4" />
           <div className="hidden sm:block  font-semibold text-base md:text-lg">{tokenDetails && tokenDetails.name}</div>
         </div>
         <div className="flex items-center">
