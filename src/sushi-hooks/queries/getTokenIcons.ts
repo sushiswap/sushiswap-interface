@@ -11,6 +11,7 @@ import SAI from '../../assets/kashi/tokens/sai-square.png'
 import SUSHI from '../../assets/kashi/tokens/sushi-square.png'
 import UNI from '../../assets/kashi/tokens/uni-square.png'
 import USDC from '../../assets/kashi/tokens/usdc-square.png'
+import USDT from '../../assets/kashi/tokens/usdt-square.png'
 import WBTC from '../../assets/kashi/tokens/wbtc-square.png'
 import WETH from '../../assets/kashi/tokens/eth-square.png'
 import YFI from '../../assets/kashi/tokens/yfi-square.png'
@@ -22,9 +23,12 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
   [ChainId.MAINNET]: {
     [String('0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9').toLowerCase()]: AAVE,
     [String('0xc00e94Cb662C3520282E6f5717214004A7f26888').toLowerCase()]: COMP,
+    [String('0x6B175474E89094C44Da98b954EedeAC495271d0F').toLowerCase()]: DAI,
     [String('0x514910771AF9Ca656af840dff83E8264EcF986CA').toLowerCase()]: LINK,
     [String('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2').toLowerCase()]: SUSHI,
     [String('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984').toLowerCase()]: UNI,
+    [String('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48').toLowerCase()]: USDC,
+    [String('0xdAC17F958D2ee523a2206206994597C13D831ec7').toLowerCase()]: USDT,
     [String('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599').toLowerCase()]: WBTC,
     [String('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2').toLowerCase()]: WETH,
     [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI

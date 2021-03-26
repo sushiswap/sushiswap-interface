@@ -56,7 +56,7 @@ export default function BentoBalances() {
               backgroundImage={BentoBoxImage}
               title={'Deposit tokens into BentoBox for all the yields.'}
               description={
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                'BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets.'
               }
             />
           }
