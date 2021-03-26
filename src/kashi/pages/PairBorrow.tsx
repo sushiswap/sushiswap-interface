@@ -64,7 +64,7 @@ export default function KashiPair({
           <div>
             <Card backgroundColor={theme.extraDarkPurple}>
               <RowBetween>
-                <TYPE.body color="mediumEmphesisText">Borrow Limit Rate:</TYPE.body>
+                <TYPE.body color="mediumEmphesisText">Borrow Limit Used:</TYPE.body>
                 <TYPE.body color="highEmphesisText">{formattedPercent(pair.user.health.percentage)}</TYPE.body>
               </RowBetween>
               <RowBetween>

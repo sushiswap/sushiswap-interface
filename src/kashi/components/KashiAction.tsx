@@ -238,7 +238,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Rate</TYPE.mediumHeader>
+            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
               {formattedPercent(pair.user.health.percentage)}
               {' → '}
@@ -283,7 +283,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Rate</TYPE.mediumHeader>{' '}
+            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>{' '}
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
               {formattedPercent(pair.user.health.percentage)}
               {' → '}
@@ -350,7 +350,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Rate </TYPE.mediumHeader>
+            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used </TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
               {formattedPercent(pair.user.health.percentage)} {' → '}
               {formattedPercent(
@@ -428,7 +428,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
-            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Rate</TYPE.mediumHeader>
+            <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
               {formattedPercent(pair.user.health.percentage)}
               {' → '}
