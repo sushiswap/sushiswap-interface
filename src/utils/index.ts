@@ -184,6 +184,9 @@ export function gradientColorAsc(percent: any) {
   if (percent < 100 && percent >= 90) {
     return '#4ed864'
   }
+  if (percent >= 100) {
+    return '#4ed864'
+  }
   return '#ff3a31'
 }
 
