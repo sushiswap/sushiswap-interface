@@ -122,7 +122,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
   }, [kashiPairHelperContract, pairAddresses])
 
   const pollPairs = useCallback(async () => {
-    if (account) {
+    if (account && chainId) {
       const pairDetails: any = await getPairs()
       //console.log('pairDetails:', pairDetails)
 
@@ -141,7 +141,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         tokens.map(async (address: string) => {
           try {
             const details = await sushiData.exchange.token({
-              token_address: getMainnetAddress(address)
+              token_address: chainId !== ChainId.MAINNET ? getMainnetAddress(address) : address
             })
             return { address: address, details: details }
           } catch (e) {
