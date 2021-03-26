@@ -113,7 +113,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const pairAddresses = CLONE_ADDRESSES[3]
+  const pairAddresses = CLONE_ADDRESSES[chainId || 1]
 
   const kashiPairHelperContract = useKashiPairHelperContract()
 
