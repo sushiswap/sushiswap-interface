@@ -241,14 +241,16 @@ const useKashi = () => {
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      let ethAmt = BigNumber.from(0)
       if (chainId && tokenAddress == WETH[chainId]) {
+        ethAmt = amount?.value
         tokenAddress = '0x0000000000000000000000000000000000000000'
       }
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_BENTO_DEPOSIT, ACTION_ADD_ASSET],
-          [amount?.value, 0],
+          [ethAmt, 0],
           [
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
@@ -256,7 +258,7 @@ const useKashi = () => {
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ],
-          { value: amount?.value }
+          { value: ethAmt }
         )
 
         return addTransaction(tx, { summary: 'Deposit -> Add Asset' })
@@ -411,14 +413,16 @@ const useKashi = () => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
+      let ethAmt = BigNumber.from(0)
       if (chainId && tokenAddress == WETH[chainId]) {
+        ethAmt = amount?.value
         tokenAddress = '0x0000000000000000000000000000000000000000'
       }
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_BENTO_DEPOSIT, ACTION_ADD_COLLATERAL],
-          [amount?.value, 0],
+          [ethAmt, 0],
           [
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
@@ -426,7 +430,7 @@ const useKashi = () => {
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ],
-          { value: amount?.value }
+          { value: ethAmt }
         )
 
         return addTransaction(tx, { summary: 'Deposit → Add Collateral' })
@@ -662,14 +666,16 @@ const useKashi = () => {
 
       console.log('repayPart_wallet:', repayPart.toString())
 
+      let ethAmt = BigNumber.from(0)
       if (chainId && tokenAddress == WETH[chainId]) {
+        ethAmt = amount?.value
         tokenAddress = '0x0000000000000000000000000000000000000000'
       }
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_GET_REPAY_SHARE, ACTION_BENTO_DEPOSIT, ACTION_REPAY],
-          [0, amount?.value, 0],
+          [0, ethAmt, 0],
           [
             ethers.utils.defaultAbiCoder.encode(['int256'], [repayPart]),
             ethers.utils.defaultAbiCoder.encode(
@@ -678,7 +684,7 @@ const useKashi = () => {
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [repayPart, account, false])
           ],
-          { value: amount?.value }
+          { value: ethAmt }
         )
 
         return addTransaction(tx, { summary: 'Repay' })

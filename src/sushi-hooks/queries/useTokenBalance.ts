@@ -6,8 +6,11 @@ import ERC20_ABI from '../../constants/abis/erc20.json'
 import { useContract } from '../useContract'
 //import { useBlockNumber } from '../../state/application/hooks'
 import { isAddress } from '../../utils'
+import { ethers } from 'ethers'
 
 import useTransactionStatus from '../useTransactionStatus'
+
+import { WETH } from '../../kashi/constants'
 
 //import Fraction from '../../constants/Fraction'
 
@@ -18,16 +21,22 @@ export interface BalanceProps {
 
 const useTokenBalance = (tokenAddress: string) => {
   const [balance, setBalance] = useState<BalanceProps>({ value: BigNumber.from(0), decimals: 18 })
-  const { account } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   //const currentBlockNumber = useBlockNumber()
   // allows balance to update given transaction updates
   const currentTransactionStatus = useTransactionStatus()
-  const addressCheckSum = isAddress(tokenAddress)
+  let addressCheckSum = isAddress(tokenAddress)
   const tokenContract = useContract(addressCheckSum, ERC20_ABI, false)
 
   const getBalance = async (contract: Contract | null, owner: string | null | undefined): Promise<BalanceProps> => {
     try {
       //console.log('token_contract:', contract)
+
+      if (account && chainId && contract?.address == WETH[chainId]) {
+        const ethBalance = await library?.getBalance(account)
+        return { value: BigNumber.from(ethBalance), decimals: 18 }
+      }
+
       const balance = await contract?.balanceOf(owner)
       const decimals = await contract?.decimals()
 
