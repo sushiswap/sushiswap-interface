@@ -505,7 +505,7 @@ const useKashi = () => {
 
       if (max) {
         if (pair) {
-          amountToWithdraw = pair.user.collateral.max
+          amountToWithdraw = pair.user.collateral.max.value
         }
       }
 
