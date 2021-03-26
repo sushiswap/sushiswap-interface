@@ -22,7 +22,7 @@ export default function Positions() {
   const pairs = useKashiPairs()
 
   const borrowPositions = pairs.filter(function(pair: any) {
-    return pair.user.borrow.value.gt(0)
+    return pair.user.borrow.value.gt(0) || pair.user.collateral.value.gt(0)
   })
 
   return (
