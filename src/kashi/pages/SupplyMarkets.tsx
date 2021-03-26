@@ -66,9 +66,9 @@ export default function KashiPairs() {
           <SectionHeader search={search} term={term} />
           {/* TODO: Use table component */}
           <StyledBaseCard cornerRadiusTopNone={true}>
-            <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
+            <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold text-gray-500">
               <div
-                className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"
+                className="hover:text-gray-400 col-span-2 md:col-span-2 cursor-pointer flex items-center"
                 onClick={() => requestSort('symbol')}
               >
                 <div className="mr-2">Pair</div>
@@ -89,7 +89,10 @@ export default function KashiPairs() {
                       (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                 </div>
               </div>
-              <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('oracle.name')}>
+              <div
+                className="hidden lg:block hover:text-gray-400 cursor-pointer"
+                onClick={() => requestSort('oracle.name')}
+              >
                 <div className="flex items-center float-right justify-end">
                   <div className="mr-2 flex">
                     Oracle <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
@@ -104,7 +107,7 @@ export default function KashiPairs() {
                 className="hover:text-gray-400 cursor-pointer"
                 onClick={() => requestSort('details.apr.currentSupplyAPR')}
               >
-                <div className="flex items-center float-right">
+                <div className="flex items-center float-left sm:float-right">
                   <div className="mr-2">Lending APR</div>
                   {sortConfig &&
                     sortConfig.key === 'details.apr.currentSupplyAPR' &&
@@ -116,7 +119,7 @@ export default function KashiPairs() {
                 className="hover:text-gray-400 cursor-pointer"
                 onClick={() => requestSort('details.total.utilization.string')}
               >
-                <div className="flex items-center float-right">
+                <div className="flex items-center float-left sm:float-right">
                   <div className="mr-2">Utilization</div>
                   {sortConfig &&
                     sortConfig.key === 'details.total.utilization.string' &&
@@ -129,7 +132,7 @@ export default function KashiPairs() {
                 onClick={() => requestSort('details.total.supply.usdString')}
               >
                 <div className="flex items-center float-right">
-                  <div className="mr-2">Total Supplied</div>
+                  <div className="mr-2">Market Supply</div>
                   {sortConfig &&
                     sortConfig.key === 'details.total.supply.usdString' &&
                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -149,10 +152,10 @@ export default function KashiPairs() {
                         style={{ color: theme.highEmphesisText }}
                       >
                         <div
-                          className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 text-sm font-semibold"
+                          className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold"
                           style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
                         >
-                          <div className="flex col-span-2 md:col-span-1 items-center">
+                          <div className="flex flex-col sm:flex-row col-span-2 items-start sm:items-center">
                             <div className="flex space-x-2">
                               <img
                                 src={getTokenIcon(pair.collateral.address)}
@@ -163,15 +166,22 @@ export default function KashiPairs() {
                                 className="w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
                               />
                             </div>
-                            <div className="items-end">
-                              <div className="text-left hidden md:block pl-4">{pair.collateral.symbol} /</div>
-                              <div className="text-left hidden md:block pl-4">{pair.asset.symbol}</div>
+                            <div className="sm:items-end">
+                              <div className="text-left hidden sm:block pl-4">{pair.collateral.symbol} /</div>
+                              <div className="text-left hidden sm:block pl-4">{pair.asset.symbol}</div>
+                              <div className="mt-2 sm:mt-0 text-left text-white-500 text-xs block lg:hidden sm:pl-4">
+                                {pair.oracle.name}
+                              </div>
                             </div>
                           </div>
                           <div className="text-right hidden md:block pl-4">{pair.asset.symbol}</div>
-                          <div className="text-right">{pair.oracle.name}</div>
-                          <div className="text-right">{formattedPercent(pair.details.apr.currentSupplyAPR)}</div>
-                          <div className="text-right">{formattedPercent(pair.details.total.utilization.string)}</div>
+                          <div className="text-right hidden lg:block">{pair.oracle.name}</div>
+                          <div className="text-left sm:text-right">
+                            {formattedPercent(pair.details.apr.currentSupplyAPR)}
+                          </div>
+                          <div className="text-left sm:text-right">
+                            {formattedPercent(pair.details.total.utilization.string)}
+                          </div>
                           <div className="text-right">
                             <div>
                               {formattedNum(pair.details.total.supply.string)} {pair.asset.symbol}
