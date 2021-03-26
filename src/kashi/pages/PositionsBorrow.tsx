@@ -7,7 +7,7 @@ import { formattedPercent, formattedNum } from 'utils'
 
 import { useKashiPairs } from '../context'
 import PositionsSelector from './Positions/Selector'
-import { InfoCard, SectionHeader, Layout, FixedScrollable } from '../components'
+import { InfoCard, SectionHeader, Layout, FixedScrollable, GradientDot } from '../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 
 const StyledBaseCard = styled(BaseCard)`
@@ -125,15 +125,21 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                           ≈ {formattedNum(pair.user.collateral.usdString, true)}
                         </div>
                       </div>
-                      <div className="hidden sm:block text-right">{formattedPercent(pair.user.health.percentage)}</div>
+                      <div className="hidden sm:block">
+                        <div className="flex text-right float-right items-center">
+                          {formattedPercent(pair.user.health.percentage)}
+                          <GradientDot percent={pair.user.health.percentage} />
+                        </div>
+                      </div>
                       <div className="hidden sm:block text-right">
                         {formattedPercent(pair.details.apr.currentInterestPerYear)}
                       </div>
                       <div className="sm:hidden text-right col-span-3">
                         <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
-                          <div className="flex">
+                          <div className="flex items-center">
                             <div className="text-gray-500 mr-2">Limit Used: </div>
                             <div>{formattedPercent(pair.user.health.percentage)}</div>
+                            <GradientDot percent={pair.user.health.percentage} />
                           </div>
                           <div className="flex">
                             <div className="text-gray-500 mr-2">Borrow APY: </div>

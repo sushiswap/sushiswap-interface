@@ -10,6 +10,7 @@ const GradientDot = ({ percent }: any) => {
           height: '0.5rem',
           width: '0.5rem',
           borderRadius: '9999px',
+          marginLeft: '0.5rem',
           background: `${gradientColor(percent)}`
         }}
       ></span>
