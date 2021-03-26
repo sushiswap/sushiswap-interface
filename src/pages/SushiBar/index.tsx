@@ -37,47 +37,49 @@ export default function Saave() {
   return (
     <>
       <PageWrapper>
-        <VoteCard>
-          <CardSection>
-            <AutoColumn gap="md">
-              <RowBetween>
-                <TYPE.white fontWeight={600} color={theme.text1}>
-                  SushiBar: Make SUSHI work for you
-                </TYPE.white>
-              </RowBetween>
-              <RowBetween>
-                <div>
-                  <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
-                    {`Stake your SUSHI into xSUSHI for ~15% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
+        <div style={{ padding: '16px' }}>
+          <VoteCard>
+            <CardSection>
+              <AutoColumn gap="md">
+                <RowBetween>
+                  <TYPE.white fontWeight={600} color={theme.text1}>
+                    SushiBar: Make SUSHI work for you
                   </TYPE.white>
-                  <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
-                    {`xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional to your share of the SushiBar.`}
-                  </TYPE.white>
-                </div>
-              </RowBetween>
-              <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
-                target="_blank"
-                href="https://analytics.sushi.com/bar"
-              >
-                <TYPE.white fontSize={14} color={theme.text1}>
-                  View SushiBar Stats <span style={{ fontSize: '11px' }}>↗</span>
-                </TYPE.white>
-              </ExternalLink>
-              {account && (
+                </RowBetween>
+                <RowBetween>
+                  <div>
+                    <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
+                      {`Stake your SUSHI into xSUSHI for ~15% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
+                    </TYPE.white>
+                    <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
+                      {`xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional to your share of the SushiBar.`}
+                    </TYPE.white>
+                  </div>
+                </RowBetween>
                 <ExternalLink
                   style={{ color: 'white', textDecoration: 'underline' }}
                   target="_blank"
-                  href={'http://analytics.sushi.com/users/' + account}
+                  href="https://analytics.sushi.com/bar"
                 >
                   <TYPE.white fontSize={14} color={theme.text1}>
-                    View your SushiBar Portfolio <span style={{ fontSize: '11px' }}>↗</span>
+                    View SushiBar Stats <span style={{ fontSize: '11px' }}>↗</span>
                   </TYPE.white>
                 </ExternalLink>
-              )}
-            </AutoColumn>
-          </CardSection>
-        </VoteCard>
+                {account && (
+                  <ExternalLink
+                    style={{ color: 'white', textDecoration: 'underline' }}
+                    target="_blank"
+                    href={'http://analytics.sushi.com/users/' + account}
+                  >
+                    <TYPE.white fontSize={14} color={theme.text1}>
+                      View your SushiBar Portfolio <span style={{ fontSize: '11px' }}>↗</span>
+                    </TYPE.white>
+                  </ExternalLink>
+                )}
+              </AutoColumn>
+            </CardSection>
+          </VoteCard>
+        </div>
         <AppBody>
           <SaaveHeader />
           <Wrapper id="swap-page">
