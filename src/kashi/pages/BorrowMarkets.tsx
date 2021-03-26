@@ -26,7 +26,7 @@ export default function KashiPairs() {
 
   // setup search
   // console.log('pairs:', pairs)
-  const options = { keys: ['symbol', 'name', 'address'] }
+  const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
     options
