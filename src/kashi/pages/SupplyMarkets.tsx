@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { transparentize } from 'polished'
+//import { transparentize } from 'polished'
 //import { Debugger } from 'components/Debugger'
 import { BaseCard } from '../../components/Card'
 import QuestionHelper from '../../components/QuestionHelper'
@@ -14,12 +14,14 @@ import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 
-import { Debugger } from 'components/Debugger'
+import { ChevronUp, ChevronDown } from 'react-feather'
 
-const PageWrapper = styled.div`
-  max-width: 1280px;
-  width: 100%;
-`
+//import { Debugger } from 'components/Debugger'
+
+// const PageWrapper = styled.div`
+//   max-width: 1280px;
+//   width: 100%;
+// `
 
 const StyledBaseCard = styled(BaseCard)<{ cornerRadiusTopNone: boolean }>`
   border: none;
@@ -34,7 +36,7 @@ export default function KashiPairs() {
   const pairs = useKashiPairs()
 
   // setup search
-  console.log('pairs:', pairs)
+  // console.log('pairs:', pairs)
   const options = { keys: ['symbol', 'name', 'address'] }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
@@ -44,8 +46,8 @@ export default function KashiPairs() {
 
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
-
-  console.log('items:', items)
+  //console.log('items:', items)
+  console.log('sortConfig:', sortConfig)
 
   return (
     <Layout
@@ -66,41 +68,73 @@ export default function KashiPairs() {
           <StyledBaseCard cornerRadiusTopNone={true}>
             <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 text-sm font-semibold text-gray-500">
               <div
-                className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer"
+                className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"
                 onClick={() => requestSort('symbol')}
               >
-                Pair
+                <div className="mr-2">Pair</div>
+                {sortConfig &&
+                  sortConfig.key === 'symbol' &&
+                  ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
               </div>
               <div
-                className="text-right hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
+                className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
                 onClick={() => requestSort('asset.symbol')}
               >
-                Lending
+                <div className="flex items-center float-right">
+                  <div className="mr-2">Lending</div>
+                  {sortConfig &&
+                    sortConfig.key === 'asset.symbol' &&
+                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                      (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                </div>
+              </div>
+              <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('oracle.name')}>
+                <div className="flex items-center float-right justify-end">
+                  <div className="mr-2 flex">
+                    Oracle <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
+                  </div>
+                  {sortConfig &&
+                    sortConfig.key === 'oracle.name' &&
+                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                      (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                </div>
               </div>
               <div
-                className="flex text-right hover:text-gray-400 item-center justify-end cursor-pointer"
-                onClick={() => requestSort('oracle.name')}
-              >
-                Oracle
-                <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
-              </div>
-              <div
-                className="text-right hover:text-gray-400 cursor-pointer"
+                className="hover:text-gray-400 cursor-pointer"
                 onClick={() => requestSort('details.apr.currentSupplyAPR')}
               >
-                Lending APR
+                <div className="flex items-center float-right">
+                  <div className="mr-2">Lending APR</div>
+                  {sortConfig &&
+                    sortConfig.key === 'details.apr.currentSupplyAPR' &&
+                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                      (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                </div>
               </div>
               <div
-                className="text-right hover:text-gray-400 cursor-pointer"
+                className="hover:text-gray-400 cursor-pointer"
                 onClick={() => requestSort('details.total.utilization.string')}
               >
-                Utilization
+                <div className="flex items-center float-right">
+                  <div className="mr-2">Utilization</div>
+                  {sortConfig &&
+                    sortConfig.key === 'details.total.utilization.string' &&
+                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                      (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                </div>
               </div>
               <div
                 className="text-right hover:text-gray-400 cursor-pointer"
                 onClick={() => requestSort('details.total.supply.usdString')}
               >
-                Total Supplied
+                <div className="flex items-center float-right">
+                  <div className="mr-2">Total Supplied</div>
+                  {sortConfig &&
+                    sortConfig.key === 'details.total.supply.usdString' &&
+                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                      (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                </div>
               </div>
             </div>
             <div className="flex-col space-y-2">
