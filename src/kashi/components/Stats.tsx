@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Card from 'components/Card'
 import { useKashiCounts, useKashiPairs } from 'kashi/context'
-import { formattedNum } from 'utils'
+//import { formattedNum } from 'utils'
 import sumBy from 'lodash/sumBy'
 import millify from 'millify'
 
@@ -28,7 +29,7 @@ export default function Header() {
           </div>
         </BaseCard>
       </div>
-      <div className="flex-none">
+      <Link className="flex-none text-white" to="/bento/kashi/positions/supply">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
@@ -40,8 +41,8 @@ export default function Header() {
             <div className="h-2 flex-1" style={{ background: '#6ca8ff' }} />
           </div>
         </BaseCard>
-      </div>
-      <div className="flex-none">
+      </Link>
+      <Link className="flex-none text-white" to="/bento/kashi/positions/borrow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
@@ -53,7 +54,7 @@ export default function Header() {
             <div className="h-2 flex-1" style={{ background: '#de5597' }} />
           </div>
         </BaseCard>
-      </div>
+      </Link>
     </div>
   )
 }
