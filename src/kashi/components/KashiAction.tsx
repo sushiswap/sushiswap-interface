@@ -497,9 +497,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
       } else if (action === 'Withdraw') {
         await removeWithdrawAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Borrow') {
-        await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
+        await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Repay') {
-        await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
+        await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Add Collateral') {
         await depositAddCollateral(
           pair.address,
@@ -520,9 +520,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
       } else if (action === 'Withdraw') {
         await removeAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       } else if (action === 'Borrow') {
-        await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
+        await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Repay') {
-        await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
+        await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
       } else if (action === 'Add Collateral') {
         await addCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
       } else if (action === 'Remove Collateral') {

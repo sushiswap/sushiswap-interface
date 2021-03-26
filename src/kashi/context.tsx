@@ -113,7 +113,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const pairAddresses = CLONE_ADDRESSES[chainId || 1]
+  const pairAddresses = CLONE_ADDRESSES[3]
 
   const kashiPairHelperContract = useKashiPairHelperContract()
 
@@ -127,6 +127,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
     //console.log('pairUserDetails_inputs:', account, pairAddresses)
     const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, pairAddresses)
+
     //console.log('pairUserDetails:', pairUserDetails)
 
     // Get list of tokens and fetch pricing information
@@ -159,6 +160,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
     const pairs = pairAddresses?.map((address, i) => {
       // Find pricing information
+
       const asset = pricing.find(pair => pair.address === pairDetails[i].asset)
       const assetUSD = asset.priceUSD
       const collateral = pricing.find(pair => pair.address === pairDetails[i].collateral)
@@ -189,7 +191,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
-            .div(pairUserDetails[1][0].oracleExchangeRate)
+            .div(pairUserDetails[1][i].oracleExchangeRate)
         : BigNumber.from(0)
 
       const maxBorrowableStored = pairUserDetails[1][i].currentExchangeRate.gt(BigNumber.from(0))
@@ -197,7 +199,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
-            .div(pairUserDetails[1][0].currentExchangeRate)
+            .div(pairUserDetails[1][i].currentExchangeRate)
         : BigNumber.from(0)
 
       const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
@@ -206,20 +208,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
       const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
 
-      // const safeMaxBorrowableLeftPossible2 = BigInt.min(pair.safeMaxBorrowable - pair.currentUserBorrowAmount, pair.totalBorrowable.amount.value)
-
       const safeMaxBorrowableLeftPossible = pairUserDetails[1][i].totalAssetAmount.lt(
         safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
       )
         ? pairUserDetails[1][i].totalAssetAmount
         : safeMaxBorrowable.sub(pairUserDetails[1][i].userBorrowAmount)
-
-      // const safeMaxBorrowableLeftPossible2 = BigNumber.from(, pair.totalBorrowable.amount.value)
-
-      console.log({
-        totalBorrowAmount: pairUserDetails[1][i].totalBorrowAmount.toString(),
-        userBorrowAmount: pairUserDetails[1][i].userBorrowAmount.toString()
-      })
 
       // console.log(pairUserDetails[1][i].userCollateralAmount)
 
@@ -347,17 +340,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           ).toString()
         ) *
           assetUSD
-
-      //const pairNetAPY =
-
-      console.log({
-        currentUserBorrowAmount: currentUserBorrowAmount.toString(),
-        maxBorrowable: maxBorrowable.toString(),
-        safeMaxBorrowable: safeMaxBorrowable.toString(),
-        safeMaxBorrowableLeft: safeMaxBorrowableLeft.toString(),
-        safeMaxBorrowableLeftPossible: safeMaxBorrowableLeftPossible.toString()
-      })
-
       return {
         id: address,
         address: address,
@@ -581,7 +563,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     })
   }, [account, getPairs, kashiPairHelperContract, pairAddresses])
 
-  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 1000 : 10000)
+  useIntervalTransaction(pollPairs, process.env.NODE_ENV !== 'production' ? 20000 : 10000)
 
   return (
     <KashiContext.Provider
