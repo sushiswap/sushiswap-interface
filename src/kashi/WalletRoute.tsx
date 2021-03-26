@@ -10,8 +10,9 @@ export const WalletRoute = ({ component: Component, children, ...rest }: any) =>
     <>
       <Route
         {...rest}
-        render={({ location, props, match }: any) =>
-          account ? (
+        render={({ location, props, match }: any) => {
+          //console.log('render:', location, props, match)
+          return account ? (
             Component ? (
               <Component {...props} {...rest} match={match} />
             ) : (
@@ -25,7 +26,7 @@ export const WalletRoute = ({ component: Component, children, ...rest }: any) =>
               }}
             />
           )
-        }
+        }}
       />
     </>
   )

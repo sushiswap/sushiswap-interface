@@ -106,7 +106,7 @@ export default function App() {
                 <PublicRoute exact path="/connect" component={Connect} />
                 {/* BentoApps */}
                 <Route exact strict path="/bento" component={Bento} />
-                <WalletRoute exact strict path="/bento/kashi" render={() => <Redirect to="/bento/kashi/supply" />} />
+                <Route exact strict path="/bento/kashi" render={() => <Redirect to="/bento/kashi/supply" />} />
                 <WalletRoute exact strict path="/bento/kashi/supply" component={SupplyMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/positions" component={KashiPositions} />
