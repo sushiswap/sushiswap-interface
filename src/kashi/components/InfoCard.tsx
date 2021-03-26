@@ -8,7 +8,7 @@ export default function InfoCard({ backgroundImage, title, description }: any) {
       className="h-full flex-col justify-between"
       style={{
         backgroundColor: theme.baseCard,
-        background: `url(${backgroundImage}), ${theme.baseCard}`,
+        background: `url(${backgroundImage}), ${theme.extraDarkPurple}`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
         backgroundPosition: 'center bottom',
