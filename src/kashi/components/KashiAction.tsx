@@ -396,14 +396,13 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                 {formattedPercent(
                   Math.min(
                     Number(
-                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
-                        ? Fraction.from(
-                            pair.currentUserBorrowAmount
-                              .mul(BigNumber.from('1000000000000000000'))
-                              .div(safeMaxBorrowable),
-                            BigNumber.from(10).pow(16)
-                          ).toString()
-                        : 0
+                      Fraction.from(
+                        pair.currentUserBorrowAmount
+                          .sub(formatToBalance(value, pair.asset.decimals).value)
+                          .mul(BigNumber.from('1000000000000000000'))
+                          .div(safeMaxBorrowable),
+                        BigNumber.from(10).pow(16)
+                      ).toString()
                     ),
                     100
                   )
@@ -412,14 +411,13 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
               <GradientDot
                 percent={Math.min(
                   Number(
-                    pair.currentUserBorrowAmount.gt(BigNumber.from(0))
-                      ? Fraction.from(
-                          pair.currentUserBorrowAmount
-                            .mul(BigNumber.from('1000000000000000000'))
-                            .div(safeMaxBorrowable),
-                          BigNumber.from(10).pow(16)
-                        ).toString()
-                      : 0
+                    Fraction.from(
+                      pair.currentUserBorrowAmount
+                        .sub(formatToBalance(value, pair.asset.decimals).value)
+                        .mul(BigNumber.from('1000000000000000000'))
+                        .div(safeMaxBorrowable),
+                      BigNumber.from(10).pow(16)
+                    ).toString()
                   ),
                   100
                 )}
