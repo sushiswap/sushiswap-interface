@@ -4,7 +4,8 @@ import styled, {
   ThemeProvider as StyledComponentsThemeProvider,
   createGlobalStyle,
   css,
-  DefaultTheme
+  DefaultTheme,
+  keyframes
 } from 'styled-components'
 import { useIsDarkMode } from '../state/user/hooks'
 import { Text, TextProps } from 'rebass'
@@ -254,6 +255,12 @@ html {
 }
 `
 
+const breatheAnimation = keyframes`
+  0% {filter: hue-rotate(0deg) brightness(1)}
+  100% {filter: hue-rotate(90deg) brightness(1.5)}
+  100% {filter: hue-rotate(360deg) brightness(1)}
+`
+
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
@@ -274,7 +281,7 @@ body {
 body::after {    
   content: "";
   background-image: ${({ theme }) =>
-    `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.8, '#dd5597')} 0%, ${transparentize(1, '#dd5597')} 100%)`};
+    `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.8, '#9d53f8')} 0%, ${transparentize(1, '#dd5597')} 100%)`};
 
   min-height: 100vh;
   background-position: 0 -30vh;
@@ -287,5 +294,4 @@ body::after {
   left: 0px;
   opacity: 1;
 }
-
 `
