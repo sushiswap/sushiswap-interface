@@ -30,9 +30,9 @@ export default function Positions() {
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Deposit tokens into BentoBox for all the yields.'}
+          title={'Mind the borrow limit.'}
           description={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            'Track your open borrow positions and your borow limits. If your borrow limit is approaching 80% we recommend you repay or add more collateral in order to avoid liquidation.'
           }
         />
       }

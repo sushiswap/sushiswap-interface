@@ -15,7 +15,7 @@ export default function InfoCard({ backgroundImage, title, description }: any) {
         borderRadius: '20px'
       }}
     >
-      <div className="p-8">
+      <div className="p-5">
         <div className="font-semibold text-2xl pb-4">{title}</div>
         <div className="font-base text-base text-gray-400">{description}</div>
       </div>

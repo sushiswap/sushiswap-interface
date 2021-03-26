@@ -54,9 +54,9 @@ export default function KashiPairs() {
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Deposit tokens into BentoBox for all the yields.'}
+          title={'Lend your assets, earn yields with no impermanent loss'}
           description={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            'Isolated lending pairs mitigate your risks as a asset supplier. Know exactly what collateral is availble to you in the event of counter party insolvency.'
           }
         />
       }

@@ -30,9 +30,9 @@ export default function Positions() {
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Deposit tokens into BentoBox for all the yields.'}
+          title={'Got yield? Track market interest rates and utilization'}
           description={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            'Earn interest from borrowers. Know exactly the denominated collateral. Track interest rates and see if your pairs are fully utilized.'
           }
         />
       }

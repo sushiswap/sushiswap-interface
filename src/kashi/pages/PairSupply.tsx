@@ -35,9 +35,9 @@ export default function KashiPair({
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Deposit tokens into BentoBox for all the yields.'}
+          title={'Supply assets for interest from borrowers.'}
           description={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            'Have assets you want to earn additional interest on? Supply them in isolated markets and earn interest from borrowers. Its as easy as deposit and withdraw whenever you want.'
           }
         />
       }

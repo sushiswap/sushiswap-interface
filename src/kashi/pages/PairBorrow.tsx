@@ -48,9 +48,9 @@ export default function KashiPair({
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Deposit tokens into BentoBox for all the yields.'}
+          title={'Add collateral in order to borrow assets'}
           description={
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            'Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements.'
           }
         />
       }
