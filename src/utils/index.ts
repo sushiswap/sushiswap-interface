@@ -131,22 +131,22 @@ export function gradientColor(percent: any) {
   if (percent < 70 && percent >= 60) {
     return '#de8400'
   }
-  if (percent < 60 && percent > 50) {
+  if (percent < 60 && percent >= 50) {
     return '#ce9700'
   }
-  if (percent < 50 && percent > 40) {
+  if (percent < 50 && percent >= 40) {
     return '#bba700'
   }
-  if (percent < 40 && percent > 30) {
+  if (percent < 40 && percent >= 30) {
     return '#a6b500'
   }
-  if (percent < 30 && percent > 20) {
+  if (percent < 30 && percent >= 20) {
     return '#8fc21b'
   }
-  if (percent < 20 && percent > 10) {
+  if (percent < 20 && percent >= 10) {
     return '#73ce42'
   }
-  if (percent < 10 && percent > 0) {
+  if (percent < 10 && percent >= 0) {
     return '#4ed864'
   }
   return '#ff3a31'
