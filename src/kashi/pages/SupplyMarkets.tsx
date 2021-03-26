@@ -47,7 +47,7 @@ export default function KashiPairs() {
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
   //console.log('items:', items)
-  console.log('sortConfig:', sortConfig)
+  //console.log('sortConfig:', sortConfig)
 
   return (
     <Layout
