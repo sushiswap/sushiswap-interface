@@ -265,7 +265,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, bentoBoxContract, library]
+    [account, addTransaction, chainId, library]
   )
 
   // Description: Remove asset to BentoBox
@@ -370,7 +370,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, bentoBoxContract, kashiPairHelperContract, library]
+    [account, addTransaction, bentoBoxContract, chainId, kashiPairHelperContract, library]
   )
 
   // Description: Add collateral from bentobox
@@ -435,7 +435,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, library]
+    [account, addTransaction, chainId, library]
   )
 
   // Description: remove into bentbox, withdraw into wallet
@@ -482,7 +482,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, bentoBoxContract, library, pairs]
+    [account, addTransaction, bentoBoxContract, chainId, library, pairs]
   )
 
   // Description: remove collateral into bentobox
@@ -594,7 +594,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, library, pairs]
+    [account, addTransaction, chainId, library, pairs]
   )
 
   // repay borrowed amount
@@ -687,7 +687,7 @@ const useKashi = () => {
         return e
       }
     },
-    [account, addTransaction, kashiPairHelperContract, library]
+    [account, addTransaction, chainId, kashiPairHelperContract, library]
   )
 
   // Type: Collateral, Asset
