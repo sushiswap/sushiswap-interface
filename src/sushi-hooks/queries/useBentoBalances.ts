@@ -17,8 +17,10 @@ import useTransactionStatus from '../useTransactionStatus'
 import Fraction from '../../constants/Fraction'
 import _ from 'lodash'
 
+import { CLONE_ADDRESSES } from 'kashi/constants'
+
 const useBentoBalances = () => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
 
   const bentoHelperContract = useBentoHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -32,6 +34,7 @@ const useBentoBalances = () => {
     // Todo:
     // Eventhough you can add and approve any erc20 token into Bentbox,
     // In the beginning we fetch all pairs on Kashi and determine the tokens that make sense to be deposited
+    console.log('Before log deploy...')
     const filter = bentoBoxContract?.filters.LogDeploy(kashiPairContract?.address, null)
     const events = await bentoBoxContract?.queryFilter(filter!)
     //const pairAddresses = events?.map(event => event.args?.[2])
@@ -40,7 +43,7 @@ const useBentoBalances = () => {
     //const pairAddresses = ['0x6e9d0853e65f06fab1d5d7d4f78c49bf3595fcb4', '0x6e9d0853e65f06fab1d5d7d4f78c49bf3595fcb4']
     //console.log('pairAddresses:', pairAddresses)
 
-    const pairDetails = await kashiPairHelperContract?.getPairs(pairAddresses)
+    const pairDetails = await kashiPairHelperContract?.getPairs(CLONE_ADDRESSES[chainId || 1])
     const tokensWithDuplicates: any[] = []
     pairDetails.map((pair: { collateral: string; asset: string }) => {
       tokensWithDuplicates.push(pair.collateral)
@@ -89,7 +92,6 @@ const useBentoBalances = () => {
       })
     )
     //console.log('tokensWithPricing:', tokensWithPricing, exchangeEthPrice)
-
     const balances = await bentoHelperContract?.getBalances(account, tokens)
     //console.log('balances:', balances, bentoHelperContract)
 
