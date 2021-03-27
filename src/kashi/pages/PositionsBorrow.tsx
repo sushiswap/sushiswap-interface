@@ -101,11 +101,11 @@ const BorrowPositions = ({ borrowPositions }: any) => {
                       <div className="flex space-x-2 col-span-1">
                         <img
                           src={getTokenIcon(pair.collateral.address)}
-                          className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                          className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                         />
                         <img
                           src={getTokenIcon(pair.asset.address)}
-                          className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                          className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                         />
                       </div>
                       <div className="text-left hidden sm:block pl-4">

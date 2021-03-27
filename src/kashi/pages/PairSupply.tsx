@@ -87,7 +87,7 @@ export default function KashiPair({
             >
               <img
                 src={pair && getTokenIcon(pair?.collateral.address)}
-                className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
               />
             </a>
             <a
@@ -105,7 +105,7 @@ export default function KashiPair({
             >
               <img
                 src={pair && getTokenIcon(pair?.asset.address)}
-                className="block w-10 y-10 sm:w-12 sm:y-12 rounded-lg"
+                className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
               />
             </a>
           </div>
