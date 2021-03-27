@@ -6,6 +6,7 @@ import INCH from '../../assets/kashi/tokens/1inch-square.png'
 import AAVE from '../../assets/kashi/tokens/aave-square.png'
 import BAT from '../../assets/kashi/tokens/bat-square.png'
 import COMP from '../../assets/kashi/tokens/comp-square.png'
+import COVER from '../../assets/kashi/tokens/cover-square.png'
 import DAI from '../../assets/kashi/tokens/dai-square.png'
 import LINK from '../../assets/kashi/tokens/link-square.png'
 import SAI from '../../assets/kashi/tokens/sai-square.png'
@@ -25,6 +26,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
     [String('0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9').toLowerCase()]: AAVE,
     [String('0xc00e94Cb662C3520282E6f5717214004A7f26888').toLowerCase()]: COMP,
+    [String('0x4688a8b1f292fdab17e9a90c8bc379dc1dbd8713').toLowerCase()]: COVER,
     [String('0x6B175474E89094C44Da98b954EedeAC495271d0F').toLowerCase()]: DAI,
     [String('0x514910771AF9Ca656af840dff83E8264EcF986CA').toLowerCase()]: LINK,
     [String('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2').toLowerCase()]: SUSHI,

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
+import { ChainId } from '@sushiswap/sdk'
 import { RowBetween } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
 import { DarkCard, BaseCard } from '../../components/Card'
@@ -39,7 +40,6 @@ const StyledBaseCard = styled(BaseCard)`
 export default function BentoBalances() {
   const history = useHistory()
   const theme = useContext(ThemeContext)
-  const { account } = useActiveWeb3React()
 
   // todo: include totalDeposits in balances
   const balances = useBentoBalances()
@@ -160,11 +160,26 @@ interface TokenBalanceProps {
 const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
   const [expand, setExpand] = useState<boolean>(false)
   const tokenBalance = formatFromBalance(tokenDetails?.amount?.value, tokenDetails?.amount?.decimals)
+  const { account, chainId } = useActiveWeb3React()
   return (
     <DarkCard padding={'0px'} marginBottom={'10px'}>
       <div className="p-2 sm:p-4 flex justify-between">
         <div className="flex items-center">
-          <img src={getTokenIcon(tokenAddress)} className="block w-10 sm:w-14 rounded-lg mr-4" />
+          <a
+            href={
+              `${
+                chainId === ChainId.MAINNET
+                  ? 'https://www.etherscan.io/address/'
+                  : chainId === ChainId.ROPSTEN
+                  ? 'https://ropsten.etherscan.io/address/'
+                  : null
+              }` + tokenAddress
+            }
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={getTokenIcon(tokenAddress)} className="block w-10 sm:w-14 rounded-lg mr-4" />
+          </a>
           <div className="hidden sm:block  font-semibold text-base md:text-lg">{tokenDetails && tokenDetails.name}</div>
         </div>
         <div className="flex items-center">
