@@ -218,7 +218,6 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
         </div>
       )
     } else if (action === 'Withdraw') {
-      console.log('Withdraw:', pair.user.supply.string, value, Number(pair.user.supply.string) - Number(value))
       return (
         <div className="flex justify-between">
           <TYPE.mediumHeader color={theme.mediumEmphesisText}>Balance </TYPE.mediumHeader>
