@@ -3,6 +3,7 @@ import { TeardropCard, Navigation } from '.'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import MarketsNavigation from './MarketsNavigation'
 import Card from './Card'
+import { Warning } from './Alert'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -32,6 +33,12 @@ export default function Layout({ left = undefined, children = undefined, right =
             </div>
             <Navigation />
           </div>
+        </div>
+        <div className="flex col-span-10 pb-6 px-2 justify-center">
+          <Warning predicate={true}>
+            The Kashi staging pools will soon be replaced with production pools, so bare this in mind before interacting
+            with them.
+          </Warning>
         </div>
       </div>
       <div className={`md:px-4 grid grid-cols-10 gap-4`}>
