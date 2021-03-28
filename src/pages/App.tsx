@@ -41,6 +41,8 @@ import Saave from './Saave'
 
 import ComingSoonModal from '../components/ComingSoonModal'
 
+import { hot } from 'react-hot-loader'
+
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -77,7 +79,7 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
-export default function App() {
+function App() {
   const { chainId } = useActiveWeb3React()
   return (
     <Suspense fallback={null}>
@@ -131,3 +133,5 @@ export default function App() {
     </Suspense>
   )
 }
+
+export default hot(module)(App)

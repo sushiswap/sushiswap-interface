@@ -6735,10 +6735,10 @@ csstype@^2.2.0, csstype@^2.5.7, csstype@^2.6.6, csstype@^2.6.9:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.11.tgz#452f4d024149ecf260a852b025e36562a253ffc5"
   integrity sha512-l8YyEC9NBkSm783PFTvh0FmJy7s5pFKrDp49ZL7zBGX3fWkO+N4EEyan1qqp8cwPLDcD0OSdyY6hAMoxp34JFw==
 
-customize-cra@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/customize-cra/-/customize-cra-0.9.1.tgz#76b42c4f537c16329eccc09cfefd804d04c81550"
-  integrity sha512-LISruJ6ak6u+HVQ2vPI+HE4inpPugB73KB9YIpE2J1TW5L1Vrjzm3l2Yupyy+1alJGwAd5GAb5Hfc9qmSUuHow==
+customize-cra@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/customize-cra/-/customize-cra-1.0.0.tgz#73286563631aa08127ad4d30a2e3c89cf4e93c8d"
+  integrity sha512-DbtaLuy59224U+xCiukkxSq8clq++MOtJ1Et7LED1fLszWe88EoblEYFBJ895sB1mC6B4uu3xPT/IjClELhMbA==
   dependencies:
     lodash.flow "^3.5.0"
 
@@ -14847,6 +14847,13 @@ react-app-polyfill@^1.0.6:
     raf "^3.4.1"
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
+
+react-app-rewired@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/react-app-rewired/-/react-app-rewired-2.1.8.tgz#e192f93b98daf96889418d33d3e86cf863812b56"
+  integrity sha512-wjXPdKPLscA7mn0I1de1NHrbfWdXz4S1ladaGgHVKdn1hTgKK5N6EdGIJM0KrS6bKnJBj7WuqJroDTsPKKr66Q==
+  dependencies:
+    semver "^5.6.0"
 
 react-clientside-effect@^1.2.2:
   version "1.2.2"
