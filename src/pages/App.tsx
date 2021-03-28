@@ -5,7 +5,6 @@ import { useActiveWeb3React } from '../hooks/index'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 
-import AddressClaimModal from '../components/claim/AddressClaimModal'
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
 import URLWarning from '../components/Header/URLWarning'
@@ -78,12 +77,6 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
-function TopLevelModals() {
-  const open = useModalOpen(ApplicationModal.ADDRESS_CLAIM)
-  const toggle = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-  return <AddressClaimModal isOpen={open} onDismiss={toggle} />
-}
-
 export default function App() {
   const { chainId } = useActiveWeb3React()
   return (
@@ -98,8 +91,6 @@ export default function App() {
         <BodyWrapper>
           <Popups />
           <Polling />
-          <TopLevelModals />
-          <ComingSoonModal />
           <Web3ReactManager>
             <Switch>
               {/* Tools */}
