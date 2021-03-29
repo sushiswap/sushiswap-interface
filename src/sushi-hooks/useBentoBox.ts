@@ -1,13 +1,9 @@
 import { useCallback } from 'react'
 import { useBentoBoxContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
-
 import { useActiveWeb3React } from '../hooks'
-import { BalanceProps } from './queries/useTokenBalance'
+import { BalanceProps } from './useTokenBalance'
 import { isAddress } from '../utils'
-
-//import Fraction from '../constants/Fraction'
-import { ethers } from 'ethers'
 import { WETH } from '../kashi/constants'
 
 const useBentoBox = () => {

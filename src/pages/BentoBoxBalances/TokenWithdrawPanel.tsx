@@ -1,24 +1,17 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { darken } from 'polished'
-
 import { RowBetween } from '../../components/Row'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { TYPE } from '../../theme'
-import { Text } from 'rebass'
-
-import { AutoColumn } from '../../components/Column'
-import { ButtonPrimaryNormal } from '../../components/Button'
 import { Dots } from '../Pool/styleds'
-
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
-
 import { useBentoBoxContract } from '../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../sushi-hooks/useApproveCallback'
 import useBentoBox from 'sushi-hooks/useBentoBox'
-import useBentoBalance from '../../sushi-hooks/queries/useBentoBalance'
+import useBentoBalance from '../../sushi-hooks/useBentoBalance'
 
 import { formatFromBalance, formatToBalance } from '../../utils'
 

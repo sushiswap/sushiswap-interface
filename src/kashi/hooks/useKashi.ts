@@ -6,25 +6,25 @@ import {
   useKashiPairContract,
   useSushiSwapSwapper,
   useKashiPairHelperContract
-} from './useContract'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from '../hooks'
+} from '../../sushi-hooks/useContract'
+import { useTransactionAdder } from '../../state/transactions/hooks'
+import { useActiveWeb3React } from '../../hooks'
 
-import ERC20_ABI from '../constants/abis/erc20.json'
-import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
-import { isAddressString, getContract } from '../utils'
+import ERC20_ABI from '../../constants/abis/erc20.json'
+import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
+import { isAddressString, getContract } from '../../utils'
 
 import { ethers } from 'ethers'
 
-import { BalanceProps } from './queries/useTokenBalance'
+import { BalanceProps } from '../../sushi-hooks/useTokenBalance'
 import { BigNumber } from '@ethersproject/bignumber'
 
-import { BASE_SWAPPER } from '../constants'
-import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
+import { BASE_SWAPPER } from '../../constants'
+import BASE_SWAPPER_ABI from '../../constants/sushiAbis/swapper.json'
 import { ChainId } from '@sushiswap/sdk'
-import { getSigner } from '../utils'
+import { getSigner } from '../../utils'
 import { useKashiPairs } from 'kashi/context'
-import { WETH } from '../kashi/constants'
+import { WETH } from '../constants'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1

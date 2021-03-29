@@ -1,6 +1,30 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
 
+// Functions that need accrue to be called
+export const ACTION_ADD_ASSET = 1
+export const ACTION_REPAY = 2
+export const ACTION_REMOVE_ASSET = 3
+export const ACTION_REMOVE_COLLATERAL = 4
+export const ACTION_BORROW = 5
+export const ACTION_GET_REPAY_SHARE = 6
+export const ACTION_GET_REPAY_PART = 7
+export const ACTION_ACCRUE = 8
+
+// Functions that don't need accrue to be called
+export const ACTION_ADD_COLLATERAL = 10
+export const ACTION_UPDATE_EXCHANGE_RATE = 11
+
+// Function on BentoBox
+export const ACTION_BENTO_DEPOSIT = 20
+export const ACTION_BENTO_WITHDRAW = 21
+export const ACTION_BENTO_TRANSFER = 22
+export const ACTION_BENTO_TRANSFER_MULTIPLE = 23
+export const ACTION_BENTO_SETAPPROVAL = 24
+
+// Any external call (except to BentoBox)
+export const ACTION_CALL = 30
+
 export const MINIMUM_TARGET_UTILIZATION = BigNumber.from('700000000000000000') // 70%
 
 export const MAXIMUM_TARGET_UTILIZATION = BigNumber.from('800000000000000000') // 80%
@@ -93,6 +117,7 @@ export const CLONE_ADDRESSES: ChainKashiList = {
   ]
 }
 
+// TODO: Remove, this is redundant, use WETH map from SDK which supports all networks
 export const WETH: {
   [chainId in ChainId]?: string
 } = {

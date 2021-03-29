@@ -1,5 +1,5 @@
 import React from 'react'
-import useKashi from '../../sushi-hooks/useKashi'
+import useKashi from 'kashi/hooks/useKashi'
 //import useBentoBalances from '../../sushi-hooks/queries/useBentoBalances'
 //import { BigNumber } from '@ethersproject/bignumber'
 //import { useKashiPair } from 'context/kashi'
@@ -11,10 +11,9 @@ import {
   BORING_HELPER_ADDRESS,
   KASHI_ADDRESS,
   KASHI_HELPER_ADDRESS,
-  SUSHISWAP_SWAPPER_ADDRESS
+  SUSHISWAP_SWAPPER_ADDRESS,
+  CLONE_ADDRESSES
 } from 'kashi'
-
-import { CLONE_ADDRESSES } from 'kashi/constants'
 
 const TestBed = () => {
   const { chainId } = useActiveWeb3React()

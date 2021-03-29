@@ -1,18 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from '../../hooks'
-import ERC20_ABI from '../../constants/abis/erc20.json'
-import { useContract } from '../useContract'
-//import { useBlockNumber } from '../../state/application/hooks'
-import { isAddress } from '../../utils'
-import { ethers } from 'ethers'
-
-import useTransactionStatus from '../useTransactionStatus'
-
-import { WETH } from '../../kashi/constants'
-
-//import Fraction from '../../constants/Fraction'
+import { useActiveWeb3React } from 'hooks'
+import ERC20_ABI from 'constants/abis/erc20.json'
+import { useContract } from './useContract'
+import { isAddress } from 'utils'
+import useTransactionStatus from './useTransactionStatus'
+import { WETH } from 'kashi/constants'
 
 export interface BalanceProps {
   value: BigNumber

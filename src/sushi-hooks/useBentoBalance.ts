@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useActiveWeb3React } from '../../hooks'
-import { useContract, useBentoBoxContract, useBentoHelperContract } from '../useContract'
-import ERC20_ABI from '../../constants/abis/erc20.json'
-import { isAddress } from '../../utils'
+import { useActiveWeb3React } from '../hooks'
+import { useContract, useBentoBoxContract, useBentoHelperContract } from './useContract'
+import ERC20_ABI from '../constants/abis/erc20.json'
+import { isAddress } from '../utils'
 import { BigNumber } from '@ethersproject/bignumber'
-import useTransactionStatus from '../useTransactionStatus'
+import useTransactionStatus from './useTransactionStatus'
 
 const useBentoBalance = (tokenAddress: string) => {
   const { account } = useActiveWeb3React()

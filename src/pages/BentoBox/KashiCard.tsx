@@ -1,18 +1,14 @@
 import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
 import { Text } from 'rebass'
 import { RowBetween } from '../../components/Row'
-import { ButtonSecondary, ButtonEmpty } from '../../components/Button'
+import { ButtonSecondary } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import { DarkCard } from '../../components/Card'
-
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from 'hooks'
 import Web3Status from 'components/Web3Status'
-
-import useKashi from '../../sushi-hooks/useKashi'
-
+import useKashi from 'kashi/hooks/useKashi'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 
 export const FixedHeightRow = styled(RowBetween)`

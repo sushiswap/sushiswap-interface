@@ -332,9 +332,11 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008'
 ]
 
-
 // BentoBox Swappers
 export const BASE_SWAPPER: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: '0x0',
   [ChainId.ROPSTEN]: '0xe4E2540D421e56b0B786d40c5F5268891288c6fb'
 }
+
+// Boring Helper
+export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'

@@ -1,20 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from 'hooks'
 import {
   useBentoBoxContract,
   useBentoHelperContract,
   useKashiPairContract,
   useKashiPairHelperContract
-} from '../useContract'
-
-import ERC20_ABI from '../../constants/abis/erc20.json'
-import { isAddressString, getContract } from '../../utils'
+} from './useContract'
+import ERC20_ABI from 'constants/abis/erc20.json'
+import { isAddressString, getContract } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import sushiData from '@sushiswap/sushi-data'
-import getMainnetAddress from './getMainnetAddress'
-
-import useTransactionStatus from '../useTransactionStatus'
-import Fraction from '../../constants/Fraction'
+import { getMainnetAddress } from 'kashi/functions'
+import useTransactionStatus from './useTransactionStatus'
+import Fraction from 'constants/Fraction'
 import _ from 'lodash'
 
 import { CLONE_ADDRESSES } from 'kashi/constants'

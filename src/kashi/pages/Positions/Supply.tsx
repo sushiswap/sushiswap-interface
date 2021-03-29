@@ -1,11 +1,10 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { transparentize } from 'polished'
 import { BaseCard } from '../../../components/Card'
 import { FixedScrollable } from '../../components'
-import getTokenIcon from '../../../sushi-hooks/queries/getTokenIcons'
-import { formattedPercent, formattedNum } from '../../../utils'
+import { getTokenIcon } from 'kashi/functions'
+import { formattedPercent, formattedNum } from 'utils'
 
 const StyledBaseCard = styled(BaseCard)`
   border: none;

@@ -5,7 +5,7 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import Card from 'components/Card'
 import { useKashiPair } from 'kashi/context'
-import getTokenIcon from 'sushi-hooks/queries/getTokenIcons'
+import { getTokenIcon } from 'kashi/functions'
 import { KashiAction, CardHeader, PrimaryTabs } from '../../kashi/components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { TYPE } from 'theme'
@@ -13,7 +13,6 @@ import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import { InfoCard, Layout } from '../../kashi/components'
 import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
-
 import { GradientDot } from '../components'
 
 export default function KashiPair({
