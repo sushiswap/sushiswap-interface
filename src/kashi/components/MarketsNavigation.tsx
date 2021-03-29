@@ -5,7 +5,7 @@ import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 export default function MarketsNavigation() {
   const location = useLocation()
   return (
-    <nav className="-mb-px flex space-x-4 justify-center pb-2 md:pb-0 md:justify-start ">
+    <nav className="-mb-px flex space-x-4 justify-center pb-2 md:pb-0 md:justify-start items-baseline">
       {/* <NavLink to="/bento/kashi" className="border-transparent py-2 px-1 border-b-2">
         <div
           className={
@@ -15,7 +15,7 @@ export default function MarketsNavigation() {
           <div className={'whitespace-nowrap text-base mr-2'}>All</div>
         </div>
       </NavLink> */}
-      <NavLink to="/bento/kashi/supply" className="border-transparent py-2 px-1 border-b-2">
+      <NavLink to="/bento/kashi/supply" className="border-transparent px-1 border-b-2">
         <div
           className={
             'flex items-center font-medium ' +
@@ -25,7 +25,7 @@ export default function MarketsNavigation() {
           <div className="whitespace-nowrap text-base mr-2">Lend</div>
         </div>
       </NavLink>
-      <NavLink to="/bento/kashi/borrow" className="border-transparent py-2 px-1 border-b-2">
+      <NavLink to="/bento/kashi/borrow" className="border-transparent px-1 border-b-2">
         <div
           className={
             'flex items-center font-medium ' +
@@ -35,7 +35,7 @@ export default function MarketsNavigation() {
           <div className="whitespace-nowrap text-base mr-2">Borrow</div>
         </div>
       </NavLink>
-      <NavLink to="/bento/balances" className="border-transparent py-2 px-1 border-b-2">
+      <NavLink to="/bento/balances" className="border-transparent px-1 border-b-2">
         <div
           className={
             'flex items-center font-medium ' +
