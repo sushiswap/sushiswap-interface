@@ -24,7 +24,7 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
         <div className="px-6 pb-2 md:px-2 md:pb-4 flex md:hidden justify-between">
           <div className="float-right items-center w-full">
             <div className="flex justify-between items-center w-full">
-              <div className="font-semibold pb-2">
+              <div className="hidden sm:block font-semibold pb-2">
                 {(() => {
                   switch (pathname) {
                     case '/bento/kashi':

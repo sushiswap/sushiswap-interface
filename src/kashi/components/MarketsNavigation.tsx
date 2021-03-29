@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 export default function MarketsNavigation() {
   const location = useLocation()
@@ -21,7 +22,7 @@ export default function MarketsNavigation() {
             (location.pathname === '/bento/kashi/supply' ? 'text-white' : 'text-gray-500')
           }
         >
-          <div className="whitespace-nowrap text-base mr-2">Supply</div>
+          <div className="whitespace-nowrap text-base mr-2">Lend</div>
         </div>
       </NavLink>
       <NavLink to="/bento/kashi/borrow" className="border-transparent py-2 px-1 border-b-2">
@@ -32,6 +33,17 @@ export default function MarketsNavigation() {
           }
         >
           <div className="whitespace-nowrap text-base mr-2">Borrow</div>
+        </div>
+      </NavLink>
+      <NavLink to="/bento/balances" className="border-transparent py-2 px-1 border-b-2">
+        <div
+          className={
+            'flex items-center font-medium ' +
+            (location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500')
+          }
+        >
+          <img src={BentoBoxLogo} className="block w-6" />
+          <div className="whitespace-nowrap text-base ml-2">My Bento</div>
         </div>
       </NavLink>
     </nav>

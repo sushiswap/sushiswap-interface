@@ -31,7 +31,7 @@ export default function Layout({ left = undefined, children = undefined, right =
             <div className="hidden lg:block">
               <MarketsNavigation />
             </div>
-            <Navigation />
+            {/* <Navigation /> */}
           </div>
         </div>
         <div className="flex col-span-10 pb-6 px-2 justify-center">
