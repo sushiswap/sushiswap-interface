@@ -21,17 +21,17 @@ export default function Layout({ left = undefined, children = undefined, right =
     >
       <div className={`md:px-4 grid grid-cols-10 gap-4`}>
         <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
-          <div className="flex items-center pb-3">
-            <img src={KashiLogo} className="block w-20 lg:w-28 mr-2" />
+          <div className="flex items-baseline">
+            <img src={KashiLogo} className="block w-20 lg:w-26 mr-2" />
             <div className="font-semibold text-2xl">Kashi</div>
           </div>
         </div>
         <div className="flex col-span-10 lg:col-span-8 items-end">
-          <div className="w-full flex justify-center lg:justify-between pb-2 px-6">
+          <div className="w-full flex justify-center lg:justify-between px-6">
             <div className="hidden lg:block">
               <MarketsNavigation />
             </div>
-            <Navigation />
+            {/* <Navigation /> */}
           </div>
         </div>
         <div className="flex col-span-10 pb-6 px-2 justify-center">
