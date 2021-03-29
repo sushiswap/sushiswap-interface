@@ -5,14 +5,15 @@ export default function InfoCard({ backgroundImage, title, description }: any) {
   const theme = useContext(ThemeContext)
   return (
     <div
-      className="h-full flex-col justify-between"
+      className="flex-col justify-between"
       style={{
         backgroundColor: theme.baseCard,
         background: `url(${backgroundImage}), ${theme.extraDarkPurple}`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
         backgroundPosition: 'center bottom',
-        borderRadius: '20px'
+        borderRadius: '20px',
+        minHeight: '40rem'
       }}
     >
       <div className="p-5">
