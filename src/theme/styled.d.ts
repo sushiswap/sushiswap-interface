@@ -19,6 +19,8 @@ export interface Colors {
   bg3: Color
   bg4: Color
   bg5: Color
+  bg6: Color
+  bg7: Color
 
   modalBG: Color
   advancedBG: Color
@@ -47,6 +49,19 @@ export interface Colors {
   blue1: Color
 
   borderRadius: string
+  darkMode: boolean
+
+  // BentoBox/Kashi
+  lowEmphesisText: Color
+  mediumEmphesisText: Color
+  highEmphesisText: Color
+  extraHighEmphesisText: Color
+  mediumDarkPurple: Color
+  extraDarkPurple: Color
+  primaryPink: Color
+  primaryBlue: Color
+  baseCard: Color
+  alertYellow: Color
 }
 
 export interface Grids {

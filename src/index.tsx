@@ -1,5 +1,7 @@
-import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
+import './styles.css'
 import 'inter-ui'
+import '@fontsource/dm-sans/700.css'
+import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import React, { StrictMode } from 'react'
 import { isMobile } from 'react-device-detect'
 import ReactDOM from 'react-dom'

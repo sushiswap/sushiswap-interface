@@ -22,6 +22,8 @@ import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
+import { BORING_HELPER_ADDRESS } from '../constants'
+import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
 
 // returns null on errors
 function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -127,4 +129,8 @@ export function useSocksController(): Contract | null {
     UNISOCKS_ABI,
     false
   )
+}
+
+export function useBoringHelperContract(): Contract | null {
+  return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
 }

@@ -11,7 +11,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance, { BalanceProps } from '../../sushi-hooks/queries/useTokenBalance'
+import useTokenBalance, { BalanceProps } from 'sushi-hooks/useTokenBalance'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatFromBalance, formatToBalance } from '../../utils'
 
@@ -188,7 +188,7 @@ export default function CurrencyInputPanel({
     maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
   }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
 
-  console.log('state:', depositValue, maxSelected)
+  // console.log('state:', depositValue, maxSelected)
 
   return (
     <>

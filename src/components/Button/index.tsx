@@ -170,6 +170,7 @@ export const ButtonSecondary = styled(Base)`
   background-color: transparent;
   font-size: 16px;
   border-radius: ${({ theme }) => theme.borderRadius};
+  border-radius: ${({ borderRadius }) => borderRadius};
   padding: ${({ padding }) => (padding ? padding : '10px')};
 
   &:focus {
@@ -193,22 +194,44 @@ export const ButtonSecondary = styled(Base)`
 `
 
 export const ButtonPink = styled(Base)`
-  background-color: ${({ theme }) => theme.primary1};
+  background-color: ${({ theme }) => theme.primaryPink};
   color: white;
 
   &:focus {
-    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primary1)};
-    background-color: ${({ theme }) => darken(0.05, theme.primary1)};
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primaryPink)};
+    background-color: ${({ theme }) => darken(0.05, theme.primaryPink)};
   }
   &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.primary1)};
+    background-color: ${({ theme }) => darken(0.05, theme.primaryPink)};
   }
   &:active {
-    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primary1)};
-    background-color: ${({ theme }) => darken(0.1, theme.primary1)};
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primaryPink)};
+    background-color: ${({ theme }) => darken(0.1, theme.primaryPink)};
   }
   &:disabled {
-    background-color: ${({ theme }) => theme.primary1};
+    background-color: ${({ theme }) => theme.primaryPink};
+    opacity: 50%;
+    cursor: auto;
+  }
+`
+
+export const ButtonBlue = styled(Base)`
+  background-color: ${({ theme }) => theme.primaryBlue};
+  color: white;
+
+  &:focus {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primaryBlue)};
+    background-color: ${({ theme }) => darken(0.05, theme.primaryBlue)};
+  }
+  &:hover {
+    background-color: ${({ theme }) => darken(0.05, theme.primaryBlue)};
+  }
+  &:active {
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.primaryBlue)};
+    background-color: ${({ theme }) => darken(0.1, theme.primaryBlue)};
+  }
+  &:disabled {
+    background-color: ${({ theme }) => theme.primaryBlue};
     opacity: 50%;
     cursor: auto;
   }

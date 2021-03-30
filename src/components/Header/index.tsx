@@ -47,7 +47,7 @@ const HeaderFrame = styled.div`
   width: 100%;
   top: 0;
   position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
   padding: 1rem;
   z-index: 2;
   ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -346,15 +346,14 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/sushi'}>
-            SUSHI
-          </StyledNavLink> */}
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Vote
-          </StyledNavLink> */}
           {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
               Stake
+            </StyledNavLink>
+          )}
+          {(chainId === ChainId.ROPSTEN || chainId === ChainId.MAINNET) && (
+            <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
+              Apps
             </StyledNavLink>
           )}
           {chainId && (
