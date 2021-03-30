@@ -36,9 +36,9 @@ export default function LendingPair({
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Supply assets for interest from borrowers.'}
+          title={'Lend assets for interest from borrowers.'}
           description={
-            'Have assets you want to earn additional interest on? Supply them in isolated markets and earn interest from borrowers. Its as easy as deposit and withdraw whenever you want.'
+            'Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It\'s as easy as deposit and withdraw whenever you want.'
           }
         />
       }

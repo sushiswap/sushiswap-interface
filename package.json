@@ -119,7 +119,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "build:styles": "postcss tailwind.css -o src/styles.css",
-    "prebuild": "NODE_ENV=production npm run build:styles",
+    "prebuild": "cross-env NODE_ENV=production npm run build:styles",
     "prestart": "npm run build:styles",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
   },

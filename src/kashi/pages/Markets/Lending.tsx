@@ -54,9 +54,9 @@ export default function KashiPairs() {
       left={
         <InfoCard
           backgroundImage={DepositGraphic}
-          title={'Lend your assets, earn yields with no impermanent loss'}
+          title={'Lend your assets, earn yield with no impermanent loss'}
           description={
-            'Isolated lending pairs mitigate your risks as a asset supplier. Know exactly what collateral is availble to you in the event of counter party insolvency.'
+            'Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency.'
           }
         />
       }

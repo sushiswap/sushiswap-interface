@@ -36,7 +36,7 @@ export default function Layout({ left = undefined, children = undefined, right =
         </div>
         <div className="flex col-span-10 pb-6 px-2 justify-center">
           <Warning predicate={true}>
-            The Kashi staging pools will soon be replaced with production pools, so please bear this in mind before
+            The Kashi staging markets will soon be replaced with production markets, so please bear this in mind before
             interacting with them.
           </Warning>
         </div>

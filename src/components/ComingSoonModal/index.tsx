@@ -101,7 +101,7 @@ export default function ComingSoonModal() {
             </TYPE.subHeader>
             <TYPE.white fontWeight={400}>
               The first app in the BentoBox system is Kashi, a<br /> gas-optimised lending and margin trading platform
-              with risk-isolated pairs.
+              with risk-isolated markets.
             </TYPE.white>
           </AutoRow>
         </ModalLower>
