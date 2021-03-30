@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId, WETH } from '@sushiswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
@@ -25,9 +25,13 @@ export default function LendingPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
+
   const theme = useTheme()
 
   if (!pair) return null
+
+  pair.asset.symbol = pair.asset.address === WETH[chainId || 1].address ? 'ETH' : pair.asset.symbol
+  pair.collateral.symbol = pair.collateral.address === WETH[chainId || 1].address ? 'ETH' : pair.collateral.symbol
 
   // console.log({ pair })
 
@@ -38,7 +42,7 @@ export default function LendingPair({
           backgroundImage={DepositGraphic}
           title={'Lend assets for interest from borrowers.'}
           description={
-            'Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It\'s as easy as deposit and withdraw whenever you want.'
+            "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
           }
         />
       }

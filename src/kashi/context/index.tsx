@@ -1,5 +1,5 @@
 import { useActiveWeb3React } from 'hooks'
-import React, { createContext, useContext, useReducer, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, useCallback, Component } from 'react'
 import { useBentoBoxContract, useKashiPairContract } from 'sushi-hooks/useContract'
 import Fraction from '../../constants/Fraction'
 import { ChainId } from '@sushiswap/sdk'

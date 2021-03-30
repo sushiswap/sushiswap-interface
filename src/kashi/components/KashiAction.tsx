@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import useTheme from 'hooks/useTheme'
+import { WETH, ETHER } from '@sushiswap/sdk'
 import { TYPE } from 'theme'
 import { Warning, Dots } from '.'
 import { ButtonBlue, ButtonPink } from 'components/Button'
@@ -135,13 +136,15 @@ interface KashiActionProps {
 
 export default function KashiAction({ pair, action, direction, label }: KashiActionProps) {
   const theme = useTheme()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const bentoBoxContract = useBentoBoxContract()
 
   const token =
     action === 'Deposit' || action === 'Withdraw' || action === 'Borrow' || action === 'Repay'
       ? pair.asset
       : pair.collateral
+
+  token.symbol = token.address === WETH[chainId || 1].address ? 'ETH' : token.symbol
 
   const [approvalState, approve] = useApproveCallback(token.address, bentoBoxContract?.address)
 
@@ -623,6 +626,14 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
     setPendingTx(false)
   }
 
+  const showApprove =
+    (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) &&
+    (action === 'Deposit' || action === 'Add Collateral' || action === 'Repay') &&
+    ((direction === 'From' && sourceOrDestination !== 'BentoBox') || direction === 'To') &&
+    direction === 'From' &&
+    sourceOrDestination === 'Wallet' &&
+    token.address !== WETH[chainId || 1].address
+
   return (
     <Wrapper>
       <TYPE.largeHeader color={theme.highEmphesisText}>
@@ -663,17 +674,15 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
 
           <Warning predicate={getWarningPredicate()}>{getWarningMessage()}</Warning>
         </>
-        {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) &&
-          (action === 'Deposit' || action === 'Add Collateral' || action === 'Repay') &&
-          ((direction === 'From' && sourceOrDestination !== 'BentoBox') || direction === 'To') && (
-            <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
-              {approvalState === ApprovalState.PENDING ? (
-                <Dots>Approving {token.symbol}</Dots>
-              ) : (
-                `Approve ${token.symbol}`
-              )}
-            </ButtonBlue>
-          )}
+        {showApprove && (
+          <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
+            {approvalState === ApprovalState.PENDING ? (
+              <Dots>Approving {token.symbol}</Dots>
+            ) : (
+              `Approve ${token.symbol}`
+            )}
+          </ButtonBlue>
+        )}
 
         {!getWarningPredicate() && value !== '' && value !== '0' && (
           <div>

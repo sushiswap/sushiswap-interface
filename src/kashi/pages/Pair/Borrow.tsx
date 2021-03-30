@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId, WETH } from '@sushiswap/sdk'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
@@ -34,11 +34,13 @@ export default function BorrowPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
+
   const theme = useTheme()
 
   if (!pair) return null
 
-  console.log({ pair })
+  pair.asset.symbol = pair.asset.address === WETH[chainId || 1].address ? 'ETH' : pair.asset.symbol
+  pair.collateral.symbol = pair.collateral.address === WETH[chainId || 1].address ? 'ETH' : pair.collateral.symbol
 
   return (
     <Layout
