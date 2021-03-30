@@ -21,7 +21,7 @@ export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): 
 }
 export const formatToBalance = (value: string | undefined, decimals = 18) => {
   if (value) {
-    return { value: ethers.utils.parseUnits(value, decimals), decimals: decimals }
+    return { value: ethers.utils.parseUnits(Number(value).toFixed(decimals), decimals), decimals: decimals }
   } else {
     return { value: BigNumber.from(0), decimals: decimals }
   }

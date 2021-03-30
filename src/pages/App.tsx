@@ -38,14 +38,11 @@ import BentoBalances from './BentoBoxBalances'
 // Feat Kashi
 import WalletRoute from '../hocs/WalletRoute'
 import PublicRoute from '../hocs/PublicRoute'
-import KashiIndex from '../kashi/pages/index'
 import Connect from '../kashi/pages/Connect'
-import KashiPairSupply from '../kashi/pages/PairSupply'
-import KashiPairBorrow from '../kashi/pages/PairBorrow'
-import KashiPositionsSupply from '../kashi/pages/PositionsSupply'
-import KashiPositionsBorrow from '../kashi/pages/PositionsBorrow'
-import SupplyMarkets from '../kashi/pages/SupplyMarkets'
-import BorrowMarkets from '../kashi/pages/BorrowMarkets'
+import KashiPairSupply from '../kashi/pages/Pair/Lending'
+import KashiPairBorrow from '../kashi/pages/Pair/Borrow'
+import SupplyMarkets from '../kashi/pages/Markets/Lending'
+import BorrowMarkets from '../kashi/pages/Markets/Borrow'
 
 // Additional Tools
 import Tools from './Tools'
@@ -111,25 +108,18 @@ function App() {
                 <PublicRoute exact path="/connect" component={Connect} />
                 {/* BentoApps */}
 
-                <Route exact strict path={'/kashi'} component={KashiIndex} />
+                {/* <Route exact strict path={'/kashi'} component={KashiIndex} /> */}
                 {/* <Route exact strict path="/kashi/:market" component={KashiPairs} /> */}
                 {/* <Route exact strict path="/kashi/:market/:pairAddress" component={KashiPair} /> */}
 
-                {/* <Route exact strict path="/bento" component={Bento} />
+                <Route exact strict path="/bento" component={Bento} />
                 <Route exact strict path="/bento/kashi" render={() => <Redirect to="/bento/kashi/supply" />} />
                 <WalletRoute exact strict path="/bento/kashi/supply" component={SupplyMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
-                <Route
-                  exact
-                  strict
-                  path="/bento/kashi/positions"
-                  render={() => <Redirect to="/bento/kashi/positions/supply" />}
-                />
-                <WalletRoute exact strict path="/bento/kashi/positions/supply" component={KashiPositionsSupply} />
-                <WalletRoute exact strict path="/bento/kashi/positions/borrow" component={KashiPositionsBorrow} />
+
                 <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/supply" component={KashiPairSupply} />
                 <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={KashiPairBorrow} />
-                <WalletRoute exact strict path="/bento/balances" component={BentoBalances} /> */}
+                <WalletRoute exact strict path="/bento/balances" component={BentoBalances} />
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />
                 <Route exact strict path="/saave" component={Saave} />

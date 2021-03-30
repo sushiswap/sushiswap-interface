@@ -184,17 +184,21 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
     if (action === 'Deposit') {
       return formatFromBalance(assetBalance?.value, assetBalance?.decimals)
     } else if (action === 'Withdraw') {
-      return formatFromBalance(pair.user.supply.value, pair.asset.decimals)
+      return pair.userTotalSupply.string
+      // return formatFromBalance(pair.user.supply.value, pair.asset.decimals)
     } else if (action === 'Borrow') {
-      return pair.user.borrow.max.value.gt(BigNumber.from(0)) ? pair.user.borrow.max.string : '0'
+      return pair.safeMaxBorrowableLeftPossible.string
+      // return pair.user.borrow.max.value.gt(BigNumber.from(0)) ? pair.user.borrow.max.string : '0'
     } else if (action === 'Repay') {
-      return assetBalance?.value.gt(pair.user.borrow.value)
-        ? pair.user.borrow.string
+      // return pair.maxBorrowableLeftPossible.string
+      return assetBalance?.value.gt(pair.userBorrowAmount.value)
+        ? pair.userBorrowAmount.string
         : formatFromBalance(assetBalance?.value, assetBalance?.decimals)
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
     } else if (action === 'Remove Collateral') {
-      return pair.user.collateral.max.value.gt(BigNumber.from(0)) ? pair.user.collateral.max.string : '0'
+      return pair.safeMaxRemovable.value.gt(BigNumber.from(0)) ? pair.safeMaxRemovable.string : '0'
+      // return pair.user.collateral.max.value.gt(BigNumber.from(0)) ? pair.user.collateral.max.string : '0'
     }
   }, [action, pair, assetBalance, collateralBalance])
 
@@ -211,9 +215,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
         <div className="flex justify-between">
           <TYPE.mediumHeader color={theme.mediumEmphesisText}>Balance </TYPE.mediumHeader>
           <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-            {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
+            {formattedNum(pair.userTotalSupply.string)} {pair.asset.symbol}
             {' → '}
-            {formattedNum(Number(pair.user.supply.string) + Number(value))} {pair.asset.symbol}
+            {formattedNum(Number(pair.userTotalSupply.string) + Number(value))} {pair.asset.symbol}
           </TYPE.mediumHeader>
         </div>
       )
@@ -222,9 +226,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
         <div className="flex justify-between">
           <TYPE.mediumHeader color={theme.mediumEmphesisText}>Balance </TYPE.mediumHeader>
           <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-            {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
+            {formattedNum(pair.userTotalSupply.string)} {pair.asset.symbol}
             {' → '}
-            {formattedNum(Number(pair.user.supply.string) - Number(value))} {pair.asset.symbol}
+            {formattedNum(Number(pair.userTotalSupply.string) - Number(value))} {pair.asset.symbol}
           </TYPE.mediumHeader>
         </div>
       )
@@ -234,16 +238,16 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit</TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedNum(Math.max(0, Number(pair.user.borrow.max.string)))} {pair.asset.symbol}
+              {formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string)))} {pair.asset.symbol}
               {' → '}
-              {formattedNum(Math.max(0, Number(pair.user.borrow.max.string) - Number(value)))} {pair.asset.symbol}
+              {formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string) - Number(value)))} {pair.asset.symbol}
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>
             <div className="flex items-center">
               <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-                {formattedPercent(pair.user.health.percentage)}
+                {formattedPercent(pair.health.string)}
                 {' → '}
                 {formattedPercent(
                   Math.min(
@@ -251,10 +255,10 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                     Math.min(
                       Number(
                         Fraction.from(
-                          pair.currentUserBorrowAmount
+                          pair.currentUserBorrowAmount.value
                             .add(formatToBalance(value, pair.asset.decimals).value)
                             .mul(BigNumber.from('1000000000000000000'))
-                            .div(pair.maxBorrowable),
+                            .div(pair.maxBorrowable.value),
                           BigNumber.from(10).pow(16)
                         ).toString()
                       ),
@@ -268,12 +272,12 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                   100,
                   Math.min(
                     Number(
-                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                      pair.currentUserBorrowAmount.value.gt(BigNumber.from(0))
                         ? Fraction.from(
-                            pair.currentUserBorrowAmount
+                            pair.currentUserBorrowAmount.value
                               .add(formatToBalance(value, pair.asset.decimals).value)
                               .mul(BigNumber.from('1000000000000000000'))
-                              .div(pair.maxBorrowable),
+                              .div(pair.maxBorrowable.value),
                             BigNumber.from(10).pow(16)
                           ).toString()
                         : 0
@@ -292,12 +296,15 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit </TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedNum(Math.max(0, Number(pair.user.borrow.max.string)))} {pair.asset.symbol}
+              {formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string)))} {pair.asset.symbol}
               {' → '}
               {Math.min(
-                Number(pair.user.borrow.max.string) + Number(value),
+                Number(pair.safeMaxBorrowableLeft.string) + Number(value),
                 Number(
-                  Fraction.from(pair.safeMaxBorrowable, BigNumber.from(10).pow(BigNumber.from(pair.asset.decimals)))
+                  Fraction.from(
+                    pair.safeMaxBorrowable.value,
+                    BigNumber.from(10).pow(BigNumber.from(pair.asset.decimals))
+                  )
                 )
               )}{' '}
               {pair.asset.symbol}
@@ -307,18 +314,18 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>{' '}
             <div className="flex items-center">
               <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-                {formattedPercent(pair.user.health.percentage)}
+                {formattedPercent(pair.health.string)}
                 {' → '}
                 {formattedPercent(
                   Math.max(
                     0,
                     Number(
-                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                      pair.currentUserBorrowAmount.value.gt(BigNumber.from(0))
                         ? Fraction.from(
-                            pair.currentUserBorrowAmount
+                            pair.currentUserBorrowAmount.value
                               .sub(formatToBalance(value, pair.asset.decimals).value)
                               .mul(BigNumber.from('1000000000000000000'))
-                              .div(pair.maxBorrowable),
+                              .div(pair.maxBorrowable.value),
                             BigNumber.from(10).pow(16)
                           ).toString()
                         : 0
@@ -330,12 +337,12 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                 percent={Math.max(
                   0,
                   Number(
-                    pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                    pair.currentUserBorrowAmount.value.gt(BigNumber.from(0))
                       ? Fraction.from(
-                          pair.currentUserBorrowAmount
+                          pair.currentUserBorrowAmount.value
                             .sub(formatToBalance(value, pair.asset.decimals).value)
                             .mul(BigNumber.from('1000000000000000000'))
-                            .div(pair.maxBorrowable),
+                            .div(pair.maxBorrowable.value),
                           BigNumber.from(10).pow(16)
                         ).toString()
                       : 0
@@ -347,22 +354,22 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
         </div>
       )
     } else if (action === 'Add Collateral') {
-      const maxBorrowableOracle = pair.details.rate.oracle.gt(BigNumber.from(0))
-        ? pair.user.collateral.value
+      const maxBorrowableOracle = pair.oracleExchangeRate.gt(BigNumber.from(0))
+        ? pair.userCollateralAmount.value
             .add(formatToBalance(value, pair.collateral.decimals).value)
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
-            .div(pair.details.rate.oracle)
+            .div(pair.oracleExchangeRate)
         : BigNumber.from(0)
 
-      const maxBorrowableStored = pair.details.rate.current.gt(BigNumber.from(0))
-        ? pair.user.collateral.value
+      const maxBorrowableStored = pair.currentExchangeRate.gt(BigNumber.from(0))
+        ? pair.userCollateralAmount.value
             .add(formatToBalance(value, pair.collateral.decimals).value)
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
-            .div(pair.details.rate.current)
+            .div(pair.currentExchangeRate)
         : BigNumber.from(0)
 
       const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
@@ -374,15 +381,15 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Collateral Balance</TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {pair.user.collateral.string}
+              {pair.userCollateralAmount.string}
               {' → '}
-              {Number(pair.user.collateral.string) + Number(value)}
+              {Number(pair.userCollateralAmount.string) + Number(value)}
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit</TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {formattedNum(Math.max(0, Number(pair.user.borrow.max.string)))} {pair.asset.symbol}
+              {formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string)))} {pair.asset.symbol}
               {' → '}
               {Fraction.from(safeMaxBorrowable, BigNumber.from(10).pow(pair.asset.decimals)).toString()}{' '}
               {pair.asset.symbol}
@@ -392,13 +399,14 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used </TYPE.mediumHeader>
             <div className="flex items-center">
               <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-                {formattedPercent(pair.user.health.percentage)} {' → '}
+                {formattedPercent(pair.health.string)} {' → '}
                 {formattedPercent(
                   Math.min(
                     Number(
-                      formatToBalance(value, pair.asset.decimals).value.gt(0) && pair.currentUserBorrowAmount.gt(0)
+                      formatToBalance(value, pair.asset.decimals).value.gt(0) &&
+                        pair.currentUserBorrowAmount.value.gt(0)
                         ? Fraction.from(
-                            pair.currentUserBorrowAmount
+                            pair.currentUserBorrowAmount.value
                               .sub(formatToBalance(value, pair.asset.decimals).value)
                               .mul(BigNumber.from('1000000000000000000'))
                               .div(safeMaxBorrowable),
@@ -413,9 +421,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
               <GradientDot
                 percent={Math.min(
                   Number(
-                    formatToBalance(value, pair.asset.decimals).value.gt(0) && pair.currentUserBorrowAmount.gt(0)
+                    formatToBalance(value, pair.asset.decimals).value.gt(0) && pair.currentUserBorrowAmount.value.gt(0)
                       ? Fraction.from(
-                          pair.currentUserBorrowAmount
+                          pair.currentUserBorrowAmount.value
                             .sub(formatToBalance(value, pair.asset.decimals).value)
                             .mul(BigNumber.from('1000000000000000000'))
                             .div(safeMaxBorrowable),
@@ -431,38 +439,38 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
         </div>
       )
     } else if (action === 'Remove Collateral') {
-      const maxBorrowableOracle = pair.details.rate.oracle.gt(BigNumber.from(0))
-        ? pair.user.collateral.value
+      const maxBorrowableOracle = pair.oracleExchangeRate.gt(BigNumber.from(0))
+        ? pair.userCollateralAmount.value
             .sub(formatToBalance(value, pair.collateral.decimals).value)
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
-            .div(pair.details.rate.oracle)
+            .div(pair.oracleExchangeRate)
         : BigNumber.from(0)
 
-      const maxBorrowableStored = pair.details.rate.current.gt(BigNumber.from(0))
-        ? pair.user.collateral.value
+      const maxBorrowableStored = pair.currentExchangeRate.gt(BigNumber.from(0))
+        ? pair.userCollateralAmount.value
             .sub(formatToBalance(value, pair.collateral.decimals).value)
             .mul(BigNumber.from('1000000000000000000'))
             .div(BigNumber.from(100))
             .mul(BigNumber.from(75))
-            .div(pair.details.rate.current)
+            .div(pair.currentExchangeRate)
         : BigNumber.from(0)
 
       const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored) ? maxBorrowableOracle : maxBorrowableStored
 
       const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
 
-      const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pair.user.borrow.value)
+      const safeMaxBorrowableLeft = safeMaxBorrowable.sub(pair.userBorrowAmount.value)
 
       return (
         <div>
           <div className="flex justify-between">
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Collateral Balance</TYPE.mediumHeader>
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-              {pair.user.collateral.string}
+              {pair.userCollateralAmount.string}
               {' → '}
-              {Math.max(Number(pair.user.collateral.string) - Number(value), 0)}
+              {Math.max(Number(pair.userCollateralAmount.string) - Number(value), 0)}
             </TYPE.mediumHeader>
           </div>
           <div className="flex justify-between">
@@ -489,14 +497,14 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             <TYPE.mediumHeader color={theme.mediumEmphesisText}>Est. Borrow Limit Used</TYPE.mediumHeader>
             <div className="flex items-center">
               <TYPE.mediumHeader color={theme.mediumEmphesisText}>
-                {formattedPercent(pair.user.health.percentage)}
+                {formattedPercent(pair.health.string)}
                 {' → '}
                 {formattedPercent(
                   Math.min(
                     Number(
-                      pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                      pair.currentUserBorrowAmount.value.gt(BigNumber.from(0))
                         ? Fraction.from(
-                            pair.currentUserBorrowAmount
+                            pair.currentUserBorrowAmount.value
                               .mul(BigNumber.from('1000000000000000000'))
                               .div(safeMaxBorrowable),
                             BigNumber.from(10).pow(16)
@@ -510,9 +518,9 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
               <GradientDot
                 percent={Math.min(
                   Number(
-                    pair.currentUserBorrowAmount.gt(BigNumber.from(0))
+                    pair.currentUserBorrowAmount.value.gt(BigNumber.from(0))
                       ? Fraction.from(
-                          pair.currentUserBorrowAmount
+                          pair.currentUserBorrowAmount.value
                             .mul(BigNumber.from('1000000000000000000'))
                             .div(safeMaxBorrowable),
                           BigNumber.from(10).pow(16)
@@ -529,24 +537,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
     }
 
     return null
-  }, [
-    action,
-    theme.mediumEmphesisText,
-    pair.user.supply.string,
-    pair.user.borrow.max.string,
-    pair.user.borrow.value,
-    pair.user.health.percentage,
-    pair.user.collateral.value,
-    pair.user.collateral.string,
-    pair.asset.symbol,
-    pair.asset.decimals,
-    pair.currentUserBorrowAmount,
-    pair.maxBorrowable,
-    pair.safeMaxBorrowable,
-    pair.details.rate,
-    pair.collateral.decimals,
-    value
-  ])
+  }, [action, theme, pair, value])
 
   const getWarningMessage = useCallback(() => {
     if (action === 'Deposit' || action === 'Repay' || action === 'Add Collateral') {
@@ -554,10 +545,10 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
     } else if (action === 'Withdraw') {
       return `Please make sure your supply balance is sufficient to withdraw and then try again.`
     } else if (action === 'Borrow') {
-      if (pair.user.collateral.value.eq(BigNumber.from(0))) {
+      if (pair.userCollateralAmount.value.eq(BigNumber.from(0))) {
         return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
       }
-      if (pair.user.borrow.max.value.lt(BigNumber.from(0))) {
+      if (pair.safeMaxBorrowableLeft.value.lt(BigNumber.from(0))) {
         return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
       }
     } else if (action === 'Remove Collateral') {
@@ -570,13 +561,15 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
     if (action === 'Deposit' || action === 'Repay') {
       return assetBalance?.value.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Withdraw') {
-      return pair.user.supply.value.lt(formatToBalance(value, pair.asset.decimals).value)
+      return pair.userTotalSupply.value.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Borrow') {
-      return pair.user.collateral.value.eq(BigNumber.from(0)) || pair.user.borrow.max.value.lte(BigNumber.from(0))
+      return (
+        pair.userCollateralAmount.value.eq(BigNumber.from(0)) || pair.safeMaxBorrowableLeft.value.lte(BigNumber.from(0))
+      )
     } else if (action === 'Add Collateral') {
       return collateralBalance?.value.lt(formatToBalance(value, pair.collateral.decimals).value)
     } else if (action === 'Remove Collateral') {
-      return pair.user.collateral.max.value.lt(formatToBalance(value, pair.collateral.decimals).value)
+      return pair.safeMaxRemovable.value.lt(formatToBalance(value, pair.collateral.decimals).value)
     }
     return false
   }, [action, assetBalance, collateralBalance, value, pair])

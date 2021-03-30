@@ -6,16 +6,16 @@ import useTheme from 'hooks/useTheme'
 import Card from 'components/Card'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { KashiAction, CardHeader, PrimaryTabs } from '../../kashi/components'
+import { KashiAction, CardHeader, PrimaryTabs } from '../../components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
-import { InfoCard, Layout } from '../../kashi/components'
-import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
-import { GradientDot } from '../components'
+import { InfoCard, Layout } from '../../components'
+import DepositGraphic from 'assets/kashi/deposit-graphic.png'
+import { GradientDot } from '../../components'
 
-export default function KashiPair({
+export default function LendingPair({
   match: {
     params: { pairAddress }
   }
@@ -46,22 +46,20 @@ export default function KashiPair({
         <>
           <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
-            ≈ {formattedNum(pair.user.pairNetWorth.usdString, true)}
+            ≈ {formattedNum(pair.userNetWorth, true)}
           </TYPE.largeHeader>
           <Card backgroundColor={theme.extraDarkPurple}>
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Debt Ceiling:</TYPE.body>
               <TYPE.body color="highEmphesisText">
-                {formattedNum(pair.details.total.borrow.string)} {pair.asset.symbol}
+                {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
               </TYPE.body>
             </RowBetween>
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Utilization:</TYPE.body>
               <div className="flex items-center">
-                <TYPE.body color="highEmphesisText">
-                  {formattedPercent(pair.details.total.utilization.string)}
-                </TYPE.body>
-                <GradientDot percent={pair.details.total.utilization.string} desc={false} />
+                <TYPE.body color="highEmphesisText">{formattedPercent(pair.utilization.string)}</TYPE.body>
+                <GradientDot percent={pair.utilization.string} desc={false} />
               </div>
             </RowBetween>
           </Card>
@@ -129,23 +127,21 @@ export default function KashiPair({
         <div>
           <TYPE.mediumHeader color="mediumEmphesisText">Supply Balance</TYPE.mediumHeader>
           <TYPE.largeHeader color="primaryBlue">
-            {formattedNum(pair.user.supply.string)} {pair.asset.symbol}
+            {formattedNum(pair.userTotalSupply.string)} {pair.asset.symbol}
           </TYPE.largeHeader>
-          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.supply.usdString, true)}</TYPE.body>
+          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.userTotalSupply.usd, true)}</TYPE.body>
         </div>
         <div>
           <TYPE.mediumHeader color="mediumEmphesisText">Market Supply</TYPE.mediumHeader>
           <TYPE.largeHeader color="highEmphesisText">
-            {formattedNum(pair.details.total.supply.string)} {pair.asset.symbol}
+            {formattedNum(pair.liquidity.string)} {pair.asset.symbol}
           </TYPE.largeHeader>
-          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.details.total.supply.usdString, true)}</TYPE.body>
+          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.liquidity.usd, true)}</TYPE.body>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div>
             <TYPE.mediumHeader color="mediumEmphesisText">Supply APR</TYPE.mediumHeader>
-            <TYPE.largeHeader color="highEmphesisText">
-              {formattedPercent(pair.details.apr.currentSupplyAPR)}
-            </TYPE.largeHeader>
+            <TYPE.largeHeader color="highEmphesisText">{formattedPercent(pair.currentSupplyAPR)}</TYPE.largeHeader>
           </div>
         </div>
       </RowBetween>

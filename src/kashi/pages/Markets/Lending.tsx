@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 //import { transparentize } from 'polished'
 //import { Debugger } from 'components/Debugger'
-import { BaseCard } from '../../components/Card'
-import QuestionHelper from '../../components/QuestionHelper'
-import { getTokenIcon } from '../functions'
-import { formattedPercent, formattedNum } from '../../utils'
-import { useKashiPairs } from '../../kashi/context'
-import { InfoCard, SectionHeader, Layout } from '../../kashi/components'
+import { BaseCard } from '../../../components/Card'
+import QuestionHelper from '../../../components/QuestionHelper'
+import { getTokenIcon } from '../../functions'
+import { formattedPercent, formattedNum } from '../../../utils'
+import { useKashiPairs } from '../../context'
+import { InfoCard, SectionHeader, Layout } from '../../components'
 
-import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
+import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 
@@ -105,36 +105,33 @@ export default function KashiPairs() {
               </div>
               <div
                 className="hover:text-gray-400 cursor-pointer"
-                onClick={() => requestSort('details.apr.currentSupplyAPR')}
+                onClick={() => requestSort('currentSupplyAPR.string')}
               >
                 <div className="flex items-center float-left sm:float-right">
                   <div className="mr-2">Lending APR</div>
                   {sortConfig &&
-                    sortConfig.key === 'details.apr.currentSupplyAPR' &&
+                    sortConfig.key === 'currentSupplyAPR.string' &&
                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                       (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                 </div>
               </div>
-              <div
-                className="hover:text-gray-400 cursor-pointer"
-                onClick={() => requestSort('details.total.utilization.string')}
-              >
+              <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('utilization.string')}>
                 <div className="flex items-center float-left sm:float-right">
                   <div className="mr-2">Utilization</div>
                   {sortConfig &&
-                    sortConfig.key === 'details.total.utilization.string' &&
+                    sortConfig.key === 'utilization.string' &&
                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                       (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                 </div>
               </div>
               <div
                 className="text-right hover:text-gray-400 cursor-pointer"
-                onClick={() => requestSort('details.total.supply.usdString')}
+                onClick={() => requestSort('liquidity.usd')}
               >
                 <div className="flex items-center float-right">
                   <div className="mr-2">Market Supply</div>
                   {sortConfig &&
-                    sortConfig.key === 'details.total.supply.usdString' &&
+                    sortConfig.key === 'liquidity.usd' &&
                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                       (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                 </div>
@@ -176,19 +173,16 @@ export default function KashiPairs() {
                           </div>
                           <div className="text-right hidden md:block pl-4">{pair.asset.symbol}</div>
                           <div className="text-right hidden lg:block">{pair.oracle.name}</div>
-                          <div className="text-left sm:text-right">
+                          <div className="text-left sm:text-right">{formattedPercent(pair.currentSupplyAPR)}</div>
+                          {/* <div className="text-left sm:text-right">
                             {formattedPercent(pair.details.apr.currentSupplyAPR)}
-                          </div>
-                          <div className="text-left sm:text-right">
-                            {formattedPercent(pair.details.total.utilization.string)}
-                          </div>
+                          </div> */}
+                          <div className="text-left sm:text-right">{formattedPercent(pair.utilization.string)}</div>
                           <div className="text-right">
                             <div>
-                              {formattedNum(pair.details.total.supply.string)} {pair.asset.symbol}
+                              {formattedNum(pair.liquidity.string)} {pair.asset.symbol}
                             </div>
-                            <div className="text-gray-500">
-                              ≈ {formattedNum(pair.details.total.supply.usdString, true)}
-                            </div>
+                            <div className="text-gray-500">≈ {formattedNum(pair.liquidity.usd, true)}</div>
                           </div>
                         </div>
                       </Link>

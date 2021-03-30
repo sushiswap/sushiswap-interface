@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { BaseCard } from '../../components/Card'
-import QuestionHelper from '../../components/QuestionHelper'
-import { getTokenIcon } from '../functions'
-import { formattedNum } from '../../utils'
-import { useKashiPairs } from '../context'
-import { InfoCard, SectionHeader, Layout } from '../components'
-import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
+import { BaseCard } from '../../../components/Card'
+import QuestionHelper from '../../../components/QuestionHelper'
+import { getTokenIcon } from '../../functions'
+import { formattedNum } from '../../../utils'
+import { useKashiPairs } from '../../context'
+import { InfoCard, SectionHeader, Layout } from '../../components'
+import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
@@ -168,19 +168,17 @@ export default function KashiPairs() {
                           <div className="text-right hidden lg:block">{pair.oracle.name}</div>
                           <div className="text-right">
                             <div>
-                              {formattedNum(pair.details.total.borrow.string)} {pair.asset.symbol}
+                              {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
                             </div>
-                            <div className="text-gray-500">
+                            {/* <div className="text-gray-500">
                               ≈ {formattedNum(pair.details.total.borrow.usdString, true)}
-                            </div>
+                            </div> */}
                           </div>
                           <div className="text-right">
                             <div>
-                              {formattedNum(pair.details.total.asset.string)} {pair.asset.symbol}
+                              {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                             </div>
-                            <div className="text-gray-500">
-                              ≈ {formattedNum(pair.details.total.asset.usdString, true)}
-                            </div>
+                            <div className="text-gray-500">≈ {formattedNum(pair.totalAssetAmount.usd, true)}</div>
                           </div>
                         </div>
                       </Link>

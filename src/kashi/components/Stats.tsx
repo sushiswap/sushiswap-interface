@@ -15,7 +15,8 @@ export default function Header() {
   const counts = useKashiCounts()
   const pairs = useKashiPairs()
   const netWorth = useMemo(() => {
-    return millify(sumBy(pairs, pair => pair.user.pairNetWorth.usdString))
+    return '0.00'
+    // return millify(sumBy(pairs, pair => pair.user.pairNetWorth.usdString))
   }, [pairs])
   return (
     <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">

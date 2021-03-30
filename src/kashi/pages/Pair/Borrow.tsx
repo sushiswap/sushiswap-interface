@@ -4,21 +4,16 @@ import { Link, RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
-import { AutoColumn } from 'components/Column'
 import Card from 'components/Card'
-import { Debugger } from 'components/Debugger'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { KashiAction, CardHeader, PrimaryTabs, SecondaryTabs } from '../../kashi/components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
-import { InfoCard, Layout } from '../../kashi/components'
-import DepositGraphic from '../../assets/kashi/deposit-graphic.png'
-
-import { GradientDot } from '../components'
+import DepositGraphic from 'assets/kashi/deposit-graphic.png'
+import { GradientDot, InfoCard, Layout, KashiAction, CardHeader, PrimaryTabs, SecondaryTabs } from '../../components'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -29,7 +24,7 @@ export const LabelRow = styled.div`
   padding: 0.75rem 0;
 `
 
-export default function KashiPair({
+export default function BorrowPair({
   match: {
     params: { pairAddress }
   }
@@ -43,7 +38,7 @@ export default function KashiPair({
 
   if (!pair) return null
 
-  // console.log({ pair })
+  console.log({ pair })
 
   return (
     <Layout
@@ -60,21 +55,21 @@ export default function KashiPair({
         <>
           <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
-            ≈ {formattedNum(pair.user.pairNetWorth.usdString, true)}
+            ≈ {formattedNum(pair.userNetWorth, true)}
           </TYPE.largeHeader>
           <div>
             <Card backgroundColor={theme.extraDarkPurple}>
               <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Borrow Limit Used:</TYPE.body>
                 <div className="flex items-center">
-                  <TYPE.body color="highEmphesisText">{formattedPercent(pair.user.health.percentage)}</TYPE.body>
-                  <GradientDot percent={pair.user.health.percentage} />
+                  <TYPE.body color="highEmphesisText">{formattedPercent(pair.health.string)}</TYPE.body>
+                  <GradientDot percent={pair.health.string} />
                 </div>
               </RowBetween>
               <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Left to borrow:</TYPE.body>
                 <TYPE.body color="highEmphesisText">
-                  {formattedNum(pair.user.borrow.max.string)} {pair.asset.symbol}
+                  {formattedNum(pair.safeMaxBorrowableLeft.string)} {pair.asset.symbol}
                 </TYPE.body>
               </RowBetween>
               {/* <RowBetween>
@@ -91,18 +86,16 @@ export default function KashiPair({
                 <TYPE.body color="mediumEmphesisText">Market Available:</TYPE.body>
                 <div className="flex items-center">
                   <TYPE.body color="highEmphesisText">
-                    {formattedNum(pair.details.total.asset.string)} {pair.asset.symbol}
+                    {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                   </TYPE.body>
-                  <GradientDot percent={pair.details.total.asset.string} desc={false} />
+                  <GradientDot percent={pair.totalAssetAmount.string} desc={false} />
                 </div>
               </RowBetween>
               <RowBetween>
                 <TYPE.body color="mediumEmphesisText">Utilization rate:</TYPE.body>
                 <div className="flex items-center">
-                  <TYPE.body color="highEmphesisText">
-                    {formattedPercent(pair.details.total.utilization.string)}
-                  </TYPE.body>
-                  <GradientDot percent={pair.details.total.utilization.string} />
+                  <TYPE.body color="highEmphesisText">{formattedPercent(pair.utilization.string)}</TYPE.body>
+                  <GradientDot percent={pair.utilization.string} />
                 </div>
               </RowBetween>
             </Card>
@@ -171,22 +164,22 @@ export default function KashiPair({
         <div>
           <TYPE.mediumHeader color="mediumEmphesisText">Collateral Balance</TYPE.mediumHeader>
           <TYPE.largeHeader color="primaryBlue">
-            {formattedNum(pair.user.collateral.string)} {pair.collateral.symbol}
+            {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
           </TYPE.largeHeader>
-          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.collateral.usdString, true)}</TYPE.body>
+          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.userCollateralAmount.usd, true)}</TYPE.body>
         </div>
         <div>
           <TYPE.mediumHeader color="mediumEmphesisText">Borrow Balance</TYPE.mediumHeader>
           <TYPE.largeHeader color="primaryPink">
-            {formattedNum(pair.user.borrow.string)} {pair.asset.symbol}
+            {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
           </TYPE.largeHeader>
-          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.user.borrow.usdString, true)}</TYPE.body>
+          <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.userBorrowAmount.usd, true)}</TYPE.body>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div>
             <TYPE.mediumHeader color="mediumEmphesisText">Borrow APR</TYPE.mediumHeader>
             <TYPE.largeHeader color="highEmphesisText">
-              {formattedPercent(pair.details.apr.currentInterestPerYear)}
+              {formattedPercent(pair.currentInterestPerYear.string)}
             </TYPE.largeHeader>
           </div>
         </div>
