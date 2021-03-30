@@ -663,15 +663,17 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
 
           <Warning predicate={getWarningPredicate()}>{getWarningMessage()}</Warning>
         </>
-        {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
-          <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
-            {approvalState === ApprovalState.PENDING ? (
-              <Dots>Approving {token.symbol}</Dots>
-            ) : (
-              `Approve ${token.symbol}`
-            )}
-          </ButtonBlue>
-        )}
+        {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) &&
+          (action === 'Deposit' || action === 'Add Collateral' || action === 'Repay') &&
+          ((direction === 'From' && sourceOrDestination !== 'BentoBox') || direction === 'To') && (
+            <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
+              {approvalState === ApprovalState.PENDING ? (
+                <Dots>Approving {token.symbol}</Dots>
+              ) : (
+                `Approve ${token.symbol}`
+              )}
+            </ButtonBlue>
+          )}
 
         {!getWarningPredicate() && value !== '' && value !== '0' && (
           <div>

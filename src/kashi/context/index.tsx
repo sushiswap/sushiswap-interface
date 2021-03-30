@@ -1,19 +1,13 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { useActiveWeb3React } from 'hooks'
-import useIntervalTransaction from 'hooks/useIntervalTransaction'
-import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
+import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useBentoBoxContract, useKashiPairContract } from 'sushi-hooks/useContract'
-import { BigNumber } from '@ethersproject/bignumber'
-import Fraction from '../constants/Fraction'
-import sushiData from '@sushiswap/sushi-data'
-import { ChainId, Token } from '@sushiswap/sdk'
-import { getOracleName, getMainnetAddress, takeFee, addBorrowFee, toElastic, accrue } from './functions'
+import Fraction from '../../constants/Fraction'
+import { ChainId } from '@sushiswap/sdk'
+import { takeFee, toElastic } from '../functions'
 import { ethers } from 'ethers'
 import {
   MINIMUM_TARGET_UTILIZATION,
   MAXIMUM_TARGET_UTILIZATION,
-  UTILIZATION_PRECISION,
-  FULL_UTILIZATION,
   FULL_UTILIZATION_MINUS_MAX,
   STARTING_INTEREST_PER_YEAR,
   MINIMUM_INTEREST_PER_YEAR,
@@ -22,12 +16,12 @@ import {
   FACTOR_PRECISION,
   CLONE_ADDRESSES,
   KASHI_ADDRESS
-} from './constants'
+} from '../constants'
 import { useBoringHelperContract } from 'hooks/useContract'
-import { useSingleCallResult } from 'state/multicall/hooks'
-import { JSBI } from '@sushiswap/sdk'
 import { useDefaultTokens } from 'hooks/Tokens'
-import { Oracle } from './entities'
+import { Oracle, KashiPollPair, KashiPair } from '../entities'
+import useInterval from 'hooks/useInterval'
+import { BigNumber } from '@ethersproject/bignumber'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -38,22 +32,6 @@ interface Reducer {
   type: ActionType
   payload: any
 }
-
-// TODO: typing for data structure...
-// export interface KashiPair {
-//   id: string
-//   address: string
-//   collateral: Token
-//   asset: Token
-//   oracle: {
-//     name: string
-//   }
-//   details: any
-//   user: any
-// }
-
-import { KashiPollPair } from './entities'
-import useInterval from 'hooks/useInterval'
 
 interface State {
   pairsSupplied: number
