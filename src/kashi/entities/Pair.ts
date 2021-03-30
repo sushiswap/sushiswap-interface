@@ -30,5 +30,13 @@ export interface KashiPollPair {
 }
 
 export class KashiPair {
-  //
+  address: string
+  collateral: string
+  asset: string
+
+  constructor(address: string, collateral: string, asset: string) {
+    this.address = address
+    this.collateral = collateral
+    this.asset = asset
+  }
 }

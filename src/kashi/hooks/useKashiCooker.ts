@@ -2,9 +2,13 @@ import { useActiveWeb3React } from 'hooks'
 import React, { useCallback, useState } from 'react'
 import { KashiPair } from 'kashi'
 import { ethers } from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
 import { useKashiPairContract, useBentoBoxContract } from 'sushi-hooks/useContract'
 import { ChainId } from '@sushiswap/sdk'
 import { getSigner } from '../../utils'
+import { BalanceProps } from '../../sushi-hooks/useTokenBalance'
+import { useKashiPair } from 'kashi/context'
+
 import { 
   ACTION_ADD_ASSET,
   ACTION_REPAY,
@@ -67,7 +71,7 @@ const signMasterContractApproval = async (
     },
     message: message
   }
-  console.log('typedData:', typedData)
+  // console.log('typedData:', typedData)
   const signer = getSigner(library, user)
   let signature = await signer._signTypedData(typedData.domain, typedData.types, typedData.message)
   return ethers.utils.splitSignature(signature)
@@ -88,25 +92,44 @@ function useKashiCooker(pair: KashiPair) {
     setActions([...actions, ACTION_BENTO_SETAPPROVAL])
     setValues([...values, 0])
 
-    let abiCoder = ethers.utils.defaultAbiCoder;
-    let abiData = abiCoder.encode(["address", "address", "bool", "uint8", "bytes32", "bytes32"], [bentoBoxContract?.address, pair.address, true, permit.v, permit.r, permit.s])
+    let abiData = ethers.utils.defaultAbiCoder.encode(["address", "address", "bool", "uint8", "bytes32", "bytes32"], [bentoBoxContract?.address, pair.address, true, permit.v, permit.r, permit.s])
     setData([...data, abiData])
   }, [])
 
-  const addCollateral = useCallback(async value => {
-    //
+  const addCollateral = useCallback(async (amount: BalanceProps) => {
+    const share = await bentoBoxContract?.toShare(pair.collateral, amount?.value, true)
+    setActions([...actions, ACTION_ADD_COLLATERAL])
+    setValues([...values, 0])
+
+    let abiData = ethers.utils.defaultAbiCoder.encode(["int256", "address", "bool"], [share, pair.address, true])
+    setData([...data, abiData])
   }, [])
 
-  const depositCollateral = useCallback(async value => {
-    //
+  const depositCollateral = useCallback(async (amount: BalanceProps) => {
+    setActions([...actions, ACTION_BENTO_DEPOSIT, ACTION_ADD_COLLATERAL])
+    setValues([...values, 0, 0])
+
+    let depositData = ethers.utils.defaultAbiCoder.encode(["address", "address", "int256", "int256"], [pair.collateral, pair.address, amount.value, 0])
+    let addCollateralData = ethers.utils.defaultAbiCoder.encode(["int256", "address", "bool"], [-2, pair.address, false])
+    setData([...data, depositData, addCollateralData])
   }, [])
 
-  const addAsset = useCallback(async value => {
-    //
+  const addAsset = useCallback(async (amount: BalanceProps) => {
+    setActions([...actions, ACTION_BENTO_DEPOSIT, ACTION_ADD_ASSET])
+    setValues([...values, 0, 0])
+
+    let depositData = ethers.utils.defaultAbiCoder.encode(["address", "address", "int256", "int256"], [pair.asset, pair.address, amount.value, 0])
+    let addAssetData = ethers.utils.defaultAbiCoder.encode(["int256", "address", "bool"], [-2, pair.address, false])
+    setData([...data, depositData, addAssetData])
   }, [])
 
-  const borrow = useCallback(async value => {
-    //
+  const borrow = useCallback(async (amount: BalanceProps) => {
+    const share = await bentoBoxContract?.toShare(pair.collateral, amount?.value, true)
+    setActions([...actions, ACTION_BORROW])
+    setValues([...values, 0])
+
+    let abiData = ethers.utils.defaultAbiCoder.encode(["int256", "address"], [amount.value, pair.address])
+    setData([...data, abiData])
   }, [])
 
   const cook = useCallback(() => {
