@@ -108,11 +108,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI= GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "cross-env CI= GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "build:styles": "postcss tailwind.css -o src/styles.css",
-    "prebuild": "NODE_ENV=production npm run build:styles",
+    "prebuild": "cross-env NODE_ENV=production npm run build:styles",
     "prestart": "npm run build:styles",
     "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
   },
