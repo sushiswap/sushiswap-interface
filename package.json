@@ -130,6 +130,8 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "i18next": "^19.9.1",
+    "react-app-rewire-hot-loader": "^2.0.1",
+    "react-hot-loader": "^4.13.0",
     "react-i18next": "^11.8.9"
   }
 }
