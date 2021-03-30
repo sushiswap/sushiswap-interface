@@ -38,10 +38,6 @@ export default function BorrowPair({
   const theme = useTheme()
 
   if (!pair) return null
-
-  pair.asset.symbol = pair.asset.address === WETH[chainId || 1].address ? 'ETH' : pair.asset.symbol
-  pair.collateral.symbol = pair.collateral.address === WETH[chainId || 1].address ? 'ETH' : pair.collateral.symbol
-
   return (
     <Layout
       left={

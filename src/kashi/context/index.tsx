@@ -2,7 +2,7 @@ import { useActiveWeb3React } from 'hooks'
 import React, { createContext, useContext, useReducer, useCallback, Component } from 'react'
 import { useBentoBoxContract, useKashiPairContract } from 'sushi-hooks/useContract'
 import Fraction from '../../constants/Fraction'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId, WETH, Currency } from '@sushiswap/sdk'
 import { takeFee, toElastic } from '../functions'
 import { ethers } from 'ethers'
 import {
@@ -337,10 +337,18 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                       lastAccrued: accrueInfo.lastAccrued
                     },
                     asset: {
-                      ...tokens[asset]
+                      ...tokens[asset],
+                      symbol:
+                        tokens[asset].address === WETH[chainId || 1].address
+                          ? Currency.getNativeCurrencySymbol(chainId)
+                          : tokens[asset].symbol
                     },
                     collateral: {
-                      ...tokens[collateral]
+                      ...tokens[collateral],
+                      symbol:
+                        tokens[collateral].address === WETH[chainId || 1].address
+                          ? Currency.getNativeCurrencySymbol(chainId)
+                          : tokens[collateral].symbol
                     },
                     currentExchangeRate,
                     oracle: new Oracle(pair.oracle, pair.oracleData),

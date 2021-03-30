@@ -144,8 +144,6 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
       ? pair.asset
       : pair.collateral
 
-  token.symbol = token.address === WETH[chainId || 1].address ? 'ETH' : token.symbol
-
   const [approvalState, approve] = useApproveCallback(token.address, bentoBoxContract?.address)
 
   const {
