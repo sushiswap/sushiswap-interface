@@ -214,8 +214,8 @@ export default function Swap() {
               ? 'Swap w/o Send + recipient'
               : 'Swap w/ Send',
           label: [
-            trade?.inputAmount?.currency?.symbol,
-            trade?.outputAmount?.currency?.symbol,
+            trade?.inputAmount?.currency?.getSymbol(chainId),
+            trade?.outputAmount?.currency?.getSymbol(chainId),
             getTradeVersion(trade)
           ].join('/')
         })

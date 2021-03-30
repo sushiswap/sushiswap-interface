@@ -78,5 +78,5 @@ export default function CurrencyLogo({
     return <StyledNativeCurrencyLogo src={logo[chainId]} size={size} style={style} />
   }
 
-  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
+  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`} style={style} />
 }

@@ -185,11 +185,11 @@ export default function AddLiquidity({
               'Add ' +
               parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
               ' ' +
-              currencies[Field.CURRENCY_A]?.symbol +
+              currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
               ' and ' +
               parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
               ' ' +
-              currencies[Field.CURRENCY_B]?.symbol
+              currencies[Field.CURRENCY_B]?.getSymbol(chainId)
           })
 
           setTxHash(response.hash)
@@ -197,7 +197,10 @@ export default function AddLiquidity({
           ReactGA.event({
             category: 'Liquidity',
             action: 'Add',
-            label: [currencies[Field.CURRENCY_A]?.symbol, currencies[Field.CURRENCY_B]?.symbol].join('/')
+            label: [
+              currencies[Field.CURRENCY_A]?.getSymbol(chainId),
+              currencies[Field.CURRENCY_B]?.getSymbol(chainId)
+            ].join('/')
           })
         })
       )

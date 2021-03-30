@@ -315,11 +315,11 @@ export default function RemoveLiquidity({
               'Remove ' +
               parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
               ' ' +
-              currencyA?.symbol +
+              currencyA?.getSymbol(chainId) +
               ' and ' +
               parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
               ' ' +
-              currencyB?.symbol
+              currencyB?.getSymbol(chainId)
           })
 
           setTxHash(response.hash)
@@ -327,7 +327,7 @@ export default function RemoveLiquidity({
           ReactGA.event({
             category: 'Liquidity',
             action: 'Remove',
-            label: [currencyA?.symbol, currencyB?.symbol].join('/')
+            label: [currencyA?.getSymbol(chainId), currencyB?.getSymbol(chainId)].join('/')
           })
         })
         .catch((error: Error) => {
@@ -418,9 +418,9 @@ export default function RemoveLiquidity({
     )
   }
 
-  const pendingText = `Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${
-    currencyA?.symbol
-  } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.symbol}`
+  const pendingText = `Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
+    chainId
+  )} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.getSymbol(chainId)}`
 
   const liquidityPercentChangeCallback = useCallback(
     (value: number) => {

@@ -42,11 +42,12 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade | undefined; al
             <TYPE.black color={theme.text3} fontSize={14}>
               {trade
                 ? isExactIn
-                  ? `${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4)} ${
-                      trade?.outputAmount.currency.symbol
-                    }` ?? '-'
-                  : `${slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4)} ${trade?.inputAmount.currency.symbol}` ??
-                    '-'
+                  ? `${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(
+                      4
+                    )} ${trade?.outputAmount.currency.getSymbol(chainId)}` ?? '-'
+                  : `${slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4)} ${trade?.inputAmount.currency.getSymbol(
+                      chainId
+                    )}` ?? '-'
                 : ''}
             </TYPE.black>
             <QuestionHelper text="Your transaction will revert if there is a large, unfavorable price movement before it is confirmed." />

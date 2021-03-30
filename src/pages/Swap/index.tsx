@@ -97,6 +97,7 @@ export default function Swap() {
     currencies,
     inputError: swapInputError
   } = useDerivedSwapInfo()
+
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
     currencies[Field.INPUT],
     currencies[Field.OUTPUT],
@@ -214,8 +215,8 @@ export default function Swap() {
               ? 'Swap w/o Send + recipient'
               : 'Swap w/ Send',
           label: [
-            trade?.inputAmount?.currency?.symbol,
-            trade?.outputAmount?.currency?.symbol,
+            trade?.inputAmount?.currency?.getSymbol(chainId),
+            trade?.outputAmount?.currency?.getSymbol(chainId),
             getTradeVersion(trade)
           ].join('/')
         })
