@@ -2,9 +2,7 @@ import { useCallback, useState, useEffect } from 'react'
 
 import {
   useBentoBoxContract,
-  useBentoHelperContract,
   useKashiPairContract,
-  useSushiSwapSwapper,
   useKashiPairHelperContract
 } from '../../sushi-hooks/useContract'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -102,7 +100,6 @@ const useKashi = () => {
   const { account, library, chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
-  const bentoHelperContract = useBentoHelperContract()
   const bentoBoxContract = useBentoBoxContract(true) // withSigner
   const kashiPairContract = useKashiPairContract(true) // withSigner
   const kashiPairHelperContract = useKashiPairHelperContract()

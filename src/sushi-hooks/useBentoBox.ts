@@ -19,7 +19,7 @@ const useBentoBox = () => {
       if (amount?.value && chainId) {
         try {
           //ethers.constants.HashZero
-          if (tokenAddressChecksum == WETH[chainId]) {
+          if (tokenAddressChecksum === WETH[chainId]) {
             const tx = await bentoBoxContract?.deposit(
               '0x0000000000000000000000000000000000000000',
               account,
@@ -50,7 +50,7 @@ const useBentoBox = () => {
       if (amount?.value && chainId) {
         try {
           tokenAddressChecksum =
-            tokenAddressChecksum == WETH[chainId] ? '0x0000000000000000000000000000000000000000' : tokenAddressChecksum
+            tokenAddressChecksum === WETH[chainId] ? '0x0000000000000000000000000000000000000000' : tokenAddressChecksum
           const tx = await bentoBoxContract?.withdraw(tokenAddressChecksum, account, account, amount?.value, 0)
           return addTransaction(tx, { summary: 'Withdraw from Bentobox' })
         } catch (e) {

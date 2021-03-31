@@ -14,7 +14,7 @@ import {
   MAXIMUM_INTEREST_PER_YEAR,
   INTEREST_ELASTICITY,
   FACTOR_PRECISION,
-  CLONE_ADDRESSES,
+  USD_ADDRESS,
   KASHI_ADDRESS,
   CHAINLINK_MAPPING
 } from '../constants'
@@ -77,18 +77,11 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
   }
 }
 
-// Pricing currency
-const USDT_ADDRESS: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-  [ChainId.ROPSTEN]: '0x516de3a7a567d81737e3a46ec4ff9cfd1fcb0136'
-}
-
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
   const { account, chainId } = useActiveWeb3React()
 
-  const pairAddresses = CLONE_ADDRESSES[chainId || 1]
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
@@ -96,20 +89,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   // Default token list fine for now, might want to more to the broader collection later.
   const tokens = useDefaultTokens()
-
-  // TODO: Use multicall to poll by block
-  // const { result, loading } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', [
-  //   account ?? undefined,
-  //   pairAddresses
-  // ])
+  console.log(tokens)
 
   const updatePairs = useCallback(
     async function() {
-      if (boringHelperContract && bentoBoxContract && kashiPairContract && pairAddresses) {
+      if (boringHelperContract && bentoBoxContract && kashiPairContract) {
+        console.log(USD_ADDRESS[chainId || 1])
         const info = await boringHelperContract.getUIInfo(
           account || '0x0000000000000000000000000000000000000000',
           [],
-          USDT_ADDRESS[chainId || 1],
+          USD_ADDRESS[chainId || 1],
           [KASHI_ADDRESS]
         )
 
@@ -169,7 +158,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 }
               }
             }
-            if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase()) {
+            if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase() && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
               const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
               const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
               if (!divider.eq(params[2])) {
@@ -262,7 +251,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   )
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
-                    ? BigNumber.from(1)
+                    ? BigNumber.from(0)
                     : totalBorrow.elastic
 
                   const userBorrowAmount = toElastic(totalBorrow, userBorrowPart, false)
@@ -404,7 +393,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                       Number(assetUSD)
 
                   return {
-                    address: pairAddresses[i],
+                    address: pairsAll[i].address,
                     accrueInfo: {
                       feesEarnedFraction: accrueInfo.feesEarnedFraction,
                       interestPerSecond: accrueInfo.interestPerSecond,
@@ -595,7 +584,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         })
       }
     },
-    [boringHelperContract, bentoBoxContract, chainId, kashiPairContract, account, pairAddresses, tokens]
+    [boringHelperContract, bentoBoxContract, chainId, kashiPairContract, account, tokens]
   )
 
   useInterval(updatePairs, 10000)

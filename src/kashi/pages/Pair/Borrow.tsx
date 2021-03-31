@@ -51,7 +51,7 @@ export default function BorrowPair({
       }
       right={
         <Card>
-          <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
+          <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Market</TYPE.mediumHeader>
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
             ≈ {formattedNum(pair.userNetWorth, true)}
           </TYPE.largeHeader>
