@@ -1,8 +1,9 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {}
+    extend: {
+      
+    }
   },
   variants: {
     extend: {}
@@ -12,5 +13,5 @@ module.exports = {
     fontFamily: false,
     preflight: true
   },
-  purge: process.env.NODE_ENV === 'production'
+  purge: process.env.NODE_ENV !== 'development' ? ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'] : false
 }
