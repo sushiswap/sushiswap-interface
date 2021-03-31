@@ -114,20 +114,18 @@ export default function BentoBalances() {
                 <div className="font-medium text-base text-gray-500">Total Deposits:</div>
                 <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
               </div>
-              <FixedScrollable>
-                {items &&
-                  items.length > 0 &&
-                  items.map((balance: any, i: number) => {
-                    // todo: remove increment for testing purposes
-                    return (
-                      <TokenBalance
-                        tokenAddress={balance.address}
-                        tokenDetails={balance}
-                        key={balance.address + '_' + i}
-                      />
-                    )
-                  })}
-              </FixedScrollable>
+              {items &&
+                items.length > 0 &&
+                items.map((balance: any, i: number) => {
+                  // todo: remove increment for testing purposes
+                  return (
+                    <TokenBalance
+                      tokenAddress={balance.address}
+                      tokenDetails={balance}
+                      key={balance.address + '_' + i}
+                    />
+                  )
+                })}
             </div>
           </AutoColumn>
         </AutoColumn>
