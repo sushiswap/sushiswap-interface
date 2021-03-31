@@ -1,34 +1,34 @@
-import { BaseCard } from 'components/Card'
-import styled from 'styled-components'
-import { Color } from 'theme/styled'
+import React, { useContext } from 'react'
+import { ThemeContext } from 'styled-components'
 
-export const Card = styled(BaseCard)<{ background?: Color }>`
-  border: none
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-  border-radius: 20px;
-  padding: 33px;
-  background: ${({ background = 'mediumDarkPurple' }) => background};
-`
-
-export default Card
-
-export const CardHeader = styled.div<{ border?: boolean; market?: string }>`
-  display: flex;
-  align-items: center;
-  background: ${({ theme }) => theme.extraDarkPurple};
-  border-radius: 30px 20px 0px 0px;
-  padding: 32px 32px 26px;
-  border-bottom: 6px solid
-    ${({ market, border, theme }) =>
-      border ? `${market === 'Supply' ? theme.primaryBlue : theme.primaryPink}` : 'transparent'};
-`
-
-export const TeardropCard = styled(BaseCard)`
-  border: none
-  position: relative;
-  overflow: hidden;
-  padding: 0;
-  border-radius: 35px 20px 35px 20px;
-`
+export default function Card({
+  header = undefined,
+  backgroundImage = '',
+  backgroundColor = 'rgb(34, 38, 54)',
+  title = '',
+  description = '',
+  children,
+  className
+}: any) {
+  const theme = useContext(ThemeContext)
+  return (
+    <div
+      className={`${className} h-full`}
+      style={{
+        borderRadius: '10px',
+        // minHeight: '40rem',
+        background: backgroundImage ? `url(${backgroundImage}), ${theme.extraDarkPurple}` : backgroundColor,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center bottom'
+      }}
+    >
+      {header && <>{header}</>}
+      <div className="p-5">
+        {title && <div className="font-semibold text-2xl mb-4">{title}</div>}
+        {description && <div className="font-base text-base text-gray-400">{description}</div>}
+        {children}
+      </div>
+    </div>
+  )
+}
