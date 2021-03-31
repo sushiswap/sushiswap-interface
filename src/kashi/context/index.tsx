@@ -14,7 +14,7 @@ import {
   MAXIMUM_INTEREST_PER_YEAR,
   INTEREST_ELASTICITY,
   FACTOR_PRECISION,
-  CLONE_ADDRESSES,
+  USD_ADDRESS,
   KASHI_ADDRESS,
   CHAINLINK_MAPPING
 } from '../constants'
@@ -77,12 +77,6 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
   }
 }
 
-// Pricing currency
-const USDT_ADDRESS: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-  [ChainId.ROPSTEN]: '0x516de3a7a567d81737e3a46ec4ff9cfd1fcb0136'
-}
-
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -95,14 +89,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   // Default token list fine for now, might want to more to the broader collection later.
   const tokens = useDefaultTokens()
+  console.log(tokens)
 
   const updatePairs = useCallback(
     async function() {
       if (boringHelperContract && bentoBoxContract && kashiPairContract) {
+        console.log(USD_ADDRESS[chainId || 1])
         const info = await boringHelperContract.getUIInfo(
           account || '0x0000000000000000000000000000000000000000',
           [],
-          USDT_ADDRESS[chainId || 1],
+          USD_ADDRESS[chainId || 1],
           [KASHI_ADDRESS]
         )
 

@@ -331,7 +331,7 @@ export default function Header() {
         </Title>
         <HeaderLinks>
           <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-            {t('swap')}
+            {t('Swap')}
           </StyledNavLink>
           <StyledNavLink
             id={`pool-nav-link`}
@@ -344,7 +344,7 @@ export default function Header() {
               pathname.startsWith('/find')
             }
           >
-            {t('pool')}
+            {t('Pool')}
           </StyledNavLink>
           {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`stake-nav-link`} to={'/stake'}>

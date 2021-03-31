@@ -41,7 +41,6 @@ import {
   SUSHISWAP_SWAPPER_ADDRESS,
   CHAINLINK_ORACLE_ADDRESS
 } from 'kashi'
-import { CHAINLINK_ORACLE } from 'kashi/functions/getOracleName'
 
 // returns null on errors
 export function useContract(
