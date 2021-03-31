@@ -96,7 +96,7 @@ export default function KashiPairs() {
             onClick={() => requestSort('details.total.borrow.string')}
           >
             <div className="flex items-center float-right text-right">
-              <div className="mr-2">Market Borrowed</div>
+              <div className="mr-2">Borrowed</div>
               {sortConfig &&
                 sortConfig.key === 'details.total.borrow.string' &&
                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||

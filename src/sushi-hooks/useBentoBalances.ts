@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import {
   useBentoBoxContract,
-  useBentoHelperContract,
   useKashiPairContract,
   useKashiPairHelperContract
 } from './useContract'
@@ -16,11 +15,12 @@ import Fraction from 'constants/Fraction'
 import _ from 'lodash'
 
 import { CLONE_ADDRESSES } from 'kashi/constants'
+import { useBoringHelperContract } from 'hooks/useContract'
 
 const useBentoBalances = () => {
   const { chainId, library, account } = useActiveWeb3React()
 
-  const bentoHelperContract = useBentoHelperContract()
+  const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
   const kashiPairHelperContract = useKashiPairHelperContract()
@@ -88,9 +88,8 @@ const useBentoBalances = () => {
         }
       })
     )
-    //console.log('tokensWithPricing:', tokensWithPricing, exchangeEthPrice)
-    const balances = await bentoHelperContract?.getBalances(account, tokens)
-    //console.log('balances:', balances, bentoHelperContract)
+
+    const balances = await boringHelperContract?.getBalances(account, tokens)
 
     const balancesWithDetails = tokens.map((tokenAddress, i) => {
       const amount = BigNumber.from(balances[i].bentoShare).isZero()
@@ -122,7 +121,7 @@ const useBentoBalances = () => {
     })
     //console.log('balancesWithDetails:', balancesWithDetails)
     setBalances(_.orderBy(balancesWithDetails, ['name'], ['asc']))
-  }, [account, bentoBoxContract, bentoHelperContract, kashiPairContract?.address, kashiPairHelperContract, library])
+  }, [account, bentoBoxContract, kashiPairContract?.address, kashiPairHelperContract, library])
 
   useEffect(() => {
     if (account && bentoBoxContract && library) {

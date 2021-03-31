@@ -19,7 +19,6 @@ import PENDING_ABI from '../constants/sushiAbis/pending.json'
 
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
 import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
-import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper3.json'
 import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/sushiAbis/chainlinkOracle.json'
@@ -151,10 +150,6 @@ export function useKashiPairContract(withSignerIfPossible?: boolean): Contract |
 export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? KASHI_HELPER_ADDRESS[chainId] : undefined, KASHIPAIRHELPER_ABI, withSignerIfPossible)
-}
-
-export function useBentoHelperContract(): Contract | null {
-  return useContract(BORING_HELPER_ADDRESS, BENTOHELPER_ABI, false)
 }
 
 export function useSushiSwapSwapper(): Contract | null {
