@@ -1,4 +1,4 @@
-export { Warning } from './Alert'
+export { default as Alert } from './Alert'
 export { default as SectionHeader } from './SectionHeader'
 export { default as Search } from './Search'
 export { PrimaryTabs, SecondaryTabs } from './Tabs'

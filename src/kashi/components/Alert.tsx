@@ -1,13 +1,6 @@
 import React from 'react'
-//import styled from 'styled-components'
 
-// export const Warning = styled.div<{ predicate: boolean }>`
-//   display: ${({ predicate }) => (predicate ? 'block' : 'none')}
-//   color: ${({ theme }) => theme.alertYellow};
-//   font-size: 16px;
-// `
-
-export const Warning = ({ predicate, children }: any) => {
+export default function Alert({ predicate, message }: { predicate: boolean; message?: string | null }) {
   return (
     <div className={predicate ? 'block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4' : 'hidden'}>
       <div className="flex">
@@ -28,7 +21,7 @@ export const Warning = ({ predicate, children }: any) => {
           </svg>
         </div>
         <div className="ml-3">
-          <p className="text-sm text-yellow-700">{children}</p>
+          <p className="text-sm text-yellow-700">{message}</p>
         </div>
       </div>
     </div>
