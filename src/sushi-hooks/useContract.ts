@@ -10,10 +10,6 @@ import ROUTER_ABI from '../constants/sushiAbis/router.json'
 import BAR_ABI from '../constants/sushiAbis/bar.json'
 import MAKER_ABI from '../constants/sushiAbis/maker.json'
 import TIMELOCK_ABI from '../constants/sushiAbis/timelock.json'
-import BASEINFO_ABI from '../constants/sushiAbis/baseInfo.json'
-import USERINFO_ABI from '../constants/sushiAbis/userInfo.json'
-import MAKERINFO_ABI from '../constants/sushiAbis/makerInfo.json'
-import PENDING_ABI from '../constants/sushiAbis/pending.json'
 
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
 import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
@@ -40,7 +36,6 @@ import {
 
 import {
   BENTOBOX_ADDRESS,
-  BORING_HELPER_ADDRESS,
   KASHI_ADDRESS,
   KASHI_HELPER_ADDRESS,
   SUSHISWAP_SWAPPER_ADDRESS,
@@ -111,6 +106,22 @@ export function useTimelockContract(): Contract | null {
   return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
 
+export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(BENTOBOX_ADDRESS, BENTOBOX_ABI, withSignerIfPossible)
+}
+
+export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(KASHI_ADDRESS, KASHIPAIR_ABI, withSignerIfPossible)
+}
+
+export function useSushiSwapSwapper(): Contract | null {
+  return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
+}
+
+export function useChainlinkOracle(): Contract | null {
+  return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
+}
+
 // experimental:
 export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
@@ -137,81 +148,8 @@ export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
   return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 
-export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract(BENTOBOX_ADDRESS, BENTOBOX_ABI, withSignerIfPossible)
-}
-
-export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract(KASHI_ADDRESS, KASHIPAIR_ABI, withSignerIfPossible)
-}
-
+// legacy:
 export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? KASHI_HELPER_ADDRESS[chainId] : undefined, KASHIPAIRHELPER_ABI, withSignerIfPossible)
-}
-
-export function useSushiSwapSwapper(): Contract | null {
-  return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
-}
-
-export function useChainlinkOracle(): Contract | null {
-  return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
-}
-
-export function useBaseInfoContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xBb7dF27209ea65Ae02Fe02E76cC1C0247765dcFF'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x39Bb002c6400f7F1679090fdAc722BC08e2a8C1e'
-        break
-    }
-  }
-  return useContract(address, BASEINFO_ABI, false)
-}
-
-export function useUserInfoContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x39Ec6247dE60d885239aD0bcE1bC9f1553f4EF75'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xe8f852908A61e074032382E9B5058F86fe2a0ea7'
-        break
-    }
-  }
-  return useContract(address, USERINFO_ABI, false)
-}
-
-export function useMakerInfoContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x001c92D884fe654A6C5438fa85a222aA400C1999'
-        break
-    }
-  }
-  return useContract(address, MAKERINFO_ABI, false)
-}
-
-export function usePendingContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029'
-        break
-    }
-  }
-  return useContract(address, PENDING_ABI, false)
 }
