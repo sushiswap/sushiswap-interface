@@ -224,8 +224,8 @@ export default function BorrowPair({
                 Coming Soon
               </TYPE.extraLargeHeader>
               <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-500">
-                We're working on refining the leverage experience to give our users the largest selection of long short
-                positions on various tokens. Stay tuned.
+                We&apos;re working on refining the leverage experience to give our users the largest selection of long
+                short positions on various tokens. Stay tuned.
               </p>
             </div>
             <div className="mt-12 mx-auto ">

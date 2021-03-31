@@ -19,7 +19,7 @@ const useTokenBalance = (tokenAddress: string) => {
   //const currentBlockNumber = useBlockNumber()
   // allows balance to update given transaction updates
   const currentTransactionStatus = useTransactionStatus()
-  let addressCheckSum = isAddress(tokenAddress)
+  const addressCheckSum = isAddress(tokenAddress)
   const tokenContract = useContract(addressCheckSum, ERC20_ABI, false)
 
   const getBalance = async (contract: Contract | null, owner: string | null | undefined): Promise<BalanceProps> => {

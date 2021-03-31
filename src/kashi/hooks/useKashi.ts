@@ -567,7 +567,7 @@ const useKashi = () => {
       let tokenAddress = isAddressString(address)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
-      let borrowAmount = amount?.value
+      const borrowAmount = amount?.value
       const pair = pairs.find(pair => pair.address === pairAddress)
 
       /*if (max) {

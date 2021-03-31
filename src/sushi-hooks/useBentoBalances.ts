@@ -80,7 +80,6 @@ const useBentoBalances = () => {
       tokens.map(async (address: string) => {
         try {
           const tokenExchangeDetails = await sushiData.exchange.token({
-            // eslint-disable-next-line @typescript-eslint/camelcase
             token_address: getMainnetAddress(address)
           })
           return tokenExchangeDetails?.derivedETH * exchangeEthPrice
