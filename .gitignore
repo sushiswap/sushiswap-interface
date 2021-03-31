@@ -23,10 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-notes.txt
 .idea/
-
-.vscode/
 
 package-lock.json
 
@@ -34,6 +31,3 @@ cypress/videos
 cypress/screenshots
 cypress/fixtures/example.json
 .vercel
-
-# ignore generated css
-src/styles.css
