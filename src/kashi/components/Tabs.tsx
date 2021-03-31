@@ -5,7 +5,6 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import styled from 'styled-components'
 
 export const PrimaryTabs = styled(Tabs)`
-  padding: 32px;
   .react-tabs__tab-list {
     display: flex;
     border-radius: 10px;

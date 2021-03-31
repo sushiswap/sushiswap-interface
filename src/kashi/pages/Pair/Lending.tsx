@@ -46,7 +46,7 @@ export default function LendingPair({
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
             ≈ {formattedNum(pair.userNetWorth, true)}
           </TYPE.largeHeader>
-          <Card backgroundColor={theme.extraDarkPurple}>
+          <Card backgroundColor={theme.extraDarkPurple} p="p-4">
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Debt Ceiling:</TYPE.body>
               <TYPE.body color="highEmphesisText">
@@ -124,7 +124,7 @@ export default function LendingPair({
           </CardHeader>
         }
       >
-        <RowBetween style={{ padding: '32px 48px 0' }} align="top">
+        <div className="flex justify-between mb-8">
           <div>
             <TYPE.mediumHeader color="mediumEmphesisText">Supply Balance</TYPE.mediumHeader>
             <TYPE.largeHeader color="primaryBlue">
@@ -145,7 +145,7 @@ export default function LendingPair({
               <TYPE.largeHeader color="highEmphesisText">{formattedPercent(pair.currentSupplyAPR)}</TYPE.largeHeader>
             </div>
           </div>
-        </RowBetween>
+        </div>
 
         <PrimaryTabs
           forceRenderTabPanel

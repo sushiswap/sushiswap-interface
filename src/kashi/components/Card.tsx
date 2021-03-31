@@ -8,7 +8,8 @@ export default function Card({
   title = '',
   description = '',
   children,
-  className
+  className,
+  padding = undefined
 }: any) {
   const theme = useContext(ThemeContext)
   return (
@@ -24,7 +25,7 @@ export default function Card({
       }}
     >
       {header && <>{header}</>}
-      <div className="p-5">
+      <div className={`${padding ? padding : 'p-8'}`}>
         {title && <div className="font-semibold text-2xl mb-4">{title}</div>}
         {description && <div className="font-base text-base text-gray-400">{description}</div>}
         {children}

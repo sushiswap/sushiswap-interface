@@ -55,7 +55,7 @@ export default function BorrowPair({
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
             ≈ {formattedNum(pair.userNetWorth, true)}
           </TYPE.largeHeader>
-          <Card backgroundColor={theme.extraDarkPurple}>
+          <Card backgroundColor={theme.extraDarkPurple} padding="p-4">
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Borrow Limit Used:</TYPE.body>
               <div className="flex items-center">
@@ -74,7 +74,7 @@ export default function BorrowPair({
                 <TYPE.body color="highEmphesisText">???</TYPE.body>
               </RowBetween> */}
           </Card>
-          <Card backgroundColor="transparent">
+          <Card backgroundColor="transparent" padding="p-4">
             <RowBetween>
               <TYPE.body color="mediumEmphesisText">Loan to Value:</TYPE.body>
               <TYPE.body color="highEmphesisText">75%</TYPE.body>
@@ -159,7 +159,7 @@ export default function BorrowPair({
           </CardHeader>
         }
       >
-        <RowBetween style={{ padding: '32px 48px 0' }} align="top">
+        <div className="flex justify-between mb-8">
           <div>
             <TYPE.mediumHeader color="mediumEmphesisText">Collateral Balance</TYPE.mediumHeader>
             <TYPE.largeHeader color="primaryBlue">
@@ -182,7 +182,7 @@ export default function BorrowPair({
               </TYPE.largeHeader>
             </div>
           </div>
-        </RowBetween>
+        </div>
 
         <PrimaryTabs
           forceRenderTabPanel
