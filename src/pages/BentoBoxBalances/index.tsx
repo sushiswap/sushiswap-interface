@@ -23,19 +23,6 @@ export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
 `
 
-const PageWrapper = styled(AutoColumn)`
-  max-width: 1280px;
-  width: 100%;
-`
-
-const StyledBaseCard = styled(BaseCard)`
-  border: none;
-  background: ${({ theme }) => theme.baseCard};
-  position: relative;
-  overflow: hidden;
-  border-radius: 0 0 15px 15px;
-`
-
 export default function BentoBalances() {
   const history = useHistory()
   const theme = useContext(ThemeContext)
@@ -60,96 +47,92 @@ export default function BentoBalances() {
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
 
   return (
-    <>
-      <PageWrapper>
-        <Layout
-          left={
-            <Card
-              backgroundImage={BentoBoxImage}
-              title={'Deposit tokens into BentoBox for all the yields.'}
-              description={
-                'BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets.'
-              }
-            />
+    <Layout
+      left={
+        <Card
+          backgroundImage={BentoBoxImage}
+          title={'Deposit tokens into BentoBox for all the yields.'}
+          description={
+            'BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets.'
           }
-        >
-          <Card
-            header={
-              <CardHeader className="flex justify-between items-center">
-                <div className="md:hidden">
-                  <div className="flex float-right items-center">
-                    <div className="font-semibold">My Bento Balances</div>
+        />
+      }
+    >
+      <Card
+        header={
+          <CardHeader className="flex justify-between items-center">
+            <div className="md:hidden">
+              <div className="flex float-right items-center">
+                <div className="font-semibold">BentoBox Balances</div>
+              </div>
+            </div>
+            <div className="flex w-full justify-between">
+              <div className="hidden md:flex items-center">
+                <button
+                  onClick={() => {
+                    if (history.length < 3) {
+                      history.push('/bento')
+                    } else {
+                      history.goBack()
+                    }
+                  }}
+                  className="mr-4 p-2 rounded-full"
+                  style={{ background: theme.baseCard }}
+                >
+                  <ChevronLeft strokeWidth={2} size={24} />
+                </button>
+                <img src={BentoBoxLogo} className="block w-10 mr-2" />
+                <div className="font-semibold text-lg">My Bento Balances</div>
+              </div>
+              <div className="w-full md:w-1/2">
+                <div className="relative">
+                  <input
+                    className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
+                    style={{ background: theme.baseCard }}
+                    onChange={e => search(e.target.value)}
+                    value={term}
+                    placeholder="Search by name, symbol, address"
+                  />
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <Search size={16} />
                   </div>
                 </div>
-                <div className="flex w-full justify-between">
-                  <div className="hidden md:flex items-center">
-                    <button
-                      onClick={() => {
-                        if (history.length < 3) {
-                          history.push('/bento')
-                        } else {
-                          history.goBack()
-                        }
-                      }}
-                      className="mr-4 p-2 rounded-full"
-                      style={{ background: theme.baseCard }}
-                    >
-                      <ChevronLeft strokeWidth={2} size={24} />
-                    </button>
-                    <img src={BentoBoxLogo} className="block w-10 mr-2" />
-                    <div className="font-semibold text-lg">My Bento Balances</div>
-                  </div>
-                  <div className="w-full md:w-1/2">
-                    <div className="relative">
-                      <input
-                        className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
-                        style={{ background: theme.baseCard }}
-                        onChange={e => search(e.target.value)}
-                        value={term}
-                        placeholder="Search by name, symbol, address"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <Search size={16} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-            }
+              </div>
+            </div>
+          </CardHeader>
+        }
+      >
+        <AutoColumn gap="md" justify="center">
+          <AutoColumn
+            gap="md"
+            style={{
+              width: '100%'
+            }}
           >
-            <AutoColumn gap="md" justify="center">
-              <AutoColumn
-                gap="md"
-                style={{
-                  width: '100%'
-                }}
-              >
-                <div>
-                  <div className="flex justify-between px-2 pb-4">
-                    <div className="font-medium text-base text-gray-500">Total Deposits:</div>
-                    <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
-                  </div>
-                  <FixedScrollable>
-                    {items &&
-                      items.length > 0 &&
-                      items.map((balance: any, i: number) => {
-                        // todo: remove increment for testing purposes
-                        return (
-                          <TokenBalance
-                            tokenAddress={balance.address}
-                            tokenDetails={balance}
-                            key={balance.address + '_' + i}
-                          />
-                        )
-                      })}
-                  </FixedScrollable>
-                </div>
-              </AutoColumn>
-            </AutoColumn>
-          </Card>
-        </Layout>
-      </PageWrapper>
-    </>
+            <div>
+              <div className="flex justify-between px-2 pb-4">
+                <div className="font-medium text-base text-gray-500">Total Deposits:</div>
+                <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
+              </div>
+              <FixedScrollable>
+                {items &&
+                  items.length > 0 &&
+                  items.map((balance: any, i: number) => {
+                    // todo: remove increment for testing purposes
+                    return (
+                      <TokenBalance
+                        tokenAddress={balance.address}
+                        tokenDetails={balance}
+                        key={balance.address + '_' + i}
+                      />
+                    )
+                  })}
+              </FixedScrollable>
+            </div>
+          </AutoColumn>
+        </AutoColumn>
+      </Card>
+    </Layout>
   )
 }
 interface TokenBalanceProps {
