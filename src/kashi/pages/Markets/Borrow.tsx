@@ -43,40 +43,28 @@ export default function KashiPairs() {
     >
       <Card header={<SectionHeader search={search} term={term} />}>
         <div>
-          <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold text-gray-500">
+          <div className="pb-4 px-4 grid grid-flow-col grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold text-gray-500">
             <div
-              className="hover:text-gray-400 col-span-2 cursor-pointer flex items-center"
+              className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"
               onClick={() => requestSort('symbol')}
             >
               <div className="mr-2">Pair</div>
               {sortConfig &&
-                sortConfig.key === 'symbol' &&
+                sortConfig.key === 'collateral.symbol' &&
                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
-            <div
-              className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
-              onClick={() => requestSort('collateral.symbol')}
-            >
-              <div className="flex items-center float-right">
-                <div className="mr-2">Collateral</div>
-                {sortConfig &&
-                  sortConfig.key === 'collateral.symbol' &&
-                  ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-              </div>
-            </div>
-            <div
-              className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
-              onClick={() => requestSort('asset.symbol')}
-            >
-              <div className="flex items-center float-right">
-                <div className="mr-2">Borrow</div>
-                {sortConfig &&
-                  sortConfig.key === 'asset.symbol' &&
-                  ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-              </div>
+          </div>
+          <div
+            className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
+            onClick={() => requestSort('asset.symbol')}
+          >
+            <div className="flex items-center float-right">
+              <div className="mr-2">Borrow</div>
+              {sortConfig &&
+                sortConfig.key === 'asset.symbol' &&
+                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                  (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
             <div
               className="hidden lg:block hover:text-gray-400 cursor-pointer"
@@ -129,16 +117,28 @@ export default function KashiPairs() {
                         className="py-4 px-4 items-center align-center grid grid-cols-4 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold"
                         style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
                       >
-                        <div className="flex flex-col sm:flex-row col-span-2 items-start sm:items-center">
-                          <div className="flex space-x-2">
-                            <img
-                              src={getTokenIcon(pair.collateral.address)}
-                              className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                            />
-                            <img
-                              src={getTokenIcon(pair.asset.address)}
-                              className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                            />
+                        <div
+                          className="py-4 px-4 items-center align-center grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold"
+                          style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
+                        >
+                          <div className="flex flex-col sm:flex-row col-span-2 md:col-span-1 items-start sm:items-center">
+                            <div className="flex space-x-2">
+                              <img
+                                src={getTokenIcon(pair.collateral.address)}
+                                className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                              />
+                              <img
+                                src={getTokenIcon(pair.asset.address)}
+                                className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                              />
+                              <div className="text-left pl-4 md:hidden">
+                                {pair.collateral.symbol} /<br></br>
+                                {pair.asset.symbol}
+                                <br></br>
+                                <span className="text-white-500 text-xs">{pair.oracle.name}</span>
+                              </div>
+                            </div>
+                            <div className="sm:items-end md:hidden"></div>
                           </div>
                           <div className="sm:items-end">
                             <div className="text-left hidden sm:block pl-4">{pair.collateral.symbol} /</div>
