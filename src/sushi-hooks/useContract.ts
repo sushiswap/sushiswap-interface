@@ -22,6 +22,7 @@ import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
 import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper3.json'
 import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
+import CHAINLINK_ORACLE_ABI from '../constants/sushiAbis/chainlinkOracle.json'
 
 import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 
@@ -45,8 +46,10 @@ import {
   BORING_HELPER_ADDRESS,
   KASHI_ADDRESS,
   KASHI_HELPER_ADDRESS,
-  SUSHISWAP_SWAPPER_ADDRESS
+  SUSHISWAP_SWAPPER_ADDRESS,
+  CHAINLINK_ORACLE_ADDRESS
 } from 'kashi'
+import { CHAINLINK_ORACLE } from 'kashi/functions/getOracleName'
 
 // returns null on errors
 export function useContract(
@@ -156,6 +159,10 @@ export function useBentoHelperContract(): Contract | null {
 
 export function useSushiSwapSwapper(): Contract | null {
   return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
+}
+
+export function useChainlinkOracle(): Contract | null {
+  return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
 }
 
 export function useBaseInfoContract(): Contract | null {
