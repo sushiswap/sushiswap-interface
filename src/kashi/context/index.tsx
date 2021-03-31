@@ -115,9 +115,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
         const supported_oracles = [chainlinkOracleContract?.address]
 
-        const logs = await bentoBoxContract.queryFilter(
-          bentoBoxContract.filters.LogDeploy('0x74A81CB5b6996d9347b864b9a1492a6509e51e65')
-        )
+        const logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
+        console.log('LOGS', logs)
 
         const pairsAll: any[] = []
 
@@ -141,7 +140,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
           if (pair.oracle == chainlinkOracleContract?.address) {
             const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
-            let decimals = BigInt('36')
+            let decimals = BigInt('54')
             let from = ''
             let to = ''
             if (params[0] != '0x0000000000000000000000000000000000000000') {
