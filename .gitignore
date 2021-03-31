@@ -34,3 +34,6 @@ cypress/videos
 cypress/screenshots
 cypress/fixtures/example.json
 .vercel
+
+# ignore generated css
+src/styles.css

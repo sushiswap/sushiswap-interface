@@ -1,8 +1,7 @@
-// const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme')
 // const colors = require("tailwindcss/colors");
 
 module.exports = {
-  //prefix: "sushi-",
   darkMode: 'class',
   theme: {
     // screens: {
