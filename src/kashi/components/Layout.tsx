@@ -12,13 +12,7 @@ interface LayoutProps {
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   const location = useLocation()
   return (
-    <div
-      style={{
-        maxWidth: '1280px',
-        width: '100%'
-      }}
-      className="px-4"
-    >
+    <div className="container mx-auto px-4">
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
         <div className="flex justify-center col-span-12 lg:col-span-3 lg:justify-start">
           <div className="flex items-center">
@@ -63,7 +57,7 @@ export default function Layout({ left = undefined, children = undefined, right =
           </nav>
         </div>
       </div>
-      <div className={`md:px-4 grid grid-cols-12 gap-4 min-h-1/2`}>
+      <div className={`grid grid-cols-12 gap-4 min-h-1/2`}>
         {left && (
           <div className={`hidden lg:block lg:col-span-3`} style={{ maxHeight: '40rem' }}>
             {left}
