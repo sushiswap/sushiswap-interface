@@ -169,7 +169,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 }
               }
             }
-            if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase()) {
+            if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase() && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
               const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
               const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
               if (!divider.eq(params[2])) {
