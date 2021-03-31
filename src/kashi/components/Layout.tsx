@@ -1,9 +1,7 @@
 import React from 'react'
-import { TeardropCard, Navigation } from '.'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
-import MarketsNavigation from './MarketsNavigation'
-import Card from './Card'
-import { Warning } from './Alert'
+import { NavLink, useLocation } from 'react-router-dom'
+import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -12,39 +10,73 @@ interface LayoutProps {
 }
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
+  const location = useLocation()
   return (
     <div
       style={{
         maxWidth: '1280px',
         width: '100%'
       }}
+      className="px-4"
     >
-      <div className={`md:px-4 grid grid-cols-10 gap-4`}>
-        <div className="flex justify-center col-span-10 lg:col-span-2 lg:justify-start">
-          <div className="flex items-baseline">
+      <div className={`mb-2 grid grid-cols-12 gap-4`}>
+        <div className="flex justify-center col-span-12 lg:col-span-3 lg:justify-start">
+          <div className="flex items-center">
             <img src={KashiLogo} className="block w-20 lg:w-26 mr-2" />
             <div className="font-semibold text-2xl">Kashi</div>
           </div>
         </div>
-        <div className="flex col-span-10 lg:col-span-8 items-end">
-          <div className="w-full flex justify-center lg:justify-between px-6">
-            <div className="hidden lg:block">
-              <MarketsNavigation />
+        <div className="flex col-span-12 lg:col-span-9 items-end">
+          <nav className="flex justify-between items-center w-full">
+            <div className="flex">
+              <NavLink to="/bento/kashi/lend" className="border-transparent px-6 border-b-2">
+                <div
+                  className={
+                    'flex items-center font-medium ' +
+                    (location.pathname === '/bento/kashi/lend' ? 'text-white' : 'text-gray-500')
+                  }
+                >
+                  <div className="whitespace-nowrap text-base mr-2">Lend</div>
+                </div>
+              </NavLink>
+              <NavLink to="/bento/kashi/borrow" className="border-transparent px-6 border-b-2">
+                <div
+                  className={
+                    'flex items-center font-medium ' +
+                    (location.pathname === '/bento/kashi/borrow' ? 'text-white' : 'text-gray-500')
+                  }
+                >
+                  <div className="whitespace-nowrap text-base mr-2">Borrow</div>
+                </div>
+              </NavLink>
             </div>
-            {/* <Navigation /> */}
-          </div>
-        </div>
-        <div className="flex col-span-10 pb-6 px-2 justify-center">
-          <Warning predicate={true}>
-            The Kashi staging markets will soon be replaced with production markets, so please bear this in mind before
-            interacting with them.
-          </Warning>
+
+            <NavLink
+              to="/bento/balances"
+              className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
+                location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'
+              }`}
+            >
+              <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
+              <div className="whitespace-nowrap text-base">My BentoBox</div>
+            </NavLink>
+          </nav>
         </div>
       </div>
-      <div className={`md:px-4 grid grid-cols-10 gap-4`}>
-        {left && <div className={`hidden lg:block lg:col-span-2`}>{left}</div>}
-        <TeardropCard className={`col-span-10 ${right ? 'lg:col-span-5' : 'lg:col-span-8'}`}>{children}</TeardropCard>
-        {right && <Card className="col-span-10 lg:col-span-3">{right}</Card>}
+      <div className={`md:px-4 grid grid-cols-12 gap-4 min-h-1/2`}>
+        {left && (
+          <div className={`hidden lg:block lg:col-span-3`} style={{ maxHeight: '40rem' }}>
+            {left}
+          </div>
+        )}
+        <div className={`col-span-12 ${right ? 'lg:col-span-6' : 'lg:col-span-9'}`} style={{ minHeight: '40rem' }}>
+          {children}
+        </div>
+        {right && (
+          <div className="col-span-12 lg:col-span-3" style={{ maxHeight: '40rem' }}>
+            {right}
+          </div>
+        )}
       </div>
     </div>
   )
