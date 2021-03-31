@@ -1,13 +1,12 @@
 import React from 'react'
-//import styled from 'styled-components'
 
-// export const Warning = styled.div<{ predicate: boolean }>`
-//   display: ${({ predicate }) => (predicate ? 'block' : 'none')}
-//   color: ${({ theme }) => theme.alertYellow};
-//   font-size: 16px;
-// `
-
-export const Warning = ({ predicate, children }: any) => {
+export default function Alert({
+  predicate,
+  children
+}: {
+  predicate: boolean
+  children: React.ReactChildren | React.ReactChildren[]
+}) {
   return (
     <div className={predicate ? 'block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4' : 'hidden'}>
       <div className="flex">

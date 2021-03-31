@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import useTheme from 'hooks/useTheme'
 import { WETH, ETHER } from '@sushiswap/sdk'
 import { TYPE } from 'theme'
-import { Warning, Dots } from '.'
+import { Alert, Dots } from '.'
 import { ButtonBlue, ButtonPink } from 'components/Button'
 import { RowBetween } from 'components/Row'
 import { AutoColumn } from 'components/Column'
@@ -670,7 +670,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             </>
           </InputRow>
 
-          <Warning predicate={getWarningPredicate()}>{getWarningMessage()}</Warning>
+          <Alert predicate={getWarningPredicate()}>{getWarningMessage()}</Alert>
         </>
         {showApprove && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>
