@@ -1,4 +1,4 @@
-import './styles.css'
+import './tailwind.css'
 import 'inter-ui'
 import '@fontsource/dm-sans/700.css'
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
