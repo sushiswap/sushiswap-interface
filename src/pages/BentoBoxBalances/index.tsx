@@ -11,7 +11,7 @@ import { useActiveWeb3React } from 'hooks'
 import useBentoBalances from 'sushi-hooks/useBentoBalances'
 import { formatFromBalance, formattedNum } from '../../utils'
 import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
-import { InfoCard, FixedScrollable, Layout } from '../../kashi/components'
+import { Card, CardHeader, FixedScrollable, Layout } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
@@ -64,7 +64,7 @@ export default function BentoBalances() {
       <PageWrapper>
         <Layout
           left={
-            <InfoCard
+            <Card
               backgroundImage={BentoBoxImage}
               title={'Deposit tokens into BentoBox for all the yields.'}
               description={
@@ -73,57 +73,58 @@ export default function BentoBalances() {
             />
           }
         >
-          <AutoColumn gap="md" justify="center">
-            <AutoColumn
-              gap="md"
-              style={{
-                width: '100%',
-                paddingTop: '1rem',
-                background: `${theme.mediumDarkPurple}`,
-                borderRadius: '12px 12px 12px 12px'
-              }}
-            >
-              <div className="px-6 pb-2 md:px-2 md:pb-4 flex md:hidden justify-between">
-                <div className="flex float-right items-center">
-                  <div className="font-semibold">My Bento Balances</div>
+          <Card
+            header={
+              <CardHeader className="flex justify-between items-center">
+                <div className="md:hidden">
+                  <div className="flex float-right items-center">
+                    <div className="font-semibold">My Bento Balances</div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="hidden md:flex ml-4 items-center">
-                  <button
-                    onClick={() => {
-                      if (history.length < 3) {
-                        history.push('/bento')
-                      } else {
-                        history.goBack()
-                      }
-                    }}
-                    className="mr-4 p-2 rounded-full"
-                    style={{ background: theme.baseCard }}
-                  >
-                    <ChevronLeft strokeWidth={2} size={24} />
-                  </button>
-                  <img src={BentoBoxLogo} className="block w-10 mr-2" />
-                  <div className="font-semibold text-lg">My Bento Balances</div>
-                </div>
-                <div className="px-4 w-full md:w-1/2">
-                  <div className="relative">
-                    <input
-                      className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
+                <div className="flex w-full justify-between">
+                  <div className="hidden md:flex items-center">
+                    <button
+                      onClick={() => {
+                        if (history.length < 3) {
+                          history.push('/bento')
+                        } else {
+                          history.goBack()
+                        }
+                      }}
+                      className="mr-4 p-2 rounded-full"
                       style={{ background: theme.baseCard }}
-                      onChange={e => search(e.target.value)}
-                      value={term}
-                      placeholder="Search by name, symbol, address"
-                    />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <Search size={16} />
+                    >
+                      <ChevronLeft strokeWidth={2} size={24} />
+                    </button>
+                    <img src={BentoBoxLogo} className="block w-10 mr-2" />
+                    <div className="font-semibold text-lg">My Bento Balances</div>
+                  </div>
+                  <div className="w-full md:w-1/2">
+                    <div className="relative">
+                      <input
+                        className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
+                        style={{ background: theme.baseCard }}
+                        onChange={e => search(e.target.value)}
+                        value={term}
+                        placeholder="Search by name, symbol, address"
+                      />
+                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <Search size={16} />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <StyledBaseCard padding={'0px'}>
-                <div className="p-2 sm:p-4">
+              </CardHeader>
+            }
+          >
+            <AutoColumn gap="md" justify="center">
+              <AutoColumn
+                gap="md"
+                style={{
+                  width: '100%'
+                }}
+              >
+                <div>
                   <div className="flex justify-between px-2 pb-4">
                     <div className="font-medium text-base text-gray-500">Total Deposits:</div>
                     <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
@@ -143,9 +144,9 @@ export default function BentoBalances() {
                       })}
                   </FixedScrollable>
                 </div>
-              </StyledBaseCard>
+              </AutoColumn>
             </AutoColumn>
-          </AutoColumn>
+          </Card>
         </Layout>
       </PageWrapper>
     </>

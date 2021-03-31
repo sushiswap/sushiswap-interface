@@ -51,7 +51,7 @@ const KashiCard = () => {
           <div className="w-full">
             {account ? (
               kashiApproved && kashiApproved === true ? (
-                <Link to={'/bento/kashi/supply'}>
+                <Link to={'/bento/kashi/borrow'}>
                   <ButtonSecondary padding="10px 8px" margin="0px" borderRadius="6px">
                     <Text fontWeight={500} fontSize={16}>
                       Enter

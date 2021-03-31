@@ -8,7 +8,7 @@ export const PrimaryTabs = styled(Tabs)`
   padding: 32px;
   .react-tabs__tab-list {
     display: flex;
-    border-radius: 20px;
+    border-radius: 10px;
     background: ${({ theme }) => theme.mediumDarkPurple};
     font-size: 20px;
     font-weight: 700;
@@ -23,7 +23,7 @@ export const PrimaryTabs = styled(Tabs)`
     flex: 1;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 10px;
     bottom: 0;
     color: ${({ theme }) => theme.mediumEmphesisText};
     padding: 16px 12px;

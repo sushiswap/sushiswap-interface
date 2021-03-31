@@ -1,23 +1,19 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useLocation } from 'react-router'
-import { ThemeContext } from 'styled-components'
 import { AutoColumn } from '../../components/Column'
 
-import { Search, Stats, MarketsNavigation, Navigation, SplitPane } from '.'
+import { Search, Stats, CardHeader } from '.'
 
 const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
-  const theme = useContext(ThemeContext)
   const { pathname } = useLocation()
   return (
-    <>
-      {/* Header */}
+    <CardHeader style={{ padding: 0 }}>
       <AutoColumn
         gap="md"
         style={{
           width: '100%',
           paddingTop: '1rem',
-          paddingBottom: '1rem',
-          background: `${theme.mediumDarkPurple}`
+          paddingBottom: '1rem'
         }}
       >
         {/* Mobile */}
@@ -29,8 +25,8 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
                   switch (pathname) {
                     case '/bento/kashi':
                       return 'All Kashi Markets'
-                    case '/bento/kashi/supply':
-                      return 'Kashi Supply Markets'
+                    case '/bento/kashi/lend':
+                      return 'Kashi Lend Markets'
                     case '/bento/kashi/borrow':
                       return 'Kashi Borrow Markets'
                     case '/bento/kashi/positions':
@@ -40,7 +36,7 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
                   }
                 })()}
               </div>
-              <MarketsNavigation />
+              {/* <MarketsNavigation /> */}
             </div>
             {portfolio ? children : <Search />}
           </div>
@@ -54,8 +50,8 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
                   switch (pathname) {
                     case '/bento/kashi':
                       return 'All Kashi Markets'
-                    case '/bento/kashi/supply':
-                      return 'Kashi Supply Markets'
+                    case '/bento/kashi/lend':
+                      return 'Kashi Lend Markets'
                     case '/bento/kashi/borrow':
                       return 'Kashi Borrow Markets'
                     case '/bento/kashi/positions':
@@ -73,7 +69,7 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
           </div>
         </div>
       </AutoColumn>
-    </>
+    </CardHeader>
   )
 }
 
