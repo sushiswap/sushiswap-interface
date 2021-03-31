@@ -22,6 +22,7 @@
     "@sushiswap/sushi-data": "^1.0.7",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.2.1",
+    "@tailwindcss/line-clamp": "^0.2.0",
     "@tailwindcss/postcss7-compat": "^2.0.4",
     "@tailwindcss/typography": "^0.3.1",
     "@types/jest": "^25.2.1",
