@@ -13,8 +13,6 @@ import TIMELOCK_ABI from '../constants/sushiAbis/timelock.json'
 import BASEINFO_ABI from '../constants/sushiAbis/baseInfo.json'
 import USERINFO_ABI from '../constants/sushiAbis/userInfo.json'
 import MAKERINFO_ABI from '../constants/sushiAbis/makerInfo.json'
-import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
-import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
 import PENDING_ABI from '../constants/sushiAbis/pending.json'
 
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
@@ -203,38 +201,6 @@ export function useMakerInfoContract(): Contract | null {
     }
   }
   return useContract(address, MAKERINFO_ABI, false)
-}
-
-export function useDashboardContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xD132Ce8eA8865348Ac25E416d95ab1Ba84D216AF'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
-        break
-    }
-  }
-  return useContract(address, DASHBOARD_ABI, false)
-}
-
-export function useDashboard2Contract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x1B13fC91c6f976959E7c236Ac1CF17E052d113Fc'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
-        break
-    }
-  }
-  return useContract(address, DASHBOARD2_ABI, false)
 }
 
 export function usePendingContract(): Contract | null {
