@@ -1,12 +1,6 @@
 import React from 'react'
 
-export default function Alert({
-  predicate,
-  children
-}: {
-  predicate: boolean
-  children?: React.ReactChild | React.ReactChild[]
-}) {
+export default function Alert({ predicate, message }: { predicate: boolean; message?: string | null }) {
   return (
     <div className={predicate ? 'block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4' : 'hidden'}>
       <div className="flex">
@@ -27,7 +21,7 @@ export default function Alert({
           </svg>
         </div>
         <div className="ml-3">
-          <p className="text-sm text-yellow-700">{children}</p>
+          <p className="text-sm text-yellow-700">{message}</p>
         </div>
       </div>
     </div>

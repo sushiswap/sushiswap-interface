@@ -670,7 +670,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
             </>
           </InputRow>
 
-          <Alert predicate={getWarningPredicate()}>{getWarningMessage()}</Alert>
+          <Alert predicate={getWarningPredicate()} message={getWarningMessage()} />
         </>
         {showApprove && (
           <ButtonBlue borderRadius="10px" padding="10px" onClick={approve}>

@@ -129,7 +129,7 @@
     "@walletconnect/web3-provider": "1.1.1-alpha.0"
   },
   "scripts": {
-    "start": "cross-env PORT=3001 react-app-rewired start",
+    "start": "cross-env PORT=3000 react-app-rewired start",
     "dev": "cross-env PORT=3001 react-app-rewired start",
     "build": "cross-env CI= GENERATE_SOURCEMAP=false react-app-rewired build",
     "eject": "react-app-rewired eject",
