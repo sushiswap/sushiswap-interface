@@ -5,7 +5,7 @@ export default function Alert({
   children
 }: {
   predicate: boolean
-  children: React.ReactChildren | React.ReactChildren[]
+  children?: React.ReactChild | React.ReactChild[]
 }) {
   return (
     <div className={predicate ? 'block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4' : 'hidden'}>
