@@ -54,7 +54,7 @@ const useBentoBalances = () => {
         },
         amountUSD: amountUSD
       }
-    }).filter(token => token.balance.gt("0"))
+    }).filter(token => token.balance.gt("0") || token.bentoBalance.gt("0"))
     setBalances(_.orderBy(balancesWithDetails, ['name'], ['asc']))
   }, [account, bentoBoxContract, kashiPairContract?.address, kashiPairHelperContract, library])
 
