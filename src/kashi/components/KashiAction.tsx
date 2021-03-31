@@ -34,7 +34,7 @@ export const LabelRow = styled.div`
 export const InputRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
-  border-radius: 20px;
+  border-radius: 10px;
   background-color: #2e3348;
   padding: 0.75rem 0.5rem 0.75rem 1rem;
 `
@@ -48,7 +48,7 @@ export const Aligner = styled.span`
 export const InputPanel = styled.div<{ hideInput?: boolean }>`
   ${({ theme }) => theme.flexColumnNoWrap}
   position: relative;
-  border-radius: ${({ hideInput }) => (hideInput ? '8px' : '20px')};
+  border-radius: 10px;
   background-color: ${({ theme }) => theme.bg2};
   z-index: 1;
 `
