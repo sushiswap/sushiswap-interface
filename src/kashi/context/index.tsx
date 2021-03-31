@@ -88,7 +88,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const pairAddresses = CLONE_ADDRESSES[chainId || 1]
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const kashiPairContract = useKashiPairContract()
@@ -97,15 +96,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
   // Default token list fine for now, might want to more to the broader collection later.
   const tokens = useDefaultTokens()
 
-  // TODO: Use multicall to poll by block
-  // const { result, loading } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', [
-  //   account ?? undefined,
-  //   pairAddresses
-  // ])
-
   const updatePairs = useCallback(
     async function() {
-      if (boringHelperContract && bentoBoxContract && kashiPairContract && pairAddresses) {
+      if (boringHelperContract && bentoBoxContract && kashiPairContract) {
         const info = await boringHelperContract.getUIInfo(
           account || '0x0000000000000000000000000000000000000000',
           [],
@@ -262,7 +255,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   )
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
-                    ? BigNumber.from(1)
+                    ? BigNumber.from(0)
                     : totalBorrow.elastic
 
                   const userBorrowAmount = toElastic(totalBorrow, userBorrowPart, false)
@@ -404,7 +397,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                       Number(assetUSD)
 
                   return {
-                    address: pairAddresses[i],
+                    address: pairsAll[i].address,
                     accrueInfo: {
                       feesEarnedFraction: accrueInfo.feesEarnedFraction,
                       interestPerSecond: accrueInfo.interestPerSecond,
@@ -595,7 +588,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         })
       }
     },
-    [boringHelperContract, bentoBoxContract, chainId, kashiPairContract, account, pairAddresses, tokens]
+    [boringHelperContract, bentoBoxContract, chainId, kashiPairContract, account, tokens]
   )
 
   useInterval(updatePairs, 10000)

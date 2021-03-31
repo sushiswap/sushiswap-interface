@@ -47,7 +47,7 @@ export default function KashiPairs() {
             className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"
             onClick={() => requestSort('symbol')}
           >
-            <div className="mr-2">Pair</div>
+            <div className="mr-2">Market</div>
             {sortConfig &&
               sortConfig.key === 'symbol' &&
               ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||

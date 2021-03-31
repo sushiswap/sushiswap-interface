@@ -35,7 +35,7 @@ export default function Header() {
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
             <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
-              Pairs Supplied
+              Lend
             </div>
           </div>
           <div className="absolute bottom-0 left-0 w-full h-2 flex">
@@ -48,7 +48,7 @@ export default function Header() {
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
             <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
-              Pairs Borrowed
+              Borrowed
             </div>
           </div>
           <div className="absolute bottom-0 left-0 w-full h-2 flex">

@@ -42,7 +42,7 @@ export default function LendingPair({
       }
       right={
         <Card>
-          <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Pair</TYPE.mediumHeader>
+          <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Market</TYPE.mediumHeader>
           <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
             ≈ {formattedNum(pair.userNetWorth, true)}
           </TYPE.largeHeader>
@@ -109,8 +109,9 @@ export default function LendingPair({
               <div className="flex justify-between items-center">
                 <div>
                   <TYPE.largeHeader color="highEmphesisText" lineHeight={1}>
-                    {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
+                    <span>Lend {pair && pair.asset.symbol}</span>
                   </TYPE.largeHeader>
+                  <TYPE.subHeader color="mediumEmphesisText">with {pair && pair.collateral.symbol} as collateral</TYPE.subHeader>
                   <AutoRow>
                     <TYPE.subHeader color="mediumEmphesisText" style={{ marginRight: 4 }}>
                       Oracle:
