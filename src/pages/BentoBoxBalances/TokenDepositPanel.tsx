@@ -35,7 +35,7 @@ const ButtonSelect = styled.button`
   height: 2.2rem;
   font-size: 20px;
   font-weight: 500;
-  background-color: ${({ theme }) => theme.bg3};
+  background-color: ${({ theme }) => theme.primaryButton};
   color: ${({ theme }) => theme.white};
   border-radius: ${({ theme }) => theme.borderRadius};
   border-radius: 0 0 12px 12px;
@@ -47,15 +47,16 @@ const ButtonSelect = styled.button`
   padding: 0 0.5rem;
   width: 100%;
   &:focus {
-    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.bg3)};
-    background-color: ${({ theme }) => darken(0.05, theme.bg3)};
+    box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.primaryButton)};
+    background-color: ${({ theme }) => darken(0.05, theme.primaryButton)};
   }
   &:hover {
-    background-color: ${({ theme }) => darken(0.05, theme.bg3)};
+    background-color: ${({ theme }) => darken(0.05, theme.primaryButton)};
   }
   &:disabled {
     opacity: 50%;
     cursor: auto;
+    background-color: ${({ theme }) => darken(0.15, theme.primaryButton)};
   }
 `
 
@@ -90,8 +91,8 @@ const Container = styled.div<{ hideInput: boolean; cornerRadiusTopNone?: boolean
   border-radius: ${({ hideInput }) => (hideInput ? '8px' : '12px')};
   border-radius: ${({ cornerRadiusTopNone }) => cornerRadiusTopNone && '0 0 12px 12px'};
   border-radius: ${({ cornerRadiusBottomNone }) => cornerRadiusBottomNone && '12px 12px 0 0'};
-  border: 1px solid ${({ theme }) => theme.bg2};
-  background-color: ${({ theme }) => theme.bg1};
+  /* border: 1px solid ${({ theme }) => theme.bg2}; */
+  background-color: ${({ theme }) => theme.mediumDarkPurple};
 `
 
 const StyledButtonName = styled.span<{ active?: boolean }>`

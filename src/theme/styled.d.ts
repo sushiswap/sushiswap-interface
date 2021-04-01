@@ -60,6 +60,7 @@ export interface Colors {
   extraDarkPurple: Color
   primaryPink: Color
   primaryBlue: Color
+  primaryButton: Color
   baseCard: Color
   alertYellow: Color
 }

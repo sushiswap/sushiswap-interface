@@ -105,6 +105,7 @@ export function colors(darkMode: boolean): Colors {
     extraDarkPurple: '#1a1d29',
     primaryPink: 'rgb(221, 85, 151)',
     baseCard: '#222636',
+    primaryButton: '#38507a',
     alertYellow: '#bfbf31',
     primaryBlue: 'rgb(108, 168, 255)'
   }
