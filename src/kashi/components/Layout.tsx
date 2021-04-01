@@ -1,6 +1,6 @@
 import React from 'react'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 import { formattedNum } from 'utils'
@@ -23,8 +23,12 @@ export default function Layout({ left = undefined, children = undefined, right =
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
         <div className="flex justify-center col-span-12 lg:col-span-3 lg:justify-start">
           <div className="flex items-center">
-            <img src={KashiLogo} className="block w-20 lg:w-26 mr-2" />
-            <div className="font-semibold text-2xl">Kashi</div>
+            <Link to="/bento/kashi/borrow" className="border-transparent pl-8 pr-4 border-b-2">
+              <div className="flex items-end">
+                <img src={KashiLogo} alt="" className="block w-20 lg:w-26 mr-2" />
+                <div className="font-semibold text-2xl text-high-emphesis">Kashi</div>
+              </div>
+            </Link>
           </div>
         </div>
         <div className="flex col-span-12 lg:col-span-9 items-end">
@@ -66,7 +70,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                   location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'
                 }`}
               >
-                <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
+                <img src={BentoBoxLogo} alt="" className="flex max-h-4 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
               {netWorth.value.gt(0) && (
