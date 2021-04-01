@@ -96,8 +96,7 @@ export default function BorrowPair({
         header={
           <BorrowCardHeader>
             <div className="flex items-center">
-              <div className="flex space-x-2 mr-4">
-                <BackButton defaultRoute={'/bento/kashi/borrow'} marginRight={0} backgroundColor={'#37283e'} />
+              <div className="flex items-center space-x-2 mr-4">
                 <a
                   href={
                     `${

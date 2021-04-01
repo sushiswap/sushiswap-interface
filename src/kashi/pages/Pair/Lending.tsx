@@ -75,8 +75,7 @@ export default function LendingPair({
         header={
           <LendCardHeader>
             <div className="flex items-center">
-              <div className="flex space-x-2 mr-4">
-                <BackButton defaultRoute={'/bento/kashi/lend'} marginRight={0} backgroundColor={'#172948'} />
+              <div className="flex items-center space-x-2 mr-4">
                 <a
                   href={
                     `${
