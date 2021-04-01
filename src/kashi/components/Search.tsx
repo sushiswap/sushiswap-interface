@@ -9,7 +9,7 @@ export default function Search({ term, search }: any) {
     <div className="relative w-full" style={{ maxWidth: '30rem' }}>
       <input
         className="py-3 px-4 rounded-full w-full focus:outline-none"
-        style={{ background: theme.baseCard }}
+        style={{ background: '#161522' }}
         onChange={e => search(e.target.value)}
         value={term}
         placeholder="Search by name, symbol, address"
