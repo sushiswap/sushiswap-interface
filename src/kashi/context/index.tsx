@@ -2,7 +2,7 @@ import { useActiveWeb3React } from 'hooks'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useBentoBoxContract, useChainlinkOracle, useKashiPairContract } from 'sushi-hooks/useContract'
 import Fraction from '../../constants/Fraction'
-import { ChainId, WETH, Currency } from '@sushiswap/sdk'
+import { WETH, Currency } from '@sushiswap/sdk'
 import { takeFee, toElastic } from '../functions'
 import { ethers } from 'ethers'
 import {
@@ -14,9 +14,9 @@ import {
   MAXIMUM_INTEREST_PER_YEAR,
   INTEREST_ELASTICITY,
   FACTOR_PRECISION,
-  USD_ADDRESS,
   KASHI_ADDRESS,
-  CHAINLINK_MAPPING
+  CHAINLINK_MAPPING,
+  getCurrency
 } from '../constants'
 import { useBoringHelperContract } from 'hooks/useContract'
 import { useDefaultTokens } from 'hooks/Tokens'
@@ -145,6 +145,10 @@ function GetPairsFromLogs(logs: any) {
   })
 }
 
+function e10(exponent: BigNumber | Number | string) {
+  return BigNumber.from("10").pow(BigNumber.from(exponent))
+}
+
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -165,7 +169,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         const info = await boringHelperContract.getUIInfo(
           account || ethers.constants.AddressZero,
           [],
-          USD_ADDRESS[chainId || 1],
+          getCurrency(chainId).address,
           [KASHI_ADDRESS]
         )
 
@@ -190,13 +194,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           .map((balance: any) => {
             return {
               ...tokens[balance.token],
-              usd: Fraction.from(
-                BigNumber.from(10)
-                  .pow(BigNumber.from(tokens[balance.token].decimals))
-                  .mul(info.ethRate)
-                  .div(balance.rate),
-                BigNumber.from('1000000')
-              ).toString()
+              usd: e10(tokens[balance.token].decimals).mul(info.ethRate).div(balance.rate).div(e10(getCurrency(chainId).decimals)).toString()
             }
           })
 
