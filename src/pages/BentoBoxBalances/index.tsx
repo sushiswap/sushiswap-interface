@@ -11,7 +11,7 @@ import { useActiveWeb3React } from 'hooks'
 import useBentoBalances from 'sushi-hooks/useBentoBalances'
 import { formatFromBalance, formattedNum } from '../../utils'
 import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
-import { Card, CardHeader, FixedScrollable, Layout } from '../../kashi/components'
+import { Card, CardHeader, Paper, FixedScrollable, Layout } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
@@ -102,32 +102,19 @@ export default function BentoBalances() {
           </CardHeader>
         }
       >
-        <AutoColumn gap="md" justify="center">
-          <AutoColumn
-            gap="md"
-            style={{
-              width: '100%'
-            }}
-          >
-            <div>
-              <div className="flex justify-between px-2 pb-4">
-                <div className="font-medium text-base text-gray-500">{formattedNum(totalDepositsUSD, true)}</div>
-              </div>
-              {items &&
-                items.length > 0 &&
-                items.map((balance: any, i: number) => {
-                  // todo: remove increment for testing purposes
-                  return (
-                    <TokenBalance
-                      tokenAddress={balance.address}
-                      tokenDetails={balance}
-                      key={balance.address + '_' + i}
-                    />
-                  )
-                })}
-            </div>
-          </AutoColumn>
-        </AutoColumn>
+        <div className="grid gap-4 grid-flow-row auto-rows-max">
+          <div className="flex justify-between px-2 pb-4">
+            <div className="font-medium text-base text-gray-500">{formattedNum(totalDepositsUSD, true)}</div>
+          </div>
+          {items &&
+            items.length > 0 &&
+            items.map((balance: any, i: number) => {
+              // todo: remove increment for testing purposes
+              return (
+                <TokenBalance tokenAddress={balance.address} tokenDetails={balance} key={balance.address + '_' + i} />
+              )
+            })}
+        </div>
       </Card>
     </Layout>
   )
@@ -142,7 +129,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
   const tokenBalance = formatFromBalance(tokenDetails?.amount?.value, tokenDetails?.amount?.decimals)
   const { account, chainId } = useActiveWeb3React()
   return (
-    <DarkCard padding={'0px'} marginBottom={'10px'}>
+    <Paper className="bg-kashi-card-inner">
       <div className="p-2 sm:p-4 flex justify-between">
         <div className="flex items-center">
           <a
@@ -200,6 +187,6 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
           </div>
         </div>
       )}
-    </DarkCard>
+    </Paper>
   )
 }
