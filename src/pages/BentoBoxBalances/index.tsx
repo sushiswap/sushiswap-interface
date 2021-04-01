@@ -111,7 +111,6 @@ export default function BentoBalances() {
           >
             <div>
               <div className="flex justify-between px-2 pb-4">
-                <div className="font-medium text-base text-gray-500">Total Deposits:</div>
                 <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
               </div>
               {items &&
