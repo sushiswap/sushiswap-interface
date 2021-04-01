@@ -7,13 +7,11 @@ import { Search, Stats, CardHeader } from '.'
 const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
   const { pathname } = useLocation()
   return (
-    <CardHeader style={{ padding: 0 }}>
+    <CardHeader className="pl-0 pr-0 bg-kashi-card-inner">
       <AutoColumn
         gap="md"
         style={{
-          width: '100%',
-          paddingTop: '1rem',
-          paddingBottom: '1rem'
+          width: '100%'
         }}
       >
         {/* Mobile */}

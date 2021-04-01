@@ -127,13 +127,9 @@ export default function KashiPairs() {
                 <div key={pair.address}>
                   <Link
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
-                    className="block"
-                    style={{ color: theme.highEmphesisText }}
+                    className="block text-high-emphesis"
                   >
-                    <div
-                      className="py-4 px-4 items-center align-center grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold"
-                      style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
-                    >
+                    <div className="py-4 px-4 items-center align-center grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold rounded bg-kashi-card-inner">
                       <div className="flex flex-col sm:flex-row col-span-2 md:col-span-1 items-start sm:items-center">
                         <div className="flex space-x-2">
                           <img
@@ -160,9 +156,7 @@ export default function KashiPairs() {
                         <div>
                           {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
                         </div>
-                        {/* <div className="text-gray-500">
-                              ≈ {formattedNum(pair.details.total.borrow.usdString, true)}
-                            </div> */}
+                        <div className="text-gray-500">≈ {formattedNum(pair.totalBorrowAmount.usd, true)}</div>
                       </div>
                       <div className="text-right">
                         <div>

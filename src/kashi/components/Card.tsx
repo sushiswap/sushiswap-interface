@@ -4,7 +4,7 @@ import { ThemeContext } from 'styled-components'
 export default function Card({
   header = undefined,
   backgroundImage = '',
-  backgroundColor = 'rgb(34, 38, 54)',
+  backgroundColor = '#161522',
   title = '',
   description = '',
   children,
@@ -14,11 +14,10 @@ export default function Card({
   const theme = useContext(ThemeContext)
   return (
     <div
-      className={`${className} h-full`}
+      className={`h-full ${className}`}
       style={{
         borderRadius: '10px',
-        // minHeight: '40rem',
-        background: backgroundImage ? `url(${backgroundImage}), ${theme.extraDarkPurple}` : backgroundColor,
+        background: backgroundImage ? `url(${backgroundImage}), ${backgroundColor}` : backgroundColor,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
         backgroundPosition: 'center bottom'

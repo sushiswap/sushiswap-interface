@@ -110,38 +110,36 @@ export default function KashiPairs() {
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
           </div>
-        </div>
-        <div className="flex-col space-y-2">
-          {items &&
-            items.length > 0 &&
-            items.map(pair => {
-              return (
-                <div key={pair.address}>
-                  <Link
-                    to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
-                    className="block"
-                    style={{ color: theme.highEmphesisText }}
-                  >
-                    <div
-                      className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold"
-                      style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
+          <div className="flex-col space-y-2">
+            {items &&
+              items.length > 0 &&
+              items.map(pair => {
+                return (
+                  <div key={pair.address}>
+                    <Link
+                      to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
+                      className="block text-high-emphesis"
                     >
-                      <div className="flex flex-col sm:flex-row col-span-2 items-start sm:items-center">
-                        <div className="flex space-x-2">
-                          <img
-                            src={getTokenIcon(pair.collateral.address)}
-                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                          />
-                          <img
-                            src={getTokenIcon(pair.asset.address)}
-                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                          />
-                        </div>
-                        <div className="sm:items-end">
-                          <div className="text-left hidden sm:block pl-4">{pair.collateral.symbol} /</div>
-                          <div className="text-left hidden sm:block pl-4">{pair.asset.symbol}</div>
-                          <div className="mt-2 sm:mt-0 text-left text-white-500 text-xs block lg:hidden sm:pl-4">
-                            {pair.oracle.name}
+                      <div className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold rounded bg-kashi-card-inner">
+                        <div className="flex flex-col sm:flex-row col-span-2 items-start sm:items-center">
+                          <div className="flex space-x-2">
+                            <img
+                              src={getTokenIcon(pair.collateral.address)}
+                              className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                              alt=""
+                            />
+                            <img
+                              src={getTokenIcon(pair.asset.address)}
+                              className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                              alt=""
+                            />
+                          </div>
+                          <div className="sm:items-end">
+                            <div className="text-left hidden sm:block pl-4">{pair.collateral.symbol} /</div>
+                            <div className="text-left hidden sm:block pl-4">{pair.asset.symbol}</div>
+                            <div className="mt-2 sm:mt-0 text-left text-white-500 text-xs block lg:hidden sm:pl-4">
+                              {pair.oracle.name}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -158,12 +156,12 @@ export default function KashiPairs() {
                         </div>
                         <div className="text-gray-500">≈ {formattedNum(pair.liquidity.usd, true)}</div>
                       </div>
-                    </div>
-                  </Link>
-                  {/* {process.env.NODE_ENV === 'development' && <Debugger data={pair} />} */}
-                </div>
-              )
-            })}
+                    </Link>
+                    {/* {process.env.NODE_ENV === 'development' && <Debugger data={pair} />} */}
+                  </div>
+                )
+              })}
+          </div>
         </div>
       </Card>
     </Layout>

@@ -8,14 +8,14 @@ export const PrimaryTabs = styled(Tabs)`
   .react-tabs__tab-list {
     display: flex;
     border-radius: 10px;
-    background: ${({ theme }) => theme.mediumDarkPurple};
+    background: #202231;
     font-size: 20px;
     font-weight: 700;
     padding: 4px;
     border: 0;
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-    font-size: 14px;
-    `};
+    // ${({ theme }) => theme.mediaWidth.upToMedium`
+    // font-size: 14px;
+    // `};
   }
   .react-tabs__tab {
     display: flex;
@@ -28,8 +28,8 @@ export const PrimaryTabs = styled(Tabs)`
     padding: 16px 12px;
   }
   .react-tabs__tab--selected {
-    background: ${({ theme }) => theme.baseCard};
-    color: ${({ theme }) => theme.white};
+    background: #161522;
+    color: white;
     margin: 0;
     border: 0;
     bottom: 0;
@@ -66,7 +66,7 @@ export const SecondaryTabs = styled(Tabs)`
   }
   .react-tabs__tab--selected {
     background: ${({ theme }) => theme.mediumDarkPurple};
-    color: ${({ theme }) => theme.white};
+    color: white;
     margin: 0;
     border: 0;
     bottom: 0;

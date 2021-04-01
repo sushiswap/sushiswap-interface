@@ -35,8 +35,8 @@ export const InputRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
   border-radius: 10px;
-  background-color: #2e3348;
-  padding: 0.75rem 0.5rem 0.75rem 1rem;
+  // background-color: #2e3348;
+  // padding: 0.75rem 0.5rem 0.75rem 1rem;
 `
 
 export const Aligner = styled.span`
@@ -665,8 +665,27 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
 
           <InputRow>
             <>
-              <NumericalInput value={value} onUserInput={setValue} />
-              {account && <StyledBalanceMax onClick={onMax}>MAX</StyledBalanceMax>}
+              <NumericalInput
+                value={value}
+                onUserInput={setValue}
+                style={{
+                  display: 'flex',
+                  backgroundColor: '#2E3348',
+                  padding: '0.75rem ',
+                  borderRadius: '10px'
+                }}
+              />
+              {account && (
+                <StyledBalanceMax
+                  onClick={onMax}
+                  style={{
+                    position: 'absolute',
+                    right: 0
+                  }}
+                >
+                  MAX
+                </StyledBalanceMax>
+              )}
             </>
           </InputRow>
 
