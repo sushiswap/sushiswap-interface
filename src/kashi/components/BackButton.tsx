@@ -17,7 +17,7 @@ const BackButton = ({ defaultRoute, marginRight = 4, backgroundColor }: any) => 
             history.goBack()
           }
         }}
-        className={`mr-${marginRight} p-2 rounded`}
+        className={`mr-${marginRight} p-2 rounded-full`}
         style={{ background: `${backgroundColor ? backgroundColor : theme.baseCard}` }}
       >
         <ChevronLeft strokeWidth={2} size={24} />
