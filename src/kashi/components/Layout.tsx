@@ -48,14 +48,9 @@ export default function Layout({ left = undefined, children = undefined, right =
               </NavLink>
             </div>
             <div className="flex">
-              <div
-                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium text-gray-500`}
-              >
-                <div className="whitespace-nowrap text-base">Kashi Net Worth: ≈ {formattedNum(netWorth, true)}</div>
-              </div>
               <NavLink
                 to="/bento/updates"
-                className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
+                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
                   location.pathname === '/bento/updates' ? 'text-white' : 'text-gray-500'
                 }`}
               >
@@ -70,6 +65,11 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
+              <div
+                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium text-gray-500`}
+              >
+                <div className="whitespace-nowrap text-base">Kashi Net Worth: ≈ {formattedNum(netWorth, true)}</div>
+              </div>
             </div>
           </nav>
         </div>
