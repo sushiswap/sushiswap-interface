@@ -30,13 +30,11 @@ const LendingPositions = () => {
     <>
       {lendingPositions && lendingPositions.length > 0 ? (
         <div className="pb-4 px-4 grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-2 sm:col-span-1">Your Markets</div>
-          <div className="hidden sm:block"></div>
+          <div className="hover:text-gray-400 col-span-2 sm:col-span-2">Your Markets</div>
           <div className="text-right pl-4 hover:text-gray-400">Lend</div>
           <div className="text-right hover:text-gray-400">APR</div>
         </div>
-      ) : null
-      }
+      ) : null}
       {lendingPositions &&
         lendingPositions.length > 0 &&
         lendingPositions.map((pair: any) => {
@@ -53,8 +51,16 @@ const LendingPositions = () => {
                   style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
                 >
                   <div className="flex space-x-2 col-span-2 sm:col-span-1">
-                    <img src={getTokenIcon(pair.collateral.address)} className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg" />
-                    <img src={getTokenIcon(pair.asset.address)} className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg" />
+                    <img
+                      src={getTokenIcon(pair.collateral.address)}
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                      alt=""
+                    />
+                    <img
+                      src={getTokenIcon(pair.asset.address)}
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                      alt=""
+                    />
                   </div>
                   <div className="text-left hidden sm:block pl-4">
                     <div>

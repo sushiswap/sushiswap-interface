@@ -3,6 +3,8 @@ import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import { NavLink, useLocation } from 'react-router-dom'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
+import { formattedNum } from 'utils'
+
 interface LayoutProps {
   left?: JSX.Element
   children?: React.ReactChild | React.ReactChild[]
@@ -11,6 +13,7 @@ interface LayoutProps {
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   const location = useLocation()
+  const netWorth = '0.00'
   return (
     <div className="container mx-auto px-4">
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -47,7 +50,7 @@ export default function Layout({ left = undefined, children = undefined, right =
             <div className="flex">
               <NavLink
                 to="/bento/updates"
-                className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
+                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
                   location.pathname === '/bento/updates' ? 'text-white' : 'text-gray-500'
                 }`}
               >
@@ -62,6 +65,11 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
+              <div
+                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium text-gray-500`}
+              >
+                <div className="whitespace-nowrap text-base">Kashi Net Worth: ≈ {formattedNum(netWorth, true)}</div>
+              </div>
             </div>
           </nav>
         </div>

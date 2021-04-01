@@ -14,7 +14,7 @@ import React from 'react'
 // `
 
 export default function CardHeader({ className, children }: any) {
-  return <div className={`${className} flex items-center rounded-t p-8`}>{children}</div>
+  return <div className={`${className} flex items-center rounded-t px-8 py-4`}>{children}</div>
 }
 
 export function BorrowCardHeader({ children }: any) {

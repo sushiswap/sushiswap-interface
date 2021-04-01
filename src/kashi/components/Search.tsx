@@ -6,7 +6,7 @@ import { Search as SearchIcon } from 'react-feather'
 export default function Search({ term, search }: any) {
   const theme = useContext(ThemeContext)
   return (
-    <div className="relative">
+    <div className="relative w-full" style={{ maxWidth: '30rem' }}>
       <input
         className="py-3 px-4 rounded-full w-full focus:outline-none"
         style={{ background: theme.baseCard }}
