@@ -48,6 +48,17 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0xBde8bB00A7eF67007A96945B3a3621177B615C44').toLowerCase()]: WBTC,
     [String('0xc778417E063141139Fce010982780140Aa0cD5Ab').toLowerCase()]: WETH,
     [String('0xE4C6182EA459E63B8F1be7c428381994CcC2D49c').toLowerCase()]: ZRX
+  },
+  [ChainId.KOVAN]: {
+    [String('0x482dC9bB08111CB875109B075A40881E48aE02Cd').toLowerCase()]: BAT,
+    [String('0x61460874a7196d6a22D1eE4922473664b3E95270').toLowerCase()]: COMP,
+    [String('0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa').toLowerCase()]: DAI,
+    [String('0xD1308F63823221518Ec88EB209CBaa1ac182105f').toLowerCase()]: SAI,
+    [String('0xb7a4F3E9097C08dA09517b5aB877F7a917224ede').toLowerCase()]: USDC,
+    [String('0x07de306FF27a2B630B1141956844eB1552B956B5').toLowerCase()]: USDT,
+    [String('0xd3A691C852CDB01E281545A27064741F0B7f6825').toLowerCase()]: WBTC,
+    [String('0xd0A1E359811322d97991E03f863a0C30C2cF029C').toLowerCase()]: WETH,
+    [String('0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3').toLowerCase()]: ZRX
   }
 }
 

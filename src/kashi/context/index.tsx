@@ -2,7 +2,7 @@ import { useActiveWeb3React } from 'hooks'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
 import { useBentoBoxContract, useChainlinkOracle, useKashiPairContract } from 'sushi-hooks/useContract'
 import Fraction from '../../constants/Fraction'
-import { WETH, Currency } from '@sushiswap/sdk'
+import { WETH, Currency, ChainId } from '@sushiswap/sdk'
 import { takeFee, toElastic } from '../functions'
 import { ethers } from 'ethers'
 import {
@@ -77,44 +77,51 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
   }
 }
 
-function ChainOracleVerify(pair: any, tokens: any) {
+function ChainOracleVerify(chainId: ChainId, pair: any, tokens: any) {
+  const mapping = CHAINLINK_MAPPING[chainId]
+  if (!mapping) { return false }
   const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
-  let decimals = BigInt('54')
+  let decimals = 54
   let from = ''
   let to = ''
   if (params[0] != ethers.constants.AddressZero) {
-    if (!CHAINLINK_MAPPING[params[0]]) {
+    if (!mapping![params[0]]) {
+      console.log("One of the Chainlink oracles used is not configured in this UI.")
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
-      decimals -= BigInt('18') - CHAINLINK_MAPPING[params[0]].decimals
-      from = CHAINLINK_MAPPING[params[0]].from
-      to = CHAINLINK_MAPPING[params[0]].to
+      decimals -= 18 - mapping![params[0]].decimals
+      from = mapping![params[0]].from
+      to = mapping![params[0]].to
     }
   }
   if (params[1] != ethers.constants.AddressZero) {
-    if (!CHAINLINK_MAPPING[params[1]]) {
+    if (!mapping![params[1]]) {
+      console.log("One of the Chainlink oracles used is not configured in this UI.")
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
-      decimals -= CHAINLINK_MAPPING[params[1]].decimals
+      decimals -= mapping![params[1]].decimals
       if (!to) {
-        from = CHAINLINK_MAPPING[params[1]].to
-        to = CHAINLINK_MAPPING[params[1]].from
-      } else if (to == CHAINLINK_MAPPING[params[1]].to) {
-        to = CHAINLINK_MAPPING[params[1]].from
+        from = mapping![params[1]].to
+        to = mapping![params[1]].from
+      } else if (to == mapping![params[1]].to) {
+        to = mapping![params[1]].from
       } else {
+        console.log("The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.")
         return false // The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.
       }
     }
   }
-  if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase() && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
-    const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
+  if (from == pair.assetAddress && to == pair.collateralAddress && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
+    const needed = tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals
     const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
     if (!divider.eq(params[2])) {
+      console.log("The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.")
       return false // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
     } else {
       return true
     }
   } else {
+    console.log("The Chainlink oracles configured don't match the pair tokens.")
     return false // The Chainlink oracles configured don't match the pair tokens.
   }
 }
@@ -162,7 +169,7 @@ function rpcToObj(rpc_obj: any, obj?: any) {
 }
 
 function toAmount(token: any, shares: BigNumber) {
-  return shares.mul(token.bentoAmount).div(token.bentoShare)
+  return !token.bentoShare.eq("0") ? shares.mul(token.bentoAmount).div(token.bentoShare) : BigNumber.from("0")
 }
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
@@ -196,7 +203,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         const supported_oracles = [chainlinkOracleContract?.address]
         const pairAddresses = (logPairs).filter((pair: any) => 
           supported_oracles.indexOf(pair.oracle) != -1 && 
-          ChainOracleVerify(pair, tokens)
+          ChainOracleVerify(chainId || 1, pair, tokens)
         ).map((pair: any) => pair.address)
 
         // Get full info on all the verified pairs
@@ -228,6 +235,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           Object.assign(pairTokens[balance.token], balance)
         })
 
+        console.log(pairs, pairTokens, missingTokens)
+
         // For any tokens that are not on the defaultTokenList, retrieve name, symbol, decimals, etc.
         // TODO
 
@@ -235,15 +244,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         Object.values(pairTokens).forEach((token: any) => { 
           token.usd = e10(token.decimals).mul(info.ethRate).div(token.rate).div(e10(getCurrency(chainId).decimals)) 
         })
-
-        /*const prices = pairs
-          .filter((balance: any) => tokens[balance.token])
-          .map((balance: any) => {
-            return {
-              ...tokens[balance.token],
-              usd: e10(tokens[balance.token].decimals).mul(info.ethRate).div(balance.rate).div(e10(getCurrency(chainId).decimals)).toString()
-            }
-          })*/
 
         dispatch({
           type: ActionType.UPDATE,

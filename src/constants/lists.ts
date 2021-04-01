@@ -21,7 +21,7 @@ const GEMINI_LIST = 'https://www.gemini.com/uniswap/manifest.json'
 const QUICK_SWAP = 'https://unpkg.com/quickswap-default-token-list@1.0.39/build/quickswap-default.tokenlist.json'
 
 // lower index == higher priority for token import
-export const DEFAULT_LIST_OF_LISTS: string[] = [
+export const DEFAULT_LIST_OF_LISTS: string[] = process.env.NODE_ENV !== 'production' ? [] : [
   COMPOUND_LIST,
   AAVE_LIST,
   SYNTHETIX_LIST,
