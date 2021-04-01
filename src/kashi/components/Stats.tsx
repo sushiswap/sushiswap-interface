@@ -22,7 +22,7 @@ export default function Header() {
     <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
       <div className="flex-grow">
       </div>
-      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/supply">
+      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/lend">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>

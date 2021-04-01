@@ -11,7 +11,7 @@ import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import { Card, Layout, Paper } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot } from '../../components'
+import { GradientDot, BackButton } from '../../components'
 
 export default function LendingPair({
   match: {
@@ -43,7 +43,7 @@ export default function LendingPair({
           <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
           <Paper className="bg-kashi-card-inner p-4">
             <RowBetween>
-              <div className="text-lg text-secondary">Availble:</div>
+              <div className="text-lg text-secondary">Available:</div>
               <div className="text-lg text-high-emphesis">
                 {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
               </div>
@@ -76,6 +76,7 @@ export default function LendingPair({
           <LendCardHeader>
             <div className="flex items-center">
               <div className="flex space-x-2 mr-4">
+                <BackButton defaultRoute={'/bento/kashi/lend'} marginRight={0} backgroundColor={'#172948'} />
                 <a
                   href={
                     `${
@@ -92,6 +93,7 @@ export default function LendingPair({
                   <img
                     src={pair && getTokenIcon(pair?.collateral.address)}
                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                    alt=""
                   />
                 </a>
                 <a
@@ -110,6 +112,7 @@ export default function LendingPair({
                   <img
                     src={pair && getTokenIcon(pair?.asset.address)}
                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                    alt=""
                   />
                 </a>
               </div>

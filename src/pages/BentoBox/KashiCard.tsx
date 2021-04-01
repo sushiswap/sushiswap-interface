@@ -65,7 +65,7 @@ const KashiCard = () => {
                       Enable Kashi
                     </Text>
                   </ButtonSecondary>
-                  {/* <Link to={'/bento/kashi/supply'}>
+                  {/* <Link to={'/bento/kashi/lend'}>
                     <ButtonEmpty padding="4px 2px" margin="0px" borderRadius="6px">
                       <Text fontWeight={500} fontSize={16}>
                         Preview

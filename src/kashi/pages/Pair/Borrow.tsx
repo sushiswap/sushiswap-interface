@@ -11,7 +11,7 @@ import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, Card, Layout, Paper, BorrowCardHeader, PrimaryTabs } from '../../components'
+import { GradientDot, Card, Layout, Paper, BorrowCardHeader, PrimaryTabs, BackButton } from '../../components'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -97,6 +97,7 @@ export default function BorrowPair({
           <BorrowCardHeader>
             <div className="flex items-center">
               <div className="flex space-x-2 mr-4">
+                <BackButton defaultRoute={'/bento/kashi/borrow'} marginRight={0} backgroundColor={'#37283e'} />
                 <a
                   href={
                     `${
@@ -113,6 +114,7 @@ export default function BorrowPair({
                   <img
                     src={pair && getTokenIcon(pair?.collateral.address)}
                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                    alt=""
                   />
                 </a>
                 <a
@@ -131,6 +133,7 @@ export default function BorrowPair({
                   <img
                     src={pair && getTokenIcon(pair?.asset.address)}
                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                    alt=""
                   />
                 </a>
               </div>
