@@ -64,7 +64,7 @@ export default function KashiPairs() {
               className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
               onClick={() => requestSort('asset.symbol')}
             >
-              <div className="flex items-center float-right">
+              <div className="flex items-center float-left">
                 <div className="mr-2">Lending</div>
                 {sortConfig &&
                   sortConfig.key === 'asset.symbol' &&
@@ -76,7 +76,7 @@ export default function KashiPairs() {
               className="hidden lg:block hover:text-gray-400 cursor-pointer"
               onClick={() => requestSort('oracle.name')}
             >
-              <div className="flex items-center float-right justify-end">
+              <div className="flex items-center float-left justify-end">
                 <div className="mr-2 flex">
                   Oracle <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
                 </div>
@@ -146,8 +146,8 @@ export default function KashiPairs() {
                             </div>
                           </div>
                         </div>
-                        <div className="text-right hidden md:block pl-4">{pair.asset.symbol}</div>
-                        <div className="text-right hidden lg:block">{pair.oracle.name}</div>
+                        <div className="text-left hidden md:block pl-4">{pair.asset.symbol}</div>
+                        <div className="text-left hidden lg:block">{pair.oracle.name}</div>
                         <div className="text-left sm:text-right">{formattedPercent(pair.currentSupplyAPR)}</div>
                         {/* <div className="text-left sm:text-right">
                             {formattedPercent(pair.details.apr.currentSupplyAPR)}
