@@ -1,91 +1,24 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import styled, { ThemeContext } from 'styled-components'
-import { TYPE } from '../../theme'
-import { RowBetween } from '../../components/Row'
-import { AutoColumn } from '../../components/Column'
-import { BaseCard, OutlineCard } from '../../components/Card'
-import { CardSection, DataCard } from '../../components/earn/styled'
-import { transparentize } from 'polished'
+import React from 'react'
 import KashiCard from './KashiCard'
-import { useActiveWeb3React } from '../../hooks'
-import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
+import { Card } from 'kashi/components'
 
-export const FixedHeightRow = styled(RowBetween)`
-  height: 24px;
-`
-
-// max-width: 640px;
-const PageWrapper = styled(AutoColumn)`
-  max-width: 500px;
-  width: 100%;
-`
-
-const VoteCard = styled(DataCard)`
-  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  overflow: hidden;
-`
-
-const StyledBaseCard = styled(BaseCard)`
-  border: none
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
-  position: relative;
-`
-
-export default function Bento() {
-  const theme = useContext(ThemeContext)
-  const { account } = useActiveWeb3React()
+function BentoBox() {
   return (
-    <>
-      <PageWrapper>
-        <AutoColumn gap="md" justify="center">
-          <AutoColumn gap="md" style={{ width: '100%' }}>
-            <div className="px-6 md:px-4 flex justify-between pb-2 items-center">
-              <div className="text-2xl font-semibold">
-                <div className="hidden md:block">BentoBox Apps</div>
-              </div>
-              {account ? (
-                <Link
-                  to="/bento/balances"
-                  className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium`}
-                >
-                  <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
-                  <div className="whitespace-nowrap text-base">My BentoBox</div>
-                </Link>
-              ) : (
-                <div>Connect Wallet</div>
-              )}
-            </div>
-            <div className="px-4 pb-2 md:px-0 md:pb-4">
-              <VoteCard>
-                <CardSection>
-                  <AutoColumn gap="md">
-                    <RowBetween>
-                      <TYPE.white fontSize={14} color={theme.highEmphesisText}>
-                        {`BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In order to use any one of the decentralized apps below you'll need to first enable them and deposit any ERC20 asset to your BentoBox balance.`}
-                      </TYPE.white>
-                    </RowBetween>
-                  </AutoColumn>
-                </CardSection>
-              </VoteCard>
-            </div>
-            {/* List of Apps */}
-            <StyledBaseCard style={{ minHeight: '20rem' }}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <KashiCard />
-                <OutlineCard minHeight="14rem" height="100%" />
-                <div className="hidden sm:block">
-                  <OutlineCard height="10rem" />
-                </div>
-                <div className="hidden sm:block">
-                  <OutlineCard height="10rem" />
-                </div>
-              </div>
-            </StyledBaseCard>
-          </AutoColumn>
-        </AutoColumn>
-      </PageWrapper>
-    </>
+    <div className="container mx-auto max-w-xl">
+      <div className="flex justify-center">
+        <div className="text-3xl font-semibold text-high-emphesis">BentoBox Apps</div>
+      </div>
+      <div className="text-center text-high-emphesis my-6">
+        BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In
+        order to use any one of the decentralized apps below you&apos;ll need to first enable them and deposit any ERC20
+        asset to your BentoBox balance.
+      </div>
+      {/* List of Apps */}
+      <div className="flex justify-center max-w-xs mx-auto">
+        <KashiCard />
+      </div>
+    </div>
   )
 }
+
+export default BentoBox
