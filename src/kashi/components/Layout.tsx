@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 import { formattedNum } from 'utils'
+import { BigNumber } from '@ethersproject/bignumber'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -13,7 +14,10 @@ interface LayoutProps {
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   const location = useLocation()
-  const netWorth = '0.00'
+  const netWorth = {
+    value: BigNumber.from("10"),
+    string: '10.00'
+  }
   return (
     <div className="container mx-auto px-4">
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -47,7 +51,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                 </div>
               </NavLink>
             </div>
-            <div className="flex">
+            <div className="flex pr-3">
               <NavLink
                 to="/bento/updates"
                 className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
@@ -65,11 +69,11 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
-              <div
-                className={`hidden md:block border-transparent pl-6 pr-9 border-b-2 justify-end items-center font-medium text-gray-500`}
-              >
-                <div className="whitespace-nowrap text-base">{formattedNum(netWorth, true)}</div>
-              </div>
+              { netWorth.value.gt(0) && (
+                <div className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-gray-500`}>
+                  <div className="whitespace-nowrap text-base">{formattedNum(netWorth.string, true)}</div>
+                </div>
+              )}
             </div>
           </nav>
         </div>
