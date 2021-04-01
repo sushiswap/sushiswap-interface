@@ -39,21 +39,6 @@ const BorrowPositions = () => {
           <div className="hidden sm:block text-right hover:text-gray-400">Borrow APR</div>
         </div>
       ) : null
-      //   <div className="items-center text-center p-6 w-full">
-      //     <div className="text-2xl font-semibold text-gray-400 pb-2">You have no open borrow positions.</div>
-      //     <div className="text-base font-base text-gray-400">
-      //       Swing by once you have borrowed assets from various markets
-      //     </div>
-      //     <div className="flex mx-auto justify-center">
-      //       <Link
-      //         to={'/bento/kashi/borrow'}
-      //         className="my-8 px-3 py-2 text-base font-medium rounded-md shadow-sm text-white"
-      //         style={{ background: `${theme.primaryPink}` }}
-      //       >
-      //         View Borrow Markets
-      //       </Link>
-      //     </div>
-      //   </div>
       }
       {borrowPositions &&
         borrowPositions.length > 0 &&
@@ -90,35 +75,35 @@ const BorrowPositions = () => {
                   </div>
                   <div className="text-right">
                     <div>
-                      {formattedNum(pair.user.borrow.string, false)} {pair.asset.symbol}
+                      {formattedNum(pair.userBorrowAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.borrow.usdString, true)}</div>
+                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.userBorrowAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">
                     <div>
-                      {formattedNum(pair.user.collateral.string, false)} {pair.collateral.symbol}
+                      {formattedNum(pair.userCollateralAmount.string, false)} {pair.collateral.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.collateral.usdString, true)}</div>
+                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.userCollateralAmount.usd, true)}</div>
                   </div>
                   <div className="hidden sm:block">
                     <div className="flex text-right float-right items-center">
-                      {formattedPercent(pair.user.health.percentage)}
-                      <GradientDot percent={pair.user.health.percentage} />
+                      {formattedPercent(pair.health.string)}
+                      <GradientDot percent={pair.health.string} />
                     </div>
                   </div>
                   <div className="hidden sm:block text-right">
-                    {formattedPercent(pair.details.apr.currentInterestPerYear)}
+                    {formattedPercent(pair.currentInterestPerYear.string)}
                   </div>
                   <div className="sm:hidden text-right col-span-3">
                     <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
                       <div className="flex items-center">
                         <div className="text-gray-500 mr-2">Limit Used: </div>
-                        <div>{formattedPercent(pair.user.health.percentage)}</div>
-                        <GradientDot percent={pair.user.health.percentage} />
+                        <div>{formattedPercent(pair.health.string)}</div>
+                        <GradientDot percent={pair.health.string} />
                       </div>
                       <div className="flex">
                         <div className="text-gray-500 mr-2">Borrow APY: </div>
-                        <div>{formattedPercent(pair.details.apr.currentInterestPerYear)}</div>
+                        <div>{formattedPercent(pair.currentInterestPerYear.string)}</div>
                       </div>
                     </div>
                   </div>
