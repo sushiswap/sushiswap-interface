@@ -20,9 +20,17 @@ export default function Header() {
   }, [pairs])
   return (
     <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-      <div className="flex-grow">
+      <div className="block md:hidden flex-grow">
+        <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
+          <div className="items-center text-center">
+            <div className="text-2xl font-semibold">≈${netWorth}</div>
+            <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
+              Net Worth
+            </div>
+          </div>
+        </BaseCard>
       </div>
-      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/lend">
+      {/* <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/lend">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
@@ -34,8 +42,8 @@ export default function Header() {
             <div className="h-2 flex-1" style={{ background: '#6ca8ff' }} />
           </div>
         </BaseCard>
-      </Link>
-      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/borrow">
+      </Link> */}
+      {/* <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/borrow">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsBorrowed}</div>
@@ -47,7 +55,7 @@ export default function Header() {
             <div className="h-2 flex-1" style={{ background: '#de5597' }} />
           </div>
         </BaseCard>
-      </Link>
+      </Link> */}
     </div>
   )
 }
