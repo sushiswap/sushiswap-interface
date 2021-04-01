@@ -21,14 +21,10 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
               <div className="hidden sm:block font-semibold pb-2">
                 {(() => {
                   switch (pathname) {
-                    case '/bento/kashi':
-                      return 'All Kashi Markets'
                     case '/bento/kashi/lend':
-                      return 'Kashi Lend Markets'
+                      return 'Lend Markets'
                     case '/bento/kashi/borrow':
-                      return 'Kashi Borrow Markets'
-                    case '/bento/kashi/positions':
-                      return 'Your Open Positions'
+                      return 'Borrow Markets'
                     default:
                       return null
                   }
@@ -46,14 +42,10 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
               <div className="font-semibold text-lg px-4 pb-2">
                 {(() => {
                   switch (pathname) {
-                    case '/bento/kashi':
-                      return 'All Kashi Markets'
                     case '/bento/kashi/lend':
-                      return 'Kashi Lend Markets'
+                      return 'Lend Markets'
                     case '/bento/kashi/borrow':
-                      return 'Kashi Borrow Markets'
-                    case '/bento/kashi/positions':
-                      return 'Your Open Positions'
+                      return 'Borrow Markets'
                     default:
                       return null
                   }

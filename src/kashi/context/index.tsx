@@ -103,12 +103,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         )
 
         const supported_oracles = [chainlinkOracleContract?.address]
-
         const logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
-        console.log('LOGS', logs)
 
         const pairsAll: any[] = []
-
         logs.forEach(log => {
           const deployParams = ethers.utils.defaultAbiCoder.decode(
             ['address', 'address', 'address', 'bytes'],
@@ -244,12 +241,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                   const totalAssetAmount = await bentoBoxContract.toAmount(asset, totalAsset.elastic, false)
 
-                  const userAssetAmount = await bentoBoxContract.toAmount(
-                    asset,
-                    toElastic(totalAsset, await kashiPairContract.balanceOf(account), false),
-                    false
-                  )
-                  console.log(userAssetFraction.toString(), userAssetFraction.toString())
+                  // TODO: Convert from shares to amount
+                  const userAssetAmount = toElastic(totalAsset, userAssetFraction, false)
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
                     ? BigNumber.from(0)
