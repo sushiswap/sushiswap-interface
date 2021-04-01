@@ -84,7 +84,6 @@ function ChainOracleVerify(pair: any, tokens: any) {
   let to = ''
   if (params[0] != ethers.constants.AddressZero) {
     if (!CHAINLINK_MAPPING[params[0]]) {
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
       decimals -= BigInt('18') - CHAINLINK_MAPPING[params[0]].decimals
@@ -94,7 +93,6 @@ function ChainOracleVerify(pair: any, tokens: any) {
   }
   if (params[1] != ethers.constants.AddressZero) {
     if (!CHAINLINK_MAPPING[params[1]]) {
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
       decimals -= CHAINLINK_MAPPING[params[1]].decimals
@@ -112,18 +110,11 @@ function ChainOracleVerify(pair: any, tokens: any) {
     const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
     const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
     if (!divider.eq(params[2])) {
-      console.log(
-        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
-        divider.toString(),
-        params[2].toString(),
-        tokens[pair.collateralAddress].decimals
-      )
       return false // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
     } else {
       return true
     }
   } else {
-    console.log("The Chainlink oracles configured don't match the pair tokens.")
     return false // The Chainlink oracles configured don't match the pair tokens.
   }
 }
@@ -149,6 +140,31 @@ function e10(exponent: BigNumber | Number | string) {
   return BigNumber.from("10").pow(BigNumber.from(exponent))
 }
 
+function rpcToObj(rpc_obj: any, obj?: any) {
+  if (rpc_obj instanceof ethers.BigNumber) {
+    return rpc_obj
+  }
+  if (!obj) {
+      obj = {}
+  }
+  if (typeof(rpc_obj) == "object") {
+    if (Object.keys(rpc_obj).length && isNaN(Number(Object.keys(rpc_obj)[Object.keys(rpc_obj).length - 1]))) {
+      for (let i in rpc_obj) {
+        if (isNaN(Number(i))) {
+          obj[i] = rpcToObj(rpc_obj[i])
+        }
+      }
+      return obj
+    }
+    return rpc_obj.map((item: any) => rpcToObj(item));
+  }
+  return rpc_obj
+}
+
+function toAmount(token: any, shares: BigNumber) {
+  return shares.mul(token.bentoAmount).div(token.bentoShare)
+}
+
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -161,11 +177,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   // Default token list fine for now, might want to more to the broader collection later.
   const tokens = useDefaultTokens()
-  console.log(tokens)
 
   const updatePairs = useCallback(
     async function() {
       if (boringHelperContract && bentoBoxContract && kashiPairContract) {
+        // Get UI info such as ETH balance, ETH rate, etc (only eth rate is used here?)
         const info = await boringHelperContract.getUIInfo(
           account || ethers.constants.AddressZero,
           [],
@@ -173,49 +189,77 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           [KASHI_ADDRESS]
         )
 
+        // Get the deployed pairs from the logs and decode
         const logPairs = GetPairsFromLogs(await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS)))
 
+        // Filter all pairs by supported oracles and verify the oracle setup
         const supported_oracles = [chainlinkOracleContract?.address]
         const pairAddresses = (logPairs).filter((pair: any) => 
           supported_oracles.indexOf(pair.oracle) != -1 && 
           ChainOracleVerify(pair, tokens)
         ).map((pair: any) => pair.address)
 
-        const pairs = await boringHelperContract.pollKashiPairs(account, pairAddresses)
+        // Get full info on all the verified pairs
+        const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, pairAddresses))
 
-        const tokenAddresses: string[] = _.uniq(
-          pairs.map((pair: KashiPollPair) => pair.collateral).concat(pairs.map((pair: KashiPollPair) => pair.asset))
-        )
+        // Get a list of all tokens in the pairs
+        const pairTokens: {[address: string]: any} = {}
+        pairs.forEach((pair: any, i: number) => {
+          pair.address = pairAddresses[i]
+          if (!pairTokens[pair.collateral]) {
+            pairTokens[pair.collateral] = { "address": pair.collateral }
+          }
+          pair.collateralToken = pairTokens[pair.collateral]
+          if (!pairTokens[pair.asset]) {
+            pairTokens[pair.asset] = { "address": pair.asset }
+          }
+          pair.assetToken = pairTokens[pair.asset]
+        })
 
-        const balances = await boringHelperContract.getBalances(account, tokenAddresses)
+        // Get balances, bentobox info and allowences for the tokens
+        const balances = rpcToObj(await boringHelperContract.getBalances(account, Object.values(pairTokens).map((token: any) => token.address)))
+        const missingTokens: any[] = []
+        balances.forEach((balance: any, i: number) => {
+          if (tokens[balance.token]) {
+            Object.assign(pairTokens[balance.token], tokens[balance.token])
+          } else {
+            missingTokens.push(balance.token)
+          }
+          Object.assign(pairTokens[balance.token], balance)
+        })
 
-        const prices = balances
+        // For any tokens that are not on the defaultTokenList, retrieve name, symbol, decimals, etc.
+        // TODO
+
+        // Calculate the USD price for each token
+        Object.values(pairTokens).forEach((token: any) => { 
+          token.usd = e10(token.decimals).mul(info.ethRate).div(token.rate).div(e10(getCurrency(chainId).decimals)) 
+        })
+
+        /*const prices = pairs
           .filter((balance: any) => tokens[balance.token])
           .map((balance: any) => {
             return {
               ...tokens[balance.token],
               usd: e10(tokens[balance.token].decimals).mul(info.ethRate).div(balance.rate).div(e10(getCurrency(chainId).decimals)).toString()
             }
-          })
-
-        console.log({ pairs })
+          })*/
 
         dispatch({
           type: ActionType.UPDATE,
           payload: {
-            pairs: await Promise.all(
+            pairs: 
               pairs
-                .filter((pair: KashiPollPair) => {
-                  const oracle = new Oracle(pair.oracle, pair.oracleData)
-                  return oracle.validate() && tokens[pair.collateral] && tokens[pair.asset]
-                })
-                .map(async (pair: KashiPollPair, i: number) => {
+                .map((pair: any, i: number) => {
                   const {
+                    address,
                     accrueInfo,
                     asset,
+                    assetToken,
                     collateral,
+                    collateralToken,
                     currentExchangeRate,
-                    // oracle,
+                    oracle,
                     oracleData,
                     oracleExchangeRate,
                     spotExchangeRate,
@@ -227,18 +271,10 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     userCollateralShare
                   } = pair
 
-                  const collateralUSD = prices.find((token: any) => token.address === collateral)?.usd || 0
-
-                  const assetUSD = prices.find((token: any) => token.address === asset)?.usd || 0
-
-                  const totalCollateralAmount = await bentoBoxContract.toAmount(collateral, totalCollateralShare, false)
-
-                  const userCollateralAmount = await bentoBoxContract.toAmount(collateral, userCollateralShare, false)
-
-                  const totalAssetAmount = await bentoBoxContract.toAmount(asset, totalAsset.elastic, false)
-
-                  // TODO: Convert from shares to amount
-                  const userAssetAmount = toElastic(totalAsset, userAssetFraction, false)
+                  const totalCollateralAmount = toAmount(collateralToken, totalCollateralShare)
+                  const userCollateralAmount = toAmount(collateralToken, userCollateralShare)
+                  const totalAssetAmount = toAmount(assetToken, totalAsset.elastic)
+                  const userAssetAmount = toAmount(assetToken, toElastic(totalAsset, userAssetFraction, false))
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
                     ? BigNumber.from(0)
@@ -362,28 +398,10 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     ? userAssetAmount.add(userAssetAmount.mul(totalBorrowAmount).div(totalAssetAmount))
                     : BigNumber.from(0)
 
-                  const userNetWorth =
-                    Number(
-                      Fraction.from(userTotalSupply, BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals)))
-                    ) *
-                      Number(assetUSD) +
-                    Number(
-                      Fraction.from(
-                        BigNumber.from(userCollateralAmount),
-                        BigNumber.from(10).pow(BigNumber.from(tokens[collateral].decimals))
-                      ).toString()
-                    ) *
-                      Number(collateralUSD) -
-                    Number(
-                      Fraction.from(
-                        BigNumber.from(userBorrowAmount),
-                        BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                      ).toString()
-                    ) *
-                      Number(assetUSD)
+                  const userNetWorth = BigNumber.from("536241")
 
                   return {
-                    address: pairAddresses[i].address,
+                    address: address,
                     accrueInfo: {
                       feesEarnedFraction: accrueInfo.feesEarnedFraction,
                       interestPerSecond: accrueInfo.interestPerSecond,
@@ -443,13 +461,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                         totalAssetAmount,
                         BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
                       ).toString(),
-                      usd:
-                        Number(
-                          Fraction.from(
-                            totalAssetAmount,
-                            BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                          ).toString()
-                        ) * Number(assetUSD)
+                      usd: totalAssetAmount.mul(assetToken.usd)
                     },
                     userAssetAmount: {
                       value: userAssetAmount,
@@ -457,13 +469,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                         userAssetAmount,
                         BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
                       ).toString(),
-                      usd:
-                        Number(
-                          Fraction.from(
-                            userAssetAmount,
-                            BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                          ).toString()
-                        ) * Number(assetUSD)                   
+                      usd: userAssetAmount.mul(assetToken.usd)
                     },
                     totalBorrowAmount: {
                       value: totalBorrowAmount,
@@ -511,13 +517,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                         liquidity,
                         BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
                       ).toString(),
-                      usd:
-                        Number(
-                          Fraction.from(
-                            liquidity,
-                            BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                          ).toString()
-                        ) * Number(assetUSD)
+                      usd: liquidity.mul(assetToken.usd)
                     },
 
                     userNetWorth,
@@ -576,7 +576,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     }
                   }
                 })
-            )
+            
           }
         })
       }

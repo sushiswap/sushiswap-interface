@@ -40,35 +40,31 @@ export default function LendingPair({
       }
       right={
         <Card className="h-full bg-kashi-card">
-          <div className="text-lg text-high-emphesis">Net Worth in this Market</div>
-          <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
-          <Paper className="bg-kashi-card-inner p-4">
-            <RowBetween>
-              <div className="text-lg text-secondary">Available:</div>
-              <div className="text-lg text-high-emphesis">
-                {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
-              </div>
-            </RowBetween>
-            <RowBetween>
-              <div className="text-lg text-secondary">Utilization:</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
-                <GradientDot percent={pair.utilization.string} desc={false} />
-              </div>
-            </RowBetween>
-            <RowBetween>
-              <div className="text-lg text-secondary">Lending APR:</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">-</div>
-              </div>
-            </RowBetween>
-            <RowBetween>
-              <div className="text-lg text-secondary">Market Supply:</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">-</div>
-              </div>
-            </RowBetween>
-          </Paper>
+          <RowBetween>
+            <div className="text-lg text-secondary">Available</div>
+            <div className="text-lg text-high-emphesis">
+              {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
+            </div>
+          </RowBetween>
+          <RowBetween>
+            <div className="text-lg text-secondary">Utilization</div>
+            <div className="flex items-center">
+              <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
+              <GradientDot percent={pair.utilization.string} desc={false} />
+            </div>
+          </RowBetween>
+          <RowBetween>
+            <div className="text-lg text-secondary">Lending APR</div>
+            <div className="flex items-center">
+              <div className="text-lg text-high-emphesis">-</div>
+            </div>
+          </RowBetween>
+          <RowBetween>
+            <div className="text-lg text-secondary">Market Supply</div>
+            <div className="flex items-center">
+              <div className="text-lg text-high-emphesis">-</div>
+            </div>
+          </RowBetween>
         </Card>
       }
     >

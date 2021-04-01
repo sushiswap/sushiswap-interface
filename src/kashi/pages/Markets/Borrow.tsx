@@ -18,7 +18,6 @@ export default function KashiPairs() {
   const pairs = useKashiPairs()
 
   // setup search
-  // console.log('pairs:', pairs)
   const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
@@ -28,8 +27,6 @@ export default function KashiPairs() {
 
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
-  //console.log('items:', items)
-  //console.log('sortConfig:', sortConfig)
 
   return (
     <Layout

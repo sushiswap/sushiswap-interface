@@ -122,7 +122,6 @@ const useKashi = () => {
     if (account) {
       try {
         const isApproved = await bentoBoxContract?.masterContractApproved(kashiPairContract?.address, account)
-        console.log(kashiPairContract?.address, isApproved)
 
         return setKashiApproved(isApproved)
       } catch (e) {

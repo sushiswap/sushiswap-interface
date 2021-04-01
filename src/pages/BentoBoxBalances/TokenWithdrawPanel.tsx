@@ -149,8 +149,6 @@ export default function CurrencyInputPanel({
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
   const decimals = tokenBalanceBigInt?.decimals
 
-  console.log('balances:', tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
-
   // check whether the user has approved the router on the tokens
   const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
@@ -170,14 +168,7 @@ export default function CurrencyInputPanel({
   const handleMaxDeposit = useCallback(() => {
     maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
   }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
-
-  // console.log(
-  //   'state:',
-  //   depositValue,
-  //   maxSelected,
-  //   approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING
-  // )
-
+  
   return (
     <>
       {/* Deposit Input */}
@@ -238,7 +229,6 @@ export default function CurrencyInputPanel({
             if (maxSelected) {
               await withdraw(tokenAddress, maxDepositAmountInput)
             } else {
-              console.log('hello')
               await withdraw(tokenAddress, formatToBalance(depositValue, decimals))
             }
             setPendingTx(false)

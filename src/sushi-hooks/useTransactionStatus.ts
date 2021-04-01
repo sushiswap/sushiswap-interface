@@ -20,7 +20,6 @@ const useTransactionStatus = () => {
   const hasPendingTransactions = !!pending.length
 
   useEffect(() => {
-    console.log('hasPendingTransactions:', hasPendingTransactions)
     setPendingTXStatus(hasPendingTransactions)
   }, [hasPendingTransactions])
 
