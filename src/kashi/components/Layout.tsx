@@ -15,7 +15,7 @@ interface LayoutProps {
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   const location = useLocation()
   const netWorth = {
-    value: BigNumber.from("10"),
+    value: BigNumber.from('10'),
     string: '10.00'
   }
   return (
@@ -69,8 +69,10 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
-              { netWorth.value.gt(0) && (
-                <div className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-gray-500`}>
+              {netWorth.value.gt(0) && (
+                <div
+                  className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-gray-500`}
+                >
                   <div className="whitespace-nowrap text-base">{formattedNum(netWorth.string, true)}</div>
                 </div>
               )}
@@ -80,15 +82,15 @@ export default function Layout({ left = undefined, children = undefined, right =
       </div>
       <div className={`grid grid-cols-12 gap-4 min-h-1/2`}>
         {left && (
-          <div className={`hidden lg:block lg:col-span-3`} style={{ maxHeight: '40rem' }}>
+          <div className={`hidden xl:block xl:col-span-3`} style={{ maxHeight: '40rem' }}>
             {left}
           </div>
         )}
-        <div className={`col-span-12 ${right ? 'lg:col-span-6' : 'lg:col-span-9'}`} style={{ minHeight: '40rem' }}>
+        <div className={`col-span-12 ${right ? 'xl:col-span-6' : 'xl:col-span-9'}`} style={{ minHeight: '40rem' }}>
           {children}
         </div>
         {right && (
-          <div className="col-span-12 lg:col-span-3" style={{ maxHeight: '40rem' }}>
+          <div className="col-span-12 xl:col-span-3" style={{ maxHeight: '40rem' }}>
             {right}
           </div>
         )}

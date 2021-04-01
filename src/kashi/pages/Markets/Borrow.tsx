@@ -48,12 +48,9 @@ export default function KashiPairs() {
         <div className="pb-4">
           <BorrowPositions />
         </div>
-        <div className="pb-4 px-4 grid grid-flow-col grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold text-gray-500">
-          <div
-            className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"
-            onClick={() => requestSort('symbol')}
-          >
-            <div>Available Markets</div>
+        <div className="grid grid-flow-col grid-cols-3 md:grid-cols-5 lg:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
+          <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
+            <div>Markets</div>
             {sortConfig &&
               sortConfig.key === 'symbol' &&
               ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -63,7 +60,7 @@ export default function KashiPairs() {
             className="hidden md:block hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('collateral.symbol')}
           >
-            <div className="flex items-center float-left">
+            <div className="flex items-center">
               <div>Collateral</div>
               {sortConfig &&
                 sortConfig.key === 'collateral.symbol' &&
@@ -75,7 +72,7 @@ export default function KashiPairs() {
             className="hidden md:block hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('asset.symbol')}
           >
-            <div className="flex items-center float-left">
+            <div className="flex items-center">
               <div>Borrow</div>
               {sortConfig &&
                 sortConfig.key === 'asset.symbol' &&
@@ -87,7 +84,7 @@ export default function KashiPairs() {
             className="hidden lg:block hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('oracle.name')}
           >
-            <div className="flex items-center float-left justify-end">
+            <div className="flex items-center">
               <div className="flex">
                 Oracle <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
               </div>
@@ -101,7 +98,7 @@ export default function KashiPairs() {
             className="hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('details.total.borrow.string')}
           >
-            <div className="flex items-center float-right text-right">
+            <div className="flex items-center justify-end">
               <div>Borrowed</div>
               {sortConfig &&
                 sortConfig.key === 'details.total.borrow.string' &&
@@ -113,8 +110,8 @@ export default function KashiPairs() {
             className="hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('details.total.asset.usdString')}
           >
-            <div className="flex items-center float-right">
-              <div className="mr-2">Available</div>
+            <div className="flex items-center justify-end">
+              <div>Available</div>
               {sortConfig &&
                 sortConfig.key === 'details.total.asset.usdString' &&
                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -132,27 +129,27 @@ export default function KashiPairs() {
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
                     className="block text-high-emphesis"
                   >
-                    <div className="py-4 px-4 items-center align-center grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold rounded bg-kashi-card-inner">
-                      <div className="flex flex-col sm:flex-row col-span-2 md:col-span-1 items-start sm:items-center">
-                        <div className="flex space-x-2">
+                    <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-kashi-card-inner">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                        <div className="hidden space-x-2 md:flex">
                           <img
                             src={getTokenIcon(pair.collateral.address)}
-                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                            className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                             alt=""
                           />
                           <img
                             src={getTokenIcon(pair.asset.address)}
-                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                            className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                             alt=""
                           />
-                          <div className="text-left pl-4 md:hidden">
-                            {pair.collateral.symbol} /<br></br>
-                            {pair.asset.symbol}
-                            <br></br>
-                            <span className="text-white-500 text-xs">{pair.oracle.name}</span>
+                        </div>
+                        <div className="sm:items-end md:hidden">
+                          <div className="text-left hidden sm:block">{pair.collateral.symbol} /</div>
+                          <div className="text-left hidden sm:block">{pair.asset.symbol}</div>
+                          <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
+                            {pair.oracle.name}
                           </div>
                         </div>
-                        <div className="sm:items-end md:hidden"></div>
                       </div>
                       <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
                       <div className="text-left text-white hidden md:block">{pair.asset.symbol}</div>
@@ -171,7 +168,6 @@ export default function KashiPairs() {
                       </div>
                     </div>
                   </Link>
-                  {/* <Debugger data={pair} /> */}
                 </div>
               )
             })}

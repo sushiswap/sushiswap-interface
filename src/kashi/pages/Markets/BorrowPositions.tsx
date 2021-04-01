@@ -30,13 +30,12 @@ const BorrowPositions = () => {
   return (
     <>
       {borrowPositions && borrowPositions.length > 0 ? (
-        <div className="pb-4 px-4 grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-1 md:col-span-1">Your Positions</div>
-          <div className="hidden sm:block"></div>
-          <div className="text-right pl-4 hover:text-gray-400">Borrowing</div>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
+          <div className="hover:text-gray-400 col-span-1 md:col-span-2">Your Positions</div>
+          <div className="text-right hover:text-gray-400">Borrowing</div>
           <div className="text-right hover:text-gray-400">Collateral</div>
-          <div className="hidden sm:block text-right hover:text-gray-400">Limit Used</div>
-          <div className="hidden sm:block text-right hover:text-gray-400">APR</div>
+          <div className="hidden text-right md:block hover:text-gray-400">Limit Used</div>
+          <div className="hidden text-right sm:block hover:text-gray-400">APR</div>
         </div>
       ) : null}
       {borrowPositions &&
@@ -46,27 +45,23 @@ const BorrowPositions = () => {
             <>
               <Link
                 to={'/bento/kashi/pair/' + pair.address + '/borrow'}
-                className="block"
+                className="block text-high-emphesis"
                 key={pair.address}
-                style={{ color: theme.highEmphesisText }}
               >
-                <div
-                  className="mb-2 py-4 px-4 items-center align-center grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold"
-                  style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
-                >
-                  <div className="flex space-x-2 col-span-1">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 mb-2 py-4 px-4 items-center align-center  text-sm font-semibold rounded bg-kashi-card-inner">
+                  <div className="hidden space-x-2 md:flex">
                     <img
                       src={getTokenIcon(pair.collateral.address)}
-                      className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                      className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                       alt=""
                     />
                     <img
                       src={getTokenIcon(pair.asset.address)}
-                      className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                      className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                       alt=""
                     />
                   </div>
-                  <div className="text-left hidden sm:block pl-4">
+                  <div className="sm:block">
                     <div>
                       {pair.collateral.symbol} / {pair.asset.symbol}
                     </div>
@@ -84,16 +79,14 @@ const BorrowPositions = () => {
                     </div>
                     <div className="text-gray-500 text-sm">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
                   </div>
-                  <div className="hidden sm:block">
-                    <div className="flex text-right float-right items-center">
-                      {formattedPercent(pair.health.string)}
-                      <GradientDot percent={pair.health.string} />
-                    </div>
+                  <div className="hidden md:flex justify-end items-center">
+                    {formattedPercent(pair.health.string)}
+                    <GradientDot percent={pair.health.string} />
                   </div>
                   <div className="hidden sm:block text-right">
                     {formattedPercent(pair.currentInterestPerYear.string)}
                   </div>
-                  <div className="sm:hidden text-right col-span-3">
+                  {/* <div className="sm:hidden text-right col-span-3">
                     <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
                       <div className="flex items-center">
                         <div className="text-gray-500 mr-2">Limit Used: </div>
@@ -105,7 +98,7 @@ const BorrowPositions = () => {
                         <div>{formattedPercent(pair.currentInterestPerYear.string)}</div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </Link>
             </>

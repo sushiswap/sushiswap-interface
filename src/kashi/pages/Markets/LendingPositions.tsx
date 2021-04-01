@@ -42,15 +42,11 @@ const LendingPositions = () => {
             <>
               <Link
                 to={'/bento/kashi/pair/' + pair.address + '/lend'}
-                className="block"
+                className="block text-high-emphesis"
                 key={pair.address}
-                style={{ color: theme.highEmphesisText }}
               >
-                <div
-                  className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold"
-                  style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
-                >
-                  <div className="flex space-x-2 col-span-2 sm:col-span-1">
+                <div className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 text-sm font-semibold rounded bg-kashi-card-inner">
+                  <div className="hidden space-x-2 md:flex">
                     <img
                       src={getTokenIcon(pair.collateral.address)}
                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
@@ -62,7 +58,7 @@ const LendingPositions = () => {
                       alt=""
                     />
                   </div>
-                  <div className="text-left hidden sm:block pl-4">
+                  <div className="col-span-2 md:col-span-1 sm:block">
                     <div>
                       {pair.collateral.symbol} / {pair.asset.symbol}
                     </div>
