@@ -1,10 +1,9 @@
 import { ChainId, JSBI, Token, TokenAmount } from '@sushiswap/sdk'
-import { BigNumber } from 'ethers'
-import { ZERO_ADDRESS } from '../constants'
+import { BigNumber, ethers } from 'ethers'
 import { computeUniCirculation } from './computeUniCirculation'
 
 describe('computeUniCirculation', () => {
-  const token = new Token(ChainId.RINKEBY, ZERO_ADDRESS, 18)
+  const token = new Token(ChainId.RINKEBY, ethers.constants.AddressZero, 18)
 
   function expandTo18Decimals(num: JSBI | string | number) {
     return JSBI.multiply(JSBI.BigInt(num), JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18)))
