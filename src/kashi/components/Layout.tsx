@@ -44,16 +44,25 @@ export default function Layout({ left = undefined, children = undefined, right =
                 </div>
               </NavLink>
             </div>
-
-            <NavLink
-              to="/bento/balances"
-              className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
-                location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'
-              }`}
-            >
-              <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
-              <div className="whitespace-nowrap text-base">My BentoBox</div>
-            </NavLink>
+            <div className="flex">
+              <NavLink
+                to="/bento/updates"
+                className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
+                  location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'
+                }`}
+              >
+                <div className="whitespace-nowrap text-base">Updates</div>
+              </NavLink>
+              <NavLink
+                to="/bento/balances"
+                className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
+                  location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'
+                }`}
+              >
+                <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
+                <div className="whitespace-nowrap text-base">My BentoBox</div>
+              </NavLink>
+            </div>
           </nav>
         </div>
       </div>

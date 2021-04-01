@@ -135,10 +135,12 @@ export default function KashiPairs() {
                           <img
                             src={getTokenIcon(pair.collateral.address)}
                             className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                            alt=""
                           />
                           <img
                             src={getTokenIcon(pair.asset.address)}
                             className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                            alt=""
                           />
                           <div className="text-left pl-4 md:hidden">
                             {pair.collateral.symbol} /<br></br>
