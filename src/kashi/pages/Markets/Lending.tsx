@@ -6,7 +6,7 @@ import QuestionHelper from '../../../components/QuestionHelper'
 import { getTokenIcon } from '../../functions'
 import { formattedPercent, formattedNum } from '../../../utils'
 import { useKashiPairs } from '../../context'
-import { Card, SectionHeader, Layout } from '../../components'
+import { Card, CardHeader, LendCardHeader, MarketHeader, Layout } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
@@ -42,7 +42,7 @@ export default function KashiPairs() {
         />
       }
     >
-      <Card className="bg-kashi-card" header={<SectionHeader search={search} term={term} />}>
+      <Card className="bg-kashi-card" header={<MarketHeader type="Lending" search={search} term={term} />}>
         <div className="pb-4">
           <LendingPositions />
         </div>

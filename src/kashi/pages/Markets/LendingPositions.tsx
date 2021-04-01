@@ -6,16 +6,6 @@ import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
 
 import { useKashiPairs } from '../../context'
-import { SectionHeader, Layout } from '../../components'
-import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-
-const StyledBaseCard = styled(BaseCard)`
-  border: none;
-  background: ${({ theme }) => theme.baseCard};
-  position: relative;
-  overflow: hidden;
-  border-radius: 0 0 15px 15px;
-`
 
 const LendingPositions = () => {
   const theme = useContext(ThemeContext)

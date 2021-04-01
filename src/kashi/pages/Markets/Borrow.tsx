@@ -5,15 +5,14 @@ import QuestionHelper from '../../../components/QuestionHelper'
 import { getTokenIcon } from '../../functions'
 import { formattedNum } from '../../../utils'
 import { useKashiPairs } from '../../context'
-import { Card, SectionHeader, Layout } from '../../components'
+import { Card, BorrowCardHeader, MarketHeader, Layout } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
-
 import BorrowPositions from './BorrowPositions'
 
-export default function KashiPairs() {
+export default function Borrow() {
   const theme = useContext(ThemeContext)
   const pairs = useKashiPairs()
 
@@ -41,7 +40,7 @@ export default function KashiPairs() {
         />
       }
     >
-      <Card className="h-full bg-kashi-card" header={<SectionHeader search={search} term={term} />}>
+      <Card className="h-full bg-kashi-card" header={<MarketHeader type="Borrow" search={search} term={term} />}>
         <div className="pb-4">
           <BorrowPositions />
         </div>

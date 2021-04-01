@@ -1,12 +1,9 @@
 import React, { useContext } from 'react'
-import { transparentize } from 'polished'
-import { ThemeContext } from 'styled-components'
 import { Search as SearchIcon } from 'react-feather'
 
 export default function Search({ term, search }: any) {
-  const theme = useContext(ThemeContext)
   return (
-    <div className="relative w-full" style={{ maxWidth: '30rem' }}>
+    <div className="relative w-full max-w-lg" style={{ maxWidth: '30rem' }}>
       <input
         className="py-3 px-4 rounded-full w-full focus:outline-none"
         style={{ background: '#161522' }}

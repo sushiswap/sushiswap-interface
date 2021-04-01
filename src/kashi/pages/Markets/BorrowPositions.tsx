@@ -4,10 +4,8 @@ import styled, { ThemeContext } from 'styled-components'
 import { BaseCard } from 'components/Card'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
-
 import { useKashiPairs } from '../../context'
-import { SectionHeader, Layout, GradientDot } from '../../components'
-import DepositGraphic from 'assets/kashi/deposit-graphic.png'
+import { GradientDot } from '../../components'
 
 const StyledBaseCard = styled(BaseCard)`
   border: none;
