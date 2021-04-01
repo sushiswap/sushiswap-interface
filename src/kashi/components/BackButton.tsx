@@ -15,9 +15,9 @@ const BackButton = ({ defaultRoute }: any) => {
             history.goBack()
           }
         }}
-        className={`p-2 mr-4 rounded-full bg-kashi-card-inner`}
+        className={`p-2 mr-4 rounded-full bg-kashi-card-inner w-10 h-10`}
       >
-        <ChevronLeft strokeWidth={2} size={24} />
+        <ChevronLeft className={'w-6 h-6'} />
       </button>
     </>
   )
