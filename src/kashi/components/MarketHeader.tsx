@@ -14,7 +14,7 @@ function MarketHeader({ type = 'Borrow', children, search, term }: any) {
   return (
     <Header>
       <div className="flex flex-col md:flex-row items-center justify-between w-full">
-        <div className="font-semibold text-lg">{type}</div>
+        <div className="font-semibold text-3xl text-high-emphesis">{type}</div>
         <div className="flex justify-end w-full py-4 md:py-0">
           <Search term={term} search={search} />
         </div>
