@@ -18,23 +18,27 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['DM Sans',...defaultTheme.fontFamily.sans]
+        sans: ['DM Sans', ...defaultTheme.fontFamily.sans]
       },
       borderRadius: {
         'none': '0',
-        'sm': '0.313',
-        DEFAULT: '0.625rem',
+        'sm': '0.313rem',
+        DEFAULT: '0.625rem'
       },
       textColor: {
         ...defaultTheme.textColor,
-        lowEmphesis: '#575757',
+        'low-emphesis': '#575757',
         primary: '#BFBFBF',
         secondary: '#7F7F7F',
-        highEmphesis: '#E3E3E3',
+        'high-emphesis': '#E3E3E3'
       },
       backgroundColor: {
         ...defaultTheme.backgroundColor,
-        primary: '#0D0415'
+        primary: '#0D0415',
+        'kashi-borrow-header': '#221825',
+        'kashi-lend-header': '#0F182A',
+        'kashi-card': '#161522',
+        'kashi-card-inner': '#202231'
       }
     }
   },
