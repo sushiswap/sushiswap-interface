@@ -149,6 +149,27 @@ function e10(exponent: BigNumber | Number | string) {
   return BigNumber.from("10").pow(BigNumber.from(exponent))
 }
 
+function rpcToObj(rpc_obj: any, obj?: any) {
+  if (rpc_obj instanceof ethers.BigNumber) {
+    return rpc_obj
+  }
+  if (!obj) {
+      obj = {}
+  }
+  if (typeof(rpc_obj) == "object") {
+    if (Object.keys(rpc_obj).length && isNaN(Number(Object.keys(rpc_obj)[Object.keys(rpc_obj).length - 1]))) {
+      for (let i in rpc_obj) {
+        if (isNaN(Number(i))) {
+          obj[i] = rpcToObj(rpc_obj[i])
+        }
+      }
+      return obj
+    }
+    return rpc_obj.map((item: any) => rpcToObj(item));
+  }
+  return rpc_obj
+}
+
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -181,15 +202,27 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           ChainOracleVerify(pair, tokens)
         ).map((pair: any) => pair.address)
 
-        const pairs = await boringHelperContract.pollKashiPairs(account, pairAddresses)
+        const pairTokens: {[address: string]: any} = {}
+        const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, pairAddresses))
+        pairs.forEach((pair: any, i: number) => {
+          pair.address = pairAddresses[i]
+          if (!pairTokens[pair.collateral]) {
+            pairTokens[pair.collateral] = { "address": pair.collateral }
+          }
+          pair.collateralToken = pairTokens[pair.collateral]
+          if (!pairTokens[pair.asset]) {
+            pairTokens[pair.asset] = { "address": pair.asset }
+          }
+          pair.assetToken = pairTokens[pair.asset]
+        })
 
-        const tokenAddresses: string[] = _.uniq(
-          pairs.map((pair: KashiPollPair) => pair.collateral).concat(pairs.map((pair: KashiPollPair) => pair.asset))
-        )
+        const balances = rpcToObj(await boringHelperContract.getBalances(account, Object.values(pairTokens).map((token: any) => token.address)))
+        balances.forEach((balance: any, i: number) => {
+          console.log(pairTokens[balance.token], balance)
+          Object.assign(pairTokens[balance.token], balance)
+        })
 
-        const balances = await boringHelperContract.getBalances(account, tokenAddresses)
-
-        const prices = balances
+        const prices = pairs
           .filter((balance: any) => tokens[balance.token])
           .map((balance: any) => {
             return {
@@ -198,7 +231,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             }
           })
 
-        console.log({ pairs })
+        console.log(pairs)
 
         dispatch({
           type: ActionType.UPDATE,
@@ -211,6 +244,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 })
                 .map(async (pair: KashiPollPair, i: number) => {
                   const {
+                    address,
                     accrueInfo,
                     asset,
                     collateral,
@@ -238,6 +272,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   const totalAssetAmount = await bentoBoxContract.toAmount(asset, totalAsset.elastic, false)
 
                   // TODO: Convert from shares to amount
+                  console.log(totalAsset)
                   const userAssetAmount = toElastic(totalAsset, userAssetFraction, false)
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
@@ -383,7 +418,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                       Number(assetUSD)
 
                   return {
-                    address: pairAddresses[i].address,
+                    address: address,
                     accrueInfo: {
                       feesEarnedFraction: accrueInfo.feesEarnedFraction,
                       interestPerSecond: accrueInfo.interestPerSecond,
