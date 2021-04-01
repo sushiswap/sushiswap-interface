@@ -3,10 +3,11 @@ import { Search as SearchIcon } from 'react-feather'
 
 export default function Search({ term, search }: any) {
   return (
-    <div className="relative w-full max-w-lg">
+    <div className="relative w-full max-w-md">
       <input
-        className="py-3 pl-4 pr-14 rounded-full w-full bg-primary focus:outline-none"
+        className="py-3 pl-4 pr-14 rounded-full w-full focus:outline-none"
         onChange={e => search(e.target.value)}
+        style={{ background: '#161522' }}
         value={term}
         placeholder="Search by name, symbol, address"
       />

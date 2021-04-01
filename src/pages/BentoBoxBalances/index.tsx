@@ -8,8 +8,8 @@ import TokenWithdrawPanel from './TokenWithdrawPanel'
 import { useActiveWeb3React } from 'hooks'
 import useBentoBalances from 'sushi-hooks/useBentoBalances'
 import { formatFromBalance, formattedNum } from '../../utils'
-import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
-import { Card, CardHeader, Paper, Layout } from '../../kashi/components'
+import { PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
+import { Card, CardHeader, Paper, Layout, Search } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
@@ -71,20 +71,7 @@ export default function BentoBalances() {
                 <img src={BentoBoxLogo} className="block w-10 mr-2" />
                 <div className="font-semibold text-lg">My BentoBox Balances</div>
               </div>
-              <div className="w-full md:w-1/2">
-                <div className="relative">
-                  <input
-                    className="py-3 md:py-3 px-4 rounded-full w-full focus:outline-none"
-                    style={{ background: '#161522' }}
-                    onChange={e => search(e.target.value)}
-                    value={term}
-                    placeholder="Search by name, symbol, address"
-                  />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <Search size={16} />
-                  </div>
-                </div>
-              </div>
+              <Search search={search} term={term} />
             </div>
           </CardHeader>
         }
