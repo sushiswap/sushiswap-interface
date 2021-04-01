@@ -52,7 +52,7 @@ export default function KashiPairs() {
               className="hover:text-gray-400 col-span-2 md:col-span-2 cursor-pointer flex items-center"
               onClick={() => requestSort('symbol')}
             >
-              <div className="mr-2">Market</div>
+              <div className="mr-2">Available Markets</div>
               {sortConfig &&
                 sortConfig.key === 'symbol' &&
                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -86,7 +86,7 @@ export default function KashiPairs() {
             </div>
             <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('currentSupplyAPR.string')}>
               <div className="flex items-center float-left sm:float-right">
-                <div className="mr-2">Lending APR</div>
+                <div className="mr-2">APR</div>
                 {sortConfig &&
                   sortConfig.key === 'currentSupplyAPR.string' &&
                   ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -95,7 +95,7 @@ export default function KashiPairs() {
             </div>
             <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('utilization.string')}>
               <div className="flex items-center float-left sm:float-right">
-                <div className="mr-2">Utilization</div>
+                <div className="mr-2">Borrowed</div>
                 {sortConfig &&
                   sortConfig.key === 'utilization.string' &&
                   ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -104,7 +104,7 @@ export default function KashiPairs() {
             </div>
             <div className="text-right hover:text-gray-400 cursor-pointer" onClick={() => requestSort('liquidity.usd')}>
               <div className="flex items-center float-right">
-                <div className="mr-2">Market Supply</div>
+                <div className="mr-2">Total</div>
                 {sortConfig &&
                   sortConfig.key === 'liquidity.usd' &&
                   ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
