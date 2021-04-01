@@ -21,14 +21,12 @@ export default function Header() {
   return (
     <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
       <div className="block md:hidden flex-grow">
-        <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
+        <Card style={{ position: 'relative', overflow: 'hidden' }} className="bg-kashi-card">
           <div className="items-center text-center">
-            <div className="text-2xl font-semibold">${netWorth}</div>
-            <div className="text-sm font-semibold" style={{ color: '#bfbfbf' }}>
-              Net Worth
-            </div>
+            <div className="text-2xl font-semibold text-high-emphesis">${netWorth}</div>
+            <div className="text-sm font-semibold text-secondary">Net Worth</div>
           </div>
-        </BaseCard>
+        </Card>
       </div>
       {/* <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/lend">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
