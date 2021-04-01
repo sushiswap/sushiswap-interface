@@ -8,13 +8,15 @@ import { ArrowLeft } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
 import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonPrimaryNormal, ButtonSecondary, ButtonEmpty } from '../../components/Button'
+import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import { LightCard } from '../../components/Card'
+import CurrencyLogo from '../../components/CurrencyLogo'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Settings from '../../components/Settings'
 import PoolList from './PoolList';
+import { DataCard, CardSection } from 'components/earn/styled'
 
 import { AppDispatch } from 'state'
 import { useCurrency } from '../../hooks/Tokens'
@@ -63,8 +65,15 @@ const Wrapper = styled.div`
 const PoolAllocationWrapper = styled.div`
   margin-top: 1rem;
   background-color: ${({ theme }) => theme.bg1};
-  border-radius: 4px;
+  border-radius: 4px 4px 0 0;
   padding: 1rem
+`
+
+const PoolBreakDownWrapper = styled.div`
+  background-color: ${({ theme }) => theme.bg1};
+  border-top: 1px solid gray;
+  padding: 1rem
+  border-radius: 0 0 4px 4px;
 `
 
 const Tabs = styled.div`
@@ -78,33 +87,75 @@ const StyledArrowLeft = styled(ArrowLeft)`
   color: ${({ theme }) => theme.text1};
 `
 
-const ZapHeader = () => (
-  <StyledZapHeader>
-    <RowBetween>
-      <Settings />
-    </RowBetween>
-  </StyledZapHeader>
+const PoolTokenRow = styled.span`
+  display: flex;
+  margin: 10px 0;
+`
+
+// @ts-ignore
+const TypeDefaultCursor = ({ children, ...props }) => (
+  <TYPE.white {...props} style={{ cursor: "default" }}>
+    {children}
+  </TYPE.white>
 )
 
-const PoolInfo = () => {
+// @ts-ignore
+const TypeDefaultCursorRight = ({ children, ...props }) => (
+  <TYPE.white {...props} style={{ cursor: "default", textAlign: 'right', marginTop: '10px' }}>
+    {children}
+  </TYPE.white>
+)
+
+const InfoCard = styled(DataCard)`
+  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
+`
+
+const PoolInfo = ({ poolAddress }: { poolAddress: string }) => {
   const currency0 = useCurrency('ETH')
-  const currency1 = useCurrency('0x6B175474E89094C44Da98b954EedeAC495271d0F')
+  const currency1 = useCurrency('0x101848d5c5bbca18e6b4431eedf6b95e9adf82fa')
 
   return (
-    <PoolAllocationWrapper>
-      <RowBetween style={{ marginBottom: '12px' }}>
-        <TYPE.darkGray fontSize="14px">To</TYPE.darkGray>
-        <DoubleCurrencyLogo 
-          currency0={currency0 ?? undefined} currency1={currency1 ?? undefined}
-          margin={false} 
-          size={20}
-        />
-      </RowBetween>
-      <RowBetween>
-        <TYPE.white fontWeight={500} fontSize="22px">0</TYPE.white>
-        <TYPE.white fontWeight={500} fontSize="22px">DAI/ETH</TYPE.white>
-      </RowBetween>
-    </PoolAllocationWrapper>
+    <>
+      <PoolAllocationWrapper>
+        <RowBetween style={{ marginBottom: '12px' }}>
+          <TYPE.darkGray fontSize="14px">To</TYPE.darkGray>
+          <DoubleCurrencyLogo 
+            currency0={currency0 ?? undefined} currency1={currency1 ?? undefined}
+            margin={false} 
+            size={20}
+          />
+        </RowBetween>
+        <RowBetween>
+          <TypeDefaultCursor fontWeight={500} fontSize="22px">0</TypeDefaultCursor>
+          <TypeDefaultCursor fontWeight={500} fontSize="22px">DAI/ETH</TypeDefaultCursor>
+        </RowBetween>
+      </PoolAllocationWrapper>
+      <PoolBreakDownWrapper>
+        <RowBetween>
+            <div>
+              <TYPE.darkGray fontSize="14px">Est. Pool Allocation</TYPE.darkGray>
+              <PoolTokenRow>
+                <CurrencyLogo size="22px"  currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
+                <TypeDefaultCursor fontSize="14px">
+                  0 {' '}
+                  {currency0?.symbol}
+                </TypeDefaultCursor>
+              </PoolTokenRow>
+              <PoolTokenRow>
+                <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
+                <TypeDefaultCursor fontSize="14px">
+                  0 {' '}
+                  {currency1?.symbol}
+                </TypeDefaultCursor>
+              </PoolTokenRow>
+            </div>
+            <div style={{ height: '91px' }}>
+              <TYPE.darkGray fontSize="14px">Pool Share</TYPE.darkGray>
+              <TypeDefaultCursorRight fontSize="14px">0.01%</TypeDefaultCursorRight>
+            </div>
+        </RowBetween>
+      </PoolBreakDownWrapper>
+    </>
   )
 }
 
@@ -122,7 +173,7 @@ const CardHeader = () => {
         >
           <StyledArrowLeft />
         </Link>
-        <TYPE.white fontWeight={500} fontSize="22px">Zap Liquidity</TYPE.white>
+        <TypeDefaultCursor fontWeight={500} fontSize="22px">Zap Liquidity</TypeDefaultCursor>
         <Settings />
       </RowBetween>
     </Tabs>
@@ -143,14 +194,6 @@ const AddSingleSideLiquidity = ({
   const { currencyBalance, noLiquidity, parsedAmount } = useDerivedZapInfo(currency ?? undefined, undefined)
   const formattedAmount = parsedAmount?.toSignificant(6);
 
-
-  // get formatted amounts
-  // const formattedAmounts = {
-  //   [independentField]: typedValue,
-  //   [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
-  // }
-  // const formattedAmount = noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
-
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
       const newCurrencyId = getCurrencyId(currencyA)
@@ -160,14 +203,12 @@ const AddSingleSideLiquidity = ({
     [history, poolAddress]
   )
 
-
   return (
     <>
       { !poolAddress ? (
         <PoolList />
       ) : (
         <AppBody>
-          {/* <ZapHeader /> */}
           <CardHeader />
           <Wrapper>
             <AutoColumn>
@@ -184,7 +225,10 @@ const AddSingleSideLiquidity = ({
                   id="swap-currency-input"
                   cornerRadiusBottomNone={false}
               />
-              <PoolInfo />
+              <PoolInfo poolAddress={poolAddress} />
+              <ButtonPrimary style={{ marginTop: '20px' }}>
+                <TYPE.main mb="4px">Zap</TYPE.main>
+              </ButtonPrimary>
             </AutoColumn>
           </Wrapper>
         </AppBody>
