@@ -44,7 +44,9 @@ export default function KashiPairs() {
       }
     >
       <Card header={<SectionHeader search={search} term={term} />}>
-        <BorrowPositions />
+        <div className="pb-4">
+          <BorrowPositions />
+        </div>
         <div className="pb-4 px-4 grid grid-flow-col grid-cols-4 md:grid-cols-5 lg:grid-cols-6 text-sm font-semibold text-gray-500">
           <div
             className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"

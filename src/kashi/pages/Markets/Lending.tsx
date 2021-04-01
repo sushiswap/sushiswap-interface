@@ -45,7 +45,9 @@ export default function KashiPairs() {
       }
     >
       <Card header={<SectionHeader search={search} term={term} />}>
-        <LendingPositions />
+        <div className="pb-4">
+          <LendingPositions />
+        </div>
         <div>
           <div className="pb-4 px-4 grid grid-flow-col grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold text-gray-500">
             <div
