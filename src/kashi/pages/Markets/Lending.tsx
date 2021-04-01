@@ -146,11 +146,9 @@ export default function KashiPairs() {
                             />
                           </div>
                           <div className="sm:items-end md:hidden">
-                            <div className="text-left hidden sm:block">{pair.collateral.symbol} /</div>
-                            <div className="text-left hidden sm:block">{pair.asset.symbol}</div>
-                            <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
-                              {pair.oracle.name}
-                            </div>
+                            <div>{pair.collateral.symbol} /</div>
+                            <div>{pair.asset.symbol}</div>
+                            <div className="mt-0 text-white-500 text-xs block lg:hidden">{pair.oracle.name}</div>
                           </div>
                         </div>
                         <div className="text-left hidden md:block">{pair.asset.symbol}</div>
