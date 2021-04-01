@@ -31,12 +31,12 @@ const BorrowPositions = () => {
     <>
       {borrowPositions && borrowPositions.length > 0 ? (
         <div className="pb-4 px-4 grid grid-cols-3 sm:grid-cols-6 text-sm font-semibold text-gray-500">
-          <div className="hover:text-gray-400 col-span-1 md:col-span-1">Market</div>
+          <div className="hover:text-gray-400 col-span-1 md:col-span-1">Your Positions</div>
           <div className="hidden sm:block"></div>
           <div className="text-right pl-4 hover:text-gray-400">Borrowing</div>
           <div className="text-right hover:text-gray-400">Collateral</div>
           <div className="hidden sm:block text-right hover:text-gray-400">Limit Used</div>
-          <div className="hidden sm:block text-right hover:text-gray-400">Borrow APR</div>
+          <div className="hidden sm:block text-right hover:text-gray-400">APR</div>
         </div>
       ) : null
       }
