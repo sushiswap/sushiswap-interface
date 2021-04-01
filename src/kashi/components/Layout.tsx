@@ -23,24 +23,24 @@ export default function Layout({ left = undefined, children = undefined, right =
         <div className="flex col-span-12 lg:col-span-9 items-end">
           <nav className="flex justify-between items-center w-full">
             <div className="flex">
-              <NavLink to="/bento/kashi/lend" className="border-transparent px-6 border-b-2">
+              <NavLink to="/bento/kashi/lend" className="border-transparent px-4 border-b-2">
                 <div
                   className={
                     'flex items-center font-medium ' +
                     (location.pathname === '/bento/kashi/lend' ? 'text-white' : 'text-gray-500')
                   }
                 >
-                  <div className="whitespace-nowrap text-base mr-2">Lend</div>
+                  <div className="whitespace-nowrap text-base">Lend</div>
                 </div>
               </NavLink>
-              <NavLink to="/bento/kashi/borrow" className="border-transparent px-6 border-b-2">
+              <NavLink to="/bento/kashi/borrow" className="border-transparent px-4 border-b-2">
                 <div
                   className={
                     'flex items-center font-medium ' +
                     (location.pathname === '/bento/kashi/borrow' ? 'text-white' : 'text-gray-500')
                   }
                 >
-                  <div className="whitespace-nowrap text-base mr-2">Borrow</div>
+                  <div className="whitespace-nowrap text-base">Borrow</div>
                 </div>
               </NavLink>
             </div>
