@@ -56,7 +56,7 @@ const LendingPositions = () => {
           return (
             <>
               <Link
-                to={'/bento/kashi/pair/' + pair.address + '/supply'}
+                to={'/bento/kashi/pair/' + pair.address + '/lend'}
                 className="block"
                 key={pair.address}
                 style={{ color: theme.highEmphesisText }}
