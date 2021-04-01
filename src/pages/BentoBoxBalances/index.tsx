@@ -28,12 +28,10 @@ export default function BentoBalances() {
 
   // todo: include totalDeposits in balances
   const balances = useBentoBalances()
-  console.log('balances:', balances)
 
   const totalDepositsUSD = balances?.reduce((total: number, balance: { amountUSD: number }) => {
     return total + balance.amountUSD
   }, 0)
-  //console.log('totalDepositsUSD:', totalDepositsUSD)
 
   // Search Setup
   const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }

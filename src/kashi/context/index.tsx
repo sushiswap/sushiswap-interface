@@ -84,7 +84,6 @@ function ChainOracleVerify(pair: any, tokens: any) {
   let to = ''
   if (params[0] != ethers.constants.AddressZero) {
     if (!CHAINLINK_MAPPING[params[0]]) {
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
       decimals -= BigInt('18') - CHAINLINK_MAPPING[params[0]].decimals
@@ -94,7 +93,6 @@ function ChainOracleVerify(pair: any, tokens: any) {
   }
   if (params[1] != ethers.constants.AddressZero) {
     if (!CHAINLINK_MAPPING[params[1]]) {
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
       decimals -= CHAINLINK_MAPPING[params[1]].decimals
@@ -112,18 +110,11 @@ function ChainOracleVerify(pair: any, tokens: any) {
     const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
     const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
     if (!divider.eq(params[2])) {
-      console.log(
-        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
-        divider.toString(),
-        params[2].toString(),
-        tokens[pair.collateralAddress].decimals
-      )
       return false // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
     } else {
       return true
     }
   } else {
-    console.log("The Chainlink oracles configured don't match the pair tokens.")
     return false // The Chainlink oracles configured don't match the pair tokens.
   }
 }
@@ -182,7 +173,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   // Default token list fine for now, might want to more to the broader collection later.
   const tokens = useDefaultTokens()
-  console.log(tokens)
 
   const updatePairs = useCallback(
     async function() {
@@ -218,7 +208,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
         const balances = rpcToObj(await boringHelperContract.getBalances(account, Object.values(pairTokens).map((token: any) => token.address)))
         balances.forEach((balance: any, i: number) => {
-          console.log(pairTokens[balance.token], balance)
           Object.assign(pairTokens[balance.token], balance)
         })
 
@@ -230,8 +219,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               usd: e10(tokens[balance.token].decimals).mul(info.ethRate).div(balance.rate).div(e10(getCurrency(chainId).decimals)).toString()
             }
           })
-
-        console.log(pairs)
 
         dispatch({
           type: ActionType.UPDATE,
@@ -272,7 +259,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                   const totalAssetAmount = await bentoBoxContract.toAmount(asset, totalAsset.elastic, false)
 
                   // TODO: Convert from shares to amount
-                  console.log(totalAsset)
                   const userAssetAmount = toElastic(totalAsset, userAssetFraction, false)
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))

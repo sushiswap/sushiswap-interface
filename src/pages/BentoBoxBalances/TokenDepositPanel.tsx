@@ -235,7 +235,6 @@ export default function CurrencyInputPanel({
             if (maxSelected) {
               await deposit(tokenAddress, maxDepositAmountInput)
             } else {
-              console.log('hello')
               await deposit(tokenAddress, formatToBalance(depositValue, decimals))
             }
             setPendingTx(false)
