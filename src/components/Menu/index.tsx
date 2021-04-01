@@ -18,6 +18,8 @@ const StyledMenuIcon = styled(MenuIcon)`
 `
 
 const MenuItem = styled(ExternalLink)`
+  display: flex;
+  align-items: center;
   flex: 1;
   padding: 0.5rem 0.5rem;
   color: ${({ theme }) => theme.text2};
@@ -32,7 +34,8 @@ const MenuItem = styled(ExternalLink)`
 `
 
 const MenuItemInternal = styled(StyledInternalLink)`
-  flex: 1;
+  display: flex;
+  align-items: center;
   padding: 0.5rem 0.5rem;
   color: ${({ theme }) => theme.text2};
   :hover {
