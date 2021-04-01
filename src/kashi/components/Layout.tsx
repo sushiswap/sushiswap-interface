@@ -26,7 +26,7 @@ export default function Layout({ left = undefined, children = undefined, right =
         <div className="flex col-span-12 lg:col-span-9 items-end">
           <nav className="flex justify-between items-center w-full">
             <div className="flex">
-              <NavLink to="/bento/kashi/lend" className="border-transparent px-4 border-b-2">
+              <NavLink to="/bento/kashi/lend" className="border-transparent pl-8 pr-4 border-b-2">
                 <div
                   className={
                     'flex items-center font-medium ' +
@@ -66,9 +66,9 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
               <div
-                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium text-gray-500`}
+                className={`hidden md:block border-transparent pl-6 pr-9 border-b-2 justify-end items-center font-medium text-gray-500`}
               >
-                <div className="whitespace-nowrap text-base">Kashi Net Worth: {formattedNum(netWorth, true)}</div>
+                <div className="whitespace-nowrap text-base">{formattedNum(netWorth, true)}</div>
               </div>
             </div>
           </nav>
