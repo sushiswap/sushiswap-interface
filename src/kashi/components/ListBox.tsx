@@ -7,7 +7,7 @@ export default function ListBox({ label }: any) {
   const [selectedToken, setSelectedToken] = useState(tokens[0])
 
   return (
-    <div className="flex items-center justify-center p-12">
+    <div className="flex items-center justify-center">
       <div className="w-full">
         <Listbox as="div" className="space-y-1" value={selectedToken} onChange={setSelectedToken}>
           {({ open }) => (
