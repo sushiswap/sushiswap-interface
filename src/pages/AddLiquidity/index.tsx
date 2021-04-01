@@ -51,6 +51,8 @@ export default function AddLiquidity({
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
+  console.log({ currencyIdA, currencyIdB })
+  console.log({ currencyA, currencyB })
 
   const oneCurrencyIsWETH = Boolean(
     chainId &&

@@ -136,6 +136,30 @@ export default function Pool() {
                 </FixedHeightRow>
               </AutoColumn>
             </StyledPositionCard>
+            <StyledPositionCard>
+              <AutoColumn gap="12px">
+                <FixedHeightRow>
+                  <RowFixed>
+                    <Text fontWeight={500} fontSize={16}>
+                      LP ZAP
+                    </Text>
+                  </RowFixed>
+                </FixedHeightRow>
+                <FixedHeightRow>
+                  <RowFixed>
+                    {/* <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} /> */}
+                    <Text fontWeight={500} fontSize={14}>
+                      Zap into an LP position for any pool using any asset
+                    </Text>
+                  </RowFixed>
+                  <RowFixed>
+                    <ButtonEmpty padding="6px 8px" borderRadius="20px" width="fit-content" as={Link} to={`/zap`}>
+                      Manage
+                    </ButtonEmpty>
+                  </RowFixed>
+                </FixedHeightRow>
+              </AutoColumn>
+            </StyledPositionCard>
           </AutoColumn>
         </AutoColumn>
       </PageWrapper>

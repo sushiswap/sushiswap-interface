@@ -10,6 +10,7 @@ import mint from './mint/reducer'
 import lists from './lists/reducer'
 import burn from './burn/reducer'
 import multicall from './multicall/reducer'
+import zap from './zap/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
@@ -22,7 +23,8 @@ const store = configureStore({
     mint,
     burn,
     multicall,
-    lists
+    lists,
+    zap,
   },
   middleware: [...getDefaultMiddleware({ thunk: false, immutableCheck: false }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })

@@ -16,6 +16,7 @@ import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
 import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
 import PENDING_ABI from '../constants/sushiAbis/pending.json'
 import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
+import ZAPPER_ABI from '../constants/sushiAbis/zapper.json'
 
 import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 
@@ -33,6 +34,7 @@ import {
   TIMELOCK_ADDRESS,
   ROUTER_ADDRESS
 } from '@sushiswap/sdk'
+import { chain } from 'lodash'
 
 // returns null on errors
 export function useContract(
@@ -117,6 +119,22 @@ export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
     }
   }
   return useContract(address, SAAVE_ABI, withSignerIfPossible)
+}
+
+export function useZapper(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0xcff6eF0B9916682B37D80c19cFF8949bc1886bC2'
+        break
+      case ChainId.ROPSTEN:
+        address = '0x169c54a9826caf9f14bd30688296021533fe23ae'
+        break
+    }
+  }
+  return useContract(address, ZAPPER_ABI, withSignerIfPossible)
 }
 
 // TODO: Leaving these alone for now, since I'm unsure of whether these should

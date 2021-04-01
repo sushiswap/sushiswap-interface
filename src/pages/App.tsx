@@ -29,6 +29,7 @@ import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
+import AddSingleSideLiquidity from './AddSingleSideLiquidity'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 //import Vote from './Vote'
 //import VotePage from './Vote/VotePage'
@@ -120,6 +121,9 @@ function App() {
               <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
               <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
               <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+              <Route exact strict path="/zap" component={AddSingleSideLiquidity} />
+              <Route exact strict path="/zap/:poolAddress" component={AddSingleSideLiquidity} />
+              <Route exact strict path="/zap/:poolAddress/:currencyId" component={AddSingleSideLiquidity} />
               {/* <Route exact strict path="/migrate/v1" component={MigrateV1} /> */}
               {/* <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} /> */}
               {/* <Route exact strict path="/uni/:currencyIdA/:currencyIdB" component={Manage} /> */}
