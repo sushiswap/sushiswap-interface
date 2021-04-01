@@ -48,6 +48,7 @@ export function useDerivedZapInfo(
   parsedAmount: CurrencyAmount | undefined
   // price?: Price
   noLiquidity?: boolean
+  estimatedOutputValue: CurrencyAmount | undefined
   // liquidityMinted?: TokenAmount
   // poolTokenPercentage?: Percent
   // error?: string
@@ -77,6 +78,8 @@ export function useDerivedZapInfo(
 
   const parsedAmount = tryParseAmount(typedValue, currency);
 
+  const estimatedOutputValue = tryParseAmount((+typedValue * 0.2).toString(), currency)
+
   // // liquidity minted
   // const liquidityMinted = useMemo(() => {
   //   const { [Field.CURRENCY]: currencyAAmount, [Field.CURRENCY]: currencyBAmount } = parsedAmounts
@@ -103,6 +106,7 @@ export function useDerivedZapInfo(
     currency: currencyData,
     currencyBalance,
     noLiquidity,
-    parsedAmount
+    parsedAmount,
+    estimatedOutputValue,
   }
 }

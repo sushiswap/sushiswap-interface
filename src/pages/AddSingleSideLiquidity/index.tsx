@@ -20,6 +20,7 @@ import { DataCard, CardSection } from 'components/earn/styled'
 
 import { AppDispatch } from 'state'
 import { useCurrency } from '../../hooks/Tokens'
+import usePool from '../../sushi-hooks/queries/usePool'
 import { Field, resetZapState } from '../../state/zap/actions'
 import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../../state/zap/hooks'
 
@@ -71,7 +72,7 @@ const PoolAllocationWrapper = styled.div`
 
 const PoolBreakDownWrapper = styled.div`
   background-color: ${({ theme }) => theme.bg1};
-  border-top: 1px solid gray;
+  border-top: 1px solid ${({ theme }) => theme.bg3};
   padding: 1rem
   border-radius: 0 0 4px 4px;
 `
@@ -110,9 +111,14 @@ const InfoCard = styled(DataCard)`
   background: ${({ theme }) => transparentize(0.5, theme.bg1)};
 `
 
-const PoolInfo = ({ poolAddress }: { poolAddress: string }) => {
-  const currency0 = useCurrency('ETH')
-  const currency1 = useCurrency('0x101848d5c5bbca18e6b4431eedf6b95e9adf82fa')
+const PoolInfo = (
+  { poolAddress, currency }: { poolAddress: string, currency: Currency | undefined }
+) => {
+  const { token0, token1 } = usePool(poolAddress)
+  const { estimatedOutputValue } = useDerivedZapInfo(currency ?? undefined, undefined)
+  const currency0 = useCurrency(token0)
+  const currency1 = useCurrency(token1)
+  const formattedAmount = estimatedOutputValue?.toSignificant(6);
 
   return (
     <>
@@ -126,8 +132,12 @@ const PoolInfo = ({ poolAddress }: { poolAddress: string }) => {
           />
         </RowBetween>
         <RowBetween>
-          <TypeDefaultCursor fontWeight={500} fontSize="22px">0</TypeDefaultCursor>
-          <TypeDefaultCursor fontWeight={500} fontSize="22px">DAI/ETH</TypeDefaultCursor>
+          <TypeDefaultCursor fontWeight={500} fontSize="22px">
+            {formattedAmount || '0'}
+          </TypeDefaultCursor>
+          <TypeDefaultCursor fontWeight={500} fontSize="22px">
+            { (currency0 && currency1) &&`${currency0?.symbol}/${currency1?.symbol}`}
+            </TypeDefaultCursor>
         </RowBetween>
       </PoolAllocationWrapper>
       <PoolBreakDownWrapper>
@@ -225,7 +235,7 @@ const AddSingleSideLiquidity = ({
                   id="swap-currency-input"
                   cornerRadiusBottomNone={false}
               />
-              <PoolInfo poolAddress={poolAddress} />
+              <PoolInfo poolAddress={poolAddress} currency={currency ?? undefined} />
               <ButtonPrimary style={{ marginTop: '20px' }}>
                 <TYPE.main mb="4px">Zap</TYPE.main>
               </ButtonPrimary>

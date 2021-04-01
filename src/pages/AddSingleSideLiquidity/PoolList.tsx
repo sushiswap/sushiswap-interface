@@ -36,10 +36,10 @@ const PoolList = () => {
   const theme = useContext(ThemeContext)
   const mockData = [
     {
-      poolName: 'ETH-WBTC',
-      poolAddress: '0x1',
+      poolName: 'ETH-WEENUS',
+      poolAddress: '0x37f4d05b879c364187caa02678ba041f7b5f5c71',
       asset0: {
-        address: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+        address: '0x37f4d05b879c364187caa02678ba041f7b5f5c71',
         symbol: 'ETH',
         decimals: 18,
         getSymbol: () => '',
@@ -54,21 +54,21 @@ const PoolList = () => {
       } 
     },
     {
-      poolName: 'ETH-SUSHI',
-      poolAddress: '0x1',
+      poolName: 'ETH-UNI',
+      poolAddress: '0x4fc5a04948935f850ef3504bf69b2672f5b4bdc6',
       asset0: {
-        address: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+        address: '0x0a180a76e4466bf68a7f86fb029bed3cccfaaac5',
         symbol: 'WETH',
         decimals: 18,
-        getSymbol: () => 'ETH',
-        getName: () => 'Ether'
+        getSymbol: () => 'WETH',
+        getName: () => 'Wrapped Ether'
       },
       asset1: {
-        address: '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-        symbol: 'SUSHI',
+        address: '0x71d82eb6a5051cff99582f4cdf2ae9cd402a4882',
+        symbol: 'UNI',
         decimals: 18,
-        getSymbol: () => '',
-        getName: () => ''
+        getSymbol: () => 'UNI',
+        getName: () => 'Uniswap'
       } 
     },
   ]
