@@ -38,7 +38,7 @@ const SectionHeader = ({ portfolio = false, children, search, term }: any) => {
         {/* Desktop */}
         <div className="flex justify-between items-center">
           {/* <div className="hidden md:flex ml-4 items-center md:w-2/5"> */}
-          <div className="hidden md:flex ml-4 items-center w-full">
+          <div className="hidden md:flex md:justify-between mx-4 items-center w-full">
             {/* <div className="w-full"> */}
             <div className="font-semibold text-lg px-4">
               {(() => {
