@@ -82,7 +82,7 @@ function ChainOracleVerify(pair: any, tokens: any) {
   let decimals = BigInt('54')
   let from = ''
   let to = ''
-  if (params[0] != '0x0000000000000000000000000000000000000000') {
+  if (params[0] != ethers.constants.AddressZero) {
     if (!CHAINLINK_MAPPING[params[0]]) {
       console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
@@ -92,7 +92,7 @@ function ChainOracleVerify(pair: any, tokens: any) {
       to = CHAINLINK_MAPPING[params[0]].to
     }
   }
-  if (params[1] != '0x0000000000000000000000000000000000000000') {
+  if (params[1] != ethers.constants.AddressZero) {
     if (!CHAINLINK_MAPPING[params[1]]) {
       console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
@@ -163,7 +163,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     async function() {
       if (boringHelperContract && bentoBoxContract && kashiPairContract) {
         const info = await boringHelperContract.getUIInfo(
-          account || '0x0000000000000000000000000000000000000000',
+          account || ethers.constants.AddressZero,
           [],
           USD_ADDRESS[chainId || 1],
           [KASHI_ADDRESS]

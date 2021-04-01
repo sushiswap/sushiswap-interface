@@ -241,7 +241,7 @@ const useKashi = () => {
       let ethAmt = BigNumber.from(0)
       if (chainId && tokenAddress == WETH[chainId]) {
         ethAmt = amount?.value
-        tokenAddress = '0x0000000000000000000000000000000000000000'
+        tokenAddress = ethers.constants.AddressZero
       }
 
       try {
@@ -347,7 +347,7 @@ const useKashi = () => {
       const removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
 
       if (chainId && tokenAddress == WETH[chainId]) {
-        tokenAddress = '0x0000000000000000000000000000000000000000'
+        tokenAddress = ethers.constants.AddressZero
       }
 
       try {
@@ -413,7 +413,7 @@ const useKashi = () => {
       let ethAmt = BigNumber.from(0)
       if (chainId && tokenAddress == WETH[chainId]) {
         ethAmt = amount?.value
-        tokenAddress = '0x0000000000000000000000000000000000000000'
+        tokenAddress = ethers.constants.AddressZero
       }
 
       try {
@@ -461,7 +461,7 @@ const useKashi = () => {
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
 
       if (chainId && tokenAddress == WETH[chainId]) {
-        tokenAddress = '0x0000000000000000000000000000000000000000'
+        tokenAddress = ethers.constants.AddressZero
       }
 
       try {
@@ -574,7 +574,7 @@ const useKashi = () => {
       }*/
 
       if (chainId && tokenAddress == WETH[chainId]) {
-        tokenAddress = '0x0000000000000000000000000000000000000000'
+        tokenAddress = ethers.constants.AddressZero
       }
 
       try {
@@ -666,7 +666,7 @@ const useKashi = () => {
       let ethAmt = BigNumber.from(0)
       if (chainId && tokenAddress == WETH[chainId]) {
         ethAmt = amount?.value
-        tokenAddress = '0x0000000000000000000000000000000000000000'
+        tokenAddress = ethers.constants.AddressZero
       }
 
       //onsole.log("ethAmt:", ethAmt);

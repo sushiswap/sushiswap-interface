@@ -3,8 +3,6 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
 
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
 export { PRELOADED_PROPOSALS } from './proposals'
 
 // a list of tokens by chain

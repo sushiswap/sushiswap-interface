@@ -5,6 +5,7 @@ import { useActiveWeb3React } from '../hooks'
 import { BalanceProps } from './useTokenBalance'
 import { isAddress } from '../utils'
 import { WETH } from '../kashi/constants'
+import { ethers } from 'ethers'
 
 const useBentoBox = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -21,7 +22,7 @@ const useBentoBox = () => {
           //ethers.constants.HashZero
           if (tokenAddressChecksum === WETH[chainId]) {
             const tx = await bentoBoxContract?.deposit(
-              '0x0000000000000000000000000000000000000000',
+              ethers.constants.AddressZero,
               account,
               account,
               amount?.value,
