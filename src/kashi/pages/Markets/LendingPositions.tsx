@@ -23,7 +23,7 @@ const LendingPositions = () => {
   const pairs = useKashiPairs()
 
   const lendingPositions = pairs.filter(function(pair: any) {
-    return pair.userAssetAmount.value.gt(0)
+    return pair.userAssetFraction.gt(0)
   })
 
   return (
@@ -77,11 +77,11 @@ const LendingPositions = () => {
                   </div>
                   <div className="text-right">
                     <div>
-                      {formattedNum(pair.user.asset.string, false)} {pair.asset.symbol}
+                      {formattedNum(pair.userAssetAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.user.asset.usdString, true)}</div>
+                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.userAssetAmount.usd, true)}</div>
                   </div>
-                  <div className="text-right">{formattedPercent(pair.details.apr.currentSupplyAPR)}</div>
+                  <div className="text-right">{formattedPercent(pair.currentSupplyAPR.value)}</div>
                 </div>
               </Link>
             </>
