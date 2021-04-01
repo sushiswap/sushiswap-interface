@@ -54,7 +54,17 @@ const CreatePair = () => {
   const theme = useTheme()
 
   return (
-    <Layout left={<Card backgroundImage={DepositGraphic} title={'Create a new Kashi Market'} description={''} />}>
+    <Layout
+      left={
+        <Card
+          backgroundImage={DepositGraphic}
+          title={'Create a new Kashi Market'}
+          description={
+            'If you want to supply to a market that is not listed yet, you can use this tool to create a new pair based on Chainlink oracles.'
+          }
+        />
+      }
+    >
       <Card
         header={
           <LendCardHeader>
@@ -70,19 +80,21 @@ const CreatePair = () => {
           </LendCardHeader>
         }
       >
-        <div className="flex justify-between mb-8 w-full">
-          <InputRow>
-            <NumericalInput
-              value={0.0}
-              onUserInput={() => console.log('input')}
-              style={{
-                display: 'flex',
-                backgroundColor: '#2E3348',
-                padding: '0.75rem ',
-                borderRadius: '10px'
-              }}
-            />
-          </InputRow>
+        <div className="space-y-6">
+          <label className="block pb-4">
+            <span className="text-gray-700 pb-2">Collateral (LONG)</span>
+            <select className="form-select block w-full mt-1 rounded bg-background border-none py-4 px-6">
+              <option>Option 1</option>
+              <option>Option 2</option>
+            </select>
+          </label>
+          <label className="block pb-4">
+            <span className="text-gray-700 pb-2">Asset to Borrow (SHORT)</span>
+            <select className="form-select block w-full mt-1 rounded bg-background border-none py-4 px-6">
+              <option>Option 1</option>
+              <option>Option 2</option>
+            </select>
+          </label>
         </div>
       </Card>
     </Layout>
