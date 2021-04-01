@@ -69,7 +69,7 @@ export default function BentoBalances() {
               <div className="hidden md:flex items-center">
                 <BackButton defaultRoute="/bento" />
                 <img src={BentoBoxLogo} className="block w-10 mr-2" />
-                <div className="font-semibold text-lg">My Bento Balances</div>
+                <div className="font-semibold text-lg">My BentoBox Balances</div>
               </div>
               <div className="w-full md:w-1/2">
                 <div className="relative">
