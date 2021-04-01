@@ -5,15 +5,14 @@ import QuestionHelper from '../../../components/QuestionHelper'
 import { getTokenIcon } from '../../functions'
 import { formattedNum } from '../../../utils'
 import { useKashiPairs } from '../../context'
-import { Card, SectionHeader, Layout } from '../../components'
+import { Card, BorrowCardHeader, MarketHeader, Layout } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
-
 import BorrowPositions from './BorrowPositions'
 
-export default function KashiPairs() {
+export default function Borrow() {
   const theme = useContext(ThemeContext)
   const pairs = useKashiPairs()
 
@@ -41,7 +40,7 @@ export default function KashiPairs() {
         />
       }
     >
-      <Card className="h-full bg-kashi-card" header={<SectionHeader search={search} term={term} />}>
+      <Card className="h-full bg-kashi-card" header={<MarketHeader type="Borrow" search={search} term={term} />}>
         <div className="pb-4">
           <BorrowPositions />
         </div>
@@ -141,16 +140,16 @@ export default function KashiPairs() {
                           />
                         </div>
                         <div className="sm:items-end md:hidden">
-                          <div className="text-left hidden sm:block">{pair.collateral.symbol} /</div>
-                          <div className="text-left hidden sm:block">{pair.asset.symbol}</div>
+                          <div>{pair.collateral.symbol} /</div>
+                          <div>{pair.asset.symbol}</div>
                           <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
                             {pair.oracle.name}
                           </div>
                         </div>
                       </div>
-                      <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
-                      <div className="text-left text-white hidden md:block">{pair.asset.symbol}</div>
-                      <div className="text-left hidden lg:block">{pair.oracle.name}</div>
+                      <div className="hidden md:block">{pair.collateral.symbol}</div>
+                      <div className="text-white hidden md:block">{pair.asset.symbol}</div>
+                      <div className="hidden lg:block">{pair.oracle.name}</div>
                       <div className="text-right">
                         <div>
                           {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
