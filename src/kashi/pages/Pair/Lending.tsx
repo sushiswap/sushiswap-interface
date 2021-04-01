@@ -93,6 +93,7 @@ export default function LendingPair({
                   <img
                     src={pair && getTokenIcon(pair?.collateral.address)}
                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                    alt=""
                   />
                 </a>
                 <a
@@ -111,6 +112,7 @@ export default function LendingPair({
                   <img
                     src={pair && getTokenIcon(pair?.asset.address)}
                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                    alt=""
                   />
                 </a>
               </div>
