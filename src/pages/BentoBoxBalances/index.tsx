@@ -3,8 +3,6 @@ import { useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { ChainId } from '@sushiswap/sdk'
 import { RowBetween } from '../../components/Row'
-import { AutoColumn } from '../../components/Column'
-import { DarkCard, BaseCard } from '../../components/Card'
 import TokenDepositPanel from './TokenDepositPanel'
 import TokenWithdrawPanel from './TokenWithdrawPanel'
 import { useActiveWeb3React } from 'hooks'
@@ -18,6 +16,7 @@ import BentoBoxImage from 'assets/kashi/bento-illustration.png'
 
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
+import BackButton from 'kashi/components/BackButton'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
@@ -68,19 +67,7 @@ export default function BentoBalances() {
             </div>
             <div className="flex w-full justify-between">
               <div className="hidden md:flex items-center">
-                <button
-                  onClick={() => {
-                    if (history.length < 3) {
-                      history.push('/bento')
-                    } else {
-                      history.goBack()
-                    }
-                  }}
-                  className="mr-4 p-2 rounded-full"
-                  style={{ background: theme.baseCard }}
-                >
-                  <ChevronLeft strokeWidth={2} size={24} />
-                </button>
+                <BackButton defaultRoute="/bento" />
                 <img src={BentoBoxLogo} className="block w-10 mr-2" />
                 <div className="font-semibold text-lg">My Bento Balances</div>
               </div>
