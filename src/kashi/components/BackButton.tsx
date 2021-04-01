@@ -1,11 +1,9 @@
 import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
 import { useHistory } from 'react-router-dom'
 
 import { ChevronLeft } from 'react-feather'
 
-const BackButton = ({ defaultRoute, marginRight = 4, backgroundColor }: any) => {
-  const theme = useContext(ThemeContext)
+const BackButton = ({ defaultRoute }: any) => {
   const history = useHistory()
   return (
     <>
@@ -17,8 +15,7 @@ const BackButton = ({ defaultRoute, marginRight = 4, backgroundColor }: any) => 
             history.goBack()
           }
         }}
-        className={`mr-${marginRight} p-2 rounded-full`}
-        style={{ background: `${backgroundColor ? backgroundColor : theme.baseCard}` }}
+        className={`p-2 mr-4 rounded-full bg-kashi-card-inner`}
       >
         <ChevronLeft strokeWidth={2} size={24} />
       </button>
