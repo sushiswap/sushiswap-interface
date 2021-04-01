@@ -9,7 +9,7 @@ import { getSigner } from '../../utils'
 import { BalanceProps } from '../../sushi-hooks/useTokenBalance'
 import { useKashiPair } from 'kashi/context'
 
-import { 
+import {
   ACTION_ADD_ASSET,
   ACTION_REPAY,
   ACTION_REMOVE_ASSET,
@@ -24,7 +24,7 @@ import {
   ACTION_BENTO_TRANSFER_MULTIPLE,
   ACTION_BENTO_SETAPPROVAL,
   ACTION_CALL
- } from '../constants'
+} from '../constants'
 
 const signMasterContractApproval = async (
   bentoBoxContract: ethers.Contract | null,
@@ -82,17 +82,28 @@ function useKashiCooker(pair: KashiPair) {
 
   const kashiPairContract = useKashiPairContract()
   const bentoBoxContract = useBentoBoxContract()
-  
+
   const [actions, setActions] = useState<number[]>([])
   const [values, setValues] = useState<number[]>([])
   const [data, setData] = useState<string[]>([])
 
-  const approve = useCallback(async (approval) => {
-    const permit = await signMasterContractApproval(bentoBoxContract, pair.address, account!, library!, approval, chainId, undefined)
+  const approve = useCallback(async approval => {
+    const permit = await signMasterContractApproval(
+      bentoBoxContract,
+      pair.address,
+      account!,
+      library!,
+      approval,
+      chainId,
+      undefined
+    )
     setActions([...actions, ACTION_BENTO_SETAPPROVAL])
     setValues([...values, 0])
 
-    let abiData = ethers.utils.defaultAbiCoder.encode(["address", "address", "bool", "uint8", "bytes32", "bytes32"], [bentoBoxContract?.address, pair.address, true, permit.v, permit.r, permit.s])
+    let abiData = ethers.utils.defaultAbiCoder.encode(
+      ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
+      [bentoBoxContract?.address, pair.address, true, permit.v, permit.r, permit.s]
+    )
     setData([...data, abiData])
   }, [])
 
@@ -101,7 +112,7 @@ function useKashiCooker(pair: KashiPair) {
     setActions([...actions, ACTION_ADD_COLLATERAL])
     setValues([...values, 0])
 
-    let abiData = ethers.utils.defaultAbiCoder.encode(["int256", "address", "bool"], [share, pair.address, true])
+    let abiData = ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, pair.address, true])
     setData([...data, abiData])
   }, [])
 
@@ -109,8 +120,14 @@ function useKashiCooker(pair: KashiPair) {
     setActions([...actions, ACTION_BENTO_DEPOSIT, ACTION_ADD_COLLATERAL])
     setValues([...values, 0, 0])
 
-    let depositData = ethers.utils.defaultAbiCoder.encode(["address", "address", "int256", "int256"], [pair.collateral, pair.address, amount.value, 0])
-    let addCollateralData = ethers.utils.defaultAbiCoder.encode(["int256", "address", "bool"], [-2, pair.address, false])
+    let depositData = ethers.utils.defaultAbiCoder.encode(
+      ['address', 'address', 'int256', 'int256'],
+      [pair.collateral, pair.address, amount.value, 0]
+    )
+    let addCollateralData = ethers.utils.defaultAbiCoder.encode(
+      ['int256', 'address', 'bool'],
+      [-2, pair.address, false]
+    )
     setData([...data, depositData, addCollateralData])
   }, [])
 
@@ -118,8 +135,11 @@ function useKashiCooker(pair: KashiPair) {
     setActions([...actions, ACTION_BENTO_DEPOSIT, ACTION_ADD_ASSET])
     setValues([...values, 0, 0])
 
-    let depositData = ethers.utils.defaultAbiCoder.encode(["address", "address", "int256", "int256"], [pair.asset, pair.address, amount.value, 0])
-    let addAssetData = ethers.utils.defaultAbiCoder.encode(["int256", "address", "bool"], [-2, pair.address, false])
+    let depositData = ethers.utils.defaultAbiCoder.encode(
+      ['address', 'address', 'int256', 'int256'],
+      [pair.asset, pair.address, amount.value, 0]
+    )
+    let addAssetData = ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, pair.address, false])
     setData([...data, depositData, addAssetData])
   }, [])
 
@@ -128,7 +148,7 @@ function useKashiCooker(pair: KashiPair) {
     setActions([...actions, ACTION_BORROW])
     setValues([...values, 0])
 
-    let abiData = ethers.utils.defaultAbiCoder.encode(["int256", "address"], [amount.value, pair.address])
+    let abiData = ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [amount.value, pair.address])
     setData([...data, abiData])
   }, [])
 

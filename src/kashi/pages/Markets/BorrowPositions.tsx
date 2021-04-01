@@ -6,7 +6,7 @@ import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
 
 import { useKashiPairs } from '../../context'
-import { SectionHeader, Layout, FixedScrollable, GradientDot } from '../../components'
+import { SectionHeader, Layout, GradientDot } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 
 const StyledBaseCard = styled(BaseCard)`
@@ -38,8 +38,7 @@ const BorrowPositions = () => {
           <div className="hidden sm:block text-right hover:text-gray-400">Limit Used</div>
           <div className="hidden sm:block text-right hover:text-gray-400">APR</div>
         </div>
-      ) : null
-      }
+      ) : null}
       {borrowPositions &&
         borrowPositions.length > 0 &&
         borrowPositions.map((pair: any) => {

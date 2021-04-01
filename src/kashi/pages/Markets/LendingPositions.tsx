@@ -6,7 +6,7 @@ import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
 
 import { useKashiPairs } from '../../context'
-import { SectionHeader, Layout, FixedScrollable } from '../../components'
+import { SectionHeader, Layout } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 
 const StyledBaseCard = styled(BaseCard)`

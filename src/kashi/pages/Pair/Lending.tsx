@@ -30,6 +30,7 @@ export default function LendingPair({
     <Layout
       left={
         <Card
+          className="h-full bg-kashi-card"
           backgroundImage={DepositGraphic}
           title={'Lend assets for interest from borrowers.'}
           description={
@@ -38,7 +39,7 @@ export default function LendingPair({
         />
       }
       right={
-        <Card>
+        <Card className="h-full bg-kashi-card">
           <div className="text-lg text-high-emphesis">Net Worth in this Market</div>
           <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
           <Paper className="bg-kashi-card-inner p-4">
@@ -72,6 +73,7 @@ export default function LendingPair({
       }
     >
       <Card
+        className="h-full bg-kashi-card"
         header={
           <LendCardHeader>
             <div className="flex items-center">
