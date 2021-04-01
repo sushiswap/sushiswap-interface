@@ -12,8 +12,8 @@ import { useBentoBoxContract } from '../../sushi-hooks/useContract'
 import { ApprovalState, useApproveCallback } from '../../sushi-hooks/useApproveCallback'
 import useBentoBox from 'sushi-hooks/useBentoBox'
 import useBentoBalance from '../../sushi-hooks/useBentoBalance'
-
 import { formatFromBalance, formatToBalance } from '../../utils'
+import { Paper } from 'kashi/components'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -182,11 +182,7 @@ export default function CurrencyInputPanel({
     <>
       {/* Deposit Input */}
       <InputPanel id={id}>
-        <Container
-          hideInput={hideInput}
-          cornerRadiusBottomNone={cornerRadiusBottomNone}
-          cornerRadiusTopNone={cornerRadiusTopNone}
-        >
+        <Paper className="bg-kashi-card rounded-b-none">
           {!hideInput && (
             <LabelRow>
               <RowBetween>
@@ -221,7 +217,7 @@ export default function CurrencyInputPanel({
               </>
             )}
           </InputRow>
-        </Container>
+        </Paper>
       </InputPanel>
       {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
         <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
