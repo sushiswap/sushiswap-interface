@@ -43,7 +43,7 @@ export default function LendingPair({
           <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
           <Paper className="bg-kashi-card-inner p-4">
             <RowBetween>
-              <div className="text-lg text-secondary">Availble:</div>
+              <div className="text-lg text-secondary">Available:</div>
               <div className="text-lg text-high-emphesis">
                 {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
               </div>

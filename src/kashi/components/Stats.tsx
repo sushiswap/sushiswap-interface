@@ -30,7 +30,7 @@ export default function Header() {
           </div>
         </BaseCard>
       </div>
-      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/supply">
+      <Link className="hidden md:block flex-none text-white" to="/bento/kashi/positions/lend">
         <BaseCard style={{ position: 'relative', overflow: 'hidden' }} borderRadius="12px" padding="1rem">
           <div className="items-center text-center">
             <div className="text-2xl font-semibold">{counts.pairsSupplied || 0}</div>
