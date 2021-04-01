@@ -38,7 +38,8 @@ module.exports = {
         'kashi-borrow-header': '#221825',
         'kashi-lend-header': '#0F182A',
         'kashi-card': '#161522',
-        'kashi-card-inner': '#202231'
+        'kashi-card-inner': '#202231',
+        'input': "#2E3348"
       }
     }
   },
