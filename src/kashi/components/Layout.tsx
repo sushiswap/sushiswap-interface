@@ -68,7 +68,7 @@ export default function Layout({ left = undefined, children = undefined, right =
               <div
                 className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium text-gray-500`}
               >
-                <div className="whitespace-nowrap text-base">Kashi Net Worth: ≈ {formattedNum(netWorth, true)}</div>
+                <div className="whitespace-nowrap text-base">Kashi Net Worth: {formattedNum(netWorth, true)}</div>
               </div>
             </div>
           </nav>

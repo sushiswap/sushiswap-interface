@@ -160,13 +160,13 @@ export default function KashiPairs() {
                         <div>
                           {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-gray-500">≈ {formattedNum(pair.totalBorrowAmount.usd, true)}</div>
+                        <div className="text-gray-500">{formattedNum(pair.totalBorrowAmount.usd, true)}</div>
                       </div>
                       <div className="text-right">
                         <div>
                           {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-gray-500">≈ {formattedNum(pair.totalAssetAmount.usd, true)}</div>
+                        <div className="text-gray-500">{formattedNum(pair.totalAssetAmount.usd, true)}</div>
                       </div>
                     </div>
                   </Link>

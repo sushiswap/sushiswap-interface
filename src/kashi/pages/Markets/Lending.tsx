@@ -157,7 +157,7 @@ export default function KashiPairs() {
                           <div>
                             {formattedNum(pair.liquidity.string)} {pair.asset.symbol}
                           </div>
-                          <div className="text-gray-500">≈ {formattedNum(pair.liquidity.usd, true)}</div>
+                          <div className="text-gray-500">{formattedNum(pair.liquidity.usd, true)}</div>
                         </div>
                       </div>
                     </Link>
