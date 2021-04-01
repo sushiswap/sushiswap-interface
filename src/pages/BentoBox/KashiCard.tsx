@@ -8,14 +8,14 @@ import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 
 const KashiCard = () => {
   const { account } = useActiveWeb3React()
-  const { kashiApproved, approve } = useKashi()
+  const { kashiApproved, approveMaster } = useKashi()
 
   const [requestedApproval, setRequestedApproval] = useState(false)
 
   const handleApprove = useCallback(async () => {
     try {
       setRequestedApproval(true)
-      const txHash = await approve()
+      const txHash = await approveMaster()
       console.log(txHash)
       if (!txHash) {
         setRequestedApproval(false)
@@ -23,7 +23,7 @@ const KashiCard = () => {
     } catch (e) {
       console.log(e)
     }
-  }, [approve])
+  }, [approveMaster])
 
   console.log('kashiApproved:', kashiApproved)
 
