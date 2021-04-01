@@ -7,12 +7,11 @@ import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, Card, Layout, KashiAction, CardHeader, PrimaryTabs, SecondaryTabs } from '../../components'
+import { GradientDot, Card, Layout, Paper, BorrowCardHeader, PrimaryTabs } from '../../components'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -51,47 +50,41 @@ export default function BorrowPair({
       }
       right={
         <Card>
-          <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Market</TYPE.mediumHeader>
-          <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
-            ≈ {formattedNum(pair.userNetWorth, true)}
-          </TYPE.largeHeader>
-          <Card backgroundColor={theme.extraDarkPurple} padding="p-4">
+          <div className="text-lg text-high-emphesis">Net Worth in this Market</div>
+          <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
+          <Paper className="bg-kashi-card-inner p-4">
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Borrow Limit Used:</TYPE.body>
+              <div className="text-lg text-secondary">Borrow Limit Used:</div>
               <div className="flex items-center">
-                <TYPE.body color="highEmphesisText">{formattedPercent(pair.health.string)}</TYPE.body>
+                <div className="text-lg text-high-emphesis">{formattedPercent(pair.health.string)}</div>
                 <GradientDot percent={pair.health.string} />
               </div>
             </RowBetween>
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Left to borrow:</TYPE.body>
-              <TYPE.body color="highEmphesisText">
+              <div className="text-lg text-secondary">Left to borrow:</div>
+              <div className="text-lg text-high-emphesis">
                 {formattedNum(pair.safeMaxBorrowableLeft.string)} {pair.asset.symbol}
-              </TYPE.body>
+              </div>
             </RowBetween>
-            {/* <RowBetween>
-                <TYPE.body color="mediumEmphesisText">Liquidation price:</TYPE.body>
-                <TYPE.body color="highEmphesisText">???</TYPE.body>
-              </RowBetween> */}
-          </Card>
+          </Paper>
           <Card backgroundColor="transparent" padding="p-4">
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Loan to Value:</TYPE.body>
-              <TYPE.body color="highEmphesisText">75%</TYPE.body>
+              <div className="text-lg text-secondary">Loan to Value:</div>
+              <div className="text-lg text-high-emphesis">75%</div>
             </RowBetween>
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Market Available:</TYPE.body>
+              <div className="text-lg text-secondary">Market Available:</div>
               <div className="flex items-center">
-                <TYPE.body color="highEmphesisText">
+                <div className="text-lg text-high-emphesis">
                   {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
-                </TYPE.body>
+                </div>
                 <GradientDot percent={pair.totalAssetAmount.string} desc={false} />
               </div>
             </RowBetween>
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Utilization rate:</TYPE.body>
+              <div className="text-lg text-secondary">Utilization rate:</div>
               <div className="flex items-center">
-                <TYPE.body color="highEmphesisText">{formattedPercent(pair.utilization.string)}</TYPE.body>
+                <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
                 <GradientDot percent={pair.utilization.string} />
               </div>
             </RowBetween>
@@ -101,7 +94,7 @@ export default function BorrowPair({
     >
       <Card
         header={
-          <CardHeader market="Borrow" border>
+          <BorrowCardHeader>
             <div className="flex items-center">
               <div className="flex space-x-2 mr-4">
                 <a
@@ -143,43 +136,38 @@ export default function BorrowPair({
               </div>
               <div className="flex justify-between items-center">
                 <div>
-                  <TYPE.largeHeader color="highEmphesisText" lineHeight={1}>
+                  <div className="text-3xl text-high-emphesis">
                     {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
-                  </TYPE.largeHeader>
+                  </div>
                   <AutoRow>
-                    <TYPE.subHeader color="mediumEmphesisText" style={{ marginRight: 4 }}>
-                      Oracle:
-                    </TYPE.subHeader>
-                    <TYPE.subHeader color="highEmphesisText">{pair && pair.oracle.name}</TYPE.subHeader>
-                    {/* <QuestionHelper text="" /> */}
+                    <div className="text-sm text-low-emphesis mr-1">Oracle:</div>
+                    <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
                   </AutoRow>
                 </div>
               </div>
             </div>
-          </CardHeader>
+          </BorrowCardHeader>
         }
       >
         <div className="flex justify-between mb-8">
           <div>
-            <TYPE.mediumHeader color="mediumEmphesisText">Collateral Balance</TYPE.mediumHeader>
-            <TYPE.largeHeader color="primaryBlue">
+            <div className="text-secondary text-lg">Collateral Balance</div>
+            <div className="text-blue text-2xl">
               {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
-            </TYPE.largeHeader>
-            <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.userCollateralAmount.usd, true)}</TYPE.body>
+            </div>
+            <div className="text-high-emphesis text-lg">≈ {formattedNum(pair.userCollateralAmount.usd, true)}</div>
           </div>
           <div>
-            <TYPE.mediumHeader color="mediumEmphesisText">Borrow Balance</TYPE.mediumHeader>
-            <TYPE.largeHeader color="primaryPink">
+            <div className="text-secondary text-lg">Borrow Balance</div>
+            <div className="text-pink text-2xl">
               {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
-            </TYPE.largeHeader>
-            <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.userBorrowAmount.usd, true)}</TYPE.body>
+            </div>
+            <div className="text-high-emphesis text-lg">≈ {formattedNum(pair.userBorrowAmount.usd, true)}</div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div className="text-right">
             <div>
-              <TYPE.mediumHeader color="mediumEmphesisText">Borrow APR</TYPE.mediumHeader>
-              <TYPE.largeHeader color="highEmphesisText">
-                {formattedPercent(pair.currentInterestPerYear.string)}
-              </TYPE.largeHeader>
+              <div className="text-secondary text-lg">Borrow APR</div>
+              <div className="text-high-emphesis text-2xl">{formattedPercent(pair.currentInterestPerYear.string)}</div>
             </div>
           </div>
         </div>
@@ -191,69 +179,9 @@ export default function BorrowPair({
           onSelect={index => setTabIndex(index)}
         >
           <TabList>
-            <Tab>Collateral</Tab>
             <Tab>Borrow</Tab>
-            <Tab>Leverage</Tab>
+            <Tab>Repay</Tab>
           </TabList>
-          <TabPanel>
-            <SecondaryTabs forceRenderTabPanel>
-              <TabList>
-                <Tab>Add {pair.collateral.symbol}</Tab>
-                <Tab>Remove {pair.collateral.symbol}</Tab>
-              </TabList>
-              <TabPanel>
-                <KashiAction pair={pair} action="Add Collateral" direction="From" label="Balance" />
-              </TabPanel>
-              <TabPanel>
-                <KashiAction pair={pair} action="Remove Collateral" direction="Into" label="Max" />
-              </TabPanel>
-            </SecondaryTabs>
-          </TabPanel>
-          <TabPanel>
-            <SecondaryTabs forceRenderTabPanel>
-              <TabList>
-                <Tab>Borrow {pair.asset.symbol}</Tab>
-                <Tab>Repay {pair.asset.symbol}</Tab>
-              </TabList>
-              <TabPanel>
-                <KashiAction pair={pair} action="Borrow" direction="To" label="Limit" />
-              </TabPanel>
-              <TabPanel>
-                <KashiAction pair={pair} action="Repay" direction="From" label="Max" />
-              </TabPanel>
-            </SecondaryTabs>
-          </TabPanel>
-          <TabPanel>
-            <div className="relative pt-10">
-              <div className="sm:text-center">
-                <TYPE.extraLargeHeader color="highEmphesisText" lineHeight={1}>
-                  Coming Soon
-                </TYPE.extraLargeHeader>
-                <p className="mt-6 mx-auto max-w-2xl text-lg text-gray-500">
-                  We&apos;re working on refining the leverage experience to give our users the largest selection of long
-                  short positions on various tokens. Stay tuned.
-                </p>
-              </div>
-              <div className="mt-12 mx-auto ">
-                <div className="mt-4 sm:mt-0 sm:ml-3 flex space-x-4">
-                  <Link
-                    to={'/bento/kashi/pair/' + pairAddress + '/supply'}
-                    style={{ background: theme.primaryBlue }}
-                    className="block w-full text-center rounded-md border border-transparent px-5 py-3 text-base font-medium text-white shadow focus:outline-none sm:px-10"
-                  >
-                    Explore Lending
-                  </Link>
-                  <Link
-                    to={'/bento/kashi/borrow'}
-                    style={{ background: theme.primaryPink }}
-                    className="block w-full text-center rounded-md border border-transparent px-5 py-3  text-base font-medium text-white shadow focus:outline-none sm:px-10"
-                  >
-                    Borrow Markets
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </TabPanel>
         </PrimaryTabs>
       </Card>
     </Layout>

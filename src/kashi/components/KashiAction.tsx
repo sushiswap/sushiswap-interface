@@ -670,7 +670,7 @@ export default function KashiAction({ pair, action, direction, label }: KashiAct
                 onUserInput={setValue}
                 style={{
                   display: 'flex',
-                  backgroundColor: '#2e3348',
+                  backgroundColor: '#2E3348',
                   padding: '0.75rem ',
                   borderRadius: '10px'
                 }}

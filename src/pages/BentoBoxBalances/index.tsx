@@ -60,7 +60,7 @@ export default function BentoBalances() {
     >
       <Card
         header={
-          <CardHeader className="flex justify-between items-center">
+          <CardHeader className="flex justify-between items-center bg-kashi-card-inner">
             <div className="md:hidden">
               <div className="flex float-right items-center">
                 <div className="font-semibold">BentoBox Balances</div>

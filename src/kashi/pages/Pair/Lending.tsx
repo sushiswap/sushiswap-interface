@@ -5,12 +5,11 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { KashiAction, CardHeader, PrimaryTabs } from '../../components'
+import { KashiAction, LendCardHeader, PrimaryTabs } from '../../components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import { TYPE } from 'theme'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
-import { Card, Layout } from '../../components'
+import { Card, Layout, Paper } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { GradientDot } from '../../components'
 
@@ -24,8 +23,6 @@ export default function LendingPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
-
-  const theme = useTheme()
 
   if (!pair) return null
 
@@ -42,31 +39,29 @@ export default function LendingPair({
       }
       right={
         <Card>
-          <TYPE.mediumHeader color="highEmphesisText">Net Worth in this Market</TYPE.mediumHeader>
-          <TYPE.largeHeader color="extraHighEmphesisText" marginBottom={18}>
-            ≈ {formattedNum(pair.userNetWorth, true)}
-          </TYPE.largeHeader>
-          <Card backgroundColor={theme.extraDarkPurple} p="p-4">
+          <div className="text-lg text-high-emphesis">Net Worth in this Market</div>
+          <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
+          <Paper className="bg-kashi-card-inner p-4">
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Debt Ceiling:</TYPE.body>
-              <TYPE.body color="highEmphesisText">
+              <div className="text-lg text-secondary">Debt Ceiling:</div>
+              <div className="text-lg text-high-emphesis">
                 {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
-              </TYPE.body>
+              </div>
             </RowBetween>
             <RowBetween>
-              <TYPE.body color="mediumEmphesisText">Utilization:</TYPE.body>
+              <div className="text-lg text-secondary">Utilization:</div>
               <div className="flex items-center">
-                <TYPE.body color="highEmphesisText">{formattedPercent(pair.utilization.string)}</TYPE.body>
+                <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
                 <GradientDot percent={pair.utilization.string} desc={false} />
               </div>
             </RowBetween>
-          </Card>
+          </Paper>
         </Card>
       }
     >
       <Card
         header={
-          <CardHeader market={'Supply'} border>
+          <LendCardHeader>
             <div className="flex items-center">
               <div className="flex space-x-2 mr-4">
                 <a
@@ -108,42 +103,39 @@ export default function LendingPair({
               </div>
               <div className="flex justify-between items-center">
                 <div>
-                  <TYPE.largeHeader color="highEmphesisText" lineHeight={1}>
-                    <span>Lend {pair && pair.asset.symbol}</span>
-                  </TYPE.largeHeader>
-                  <TYPE.subHeader color="mediumEmphesisText">with {pair && pair.collateral.symbol} as collateral</TYPE.subHeader>
+                  <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.symbol}</div>
+
                   <AutoRow>
-                    <TYPE.subHeader color="mediumEmphesisText" style={{ marginRight: 4 }}>
-                      Oracle:
-                    </TYPE.subHeader>
-                    <TYPE.subHeader color="highEmphesisText">{pair && pair.oracle.name}</TYPE.subHeader>
-                    {/* <QuestionHelper text="" /> */}
+                    <div className="text-sm text-low-emphesis mr-1">Oracle:</div>
+                    <div className="text-sm text-high-emphesis mr-2">{pair && pair.oracle.name}</div>
+                    <div className="text-sm text-secondary mr-1">Collateral:</div>
+                    <div className="text-sm text-high-emphesis">{pair && pair.collateral.symbol}</div>
                   </AutoRow>
                 </div>
               </div>
             </div>
-          </CardHeader>
+          </LendCardHeader>
         }
       >
         <div className="flex justify-between mb-8">
           <div>
-            <TYPE.mediumHeader color="mediumEmphesisText">Supply Balance</TYPE.mediumHeader>
-            <TYPE.largeHeader color="primaryBlue">
+            <div className="text-secondary text-lg">Supply Balance</div>
+            <div className="text-blue text-2xl">
               {formattedNum(pair.userTotalSupply.string)} {pair.asset.symbol}
-            </TYPE.largeHeader>
-            <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.userTotalSupply.usd, true)}</TYPE.body>
+            </div>
+            <div className="text-high-emphesis text-lg">≈ {formattedNum(pair.userTotalSupply.usd, true)}</div>
           </div>
           <div>
-            <TYPE.mediumHeader color="mediumEmphesisText">Market Supply</TYPE.mediumHeader>
-            <TYPE.largeHeader color="highEmphesisText">
+            <div className="text-secondary text-lg">Market Supply</div>
+            <div className="text-high-emphesis text-2xl">
               {formattedNum(pair.liquidity.string)} {pair.asset.symbol}
-            </TYPE.largeHeader>
-            <TYPE.body color="highEmphesisText">≈ {formattedNum(pair.liquidity.usd, true)}</TYPE.body>
+            </div>
+            <div className="text-high-emphesis text-lg">≈ {formattedNum(pair.liquidity.usd, true)}</div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div className="text-right">
             <div>
-              <TYPE.mediumHeader color="mediumEmphesisText">Supply APR</TYPE.mediumHeader>
-              <TYPE.largeHeader color="highEmphesisText">{formattedPercent(pair.currentSupplyAPR)}</TYPE.largeHeader>
+              <div className="text-secondary text-lg">Supply APR</div>
+              <div className="text-high-emphesis text-2xl">{formattedPercent(pair.currentSupplyAPR)}</div>
             </div>
           </div>
         </div>
