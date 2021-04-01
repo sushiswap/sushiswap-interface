@@ -77,6 +77,74 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
   }
 }
 
+function ChainOracleVerify(pair: any, tokens: any) {
+  const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
+  let decimals = BigInt('54')
+  let from = ''
+  let to = ''
+  if (params[0] != '0x0000000000000000000000000000000000000000') {
+    if (!CHAINLINK_MAPPING[params[0]]) {
+      console.log('One of the Chainlink oracles used is not configured in this UI.')
+      return false // One of the Chainlink oracles used is not configured in this UI.
+    } else {
+      decimals -= BigInt('18') - CHAINLINK_MAPPING[params[0]].decimals
+      from = CHAINLINK_MAPPING[params[0]].from
+      to = CHAINLINK_MAPPING[params[0]].to
+    }
+  }
+  if (params[1] != '0x0000000000000000000000000000000000000000') {
+    if (!CHAINLINK_MAPPING[params[1]]) {
+      console.log('One of the Chainlink oracles used is not configured in this UI.')
+      return false // One of the Chainlink oracles used is not configured in this UI.
+    } else {
+      decimals -= CHAINLINK_MAPPING[params[1]].decimals
+      if (!to) {
+        from = CHAINLINK_MAPPING[params[1]].to
+        to = CHAINLINK_MAPPING[params[1]].from
+      } else if (to == CHAINLINK_MAPPING[params[1]].to) {
+        to = CHAINLINK_MAPPING[params[1]].from
+      } else {
+        return false // The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.
+      }
+    }
+  }
+  if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase() && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
+    const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
+    const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
+    if (!divider.eq(params[2])) {
+      console.log(
+        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
+        divider.toString(),
+        params[2].toString(),
+        tokens[pair.collateralAddress].decimals
+      )
+      return false // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
+    } else {
+      return true
+    }
+  } else {
+    console.log("The Chainlink oracles configured don't match the pair tokens.")
+    return false // The Chainlink oracles configured don't match the pair tokens.
+  }
+}
+
+function GetPairsFromLogs(logs: any) {
+  return logs.map((log: any) => {
+    const deployParams = ethers.utils.defaultAbiCoder.decode(
+      ['address', 'address', 'address', 'bytes'],
+      log.args?.data
+    )
+    return {
+      masterContract: log.args?.masterContract,
+      address: log.args?.cloneAddress,
+      collateralAddress: deployParams[0],
+      assetAddress: deployParams[1],
+      oracle: deployParams[2],
+      oracleData: deployParams[3]      
+    }
+  })
+}
+
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
@@ -94,7 +162,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
   const updatePairs = useCallback(
     async function() {
       if (boringHelperContract && bentoBoxContract && kashiPairContract) {
-        console.log(USD_ADDRESS[chainId || 1])
         const info = await boringHelperContract.getUIInfo(
           account || '0x0000000000000000000000000000000000000000',
           [],
@@ -102,84 +169,15 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           [KASHI_ADDRESS]
         )
 
+        const logPairs = GetPairsFromLogs(await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS)))
+
         const supported_oracles = [chainlinkOracleContract?.address]
-        const logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
+        const pairAddresses = (logPairs).filter((pair: any) => 
+          supported_oracles.indexOf(pair.oracle) != -1 && 
+          ChainOracleVerify(pair, tokens)
+        ).map((pair: any) => pair.address)
 
-        const pairsAll: any[] = []
-        logs.forEach(log => {
-          const deployParams = ethers.utils.defaultAbiCoder.decode(
-            ['address', 'address', 'address', 'bytes'],
-            log.args?.data
-          )
-          if (!log.args?.cloneAddress || supported_oracles.indexOf(deployParams[2]) == -1) {
-            return
-          }
-
-          const pair = {
-            masterContract: log.args?.masterContract,
-            address: log.args.cloneAddress,
-            collateralAddress: deployParams[0],
-            assetAddress: deployParams[1],
-            oracle: deployParams[2],
-            oracleData: deployParams[3]
-          }
-
-          if (pair.oracle == chainlinkOracleContract?.address) {
-            const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
-            let decimals = BigInt('54')
-            let from = ''
-            let to = ''
-            if (params[0] != '0x0000000000000000000000000000000000000000') {
-              if (!CHAINLINK_MAPPING[params[0]]) {
-                console.log('One of the Chainlink oracles used is not configured in this UI.')
-                return // One of the Chainlink oracles used is not configured in this UI.
-              } else {
-                decimals -= BigInt('18') - CHAINLINK_MAPPING[params[0]].decimals
-                from = CHAINLINK_MAPPING[params[0]].from
-                to = CHAINLINK_MAPPING[params[0]].to
-              }
-            }
-            if (params[1] != '0x0000000000000000000000000000000000000000') {
-              if (!CHAINLINK_MAPPING[params[1]]) {
-                console.log('One of the Chainlink oracles used is not configured in this UI.')
-                return // One of the Chainlink oracles used is not configured in this UI.
-              } else {
-                decimals -= CHAINLINK_MAPPING[params[1]].decimals
-                if (!to) {
-                  from = CHAINLINK_MAPPING[params[1]].to
-                  to = CHAINLINK_MAPPING[params[1]].from
-                } else if (to == CHAINLINK_MAPPING[params[1]].to) {
-                  to = CHAINLINK_MAPPING[params[1]].from
-                } else {
-                  return // The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.
-                }
-              }
-            }
-            if (from == pair.assetAddress.toLowerCase() && to == pair.collateralAddress.toLowerCase() && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
-              const needed = BigInt(tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals)
-              const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
-              if (!divider.eq(params[2])) {
-                console.log(
-                  'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
-                  divider.toString(),
-                  params[2].toString(),
-                  tokens[pair.collateralAddress].decimals
-                )
-                return // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
-              }
-            } else {
-              console.log("The Chainlink oracles configured don't match the pair tokens.")
-              return // The Chainlink oracles configured don't match the pair tokens.
-            }
-          }
-
-          pairsAll.push(pair)
-        })
-
-        const pairs = await boringHelperContract.pollKashiPairs(
-          account,
-          pairsAll.map(pair => pair.address)
-        )
+        const pairs = await boringHelperContract.pollKashiPairs(account, pairAddresses)
 
         const tokenAddresses: string[] = _.uniq(
           pairs.map((pair: KashiPollPair) => pair.collateral).concat(pairs.map((pair: KashiPollPair) => pair.asset))
@@ -387,7 +385,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                       Number(assetUSD)
 
                   return {
-                    address: pairsAll[i].address,
+                    address: pairAddresses[i].address,
                     accrueInfo: {
                       feesEarnedFraction: accrueInfo.feesEarnedFraction,
                       interestPerSecond: accrueInfo.interestPerSecond,
