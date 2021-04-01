@@ -1,23 +1,20 @@
 import React, { useContext } from 'react'
-import { ThemeContext } from 'styled-components'
 
 export default function Card({
   header = undefined,
   backgroundImage = '',
-  backgroundColor = '#161522',
   title = '',
   description = '',
   children,
   className,
   padding = undefined
 }: any) {
-  const theme = useContext(ThemeContext)
   return (
     <div
-      className={`h-full ${className}`}
+      className={`${className}`}
       style={{
         borderRadius: '10px',
-        background: backgroundImage ? `url(${backgroundImage}), ${backgroundColor}` : backgroundColor,
+        backgroundImage: `url(${backgroundImage})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
         backgroundPosition: 'center bottom'

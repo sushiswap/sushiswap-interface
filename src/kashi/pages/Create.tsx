@@ -1,17 +1,14 @@
 import React from 'react'
-import { useActiveWeb3React } from 'hooks'
-import useTheme from 'hooks/useTheme'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { Card, Layout, LendCardHeader, BackButton, ListBox } from '../components'
 import { getTokenIcon } from 'kashi/functions'
 
 const CreatePair = () => {
-  const { account, chainId } = useActiveWeb3React()
-  const theme = useTheme()
   return (
     <Layout
       left={
         <Card
+          className="h-full bg-kashi-card"
           backgroundImage={DepositGraphic}
           title={'Create a new Kashi Market'}
           description={
@@ -21,16 +18,12 @@ const CreatePair = () => {
       }
     >
       <Card
+        className="h-full bg-kashi-card"
         header={
           <LendCardHeader>
             <div className="flex items-center">
-              <div className="flex space-x-2 mr-4"></div>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <BackButton defaultRoute={'/bento/kashi/lend'} />
-                  <div className="text-3xl text-high-emphesis">Create a Market</div>
-                </div>
-              </div>
+              <BackButton defaultRoute={'/bento/kashi/lend'} />
+              <div className="text-3xl text-high-emphesis">Create a Market</div>
             </div>
           </LendCardHeader>
         }

@@ -9,7 +9,7 @@ import { useActiveWeb3React } from 'hooks'
 import useBentoBalances from 'sushi-hooks/useBentoBalances'
 import { formatFromBalance, formattedNum } from '../../utils'
 import { Search, PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
-import { Card, CardHeader, Paper, FixedScrollable, Layout } from '../../kashi/components'
+import { Card, CardHeader, Paper, Layout } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
@@ -49,6 +49,7 @@ export default function BentoBalances() {
     <Layout
       left={
         <Card
+          className="h-full bg-kashi-card"
           backgroundImage={BentoBoxImage}
           title={'Deposit tokens into BentoBox for all the yields.'}
           description={
@@ -58,6 +59,7 @@ export default function BentoBalances() {
       }
     >
       <Card
+        className="h-full bg-kashi-card"
         header={
           <CardHeader className="flex justify-between items-center bg-kashi-card-inner">
             <div className="md:hidden">

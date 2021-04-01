@@ -41,6 +41,7 @@ export default function BorrowPair({
     <Layout
       left={
         <Card
+          className="h-full bg-kashi-card"
           backgroundImage={DepositGraphic}
           title={'Add collateral in order to borrow assets'}
           description={
@@ -49,7 +50,7 @@ export default function BorrowPair({
         />
       }
       right={
-        <Card>
+        <Card className="h-full bg-kashi-card">
           <div className="text-lg text-high-emphesis">Net Worth in this Market</div>
           <div className="text-2xl text-high-emphesis mb-4">{formattedNum(pair.userNetWorth, true)}</div>
           <Paper className="bg-kashi-card-inner p-4">
@@ -93,6 +94,7 @@ export default function BorrowPair({
       }
     >
       <Card
+        className="h-full bg-kashi-card"
         header={
           <BorrowCardHeader>
             <div className="flex items-center">

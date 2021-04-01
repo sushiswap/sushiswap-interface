@@ -35,6 +35,7 @@ export default function KashiPairs() {
     <Layout
       left={
         <Card
+          className="h-full bg-kashi-card"
           backgroundImage={DepositGraphic}
           title={'Borrow assets and leverage up'}
           description={
@@ -43,7 +44,7 @@ export default function KashiPairs() {
         />
       }
     >
-      <Card header={<SectionHeader search={search} term={term} />}>
+      <Card className="h-full bg-kashi-card" header={<SectionHeader search={search} term={term} />}>
         <div className="pb-4">
           <BorrowPositions />
         </div>
