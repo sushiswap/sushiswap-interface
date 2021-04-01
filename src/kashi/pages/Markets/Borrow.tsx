@@ -50,7 +50,7 @@ export default function KashiPairs() {
             className="hover:text-gray-400 col-span-2 md:col-span-1 cursor-pointer flex items-center"
             onClick={() => requestSort('symbol')}
           >
-            <div className="mr-2">Market</div>
+            <div className="mr-2">Available Markets</div>
             {sortConfig &&
               sortConfig.key === 'symbol' &&
               ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -60,7 +60,7 @@ export default function KashiPairs() {
             className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('collateral.symbol')}
           >
-            <div className="flex items-center float-right">
+            <div className="flex items-center float-left">
               <div className="mr-2">Collateral</div>
               {sortConfig &&
                 sortConfig.key === 'collateral.symbol' &&
@@ -72,7 +72,7 @@ export default function KashiPairs() {
             className="hidden md:block pl-4 hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('asset.symbol')}
           >
-            <div className="flex items-center float-right">
+            <div className="flex items-center float-left">
               <div className="mr-2">Borrow</div>
               {sortConfig &&
                 sortConfig.key === 'asset.symbol' &&
@@ -84,7 +84,7 @@ export default function KashiPairs() {
             className="hidden lg:block hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('oracle.name')}
           >
-            <div className="flex items-center float-right justify-end">
+            <div className="flex items-center float-left justify-end">
               <div className="mr-2 flex">
                 Oracle <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
               </div>
@@ -151,9 +151,9 @@ export default function KashiPairs() {
                         </div>
                         <div className="sm:items-end md:hidden"></div>
                       </div>
-                      <div className="text-right hidden md:block pl-4">{pair.collateral.symbol}</div>
-                      <div className="text-right text-white hidden md:block">{pair.asset.symbol}</div>
-                      <div className="text-right hidden lg:block">{pair.oracle.name}</div>
+                      <div className="text-left hidden md:block pl-4">{pair.collateral.symbol}</div>
+                      <div className="text-left text-white hidden md:block">{pair.asset.symbol}</div>
+                      <div className="text-left hidden lg:block">{pair.oracle.name}</div>
                       <div className="text-right">
                         <div>
                           {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
