@@ -11,7 +11,7 @@ import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import { Card, Layout, Paper } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot } from '../../components'
+import { GradientDot, BackButton } from '../../components'
 
 export default function LendingPair({
   match: {
@@ -76,6 +76,7 @@ export default function LendingPair({
           <LendCardHeader>
             <div className="flex items-center">
               <div className="flex space-x-2 mr-4">
+                <BackButton defaultRoute={'/bento/kashi/lend'} marginRight={0} backgroundColor={'#172948'} />
                 <a
                   href={
                     `${

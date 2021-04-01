@@ -74,10 +74,12 @@ const BorrowPositions = () => {
                     <img
                       src={getTokenIcon(pair.collateral.address)}
                       className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                      alt=""
                     />
                     <img
                       src={getTokenIcon(pair.asset.address)}
                       className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                      alt=""
                     />
                   </div>
                   <div className="text-left hidden sm:block pl-4">

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import { ChevronLeft } from 'react-feather'
 
-const BackButton = ({ defaultRoute }: any) => {
+const BackButton = ({ defaultRoute, marginRight = 4, backgroundColor }: any) => {
   const theme = useContext(ThemeContext)
   const history = useHistory()
   return (
@@ -17,8 +17,8 @@ const BackButton = ({ defaultRoute }: any) => {
             history.goBack()
           }
         }}
-        className="mr-4 p-2 rounded-full"
-        style={{ background: theme.baseCard }}
+        className={`mr-${marginRight} p-2 rounded`}
+        style={{ background: `${backgroundColor ? backgroundColor : theme.baseCard}` }}
       >
         <ChevronLeft strokeWidth={2} size={24} />
       </button>
