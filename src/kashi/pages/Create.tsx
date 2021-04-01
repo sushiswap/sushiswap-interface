@@ -54,17 +54,7 @@ const CreatePair = () => {
   const theme = useTheme()
 
   return (
-    <Layout
-      left={
-        <Card
-          backgroundImage={DepositGraphic}
-          title={'Add collateral in order to borrow assets'}
-          description={
-            'Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements.'
-          }
-        />
-      }
-    >
+    <Layout left={<Card backgroundImage={DepositGraphic} title={'Create a new Kashi Market'} description={''} />}>
       <Card
         header={
           <LendCardHeader>

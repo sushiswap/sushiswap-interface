@@ -165,6 +165,11 @@ export default function KashiPairs() {
               })}
           </div>
         </div>
+        <div className="w-full py-6 text-center">
+          <Link to="/bento/kashi/create" className="font-bold text-lg">
+            + Create a new market
+          </Link>
+        </div>
       </Card>
     </Layout>
   )
