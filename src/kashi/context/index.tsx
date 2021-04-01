@@ -249,6 +249,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     toElastic(totalAsset, await kashiPairContract.balanceOf(account), false),
                     false
                   )
+                  console.log(userAssetFraction.toString(), userAssetFraction.toString())
 
                   const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
                     ? BigNumber.from(0)
@@ -466,7 +467,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                       string: Fraction.from(
                         userAssetAmount,
                         BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                      ).toString()
+                      ).toString(),
+                      usd:
+                        Number(
+                          Fraction.from(
+                            userAssetAmount,
+                            BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
+                          ).toString()
+                        ) * Number(assetUSD)                   
                     },
                     totalBorrowAmount: {
                       value: totalBorrowAmount,
