@@ -117,13 +117,9 @@ export default function KashiPairs() {
                   <div key={pair.address}>
                     <Link
                       to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
-                      className="block"
-                      style={{ color: theme.highEmphesisText }}
+                      className="block text-high-emphesis"
                     >
-                      <div
-                        className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold"
-                        style={{ background: theme.mediumDarkPurple, borderRadius: '15px' }}
-                      >
+                      <div className="py-4 px-4 items-center align-center grid grid-cols-5 md:grid-cols-6 lg:grid-cols-7 text-sm font-semibold rounded bg-kashi-card-inner">
                         <div className="flex flex-col sm:flex-row col-span-2 items-start sm:items-center">
                           <div className="flex space-x-2">
                             <img

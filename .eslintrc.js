@@ -20,7 +20,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-unused-vars": "off",
-    "prettier/prettier": "warn",
+    "prettier/prettier": "off",
     "prefer-const": "warn"
   },
   settings: {
