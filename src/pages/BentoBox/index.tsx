@@ -1,19 +1,14 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-
 import { TYPE } from '../../theme'
 import { RowBetween } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
 import { BaseCard, OutlineCard } from '../../components/Card'
 import { CardSection, DataCard } from '../../components/earn/styled'
 import { transparentize } from 'polished'
-
 import KashiCard from './KashiCard'
-
 import { useActiveWeb3React } from '../../hooks'
-import Web3Status from 'components/Web3Status'
-
 import BentoBoxLogo from '../../assets/kashi/bento-symbol.svg'
 
 export const FixedHeightRow = styled(RowBetween)`
@@ -51,9 +46,12 @@ export default function Bento() {
                 <div className="hidden md:block">BentoBox Apps</div>
               </div>
               {account ? (
-                <Link to="/bento/balances" className="inline-block flex float-right text-right items-center">
-                  <img src={BentoBoxLogo} className="block w-10 mr-2" />
-                  <div className="font-normal">My Bento</div>
+                <Link
+                  to="/bento/balances"
+                  className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium`}
+                >
+                  <img src={BentoBoxLogo} className="flex max-h-4 mr-2" />
+                  <div className="whitespace-nowrap text-base">My BentoBox</div>
                 </Link>
               ) : (
                 <div>Connect Wallet</div>
