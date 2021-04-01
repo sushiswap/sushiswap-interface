@@ -77,13 +77,13 @@ const BorrowPositions = () => {
                     <div>
                       {formattedNum(pair.userBorrowAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.userBorrowAmount.usd, true)}</div>
+                    <div className="text-gray-500 text-sm">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">
                     <div>
                       {formattedNum(pair.userCollateralAmount.string, false)} {pair.collateral.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.userCollateralAmount.usd, true)}</div>
+                    <div className="text-gray-500 text-sm">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
                   </div>
                   <div className="hidden sm:block">
                     <div className="flex text-right float-right items-center">

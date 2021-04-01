@@ -111,7 +111,7 @@ export default function BentoBalances() {
           >
             <div>
               <div className="flex justify-between px-2 pb-4">
-                <div className="font-medium text-base text-gray-500">≈ {formattedNum(totalDepositsUSD, true)}</div>
+                <div className="font-medium text-base text-gray-500">{formattedNum(totalDepositsUSD, true)}</div>
               </div>
               {items &&
                 items.length > 0 &&
@@ -168,7 +168,7 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
               {tokenBalance} {tokenDetails && tokenDetails.symbol}{' '}
             </div>
             <div className="font-medium text-gray-600 text-xs md:text-sm mr-4 text-right">
-              ≈ {formattedNum(tokenDetails.amountUSD, true)}
+              {formattedNum(tokenDetails.amountUSD, true)}
             </div>
           </div>
           {expand ? (

@@ -72,7 +72,7 @@ const LendingPositions = () => {
                     <div>
                       {formattedNum(pair.userAssetAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">≈ {formattedNum(pair.userAssetAmount.usd, true)}</div>
+                    <div className="text-gray-500 text-sm">{formattedNum(pair.userAssetAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">{formattedPercent(pair.currentSupplyAPR.value)}</div>
                 </div>

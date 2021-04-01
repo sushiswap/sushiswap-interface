@@ -158,14 +158,14 @@ export default function BorrowPair({
             <div className="text-blue text-2xl">
               {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
             </div>
-            <div className="text-high-emphesis text-lg">≈ {formattedNum(pair.userCollateralAmount.usd, true)}</div>
+            <div className="text-high-emphesis text-lg">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
           </div>
           <div>
             <div className="text-secondary text-lg">Borrow Balance</div>
             <div className="text-pink text-2xl">
               {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
             </div>
-            <div className="text-high-emphesis text-lg">≈ {formattedNum(pair.userBorrowAmount.usd, true)}</div>
+            <div className="text-high-emphesis text-lg">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
           </div>
           <div className="text-right">
             <div>
