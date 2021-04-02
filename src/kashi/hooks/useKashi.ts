@@ -25,8 +25,6 @@ import { getSigner } from '../../utils'
 import { useKashiPairs } from 'kashi/context'
 import { WETH } from '../constants'
 
-import { chainLinkMappings } from 'kashi/chainLinkTokens'
-
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
 const ACTION_REPAY = 2
