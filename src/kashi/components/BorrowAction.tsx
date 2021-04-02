@@ -261,7 +261,9 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
   }, [action, pair, value])
 
   const getWarningMessage = useCallback(() => {
-    if (action === 'Borrow') {
+    if (pair.oracleExchangeRate.isZero()) {
+      return 'Oracle exchange rate has NOT been set'
+    } else if (action === 'Borrow') {
       if (pair.userCollateralAmount.value.eq(BigNumber.from(0))) {
         return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
       }
@@ -277,7 +279,9 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
   }, [action, sourceOrDestination, pair])
 
   const getWarningPredicate = useCallback<() => boolean>(() => {
-    if (action === 'Borrow') {
+    if (pair.oracleExchangeRate.isZero()) {
+      return true
+    } else if (action === 'Borrow') {
       return (
         pair.userCollateralAmount.value.eq(BigNumber.from(0)) ||
         pair.safeMaxBorrowableLeft.value.lte(BigNumber.from(0)) ||

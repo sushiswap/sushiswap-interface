@@ -69,16 +69,20 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
   }, [action, pair, value])
 
   const getWarningMessage = useCallback(() => {
-    if (action === 'Deposit') {
+    if (pair.oracleExchangeRate.isZero()) {
+      return 'Oracle exchange rate has NOT been set'
+    } else if (action === 'Deposit') {
       return `Please make sure your ${sourceOrDestination} balance is sufficient to ${action.toLowerCase()} and then try again.`
     } else if (action === 'Withdraw') {
       return `Please make sure your supply balance is sufficient to withdraw and then try again.`
     }
     return null
-  }, [action, sourceOrDestination])
+  }, [action, sourceOrDestination, pair])
 
   const getWarningPredicate = useCallback<() => boolean>(() => {
-    if (action === 'Deposit') {
+    if (pair.oracleExchangeRate.isZero()) {
+      return true
+    } else if (action === 'Deposit') {
       return assetBalance?.value.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Withdraw') {
       return pair.userTotalSupply.value.lt(formatToBalance(value, pair.asset.decimals).value)
