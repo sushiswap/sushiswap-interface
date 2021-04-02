@@ -76,7 +76,7 @@ export default function BentoBalances(): JSX.Element {
         }
       >
         <div className="grid gap-4 grid-flow-row auto-rows-max">
-          <div className="px-4 grid grid-cols-3 text-sm font-semibold text-gray-500">
+          <div className="px-4 grid grid-cols-3 text-sm font-semibold text-gray-500 select-none">
             <div>Token</div>
             <div className="text-right">Wallet</div>
             <div className="text-right">BentoBox</div>
