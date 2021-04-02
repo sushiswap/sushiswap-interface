@@ -214,7 +214,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
     [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
     [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-    [XSUSHI_CALL]: [XSUSHI, WETH[ChainId.MAINNET]],
+    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
   }
 }
 
