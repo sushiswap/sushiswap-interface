@@ -25,11 +25,6 @@ export const FixedHeightRow = styled(RowBetween)`
 export default function BentoBalances(): JSX.Element {
   // todo: include totalDeposits in balances
   const balances = useBentoBalances()
-
-  const totalDepositsUSD = balances?.reduce((previousValue, currentValue) => {
-    return previousValue + Number(currentValue.amountUSD)
-  }, 0)
-
   // Search Setup
   const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }
   const { result, search, term } = useFuse({
@@ -39,7 +34,6 @@ export default function BentoBalances(): JSX.Element {
   const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
-
   return (
     <Layout
       left={
@@ -67,7 +61,14 @@ export default function BentoBalances(): JSX.Element {
                 <BackButton defaultRoute="/bento" />
                 <img alt="" src={BentoBoxLogo} className="block w-10 mr-2" />
                 <div className="text-lg mr-2">My BentoBox</div>
-                <div className="text-lg text-gray-500">{formattedNum(totalDepositsUSD, true)}</div>
+                <div className="text-lg text-gray-500">
+                  {formattedNum(
+                    balances?.reduce((previousValue, currentValue) => {
+                      return previousValue + Number(currentValue.amountUSD)
+                    }, 0),
+                    true
+                  )}
+                </div>
               </div>
               <Search search={search} term={term} />
             </div>
@@ -100,7 +101,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
   return (
     <Paper className="bg-kashi-card-inner">
       <div
-        className="p-2 sm:p-4 grid grid-cols-3 cursor-pointer select-none rounded"
+        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm font-semibold"
         onClick={() => setExpand(!expand)}
       >
         <div className="flex items-center">
@@ -119,26 +120,22 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
           >
             <img alt="" src={getTokenIcon(balance.address)} className="block w-10 sm:w-14 rounded-lg mr-2" />
           </a>
-          <div className="hidden sm:block  font-semibold text-base md:text-lg">{balance && balance.name}</div>
+          <div className="hidden sm:block">{balance && balance.name}</div>
         </div>
         <div className="flex justify-end items-center">
           <div>
-            <div className="font-medium text-base md:text-lg text-right">
+            <div className="text-right">
               {walletBalance} {balance && balance.symbol}{' '}
             </div>
-            <div className="font-medium text-gray-600 text-xs md:text-sm text-right">
-              {formattedNum(balance.amountUSD, true)}
-            </div>
+            <div className="text-gray-500 text-right">{formattedNum(balance.amountUSD, true)}</div>
           </div>
         </div>
         <div className="flex justify-end items-center">
           <div>
-            <div className="font-medium text-base md:text-lg text-right">
+            <div className="text-right">
               {bentoBalance} {balance && balance.symbol}{' '}
             </div>
-            <div className="font-medium text-gray-600 text-xs md:text-sm text-right">
-              {formattedNum(balance.amountUSD, true)}
-            </div>
+            <div className="text-gray-500 text-right">{formattedNum(balance.amountUSD, true)}</div>
           </div>
         </div>
         {/* <div className="flex items-center">
