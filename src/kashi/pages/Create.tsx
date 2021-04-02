@@ -30,27 +30,7 @@ const CreatePair = () => {
       >
         <div className="space-y-6">
           <ListBox label={'Collateral (LONG)'} />
-          <label className="block pb-4">
-            <span className="text-gray-700 pb-2">Collateral (LONG)</span>
-            <select className="form-select block w-full mt-1 rounded bg-background border-none py-4 px-6">
-              <option className="flex">
-                <img
-                  src={getTokenIcon('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2')}
-                  className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                  alt=""
-                />
-                Option 1
-              </option>
-              <option>Option 2</option>
-            </select>
-          </label>
-          <label className="block pb-4">
-            <span className="text-gray-700 pb-2">Asset to Borrow (SHORT)</span>
-            <select className="form-select block w-full mt-1 rounded bg-background border-none py-4 px-6">
-              <option>Option 1</option>
-              <option>Option 2</option>
-            </select>
-          </label>
+          <ListBox label={'Asset to Borrow (SHORT)'} />
         </div>
       </Card>
     </Layout>
