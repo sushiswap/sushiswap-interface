@@ -63,6 +63,24 @@ export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: '0x090D4613473dEE047c3f2706764f49E0821D256e'
 }
 
+// TODO: update weekly with new constant
+export const MERKLE_ROOT = {
+  merkleRoot: '0x8d8695c4a951e44621c712bc269b03a028b747f2ccab49ab9637c2b3e8470aba',
+  tokenTotal: '0x07c083a53f032cc000',
+  claims: {
+    '0x8867eF1593F6A72DbbB941D4D96b746A4da691B2': {
+      index: 0,
+      amount: '0x02a67769ebd93ae000',
+      proof: ['0xd6f8d7647d9ae162458882a1c50e4f2a59f3f19a11f45ff9f4c07f9d55768c8f']
+    },
+    '0xb900Ee43397Bc2829e565DECe3518A02F712Ec33': {
+      index: 1,
+      amount: '0x051a0c3b5329f1e000',
+      proof: ['0x628cc16b45049572bdb29f7b23df369bee23f09d17b01d7ab6e95d37728429dd']
+    }
+  }
+}
+
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
@@ -191,13 +209,7 @@ export const XSUSHI_CALL = new Token(
   'XSUSHI 25 Call [31 May 2021]'
 )
 
-export const XSUSHI = new Token(
-  ChainId.MAINNET,
-  '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
-  18,
-  'xSUSHI',
-  'SushiBar'
-)
+export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -214,7 +226,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
     [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
     [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
+    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
   }
 }
 

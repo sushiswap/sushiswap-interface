@@ -24,6 +24,8 @@ import { YellowCard } from '../Card'
 import { Moon, Sun } from 'react-feather'
 import Menu from '../Menu'
 
+import ClaimModal from '../claim/ClaimModal'
+
 import Row, { RowFixed } from '../Row'
 import Web3Status from '../Web3Status'
 import { Dots } from '../swap/styleds'
@@ -317,6 +319,7 @@ export default function Header() {
 
   return (
     <HeaderFrame>
+      <ClaimModal />
       <Modal isOpen={showUniBalanceModal} onDismiss={() => setShowUniBalanceModal(false)}>
         <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
       </Modal>
@@ -355,6 +358,11 @@ export default function Header() {
           {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
               Stake
+            </StyledNavLink>
+          )}
+          {chainId === ChainId.ROPSTEN && (
+            <StyledNavLink id={`claim-nav-link`} to={'/vested'}>
+              Vested SUSHI
             </StyledNavLink>
           )}
           {chainId && (

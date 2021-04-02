@@ -34,6 +34,7 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 //import VotePage from './Vote/VotePage'
 
 import SushiBar from './SushiBar'
+import Vested from './Vested'
 
 // Additional Tools
 import Tools from './Tools'
@@ -102,6 +103,7 @@ function App() {
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
               {/* Pages */}
+              <Route exact strict path="/vested" component={Vested} />
               <Route exact strict path="/swap" component={Swap} />
               <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
