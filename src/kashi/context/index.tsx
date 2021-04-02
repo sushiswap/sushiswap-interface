@@ -407,6 +407,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
               return {
                 address: address,
+                search: (tokens[collateral].address === WETH[chainId || 1].address
+                  ? Currency.getNativeCurrencySymbol(chainId)
+                  : tokens[collateral].symbol) + '/' +
+                  (tokens[asset].address === WETH[chainId || 1].address
+                    ? Currency.getNativeCurrencySymbol(chainId)
+                    : tokens[asset].symbol),
                 accrueInfo: {
                   feesEarnedFraction: accrueInfo.feesEarnedFraction,
                   interestPerSecond: accrueInfo.interestPerSecond,

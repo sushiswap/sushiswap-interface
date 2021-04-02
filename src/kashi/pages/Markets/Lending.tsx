@@ -19,7 +19,7 @@ export default function KashiPairs() {
   const pairs = useKashiPairs()
 
   // setup search
-  const options = { keys: ['asset.symbol', 'collateral.symbol'], threshold: 0 }
+  const options = { keys: ['search'], threshold: 0 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
     options
