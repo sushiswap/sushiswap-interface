@@ -66,7 +66,8 @@ export default function BentoBalances(): JSX.Element {
               <div className="hidden md:flex items-center">
                 <BackButton defaultRoute="/bento" />
                 <img alt="" src={BentoBoxLogo} className="block w-10 mr-2" />
-                <div className="font-semibold text-lg">My BentoBox</div>
+                <div className="text-lg mr-2">My BentoBox</div>
+                <div className="text-lg text-gray-500">{formattedNum(totalDepositsUSD, true)}</div>
               </div>
               <Search search={search} term={term} />
             </div>
