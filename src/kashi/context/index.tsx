@@ -22,7 +22,7 @@ import { useBoringHelperContract } from 'hooks/useContract'
 import { useDefaultTokens } from 'hooks/Tokens'
 import { Oracle, KashiPollPair, KashiPair } from '../entities'
 import useInterval from 'hooks/useInterval'
-import { BigNumber } from '@ethersproject/bignumber'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import _ from 'lodash'
 
 enum ActionType {
@@ -77,8 +77,8 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
   }
 }
 
-function ChainOracleVerify(chainId: ChainId, pair: any, tokens: any) {
-  const mapping = CHAINLINK_MAPPING[chainId]
+function ChainOracleVerify(chain: ChainId, pair: any, tokens: any) {
+  const mapping = CHAINLINK_MAPPING[chain]
   if (!mapping) { return false }
   const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
   let decimals = 54
@@ -140,10 +140,6 @@ function GetPairsFromLogs(logs: any) {
   })
 }
 
-function e10(exponent: BigNumber | Number | string) {
-  return BigNumber.from('10').pow(BigNumber.from(exponent))
-}
-
 function rpcToObj(rpc_obj: any, obj?: any) {
   if (rpc_obj instanceof ethers.BigNumber) {
     return rpc_obj
@@ -165,18 +161,77 @@ function rpcToObj(rpc_obj: any, obj?: any) {
   return rpc_obj
 }
 
+const ZERO = BigNumber.from("0")
+function e10(exponent: BigNumber | Number | string) {
+  return BigNumber.from("10").pow(BigNumber.from(exponent))
+}
+function min(...values: BigNumberish[]) {
+  let lowest = BigNumber.from(values[0])
+  for (let i = 1; i < values.length; i++) {
+    const value = BigNumber.from(values[i])
+    if (value.lt(lowest)) {
+      lowest = value
+    }
+  }
+  return lowest
+}
+function muldiv(amount: BigNumberish, multiplier: BigNumberish, divisor: BigNumberish): BigNumber {
+  return BigNumber.from(divisor).gt(0) ? BigNumber.from(amount).mul(multiplier).div(divisor) : ZERO
+}
 function toAmount(token: any, shares: BigNumber) {
-  return !token.bentoShare.eq("0") ? shares.mul(token.bentoAmount).div(token.bentoShare) : BigNumber.from("0")
+  return muldiv(shares, token.bentoAmount, token.bentoShare)
+}
+function toShare(token: any, shares: BigNumber) {
+  return muldiv(shares, token.bentoShare, token.bentoAmount)
+}
+function accrue(pair:any, amount: BigNumber) {
+  return amount
+    .mul(pair.accrueInfo.interestPerSecond)
+    .mul(pair.elapsedSeconds)
+    .div(e10(18))
+}
+function interestAccrue(pair: any, interest: BigNumber) {
+  if (pair.totalBorrowAmount.eq(0)) { return STARTING_INTEREST_PER_YEAR }
+  if (pair.elapsedSeconds.lte(0)) { return interest }
+
+  let currentInterest = interest
+  if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
+    const underFactor = muldiv(MINIMUM_TARGET_UTILIZATION.sub(pair.utilization), FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
+    const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
+    currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
+
+    if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
+      currentInterest = MINIMUM_INTEREST_PER_YEAR // 0.25% APR minimum
+    }
+  } else if (pair.utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
+    const overFactor = pair.utilization
+      .sub(MAXIMUM_TARGET_UTILIZATION)
+      .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
+    const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor).mul(pair.elapsedSeconds))
+    currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
+    if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
+      currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
+    }
+  }
+  return currentInterest
+}
+function easyAmount(amount: BigNumber, token: any) {
+  return {
+    value: amount,
+    string: Fraction.from(amount, e10(token.decimals)).toString(),
+    usd: amount.mul(token.usd).div(e10(token.decimals))
+  }
 }
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
 
-  const { account, chainId } = useActiveWeb3React()
+  let { account, chainId } = useActiveWeb3React()
+  const chain: ChainId = chainId || 1
+  const weth = WETH[chain].address
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
-  const kashiPairContract = useKashiPairContract()
   const chainlinkOracleContract = useChainlinkOracle()
 
   // Default token list fine for now, might want to more to the broader collection later.
@@ -184,12 +239,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const updatePairs = useCallback(
     async function() {
-      if (boringHelperContract && bentoBoxContract && kashiPairContract) {
+      if (boringHelperContract && bentoBoxContract) {
         // Get UI info such as ETH balance, ETH rate, etc (only eth rate is used here?)
         const info = await boringHelperContract.getUIInfo(
           account || ethers.constants.AddressZero,
           [],
-          getCurrency(chainId).address,
+          getCurrency(chain).address,
           [KASHI_ADDRESS]
         )
 
@@ -202,7 +257,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         const supported_oracles = [chainlinkOracleContract?.address]
         const pairAddresses = (logPairs).filter((pair: any) => 
           supported_oracles.indexOf(pair.oracle) != -1 && 
-          ChainOracleVerify(chainId || 1, pair, tokens)
+          ChainOracleVerify(chain, pair, tokens)
         ).map((pair: any) => pair.address)
 
         // Get full info on all the verified pairs
@@ -215,11 +270,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           if (!pairTokens[pair.collateral]) {
             pairTokens[pair.collateral] = { address: pair.collateral }
           }
-          pair.collateralToken = pairTokens[pair.collateral]
+          pair.collateral = pairTokens[pair.collateral]
           if (!pairTokens[pair.asset]) {
             pairTokens[pair.asset] = { address: pair.asset }
           }
-          pair.assetToken = pairTokens[pair.asset]
+          pair.asset = pairTokens[pair.asset]
         })
 
         // Get balances, bentobox info and allowences for the tokens
@@ -239,359 +294,92 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           Object.assign(pairTokens[balance.token], balance)
         })
 
-        console.log(pairs, pairTokens, missingTokens)
-
         // For any tokens that are not on the defaultTokenList, retrieve name, symbol, decimals, etc.
-        // TODO
+        if (missingTokens.length) {
+          // TODO
+        }
 
         // Calculate the USD price for each token
         Object.values(pairTokens).forEach((token: any) => {
+          token.symbol = token.address === weth ? Currency.getNativeCurrencySymbol(chain) : token.symbol
           token.usd = e10(token.decimals)
             .mul(info.ethRate)
             .div(token.rate)
-            .div(e10(getCurrency(chainId).decimals))
         })
 
         dispatch({
           type: ActionType.UPDATE,
           payload: {
             pairs: pairs.map((pair: any, i: number) => {
-              const {
-                address,
-                accrueInfo,
-                asset,
-                assetToken,
-                collateral,
-                collateralToken,
-                currentExchangeRate,
-                oracle,
-                oracleData,
-                oracleExchangeRate,
-                spotExchangeRate,
-                totalAsset,
-                totalBorrow,
-                totalCollateralShare,
-                userAssetFraction,
-                userBorrowPart,
-                userCollateralShare
-              } = pair
+              pair.totalCollateralAmount = toAmount(pair.collateral, pair.totalCollateralShare)
+              pair.userCollateralAmount = toAmount(pair.collateral, pair.userCollateralShare)
+              pair.totalAssetAmount = toAmount(pair.asset, pair.totalAsset.elastic)
+              pair.userAssetAmount = toAmount(pair.asset, toElastic(pair.totalAsset, pair.userAssetFraction, false))
+              pair.totalBorrowAmount = pair.totalBorrow.elastic
+              pair.userBorrowAmount = toElastic(pair.totalBorrow, pair.userBorrowPart, false)
+              pair.elapsedSeconds = BigNumber.from(Date.now()).div("1000").sub(pair.accrueInfo.lastAccrued)
+              pair.currentBorrowAmount = pair.totalBorrowAmount.add(accrue(pair, pair.totalBorrowAmount))
+              pair.currentUserBorrowAmount = pair.userBorrowAmount.add(takeFee(accrue(pair, pair.userBorrowAmount)))
+              pair.currentAllAssets = pair.totalAssetAmount.add(pair.currentBorrowAmount)
+              pair.utilization = muldiv(e10(18), pair.currentBorrowAmount, pair.currentAllAssets)
+              pair.interestPerYear = pair.accrueInfo.interestPerSecond.mul("60").mul("60").mul("24").mul("365")
+              pair.currentInterestPerYear = interestAccrue(pair, pair.interestPerYear)
+              pair.currentSupplyAPR = takeFee(muldiv(pair.currentInterestPerYear, pair.utilization, e10(18)))
+              pair.maxBorrowableOracle = muldiv(pair.userCollateralAmount, e10(16).mul("75"), pair.oracleExchangeRate)
+              pair.maxBorrowableStored = muldiv(pair.userCollateralAmount, e10(16).mul("75"), pair.currentExchangeRate)
+              pair.maxBorrowable = min(pair.maxBorrowableOracle, pair.maxBorrowableStored)
+              pair.safeMaxBorrowable = muldiv(pair.maxBorrowable, "95", "100")
+              pair.safeMaxBorrowableLeft = pair.safeMaxBorrowable.sub(pair.userBorrowAmount)
+              pair.safeMaxBorrowableLeftPossible = min(pair.safeMaxBorrowableLeft, pair.totalAssetAmount)
+              pair.safeMaxRemovable = ZERO
+              pair.health = muldiv(pair.currentUserBorrowAmount, e10(18), pair.maxBorrowable)
+              pair.liquidity = pair.totalAssetAmount.add(pair.totalBorrowAmount)
+              pair.userTotalSupply = pair.userAssetAmount.add(muldiv(pair.userAssetAmount, pair.totalBorrowAmount, pair.totalAssetAmount))
+              pair.userNetWorth = BigNumber.from('536241')
+              pair.search = pair.collateral.symbol + "/" + pair.asset.symbol
 
-              const totalCollateralAmount = toAmount(collateralToken, totalCollateralShare)
-              const userCollateralAmount = toAmount(collateralToken, userCollateralShare)
-              const totalAssetAmount = toAmount(assetToken, totalAsset.elastic)
-              const userAssetAmount = toAmount(assetToken, toElastic(totalAsset, userAssetFraction, false))
-
-              const totalBorrowAmount = totalBorrow.elastic.eq(BigNumber.from(0))
-                ? BigNumber.from(0)
-                : totalBorrow.elastic
-
-              const userBorrowAmount = toElastic(totalBorrow, userBorrowPart, false)
-
-              function accrue(amount: BigNumber) {
-                return amount
-                  .mul(
-                    accrueInfo.interestPerSecond.mul(
-                      BigNumber.from(Date.now())
-                        .div(BigNumber.from(1000))
-                        .sub(accrueInfo.lastAccrued)
-                    )
-                  )
-                  .div(BigNumber.from('1000000000000000000'))
+              pair.oracle = new Oracle(pair.oracle, pair.oracleData)
+              pair.totalCollateralAmount = easyAmount(pair.totalCollateralAmount, pair.collateral)
+              pair.userCollateralAmount = easyAmount(pair.userCollateralAmount, pair.collateral)
+              pair.totalAssetAmount = easyAmount(pair.totalAssetAmount, pair.asset)
+              pair.userAssetAmount = easyAmount(pair.userAssetAmount, pair.asset)
+              pair.totalBorrowAmount = easyAmount(pair.totalBorrowAmount, pair.asset)
+              pair.userBorrowAmount = easyAmount(pair.userBorrowAmount, pair.asset)
+              pair.currentBorrowAmount = easyAmount(pair.currentBorrowAmount, pair.asset)
+              pair.currentUserBorrowAmount = easyAmount(pair.currentUserBorrowAmount, pair.asset)
+              pair.currentSupplyAPR = {
+                value: pair.currentSupplyAPR,
+                string: Fraction.from(pair.currentSupplyAPR, BigNumber.from(10).pow(BigNumber.from(16))).toString()
               }
-
-              const currentBorrowAmount = totalBorrowAmount.add(accrue(totalBorrowAmount))
-
-              const currentUserBorrowAmount = userBorrowAmount.add(takeFee(accrue(userBorrowAmount)))
-
-              const utilization = currentBorrowAmount.gt(BigNumber.from(0))
-                ? currentBorrowAmount
-                    .mul(BigNumber.from('1000000000000000000'))
-                    .div(totalAssetAmount.add(currentBorrowAmount))
-                : BigNumber.from(0)
-
-              function interestAccrue(interest: BigNumber) {
-                if (totalBorrowAmount.eq(BigNumber.from(0))) {
-                  return STARTING_INTEREST_PER_YEAR
-                }
-
-                let currentInterest = interest
-
-                const elapsedTime = BigNumber.from(Date.now())
-                  .div(BigNumber.from(1000))
-                  .sub(accrueInfo.lastAccrued)
-
-                if (elapsedTime.lte(BigNumber.from(0))) {
-                  return currentInterest
-                }
-
-                if (utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-                  const underFactor = MINIMUM_TARGET_UTILIZATION.sub(utilization)
-                    .mul(FACTOR_PRECISION)
-                    .div(MINIMUM_TARGET_UTILIZATION)
-                  const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor.mul(elapsedTime)))
-                  currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
-
-                  if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
-                    currentInterest = MINIMUM_INTEREST_PER_YEAR // 0.25% APR minimum
-                  }
-                } else if (utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
-                  const overFactor = utilization
-                    .sub(MAXIMUM_TARGET_UTILIZATION)
-                    .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
-                  const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor.mul(elapsedTime)))
-                  currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
-                  if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
-                    currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
-                  }
-                }
-                return currentInterest
+              pair.currentInterestPerYear = {
+                value: pair.currentInterestPerYear,
+                string: Fraction.from(pair.currentInterestPerYear, BigNumber.from(10).pow(16)).toString()
               }
-
-              const interestPerYear = accrueInfo.interestPerSecond
-                .mul(BigNumber.from(60))
-                .mul(BigNumber.from(60))
-                .mul(BigNumber.from(24))
-                .mul(BigNumber.from(365))
-
-              const currentInterestPerYear = interestAccrue(interestPerYear)
-
-              const currentSupplyAPR = takeFee(currentInterestPerYear.mul(utilization)).div(
-                BigNumber.from(10).pow(BigNumber.from(18))
-              )
-
-              const maxBorrowableOracle = oracleExchangeRate.gt(BigNumber.from(0))
-                ? userCollateralAmount
-                    .mul(BigNumber.from('1000000000000000000'))
-                    .div(BigNumber.from(100))
-                    .mul(BigNumber.from(75))
-                    .div(oracleExchangeRate)
-                : BigNumber.from(0)
-
-              const maxBorrowableStored = currentExchangeRate.gt(BigNumber.from(0))
-                ? userCollateralAmount
-                    .mul(BigNumber.from('1000000000000000000'))
-                    .div(BigNumber.from(100))
-                    .mul(BigNumber.from(75))
-                    .div(currentExchangeRate)
-                : BigNumber.from(0)
-
-              const maxBorrowable = maxBorrowableOracle.lt(maxBorrowableStored)
-                ? maxBorrowableOracle
-                : maxBorrowableStored
-
-              const safeMaxBorrowable = maxBorrowable.div(BigNumber.from(100)).mul(BigNumber.from(95))
-
-              const safeMaxBorrowableLeft = safeMaxBorrowable.sub(userBorrowAmount)
-
-              const safeMaxBorrowableLeftPossible = totalAssetAmount.lt(safeMaxBorrowable.sub(userBorrowAmount))
-                ? totalAssetAmount
-                : safeMaxBorrowable.sub(userBorrowAmount)
-
-              const safeMaxRemovable = userCollateralAmount.gt(BigNumber.from(0))
-                ? userCollateralAmount.sub(
-                    userCollateralAmount.mul(safeMaxBorrowable.sub(safeMaxBorrowableLeft)).div(safeMaxBorrowable)
-                  )
-                : BigNumber.from(0)
-
-              const health = maxBorrowable.gt(BigNumber.from(0))
-                ? currentUserBorrowAmount.mul(BigNumber.from('1000000000000000000')).div(maxBorrowable)
-                : BigNumber.from(0)
-
-              const liquidity = totalAssetAmount.add(totalBorrowAmount)
-
-              const userTotalSupply = totalAssetAmount.gt(BigNumber.from(0))
-                ? userAssetAmount.add(userAssetAmount.mul(totalBorrowAmount).div(totalAssetAmount))
-                : BigNumber.from(0)
-
-              const userNetWorth = BigNumber.from('536241')
-
-              return {
-                address: address,
-                search: (tokens[collateral].address === WETH[chainId || 1].address
-                  ? Currency.getNativeCurrencySymbol(chainId)
-                  : tokens[collateral].symbol) + '/' +
-                  (tokens[asset].address === WETH[chainId || 1].address
-                    ? Currency.getNativeCurrencySymbol(chainId)
-                    : tokens[asset].symbol),
-                accrueInfo: {
-                  feesEarnedFraction: accrueInfo.feesEarnedFraction,
-                  interestPerSecond: accrueInfo.interestPerSecond,
-                  lastAccrued: accrueInfo.lastAccrued
-                },
-                asset: {
-                  ...tokens[asset],
-                  symbol:
-                    tokens[asset].address === WETH[chainId || 1].address
-                      ? Currency.getNativeCurrencySymbol(chainId)
-                      : tokens[asset].symbol
-                },
-                collateral: {
-                  ...tokens[collateral],
-                  symbol:
-                    tokens[collateral].address === WETH[chainId || 1].address
-                      ? Currency.getNativeCurrencySymbol(chainId)
-                      : tokens[collateral].symbol
-                },
-                currentExchangeRate,
-                oracle: new Oracle(pair.oracle, pair.oracleData),
-                // oracle,
-                oracleData,
-                oracleExchangeRate,
-                spotExchangeRate,
-                totalAsset: {
-                  elastic: totalAsset.elastic,
-                  base: totalAsset.base
-                },
-                totalBorrow: {
-                  elastic: totalBorrow.elastic,
-                  base: totalBorrow.base
-                },
-                totalCollateralShare,
-                userAssetFraction,
-                userBorrowPart,
-                userCollateralShare,
-
-                // computed
-                totalCollateralAmount: {
-                  value: totalCollateralAmount,
-                  string: Fraction.from(
-                    totalCollateralAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[collateral].decimals))
-                  ).toString()
-                },
-                userCollateralAmount: {
-                  value: userCollateralAmount,
-                  string: Fraction.from(
-                    userCollateralAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[collateral].decimals))
-                  ).toString()
-                },
-                totalAssetAmount: {
-                  value: totalAssetAmount,
-                  string: Fraction.from(
-                    totalAssetAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString(),
-                  usd: totalAssetAmount.mul(assetToken.usd)
-                },
-                userAssetAmount: {
-                  value: userAssetAmount,
-                  string: Fraction.from(
-                    userAssetAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString(),
-                  usd: userAssetAmount.mul(assetToken.usd)
-                },
-                totalBorrowAmount: {
-                  value: totalBorrowAmount,
-                  string: Fraction.from(
-                    totalBorrowAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString()
-                },
-                userBorrowAmount: {
-                  value: userBorrowAmount,
-                  string: Fraction.from(
-                    userBorrowAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString()
-                },
-                currentBorrowAmount: {
-                  value: currentBorrowAmount,
-                  string: Fraction.from(
-                    currentBorrowAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString()
-                },
-                currentUserBorrowAmount: {
-                  value: currentUserBorrowAmount,
-                  string: Fraction.from(
-                    currentUserBorrowAmount,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString()
-                },
-                currentSupplyAPR: {
-                  value: currentSupplyAPR,
-                  string: Fraction.from(currentSupplyAPR, BigNumber.from(10).pow(BigNumber.from(16))).toString()
-                },
-                currentInterestPerYear: {
-                  value: currentInterestPerYear,
-                  string: Fraction.from(currentInterestPerYear, BigNumber.from(10).pow(16)).toString()
-                },
-                utilization: {
-                  value: utilization,
-                  string: Fraction.from(utilization, BigNumber.from(10).pow(16)).toString()
-                },
-                liquidity: {
-                  value: liquidity,
-                  string: Fraction.from(
-                    liquidity,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString(),
-                  usd: liquidity.mul(assetToken.usd)
-                },
-
-                userNetWorth,
-
-                userTotalSupply: {
-                  value: userTotalSupply,
-                  string: Fraction.from(
-                    userTotalSupply,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  ).toString()
-                },
-
-                health: {
-                  value: health,
-                  string: Fraction.from(health, BigNumber.from(10).pow(16))
-                },
-
-                maxBorrowableOracle: {
-                  value: maxBorrowableOracle
-                },
-
-                maxBorrowableStored: {
-                  value: maxBorrowableStored
-                },
-
-                maxBorrowable: {
-                  value: maxBorrowable
-                },
-
-                safeMaxBorrowable: {
-                  value: safeMaxBorrowable
-                },
-
-                safeMaxBorrowableLeft: {
-                  value: safeMaxBorrowableLeft,
-                  string: Fraction.from(
-                    safeMaxBorrowableLeft,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  )
-                },
-
-                safeMaxBorrowableLeftPossible: {
-                  value: safeMaxBorrowableLeftPossible,
-                  string: Fraction.from(
-                    safeMaxBorrowableLeftPossible,
-                    BigNumber.from(10).pow(BigNumber.from(tokens[asset].decimals))
-                  )
-                },
-
-                safeMaxRemovable: {
-                  value: safeMaxRemovable,
-                  string: Fraction.from(
-                    safeMaxRemovable,
-                    BigNumber.from(10).pow(tokens[collateral].decimals)
-                  ).toString()
-                }
+              pair.utilization = {
+                value: pair.utilization,
+                string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString()
               }
+              pair.liquidity = easyAmount(pair.liquidity, pair.asset)
+              pair.userTotalSupply = easyAmount(pair.userTotalSupply, pair.asset)
+              pair.health = {
+                value: pair.health,
+                string: Fraction.from(pair.health, e10(16))
+              }
+              pair.maxBorrowableOracle = easyAmount(pair.maxBorrowableOracle, pair.asset)
+              pair.maxBorrowableStored = easyAmount(pair.maxBorrowableStored, pair.asset)
+              pair.maxBorrowable = easyAmount(pair.maxBorrowable, pair.asset)
+              pair.safeMaxBorrowable = easyAmount(pair.safeMaxBorrowable, pair.asset)
+              pair.safeMaxBorrowableLeft = easyAmount(pair.safeMaxBorrowableLeft, pair.asset)
+              pair.safeMaxBorrowableLeftPossible = easyAmount(pair.safeMaxBorrowableLeftPossible, pair.asset)
+              pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
+              
+              return pair
             })
           }
         })
       }
     },
-    [boringHelperContract, bentoBoxContract, chainId, kashiPairContract, account, tokens]
+    [boringHelperContract, bentoBoxContract, chain, account, tokens]
   )
 
   useInterval(updatePairs, 10000)
