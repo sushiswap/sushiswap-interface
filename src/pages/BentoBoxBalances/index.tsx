@@ -120,21 +120,17 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
           >
             <img alt="" src={getTokenIcon(balance.address)} className="block w-10 sm:w-14 rounded-lg mr-2" />
           </a>
-          <div className="hidden sm:block">{balance && balance.name}</div>
+          <div className="hidden sm:block">{balance && balance.symbol}</div>
         </div>
         <div className="flex justify-end items-center">
           <div>
-            <div className="text-right">
-              {walletBalance} {balance && balance.symbol}{' '}
-            </div>
+            <div className="text-right">{walletBalance} </div>
             <div className="text-gray-500 text-right">{formattedNum(balance.amountUSD, true)}</div>
           </div>
         </div>
         <div className="flex justify-end items-center">
           <div>
-            <div className="text-right">
-              {bentoBalance} {balance && balance.symbol}{' '}
-            </div>
+            <div className="text-right">{bentoBalance} </div>
             <div className="text-gray-500 text-right">{formattedNum(balance.amountUSD, true)}</div>
           </div>
         </div>
