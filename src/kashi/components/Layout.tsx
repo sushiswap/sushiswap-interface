@@ -58,14 +58,6 @@ export default function Layout({ left = undefined, children = undefined, right =
             </div>
             <div className="flex pr-3">
               <NavLink
-                to="/bento/updates"
-                className={`hidden md:block border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
-                  location.pathname === '/bento/updates' ? 'text-white' : 'text-gray-500'
-                }`}
-              >
-                <div className="whitespace-nowrap text-base">Updates</div>
-              </NavLink>
-              <NavLink
                 to="/bento/balances"
                 className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
                   location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'

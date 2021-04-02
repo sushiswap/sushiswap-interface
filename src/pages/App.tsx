@@ -33,7 +33,6 @@ import Test from './Test'
 //Feat Bento
 import Bento from './BentoBox'
 import BentoBalances from './BentoBoxBalances'
-import BentoUpdates from './BentoUpdates'
 
 // Feat Kashi
 import WalletRoute from '../hocs/WalletRoute'
@@ -121,7 +120,6 @@ function App() {
                 <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/lend" component={KashiPairLend} />
                 <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={KashiPairBorrow} />
                 <WalletRoute exact strict path="/bento/balances" component={BentoBalances} />
-                <WalletRoute exact strict path="/bento/updates" component={BentoUpdates} />
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />
                 <Route exact strict path="/saave" component={Saave} />
