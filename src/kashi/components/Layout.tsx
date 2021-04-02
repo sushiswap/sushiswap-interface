@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
 import { formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
+import { useKashiPairs } from 'kashi/context'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -14,10 +15,10 @@ interface LayoutProps {
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   const location = useLocation()
-  const netWorth = {
-    value: BigNumber.from('10'),
-    string: '10.00'
-  }
+  const pairs = useKashiPairs()
+  const netWorth = useMemo(() => {
+    return pairs.reduce((previous, current) => previous.add(current.userNetWorth), BigNumber.from(0))
+  }, [pairs])
   return (
     <div className="container mx-auto px-4">
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -73,7 +74,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <img src={BentoBoxLogo} alt="" className="flex max-h-4 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
-              {netWorth.value.gt(0) && (
+              {netWorth.gt(0) && (
                 <div
                   className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-gray-500`}
                 >

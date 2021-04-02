@@ -139,9 +139,9 @@ export default function LendingPair({
           <div>
             <div className="text-secondary text-lg">Market Supply</div>
             <div className="text-high-emphesis text-2xl">
-              {formattedNum(pair.liquidity.string)} {pair.asset.symbol}
+              {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
             </div>
-            <div className="text-high-emphesis text-lg">{formattedNum(pair.liquidity.usd, true)}</div>
+            <div className="text-high-emphesis text-lg">{formattedNum(pair.currentAllAssets.usd, true)}</div>
           </div>
           <div className="text-right">
             <div>

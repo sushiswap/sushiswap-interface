@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react'
 import { useLocation } from 'react-router'
 import { useKashiPairs } from 'kashi/context'
-import sumBy from 'lodash/sumBy'
-import millify from 'millify'
 import { LendCardHeader, BorrowCardHeader, Search } from '.'
+import { BigNumber } from '@ethersproject/bignumber'
+import { formattedNum } from 'utils'
 
 function MarketHeader({ type = 'Borrow', children, search, term }: any) {
   const pairs = useKashiPairs()
   const netWorth = useMemo(() => {
-    return millify(sumBy(pairs, pair => Number(pair.userNetWorth)))
+    return pairs.reduce((previous, current) => previous.add(current.userNetWorth), BigNumber.from(0))
   }, [pairs])
   const Header = type === 'Borrow' ? BorrowCardHeader : LendCardHeader
   return (
@@ -19,7 +19,7 @@ function MarketHeader({ type = 'Borrow', children, search, term }: any) {
           <Search term={term} search={search} />
         </div>
         <div className="flex flex-col w-full md:hidden items-center">
-          <div className="text-2xl font-semibold text-high-emphesis">${netWorth}</div>
+          <div className="text-2xl font-semibold text-high-emphesis">{formattedNum(netWorth, true)}</div>
           <div className="text-sm font-semibold text-secondary">Net Worth</div>
         </div>
       </div>

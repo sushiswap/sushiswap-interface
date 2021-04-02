@@ -12,6 +12,7 @@ import { formattedNum, formattedPercent } from 'utils'
 import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { GradientDot, Card, Layout, Paper, BorrowCardHeader, PrimaryTabs, BackButton } from '../../components'
+import { BigNumber } from 'ethers'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -168,6 +169,12 @@ export default function BorrowPair({
             <Tab>Repay</Tab>
           </TabList>
         </PrimaryTabs>
+        <div><pre>{JSON.stringify(pair, (key, value) => {
+            if (value?.type === "BigNumber") {
+              return BigNumber.from(value.hex).toString()
+            }
+            return value;
+          }, 2) }</pre></div>
       </Card>
     </Layout>
   )

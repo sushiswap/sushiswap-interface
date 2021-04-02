@@ -111,11 +111,11 @@ export default function KashiPairs() {
                     (sortConfig.direction === 'descending' && <ChevronDown size={12} className="ml-2" />))}
               </div>
             </div>
-            <div className="text-right hover:text-gray-400 cursor-pointer" onClick={() => requestSort('liquidity.usd')}>
+            <div className="text-right hover:text-gray-400 cursor-pointer" onClick={() => requestSort('currentAllAssets.usd')}>
               <div className="flex items-center justify-end">
                 <div>Total</div>
                 {sortConfig &&
-                  sortConfig.key === 'liquidity.usd' &&
+                  sortConfig.key === 'currentAllAssets.usd' &&
                   ((sortConfig.direction === 'ascending' && <ChevronUp size={12} className="ml-2" />) ||
                     (sortConfig.direction === 'descending' && <ChevronDown size={12} className="ml-2" />))}
               </div>
@@ -158,9 +158,9 @@ export default function KashiPairs() {
                         <div className="text-left sm:text-right">{formattedPercent(pair.utilization.string)}</div>
                         <div className="text-right">
                           <div>
-                            {formattedNum(pair.liquidity.string)} {pair.asset.symbol}
+                            {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
                           </div>
-                          <div className="text-gray-500">{formattedNum(pair.liquidity.usd, true)}</div>
+                          <div className="text-gray-500">{formattedNum(pair.currentAllAssets.usd, true)}</div>
                         </div>
                       </div>
                     </Link>

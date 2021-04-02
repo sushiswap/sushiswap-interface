@@ -24,6 +24,7 @@ import { Oracle } from '../entities'
 import useInterval from 'hooks/useInterval'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import _ from 'lodash'
+import { e10, min, ZERO } from 'kashi/functions/math'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -36,16 +37,12 @@ interface Reducer {
 }
 
 interface State {
-  pairsSupplied: number
   markets: number
-  pairsBorrowed: number
   pairs: any[]
 }
 
 const initialState: State = {
-  pairsSupplied: 0,
   markets: 0,
-  pairsBorrowed: 0,
   pairs: []
 }
 
@@ -161,28 +158,11 @@ function rpcToObj(rpc_obj: any, obj?: any) {
   return rpc_obj
 }
 
-const ZERO = BigNumber.from("0")
-function e10(exponent: BigNumber | Number | string) {
-  return BigNumber.from("10").pow(BigNumber.from(exponent))
-}
-function min(...values: BigNumberish[]) {
-  let lowest = BigNumber.from(values[0])
-  for (let i = 1; i < values.length; i++) {
-    const value = BigNumber.from(values[i])
-    if (value.lt(lowest)) {
-      lowest = value
-    }
-  }
-  return lowest
-}
-function muldiv(amount: BigNumberish, multiplier: BigNumberish, divisor: BigNumberish): BigNumber {
-  return BigNumber.from(divisor).gt(0) ? BigNumber.from(amount).mul(multiplier).div(divisor) : ZERO
-}
 function toAmount(token: any, shares: BigNumber) {
-  return muldiv(shares, token.bentoAmount, token.bentoShare)
+  return shares.muldiv(token.bentoAmount, token.bentoShare)
 }
 function toShare(token: any, shares: BigNumber) {
-  return muldiv(shares, token.bentoShare, token.bentoAmount)
+  return shares.muldiv(token.bentoShare, token.bentoAmount)
 }
 function accrue(pair:any, amount: BigNumber) {
   return amount
@@ -196,7 +176,7 @@ function interestAccrue(pair: any, interest: BigNumber) {
 
   let currentInterest = interest
   if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-    const underFactor = muldiv(MINIMUM_TARGET_UTILIZATION.sub(pair.utilization), FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
+    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
     const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
     currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
 
@@ -215,11 +195,14 @@ function interestAccrue(pair: any, interest: BigNumber) {
   }
   return currentInterest
 }
+function getUSDValue(amount: BigNumberish, token: any) {
+  return BigNumber.from(amount).mul(token.usd).div(e10(token.decimals))
+}
 function easyAmount(amount: BigNumber, token: any) {
   return {
     value: amount,
     string: Fraction.from(amount, e10(token.decimals)).toString(),
-    usd: amount.mul(token.usd).div(e10(token.decimals))
+    usd: Fraction.from(getUSDValue(amount, token), e10(6)).toString()
   }
 }
 class Tokens extends Array {
@@ -227,7 +210,7 @@ class Tokens extends Array {
     if (!this[address]) { this[address] = { address: address } }
     return this[address]
   }
-} 
+}
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
@@ -293,38 +276,62 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         // Calculate the USD price for each token
         Object.values(pairTokens).forEach((token: any) => {
           token.symbol = token.address === weth ? Currency.getNativeCurrencySymbol(chain) : token.symbol
-          token.usd = muldiv(e10(token.decimals), pairTokens[curreny].rate, token.rate)
+          token.usd = e10(token.decimals).muldiv(pairTokens[curreny].rate, token.rate)
         })
 
         dispatch({
           type: ActionType.UPDATE,
           payload: {
             pairs: pairs.map((pair: any, i: number) => {
-              pair.totalCollateralAmount = toAmount(pair.collateral, pair.totalCollateralShare)
-              pair.userCollateralAmount = toAmount(pair.collateral, pair.userCollateralShare)
-              pair.totalAssetAmount = toAmount(pair.asset, pair.totalAsset.elastic)
-              pair.userAssetAmount = toAmount(pair.asset, toElastic(pair.totalAsset, pair.userAssetFraction, false))
-              pair.totalBorrowAmount = pair.totalBorrow.elastic
-              pair.userBorrowAmount = toElastic(pair.totalBorrow, pair.userBorrowPart, false)
               pair.elapsedSeconds = BigNumber.from(Date.now()).div("1000").sub(pair.accrueInfo.lastAccrued)
-              pair.currentBorrowAmount = pair.totalBorrowAmount.add(accrue(pair, pair.totalBorrowAmount))
-              pair.currentUserBorrowAmount = pair.userBorrowAmount.add(takeFee(accrue(pair, pair.userBorrowAmount)))
-              pair.currentAllAssets = pair.totalAssetAmount.add(pair.currentBorrowAmount)
-              pair.utilization = muldiv(e10(18), pair.currentBorrowAmount, pair.currentAllAssets)
+
+              // Interest per year at last accrue, this will apply during the next accrue
               pair.interestPerYear = pair.accrueInfo.interestPerSecond.mul("60").mul("60").mul("24").mul("365")
+
+              // The total collateral in the market (stable, doesn't accrue)
+              pair.totalCollateralAmount = toAmount(pair.collateral, pair.totalCollateralShare)
+
+              // The total assets unborrowed in the market (stable, doesn't accrue)
+              pair.totalAssetAmount = toAmount(pair.asset, pair.totalAsset.elastic)
+
+              // The total assets borrowed in the market at last accrue (accrues over time)
+              pair.totalBorrowAmount = pair.totalBorrow.elastic
+
+              // The total assets borrowed in the market right now
+              pair.currentBorrowAmount = pair.totalBorrowAmount.add(accrue(pair, pair.totalBorrowAmount))
+
+              // The total amount of assets, both borrowed and still available right now
+              pair.currentAllAssets = pair.totalAssetAmount.add(pair.currentBorrowAmount)
+              pair.liquidity = pair.totalAssetAmount.add(pair.totalBorrowAmount)
+
+              // The percentage of assets that is borrowed out right now
+              pair.utilization = e10(18).muldiv(pair.currentBorrowAmount, pair.currentAllAssets)
+
+              // Interest payable by borrowers per year as of now
               pair.currentInterestPerYear = interestAccrue(pair, pair.interestPerYear)
-              pair.currentSupplyAPR = takeFee(muldiv(pair.currentInterestPerYear, pair.utilization, e10(18)))
-              pair.maxBorrowableOracle = muldiv(pair.userCollateralAmount, e10(16).mul("75"), pair.oracleExchangeRate)
-              pair.maxBorrowableStored = muldiv(pair.userCollateralAmount, e10(16).mul("75"), pair.currentExchangeRate)
+
+              // Interest per year received by lenders as of now
+              pair.currentSupplyAPR = takeFee(pair.currentInterestPerYear.muldiv(pair.utilization, e10(18)))
+
+              
+              pair.userCollateralAmount = toAmount(pair.collateral, pair.userCollateralShare)
+              pair.userAssetAmount = toAmount(pair.asset, toElastic(pair.totalAsset, pair.userAssetFraction, false))
+              pair.userBorrowAmount = toElastic(pair.totalBorrow, pair.userBorrowPart, false)
+
+              pair.currentUserBorrowAmount = pair.userBorrowAmount.add(takeFee(accrue(pair, pair.userBorrowAmount)))
+
+              pair.maxBorrowableOracle = pair.userCollateralAmount.muldiv(e10(16).mul("75"), pair.oracleExchangeRate)
+              pair.maxBorrowableStored = pair.userCollateralAmount.muldiv(e10(16).mul("75"), pair.currentExchangeRate)
               pair.maxBorrowable = min(pair.maxBorrowableOracle, pair.maxBorrowableStored)
-              pair.safeMaxBorrowable = muldiv(pair.maxBorrowable, "95", "100")
+              pair.safeMaxBorrowable = pair.maxBorrowable.muldiv("95", "100")
               pair.safeMaxBorrowableLeft = pair.safeMaxBorrowable.sub(pair.userBorrowAmount)
               pair.safeMaxBorrowableLeftPossible = min(pair.safeMaxBorrowableLeft, pair.totalAssetAmount)
               pair.safeMaxRemovable = ZERO
-              pair.health = muldiv(pair.currentUserBorrowAmount, e10(18), pair.maxBorrowable)
-              pair.liquidity = pair.totalAssetAmount.add(pair.totalBorrowAmount)
-              pair.userTotalSupply = pair.userAssetAmount.add(muldiv(pair.userAssetAmount, pair.totalBorrowAmount, pair.totalAssetAmount))
-              pair.userNetWorth = BigNumber.from('536241')
+              
+              pair.health = pair.currentUserBorrowAmount.muldiv(e10(18), pair.maxBorrowable)
+              
+              pair.userTotalSupply = pair.userAssetAmount.add(pair.userAssetAmount.muldiv(pair.totalBorrowAmount, pair.totalAssetAmount))
+              pair.userNetWorth = getUSDValue(pair.userAssetAmount.sub(pair.currentUserBorrowAmount), pair.asset)
               pair.search = pair.collateral.symbol + "/" + pair.asset.symbol
 
               pair.oracle = new Oracle(pair.oracle, pair.oracleData)
@@ -336,6 +343,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               pair.userBorrowAmount = easyAmount(pair.userBorrowAmount, pair.asset)
               pair.currentBorrowAmount = easyAmount(pair.currentBorrowAmount, pair.asset)
               pair.currentUserBorrowAmount = easyAmount(pair.currentUserBorrowAmount, pair.asset)
+              pair.currentAllAssets = easyAmount(pair.currentAllAssets, pair.asset)
               pair.currentSupplyAPR = {
                 value: pair.currentSupplyAPR,
                 string: Fraction.from(pair.currentSupplyAPR, BigNumber.from(10).pow(BigNumber.from(16))).toString()
@@ -368,7 +376,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         })
       }
     },
-    [boringHelperContract, bentoBoxContract, chain, account, tokens]
+    [boringHelperContract, bentoBoxContract, chainId, chain, account, tokens]
   )
 
   useInterval(updatePairs, 10000)
@@ -383,18 +391,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       {children}
     </KashiContext.Provider>
   )
-}
-
-export function useKashiCounts() {
-  const context = useContext(KashiContext)
-  if (context === undefined) {
-    throw new Error('useKashiCounts must be used within a KashiProvider')
-  }
-  return {
-    pairsSupplied: context.state.pairsSupplied,
-    markets: context.state.markets,
-    pairsBorrowed: context.state.pairsBorrowed
-  }
 }
 
 export function useKashiPairs() {
