@@ -1,6 +1,6 @@
 export { default as Alert } from './Alert'
 export { default as BackButton } from './BackButton'
-export { default as Button } from './Button'
+export { default as Button, GradientButton } from './Button'
 export { default as Card } from './Card'
 export { default as CardHeader, BorrowCardHeader, LendCardHeader } from './CardHeader'
 export { default as Dots } from './Dots'
