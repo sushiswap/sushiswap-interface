@@ -42,3 +42,11 @@ export function BlueButtonOutlined({ children, className, ...rest }: any): JSX.E
     </Button>
   )
 }
+
+export function PinkButtonOutlined({ children, className, ...rest }: any): JSX.Element {
+  return (
+    <Button className={`bg-pink bg-opacity-20 rounded text-xs text-pink px-2 py-1 ${className} `} {...rest}>
+      {children}
+    </Button>
+  )
+}
