@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { chainLinkTokens } from '../chainLinkTokens'
+import { CHAINLINK_MAPPING } from 'kashi/constants'
 import { getTokenIcon } from 'kashi/functions'
-
-const tokens = chainLinkTokens
+import { useActiveWeb3React } from 'hooks'
 
 export default function ListBox({ label }: any) {
+  const { chainId } = useActiveWeb3React()
+  const tokens: any = CHAINLINK_MAPPING[chainId || 1]
   const [selectedToken, setSelectedToken] = useState(tokens[0])
 
   console.log('selectedToken:', selectedToken)
@@ -50,7 +51,7 @@ export default function ListBox({ label }: any) {
                     static
                     className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:border-none focus:outline-none sm:text-sm sm:leading-5"
                   >
-                    {tokens.map(token => (
+                    {tokens.map((token: any) => (
                       <Listbox.Option key={token.address} value={token}>
                         {({ selected, active }) => (
                           <div
