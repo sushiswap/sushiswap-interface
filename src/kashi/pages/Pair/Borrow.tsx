@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
@@ -9,9 +9,17 @@ import { getTokenIcon } from 'kashi/functions'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
-import KashiLogo from 'assets/images/kashi-kanji-wires.png'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, Card, Layout, Paper, BorrowCardHeader, PrimaryTabs, BackButton } from '../../components'
+import {
+  GradientDot,
+  Card,
+  Layout,
+  Paper,
+  BorrowCardHeader,
+  PrimaryTabs,
+  BackButton,
+  BorrowAction
+} from '../../components'
 
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -32,8 +40,6 @@ export default function BorrowPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
-
-  const theme = useTheme()
 
   if (!pair) return null
 
@@ -167,6 +173,12 @@ export default function BorrowPair({
             <Tab>Borrow</Tab>
             <Tab>Repay</Tab>
           </TabList>
+          <TabPanel>
+            <BorrowAction pair={pair} action="Borrow" direction="From" label="Max" />
+          </TabPanel>
+          <TabPanel>
+            <BorrowAction pair={pair} action="Repay" direction="From" label="Max" />
+          </TabPanel>
         </PrimaryTabs>
       </Card>
     </Layout>

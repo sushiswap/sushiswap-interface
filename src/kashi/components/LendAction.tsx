@@ -20,11 +20,10 @@ interface LendActionProps {
 
 export default function LendAction({ pair, action, direction }: LendActionProps): JSX.Element {
   const { account, chainId } = useActiveWeb3React()
+
   const bentoBoxContract = useBentoBoxContract()
 
-  const token = pair.asset
-
-  const [approvalState, approve] = useApproveCallback(token.address, bentoBoxContract?.address)
+  const [approvalState, approve] = useApproveCallback(pair.asset.address, bentoBoxContract?.address)
 
   const { depositAddAsset, addAsset, removeAsset, removeWithdrawAsset } = useKashi()
 
@@ -111,7 +110,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
     ((direction === 'From' && sourceOrDestination !== 'BentoBox') || direction === 'To') &&
     direction === 'From' &&
     sourceOrDestination === 'Wallet' &&
-    token.address !== WETH[chainId || 1].address
+    pair.asset.address !== WETH[chainId || 1].address
 
   const limit = getMax()
 
@@ -120,7 +119,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
   return (
     <>
       <div className="text-3xl text-high-emphesis mt-6">
-        {action} {token.symbol}
+        {action} {pair.asset.symbol}
       </div>
 
       <div className="flex justify-between my-4">
@@ -158,7 +157,11 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
 
       {showApprove && (
         <BlueButton onClick={approve} className="mb-4">
-          {approvalState === ApprovalState.PENDING ? <Dots>Approving {token.symbol}</Dots> : `Approve ${token.symbol}`}
+          {approvalState === ApprovalState.PENDING ? (
+            <Dots>Approving {pair.asset.symbol}</Dots>
+          ) : (
+            `Approve ${pair.asset.symbol}`
+          )}
         </BlueButton>
       )}
 
