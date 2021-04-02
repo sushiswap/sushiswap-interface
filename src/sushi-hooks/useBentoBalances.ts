@@ -23,7 +23,7 @@ export interface BentoBalances {
   amountUSD: string
 }
 
-function useBentoBalances(): BentoBalances {
+function useBentoBalances(): BentoBalances[] {
   const { chainId, library, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
