@@ -183,6 +183,22 @@ export const PLAY = new Token(
   'Metaverse NFT Index'
 )
 
+export const XSUSHI_CALL = new Token(
+  ChainId.MAINNET,
+  '0xada279f9301C01A4eF914127a6C2a493Ad733924',
+  18,
+  'XSUc25-0531',
+  'XSUSHI 25 Call [31 May 2021]'
+)
+
+export const XSUSHI = new Token(
+  ChainId.MAINNET,
+  '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
+  18,
+  'xSUSHI',
+  'SushiBar'
+)
+
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
@@ -197,7 +213,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
     [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
     [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
-    [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]]
+    [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
+    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
   }
 }
 
