@@ -17,7 +17,7 @@ export default function Borrow() {
   const pairs = useKashiPairs()
 
   // setup search
-  const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }
+  const options = { keys: ['asset.symbol', 'collateral.symbol'], threshold: 0 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
     options
