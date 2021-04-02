@@ -5,7 +5,7 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { KashiAction, LendCardHeader, PrimaryTabs } from '../../components'
+import { LendCardHeader, PrimaryTabs, LendAction } from '../../components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
@@ -17,7 +17,7 @@ export default function LendingPair({
   match: {
     params: { pairAddress }
   }
-}: RouteComponentProps<{ pairAddress: string }>) {
+}: RouteComponentProps<{ pairAddress: string }>): JSX.Element | null {
   const [tabIndex, setTabIndex] = useState(0)
 
   const { chainId } = useActiveWeb3React()
@@ -116,7 +116,6 @@ export default function LendingPair({
               <div className="flex justify-between items-center">
                 <div>
                   <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.symbol}</div>
-
                   <AutoRow>
                     <div className="text-sm text-low-emphesis mr-1">Oracle:</div>
                     <div className="text-sm text-high-emphesis mr-2">{pair && pair.oracle.name}</div>
@@ -163,10 +162,10 @@ export default function LendingPair({
             <Tab>Withdraw {pair.asset.symbol}</Tab>
           </TabList>
           <TabPanel>
-            <KashiAction pair={pair} action="Deposit" direction="From" label="Balance" />
+            <LendAction pair={pair} action="Deposit" direction="From" />
           </TabPanel>
           <TabPanel>
-            <KashiAction pair={pair} action="Withdraw" direction="Into" label="Balance" />
+            <LendAction pair={pair} action="Withdraw" direction="Into" />
           </TabPanel>
         </PrimaryTabs>
       </Card>
