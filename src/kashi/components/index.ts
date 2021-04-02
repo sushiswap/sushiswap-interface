@@ -1,11 +1,18 @@
 export { default as Alert } from './Alert'
 export { default as BackButton } from './BackButton'
-export { default as Button, GradientButton, BlueButton, PinkButton, BlueButtonOutlined } from './Button'
+export {
+  default as Button,
+  GradientButton,
+  BlueButton,
+  PinkButton,
+  BlueButtonOutlined,
+  PinkButtonOutlined
+} from './Button'
 export { default as Card } from './Card'
 export { default as CardHeader, BorrowCardHeader, LendCardHeader } from './CardHeader'
 export { default as Dots } from './Dots'
 export { default as GradientDot } from './GradientDot'
-export { default as KashiAction } from './BorrowAction'
+export { default as BorrowAction } from './BorrowAction'
 export { default as Layout } from './Layout'
 export { default as LendAction } from './LendAction'
 export { default as ListBox } from './ListBox'

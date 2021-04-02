@@ -20,11 +20,10 @@ interface LendActionProps {
 
 export default function LendAction({ pair, action, direction }: LendActionProps): JSX.Element {
   const { account, chainId } = useActiveWeb3React()
+
   const bentoBoxContract = useBentoBoxContract()
 
-  const token = pair.asset
-
-  const [approvalState, approve] = useApproveCallback(token.address, bentoBoxContract?.address)
+  const [approvalState, approve] = useApproveCallback(pair.asset.address, bentoBoxContract?.address)
 
   const { depositAddAsset, addAsset, removeAsset, removeWithdrawAsset } = useKashi()
 
@@ -70,16 +69,20 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
   }, [action, pair, value])
 
   const getWarningMessage = useCallback(() => {
-    if (action === 'Deposit') {
+    if (pair.oracleExchangeRate.isZero()) {
+      return 'Oracle exchange rate has NOT been set'
+    } else if (action === 'Deposit') {
       return `Please make sure your ${sourceOrDestination} balance is sufficient to ${action.toLowerCase()} and then try again.`
     } else if (action === 'Withdraw') {
       return `Please make sure your supply balance is sufficient to withdraw and then try again.`
     }
     return null
-  }, [action, sourceOrDestination])
+  }, [action, sourceOrDestination, pair])
 
   const getWarningPredicate = useCallback<() => boolean>(() => {
-    if (action === 'Deposit') {
+    if (pair.oracleExchangeRate.isZero()) {
+      return true
+    } else if (action === 'Deposit') {
       return assetBalance?.value.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Withdraw') {
       return pair.userTotalSupply.value.lt(formatToBalance(value, pair.asset.decimals).value)
@@ -111,7 +114,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
     ((direction === 'From' && sourceOrDestination !== 'BentoBox') || direction === 'To') &&
     direction === 'From' &&
     sourceOrDestination === 'Wallet' &&
-    token.address !== WETH[chainId || 1].address
+    pair.asset.address !== WETH[chainId || 1].address
 
   const limit = getMax()
 
@@ -120,46 +123,49 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
   return (
     <>
       <div className="text-3xl text-high-emphesis mt-6">
-        {action} {token.symbol}
+        {action} {pair.asset.symbol}
       </div>
-      <>
-        <div className="flex justify-between my-4">
-          <div className="text-base text-secondary">
-            <span>
-              <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
-            </span>
-            <span> {direction} </span>
-            <span>
-              <BlueButtonOutlined
-                onClick={() => {
-                  setValue('')
-                  setSourceOrDestination(sourceOrDestination === 'BentoBox' ? 'Wallet' : 'BentoBox')
-                }}
-              >
-                {sourceOrDestination}
-              </BlueButtonOutlined>
-            </span>
-          </div>
-          <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-            Balance: {Math.max(0, limit)}
-          </div>
-        </div>
 
-        <div className="flex items-center relative w-full mb-4">
-          <NumericalInput className="w-full p-3 bg-input rounded" value={value} onUserInput={setValue} />
-          {account && (
-            <BlueButtonOutlined onClick={onMax} className="absolute right-4">
-              MAX
+      <div className="flex justify-between my-4">
+        <div className="text-base text-secondary">
+          <span>
+            <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
+          </span>
+          <span> {direction} </span>
+          <span>
+            <BlueButtonOutlined
+              onClick={() => {
+                setValue('')
+                setSourceOrDestination(sourceOrDestination === 'BentoBox' ? 'Wallet' : 'BentoBox')
+              }}
+            >
+              {sourceOrDestination}
             </BlueButtonOutlined>
-          )}
+          </span>
         </div>
+        <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+          Balance: {Math.max(0, limit)}
+        </div>
+      </div>
 
-        <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
-      </>
+      <div className="flex items-center relative w-full mb-4">
+        <NumericalInput className="w-full p-3 bg-input rounded" value={value} onUserInput={setValue} />
+        {account && (
+          <BlueButtonOutlined onClick={onMax} className="absolute right-4">
+            MAX
+          </BlueButtonOutlined>
+        )}
+      </div>
+
+      <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
 
       {showApprove && (
         <BlueButton onClick={approve} className="mb-4">
-          {approvalState === ApprovalState.PENDING ? <Dots>Approving {token.symbol}</Dots> : `Approve ${token.symbol}`}
+          {approvalState === ApprovalState.PENDING ? (
+            <Dots>Approving {pair.asset.symbol}</Dots>
+          ) : (
+            `Approve ${pair.asset.symbol}`
+          )}
         </BlueButton>
       )}
 

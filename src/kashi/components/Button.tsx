@@ -37,7 +37,21 @@ export function PinkButton({ children, className, ...rest }: any): JSX.Element {
 
 export function BlueButtonOutlined({ children, className, ...rest }: any): JSX.Element {
   return (
-    <Button className={`bg-blue bg-opacity-20 rounded text-xs text-blue px-2 py-1 ${className} `} {...rest}>
+    <Button
+      className={`bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1 ${className} `}
+      {...rest}
+    >
+      {children}
+    </Button>
+  )
+}
+
+export function PinkButtonOutlined({ children, className, ...rest }: any): JSX.Element {
+  return (
+    <Button
+      className={`bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1 ${className} `}
+      {...rest}
+    >
       {children}
     </Button>
   )
