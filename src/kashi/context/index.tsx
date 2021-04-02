@@ -20,7 +20,7 @@ import {
 } from '../constants'
 import { useBoringHelperContract } from 'hooks/useContract'
 import { useDefaultTokens } from 'hooks/Tokens'
-import { Oracle, KashiPollPair, KashiPair } from '../entities'
+import { Oracle } from '../entities'
 import useInterval from 'hooks/useInterval'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import _ from 'lodash'
@@ -222,6 +222,12 @@ function easyAmount(amount: BigNumber, token: any) {
     usd: amount.mul(token.usd).div(e10(token.decimals))
   }
 }
+class Tokens extends Array {
+  add(address: any) {
+    if (!this[address]) { this[address] = { address: address } }
+    return this[address]
+  }
+} 
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
@@ -229,6 +235,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
   let { account, chainId } = useActiveWeb3React()
   const chain: ChainId = chainId || 1
   const weth = WETH[chain].address
+  const curreny: any = getCurrency(chain).address
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -240,14 +247,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
   const updatePairs = useCallback(
     async function() {
       if (boringHelperContract && bentoBoxContract) {
-        // Get UI info such as ETH balance, ETH rate, etc (only eth rate is used here?)
-        const info = await boringHelperContract.getUIInfo(
-          account || ethers.constants.AddressZero,
-          [],
-          getCurrency(chain).address,
-          [KASHI_ADDRESS]
-        )
-
         // Get the deployed pairs from the logs and decode
         const logPairs = GetPairsFromLogs(
           await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
@@ -255,35 +254,27 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
         // Filter all pairs by supported oracles and verify the oracle setup
         const supported_oracles = [chainlinkOracleContract?.address]
-        const pairAddresses = (logPairs).filter((pair: any) => 
+        const allPairAddresses = (logPairs).filter((pair: any) => 
           supported_oracles.indexOf(pair.oracle) != -1 && 
           ChainOracleVerify(chain, pair, tokens)
         ).map((pair: any) => pair.address)
 
         // Get full info on all the verified pairs
-        const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, pairAddresses))
+        const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
 
         // Get a list of all tokens in the pairs
-        const pairTokens: { [address: string]: any } = {}
-        pairs.forEach((pair: any, i: number) => {
-          pair.address = pairAddresses[i]
-          if (!pairTokens[pair.collateral]) {
-            pairTokens[pair.collateral] = { address: pair.collateral }
-          }
-          pair.collateral = pairTokens[pair.collateral]
-          if (!pairTokens[pair.asset]) {
-            pairTokens[pair.asset] = { address: pair.asset }
-          }
-          pair.asset = pairTokens[pair.asset]
-        })
+        const pairTokens = new Tokens()
+        pairTokens.add(curreny)
 
+        pairs.forEach((pair: any, i: number) => {
+          pair.address = allPairAddresses[i]
+          pair.collateral = pairTokens.add(pair.collateral)
+          pair.asset = pairTokens.add(pair.asset)
+        })
+        
         // Get balances, bentobox info and allowences for the tokens
-        const balances = rpcToObj(
-          await boringHelperContract.getBalances(
-            account,
-            Object.values(pairTokens).map((token: any) => token.address)
-          )
-        )
+        const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
+        const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
         const missingTokens: any[] = []
         balances.forEach((balance: any, i: number) => {
           if (tokens[balance.token]) {
@@ -302,9 +293,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         // Calculate the USD price for each token
         Object.values(pairTokens).forEach((token: any) => {
           token.symbol = token.address === weth ? Currency.getNativeCurrencySymbol(chain) : token.symbol
-          token.usd = e10(token.decimals)
-            .mul(info.ethRate)
-            .div(token.rate)
+          token.usd = muldiv(e10(token.decimals), pairTokens[curreny].rate, token.rate)
         })
 
         dispatch({
