@@ -1,30 +1,37 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
-import { useBentoBoxContract, useKashiPairContract, useKashiPairHelperContract } from './useContract'
-import ERC20_ABI from 'constants/abis/erc20.json'
-import { isAddressString, getContract } from 'utils'
+import { useBentoBoxContract } from './useContract'
 import { BigNumber } from '@ethersproject/bignumber'
-import sushiData from '@sushiswap/sushi-data'
-import { getMainnetAddress } from 'kashi/functions'
 import useTransactionStatus from './useTransactionStatus'
-import Fraction from 'constants/Fraction'
 import { useDefaultTokens } from 'hooks/Tokens'
-import _ from 'lodash'
+import orderBy from 'lodash/orderBy'
+import { Token } from '@sushiswap/sdk'
 
 import { useBoringHelperContract } from 'hooks/useContract'
 
-const useBentoBalances = () => {
+export interface BentoBalance {
+  address: string
+  name: string
+  symbol: string
+  decimals: number | string
+  balance: BigNumber
+  bentoBalance: BigNumber
+  amount: {
+    value: BigNumber
+    decimals: number
+  }
+  amountUSD: string
+}
+
+function useBentoBalances(): BentoBalance[] {
   const { chainId, library, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
-  const kashiPairContract = useKashiPairContract()
-  const kashiPairHelperContract = useKashiPairHelperContract()
-
   const currentTransactionStatus = useTransactionStatus()
 
   const [balances, setBalances] = useState<any>()
-  const tokens = Object.values(useDefaultTokens()).filter((token: any) => token.chainId === chainId)
+  const tokens = Object.values(useDefaultTokens()).filter((token: Token) => token.chainId === chainId)
 
   const fetchBentoBalances = useCallback(async () => {
     const balances = await boringHelperContract?.getBalances(
@@ -56,8 +63,8 @@ const useBentoBalances = () => {
         }
       })
       .filter(token => token.balance.gt('0') || token.bentoBalance.gt('0'))
-    setBalances(_.orderBy(balancesWithDetails, ['name'], ['asc']))
-  }, [account, bentoBoxContract, kashiPairContract?.address, kashiPairHelperContract, library])
+    setBalances(orderBy(balancesWithDetails, ['name'], ['asc']))
+  }, [account, tokens, boringHelperContract])
 
   useEffect(() => {
     if (account && bentoBoxContract && library) {
