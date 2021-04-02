@@ -6,7 +6,7 @@ import { RowBetween } from '../../components/Row'
 import TokenDepositPanel from './TokenDepositPanel'
 import TokenWithdrawPanel from './TokenWithdrawPanel'
 import { useActiveWeb3React } from 'hooks'
-import useBentoBalances from 'sushi-hooks/useBentoBalances'
+import useBentoBalances, { BentoBalance } from 'sushi-hooks/useBentoBalances'
 import { formatFromBalance, formattedNum } from '../../utils'
 import { PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
 import { Card, CardHeader, Paper, Layout, Search } from '../../kashi/components'
@@ -22,15 +22,12 @@ export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
 `
 
-export default function BentoBalances() {
-  const history = useHistory()
-  const theme = useContext(ThemeContext)
-
+export default function BentoBalances(): JSX.Element {
   // todo: include totalDeposits in balances
   const balances = useBentoBalances()
 
-  const totalDepositsUSD = balances?.reduce((total: number, balance: { amountUSD: number }) => {
-    return total + balance.amountUSD
+  const totalDepositsUSD = balances?.reduce((previousValue, currentValue) => {
+    return previousValue + Number(currentValue.amountUSD)
   }, 0)
 
   // Search Setup
@@ -62,14 +59,14 @@ export default function BentoBalances() {
           <CardHeader className="flex justify-between items-center bg-kashi-card-inner">
             <div className="md:hidden">
               <div className="flex float-right items-center">
-                <div className="font-semibold">BentoBox Balances</div>
+                <div className="font-semibold">My BentoBox</div>
               </div>
             </div>
             <div className="flex w-full justify-between">
               <div className="hidden md:flex items-center">
                 <BackButton defaultRoute="/bento" />
-                <img src={BentoBoxLogo} className="block w-10 mr-2" />
-                <div className="font-semibold text-lg">My BentoBox Balances</div>
+                <img alt="" src={BentoBoxLogo} className="block w-10 mr-2" />
+                <div className="font-semibold text-lg">My BentoBox</div>
               </div>
               <Search search={search} term={term} />
             </div>
@@ -77,34 +74,34 @@ export default function BentoBalances() {
         }
       >
         <div className="grid gap-4 grid-flow-row auto-rows-max">
-          <div className="flex justify-between px-2 pb-4">
-            <div className="font-medium text-base text-gray-500">{formattedNum(totalDepositsUSD, true)}</div>
+          <div className="px-4 grid grid-cols-3 text-sm font-semibold text-gray-500">
+            <div>Token</div>
+            <div className="text-right">Wallet</div>
+            <div className="text-right">BentoBox</div>
           </div>
           {items &&
             items.length > 0 &&
-            items.map((balance: any, i: number) => {
+            items.map((balance: BentoBalance, i: number) => {
               // todo: remove increment for testing purposes
-              return (
-                <TokenBalance tokenAddress={balance.address} tokenDetails={balance} key={balance.address + '_' + i} />
-              )
+              return <TokenBalance key={balance.address + '_' + i} balance={balance} />
             })}
         </div>
       </Card>
     </Layout>
   )
 }
-interface TokenBalanceProps {
-  tokenAddress: string
-  tokenDetails: any
-}
 
-const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
+const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
   const [expand, setExpand] = useState<boolean>(false)
-  const tokenBalance = formatFromBalance(tokenDetails?.amount?.value, tokenDetails?.amount?.decimals)
-  const { account, chainId } = useActiveWeb3React()
+  const walletBalance = formatFromBalance(balance?.balance, balance?.amount?.decimals)
+  const bentoBalance = formatFromBalance(balance?.bentoBalance, balance?.amount?.decimals)
+  const { chainId } = useActiveWeb3React()
   return (
     <Paper className="bg-kashi-card-inner">
-      <div className="p-2 sm:p-4 flex justify-between">
+      <div
+        className="p-2 sm:p-4 grid grid-cols-3 cursor-pointer select-none rounded"
+        onClick={() => setExpand(!expand)}
+      >
         <div className="flex items-center">
           <a
             href={
@@ -114,48 +111,56 @@ const TokenBalance = ({ tokenAddress, tokenDetails }: TokenBalanceProps) => {
                   : chainId === ChainId.ROPSTEN
                   ? 'https://ropsten.etherscan.io/address/'
                   : null
-              }` + tokenAddress
+              }` + balance.address
             }
             target="_blank"
             rel="noreferrer"
           >
-            <img src={getTokenIcon(tokenAddress)} className="block w-10 sm:w-14 rounded-lg mr-4" />
+            <img alt="" src={getTokenIcon(balance.address)} className="block w-10 sm:w-14 rounded-lg mr-2" />
           </a>
-          <div className="hidden sm:block  font-semibold text-base md:text-lg">{tokenDetails && tokenDetails.name}</div>
+          <div className="hidden sm:block  font-semibold text-base md:text-lg">{balance && balance.name}</div>
         </div>
-        <div className="flex items-center">
+        <div className="flex justify-end items-center">
           <div>
-            <div className="font-medium text-base md:text-lg mr-4 text-right">
-              {tokenBalance} {tokenDetails && tokenDetails.symbol}{' '}
+            <div className="font-medium text-base md:text-lg text-right">
+              {walletBalance} {balance && balance.symbol}{' '}
             </div>
-            <div className="font-medium text-gray-600 text-xs md:text-sm mr-4 text-right">
-              {formattedNum(tokenDetails.amountUSD, true)}
+            <div className="font-medium text-gray-600 text-xs md:text-sm text-right">
+              {formattedNum(balance.amountUSD, true)}
             </div>
           </div>
-          {expand ? (
-            <MinusSquare strokeWidth={2} size={24} onClick={() => setExpand(!expand)} />
-          ) : (
-            <PlusSquare strokeWidth={2} size={24} onClick={() => setExpand(!expand)} />
-          )}
         </div>
+        <div className="flex justify-end items-center">
+          <div>
+            <div className="font-medium text-base md:text-lg text-right">
+              {bentoBalance} {balance && balance.symbol}{' '}
+            </div>
+            <div className="font-medium text-gray-600 text-xs md:text-sm text-right">
+              {formattedNum(balance.amountUSD, true)}
+            </div>
+          </div>
+        </div>
+        {/* <div className="flex items-center">
+          {expand ? <MinusSquare strokeWidth={2} size={24} /> : <PlusSquare strokeWidth={2} size={24} />}
+        </div> */}
       </div>
       {expand && (
         <div className="p-2 space-y-4 sm:p-4 sm:flex sm:space-x-2 sm:space-y-0">
           <div className="w-full text-center">
             {/* <div className="pb-2 text-base font-semibold text-gray-400">Deposit to Bento</div> */}
             <TokenDepositPanel
-              id={tokenAddress}
-              tokenAddress={tokenAddress}
-              tokenSymbol={tokenDetails?.symbol}
+              id={balance.address}
+              tokenAddress={balance.address}
+              tokenSymbol={balance.symbol}
               cornerRadiusBottomNone={true}
             />
           </div>
           <div className="w-full text-center">
             {/* <div className="pb-2 text-base font-semibold text-gray-400">Withdraw to Wallet</div> */}
             <TokenWithdrawPanel
-              id={tokenAddress}
-              tokenAddress={tokenAddress}
-              tokenSymbol={tokenDetails?.symbol}
+              id={balance.address}
+              tokenAddress={balance.address}
+              tokenSymbol={balance.symbol}
               cornerRadiusBottomNone={true}
             />
           </div>
