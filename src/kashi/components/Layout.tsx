@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import KashiLogo from 'assets/images/kashi-kanji-wires.png'
+import KashiLogo from 'assets/kashi/logo.png'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 
@@ -24,10 +24,9 @@ export default function Layout({ left = undefined, children = undefined, right =
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
         <div className="flex justify-center col-span-12 lg:col-span-3 lg:justify-start">
           <div className="flex items-center">
-            <Link to="/bento/kashi/borrow" className="border-transparent pl-8 pr-4 border-b-2">
+            <Link to="/bento/kashi/borrow" className="border-transparent border-b-2">
               <div className="flex items-end">
-                <img src={KashiLogo} alt="" className="block w-20 lg:w-26 mr-2" />
-                <div className="font-semibold text-2xl text-high-emphesis">Kashi</div>
+                <img src={KashiLogo} alt="" className="block w-2/5 md:w-4/5 ml-6 mr-2" />
               </div>
             </Link>
           </div>
