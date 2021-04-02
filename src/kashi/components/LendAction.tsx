@@ -145,7 +145,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
           </div>
         </div>
 
-        <div className="flex items-center relative w-full">
+        <div className="flex items-center relative w-full mb-4">
           <NumericalInput className="w-full p-3 bg-input rounded" value={value} onUserInput={setValue} />
           {account && (
             <BlueButtonOutlined onClick={onMax} className="absolute right-4">
@@ -154,17 +154,17 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
           )}
         </div>
 
-        <Alert predicate={warning} message={getWarningMessage()} />
+        <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
       </>
 
       {showApprove && (
-        <BlueButton onClick={approve}>
+        <BlueButton onClick={approve} className="mb-4">
           {approvalState === ApprovalState.PENDING ? <Dots>Approving {token.symbol}</Dots> : `Approve ${token.symbol}`}
         </BlueButton>
       )}
 
       {!warning && Math.sign(Number(value)) > 0 && (
-        <div className="py-4">
+        <div className="py-4 mb-4">
           <div className="text-xl text-high-emphesis">Transaction Review</div>
           <div className="flex items-center justify-between">
             <div className="text-lg text-secondary">Balance:</div>
@@ -174,11 +174,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
       )}
 
       {approvalState === ApprovalState.APPROVED && (
-        <BlueButton
-          onClick={onClick}
-          disabled={pendingTx || isEmpty(limit) || Math.sign(Number(value)) < 0 || warning}
-          className="mt-4"
-        >
+        <BlueButton onClick={onClick} disabled={pendingTx || isEmpty(limit) || Math.sign(Number(value)) < 0 || warning}>
           {action}
         </BlueButton>
       )}

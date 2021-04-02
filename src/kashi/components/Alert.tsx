@@ -1,8 +1,16 @@
 import React from 'react'
 
-export default function Alert({ predicate, message }: { predicate: boolean; message?: string | null }) {
+export default function Alert({
+  predicate,
+  message,
+  className
+}: {
+  predicate: boolean
+  message?: string | null
+  className?: string
+}) {
   return (
-    <div className={predicate ? 'block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4' : 'hidden'}>
+    <div className={predicate ? `block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4 ${className}` : 'hidden'}>
       <div className="flex">
         <div className="flex-shrink-0">
           {/* Heroicon name: solid/exclamation */}
