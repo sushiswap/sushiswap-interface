@@ -118,7 +118,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
             target="_blank"
             rel="noreferrer"
           >
-            <img alt="" src={getTokenIcon(balance.address)} className="block w-10 sm:w-14 rounded-lg mr-2" />
+            <img alt="" src={getTokenIcon(balance.address)} className="block w-10 sm:w-14 rounded-lg mr-4" />
           </a>
           <div className="hidden sm:block">{balance && balance.symbol}</div>
         </div>
