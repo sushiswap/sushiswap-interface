@@ -122,40 +122,39 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
       <div className="text-3xl text-high-emphesis mt-6">
         {action} {token.symbol}
       </div>
-      <>
-        <div className="flex justify-between my-4">
-          <div className="text-base text-secondary">
-            <span>
-              <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
-            </span>
-            <span> {direction} </span>
-            <span>
-              <BlueButtonOutlined
-                onClick={() => {
-                  setValue('')
-                  setSourceOrDestination(sourceOrDestination === 'BentoBox' ? 'Wallet' : 'BentoBox')
-                }}
-              >
-                {sourceOrDestination}
-              </BlueButtonOutlined>
-            </span>
-          </div>
-          <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-            Balance: {Math.max(0, limit)}
-          </div>
-        </div>
 
-        <div className="flex items-center relative w-full mb-4">
-          <NumericalInput className="w-full p-3 bg-input rounded" value={value} onUserInput={setValue} />
-          {account && (
-            <BlueButtonOutlined onClick={onMax} className="absolute right-4">
-              MAX
+      <div className="flex justify-between my-4">
+        <div className="text-base text-secondary">
+          <span>
+            <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
+          </span>
+          <span> {direction} </span>
+          <span>
+            <BlueButtonOutlined
+              onClick={() => {
+                setValue('')
+                setSourceOrDestination(sourceOrDestination === 'BentoBox' ? 'Wallet' : 'BentoBox')
+              }}
+            >
+              {sourceOrDestination}
             </BlueButtonOutlined>
-          )}
+          </span>
         </div>
+        <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+          Balance: {Math.max(0, limit)}
+        </div>
+      </div>
 
-        <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
-      </>
+      <div className="flex items-center relative w-full mb-4">
+        <NumericalInput className="w-full p-3 bg-input rounded" value={value} onUserInput={setValue} />
+        {account && (
+          <BlueButtonOutlined onClick={onMax} className="absolute right-4">
+            MAX
+          </BlueButtonOutlined>
+        )}
+      </div>
+
+      <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
 
       {showApprove && (
         <BlueButton onClick={approve} className="mb-4">
