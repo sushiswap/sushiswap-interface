@@ -9,7 +9,7 @@ import { Token } from '@sushiswap/sdk'
 
 import { useBoringHelperContract } from 'hooks/useContract'
 
-export interface BentoBalances {
+export interface BentoBalance {
   address: string
   name: string
   symbol: string
@@ -23,7 +23,7 @@ export interface BentoBalances {
   amountUSD: string
 }
 
-function useBentoBalances(): BentoBalances[] {
+function useBentoBalances(): BentoBalance[] {
   const { chainId, library, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
