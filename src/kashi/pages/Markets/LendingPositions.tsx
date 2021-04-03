@@ -35,7 +35,7 @@ const LendingPositions = () => {
                 className="block text-high-emphesis"
                 key={pair.address}
               >
-                <div className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 text-sm font-semibold rounded bg-dark-900">
+                <div className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 text-sm font-semibold rounded bg-dark-800">
                   <div className="hidden space-x-2 md:flex">
                     <img
                       src={getTokenIcon(pair.collateral.address)}
