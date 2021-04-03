@@ -6,16 +6,7 @@ import { WETH, Currency, ChainId } from '@sushiswap/sdk'
 import { takeFee, toElastic } from '../functions'
 import { ethers } from 'ethers'
 import {
-  MINIMUM_TARGET_UTILIZATION,
-  MAXIMUM_TARGET_UTILIZATION,
-  FULL_UTILIZATION_MINUS_MAX,
-  STARTING_INTEREST_PER_YEAR,
-  MINIMUM_INTEREST_PER_YEAR,
-  MAXIMUM_INTEREST_PER_YEAR,
-  INTEREST_ELASTICITY,
-  FACTOR_PRECISION,
   KASHI_ADDRESS,
-  CHAINLINK_MAPPING,
   getCurrency
 } from '../constants'
 import { useBoringHelperContract } from 'hooks/useContract'
@@ -25,6 +16,9 @@ import useInterval from 'hooks/useInterval'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import _ from 'lodash'
 import { e10, min, ZERO } from 'kashi/functions/math'
+import { rpcToObj } from 'kashi/functions/utils'
+import { toAmount } from 'kashi/functions/bentobox'
+import { accrue, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -88,74 +82,6 @@ function GetPairsFromLogs(logs: any) {
   })
 }
 
-function rpcToObj(rpc_obj: any, obj?: any) {
-  if (rpc_obj instanceof ethers.BigNumber) {
-    return rpc_obj
-  }
-  if (!obj) {
-    obj = {}
-  }
-  if (typeof rpc_obj == 'object') {
-    if (Object.keys(rpc_obj).length && isNaN(Number(Object.keys(rpc_obj)[Object.keys(rpc_obj).length - 1]))) {
-      for (let i in rpc_obj) {
-        if (isNaN(Number(i))) {
-          obj[i] = rpcToObj(rpc_obj[i])
-        }
-      }
-      return obj
-    }
-    return rpc_obj.map((item: any) => rpcToObj(item))
-  }
-  return rpc_obj
-}
-
-function toAmount(token: any, shares: BigNumber) {
-  return shares.muldiv(token.bentoAmount, token.bentoShare)
-}
-function toShare(token: any, shares: BigNumber) {
-  return shares.muldiv(token.bentoShare, token.bentoAmount)
-}
-function accrue(pair:any, amount: BigNumber) {
-  return amount
-    .mul(pair.accrueInfo.interestPerSecond)
-    .mul(pair.elapsedSeconds)
-    .div(e10(18))
-}
-function interestAccrue(pair: any, interest: BigNumber) {
-  if (pair.totalBorrowAmount.eq(0)) { return STARTING_INTEREST_PER_YEAR }
-  if (pair.elapsedSeconds.lte(0)) { return interest }
-
-  let currentInterest = interest
-  if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
-    const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
-    currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
-
-    if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
-      currentInterest = MINIMUM_INTEREST_PER_YEAR // 0.25% APR minimum
-    }
-  } else if (pair.utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
-    const overFactor = pair.utilization
-      .sub(MAXIMUM_TARGET_UTILIZATION)
-      .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
-    const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor).mul(pair.elapsedSeconds))
-    currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
-    if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
-      currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
-    }
-  }
-  return currentInterest
-}
-function getUSDValue(amount: BigNumberish, token: any) {
-  return BigNumber.from(amount).mul(token.usd).div(e10(token.decimals))
-}
-function easyAmount(amount: BigNumber, token: any) {
-  return {
-    value: amount,
-    string: Fraction.from(amount, e10(token.decimals)).toString(),
-    usd: Fraction.from(getUSDValue(amount, token), e10(6)).toString()
-  }
-}
 class Tokens extends Array {
   add(address: any) {
     if (!this[address]) { this[address] = { address: address } }
