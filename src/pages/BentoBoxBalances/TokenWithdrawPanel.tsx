@@ -168,12 +168,12 @@ export default function CurrencyInputPanel({
   const handleMaxDeposit = useCallback(() => {
     maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
   }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
-  
+
   return (
     <>
       {/* Deposit Input */}
       <InputPanel id={id}>
-        <Paper className="bg-kashi-card rounded-b-none">
+        <Paper className="bg-dark-900 rounded-b-none">
           {!hideInput && (
             <LabelRow>
               <RowBetween>

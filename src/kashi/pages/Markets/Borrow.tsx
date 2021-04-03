@@ -31,7 +31,7 @@ export default function BorrowMarkets() {
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={DepositGraphic}
           title={'Borrow assets and leverage up'}
           description={
@@ -40,7 +40,7 @@ export default function BorrowMarkets() {
         />
       }
     >
-      <Card className="h-full bg-kashi-card" header={<MarketHeader type="Borrow" search={search} term={term} />}>
+      <Card className="h-full bg-dark-900" header={<MarketHeader type="Borrow" search={search} term={term} />}>
         <div className="pb-4">
           <BorrowPositions />
         </div>
@@ -123,9 +123,9 @@ export default function BorrowMarkets() {
                 <div key={pair.address}>
                   <Link
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
-                    className="block text-high-emphesis hover:bg-dark-pink"
+                    className="block text-high-emphesis"
                   >
-                    <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-kashi-card-inner">
+                    <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center">
                         <div className="hidden space-x-2 md:flex">
                           <img

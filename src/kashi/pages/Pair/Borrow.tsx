@@ -39,7 +39,7 @@ export default function BorrowPair({
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={DepositGraphic}
           title={'Add collateral in order to borrow assets'}
           description={
@@ -48,7 +48,7 @@ export default function BorrowPair({
         />
       }
       right={
-        <Card className="h-full bg-kashi-card">
+        <Card className="h-full bg-dark-900">
           <RowBetween>
             <div className="text-lg text-secondary">Total</div>
             <div className="flex items-center">
@@ -73,7 +73,7 @@ export default function BorrowPair({
       }
     >
       <Card
-        className="h-full bg-kashi-card"
+        className="h-full bg-dark-900"
         header={
           <BorrowCardHeader>
             <div className="flex items-center">
@@ -158,14 +158,14 @@ export default function BorrowPair({
         <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
           <TabList className="flex rounded bg-dark-800 p-1">
             <Tab
-              selectedClassName="bg-dark-900 text-high-emphesis"
               className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
               Borrow
             </Tab>
             <Tab
-              selectedClassName="bg-dark-900 text-high-emphesis"
               className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
               Repay
             </Tab>

@@ -46,7 +46,7 @@ const BorrowPositions = () => {
                 className="block text-high-emphesis"
                 key={pair.address}
               >
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 mb-2 py-4 px-4 items-center align-center  text-sm font-semibold rounded bg-kashi-card-inner">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 mb-2 py-4 px-4 items-center align-center  text-sm font-semibold rounded bg-dark-900">
                   <div className="hidden space-x-2 md:flex">
                     <img
                       src={getTokenIcon(pair.collateral.address)}

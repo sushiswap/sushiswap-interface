@@ -2699,10 +2699,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-1.4.2.tgz#065a6613f842ab7ac6d12878072b59327bffa296"
   integrity sha512-Khd2i6Bob9uk7dCgVkhUioEoxRP28m6aj25MegAHvnJyxZPVzZDhxSkeL6wdv5MeAp2DwHkYqUq03KDfVTTP4Q==
 
-"@sushiswap/default-token-list@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-5.0.0.tgz#33e727d6c32118e5061c59135e626b97d7725c97"
-  integrity sha512-enrym/PDtg2yhJWO5G1HlM4LGO5xBcYvV28gK9fTYtnylWDh8v9/F69VVr7t9IcR9g4hnuX98K70DclSlhqm1g==
+"@sushiswap/default-token-list@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-5.1.0.tgz#eba741feac1cc429d3a56eb395ea97c31072eff1"
+  integrity sha512-m8N2Vc/l4qX3TDceIMK6fflHRvflna/Wyhge83KaT5QOSOy/waHOME+cRxh/17yC8Q9Bm8qvtNtaiSdaQUs9cQ==
 
 "@sushiswap/sdk@5.0.0-canary.5":
   version "5.0.0-canary.5"
@@ -12773,13 +12773,6 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-millify@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/millify/-/millify-3.5.0.tgz#8ac0e76983725c5ccf6b4bd822a53f5bc9f56b4b"
-  integrity sha512-9rBrp4dbvJy9hyRiUnKgfCgfoR8ZGdn3rL1AQw4rGrDoyyzjhMeH+KAlYB2qdcsOJ35iS1CcpaYYP1UQOnzLCw==
-  dependencies:
-    yargs "^15.3.1"
-
 mime-db@1.46.0, "mime-db@>= 1.43.0 < 2":
   version "1.46.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.46.0.tgz#6267748a7f799594de3cbc8cde91def349661cee"
@@ -19983,7 +19976,7 @@ yargs@^13.2.4, yargs@^13.3.2:
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
 
-yargs@^15.3.1, yargs@^15.4.1:
+yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==

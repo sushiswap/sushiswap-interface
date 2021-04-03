@@ -46,6 +46,16 @@ const initialState: State = {
   pairs: []
 }
 
+export interface KashiContextProps {
+  state: State
+  dispatch: React.Dispatch<any>
+}
+
+type KashiProviderProps = {
+  state: State
+  dispatch: React.Dispatch<any>
+}
+
 export const KashiContext = createContext<{
   state: State
   dispatch: React.Dispatch<any>
@@ -76,14 +86,16 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
 
 function ChainOracleVerify(chain: ChainId, pair: any, tokens: any) {
   const mapping = CHAINLINK_MAPPING[chain]
-  if (!mapping) { return false }
+  if (!mapping) {
+    return false
+  }
   const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
   let decimals = 54
   let from = ''
   let to = ''
   if (params[0] != ethers.constants.AddressZero) {
     if (!mapping![params[0]]) {
-      console.log("One of the Chainlink oracles used is not configured in this UI.")
+      console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
       decimals -= 18 - mapping![params[0]].decimals
@@ -93,7 +105,7 @@ function ChainOracleVerify(chain: ChainId, pair: any, tokens: any) {
   }
   if (params[1] != ethers.constants.AddressZero) {
     if (!mapping![params[1]]) {
-      console.log("One of the Chainlink oracles used is not configured in this UI.")
+      console.log('One of the Chainlink oracles used is not configured in this UI.')
       return false // One of the Chainlink oracles used is not configured in this UI.
     } else {
       decimals -= mapping![params[1]].decimals
@@ -103,16 +115,25 @@ function ChainOracleVerify(chain: ChainId, pair: any, tokens: any) {
       } else if (to == mapping![params[1]].to) {
         to = mapping![params[1]].from
       } else {
-        console.log("The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.")
+        console.log(
+          "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
+        )
         return false // The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.
       }
     }
   }
-  if (from == pair.assetAddress && to == pair.collateralAddress && tokens[pair.collateralAddress] && tokens[pair.assetAddress]) {
+  if (
+    from == pair.assetAddress &&
+    to == pair.collateralAddress &&
+    tokens[pair.collateralAddress] &&
+    tokens[pair.assetAddress]
+  ) {
     const needed = tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals
     const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
     if (!divider.eq(params[2])) {
-      console.log("The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.")
+      console.log(
+        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
+      )
       return false // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
     } else {
       return true
@@ -164,19 +185,26 @@ function toAmount(token: any, shares: BigNumber) {
 function toShare(token: any, shares: BigNumber) {
   return shares.muldiv(token.bentoShare, token.bentoAmount)
 }
-function accrue(pair:any, amount: BigNumber) {
+function accrue(pair: any, amount: BigNumber) {
   return amount
     .mul(pair.accrueInfo.interestPerSecond)
     .mul(pair.elapsedSeconds)
     .div(e10(18))
 }
 function interestAccrue(pair: any, interest: BigNumber) {
-  if (pair.totalBorrowAmount.eq(0)) { return STARTING_INTEREST_PER_YEAR }
-  if (pair.elapsedSeconds.lte(0)) { return interest }
+  if (pair.totalBorrowAmount.eq(0)) {
+    return STARTING_INTEREST_PER_YEAR
+  }
+  if (pair.elapsedSeconds.lte(0)) {
+    return interest
+  }
 
   let currentInterest = interest
   if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
+    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(
+      FACTOR_PRECISION,
+      MINIMUM_TARGET_UTILIZATION
+    )
     const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
     currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
 
@@ -196,7 +224,9 @@ function interestAccrue(pair: any, interest: BigNumber) {
   return currentInterest
 }
 function getUSDValue(amount: BigNumberish, token: any) {
-  return BigNumber.from(amount).mul(token.usd).div(e10(token.decimals))
+  return BigNumber.from(amount)
+    .mul(token.usd)
+    .div(e10(token.decimals))
 }
 function easyAmount(amount: BigNumber, token: any) {
   return {
@@ -207,7 +237,9 @@ function easyAmount(amount: BigNumber, token: any) {
 }
 class Tokens extends Array {
   add(address: any) {
-    if (!this[address]) { this[address] = { address: address } }
+    if (!this[address]) {
+      this[address] = { address: address }
+    }
     return this[address]
   }
 }
@@ -237,10 +269,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
         // Filter all pairs by supported oracles and verify the oracle setup
         const supported_oracles = [chainlinkOracleContract?.address]
-        const allPairAddresses = (logPairs).filter((pair: any) => 
-          supported_oracles.indexOf(pair.oracle) != -1 && 
-          ChainOracleVerify(chain, pair, tokens)
-        ).map((pair: any) => pair.address)
+        const allPairAddresses = logPairs
+          .filter((pair: any) => supported_oracles.indexOf(pair.oracle) != -1 && ChainOracleVerify(chain, pair, tokens))
+          .map((pair: any) => pair.address)
 
         // Get full info on all the verified pairs
         const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
@@ -254,7 +285,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           pair.collateral = pairTokens.add(pair.collateral)
           pair.asset = pairTokens.add(pair.asset)
         })
-        
+
         // Get balances, bentobox info and allowences for the tokens
         const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
         const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
@@ -283,10 +314,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           type: ActionType.UPDATE,
           payload: {
             pairs: pairs.map((pair: any, i: number) => {
-              pair.elapsedSeconds = BigNumber.from(Date.now()).div("1000").sub(pair.accrueInfo.lastAccrued)
+              pair.elapsedSeconds = BigNumber.from(Date.now())
+                .div('1000')
+                .sub(pair.accrueInfo.lastAccrued)
 
               // Interest per year at last accrue, this will apply during the next accrue
-              pair.interestPerYear = pair.accrueInfo.interestPerSecond.mul("60").mul("60").mul("24").mul("365")
+              pair.interestPerYear = pair.accrueInfo.interestPerSecond
+                .mul('60')
+                .mul('60')
+                .mul('24')
+                .mul('365')
 
               // The total collateral in the market (stable, doesn't accrue)
               pair.totalCollateralAmount = toAmount(pair.collateral, pair.totalCollateralShare)
@@ -313,26 +350,27 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               // Interest per year received by lenders as of now
               pair.currentSupplyAPR = takeFee(pair.currentInterestPerYear.muldiv(pair.utilization, e10(18)))
 
-              
               pair.userCollateralAmount = toAmount(pair.collateral, pair.userCollateralShare)
               pair.userAssetAmount = toAmount(pair.asset, toElastic(pair.totalAsset, pair.userAssetFraction, false))
               pair.userBorrowAmount = toElastic(pair.totalBorrow, pair.userBorrowPart, false)
 
               pair.currentUserBorrowAmount = pair.userBorrowAmount.add(takeFee(accrue(pair, pair.userBorrowAmount)))
 
-              pair.maxBorrowableOracle = pair.userCollateralAmount.muldiv(e10(16).mul("75"), pair.oracleExchangeRate)
-              pair.maxBorrowableStored = pair.userCollateralAmount.muldiv(e10(16).mul("75"), pair.currentExchangeRate)
+              pair.maxBorrowableOracle = pair.userCollateralAmount.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
+              pair.maxBorrowableStored = pair.userCollateralAmount.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
               pair.maxBorrowable = min(pair.maxBorrowableOracle, pair.maxBorrowableStored)
-              pair.safeMaxBorrowable = pair.maxBorrowable.muldiv("95", "100")
+              pair.safeMaxBorrowable = pair.maxBorrowable.muldiv('95', '100')
               pair.safeMaxBorrowableLeft = pair.safeMaxBorrowable.sub(pair.userBorrowAmount)
               pair.safeMaxBorrowableLeftPossible = min(pair.safeMaxBorrowableLeft, pair.totalAssetAmount)
               pair.safeMaxRemovable = ZERO
-              
+
               pair.health = pair.currentUserBorrowAmount.muldiv(e10(18), pair.maxBorrowable)
-              
-              pair.userTotalSupply = pair.userAssetAmount.add(pair.userAssetAmount.muldiv(pair.totalBorrowAmount, pair.totalAssetAmount))
+
+              pair.userTotalSupply = pair.userAssetAmount.add(
+                pair.userAssetAmount.muldiv(pair.totalBorrowAmount, pair.totalAssetAmount)
+              )
               pair.userNetWorth = getUSDValue(pair.userAssetAmount.sub(pair.currentUserBorrowAmount), pair.asset)
-              pair.search = pair.collateral.symbol + "/" + pair.asset.symbol
+              pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
 
               pair.oracle = new Oracle(pair.oracle, pair.oracleData)
               pair.totalCollateralAmount = easyAmount(pair.totalCollateralAmount, pair.collateral)
@@ -369,7 +407,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               pair.safeMaxBorrowableLeft = easyAmount(pair.safeMaxBorrowableLeft, pair.asset)
               pair.safeMaxBorrowableLeftPossible = easyAmount(pair.safeMaxBorrowableLeftPossible, pair.asset)
               pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
-              
+
               return pair
             })
           }
@@ -410,3 +448,13 @@ export function useKashiPair(address: string) {
     return ethers.utils.getAddress(pair.address) === ethers.utils.getAddress(address)
   })
 }
+
+// export function withKashi<P extends object>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof State>> {
+//   return function WrappedWithKashi(props) {
+//     return (
+//       <KashiContext.Consumer>
+//         {(value: KashiProviderProps) => <Component {...(props as P)} value={value} />}
+//       </KashiContext.Consumer>
+//     )
+//   }
+// }

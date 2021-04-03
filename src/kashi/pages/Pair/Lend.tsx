@@ -30,7 +30,7 @@ export default function LendingPair({
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={DepositGraphic}
           title={'Lend assets for interest from borrowers.'}
           description={
@@ -39,7 +39,7 @@ export default function LendingPair({
         />
       }
       right={
-        <Card className="h-full bg-kashi-card">
+        <Card className="h-full bg-dark-900">
           <RowBetween>
             <div className="text-lg text-secondary">Available</div>
             <div className="text-lg text-high-emphesis">
@@ -69,7 +69,7 @@ export default function LendingPair({
       }
     >
       <Card
-        className="h-full bg-kashi-card"
+        className="h-full bg-dark-900"
         header={
           <LendCardHeader>
             <div className="flex items-center">
@@ -154,14 +154,14 @@ export default function LendingPair({
         <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: any) => setTabIndex(index)}>
           <TabList className="flex rounded bg-dark-800 p-1">
             <Tab
-              selectedClassName="bg-dark-900 text-high-emphesis"
               className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
               Deposit {pair.asset.symbol}
             </Tab>
             <Tab
-              selectedClassName="bg-dark-900 text-high-emphesis"
               className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
               Withdraw {pair.asset.symbol}
             </Tab>

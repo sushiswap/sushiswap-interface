@@ -32,14 +32,14 @@ function BentoBox(): JSX.Element {
       <div className="flex justify-center">
         <div className="text-3xl font-semibold text-high-emphesis">BentoBox Apps</div>
       </div>
-      <div className="text-center text-high-emphesis my-6 p-4 bg-primary rounded">
+      <div className="text-center text-high-emphesis my-6 p-4 bg-dark-1000 rounded">
         BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In
         order to use any one of the decentralized apps below you&apos;ll need to first enable them and deposit any ERC20
         asset to your BentoBox balance.
       </div>
       {/* List of Apps */}
       <div className="flex justify-center max-w-xs mx-auto">
-        <Card className="w-full bg-primary rounded">
+        <Card className="w-full bg-dark-1000 rounded">
           <div className="relative w-full">
             <img alt="" src={KashiNeonSign} className="block m-auto w-2/3 mb-4" />
             {account ? (

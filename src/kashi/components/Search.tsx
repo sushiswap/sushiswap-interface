@@ -5,7 +5,7 @@ export default function Search({ term, search }: any) {
   return (
     <div className="relative w-full max-w-md">
       <input
-        className="py-3 pl-4 pr-14 rounded-full w-full focus:outline-none"
+        className="py-3 pl-4 pr-14 rounded w-full focus:outline-none"
         onChange={e => search(e.target.value)}
         style={{ background: '#161522' }}
         value={term}

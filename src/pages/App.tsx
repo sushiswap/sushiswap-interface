@@ -51,8 +51,6 @@ import Saave from './Saave'
 
 import { KashiProvider } from 'kashi/context'
 
-import { hot } from 'react-hot-loader'
-
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -153,4 +151,4 @@ function App() {
   )
 }
 
-export default hot(module)(App)
+export default App
