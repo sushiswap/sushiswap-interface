@@ -20,7 +20,7 @@ import {
 } from '../constants'
 import { useBoringHelperContract } from 'hooks/useContract'
 import { useDefaultTokens } from 'hooks/Tokens'
-import { Oracle } from '../entities'
+import { getOracle } from '../entities'
 import useInterval from 'hooks/useInterval'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import _ from 'lodash'
@@ -81,66 +81,6 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
       }
     default:
       return state
-  }
-}
-
-function ChainOracleVerify(chain: ChainId, pair: any, tokens: any) {
-  const mapping = CHAINLINK_MAPPING[chain]
-  if (!mapping) {
-    return false
-  }
-  const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], pair.oracleData)
-  let decimals = 54
-  let from = ''
-  let to = ''
-  if (params[0] != ethers.constants.AddressZero) {
-    if (!mapping![params[0]]) {
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
-      return false // One of the Chainlink oracles used is not configured in this UI.
-    } else {
-      decimals -= 18 - mapping![params[0]].decimals
-      from = mapping![params[0]].from
-      to = mapping![params[0]].to
-    }
-  }
-  if (params[1] != ethers.constants.AddressZero) {
-    if (!mapping![params[1]]) {
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
-      return false // One of the Chainlink oracles used is not configured in this UI.
-    } else {
-      decimals -= mapping![params[1]].decimals
-      if (!to) {
-        from = mapping![params[1]].to
-        to = mapping![params[1]].from
-      } else if (to == mapping![params[1]].to) {
-        to = mapping![params[1]].from
-      } else {
-        console.log(
-          "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
-        )
-        return false // The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.
-      }
-    }
-  }
-  if (
-    from == pair.assetAddress &&
-    to == pair.collateralAddress &&
-    tokens[pair.collateralAddress] &&
-    tokens[pair.assetAddress]
-  ) {
-    const needed = tokens[pair.collateralAddress].decimals + 18 - tokens[pair.assetAddress].decimals
-    const divider = BigNumber.from(10).pow(BigNumber.from(decimals - needed))
-    if (!divider.eq(params[2])) {
-      console.log(
-        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
-      )
-      return false // The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.
-    } else {
-      return true
-    }
-  } else {
-    console.log("The Chainlink oracles configured don't match the pair tokens.")
-    return false // The Chainlink oracles configured don't match the pair tokens.
   }
 }
 
@@ -254,7 +194,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
-  const chainlinkOracleContract = useChainlinkOracle()
 
   // Default token list fine for now, might want to more to the broader collection later.
   const tokens = useDefaultTokens()
@@ -268,9 +207,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         )
 
         // Filter all pairs by supported oracles and verify the oracle setup
-        const supported_oracles = [chainlinkOracleContract?.address]
         const allPairAddresses = logPairs
-          .filter((pair: any) => supported_oracles.indexOf(pair.oracle) != -1 && ChainOracleVerify(chain, pair, tokens))
+          .filter((pair: any) => getOracle(pair, chain, tokens).valid)
           .map((pair: any) => pair.address)
 
         // Get full info on all the verified pairs
@@ -279,7 +217,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         // Get a list of all tokens in the pairs
         const pairTokens = new Tokens()
         pairTokens.add(curreny)
-
         pairs.forEach((pair: any, i: number) => {
           pair.address = allPairAddresses[i]
           pair.collateral = pairTokens.add(pair.collateral)
@@ -372,7 +309,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               pair.userNetWorth = getUSDValue(pair.userAssetAmount.sub(pair.currentUserBorrowAmount), pair.asset)
               pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
 
-              pair.oracle = new Oracle(pair.oracle, pair.oracleData)
+              pair.oracle = getOracle(pair, chain, tokens)
               pair.totalCollateralAmount = easyAmount(pair.totalCollateralAmount, pair.collateral)
               pair.userCollateralAmount = easyAmount(pair.userCollateralAmount, pair.collateral)
               pair.totalAssetAmount = easyAmount(pair.totalAssetAmount, pair.asset)

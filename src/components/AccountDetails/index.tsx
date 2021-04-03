@@ -225,7 +225,7 @@ export default function AccountDetails({
   confirmedTransactions,
   ENSName,
   openOptions
-}: AccountDetailsProps) {
+}: AccountDetailsProps): any {
   const { chainId, account, connector } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
   const dispatch = useDispatch<AppDispatch>()
