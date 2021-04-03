@@ -19,7 +19,9 @@ module.exports = {
     },
     extend: {
       backgroundImage: theme => ({
+        ...defaultTheme.backgroundImage,
         'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.png')",
+        'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')",
        }),
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans]
@@ -44,6 +46,13 @@ module.exports = {
         'dark-pink': '#221825',
         'dark-blue': '#0F182A',
         'input': "#2E3348"
+      },
+      boxShadow: {
+        ...defaultTheme.boxShadow,
+        'pink-glow': '0px 57px 90px -47px rgba(250, 82, 160, 0.15)',
+        'blue-glow': '0px 57px 90px -47px rgba(39, 176, 230, 0.17)',
+        'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
+        'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)'
       }
     }
   },
