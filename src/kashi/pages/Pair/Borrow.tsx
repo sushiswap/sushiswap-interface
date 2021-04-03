@@ -157,7 +157,6 @@ export default function BorrowPair({
 
         <PrimaryTabs
           forceRenderTabPanel
-          defaultIndex={0}
           selectedIndex={tabIndex}
           onSelect={index => setTabIndex(index)}
         >
@@ -175,6 +174,9 @@ export default function BorrowPair({
         <div><pre>{JSON.stringify(pair, (key, value) => {
             if (value?.type === "BigNumber") {
               return BigNumber.from(value.hex).toString()
+            }
+            if (key.startsWith("_")) {
+              return undefined
             }
             return value;
           }, 2) }</pre></div>

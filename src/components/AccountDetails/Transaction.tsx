@@ -36,7 +36,7 @@ const IconWrapper = styled.div<{ pending: boolean; success?: boolean }>`
   color: ${({ pending, success, theme }) => (pending ? theme.primary1 : success ? theme.green1 : theme.red1)};
 `
 
-export default function Transaction({ hash }: { hash: string }) {
+export default function Transaction({ hash }: { hash: string }): any {
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
 
