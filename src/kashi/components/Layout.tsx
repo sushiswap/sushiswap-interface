@@ -26,7 +26,7 @@ export default function Layout({ left = undefined, children = undefined, right =
           <div className="flex items-center">
             <Link to="/bento/kashi/borrow" className="border-transparent border-b-2">
               <div className="flex items-end">
-                <img src={KashiLogo} alt="" className="block w-2/5 md:w-4/5 ml-6 mr-2" />
+                <img src={KashiLogo} alt="" className="block w-1/2 sm:w-1/3 lg:w-2/3" />
               </div>
             </Link>
           </div>
