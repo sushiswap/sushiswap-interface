@@ -22,7 +22,7 @@ const BorrowPositions = () => {
   const pairs = useKashiPairs()
 
   const borrowPositions = pairs.filter(function(pair: any) {
-    return pair.userBorrowAmount.value.gt(0) || pair.userCollateralAmount.value.gt(0)
+    return pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)
   })
 
   return (
@@ -67,9 +67,9 @@ const BorrowPositions = () => {
                   </div>
                   <div className="text-right">
                     <div>
-                      {formattedNum(pair.userBorrowAmount.string, false)} {pair.asset.symbol}
+                      {formattedNum(pair.currentUserBorrowAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
+                    <div className="text-gray-500 text-sm">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">
                     <div>

@@ -152,9 +152,9 @@ export default function BorrowMarkets() {
                       <div className="hidden lg:block">{pair.oracle.name}</div>
                       <div className="text-center sm:text-right">
                         <div>
-                          {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
+                          {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-gray-500">{formattedNum(pair.totalBorrowAmount.usd, true)}</div>
+                        <div className="text-gray-500">{formattedNum(pair.currentBorrowAmount.usd, true)}</div>
                       </div>
                       <div className="text-right">
                         <div>

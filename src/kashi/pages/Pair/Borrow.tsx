@@ -143,9 +143,9 @@ export default function BorrowPair({
           <div>
             <div className="text-secondary text-lg">Borrow Balance</div>
             <div className="text-pink text-2xl">
-              {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
+              {formattedNum(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
             </div>
-            <div className="text-high-emphesis text-lg">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
+            <div className="text-high-emphesis text-lg">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
           </div>
           <div className="text-right">
             <div>
@@ -184,6 +184,9 @@ export default function BorrowPair({
               (key, value) => {
                 if (value?.type === 'BigNumber') {
                   return BigNumber.from(value.hex).toString()
+                }
+                if (key.startsWith("_")) {
+                  return undefined
                 }
                 return value
               },

@@ -165,10 +165,10 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
 
   const getMax = useCallback(() => {
     if (action === 'Borrow') {
-      return pair.safeMaxBorrowableLeftPossible.string
+      return pair.maxBorrowable.possible.string
     } else if (action === 'Repay') {
-      return assetBalance?.value.gt(pair.userBorrowAmount.value)
-        ? pair.userBorrowAmount.string
+      return assetBalance?.value.gt(pair.currentUserBorrowAmount.value)
+        ? pair.currentUserBorrowAmount.string
         : formatFromBalance(assetBalance?.value, assetBalance?.decimals)
     } else if (action === 'Add Collateral') {
       return formatFromBalance(collateralBalance?.value, collateralBalance?.decimals)
@@ -193,7 +193,7 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
                   pair.currentUserBorrowAmount.value
                     .add(formatToBalance(value, pair.asset.decimals).value)
                     .mul(BigNumber.from('1000000000000000000'))
-                    .div(pair.maxBorrowable.value),
+                    .div(pair.maxBorrowable.minimum.value),
                   BigNumber.from(10).pow(16)
                 ).toString()
               : 0
@@ -204,8 +204,8 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
       return [
         {
           label: 'Est. Borrow Limit',
-          from: `${formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string)))} ${pair.asset.symbol}`,
-          to: `${formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string) - Number(value)))} ${
+          from: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string)))} ${pair.asset.symbol}`,
+          to: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string) - Number(value)))} ${
             pair.asset.symbol
           }`
         },
@@ -228,7 +228,7 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
                 pair.currentUserBorrowAmount.value
                   .sub(formatToBalance(value, pair.asset.decimals).value)
                   .mul(BigNumber.from('1000000000000000000'))
-                  .div(pair.maxBorrowable.value),
+                  .div(pair.maxBorrowable.minimum.value),
                 BigNumber.from(10).pow(16)
               ).toString()
             : 0
@@ -238,11 +238,11 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
       return [
         {
           label: 'Est. Borrow Limit',
-          from: `${formattedNum(Math.max(0, Number(pair.safeMaxBorrowableLeft.string)))} ${pair.asset.symbol}`,
+          from: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string)))} ${pair.asset.symbol}`,
           to: `${Math.min(
-            Number(pair.safeMaxBorrowableLeft.string) + Number(value),
+            Number(pair.maxBorrowable.safe.string) + Number(value),
             Number(
-              Fraction.from(pair.safeMaxBorrowable.value, BigNumber.from(10).pow(BigNumber.from(pair.asset.decimals)))
+              Fraction.from(pair.maxBorrowable.safe.value, BigNumber.from(10).pow(BigNumber.from(pair.asset.decimals)))
             )
           )} ${pair.asset.symbol}`
         },
@@ -284,7 +284,7 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
     } else if (action === 'Borrow') {
       return (
         pair.userCollateralAmount.value.eq(BigNumber.from(0)) ||
-        pair.safeMaxBorrowableLeft.value.lte(BigNumber.from(0)) ||
+        pair.maxBorrowable.safe.value.lte(BigNumber.from(0)) ||
         collateralBalance?.value.lt(formatToBalance(value, pair.collateral.decimals).value)
       )
     } else if (action === 'Repay') {
