@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 import { useLocation } from 'react-router'
 import { useKashiPairs } from 'kashi/context'
-import { LendCardHeader, BorrowCardHeader, Search } from '.'
+import { LendCardHeader, BorrowCardHeader } from '.'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formattedNum } from 'utils'
+import { Search } from 'react-feather'
 
 function MarketHeader({ type = 'Borrow', children, search, term }: any) {
   const pairs = useKashiPairs()
@@ -16,7 +17,20 @@ function MarketHeader({ type = 'Borrow', children, search, term }: any) {
       <div className="flex flex-col md:flex-row items-center justify-between w-full">
         <div className="font-semibold text-3xl text-high-emphesis">{type}</div>
         <div className="flex justify-end w-full py-4 md:py-0">
-          <Search term={term} search={search} />
+          <div className="relative w-full max-w-md">
+            <input
+              className={`py-3 pl-4 pr-14 rounded w-full focus:outline-none focus:ring ${
+                type === 'Borrow' ? 'focus:ring-pink' : 'focus:ring-blue'
+              }`}
+              onChange={e => search(e.target.value)}
+              style={{ background: '#161522' }}
+              value={term}
+              placeholder="Search by name, symbol, address"
+            />
+            <div className="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
+              <Search size={16} />
+            </div>
+          </div>
         </div>
         <div className="flex flex-col w-full md:hidden items-center">
           <div className="text-2xl font-semibold text-high-emphesis">{formattedNum(netWorth, true)}</div>

@@ -134,6 +134,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
           <span> {direction} </span>
           <span>
             <BlueButtonOutlined
+              className="focus:ring focus:ring-blue"
               onClick={() => {
                 setValue('')
                 setSourceOrDestination(sourceOrDestination === 'BentoBox' ? 'Wallet' : 'BentoBox')
@@ -149,9 +150,13 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
       </div>
 
       <div className="flex items-center relative w-full mb-4">
-        <NumericalInput className="w-full p-3 bg-input rounded focus:ring" value={value} onUserInput={setValue} />
+        <NumericalInput
+          className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
+          value={value}
+          onUserInput={setValue}
+        />
         {account && (
-          <BlueButtonOutlined onClick={onMax} className="absolute right-4">
+          <BlueButtonOutlined onClick={onMax} className="absolute right-4 focus:ring focus:ring-blue">
             MAX
           </BlueButtonOutlined>
         )}
