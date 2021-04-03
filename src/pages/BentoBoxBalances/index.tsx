@@ -37,7 +37,7 @@ export default function BentoBalances(): JSX.Element {
     <Layout
       left={
         <Card
-          className="h-full bg-dark-900"
+          className="h-full bg-dark-800"
           backgroundImage={BentoBoxImage}
           title={'Deposit tokens into BentoBox for all the yields.'}
           description={
@@ -49,7 +49,7 @@ export default function BentoBalances(): JSX.Element {
       <Card
         className="h-full bg-dark-900"
         header={
-          <CardHeader className="flex justify-between items-center bg-dark-900">
+          <CardHeader className="flex justify-between items-center bg-dark-800">
             <div className="md:hidden">
               <div className="flex float-right items-center">
                 <div className="font-semibold">My BentoBox</div>
