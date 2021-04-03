@@ -5,13 +5,13 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { LendCardHeader, PrimaryTabs, LendAction } from '../../components'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { LendCardHeader, LendAction } from '../../components'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import { Card, Layout, Paper } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { GradientDot, BackButton } from '../../components'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
 export default function LendingPair({
   match: {
@@ -151,15 +151,20 @@ export default function LendingPair({
           </div>
         </div>
 
-        <PrimaryTabs
-          forceRenderTabPanel
-          defaultIndex={0}
-          selectedIndex={tabIndex}
-          onSelect={index => setTabIndex(index)}
-        >
-          <TabList>
-            <Tab>Deposit {pair.asset.symbol}</Tab>
-            <Tab>Withdraw {pair.asset.symbol}</Tab>
+        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: any) => setTabIndex(index)}>
+          <TabList className="flex rounded bg-dark-800 p-1">
+            <Tab
+              selectedClassName="bg-dark-900 text-high-emphesis"
+              className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+            >
+              Deposit {pair.asset.symbol}
+            </Tab>
+            <Tab
+              selectedClassName="bg-dark-900 text-high-emphesis"
+              className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+            >
+              Withdraw {pair.asset.symbol}
+            </Tab>
           </TabList>
           <TabPanel>
             <LendAction pair={pair} action="Deposit" direction="From" />
@@ -167,7 +172,7 @@ export default function LendingPair({
           <TabPanel>
             <LendAction pair={pair} action="Withdraw" direction="Into" />
           </TabPanel>
-        </PrimaryTabs>
+        </Tabs>
       </Card>
     </Layout>
   )
