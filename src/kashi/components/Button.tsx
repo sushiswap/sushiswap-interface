@@ -1,9 +1,11 @@
 import React from 'react'
 import { keyframes } from 'styled-components'
+import { useHistory } from 'react-router-dom'
+import { ChevronLeft } from 'react-feather'
 
 function Button({ children, className, ...rest }: any): JSX.Element {
   return (
-    <button className={`focus:outline-none focus:ring ${className}`} {...rest}>
+    <button className={`${className} focus:outline-none focus:ring`} {...rest}>
       {children}
     </button>
   )
@@ -53,6 +55,24 @@ export function PinkButtonOutlined({ children, className, ...rest }: any): JSX.E
       {...rest}
     >
       {children}
+    </Button>
+  )
+}
+
+export function BackButton({ defaultRoute }: any) {
+  const history = useHistory()
+  return (
+    <Button
+      onClick={() => {
+        if (history.length < 3) {
+          history.push(defaultRoute)
+        } else {
+          history.goBack()
+        }
+      }}
+      className={`p-2 mr-4 rounded-full bg-dark-900 w-10 h-10`}
+    >
+      <ChevronLeft className={'w-6 h-6'} />
     </Button>
   )
 }

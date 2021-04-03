@@ -1,7 +1,7 @@
 export { default as Alert } from './Alert'
-export { default as BackButton } from './BackButton'
 export {
   default as Button,
+  BackButton,
   GradientButton,
   BlueButton,
   PinkButton,
@@ -20,4 +20,3 @@ export { default as Paper } from './Paper'
 export { default as Search } from './Search'
 export { default as MarketHeader } from './MarketHeader'
 export { default as SplitPane } from './SplitPane'
-export { PrimaryTabs, SecondaryTabs } from './Tabs'

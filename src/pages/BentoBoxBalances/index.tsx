@@ -13,10 +13,9 @@ import { Card, CardHeader, Paper, Layout, Search } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
-
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
-import BackButton from 'kashi/components/BackButton'
+import { BackButton } from 'kashi/components'
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
@@ -38,7 +37,7 @@ export default function BentoBalances(): JSX.Element {
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={BentoBoxImage}
           title={'Deposit tokens into BentoBox for all the yields.'}
           description={
@@ -48,9 +47,9 @@ export default function BentoBalances(): JSX.Element {
       }
     >
       <Card
-        className="h-full bg-kashi-card"
+        className="h-full bg-dark-900"
         header={
-          <CardHeader className="flex justify-between items-center bg-kashi-card-inner">
+          <CardHeader className="flex justify-between items-center bg-dark-900">
             <div className="md:hidden">
               <div className="flex float-right items-center">
                 <div className="font-semibold">My BentoBox</div>
@@ -99,7 +98,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
   const bentoBalance = formatFromBalance(balance?.bentoBalance, balance?.amount?.decimals)
   const { chainId } = useActiveWeb3React()
   return (
-    <Paper className="bg-kashi-card-inner">
+    <Paper className="bg-dark-800">
       <div
         className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm font-semibold"
         onClick={() => setExpand(!expand)}

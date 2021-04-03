@@ -40,6 +40,16 @@ const initialState: State = {
   pairs: []
 }
 
+export interface KashiContextProps {
+  state: State
+  dispatch: React.Dispatch<any>
+}
+
+type KashiProviderProps = {
+  state: State
+  dispatch: React.Dispatch<any>
+}
+
 export const KashiContext = createContext<{
   state: State
   dispatch: React.Dispatch<any>
@@ -84,7 +94,9 @@ function GetPairsFromLogs(logs: any) {
 
 class Tokens extends Array {
   add(address: any) {
-    if (!this[address]) { this[address] = { address: address } }
+    if (!this[address]) {
+      this[address] = { address: address }
+    }
     return this[address]
   }
 }
@@ -107,10 +119,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     async function() {
       if (boringHelperContract && bentoBoxContract) {
         // Get the deployed pairs from the logs and decode
-        const logPairs = GetPairsFromLogs(await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS)))
+        const logPairs = GetPairsFromLogs(
+          await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
+        )
 
         // Filter all pairs by supported oracles and verify the oracle setup
-        const allPairAddresses = logPairs.filter((pair: any) => getOracle(pair, chain, tokens).valid).map((pair: any) => pair.address)
+        const allPairAddresses = logPairs
+          .filter((pair: any) => getOracle(pair, chain, tokens).valid)
+          .map((pair: any) => pair.address)
 
         // Get full info on all the verified pairs
         const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
@@ -123,7 +139,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           pair.collateral = pairTokens.add(pair.collateral)
           pair.asset = pairTokens.add(pair.asset)
         })
-        
+
         // Get balances, bentobox info and allowences for the tokens
         const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
         const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
@@ -152,10 +168,16 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
           type: ActionType.UPDATE,
           payload: {
             pairs: pairs.map((pair: any, i: number) => {
-              pair.elapsedSeconds = BigNumber.from(Date.now()).div("1000").sub(pair.accrueInfo.lastAccrued)
+              pair.elapsedSeconds = BigNumber.from(Date.now())
+                .div('1000')
+                .sub(pair.accrueInfo.lastAccrued)
 
               // Interest per year at last accrue, this will apply during the next accrue
-              pair.interestPerYear = pair.accrueInfo.interestPerSecond.mul("60").mul("60").mul("24").mul("365")
+              pair.interestPerYear = pair.accrueInfo.interestPerSecond
+                .mul('60')
+                .mul('60')
+                .mul('24')
+                .mul('365')
 
               // The total collateral in the market (stable, doesn't accrue)
               pair.totalCollateralAmount = toAmount(pair.collateral, pair.totalCollateralShare)
@@ -182,26 +204,27 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               // Interest per year received by lenders as of now
               pair.currentSupplyAPR = takeFee(pair.currentInterestPerYear.muldiv(pair.utilization, e10(18)))
 
-              
               pair.userCollateralAmount = toAmount(pair.collateral, pair.userCollateralShare)
               pair.userAssetAmount = toAmount(pair.asset, toElastic(pair.totalAsset, pair.userAssetFraction, false))
               pair.userBorrowAmount = toElastic(pair.totalBorrow, pair.userBorrowPart, false)
 
               pair.currentUserBorrowAmount = pair.userBorrowAmount.add(takeFee(accrue(pair, pair.userBorrowAmount)))
 
-              pair.maxBorrowableOracle = pair.userCollateralAmount.muldiv(e10(16).mul("75"), pair.oracleExchangeRate)
-              pair.maxBorrowableStored = pair.userCollateralAmount.muldiv(e10(16).mul("75"), pair.currentExchangeRate)
+              pair.maxBorrowableOracle = pair.userCollateralAmount.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
+              pair.maxBorrowableStored = pair.userCollateralAmount.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
               pair.maxBorrowable = min(pair.maxBorrowableOracle, pair.maxBorrowableStored)
-              pair.safeMaxBorrowable = pair.maxBorrowable.muldiv("95", "100")
+              pair.safeMaxBorrowable = pair.maxBorrowable.muldiv('95', '100')
               pair.safeMaxBorrowableLeft = pair.safeMaxBorrowable.sub(pair.userBorrowAmount)
               pair.safeMaxBorrowableLeftPossible = min(pair.safeMaxBorrowableLeft, pair.totalAssetAmount)
               pair.safeMaxRemovable = ZERO
-              
+
               pair.health = pair.currentUserBorrowAmount.muldiv(e10(18), pair.maxBorrowable)
-              
-              pair.userTotalSupply = pair.userAssetAmount.add(pair.userAssetAmount.muldiv(pair.totalBorrowAmount, pair.totalAssetAmount))
+
+              pair.userTotalSupply = pair.userAssetAmount.add(
+                pair.userAssetAmount.muldiv(pair.totalBorrowAmount, pair.totalAssetAmount)
+              )
               pair.userNetWorth = getUSDValue(pair.userAssetAmount.sub(pair.currentUserBorrowAmount), pair.asset)
-              pair.search = pair.collateral.symbol + "/" + pair.asset.symbol
+              pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
 
               pair.oracle = getOracle(pair, chain, tokens)
               pair.totalCollateralAmount = easyAmount(pair.totalCollateralAmount, pair.collateral)
@@ -238,7 +261,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               pair.safeMaxBorrowableLeft = easyAmount(pair.safeMaxBorrowableLeft, pair.asset)
               pair.safeMaxBorrowableLeftPossible = easyAmount(pair.safeMaxBorrowableLeftPossible, pair.asset)
               pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
-              
+
               return pair
             })
           }
@@ -279,3 +302,13 @@ export function useKashiPair(address: string) {
     return ethers.utils.getAddress(pair.address) === ethers.utils.getAddress(address)
   })
 }
+
+// export function withKashi<P extends object>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof State>> {
+//   return function WrappedWithKashi(props) {
+//     return (
+//       <KashiContext.Consumer>
+//         {(value: KashiProviderProps) => <Component {...(props as P)} value={value} />}
+//       </KashiContext.Consumer>
+//     )
+//   }
+// }

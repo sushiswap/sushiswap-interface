@@ -6,13 +6,13 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, Card, Layout, Paper, BorrowCardHeader, PrimaryTabs, BackButton, BorrowAction } from '../../components'
+import { GradientDot, Card, Layout, Paper, BorrowCardHeader, BackButton, BorrowAction } from '../../components'
 import { BigNumber } from 'ethers'
-
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 export const LabelRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: center;
@@ -39,7 +39,7 @@ export default function BorrowPair({
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={DepositGraphic}
           title={'Add collateral in order to borrow assets'}
           description={
@@ -48,7 +48,7 @@ export default function BorrowPair({
         />
       }
       right={
-        <Card className="h-full bg-kashi-card">
+        <Card className="h-full bg-dark-900">
           <RowBetween>
             <div className="text-lg text-secondary">Total</div>
             <div className="flex items-center">
@@ -73,7 +73,7 @@ export default function BorrowPair({
       }
     >
       <Card
-        className="h-full bg-kashi-card"
+        className="h-full bg-dark-900"
         header={
           <BorrowCardHeader>
             <div className="flex items-center">
@@ -155,14 +155,20 @@ export default function BorrowPair({
           </div>
         </div>
 
-        <PrimaryTabs
-          forceRenderTabPanel
-          selectedIndex={tabIndex}
-          onSelect={index => setTabIndex(index)}
-        >
-          <TabList>
-            <Tab>Borrow</Tab>
-            <Tab>Repay</Tab>
+        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
+          <TabList className="flex rounded bg-dark-800 p-1">
+            <Tab
+              className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+              selectedClassName="bg-dark-900 text-high-emphesis"
+            >
+              Borrow
+            </Tab>
+            <Tab
+              className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+              selectedClassName="bg-dark-900 text-high-emphesis"
+            >
+              Repay
+            </Tab>
           </TabList>
           <TabPanel>
             <BorrowAction pair={pair} action="Borrow" direction="From" label="Max" />
@@ -170,16 +176,21 @@ export default function BorrowPair({
           <TabPanel>
             <BorrowAction pair={pair} action="Repay" direction="From" label="Max" />
           </TabPanel>
-        </PrimaryTabs>
-        <div><pre>{JSON.stringify(pair, (key, value) => {
-            if (value?.type === "BigNumber") {
-              return BigNumber.from(value.hex).toString()
-            }
-            if (key.startsWith("_")) {
-              return undefined
-            }
-            return value;
-          }, 2) }</pre></div>
+        </Tabs>
+        <div>
+          <pre>
+            {JSON.stringify(
+              pair,
+              (key, value) => {
+                if (value?.type === 'BigNumber') {
+                  return BigNumber.from(value.hex).toString()
+                }
+                return value
+              },
+              2
+            )}
+          </pre>
+        </div>
       </Card>
     </Layout>
   )

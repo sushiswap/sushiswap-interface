@@ -14,7 +14,7 @@ import { ChevronUp, ChevronDown } from 'react-feather'
 
 import LendingPositions from './LendingPositions'
 
-export default function KashiPairs() {
+export default function LendingMarkets() {
   const theme = useContext(ThemeContext)
   const pairs = useKashiPairs()
 
@@ -33,7 +33,7 @@ export default function KashiPairs() {
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={DepositGraphic}
           title={'Lend your assets, earn yield with no impermanent loss'}
           description={
@@ -42,7 +42,7 @@ export default function KashiPairs() {
         />
       }
     >
-      <Card className="bg-kashi-card" header={<MarketHeader type="Lending" search={search} term={term} />}>
+      <Card className="bg-dark-900" header={<MarketHeader type="Lending" search={search} term={term} />}>
         <div className="pb-4">
           <LendingPositions />
         </div>
@@ -111,7 +111,10 @@ export default function KashiPairs() {
                     (sortConfig.direction === 'descending' && <ChevronDown size={12} className="ml-2" />))}
               </div>
             </div>
-            <div className="text-right hover:text-gray-400 cursor-pointer" onClick={() => requestSort('currentAllAssets.usd')}>
+            <div
+              className="text-right hover:text-gray-400 cursor-pointer"
+              onClick={() => requestSort('currentAllAssets.usd')}
+            >
               <div className="flex items-center justify-end">
                 <div>Total</div>
                 {sortConfig &&
@@ -131,7 +134,7 @@ export default function KashiPairs() {
                       to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
                       className="block text-high-emphesis"
                     >
-                      <div className="grid grid-flow-col gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-kashi-card-inner">
+                      <div className="grid grid-flow-col gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-blue">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center">
                           <div className="hidden space-x-2 md:flex">
                             <img
@@ -154,8 +157,8 @@ export default function KashiPairs() {
                         <div className="text-left hidden md:block">{pair.asset.symbol}</div>
                         <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
                         <div className="text-left hidden lg:block">{pair.oracle.name}</div>
-                        <div className="text-left sm:text-right">{formattedPercent(pair.currentSupplyAPR)}</div>
-                        <div className="text-left sm:text-right">{formattedPercent(pair.utilization.string)}</div>
+                        <div className="text-right">{formattedPercent(pair.currentSupplyAPR)}</div>
+                        <div className="text-right">{formattedPercent(pair.utilization.string)}</div>
                         <div className="text-right">
                           <div>
                             {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}

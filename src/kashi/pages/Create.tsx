@@ -8,7 +8,7 @@ const CreatePair = () => {
     <Layout
       left={
         <Card
-          className="h-full bg-kashi-card"
+          className="h-full bg-dark-900"
           backgroundImage={DepositGraphic}
           title={'Create a new Kashi Market'}
           description={
@@ -18,7 +18,7 @@ const CreatePair = () => {
       }
     >
       <Card
-        className="h-full bg-kashi-card"
+        className="h-full bg-dark-900"
         header={
           <LendCardHeader>
             <div className="flex items-center">
