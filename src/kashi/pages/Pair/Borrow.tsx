@@ -155,7 +155,12 @@ export default function BorrowPair({
           </div>
         </div>
 
-        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
+        <Tabs
+          forceRenderTabPanel
+          defaultIndex={0}
+          selectedIndex={tabIndex}
+          onSelect={(index: number) => setTabIndex(index)}
+        >
           <TabList className="flex rounded bg-dark-800 p-1">
             <Tab
               className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
@@ -178,7 +183,7 @@ export default function BorrowPair({
           </TabPanel>
         </Tabs>
         <div>
-          <pre>
+          {/* <pre>
             {JSON.stringify(
               pair,
               (key, value) => {
@@ -192,7 +197,7 @@ export default function BorrowPair({
               },
               2
             )}
-          </pre>
+          </pre> */}
         </div>
       </Card>
     </Layout>
