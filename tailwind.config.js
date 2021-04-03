@@ -18,6 +18,9 @@ module.exports = {
       xl: '1440px',
     },
     extend: {
+      backgroundImage: theme => ({
+        'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.png')",
+       }),
       fontFamily: {
         sans: ['DM Sans', ...defaultTheme.fontFamily.sans]
       },
