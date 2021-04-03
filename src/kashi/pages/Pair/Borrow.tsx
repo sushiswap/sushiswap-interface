@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import styled from 'styled-components'
@@ -10,17 +10,19 @@ import { getTokenIcon } from 'kashi/functions'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, Card, Layout, Paper, BorrowCardHeader, BackButton, BorrowAction } from '../../components'
+import {
+  GradientDot,
+  PinkButton,
+  Card,
+  Error,
+  Layout,
+  Paper,
+  BorrowCardHeader,
+  BackButton,
+  BorrowAction
+} from '../../components'
 import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-export const LabelRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: center;
-  color: ${({ theme }) => theme.mediumEmphesisText};
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding: 0.75rem 0;
-`
 
 export default function BorrowPair({
   match: {
@@ -32,6 +34,13 @@ export default function BorrowPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
+
+  const handleSetExchangeRate = useCallback(() => {
+    async function updateExchangeRate() {
+      // update exchange rate
+    }
+    updateExchangeRate()
+  }, [])
 
   if (!pair) return null
 
@@ -132,51 +141,63 @@ export default function BorrowPair({
           </BorrowCardHeader>
         }
       >
-        <div className="flex justify-between mb-8">
+        {pair.currentExchangeRate.isZero() ? (
           <div>
-            <div className="text-secondary text-lg">Collateral Balance</div>
-            <div className="text-blue text-2xl">
-              {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
-            </div>
-            <div className="text-high-emphesis text-lg">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
+            <div className="mb-8 text-xl text-center">Oracle exchange rate not set!</div>
+            <PinkButton onClick={handleSetExchangeRate}>Set Exchange Rate</PinkButton>
           </div>
-          <div>
-            <div className="text-secondary text-lg">Borrow Balance</div>
-            <div className="text-pink text-2xl">
-              {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
+        ) : (
+          <>
+            {' '}
+            <div className="flex justify-between mb-8">
+              <div>
+                <div className="text-secondary text-lg">Collateral Balance</div>
+                <div className="text-blue text-2xl">
+                  {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
+                </div>
+                <div className="text-high-emphesis text-lg">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
+              </div>
+              <div>
+                <div className="text-secondary text-lg">Borrow Balance</div>
+                <div className="text-pink text-2xl">
+                  {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
+                </div>
+                <div className="text-high-emphesis text-lg">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
+              </div>
+              <div className="text-right">
+                <div>
+                  <div className="text-secondary text-lg">Borrow APR</div>
+                  <div className="text-high-emphesis text-2xl">
+                    {formattedPercent(pair.currentInterestPerYear.string)}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="text-high-emphesis text-lg">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
-          </div>
-          <div className="text-right">
-            <div>
-              <div className="text-secondary text-lg">Borrow APR</div>
-              <div className="text-high-emphesis text-2xl">{formattedPercent(pair.currentInterestPerYear.string)}</div>
-            </div>
-          </div>
-        </div>
+            <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
+              <TabList className="flex rounded bg-dark-800 p-1">
+                <Tab
+                  className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+                  selectedClassName="bg-dark-900 text-high-emphesis"
+                >
+                  Borrow
+                </Tab>
+                <Tab
+                  className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+                  selectedClassName="bg-dark-900 text-high-emphesis"
+                >
+                  Repay
+                </Tab>
+              </TabList>
+              <TabPanel>
+                <BorrowAction pair={pair} action="Borrow" direction="From" label="Max" />
+              </TabPanel>
+              <TabPanel>
+                <BorrowAction pair={pair} action="Repay" direction="From" label="Max" />
+              </TabPanel>
+            </Tabs>
+          </>
+        )}
 
-        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
-          <TabList className="flex rounded bg-dark-800 p-1">
-            <Tab
-              className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
-              selectedClassName="bg-dark-900 text-high-emphesis"
-            >
-              Borrow
-            </Tab>
-            <Tab
-              className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
-              selectedClassName="bg-dark-900 text-high-emphesis"
-            >
-              Repay
-            </Tab>
-          </TabList>
-          <TabPanel>
-            <BorrowAction pair={pair} action="Borrow" direction="From" label="Max" />
-          </TabPanel>
-          <TabPanel>
-            <BorrowAction pair={pair} action="Repay" direction="From" label="Max" />
-          </TabPanel>
-        </Tabs>
         <div>
           {/* <pre>
             {JSON.stringify(
