@@ -1,4 +1,4 @@
-export { default as Alert } from './Alert'
+export { default as Alert, Error } from './Alert'
 export {
   default as Button,
   BackButton,
