@@ -5,6 +5,7 @@ import { useActiveWeb3React } from 'hooks'
 import Web3Status from 'components/Web3Status'
 import useKashi from 'kashi/hooks/useKashi'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
+import ComingSoon from '../../assets/kashi/coming-soon.svg'
 
 function BentoBox(): JSX.Element {
   const { account } = useActiveWeb3React()
@@ -28,42 +29,55 @@ function BentoBox(): JSX.Element {
   console.log('kashiApproved:', kashiApproved)
 
   return (
-    <div className="container mx-auto max-w-xl">
-      <div className="flex justify-center">
-        <div className="text-3xl font-semibold text-high-emphesis">BentoBox Apps</div>
+    <>
+      <div className="container mx-auto max-w-3xl">
+        <div className="flex flex-col justify-center">
+          <div className="text-6xl text-high-emphesis text-center">BentoBox Apps</div>
+        </div>
+        <div className="font-medium text-center text-high-emphesis my-6 p-4">
+          BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner.
+          In order to use any one of the decentralized apps below you&apos;ll need to first enable them and deposit any
+          ERC20 asset to your BentoBox balance.
+        </div>
+        {/* List of Apps */}
       </div>
-      <div className="text-center text-high-emphesis my-6 p-4 bg-dark-1000 rounded">
-        BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas efficient manner. In
-        order to use any one of the decentralized apps below you&apos;ll need to first enable them and deposit any ERC20
-        asset to your BentoBox balance.
-      </div>
-      {/* List of Apps */}
-      <div className="flex justify-center max-w-xs mx-auto">
-        <Card className="w-full bg-dark-1000 rounded">
-          <div className="relative w-full">
-            <img alt="" src={KashiNeonSign} className="block m-auto w-2/3 mb-4" />
-            {account ? (
-              kashiApproved && kashiApproved === true ? (
-                <Link to={'/bento/kashi/borrow'}>
-                  <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3">
-                    Enter
+      <div className="container mx-auto px-6 max-w-5xl">
+        <div className="grid gap-6 grid-flow-auto grid-cols-4">
+          <Card className="col-span-4 sm:col-span-2 md:col-span-1 w-full bg-dark-900 rounded">
+            <div className="relative w-full">
+              <img alt="" src={KashiNeonSign} className="block m-auto w-full h-auto mb-4" />
+              {account ? (
+                kashiApproved && kashiApproved === true ? (
+                  <Link to={'/bento/kashi/borrow'}>
+                    <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3">
+                      Enter
+                    </GradientButton>
+                  </Link>
+                ) : (
+                  <GradientButton
+                    className="w-full rounded text-base text-high-emphesis px-4 py-3"
+                    onClick={handleApprove}
+                  >
+                    Enable Kashi
                   </GradientButton>
-                </Link>
+                )
               ) : (
-                <GradientButton
-                  className="w-full rounded text-base text-high-emphesis px-4 py-3"
-                  onClick={handleApprove}
-                >
-                  Enable Kashi
-                </GradientButton>
-              )
-            ) : (
-              <Web3Status />
-            )}
-          </div>
-        </Card>
+                <Web3Status />
+              )}
+            </div>
+          </Card>
+          <Card className="flex items-center justify-center col-span-4 sm:col-span-2 md:col-span-1  bg-dark-900">
+            <img src={ComingSoon} alt="Coming Soon" />
+          </Card>
+          <Card className="flex items-center justify-center col-span-4 sm:col-span-2 md:col-span-1 bg-dark-900">
+            <img src={ComingSoon} alt="Coming Soon" />
+          </Card>
+          <Card className="flex items-center justify-center col-span-4 sm:col-span-2 md:col-span-1 bg-dark-900">
+            <img src={ComingSoon} alt="Coming Soon" />
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
