@@ -12,7 +12,7 @@ import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
 import BorrowPositions from './BorrowPositions'
 
-export default function Borrow() {
+export default function BorrowMarkets() {
   const theme = useContext(ThemeContext)
   const pairs = useKashiPairs()
 
@@ -123,7 +123,7 @@ export default function Borrow() {
                 <div key={pair.address}>
                   <Link
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
-                    className="block text-high-emphesis"
+                    className="block text-high-emphesis hover:bg-dark-pink"
                   >
                     <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-kashi-card-inner">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center">

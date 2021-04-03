@@ -129,7 +129,7 @@ export default function KashiPairs() {
                   <div key={pair.address}>
                     <Link
                       to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
-                      className="block text-high-emphesis"
+                      className="block text-high-emphesis hover:bg-dark-blue"
                     >
                       <div className="grid grid-flow-col gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-kashi-card-inner">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center">
