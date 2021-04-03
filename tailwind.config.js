@@ -35,11 +35,11 @@ module.exports = {
       },
       backgroundColor: {
         ...defaultTheme.backgroundColor,
-        primary: '#0D0415',
-        'kashi-borrow-header': '#221825',
-        'kashi-lend-header': '#0F182A',
-        'kashi-card': '#161522',
-        'kashi-card-inner': '#202231',
+        'dark-1000': '#0D0415',
+        'dark-900': '#161522',
+        'dark-800': '#202231',
+        'dark-pink': '#221825',
+        'dark-blue': '#0F182A',
         'input': "#2E3348"
       }
     }
