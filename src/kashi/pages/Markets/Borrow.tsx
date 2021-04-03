@@ -44,7 +44,7 @@ export default function BorrowMarkets() {
         <div className="pb-4">
           <BorrowPositions />
         </div>
-        <div className="grid grid-flow-col grid-cols-3 md:grid-cols-5 lg:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
+        <div className="grid  gap-4 grid-flow-col grid-cols-3 md:grid-cols-5 lg:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
           <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
             <div>Markets</div>
             {sortConfig &&
@@ -94,7 +94,7 @@ export default function BorrowMarkets() {
             className="hover:text-gray-400 cursor-pointer"
             onClick={() => requestSort('details.total.borrow.string')}
           >
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-center sm:justify-end">
               <div>Borrowed</div>
               {sortConfig &&
                 sortConfig.key === 'details.total.borrow.string' &&
@@ -125,7 +125,7 @@ export default function BorrowMarkets() {
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
                     className="block text-high-emphesis"
                   >
-                    <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
+                    <div className="grid gap-4 grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center">
                         <div className="hidden space-x-2 md:flex">
                           <img
@@ -150,7 +150,7 @@ export default function BorrowMarkets() {
                       <div className="hidden md:block">{pair.collateral.symbol}</div>
                       <div className="text-white hidden md:block">{pair.asset.symbol}</div>
                       <div className="hidden lg:block">{pair.oracle.name}</div>
-                      <div className="text-right">
+                      <div className="text-center sm:text-right">
                         <div>
                           {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
                         </div>

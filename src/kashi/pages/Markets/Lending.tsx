@@ -47,7 +47,7 @@ export default function LendingMarkets() {
           <LendingPositions />
         </div>
         <div>
-          <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
+          <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
             <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
               <div>Markets</div>
               {sortConfig &&
@@ -94,7 +94,7 @@ export default function LendingMarkets() {
               </div>
             </div>
             <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('currentSupplyAPR.string')}>
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-center sm:justify-end">
                 <div>APR</div>
                 {sortConfig &&
                   sortConfig.key === 'currentSupplyAPR.string' &&
@@ -102,7 +102,10 @@ export default function LendingMarkets() {
                     (sortConfig.direction === 'descending' && <ChevronDown size={12} className="ml-2" />))}
               </div>
             </div>
-            <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('utilization.string')}>
+            <div
+              className="hidden sm:block hover:text-gray-400 cursor-pointer"
+              onClick={() => requestSort('utilization.string')}
+            >
               <div className="flex items-center justify-end">
                 <div>Borrowed</div>
                 {sortConfig &&
@@ -134,7 +137,7 @@ export default function LendingMarkets() {
                       to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
                       className="block text-high-emphesis"
                     >
-                      <div className="grid grid-flow-col gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-blue">
+                      <div className="grid grid-flow-col gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-blue">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center">
                           <div className="hidden space-x-2 md:flex">
                             <img
@@ -157,8 +160,8 @@ export default function LendingMarkets() {
                         <div className="text-left hidden md:block">{pair.asset.symbol}</div>
                         <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
                         <div className="text-left hidden lg:block">{pair.oracle.name}</div>
-                        <div className="text-right">{formattedPercent(pair.currentSupplyAPR)}</div>
-                        <div className="text-right">{formattedPercent(pair.utilization.string)}</div>
+                        <div className="text-center sm:text-right">{formattedPercent(pair.currentSupplyAPR)}</div>
+                        <div className="text-right hidden sm:block">{formattedPercent(pair.utilization.string)}</div>
                         <div className="text-right">
                           <div>
                             {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
