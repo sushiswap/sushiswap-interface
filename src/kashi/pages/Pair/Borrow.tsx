@@ -183,7 +183,7 @@ export default function BorrowPair({
           </TabPanel>
         </Tabs>
         <div>
-          {/* <pre>
+          <pre>
             {JSON.stringify(
               pair,
               (key, value) => {
@@ -197,7 +197,7 @@ export default function BorrowPair({
               },
               2
             )}
-          </pre> */}
+          </pre>
         </div>
       </Card>
     </Layout>

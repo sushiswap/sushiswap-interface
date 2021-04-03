@@ -261,13 +261,13 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
   }, [action, pair, value])
 
   const getWarningMessage = useCallback(() => {
-    if (pair.oracleExchangeRate.isZero()) {
+    if (pair.currentExchangeRate.isZero()) {
       return 'Oracle exchange rate has NOT been set'
     } else if (action === 'Borrow') {
       if (pair.userCollateralAmount.value.eq(BigNumber.from(0))) {
         return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
       }
-      if (pair.safeMaxBorrowableLeft.value.lt(BigNumber.from(0))) {
+      if (pair.maxBorrowable.safe.value.lt(BigNumber.from(0))) {
         return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
       }
     } else if (action === 'Repay') {

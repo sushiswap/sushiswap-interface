@@ -212,10 +212,10 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               // The user's maximum borrowable amount based on the collateral provided, using all three oracle values
               pair.maxBorrowable = {
                 oracle: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.oracleExchangeRate),
-                //spot: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.spotExchangeRate),
+                spot: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.spotExchangeRate),
                 stored: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
               }
-              pair.maxBorrowable.minimum = min(pair.maxBorrowable.oracle, pair.maxBorrowable.stored)
+              pair.maxBorrowable.minimum = min(pair.maxBorrowable.oracle, pair.maxBorrowable.spot, pair.maxBorrowable.stored)
               pair.maxBorrowable.safe = pair.maxBorrowable.minimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
               pair.maxBorrowable.possible = min(pair.maxBorrowable.safe, pair.totalAssetAmount.value)
               
@@ -249,6 +249,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               }
               pair.maxBorrowable = {
                 oracle: easyAmount(pair.maxBorrowable.oracle, pair.asset),
+                spot: easyAmount(pair.maxBorrowable.spot, pair.asset),
                 stored: easyAmount(pair.maxBorrowable.stored, pair.asset),
                 minimum: easyAmount(pair.maxBorrowable.minimum, pair.asset),
                 safe: easyAmount(pair.maxBorrowable.safe, pair.asset),
