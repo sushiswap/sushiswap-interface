@@ -1,7 +1,7 @@
 export { default as Alert } from './Alert'
-export { default as BackButton } from './BackButton'
 export {
   default as Button,
+  BackButton,
   GradientButton,
   BlueButton,
   PinkButton,
