@@ -98,7 +98,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
   const bentoBalance = formatFromBalance(balance?.bentoBalance, balance?.amount?.decimals)
   const { chainId } = useActiveWeb3React()
   return (
-    <Paper className="bg-dark-900">
+    <Paper className="bg-dark-800">
       <div
         className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm font-semibold"
         onClick={() => setExpand(!expand)}
