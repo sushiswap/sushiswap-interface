@@ -33,7 +33,7 @@ function BentoBox(): JSX.Element {
     <div>
       <div className="absolute bg-dark-1000 top-0 right-0 bottom-0 left-0" />
       <div
-        className="absolute -inset-32"
+        className="absolute -top-32 right-0 left-0"
         style={{
           maxHeight: '700px'
         }}
