@@ -149,7 +149,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
       </div>
 
       <div className="flex items-center relative w-full mb-4">
-        <NumericalInput className="w-full p-3 bg-input rounded" value={value} onUserInput={setValue} />
+        <NumericalInput className="w-full p-3 bg-input rounded focus:ring" value={value} onUserInput={setValue} />
         {account && (
           <BlueButtonOutlined onClick={onMax} className="absolute right-4">
             MAX
