@@ -43,11 +43,11 @@ export default function LendingPair({
           <RowBetween>
             <div className="text-lg text-secondary">Available</div>
             <div className="text-lg text-high-emphesis">
-              {formattedNum(pair.totalBorrowAmount.string)} {pair.asset.symbol}
+              {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
             </div>
           </RowBetween>
           <RowBetween>
-            <div className="text-lg text-secondary">Utilization</div>
+            <div className="text-lg text-secondary">Borrowed</div>
             <div className="flex items-center">
               <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
               <GradientDot percent={pair.utilization.string} desc={false} />
@@ -130,14 +130,14 @@ export default function LendingPair({
       >
         <div className="flex justify-between mb-8">
           <div>
-            <div className="text-secondary text-lg">Supply Balance</div>
+            <div className="text-secondary text-lg">Lent</div>
             <div className="text-blue text-2xl">
               {formattedNum(pair.userTotalSupply.string)} {pair.asset.symbol}
             </div>
             <div className="text-high-emphesis text-lg">{formattedNum(pair.userTotalSupply.usd, true)}</div>
           </div>
           <div>
-            <div className="text-secondary text-lg">Market Supply</div>
+            <div className="text-secondary text-lg">Borrowed</div>
             <div className="text-high-emphesis text-2xl">
               {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
             </div>

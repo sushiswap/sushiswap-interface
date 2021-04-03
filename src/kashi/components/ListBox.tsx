@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { CHAINLINK_MAPPING } from 'kashi/constants'
+import { CHAINLINK_TOKENS, ChainlinkToken } from 'kashi/constants'
 import { getTokenIcon } from 'kashi/functions'
 import { useActiveWeb3React } from 'hooks'
 
 export default function ListBox({ label }: any) {
   const { chainId } = useActiveWeb3React()
-  const tokens: any = CHAINLINK_MAPPING[chainId || 1]
+  const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
   const [selectedToken, setSelectedToken] = useState(tokens[0])
 
   console.log('selectedToken:', selectedToken)

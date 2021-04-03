@@ -1,17 +1,18 @@
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber"
 import Fraction from "constants/Fraction"
 import { FACTOR_PRECISION, FULL_UTILIZATION_MINUS_MAX, INTEREST_ELASTICITY, MAXIMUM_INTEREST_PER_YEAR, MAXIMUM_TARGET_UTILIZATION, MINIMUM_INTEREST_PER_YEAR, MINIMUM_TARGET_UTILIZATION, STARTING_INTEREST_PER_YEAR } from "kashi/constants"
-import { e10 } from "./math"
+import { e10, ZERO } from "./math"
 
-export function accrue(pair:any, amount: BigNumber) {
+export function accrue(pair:any, amount: BigNumber, includePrincipal: boolean) {
   return amount
     .mul(pair.accrueInfo.interestPerSecond)
     .mul(pair.elapsedSeconds)
     .div(e10(18))
+    .add(includePrincipal ? amount : ZERO)
 }
 
 export function interestAccrue(pair: any, interest: BigNumber) {
-  if (pair.totalBorrowAmount.eq(0)) { return STARTING_INTEREST_PER_YEAR }
+  if (pair.totalBorrow.base.eq(0)) { return STARTING_INTEREST_PER_YEAR }
   if (pair.elapsedSeconds.lte(0)) { return interest }
 
   let currentInterest = interest
