@@ -27,7 +27,9 @@ const RPC = {
   [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
   [ChainId.FUJI]: 'https://api.avax-test.network/ext/bc/C/rpc',
   [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
-  [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com'
+  [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com',
+  [ChainId.HARMONY]: 'https://explorer.harmony.one',
+  [ChainId.HARMONY_TESTNET]: 'https://explorer.pops.one'
 }
 
 export const network = new NetworkConnector({
@@ -58,7 +60,9 @@ export const injected = new InjectedConnector({
     43114, // avalanche
     43113, // fuji
     128, // heco
-    256 // heco testnet
+    256, // heco testnet
+    1666600000, // harmony
+    1666700000 // harmony testnet
   ]
 })
 

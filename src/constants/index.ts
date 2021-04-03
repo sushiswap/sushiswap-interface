@@ -82,7 +82,9 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
   [ChainId.FUJI]: [WETH[ChainId.FUJI]],
   [ChainId.HECO]: [WETH[ChainId.HECO]],
-  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]]
+  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]],
+  [ChainId.HARMONY]: [WETH[ChainId.HARMONY]],
+  [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]]
 }
 
 // Default Ethereum chain tokens
@@ -191,13 +193,7 @@ export const XSUSHI_CALL = new Token(
   'XSUSHI 25 Call [31 May 2021]'
 )
 
-export const XSUSHI = new Token(
-  ChainId.MAINNET,
-  '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
-  18,
-  'xSUSHI',
-  'SushiBar'
-)
+export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -214,7 +210,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
     [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
     [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
+    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
   }
 }
 

@@ -151,6 +151,26 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+
+  harmony: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.harmony.one/#'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  harmonyTestnet: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.pops.one/#'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
@@ -233,6 +253,14 @@ const chains: ChainObject = {
   [ChainId.HECO_TESTNET]: {
     chainName: 'testnet',
     builder: builders.heco
+  },
+  [ChainId.HARMONY]: {
+    chainName: '',
+    builder: builders.harmony
+  },
+  [ChainId.HARMONY_TESTNET]: {
+    chainName: '',
+    builder: builders.harmonyTestnet
   }
 }
 
