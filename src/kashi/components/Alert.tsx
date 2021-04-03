@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function Alert({
   predicate,
@@ -34,4 +34,8 @@ export default function Alert({
       </div>
     </div>
   )
+}
+
+export function Error(): JSX.Element {
+  return <></>
 }
