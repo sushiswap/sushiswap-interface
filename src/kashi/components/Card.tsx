@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 
 export default function Card({
   header = undefined,
+  footer = undefined,
   backgroundImage = '',
   title = '',
   description = '',
@@ -11,7 +12,7 @@ export default function Card({
 }: any) {
   return (
     <div
-      className={`${className}`}
+      className={`relative ${className}`}
       style={{
         borderRadius: '10px',
         backgroundImage: `url(${backgroundImage})`,
@@ -20,11 +21,16 @@ export default function Card({
         backgroundPosition: 'center bottom'
       }}
     >
-      {header && <>{header}</>}
-      <div className={`${padding ? padding : 'p-8'}`}>
-        {title && <div className="font-semibold text-2xl mb-4">{title}</div>}
-        {description && <div className="font-base text-base text-gray-400">{description}</div>}
-        {children}
+      <div>
+        {header && <>{header}</>}
+
+        <div className="p-8">
+          {title && <div className="font-semibold text-2xl mb-4">{title}</div>}
+          {description && <div className="font-base text-base text-gray-400">{description}</div>}
+          {children}
+        </div>
+
+        {footer && <>{footer}</>}
       </div>
     </div>
   )
