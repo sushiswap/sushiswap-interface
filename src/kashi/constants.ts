@@ -193,7 +193,6 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
     { "symbol": "ZRX", "name": "0x Protocol Token", "address": "0xE41d2489571d322189246DaFA5ebDe1F4699F498", "decimals": 18 }
   ],
   [ChainId.KOVAN]: [
-    { "symbol": "ZRX", "name": "0x Protocol Token", "address": "0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3", "decimals": 18 },
     { "symbol": "WETH", "name": "Wrapped Ether", "address": "0xd0A1E359811322d97991E03f863a0C30C2cF029C", "decimals": 18 },
     { "symbol": "ZRX", "name": "0x Protocol Token", "address": "0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3", "decimals": 18 },
     { "symbol": "USDC", "name": "USD Coin USDC", "address": "0xb7a4F3E9097C08dA09517b5aB877F7a917224ede", "decimals": 6 },
