@@ -12,6 +12,8 @@ import { Card, Layout, Paper } from '../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { GradientDot, BackButton } from '../../components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { BigNumber } from '@ethersproject/bignumber'
+import LendDepositAction from 'kashi/components/LendDepositAction'
 
 export default function LendingPair({
   match: {
@@ -117,10 +119,10 @@ export default function LendingPair({
                 <div>
                   <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.symbol}</div>
                   <AutoRow>
-                    <div className="text-sm text-low-emphesis mr-1">Oracle:</div>
-                    <div className="text-sm text-high-emphesis mr-2">{pair && pair.oracle.name}</div>
-                    <div className="text-sm text-secondary mr-1">Collateral:</div>
-                    <div className="text-sm text-high-emphesis">{pair && pair.collateral.symbol}</div>
+                  <div className="text-sm text-secondary mr-1">Collateral:</div>
+                    <div className="text-sm text-high-emphesis mr-2">{pair && pair.collateral.symbol}</div>
+                    <div className="text-sm text-secondary mr-1">Oracle:</div>
+                    <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
                   </AutoRow>
                 </div>
               </div>
@@ -139,9 +141,8 @@ export default function LendingPair({
           <div>
             <div className="text-secondary text-lg">Borrowed</div>
             <div className="text-high-emphesis text-2xl">
-              {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
+              {formattedPercent(pair.utilization.string)}
             </div>
-            <div className="text-high-emphesis text-lg">{formattedNum(pair.currentAllAssets.usd, true)}</div>
           </div>
           <div className="text-right">
             <div>
@@ -167,12 +168,29 @@ export default function LendingPair({
             </Tab>
           </TabList>
           <TabPanel>
-            <LendAction pair={pair} action="Deposit" direction="From" />
+            <LendDepositAction pair={pair} />
           </TabPanel>
           <TabPanel>
             <LendAction pair={pair} action="Withdraw" direction="Into" />
           </TabPanel>
         </Tabs>
+        <div>
+          <pre>
+            {JSON.stringify(
+              pair,
+              (key, value) => {
+                if (value?.type === 'BigNumber') {
+                  return BigNumber.from(value.hex).toString()
+                }
+                if (key.startsWith('_')) {
+                  return undefined
+                }
+                return value
+              },
+              2
+            )}
+          </pre>
+        </div>
       </Card>
     </Layout>
   )

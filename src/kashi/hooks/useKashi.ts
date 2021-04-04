@@ -280,12 +280,12 @@ const useKashi = () => {
   // Type: Asset
   // Actions: Add
   const addAsset = useCallback(
-    async (pairAddress: string, address: string, amount: BalanceProps) => {
+    async (pairAddress: string, address: string, amount: BigNumber) => {
       const tokenAddress = isAddressString(address)
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+      const share = await bentoBoxContract?.toShare(tokenAddress, amount, false)
 
       try {
         const tx = await kashiPairCloneContract?.cook(

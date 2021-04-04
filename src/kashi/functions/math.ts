@@ -1,4 +1,11 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { ethers } from 'ethers'
+
+declare global {
+  interface String {
+    toBigNumber(decimals: number): BigNumber
+  }
+}
 
 declare module '@ethersproject/bignumber' {
   interface BigNumber {
@@ -6,7 +13,16 @@ declare module '@ethersproject/bignumber' {
   }
 }
 
-BigNumber.prototype.muldiv = function muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber {
+String.prototype.toBigNumber = function(decimals: number): BigNumber {
+  try {
+    return ethers.utils.parseUnits(String(this), decimals)
+  } catch (error) {
+    console.debug(`Failed to parse input amount: "${this}"`, error)
+  }
+  return BigNumber.from(0)
+}
+
+BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumberish): BigNumber {
   return BigNumber.from(divisor).gt(0)
     ? BigNumber.from(this)
         .mul(multiplier)
@@ -29,4 +45,14 @@ export function min(...values: BigNumberish[]) {
     }
   }
   return lowest
+}
+
+// try to parse a user entered amount for a number of decimals
+export function toBN(value: string, decimals: number): BigNumber | undefined {
+  try {
+    return ethers.utils.parseUnits(value, decimals)
+  } catch (error) {
+    console.debug(`Failed to parse input amount: "${value}"`, error)
+  }
+  return undefined
 }

@@ -20,7 +20,6 @@ interface LendActionProps {
 
 export default function LendAction({ pair, action, direction }: LendActionProps): JSX.Element {
   const { account, chainId } = useActiveWeb3React()
-
   const bentoBoxContract = useBentoBoxContract()
 
   const [approvalState, approve] = useApproveCallback(pair.asset.address, bentoBoxContract?.address)
@@ -29,11 +28,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
 
   const [sourceOrDestination, setSourceOrDestination] = useState<'BentoBox' | 'Wallet'>('BentoBox')
 
-  const bentoAssetBalance = useBentoBalance(pair.asset.address)
-
-  const walletAssetBalance = useTokenBalance(pair.asset.address)
-
-  const assetBalance = sourceOrDestination === 'BentoBox' ? bentoAssetBalance : walletAssetBalance
+  const assetBalance = sourceOrDestination === 'BentoBox' ? pair.asset.bentoBalance : pair.asset.balance
 
   const [value, setValue] = useState('')
 
@@ -43,7 +38,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
 
   const getMax = useCallback(() => {
     if (action === 'Deposit') {
-      return formatFromBalance(assetBalance?.value, assetBalance?.decimals)
+      return formatFromBalance(assetBalance, pair.asset.decimals)
     } else if (action === 'Withdraw') {
       return pair.userTotalSupply.string
     }
@@ -83,7 +78,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
     if (pair.oracleExchangeRate.isZero()) {
       return true
     } else if (action === 'Deposit') {
-      return assetBalance?.value.lt(formatToBalance(value, pair.asset.decimals).value)
+      return assetBalance?.lt(formatToBalance(value, pair.asset.decimals).value)
     } else if (action === 'Withdraw') {
       return pair.userTotalSupply.value.lt(formatToBalance(value, pair.asset.decimals).value)
     }
@@ -100,7 +95,7 @@ export default function LendAction({ pair, action, direction }: LendActionProps)
       }
     } else if (sourceOrDestination === 'BentoBox') {
       if (action === 'Deposit') {
-        await addAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+        await addAsset(pair.address, pair.asset.address, value.toBigNumber(pair.asset.decimals))
       } else if (action === 'Withdraw') {
         await removeAsset(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals), max)
       }
