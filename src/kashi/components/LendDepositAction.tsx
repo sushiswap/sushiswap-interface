@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from 'react'
-import { WETH } from '@sushiswap/sdk'
+import React, { useState } from 'react'
 import { Alert, Dots, BlueButton, BlueButtonOutlined } from '.'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
@@ -9,7 +8,6 @@ import { formatToBalance, formatFromBalance, formattedNum } from 'utils'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import { BigNumber, ethers } from 'ethers'
 
 export default function LendDepositAction({pair}: any): JSX.Element {
   const { account } = useActiveWeb3React()
@@ -33,10 +31,6 @@ export default function LendDepositAction({pair}: any): JSX.Element {
 
   const newUserTotalSupply = formatFromBalance(pair.userTotalSupply.value.add(value.toBigNumber(pair.asset.decimals)), pair.asset.decimals)
   const transactionReview = `${formattedNum(pair.userTotalSupply.string)} ${pair.asset.symbol} → ${formattedNum(newUserTotalSupply)} ${pair.asset.symbol}`
-
-  const onMax = useCallback(() => {
-    setValue(max)
-  }, [max])
 
   // Handlers
   const onClick = async function() {
@@ -81,7 +75,7 @@ export default function LendDepositAction({pair}: any): JSX.Element {
           onUserInput={setValue}
         />
         {account && (
-          <BlueButtonOutlined onClick={onMax} className="absolute right-4 focus:ring focus:ring-blue">
+          <BlueButtonOutlined onClick={() => setValue(max)} className="absolute right-4 focus:ring focus:ring-blue">
             MAX
           </BlueButtonOutlined>
         )}
