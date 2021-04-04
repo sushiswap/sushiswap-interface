@@ -19,11 +19,11 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
   const [pendingTx, setPendingTx] = useState(false)
 
   // Calculated
-  const assetBalance = useBento ? pair.asset.bentoBalance : pair.asset.balance
+  const balance = useBento ? pair.asset.bentoBalance : pair.asset.balance
 
   const max = pair.userTotalSupply.string
 
-  const warning = pair.oracleExchangeRate.isZero() || assetBalance?.lt(value.toBigNumber(pair.asset.decimals))
+  const warning = pair.oracleExchangeRate.isZero() || balance?.lt(value.toBigNumber(pair.asset.decimals))
 
   const warningMessage = pair.oracleExchangeRate.isZero()
     ? 'Oracle exchange rate has NOT been set'
@@ -101,7 +101,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
           </div>
           <BlueButton
             onClick={onClick}
-            disabled={pendingTx || assetBalance.gt(0) || Math.sign(Number(value)) < 0 || warning}
+            disabled={pendingTx || balance.eq(0) || Math.sign(Number(value)) < 0 || warning}
           >
             Deposit
           </BlueButton>
