@@ -17,7 +17,8 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                   <Listbox.Button className="cursor-default relative w-full rounded-md border bg-input border-none p-3 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                     <span className="truncate flex items-center">
                       <img src={getTokenIcon(selectedToken.address)} className="w-10 h-10 rounded-sm mr-4" />
-                      <div className="text-lg">{selectedToken.name}</div>
+                      <span className="text-lg">{selectedToken.symbol}&nbsp;</span>
+                      <span className="text-lg text-gray-400">{selectedToken.name}</span>
                     </span>
                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                       <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="none" stroke="currentColor">
@@ -46,16 +47,11 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                     {tokens.map((token: any) => (
                       <Listbox.Option key={token.address} value={token}>
                         {({ selected, active }) => (
-                          <div
-                            className={`${
-                              active || selected ? 'text-white bg-blue-600' : 'text-gray-400'
-                            } cursor-default select-none relative p-3`}
-                          >
-                            <span
-                              className={`${selected ? 'font-semibold' : 'font-normal'} flex truncate items-center`}
-                            >
+                          <div className={`${ active ? 'bg-dark-blue' : ''} cursor-pointer relative p-3`}>
+                            <span className="flex truncate items-center">
                               <img src={getTokenIcon(token.address)} className="w-10 h-10 rounded-sm mr-4" />
-                              <div className="text-lg">{token.name}</div>
+                              <span className="text-lg">{token.symbol}&nbsp;</span>
+                              <span className="text-lg text-gray-400">{token.name}</span>
                             </span>
                           </div>
                         )}
