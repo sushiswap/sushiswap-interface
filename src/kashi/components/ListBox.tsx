@@ -1,16 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { CHAINLINK_TOKENS, ChainlinkToken } from 'kashi/constants'
 import { getTokenIcon } from 'kashi/functions'
-import { useActiveWeb3React } from 'hooks'
 
-export default function ListBox({ label }: any) {
-  const { chainId } = useActiveWeb3React()
-  const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
-  const [selectedToken, setSelectedToken] = useState(tokens[0])
-
-  console.log('selectedToken:', selectedToken)
-
+export default function ListBox({ label, tokens, selectedToken, setSelectedToken }: any) {
   return (
     <div className="flex items-center justify-center">
       <div className="w-full">
