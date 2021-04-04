@@ -213,6 +213,7 @@ export type ChainlinkMappingList = {
     fromDecimals: number
     toDecimals: number
     warning?: string
+    address?: string
   }
 }
 
