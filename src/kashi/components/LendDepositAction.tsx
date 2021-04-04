@@ -16,7 +16,7 @@ export default function LendDepositAction({pair}: any): JSX.Element {
   const { depositAddAsset, addAsset } = useKashi()
 
   // State
-  const [useBento, setUseBento] = useState<boolean>(true)
+  const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const [approvalState, approve] = useApproveCallback(pair.asset.address, BENTOBOX_ADDRESS)
@@ -31,10 +31,8 @@ export default function LendDepositAction({pair}: any): JSX.Element {
     : assetBalance?.lt(formatToBalance(value, pair.asset.decimals).value) 
       ? `Please make sure your ${useBento ? "BentoBox" : "wallet"} balance is sufficient to deposit and then try again.` : ''
 
-  const getTransactionReview = useCallback(() => {
-    const newUserTotalSupply = formatFromBalance(pair.userTotalSupply.value.add(value.toBigNumber(pair.asset.decimals)), pair.asset.decimals)
-    return `${formattedNum(pair.userTotalSupply.string)} ${pair.asset.symbol} → ${formattedNum(newUserTotalSupply)} ${pair.asset.symbol}`
-  }, [pair, value])
+  const newUserTotalSupply = formatFromBalance(pair.userTotalSupply.value.add(value.toBigNumber(pair.asset.decimals)), pair.asset.decimals)
+  const transactionReview = `${formattedNum(pair.userTotalSupply.string)} ${pair.asset.symbol} → ${formattedNum(newUserTotalSupply)} ${pair.asset.symbol}`
 
   const onMax = useCallback(() => {
     setValue(max)
@@ -96,7 +94,7 @@ export default function LendDepositAction({pair}: any): JSX.Element {
           <div className="text-xl text-high-emphesis">Transaction Review</div>
           <div className="flex items-center justify-between">
             <div className="text-lg text-secondary">Balance:</div>
-            <div className="text-lg">{getTransactionReview()}</div>
+            <div className="text-lg">{transactionReview}</div>
           </div>
         </div>
       )}
