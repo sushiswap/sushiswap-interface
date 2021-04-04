@@ -1,6 +1,6 @@
 import React from 'react'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { Card, Layout, LendCardHeader, BackButton, ListBox } from '../components'
+import { Card, Layout, LendCardHeader, BackButton, ListBox, GradientButton } from '../components'
 import { getTokenIcon } from 'kashi/functions'
 
 const CreatePair = () => {
@@ -31,6 +31,9 @@ const CreatePair = () => {
         <div className="space-y-6">
           <ListBox label={'Collateral (LONG)'} />
           <ListBox label={'Asset to Borrow (SHORT)'} />
+          <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3">
+            Create Market
+          </GradientButton>
         </div>
       </Card>
     </Layout>
