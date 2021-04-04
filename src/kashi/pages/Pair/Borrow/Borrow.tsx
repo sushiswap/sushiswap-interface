@@ -111,20 +111,28 @@ export default function Borrow({ pair }: BorrowProps) {
 
     // TODO: Cook
 
-    if (useBentoCollateral) {
-      await addCollateral(pair.address, pair.collateral.address, collateralValue.toBigNumber(pair.collateral.decimals))
-    } else {
-      await depositAddCollateral(
-        pair.address,
-        pair.collateral.address,
-        collateralValue.toBigNumber(pair.collateral.decimals)
-      )
+    if (collateralValue.toBigNumber(pair.collateral.address).gt(0)) {
+      if (useBentoCollateral) {
+        await addCollateral(
+          pair.address,
+          pair.collateral.address,
+          collateralValue.toBigNumber(pair.collateral.decimals)
+        )
+      } else {
+        await depositAddCollateral(
+          pair.address,
+          pair.collateral.address,
+          collateralValue.toBigNumber(pair.collateral.decimals)
+        )
+      }
     }
 
-    if (useBentoBorrow) {
-      await borrow(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
-    } else {
-      await borrowWithdraw(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
+    if (borrowValue.toBigNumber(pair.asset.address).gt(0)) {
+      if (useBentoBorrow) {
+        await borrow(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
+      } else {
+        await borrowWithdraw(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
+      }
     }
 
     setPendingTx(false)
