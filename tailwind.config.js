@@ -20,7 +20,7 @@ module.exports = {
     extend: {
       backgroundImage: theme => ({
         ...defaultTheme.backgroundImage,
-        'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.png')",
+        'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
         'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')",
        }),
       fontFamily: {

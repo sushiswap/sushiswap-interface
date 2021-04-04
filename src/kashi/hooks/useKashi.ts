@@ -257,6 +257,25 @@ const useKashi = () => {
   //   [account, addTransaction, bentoBoxContract, library]
   // )
 
+  // Description: Update Exchange Rate
+  const updateExchangeRate = useCallback(
+    async (pairAddress: string) => {
+      const pairCheckSum = isAddressString(pairAddress)
+      const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
+
+      try {
+        const tx = await kashiPairCloneContract?.updateExchangeRate()
+
+        return addTransaction(tx, { summary: 'Update Exchange Rate' })
+      } catch (e) {
+        console.log(e)
+        return e
+      }
+    },
+    [account, addTransaction, library]
+  )
+
+
   // Description: Add Asset from BentoBox
   // Type: Asset
   // Actions: Add
@@ -870,6 +889,7 @@ const useKashi = () => {
     kashiApproved,
     approve,
     approveMaster,
+    updateExchangeRate,
     addAsset,
     depositAddAsset,
     removeAsset,
