@@ -35,7 +35,7 @@ function BentoBox(): JSX.Element {
       <div
         className="absolute -top-32 right-0 left-0"
         style={{
-          maxHeight: '700px'
+          height: '700px'
         }}
       >
         <img className="h-full w-full object-cover object-bottom opacity-50" src={BentoBoxHero} alt="" />
