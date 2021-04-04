@@ -23,7 +23,7 @@ import BASE_SWAPPER_ABI from '../../constants/sushiAbis/swapper.json'
 import { ChainId } from '@sushiswap/sdk'
 import { getSigner } from '../../utils'
 import { useKashiPairs } from 'kashi/context'
-import { WETH } from '../constants'
+import { WETH } from '@sushiswap/sdk'
 
 // Functions that need accrue to be called
 const ACTION_ADD_ASSET = 1
@@ -275,17 +275,18 @@ const useKashi = () => {
     [account, addTransaction, library]
   )
 
-
   // Description: Add Asset from BentoBox
   // Type: Asset
   // Actions: Add
   const addAsset = useCallback(
-    async (pairAddress: string, address: string, amount: BigNumber) => {
+    async (pairAddress: string, address: string, value: BigNumber) => {
+      console.log('Add asset', pairAddress, address, value, value.toString())
+
       const tokenAddress = isAddressString(address)
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
-      const share = await bentoBoxContract?.toShare(tokenAddress, amount, false)
+      const share = await bentoBoxContract?.toShare(tokenAddress, value, false)
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -296,7 +297,7 @@ const useKashi = () => {
 
         return addTransaction(tx, { summary: 'Add Asset' })
       } catch (e) {
-        console.log(e)
+        console.error(e)
         return e
       }
     },
@@ -307,14 +308,18 @@ const useKashi = () => {
   // Type: Asset
   // Actions: Deposit, Add
   const depositAddAsset = useCallback(
-    async (pairAddress: string, address: string, amount: BalanceProps) => {
+    async (pairAddress: string, address: string, value: BigNumber) => {
+      console.log('Deposit add asset', pairAddress, address, value, value.toString())
+
       let tokenAddress = isAddressString(address)
+
       const pairCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairCheckSum, KASHIPAIR_ABI, library!, account!)
 
       let ethAmt = BigNumber.from(0)
-      if (chainId && tokenAddress == WETH[chainId]) {
-        ethAmt = amount?.value
+
+      if (chainId && tokenAddress === WETH[chainId].address) {
+        ethAmt = value
         tokenAddress = ethers.constants.AddressZero
       }
 
@@ -325,7 +330,7 @@ const useKashi = () => {
           [
             ethers.utils.defaultAbiCoder.encode(
               ['address', 'address', 'int256', 'int256'],
-              [tokenAddress, account, amount?.value, 0]
+              [tokenAddress, account, value, 0]
             ),
             ethers.utils.defaultAbiCoder.encode(['int256', 'address', 'bool'], [-2, account, false])
           ],
@@ -333,9 +338,9 @@ const useKashi = () => {
         )
 
         return addTransaction(tx, { summary: 'Deposit -> Add Asset' })
-      } catch (e) {
-        console.log(e)
-        return e
+      } catch (error) {
+        console.error(error)
+        return error
       }
     },
     [account, addTransaction, chainId, library]
@@ -345,7 +350,7 @@ const useKashi = () => {
   // Type: Asset
   // Action: Remove
   const removeAsset = useCallback(
-    async (pairAddress: string, address: string, amount: BalanceProps, max = false) => {
+    async (pairAddress: string, address: string, value: BigNumber, max = false) => {
       const tokenAddress = isAddressString(address)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
@@ -354,7 +359,7 @@ const useKashi = () => {
       const totalAsset = await kashiPairCloneContract?.totalAsset()
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
-      let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+      let share = await bentoBoxContract?.toShare(tokenAddress, value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
         const userSupplyAmount = pairUserDetails[1][0].totalAssetAmount.gt(BigNumber.from(0))
@@ -369,7 +374,7 @@ const useKashi = () => {
       const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
       const allShare = totalAsset.elastic.add(borrowShares)
       const fraction = share.mul(totalAsset.base).div(allShare)
-      const removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
+      const removedPart = fraction.eq(BigNumber.from(0)) ? value : fraction
 
       try {
         const tx = await kashiPairCloneContract?.cook(
@@ -391,7 +396,7 @@ const useKashi = () => {
   // Type: Asset
   // Action: Remove, Withdraw
   const removeWithdrawAsset = useCallback(
-    async (pairAddress: string, address: string, amount: BalanceProps, max = false) => {
+    async (pairAddress: string, address: string, value: BigNumber, max = false) => {
       let tokenAddress = isAddressString(address)
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
@@ -400,7 +405,7 @@ const useKashi = () => {
       const totalAsset = await kashiPairCloneContract?.totalAsset()
       const totalBorrow = await kashiPairCloneContract?.totalBorrow()
 
-      let share = await bentoBoxContract?.toShare(tokenAddress, amount?.value, false)
+      let share = await bentoBoxContract?.toShare(tokenAddress, value, false)
       if (max) {
         const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
         const userSupplyAmount = pairUserDetails[1][0].totalAssetAmount.gt(BigNumber.from(0))
@@ -418,9 +423,9 @@ const useKashi = () => {
       const allShare = totalAsset.elastic.add(borrowShares)
       const fraction = share.mul(totalAsset.base).div(allShare)
 
-      const removedPart = fraction.eq(BigNumber.from(0)) ? amount?.value : fraction
+      const removedPart = fraction.eq(BigNumber.from(0)) ? value : fraction
 
-      if (chainId && tokenAddress == WETH[chainId]) {
+      if (chainId && tokenAddress === WETH[chainId].address) {
         tokenAddress = ethers.constants.AddressZero
       }
 
@@ -485,7 +490,7 @@ const useKashi = () => {
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
 
       let ethAmt = BigNumber.from(0)
-      if (chainId && tokenAddress == WETH[chainId]) {
+      if (chainId && tokenAddress === WETH[chainId].address) {
         ethAmt = amount?.value
         tokenAddress = ethers.constants.AddressZero
       }
@@ -534,7 +539,7 @@ const useKashi = () => {
       }
       const share = await bentoBoxContract?.toShare(tokenAddress, amountToWithdraw, false)
 
-      if (chainId && tokenAddress == WETH[chainId]) {
+      if (chainId && tokenAddress === WETH[chainId].address) {
         tokenAddress = ethers.constants.AddressZero
       }
 
@@ -647,7 +652,7 @@ const useKashi = () => {
         }
       }*/
 
-      if (chainId && tokenAddress == WETH[chainId]) {
+      if (chainId && tokenAddress === WETH[chainId].address) {
         tokenAddress = ethers.constants.AddressZero
       }
 
@@ -738,7 +743,7 @@ const useKashi = () => {
       console.log('repayPart_wallet:', repayPart.toString())
 
       let ethAmt = BigNumber.from(0)
-      if (chainId && tokenAddress == WETH[chainId]) {
+      if (chainId && tokenAddress === WETH[chainId].address) {
         ethAmt = amount?.value
         tokenAddress = ethers.constants.AddressZero
       }
