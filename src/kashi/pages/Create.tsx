@@ -9,8 +9,17 @@ import { useActiveWeb3React } from 'hooks'
 const CreatePair = () => {
   const { chainId } = useActiveWeb3React()
   const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
-  const [selectedCollateral, setSelectedCollateral] = useState(tokens[0])
-  const [selectedAsset, setSelectedAsset] = useState(tokens[0])
+  const [selectedCollateral, setSelectedCollateral] = useState({ name: 'Select a token', address: '0' }) //useState(tokens[0])
+  const [selectedAsset, setSelectedAsset] = useState({ name: 'Select a token', address: '0' }) //useState(tokens[1])
+
+  const collateralTokens = tokens.filter((token: any) => {
+    return token !== selectedAsset
+  })
+  //console.log('collateralTokens:', collateralTokens)
+  const assetTokens = tokens.filter((token: any) => {
+    return token !== selectedCollateral
+  })
+  //console.log('assetTokens:', assetTokens)
 
   const handleCreate = useCallback(async (collateral, asset) => {
     try {
@@ -50,19 +59,23 @@ const CreatePair = () => {
         <div className="space-y-6">
           <ListBox
             label={'Collateral (LONG)'}
-            tokens={tokens}
+            tokens={collateralTokens}
             selectedToken={selectedCollateral}
             setSelectedToken={setSelectedCollateral}
           />
           <ListBox
             label={'Asset to Borrow (SHORT)'}
-            tokens={tokens}
+            tokens={assetTokens}
             selectedToken={selectedAsset}
             setSelectedToken={setSelectedAsset}
           />
           <GradientButton
             className="w-full rounded text-base text-high-emphesis px-4 py-3"
             onClick={() => handleCreate(selectedCollateral, selectedAsset)}
+            disabled={
+              selectedCollateral === { name: 'Select a token', address: '0' } ||
+              selectedAsset === { name: 'Select a token', address: '0' }
+            }
           >
             Create Market
           </GradientButton>
