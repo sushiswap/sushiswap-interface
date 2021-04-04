@@ -41,19 +41,23 @@ export default function Borrow({ pair }: BorrowProps) {
 
   const nextMaxBorrowableOracle = collateralValue
     .toBigNumber(pair.collateral.decimals)
+    .add(pair.userCollateralAmount.value)
     .muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
   const nextMaxBorrowableSpot = collateralValue
     .toBigNumber(pair.collateral.decimals)
+    .add(pair.userCollateralAmount.value)
     .muldiv(e10(16).mul('75'), pair.spotExchangeRate)
   const nextMaxBorrowableStored = collateralValue
     .toBigNumber(pair.collateral.decimals)
+    .add(pair.userCollateralAmount.value)
     .muldiv(e10(16).mul('75'), pair.currentExchangeRate)
   const nextMaxBorrowMinimum = min(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
   const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
   const nextMaxBorrowPossible = min(nextMaxBorrowSafe, pair.totalAssetAmount.value)
+
   const nextHealth = pair.currentUserBorrowAmount.value
     .add(borrowValue.toBigNumber(pair.asset.decimals))
-    .muldiv(BigNumber.from('1000000000000000000'), nextMaxBorrowMinimum)
+    .muldiv('1000000000000000000', nextMaxBorrowMinimum)
     .toFixed(16)
 
   const maxCollateral = balance.toFixed(pair.collateral.decimals)
@@ -78,10 +82,13 @@ export default function Borrow({ pair }: BorrowProps) {
   const transactionReview = [
     {
       label: 'Est. Borrow Limit',
-      from: `${formattedNum(Math.max(0, Number(nextMaxBorrowSafe.toFixed(pair.asset.decimals))))} ${pair.asset.symbol}`,
-      to: `${formattedNum(Math.max(0, Number(nextMaxBorrowSafe.toFixed(pair.asset.decimals)) - Number(borrowValue)))} ${
-        pair.asset.symbol
-      }`
+      from: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string)))} ${pair.asset.symbol}`,
+      to: `${formattedNum(
+        Math.max(
+          0,
+          Number(nextMaxBorrowSafe.sub(borrowValue.toBigNumber(pair.asset.decimals)).toFixed(pair.asset.decimals))
+        )
+      )} ${pair.asset.symbol}`
     },
     {
       label: 'Est. Borrow Limit Used',
@@ -111,7 +118,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
     // TODO: Cook
 
-    if (collateralValue.toBigNumber(pair.collateral.address).gt(0)) {
+    if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
       if (useBentoCollateral) {
         await addCollateral(
           pair.address,
@@ -127,7 +134,7 @@ export default function Borrow({ pair }: BorrowProps) {
       }
     }
 
-    if (borrowValue.toBigNumber(pair.asset.address).gt(0)) {
+    if (borrowValue.toBigNumber(pair.asset.decimals).gt(0)) {
       if (useBentoBorrow) {
         await borrow(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
       } else {
