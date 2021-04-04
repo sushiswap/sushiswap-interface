@@ -1,4 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import Fraction from 'constants/Fraction'
 import { ethers } from 'ethers'
 
 declare global {
@@ -10,6 +11,7 @@ declare global {
 declare module '@ethersproject/bignumber' {
   interface BigNumber {
     muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
+    toFixed(decimals: number): string
   }
 }
 
@@ -28,6 +30,10 @@ BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumb
         .mul(multiplier)
         .div(divisor)
     : ZERO
+}
+
+BigNumber.prototype.toFixed = function(decimals?: number): string {
+  return Fraction.from(this, decimals ? BigNumber.from(10).pow(BigNumber.from(decimals)) : ZERO).toString(decimals)
 }
 
 export const ZERO = BigNumber.from('0')
