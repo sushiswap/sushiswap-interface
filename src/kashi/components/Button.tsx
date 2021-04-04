@@ -59,7 +59,7 @@ export function PinkButtonOutlined({ children, className, ...rest }: any): JSX.E
   )
 }
 
-export function BackButton({ defaultRoute }: any) {
+export function BackButton({ defaultRoute }: { defaultRoute: string }): JSX.Element {
   const history = useHistory()
   return (
     <Button
