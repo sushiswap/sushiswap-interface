@@ -32,11 +32,11 @@ BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumb
 
 export const ZERO = BigNumber.from('0')
 
-export function e10(exponent: BigNumber | Number | string) {
+export function e10(exponent: BigNumber | Number | string): BigNumber {
   return BigNumber.from('10').pow(BigNumber.from(exponent))
 }
 
-export function min(...values: BigNumberish[]) {
+export function min(...values: BigNumberish[]): BigNumber {
   let lowest = BigNumber.from(values[0])
   for (let i = 1; i < values.length; i++) {
     const value = BigNumber.from(values[i])
