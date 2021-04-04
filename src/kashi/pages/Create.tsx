@@ -12,11 +12,11 @@ const CreatePair = () => {
   const [selectedCollateral, setSelectedCollateral] = useState(tokens[0])
   const [selectedAsset, setSelectedAsset] = useState(tokens[0])
 
-  const handleCreate = useCallback(async () => {
+  const handleCreate = useCallback(async (collateral, asset) => {
     try {
-      console.log('selectedCollateral:', selectedCollateral)
-      console.log('selectedAsset:', selectedAsset)
-      //const txHash = await createMarket(selectedCollateral, selectedAsset)
+      console.log('collateral:', collateral)
+      console.log('asset:', asset)
+      //const txHash = await createMarket(collateral, asset)
     } catch (e) {
       console.log(e)
     }
@@ -60,7 +60,10 @@ const CreatePair = () => {
             selectedToken={selectedAsset}
             setSelectedToken={setSelectedAsset}
           />
-          <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3" onClick={handleCreate}>
+          <GradientButton
+            className="w-full rounded text-base text-high-emphesis px-4 py-3"
+            onClick={() => handleCreate(selectedCollateral, selectedAsset)}
+          >
             Create Market
           </GradientButton>
         </div>
