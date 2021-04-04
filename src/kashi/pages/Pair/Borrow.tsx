@@ -23,6 +23,7 @@ import {
 } from '../../components'
 import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { useKashi } from 'kashi/hooks'
 
 export default function BorrowPair({
   match: {
@@ -34,13 +35,11 @@ export default function BorrowPair({
   const { chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(pairAddress)
+  const { updateExchangeRate } = useKashi()
 
-  const handleSetExchangeRate = useCallback(() => {
-    async function updateExchangeRate() {
-      // update exchange rate
-    }
-    updateExchangeRate()
-  }, [])
+  const onUpdateExchangeRate = useCallback(async () => {
+    await updateExchangeRate(pair.address)
+  }, [pair])
 
   if (!pair) return null
 
@@ -144,7 +143,7 @@ export default function BorrowPair({
         {pair.currentExchangeRate.isZero() ? (
           <div>
             <div className="mb-8 text-xl text-center">Oracle exchange rate not set!</div>
-            <PinkButton onClick={handleSetExchangeRate}>Set Exchange Rate</PinkButton>
+            <PinkButton onClick={onUpdateExchangeRate}>Set Exchange Rate</PinkButton>
           </div>
         ) : (
           <>
@@ -160,9 +159,9 @@ export default function BorrowPair({
               <div>
                 <div className="text-secondary text-lg">Borrow Balance</div>
                 <div className="text-pink text-2xl">
-                  {formattedNum(pair.userBorrowAmount.string)} {pair.asset.symbol}
+                  {formattedNum(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
                 </div>
-                <div className="text-high-emphesis text-lg">{formattedNum(pair.userBorrowAmount.usd, true)}</div>
+                <div className="text-high-emphesis text-lg">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
               </div>
               <div className="text-right">
                 <div>
