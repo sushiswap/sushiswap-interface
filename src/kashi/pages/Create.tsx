@@ -16,7 +16,7 @@ const CreatePair = () => {
     try {
       console.log('selectedCollateral:', selectedCollateral)
       console.log('selectedAsset:', selectedAsset)
-      //const txHash = await createMarket()
+      //const txHash = await createMarket(selectedCollateral, selectedAsset)
     } catch (e) {
       console.log(e)
     }
