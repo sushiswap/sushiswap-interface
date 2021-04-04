@@ -39,9 +39,11 @@ import WalletRoute from '../hocs/WalletRoute'
 import PublicRoute from '../hocs/PublicRoute'
 import Connect from '../kashi/pages/Connect'
 import KashiCreate from '../kashi/pages/Create'
-import KashiPairLend from '../kashi/pages/Pair/Lend'
-import KashiPairBorrow from '../kashi/pages/Pair/Borrow'
+
+import LendPair from '../kashi/pages/Pair/Lend'
 import LendMarkets from '../kashi/pages/Markets/Lending'
+
+import BorrowPair from '../kashi/pages/Pair/Borrow'
 import BorrowMarkets from '../kashi/pages/Markets/Borrow'
 
 // Additional Tools
@@ -111,13 +113,15 @@ function App() {
                 {/* <Route exact strict path="/kashi/:market/:pairAddress" component={KashiPair} /> */}
 
                 <Route exact strict path="/bento" component={Bento} />
+                <WalletRoute exact strict path="/bento/balances" component={BentoBalances} />
+
                 <Route exact strict path="/bento/kashi" render={() => <Redirect to="/bento/kashi/borrow" />} />
                 <WalletRoute exact strict path="/bento/kashi/lend" component={LendMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/create" component={KashiCreate} />
-                <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/lend" component={KashiPairLend} />
-                <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={KashiPairBorrow} />
-                <WalletRoute exact strict path="/bento/balances" component={BentoBalances} />
+                <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/lend" component={LendPair} />
+                <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={BorrowPair} />
+
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />
                 <Route exact strict path="/saave" component={Saave} />

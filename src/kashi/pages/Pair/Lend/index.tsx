@@ -5,15 +5,16 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-import { LendCardHeader, LendAction } from '../../components'
+import { LendCardHeader } from '../../../components'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
-import { Card, Layout, Paper } from '../../components'
+import { Card, Layout, Paper } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, BackButton } from '../../components'
+import { GradientDot, BackButton } from '../../../components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { BigNumber } from '@ethersproject/bignumber'
-import LendDepositAction from 'kashi/components/LendDepositAction'
+import Deposit from './Deposit'
+import Withdraw from './Withdraw'
 
 export default function LendingPair({
   match: {
@@ -119,7 +120,7 @@ export default function LendingPair({
                 <div>
                   <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.symbol}</div>
                   <AutoRow>
-                  <div className="text-sm text-secondary mr-1">Collateral:</div>
+                    <div className="text-sm text-secondary mr-1">Collateral:</div>
                     <div className="text-sm text-high-emphesis mr-2">{pair && pair.collateral.symbol}</div>
                     <div className="text-sm text-secondary mr-1">Oracle:</div>
                     <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
@@ -140,9 +141,7 @@ export default function LendingPair({
           </div>
           <div>
             <div className="text-secondary text-lg">Borrowed</div>
-            <div className="text-high-emphesis text-2xl">
-              {formattedPercent(pair.utilization.string)}
-            </div>
+            <div className="text-high-emphesis text-2xl">{formattedPercent(pair.utilization.string)}</div>
           </div>
           <div className="text-right">
             <div>
@@ -168,10 +167,10 @@ export default function LendingPair({
             </Tab>
           </TabList>
           <TabPanel>
-            <LendDepositAction pair={pair} />
+            <Deposit pair={pair} />
           </TabPanel>
           <TabPanel>
-            <LendAction pair={pair} action="Withdraw" direction="Into" />
+            <Withdraw pair={pair} />
           </TabPanel>
         </Tabs>
         <div>
