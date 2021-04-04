@@ -1,29 +1,19 @@
 import React, { useState, useCallback } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
-import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
-import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
-// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import {
-  GradientDot,
-  PinkButton,
-  Card,
-  Error,
-  Layout,
-  Paper,
-  BorrowCardHeader,
-  BackButton,
-  BorrowAction
-} from '../../components'
+import { GradientDot, PinkButton, Card, Error, Layout, Paper, BorrowCardHeader, BackButton } from 'kashi/components'
+
 import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { useKashi } from 'kashi/hooks'
+import Borrow from './Borrow'
+import Repay from './Repay'
 
 export default function BorrowPair({
   match: {
@@ -39,7 +29,7 @@ export default function BorrowPair({
 
   const onUpdateExchangeRate = useCallback(async () => {
     await updateExchangeRate(pair.address)
-  }, [pair])
+  }, [pair, updateExchangeRate])
 
   if (!pair) return null
 
@@ -188,11 +178,9 @@ export default function BorrowPair({
                 </Tab>
               </TabList>
               <TabPanel>
-                <BorrowAction pair={pair} action="Borrow" direction="From" label="Max" />
+                <Borrow pair={pair} />
               </TabPanel>
-              <TabPanel>
-                <BorrowAction pair={pair} action="Repay" direction="From" label="Max" />
-              </TabPanel>
+              <TabPanel>{/* <Repay pair={pair} action="Repay" direction="From" label="Max" /> */}</TabPanel>
             </Tabs>
           </>
         )}

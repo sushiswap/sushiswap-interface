@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import useTheme from 'hooks/useTheme'
 import { WETH } from '@sushiswap/sdk'
-import { Alert, Dots, PinkButton, PinkButtonOutlined } from '.'
+import { Alert, Dots, PinkButton, PinkButtonOutlined } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, Type } from 'react-feather'
-import styled from 'styled-components'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
 import useTokenBalance from 'sushi-hooks/useTokenBalance'
@@ -15,106 +14,7 @@ import { formatToBalance, formatFromBalance, formattedPercent, formattedNum } fr
 import isEmpty from 'lodash/isEmpty'
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from 'constants/Fraction'
-
-import { GradientDot } from '.'
-
-export const LabelRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: center;
-  color: ${({ theme }) => theme.mediumEmphesisText};
-  font-size: 0.75rem;
-  line-height: 1rem;
-  padding: 0.75rem 0;
-`
-
-export const InputRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: center;
-  border-radius: 10px;
-  // background-color: #2e3348;
-  // padding: 0.75rem 0.5rem 0.75rem 1rem;
-`
-
-export const Aligner = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
-export const InputPanel = styled.div<{ hideInput?: boolean }>`
-  ${({ theme }) => theme.flexColumnNoWrap}
-  position: relative;
-  border-radius: 10px;
-  background-color: ${({ theme }) => theme.bg2};
-  z-index: 1;
-`
-
-export const Container = styled.div<{
-  cornerRadiusTopNone?: boolean
-  cornerRadiusBottomNone?: boolean
-}>`
-  border-radius: 12px;
-  border-radius: ${({ cornerRadiusTopNone }) => cornerRadiusTopNone && '0 0 12px 12px'};
-  border-radius: ${({ cornerRadiusBottomNone }) => cornerRadiusBottomNone && '12px 12px 0 0'};
-  border: 1px solid ${({ theme }) => theme.bg2};
-  background-color: ${({ theme }) => theme.bg1};
-`
-
-export const StyledButtonName = styled.span<{ active?: boolean }>`
-  ${({ active }) => (active ? '  margin: 0 auto;' : '  margin: 0 auto;')}
-  font-size:  ${({ active }) => (active ? '20px' : '16px')};
-`
-
-export const StyledSwitch = styled.button`
-  padding-top: 0.125rem;
-  padding-bottom: 0.125rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  background-color: ${({ theme }) => theme.primary5};
-  border: 1px solid ${({ theme }) => theme.primary5};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  color: ${({ theme }) => theme.primaryText1};
-  :hover {
-    border: 1px solid ${({ theme }) => theme.primary1};
-  }
-  :focus {
-    border: 1px solid ${({ theme }) => theme.primary1};
-    outline: none;
-  }
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    margin-right: 0.5rem;
-  `};
-`
-
-export const StyledBalanceMax = styled.button`
-  height: 28px;
-  padding-right: 8px;
-  padding-left: 8px;
-  background-color: ${({ theme }) => theme.primary5};
-  border: 1px solid ${({ theme }) => theme.primary5};
-  border-radius: ${({ theme }) => theme.borderRadius};
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  color: ${({ theme }) => theme.primaryText1};
-  :hover {
-    border: 1px solid ${({ theme }) => theme.primary1};
-  }
-  :focus {
-    border: 1px solid ${({ theme }) => theme.primary1};
-    outline: none;
-  }
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    margin-right: 0.5rem;
-  `};
-`
+import { GradientDot } from '../../../components'
 
 interface BorrowActionProps {
   pair: any
@@ -295,42 +195,42 @@ export default function BorrowAction({ pair, action, direction, label }: BorrowA
 
   const onClick = async function() {
     setPendingTx(true)
-    if (sourceOrDestination === 'Wallet') {
-      if (action === 'Borrow') {
-        await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-      } else if (action === 'Repay') {
-        await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-      } else if (action === 'Add Collateral') {
-        await depositAddCollateral(
-          pair.address,
-          pair.collateral.address,
-          formatToBalance(value, pair.collateral.decimals)
-        )
-      } else if (action === 'Remove Collateral') {
-        await removeWithdrawCollateral(
-          pair.address,
-          pair.collateral.address,
-          formatToBalance(value, pair.collateral.decimals),
-          max
-        )
-      }
-    } else if (sourceOrDestination === 'BentoBox') {
-      if (action === 'Borrow') {
-        await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-      } else if (action === 'Repay') {
-        await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
-      } else if (action === 'Add Collateral') {
-        await addCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
-      } else if (action === 'Remove Collateral') {
-        console.log('Remove collateral', formatToBalance(value, pair.collateral.decimals))
-        await removeCollateral(
-          pair.address,
-          pair.collateral.address,
-          formatToBalance(value, pair.collateral.decimals),
-          max
-        )
-      }
-    }
+    // if (sourceOrDestination === 'Wallet') {
+    //   if (action === 'Borrow') {
+    //     await borrowWithdraw(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+    //   } else if (action === 'Repay') {
+    //     await repay(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+    //   } else if (action === 'Add Collateral') {
+    //     await depositAddCollateral(
+    //       pair.address,
+    //       pair.collateral.address,
+    //       formatToBalance(value, pair.collateral.decimals)
+    //     )
+    //   } else if (action === 'Remove Collateral') {
+    //     await removeWithdrawCollateral(
+    //       pair.address,
+    //       pair.collateral.address,
+    //       formatToBalance(value, pair.collateral.decimals),
+    //       max
+    //     )
+    //   }
+    // } else if (sourceOrDestination === 'BentoBox') {
+    //   if (action === 'Borrow') {
+    //     await borrow(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+    //   } else if (action === 'Repay') {
+    //     await repayFromBento(pair.address, pair.asset.address, formatToBalance(value, pair.asset.decimals))
+    //   } else if (action === 'Add Collateral') {
+    //     await addCollateral(pair.address, pair.collateral.address, formatToBalance(value, pair.collateral.decimals))
+    //   } else if (action === 'Remove Collateral') {
+    //     console.log('Remove collateral', formatToBalance(value, pair.collateral.decimals))
+    //     await removeCollateral(
+    //       pair.address,
+    //       pair.collateral.address,
+    //       formatToBalance(value, pair.collateral.decimals),
+    //       max
+    //     )
+    //   }
+    // }
     setPendingTx(false)
   }
 
