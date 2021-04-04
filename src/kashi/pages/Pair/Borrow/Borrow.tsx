@@ -139,13 +139,14 @@ export default function Borrow({ pair }: BorrowProps) {
 
   return (
     <>
-      <div className="text-3xl text-high-emphesis mt-6">Borrow {pair.asset.symbol}</div>
-      <div className="flex justify-between my-4">
-        <div className="text-base text-secondary">
+      <div className="text-3xl text-high-emphesis mt-6 mb-4">Borrow {pair.asset.symbol}</div>
+
+      <div className="flex items-center justify-between my-4">
+        <div className="flex items-center text-base text-secondary">
           <span>
             <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
           </span>
-          <span> From </span>
+          <span className="mx-2">Add Collateral From</span>
           <span>
             <PinkButtonOutlined
               className="focus:ring focus:ring-pink"
@@ -178,12 +179,12 @@ export default function Borrow({ pair }: BorrowProps) {
         )}
       </div>
 
-      <div className="flex justify-between my-4">
-        <div className="text-base text-secondary">
+      <div className="flex items-center justify-between my-4">
+        <div className="flex items-center text-base text-secondary">
           <span>
             <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
           </span>
-          <span> To </span>
+          <span className="mx-2"> Borrow Asset To </span>
           <span>
             <PinkButtonOutlined
               className="focus:ring focus:ring-pink"
@@ -236,8 +237,8 @@ export default function Borrow({ pair }: BorrowProps) {
             <div className="text-xl text-high-emphesis">Transaction Review</div>
             {transactionReview.map((item, i) => (
               <div key={i} className="flex flex-row items-center justify-between text-lg">
+                <div className="text-lg text-secondary">{item.label}:</div>
                 <div className="flex">
-                  <div className="text-lg text-secondary">{item.label}:</div>
                   <div className="text-secondary">{item.from}</div>
                   {' → '}
                   <div className="text-primary">{item.to}</div>
@@ -247,13 +248,13 @@ export default function Borrow({ pair }: BorrowProps) {
           </div>
           <PinkButton
             onClick={onBorrow}
-            // disabled={
-            //   pendingTx ||
-            //   balance.eq(0) ||
-            //   Math.sign(Number(collateralValue)) > 0 ||
-            //   Math.sign(Number(borrowValue)) > 0 ||
-            //   warning
-            // }
+            disabled={
+              pendingTx ||
+              (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
+              // Math.sign(Number(collateralValue)) > 0 ||
+              // Math.sign(Number(borrowValue)) > 0 ||
+              warning
+            }
           >
             Borrow
           </PinkButton>
