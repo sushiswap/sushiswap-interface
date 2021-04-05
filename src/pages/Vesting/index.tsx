@@ -188,7 +188,7 @@ export default function ClaimModal() {
                 </RowBetween>
                 <div style={{ display: 'flex', alignItems: 'baseline' }}>
                   <TYPE.white fontWeight={700} fontSize={36} color={theme.text1}>
-                    {unclaimedAmount?.toFixed(0, { groupSeparator: ',' } ?? '-')}
+                    {unclaimedAmount?.toFixed(4, { groupSeparator: ',' } ?? '-')}
                   </TYPE.white>
                   {account ? (
                     <TYPE.white fontWeight={700} fontSize={14} color={theme.text3} marginLeft={10}>
