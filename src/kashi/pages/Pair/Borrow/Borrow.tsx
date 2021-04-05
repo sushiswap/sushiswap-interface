@@ -28,7 +28,9 @@ export default function Borrow({ pair }: BorrowProps) {
   const { borrowWithdraw, borrow, depositAddCollateral, addCollateral } = useKashi()
 
   // State
-  const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
+  const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(
+    pair.collateral.bentoBalance.gt(BigNumber.from(0))
+  )
   const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
   const [collateralValue, setCollateralValue] = useState('')
   const [borrowValue, setBorrowValue] = useState('')
@@ -39,26 +41,24 @@ export default function Borrow({ pair }: BorrowProps) {
   // Calculated
   const balance = useBentoCollateral ? pair.collateral.bentoBalance : pair.collateral.balance
 
-  const nextMaxBorrowableOracle = collateralValue
-    .toBigNumber(pair.collateral.decimals)
-    .add(pair.userCollateralAmount.value)
-    .muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
-  const nextMaxBorrowableSpot = collateralValue
-    .toBigNumber(pair.collateral.decimals)
-    .add(pair.userCollateralAmount.value)
-    .muldiv(e10(16).mul('75'), pair.spotExchangeRate)
-  const nextMaxBorrowableStored = collateralValue
-    .toBigNumber(pair.collateral.decimals)
-    .add(pair.userCollateralAmount.value)
-    .muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+  const nextUserCollateralValue = pair.userCollateralAmount.value.add(
+    collateralValue.toBigNumber(pair.collateral.decimals)
+  )
+
+  const nextBorrowValue = pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals))
+
+  const nextMaxBorrowableOracle = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
+  const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
+  const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+
   const nextMaxBorrowMinimum = min(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
-  const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
+  const nextMaxBorrowSafe = nextMaxBorrowMinimum
+    .muldiv('95', '100')
+    .sub(pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals)))
+
   const nextMaxBorrowPossible = min(nextMaxBorrowSafe, pair.totalAssetAmount.value)
 
-  const nextHealth = pair.currentUserBorrowAmount.value
-    .add(borrowValue.toBigNumber(pair.asset.decimals))
-    .muldiv('1000000000000000000', nextMaxBorrowMinimum)
-    .toFixed(16)
+  const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum).toFixed(16)
 
   const maxCollateral = balance.toFixed(pair.collateral.decimals)
 
@@ -66,29 +66,24 @@ export default function Borrow({ pair }: BorrowProps) {
     ? nextMaxBorrowPossible.toFixed(pair.asset.decimals)
     : pair.maxBorrowable.possible.string
 
-  const warning =
-    pair.oracleExchangeRate.isZero() ||
-    pair.userCollateralAmount.value.eq(BigNumber.from(0)) ||
-    pair.maxBorrowable.safe.value.lte(BigNumber.from(0)) ||
-    balance?.lt(collateralValue.toBigNumber(pair.collateral.decimals))
+  // console.log(
+  //   pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals)),
+  //   borrowValue && pair.maxBorrowable.safe.value.lte(BigNumber.from(0)),
+  //   borrowValue && nextMaxBorrowSafe.lte(BigNumber.from(0)),
+  //   collateralValue && balance.lt(collateralValue.toBigNumber(pair.collateral.decimals))
+  // )
 
-  const warningMessage = pair.oracleExchangeRate.isZero()
-    ? 'Oracle exchange rate has NOT been set'
-    : balance?.lt(collateralValue.toBigNumber(pair.collateral.decimals)) &&
-      `Please make sure your ${
-        useBentoCollateral ? 'BentoBox' : 'wallet'
-      } balance is sufficient to borrow and then try again.`
+  console.log(
+    'tx',
+    nextMaxBorrowSafe.toString(),
+    borrowValue.toBigNumber(pair.asset.decimals).toFixed(pair.asset.decimals)
+  )
 
   const transactionReview = [
     {
       label: 'Est. Borrow Limit',
       from: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string)))} ${pair.asset.symbol}`,
-      to: `${formattedNum(
-        Math.max(
-          0,
-          Number(nextMaxBorrowSafe.sub(borrowValue.toBigNumber(pair.asset.decimals)).toFixed(pair.asset.decimals))
-        )
-      )} ${pair.asset.symbol}`
+      to: `${formattedNum(Math.max(0, Number(nextMaxBorrowSafe.toFixed(pair.asset.decimals))))} ${pair.asset.symbol}`
     },
     {
       label: 'Est. Borrow Limit Used',
@@ -101,16 +96,30 @@ export default function Borrow({ pair }: BorrowProps) {
     }
   ]
 
-  const getWarningMessage = useCallback(() => {
+  const warning =
+    pair.currentExchangeRate.isZero() ||
+    (borrowValue && nextUserCollateralValue.eq(BigNumber.from(0))) ||
+    pair.maxBorrowable.safe.value.lt(BigNumber.from(0)) ||
+    (borrowValue && nextMaxBorrowPossible.lt(0)) ||
+    (borrowValue && nextMaxBorrowSafe.lt(BigNumber.from(0)))
+
+  function getWarningMessage() {
+    console.log('getWarningMessage', nextMaxBorrowSafe.toString(), nextMaxBorrowSafe.toFixed(pair.asset.decimals))
     if (pair.currentExchangeRate.isZero()) {
       return 'Oracle exchange rate has NOT been set'
-    } else if (pair.userCollateralAmount.value.eq(BigNumber.from(0))) {
+    } else if (borrowValue && nextUserCollateralValue.eq(BigNumber.from(0))) {
       return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
     } else if (pair.maxBorrowable.safe.value.lt(BigNumber.from(0))) {
       return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
+    } else if (borrowValue && nextMaxBorrowPossible.lt(0)) {
+      return 'Not enough liquidity in this pair.'
+    } else if (borrowValue && nextMaxBorrowSafe.lt(BigNumber.from(0))) {
+      return 'You will surpass your safe borrow limit and assets will be at a high risk of liquidation.'
     }
     return null
-  }, [pair])
+  }
+
+  // console.log('warning', warning, getWarningMessage())
 
   // Handlers
   async function onBorrow() {
@@ -212,7 +221,7 @@ export default function Borrow({ pair }: BorrowProps) {
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-          Max: {Math.max(0, maxBorrow)}
+          Max: {Math.max(0, Number(maxBorrow))}
         </div>
       </div>
 
@@ -244,9 +253,9 @@ export default function Borrow({ pair }: BorrowProps) {
         )}
       </div>
 
-      <Alert predicate={warning.length} message={getWarningMessage()} className="mb-4" />
+      <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
 
-      {!warning.length && Math.sign(Number(maxCollateral)) > 0 && Math.sign(Number(maxBorrow)) > 0 && (
+      {!warning && (Math.sign(Number(collateralValue)) > 0 || Math.sign(Number(borrowValue)) > 0) && (
         <>
           <div className="py-4 mb-4">
             <div className="text-xl text-high-emphesis">Transaction Review</div>
