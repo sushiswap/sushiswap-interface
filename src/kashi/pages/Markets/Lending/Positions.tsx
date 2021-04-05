@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
 
-function LendingPositions({ pairs }: any): JSX.Element | null {
+function Positions({ pairs }: any): JSX.Element | null {
   return (
     <div>
       <div className="pb-4 px-4 grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold text-gray-500">
@@ -46,4 +46,4 @@ function LendingPositions({ pairs }: any): JSX.Element | null {
   )
 }
 
-export default LendingPositions
+export default Positions

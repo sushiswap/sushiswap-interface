@@ -2,10 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
-import { GradientDot } from '../../components'
+import { GradientDot } from '../../../components'
 
 // TODO: Use table component
-function BorrowPositions({ pairs }: any): JSX.Element | null {
+function Positions({ pairs }: any): JSX.Element | null {
   return (
     <div>
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
@@ -77,4 +77,4 @@ function BorrowPositions({ pairs }: any): JSX.Element | null {
   )
 }
 
-export default BorrowPositions
+export default Positions

@@ -1,15 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { getTokenIcon } from '../../functions'
-import { formattedNum } from '../../../utils'
-import { useKashiPairs } from '../../context'
-import { Card, MarketHeader, Layout } from '../../components'
+import QuestionHelper from '../../../../components/QuestionHelper'
+import { getTokenIcon } from '../../../functions'
+import { formattedNum } from '../../../../utils'
+import { useKashiPairs } from '../../../context'
+import { Card, MarketHeader, Layout } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
-import BorrowPositions from './BorrowPositions'
+import BorrowPositions from './Positions'
 
 export default function BorrowMarkets(): JSX.Element {
   const pairs = useKashiPairs()

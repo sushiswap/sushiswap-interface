@@ -1,17 +1,17 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { BaseCard } from '../../../components/Card'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { getTokenIcon } from '../../functions'
-import { formattedPercent, formattedNum } from '../../../utils'
-import { useKashiPairs } from '../../context'
-import { Card, CardHeader, LendCardHeader, MarketHeader, Layout } from '../../components'
+import { BaseCard } from '../../../../components/Card'
+import QuestionHelper from '../../../../components/QuestionHelper'
+import { getTokenIcon } from '../../../functions'
+import { formattedPercent, formattedNum } from '../../../../utils'
+import { useKashiPairs } from '../../../context'
+import { Card, CardHeader, LendCardHeader, MarketHeader, Layout } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
-import LendingPositions from './LendingPositions'
+import Positions from './Positions'
 
 export default function LendingMarkets(): JSX.Element | null {
   const pairs = useKashiPairs()
@@ -44,7 +44,7 @@ export default function LendingMarkets(): JSX.Element | null {
       <Card className="bg-dark-900" header={<MarketHeader type="Lending" search={search} term={term} />}>
         {positions && positions.length > 0 && (
           <div className="pb-4">
-            <LendingPositions pairs={positions} />
+            <Positions pairs={positions} />
           </div>
         )}
         <div>
