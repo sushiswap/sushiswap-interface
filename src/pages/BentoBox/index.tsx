@@ -5,7 +5,7 @@ import { useActiveWeb3React } from 'hooks'
 import Web3Status from 'components/Web3Status'
 import useKashi from 'kashi/hooks/useKashi'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
-import ComingSoon from '../../assets/kashi/coming-soon.svg'
+import ComingSoon from '../../assets/kashi/coming-soon.png'
 import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
 import BentoBoxHero from '../../assets/kashi/bentobox-hero.png'
 function BentoBox(): JSX.Element {
