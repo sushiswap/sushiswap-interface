@@ -1,7 +1,7 @@
-const rewireReactHotLoader = require('react-app-rewire-hot-loader')
+// const rewireReactHotLoader = require('react-app-rewire-hot-loader')
+const rewirePostCss = require('react-app-rewire-postcss')
 
-/* config-overrides.js */
-module.exports = function override(config, env) {
-  config = rewireReactHotLoader(config, env)
+module.exports = function override (config, env) {
+  config = rewirePostCss(config, true)
   return config
 }

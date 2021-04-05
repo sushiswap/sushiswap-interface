@@ -359,6 +359,11 @@ export default function Header() {
               Stake
             </StyledNavLink>
           )}
+          {chainId === ChainId.MAINNET && (
+            <StyledNavLink id={`vesting-nav-link`} to={'/vesting'}>
+              Vesting
+            </StyledNavLink>
+          )}
           {chainId && (
             <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>
