@@ -126,15 +126,46 @@ export default function ClaimModal() {
     fetchLockup()
   }, [account])
 
+  // remove once treasury signature passed
+  const pendingTreasurySignature = true
+
   return (
     <PageWrapper>
       {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
       <>
-        <div className="flex flex-row space-x-20">
-          <img
-            src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
-            style={{ width: 'auto', height: '300px' }}
-          />
+        <div className="flex px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
+          <div className="space-y-10 hidden md:block">
+            <img
+              src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
+              style={{ width: 'auto', height: '300px' }}
+            />
+            <VoteCard>
+              <CardSection gap="sm">
+                <RowBetween>
+                  <TYPE.white fontWeight={500} color={theme.text1}>
+                    Community Approval
+                  </TYPE.white>
+                </RowBetween>
+                <div className="text-sm text-gray-400 pt-4" style={{ maxWidth: '300px', minHeight: '150px' }}>
+                  Vesting is executed within the guidelines selected by the community in{' '}
+                  <a
+                    target="_blank"
+                    href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
+                  >
+                    SIMP3
+                  </a>
+                  .
+                  <br />
+                  <br />
+                  Please refer to the{' '}
+                  <a href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794">
+                    forum discussion
+                  </a>{' '}
+                  for deliberations on additional points.
+                </div>
+              </CardSection>
+            </VoteCard>
+          </div>
           <div>
             <VoteCard>
               <CardSection gap="sm">
@@ -164,7 +195,8 @@ export default function ClaimModal() {
                     !isAddress(account ?? '') ||
                     claimConfirmed ||
                     !unclaimedAmount ||
-                    Number(unclaimedAmount?.toFixed(0)) <= 0
+                    Number(unclaimedAmount?.toFixed(0)) <= 0 ||
+                    pendingTreasurySignature
                   }
                   padding="16px 16px"
                   width="100%"
@@ -172,7 +204,12 @@ export default function ClaimModal() {
                   mt="0.5rem"
                   onClick={onClaim}
                 >
-                  {claimConfirmed ? 'Claimed' : 'Claim SUSHI'}
+                  {pendingTreasurySignature ? (
+                    <Dots>Pending Treasury Approval</Dots>
+                  ) : (
+                    <> {claimConfirmed ? 'Claimed' : 'Claim SUSHI'}</>
+                  )}
+
                   {attempting && <Loader stroke="white" style={{ marginLeft: '10px' }} />}
                 </ButtonPrimary>
               </CardSection>
@@ -218,7 +255,7 @@ export default function ClaimModal() {
                     </RowBetween>
                   </AutoColumn>
                 </LightCard>
-                <LightCard as={Link} to={`/bento/balances`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                <LightCard style={{ color: 'inherit', textDecoration: 'none' }}>
                   <AutoColumn gap="12px">
                     <RowBetween>
                       <AutoRow>
@@ -227,11 +264,11 @@ export default function ClaimModal() {
                         </AutoRow>
                         <AutoRow>
                           <TYPE.darkGray fontSize=".75rem">
-                            Accrue automatic yield through flash loans and SUSHI strategies
+                            (COMING SOON) Accrue automatic yield through flash loans and SUSHI strategies
                           </TYPE.darkGray>
                         </AutoRow>
                       </AutoRow>
-                      <ChevronRight />
+                      {/* <ChevronRight /> */}
                     </RowBetween>
                   </AutoColumn>
                 </LightCard>
