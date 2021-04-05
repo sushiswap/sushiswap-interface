@@ -17,12 +17,8 @@ function BorrowPositions({ pairs }: any): JSX.Element | null {
       </div>
       {pairs.map((pair: any) => {
         return (
-          <>
-            <Link
-              to={'/bento/kashi/pair/' + pair.address + '/borrow'}
-              className="block text-high-emphesis"
-              key={pair.address}
-            >
+          <div key={pair.address}>
+            <Link to={'/bento/kashi/pair/' + pair.address + '/borrow'} className="block text-high-emphesis">
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 mb-2 py-4 px-4 items-center align-center  text-sm font-semibold rounded bg-dark-800">
                 <div className="hidden space-x-2 md:flex">
                   <img
@@ -74,7 +70,7 @@ function BorrowPositions({ pairs }: any): JSX.Element | null {
           </div> */}
               </div>
             </Link>
-          </>
+          </div>
         )
       })}
     </div>

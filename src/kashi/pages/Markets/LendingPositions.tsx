@@ -13,12 +13,8 @@ function LendingPositions({ pairs }: any): JSX.Element | null {
       </div>
       {pairs.map((pair: any) => {
         return (
-          <>
-            <Link
-              to={'/bento/kashi/pair/' + pair.address + '/lend'}
-              className="block text-high-emphesis"
-              key={pair.address}
-            >
+          <div key={pair.address}>
+            <Link to={'/bento/kashi/pair/' + pair.address + '/lend'} className="block text-high-emphesis">
               <div className="mb-2 py-4 px-4 items-center align-center grid grid-cols-4 text-sm font-semibold rounded bg-dark-800">
                 <div className="hidden space-x-2 md:flex">
                   <img
@@ -43,7 +39,7 @@ function LendingPositions({ pairs }: any): JSX.Element | null {
                 <div className="text-right">{formattedPercent(pair.currentSupplyAPR.value)}</div>
               </div>
             </Link>
-          </>
+          </div>
         )
       })}
     </div>
