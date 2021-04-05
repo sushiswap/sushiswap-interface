@@ -1,31 +1,30 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { ThemeContext } from 'styled-components'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { getTokenIcon } from '../../functions'
-import { formattedNum } from '../../../utils'
-import { useKashiPairs } from '../../context'
-import { Card, BorrowCardHeader, MarketHeader, Layout } from '../../components'
+import QuestionHelper from '../../../../components/QuestionHelper'
+import { getTokenIcon } from '../../../functions'
+import { formattedNum } from '../../../../utils'
+import { useKashiPairs } from '../../../context'
+import { Card, MarketHeader, Layout } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
-import BorrowPositions from './BorrowPositions'
+import BorrowPositions from './Positions'
 
-export default function BorrowMarkets() {
-  const theme = useContext(ThemeContext)
+export default function BorrowMarkets(): JSX.Element {
   const pairs = useKashiPairs()
 
-  // setup search
-  const options = { keys: ['search'], threshold: 0.1 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
-    options
+    options: { keys: ['search'], threshold: 0.1 }
   })
-  const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
 
-  // Sorting Setup
-  const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
+  // TODO: Causing rule of hooks errors
+  const { items, requestSort, sortConfig } = useSortableData(result.map((a: { item: any }) => (a.item ? a.item : a)))
+
+  const positions = pairs.filter(function(pair: any) {
+    return pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)
+  })
 
   return (
     <Layout
@@ -41,9 +40,12 @@ export default function BorrowMarkets() {
       }
     >
       <Card className="h-full bg-dark-900" header={<MarketHeader type="Borrow" search={search} term={term} />}>
-        <div className="pb-4">
-          <BorrowPositions />
-        </div>
+        {positions && positions.length > 0 && (
+          <div className="pb-4">
+            <BorrowPositions pairs={positions} />
+          </div>
+        )}
+
         <div className="grid  gap-4 grid-flow-col grid-cols-3 md:grid-cols-5 lg:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
           <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
             <div>Markets</div>

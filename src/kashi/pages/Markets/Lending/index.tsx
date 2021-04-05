@@ -1,33 +1,32 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
-import { BaseCard } from '../../../components/Card'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { getTokenIcon } from '../../functions'
-import { formattedPercent, formattedNum } from '../../../utils'
-import { useKashiPairs } from '../../context'
-import { Card, CardHeader, LendCardHeader, MarketHeader, Layout } from '../../components'
+import { BaseCard } from '../../../../components/Card'
+import QuestionHelper from '../../../../components/QuestionHelper'
+import { getTokenIcon } from '../../../functions'
+import { formattedPercent, formattedNum } from '../../../../utils'
+import { useKashiPairs } from '../../../context'
+import { Card, CardHeader, LendCardHeader, MarketHeader, Layout } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
+import Positions from './Positions'
 
-import LendingPositions from './LendingPositions'
-
-export default function LendingMarkets() {
-  const theme = useContext(ThemeContext)
+export default function LendingMarkets(): JSX.Element | null {
   const pairs = useKashiPairs()
 
-  // setup search
-  const options = { keys: ['search'], threshold: 0.1 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
-    options
+    options: { keys: ['search'], threshold: 0.1 }
   })
-  const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
 
-  // Sorting Setup
-  const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
+  // TODO: Causing rule of hooks errors
+  const { items, requestSort, sortConfig } = useSortableData(result.map((a: { item: any }) => (a.item ? a.item : a)))
+
+  const positions = pairs.filter(function(pair: any) {
+    return pair.userAssetFraction.gt(0)
+  })
 
   return (
     <Layout
@@ -43,9 +42,11 @@ export default function LendingMarkets() {
       }
     >
       <Card className="bg-dark-900" header={<MarketHeader type="Lending" search={search} term={term} />}>
-        <div className="pb-4">
-          <LendingPositions />
-        </div>
+        {positions && positions.length > 0 && (
+          <div className="pb-4">
+            <Positions pairs={positions} />
+          </div>
+        )}
         <div>
           <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
             <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>

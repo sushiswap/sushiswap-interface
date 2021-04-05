@@ -1,23 +1,23 @@
 //import { backgrounds } from "polished";
 import { useState, useMemo } from 'react'
 
-const useSortableData = (items, config = null) => {
-  const [sortConfig, setSortConfig] = useState(config)
-
-  function getNested(theObject, path, separator) {
-    try {
-      separator = separator || '.'
-      return path
-        .replace('[', separator)
-        .replace(']', '')
-        .split(separator)
-        .reduce(function(obj, property) {
-          return obj[property]
-        }, theObject)
-    } catch (err) {
-      return undefined
-    }
+function getNested(theObject: any, path: string, separator?: string) {
+  try {
+    separator = separator || '.'
+    return path
+      .replace('[', separator)
+      .replace(']', '')
+      .split(separator)
+      .reduce(function(obj, property) {
+        return obj[property]
+      }, theObject)
+  } catch (err) {
+    return undefined
   }
+}
+
+const useSortableData = (items: any, config: any = null) => {
+  const [sortConfig, setSortConfig] = useState(config)
 
   const sortedItems = useMemo(() => {
     if (items && items.length > 0) {
@@ -35,9 +35,10 @@ const useSortableData = (items, config = null) => {
       }
       return sortableItems
     }
+    return []
   }, [items, sortConfig])
 
-  const requestSort = key => {
+  const requestSort = (key: any) => {
     let direction = 'ascending'
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending'
