@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
 
-function LendingPositions(pairs: any): JSX.Element | null {
-  return pairs && pairs.length > 0 ? (
-    <>
+function LendingPositions({ pairs }: any): JSX.Element | null {
+  return (
+    <div>
       <div className="pb-4 px-4 grid grid-cols-4 sm:grid-cols-4 text-sm font-semibold text-gray-500">
         <div className="hover:text-gray-400 col-span-2 sm:col-span-2">Your Positions</div>
         <div className="text-right pl-4 hover:text-gray-400">Lent</div>
@@ -46,8 +46,8 @@ function LendingPositions(pairs: any): JSX.Element | null {
           </>
         )
       })}
-    </>
-  ) : null
+    </div>
+  )
 }
 
 export default LendingPositions

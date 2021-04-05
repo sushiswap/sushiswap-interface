@@ -13,21 +13,18 @@ import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
 import LendingPositions from './LendingPositions'
 
-export default function LendingMarkets(): JSX.Element {
+export default function LendingMarkets(): JSX.Element | null {
   const pairs = useKashiPairs()
 
-  // setup search
-  const options = { keys: ['search'], threshold: 0.1 }
   const { result, search, term } = useFuse({
     data: pairs && pairs.length > 0 ? pairs : [],
-    options
+    options: { keys: ['search'], threshold: 0.1 }
   })
-  const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
 
-  // Sorting Setup
-  const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
+  // TODO: Causing rule of hooks errors
+  const { items, requestSort, sortConfig } = useSortableData(result.map((a: { item: any }) => (a.item ? a.item : a)))
 
-  const lendingPositions = pairs.filter(function(pair: any) {
+  const positions = pairs.filter(function(pair: any) {
     return pair.userAssetFraction.gt(0)
   })
 
@@ -45,9 +42,11 @@ export default function LendingMarkets(): JSX.Element {
       }
     >
       <Card className="bg-dark-900" header={<MarketHeader type="Lending" search={search} term={term} />}>
-        <div className="pb-4">
-          <LendingPositions pairs={lendingPositions} />
-        </div>
+        {positions && positions.length > 0 && (
+          <div className="pb-4">
+            <LendingPositions pairs={positions} />
+          </div>
+        )}
         <div>
           <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
             <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>

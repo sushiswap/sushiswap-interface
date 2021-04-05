@@ -6,8 +6,8 @@ import { GradientDot } from '../../components'
 
 // TODO: Use table component
 function BorrowPositions(pairs: any): JSX.Element | null {
-  return pairs && pairs.length > 0 ? (
-    <>
+  return (
+    <div>
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
         <div className="hover:text-gray-400 col-span-1 md:col-span-2">Your Positions</div>
         <div className="text-right hover:text-gray-400">Borrowing</div>
@@ -60,25 +60,25 @@ function BorrowPositions(pairs: any): JSX.Element | null {
                 </div>
                 <div className="hidden sm:block text-right">{formattedPercent(pair.currentInterestPerYear.string)}</div>
                 {/* <div className="sm:hidden text-right col-span-3">
-                <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
-                  <div className="flex items-center">
-                    <div className="text-gray-500 mr-2">Limit Used: </div>
-                    <div>{formattedPercent(pair.health.string)}</div>
-                    <GradientDot percent={pair.health.string} />
-                  </div>
-                  <div className="flex">
-                    <div className="text-gray-500 mr-2">Borrow APY: </div>
-                    <div>{formattedPercent(pair.currentInterestPerYear.string)}</div>
-                  </div>
-                </div>
-              </div> */}
+            <div className="flex justify-between px-2 py-2 mt-4 bg-gray-800 rounded-lg">
+              <div className="flex items-center">
+                <div className="text-gray-500 mr-2">Limit Used: </div>
+                <div>{formattedPercent(pair.health.string)}</div>
+                <GradientDot percent={pair.health.string} />
+              </div>
+              <div className="flex">
+                <div className="text-gray-500 mr-2">Borrow APY: </div>
+                <div>{formattedPercent(pair.currentInterestPerYear.string)}</div>
+              </div>
+            </div>
+          </div> */}
               </div>
             </Link>
           </>
         )
       })}
-    </>
-  ) : null
+    </div>
+  )
 }
 
 export default BorrowPositions
