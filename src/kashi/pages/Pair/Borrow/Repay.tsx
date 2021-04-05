@@ -16,7 +16,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from 'constants/Fraction'
 import { GradientDot } from '../../../components'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
-import { min, e10 } from 'kashi/functions/math'
+import { minimum, e10 } from 'kashi/functions/math'
 
 interface RepayProps {
   pair: any
@@ -52,9 +52,9 @@ export default function Repay({ pair }: RepayProps) {
     .sub(removeCollateralValue.toBigNumber(pair.collateral.decimals))
     .muldiv(e10(16).mul('75'), pair.currentExchangeRate)
 
-  const nextMaxBorrowMinimum = min(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
+  const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
   const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
-  const nextMaxBorrowPossible = min(nextMaxBorrowSafe, pair.totalAssetAmount.value)
+  const nextMaxBorrowPossible = minimum(nextMaxBorrowSafe, pair.totalAssetAmount.value)
 
   const nextHealth = pair.currentUserBorrowAmount.value
     .sub(repayAssetValue.toBigNumber(pair.asset.decimals))

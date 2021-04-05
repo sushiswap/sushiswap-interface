@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
+import { e10 } from './functions/math'
 
 // Functions that need accrue to be called
 export const ACTION_ADD_ASSET = 1
@@ -57,6 +58,9 @@ export const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(317097920000)
 export const INTEREST_ELASTICITY = BigNumber.from('28800000000000000000000000000000000000000') // Half or double in 28800 seconds (8 hours) if linear
 
 export const FACTOR_PRECISION = BigNumber.from('1000000000000000000')
+
+export const PROTOCOL_FEE = BigNumber.from("10000"); // 10%
+export const PROTOCOL_FEE_DIVISOR = BigNumber.from("100000");
 
 export const BENTOBOX_ADDRESS = '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966'
 

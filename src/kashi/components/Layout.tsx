@@ -82,11 +82,11 @@ export default function Layout({ left = undefined, children = undefined, right =
             {left}
           </div>
         )}
-        <div className={`col-span-12 ${right ? 'xl:col-span-6' : 'xl:col-span-9'}`} style={{ minHeight: '40rem' }}>
+        <div className={`col-span-12 ${right ? 'lg:col-span-8 xl:col-span-6' : 'xl:col-span-9'}`} style={{ minHeight: '40rem' }}>
           {children}
         </div>
         {right && (
-          <div className="col-span-12 xl:col-span-3" style={{ maxHeight: '40rem' }}>
+          <div className="col-span-12 lg:col-span-4 xl:col-span-3" style={{ maxHeight: '40rem' }}>
             {right}
           </div>
         )}

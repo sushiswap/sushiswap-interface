@@ -135,9 +135,9 @@ export default function LendingPair({
           <div>
             <div className="text-secondary text-lg">Lent</div>
             <div className="text-blue text-2xl">
-              {formattedNum(pair.userTotalSupply.string)} {pair.asset.symbol}
+              {formattedNum(pair.currentUserAssetAmount.string)} {pair.asset.symbol}
             </div>
-            <div className="text-high-emphesis text-lg">{formattedNum(pair.userTotalSupply.usd, true)}</div>
+            <div className="text-high-emphesis text-lg">{formattedNum(pair.currentUserAssetAmount.usd, true)}</div>
           </div>
           <div>
             <div className="text-secondary text-lg">Borrowed</div>
@@ -173,24 +173,22 @@ export default function LendingPair({
             <Withdraw pair={pair} />
           </TabPanel>
         </Tabs>
-        <div>
-          <pre>
-            {JSON.stringify(
-              pair,
-              (key, value) => {
-                if (value?.type === 'BigNumber') {
-                  return BigNumber.from(value.hex).toString()
-                }
-                if (key.startsWith('_')) {
-                  return undefined
-                }
-                return value
-              },
-              2
-            )}
-          </pre>
-        </div>
       </Card>
+        <pre>
+          {JSON.stringify(
+            pair,
+            (key, value) => {
+              if (value?.type === 'BigNumber') {
+                return BigNumber.from(value.hex).toString()
+              }
+              if (key.startsWith('_')) {
+                return undefined
+              }
+              return value
+            },
+            2
+          )}
+        </pre>
     </Layout>
   )
 }

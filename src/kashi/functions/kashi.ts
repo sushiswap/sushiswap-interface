@@ -8,16 +8,31 @@ import {
   MAXIMUM_TARGET_UTILIZATION,
   MINIMUM_INTEREST_PER_YEAR,
   MINIMUM_TARGET_UTILIZATION,
+  PROTOCOL_FEE,
+  PROTOCOL_FEE_DIVISOR,
   STARTING_INTEREST_PER_YEAR
 } from 'kashi/constants'
 import { e10, ZERO } from './math'
 
-export function accrue(pair: any, amount: BigNumber, includePrincipal: boolean) {
+export function accrue(pair: any, amount: BigNumber, includePrincipal = false) {
   return amount
     .mul(pair.accrueInfo.interestPerSecond)
     .mul(pair.elapsedSeconds)
     .div(e10(18))
     .add(includePrincipal ? amount : ZERO)
+}
+
+export function accrueTotalAssetWithFee(pair: any) {
+  const extraAmount = pair.totalBorrow.elastic
+    .mul(pair.accrueInfo.interestPerSecond)
+    .mul(pair.elapsedSeconds.add('3600')) // Project an hour into the future
+    .div(e10(18))  
+  const feeAmount = extraAmount.mul(PROTOCOL_FEE).div(PROTOCOL_FEE_DIVISOR); // % of interest paid goes to fee
+  const feeFraction = feeAmount.muldiv(pair.totalAsset.base, pair.currentAllAssets.value);
+  return {
+    elastic: pair.totalAsset.elastic,
+    base: pair.totalAsset.base.add(feeFraction)
+  }
 }
 
 export function interestAccrue(pair: any, interest: BigNumber) {

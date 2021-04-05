@@ -352,37 +352,15 @@ const useKashi = () => {
   // Type: Asset
   // Action: Remove
   const removeAsset = useCallback(
-    async (pairAddress: string, address: string, value: BigNumber, max = false) => {
-      const tokenAddress = isAddressString(address)
+    async (pairAddress: string, fraction: BigNumber) => {
       const pairAddressCheckSum = isAddressString(pairAddress)
       const kashiPairCloneContract = getContract(pairAddressCheckSum, KASHIPAIR_ABI, library!, account!)
-
-      const bentoTotalAsset = await bentoBoxContract?.totals(address)
-      const totalAsset = await kashiPairCloneContract?.totalAsset()
-      const totalBorrow = await kashiPairCloneContract?.totalBorrow()
-
-      let share = await bentoBoxContract?.toShare(tokenAddress, value, false)
-      if (max) {
-        const pairUserDetails = await kashiPairHelperContract?.pollPairs(account, [pairAddressCheckSum])
-        const userSupplyAmount = pairUserDetails[1][0].totalAssetAmount.gt(BigNumber.from(0))
-          ? pairUserDetails[1][0].userAssetAmount.add(
-              pairUserDetails[1][0].userAssetAmount
-                .mul(pairUserDetails[1][0].totalBorrowAmount)
-                .div(pairUserDetails[1][0].totalAssetAmount)
-            )
-          : BigNumber.from(0)
-        share = await bentoBoxContract?.toShare(tokenAddress, userSupplyAmount, true)
-      }
-      const borrowShares = await bentoBoxContract?.toShare(tokenAddress, totalBorrow.elastic, true)
-      const allShare = totalAsset.elastic.add(borrowShares)
-      const fraction = share.mul(totalAsset.base).div(allShare)
-      const removedPart = fraction.eq(BigNumber.from(0)) ? value : fraction
 
       try {
         const tx = await kashiPairCloneContract?.cook(
           [ACTION_REMOVE_ASSET],
           [0],
-          [ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [removedPart, account])]
+          [ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [fraction, account])]
         )
 
         return addTransaction(tx, { summary: 'Remove Asset' })

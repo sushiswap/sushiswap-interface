@@ -12,10 +12,10 @@ import { getOracle } from '../entities'
 import useInterval from 'hooks/useInterval'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import _ from 'lodash'
-import { e10, min, ZERO } from 'kashi/functions/math'
+import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
-import { toAmount } from 'kashi/functions/bentobox'
-import { accrue, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
+import { toAmount, toShare } from 'kashi/functions/bentobox'
+import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -194,6 +194,18 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 pair.asset
               )
 
+              pair.currentTotalAsset = accrueTotalAssetWithFee(pair)
+
+              pair.currentAllAssetShares = toShare(pair.asset, pair.currentAllAssets.value)
+
+              // Maximum amount of assets available for withdrawal
+              pair.maxAssetAvailable = minimum(
+                pair.totalAsset.elastic.muldiv(pair.currentAllAssets.value, pair.currentAllAssetShares),
+                toAmount(pair.asset, toElastic(pair.currentTotalAsset, pair.totalAsset.base.sub(1000), false))
+              )
+
+              pair.maxAssetAvailableFraction = pair.maxAssetAvailable.muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
+
               // The percentage of assets that is borrowed out right now
               pair.utilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value)
 
@@ -210,8 +222,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               )
 
               // The user's amount of assets (stable, doesn't accrue)
-              pair.userAssetAmount = easyAmount(
-                toAmount(pair.asset, toElastic(pair.totalAsset, pair.userAssetFraction, false)),
+              pair.currentUserAssetAmount = easyAmount(
+                pair.userAssetFraction.muldiv(pair.currentAllAssets.value, pair.totalAsset.base),
                 pair.asset
               )
 
@@ -227,7 +239,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 spot: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.spotExchangeRate),
                 stored: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
               }
-              pair.maxBorrowable.minimum = min(
+              pair.maxBorrowable.minimum = minimum(
                 pair.maxBorrowable.oracle,
                 pair.maxBorrowable.spot,
                 pair.maxBorrowable.stored
@@ -235,17 +247,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               pair.maxBorrowable.safe = pair.maxBorrowable.minimum
                 .muldiv('95', '100')
                 .sub(pair.currentUserBorrowAmount.value)
-              pair.maxBorrowable.possible = min(pair.maxBorrowable.safe, pair.totalAssetAmount.value)
+              pair.maxBorrowable.possible = minimum(pair.maxBorrowable.safe, pair.totalAssetAmount.value)
 
               pair.safeMaxRemovable = ZERO
 
               pair.health = pair.currentUserBorrowAmount.value.muldiv(e10(18), pair.maxBorrowable.minimum)
 
-              pair.userTotalSupply = pair.userAssetAmount.value.add(
-                pair.userAssetAmount.value.muldiv(pair.totalBorrow.elastic, pair.totalAssetAmount.value)
-              )
               pair.userNetWorth = getUSDValue(
-                pair.userAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
+                pair.currentUserAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
                 pair.asset
               )
               pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
@@ -253,7 +262,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
               pair.oracle = getOracle(pair, chain, tokens)
               pair.currentSupplyAPR = {
                 value: pair.currentSupplyAPR,
-                string: Fraction.from(pair.currentSupplyAPR, BigNumber.from(10).pow(BigNumber.from(16))).toString()
+                string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString()
               }
               pair.currentInterestPerYear = {
                 value: pair.currentInterestPerYear,
@@ -263,7 +272,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 value: pair.utilization,
                 string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString()
               }
-              pair.userTotalSupply = easyAmount(pair.userTotalSupply, pair.asset)
               pair.health = {
                 value: pair.health,
                 string: Fraction.from(pair.health, e10(16))

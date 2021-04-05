@@ -39,13 +39,13 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     : balance?.lt(value.toBigNumber(pair.asset.decimals)) &&
       `Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to deposit and then try again.`
 
-  const newUserTotalSupply = pair.userTotalSupply.value
+  const newUserAssetAmount = pair.currentUserAssetAmount.value
     .add(value.toBigNumber(pair.asset.decimals))
     .toFixed(pair.asset.decimals)
 
-  const transactionReview = `${formattedNum(pair.userTotalSupply.string)} ${
+  const transactionReview = `${formattedNum(pair.currentUserAssetAmount.string)} ${
     pair.asset.symbol
-  } → ${newUserTotalSupply} ${pair.asset.symbol}`
+  } → ${newUserAssetAmount} ${pair.asset.symbol}`
 
   // Handlers
   async function onClick() {

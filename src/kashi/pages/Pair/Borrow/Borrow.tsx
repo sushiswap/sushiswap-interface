@@ -16,7 +16,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from 'constants/Fraction'
 import { GradientDot } from '../../../components'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
-import { min, e10 } from 'kashi/functions/math'
+import { minimum, e10 } from 'kashi/functions/math'
 
 interface BorrowProps {
   pair: any
@@ -51,12 +51,12 @@ export default function Borrow({ pair }: BorrowProps) {
   const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
   const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
 
-  const nextMaxBorrowMinimum = min(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
+  const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
   const nextMaxBorrowSafe = nextMaxBorrowMinimum
     .muldiv('95', '100')
     .sub(pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals)))
 
-  const nextMaxBorrowPossible = min(nextMaxBorrowSafe, pair.totalAssetAmount.value)
+  const nextMaxBorrowPossible = minimum(nextMaxBorrowSafe, pair.totalAssetAmount.value)
 
   const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum).toFixed(16)
 
