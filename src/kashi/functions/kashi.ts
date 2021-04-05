@@ -1,9 +1,18 @@
-import { BigNumber, BigNumberish } from "@ethersproject/bignumber"
-import Fraction from "constants/Fraction"
-import { FACTOR_PRECISION, FULL_UTILIZATION_MINUS_MAX, INTEREST_ELASTICITY, MAXIMUM_INTEREST_PER_YEAR, MAXIMUM_TARGET_UTILIZATION, MINIMUM_INTEREST_PER_YEAR, MINIMUM_TARGET_UTILIZATION, STARTING_INTEREST_PER_YEAR } from "kashi/constants"
-import { e10, ZERO } from "./math"
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import Fraction from 'constants/Fraction'
+import {
+  FACTOR_PRECISION,
+  FULL_UTILIZATION_MINUS_MAX,
+  INTEREST_ELASTICITY,
+  MAXIMUM_INTEREST_PER_YEAR,
+  MAXIMUM_TARGET_UTILIZATION,
+  MINIMUM_INTEREST_PER_YEAR,
+  MINIMUM_TARGET_UTILIZATION,
+  STARTING_INTEREST_PER_YEAR
+} from 'kashi/constants'
+import { e10, ZERO } from './math'
 
-export function accrue(pair:any, amount: BigNumber, includePrincipal: boolean) {
+export function accrue(pair: any, amount: BigNumber, includePrincipal: boolean) {
   return amount
     .mul(pair.accrueInfo.interestPerSecond)
     .mul(pair.elapsedSeconds)
@@ -12,12 +21,19 @@ export function accrue(pair:any, amount: BigNumber, includePrincipal: boolean) {
 }
 
 export function interestAccrue(pair: any, interest: BigNumber) {
-  if (pair.totalBorrow.base.eq(0)) { return STARTING_INTEREST_PER_YEAR }
-  if (pair.elapsedSeconds.lte(0)) { return interest }
+  if (pair.totalBorrow.base.eq(0)) {
+    return STARTING_INTEREST_PER_YEAR
+  }
+  if (pair.elapsedSeconds.lte(0)) {
+    return interest
+  }
 
   let currentInterest = interest
   if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
+    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(
+      FACTOR_PRECISION,
+      MINIMUM_TARGET_UTILIZATION
+    )
     const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
     currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
 
@@ -26,8 +42,8 @@ export function interestAccrue(pair: any, interest: BigNumber) {
     }
   } else if (pair.utilization.gt(MAXIMUM_TARGET_UTILIZATION)) {
     const overFactor = pair.utilization
-    .sub(MAXIMUM_TARGET_UTILIZATION)
-    .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
+      .sub(MAXIMUM_TARGET_UTILIZATION)
+      .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
     const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor).mul(pair.elapsedSeconds))
     currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
     if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
@@ -38,14 +54,15 @@ export function interestAccrue(pair: any, interest: BigNumber) {
 }
 
 export function getUSDValue(amount: BigNumberish, token: any) {
-  return BigNumber.from(amount).mul(token.usd).div(e10(token.decimals))
+  return BigNumber.from(amount)
+    .mul(token.usd)
+    .div(e10(token.decimals))
 }
 
 export function easyAmount(amount: BigNumber, token: any) {
   return {
     value: amount,
-    string: Fraction.from(amount, e10(token.decimals)).toString(),
-    usd: Fraction.from(getUSDValue(amount, token), e10(6)).toString()
+    string: amount.toFixed(token.decimals),
+    usd: getUSDValue(amount, token).toFixed(6)
   }
 }
-  
