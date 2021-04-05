@@ -388,9 +388,9 @@ export default function Header() {
           </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
-          <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
+          {/* <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </ExtendedStyledMenuButton>
+          </ExtendedStyledMenuButton> */}
           <LanguageSwitch />
           <Menu />
         </HeaderElementWrap>
