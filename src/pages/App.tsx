@@ -38,6 +38,7 @@ import SushiBar from './SushiBar'
 // Additional Tools
 import Tools from './Tools'
 import Saave from './Saave'
+import Vesting from './Vesting'
 
 import ComingSoonModal from '../components/ComingSoonModal'
 
@@ -98,6 +99,7 @@ function App() {
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
+              <Route exact strict path="/vesting" component={Vesting} />
               {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
