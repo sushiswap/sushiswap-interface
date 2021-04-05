@@ -11,11 +11,9 @@ import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
-
 import LendingPositions from './LendingPositions'
 
-export default function LendingMarkets() {
-  const theme = useContext(ThemeContext)
+export default function LendingMarkets(): JSX.Element {
   const pairs = useKashiPairs()
 
   // setup search
@@ -28,6 +26,10 @@ export default function LendingMarkets() {
 
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
+
+  const lendingPositions = pairs.filter(function(pair: any) {
+    return pair.userAssetFraction.gt(0)
+  })
 
   return (
     <Layout
@@ -44,7 +46,7 @@ export default function LendingMarkets() {
     >
       <Card className="bg-dark-900" header={<MarketHeader type="Lending" search={search} term={term} />}>
         <div className="pb-4">
-          <LendingPositions />
+          <LendingPositions pairs={lendingPositions} />
         </div>
         <div>
           <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
