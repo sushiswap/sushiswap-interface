@@ -15,7 +15,7 @@ function MarketHeader({ type = 'Borrow', children, search, term }: any) {
   return (
     <Header>
       <div className="flex flex-col md:flex-row items-center justify-between w-full">
-        <div className="font-semibold text-3xl text-high-emphesis">{type}</div>
+        <div className=" text-3xl text-high-emphesis">{type}</div>
         <div className="flex justify-end w-full py-4 md:py-0">
           <div className="relative w-full max-w-md">
             <input
@@ -33,8 +33,8 @@ function MarketHeader({ type = 'Borrow', children, search, term }: any) {
           </div>
         </div>
         <div className="flex flex-col w-full md:hidden items-center">
-          <div className="text-2xl font-semibold text-high-emphesis">{formattedNum(netWorth, true)}</div>
-          <div className="text-sm font-semibold text-secondary">Net Worth</div>
+          <div className="text-2xl  text-high-emphesis">{formattedNum(netWorth, true)}</div>
+          <div className="text-sm  text-secondary">Net Worth</div>
         </div>
       </div>
     </Header>

@@ -18,10 +18,10 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                     <span className="truncate flex items-center">
                       <img src={getTokenIcon(selectedToken.address)} className="w-10 h-10 rounded-sm mr-4" />
                       <span className="text-lg">{selectedToken.symbol}&nbsp;</span>
-                      <span className="text-lg text-gray-400">{selectedToken.name}</span>
+                      <span className="text-lg text-secondary">{selectedToken.name}</span>
                     </span>
                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                      <svg className="h-5 w-5 text-secondary" viewBox="0 0 20 20" fill="none" stroke="currentColor">
                         <path
                           d="M7 7l3-3 3 3m0 6l-3 3-3-3"
                           strokeWidth="1.5"
@@ -47,11 +47,11 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                     {tokens.map((token: any) => (
                       <Listbox.Option key={token.address} value={token}>
                         {({ selected, active }) => (
-                          <div className={`${ active ? 'bg-dark-blue' : ''} cursor-pointer relative p-3`}>
+                          <div className={`${active ? 'bg-dark-blue' : ''} cursor-pointer relative p-3`}>
                             <span className="flex truncate items-center">
                               <img src={getTokenIcon(token.address)} className="w-10 h-10 rounded-sm mr-4" />
                               <span className="text-lg">{token.symbol}&nbsp;</span>
-                              <span className="text-lg text-gray-400">{token.name}</span>
+                              <span className="text-lg text-secondary">{token.name}</span>
                             </span>
                           </div>
                         )}

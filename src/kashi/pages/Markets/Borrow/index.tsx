@@ -46,8 +46,8 @@ export default function BorrowMarkets(): JSX.Element {
           </div>
         )}
 
-        <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
-          <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
+        <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-gray-500">
+          <div className="flex items-center cursor-pointer hover:text-secondary" onClick={() => requestSort('symbol')}>
             <div>Markets</div>
             {sortConfig &&
               sortConfig.key === 'symbol' &&
@@ -55,7 +55,7 @@ export default function BorrowMarkets(): JSX.Element {
                 (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
           </div>
           <div
-            className="hidden md:block hover:text-gray-400 cursor-pointer"
+            className="hidden md:block hover:text-secondary cursor-pointer"
             onClick={() => requestSort('collateral.symbol')}
           >
             <div className="flex items-center">
@@ -67,7 +67,7 @@ export default function BorrowMarkets(): JSX.Element {
             </div>
           </div>
           <div
-            className="hidden md:block hover:text-gray-400 cursor-pointer"
+            className="hidden md:block hover:text-secondary cursor-pointer"
             onClick={() => requestSort('asset.symbol')}
           >
             <div className="flex items-center">
@@ -79,7 +79,7 @@ export default function BorrowMarkets(): JSX.Element {
             </div>
           </div>
           <div
-            className="hidden lg:block hover:text-gray-400 cursor-pointer"
+            className="hidden lg:block hover:text-secondary cursor-pointer"
             onClick={() => requestSort('oracle.name')}
           >
             <div className="flex items-center">
@@ -92,7 +92,10 @@ export default function BorrowMarkets(): JSX.Element {
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
           </div>
-          <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('currentBorrowAmount.string')}>
+          <div
+            className="hover:text-secondary cursor-pointer"
+            onClick={() => requestSort('currentBorrowAmount.string')}
+          >
             <div className="flex items-center justify-center sm:justify-end">
               <div>Borrowed</div>
               {sortConfig &&
@@ -101,7 +104,7 @@ export default function BorrowMarkets(): JSX.Element {
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
           </div>
-          <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('totalAssetAmount.usd')}>
+          <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('totalAssetAmount.usd')}>
             <div className="flex items-center justify-end">
               <div>Available</div>
               {sortConfig &&
@@ -111,7 +114,7 @@ export default function BorrowMarkets(): JSX.Element {
             </div>
           </div>
           <div
-            className="hover:text-gray-400 cursor-pointer"
+            className="hover:text-secondary cursor-pointer"
             onClick={() => requestSort('currentInterestPerYear.string')}
           >
             <div className="flex items-center justify-end">
@@ -133,7 +136,7 @@ export default function BorrowMarkets(): JSX.Element {
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
                     className="block text-high-emphesis"
                   >
-                    <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
+                    <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center">
                         <div className="hidden space-x-2 md:flex">
                           <img

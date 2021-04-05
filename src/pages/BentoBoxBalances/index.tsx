@@ -52,7 +52,7 @@ export default function BentoBalances(): JSX.Element {
           <CardHeader className="flex justify-between items-center bg-dark-800">
             <div className="md:hidden">
               <div className="flex float-right items-center">
-                <div className="font-semibold">My BentoBox</div>
+                <div className="">My BentoBox</div>
               </div>
             </div>
             <div className="flex w-full justify-between">
@@ -75,7 +75,7 @@ export default function BentoBalances(): JSX.Element {
         }
       >
         <div className="grid gap-4 grid-flow-row auto-rows-max">
-          <div className="px-4 grid grid-cols-3 text-sm font-semibold text-gray-500 select-none">
+          <div className="px-4 grid grid-cols-3 text-sm  text-gray-500 select-none">
             <div>Token</div>
             <div className="text-right">Wallet</div>
             <div className="text-right">BentoBox</div>
@@ -100,7 +100,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
   return (
     <Paper className="bg-dark-800">
       <div
-        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm font-semibold"
+        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm "
         onClick={() => setExpand(!expand)}
       >
         <div className="flex items-center">
@@ -140,7 +140,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
       {expand && (
         <div className="p-2 space-y-4 sm:p-4 sm:flex sm:space-x-2 sm:space-y-0">
           <div className="w-full text-center">
-            {/* <div className="pb-2 text-base font-semibold text-gray-400">Deposit to Bento</div> */}
+            {/* <div className="pb-2 text-base  text-secondary">Deposit to Bento</div> */}
             <TokenDepositPanel
               id={balance.address}
               tokenAddress={balance.address}
@@ -149,7 +149,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
             />
           </div>
           <div className="w-full text-center">
-            {/* <div className="pb-2 text-base font-semibold text-gray-400">Withdraw to Wallet</div> */}
+            {/* <div className="pb-2 text-base  text-secondary">Withdraw to Wallet</div> */}
             <TokenWithdrawPanel
               id={balance.address}
               tokenAddress={balance.address}

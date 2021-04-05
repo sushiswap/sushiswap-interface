@@ -8,19 +8,19 @@ import { GradientDot } from '../../../components'
 function Positions({ pairs }: any): JSX.Element | null {
   return (
     <div>
-      <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
-        <div className="hover:text-gray-400 col-span-1 md:col-span-2">Your Positions</div>
-        <div className="text-right hover:text-gray-400">Borrowing</div>
-        <div className="text-right hover:text-gray-400">Collateral</div>
-        <div className="hidden text-right md:block hover:text-gray-400">Limit Used</div>
-        <div className="hidden text-right sm:block hover:text-gray-400">APR</div>
+      <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm  text-gray-500">
+        <div className="hover:text-secondary col-span-1 md:col-span-2">Your Positions</div>
+        <div className="text-right hover:text-secondary">Borrowing</div>
+        <div className="text-right hover:text-secondary">Collateral</div>
+        <div className="hidden text-right md:block hover:text-secondary">Limit Used</div>
+        <div className="hidden text-right sm:block hover:text-secondary">APR</div>
       </div>
       <div className="flex-col space-y-2">
         {pairs.map((pair: any) => {
           return (
             <div key={pair.address}>
               <Link to={'/bento/kashi/pair/' + pair.address + '/borrow'} className="block text-high-emphesis">
-                <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 py-4 px-4 items-center align-center  text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
+                <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                   <div className="hidden space-x-2 md:flex">
                     <img
                       src={getTokenIcon(pair.collateral.address)}
