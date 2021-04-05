@@ -2,15 +2,13 @@ import React, { useState } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
-import useTheme from 'hooks/useTheme'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { LendCardHeader } from '../../../components'
-import { AutoRow, RowBetween } from 'components/Row'
 import { formattedNum, formattedPercent } from 'utils'
 import { Card, Layout, Paper } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, BackButton } from '../../../components'
+import { GradientDot } from '../../../components'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { BigNumber } from '@ethersproject/bignumber'
 import Deposit from './Deposit'
@@ -43,31 +41,41 @@ export default function LendingPair({
       }
       right={
         <Card className="h-full bg-dark-900">
-          <RowBetween>
-            <div className="text-lg text-secondary">Available</div>
-            <div className="text-lg text-high-emphesis">
-              {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
+          <div className="flex-col space-y-2">
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">Available</div>
+              <div className="text-lg text-high-emphesis">
+                {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
+              </div>
             </div>
-          </RowBetween>
-          <RowBetween>
-            <div className="text-lg text-secondary">Borrowed</div>
-            <div className="flex items-center">
-              <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
-              <GradientDot percent={pair.utilization.string} desc={false} />
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">Borrowed</div>
+              <div className="flex items-center">
+                <div className="text-lg text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
+                <GradientDot percent={pair.utilization.string} desc={false} />
+              </div>
             </div>
-          </RowBetween>
-          <RowBetween>
-            <div className="text-lg text-secondary">Lending APR</div>
-            <div className="flex items-center">
-              <div className="text-lg text-high-emphesis">-</div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">Lending APR</div>
+              <div className="flex items-center">
+                <div className="text-lg text-high-emphesis">-</div>
+              </div>
             </div>
-          </RowBetween>
-          <RowBetween>
-            <div className="text-lg text-secondary">Market Supply</div>
-            <div className="flex items-center">
-              <div className="text-lg text-high-emphesis">-</div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">Market Supply</div>
+              <div className="flex items-center">
+                <div className="text-lg text-high-emphesis">-</div>
+              </div>
             </div>
-          </RowBetween>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{pair.asset.symbol} Strategy</div>
+              <div className="text-lg text-high-emphesis">Inactive</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{pair.collateral.symbol} Strategy</div>
+              <div className="text-lg text-high-emphesis">Inactive</div>
+            </div>
+          </div>
         </Card>
       }
     >
@@ -119,12 +127,12 @@ export default function LendingPair({
               <div className="flex justify-between items-center">
                 <div>
                   <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.symbol}</div>
-                  <AutoRow>
+                  <div className="flex items-center">
                     <div className="text-sm text-secondary mr-1">Collateral:</div>
                     <div className="text-sm text-high-emphesis mr-2">{pair && pair.collateral.symbol}</div>
                     <div className="text-sm text-secondary mr-1">Oracle:</div>
                     <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
-                  </AutoRow>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,21 +182,21 @@ export default function LendingPair({
           </TabPanel>
         </Tabs>
       </Card>
-        <pre>
-          {JSON.stringify(
-            pair,
-            (key, value) => {
-              if (value?.type === 'BigNumber') {
-                return BigNumber.from(value.hex).toString()
-              }
-              if (key.startsWith('_')) {
-                return undefined
-              }
-              return value
-            },
-            2
-          )}
-        </pre>
+      <pre>
+        {JSON.stringify(
+          pair,
+          (key, value) => {
+            if (value?.type === 'BigNumber') {
+              return BigNumber.from(value.hex).toString()
+            }
+            if (key.startsWith('_')) {
+              return undefined
+            }
+            return value
+          },
+          2
+        )}
+      </pre>
     </Layout>
   )
 }
