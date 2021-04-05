@@ -66,19 +66,6 @@ export default function Borrow({ pair }: BorrowProps) {
     ? nextMaxBorrowPossible.toFixed(pair.asset.decimals)
     : pair.maxBorrowable.possible.string
 
-  // console.log(
-  //   pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals)),
-  //   borrowValue && pair.maxBorrowable.safe.value.lte(BigNumber.from(0)),
-  //   borrowValue && nextMaxBorrowSafe.lte(BigNumber.from(0)),
-  //   collateralValue && balance.lt(collateralValue.toBigNumber(pair.collateral.decimals))
-  // )
-
-  console.log(
-    'tx',
-    nextMaxBorrowSafe.toString(),
-    borrowValue.toBigNumber(pair.asset.decimals).toFixed(pair.asset.decimals)
-  )
-
   const transactionReview = [
     {
       label: 'Est. Borrow Limit',
@@ -118,8 +105,6 @@ export default function Borrow({ pair }: BorrowProps) {
     }
     return null
   }
-
-  // console.log('warning', warning, getWarningMessage())
 
   // Handlers
   async function onBorrow() {

@@ -180,7 +180,9 @@ export default function BorrowPair({
               <TabPanel>
                 <Borrow pair={pair} />
               </TabPanel>
-              <TabPanel>{/* <Repay pair={pair} action="Repay" direction="From" label="Max" /> */}</TabPanel>
+              <TabPanel>
+                <Repay pair={pair} />
+              </TabPanel>
             </Tabs>
           </>
         )}
