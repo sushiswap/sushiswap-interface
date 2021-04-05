@@ -4,7 +4,7 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
 import { BalanceProps } from './useTokenBalance'
 import { isAddress } from '../utils'
-import { WETH } from '../kashi/constants'
+import { WETH } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
 
 const useBentoBox = () => {
@@ -20,7 +20,7 @@ const useBentoBox = () => {
       if (amount?.value && chainId) {
         try {
           //ethers.constants.HashZero
-          if (tokenAddressChecksum === WETH[chainId]) {
+          if (tokenAddressChecksum === WETH[chainId].address) {
             const tx = await bentoBoxContract?.deposit(
               ethers.constants.AddressZero,
               account,
@@ -51,7 +51,9 @@ const useBentoBox = () => {
       if (amount?.value && chainId) {
         try {
           tokenAddressChecksum =
-            tokenAddressChecksum === WETH[chainId] ? '0x0000000000000000000000000000000000000000' : tokenAddressChecksum
+            tokenAddressChecksum === WETH[chainId].address
+              ? '0x0000000000000000000000000000000000000000'
+              : tokenAddressChecksum
           const tx = await bentoBoxContract?.withdraw(tokenAddressChecksum, account, account, amount?.value, 0)
           return addTransaction(tx, { summary: 'Withdraw from Bentobox' })
         } catch (e) {

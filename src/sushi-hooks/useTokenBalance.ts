@@ -6,7 +6,7 @@ import ERC20_ABI from 'constants/abis/erc20.json'
 import { useContract } from './useContract'
 import { isAddress } from 'utils'
 import useTransactionStatus from './useTransactionStatus'
-import { WETH } from 'kashi/constants'
+import { WETH } from '@sushiswap/sdk'
 
 export interface BalanceProps {
   value: BigNumber
@@ -26,7 +26,7 @@ const useTokenBalance = (tokenAddress: string) => {
     try {
       //console.log('token_contract:', contract)
 
-      if (account && chainId && contract?.address == WETH[chainId]) {
+      if (account && chainId && contract?.address === WETH[chainId].address) {
         const ethBalance = await library?.getBalance(account)
         return { value: BigNumber.from(ethBalance), decimals: 18 }
       }
