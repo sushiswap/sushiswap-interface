@@ -146,10 +146,11 @@ export default function ClaimModal() {
                     Community Approval
                   </TYPE.white>
                 </RowBetween>
-                <div className="text-sm text-gray-400 pt-4" style={{ maxWidth: '300px', minHeight: '150px' }}>
+                <div className="text-sm text-gray-400 pt-2" style={{ maxWidth: '300px', minHeight: '150px' }}>
                   Vesting is executed within the guidelines selected by the community in{' '}
                   <a
                     target="_blank"
+                    rel="noreferrer noopener"
                     href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
                   >
                     SIMP3
@@ -158,10 +159,20 @@ export default function ClaimModal() {
                   <br />
                   <br />
                   Please refer to the{' '}
-                  <a href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794">
+                  <a
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794"
+                  >
                     forum discussion
                   </a>{' '}
                   for deliberations on additional points.
+                  <br />
+                  <br />
+                  Additional records and weekly merkle updates can be found on{' '}
+                  <a target="_blank" rel="noreferrer noopener" href="https://github.com/sushiswap/sushi-vesting">
+                    Github
+                  </a>
                 </div>
               </CardSection>
             </VoteCard>
