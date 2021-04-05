@@ -1,33 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import styled, { ThemeContext } from 'styled-components'
-import { BaseCard } from 'components/Card'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
-import { useKashiPairs } from '../../context'
 import { GradientDot } from '../../components'
 
-const StyledBaseCard = styled(BaseCard)`
-  border: none;
-  background: ${({ theme }) => theme.baseCard};
-  position: relative;
-  overflow: hidden;
-  border-radius: 0 0 15px 15px;
-`
-
 // TODO: Use table component
-const BorrowPositions = () => {
-  const theme = useContext(ThemeContext)
-
-  const pairs = useKashiPairs()
-
-  const borrowPositions = pairs.filter(function(pair: any) {
-    return pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)
-  })
-
+const BorrowPositions = (pairs: any) => {
   return (
     <>
-      {borrowPositions && borrowPositions.length > 0 ? (
+      {pairs && pairs.length > 0 ? (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
           <div className="hover:text-gray-400 col-span-1 md:col-span-2">Your Positions</div>
           <div className="text-right hover:text-gray-400">Borrowing</div>
@@ -36,9 +17,9 @@ const BorrowPositions = () => {
           <div className="hidden text-right sm:block hover:text-gray-400">APR</div>
         </div>
       ) : null}
-      {borrowPositions &&
-        borrowPositions.length > 0 &&
-        borrowPositions.map((pair: any) => {
+      {pairs &&
+        pairs.length > 0 &&
+        pairs.map((pair: any) => {
           return (
             <>
               <Link

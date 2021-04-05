@@ -27,6 +27,10 @@ export default function BorrowMarkets() {
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
 
+  const positions = pairs.filter(function(pair: any) {
+    return pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)
+  })
+
   return (
     <Layout
       left={
@@ -42,7 +46,7 @@ export default function BorrowMarkets() {
     >
       <Card className="h-full bg-dark-900" header={<MarketHeader type="Borrow" search={search} term={term} />}>
         <div className="pb-4">
-          <BorrowPositions />
+          <BorrowPositions pairs={positions} />
         </div>
         <div className="grid  gap-4 grid-flow-col grid-cols-3 md:grid-cols-5 lg:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
           <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
