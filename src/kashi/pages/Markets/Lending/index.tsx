@@ -138,7 +138,7 @@ export default function LendingMarkets(): JSX.Element | null {
                       to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
                       className="block text-high-emphesis"
                     >
-                      <div className="grid grid-flow-col gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-blue">
+                      <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-blue">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center">
                           <div className="hidden space-x-2 md:flex">
                             <img
