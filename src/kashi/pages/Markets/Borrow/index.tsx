@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import QuestionHelper from '../../../../components/QuestionHelper'
 import { getTokenIcon } from '../../../functions'
-import { formattedNum } from '../../../../utils'
+import { formattedNum, formattedPercent } from '../../../../utils'
 import { useKashiPairs } from '../../../context'
 import { Card, MarketHeader, Layout } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
@@ -46,7 +46,7 @@ export default function BorrowMarkets(): JSX.Element {
           </div>
         )}
 
-        <div className="grid  gap-4 grid-flow-col grid-cols-3 md:grid-cols-5 lg:grid-cols-6 pb-4 px-4 text-sm font-semibold text-gray-500">
+        <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm font-semibold text-gray-500">
           <div className="flex items-center cursor-pointer hover:text-gray-400" onClick={() => requestSort('symbol')}>
             <div>Markets</div>
             {sortConfig &&
@@ -92,26 +92,32 @@ export default function BorrowMarkets(): JSX.Element {
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
           </div>
-          <div
-            className="hover:text-gray-400 cursor-pointer"
-            onClick={() => requestSort('details.total.borrow.string')}
-          >
+          <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('currentBorrowAmount.string')}>
             <div className="flex items-center justify-center sm:justify-end">
               <div>Borrowed</div>
               {sortConfig &&
-                sortConfig.key === 'details.total.borrow.string' &&
+                sortConfig.key === 'currentBorrowAmount.string' &&
+                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                  (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+            </div>
+          </div>
+          <div className="hover:text-gray-400 cursor-pointer" onClick={() => requestSort('totalAssetAmount.usd')}>
+            <div className="flex items-center justify-end">
+              <div>Available</div>
+              {sortConfig &&
+                sortConfig.key === 'totalAssetAmount.usd' &&
                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
           </div>
           <div
             className="hover:text-gray-400 cursor-pointer"
-            onClick={() => requestSort('details.total.asset.usdString')}
+            onClick={() => requestSort('currentInterestPerYear.string')}
           >
             <div className="flex items-center justify-end">
-              <div>Available</div>
+              <div>APR</div>
               {sortConfig &&
-                sortConfig.key === 'details.total.asset.usdString' &&
+                sortConfig.key === 'currentInterestPerYear.string' &&
                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                   (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
             </div>
@@ -127,7 +133,7 @@ export default function BorrowMarkets(): JSX.Element {
                     to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
                     className="block text-high-emphesis"
                   >
-                    <div className="grid gap-4 grid-cols-3 md:grid-cols-5 lg:grid-cols-6 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
+                    <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm font-semibold rounded bg-dark-800 hover:bg-dark-pink">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center">
                         <div className="hidden space-x-2 md:flex">
                           <img
@@ -164,6 +170,7 @@ export default function BorrowMarkets(): JSX.Element {
                         </div>
                         <div className="text-gray-500">{formattedNum(pair.totalAssetAmount.usd, true)}</div>
                       </div>
+                      <div className="text-right">{formattedPercent(pair.currentInterestPerYear.string)}</div>
                     </div>
                   </Link>
                 </div>
