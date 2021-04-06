@@ -958,7 +958,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
       fromDecimals: 18,
       toDecimals: 8
     },
-    '0x87Ea38c9F24264Ec1Fff41B04ec94a97Caf99941': {
+    '	0x87Ea38c9F24264Ec1Fff41B04ec94a97Caf99941': {
       from: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
       to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
       decimals: 18,

@@ -9,7 +9,7 @@ import BAT from '../../assets/kashi/tokens/bat-square.jpg'
 // import BNB from '../../assets/kashi/tokens/bnb-square.jpg'
 import BUSD from '../../assets/kashi/tokens/busd-square.jpg'
 // import BCH from '../../assets/kashi/tokens/bch-square.jpg'
-// import BTC from '../../assets/kashi/tokens/btc-square.jpg'
+import BTC from '../../assets/kashi/tokens/btc-square.png'
 import COMP from '../../assets/kashi/tokens/comp-square.jpg'
 import COVER from '../../assets/kashi/tokens/cover-square.jpg'
 import CREAM from '../../assets/kashi/tokens/cream-square.jpg'
@@ -24,7 +24,7 @@ import LINK from '../../assets/kashi/tokens/link-square.jpg'
 import MATIC from '../../assets/kashi/tokens/matic-square.jpg'
 // import MDX from '../../assets/kashi/tokens/mdx-square.jpg'
 import SAI from '../../assets/kashi/tokens/sai-square.png'
-// import SNX from '../../assets/kashi/tokens/snx-square.png'
+import SNX from '../../assets/kashi/tokens/snx-square.png'
 import SUSHI from '../../assets/kashi/tokens/sushi-square.jpg'
 import SXP from '../../assets/kashi/tokens/sxp-square.jpg'
 import UNI from '../../assets/kashi/tokens/uni-square.jpg'
@@ -83,7 +83,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47').toLowerCase()]: UNKNOWN, // ADA
     [String('0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56').toLowerCase()]: BUSD,
     [String('0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18').toLowerCase()]: BAND,
-    [String('0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf').toLowerCase()]: UNKNOWN, // BTC
+    [String('0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf').toLowerCase()]: BTC, // BTC
     [String('0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c').toLowerCase()]: UNKNOWN, // BCH
     [String('0x55d398326f99059fF775485246999027B3197955').toLowerCase()]: UNKNOWN, // BUSDT
     [String('0xd4CB328A82bDf5f03eB737f37Fa6B370aef3e888').toLowerCase()]: CREAM,
@@ -104,26 +104,26 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
   },
   [ChainId.MATIC]: {
     [String('0xD6DF932A45C0f255f85145f286eA0b292B21C90B').toLowerCase()]: AAVE,
-    [String('0x3D417087f8Fcacf77feb6cF40DcBc764bF2f033a').toLowerCase()]: UNKNOWN, // BTC
+    [String('0x3D417087f8Fcacf77feb6cF40DcBc764bF2f033a').toLowerCase()]: BTC, // BTC
     [String('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063').toLowerCase()]: DAI,
     [String('0x1E8954b2b29CC5ae4952044cF71645E61309bfCb').toLowerCase()]: ETH,
     [String('0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39').toLowerCase()]: LINK,
     [String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase()]: MATIC,
     [String('0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174').toLowerCase()]: USDC,
     [String('0xc2132D05D31c914a87C6611C10748AEb04B58e8F').toLowerCase()]: USDT,
-    [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: UNKNOWN // WBTC
+    [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: BTC // WBTC
   },
   [ChainId.HECO]: {
     [String('0x202b4936fE1a82A4965220860aE46d7d3939Bb25').toLowerCase()]: AAVE,
     [String('0x64FF637fB478863B7468bc97D30a5bF3A428a1fD').toLowerCase()]: ETH,
     [String('0xeF3CEBD77E0C52cb6f60875d9306397B5Caca375').toLowerCase()]: UNKNOWN, // BCH
-    [String('0x66a79D23E58475D2738179Ca52cd0b41d73f0BEa').toLowerCase()]: UNKNOWN, // BTC
+    [String('0x66a79D23E58475D2738179Ca52cd0b41d73f0BEa').toLowerCase()]: BTC, // BTC
     [String('0xA2c49cEe16a5E5bDEFDe931107dc1fae9f7773E3').toLowerCase()]: UNKNOWN, // DOT
     [String('0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F').toLowerCase()]: UNKNOWN, // HT
     [String('0x0298c2b32eaE4da002a15f36fdf7615BEa3DA047').toLowerCase()]: UNKNOWN, // HUSD
     [String('0xecb56cf772B5c9A6907FB7d32387Da2fCbfB63b4').toLowerCase()]: UNKNOWN, // LTC
     [String('0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c').toLowerCase()]: UNKNOWN, // MDX
-    [String('0x777850281719d5a96C29812ab72f822E0e09F3Da').toLowerCase()]: UNKNOWN, // SNX
+    [String('0x777850281719d5a96C29812ab72f822E0e09F3Da').toLowerCase()]: SNX, // SNX
     [String('0x22C54cE8321A4015740eE1109D9cBc25815C46E6').toLowerCase()]: UNI,
     [String('0xa71EdC38d189767582C38A3145b5873052c3e47a').toLowerCase()]: USDT
   }
