@@ -133,7 +133,7 @@ export default function ClaimModal() {
     <PageWrapper>
       {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
       <>
-        <div className="flex px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
+        <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
           <div className="space-y-10 hidden md:block">
             <img
               src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
