@@ -216,7 +216,7 @@ export default function ClaimModal() {
                   onClick={onClaim}
                 >
                   {pendingTreasurySignature ? (
-                    <Dots>Pending Treasury Approval</Dots>
+                    <Dots>Pending Treasury Transfer</Dots>
                   ) : (
                     <> {claimConfirmed ? 'Claimed' : 'Claim SUSHI'}</>
                   )}
