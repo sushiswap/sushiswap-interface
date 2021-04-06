@@ -122,6 +122,65 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
     },
     { symbol: 'WBTC', name: 'Wrapped BTC', address: '0xd3A691C852CDB01E281545A27064741F0B7f6825', decimals: 8 },
     { symbol: 'REP', name: 'Reputation', address: '0x50DD65531676F718B018De3dc48F92B53D756996', decimals: 18 }
+  ],
+  [ChainId.BSC]: [
+    { symbol: 'ADA', name: 'Cardano Token', address: '0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47', decimals: 18 },
+    { symbol: 'BUSD', name: 'BUSD Token', address: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', decimals: 18 },
+    {
+      symbol: 'BAND',
+      name: 'Band Protocol Token',
+      address: '0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18',
+      decimals: 18
+    },
+    { symbol: 'BCH', name: 'Bitcoin Cash Token', address: '0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf', decimals: 18 },
+    { symbol: 'BTCB', name: 'BTCB Token', address: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', decimals: 18 },
+    { symbol: 'BUSD-T', name: 'BUSD-T', address: '0x55d398326f99059fF775485246999027B3197955', decimals: 18 },
+    { symbol: 'CREAM', name: 'Cream', address: '0xd4CB328A82bDf5f03eB737f37Fa6B370aef3e888', decimals: 18 },
+    { symbol: 'DAI', name: 'Dai Token', address: '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3', decimals: 18 },
+    { symbol: 'DOT', name: 'Polkadot Token', address: '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402', decimals: 18 },
+    { symbol: 'EOS', name: 'EOS Token', address: '0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6', decimals: 18 },
+    { symbol: 'LINK', name: 'ChainLink Token', address: '0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD', decimals: 18 },
+    { symbol: 'LTC', name: 'Litecoin Token', address: '0x4338665CBB7B2485A8855A139b75D5e34AB0DB94', decimals: 18 },
+    { symbol: 'SXP', name: 'Swipe', address: '0x47bead2563dcbf3bf2c9407fea4dc236faba485a', decimals: 18 },
+    { symbol: 'UNI', name: 'Uniswap', address: '0xBf5140A22578168FD562DCcF235E5D43A02ce9B1', decimals: 18 },
+    { symbol: 'USDC', name: 'USD Coin', address: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', decimals: 18 },
+    { symbol: 'XRP', name: 'XRP Token', address: '0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE', decimals: 18 },
+    { symbol: 'XTZ', name: 'Tezos Token', address: '0x16939ef78684453bfDFb47825F8a5F714f12623a', decimals: 18 },
+    { symbol: 'XVS', name: 'Venus', address: '0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63', decimals: 18 },
+    { symbol: 'YFI', name: 'yearn.finance', address: '0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e', decimals: 18 },
+    { symbol: 'WBNB', name: 'Wrapped BNB', address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', decimals: 18 },
+    { symbol: 'WETH', name: 'Wrapped Ether', address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', decimals: 18 }
+  ],
+  [ChainId.HECO]: [
+    { symbol: 'AAVE', name: 'AAVE Token', address: '0x202b4936fE1a82A4965220860aE46d7d3939Bb25', decimals: 18 },
+    { symbol: 'ETH', name: 'Ethereum', address: '0x64FF637fB478863B7468bc97D30a5bF3A428a1fD', decimals: 18 },
+    { symbol: 'HBCH', name: 'HBCH Token', address: '0xeF3CEBD77E0C52cb6f60875d9306397B5Caca375', decimals: 18 },
+    { symbol: 'HBTC', name: 'HBTC Token', address: '0x66a79D23E58475D2738179Ca52cd0b41d73f0BEa', decimals: 18 },
+    { symbol: 'HDOT', name: 'HDOT Token', address: '0xA2c49cEe16a5E5bDEFDe931107dc1fae9f7773E3', decimals: 18 },
+    { symbol: 'HT', name: 'Huobi Token', address: '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F', decimals: 18 },
+    { symbol: 'HUSD', name: 'HUSD Token', address: '0x0298c2b32eaE4da002a15f36fdf7615BEa3DA047', decimals: 18 },
+    { symbol: 'HLTC', name: 'HLTC Token', address: '0xecb56cf772B5c9A6907FB7d32387Da2fCbfB63b4', decimals: 18 },
+    { symbol: 'MDX', name: 'MDX Token', address: '0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c', decimals: 18 },
+    { symbol: 'SNX', name: 'SNX Token', address: '0x777850281719d5a96C29812ab72f822E0e09F3Da', decimals: 18 },
+    { symbol: 'UNI', name: 'UNI Token', address: '0x22C54cE8321A4015740eE1109D9cBc25815C46E6', decimals: 18 },
+    { symbol: 'USDTHECO', name: 'USDTHECO Token', address: '0xa71EdC38d189767582C38A3145b5873052c3e47a', decimals: 18 }
+  ],
+  [ChainId.MATIC]: [
+    { symbol: 'AAVE', name: 'AAVE Token', address: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', decimals: 18 },
+    { symbol: 'BTC', name: 'Bitcoin', address: '	0x3D417087f8Fcacf77feb6cF40DcBc764bF2f033a', decimals: 8 },
+    { symbol: 'DAI', name: 'Dai Stablecoin', address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', decimals: 18 },
+    { symbol: 'ETH', name: 'Ethereum', address: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb', decimals: 18 },
+
+    { symbol: 'LINK', name: 'Chainlink Token', address: '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39', decimals: 18 },
+
+    // Which?
+    { symbol: 'MATIC', name: 'Matic', address: '0x0000000000000000000000000000000000001010', decimals: 18 },
+    { symbol: 'WMATIC', name: 'Wrapped Matic', address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270', decimals: 18 },
+
+    { symbol: 'USDC', name: 'USD Coin', address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', decimals: 6 },
+    { symbol: 'USDT', name: 'Tether USD', address: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', decimals: 6 },
+
+    { symbol: 'WBTC', name: 'Wrapped Bitcoin', address: '0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6', decimals: 8 }
   ]
 }
 
@@ -840,6 +899,425 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
       decimals: 8,
       fromDecimals: 18,
       toDecimals: 8
+    }
+  },
+  [ChainId.BSC]: {
+    '0x2d5Fc41d1365fFe13d03d91E82e04Ca878D69f4B': {
+      from: '0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xa767f745331D267c7751297D982b050c93985627': {
+      from: '0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x3334bF7ec892Ca03D1378B51769b7782EAF318C4': {
+      from: '0xAD6cAEb32CD2c308980a548bD0Bc5AA4306c6c18',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x2a548935a323Bb7329a5E3F1667B979f16Bc890b': {
+      from: '0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x43d80f616DAf0b0B42a928EeD32147dC59027D41': {
+      from: '0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '	0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE': {
+      from: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '	0x116EeB23384451C78ed366D4f67D5AD44eE771A0': {
+      from: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf': {
+      from: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '	0x87Ea38c9F24264Ec1Fff41B04ec94a97Caf99941': {
+      from: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xcBb98864Ef56E9042e7d2efef76141f15731B82f': {
+      from: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x6f55DFAf098a813d87BB4e6392275b502360Bb9D': {
+      from: '0xd4CB328A82bDf5f03eB737f37Fa6B370aef3e888',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x8EC213E7191488C7873cEC6daC8e97cdbAdb7B35': {
+      from: '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '	0x132d3C0B1D2cEa0BC552588063bdBb210FDeecfA': {
+      from: '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xBA8683E9c3B1455bE6e18E7768e8cAD95Eb5eD49': {
+      from: '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xC333eb0086309a16aa7c8308DfD32c8BBA0a2592': {
+      from: '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xed93F3764334788f2f6628b30e505fe1fc5d1D7b': {
+      from: '0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '	0x63D407F32Aa72E63C7209ce1c2F5dA40b3AaE726': {
+      from: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e': {
+      from: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xB38722F6A608646a538E882Ee9972D15c86Fc597': {
+      from: '0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xca236E327F629f9Fc2c30A4E95775EbF0B89fac8': {
+      from: '0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x4e5a43A79f53c0a8e83489648Ea7e429278f8b2D': {
+      from: '0x4338665CBB7B2485A8855A139b75D5e34AB0DB94',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x74E72F37A8c415c8f1a98Ed42E78Ff997435791D': {
+      from: '0x4338665CBB7B2485A8855A139b75D5e34AB0DB94',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xE188A9875af525d25334d75F3327863B2b8cd0F1': {
+      from: '0x47bead2563dcbf3bf2c9407fea4dc236faba485a',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xb57f259E7C24e56a1dA00F66b55A5640d9f9E7e4': {
+      from: '0xBf5140A22578168FD562DCcF235E5D43A02ce9B1',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x45f86CA2A8BC9EBD757225B19a1A0D7051bE46Db': {
+      from: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '	0x51597f405303C4377E36123cBc172b13269EA163': {
+      from: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xD5c40f5144848Bd4EF08a9605d860e727b991513': {
+      from: '0x55d398326f99059fF775485246999027B3197955',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xB97Ad0E74fa7d920791E90258A6E2085088b4320': {
+      from: '0x55d398326f99059fF775485246999027B3197955',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x798A65D349B2B5E6645695912880b54dfFd79074': {
+      from: '0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x93A67D414896A280bF8FFB3b389fE3686E014fda': {
+      from: '0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x8264d6983B219be65C4D62f1c82B3A2999944cF2': {
+      from: '0x16939ef78684453bfDFb47825F8a5F714f12623a',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xBF63F430A79D4036A5900C19818aFf1fa710f206': {
+      from: '0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xF841761481DF19831cCC851A54D8350aE6022583': {
+      from: '0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e',
+      to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xD7eAa5Bf3013A96e3d515c055Dbd98DbdC8c620D': {
+      from: '0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    }
+  },
+  [ChainId.HECO]: {
+    '0x8a054991B803F6a6958Ba9695Cc8D366C8a30a69': {
+      from: '0x202b4936fE1a82A4965220860aE46d7d3939Bb25',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x98b666722D9Def641D8D4836c7cA3c38317B6B98': {
+      from: '0xeF3CEBD77E0C52cb6f60875d9306397B5Caca375',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xD5c40f5144848Bd4EF08a9605d860e727b991513': {
+      from: '0x66a79D23E58475D2738179Ca52cd0b41d73f0BEa',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x0A7b23E981F16a429C8710C82f5fa5d01453A259': {
+      from: '0xA2c49cEe16a5E5bDEFDe931107dc1fae9f7773E3',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x5Fa530068e0F5046479c588775c157930EF0Dff0': {
+      from: '0x64FF637fB478863B7468bc97D30a5bF3A428a1fD',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x8EC213E7191488C7873cEC6daC8e97cdbAdb7B35': {
+      from: '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '	0x45f86CA2A8BC9EBD757225B19a1A0D7051bE46Db': {
+      from: '0x0298c2b32eaE4da002a15f36fdf7615BEa3DA047',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x87Ea38c9F24264Ec1Fff41B04ec94a97Caf99941': {
+      from: '0xecb56cf772B5c9A6907FB7d32387Da2fCbfB63b4',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xaC4600b8F42317eAF056Cceb06cFf987c294840B': {
+      from: '0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x1797a410485FeD6B05d5b39A475ddB9C33898ee8': {
+      from: '0x777850281719d5a96C29812ab72f822E0e09F3Da',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0x1E22E1eD4a96B4529D78cd4Bac55313809deF016': {
+      from: '0x22C54cE8321A4015740eE1109D9cBc25815C46E6',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xF0D3585D8dC9f1D1D1a7dd02b48C2630d9DD78eD': {
+      from: '0xa71EdC38d189767582C38A3145b5873052c3e47a',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    }
+  },
+  [ChainId.MATIC]: {
+    '0xbE23a3AA13038CfC28aFd0ECe4FdE379fE7fBfc4': {
+      from: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xc907E116054Ad103354f2D350FD2514433D57F6f': {
+      from: '0x3D417087f8Fcacf77feb6cF40DcBc764bF2f033a',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xFC539A559e170f848323e19dfD66007520510085': {
+      from: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x4746DeC9e833A82EC7C2C1356372CcF2cfcD2F3D': {
+      from: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xF9680D99D6C9589e2a93a78A04A279e509205945': {
+      from: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xb77fa460604b9C6435A235D057F7D319AC83cb53': {
+      from: '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0x327e23A4855b6F663a28c5161541d69Af8973302': {
+      from: '0x0000000000000000000000000000000000001010',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 18,
+      fromDecimals: 18,
+      toDecimals: 18
+    },
+    '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0': {
+      from: '0x0000000000000000000000000000000000001010',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 18,
+      toDecimals: 8
+    },
+    '0xefb7e6be8356cCc6827799B6A7348eE674A80EaE': {
+      from: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 18,
+      fromDecimals: 6,
+      toDecimals: 18
+    },
+    '0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7': {
+      from: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 6,
+      toDecimals: 8
+    },
+    '0xf9d5AAC6E5572AEFa6bd64108ff86a222F69B64d': {
+      from: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 18,
+      fromDecimals: 6,
+      toDecimals: 18
+    },
+    '0x0A6513e40db6EB1b165753AD52E80663aeA50545': {
+      from: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      to: '0x0000000000000000000000000000000000000001',
+      decimals: 8,
+      fromDecimals: 6,
+      toDecimals: 8
+    },
+    '0xA338e0492B2F944E9F8C0653D3AD1484f2657a37': {
+      from: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+      to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
+      decimals: 8,
+      fromDecimals: 8,
+      toDecimals: 18
     }
   }
 }
