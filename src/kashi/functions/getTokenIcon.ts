@@ -2,22 +2,22 @@ import { ChainId } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks'
 
 // todo: move these into sushiswap/assets/square
-import INCH from '../../assets/kashi/tokens/1inch-square.png'
-import AAVE from '../../assets/kashi/tokens/aave-square.png'
-import BAT from '../../assets/kashi/tokens/bat-square.png'
-import COMP from '../../assets/kashi/tokens/comp-square.png'
-import COVER from '../../assets/kashi/tokens/cover-square.png'
-import DAI from '../../assets/kashi/tokens/dai-square.png'
-import LINK from '../../assets/kashi/tokens/link-square.png'
+import INCH from '../../assets/kashi/tokens/1inch-square.jpg'
+import AAVE from '../../assets/kashi/tokens/aave-square.jpg'
+import BAT from '../../assets/kashi/tokens/bat-square.jpg'
+import COMP from '../../assets/kashi/tokens/comp-square.jpg'
+import COVER from '../../assets/kashi/tokens/cover-square.jpg'
+import DAI from '../../assets/kashi/tokens/dai-square.jpg'
+import LINK from '../../assets/kashi/tokens/link-square.jpg'
 import SAI from '../../assets/kashi/tokens/sai-square.png'
-import SUSHI from '../../assets/kashi/tokens/sushi-square.png'
-import UNI from '../../assets/kashi/tokens/uni-square.png'
-import USDC from '../../assets/kashi/tokens/usdc-square.png'
-import USDT from '../../assets/kashi/tokens/usdt-square.png'
-import WBTC from '../../assets/kashi/tokens/wbtc-square.png'
-import WETH from '../../assets/kashi/tokens/eth-square.png'
-import YFI from '../../assets/kashi/tokens/yfi-square.png'
-import ZRX from '../../assets/kashi/tokens/zrx-square.png'
+import SUSHI from '../../assets/kashi/tokens/sushi-square.jpg'
+import UNI from '../../assets/kashi/tokens/uni-square.jpg'
+import USDC from '../../assets/kashi/tokens/usdc-square.jpg'
+import USDT from '../../assets/kashi/tokens/usdt-square.jpg'
+import WBTC from '../../assets/kashi/tokens/wbtc-square.jpg'
+import WETH from '../../assets/kashi/tokens/eth-square.jpg'
+import YFI from '../../assets/kashi/tokens/yfi-square.jpg'
+import ZRX from '../../assets/kashi/tokens/zrx-square.jpg'
 
 import UNKNOWN from '../../assets/kashi/tokens/unknown.png'
 
@@ -60,15 +60,9 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0xd0A1E359811322d97991E03f863a0C30C2cF029C').toLowerCase()]: WETH,
     [String('0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3').toLowerCase()]: ZRX
   },
-  [ChainId.BSC]: {
-
-  },
-  [ChainId.MATIC]: {
-
-  },
-  [ChainId.HECO]: {
-    
-  }
+  [ChainId.BSC]: {},
+  [ChainId.MATIC]: {},
+  [ChainId.HECO]: {}
 }
 
 const TokenIcon = (address: string) => {
