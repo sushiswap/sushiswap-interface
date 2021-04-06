@@ -1,9 +1,7 @@
-//import { backgrounds } from "polished";
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 
-function getNested(theObject: any, path: string, separator?: string) {
+function getNested(theObject: any, path: string, separator = '.') {
   try {
-    separator = separator || '.'
     return path
       .replace('[', separator)
       .replace(']', '')
