@@ -127,7 +127,7 @@ export default function ClaimModal() {
   }, [account])
 
   // remove once treasury signature passed
-  const pendingTreasurySignature = true
+  const pendingTreasurySignature = false
 
   return (
     <PageWrapper>
