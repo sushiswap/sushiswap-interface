@@ -1,40 +1,32 @@
-import React, { useState, useCallback } from 'react'
-import useTheme from 'hooks/useTheme'
+import React, { useState } from 'react'
 import { WETH } from '@sushiswap/sdk'
 import { Alert, Dots, PinkButton, PinkButtonOutlined } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, Type } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
-import useBentoBalance from 'sushi-hooks/useBentoBalance'
 import useKashi from 'kashi/hooks/useKashi'
-import { useBentoBoxContract } from 'sushi-hooks/useContract'
-import { formatToBalance, formatFromBalance, formattedPercent, formattedNum } from 'utils'
-import isEmpty from 'lodash/isEmpty'
 import { BigNumber } from '@ethersproject/bignumber'
-import Fraction from 'constants/Fraction'
-import { GradientDot } from '../../../components'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { minimum, e10 } from 'kashi/functions/math'
+import { TransactionReview } from 'kashi/entities/TransactionReview'
+import TransactionReviewView from 'kashi/components/TransactionReview'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
 
 interface BorrowProps {
   pair: any
 }
 
 export default function Borrow({ pair }: BorrowProps) {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
 
   const { borrowWithdraw, borrow, depositAddCollateral, addCollateral } = useKashi()
 
   // State
-  const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(
-    pair.collateral.bentoBalance.gt(BigNumber.from(0))
-  )
+  const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
   const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
   const [collateralValue, setCollateralValue] = useState('')
   const [borrowValue, setBorrowValue] = useState('')
-  const [pendingTx, setPendingTx] = useState(false)
 
   const [approvalState, approve] = useApproveCallback(pair.collateral.address, BENTOBOX_ADDRESS)
 
@@ -58,7 +50,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
   const nextMaxBorrowPossible = minimum(nextMaxBorrowSafe, pair.totalAssetAmount.value)
 
-  const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum).toFixed(16)
+  const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum)
 
   const maxCollateral = balance.toFixed(pair.collateral.decimals)
 
@@ -66,22 +58,11 @@ export default function Borrow({ pair }: BorrowProps) {
     ? nextMaxBorrowPossible.toFixed(pair.asset.decimals)
     : pair.maxBorrowable.possible.string
 
-  const transactionReview = [
-    {
-      label: 'Est. Borrow Limit',
-      from: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string)))} ${pair.asset.symbol}`,
-      to: `${formattedNum(Math.max(0, Number(nextMaxBorrowSafe.toFixed(pair.asset.decimals))))} ${pair.asset.symbol}`
-    },
-    {
-      label: 'Est. Borrow Limit Used',
-      from: formattedPercent(pair.health.string),
-      to: (
-        <div className="flex items-center">
-          {formattedPercent(nextHealth)} <GradientDot percent={nextHealth} />
-        </div>
-      )
-    }
-  ]
+  const transactionReview = new TransactionReview()
+  if (collateralValue || borrowValue) {
+    transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
+    transactionReview.addTokenAmount('Health', pair.health.value, nextHealth, pair.asset)
+  }
 
   const warning =
     pair.currentExchangeRate.isZero() ||
@@ -108,10 +89,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
   // Handlers
   async function onBorrow() {
-    setPendingTx(true)
-
-    // TODO: Cook
-
+    const cooker = new KashiCooker(pair, account, library, chainId)
     if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
       if (useBentoCollateral) {
         await addCollateral(
@@ -135,8 +113,6 @@ export default function Borrow({ pair }: BorrowProps) {
         await borrowWithdraw(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
       }
     }
-
-    setPendingTx(false)
   }
 
   const showApprove =
@@ -210,16 +186,6 @@ export default function Borrow({ pair }: BorrowProps) {
         </div>
       </div>
 
-      {showApprove && (
-        <PinkButton onClick={approve} className="mb-4">
-          {approvalState === ApprovalState.PENDING ? (
-            <Dots>Approving {pair.collateral.symbol}</Dots>
-          ) : (
-            `Approve ${pair.collateral.symbol}`
-          )}
-        </PinkButton>
-      )}
-
       <div className="flex items-center relative w-full mb-4">
         <NumericalInput
           className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
@@ -240,34 +206,25 @@ export default function Borrow({ pair }: BorrowProps) {
 
       <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
 
-      {!warning && (Math.sign(Number(collateralValue)) > 0 || Math.sign(Number(borrowValue)) > 0) && (
-        <>
-          <div className="py-4 mb-4">
-            <div className="text-xl text-high-emphesis">Transaction Review</div>
-            {transactionReview.map((item, i) => (
-              <div key={i} className="flex flex-row items-center justify-between text-lg">
-                <div className="text-lg text-secondary">{item.label}:</div>
-                <div className="flex">
-                  <div className="text-secondary">{item.from}</div>
-                  {' → '}
-                  <div className="text-primary">{item.to}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <PinkButton
-            onClick={onBorrow}
-            disabled={
-              pendingTx ||
-              (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
-              // Math.sign(Number(collateralValue)) > 0 ||
-              // Math.sign(Number(borrowValue)) > 0 ||
-              warning
-            }
-          >
-            Borrow
-          </PinkButton>
-        </>
+      <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+
+      {showApprove && (
+        <PinkButton onClick={approve}>
+          {approvalState === ApprovalState.PENDING ? (
+            <Dots>Approving {pair.collateral.symbol}</Dots>
+          ) : (
+            `Approve ${pair.collateral.symbol}`
+          )}
+        </PinkButton>
+      )}
+
+      {!showApprove && (
+        <PinkButton
+          onClick={onBorrow}
+          disabled={(balance.eq(0) && pair.userCollateralAmount.value.eq(0)) || warning}
+        >
+          Borrow
+        </PinkButton>
       )}
     </>
   )

@@ -2,11 +2,11 @@ import { defaultAbiCoder } from "@ethersproject/abi"
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber"
 import { ChainId } from "@sushiswap/sdk"
 import { Contract, ethers } from "ethers"
-import { KASHI_ADDRESS } from "kashi/constants"
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from "kashi/constants"
 import { toShare } from "kashi/functions/bentobox"
-import { useBentoBoxContract } from "sushi-hooks/useContract"
-import { getContract, getProviderOrSigner, getSigner } from "utils"
+import { getProviderOrSigner, getSigner } from "utils"
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
+import BENTOBOX_ABI from '../../constants/sushiAbis/bentobox.json'
 
 async function signMasterContractApproval(
     bentoBoxContract: ethers.Contract | null,
@@ -14,48 +14,39 @@ async function signMasterContractApproval(
     user: string,
     library: ethers.providers.Web3Provider,
     approved: boolean,
-    chainId: ChainId | undefined,
-    nonce: any
+    chainId: ChainId | undefined
 ) {
-const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
-if (!nonce) {
-    nonce = await bentoBoxContract?.nonces(user)
-}
-const message = {
-    warning,
-    user,
-    masterContract,
-    approved,
-    nonce
-}
+    const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
+    const nonce = await bentoBoxContract?.nonces(user)
+    const message = {
+        warning,
+        user,
+        masterContract,
+        approved,
+        nonce
+    }
 
-const typedData = {
-    types: {
-    // // ethers _signTypedData assumes EIP712
-    // EIP712Domain: [
-    //   { name: 'name', type: 'string' },
-    //   { name: 'chainId', type: 'uint256' },
-    //   { name: 'verifyingContract', type: 'address' }
-    // ],
-    SetMasterContractApproval: [
-        { name: 'warning', type: 'string' },
-        { name: 'user', type: 'address' },
-        { name: 'masterContract', type: 'address' },
-        { name: 'approved', type: 'bool' },
-        { name: 'nonce', type: 'uint256' }
-    ]
-    },
-    primaryType: 'SetMasterContractApproval',
-    domain: {
-    name: 'BentoBox V1',
-    chainId: chainId,
-    verifyingContract: bentoBoxContract?.address
-    },
-    message: message
-}
-console.log('typedData:', typedData)
-const signer = getSigner(library, user)
-return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
+    const typedData = {
+        types: {
+            SetMasterContractApproval: [
+                { name: 'warning', type: 'string' },
+                { name: 'user', type: 'address' },
+                { name: 'masterContract', type: 'address' },
+                { name: 'approved', type: 'bool' },
+                { name: 'nonce', type: 'uint256' }
+            ]
+        },
+        primaryType: 'SetMasterContractApproval',
+        domain: {
+            name: 'BentoBox V1',
+            chainId: chainId,
+            verifyingContract: bentoBoxContract?.address
+        },
+        message: message
+    }
+    console.log('typedData:', typedData)
+    const signer = getSigner(library, user)
+    return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
 }
 
 enum Action {
@@ -87,15 +78,17 @@ export class KashiCooker {
     private pair: any
     private account: string
     private library: ethers.providers.Web3Provider | undefined
+    private chainId: ChainId
 
     private actions: Action[]
     private values: BigNumber[]
     private datas: string[]
 
-    constructor(pair: any, account: string | null | undefined, library: ethers.providers.Web3Provider | undefined) {
+    constructor(pair: any, account: string | null | undefined, library: ethers.providers.Web3Provider | undefined, chainId: ChainId | undefined) {
         this.pair = pair
         this.account = account || ethers.constants.AddressZero
         this.library = library
+        this.chainId = chainId || 1
 
         this.actions = []
         this.values = []
@@ -108,13 +101,41 @@ export class KashiCooker {
         this.values.push(BigNumber.from(value))
     }
 
-    async approve() {
-        //const permit = await signMasterContractApproval(this.web3, this.web3.kashipair.address, this.account, true)
+    async approveIfNeeded() {
+        if (!this.library) { return this }
 
-        /*this.add(
-            Action.BENTO_SETAPPROVAL),
-            defaultAbiCoder.encode(["address", "address", "bool", "uint8", "bytes32", "bytes32"], [this.account, KASHI_ADDRESS, true, permit.v, permit.r, permit.s]))
-        return this*/
+        const bentoBoxContract = new Contract(BENTOBOX_ADDRESS, BENTOBOX_ABI, getProviderOrSigner(this.library, this.account) as any)
+        if (await bentoBoxContract?.masterContractApproved(KASHI_ADDRESS, this.account) === true) {
+            return this
+        }
+
+        try {
+            const signature = await signMasterContractApproval(
+                bentoBoxContract,
+                KASHI_ADDRESS,
+                this.account!,
+                this.library!,
+                true,
+                this.chainId
+            )
+            const permit = ethers.utils.splitSignature(signature)
+
+            this.add(
+                Action.BENTO_SETAPPROVAL,
+                ethers.utils.defaultAbiCoder.encode(
+                    ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
+                    [this.account, KASHI_ADDRESS, true, permit.v, permit.r, permit.s]
+                )
+            )
+        } catch(e) {
+            console.log("Error", e)
+            if (e.code && e.code === -32603) {
+                console.log(this.account, KASHI_ADDRESS, true, 0, ethers.constants.HashZero, ethers.constants.HashZero)
+                const tx = await bentoBoxContract.setMasterContractApproval(this.account, KASHI_ADDRESS, true, 0, ethers.constants.HashZero, ethers.constants.HashZero)
+                await tx.wait()
+            }
+        }
+        return true
     }
 
     addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {

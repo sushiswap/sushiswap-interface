@@ -9,7 +9,7 @@ export default function TransactionReviewView({transactionReview}: {transactionR
         <div className="text-xl text-high-emphesis">Transaction Review</div>
         {transactionReview.map((line, i) => {
           return (
-            <div className="flex items-center justify-between" key="{'review' + i}">
+            <div className="flex items-center justify-between" key={i}>
               <div className="text-lg text-secondary">{line.name}:</div>
               <div className="text-lg">
                 {line.from}

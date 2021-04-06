@@ -11,7 +11,7 @@ import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
-  const { account, library } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React()
   const { removeAsset, removeWithdrawAsset } = useKashi()
 
   // State
@@ -43,7 +43,10 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
       ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
       : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
 
-    await new KashiCooker(pair, account, library)
+    const cooker = new KashiCooker(pair, account, library, chainId)
+    await cooker.approveIfNeeded()
+  
+    await cooker
       .removeAsset(fraction, useBento)
       .cook()
   }
