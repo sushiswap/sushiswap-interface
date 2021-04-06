@@ -1,6 +1,6 @@
 import { useActiveWeb3React } from 'hooks'
 import React, { createContext, useContext, useReducer, useCallback } from 'react'
-import { useBentoBoxContract, useChainlinkOracle, useKashiPairContract } from 'sushi-hooks/useContract'
+import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import Fraction from '../../constants/Fraction'
 import { WETH, Currency, ChainId } from '@sushiswap/sdk'
 import { takeFee, toElastic } from '../functions'
@@ -10,9 +10,9 @@ import { useBoringHelperContract } from 'hooks/useContract'
 import { useDefaultTokens } from 'hooks/Tokens'
 import { getOracle } from '../entities'
 import useInterval from 'hooks/useInterval'
-import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { BigNumber } from '@ethersproject/bignumber'
 import _ from 'lodash'
-import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
+import { e10, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
@@ -116,9 +116,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     async function() {
       if (boringHelperContract && bentoBoxContract) {
         // Get the deployed pairs from the logs and decode
+        console.log("Get pairs")
         const logPairs = GetPairsFromLogs(
           await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
         )
+        console.log(logPairs)
 
         // Filter all pairs by supported oracles and verify the oracle setup
         const allPairAddresses = logPairs

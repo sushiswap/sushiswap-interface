@@ -9,15 +9,19 @@ import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useApproveCallback } from 'sushi-hooks/useApproveCallback'
 import { WETH } from '@sushiswap/sdk'
+import { e10 } from 'kashi/functions/math'
+import { TransactionReview } from 'kashi/entities/TransactionReview'
+import TransactionReviewView from 'kashi/components/TransactionReview'
+import { toShare } from 'kashi/functions/bentobox'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   const { depositAddAsset, addAsset } = useKashi()
 
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
-  const [pendingTx, setPendingTx] = useState(false)
   const [approvalState, approve] = useApproveCallback(pair.asset.address, BENTOBOX_ADDRESS)
 
   // Calculated
@@ -39,23 +43,21 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     : balance?.lt(value.toBigNumber(pair.asset.decimals)) &&
       `Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to deposit and then try again.`
 
-  const newUserAssetAmount = pair.currentUserAssetAmount.value
-    .add(value.toBigNumber(pair.asset.decimals))
-    .toFixed(pair.asset.decimals)
 
-  const transactionReview = `${formattedNum(pair.currentUserAssetAmount.string)} ${
-    pair.asset.symbol
-  } → ${newUserAssetAmount} ${pair.asset.symbol}`
+  const transactionReview = new TransactionReview()
+    if (value) {
+      const amount = value.toBigNumber(pair.asset.decimals)
+      const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
+      transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+      const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.add(amount))
+      transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
+    }    
 
   // Handlers
   async function onClick() {
-    setPendingTx(true)
-    if (useBento) {
-      await addAsset(pair.address, pair.asset.address, value.toBigNumber(pair.asset.decimals))
-    } else {
-      await depositAddAsset(pair.address, pair.asset.address, value.toBigNumber(pair.asset.decimals))
-    }
-    setPendingTx(false)
+    await new KashiCooker(pair, account, library)
+      .addAsset(value.toBigNumber(pair.asset.decimals), useBento)
+      .cook()
   }
 
   return (
@@ -109,23 +111,13 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         </BlueButton>
       )}
 
-      {!warningMessage.length && Math.sign(Number(value)) > 0 && (
-        <>
-          <div className="py-4 mb-4">
-            <div className="text-xl text-high-emphesis">Transaction Review</div>
-            <div className="flex items-center justify-between">
-              <div className="text-lg text-secondary">Balance:</div>
-              <div className="text-lg">{transactionReview}</div>
-            </div>
-          </div>
-          <BlueButton
-            onClick={onClick}
-            disabled={pendingTx || balance.eq(0) || Math.sign(Number(value)) < 0 || warning}
-          >
-            Deposit
-          </BlueButton>
-        </>
-      )}
+      <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+      <BlueButton
+        onClick={onClick}
+        disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}
+      >
+        Deposit
+      </BlueButton>
     </>
   )
 }

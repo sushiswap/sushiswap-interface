@@ -351,7 +351,7 @@ export default function Header() {
               Stake
             </StyledNavLink>
           )}
-          {(chainId === ChainId.ROPSTEN || chainId === ChainId.MAINNET || chainId === ChainId.KOVAN) && (
+          {([ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.HECO].indexOf(chainId || 1) != -1) && (
             <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
               Apps
             </StyledNavLink>
