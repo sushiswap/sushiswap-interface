@@ -206,7 +206,7 @@ export default function ClaimModal() {
                     !isAddress(account ?? '') ||
                     claimConfirmed ||
                     !unclaimedAmount ||
-                    Number(unclaimedAmount?.toFixed(0)) <= 0 ||
+                    Number(unclaimedAmount?.toFixed(8)) <= 0 ||
                     pendingTreasurySignature
                   }
                   padding="16px 16px"
