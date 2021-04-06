@@ -80,7 +80,7 @@ export default function ClaimModal() {
   // monitor the status of the claim from contracts and txns
   const { claimCallback } = useClaimCallback(account)
   const unclaimedAmount: TokenAmount | undefined = useUserUnclaimedAmount(account)
-  console.log('unclaimedAmount:', unclaimedAmount)
+  //console.log('unclaimedAmount:', unclaimedAmount)
   const { claimSubmitted, claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
   const claimConfirmed = Boolean(claimTxn?.receipt)
 
