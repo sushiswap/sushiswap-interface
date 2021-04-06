@@ -43,6 +43,9 @@ export default function LendingPair({
         <Card className="h-full bg-dark-900">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
+              <div className="text-xl text-high-emphesis">Market Info</div>
+            </div>
+            <div className="flex justify-between">
               <div className="text-lg text-secondary">Available</div>
               <div className="text-lg text-high-emphesis">
                 {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
@@ -66,6 +69,9 @@ export default function LendingPair({
               <div className="flex items-center">
                 <div className="text-lg text-high-emphesis">-</div>
               </div>
+            </div>
+            <div className="flex justify-between pt-3">
+              <div className="text-xl text-high-emphesis">BentoBox</div>
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{pair.asset.symbol} Strategy</div>

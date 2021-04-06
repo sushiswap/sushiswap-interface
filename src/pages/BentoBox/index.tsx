@@ -27,8 +27,6 @@ function BentoBox(): JSX.Element {
     }
   }, [approveMaster])
 
-  console.log('kashiApproved:', kashiApproved)
-
   return (
     <div>
       <div className="absolute bg-dark-1000 top-0 right-0 bottom-0 left-0" />
@@ -60,20 +58,11 @@ function BentoBox(): JSX.Element {
             <div className="relative w-full">
               <img alt="" src={KashiNeonSign} className="block m-auto w-full h-auto mb-4" />
               {account ? (
-                kashiApproved && kashiApproved === true ? (
-                  <Link to={'/bento/kashi/borrow'}>
-                    <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3">
-                      Enter
-                    </GradientButton>
-                  </Link>
-                ) : (
-                  <GradientButton
-                    className="w-full rounded text-base text-high-emphesis px-4 py-3"
-                    onClick={handleApprove}
-                  >
-                    Enable Kashi
+                <Link to={'/bento/kashi/borrow'}>
+                  <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3">
+                    Enter
                   </GradientButton>
-                )
+                </Link>
               ) : (
                 <Web3Status />
               )}

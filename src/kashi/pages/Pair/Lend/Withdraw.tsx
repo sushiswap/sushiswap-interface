@@ -1,27 +1,22 @@
 import React, { useState } from 'react'
-import { Alert, Dots, BlueButton, BlueButtonOutlined } from 'kashi/components'
+import { Alert, BlueButton, BlueButtonOutlined } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
+import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import useKashi from 'kashi/hooks/useKashi'
-import { formatToBalance, formatFromBalance, formattedNum } from 'utils'
-import { BENTOBOX_ADDRESS } from 'kashi/constants'
-import { ApprovalState } from 'hooks/useApproveCallback'
-import { useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import { toShare } from 'kashi/functions/bentobox'
 import { e10, minimum } from 'kashi/functions/math'
 import { easyAmount } from 'kashi/functions/kashi'
-import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
+import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
-  const { account } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React()
   const { removeAsset, removeWithdrawAsset } = useKashi()
 
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
-  const [pendingTx, setPendingTx] = useState(false)
   const [pinMax, setPinMax] = useState(false)
 
   // Calculated
@@ -44,17 +39,16 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
   
   // Handlers
   const onClick = async function() {
-    setPendingTx(true)
     const fraction = pinMax
       ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
       : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
-    console.log(fraction.toString())
-    if (useBento) {
-      await removeAsset(pair.address, fraction)
-    } else {
-      await removeWithdrawAsset(pair.address, pair.asset.address, value.toBigNumber(pair.asset.decimals))
-    }
-    setPendingTx(false)
+
+    const cooker = new KashiCooker(pair, account, library, chainId)
+    await cooker.approveIfNeeded()
+  
+    await cooker
+      .removeAsset(fraction, useBento)
+      .cook()
   }
 
   return (
@@ -103,7 +97,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
       <BlueButton
         onClick={() => onClick() }
-        disabled={pendingTx || warningMessage || displayValue.toBigNumber(0).lt(0)}
+        disabled={warningMessage || displayValue.toBigNumber(0).lte(0)}
       >
         Withdraw
       </BlueButton>

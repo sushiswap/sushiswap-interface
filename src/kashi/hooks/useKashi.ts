@@ -194,69 +194,6 @@ const useKashi = () => {
     }
   }, [account, addTransaction, bentoBoxContract, chainId, kashiPairContract, library])
 
-  // const create = useCallback(
-  //   async (collateralDetails: any, assetDetails: any) => {
-  //     let asset = assetDetails.address.toLowerCase() // from
-  //     let collateral = collateralDetails.address.toLowerCase() // to
-  //     let multiply = '0x0000000000000000000000000000000000000000'
-  //     let divide = '0x0000000000000000000000000000000000000000'
-  //     let multiplyMatches = Object.values(chainLinkMappings).filter(m => m.from == asset && m.to == collateral)
-  //     let oracleData = ''
-  //     let decimals
-  //     let match
-  //     if (multiplyMatches.length) {
-  //       match = multiplyMatches[0]
-  //       multiply = match.address
-  //       decimals = BigNumber.from(18)
-  //         .add(BigNumber.from(match.decimals))
-  //         .sub(BigNumber.from(collateralDetails.decimals))
-  //         .add(BigNumber.from(assetDetails.decimals))
-  //     } else {
-  //       let divideMatches = Object.values(chainLinkMappings).filter(m => m.from == collateral && m.to == asset)
-  //       if (divideMatches.length) {
-  //         match = divideMatches[0]
-  //         divide = match.address
-  //         decimals = BigNumber.from(36)
-  //           .sub(BigNumber.from(match.decimals))
-  //           .add(BigNumber.from(asset.decimals))
-  //         oracleData = await chainLinkOracleContract?.getDataParameter(
-  //           multiply,
-  //           divide,
-  //           BigNumber.from(10).pow(decimals)
-  //         )
-  //       } else {
-  //         let mapFrom = Object.values(chainLinkMappings).filter(m => m.from == asset)
-  //         let mapTo = Object.values(chainLinkMappings).filter(m => m.from == collateral)
-  //         const match = mapFrom
-  //           .map((mfrom: any) => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to == mto.to) }))
-  //           .filter((path: any) => path.mto.length)
-  //         if (match.length) {
-  //           console.log('FOUND', match[0].mfrom, match[0].mto[0])
-  //           multiply = match[0].mfrom.address
-  //           divide = match[0].mto[0].address
-  //           decimals = BigNumber.from(18)
-  //             .add(BigNumber.from(match[0].mfrom.decimals))
-  //             .sub(BigNumber.from(match[0].mto[0].decimals))
-  //             .sub(BigNumber.from(collateralDetails.decimals))
-  //             .add(BigNumber.from(assetDetails.decimals))
-  //         } else {
-  //           console.log('No path')
-  //           return
-  //         }
-  //       }
-  //     }
-  //     oracleData = await chainLinkOracleContract?.getDataParameter(multiply, divide, BigNumber.from(10).pow(decimals))
-  //     console.log(collateral, asset, chainLinkOracleContract?.address, oracleData)
-
-  //     const kashiData = ethers.utils.defaultAbiCoder.encode(
-  //       ['address', 'address', 'address', 'bytes'],
-  //       [collateral, asset, chainLinkOracleContract?.address, oracleData]
-  //     )
-  //     await bentoBoxContract?.deploy(kashiPairContract?.address, kashiData, true) // withSigner
-  //   },
-  //   [account, addTransaction, bentoBoxContract, library]
-  // )
-
   // Description: Update Exchange Rate
   const updateExchangeRate = useCallback(
     async (pairAddress: string) => {

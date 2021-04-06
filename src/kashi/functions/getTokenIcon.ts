@@ -59,6 +59,15 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0xd3A691C852CDB01E281545A27064741F0B7f6825').toLowerCase()]: WBTC,
     [String('0xd0A1E359811322d97991E03f863a0C30C2cF029C').toLowerCase()]: WETH,
     [String('0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3').toLowerCase()]: ZRX
+  },
+  [ChainId.BSC]: {
+
+  },
+  [ChainId.MATIC]: {
+
+  },
+  [ChainId.HECO]: {
+    
   }
 }
 
