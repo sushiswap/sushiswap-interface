@@ -3,6 +3,56 @@ import { useActiveWeb3React } from 'hooks'
 
 // todo: move these into sushiswap/assets/square
 import ADA from '../../assets/kashi/tokens/ada-square.jpg'
+import ADX from '../../assets/kashi/tokens/adx-square.jpg'
+import ALPHA from '../../assets/kashi/tokens/alpha-square.jpg'
+import AMP from '../../assets/kashi/tokens/amp-square.jpg'
+import AMPL from '../../assets/kashi/tokens/ampl-square.jpg'
+import ANT from '../../assets/kashi/tokens/ant-square.jpg'
+import BADGER from '../../assets/kashi/tokens/badger-square.jpg'
+import BAL from '../../assets/kashi/tokens/balancer-square.jpg'
+import BNT from '../../assets/kashi/tokens/bnt-square.jpg'
+import BZRX from '../../assets/kashi/tokens/bzrx-square.jpg'
+import CEL from '../../assets/kashi/tokens/cel-square.jpg'
+import CRO from '../../assets/kashi/tokens/cro-square.jpg'
+import CRV from '../../assets/kashi/tokens/crv-square.jpg'
+// import DASH from '../../assets/kashi/tokens/dash-square.jpg'
+import DPI from '../../assets/kashi/tokens/dpi-square.jpg'
+import ENJ from '../../assets/kashi/tokens/enj-square.jpg'
+import FNX from '../../assets/kashi/tokens/fnx-square.jpg'
+import FTM from '../../assets/kashi/tokens/ftm-square.jpg'
+import FTX from '../../assets/kashi/tokens/ftx-square.jpg'
+import GRT from '../../assets/kashi/tokens/grt-square.jpg'
+import HEGIC from '../../assets/kashi/tokens/hegic-square.jpg'
+import INJ from '../../assets/kashi/tokens/inj-square.jpg'
+import KNC from '../../assets/kashi/tokens/knc-square.jpg'
+import KP3R from '../../assets/kashi/tokens/kp3r-square.jpg'
+import LRC from '../../assets/kashi/tokens/lrc-square.jpg'
+import MANA from '../../assets/kashi/tokens/mana-square.jpg'
+import MKR from '../../assets/kashi/tokens/mkr-square.jpg'
+import MLN from '../../assets/kashi/tokens/mln-square.jpg'
+import MTA from '../../assets/kashi/tokens/mta-square.jpg'
+import NMR from '../../assets/kashi/tokens/nmr-square.jpg'
+import OGN from '../../assets/kashi/tokens/ogn-square.jpg'
+import OMG from '../../assets/kashi/tokens/omg-square.jpg'
+import OXT from '../../assets/kashi/tokens/oxt-square.jpg'
+import PAX from '../../assets/kashi/tokens/pax-square.jpg'
+import PAXG from '../../assets/kashi/tokens/paxg-square.jpg'
+import PERP from '../../assets/kashi/tokens/perp-square.jpg'
+import RCN from '../../assets/kashi/tokens/rcn-square.jpg'
+import REN from '../../assets/kashi/tokens/ren-square.jpg'
+import RLC from '../../assets/kashi/tokens/rlc-square.jpg'
+import RUNE from '../../assets/kashi/tokens/rune-square.jpg'
+import SRM from '../../assets/kashi/tokens/srm-square.jpg'
+import SUSD from '../../assets/kashi/tokens/susd-square.jpg'
+import TOMO from '../../assets/kashi/tokens/tomoe-square.jpg'
+import TRU from '../../assets/kashi/tokens/tru-square.jpg'
+import TUSD from '../../assets/kashi/tokens/tusd-square.jpg'
+import UMA from '../../assets/kashi/tokens/uma-square.jpg'
+import UST from '../../assets/kashi/tokens/ust-square.jpg'
+import WAVES from '../../assets/kashi/tokens/waves-square.jpg'
+import WNXM from '../../assets/kashi/tokens/wnxm-square.jpg'
+import YFII from '../../assets/kashi/tokens/yfii-square.jpg'
+
 import INCH from '../../assets/kashi/tokens/1inch-square.jpg'
 import AAVE from '../../assets/kashi/tokens/aave-square.jpg'
 import BAND from '../../assets/kashi/tokens/band-square.jpg'
@@ -44,17 +94,85 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
   [ChainId.MAINNET]: {
     [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
     [String('0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9').toLowerCase()]: AAVE,
+
+    [String('0xc14777C94229582E5758C5a79b83DDE876b9BE98').toLowerCase()]: ADA,
+    [String('0xADE00C28244d5CE17D72E40330B1c318cD12B7c3').toLowerCase()]: ADX,
+    [String('0xa1faa113cbE53436Df28FF0aEe54275c13B40975').toLowerCase()]: ALPHA,
+    [String('0xfF20817765cB7f73d4bde2e66e067E58D11095C2').toLowerCase()]: AMP,
+    [String('0xD46bA6D942050d489DBd938a2C909A5d5039A161').toLowerCase()]: AMPL,
+    [String('0xa117000000f279D81A1D3cc75430fAA017FA5A2e').toLowerCase()]: ANT,
+    [String('0x3472A5A71965499acd81997a54BBA8D852C6E53d').toLowerCase()]: BADGER,
+    [String('0xba100000625a3754423978a60c9317c58a424e3D').toLowerCase()]: BAL,
+    [String('0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55').toLowerCase()]: BAND,
+    [String('0x0D8775F648430679A709E98d2b0Cb6250d2887EF').toLowerCase()]: BAT,
+    [String('0x3aD44A16451d65D97394aC793b0a2d90c8530499').toLowerCase()]: BCH,
+    [String('0xB8c77482e45F1F44dE1745F52C74426C631bDD52').toLowerCase()]: BNB,
+    [String('0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C').toLowerCase()]: BNT,
+    [String('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599').toLowerCase()]: BTC,
+    [String('0x4Fabb145d64652a948d72533023f6E7A623C7C53').toLowerCase()]: BUSD,
+    [String('0x56d811088235F11C8920698a204A5010a788f4b3').toLowerCase()]: BZRX,
+    [String('0xaaAEBE6Fe48E54f431b0C390CfaF0b017d09D42d').toLowerCase()]: CEL,
     [String('0xc00e94Cb662C3520282E6f5717214004A7f26888').toLowerCase()]: COMP,
     [String('0x4688a8b1f292fdab17e9a90c8bc379dc1dbd8713').toLowerCase()]: COVER,
+    [String('0x2ba592F78dB6436527729929AAf6c908497cB200').toLowerCase()]: CREAM,
+    [String('0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b').toLowerCase()]: CRO,
+    [String('0xD533a949740bb3306d119CC777fa900bA034cd52').toLowerCase()]: CRV,
     [String('0x6B175474E89094C44Da98b954EedeAC495271d0F').toLowerCase()]: DAI,
-    [String('0x514910771AF9Ca656af840dff83E8264EcF986CA').toLowerCase()]: LINK,
-    [String('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2').toLowerCase()]: SUSHI,
-    [String('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984').toLowerCase()]: UNI,
-    [String('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48').toLowerCase()]: USDC,
-    [String('0xdAC17F958D2ee523a2206206994597C13D831ec7').toLowerCase()]: USDT,
-    [String('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599').toLowerCase()]: BTC,
+    [String('0xF04f22b39bF419FdEc8eAE7C69c5E89872915f53').toLowerCase()]: UNKNOWN, // DASH
+    // [String('').toLowerCase()]: DOT,
+    [String('0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b').toLowerCase()]: DPI,
+    [String('0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c').toLowerCase()]: ENJ,
     [String('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2').toLowerCase()]: ETH,
-    [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI
+    [String('0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0').toLowerCase()]: EOS,
+    // [String('').toLowerCase()]: FNX,
+    [String('0x4E15361FD6b4BB609Fa63C81A2be19d873717870').toLowerCase()]: FTM,
+    [String('0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9').toLowerCase()]: FTX,
+    [String('0xc944E90C64B2c07662A292be6244BDf05Cda44a7').toLowerCase()]: GRT,
+    [String('0x584bC13c7D411c00c01A62e8019472dE68768430').toLowerCase()]: HEGIC,
+    [String('0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30').toLowerCase()]: INJ,
+    [String('0xdd974D5C2e2928deA5F71b9825b8b646686BD200').toLowerCase()]: KNC,
+    [String('0x1cEB5cB57C4D4E2b2433641b95Dd330A33185A44').toLowerCase()]: KP3R,
+    [String('0x514910771AF9Ca656af840dff83E8264EcF986CA').toLowerCase()]: LINK,
+    [String('0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD').toLowerCase()]: LRC,
+    // [String('').toLowerCase()]: LTC,
+    [String('0x0F5D2fB29fb7d3CFeE444a200298f468908cC942').toLowerCase()]: MANA,
+    [String('0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0').toLowerCase()]: MATIC,
+    [String('0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2').toLowerCase()]: MKR,
+    [String('0xec67005c4E498Ec7f55E092bd1d35cbC47C91892').toLowerCase()]: MLN,
+    [String('0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2').toLowerCase()]: MTA,
+    [String('0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671').toLowerCase()]: NMR,
+
+    [String('0x8207c1FfC5B6804F6024322CcF34F29c3541Ae26').toLowerCase()]: OGN,
+    [String('0xd26114cd6EE289AccF82350c8d8487fedB8A0C07').toLowerCase()]: OMG,
+    [String('0x4575f41308EC1483f3d399aa9a2826d74Da13Deb').toLowerCase()]: OXT,
+    [String('0x8E870D67F660D95d5be530380D0eC0bd388289E1').toLowerCase()]: PAX,
+    [String('0x45804880De22913dAFE09f4980848ECE6EcbAf78').toLowerCase()]: PAXG,
+    [String('0xbC396689893D065F41bc2C6EcbeE5e0085233447').toLowerCase()]: PERP,
+    [String('0xF970b8E36e23F7fC3FD752EeA86f8Be8D83375A6').toLowerCase()]: RCN,
+    [String('0x408e41876cCCDC0F92210600ef50372656052a38').toLowerCase()]: REN,
+    [String('0x221657776846890989a759BA2973e427DfF5C9bB').toLowerCase()]: REP,
+    [String('0x607F4C5BB672230e8672085532f7e901544a7375').toLowerCase()]: RLC,
+    [String('0x3155BA85D5F96b2d030a4966AF206230e46849cb').toLowerCase()]: RUNE,
+    [String('0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F').toLowerCase()]: SNX,
+    [String('0x476c5E26a75bd202a9683ffD34359C0CC15be0fF').toLowerCase()]: SRM,
+    [String('0x57Ab1ec28D129707052df4dF418D58a2D46d5f51').toLowerCase()]: SUSD,
+    [String('0x6B3595068778DD592e39A122f4f5a5cF09C90fE2').toLowerCase()]: SUSHI,
+    [String('0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9').toLowerCase()]: SXP,
+    [String('0x05D3606d5c81EB9b7B18530995eC9B29da05FaBa').toLowerCase()]: TOMO,
+    [String('0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784').toLowerCase()]: TRU,
+    [String('0x0000000000085d4780B73119b644AE5ecd22b376').toLowerCase()]: TUSD,
+    [String('0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828').toLowerCase()]: UMA,
+    [String('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984').toLowerCase()]: UNI,
+    [String('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48').toLowerCase()]: USDC,
+    [String('0xdAC17F958D2ee523a2206206994597C13D831ec7').toLowerCase()]: USDT,
+    [String('0xa47c8bf37f92aBed4A126BDA807A7b7498661acD').toLowerCase()]: UST,
+    [String('0x1cF4592ebfFd730c7dc92c1bdFFDfc3B9EfCf29a').toLowerCase()]: WAVES,
+    [String('0x0d438F3b5175Bebc262bF23753C1E53d03432bDE').toLowerCase()]: WNXM,
+    // [String('').toLowerCase()]: XRP,
+    [String('0x23693431dE4CcCAe05d0CAF63bE0f1dcFcDf4906').toLowerCase()]: XTZ,
+    [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI,
+    [String('0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83').toLowerCase()]: YFII,
+    [String('0xE41d2489571d322189246DaFA5ebDe1F4699F498').toLowerCase()]: ZRX
   },
   [ChainId.ROPSTEN]: {
     [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
