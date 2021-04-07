@@ -30,7 +30,7 @@ const CreatePair = () => {
     return token !== selectedCollateral
   })
 
-  const handleCreate = async() => {
+  const handleCreate = async () => {
     try {
       let mapping = CHAINLINK_MAPPING[chainId || 1] || {}
       for (let address in mapping) {

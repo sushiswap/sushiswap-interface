@@ -5,7 +5,7 @@ import { ChevronLeft } from 'react-feather'
 
 function Button({ children, className, ...rest }: any): JSX.Element {
   return (
-    <button className={`${className} focus:outline-none focus:ring`} {...rest}>
+    <button className={`${className} focus:outline-none focus:ring disabled:opacity-50`} {...rest}>
       {children}
     </button>
   )
