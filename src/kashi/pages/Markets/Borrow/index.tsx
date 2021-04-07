@@ -46,7 +46,7 @@ export default function BorrowMarkets(): JSX.Element {
           </div>
         )}
 
-        <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-gray-500">
+        <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
           <div className="flex items-center cursor-pointer hover:text-secondary" onClick={() => requestSort('symbol')}>
             <div>Markets</div>
             {sortConfig &&
@@ -165,13 +165,13 @@ export default function BorrowMarkets(): JSX.Element {
                         <div>
                           {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-gray-500">{formattedNum(pair.currentBorrowAmount.usd, true)}</div>
+                        <div className="text-secondary">{formattedNum(pair.currentBorrowAmount.usd, true)}</div>
                       </div>
                       <div className="text-right">
                         <div>
                           {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-gray-500">{formattedNum(pair.totalAssetAmount.usd, true)}</div>
+                        <div className="text-secondary">{formattedNum(pair.totalAssetAmount.usd, true)}</div>
                       </div>
                       <div className="text-right">{formattedPercent(pair.currentInterestPerYear.string)}</div>
                     </div>

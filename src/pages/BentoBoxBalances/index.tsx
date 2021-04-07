@@ -60,7 +60,7 @@ export default function BentoBalances(): JSX.Element {
                 <BackButton defaultRoute="/bento" />
                 <BentoBoxLogo className="fill-current h-auto w-10 mr-2" />
                 <div className="text-lg mr-2">My BentoBox</div>
-                <div className="text-lg text-gray-500">
+                <div className="text-lg text-secondary">
                   {formattedNum(
                     balances?.reduce((previousValue, currentValue) => {
                       return previousValue + Number(currentValue.amountUSD)
@@ -75,7 +75,7 @@ export default function BentoBalances(): JSX.Element {
         }
       >
         <div className="grid gap-4 grid-flow-row auto-rows-max">
-          <div className="px-4 grid grid-cols-3 text-sm  text-gray-500 select-none">
+          <div className="px-4 grid grid-cols-3 text-sm  text-secondary select-none">
             <div>Token</div>
             <div className="text-right">Wallet</div>
             <div className="text-right">BentoBox</div>
@@ -124,13 +124,13 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
         <div className="flex justify-end items-center">
           <div>
             <div className="text-right">{walletBalance} </div>
-            <div className="text-gray-500 text-right">{formattedNum(balance.amountUSD, true)}</div>
+            <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
           </div>
         </div>
         <div className="flex justify-end items-center">
           <div>
             <div className="text-right">{bentoBalance} </div>
-            <div className="text-gray-500 text-right">{formattedNum(balance.amountUSD, true)}</div>
+            <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
           </div>
         </div>
         {/* <div className="flex items-center">

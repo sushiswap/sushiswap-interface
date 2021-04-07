@@ -8,7 +8,7 @@ import { GradientDot } from '../../../components'
 function Positions({ pairs }: any): JSX.Element | null {
   return (
     <div>
-      <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm  text-gray-500">
+      <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm  text-secondary">
         <div className="hover:text-secondary col-span-1 md:col-span-2">Your Positions</div>
         <div className="text-right hover:text-secondary">Borrowing</div>
         <div className="text-right hover:text-secondary">Collateral</div>
@@ -43,13 +43,13 @@ function Positions({ pairs }: any): JSX.Element | null {
                     <div>
                       {formattedNum(pair.currentUserBorrowAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
+                    <div className="text-secondary text-sm">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">
                     <div>
                       {formattedNum(pair.userCollateralAmount.string, false)} {pair.collateral.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
+                    <div className="text-secondary text-sm">{formattedNum(pair.userCollateralAmount.usd, true)}</div>
                   </div>
                   <div className="hidden md:flex justify-end items-center">
                     {formattedPercent(pair.health.string)}

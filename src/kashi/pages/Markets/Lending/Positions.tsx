@@ -6,7 +6,7 @@ import { formattedPercent, formattedNum } from 'utils'
 function Positions({ pairs }: any): JSX.Element | null {
   return (
     <div>
-      <div className="grid gap-4 grid-cols-4 md:grid-cols-5 pb-4 px-4 text-sm  text-gray-500">
+      <div className="grid gap-4 grid-cols-4 md:grid-cols-5 pb-4 px-4 text-sm  text-secondary">
         <div className="hover:text-secondary col-span-1 md:col-span-2">Your Positions</div>
         <div className="text-right hover:text-secondary">Lent</div>
         <div className="text-right hover:text-secondary">Borrowed</div>
@@ -40,11 +40,11 @@ function Positions({ pairs }: any): JSX.Element | null {
                     <div>
                       {formattedNum(pair.currentUserAssetAmount.string, false)} {pair.asset.symbol}
                     </div>
-                    <div className="text-gray-500 text-sm">{formattedNum(pair.currentUserAssetAmount.usd, true)}</div>
+                    <div className="text-secondary text-sm">{formattedNum(pair.currentUserAssetAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">
                     <div>{formattedPercent(pair.utilization.string)}</div>
-                    <div className="text-gray-500">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
+                    <div className="text-secondary">{formattedNum(pair.currentUserBorrowAmount.usd, true)}</div>
                   </div>
                   <div className="text-right">{formattedPercent(pair.currentSupplyAPR.string)}</div>
                 </div>

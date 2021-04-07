@@ -38,8 +38,8 @@ function MarketHeader({ type = 'Borrow', children, search, term }: any) {
           </div>
         </div>
         <div className="flex flex-col w-full md:hidden items-center">
-          <div className="text-2xl  text-high-emphesis">{formattedNum(netWorth, true)}</div>
-          <div className="text-sm  text-secondary">Net Worth</div>
+          <div className="text-2xl text-high-emphesis">{formattedNum(netWorth, true)}</div>
+          <div className="text-sm text-secondary">Net Worth</div>
         </div>
       </div>
     </Header>

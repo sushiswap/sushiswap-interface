@@ -48,7 +48,7 @@ export default function LendingMarkets(): JSX.Element | null {
           </div>
         )}
         <div>
-          <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-gray-500">
+          <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
             <div
               className="flex items-center cursor-pointer hover:text-secondary"
               onClick={() => requestSort('symbol')}
@@ -170,7 +170,7 @@ export default function LendingMarkets(): JSX.Element | null {
                           <div>
                             {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
                           </div>
-                          <div className="text-gray-500">{formattedNum(pair.currentAllAssets.usd, true)}</div>
+                          <div className="text-secondary">{formattedNum(pair.currentAllAssets.usd, true)}</div>
                         </div>
                       </div>
                     </Link>
