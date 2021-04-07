@@ -38,7 +38,9 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <div
                   className={
                     'flex items-center font-medium ' +
-                    (location.pathname === '/bento/kashi/lend' ? 'text-white' : 'text-gray-500')
+                    (location.pathname === '/bento/kashi/lend'
+                      ? 'text-high-emphesis'
+                      : 'text-secondary hover:text-primary')
                   }
                 >
                   <div className="whitespace-nowrap text-base">Lend</div>
@@ -48,7 +50,9 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <div
                   className={
                     'flex items-center font-medium ' +
-                    (location.pathname === '/bento/kashi/borrow' ? 'text-white' : 'text-gray-500')
+                    (location.pathname === '/bento/kashi/borrow'
+                      ? 'text-high-emphesis'
+                      : 'text-secondary hover:text-primary')
                   }
                 >
                   <div className="whitespace-nowrap text-base">Borrow</div>
@@ -59,7 +63,7 @@ export default function Layout({ left = undefined, children = undefined, right =
               <NavLink
                 to="/bento/balances"
                 className={`border-transparent px-6 border-b-2 flex justify-end items-center font-medium ${
-                  location.pathname === '/bento/balances' ? 'text-white' : 'text-gray-500'
+                  location.pathname === '/bento/balances' ? 'text-high-emphesis' : 'text-secondary hover:text-primary'
                 }`}
               >
                 <img src={BentoBoxLogo} alt="" className="flex max-h-4 mr-2" />
@@ -67,7 +71,7 @@ export default function Layout({ left = undefined, children = undefined, right =
               </NavLink>
               {netWorth.gt(0) && (
                 <div
-                  className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-gray-500`}
+                  className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-high-emphesis`}
                 >
                   <div className="whitespace-nowrap text-base">{formattedNum(netWorth.string, true)}</div>
                 </div>
@@ -82,7 +86,10 @@ export default function Layout({ left = undefined, children = undefined, right =
             {left}
           </div>
         )}
-        <div className={`col-span-12 ${right ? 'lg:col-span-8 xl:col-span-6' : 'xl:col-span-9'}`} style={{ minHeight: '40rem' }}>
+        <div
+          className={`col-span-12 ${right ? 'lg:col-span-8 xl:col-span-6' : 'xl:col-span-9'}`}
+          style={{ minHeight: '40rem' }}
+        >
           {children}
         </div>
         {right && (
