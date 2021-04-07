@@ -11,7 +11,7 @@ import { formatFromBalance, formattedNum } from '../../utils'
 import { PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
 import { Card, CardHeader, Paper, Layout, Search } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
-import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
+import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
@@ -58,7 +58,7 @@ export default function BentoBalances(): JSX.Element {
             <div className="flex w-full justify-between">
               <div className="hidden md:flex items-center">
                 <BackButton defaultRoute="/bento" />
-                <img alt="" src={BentoBoxLogo} className="block w-10 mr-2" />
+                <BentoBoxLogo className="fill-current h-auto w-10 mr-2" />
                 <div className="text-lg mr-2">My BentoBox</div>
                 <div className="text-lg text-gray-500">
                   {formattedNum(
