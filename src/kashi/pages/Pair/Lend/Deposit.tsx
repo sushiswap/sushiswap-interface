@@ -1,18 +1,16 @@
 import React, { useCallback, useState } from 'react'
-import { Alert, Dots, BlueButton, BlueButtonOutlined } from 'kashi/components'
+import { Alert, Dots, StyledButton } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import useKashi from 'kashi/hooks/useKashi'
-import { formatToBalance, formatFromBalance, formattedNum, getProviderOrSigner } from 'utils'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
-import { ApprovalState } from 'hooks/useApproveCallback'
-import { useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import { WETH } from '@sushiswap/sdk'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { Currency, CurrencyAmount, Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { e10 } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
+import { ethers } from 'ethers'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
   const { account, chainId, library } = useActiveWeb3React()
@@ -20,7 +18,13 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
-  const [approvalState, approve] = useApproveCallback(pair.asset.address, BENTOBOX_ADDRESS)
+  const [approvalState, approve] = useApproveCallback(
+    new TokenAmount(
+      new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name), 
+      value.toBigNumber(pair.asset.decimals).toString()
+    ),
+    BENTOBOX_ADDRESS
+  )
 
   // Calculated
   const balance = useBento ? pair.asset.bentoBalance : pair.asset.balance
@@ -69,14 +73,14 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
           </span>
           <span> From </span>
           <span>
-            <BlueButtonOutlined
+            <StyledButton styling="blueoutlined"
               className="focus:ring focus:ring-blue"
               onClick={() => {
                 setUseBento(!useBento)
               }}
             >
               {useBento ? 'BentoBox' : 'Wallet'}
-            </BlueButtonOutlined>
+            </StyledButton>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -91,9 +95,9 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
           onUserInput={setValue}
         />
         {account && (
-          <BlueButtonOutlined onClick={() => setValue(max)} className="absolute right-4 focus:ring focus:ring-blue">
+          <StyledButton styling="blueoutlined" onClick={() => setValue(max)} className="absolute right-4 focus:ring focus:ring-blue">
             MAX
-          </BlueButtonOutlined>
+          </StyledButton>
         )}
       </div>
           
@@ -102,22 +106,22 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
       {showApprove && (
-        <BlueButton onClick={approve} className="mb-4">
+        <StyledButton styling="blue" onClick={approve} className="mb-4">
           {approvalState === ApprovalState.PENDING ? (
             <Dots>Approving {pair.asset.symbol}</Dots>
           ) : (
             `Approve ${pair.asset.symbol}`
           )}
-        </BlueButton>
+        </StyledButton>
       )}
 
       {!showApprove && (
-        <BlueButton
+        <StyledButton styling="blue"
           onClick={onClick}
           disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}
         >
           Deposit
-        </BlueButton>
+        </StyledButton>
       )}
     </>
   )

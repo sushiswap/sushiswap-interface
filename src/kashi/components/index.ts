@@ -2,11 +2,7 @@ export { default as Alert, Error } from './Alert'
 export {
   default as Button,
   BackButton,
-  GradientButton,
-  BlueButton,
-  PinkButton,
-  BlueButtonOutlined,
-  PinkButtonOutlined
+  StyledButton,
 } from './Button'
 export { default as Card } from './Card'
 export { default as CardHeader, BorrowCardHeader, LendCardHeader } from './CardHeader'

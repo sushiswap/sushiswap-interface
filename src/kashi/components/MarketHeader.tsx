@@ -1,17 +1,12 @@
-import React, { useMemo } from 'react'
-import { useLocation } from 'react-router'
-import { useKashiPairs } from 'kashi/context'
+import React from 'react'
 import { LendCardHeader, BorrowCardHeader } from '.'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formattedNum } from 'utils'
 import { Search } from 'react-feather'
 import { ReactComponent as AddIcon } from 'assets/svg/add.svg'
 
-function MarketHeader({ type = 'Borrow', children, search, term }: any) {
-  const pairs = useKashiPairs()
-  const netWorth = useMemo(() => {
-    return pairs.reduce((previous, current) => previous.add(current.userNetWorth), BigNumber.from(0))
-  }, [pairs])
+function MarketHeader({ type = 'Borrow', pairs, search, term }: any) {
+  const netWorth = pairs.reduce((previous: any, current: any) => previous.add(current.userNetWorth), BigNumber.from(0))
   const Header = type === 'Borrow' ? BorrowCardHeader : LendCardHeader
   return (
     <Header>

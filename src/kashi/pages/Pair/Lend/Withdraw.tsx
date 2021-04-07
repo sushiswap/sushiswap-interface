@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { Alert, BlueButton, BlueButtonOutlined } from 'kashi/components'
+import { Alert, StyledButton } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import useKashi from 'kashi/hooks/useKashi'
 import { e10, minimum } from 'kashi/functions/math'
 import { easyAmount } from 'kashi/functions/kashi'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
@@ -12,7 +11,6 @@ import { KashiCooker } from 'kashi/entities/KashiCooker'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
   const { account, library, chainId } = useActiveWeb3React()
-  const { removeAsset, removeWithdrawAsset } = useKashi()
 
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
@@ -62,14 +60,14 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
           </span>
           <span> To </span>
           <span>
-            <BlueButtonOutlined
+            <StyledButton styling="blueoutlined"
               className="focus:ring focus:ring-blue"
               onClick={() => {
                 setUseBento(!useBento)
               }}
             >
               {useBento ? 'BentoBox' : 'Wallet'}
-            </BlueButtonOutlined>
+            </StyledButton>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -85,9 +83,9 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
           onFocus={() => { setValue(displayValue);setPinMax(false) } }
         />
         {account && (
-          <BlueButtonOutlined onClick={() => setPinMax(true)} className="absolute right-4 focus:ring focus:ring-blue">
+          <StyledButton styling="blueoutlined" onClick={() => setPinMax(true)} className="absolute right-4 focus:ring focus:ring-blue">
             MAX
-          </BlueButtonOutlined>
+          </StyledButton>
         )}
       </div>
 
@@ -95,12 +93,13 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-      <BlueButton
+      <StyledButton
+        styling="blue"
         onClick={() => onClick() }
         disabled={warningMessage || displayValue.toBigNumber(0).lte(0)}
       >
         Withdraw
-      </BlueButton>
+      </StyledButton>
     </>
   )
 }

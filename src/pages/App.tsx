@@ -29,8 +29,6 @@ import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 
 import SushiBar from './SushiBar'
 
-import Test from './Test'
-
 //Feat Bento
 import Bento from './BentoBox'
 import BentoBalances from './BentoBoxBalances'
@@ -104,17 +102,12 @@ function App() {
           <Web3ReactManager>
             <KashiProvider>
               <Switch>
-                {process.env.NODE_ENV === 'development' && <Route exact strict path="/test" component={Test} />}
                 <PublicRoute exact path="/connect" component={Connect} />
                 {/* BentoApps */}
-
-                {/* <Route exact strict path={'/kashi'} component={KashiIndex} /> */}
-                {/* <Route exact strict path="/kashi/:market" component={KashiPairs} /> */}
-                {/* <Route exact strict path="/kashi/:market/:pairAddress" component={KashiPair} /> */}
-
                 <Route exact strict path="/bento" component={Bento} />
                 <WalletRoute exact strict path="/bento/balances" component={BentoBalances} />
 
+                {/* Kashi */}
                 <Route exact strict path="/bento/kashi" render={() => <Redirect to="/bento/kashi/borrow" />} />
                 <WalletRoute exact strict path="/bento/kashi/lend" component={LendMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
@@ -125,10 +118,10 @@ function App() {
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />
                 <Route exact strict path="/saave" component={Saave} />
+
                 {/* Pages */}
                 {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
                 <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
-                {/* Pages */}
                 <Route exact strict path="/swap" component={Swap} />
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/send" component={RedirectPathToSwapOnly} />

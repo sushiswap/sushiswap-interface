@@ -1,31 +1,14 @@
 import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { GradientButton, Card } from 'kashi/components'
+import { StyledButton, Card } from 'kashi/components'
 import { useActiveWeb3React } from 'hooks'
 import Web3Status from 'components/Web3Status'
-import useKashi from 'kashi/hooks/useKashi'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 import ComingSoon from '../../assets/kashi/coming-soon.png'
 import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
 import BentoBoxHero from '../../assets/kashi/bentobox-hero.png'
 function BentoBox(): JSX.Element {
   const { account } = useActiveWeb3React()
-  const { kashiApproved, approveMaster } = useKashi()
-
-  const [requestedApproval, setRequestedApproval] = useState(false)
-
-  const handleApprove = useCallback(async () => {
-    try {
-      setRequestedApproval(true)
-      const txHash = await approveMaster()
-      console.log(txHash)
-      if (!txHash) {
-        setRequestedApproval(false)
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }, [approveMaster])
 
   return (
     <div>
@@ -59,9 +42,9 @@ function BentoBox(): JSX.Element {
               <img alt="" src={KashiNeonSign} className="block m-auto w-full h-auto mb-4" />
               {account ? (
                 <Link to={'/bento/kashi/borrow'}>
-                  <GradientButton className="w-full rounded text-base text-high-emphesis px-4 py-3">
+                  <StyledButton styling="gradient" className="w-full rounded text-base text-high-emphesis px-4 py-3">
                     Enter
-                  </GradientButton>
+                  </StyledButton>
                 </Link>
               ) : (
                 <Web3Status />

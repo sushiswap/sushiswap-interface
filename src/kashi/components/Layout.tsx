@@ -5,7 +5,6 @@ import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 
 import { formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useKashiPairs } from 'kashi/context'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -15,10 +14,7 @@ interface LayoutProps {
 
 export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
   const location = useLocation()
-  const pairs = useKashiPairs()
-  const netWorth = useMemo(() => {
-    return pairs.reduce((previous, current) => previous.add(current.userNetWorth), BigNumber.from(0))
-  }, [pairs])
+  const netWorth = "10.00"
   return (
     <div className="container mx-auto px-4">
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -65,11 +61,11 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <BentoBoxLogo className="fill-current h-auto w-6 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
-              {netWorth.gt(0) && (
+              {netWorth && (
                 <div
                   className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-high-emphesis`}
                 >
-                  <div className="whitespace-nowrap text-base">{formattedNum(netWorth.string, true)}</div>
+                  <div className="whitespace-nowrap text-base">{formattedNum(netWorth, true)}</div>
                 </div>
               )}
             </div>

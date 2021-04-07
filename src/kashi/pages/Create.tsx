@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { Card, Layout, LendCardHeader, BackButton, ListBox, GradientButton } from '../components'
-import { getTokenIcon } from 'kashi/functions'
+import { Card, Layout, LendCardHeader, BackButton, ListBox, StyledButton } from '../components'
 
 import {
   CHAINLINK_TOKENS,
@@ -130,7 +129,7 @@ const CreatePair = () => {
             selectedToken={selectedAsset}
             setSelectedToken={setSelectedAsset}
           />
-          <GradientButton
+          <StyledButton styling="gradient"
             className="w-full rounded text-base text-high-emphesis px-4 py-3"
             onClick={() => handleCreate()}
             disabled={
@@ -139,7 +138,7 @@ const CreatePair = () => {
             }
           >
             Create Market
-          </GradientButton>
+          </StyledButton>
         </div>
       </Card>
     </Layout>

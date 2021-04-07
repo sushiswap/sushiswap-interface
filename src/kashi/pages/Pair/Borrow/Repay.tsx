@@ -1,19 +1,11 @@
-import React, { useState, useCallback } from 'react'
-import useTheme from 'hooks/useTheme'
-import { WETH } from '@sushiswap/sdk'
-import { Alert, Dots, PinkButton, PinkButtonOutlined } from 'kashi/components'
+import React, { useState } from 'react'
+import { Alert, StyledButton } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, Type } from 'react-feather'
+import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
-import useBentoBalance from 'sushi-hooks/useBentoBalance'
-import useKashi from 'kashi/hooks/useKashi'
-import { useBentoBoxContract } from 'sushi-hooks/useContract'
-import { formatToBalance, formatFromBalance, formattedPercent, formattedNum } from 'utils'
-import isEmpty from 'lodash/isEmpty'
+import { useApproveCallback } from 'sushi-hooks/useApproveCallback'
+import { formattedPercent, formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
-import Fraction from 'constants/Fraction'
 import { GradientDot } from '../../../components'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { minimum, e10 } from 'kashi/functions/math'
@@ -24,8 +16,6 @@ interface RepayProps {
 
 export default function Repay({ pair }: RepayProps) {
   const { account, chainId } = useActiveWeb3React()
-
-  const { repay, repayFromBento, removeCollateral, removeWithdrawCollateral } = useKashi()
 
   // State
   const [useBentoRepayAsset, setUseBentoRepayAsset] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -116,7 +106,7 @@ export default function Repay({ pair }: RepayProps) {
     setPendingTx(true)
 
     // TODO: Cook
-
+    /*
     if (repayAssetValue.toBigNumber(pair.asset.decimals).gt(0)) {
       if (useBentoRepayAsset) {
         await repayFromBento(
@@ -149,17 +139,10 @@ export default function Repay({ pair }: RepayProps) {
           removeCollateralValue.toBigNumber(pair.collateral.decimals)
         )
       }
-    }
+    }*/
 
     setPendingTx(false)
   }
-
-  // const showApprove =
-  //   chainId &&
-  //   pair.collateral.address !== WETH[chainId].address &&
-  //   !useBentoCollateral &&
-  //   collateralValue &&
-  //   (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   return (
     <>
@@ -172,14 +155,15 @@ export default function Repay({ pair }: RepayProps) {
           </span>
           <span className="mx-2"> Repay Asset From </span>
           <span>
-            <PinkButtonOutlined
+            <StyledButton
+              styling="pink"
               className="focus:ring focus:ring-pink"
               onClick={() => {
                 setUseBentoRepayAsset(!useBentoRepayAsset)
               }}
             >
               {useBentoRepayAsset ? 'BentoBox' : 'Wallet'}
-            </PinkButtonOutlined>
+            </StyledButton>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -188,13 +172,13 @@ export default function Repay({ pair }: RepayProps) {
       </div>
 
       {/* {showApprove && (
-        <PinkButton onClick={approve} className="mb-4">
+        <StyledButton styling="pink" onClick={approve} className="mb-4">
           {approvalState === ApprovalState.PENDING ? (
             <Dots>Approving {pair.collateral.symbol}</Dots>
           ) : (
             `Approve ${pair.collateral.symbol}`
           )}
-        </PinkButton>
+        </StyledButton>
       )} */}
 
       <div className="flex items-center relative w-full mb-4">
@@ -204,14 +188,14 @@ export default function Repay({ pair }: RepayProps) {
           onUserInput={setRepayAssetValue}
         />
         {account && (
-          <PinkButtonOutlined
+          <StyledButton styling="pinkoutlined"
             onClick={() => {
               setRepayAssetValue(maxRepayAsset)
             }}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
             MAX
-          </PinkButtonOutlined>
+          </StyledButton>
         )}
       </div>
 
@@ -222,14 +206,14 @@ export default function Repay({ pair }: RepayProps) {
           </span>
           <span className="mx-2">Remove Collateral To</span>
           <span>
-            <PinkButtonOutlined
+            <StyledButton styling="pinkoutlined"
               className="focus:ring focus:ring-pink"
               onClick={() => {
                 setUseBentoRemoveCollateral(!useBentoRemoveCollateral)
               }}
             >
               {useBentoRemoveCollateral ? 'BentoBox' : 'Wallet'}
-            </PinkButtonOutlined>
+            </StyledButton>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -244,12 +228,12 @@ export default function Repay({ pair }: RepayProps) {
           onUserInput={setRemoveCollateralValue}
         />
         {account && (
-          <PinkButtonOutlined
+          <StyledButton styling="pinkoutlined"
             onClick={() => setRemoveCollateralValue(maxRemoveCollateral)}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
             MAX
-          </PinkButtonOutlined>
+          </StyledButton>
         )}
       </div>
 
@@ -270,7 +254,7 @@ export default function Repay({ pair }: RepayProps) {
               </div>
             ))}
           </div>
-          <PinkButton
+          <StyledButton styling="pink"
             onClick={onRepay}
             // disabled={
             //   pendingTx ||
@@ -281,7 +265,7 @@ export default function Repay({ pair }: RepayProps) {
             // }
           >
             Repay
-          </PinkButton>
+          </StyledButton>
         </>
       )}
     </>

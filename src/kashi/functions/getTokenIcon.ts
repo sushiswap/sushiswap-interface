@@ -1,5 +1,4 @@
 import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
 
 // todo: move these into sushiswap/assets/square
 import ADA from '../../assets/kashi/tokens/ada-square.jpg'
@@ -248,8 +247,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
   }
 }
 
-const TokenIcon = (address: string) => {
-  const { chainId } = useActiveWeb3React()
+const TokenIcon = (address: string, chainId?: ChainId) => {
   const RESULT = TOKEN_ICONS[chainId || 1][address.toLowerCase()]
 
   if (!RESULT) {

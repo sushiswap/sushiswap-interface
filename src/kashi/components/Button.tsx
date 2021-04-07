@@ -13,49 +13,20 @@ function Button({ children, className, ...rest }: any): JSX.Element {
 
 export default Button
 
-export function GradientButton({ children, className, ...rest }: any): JSX.Element {
+export type ButtonStyle = 'gradient' | 'blue' | 'pink' | 'blueoutlined' | 'pinkoutlined'
+export function StyledButton({ children, className, styling, ...rest }: { children: any, className?: string, styling: ButtonStyle, [x: string]: any }): JSX.Element {
+  const classNamesMap: { [key: string] : string} = {
+    'gradient': 'bg-gradient-to-r from-blue to-pink',
+    'blue': 'bg-blue w-full rounded text-base text-high-emphesis px-4 py-3',
+    'pink': 'bg-pink w-full rounded text-base text-high-emphesis px-4 py-3',
+    'blueoutlined': 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1',
+    'pinkoutlined': 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1'
+  }
+  const classNames = classNamesMap[styling]
   return (
-    <Button className={`bg-gradient-to-r from-blue to-pink ${className} `} {...rest}>
+    <button className={`${classNames} ${className} focus:outline-none focus:ring disabled:opacity-50`} {...rest}>
       {children}
-    </Button>
-  )
-}
-
-export function BlueButton({ children, className, ...rest }: any): JSX.Element {
-  return (
-    <Button className={`bg-blue w-full rounded text-base text-high-emphesis px-4 py-3 ${className} `} {...rest}>
-      {children}
-    </Button>
-  )
-}
-
-export function PinkButton({ children, className, ...rest }: any): JSX.Element {
-  return (
-    <Button className={`bg-pink w-full rounded text-base text-high-emphesis px-4 py-3 ${className}`} {...rest}>
-      {children}
-    </Button>
-  )
-}
-
-export function BlueButtonOutlined({ children, className, ...rest }: any): JSX.Element {
-  return (
-    <Button
-      className={`bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1 ${className} `}
-      {...rest}
-    >
-      {children}
-    </Button>
-  )
-}
-
-export function PinkButtonOutlined({ children, className, ...rest }: any): JSX.Element {
-  return (
-    <Button
-      className={`bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1 ${className} `}
-      {...rest}
-    >
-      {children}
-    </Button>
+    </button>
   )
 }
 

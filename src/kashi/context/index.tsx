@@ -312,7 +312,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 }
 
 export function useKashiPairs() {
+  console.log("useKashiPairs start")
   const context = useContext(KashiContext)
+  console.log("useKashiPairs end")
   if (context === undefined) {
     throw new Error('useKashiPairs must be used within a KashiProvider')
   }
@@ -320,7 +322,9 @@ export function useKashiPairs() {
 }
 
 export function useKashiPair(address: string) {
+  console.log("useKashiPair start")
   const context = useContext(KashiContext)
+  console.log("useKashiPair end")
   if (context === undefined) {
     throw new Error('useKashiPair must be used within a KashiProvider')
   }

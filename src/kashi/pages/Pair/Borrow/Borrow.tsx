@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { WETH } from '@sushiswap/sdk'
-import { Alert, Dots, PinkButton, PinkButtonOutlined } from 'kashi/components'
+import { Alert, Dots, StyledButton } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, Type } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
-import useKashi from 'kashi/hooks/useKashi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { minimum, e10 } from 'kashi/functions/math'
@@ -19,8 +18,6 @@ interface BorrowProps {
 
 export default function Borrow({ pair }: BorrowProps) {
   const { account, chainId, library } = useActiveWeb3React()
-
-  const { borrowWithdraw, borrow, depositAddCollateral, addCollateral } = useKashi()
 
   // State
   const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -90,6 +87,7 @@ export default function Borrow({ pair }: BorrowProps) {
   // Handlers
   async function onBorrow() {
     const cooker = new KashiCooker(pair, account, library, chainId)
+    /*
     if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
       if (useBentoCollateral) {
         await addCollateral(
@@ -112,7 +110,7 @@ export default function Borrow({ pair }: BorrowProps) {
       } else {
         await borrowWithdraw(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
       }
-    }
+    }*/
   }
 
   const showApprove =
@@ -133,14 +131,15 @@ export default function Borrow({ pair }: BorrowProps) {
           </span>
           <span className="mx-2">Add Collateral From</span>
           <span>
-            <PinkButtonOutlined
+            <StyledButton
+              styling="pinkoutlined"
               className="focus:ring focus:ring-pink"
               onClick={() => {
                 setUseBentoCollateral(!useBentoCollateral)
               }}
             >
               {useBentoCollateral ? 'BentoBox' : 'Wallet'}
-            </PinkButtonOutlined>
+            </StyledButton>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -155,12 +154,13 @@ export default function Borrow({ pair }: BorrowProps) {
           onUserInput={setCollateralValue}
         />
         {account && (
-          <PinkButtonOutlined
+          <StyledButton
+            styling="pinkoutlined"
             onClick={() => setCollateralValue(maxCollateral)}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
             MAX
-          </PinkButtonOutlined>
+          </StyledButton>
         )}
       </div>
 
@@ -171,14 +171,15 @@ export default function Borrow({ pair }: BorrowProps) {
           </span>
           <span className="mx-2"> Borrow Asset To </span>
           <span>
-            <PinkButtonOutlined
+            <StyledButton
+              styling="pinkoutlined"
               className="focus:ring focus:ring-pink"
               onClick={() => {
                 setUseBentoBorrow(!useBentoBorrow)
               }}
             >
               {useBentoBorrow ? 'BentoBox' : 'Wallet'}
-            </PinkButtonOutlined>
+            </StyledButton>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -193,14 +194,15 @@ export default function Borrow({ pair }: BorrowProps) {
           onUserInput={setBorrowValue}
         />
         {account && (
-          <PinkButtonOutlined
+          <StyledButton
+            styling="pinkoutlined"
             onClick={() => {
               setBorrowValue(maxBorrow)
             }}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
             MAX
-          </PinkButtonOutlined>
+          </StyledButton>
         )}
       </div>
 
@@ -209,22 +211,23 @@ export default function Borrow({ pair }: BorrowProps) {
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
       {showApprove && (
-        <PinkButton onClick={approve}>
+        <StyledButton styling="pink" onClick={approve}>
           {approvalState === ApprovalState.PENDING ? (
             <Dots>Approving {pair.collateral.symbol}</Dots>
           ) : (
             `Approve ${pair.collateral.symbol}`
           )}
-        </PinkButton>
+        </StyledButton>
       )}
 
       {!showApprove && (
-        <PinkButton
+        <StyledButton
+          styling="pink"
           onClick={onBorrow}
           disabled={(balance.eq(0) && pair.userCollateralAmount.value.eq(0)) || warning}
         >
           Borrow
-        </PinkButton>
+        </StyledButton>
       )}
     </>
   )

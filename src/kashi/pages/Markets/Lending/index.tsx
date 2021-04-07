@@ -12,8 +12,10 @@ import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
 import Positions from './Positions'
+import { useActiveWeb3React } from 'hooks'
 
 export default function LendingMarkets(): JSX.Element | null {
+  const { chainId } = useActiveWeb3React()
   const pairs = useKashiPairs()
 
   const { result, search, term } = useFuse({
@@ -21,7 +23,6 @@ export default function LendingMarkets(): JSX.Element | null {
     options: { keys: ['search'], threshold: 0.1 }
   })
 
-  // TODO: Causing rule of hooks errors
   const { items, requestSort, sortConfig } = useSortableData(result.map((a: { item: any }) => (a.item ? a.item : a)))
 
   const positions = pairs.filter(function(pair: any) {
@@ -41,7 +42,7 @@ export default function LendingMarkets(): JSX.Element | null {
         />
       }
     >
-      <Card className="bg-dark-900" header={<MarketHeader type="Lending" search={search} term={term} />}>
+      <Card className="bg-dark-900" header={<MarketHeader type="Lending" pairs={pairs} search={search} term={term} />}>
         {positions && positions.length > 0 && (
           <div className="pb-4">
             <Positions pairs={positions} />
@@ -145,12 +146,12 @@ export default function LendingMarkets(): JSX.Element | null {
                         <div className="flex flex-col sm:flex-row items-start sm:items-center">
                           <div className="hidden space-x-2 md:flex">
                             <img
-                              src={getTokenIcon(pair.collateral.address)}
+                              src={getTokenIcon(pair.collateral.address, chainId)}
                               className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                               alt=""
                             />
                             <img
-                              src={getTokenIcon(pair.asset.address)}
+                              src={getTokenIcon(pair.asset.address, chainId)}
                               className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                               alt=""
                             />
