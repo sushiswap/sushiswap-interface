@@ -22,16 +22,12 @@ export default function Layout({ left = undefined, children = undefined, right =
   return (
     <div className="container mx-auto px-4">
       <div className={`mb-2 grid grid-cols-12 gap-4`}>
-        <div className="flex justify-center col-span-12 lg:col-span-3 lg:justify-start">
-          <div className="flex items-center">
-            <Link to="/bento/kashi/borrow" className="border-transparent border-b-2">
-              <div className="flex items-end">
-                <img src={KashiLogo} alt="" className="block w-1/2 sm:w-1/3 lg:w-2/3" />
-              </div>
-            </Link>
-          </div>
+        <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
+          <Link to="/bento/kashi/borrow" className="flex justify-center xl:justify-start xl:mx-8">
+            <img src={KashiLogo} alt="" className="w-1/2 md:w-1/3 xl:w-full" />
+          </Link>
         </div>
-        <div className="flex col-span-12 lg:col-span-9 items-end">
+        <div className="flex col-span-12 xl:col-span-9 items-end">
           <nav className="flex justify-between items-center w-full">
             <div className="flex">
               <NavLink to="/bento/kashi/lend" className="border-transparent pl-8 pr-4 border-b-2">
