@@ -9,7 +9,7 @@ import BAT from '../../assets/kashi/tokens/bat-square.jpg'
 // import BNB from '../../assets/kashi/tokens/bnb-square.jpg'
 import BUSD from '../../assets/kashi/tokens/busd-square.jpg'
 // import BCH from '../../assets/kashi/tokens/bch-square.jpg'
-import BTC from '../../assets/kashi/tokens/btc-square.png'
+import BTC from '../../assets/kashi/tokens/btc-square.jpg'
 import COMP from '../../assets/kashi/tokens/comp-square.jpg'
 import COVER from '../../assets/kashi/tokens/cover-square.jpg'
 import CREAM from '../../assets/kashi/tokens/cream-square.jpg'
@@ -23,6 +23,7 @@ import LINK from '../../assets/kashi/tokens/link-square.jpg'
 // import LTC from '../../assets/kashi/tokens/ltc-square.jpg'
 import MATIC from '../../assets/kashi/tokens/matic-square.jpg'
 // import MDX from '../../assets/kashi/tokens/mdx-square.jpg'
+import REP from '../../assets/kashi/tokens/repv2-square.jpg'
 import SAI from '../../assets/kashi/tokens/sai-square.png'
 import SNX from '../../assets/kashi/tokens/snx-square.png'
 import SUSHI from '../../assets/kashi/tokens/sushi-square.jpg'
@@ -30,8 +31,6 @@ import SXP from '../../assets/kashi/tokens/sxp-square.jpg'
 import UNI from '../../assets/kashi/tokens/uni-square.jpg'
 import USDC from '../../assets/kashi/tokens/usdc-square.jpg'
 import USDT from '../../assets/kashi/tokens/usdt-square.jpg'
-import WBTC from '../../assets/kashi/tokens/wbtc-square.jpg'
-import WETH from '../../assets/kashi/tokens/eth-square.jpg'
 // import XRP from '../../assets/kashi/tokens/xrp-square.jpg'
 // import XVS from '../../assets/kashi/tokens/xvs-square.jpg'
 // import XTZ from '../../assets/kashi/tokens/xtz-square.jpg'
@@ -52,8 +51,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984').toLowerCase()]: UNI,
     [String('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48').toLowerCase()]: USDC,
     [String('0xdAC17F958D2ee523a2206206994597C13D831ec7').toLowerCase()]: USDT,
-    [String('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599').toLowerCase()]: WBTC,
-    [String('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2').toLowerCase()]: WETH,
+    [String('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599').toLowerCase()]: BTC,
+    [String('0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2').toLowerCase()]: ETH,
     [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI
   },
   [ChainId.ROPSTEN]: {
@@ -64,8 +63,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0x26fF7457496600C63b3E8902C9f871E60eDec4e4').toLowerCase()]: SAI,
     [String('0x71d82Eb6A5051CfF99582F4CDf2aE9cD402A4882').toLowerCase()]: UNI,
     [String('0x0D9C8723B343A8368BebE0B5E89273fF8D712e3C').toLowerCase()]: USDC,
-    [String('0xBde8bB00A7eF67007A96945B3a3621177B615C44').toLowerCase()]: WBTC,
-    [String('0xc778417E063141139Fce010982780140Aa0cD5Ab').toLowerCase()]: WETH,
+    [String('0xBde8bB00A7eF67007A96945B3a3621177B615C44').toLowerCase()]: BTC,
+    [String('0xc778417E063141139Fce010982780140Aa0cD5Ab').toLowerCase()]: ETH,
     [String('0xE4C6182EA459E63B8F1be7c428381994CcC2D49c').toLowerCase()]: ZRX
   },
   [ChainId.KOVAN]: {
@@ -75,9 +74,10 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0xD1308F63823221518Ec88EB209CBaa1ac182105f').toLowerCase()]: SAI,
     [String('0xb7a4F3E9097C08dA09517b5aB877F7a917224ede').toLowerCase()]: USDC,
     [String('0x07de306FF27a2B630B1141956844eB1552B956B5').toLowerCase()]: USDT,
-    [String('0xd3A691C852CDB01E281545A27064741F0B7f6825').toLowerCase()]: WBTC,
-    [String('0xd0A1E359811322d97991E03f863a0C30C2cF029C').toLowerCase()]: WETH,
-    [String('0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3').toLowerCase()]: ZRX
+    [String('0xd3A691C852CDB01E281545A27064741F0B7f6825').toLowerCase()]: BTC,
+    [String('0xd0A1E359811322d97991E03f863a0C30C2cF029C').toLowerCase()]: ETH,
+    [String('0x162c44e53097e7B5aaE939b297ffFD6Bf90D1EE3').toLowerCase()]: ZRX,
+    [String('0x50DD65531676F718B018De3dc48F92B53D756996').toLowerCase()]: REP
   },
   [ChainId.BSC]: {
     [String('0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47').toLowerCase()]: UNKNOWN, // ADA
