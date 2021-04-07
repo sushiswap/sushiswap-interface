@@ -3,11 +3,9 @@ import { Alert, StyledButton } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import { useApproveCallback } from 'sushi-hooks/useApproveCallback'
 import { formattedPercent, formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import { GradientDot } from '../../../components'
-import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { minimum, e10 } from 'kashi/functions/math'
 
 interface RepayProps {
@@ -24,8 +22,6 @@ export default function Repay({ pair }: RepayProps) {
   const [repayAssetValue, setRepayAssetValue] = useState('')
   const [removeCollateralValue, setRemoveCollateralValue] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
-
-  const [approvalState, approve] = useApproveCallback(pair.collateral.address, BENTOBOX_ADDRESS)
 
   // Calculated
   const balance = useBentoRepayAsset ? pair.asset.bentoBalance : pair.asset.balance
@@ -98,8 +94,6 @@ export default function Repay({ pair }: RepayProps) {
         )
         .toFixed(pair.collateral.decimals)
     : '0'
-
-  console.log({ maxRemoveCollateral })
 
   // Handlers
   async function onRepay() {

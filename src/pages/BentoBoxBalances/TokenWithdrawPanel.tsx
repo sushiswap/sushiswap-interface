@@ -8,8 +8,6 @@ import { Dots } from '../Pool/styleds'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
-import { useBentoBoxContract } from '../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../sushi-hooks/useApproveCallback'
 import useBentoBox from 'sushi-hooks/useBentoBox'
 import useBentoBalance from '../../sushi-hooks/useBentoBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
@@ -138,19 +136,15 @@ export default function CurrencyInputPanel({
   cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const theme = useTheme()
-  const bentoBoxContract = useBentoBoxContract()
-
+  
   const { withdraw } = useBentoBox()
 
   const tokenBalanceBigInt = useBentoBalance(tokenAddress)
   //const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
   const decimals = tokenBalanceBigInt?.decimals
-
-  // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
 
   // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
@@ -210,35 +204,24 @@ export default function CurrencyInputPanel({
           </InputRow>
         </Paper>
       </InputPanel>
-      {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
-        <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
-          <Aligner>
-            <StyledButtonName>
-              {approvalA === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
-            </StyledButtonName>
-          </Aligner>
-        </ButtonSelect>
-      )}
-      {approvalA === ApprovalState.APPROVED && (
-        <ButtonSelect
-          disabled={
-            pendingTx || !tokenBalance || Number(depositValue) === 0 || Number(depositValue) > Number(tokenBalance)
+      <ButtonSelect
+        disabled={
+          pendingTx || !tokenBalance || Number(depositValue) === 0 || Number(depositValue) > Number(tokenBalance)
+        }
+        onClick={async () => {
+          setPendingTx(true)
+          if (maxSelected) {
+            await withdraw(tokenAddress, maxDepositAmountInput)
+          } else {
+            await withdraw(tokenAddress, formatToBalance(depositValue, decimals))
           }
-          onClick={async () => {
-            setPendingTx(true)
-            if (maxSelected) {
-              await withdraw(tokenAddress, maxDepositAmountInput)
-            } else {
-              await withdraw(tokenAddress, formatToBalance(depositValue, decimals))
-            }
-            setPendingTx(false)
-          }}
-        >
-          <Aligner>
-            <StyledButtonName>Withdraw</StyledButtonName>
-          </Aligner>
-        </ButtonSelect>
-      )}
+          setPendingTx(false)
+        }}
+      >
+        <Aligner>
+          <StyledButtonName>Withdraw</StyledButtonName>
+        </Aligner>
+      </ButtonSelect>
     </>
   )
 }

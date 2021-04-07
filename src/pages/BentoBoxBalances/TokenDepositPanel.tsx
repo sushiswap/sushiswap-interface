@@ -15,12 +15,13 @@ import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
 import { useBentoBoxContract } from '../../sushi-hooks/useContract'
-import { ApprovalState, useApproveCallback } from '../../sushi-hooks/useApproveCallback'
 import useBentoBox from 'sushi-hooks/useBentoBox'
-import useTokenBalance, { BalanceProps } from 'sushi-hooks/useTokenBalance'
-import useBentoBalance from '../../sushi-hooks/useBentoBalance'
+import useTokenBalance from 'sushi-hooks/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
 import { Paper } from 'kashi/components'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { Token, TokenAmount } from '@sushiswap/sdk'
+import { BENTOBOX_ADDRESS } from 'kashi'
 
 const InputRow = styled.div<{ selected: boolean }>`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -145,25 +146,29 @@ export default function CurrencyInputPanel({
   cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const theme = useTheme()
   const bentoBoxContract = useBentoBoxContract()
-
   const { deposit } = useBentoBox()
-
   const tokenBalanceBigInt = useTokenBalance(tokenAddress)
   const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
   const decimals = tokenBalanceBigInt?.decimals
 
-  // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(tokenAddress, bentoBoxContract?.address)
+  const [depositValue, setDepositValue] = useState('')
+  const [maxSelected, setMaxSelected] = useState(false)
+
+  const [approvalState, approve] = useApproveCallback(
+    new TokenAmount(
+      new Token(chainId || 1, tokenAddress, decimals, tokenSymbol, ""), 
+      depositValue.toBigNumber(decimals).toString()
+    ),
+    BENTOBOX_ADDRESS
+  )
 
   // disable buttons if pendingTx, todo: styles could be improved
   const [pendingTx, setPendingTx] = useState(false)
 
   // track and parse user input for Deposit Input
-  const [depositValue, setDepositValue] = useState('')
-  const [maxSelected, setMaxSelected] = useState(false)
   const onUserDepositInput = useCallback((depositValue: string, max = false) => {
     setMaxSelected(max)
     setDepositValue(depositValue)
@@ -216,16 +221,16 @@ export default function CurrencyInputPanel({
           </InputRow>
         </Paper>
       </InputPanel>
-      {(approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING) && (
-        <ButtonSelect disabled={approvalA === ApprovalState.PENDING} onClick={approveACallback}>
+      {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
+        <ButtonSelect disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
           <Aligner>
             <StyledButtonName>
-              {approvalA === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
+              {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
             </StyledButtonName>
           </Aligner>
         </ButtonSelect>
       )}
-      {approvalA === ApprovalState.APPROVED && (
+      {approvalState === ApprovalState.APPROVED && (
         <ButtonSelect
           disabled={
             pendingTx || !tokenBalance || Number(depositValue) === 0 || Number(depositValue) > Number(tokenBalance)

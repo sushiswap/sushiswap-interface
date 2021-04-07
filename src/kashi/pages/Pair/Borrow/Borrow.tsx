@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { WETH } from '@sushiswap/sdk'
+import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { Alert, Dots, StyledButton } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, Type } from 'react-feather'
+import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import { ApprovalState, useApproveCallback } from 'sushi-hooks/useApproveCallback'
 import { BigNumber } from '@ethersproject/bignumber'
 import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { minimum, e10 } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 
 interface BorrowProps {
   pair: any
@@ -25,8 +25,13 @@ export default function Borrow({ pair }: BorrowProps) {
   const [collateralValue, setCollateralValue] = useState('')
   const [borrowValue, setBorrowValue] = useState('')
 
-  const [approvalState, approve] = useApproveCallback(pair.collateral.address, BENTOBOX_ADDRESS)
-
+  const [approvalState, approve] = useApproveCallback(
+    new TokenAmount(
+      new Token(chainId || 1, pair.collateral.address, pair.collateral.decimals, pair.collateral.symbol, pair.collateral.name), 
+      collateralValue.toBigNumber(pair.collateral.decimals).toString()
+    ),
+    BENTOBOX_ADDRESS
+  )
   // Calculated
   const balance = useBentoCollateral ? pair.collateral.bentoBalance : pair.collateral.balance
 
@@ -69,7 +74,6 @@ export default function Borrow({ pair }: BorrowProps) {
     (borrowValue && nextMaxBorrowSafe.lt(BigNumber.from(0)))
 
   function getWarningMessage() {
-    console.log('getWarningMessage', nextMaxBorrowSafe.toString(), nextMaxBorrowSafe.toFixed(pair.asset.decimals))
     if (pair.currentExchangeRate.isZero()) {
       return 'Oracle exchange rate has NOT been set'
     } else if (borrowValue && nextUserCollateralValue.eq(BigNumber.from(0))) {
