@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import KashiLogo from 'assets/kashi/logo.png'
 import { NavLink, Link, useLocation } from 'react-router-dom'
-import BentoBoxLogo from 'assets/kashi/bento-symbol.svg'
+import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 
 import { formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -62,7 +62,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                   location.pathname === '/bento/balances' ? 'text-high-emphesis' : 'text-secondary hover:text-primary'
                 }`}
               >
-                <img src={BentoBoxLogo} alt="" className="flex max-h-4 mr-2" />
+                <BentoBoxLogo className="fill-current h-auto w-6 mr-2" />
                 <div className="whitespace-nowrap text-base">My BentoBox</div>
               </NavLink>
               {netWorth.gt(0) && (
