@@ -15,7 +15,7 @@ import COMP from '../../assets/kashi/tokens/comp-square.jpg'
 import COVER from '../../assets/kashi/tokens/cover-square.jpg'
 import CREAM from '../../assets/kashi/tokens/cream-square.jpg'
 import DAI from '../../assets/kashi/tokens/dai-square.jpg'
-// import DOT from '../../assets/kashi/tokens/dot-square.jpg'
+import DOT from '../../assets/kashi/tokens/dot-square.jpg'
 import EOS from '../../assets/kashi/tokens/eos-square.jpg'
 import ETH from '../../assets/kashi/tokens/eth-square.jpg'
 import HT from '../../assets/kashi/tokens/heco-square.jpg'
@@ -89,7 +89,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0x55d398326f99059fF775485246999027B3197955').toLowerCase()]: USDT, // BUSDT
     [String('0xd4CB328A82bDf5f03eB737f37Fa6B370aef3e888').toLowerCase()]: CREAM,
     [String('0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3').toLowerCase()]: DAI,
-    [String('0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402').toLowerCase()]: UNKNOWN, // DOT
+    [String('0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402').toLowerCase()]: DOT, // DOT
     [String('0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6').toLowerCase()]: EOS, // EIS
     [String('0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD').toLowerCase()]: LINK,
     [String('0x4338665CBB7B2485A8855A139b75D5e34AB0DB94').toLowerCase()]: LTC, // LTC
@@ -119,7 +119,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [String('0x64FF637fB478863B7468bc97D30a5bF3A428a1fD').toLowerCase()]: ETH,
     [String('0xeF3CEBD77E0C52cb6f60875d9306397B5Caca375').toLowerCase()]: BCH, // BCH
     [String('0x66a79D23E58475D2738179Ca52cd0b41d73f0BEa').toLowerCase()]: BTC, // BTC
-    [String('0xA2c49cEe16a5E5bDEFDe931107dc1fae9f7773E3').toLowerCase()]: UNKNOWN, // DOT
+    [String('0xA2c49cEe16a5E5bDEFDe931107dc1fae9f7773E3').toLowerCase()]: DOT, // DOT
     [String('0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F').toLowerCase()]: HT, // HT
     [String('0x0298c2b32eaE4da002a15f36fdf7615BEa3DA047').toLowerCase()]: HUSD, // HUSD
     [String('0xecb56cf772B5c9A6907FB7d32387Da2fCbfB63b4').toLowerCase()]: LTC, // LTC
