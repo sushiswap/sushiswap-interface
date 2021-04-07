@@ -34,7 +34,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <div
                   className={
                     'flex items-center font-medium ' +
-                    (location.pathname === '/bento/kashi/lend'
+                    (location.pathname.startsWith('/bento/kashi/lend')
                       ? 'text-high-emphesis'
                       : 'text-secondary hover:text-primary')
                   }
@@ -46,7 +46,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                 <div
                   className={
                     'flex items-center font-medium ' +
-                    (location.pathname === '/bento/kashi/borrow'
+                    (location.pathname.startsWith('/bento/kashi/borrow')
                       ? 'text-high-emphesis'
                       : 'text-secondary hover:text-primary')
                   }

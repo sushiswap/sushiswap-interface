@@ -138,7 +138,7 @@ export default function LendingMarkets(): JSX.Element | null {
                 return (
                   <div key={pair.address}>
                     <Link
-                      to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/lend'}
+                      to={'/bento/kashi/lend/' + String(pair.address).toLowerCase()}
                       className="block text-high-emphesis"
                     >
                       <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-blue">

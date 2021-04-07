@@ -5,7 +5,7 @@ import { getTokenIcon } from '../../../functions'
 import { formattedNum, formattedPercent } from '../../../../utils'
 import { useKashiPairs } from '../../../context'
 import { Card, MarketHeader, Layout } from '../../../components'
-import DepositGraphic from 'assets/kashi/deposit-graphic.png'
+import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
@@ -31,7 +31,7 @@ export default function BorrowMarkets(): JSX.Element {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage={DepositGraphic}
+          backgroundImage={BorrowGraphic}
           title={'Borrow assets and leverage up'}
           description={
             'Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest.'
@@ -133,7 +133,7 @@ export default function BorrowMarkets(): JSX.Element {
               return (
                 <div key={pair.address}>
                   <Link
-                    to={'/bento/kashi/pair/' + String(pair.address).toLowerCase() + '/borrow'}
+                    to={'/bento/kashi/borrow/' + String(pair.address).toLowerCase()}
                     className="block text-high-emphesis"
                   >
                     <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-pink">

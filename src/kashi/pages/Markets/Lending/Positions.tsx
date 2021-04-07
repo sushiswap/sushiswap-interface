@@ -16,7 +16,7 @@ function Positions({ pairs }: any): JSX.Element | null {
         {pairs.map((pair: any) => {
           return (
             <div key={pair.address}>
-              <Link to={'/bento/kashi/pair/' + pair.address + '/lend'} className="block text-high-emphesis">
+              <Link to={'/bento/kashi/lend/' + pair.address} className="block text-high-emphesis">
                 <div className="grid gap-4 grid-cols-4 md:grid-cols-5 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-blue">
                   <div className="hidden space-x-2 md:flex">
                     <img

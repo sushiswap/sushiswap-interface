@@ -119,8 +119,8 @@ function App() {
                 <WalletRoute exact strict path="/bento/kashi/lend" component={LendMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
                 <WalletRoute exact strict path="/bento/kashi/create" component={KashiCreate} />
-                <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/lend" component={LendPair} />
-                <WalletRoute exact strict path="/bento/kashi/pair/:pairAddress/borrow" component={BorrowPair} />
+                <WalletRoute exact strict path="/bento/kashi/lend/:pairAddress" component={LendPair} />
+                <WalletRoute exact strict path="/bento/kashi/borrow/:pairAddress" component={BorrowPair} />
 
                 {/* Tools */}
                 <Route exact strict path="/tools" component={Tools} />

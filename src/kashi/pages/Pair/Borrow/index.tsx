@@ -5,8 +5,8 @@ import { useActiveWeb3React } from 'hooks'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { formattedNum, formattedPercent } from 'utils'
-import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot, PinkButton, Card, Error, Layout, Paper, BorrowCardHeader, BackButton } from 'kashi/components'
+import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
+import { GradientDot, PinkButton, Card, Layout, BorrowCardHeader } from 'kashi/components'
 import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { useKashi } from 'kashi/hooks'
@@ -36,7 +36,7 @@ export default function BorrowPair({
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage={DepositGraphic}
+          backgroundImage={BorrowGraphic}
           title={'Add collateral in order to borrow assets'}
           description={
             'Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements.'
