@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { WETH } from '@sushiswap/sdk'
-import { Alert, Dots, StyledButton } from 'kashi/components'
+import { Alert, Dots, StyledButton, Checkbox } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, Type } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
@@ -11,6 +11,7 @@ import { minimum, e10 } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
+import QuestionHelper from 'components/QuestionHelper'
 
 interface BorrowProps {
   pair: any
@@ -24,6 +25,7 @@ export default function Borrow({ pair }: BorrowProps) {
   const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
   const [collateralValue, setCollateralValue] = useState('')
   const [borrowValue, setBorrowValue] = useState('')
+  const [swap, setSwap] = useState(false)
 
   const [approvalState, approve] = useApproveCallback(pair.collateral.address, BENTOBOX_ADDRESS)
 
@@ -111,6 +113,10 @@ export default function Borrow({ pair }: BorrowProps) {
         await borrowWithdraw(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
       }
     }*/
+  }
+
+  function onLeverage() {
+    //
   }
 
   const showApprove =
@@ -207,6 +213,14 @@ export default function Borrow({ pair }: BorrowProps) {
       </div>
 
       <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
+
+      <div className="flex items-center mb-4">
+        <Checkbox color="pink" checked={swap} onChange={event => setSwap(event.target.checked)} />
+        <span className="text-secondary ml-2 mr-1">
+          Swap {pair.asset.symbol} for {pair.collateral.symbol}
+        </span>
+        <QuestionHelper text="Lorem ipsum dolor sit amet." />
+      </div>
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
