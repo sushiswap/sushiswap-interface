@@ -8,7 +8,7 @@ import { getProviderOrSigner, getSigner } from "utils"
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
 import BENTOBOX_ABI from '../../constants/sushiAbis/bentobox.json'
 
-async function signMasterContractApproval(
+export async function signMasterContractApproval(
     bentoBoxContract: ethers.Contract | null,
     masterContract: string | undefined,
     user: string,

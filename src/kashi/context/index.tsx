@@ -116,11 +116,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     async function() {
       if (boringHelperContract && bentoBoxContract) {
         // Get the deployed pairs from the logs and decode
-        console.log("Get pairs")
         const logPairs = GetPairsFromLogs(
           await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
         )
-        console.log(logPairs)
 
         // Filter all pairs by supported oracles and verify the oracle setup
         const allPairAddresses = logPairs
@@ -322,9 +320,7 @@ export function useKashiPairs() {
 }
 
 export function useKashiPair(address: string) {
-  console.log("useKashiPair start")
   const context = useContext(KashiContext)
-  console.log("useKashiPair end")
   if (context === undefined) {
     throw new Error('useKashiPair must be used within a KashiProvider')
   }
