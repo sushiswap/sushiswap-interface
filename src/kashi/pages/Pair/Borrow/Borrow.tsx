@@ -66,6 +66,8 @@ export default function Borrow({ pair }: BorrowProps) {
     transactionReview.addTokenAmount('Health', pair.health.value, nextHealth, pair.asset)
   }
 
+  //const warnings =  new Warn
+
   const warning =
     pair.currentExchangeRate.isZero() ||
     (borrowValue && nextUserCollateralValue.eq(BigNumber.from(0))) ||
