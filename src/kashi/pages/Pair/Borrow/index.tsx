@@ -129,7 +129,7 @@ export default function BorrowPair({
                     {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
                   </div>
                   <div className="flex items-center">
-                    <div className="text-sm text-low-emphesis mr-1">Oracle:</div>
+                    <div className="text-sm text-secondary mr-1">Oracle:</div>
                     <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
                   </div>
                 </div>
