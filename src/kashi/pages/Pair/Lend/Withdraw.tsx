@@ -44,7 +44,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
       : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
 
     const cooker = new KashiCooker(pair, account, library, chainId)
-    await cooker.approveIfNeeded()
+    //await cooker.approve()
 
     await cooker.removeAsset(fraction, useBento).cook()
   }

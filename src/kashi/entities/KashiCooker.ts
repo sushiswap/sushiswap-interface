@@ -7,6 +7,7 @@ import { toShare } from 'kashi/functions/bentobox'
 import { getProviderOrSigner, getSigner } from 'utils'
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
 import BENTOBOX_ABI from '../../constants/sushiAbis/bentobox.json'
+import { KashiPermit } from 'kashi/hooks'
 
 export async function signMasterContractApproval(
   bentoBoxContract: ethers.Contract | null,
@@ -106,12 +107,18 @@ export class KashiCooker {
     this.values.push(BigNumber.from(value))
   }
 
-  async approveIfNeeded() {
-    if (!this.library) {
-      return this
+  approve(permit: KashiPermit) {
+    if (permit) {
+      this.add(
+        Action.BENTO_SETAPPROVAL,
+        ethers.utils.defaultAbiCoder.encode(
+          ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
+          [permit.account, permit.masterContract, true, permit.v, permit.r, permit.s]
+        )
+      )
     }
 
-    const bentoBoxContract = new Contract(
+    /*const bentoBoxContract = new Contract(
       BENTOBOX_ADDRESS,
       BENTOBOX_ABI,
       getProviderOrSigner(this.library, this.account) as any
@@ -153,7 +160,7 @@ export class KashiCooker {
         await tx.wait()
       }
     }
-    return true
+    return true*/
   }
 
   addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {
@@ -229,7 +236,6 @@ export class KashiCooker {
     try {
       return { success: true, tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas) }
     } catch (error) {
-      console.error(error)
       return {
         success: false,
         error: error

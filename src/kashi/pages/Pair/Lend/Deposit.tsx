@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, Dots, Button } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
@@ -10,14 +10,21 @@ import { e10 } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
-import { ethers } from 'ethers'
+import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
+import { useDispatch } from 'react-redux'
+import { useBentoBoxContract } from 'sushi-hooks/useContract'
+import { useKashiApprovalPending } from 'state/application/hooks'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
   const { account, chainId, library } = useActiveWeb3React()
+  const dispatch = useDispatch()
+  const bentoBoxContract = useBentoBoxContract()
+  const pendingApprovalMessage = useKashiApprovalPending()
 
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
+
   const [approvalState, approve] = useApproveCallback(
     new TokenAmount(
       new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
@@ -25,6 +32,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     ),
     BENTOBOX_ADDRESS
   )
+  const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(KASHI_ADDRESS)
 
   // Calculated
   const balance = useBento ? pair.asset.bentoBalance : pair.asset.balance
@@ -55,11 +63,8 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
   }
 
   // Handlers
-  async function onClick() {
-    const cooker = new KashiCooker(pair, account, library, chainId)
-    await cooker.approveIfNeeded()
+  async function onExecute(cooker: KashiCooker) {
     cooker.addAsset(value.toBigNumber(pair.asset.decimals), useBento)
-    await cooker.cook()
   }
 
   return (
@@ -112,20 +117,38 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-      {showApprove && (
-        <Button color="blue" onClick={approve} className="mb-4">
-          {approvalState === ApprovalState.PENDING ? (
-            <Dots>Approving {pair.asset.symbol}</Dots>
+      {(approveKashiFallback && (
+        <Alert predicate={true} message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used." className="mb-4" />
+      ))}
+
+      {(kashiApprovalState === BentoApprovalState.NOT_APPROVED || kashiApprovalState === BentoApprovalState.PENDING) && (!kashiPermit) && (
+        <Button color="blue" onClick={onApprove} className="mb-4">
+          {kashiApprovalState === BentoApprovalState.PENDING ? (
+            <Dots>{pendingApprovalMessage}</Dots>
           ) : (
-            `Approve ${pair.asset.symbol}`
+            `Approve Kashi`
           )}
         </Button>
       )}
 
-      {!showApprove && (
-        <Button color="blue" onClick={onClick} disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}>
-          Deposit
-        </Button>
+      {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
+        <>
+        {showApprove && (
+          <Button color="blue" onClick={approve} className="mb-4">
+            {approvalState === ApprovalState.PENDING ? (
+              <Dots>Approving {pair.asset.symbol}</Dots>
+            ) : (
+              `Approve ${pair.asset.symbol}`
+            )}
+          </Button>
+        )}
+
+        {!showApprove && (
+          <Button color="blue" onClick={() => onCook(pair, onExecute)} disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}>
+            Deposit
+          </Button>
+        )}
+        </>
       )}
     </>
   )

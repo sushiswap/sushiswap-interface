@@ -1,1 +1,2 @@
-export { default as useKashiApproveCallback } from './useKashiApproveCallback'
+export { default as useKashiApproveCallback, BentoApprovalState } from './useKashiApproveCallback'
+export type { KashiPermit } from './useKashiApproveCallback'

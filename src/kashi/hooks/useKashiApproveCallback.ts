@@ -2,13 +2,15 @@ import { useBentoMasterContractAllowed } from 'data/Allowances'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks'
 import { KASHI_ADDRESS } from 'kashi/constants'
-import { signMasterContractApproval } from 'kashi/entities/KashiCooker'
-import { useCallback, useMemo } from 'react'
+import { KashiCooker, signMasterContractApproval } from 'kashi/entities/KashiCooker'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
-import { TransactionResponse } from '@ethersproject/providers'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { useDispatch } from 'react-redux'
+import { setKashiApprovalPending } from 'state/application/actions'
 
-export enum ApprovalState {
+export enum BentoApprovalState {
   UNKNOWN,
   NOT_APPROVED,
   PENDING,
@@ -16,86 +18,130 @@ export enum ApprovalState {
   APPROVED
 }
 
+interface IKashiPermit {
+  account: string, 
+  masterContract: string, 
+  v: number, 
+  r: string, 
+  s: string
+}
+export type KashiPermit = IKashiPermit | undefined
+
+export enum BentoApproveOutcome {
+  SUCCESS,
+  REJECTED,
+  FAILED,
+  NOT_READY
+}
+
+export type BentoApproveResult = {
+  outcome: BentoApproveOutcome,
+  permit?: KashiPermit
+}
+
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-function useKashiApproveCallback(masterContract: string): [ApprovalState, () => Promise<void>] {
+function useKashiApproveCallback(masterContract: string): [BentoApprovalState, boolean, KashiPermit, () => void, (pair: any, execute: (cooker: KashiCooker) => void) => void] {
   const { account, library, chainId } = useActiveWeb3React()
-  const pendingApproval = false
+  const dispatch = useDispatch()
+  const [approveKashiFallback, setApproveKashiFallback] = useState<boolean>(false)
+  const [kashiPermit, setKashiPermit] = useState<KashiPermit>(undefined)
+
+  useEffect(() => {
+    setKashiPermit(undefined)
+  }, [account, chainId])
+
+  const pendingApproval = useKashiApprovalPending()
   const currentAllowed = useBentoMasterContractAllowed(KASHI_ADDRESS, account || ethers.constants.AddressZero)
 
   // check the current approval status
-  const approvalState: ApprovalState = useMemo(() => {
-    if (!masterContract) return ApprovalState.UNKNOWN
-    if (pendingApproval) return ApprovalState.PENDING
+  const approvalState: BentoApprovalState = useMemo(() => {
+    if (!masterContract) return BentoApprovalState.UNKNOWN
+    if (!currentAllowed && pendingApproval) return BentoApprovalState.PENDING
 
-    return currentAllowed ? ApprovalState.APPROVED : ApprovalState.NOT_APPROVED
+    return currentAllowed ? BentoApprovalState.APPROVED : BentoApprovalState.NOT_APPROVED
   }, [currentAllowed, masterContract, pendingApproval])
 
   const bentoBoxContract = useBentoBoxContract()
   const addTransaction = useTransactionAdder()
 
-  const approve = useCallback(async (): Promise<void> => {
-    if (approvalState !== ApprovalState.NOT_APPROVED) {
+  const approve = useCallback(async (): Promise<BentoApproveResult> => {
+    if (approvalState !== BentoApprovalState.NOT_APPROVED) {
       console.error('approve was called unnecessarily')
-      return
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
     if (!masterContract) {
       console.error('no token')
-      return
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
 
     if (!bentoBoxContract) {
       console.error('no bentobox contract')
-      return
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
 
     if (!account) {
       console.error('no account')
-      return
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
     if (!library) {
       console.error('no library')
-      return
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
 
-    const signature = await signMasterContractApproval(bentoBoxContract, KASHI_ADDRESS, account, library, true, chainId)
-
-    const { v, r, s } = ethers.utils.splitSignature(signature)
-
-    // const options = {
-    //   gasLimit: calculateGasMargin(estimatedGas)
-    // }
-
-    return bentoBoxContract
-      .setMasterContractApproval(account, masterContract, true, v, r, s)
-      .then((response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: 'Approve BentoBox'
-          // summary: 'Approve ' + amountToApprove.currency.symbol,
-          // approval: { tokenAddress: token.address, spender: spender }
-        })
-      })
-      .catch((error: Error) => {
-        console.debug('Failed to approve BentoBox', error)
-        throw error
-      })
-
-    /*return bentoBoxContract
-      .approve(spender, useExact ? amountToApprove.raw.toString() : MaxUint256, {
-        gasLimit: calculateGasMargin(estimatedGas)
-      })
-      .then((response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: 'Approve ' + amountToApprove.currency.symbol,
-          approval: { tokenAddress: token.address, spender: spender }
-        })
-      })
-      .catch((error: Error) => {
-        console.debug('Failed to approve token', error)
-        throw error
-      })*/
+    try {
+      const signature = await signMasterContractApproval(bentoBoxContract, KASHI_ADDRESS, account, library, true, chainId)
+      const { v, r, s } = ethers.utils.splitSignature(signature)
+      return {
+        outcome: BentoApproveOutcome.SUCCESS,
+        permit: {account, masterContract, v, r, s}
+      }
+    }
+    catch (e) {
+      return {
+        outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED
+      }
+    }
   }, [approvalState, account, library, chainId, bentoBoxContract, masterContract, addTransaction])
 
-  return [approvalState, approve]
+  const onApprove = async function() {
+    if (!approveKashiFallback) {
+      const result = await approve()
+      if (result.outcome === BentoApproveOutcome.SUCCESS) {
+        setKashiPermit(result.permit)
+      } else if (result.outcome === BentoApproveOutcome.FAILED) {
+        setApproveKashiFallback(true)
+      }
+    } else {
+      const tx = await bentoBoxContract?.setMasterContractApproval(
+        account,
+        KASHI_ADDRESS,
+        true,
+        0,
+        ethers.constants.HashZero,
+        ethers.constants.HashZero
+      )
+      dispatch(setKashiApprovalPending("Approve Kashi"))
+      await tx.wait()
+      dispatch(setKashiApprovalPending(""))
+    }
+  }
+
+  const onCook = async function(pair: any, execute: (cooker: KashiCooker) => void) {
+    const cooker = new KashiCooker(pair, account, library, chainId)
+    if (approvalState === BentoApprovalState.NOT_APPROVED && kashiPermit) {
+      cooker.approve(kashiPermit)
+    }
+    execute(cooker)
+    const result = await cooker.cook()
+    if (result.success) {
+      dispatch(setKashiApprovalPending("Deposit"))
+      setKashiPermit(undefined)
+      await result.tx.wait()
+      dispatch(setKashiApprovalPending(""))
+    }
+  }
+
+  return [approvalState, approveKashiFallback, kashiPermit, onApprove, onCook]
 }
 
 export default useKashiApproveCallback

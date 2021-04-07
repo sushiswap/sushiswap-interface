@@ -12,6 +12,7 @@ import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 import QuestionHelper from 'components/QuestionHelper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { Warnings } from 'kashi/entities/Warnings'
 
 interface BorrowProps {
   pair: any
@@ -74,11 +75,16 @@ export default function Borrow({ pair }: BorrowProps) {
     transactionReview.addTokenAmount('Health', pair.health.value, nextHealth, pair.asset)
   }
 
-  //const warnings =  new Warn
+  /*const warnings =  new Warnings()
+    .add(pair.currentExchangeRate.isZero(), "Oracle exchange rate has NOT been set", true)
+    .add(borrowValue.length > 0 && nextUserCollateralValue.eq(0), "You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.", true)
+    .add(pair.maxBorrowable.safe.value.lt(0), "You have surpassed your borrow limit and assets are at a high risk of liquidation.", true)
+    .add(borrowValue.length > 0 && nextMaxBorrowPossible.lt(0), "Not enough liquidity in this pair.", true)
+    .add(borrowValue.length > 0 && nextMaxBorrowSafe.lt(BigNumber.from(0)), "You will surpass your safe borrow limit and assets will be at a high risk of liquidation.", false)*/
 
   const warning =
     pair.currentExchangeRate.isZero() ||
-    (borrowValue && nextUserCollateralValue.eq(BigNumber.from(0))) ||
+    (borrowValue && nextUserCollateralValue.eq(0)) ||
     pair.maxBorrowable.safe.value.lt(BigNumber.from(0)) ||
     (borrowValue && nextMaxBorrowPossible.lt(0)) ||
     (borrowValue && nextMaxBorrowSafe.lt(BigNumber.from(0)))
