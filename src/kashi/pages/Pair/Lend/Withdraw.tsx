@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, StyledButton } from 'kashi/components'
+import { Alert, Button } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
@@ -18,13 +18,15 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
   const [pinMax, setPinMax] = useState(false)
 
   // Calculated
-  const displayValue = pinMax ? easyAmount(minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value), pair.asset).string : value
+  const displayValue = pinMax
+    ? easyAmount(minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value), pair.asset).string
+    : value
 
   const warningMessage = pair.oracleExchangeRate.isZero()
     ? 'Oracle exchange rate has NOT been set'
     : pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals))
-      ? 'Please make sure your supply balance is sufficient to withdraw and then try again.'
-      : ''
+    ? 'Please make sure your supply balance is sufficient to withdraw and then try again.'
+    : ''
 
   const transactionReview = new TransactionReview()
   if (displayValue) {
@@ -34,7 +36,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.sub(amount))
     transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
   }
-  
+
   // Handlers
   const onClick = async function() {
     const fraction = pinMax
@@ -43,10 +45,8 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
     const cooker = new KashiCooker(pair, account, library, chainId)
     await cooker.approveIfNeeded()
-  
-    await cooker
-      .removeAsset(fraction, useBento)
-      .cook()
+
+    await cooker.removeAsset(fraction, useBento).cook()
   }
 
   return (
@@ -60,14 +60,16 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
           </span>
           <span> To </span>
           <span>
-            <StyledButton styling="blueoutlined"
+            <Button
+              variant="outlined"
+              color="blue"
               className="focus:ring focus:ring-blue"
               onClick={() => {
                 setUseBento(!useBento)
               }}
             >
               {useBento ? 'BentoBox' : 'Wallet'}
-            </StyledButton>
+            </Button>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -80,12 +82,20 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
           className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
           value={displayValue}
           onUserInput={setValue}
-          onFocus={() => { setValue(displayValue);setPinMax(false) } }
+          onFocus={() => {
+            setValue(displayValue)
+            setPinMax(false)
+          }}
         />
         {account && (
-          <StyledButton styling="blueoutlined" onClick={() => setPinMax(true)} className="absolute right-4 focus:ring focus:ring-blue">
+          <Button
+            variant="outlined"
+            color="blue"
+            onClick={() => setPinMax(true)}
+            className="absolute right-4 focus:ring focus:ring-blue"
+          >
             MAX
-          </StyledButton>
+          </Button>
         )}
       </div>
 
@@ -93,13 +103,13 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-      <StyledButton
-        styling="blue"
-        onClick={() => onClick() }
-        disabled={warningMessage || displayValue.toBigNumber(0).lte(0)}
+      <Button
+        color="blue"
+        onClick={() => onClick()}
+        disabled={warningMessage.length > 0 || displayValue.toBigNumber(0).lte(0)}
       >
         Withdraw
-      </StyledButton>
+      </Button>
     </>
   )
 }

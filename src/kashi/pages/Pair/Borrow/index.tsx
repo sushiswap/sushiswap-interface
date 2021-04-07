@@ -6,7 +6,7 @@ import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { formattedNum, formattedPercent } from 'utils'
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import { GradientDot, StyledButton, Card, Layout, BorrowCardHeader } from 'kashi/components'
+import { GradientDot, Button, Card, Layout, BorrowCardHeader } from 'kashi/components'
 import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Borrow from './Borrow'
@@ -25,7 +25,7 @@ export default function BorrowPair({
 
   const onUpdateExchangeRate = useCallback(async () => {
     // TODO: await updateExchangeRate(pair.address)
-  }, [pair/*, updateExchangeRate*/])
+  }, [pair /*, updateExchangeRate*/])
 
   if (!pair) return null
 
@@ -139,7 +139,9 @@ export default function BorrowPair({
         {pair.currentExchangeRate.isZero() ? (
           <div>
             <div className="mb-8 text-xl text-center">Oracle exchange rate not set!</div>
-            <StyledButton styling="pink" onClick={onUpdateExchangeRate}>Set Exchange Rate</StyledButton>
+            <Button color="pink" onClick={onUpdateExchangeRate}>
+              Set Exchange Rate
+            </Button>
           </div>
         ) : (
           <>
