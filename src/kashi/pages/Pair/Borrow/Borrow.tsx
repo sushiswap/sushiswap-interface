@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { Alert, Dots, StyledButton } from 'kashi/components'
+import { Alert, Dots, Button, Checkbox } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
@@ -10,6 +10,7 @@ import { minimum, e10 } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
+import QuestionHelper from 'components/QuestionHelper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 
 interface BorrowProps {
@@ -24,10 +25,17 @@ export default function Borrow({ pair }: BorrowProps) {
   const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
   const [collateralValue, setCollateralValue] = useState('')
   const [borrowValue, setBorrowValue] = useState('')
+  const [swap, setSwap] = useState(false)
 
   const [approvalState, approve] = useApproveCallback(
     new TokenAmount(
-      new Token(chainId || 1, pair.collateral.address, pair.collateral.decimals, pair.collateral.symbol, pair.collateral.name), 
+      new Token(
+        chainId || 1,
+        pair.collateral.address,
+        pair.collateral.decimals,
+        pair.collateral.symbol,
+        pair.collateral.name
+      ),
       collateralValue.toBigNumber(pair.collateral.decimals).toString()
     ),
     BENTOBOX_ADDRESS
@@ -119,6 +127,10 @@ export default function Borrow({ pair }: BorrowProps) {
     }*/
   }
 
+  function onLeverage() {
+    //
+  }
+
   const showApprove =
     chainId &&
     pair.collateral.address !== WETH[chainId].address &&
@@ -137,15 +149,16 @@ export default function Borrow({ pair }: BorrowProps) {
           </span>
           <span className="mx-2">Add Collateral From</span>
           <span>
-            <StyledButton
-              styling="pinkoutlined"
+            <Button
+              variant="outlined"
+              color="pink"
               className="focus:ring focus:ring-pink"
               onClick={() => {
                 setUseBentoCollateral(!useBentoCollateral)
               }}
             >
               {useBentoCollateral ? 'BentoBox' : 'Wallet'}
-            </StyledButton>
+            </Button>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -160,13 +173,14 @@ export default function Borrow({ pair }: BorrowProps) {
           onUserInput={setCollateralValue}
         />
         {account && (
-          <StyledButton
-            styling="pinkoutlined"
+          <Button
+            variant="outlined"
+            color="pink"
             onClick={() => setCollateralValue(maxCollateral)}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
             MAX
-          </StyledButton>
+          </Button>
         )}
       </div>
 
@@ -177,15 +191,16 @@ export default function Borrow({ pair }: BorrowProps) {
           </span>
           <span className="mx-2"> Borrow Asset To </span>
           <span>
-            <StyledButton
-              styling="pinkoutlined"
+            <Button
+              variant="outlined"
+              color="pink"
               className="focus:ring focus:ring-pink"
               onClick={() => {
                 setUseBentoBorrow(!useBentoBorrow)
               }}
             >
               {useBentoBorrow ? 'BentoBox' : 'Wallet'}
-            </StyledButton>
+            </Button>
           </span>
         </div>
         <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
@@ -200,40 +215,49 @@ export default function Borrow({ pair }: BorrowProps) {
           onUserInput={setBorrowValue}
         />
         {account && (
-          <StyledButton
-            styling="pinkoutlined"
+          <Button
+            variant="outlined"
+            color="pink"
             onClick={() => {
               setBorrowValue(maxBorrow)
             }}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
             MAX
-          </StyledButton>
+          </Button>
         )}
       </div>
 
       <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
 
+      <div className="flex items-center mb-4">
+        <Checkbox color="pink" checked={swap} onChange={event => setSwap(event.target.checked)} />
+        <span className="text-secondary ml-2 mr-1">
+          Swap {pair.asset.symbol} for {pair.collateral.symbol}
+        </span>
+        <QuestionHelper text="Lorem ipsum dolor sit amet." />
+      </div>
+
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
       {showApprove && (
-        <StyledButton styling="pink" onClick={approve}>
+        <Button color="pink" onClick={approve}>
           {approvalState === ApprovalState.PENDING ? (
             <Dots>Approving {pair.collateral.symbol}</Dots>
           ) : (
             `Approve ${pair.collateral.symbol}`
           )}
-        </StyledButton>
+        </Button>
       )}
 
       {!showApprove && (
-        <StyledButton
-          styling="pink"
+        <Button
+          color="pink"
           onClick={onBorrow}
           disabled={(balance.eq(0) && pair.userCollateralAmount.value.eq(0)) || warning}
         >
           Borrow
-        </StyledButton>
+        </Button>
       )}
     </>
   )
