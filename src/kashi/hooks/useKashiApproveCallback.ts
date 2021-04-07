@@ -17,7 +17,7 @@ export enum ApprovalState {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-export function useKashiApproveCallback(masterContract: string): [ApprovalState, () => Promise<void>] {
+function useKashiApproveCallback(masterContract: string): [ApprovalState, () => Promise<void>] {
   const { account, library, chainId } = useActiveWeb3React()
   const pendingApproval = false
   const currentAllowed = useBentoMasterContractAllowed(KASHI_ADDRESS, account || ethers.constants.AddressZero)
@@ -75,7 +75,7 @@ export function useKashiApproveCallback(masterContract: string): [ApprovalState,
         })
       })
       .catch((error: Error) => {
-        console.debug('Failed to approve token', error)
+        console.debug('Failed to approve BentoBox', error)
         throw error
       })
 
@@ -97,3 +97,5 @@ export function useKashiApproveCallback(masterContract: string): [ApprovalState,
 
   return [approvalState, approve]
 }
+
+export default useKashiApproveCallback
