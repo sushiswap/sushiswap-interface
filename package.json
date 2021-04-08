@@ -82,7 +82,7 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "ethers": "^5.0.7",
         "fuse.js": "^6.4.6",
-        "husky": "^5.0.0",
+        "husky": "^6.0.0",
         "i18next": "^19.9.1",
         "i18next-browser-languagedetector": "^3.0.1",
         "i18next-xhr-backend": "^2.0.1",
