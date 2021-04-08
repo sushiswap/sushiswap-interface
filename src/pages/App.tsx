@@ -101,7 +101,8 @@ function App() {
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
               <Route exact strict path="/vesting" component={Vesting} />
-              <Route exact strict path="/migrate/v2" component={MigrateV2} />
+              {chainId === ChainId.MAINNET && <Route exact strict path="/migrate/v2" component={MigrateV2} />}
+
               {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />

@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import { Pair, JSBI } from '@sushiswap/sdk'
+import { ChainId, Pair, JSBI } from '@sushiswap/sdk'
 import { Link } from 'react-router-dom'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 
@@ -78,7 +78,7 @@ const EmptyProposals = styled.div`
 
 export default function Pool() {
   const theme = useContext(ThemeContext)
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   // fetch the user's balances of all tracked V2 LP tokens
   const trackedTokenPairs = useTrackedTokenPairs()
@@ -224,20 +224,22 @@ export default function Pool() {
               </EmptyProposals>
             )}
 
-            <AutoColumn justify={'center'} gap="xs">
-              <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
-                <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
-                  {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
-                </StyledInternalLink>
-              </Text>
-              <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                Have Liquidity on Uniswap?{' '}
-                <StyledInternalLink id="migrate-pool-link" to={'/migrate/v2'}>
-                  Migrate Now.
-                </StyledInternalLink>
-              </Text>
-            </AutoColumn>
+            {chainId === ChainId.MAINNET && (
+              <AutoColumn justify={'center'} gap="xs">
+                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                  {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
+                  <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
+                    {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
+                  </StyledInternalLink>
+                </Text>
+                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                  Have Liquidity on Uniswap?{' '}
+                  <StyledInternalLink id="migrate-pool-link" to={'/migrate/v2'}>
+                    Migrate Now.
+                  </StyledInternalLink>
+                </Text>
+              </AutoColumn>
+            )}
           </AutoColumn>
         </AutoColumn>
       </PageWrapper>
