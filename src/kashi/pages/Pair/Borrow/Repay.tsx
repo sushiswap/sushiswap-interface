@@ -7,7 +7,9 @@ import { formattedPercent, formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import { GradientDot } from '../../../components'
 import { minimum, e10 } from 'kashi/functions/math'
-import { Warnings, TransactionReview } from 'kashi/entities'
+import { Warnings, TransactionReview, KashiCooker } from 'kashi/entities'
+import { KASHI_ADDRESS } from 'kashi/constants'
+import { useKashiApproveCallback } from 'kashi/hooks'
 
 interface RepayProps {
     pair: any
@@ -15,6 +17,9 @@ interface RepayProps {
 
 export default function Repay({ pair }: RepayProps) {
     const { account, chainId } = useActiveWeb3React()
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
+        KASHI_ADDRESS
+    )
 
     // State
     const [useBentoRepayAsset, setUseBentoRepayAsset] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -81,46 +86,22 @@ export default function Repay({ pair }: RepayProps) {
         : '0'
 
     // Handlers
-    async function onRepay() {
-        setPendingTx(true)
-
-        // TODO: Cook
-        /*
-    if (repayAssetValue.toBigNumber(pair.asset.decimals).gt(0)) {
-      if (useBentoRepayAsset) {
-        await repayFromBento(
-          pair.address,
-          pair.asset.address,
-          repayAssetValue.toBigNumber(pair.asset.decimals)
-          // repayAssetValue === maxRepayAsset
-        )
-      } else {
-        await repay(
-          pair.address,
-          pair.asset.address,
-          repayAssetValue.toBigNumber(pair.asset.decimals)
-          // repayAssetValue === maxRepayAsset
-        )
-      }
-    }
-
-    if (removeCollateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
-      if (useBentoRemoveCollateral) {
-        await removeCollateral(
-          pair.address,
-          pair.collateral.address,
-          removeCollateralValue.toBigNumber(pair.collateral.decimals)
-        )
-      } else {
-        await removeWithdrawCollateral(
-          pair.address,
-          pair.collateral.address,
-          removeCollateralValue.toBigNumber(pair.collateral.decimals)
-        )
-      }
-    }*/
-
-        setPendingTx(false)
+    async function onExecute(cooker: KashiCooker) {
+        console.log('onExecute')
+        if (repayAssetValue.toBigNumber(pair.asset.decimals).gt(0)) {
+            console.log('repay asset')
+            // TODO: Repay missing from cook
+            // cooker.repay(repayAssetValue.toBigNumber(pair.asset.decimals), useBentoRepayAsset)
+        }
+        if (removeCollateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
+            console.log('remove collateral')
+            // TODO: Remove collateral missing from cook
+            // cooker.removeCollateral(
+            //     removeCollateralValue.toBigNumber(pair.collateral.decimals),
+            //     useBentoRemoveCollateral
+            // )
+        }
+        await cooker.cook()
     }
 
     return (
@@ -150,16 +131,6 @@ export default function Repay({ pair }: RepayProps) {
                     Balance: {balance.toFixed(pair.asset.decimals)}
                 </div>
             </div>
-
-            {/* {showApprove && (
-        <Button color="pink" onClick={approve} className="mb-4">
-          {approvalState === ApprovalState.PENDING ? (
-            <Dots>Approving {pair.collateral.symbol}</Dots>
-          ) : (
-            `Approve ${pair.collateral.symbol}`
-          )}
-        </Button>
-      )} */}
 
             <div className="flex items-center relative w-full mb-4">
                 <NumericalInput
@@ -236,7 +207,7 @@ export default function Repay({ pair }: RepayProps) {
 
             <Button
                 color="pink"
-                onClick={onRepay}
+                onClick={() => onCook(pair, onExecute)}
                 disabled={
                     pendingTx ||
                     (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
