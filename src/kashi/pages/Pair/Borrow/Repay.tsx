@@ -6,9 +6,11 @@ import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10 } from 'kashi/functions/math'
 import { Warnings, TransactionReview, KashiCooker } from 'kashi/entities'
-import { KASHI_ADDRESS } from 'kashi/constants'
+import { KASHI_ADDRESS, BENTOBOX_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { useKashiApprovalPending } from 'state/application/hooks'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 
 interface RepayProps {
     pair: any
@@ -25,9 +27,17 @@ export default function Repay({ pair }: RepayProps) {
     const [useBentoRepayAsset, setUseBentoRepayAsset] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
     const [useBentoRemoveCollateral, setUseBentoRemoveCollateral] = useState<boolean>(true)
 
-    const [repayAssetValue, setRepayAssetValue] = useState('')
+    const [repayAssetValue, setRepayAssetValue] = useState('0')
     const [removeCollateralValue, setRemoveCollateralValue] = useState('')
     const [pendingTx, setPendingTx] = useState(false)
+
+    const [approvalState, approve] = useApproveCallback(
+        new TokenAmount(
+            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
+            repayAssetValue.toBigNumber(pair.asset.decimals).toString()
+        ),
+        BENTOBOX_ADDRESS
+    )
 
     // Calculated
     const balance = useBentoRepayAsset ? pair.asset.bentoBalance : pair.asset.balance
@@ -79,7 +89,15 @@ export default function Repay({ pair }: RepayProps) {
         ? nextUserCollateralAmount
               .sub(
                   nextUserCollateralAmount
-                      .mul(nextMaxBorrowSafe.sub(nextMaxBorrowPossible.sub(pair.currentUserBorrowAmount.value)))
+                      .mul(
+                          nextMaxBorrowSafe.sub(
+                              nextMaxBorrowPossible.sub(
+                                  pair.currentUserBorrowAmount.value.sub(
+                                      repayAssetValue.toBigNumber(pair.asset.decimals)
+                                  )
+                              )
+                          )
+                      )
                       .div(nextMaxBorrowSafe)
               )
               .toFixed(pair.collateral.decimals)
@@ -89,19 +107,22 @@ export default function Repay({ pair }: RepayProps) {
     async function onExecute(cooker: KashiCooker) {
         console.log('onExecute')
         if (repayAssetValue.toBigNumber(pair.asset.decimals).gt(0)) {
-            console.log('repay asset')
-            // TODO: Repay missing from cook
-            // cooker.repay(repayAssetValue.toBigNumber(pair.asset.decimals), useBentoRepayAsset)
+            cooker.repay(repayAssetValue.toBigNumber(pair.asset.decimals), useBentoRepayAsset)
         }
         if (removeCollateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
-            console.log('remove collateral')
-            // TODO: Remove collateral missing from cook
-            // cooker.removeCollateral(
-            //     removeCollateralValue.toBigNumber(pair.collateral.decimals),
-            //     useBentoRemoveCollateral
-            // )
+            cooker.removeCollateral(
+                removeCollateralValue.toBigNumber(pair.collateral.decimals),
+                useBentoRemoveCollateral
+            )
         }
     }
+
+    const showApprove =
+        chainId &&
+        pair.asset.address !== WETH[chainId].address &&
+        !useBentoRepayAsset &&
+        repayAssetValue &&
+        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
     return (
         <>
@@ -150,6 +171,16 @@ export default function Repay({ pair }: RepayProps) {
                     </Button>
                 )}
             </div>
+
+            {showApprove && (
+                <Button color="pink" onClick={approve} className="mb-4">
+                    {approvalState === ApprovalState.PENDING ? (
+                        <Dots>Approving {pair.asset.symbol}</Dots>
+                    ) : (
+                        `Approve ${pair.asset.symbol}`
+                    )}
+                </Button>
+            )}
 
             <div className="flex items-center justify-between my-4">
                 <div className="flex items-center text-base text-secondary">

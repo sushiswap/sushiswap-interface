@@ -118,9 +118,9 @@ export default function Borrow({ pair }: BorrowProps) {
         }
         if (borrowValue.toBigNumber(pair.asset.decimals).gt(0)) {
             console.log('borrow asset')
-            cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals))
-            console.log('remove asset')
-            cooker.removeAsset(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
+            cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
+            // // console.log('remove asset')
+            // cooker.removeAsset(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
         }
     }
 
