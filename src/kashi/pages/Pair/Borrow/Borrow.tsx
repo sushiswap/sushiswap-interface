@@ -5,7 +5,6 @@ import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
-import { BENTOBOX_ADDRESS } from 'kashi/constants'
 import { minimum, e10 } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
@@ -13,6 +12,9 @@ import { KashiCooker } from 'kashi/entities/KashiCooker'
 import QuestionHelper from 'components/QuestionHelper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Warnings } from 'kashi/entities/Warnings'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
+import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 
 interface BorrowProps {
     pair: any
@@ -20,6 +22,7 @@ interface BorrowProps {
 
 export default function Borrow({ pair }: BorrowProps) {
     const { account, chainId, library } = useActiveWeb3React()
+    const pendingApprovalMessage = useKashiApprovalPending()
 
     // State
     const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -27,6 +30,10 @@ export default function Borrow({ pair }: BorrowProps) {
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
     const [swap, setSwap] = useState(false)
+
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
+        KASHI_ADDRESS
+    )
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
@@ -93,34 +100,6 @@ export default function Borrow({ pair }: BorrowProps) {
         )
 
     // Handlers
-    async function onBorrow() {
-        const cooker = new KashiCooker(pair, account, library, chainId)
-        /*
-    if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
-      if (useBentoCollateral) {
-        await addCollateral(
-          pair.address,
-          pair.collateral.address,
-          collateralValue.toBigNumber(pair.collateral.decimals)
-        )
-      } else {
-        await depositAddCollateral(
-          pair.address,
-          pair.collateral.address,
-          collateralValue.toBigNumber(pair.collateral.decimals)
-        )
-      }
-    }
-
-    if (borrowValue.toBigNumber(pair.asset.decimals).gt(0)) {
-      if (useBentoBorrow) {
-        await borrow(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
-      } else {
-        await borrowWithdraw(pair.address, pair.asset.address, borrowValue.toBigNumber(pair.asset.decimals))
-      }
-    }*/
-    }
-
     function onLeverage() {
         //
     }
@@ -131,6 +110,21 @@ export default function Borrow({ pair }: BorrowProps) {
         !useBentoCollateral &&
         collateralValue &&
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
+
+    async function onExecute(cooker: KashiCooker) {
+        console.log('onExecute')
+        if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
+            console.log('add collateral')
+            cooker.addCollateral(collateralValue.toBigNumber(pair.collateral.decimals), useBentoCollateral)
+        }
+        if (borrowValue.toBigNumber(pair.asset.decimals).gt(0)) {
+            console.log('borrow asset')
+            cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals))
+            console.log('remove asset')
+            cooker.removeAsset(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
+        }
+        await cooker.cook()
+    }
 
     return (
         <>
@@ -241,7 +235,55 @@ export default function Borrow({ pair }: BorrowProps) {
 
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-            {showApprove && (
+            {approveKashiFallback && (
+                <Alert
+                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
+                    className="mb-4"
+                />
+            )}
+
+            {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
+                kashiApprovalState === BentoApprovalState.PENDING) &&
+                !kashiPermit && (
+                    <Button color="blue" onClick={onApprove} className="mb-4">
+                        {kashiApprovalState === BentoApprovalState.PENDING ? (
+                            <Dots>{pendingApprovalMessage}</Dots>
+                        ) : (
+                            `Approve Kashi`
+                        )}
+                    </Button>
+                )}
+
+            {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
+                <>
+                    {showApprove && (
+                        <Button color="blue" onClick={approve} className="mb-4">
+                            {approvalState === ApprovalState.PENDING ? (
+                                <Dots>Approving {pair.collateral.symbol}</Dots>
+                            ) : (
+                                `Approve ${pair.collateral.symbol}`
+                            )}
+                        </Button>
+                    )}
+
+                    {!showApprove && (
+                        <Button
+                            color="pink"
+                            onClick={() => onCook(pair, onExecute)}
+                            disabled={
+                                (balance.eq(0) && pair.userCollateralAmount.value.eq(0)) ||
+                                (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
+                                    borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
+                                warnings.some(warning => warning.breaking)
+                            }
+                        >
+                            Borrow
+                        </Button>
+                    )}
+                </>
+            )}
+
+            {/* {showApprove && (
                 <Button color="pink" onClick={approve}>
                     {approvalState === ApprovalState.PENDING ? (
                         <Dots>Approving {pair.collateral.symbol}</Dots>
@@ -264,7 +306,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 >
                     Borrow
                 </Button>
-            )}
+            )} */}
         </>
     )
 }
