@@ -52,7 +52,8 @@ export function useDerivedZapInfo(
   tradeAmount: CurrencyAmount | undefined
   // price?: Price
   noLiquidity?: boolean
-  estimatedOutputValue?: CurrencyAmount | undefined
+  currencyZeroOutput?: CurrencyAmount | undefined
+  currencyOneOutput?: CurrencyAmount | undefined
   liquidityMinted?: TokenAmount
   poolTokenPercentage?: Percent
   estimatedSlippage?: any
@@ -87,17 +88,39 @@ export function useDerivedZapInfo(
   const currencyBalance = balances[0]
 
   const parsedAmount = tryParseAmount(typedValue, currency);
-  // parsedAmount?.raw
+
+  // This math is currently incorrect
+  // Shouldn't be diving by 2
+  // Should instead be determining the x to y ratio
   const tradeAmount = tryParseAmount(
     (+typedValue / 2).toString(),
     currency
   );
-  const bestTradeExactIn = useTradeExactIn(tradeAmount, currency0 ?? undefined)
+  const isTradingCurrency0 = currency?.symbol === currency0?.symbol ? true : false
+
+  const currencyZeroOutput = isTradingCurrency0
+    ? tradeAmount
+    : useTradeExactIn(
+      tradeAmount,
+      currency0 ?? undefined
+    )?.outputAmount
+  const currencyOneOutput = isTradingCurrency0
+    ? useTradeExactIn(
+        tradeAmount, 
+        currency1 ?? undefined
+      )?.outputAmount
+    : tradeAmount
+  const bestTradeExactIn = useTradeExactIn(
+    tradeAmount, 
+    isTradingCurrency0 
+      ? currency1 ?? undefined
+      : currency0 ?? undefined
+    )
 
   const liquidityMinted = useMemo(() => {
     const [tokenAmountA, tokenAmountB] = [
-      wrappedCurrencyAmount(tradeAmount, chainId),
-      wrappedCurrencyAmount(bestTradeExactIn?.outputAmount, chainId)
+      wrappedCurrencyAmount(currencyZeroOutput, chainId),
+      wrappedCurrencyAmount(currencyOneOutput, chainId)
     ]
     if (pair && totalSupply && tokenAmountA && tokenAmountB) {
       return pair.getLiquidityMinted(totalSupply, tokenAmountA, tokenAmountB)
@@ -105,6 +128,8 @@ export function useDerivedZapInfo(
       return undefined
     }
   }, [chainId, parsedAmount])
+
+  console.log({ tradeAmount, parsedAmount, isTradingCurrency0, bestTradeExactIn, liquidityMinted })
 
   const poolTokenPercentage = useMemo(() => {
     if (liquidityMinted && totalSupply) {
@@ -168,7 +193,8 @@ export function useDerivedZapInfo(
     error,
     liquidityMinted,
     poolTokenPercentage,
-    estimatedOutputValue: bestTradeExactIn?.outputAmount,
+    currencyZeroOutput,
+    currencyOneOutput,
     estimatedSlippage: bestTradeExactIn?.priceImpact
   }
 }

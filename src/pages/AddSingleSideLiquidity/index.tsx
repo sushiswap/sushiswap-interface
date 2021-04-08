@@ -118,8 +118,8 @@ const PoolInfo = (
   { poolAddress, currency }: { poolAddress: string, currency: Currency | undefined }
 ) => {
   const { token0, token1, totalSupply, reserves } = usePool(poolAddress)
-  const { estimatedOutputValue, liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, estimatedSlippage } = useDerivedZapInfo(currency ?? undefined, poolAddress)
-  console.log({ estimatedOutputValue, liquidityMinted, poolTokenPercentage, currencyBalance }, 'HERE IS POOL OUTPUT DATA')
+  const { liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, currencyZeroOutput, currencyOneOutput, estimatedSlippage } = useDerivedZapInfo(currency ?? undefined, poolAddress)
+  console.log({ liquidityMinted, poolTokenPercentage, currencyBalance }, 'HERE IS POOL OUTPUT DATA')
   const currency0 = useCurrency(token0)
   const currency1 = useCurrency(token1)
   const formattedAmount = 0
@@ -151,14 +151,14 @@ const PoolInfo = (
               <PoolTokenRow>
                 <CurrencyLogo size="22px"  currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
                 <TypeDefaultCursor fontSize="14px">
-                  {estimatedOutputValue?.toSignificant(6) || 0} {' '}
+                  {currencyZeroOutput?.toSignificant(6) || 0} {' '}
                   {currency0?.symbol}
                 </TypeDefaultCursor>
               </PoolTokenRow>
               <PoolTokenRow>
                 <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
                 <TypeDefaultCursor fontSize="14px">
-                  {tradeAmount?.toSignificant(6) || 0} {' '}
+                  {currencyOneOutput?.toSignificant(6) || 0} {' '}
                   {currency1?.symbol}
                 </TypeDefaultCursor>
               </PoolTokenRow>
@@ -255,7 +255,12 @@ const AddSingleSideLiquidity = ({
                     style={{ marginTop: '20px' }} 
                     // disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
                     disabled={!parsedAmount || error !== undefined}
-                    onClick={zapIn}
+                    onClick={() => zapIn(
+                      poolAddress, 
+                      parsedAmount?.raw.toString(),
+                      0, 
+                      '0xc778417e063141139fce010982780140aa0cd5ab'
+                    )}
                     // error={!parsedAmount || error !== undefined}
                   >
                   <Text fontSize={20} fontWeight={500}>

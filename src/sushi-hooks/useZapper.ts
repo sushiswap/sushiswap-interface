@@ -18,21 +18,25 @@ const useZapper = () => {
   const [allowance, setAllowance] = useState('0')
 
   const zapIn = useCallback(
-    async () => {
+    async (pairAddress, amount, minPoolTokens, swapTarget) => {
       try {
         const tx = await zapperContract?.ZapIn(
           '0x0000000000000000000000000000000000000000',
-          '0x37f4d05b879c364187caa02678ba041f7b5f5c71',
-          100000000000000,
-          0,
-          '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+          pairAddress,
+          amount,
+          minPoolTokens,
+          swapTarget,
+          // Unknown byte data param (swapData)
           0x0,
+          // Affiliate
           '0x0000000000000000000000000000000000000000',
-          false,
+          // Transfer residual
+          true,
           {
-            value: 100000000000000
+            value: amount
           }
         )
+        return addTransaction(tx, { summary: 'Zap' })
         console.log(tx, 'HERE IS THE SWEET SWEET ZAP TX')
       } catch (e) {
         console.log(e)
