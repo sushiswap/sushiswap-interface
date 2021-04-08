@@ -143,7 +143,7 @@
         "dev": "cross-env PORT=3001 react-app-rewired start",
         "build": "cross-env CI= GENERATE_SOURCEMAP=false react-app-rewired build",
         "eject": "react-app-rewired eject",
-        "test": "react-app-rewired test --env=jsdom",
+        "test": "react-app-rewired test a",
         "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
         "prepare": "husky install"
     },
