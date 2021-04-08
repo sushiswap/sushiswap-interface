@@ -19,6 +19,7 @@ import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
+import { StyledMenuButton, MenuFlyout, StyledMenu } from 'components/StyledMenu'
 
 const StyledMenuIcon = styled(Settings)`
   height: 20px;
@@ -45,63 +46,11 @@ const StyledCloseIcon = styled(X)`
   }
 `
 
-const StyledMenuButton = styled.button`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
-  height: 35px;
-
-  padding: 0.15rem 0.5rem;
-  border-radius: ${({ theme }) => theme.borderRadius};
-
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-  }
-
-  svg {
-    margin-top: 2px;
-  }
-`
 const EmojiWrapper = styled.div`
   position: absolute;
   bottom: -6px;
   right: 0px;
   font-size: 14px;
-`
-
-const StyledMenu = styled.div`
-  margin-left: 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: none;
-  text-align: left;
-`
-
-const MenuFlyout = styled.span`
-  min-width: 20.125rem;
-  background-color: ${({ theme }) => theme.bg2};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
-  border-radius: ${({ theme }) => theme.borderRadius};
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  position: absolute;
-  top: 3rem;
-  right: 0rem;
-  z-index: 100;
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    min-width: 18.125rem;
-  `};
 `
 
 const Break = styled.div`
@@ -119,8 +68,16 @@ const ModalContentWrapper = styled.div`
   border-radius: 20px;
 `
 
+const ExtendedMenuFlyout = styled(MenuFlyout)`
+  min-width: 20.125rem;
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    min-width: 18.125rem;
+  `};
+`
+
 export default function SettingsTab() {
-  const node = useRef<HTMLDivElement>()
+  const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
   const toggle = useToggleSettingsMenu()
 
@@ -139,8 +96,7 @@ export default function SettingsTab() {
   useOnClickOutside(node, open ? toggle : undefined)
 
   return (
-    // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
-    <StyledMenu ref={node as any}>
+    <StyledMenu ref={node}>
       <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)} maxHeight={100}>
         <ModalContentWrapper>
           <AutoColumn gap="lg">
@@ -189,7 +145,7 @@ export default function SettingsTab() {
         ) : null}
       </StyledMenuButton>
       {open && (
-        <MenuFlyout>
+        <ExtendedMenuFlyout>
           <AutoColumn gap="md" style={{ padding: '1rem' }}>
             <Text fontWeight={600} fontSize={14}>
               Transaction Settings
@@ -240,7 +196,7 @@ export default function SettingsTab() {
               />
             </RowBetween>
           </AutoColumn>
-        </MenuFlyout>
+        </ExtendedMenuFlyout>
       )}
     </StyledMenu>
   )

@@ -10,6 +10,7 @@ import xDaiLogo from '../../assets/images/xdai-logo.png'
 import MoonbeamLogo from '../../assets/images/moonbeam-logo.png'
 import AvalancheLogo from '../../assets/images/avalanche-logo.png'
 import HecoLogo from '../../assets/images/heco-logo.png'
+import HarmonyLogo from '../../assets/images/harmony-logo.png'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
@@ -46,7 +47,9 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.AVALANCHE]: AvalancheLogo,
   [ChainId.FUJI]: AvalancheLogo,
   [ChainId.HECO]: HecoLogo,
-  [ChainId.HECO_TESTNET]: HecoLogo
+  [ChainId.HECO_TESTNET]: HecoLogo,
+  [ChainId.HARMONY]: HarmonyLogo,
+  [ChainId.HARMONY_TESTNET]: HarmonyLogo
 }
 
 export default function CurrencyLogo({
@@ -78,5 +81,5 @@ export default function CurrencyLogo({
     return <StyledNativeCurrencyLogo src={logo[chainId]} size={size} style={style} />
   }
 
-  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
+  return <StyledLogo size={size} srcs={srcs} alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`} style={style} />
 }

@@ -48,7 +48,7 @@ export default function Saave() {
               <RowBetween>
                 <div>
                   <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
-                    {`Stake your SUSHI into xSUSHI for ~15% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
+                    {`Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights. Continuously compounding.`}
                   </TYPE.white>
                   <TYPE.white fontSize={14} color={theme.text2} style={{ paddingBottom: '10px' }}>
                     {`xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional to your share of the SushiBar.`}

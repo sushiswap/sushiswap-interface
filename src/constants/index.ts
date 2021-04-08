@@ -60,8 +60,13 @@ export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
 
 // TODO: specify merkle distributor for mainnet
 export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '0x090D4613473dEE047c3f2706764f49E0821D256e'
+  [ChainId.MAINNET]: '0xcBE6B83e77cdc011Cc18F6f0Df8444E5783ed982',
+  [ChainId.ROPSTEN]: '0x84d1f7202e0e7dac211617017ca72a2cb5e2b955'
 }
+
+// TODO: update weekly with new constant
+export const MERKLE_ROOT =
+  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-01/merkle-10959148-11003985.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
@@ -82,7 +87,9 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
   [ChainId.FUJI]: [WETH[ChainId.FUJI]],
   [ChainId.HECO]: [WETH[ChainId.HECO]],
-  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]]
+  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]],
+  [ChainId.HARMONY]: [WETH[ChainId.HARMONY]],
+  [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]]
 }
 
 // Default Ethereum chain tokens
@@ -94,6 +101,8 @@ export const MKR = new Token(ChainId.MAINNET, '0x9f8F72aA9304c8B593d555F12eF6589
 export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
 export const WBTC = new Token(ChainId.MAINNET, '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', 8, 'WBTC', 'Wrapped BTC')
 export const RUNE = new Token(ChainId.MAINNET, '0x3155BA85D5F96b2d030a4966AF206230e46849cb', 18, 'RUNE', 'RUNE.ETH')
+export const NFTX = new Token(ChainId.MAINNET, '0x87d73E916D7057945c9BcD8cdd94e42A6F47f776', 18, 'NFTX', 'NFTX')
+export const STETH = new Token(ChainId.MAINNET, '0xDFe66B14D37C77F4E9b180cEb433d1b164f0281D', 18, 'stETH', 'stakedETH')
 
 export const BSC: { [key: string]: Token } = {
   DAI: new Token(ChainId.BSC, '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3', 18, 'DAI', 'Dai Stablecoin'),
@@ -113,7 +122,7 @@ export const FANTOM: { [key: string]: Token } = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR, WBTC, RUNE],
+  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, COMP, MKR, WBTC, RUNE, NFTX, STETH],
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB]
 }
@@ -155,6 +164,42 @@ export const PWING = new Token(
   'Poly Ontology Wing Token'
 )
 
+export const UMA = new Token(ChainId.MAINNET, '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828', 18, 'UMA', 'UMA')
+
+export const UMA_CALL = new Token(
+  ChainId.MAINNET,
+  '0x1062aD0E59fa67fa0b27369113098cC941Dd0D5F',
+  18,
+  'UMA',
+  'UMA 35 Call [30 Apr 2021]'
+)
+
+export const DOUGH = new Token(
+  ChainId.MAINNET,
+  '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+  18,
+  'DOUGH',
+  'PieDAO Dough v2'
+)
+
+export const PLAY = new Token(
+  ChainId.MAINNET,
+  '0x33e18a092a93ff21aD04746c7Da12e35D34DC7C4',
+  18,
+  'PLAY',
+  'Metaverse NFT Index'
+)
+
+export const XSUSHI_CALL = new Token(
+  ChainId.MAINNET,
+  '0xada279f9301C01A4eF914127a6C2a493Ad733924',
+  18,
+  'XSUc25-0531',
+  'XSUSHI 25 Call [31 May 2021]'
+)
+
+export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
+
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
@@ -167,7 +212,10 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [HBTC.address]: [CREAM, WETH[ChainId.MAINNET]],
     [FRAX.address]: [FXS, WETH[ChainId.MAINNET]],
     [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
-    [PONT.address]: [PWING, WETH[ChainId.MAINNET]]
+    [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
+    [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
+    [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
+    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
   }
 }
 

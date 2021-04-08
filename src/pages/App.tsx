@@ -5,7 +5,6 @@ import { useActiveWeb3React } from '../hooks/index'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 
-import AddressClaimModal from '../components/claim/AddressClaimModal'
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
 import URLWarning from '../components/Header/URLWarning'
@@ -40,8 +39,11 @@ import SushiBar from './SushiBar'
 // Additional Tools
 import Tools from './Tools'
 import Saave from './Saave'
+import Vesting from './Vesting'
 
 import ComingSoonModal from '../components/ComingSoonModal'
+
+import { hot } from 'react-hot-loader'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -79,13 +81,7 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
-function TopLevelModals() {
-  const open = useModalOpen(ApplicationModal.ADDRESS_CLAIM)
-  const toggle = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-  return <AddressClaimModal isOpen={open} onDismiss={toggle} />
-}
-
-export default function App() {
+function App() {
   const { chainId } = useActiveWeb3React()
   return (
     <Suspense fallback={null}>
@@ -99,13 +95,12 @@ export default function App() {
         <BodyWrapper>
           <Popups />
           <Polling />
-          <TopLevelModals />
-          <ComingSoonModal />
           <Web3ReactManager>
             <Switch>
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
+              <Route exact strict path="/vesting" component={Vesting} />
               {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
@@ -142,3 +137,5 @@ export default function App() {
     </Suspense>
   )
 }
+
+export default hot(module)(App)

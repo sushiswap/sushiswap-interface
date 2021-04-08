@@ -26,15 +26,16 @@ import Menu from '../Menu'
 
 import Row, { RowFixed } from '../Row'
 import Web3Status from '../Web3Status'
-import ClaimModal from '../claim/ClaimModal'
-import { useToggleSelfClaimModal, useShowClaimPopup } from '../../state/application/hooks'
-import { useUserHasAvailableClaim } from '../../state/claim/hooks'
-import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 import { Dots } from '../swap/styleds'
 import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
 import usePrevious from '../../hooks/usePrevious'
-import { SUSHI } from '../../constants'
+import LanguageSwitch from '../LanguageSwitch'
+import { StyledMenuButton } from 'components/StyledMenu'
+
+const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+  margin-left: 8px;
+`
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -280,39 +281,6 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 `}
 `
 
-export const StyledMenuButton = styled.button`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border: none;
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
-  height: 35px;
-  background-color: ${({ theme }) => theme.bg3};
-  margin-left: 8px;
-  padding: 0.15rem 0.5rem;
-  border-radius: 20px;
-
-  :hover,
-  :focus {
-    cursor: pointer;
-    outline: none;
-    background-color: ${({ theme }) => theme.bg4};
-  }
-
-  svg {
-    margin-top: 2px;
-  }
-  > * {
-    stroke: ${({ theme }) => theme.text1};
-  }
-
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    margin-left: 4px;
-  `};
-`
-
 const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
@@ -329,7 +297,9 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.AVALANCHE]: 'Avalanche',
   [ChainId.FUJI]: 'Fuji',
   [ChainId.HECO]: 'HECO',
-  [ChainId.HECO_TESTNET]: 'HECO Testnet'
+  [ChainId.HECO_TESTNET]: 'HECO Testnet',
+  [ChainId.HARMONY]: 'Harmony',
+  [ChainId.HARMONY_TESTNET]: 'Harmony Testnet'
 }
 
 export default function Header() {
@@ -340,23 +310,15 @@ export default function Header() {
   // const [isDark] = useDarkModeManager()
   const [darkMode, toggleDarkMode] = useDarkModeManager()
 
-  const toggleClaimModal = useToggleSelfClaimModal()
-
-  const availableClaim: boolean = useUserHasAvailableClaim(account)
-
-  const { claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
-
   const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
 
   const [showUniBalanceModal, setShowUniBalanceModal] = useState(false)
-  const showClaimPopup = useShowClaimPopup()
 
   const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
   const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
 
   return (
     <HeaderFrame>
-      <ClaimModal />
       <Modal isOpen={showUniBalanceModal} onDismiss={() => setShowUniBalanceModal(false)}>
         <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
       </Modal>
@@ -397,6 +359,11 @@ export default function Header() {
               Stake
             </StyledNavLink>
           )}
+          {chainId === ChainId.MAINNET && (
+            <StyledNavLink id={`vesting-nav-link`} to={'/vesting'}>
+              Vesting
+            </StyledNavLink>
+          )}
           {chainId && (
             <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
               Analytics <span style={{ fontSize: '11px' }}>↗</span>
@@ -411,42 +378,6 @@ export default function Header() {
               <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
             )}
           </HideSmall>
-          {availableClaim && !showClaimPopup && (
-            <UNIWrapper onClick={toggleClaimModal}>
-              <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
-                <TYPE.white padding="0 2px">
-                  {claimTxn && !claimTxn?.receipt ? <Dots>Claiming UNI</Dots> : 'Claim UNI'}
-                </TYPE.white>
-              </UNIAmount>
-              <CardNoise />
-            </UNIWrapper>
-          )}
-          {!availableClaim && aggregateBalance && chainId && [1, 3, 4, 5, 42].includes(chainId) && (
-            <UNIWrapper onClick={() => setShowUniBalanceModal(true)}>
-              <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
-                {account && (
-                  <HideSmall>
-                    <TYPE.white
-                      style={{
-                        paddingRight: '.4rem'
-                      }}
-                    >
-                      <CountUp
-                        key={countUpValue}
-                        isCounting
-                        start={parseFloat(countUpValuePrevious)}
-                        end={parseFloat(countUpValue)}
-                        thousandsSeparator={','}
-                        duration={1}
-                      />
-                    </TYPE.white>
-                  </HideSmall>
-                )}
-                SUSHI
-              </UNIAmount>
-              <CardNoise />
-            </UNIWrapper>
-          )}
           <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
             {account && chainId && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
@@ -457,9 +388,10 @@ export default function Header() {
           </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
-          <StyledMenuButton onClick={() => toggleDarkMode()}>
+          {/* <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </StyledMenuButton>
+          </ExtendedStyledMenuButton> */}
+          <LanguageSwitch />
           <Menu />
         </HeaderElementWrap>
       </HeaderControls>

@@ -7,11 +7,60 @@ import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUnisw
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER, ROUTER_ADDRESS } from '@sushiswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
 import { ethers } from 'ethers'
+import Numeral from 'numeral'
 
 import Fraction from '../constants/Fraction'
 
+export const toK = (num: string) => {
+  return Numeral(num).format('0.[00]a')
+}
+
+const priceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2
+})
+
+export const formattedNum = (number: any, usd = false) => {
+  if (isNaN(number) || number === '' || number === undefined) {
+    return usd ? '$0.00' : 0
+  }
+  const num = parseFloat(number)
+
+  if (num > 500000000) {
+    return (usd ? '$' : '') + toK(num.toFixed(0))
+  }
+
+  if (num === 0) {
+    if (usd) {
+      return '$0.00'
+    }
+    return 0
+  }
+
+  if (num < 0.0001 && num > 0) {
+    return usd ? '< $0.0001' : '< 0.0001'
+  }
+
+  if (num > 1000) {
+    return usd
+      ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+      : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+  }
+
+  if (usd) {
+    if (num < 0.1) {
+      return '$' + Number(parseFloat(String(num)).toFixed(4))
+    } else {
+      const usdString = priceFormatter.format(num)
+      return '$' + usdString.slice(1, usdString.length)
+    }
+  }
+
+  return Number(parseFloat(String(num)).toFixed(5))
+}
+
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
-  console.log('formatFromBalance:', value, decimals)
   if (value) {
     return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
   } else {
@@ -152,6 +201,26 @@ const builders = {
       default:
         return `${prefix}/${type}/${data}`
     }
+  },
+
+  harmony: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.harmony.one/#'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+
+  harmonyTestnet: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.pops.one/#'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
   }
 }
 
@@ -234,6 +303,14 @@ const chains: ChainObject = {
   [ChainId.HECO_TESTNET]: {
     chainName: 'testnet',
     builder: builders.heco
+  },
+  [ChainId.HARMONY]: {
+    chainName: '',
+    builder: builders.harmony
+  },
+  [ChainId.HARMONY_TESTNET]: {
+    chainName: '',
+    builder: builders.harmonyTestnet
   }
 }
 

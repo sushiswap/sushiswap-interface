@@ -44,7 +44,7 @@ export default function Saave() {
               </RowBetween>
               <RowBetween>
                 <TYPE.white fontSize={14} color={theme.text2}>
-                  {`Stake your SUSHI into xSUSHI for 15% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click.`}
+                  {`Stake your SUSHI into xSUSHI for ~5% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click.`}
                 </TYPE.white>
               </RowBetween>
               <ExternalLink

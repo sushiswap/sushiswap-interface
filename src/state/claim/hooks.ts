@@ -1,4 +1,4 @@
-import { SUSHI } from './../../constants/index'
+import { SUSHI, MERKLE_ROOT } from './../../constants/index'
 import { TokenAmount, JSBI, ChainId } from '@sushiswap/sdk'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useEffect, useState } from 'react'
@@ -26,20 +26,25 @@ function fetchClaim(account: string, chainId: ChainId): Promise<UserClaimData | 
   const formatted = isAddress(account)
   if (!formatted) return Promise.reject(new Error('Invalid address'))
   const key = `${chainId}:${account}`
+  //console.log('CLAIM_PROMISE:', CLAIM_PROMISES[key], key)
 
   return (CLAIM_PROMISES[key] =
     CLAIM_PROMISES[key] ??
-    fetch(`https://gentle-frost-9e74.uniswap.workers.dev/${chainId}/${formatted}`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json()
-        } else {
-          console.debug(`No claim for account ${formatted} on chain ID ${chainId}`)
-          return null
+    fetch(MERKLE_ROOT)
+      .then(response => response.json())
+      .then(data => {
+        const claim: typeof data.claims[0] | undefined = data.claims[account] ?? undefined
+        if (!claim) return null
+
+        //console.log('claim:', claim)
+        return {
+          index: claim.index,
+          amount: claim.amount,
+          proof: claim.proof
         }
       })
       .catch(error => {
-        console.error('Failed to get claim data', error)
+        console.log(error)
       }))
 }
 
@@ -55,6 +60,7 @@ export function useUserClaimData(account: string | null | undefined): UserClaimD
     if (!account || !chainId) return
     fetchClaim(account, chainId).then(accountClaimInfo =>
       setClaimInfo(claimInfo => {
+        //console.log('claimInfo:', claimInfo, accountClaimInfo, key)
         return {
           ...claimInfo,
           [key]: accountClaimInfo
@@ -80,12 +86,19 @@ export function useUserUnclaimedAmount(account: string | null | undefined): Toke
   const userClaimData = useUserClaimData(account)
   const canClaim = useUserHasAvailableClaim(account)
 
-  const uni = chainId ? SUSHI[chainId] : undefined
-  if (!uni) return undefined
+  const sushi = chainId ? SUSHI[chainId] : undefined
+
+  // console.log('claimStats:', {
+  //   canClaim: canClaim,
+  //   userClaimData: userClaimData,
+  //   sushi: sushi
+  // })
+
+  if (!sushi) return undefined
   if (!canClaim || !userClaimData) {
-    return new TokenAmount(uni, JSBI.BigInt(0))
+    return new TokenAmount(sushi, JSBI.BigInt(0))
   }
-  return new TokenAmount(uni, JSBI.BigInt(userClaimData.amount))
+  return new TokenAmount(sushi, JSBI.BigInt(userClaimData.amount))
 }
 
 export function useClaimCallback(
