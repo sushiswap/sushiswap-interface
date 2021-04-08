@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
-import { Alert, Button, TransactionReviewView } from 'kashi/components'
+import { Alert, Button, TransactionReviewView, Dots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import { formattedPercent, formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
-import { GradientDot } from '../../../components'
 import { minimum, e10 } from 'kashi/functions/math'
 import { Warnings, TransactionReview, KashiCooker } from 'kashi/entities'
 import { KASHI_ADDRESS } from 'kashi/constants'
-import { useKashiApproveCallback } from 'kashi/hooks'
+import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
+import { useKashiApprovalPending } from 'state/application/hooks'
 
 interface RepayProps {
     pair: any
@@ -20,6 +19,7 @@ export default function Repay({ pair }: RepayProps) {
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
         KASHI_ADDRESS
     )
+    const pendingApprovalMessage = useKashiApprovalPending()
 
     // State
     const [useBentoRepayAsset, setUseBentoRepayAsset] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -205,19 +205,40 @@ export default function Repay({ pair }: RepayProps) {
 
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-            <Button
-                color="pink"
-                onClick={() => onCook(pair, onExecute)}
-                disabled={
-                    pendingTx ||
-                    (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
-                    (repayAssetValue.toBigNumber(pair.asset.decimals).lte(0) &&
-                        removeCollateralValue.toBigNumber(pair.collateral.decimals).lte(0)) ||
-                    warnings.some(warning => warning.breaking)
-                }
-            >
-                Repay
-            </Button>
+            {approveKashiFallback && (
+                <Alert
+                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
+                    className="mb-4"
+                />
+            )}
+
+            {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
+                kashiApprovalState === BentoApprovalState.PENDING) &&
+                !kashiPermit && (
+                    <Button color="pink" onClick={onApprove} className="mb-4">
+                        {kashiApprovalState === BentoApprovalState.PENDING ? (
+                            <Dots>{pendingApprovalMessage}</Dots>
+                        ) : (
+                            `Approve Kashi`
+                        )}
+                    </Button>
+                )}
+
+            {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
+                <Button
+                    color="pink"
+                    onClick={() => onCook(pair, onExecute)}
+                    disabled={
+                        pendingTx ||
+                        (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
+                        (repayAssetValue.toBigNumber(pair.asset.decimals).lte(0) &&
+                            removeCollateralValue.toBigNumber(pair.collateral.decimals).lte(0)) ||
+                        warnings.some(warning => warning.breaking)
+                    }
+                >
+                    Repay
+                </Button>
+            )}
         </>
     )
 }
