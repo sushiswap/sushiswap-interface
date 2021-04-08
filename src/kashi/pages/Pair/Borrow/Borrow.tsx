@@ -122,7 +122,6 @@ export default function Borrow({ pair }: BorrowProps) {
             console.log('remove asset')
             cooker.removeAsset(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
         }
-        await cooker.cook()
     }
 
     return (

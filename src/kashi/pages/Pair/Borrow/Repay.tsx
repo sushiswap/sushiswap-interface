@@ -101,7 +101,6 @@ export default function Repay({ pair }: RepayProps) {
             //     useBentoRemoveCollateral
             // )
         }
-        await cooker.cook()
     }
 
     return (
