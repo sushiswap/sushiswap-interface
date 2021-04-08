@@ -11,8 +11,6 @@ import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
-import { useDispatch } from 'react-redux'
-import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
 
