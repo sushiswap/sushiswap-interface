@@ -4,11 +4,11 @@
     "homepage": ".",
     "private": true,
     "lint-staged": {
-        "*.ts": [
+        "*.{js,jsx,ts,tsx}": [
             "eslint --cache --fix",
             "prettier --write"
         ],
-        "*.md": "prettier --write"
+        "*.{md,css}": "prettier --write"
     },
     "devDependencies": {
         "@apollo/client": "^3.2.0",
