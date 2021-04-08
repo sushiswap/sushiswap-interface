@@ -101,6 +101,7 @@ function App() {
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
               <Route exact strict path="/vesting" component={Vesting} />
+              <Route exact strict path="/migrate/v2" component={MigrateV2} />
               {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
@@ -123,7 +124,6 @@ function App() {
               <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
               <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
               <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-              <Route exact strict path="/migrate/v2" component={MigrateV2} />
               {/* <Route exact strict path="/migrate/v1" component={MigrateV1} /> */}
               {/* <Route exact strict path="/migrate/v1/:address" component={MigrateV1Exchange} /> */}
               {/* <Route exact strict path="/uni/:currencyIdA/:currencyIdB" component={Manage} /> */}
