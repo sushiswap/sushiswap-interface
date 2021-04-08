@@ -7,6 +7,7 @@ import { formattedPercent, formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import { GradientDot } from '../../../components'
 import { minimum, e10 } from 'kashi/functions/math'
+import { Warnings } from 'kashi/entities'
 
 interface RepayProps {
   pair: any
@@ -66,16 +67,13 @@ export default function Repay({ pair }: RepayProps) {
     }
   ]
 
-  const warning = pair.currentExchangeRate.isZero() || pair.userCollateralAmount.value.isZero()
-
-  function getWarningMessage() {
-    if (pair.currentExchangeRate.isZero()) {
-      return 'Oracle exchange rate has NOT been set'
-    } else if (pair.userCollateralAmount.value.isZero()) {
-      return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
-    }
-    return null
-  }
+  const warnings = new Warnings()
+    .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
+    .add(
+      pair.userCollateralAmount.value.isZero(),
+      'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.',
+      true
+    )
 
   const maxRepayAsset = balance.sub(pair.currentUserBorrowAmount.value).gte(0)
     ? pair.currentUserBorrowAmount.string
@@ -238,9 +236,11 @@ export default function Repay({ pair }: RepayProps) {
         )}
       </div>
 
-      <Alert message={getWarningMessage()} className="mb-4" />
+      {warnings.map((warning, i) => (
+        <Alert key={i} type={warning.breaking ? 'error' : 'warning'} message={warning.message} className="mb-4" />
+      ))}
 
-      {!warning.length && (Math.sign(Number(repayAssetValue)) > 0 || Math.sign(Number(removeCollateralValue)) > 0) && (
+      {!warnings.length && (Math.sign(Number(repayAssetValue)) > 0 || Math.sign(Number(removeCollateralValue)) > 0) && (
         <>
           <div className="py-4 mb-4">
             <div className="text-xl text-high-emphesis">Transaction Review</div>
@@ -258,13 +258,13 @@ export default function Repay({ pair }: RepayProps) {
           <Button
             color="pink"
             onClick={onRepay}
-            // disabled={
-            //   pendingTx ||
-            //   (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
-            //   Math.sign(Number(collateralValue)) > 0 ||
-            //   Math.sign(Number(borrowValue)) > 0 ||
-            //   warning
-            // }
+            disabled={
+              // pendingTx ||
+              // (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
+              // Math.sign(Number(collateralValue)) > 0 ||
+              // Math.sign(Number(borrowValue)) > 0 ||
+              warnings.some(warning => warning.breaking)
+            }
           >
             Repay
           </Button>

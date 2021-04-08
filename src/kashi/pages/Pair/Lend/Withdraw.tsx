@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { e10, minimum } from 'kashi/functions/math'
 import { easyAmount } from 'kashi/functions/kashi'
-import { TransactionReview } from 'kashi/entities/TransactionReview'
+import { TransactionReview, Warnings } from 'kashi/entities'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 
@@ -22,11 +22,13 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     ? easyAmount(minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value), pair.asset).string
     : value
 
-  const warningMessage = pair.oracleExchangeRate.isZero()
-    ? 'Oracle exchange rate has NOT been set'
-    : pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals))
-    ? 'Please make sure your supply balance is sufficient to withdraw and then try again.'
-    : ''
+  const warnings = new Warnings()
+    .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
+    .add(
+      pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)),
+      `Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to withdraw and then try again.`,
+      true
+    )
 
   const transactionReview = new TransactionReview()
   if (displayValue) {
@@ -99,14 +101,16 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
         )}
       </div>
 
-      <Alert message={warningMessage} className="mb-4" />
+      {warnings.map((warning, i) => (
+        <Alert key={i} type={warning.breaking ? 'error' : 'warning'} message={warning.message} className="mb-4" />
+      ))}
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
       <Button
         color="blue"
         onClick={() => onClick()}
-        disabled={warningMessage.length > 0 || displayValue.toBigNumber(0).lte(0)}
+        disabled={displayValue.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
       >
         Withdraw
       </Button>

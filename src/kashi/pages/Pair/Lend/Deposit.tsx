@@ -14,6 +14,7 @@ import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { useDispatch } from 'react-redux'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import { useKashiApprovalPending } from 'state/application/hooks'
+import { Warnings } from 'kashi/entities'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
   const { account, chainId, library } = useActiveWeb3React()
@@ -41,7 +42,13 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
   const max = balance.toFixed(pair.asset.decimals)
 
-  const warning = pair.oracleExchangeRate.isZero() || balance?.lt(value.toBigNumber(pair.asset.decimals))
+  const warnings = new Warnings()
+    .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
+    .add(
+      balance?.lt(value.toBigNumber(pair.asset.decimals)),
+      `Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to deposit and then try again.`,
+      true
+    )
 
   const showApprove =
     chainId &&
@@ -49,11 +56,6 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     !useBento &&
     value &&
     (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
-
-  const warningMessage = pair.oracleExchangeRate.isZero()
-    ? 'Oracle exchange rate has NOT been set'
-    : balance?.lt(value.toBigNumber(pair.asset.decimals)) &&
-      `Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to deposit and then try again.`
 
   const transactionReview = new TransactionReview()
   if (value) {
@@ -115,7 +117,9 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         )}
       </div>
 
-      <Alert message={warningMessage} className="mb-4" />
+      {warnings.map((warning, i) => (
+        <Alert key={i} type={warning.breaking ? 'error' : 'warning'} message={warning.message} className="mb-4" />
+      ))}
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
@@ -153,7 +157,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
             <Button
               color="blue"
               onClick={() => onCook(pair, onExecute)}
-              disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}
+              disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
             >
               Deposit
             </Button>
