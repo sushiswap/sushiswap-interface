@@ -1,21 +1,38 @@
 import React, { useState } from 'react'
-import { Alert, Button } from 'kashi/components'
+import { Alert, Button, Dots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
+import { useApproveCallback, ApprovalState } from 'hooks/useApproveCallback'
 import { e10, minimum } from 'kashi/functions/math'
 import { easyAmount } from 'kashi/functions/kashi'
 import { TransactionReview, Warnings } from 'kashi/entities'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
+import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
+import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
     const { account, library, chainId } = useActiveWeb3React()
+    const pendingApprovalMessage = useKashiApprovalPending()
 
     // State
     const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
     const [value, setValue] = useState('')
     const [pinMax, setPinMax] = useState(false)
+
+    const [approvalState, approve] = useApproveCallback(
+        new TokenAmount(
+            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
+            value.toBigNumber(pair.asset.decimals).toString()
+        ),
+        BENTOBOX_ADDRESS
+    )
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
+        KASHI_ADDRESS
+    )
 
     // Calculated
     const displayValue = pinMax
@@ -42,13 +59,10 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     }
 
     // Handlers
-    const onClick = async function() {
+    async function onExecute(cooker: KashiCooker) {
         const fraction = pinMax
             ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
             : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
-
-        const cooker = new KashiCooker(pair, account, library, chainId)
-        //await cooker.approve()
 
         await cooker.removeAsset(fraction, useBento).cook()
     }
@@ -114,13 +128,49 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-            <Button
-                color="blue"
-                onClick={() => onClick()}
-                disabled={displayValue.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
-            >
-                Withdraw
-            </Button>
+            {approveKashiFallback && (
+                <Alert
+                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
+                    className="mb-4"
+                />
+            )}
+
+            {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
+                kashiApprovalState === BentoApprovalState.PENDING) &&
+                !kashiPermit && (
+                    <Button color="blue" onClick={onApprove} className="mb-4">
+                        {kashiApprovalState === BentoApprovalState.PENDING ? (
+                            <Dots>{pendingApprovalMessage}</Dots>
+                        ) : (
+                            `Approve Kashi`
+                        )}
+                    </Button>
+                )}
+
+            {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
+                <>
+                    {approvalState === ApprovalState.NOT_APPROVED ||
+                        (approvalState === ApprovalState.PENDING && (
+                            <Button color="blue" onClick={approve} className="mb-4">
+                                {approvalState === ApprovalState.PENDING ? (
+                                    <Dots>Approving {pair.asset.symbol}</Dots>
+                                ) : (
+                                    `Approve ${pair.asset.symbol}`
+                                )}
+                            </Button>
+                        ))}
+
+                    {!(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
+                        <Button
+                            color="blue"
+                            onClick={() => onCook(pair, onExecute)}
+                            disabled={displayValue.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
+                        >
+                            Withdraw
+                        </Button>
+                    )}
+                </>
+            )}
         </>
     )
 }
