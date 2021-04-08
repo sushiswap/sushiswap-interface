@@ -257,7 +257,7 @@ export default function Borrow({ pair }: BorrowProps) {
             {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
                 <>
                     {showApprove && (
-                        <Button color="blue" onClick={approve} className="mb-4">
+                        <Button color="pink" onClick={approve} className="mb-4">
                             {approvalState === ApprovalState.PENDING ? (
                                 <Dots>Approving {pair.collateral.symbol}</Dots>
                             ) : (
