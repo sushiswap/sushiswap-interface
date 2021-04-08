@@ -121,7 +121,7 @@ export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
   return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 
-export function useZapper(withSignerIfPossible?: boolean): Contract | null {
+export function useZapperContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
   if (chainId) {

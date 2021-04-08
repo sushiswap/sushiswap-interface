@@ -28,6 +28,9 @@ import { TYPE } from '../../theme'
 import { currencyId as getCurrencyId } from '../../utils/currencyId'
 import AppBody from 'pages/AppBody'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { useActiveWeb3React } from 'hooks'
+import { useWalletModalToggle } from 'state/application/hooks'
+import useZapper from 'sushi-hooks/useZapper'
 
 
 const PageWrapper = styled(AutoColumn)`
@@ -114,11 +117,12 @@ const InfoCard = styled(DataCard)`
 const PoolInfo = (
   { poolAddress, currency }: { poolAddress: string, currency: Currency | undefined }
 ) => {
-  const { token0, token1 } = usePool(poolAddress)
-  const { estimatedOutputValue } = useDerivedZapInfo(currency ?? undefined, undefined)
+  const { token0, token1, totalSupply, reserves } = usePool(poolAddress)
+  const { estimatedOutputValue, liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, estimatedSlippage } = useDerivedZapInfo(currency ?? undefined, poolAddress)
+  console.log({ estimatedOutputValue, liquidityMinted, poolTokenPercentage, currencyBalance }, 'HERE IS POOL OUTPUT DATA')
   const currency0 = useCurrency(token0)
   const currency1 = useCurrency(token1)
-  const formattedAmount = estimatedOutputValue?.toSignificant(6);
+  const formattedAmount = 0
 
   return (
     <>
@@ -133,7 +137,7 @@ const PoolInfo = (
         </RowBetween>
         <RowBetween>
           <TypeDefaultCursor fontWeight={500} fontSize="22px">
-            {formattedAmount || '0'}
+            {liquidityMinted?.toSignificant(6) || '0'}
           </TypeDefaultCursor>
           <TypeDefaultCursor fontWeight={500} fontSize="22px">
             { (currency0 && currency1) &&`${currency0?.symbol}/${currency1?.symbol}`}
@@ -147,21 +151,23 @@ const PoolInfo = (
               <PoolTokenRow>
                 <CurrencyLogo size="22px"  currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
                 <TypeDefaultCursor fontSize="14px">
-                  0 {' '}
+                  {estimatedOutputValue?.toSignificant(6) || 0} {' '}
                   {currency0?.symbol}
                 </TypeDefaultCursor>
               </PoolTokenRow>
               <PoolTokenRow>
                 <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
                 <TypeDefaultCursor fontSize="14px">
-                  0 {' '}
+                  {tradeAmount?.toSignificant(6) || 0} {' '}
                   {currency1?.symbol}
                 </TypeDefaultCursor>
               </PoolTokenRow>
             </div>
             <div style={{ height: '91px' }}>
-              <TYPE.darkGray fontSize="14px">Pool Share</TYPE.darkGray>
-              <TypeDefaultCursorRight fontSize="14px">0.01%</TypeDefaultCursorRight>
+              <TYPE.darkGray style={{ textAlign: 'right' }} fontSize="14px">Pool Share</TYPE.darkGray>
+              <TypeDefaultCursorRight fontSize="14px">{poolTokenPercentage?.toSignificant(6) || '0'}%</TypeDefaultCursorRight>
+              <TYPE.darkGray fontSize="14px">Est. Slippage</TYPE.darkGray>
+              <TypeDefaultCursorRight fontSize="14px">{estimatedSlippage?.toSignificant(6) || '0'}%</TypeDefaultCursorRight>
             </div>
         </RowBetween>
       </PoolBreakDownWrapper>
@@ -197,12 +203,13 @@ const AddSingleSideLiquidity = ({
   history
 }: RouteComponentProps<{ poolAddress?: string; currencyId?: string }>) => {
   const theme = useContext(ThemeContext)
-  // const { account, chainId, library } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
 
   const currency = useCurrency(currencyId)
   const { onFieldInput } = useZapActionHandlers(false)
-  const { currencyBalance, noLiquidity, parsedAmount } = useDerivedZapInfo(currency ?? undefined, undefined)
+  const { currencyBalance, noLiquidity, parsedAmount, error } = useDerivedZapInfo(currency ?? undefined, undefined)
   const formattedAmount = parsedAmount?.toSignificant(6);
+  const { zapIn } = useZapper()
 
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
@@ -212,6 +219,8 @@ const AddSingleSideLiquidity = ({
     },
     [history, poolAddress]
   )
+
+  const toggleWalletModal = useWalletModalToggle()
 
   return (
     <>
@@ -236,9 +245,25 @@ const AddSingleSideLiquidity = ({
                   cornerRadiusBottomNone={false}
               />
               <PoolInfo poolAddress={poolAddress} currency={currency ?? undefined} />
-              <ButtonPrimary style={{ marginTop: '20px' }}>
-                <TYPE.main mb="4px">Zap</TYPE.main>
-              </ButtonPrimary>
+              <>
+                {!account ? (
+                  <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
+                    Connect Wallet
+                  </ButtonLight>
+                ) : (
+                  <ButtonError
+                    style={{ marginTop: '20px' }} 
+                    // disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
+                    disabled={!parsedAmount || error !== undefined}
+                    onClick={zapIn}
+                    // error={!parsedAmount || error !== undefined}
+                  >
+                  <Text fontSize={20} fontWeight={500}>
+                    {error ?? 'Zap'}
+                  </Text>
+                </ButtonError>
+                )}
+              </>
             </AutoColumn>
           </Wrapper>
         </AppBody>

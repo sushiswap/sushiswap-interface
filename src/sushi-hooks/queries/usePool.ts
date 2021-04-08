@@ -7,7 +7,6 @@ const usePool = (poolAddress: string | undefined) => {
   const [poolData, setPoolData] = useState<any>({});
   const address = isAddress(poolAddress)
   const poolContract = useContract(address, IUniswapV2PairABI, false)
-  console.log({ poolContract })
 
   const fetchPoolData = useCallback(async () => {
     const [
@@ -21,13 +20,6 @@ const usePool = (poolAddress: string | undefined) => {
       poolContract?.token1(),
       poolContract?.totalSupply(),
     ])
-
-    console.log({
-      reserves,
-      token0,
-      token1, 
-      totalSupply
-    })
 
     setPoolData({
       reserves,

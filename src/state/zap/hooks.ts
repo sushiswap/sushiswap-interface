@@ -5,11 +5,14 @@ import { PairState, usePair } from '../../data/Reserves'
 import { useTotalSupply } from '../../data/TotalSupply'
 
 import { useActiveWeb3React } from '../../hooks'
+import { useTradeExactIn } from '../../hooks/Trades'
 import { wrappedCurrency, wrappedCurrencyAmount } from '../../utils/wrappedCurrency'
 import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
+import usePool from '../../sushi-hooks/queries/usePool'
+import { useCurrency } from 'hooks/Tokens'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -38,20 +41,22 @@ export function useZapActionHandlers(
 
 export function useDerivedZapInfo(
   currency: Currency | undefined,
-  pool: Pair | undefined,
+  pairAddress: string | undefined,
 ): {
   // dependentField: Field
   currency:  Currency | undefined
-  // pair?: Pair | null
-  // pairState: PairState
+  pair?: Pair | null
+  pairState: PairState
   currencyBalance: CurrencyAmount | undefined
   parsedAmount: CurrencyAmount | undefined
+  tradeAmount: CurrencyAmount | undefined
   // price?: Price
   noLiquidity?: boolean
-  estimatedOutputValue: CurrencyAmount | undefined
-  // liquidityMinted?: TokenAmount
-  // poolTokenPercentage?: Percent
-  // error?: string
+  estimatedOutputValue?: CurrencyAmount | undefined
+  liquidityMinted?: TokenAmount
+  poolTokenPercentage?: Percent
+  estimatedSlippage?: any
+  error?: string
 } {
   const { account, chainId } = useActiveWeb3React()
 
@@ -63,8 +68,13 @@ export function useDerivedZapInfo(
     [currency]
   )
 
+  // Pool Data
+  const { token0, token1 } = usePool(pairAddress)
+  const currency0 = useCurrency(token0)
+  const currency1 = useCurrency(token1)
+
   // pair
-  const [pairState, pair] = usePair(currency, currency)
+  const [pairState, pair] = usePair(currency0 ?? undefined, currency1 ?? undefined)
   const totalSupply = useTotalSupply(pair?.liquidityToken)
 
   const noLiquidity: boolean =
@@ -77,10 +87,55 @@ export function useDerivedZapInfo(
   const currencyBalance = balances[0]
 
   const parsedAmount = tryParseAmount(typedValue, currency);
+  // parsedAmount?.raw
+  const tradeAmount = tryParseAmount(
+    (+typedValue / 2).toString(),
+    currency
+  );
+  const bestTradeExactIn = useTradeExactIn(tradeAmount, currency0 ?? undefined)
 
-  const estimatedOutputValue = tryParseAmount((+typedValue * 0.2).toString(), currency)
+  const liquidityMinted = useMemo(() => {
+    const [tokenAmountA, tokenAmountB] = [
+      wrappedCurrencyAmount(tradeAmount, chainId),
+      wrappedCurrencyAmount(bestTradeExactIn?.outputAmount, chainId)
+    ]
+    if (pair && totalSupply && tokenAmountA && tokenAmountB) {
+      return pair.getLiquidityMinted(totalSupply, tokenAmountA, tokenAmountB)
+    } else {
+      return undefined
+    }
+  }, [chainId, parsedAmount])
 
-  // // liquidity minted
+  const poolTokenPercentage = useMemo(() => {
+    if (liquidityMinted && totalSupply) {
+      return new Percent(liquidityMinted.raw, totalSupply.add(liquidityMinted).raw)
+    } else {
+      return undefined
+    }
+  }, [liquidityMinted, totalSupply])
+
+  let error: string | undefined
+  if (!account) {
+    error = 'Connect Wallet'
+  }
+
+  if (!parsedAmount) {
+    error = error ?? 'Enter an amount'
+  }
+
+  if (parsedAmount && currencyBalance?.lessThan(parsedAmount)) {
+    error = 'Insufficient ' + currency?.getSymbol(chainId) + ' balance'
+  }
+
+  // We should check here which route is better (token0 or token1)
+  // And provide that to the zap in contract as the swap target 
+  // const estimatedOutputValue = tryParseAmount((+typedValue * 0.000000002).toString(), currency)
+
+  // // // liquidity minted
+  // const liquidityMined = useMemo(() => {
+  //   // const {  }
+  // })
+
   // const liquidityMinted = useMemo(() => {
   //   const { [Field.CURRENCY]: currencyAAmount, [Field.CURRENCY]: currencyBAmount } = parsedAmounts
   //   const [tokenAmountA, tokenAmountB] = [
@@ -105,8 +160,15 @@ export function useDerivedZapInfo(
   return {
     currency: currencyData,
     currencyBalance,
+    pair,
+    pairState,
     noLiquidity,
     parsedAmount,
-    estimatedOutputValue,
+    tradeAmount,
+    error,
+    liquidityMinted,
+    poolTokenPercentage,
+    estimatedOutputValue: bestTradeExactIn?.outputAmount,
+    estimatedSlippage: bestTradeExactIn?.priceImpact
   }
 }
