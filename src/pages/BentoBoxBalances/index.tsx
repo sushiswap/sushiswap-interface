@@ -103,25 +103,11 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
                 onClick={() => setExpand(!expand)}
             >
                 <div className="flex items-center">
-                    <a
-                        href={
-                            `${
-                                chainId === ChainId.MAINNET
-                                    ? 'https://www.etherscan.io/address/'
-                                    : chainId === ChainId.ROPSTEN
-                                    ? 'https://ropsten.etherscan.io/address/'
-                                    : null
-                            }` + balance.address
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        <img
-                            alt=""
-                            src={getTokenIcon(balance.address)}
-                            className="block w-10 sm:w-14 rounded-lg mr-4"
-                        />
-                    </a>
+                    <img
+                        alt={balance.symbol}
+                        src={getTokenIcon(balance.address, chainId)}
+                        className="block w-10 sm:w-14 rounded-lg mr-4"
+                    />
                     <div className="hidden sm:block">{balance && balance.symbol}</div>
                 </div>
                 <div className="flex justify-end items-center">
