@@ -257,6 +257,8 @@ export default function Borrow({ pair }: BorrowProps) {
                     onClick={onBorrow}
                     disabled={
                         (balance.eq(0) && pair.userCollateralAmount.value.eq(0)) ||
+                        (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
+                            borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
                         warnings.some(warning => warning.breaking)
                     }
                 >
