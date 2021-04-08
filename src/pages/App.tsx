@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import React, { Suspense, useEffect, useRef } from 'react'
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom'
 import { ChainId } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../hooks/index'
 import styled from 'styled-components'
@@ -87,6 +87,16 @@ const Marginer = styled.div`
 
 function App() {
     const { chainId } = useActiveWeb3React()
+    const bodyRef = useRef<any>(null)
+
+    const { pathname } = useLocation()
+
+    useEffect(() => {
+        if (bodyRef.current) {
+            bodyRef.current.scrollTo(0, 0)
+        }
+    }, [pathname])
+
     return (
         <Suspense fallback={null}>
             <Route component={GoogleAnalyticsReporter} />
@@ -96,7 +106,7 @@ function App() {
                 <HeaderWrapper>
                     <Header />
                 </HeaderWrapper>
-                <BodyWrapper>
+                <BodyWrapper ref={bodyRef}>
                     <Popups />
                     <Polling />
                     <Web3ReactManager>

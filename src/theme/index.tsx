@@ -265,7 +265,6 @@ const breatheAnimation = keyframes`
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
- 
 }
 
 body {
