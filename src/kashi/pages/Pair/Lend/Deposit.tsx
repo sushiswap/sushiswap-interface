@@ -158,7 +158,11 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
             <Button
               color="blue"
               onClick={() => onCook(pair, onExecute)}
-              disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
+              disabled={
+                balance.eq(0) ||
+                value.toBigNumber(pair.asset.decimals).lte(0) ||
+                warnings.some(warning => warning.breaking)
+              }
             >
               Deposit
             </Button>
