@@ -1,4 +1,4 @@
-export { default as Alert, Error } from './Alert'
+export { default as Alert } from './Alert'
 export { default as Button, BackButton } from './Button'
 export { default as Card } from './Card'
 export { default as CardHeader, BorrowCardHeader, LendCardHeader } from './CardHeader'

@@ -238,7 +238,7 @@ export default function Repay({ pair }: RepayProps) {
         )}
       </div>
 
-      <Alert predicate={warning.length} message={getWarningMessage()} className="mb-4" />
+      <Alert message={getWarningMessage()} className="mb-4" />
 
       {!warning.length && (Math.sign(Number(repayAssetValue)) > 0 || Math.sign(Number(removeCollateralValue)) > 0) && (
         <>

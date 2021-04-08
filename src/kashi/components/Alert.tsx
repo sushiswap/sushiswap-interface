@@ -1,16 +1,11 @@
 import React, { useState } from 'react'
 
-export default function Alert({
-  predicate,
-  message,
-  className
-}: {
-  predicate: boolean
-  message?: string | null
-  className?: string
-}) {
+export default function Alert({ message, className }: { message?: string | null; className?: string }) {
+  if (!message) {
+    return null
+  }
   return (
-    <div className={predicate ? `block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4 ${className}` : 'hidden'}>
+    <div className="block w-full bg-yellow-50 border-l-4 border-yellow-400 p-4">
       <div className="flex">
         <div className="flex-shrink-0">
           {/* Heroicon name: solid/exclamation */}
@@ -34,8 +29,4 @@ export default function Alert({
       </div>
     </div>
   )
-}
-
-export function Error(): JSX.Element {
-  return <></>
 }

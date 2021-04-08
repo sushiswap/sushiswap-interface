@@ -99,7 +99,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
         )}
       </div>
 
-      <Alert predicate={warningMessage.length > 0} message={warningMessage} className="mb-4" />
+      <Alert message={warningMessage} className="mb-4" />
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 

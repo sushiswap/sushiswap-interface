@@ -32,7 +32,9 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     ),
     BENTOBOX_ADDRESS
   )
-  const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(KASHI_ADDRESS)
+  const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
+    KASHI_ADDRESS
+  )
 
   // Calculated
   const balance = useBento ? pair.asset.bentoBalance : pair.asset.balance
@@ -113,41 +115,49 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         )}
       </div>
 
-      <Alert predicate={warningMessage.length > 0} message={warningMessage} className="mb-4" />
+      <Alert message={warningMessage} className="mb-4" />
 
       <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-      {(approveKashiFallback && (
-        <Alert predicate={true} message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used." className="mb-4" />
-      ))}
-
-      {(kashiApprovalState === BentoApprovalState.NOT_APPROVED || kashiApprovalState === BentoApprovalState.PENDING) && (!kashiPermit) && (
-        <Button color="blue" onClick={onApprove} className="mb-4">
-          {kashiApprovalState === BentoApprovalState.PENDING ? (
-            <Dots>{pendingApprovalMessage}</Dots>
-          ) : (
-            `Approve Kashi`
-          )}
-        </Button>
+      {approveKashiFallback && (
+        <Alert
+          message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
+          className="mb-4"
+        />
       )}
 
-      {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-        <>
-        {showApprove && (
-          <Button color="blue" onClick={approve} className="mb-4">
-            {approvalState === ApprovalState.PENDING ? (
-              <Dots>Approving {pair.asset.symbol}</Dots>
+      {(kashiApprovalState === BentoApprovalState.NOT_APPROVED || kashiApprovalState === BentoApprovalState.PENDING) &&
+        !kashiPermit && (
+          <Button color="blue" onClick={onApprove} className="mb-4">
+            {kashiApprovalState === BentoApprovalState.PENDING ? (
+              <Dots>{pendingApprovalMessage}</Dots>
             ) : (
-              `Approve ${pair.asset.symbol}`
+              `Approve Kashi`
             )}
           </Button>
         )}
 
-        {!showApprove && (
-          <Button color="blue" onClick={() => onCook(pair, onExecute)} disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}>
-            Deposit
-          </Button>
-        )}
+      {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
+        <>
+          {showApprove && (
+            <Button color="blue" onClick={approve} className="mb-4">
+              {approvalState === ApprovalState.PENDING ? (
+                <Dots>Approving {pair.asset.symbol}</Dots>
+              ) : (
+                `Approve ${pair.asset.symbol}`
+              )}
+            </Button>
+          )}
+
+          {!showApprove && (
+            <Button
+              color="blue"
+              onClick={() => onCook(pair, onExecute)}
+              disabled={balance.eq(0) || value.toBigNumber(0).lte(0) || warning}
+            >
+              Deposit
+            </Button>
+          )}
         </>
       )}
     </>

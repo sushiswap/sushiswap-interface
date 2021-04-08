@@ -82,13 +82,6 @@ export default function Borrow({ pair }: BorrowProps) {
     .add(borrowValue.length > 0 && nextMaxBorrowPossible.lt(0), "Not enough liquidity in this pair.", true)
     .add(borrowValue.length > 0 && nextMaxBorrowSafe.lt(BigNumber.from(0)), "You will surpass your safe borrow limit and assets will be at a high risk of liquidation.", false)*/
 
-  const warning =
-    pair.currentExchangeRate.isZero() ||
-    (borrowValue && nextUserCollateralValue.eq(0)) ||
-    pair.maxBorrowable.safe.value.lt(BigNumber.from(0)) ||
-    (borrowValue && nextMaxBorrowPossible.lt(0)) ||
-    (borrowValue && nextMaxBorrowSafe.lt(BigNumber.from(0)))
-
   function getWarningMessage() {
     if (pair.currentExchangeRate.isZero()) {
       return 'Oracle exchange rate has NOT been set'
@@ -234,7 +227,7 @@ export default function Borrow({ pair }: BorrowProps) {
         )}
       </div>
 
-      <Alert predicate={warning} message={getWarningMessage()} className="mb-4" />
+      <Alert message={getWarningMessage()} className="mb-4" />
 
       <div className="flex items-center mb-4">
         <Checkbox color="pink" checked={swap} onChange={event => setSwap(event.target.checked)} />
@@ -260,7 +253,7 @@ export default function Borrow({ pair }: BorrowProps) {
         <Button
           color="pink"
           onClick={onBorrow}
-          disabled={(balance.eq(0) && pair.userCollateralAmount.value.eq(0)) || warning}
+          disabled={(balance.eq(0) && pair.userCollateralAmount.value.eq(0)) || getWarningMessage()}
         >
           Borrow
         </Button>
