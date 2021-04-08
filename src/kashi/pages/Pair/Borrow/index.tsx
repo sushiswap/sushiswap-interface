@@ -84,44 +84,16 @@ export default function BorrowPair({
                     <BorrowCardHeader>
                         <div className="flex items-center">
                             <div className="flex items-center space-x-2 mr-4">
-                                <a
-                                    href={
-                                        `${
-                                            chainId === ChainId.MAINNET
-                                                ? 'https://www.etherscan.io/address/'
-                                                : chainId === ChainId.ROPSTEN
-                                                ? 'https://ropsten.etherscan.io/address/'
-                                                : null
-                                        }` + pair?.collateral.address
-                                    }
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <img
-                                        src={pair && getTokenIcon(pair?.collateral.address)}
-                                        className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                                        alt=""
-                                    />
-                                </a>
-                                <a
-                                    href={
-                                        `${
-                                            chainId === ChainId.MAINNET
-                                                ? 'https://www.etherscan.io/address/'
-                                                : chainId === ChainId.ROPSTEN
-                                                ? 'https://ropsten.etherscan.io/address/'
-                                                : null
-                                        }` + pair?.asset.address
-                                    }
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    <img
-                                        src={pair && getTokenIcon(pair?.asset.address)}
-                                        className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                                        alt=""
-                                    />
-                                </a>
+                                <img
+                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
+                                    className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                    alt=""
+                                />
+                                <img
+                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
+                                    className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                    alt=""
+                                />
                             </div>
                             <div className="flex justify-between items-center">
                                 <div>
