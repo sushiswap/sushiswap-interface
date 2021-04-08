@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
 import { GradientDot } from '../../../components'
+import { useActiveWeb3React } from 'hooks'
 
 // TODO: Use table component
 function Positions({ pairs }: any): JSX.Element | null {
+    const { chainId } = useActiveWeb3React()
     return (
         <div>
             <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm  text-secondary">
@@ -23,12 +25,12 @@ function Positions({ pairs }: any): JSX.Element | null {
                                 <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                                     <div className="hidden space-x-2 md:flex">
                                         <img
-                                            src={getTokenIcon(pair.collateral.address)}
+                                            src={getTokenIcon(pair.collateral.address, chainId)}
                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                             alt=""
                                         />
                                         <img
-                                            src={getTokenIcon(pair.asset.address)}
+                                            src={getTokenIcon(pair.asset.address, chainId)}
                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                             alt=""
                                         />

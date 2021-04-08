@@ -2,8 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import getTokenIcon from 'kashi/functions/getTokenIcon'
 import { formattedPercent, formattedNum } from 'utils'
+import { useActiveWeb3React } from 'hooks'
 
 function Positions({ pairs }: any): JSX.Element | null {
+    const { chainId } = useActiveWeb3React()
     return (
         <div>
             <div className="grid gap-4 grid-cols-4 md:grid-cols-5 pb-4 px-4 text-sm  text-secondary">
@@ -20,12 +22,12 @@ function Positions({ pairs }: any): JSX.Element | null {
                                 <div className="grid gap-4 grid-cols-4 md:grid-cols-5 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-blue">
                                     <div className="hidden space-x-2 md:flex">
                                         <img
-                                            src={getTokenIcon(pair.collateral.address)}
+                                            src={getTokenIcon(pair.collateral.address, chainId)}
                                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                             alt=""
                                         />
                                         <img
-                                            src={getTokenIcon(pair.asset.address)}
+                                            src={getTokenIcon(pair.asset.address, chainId)}
                                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                             alt=""
                                         />
