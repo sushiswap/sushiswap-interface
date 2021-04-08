@@ -13,7 +13,7 @@ export interface BalanceProps {
     decimals: number
 }
 
-const useTokenBalance = (tokenAddress: string) => {
+function useTokenBalance(tokenAddress: string) {
     const [balance, setBalance] = useState<BalanceProps>({ value: BigNumber.from(0), decimals: 18 })
     const { account, chainId, library } = useActiveWeb3React()
     //const currentBlockNumber = useBlockNumber()

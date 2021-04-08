@@ -17,9 +17,7 @@ import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
-    const { account, chainId, library } = useActiveWeb3React()
-    const dispatch = useDispatch()
-    const bentoBoxContract = useBentoBoxContract()
+    const { account, chainId } = useActiveWeb3React()
     const pendingApprovalMessage = useKashiApprovalPending()
 
     // State
@@ -33,6 +31,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         ),
         BENTOBOX_ADDRESS
     )
+
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
         KASHI_ADDRESS
     )

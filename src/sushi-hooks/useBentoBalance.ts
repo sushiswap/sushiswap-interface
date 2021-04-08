@@ -7,17 +7,18 @@ import { isAddress } from '../utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import useTransactionStatus from './useTransactionStatus'
 
-const useBentoBalance = (tokenAddress: string) => {
+function useBentoBalance(tokenAddress: string): { value: BigNumber; decimals: number } {
     const { account } = useActiveWeb3React()
 
     const boringHelperContract = useBoringHelperContract()
     const bentoBoxContract = useBentoBoxContract()
     const tokenAddressChecksum = isAddress(tokenAddress)
-    const tokenContract = useContract(tokenAddressChecksum, ERC20_ABI, true) // withSigner
+    const tokenContract = useContract(tokenAddressChecksum, ERC20_ABI)
 
     const currentTransactionStatus = useTransactionStatus()
 
     const [balance, setBalance] = useState<any>()
+
     const fetchBentoBalance = useCallback(async () => {
         const balances = await boringHelperContract?.getBalances(account, [tokenAddressChecksum])
         const decimals = await tokenContract?.decimals()
@@ -32,13 +33,13 @@ const useBentoBalance = (tokenAddress: string) => {
             value: amount,
             decimals: decimals
         })
-    }, [account, tokenAddressChecksum, tokenContract])
+    }, [account, tokenAddressChecksum, tokenContract, boringHelperContract])
 
     useEffect(() => {
         if (account && bentoBoxContract && boringHelperContract && tokenContract) {
             fetchBentoBalance()
         }
-    }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract])
+    }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract])
 
     return balance
 }

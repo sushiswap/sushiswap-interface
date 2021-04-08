@@ -15,7 +15,7 @@ import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
-    const { account, library, chainId } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const pendingApprovalMessage = useKashiApprovalPending()
 
     // State

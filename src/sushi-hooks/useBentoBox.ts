@@ -2,22 +2,21 @@ import { useCallback } from 'react'
 import { useBentoBoxContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
-import { BalanceProps } from './useTokenBalance'
 import { isAddress } from '../utils'
 import { WETH } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
 
-const useBentoBox = () => {
+function useBentoBox() {
     const { account, chainId } = useActiveWeb3React()
 
     const addTransaction = useTransactionAdder()
-    const bentoBoxContract = useBentoBoxContract(true) // withSigner
+    const bentoBoxContract = useBentoBoxContract()
 
     const deposit = useCallback(
-        // todo: this should be updated with BigNumber as opposed to string
-        async (tokenAddress: string, amount: BalanceProps | undefined) => {
+        async (tokenAddress: string, value: BigNumber) => {
             const tokenAddressChecksum = isAddress(tokenAddress)
-            if (amount?.value && chainId) {
+            if (value && chainId) {
                 try {
                     //ethers.constants.HashZero
                     if (tokenAddressChecksum === WETH[chainId].address) {
@@ -25,20 +24,14 @@ const useBentoBox = () => {
                             ethers.constants.AddressZero,
                             account,
                             account,
-                            amount?.value,
+                            value,
                             0,
-                            { value: amount?.value }
+                            { value }
                         )
                         console.log(tx)
                         return addTransaction(tx, { summary: 'Deposit to Bentobox' })
                     } else {
-                        const tx = await bentoBoxContract?.deposit(
-                            tokenAddressChecksum,
-                            account,
-                            account,
-                            amount?.value,
-                            0
-                        )
+                        const tx = await bentoBoxContract?.deposit(tokenAddressChecksum, account, account, value, 0)
                         return addTransaction(tx, { summary: 'Deposit to Bentobox' })
                     }
                 } catch (e) {
@@ -52,21 +45,15 @@ const useBentoBox = () => {
 
     const withdraw = useCallback(
         // todo: this should be updated with BigNumber as opposed to string
-        async (tokenAddress: string, amount: BalanceProps | undefined) => {
+        async (tokenAddress: string, value: BigNumber) => {
             let tokenAddressChecksum = isAddress(tokenAddress)
-            if (amount?.value && chainId) {
+            if (value && chainId) {
                 try {
                     tokenAddressChecksum =
                         tokenAddressChecksum === WETH[chainId].address
                             ? '0x0000000000000000000000000000000000000000'
                             : tokenAddressChecksum
-                    const tx = await bentoBoxContract?.withdraw(
-                        tokenAddressChecksum,
-                        account,
-                        account,
-                        amount?.value,
-                        0
-                    )
+                    const tx = await bentoBoxContract?.withdraw(tokenAddressChecksum, account, account, value, 0)
                     return addTransaction(tx, { summary: 'Withdraw from Bentobox' })
                 } catch (e) {
                     console.log('bentobox withdraw error:', e)

@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { ChainId } from '@sushiswap/sdk'
 import { RowBetween } from '../../components/Row'
-import TokenDepositPanel from './TokenDepositPanel'
-import TokenWithdrawPanel from './TokenWithdrawPanel'
+import Deposit from './Deposit'
+import Withdraw from './Withdraw'
 import { useActiveWeb3React } from 'hooks'
 import useBentoBalances, { BentoBalance } from 'sushi-hooks/useBentoBalances'
 import { formatFromBalance, formattedNum } from '../../utils'
@@ -98,7 +97,7 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
     const bentoBalance = formatFromBalance(balance?.bentoBalance, balance?.amount?.decimals)
     const { chainId } = useActiveWeb3React()
     return (
-        <Paper className="bg-dark-800">
+        <Paper className="bg-dark-800 ">
             <div
                 className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm "
                 onClick={() => setExpand(!expand)}
@@ -137,29 +136,14 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
                         <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
                     </div>
                 </div>
-                {/* <div className="flex items-center">
-          {expand ? <MinusSquare strokeWidth={2} size={24} /> : <PlusSquare strokeWidth={2} size={24} />}
-        </div> */}
             </div>
             {expand && (
-                <div className="p-2 space-y-4 sm:p-4 sm:flex sm:space-x-2 sm:space-y-0">
-                    <div className="w-full text-center">
-                        {/* <div className="pb-2 text-base  text-secondary">Deposit to Bento</div> */}
-                        <TokenDepositPanel
-                            id={balance.address}
-                            tokenAddress={balance.address}
-                            tokenSymbol={balance.symbol}
-                            cornerRadiusBottomNone={true}
-                        />
+                <div className="grid gap-4 grid-cols-2 px-4 pb-4">
+                    <div className="text-center col-span-2 md:col-span-1">
+                        <Deposit tokenAddress={balance.address} tokenSymbol={balance.symbol} />
                     </div>
-                    <div className="w-full text-center">
-                        {/* <div className="pb-2 text-base  text-secondary">Withdraw to Wallet</div> */}
-                        <TokenWithdrawPanel
-                            id={balance.address}
-                            tokenAddress={balance.address}
-                            tokenSymbol={balance.symbol}
-                            cornerRadiusBottomNone={true}
-                        />
+                    <div className="text-center col-span-2 md:col-span-1">
+                        <Withdraw tokenAddress={balance.address} tokenSymbol={balance.symbol} />
                     </div>
                 </div>
             )}
