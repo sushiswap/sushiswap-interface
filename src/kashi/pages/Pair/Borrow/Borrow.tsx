@@ -134,7 +134,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2">Add Collateral &quot;{pair.collateral.symbol}&quot; From</span>
+                    <span className="mx-2"> Add Collateral &quot;{pair.collateral.symbol}&quot; From </span>
                     <span>
                         <Button
                             variant="outlined"
