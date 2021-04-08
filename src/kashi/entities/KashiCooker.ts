@@ -222,8 +222,49 @@ export class KashiCooker {
         return this
     }
 
-    borrow(amount: BigNumber): KashiCooker {
-        this.add(Action.BORROW, defaultAbiCoder.encode(['uint256', 'address'], [amount, this.account]))
+    removeCollateral(fraction: BigNumber, toBento: boolean): KashiCooker {
+        this.add(
+            Action.REMOVE_COLLATERAL,
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [fraction, this.account])
+        )
+        if (!toBento) {
+            this.add(
+                Action.BENTO_WITHDRAW,
+                ethers.utils.defaultAbiCoder.encode(
+                    ['address', 'address', 'int256', 'int256'],
+                    [this.pair.collateral.address, this.account, 0, -1]
+                )
+            )
+        }
+        return this
+    }
+
+    borrow(amount: BigNumber, toBento: boolean): KashiCooker {
+        this.add(Action.BORROW, defaultAbiCoder.encode(['int256', 'address'], [amount, this.account]))
+        if (!toBento) {
+            this.add(
+                Action.BENTO_WITHDRAW,
+                ethers.utils.defaultAbiCoder.encode(
+                    ['address', 'address', 'int256', 'int256'],
+                    [this.pair.asset.address, this.account, 0, -1]
+                )
+            )
+        }
+        return this
+    }
+
+    repay(amount: BigNumber, fromBento: boolean): KashiCooker {
+        if (!fromBento) {
+            this.add(
+                Action.BENTO_DEPOSIT,
+                defaultAbiCoder.encode(
+                    ['address', 'address', 'int256', 'int256'],
+                    [this.pair.asset.address, this.account, amount, 0]
+                )
+            )
+        }
+        this.add(Action.GET_REPAY_PART, defaultAbiCoder.encode(['int256'], [amount]))
+        this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [-1, this.account, false]))
         return this
     }
 
