@@ -83,7 +83,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span> From </span>
+                    <span>Deposit Asset &quot;{pair.asset.symbol}&quot; From </span>
                     <span>
                         <Button
                             variant="outlined"

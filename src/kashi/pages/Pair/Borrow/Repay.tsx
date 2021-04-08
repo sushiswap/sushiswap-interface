@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Alert, Button, TransactionReviewView, Dots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight } from 'react-feather'
+import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10 } from 'kashi/functions/math'
@@ -113,7 +113,7 @@ export default function Repay({ pair }: RepayProps) {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2"> Repay Asset From </span>
+                    <span className="mx-2"> Repay Asset &quot;{pair.asset.symbol}&quot; From </span>
                     <span>
                         <Button
                             variant="outlined"
@@ -155,9 +155,9 @@ export default function Repay({ pair }: RepayProps) {
             <div className="flex items-center justify-between my-4">
                 <div className="flex items-center text-base text-secondary">
                     <span>
-                        <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
+                        <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2">Remove Collateral To</span>
+                    <span className="mx-2">Remove Collateral &quot;{pair.collateral.symbol}&quot; To</span>
                     <span>
                         <Button
                             variant="outlined"

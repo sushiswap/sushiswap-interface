@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { Alert, Dots, Button, Checkbox } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight } from 'react-feather'
+import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10 } from 'kashi/functions/math'
@@ -134,7 +134,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2">Add Collateral From</span>
+                    <span className="mx-2">Add Collateral &quot;{pair.collateral.symbol}&quot; From</span>
                     <span>
                         <Button
                             variant="outlined"
@@ -174,9 +174,9 @@ export default function Borrow({ pair }: BorrowProps) {
             <div className="flex items-center justify-between my-4">
                 <div className="flex items-center text-base text-secondary">
                     <span>
-                        <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
+                        <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2"> Borrow Asset To </span>
+                    <span className="mx-2"> Borrow Asset &quot;{pair.asset.symbol}&quot; To </span>
                     <span>
                         <Button
                             variant="outlined"

@@ -76,7 +76,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                     <span>
                         <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span> To </span>
+                    <span> Withdraw Asset &quot;{pair.asset.symbol}&quot; To </span>
                     <span>
                         <Button
                             variant="outlined"
