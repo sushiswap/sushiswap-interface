@@ -154,7 +154,7 @@ export default function Pool() {
           </CardSection>
         </VoteCard>
 
-        <AutoColumn gap="md" justify="center">
+        <AutoColumn gap="sm" justify="center">
           <AutoColumn gap="md" style={{ width: '100%' }}>
             <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>
               <HideSmall>
@@ -224,11 +224,17 @@ export default function Pool() {
               </EmptyProposals>
             )}
 
-            <AutoColumn justify={'center'} gap="md">
+            <AutoColumn justify={'center'} gap="xs">
               <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                 {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
                 <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
                   {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
+                </StyledInternalLink>
+              </Text>
+              <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                Have Liquidity on Uniswap?{' '}
+                <StyledInternalLink id="migrate-pool-link" to={'/migrate/v2'}>
+                  Migrate Now.
                 </StyledInternalLink>
               </Text>
             </AutoColumn>
