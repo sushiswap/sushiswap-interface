@@ -23,6 +23,7 @@ import {
 //import Manage from './Earn/Manage'
 //import MigrateV1 from './MigrateV1'
 //import MigrateV1Exchange from './MigrateV1/MigrateV1Exchange'
+import MigrateV2 from './MigrateV2'
 import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
@@ -100,6 +101,8 @@ function App() {
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
               <Route exact strict path="/vesting" component={Vesting} />
+              {chainId === ChainId.MAINNET && <Route exact strict path="/migrate/v2" component={MigrateV2} />}
+
               {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />

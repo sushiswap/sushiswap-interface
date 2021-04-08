@@ -143,6 +143,8 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "@uniswap/sdk": "^3.0.3",
+    "eth-permit": "^0.1.9",
     "@types/numeral": "^2.0.1",
     "i18next": "^19.9.1",
     "numeral": "^2.0.6",
