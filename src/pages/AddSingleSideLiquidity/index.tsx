@@ -119,10 +119,8 @@ const PoolInfo = (
 ) => {
   const { token0, token1, totalSupply, reserves } = usePool(poolAddress)
   const { liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, currencyZeroOutput, currencyOneOutput, estimatedSlippage } = useDerivedZapInfo(currency ?? undefined, poolAddress)
-  console.log({ liquidityMinted, poolTokenPercentage, currencyBalance }, 'HERE IS POOL OUTPUT DATA')
   const currency0 = useCurrency(token0)
   const currency1 = useCurrency(token1)
-  const formattedAmount = 0
 
   return (
     <>
@@ -206,9 +204,10 @@ const AddSingleSideLiquidity = ({
   const { account } = useActiveWeb3React()
 
   const currency = useCurrency(currencyId)
+  const { typedValue } = useZapState()
   const { onFieldInput } = useZapActionHandlers(false)
   const { currencyBalance, noLiquidity, parsedAmount, error } = useDerivedZapInfo(currency ?? undefined, undefined)
-  const formattedAmount = parsedAmount?.toSignificant(6);
+  const formattedAmount = parsedAmount?.toSignificant(6) ?? '';
   const { zapIn } = useZapper()
 
   const handleCurrencyASelect = useCallback(
@@ -237,12 +236,13 @@ const AddSingleSideLiquidity = ({
                   onMax={() => {
                     onFieldInput(maxAmountSpend(currencyBalance)?.toExact() ?? '') 
                   }}
-                  value={formattedAmount ?? '0'}
+                  value={typedValue ?? ''}
                   currency={currency}
                   onUserInput={onFieldInput}
                   onCurrencySelect={handleCurrencyASelect}
-                  id="swap-currency-input"
+                  id="zap-currency-input"
                   cornerRadiusBottomNone={false}
+                  showCommonBases
               />
               <PoolInfo poolAddress={poolAddress} currency={currency ?? undefined} />
               <>
@@ -258,7 +258,8 @@ const AddSingleSideLiquidity = ({
                     onClick={() => zapIn(
                       poolAddress, 
                       parsedAmount?.raw.toString(),
-                      0, 
+                      0,
+                      // Hard coded WETH for now, this needs to be based on optimal routing I think
                       '0xc778417e063141139fce010982780140aa0cd5ab'
                     )}
                     // error={!parsedAmount || error !== undefined}

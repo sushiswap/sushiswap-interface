@@ -26,7 +26,7 @@ export function useZapActionHandlers(
   onFieldInput: (typedValue: string) => void
 } {
   const dispatch = useDispatch<AppDispatch>()
-
+  
   const onFieldInput = useCallback(
     (typedValue: string) => {
       dispatch(typeInput({ field: Field.CURRENCY, typedValue, noLiquidity: noLiquidity === true }))
@@ -128,8 +128,6 @@ export function useDerivedZapInfo(
       return undefined
     }
   }, [chainId, parsedAmount])
-
-  console.log({ tradeAmount, parsedAmount, isTradingCurrency0, bestTradeExactIn, liquidityMinted })
 
   const poolTokenPercentage = useMemo(() => {
     if (liquidityMinted && totalSupply) {

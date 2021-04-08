@@ -12,7 +12,6 @@ const { BigNumber } = ethers
 const useZapper = () => {
   const { account } = useActiveWeb3React()
   const zapperContract = useZapperContract(true)
-  console.log({zapperContract})
 
   const addTransaction = useTransactionAdder()
   const [allowance, setAllowance] = useState('0')
