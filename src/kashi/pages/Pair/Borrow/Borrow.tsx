@@ -53,12 +53,10 @@ export default function Borrow({ pair }: BorrowProps) {
   const nextMaxBorrowableOracle = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
   const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
   const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
-
   const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
   const nextMaxBorrowSafe = nextMaxBorrowMinimum
     .muldiv('95', '100')
     .sub(pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals)))
-
   const nextMaxBorrowPossible = minimum(nextMaxBorrowSafe, pair.totalAssetAmount.value)
 
   const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum)
@@ -93,21 +91,6 @@ export default function Borrow({ pair }: BorrowProps) {
       'You will surpass your safe borrow limit and assets will be at a high risk of liquidation.',
       false
     )
-
-  function getWarningMessage() {
-    if (pair.currentExchangeRate.isZero()) {
-      return 'Oracle exchange rate has NOT been set'
-    } else if (borrowValue && nextUserCollateralValue.eq(BigNumber.from(0))) {
-      return 'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.'
-    } else if (pair.maxBorrowable.safe.value.lt(BigNumber.from(0))) {
-      return 'You have surpassed your borrow limit and assets are at a high risk of liquidation.'
-    } else if (borrowValue && nextMaxBorrowPossible.lt(0)) {
-      return 'Not enough liquidity in this pair.'
-    } else if (borrowValue && nextMaxBorrowSafe.lt(BigNumber.from(0))) {
-      return 'You will surpass your safe borrow limit and assets will be at a high risk of liquidation.'
-    }
-    return null
-  }
 
   // Handlers
   async function onBorrow() {

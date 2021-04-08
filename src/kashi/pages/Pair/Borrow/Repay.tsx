@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, Button } from 'kashi/components'
+import { Alert, Button, TransactionReviewView } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
@@ -7,7 +7,7 @@ import { formattedPercent, formattedNum } from 'utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import { GradientDot } from '../../../components'
 import { minimum, e10 } from 'kashi/functions/math'
-import { Warnings } from 'kashi/entities'
+import { Warnings, TransactionReview } from 'kashi/entities'
 
 interface RepayProps {
   pair: any
@@ -46,26 +46,13 @@ export default function Repay({ pair }: RepayProps) {
   const nextHealth = pair.currentUserBorrowAmount.value
     .sub(repayAssetValue.toBigNumber(pair.asset.decimals))
     .muldiv(BigNumber.from('1000000000000000000'), nextMaxBorrowMinimum)
-    .toFixed(16)
 
-  const transactionReview = [
-    {
-      label: 'Est. Borrow Limit',
-      from: `${formattedNum(Math.max(0, Number(pair.maxBorrowable.safe.string)))} ${pair.asset.symbol}`,
-      to: `${formattedNum(
-        Math.max(0, Number(nextMaxBorrowSafe.toFixed(pair.asset.decimals))) + Number(repayAssetValue)
-      )} ${pair.asset.symbol}`
-    },
-    {
-      label: 'Est. Borrow Limit Used',
-      from: formattedPercent(pair.health.string),
-      to: (
-        <div className="flex items-center">
-          {formattedPercent(nextHealth)} <GradientDot percent={nextHealth} />
-        </div>
-      )
-    }
-  ]
+  const transactionReview = new TransactionReview()
+
+  if (repayAssetValue || removeCollateralValue) {
+    transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
+    transactionReview.addPercentage('Health', pair.health.value, nextHealth)
+  }
 
   const warnings = new Warnings()
     .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
@@ -240,7 +227,23 @@ export default function Repay({ pair }: RepayProps) {
         <Alert key={i} type={warning.breaking ? 'error' : 'warning'} message={warning.message} className="mb-4" />
       ))}
 
-      {!warnings.length && (Math.sign(Number(repayAssetValue)) > 0 || Math.sign(Number(removeCollateralValue)) > 0) && (
+      <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+
+      <Button
+        color="pink"
+        onClick={onRepay}
+        disabled={
+          // pendingTx ||
+          // (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
+          // Math.sign(Number(collateralValue)) > 0 ||
+          // Math.sign(Number(borrowValue)) > 0 ||
+          warnings.some(warning => warning.breaking)
+        }
+      >
+        Repay
+      </Button>
+
+      {/* {!warnings.length && (Math.sign(Number(repayAssetValue)) > 0 || Math.sign(Number(removeCollateralValue)) > 0) && (
         <>
           <div className="py-4 mb-4">
             <div className="text-xl text-high-emphesis">Transaction Review</div>
@@ -269,7 +272,7 @@ export default function Repay({ pair }: RepayProps) {
             Repay
           </Button>
         </>
-      )}
+      )} */}
     </>
   )
 }

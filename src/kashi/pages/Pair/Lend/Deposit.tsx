@@ -58,6 +58,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   const transactionReview = new TransactionReview()
+
   if (value) {
     const amount = value.toBigNumber(pair.asset.decimals)
     const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
