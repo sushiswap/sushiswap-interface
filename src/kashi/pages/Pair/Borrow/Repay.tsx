@@ -238,10 +238,10 @@ export default function Repay({ pair }: RepayProps) {
                 color="pink"
                 onClick={onRepay}
                 disabled={
-                    // pendingTx ||
-                    // (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
-                    // Math.sign(Number(collateralValue)) > 0 ||
-                    // Math.sign(Number(borrowValue)) > 0 ||
+                    pendingTx ||
+                    (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
+                    (repayAssetValue.toBigNumber(pair.asset.decimals).lte(0) &&
+                        removeCollateralValue.toBigNumber(pair.asset.decimals).lte(0)) ||
                     warnings.some(warning => warning.breaking)
                 }
             >
