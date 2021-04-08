@@ -14,6 +14,8 @@
         "@apollo/client": "^3.2.0",
         "@apollo/react-components": "^3.1.5",
         "@apollo/react-hooks": "^3.1.5",
+        "@commitlint/cli": "^12.1.1",
+        "@commitlint/config-conventional": "^12.1.1",
         "@ethersproject/experimental": "^5.0.1",
         "@fontsource/dm-sans": "^4.2.2",
         "@fullhuman/postcss-purgecss": "^4.0.3",
@@ -142,7 +144,8 @@
         "build": "cross-env CI= GENERATE_SOURCEMAP=false react-app-rewired build",
         "eject": "react-app-rewired eject",
         "test": "react-app-rewired test --env=jsdom",
-        "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'"
+        "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
+        "prepare": "husky install"
     },
     "browserslist": {
         "production": [
@@ -156,9 +159,5 @@
             "last 1 safari version"
         ]
     },
-    "license": "GPL-3.0-or-later",
-    "dependencies": {
-        "@commitlint/cli": "^12.1.1",
-        "@commitlint/config-conventional": "^12.1.1"
-    }
+    "license": "GPL-3.0-or-later"
 }
