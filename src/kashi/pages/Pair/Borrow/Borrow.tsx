@@ -23,6 +23,9 @@ interface BorrowProps {
 export default function Borrow({ pair }: BorrowProps) {
     const { account, chainId, library } = useActiveWeb3React()
     const pendingApprovalMessage = useKashiApprovalPending()
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
+        KASHI_ADDRESS
+    )
 
     // State
     const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -30,10 +33,6 @@ export default function Borrow({ pair }: BorrowProps) {
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
     const [swap, setSwap] = useState(false)
-
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
@@ -245,7 +244,7 @@ export default function Borrow({ pair }: BorrowProps) {
             {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
                 kashiApprovalState === BentoApprovalState.PENDING) &&
                 !kashiPermit && (
-                    <Button color="blue" onClick={onApprove} className="mb-4">
+                    <Button color="pink" onClick={onApprove} className="mb-4">
                         {kashiApprovalState === BentoApprovalState.PENDING ? (
                             <Dots>{pendingApprovalMessage}</Dots>
                         ) : (
@@ -282,31 +281,6 @@ export default function Borrow({ pair }: BorrowProps) {
                     )}
                 </>
             )}
-
-            {/* {showApprove && (
-                <Button color="pink" onClick={approve}>
-                    {approvalState === ApprovalState.PENDING ? (
-                        <Dots>Approving {pair.collateral.symbol}</Dots>
-                    ) : (
-                        `Approve ${pair.collateral.symbol}`
-                    )}
-                </Button>
-            )}
-
-            {!showApprove && (
-                <Button
-                    color="pink"
-                    onClick={onBorrow}
-                    disabled={
-                        (balance.eq(0) && pair.userCollateralAmount.value.eq(0)) ||
-                        (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
-                            borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
-                        warnings.some(warning => warning.breaking)
-                    }
-                >
-                    Borrow
-                </Button>
-            )} */}
         </>
     )
 }
