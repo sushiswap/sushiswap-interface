@@ -10,110 +10,117 @@ import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
-	const { account, library, chainId } = useActiveWeb3React()
+    const { account, library, chainId } = useActiveWeb3React()
 
-	// State
-	const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
-	const [value, setValue] = useState('')
-	const [pinMax, setPinMax] = useState(false)
+    // State
+    const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
+    const [value, setValue] = useState('')
+    const [pinMax, setPinMax] = useState(false)
 
-	// Calculated
-	const displayValue = pinMax
-		? easyAmount(minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value), pair.asset).string
-		: value
+    // Calculated
+    const displayValue = pinMax
+        ? easyAmount(minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value), pair.asset).string
+        : value
 
-	const warnings = new Warnings()
-		.add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
-		.add(
-			pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)),
-			`Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to withdraw and then try again.`,
-			true
-		)
+    const warnings = new Warnings()
+        .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
+        .add(
+            pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)),
+            `Please make sure your ${
+                useBento ? 'BentoBox' : 'wallet'
+            } balance is sufficient to withdraw and then try again.`,
+            true
+        )
 
-	const transactionReview = new TransactionReview()
-	if (displayValue) {
-		const amount = displayValue.toBigNumber(pair.asset.decimals)
-		const newUserAssetAmount = pair.currentUserAssetAmount.value.sub(amount)
-		transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
-		const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.sub(amount))
-		transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
-	}
+    const transactionReview = new TransactionReview()
+    if (displayValue) {
+        const amount = displayValue.toBigNumber(pair.asset.decimals)
+        const newUserAssetAmount = pair.currentUserAssetAmount.value.sub(amount)
+        transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+        const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.sub(amount))
+        transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
+    }
 
-	// Handlers
-	const onClick = async function() {
-		const fraction = pinMax
-			? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
-			: value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
+    // Handlers
+    const onClick = async function() {
+        const fraction = pinMax
+            ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
+            : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
 
-		const cooker = new KashiCooker(pair, account, library, chainId)
-		//await cooker.approve()
+        const cooker = new KashiCooker(pair, account, library, chainId)
+        //await cooker.approve()
 
-		await cooker.removeAsset(fraction, useBento).cook()
-	}
+        await cooker.removeAsset(fraction, useBento).cook()
+    }
 
-	return (
-		<>
-			<div className="text-3xl text-high-emphesis mt-6">Withdraw {pair.asset.symbol}</div>
+    return (
+        <>
+            <div className="text-3xl text-high-emphesis mt-6">Withdraw {pair.asset.symbol}</div>
 
-			<div className="flex justify-between my-4">
-				<div className="text-base text-secondary">
-					<span>
-						<ArrowUpRight size="1rem" style={{ display: 'inline' }} />
-					</span>
-					<span> To </span>
-					<span>
-						<Button
-							variant="outlined"
-							color="blue"
-							className="focus:ring focus:ring-blue"
-							onClick={() => {
-								setUseBento(!useBento)
-							}}
-						>
-							{useBento ? 'BentoBox' : 'Wallet'}
-						</Button>
-					</span>
-				</div>
-				<div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-					Balance: {pair.currentUserAssetAmount.string}
-				</div>
-			</div>
+            <div className="flex justify-between my-4">
+                <div className="text-base text-secondary">
+                    <span>
+                        <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
+                    </span>
+                    <span> To </span>
+                    <span>
+                        <Button
+                            variant="outlined"
+                            color="blue"
+                            className="focus:ring focus:ring-blue"
+                            onClick={() => {
+                                setUseBento(!useBento)
+                            }}
+                        >
+                            {useBento ? 'BentoBox' : 'Wallet'}
+                        </Button>
+                    </span>
+                </div>
+                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+                    Balance: {pair.currentUserAssetAmount.string}
+                </div>
+            </div>
 
-			<div className="flex items-center relative w-full mb-4">
-				<NumericalInput
-					className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
-					value={displayValue}
-					onUserInput={setValue}
-					onFocus={() => {
-						setValue(displayValue)
-						setPinMax(false)
-					}}
-				/>
-				{account && (
-					<Button
-						variant="outlined"
-						color="blue"
-						onClick={() => setPinMax(true)}
-						className="absolute right-4 focus:ring focus:ring-blue"
-					>
-						MAX
-					</Button>
-				)}
-			</div>
+            <div className="flex items-center relative w-full mb-4">
+                <NumericalInput
+                    className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
+                    value={displayValue}
+                    onUserInput={setValue}
+                    onFocus={() => {
+                        setValue(displayValue)
+                        setPinMax(false)
+                    }}
+                />
+                {account && (
+                    <Button
+                        variant="outlined"
+                        color="blue"
+                        onClick={() => setPinMax(true)}
+                        className="absolute right-4 focus:ring focus:ring-blue"
+                    >
+                        MAX
+                    </Button>
+                )}
+            </div>
 
-			{warnings.map((warning, i) => (
-				<Alert key={i} type={warning.breaking ? 'error' : 'warning'} message={warning.message} className="mb-4" />
-			))}
+            {warnings.map((warning, i) => (
+                <Alert
+                    key={i}
+                    type={warning.breaking ? 'error' : 'warning'}
+                    message={warning.message}
+                    className="mb-4"
+                />
+            ))}
 
-			<TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+            <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-			<Button
-				color="blue"
-				onClick={() => onClick()}
-				disabled={displayValue.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
-			>
-				Withdraw
-			</Button>
-		</>
-	)
+            <Button
+                color="blue"
+                onClick={() => onClick()}
+                disabled={displayValue.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
+            >
+                Withdraw
+            </Button>
+        </>
+    )
 }

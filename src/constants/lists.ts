@@ -22,26 +22,26 @@ const QUICK_SWAP = 'https://unpkg.com/quickswap-default-token-list@1.0.39/build/
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] =
-	process.env.NODE_ENV !== 'production'
-		? []
-		: [
-				COMPOUND_LIST,
-				AAVE_LIST,
-				SYNTHETIX_LIST,
-				UMA_LIST,
-				NFTX_LIST,
-				WRAPPED_LIST,
-				SET_LIST,
-				OPYN_LIST,
-				ROLL_LIST,
-				COINGECKO_LIST,
-				CMC_ALL_LIST,
-				CMC_STABLECOIN,
-				KLEROS_LIST,
-				GEMINI_LIST,
-				QUICK_SWAP,
-				...UNSUPPORTED_LIST_URLS // need to load unsupported tokens as well
-		  ]
+    process.env.NODE_ENV !== 'production'
+        ? []
+        : [
+              COMPOUND_LIST,
+              AAVE_LIST,
+              SYNTHETIX_LIST,
+              UMA_LIST,
+              NFTX_LIST,
+              WRAPPED_LIST,
+              SET_LIST,
+              OPYN_LIST,
+              ROLL_LIST,
+              COINGECKO_LIST,
+              CMC_ALL_LIST,
+              CMC_STABLECOIN,
+              KLEROS_LIST,
+              GEMINI_LIST,
+              QUICK_SWAP,
+              ...UNSUPPORTED_LIST_URLS // need to load unsupported tokens as well
+          ]
 
 // default lists to be 'active' aka searched across
 export const DEFAULT_ACTIVE_LIST_URLS: string[] = [] //[GEMINI_LIST]
