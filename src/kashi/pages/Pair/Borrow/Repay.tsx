@@ -247,37 +247,6 @@ export default function Repay({ pair }: RepayProps) {
             >
                 Repay
             </Button>
-
-            {/* {!warnings.length && (Math.sign(Number(repayAssetValue)) > 0 || Math.sign(Number(removeCollateralValue)) > 0) && (
-        <>
-          <div className="py-4 mb-4">
-            <div className="text-xl text-high-emphesis">Transaction Review</div>
-            {transactionReview.map((item, i) => (
-              <div key={i} className="flex flex-row items-center justify-between text-lg">
-                <div className="text-lg text-secondary">{item.label}:</div>
-                <div className="flex">
-                  <div className="text-secondary">{item.from}</div>
-                  {' → '}
-                  <div className="text-primary">{item.to}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <Button
-            color="pink"
-            onClick={onRepay}
-            disabled={
-              // pendingTx ||
-              // (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
-              // Math.sign(Number(collateralValue)) > 0 ||
-              // Math.sign(Number(borrowValue)) > 0 ||
-              warnings.some(warning => warning.breaking)
-            }
-          >
-            Repay
-          </Button>
-        </>
-      )} */}
         </>
     )
 }
