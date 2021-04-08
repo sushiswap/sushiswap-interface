@@ -247,9 +247,9 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     }
 }
 
-const TokenIcon = (address: string, chainId?: ChainId) => {
-    const RESULT = TOKEN_ICONS[chainId || 1][address.toLowerCase()]
-
+function getTokenIcon(address: string, chainId: ChainId = 1): string {
+    const RESULT = TOKEN_ICONS[chainId][address.toLowerCase()]
+    console.log('result', RESULT)
     if (!RESULT) {
         return UNKNOWN
     } else {
@@ -257,4 +257,4 @@ const TokenIcon = (address: string, chainId?: ChainId) => {
     }
 }
 
-export default TokenIcon
+export default getTokenIcon
