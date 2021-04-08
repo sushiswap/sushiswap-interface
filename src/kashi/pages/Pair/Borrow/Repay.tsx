@@ -241,7 +241,7 @@ export default function Repay({ pair }: RepayProps) {
                     pendingTx ||
                     (balance.eq(0) && pair.userCollateralAmount.eq(0)) ||
                     (repayAssetValue.toBigNumber(pair.asset.decimals).lte(0) &&
-                        removeCollateralValue.toBigNumber(pair.asset.decimals).lte(0)) ||
+                        removeCollateralValue.toBigNumber(pair.collateral.decimals).lte(0)) ||
                     warnings.some(warning => warning.breaking)
                 }
             >
