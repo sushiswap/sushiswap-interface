@@ -10,25 +10,25 @@ export const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
 export const ZRX = '0xE41d2489571d322189246DaFA5ebDe1F4699F498'
 
 const CONVERSION = {
-  //ROPSTEN
-  [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
-  [String('0x1Fe16De955718CFAb7A44605458AB023838C2793').toLowerCase()]: COMP,
-  [String('0xc2118d4d90b274016cB7a54c03EF52E6c537D957').toLowerCase()]: DAI,
-  [String('0xb19c7BFc9a7CbE4C35189d475725557A96bFb50A').toLowerCase()]: LINK,
-  [String('0x71d82Eb6A5051CfF99582F4CDf2aE9cD402A4882').toLowerCase()]: UNI,
-  [String('0x0D9C8723B343A8368BebE0B5E89273fF8D712e3C').toLowerCase()]: USDC,
-  [String('0xBde8bB00A7eF67007A96945B3a3621177B615C44').toLowerCase()]: WBTC,
-  [String('0xc778417E063141139Fce010982780140Aa0cD5Ab').toLowerCase()]: WETH,
-  [String('0xE4C6182EA459E63B8F1be7c428381994CcC2D49c').toLowerCase()]: ZRX
+	//ROPSTEN
+	[String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
+	[String('0x1Fe16De955718CFAb7A44605458AB023838C2793').toLowerCase()]: COMP,
+	[String('0xc2118d4d90b274016cB7a54c03EF52E6c537D957').toLowerCase()]: DAI,
+	[String('0xb19c7BFc9a7CbE4C35189d475725557A96bFb50A').toLowerCase()]: LINK,
+	[String('0x71d82Eb6A5051CfF99582F4CDf2aE9cD402A4882').toLowerCase()]: UNI,
+	[String('0x0D9C8723B343A8368BebE0B5E89273fF8D712e3C').toLowerCase()]: USDC,
+	[String('0xBde8bB00A7eF67007A96945B3a3621177B615C44').toLowerCase()]: WBTC,
+	[String('0xc778417E063141139Fce010982780140Aa0cD5Ab').toLowerCase()]: WETH,
+	[String('0xE4C6182EA459E63B8F1be7c428381994CcC2D49c').toLowerCase()]: ZRX
 }
 
 const getMainnetAddress = (address: string) => {
-  const MAINNET_ADDRESS = CONVERSION[address?.toLowerCase()]
-  if (!MAINNET_ADDRESS) {
-    return address?.toLowerCase()
-  } else {
-    return MAINNET_ADDRESS?.toLowerCase()
-  }
+	const MAINNET_ADDRESS = CONVERSION[address?.toLowerCase()]
+	if (!MAINNET_ADDRESS) {
+		return address?.toLowerCase()
+	} else {
+		return MAINNET_ADDRESS?.toLowerCase()
+	}
 }
 
 export default getMainnetAddress
