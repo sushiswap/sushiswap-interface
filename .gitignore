@@ -31,3 +31,5 @@ cypress/videos
 cypress/screenshots
 cypress/fixtures/example.json
 .vercel
+
+.eslintcache
