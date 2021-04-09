@@ -49,7 +49,7 @@ export function colors(darkMode: boolean): Colors {
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
 
     // backgrounds / greys
-    bg1: darkMode ? '#18212e' : '#FFFFFF',
+    bg1: darkMode ? '#202231' : '#FFFFFF',
     bg2: darkMode ? '#202d3f' : '#F7F8FA',
     bg3: darkMode ? '#2a3a50' : '#EDEEF2',
     bg4: darkMode ? '#3a506f' : '#CED0D9',
@@ -83,7 +83,7 @@ export function colors(darkMode: boolean): Colors {
     yellow2: '#F3841E',
     blue1: '#0094ec',
 
-    borderRadius: '20px'
+    borderRadius: '10px'
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',

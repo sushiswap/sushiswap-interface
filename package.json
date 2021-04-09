@@ -143,9 +143,11 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@uniswap/sdk": "^3.0.3",
-    "eth-permit": "^0.1.9",
+    "@sushiswap/sushi-data": "^1.0.10",
     "@types/numeral": "^2.0.1",
+    "@uniswap/sdk": "^3.0.3",
+    "date-fns": "^2.20.0",
+    "eth-permit": "^0.1.9",
     "i18next": "^19.9.1",
     "numeral": "^2.0.6",
     "react-app-rewire-hot-loader": "^2.0.1",

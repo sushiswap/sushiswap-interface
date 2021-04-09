@@ -11,7 +11,7 @@ export const StyledMenuButton = styled.button`
   height: 35px;
   background-color: ${({ theme }) => theme.bg3};
   padding: 0.15rem 0.5rem;
-  border-radius: 20px;
+  border-radius: 10px;
 
   :hover,
   :focus {

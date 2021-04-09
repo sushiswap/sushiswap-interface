@@ -355,6 +355,11 @@ export default function Header() {
             Vote
           </StyledNavLink> */}
           {chainId === ChainId.MAINNET && (
+            <StyledNavLink id={`yield-nav-link`} to={'/yield'}>
+              Yield
+            </StyledNavLink>
+          )}
+          {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
               Stake
             </StyledNavLink>
