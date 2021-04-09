@@ -18,7 +18,9 @@ export const FixedHeightRow = styled(RowBetween)`
 `
 
 export default function BentoBalances(): JSX.Element {
-  const farms = useFarms()
+  const query = useFarms()
+  const farms = query?.farms
+  const userFarms = query?.userFarms
 
   // Search Setup
   const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
@@ -30,6 +32,7 @@ export default function BentoBalances(): JSX.Element {
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
 
+  console.log('userFarms:', userFarms)
   return (
     <div className="container max-w-2xl mx-auto px-0 sm:px-4">
       <Card
@@ -46,7 +49,31 @@ export default function BentoBalances(): JSX.Element {
           </CardHeader>
         }
       >
-        <div className="grid grid-cols-3 pb-4 sm:px-4 text-sm  text-secondary">
+        {/* UserFarms */}
+        {userFarms && userFarms.length > 0 && (
+          <>
+            <div className="pb-4">
+              <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
+                <div className="flex items-center">
+                  <div>Your Yields</div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <div>Deposited</div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <div>Claim</div>
+                </div>
+              </div>
+              <div className="flex-col space-y-2">
+                {userFarms.map((farm: any, i: number) => {
+                  return <UserBalance key={farm.address + '_' + i} farm={farm} />
+                })}
+              </div>
+            </div>
+          </>
+        )}
+        {/* All Farms */}
+        <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
           <div className="flex items-center cursor-pointer hover:text-secondary" onClick={() => requestSort('symbol')}>
             <div>Instruments</div>
             {sortConfig &&
@@ -54,7 +81,7 @@ export default function BentoBalances(): JSX.Element {
               ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                 (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
           </div>
-          <div className="hidden md:block hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
+          <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
             <div className="flex items-center justify-end">
               <div>TVL</div>
               {sortConfig &&
@@ -119,6 +146,48 @@ const TokenBalance = ({ farm }: any) => {
         </div>
         <div className="flex justify-end items-center">
           <div className="text-right font-semibold text-xl">{formattedPercent(farm.roiPerYear * 100)} </div>
+        </div>
+      </div>
+      {expand && (
+        <InputGroup
+          pid={farm.pid}
+          pairAddress={farm.pairAddress}
+          pairSymbol={farm.symbol}
+          token0Address={farm.liquidityPair.token0.id}
+          token1Address={farm.liquidityPair.token1.id}
+        />
+      )}
+    </Paper>
+  )
+}
+
+const UserBalance = ({ farm }: any) => {
+  const [expand, setExpand] = useState<boolean>(false)
+  return (
+    <Paper className="bg-dark-800">
+      <div
+        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+        onClick={() => setExpand(!expand)}
+      >
+        <div className="flex items-center">
+          <div className="mr-4">
+            <DoubleLogo a0={farm.liquidityPair.token0.id} a1={farm.liquidityPair.token1.id} size={26} margin={true} />
+          </div>
+          <div className="hidden sm:block">
+            {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
+          </div>
+        </div>
+        <div className="flex justify-end items-center">
+          <div>
+            <div className="text-right">{formattedNum(farm.depositedUSD, true)} </div>
+            <div className="text-secondary text-right">{formattedNum(farm.depositedLP, false)} SLP</div>
+          </div>
+        </div>
+        <div className="flex justify-end items-center">
+          <div>
+            <div className="text-right">{formattedNum(farm.pendingSushi)} </div>
+            <div className="text-secondary text-right">SUSHI</div>
+          </div>
         </div>
       </div>
       {expand && (
