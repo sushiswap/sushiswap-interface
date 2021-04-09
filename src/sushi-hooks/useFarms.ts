@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useActiveWeb3React } from 'hooks'
 
 import { exchange, masterchef } from 'sushi-hooks/apollo/client'
 import { getAverageBlockTime } from 'sushi-hooks/apollo/getAverageBlockTime'
@@ -7,11 +8,17 @@ import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'sushi
 import sushiData from '@sushiswap/sushi-data'
 import _ from 'lodash'
 
+import { useBoringHelperContract } from './useContract'
+import { BigNumber } from '@ethersproject/bignumber'
+import Fraction from '../constants/Fraction'
+
 import { POOL_DENY } from '../constants'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {
   const [farms, setFarms] = useState<any | undefined>()
+  const { account } = useActiveWeb3React()
+  const boringHelperContract = useBoringHelperContract()
 
   const fetchAllFarms = useCallback(async () => {
     const results = await Promise.all([
@@ -84,8 +91,39 @@ const useFarms = () => {
 
     //console.log('farms:', farms)
     const sorted = _.orderBy(farms, ['pid'], ['desc'])
-    setFarms(sorted)
-  }, [])
+
+    const pids = sorted.map(pool => {
+      return pool.pid
+    })
+
+    if (account) {
+      const userFarmDetails = await boringHelperContract?.pollPools(account, pids)
+      const userFarms = userFarmDetails
+        .filter((farm: any) => {
+          return farm.balance.gt(BigNumber.from(0)) || farm.pending.gt(BigNumber.from(0))
+        })
+        .map((farm: any) => {
+          const pid = farm.pid.toNumber()
+          const farmDetails = sorted.find((pair: any) => pair.pid === pid)
+          const deposited = Fraction.from(farm.balance, BigNumber.from(10).pow(18)).toString(18)
+          const pending = Fraction.from(farm.pending, BigNumber.from(10).pow(18)).toString(18)
+
+          return {
+            ...farmDetails,
+            depositedLP: deposited,
+            depositedUSD:
+              farmDetails.slpBalance && Number(farmDetails.slpBalance / 1e18) > 0
+                ? (Number(deposited) * Number(farmDetails.tvl)) / (farmDetails.slpBalance / 1e18)
+                : 0,
+            pendingSushi: pending
+          }
+        })
+      setFarms({ farms: sorted, userFarms: userFarms })
+      //console.log('userFarms:', userFarms)
+    } else {
+      setFarms({ farms: sorted, userFarms: [] })
+    }
+  }, [account, boringHelperContract])
 
   useEffect(() => {
     fetchAllFarms()

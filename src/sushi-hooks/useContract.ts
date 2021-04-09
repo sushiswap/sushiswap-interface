@@ -36,6 +36,9 @@ import {
   ROUTER_ADDRESS
 } from '@sushiswap/sdk'
 
+import { BORING_HELPER_ADDRESS } from '../constants'
+import BORING_HELPER_ABI from '../constants/sushiAbis/boring-helper.json'
+
 // Need factory address from Uni as well
 import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 
@@ -268,4 +271,8 @@ export function useSushiRollContract(): Contract | null {
     }
   }
   return useContract(address, SUSHIROLL_ABI, true)
+}
+
+export function useBoringHelperContract(): Contract | null {
+  return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
 }
