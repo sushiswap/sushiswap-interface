@@ -139,6 +139,14 @@ export function isAddressString(value: any): string {
   }
 }
 
+// returns the checksummed address if the address is valid, otherwise returns false
+export function isWETH(value: any): string {
+  if (value.toLowerCase() === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
+    return 'ETH'
+  }
+  return value
+}
+
 const builders = {
   etherscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
     const prefix = `https://${chainName ? `${chainName}.` : ''}etherscan.io`

@@ -116,7 +116,14 @@ const TokenBalance = ({ farm }: any) => {
           <div className="text-right font-semibold text-xl">{formattedPercent(farm.roiPerYear * 100)} </div>
         </div>
       </div>
-      {expand && <InputGroup tokenAddress={farm.pairAddress} tokenSymbol={farm.symbol} />}
+      {expand && (
+        <InputGroup
+          pairAddress={farm.pairAddress}
+          pairSymbol={farm.symbol}
+          token0Address={farm.liquidityPair.token0.id}
+          token1Address={farm.liquidityPair.token1.id}
+        />
+      )}
     </Paper>
   )
 }

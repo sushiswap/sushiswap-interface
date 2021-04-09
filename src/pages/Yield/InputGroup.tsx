@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { Dots } from '../Pool/styleds'
 import { useActiveWeb3React } from 'hooks'
@@ -12,7 +13,7 @@ import { ethers } from 'ethers'
 import { e10, ZERO } from 'sushi-hooks/functions/math'
 
 import { Button } from './components'
-import { isAddressString, formattedNum } from 'utils'
+import { isAddressString, formattedNum, isWETH } from 'utils'
 
 import Fraction from 'constants/Fraction'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
@@ -21,28 +22,32 @@ const fixedFormatting = (value: BigNumber, decimals?: number) => {
   return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
 }
 
-export default function Deposit({
-  tokenAddress,
-  tokenSymbol
+export default function InputGroup({
+  pairAddress,
+  pairSymbol,
+  token0Address,
+  token1Address
 }: {
-  tokenAddress: string
-  tokenSymbol: string
+  pairAddress: string
+  pairSymbol: string
+  token0Address: string
+  token1Address: string
 }): JSX.Element {
+  const history = useHistory()
   const { account, chainId } = useActiveWeb3React()
-
   const [pendingTx, setPendingTx] = useState(false)
   const [depositValue, setDepositValue] = useState('')
   const [withdrawValue, setWithdrawValue] = useState('')
 
-  const tokenAddressChecksum = isAddressString(tokenAddress)
+  const pairAddressChecksum = isAddressString(pairAddress)
 
   //const { deposit } = useBentoBox()
-  const balance = useTokenBalance(tokenAddressChecksum)
+  const balance = useTokenBalance(pairAddressChecksum)
 
   console.log('balance:', balance, balance.value, fixedFormatting(balance.value, balance.decimals))
   const [approvalState, approve] = useApproveCallback(
     new TokenAmount(
-      new Token(chainId || 1, tokenAddressChecksum, balance.decimals, tokenSymbol, ''),
+      new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''),
       ethers.constants.MaxUint256.toString()
     ),
     MASTERCHEF_ADDRESS[1]
@@ -154,8 +159,18 @@ export default function Deposit({
           </div>
         </div>
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
-          <Button color="default">Add Liquidity</Button>
-          <Button color="default">Remove Liquidity</Button>
+          <Button
+            color="default"
+            onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
+          >
+            Add Liquidity
+          </Button>
+          <Button
+            color="default"
+            onClick={() => history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
+          >
+            Remove Liquidity
+          </Button>
         </div>
       </div>
     </>
