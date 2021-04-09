@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { RowBetween } from '../../components/Row'
+import { Dots } from '../Pool/styleds'
 
-import { useActiveWeb3React } from 'hooks'
-import { formatFromBalance, formattedNum, formattedPercent } from '../../utils'
-import { Card, CardHeader, Paper, Search, BackButton, DoubleLogo } from './components'
-// import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
-//import BentoBoxImage from 'assets/kashi/bento-illustration.png'
+//import { useActiveWeb3React } from 'hooks'
+import { formattedNum, formattedPercent } from '../../utils'
+import { Card, CardHeader, Paper, Search, DoubleLogo } from './components'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import useFarms from 'sushi-hooks/useFarms'
-import { ChevronUp, ChevronDown } from 'react-feather'
 
+import { ChevronUp, ChevronDown } from 'react-feather'
 import InputGroup from './InputGroup'
 
 export const FixedHeightRow = styled(RowBetween)`
@@ -75,11 +74,21 @@ export default function BentoBalances(): JSX.Element {
           </div>
         </div>
         <div className="flex-col space-y-2">
-          {items &&
-            items.length > 0 &&
+          {items && items.length > 0 ? (
             items.map((farm: any, i: number) => {
               return <TokenBalance key={farm.address + '_' + i} farm={farm} />
-            })}
+            })
+          ) : (
+            <>
+              {term ? (
+                <div className="w-full text-center py-6">No Results.</div>
+              ) : (
+                <div className="w-full text-center py-6">
+                  <Dots>Fetching Instruments</Dots>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </Card>
     </div>
@@ -88,10 +97,6 @@ export default function BentoBalances(): JSX.Element {
 
 const TokenBalance = ({ farm }: any) => {
   const [expand, setExpand] = useState<boolean>(false)
-  //const walletBalance = formatFromBalance(balance?.balance, balance?.amount?.decimals)
-  //const bentoBalance = formatFromBalance(balance?.bentoBalance, balance?.amount?.decimals)
-  //const { chainId } = useActiveWeb3React()
-
   return (
     <Paper className="bg-dark-800">
       <div
@@ -118,6 +123,7 @@ const TokenBalance = ({ farm }: any) => {
       </div>
       {expand && (
         <InputGroup
+          pid={farm.pid}
           pairAddress={farm.pairAddress}
           pairSymbol={farm.symbol}
           token0Address={farm.liquidityPair.token0.id}

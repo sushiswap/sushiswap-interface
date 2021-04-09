@@ -3,7 +3,7 @@ import { Search as SearchIcon } from 'react-feather'
 
 export default function Search({ term, search }: any) {
   return (
-    <div className="relative w-full max-w-sm flex-end">
+    <div className="relative w-full sm:max-w-xl md:max-w-sm flex-end">
       <input
         className="py-3 pl-4 pr-14 text-white rounded w-full focus:outline-none focus:ring border-0"
         onChange={e => search(e.target.value)}
