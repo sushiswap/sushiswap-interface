@@ -137,7 +137,7 @@ export default function ClaimModal() {
           <div className="space-y-10 hidden md:block">
             <img
               src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
-              style={{ width: 'auto', height: '300px' }}
+              style={{ width: '340px', height: '300px' }}
             />
             <VoteCard>
               <CardSection gap="sm">

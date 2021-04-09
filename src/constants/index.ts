@@ -7,6 +7,8 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export { PRELOADED_PROPOSALS } from './proposals'
 
+export const POOL_DENY = ['14', '29', '45', '30']
+
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]

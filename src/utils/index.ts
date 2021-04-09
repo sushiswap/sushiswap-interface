@@ -60,6 +60,32 @@ export const formattedNum = (number: any, usd = false) => {
   return Number(parseFloat(String(num)).toFixed(5))
 }
 
+export function formattedPercent(percent: any) {
+  percent = parseFloat(percent)
+  if (!percent || percent === 0) {
+    return '0%'
+  }
+  if (percent < 0.0001 && percent > 0) {
+    return '< 0.0001%'
+  }
+  if (percent < 0 && percent > -0.0001) {
+    return '< 0.0001%'
+  }
+  const fixedPercent = percent.toFixed(2)
+  if (fixedPercent === '0.00') {
+    return '0%'
+  }
+  if (fixedPercent > 0) {
+    if (fixedPercent > 100) {
+      return `${percent?.toFixed(0).toLocaleString()}%`
+    } else {
+      return `${fixedPercent}%`
+    }
+  } else {
+    return `${fixedPercent}%`
+  }
+}
+
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
   if (value) {
     return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
@@ -102,6 +128,23 @@ export function isAddress(value: any): string | false {
   } catch {
     return false
   }
+}
+
+// returns the checksummed address if the address is valid, otherwise returns false
+export function isAddressString(value: any): string {
+  try {
+    return getAddress(value)
+  } catch {
+    return ''
+  }
+}
+
+// returns the checksummed address if the address is valid, otherwise returns false
+export function isWETH(value: any): string {
+  if (value.toLowerCase() === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
+    return 'ETH'
+  }
+  return value
 }
 
 const builders = {
