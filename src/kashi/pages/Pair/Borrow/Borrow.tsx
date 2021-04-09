@@ -110,18 +110,20 @@ export default function Borrow({ pair }: BorrowProps) {
         collateralValue &&
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
-    async function onExecute(cooker: KashiCooker) {
+    async function onExecute(cooker: KashiCooker): Promise<string> {
         console.log('onExecute')
+        let summary = ""
         if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
             console.log('add collateral')
             cooker.addCollateral(collateralValue.toBigNumber(pair.collateral.decimals), useBentoCollateral)
+            summary = "Add collateral"
         }
         if (borrowValue.toBigNumber(pair.asset.decimals).gt(0)) {
             console.log('borrow asset')
             cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
-            // // console.log('remove asset')
-            // cooker.removeAsset(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
+            summary += (summary ? " and " : "") + "Borrow"
         }
+        return summary
     }
 
     return (

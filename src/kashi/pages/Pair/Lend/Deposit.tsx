@@ -6,13 +6,15 @@ import { useActiveWeb3React } from 'hooks'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { e10 } from 'kashi/functions/math'
-import { TransactionReview } from 'kashi/entities/TransactionReview'
+import { e10, ZERO } from 'kashi/functions/math'
+import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
+import { formattedNum } from 'utils'
+import { getUSDValue } from 'kashi/functions/kashi'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
     const { account, chainId } = useActiveWeb3React()
@@ -40,7 +42,6 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const max = balance.toFixed(pair.asset.decimals)
 
     const warnings = new Warnings()
-        .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
         .add(
             balance?.lt(value.toBigNumber(pair.asset.decimals)),
             `Please make sure your ${
@@ -58,17 +59,31 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     const transactionReview = new TransactionReview()
 
-    if (value) {
+    if (value && !warnings.broken) {
         const amount = value.toBigNumber(pair.asset.decimals)
         const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
         transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+        transactionReview.addUSD('Balance USD', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
         const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.add(amount))
         transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
+        if (pair.currentExchangeRate.isZero()) {
+            transactionReview.add(
+                'Exchange Rate',
+                pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals),
+                pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals),
+                Direction.UP
+            )
+        }
+        transactionReview.addPercentage('Supply APR', pair.supplyAPR.value, pair.currentSupplyAPR.value)
     }
 
     // Handlers
-    async function onExecute(cooker: KashiCooker) {
+    async function onExecute(cooker: KashiCooker): Promise<string> {
+        if (pair.currentExchangeRate.isZero()) {
+            cooker.updateExchangeRate(false, ZERO, ZERO)
+        }
         cooker.addAsset(value.toBigNumber(pair.asset.decimals), useBento)
+        return `Deposit ${pair.asset.symbol}`
     }
 
     return (
@@ -80,7 +95,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span> Deposit Asset &quot;{pair.asset.symbol}&quot; From </span>
+                    <span> from </span>
                     <span>
                         <Button
                             variant="outlined"
@@ -95,7 +110,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                     </span>
                 </div>
                 <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {max}
+                    Balance: {formattedNum(max)} {pair.asset.symbol}
                 </div>
             </div>
 
@@ -166,7 +181,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                             disabled={
                                 balance.eq(0) ||
                                 value.toBigNumber(pair.asset.decimals).lte(0) ||
-                                warnings.some(warning => warning.breaking)
+                                warnings.broken
                             }
                         >
                             Deposit

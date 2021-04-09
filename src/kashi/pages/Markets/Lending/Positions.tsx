@@ -50,10 +50,10 @@ function Positions({ pairs }: any): JSX.Element | null {
                                     <div className="text-right">
                                         <div>{formattedPercent(pair.utilization.string)}</div>
                                         <div className="text-secondary">
-                                            {formattedNum(pair.currentUserBorrowAmount.usd, true)}
+                                            {formattedNum(pair.currentUserLentAmount.usd, true)}
                                         </div>
                                     </div>
-                                    <div className="text-right">{formattedPercent(pair.currentSupplyAPR.string)}</div>
+                                    <div className="text-right">{formattedPercent(pair.supplyAPR.string)}</div>
                                 </div>
                             </Link>
                         </div>

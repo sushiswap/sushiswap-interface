@@ -3,16 +3,17 @@ import KashiLogo from 'assets/kashi/logo.png'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 import { formattedNum } from 'utils'
+import { BigNumber } from '@ethersproject/bignumber'
 
 interface LayoutProps {
     left?: JSX.Element
     children?: React.ReactChild | React.ReactChild[]
     right?: JSX.Element
+    netWorth?: string
 }
 
-export default function Layout({ left = undefined, children = undefined, right = undefined }: LayoutProps) {
+export default function Layout({ left = undefined, children = undefined, right = undefined, netWorth = "" }: LayoutProps) {
     const location = useLocation()
-    const netWorth = '10.00'
     return (
         <div className="container mx-auto px-4">
             <div className={`mb-2 grid grid-cols-12 gap-4`}>

@@ -227,6 +227,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                 pair.currentAllAssets.value
                             )
 
+                            // Interest per year received by lenders as of now
+                            pair.supplyAPR = takeFee(
+                                pair.interestPerYear.muldiv(pair.utilization, e10(18))
+                            )
+
                             // Interest payable by borrowers per year as of now
                             pair.currentInterestPerYear = interestAccrue(pair, pair.interestPerYear)
 
@@ -250,6 +255,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                             // The user's amount borrowed right now
                             pair.currentUserBorrowAmount = easyAmount(
                                 pair.userBorrowPart.muldiv(pair.currentBorrowAmount.value, pair.totalBorrow.base),
+                                pair.asset
+                            )
+
+                            // The user's amount of assets that are currently lent
+                            pair.currentUserLentAmount = easyAmount(
+                                pair.userAssetFraction.muldiv(pair.currentBorrowAmount.value, pair.totalAsset.base),
                                 pair.asset
                             )
 
@@ -279,13 +290,17 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                             pair.health = pair.currentUserBorrowAmount.value.muldiv(e10(18), pair.maxBorrowable.minimum)
 
-                            pair.userNetWorth = getUSDValue(
+                            pair.netWorth = getUSDValue(
                                 pair.currentUserAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
                                 pair.asset
-                            )
+                            ).add(getUSDValue(pair.userCollateralAmount.value, pair.collateral))
                             pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
 
                             pair.oracle = getOracle(pair, chain, tokens)
+                            pair.supplyAPR = {
+                                value: pair.supplyAPR,
+                                string: Fraction.from(pair.supplyAPR, e10(16)).toString()
+                            }
                             pair.currentSupplyAPR = {
                                 value: pair.currentSupplyAPR,
                                 string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString()

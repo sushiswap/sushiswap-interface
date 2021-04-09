@@ -40,7 +40,6 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
         : value
 
     const warnings = new Warnings()
-        .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
         .add(
             pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)),
             `Please make sure your ${
@@ -48,12 +47,15 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
             } balance is sufficient to withdraw and then try again.`,
             true
         )
+        .add(pair.totalAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)), "The isn't enough liquidity available at the moment to withdraw this amount. Please try withdrawing less or later.", true)
 
     const transactionReview = new TransactionReview()
-    if (displayValue) {
+    if (displayValue && !warnings.broken) {
         const amount = displayValue.toBigNumber(pair.asset.decimals)
         const newUserAssetAmount = pair.currentUserAssetAmount.value.sub(amount)
         transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+        transactionReview.addUSD('Balance USD', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+
         const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.sub(amount))
         transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
     }
@@ -64,7 +66,8 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
             ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
             : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
 
-        await cooker.removeAsset(fraction, useBento).cook()
+        await cooker.removeAsset(fraction, useBento)
+        return `Withdraw ${pair.asset.symbol}`
     }
 
     return (
@@ -76,7 +79,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                     <span>
                         <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span> Withdraw Asset &quot;{pair.asset.symbol}&quot; To </span>
+                    <span> to </span>
                     <span>
                         <Button
                             variant="outlined"
@@ -91,7 +94,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                     </span>
                 </div>
                 <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {pair.currentUserAssetAmount.string}
+                    Balance: {pair.currentUserAssetAmount.string} {pair.asset.symbol}
                 </div>
             </div>
 
@@ -164,7 +167,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                         <Button
                             color="blue"
                             onClick={() => onCook(pair, onExecute)}
-                            disabled={displayValue.toBigNumber(0).lte(0) || warnings.some(warning => warning.breaking)}
+                            disabled={displayValue.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
                         >
                             Withdraw
                         </Button>

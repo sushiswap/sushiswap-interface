@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { getUSDString, getUSDValue } from 'kashi/functions/kashi'
 import { formattedNum, formattedPercent } from 'utils'
 
 export enum Direction {
@@ -30,6 +31,16 @@ export class TransactionReview extends Array<Line> {
             name,
             formattedNum(from.toFixed(token.decimals)) + ' ' + token.symbol,
             formattedNum(to.toFixed(token.decimals)) + ' ' + token.symbol,
+            from.eq(to) ? Direction.FLAT : from.lt(to) ? Direction.UP : Direction.DOWN
+        )
+        return this
+    }
+
+    public addUSD(name: string, from: BigNumber, to: BigNumber, token: any): TransactionReview {
+        this.add(
+            name,
+            formattedNum(getUSDString(from, token), true),
+            formattedNum(getUSDString(to, token), true),
             from.eq(to) ? Direction.FLAT : from.lt(to) ? Direction.UP : Direction.DOWN
         )
         return this

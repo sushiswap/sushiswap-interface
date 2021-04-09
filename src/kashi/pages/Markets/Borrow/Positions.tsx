@@ -64,7 +64,7 @@ function Positions({ pairs }: any): JSX.Element | null {
                                         <GradientDot percent={pair.health.string} />
                                     </div>
                                     <div className="hidden sm:block text-right">
-                                        {formattedPercent(pair.currentInterestPerYear.string)}
+                                        {formattedPercent(pair.interestPerYear.string)}
                                     </div>
                                 </div>
                             </Link>

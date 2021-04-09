@@ -105,16 +105,19 @@ export default function Repay({ pair }: RepayProps) {
 
     // Handlers
     async function onExecute(cooker: KashiCooker) {
-        console.log('onExecute')
+        let summary = ""
         if (repayAssetValue.toBigNumber(pair.asset.decimals).gt(0)) {
             cooker.repay(repayAssetValue.toBigNumber(pair.asset.decimals), useBentoRepayAsset)
+            summary = "Repay"
         }
         if (removeCollateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
             cooker.removeCollateral(
                 removeCollateralValue.toBigNumber(pair.collateral.decimals),
                 useBentoRemoveCollateral
             )
+            summary += (summary ? " and " : "") + summary
         }
+        return summary
     }
 
     const showApprove =

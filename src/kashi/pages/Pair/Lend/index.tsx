@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
-import { RouteComponentProps } from 'react-router-dom'
+import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
@@ -25,7 +25,9 @@ export default function LendingPair({
 
     const pair = useKashiPair(pairAddress)
 
-    if (!pair) return null
+    if (!pair) return (
+        <Redirect to="/bento/kashi/lend"></Redirect>
+    )
 
     return (
         <Layout
@@ -48,7 +50,7 @@ export default function LendingPair({
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">Available</div>
                             <div className="text-lg text-high-emphesis">
-                                {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
+                                {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -61,15 +63,15 @@ export default function LendingPair({
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Lending APR</div>
+                            <div className="text-lg text-secondary">Supply APR</div>
                             <div className="flex items-center">
-                                <div className="text-lg text-high-emphesis">-</div>
+                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentSupplyAPR.string)}</div>
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Market Supply</div>
+                            <div className="text-lg text-secondary">Borrow APR</div>
                             <div className="flex items-center">
-                                <div className="text-lg text-high-emphesis">-</div>
+                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentInterestPerYear.string)}</div>
                             </div>
                         </div>
                         <div className="flex justify-between pt-3">
@@ -166,7 +168,7 @@ export default function LendingPair({
                     <div className="text-right">
                         <div>
                             <div className="text-secondary text-lg">Supply APR</div>
-                            <div className="text-high-emphesis text-2xl">{formattedPercent(pair.currentSupplyAPR)}</div>
+                            <div className="text-high-emphesis text-2xl">{formattedPercent(pair.supplyAPR.string)}</div>
                         </div>
                     </div>
                 </div>

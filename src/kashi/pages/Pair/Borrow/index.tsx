@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
-import { RouteComponentProps } from 'react-router-dom'
+import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
 import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
@@ -11,6 +11,8 @@ import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Borrow from './Borrow'
 import Repay from './Repay'
+import { KashiCooker } from 'kashi/entities'
+import { useTransactionAdder } from 'state/transactions/hooks'
 
 export default function BorrowPair({
     match: {
@@ -19,15 +21,22 @@ export default function BorrowPair({
 }: RouteComponentProps<{ pairAddress: string }>) {
     const [tabIndex, setTabIndex] = useState(0)
 
-    const { chainId } = useActiveWeb3React()
+    const { account, library, chainId } = useActiveWeb3React()
 
     const pair = useKashiPair(pairAddress)
 
+    const addTransaction = useTransactionAdder()
     const onUpdateExchangeRate = useCallback(async () => {
-        // TODO: await updateExchangeRate(pair.address)
-    }, [pair /*, updateExchangeRate*/])
+        const result = await new KashiCooker(pair, account, library, chainId)
+            .updateExchangeRate()
+            .cook()
 
-    if (!pair) return null
+        addTransaction(result.tx, {summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate`})
+    }, [pair])
+
+    if (!pair) return (
+        <Redirect to="/bento/kashi/borrow"></Redirect>
+    )
 
     return (
         <Layout

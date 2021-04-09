@@ -8,6 +8,7 @@ import { getProviderOrSigner, getSigner } from 'utils'
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
 import BENTOBOX_ABI from '../../constants/sushiAbis/bentobox.json'
 import { KashiPermit } from 'kashi/hooks'
+import { ZERO } from 'kashi/functions'
 
 export async function signMasterContractApproval(
     bentoBoxContract: ethers.Contract | null,
@@ -117,50 +118,14 @@ export class KashiCooker {
                 )
             )
         }
-
-        /*const bentoBoxContract = new Contract(
-      BENTOBOX_ADDRESS,
-      BENTOBOX_ABI,
-      getProviderOrSigner(this.library, this.account) as any
-    )
-    if ((await bentoBoxContract?.masterContractApproved(KASHI_ADDRESS, this.account)) === true) {
-      return this
     }
 
-    try {
-      const signature = await signMasterContractApproval(
-        bentoBoxContract,
-        KASHI_ADDRESS,
-        this.account!,
-        this.library!,
-        true,
-        this.chainId
-      )
-      const permit = ethers.utils.splitSignature(signature)
-
-      this.add(
-        Action.BENTO_SETAPPROVAL,
-        ethers.utils.defaultAbiCoder.encode(
-          ['address', 'address', 'bool', 'uint8', 'bytes32', 'bytes32'],
-          [this.account, KASHI_ADDRESS, true, permit.v, permit.r, permit.s]
+    updateExchangeRate(mustUpdate = false, minRate = ZERO, maxRate = ZERO): KashiCooker {
+        this.add(
+            Action.UPDATE_EXCHANGE_RATE,
+            ethers.utils.defaultAbiCoder.encode(['bool', 'uint256', 'uint256'], [mustUpdate, minRate, maxRate])
         )
-      )
-    } catch (e) {
-      console.log('Error', e)
-      if (e.code && e.code === -32603) {
-        console.log(this.account, KASHI_ADDRESS, true, 0, ethers.constants.HashZero, ethers.constants.HashZero)
-        const tx = await bentoBoxContract.setMasterContractApproval(
-          this.account,
-          KASHI_ADDRESS,
-          true,
-          0,
-          ethers.constants.HashZero,
-          ethers.constants.HashZero
-        )
-        await tx.wait()
-      }
-    }
-    return true*/
+        return this
     }
 
     addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {

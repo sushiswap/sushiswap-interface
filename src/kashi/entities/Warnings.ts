@@ -10,4 +10,8 @@ export class Warnings extends Array<Warning> {
         }
         return this
     }
+
+    get broken(): boolean {
+        return this.some(warning => warning.breaking)
+    }
 }

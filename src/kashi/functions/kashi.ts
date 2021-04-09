@@ -1,8 +1,8 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import Fraction from 'constants/Fraction'
 import {
     FACTOR_PRECISION,
     FULL_UTILIZATION_MINUS_MAX,
+    getCurrency,
     INTEREST_ELASTICITY,
     MAXIMUM_INTEREST_PER_YEAR,
     MAXIMUM_TARGET_UTILIZATION,
@@ -74,10 +74,17 @@ export function getUSDValue(amount: BigNumberish, token: any) {
         .div(e10(token.decimals))
 }
 
-export function easyAmount(amount: BigNumber, token: any) {
+export function getUSDString(amount: BigNumberish, token: any) {
+    return BigNumber.from(amount)
+        .mul(token.usd)
+        .div(e10(token.decimals)).toFixed(getCurrency(token.chainId).decimals)
+}
+
+export function easyAmount(amount: BigNumber, token: any): { value: BigNumber, string: string, usdValue: BigNumber, usd: string} {
     return {
         value: amount,
         string: amount.toFixed(token.decimals),
-        usd: getUSDValue(amount, token).toFixed(6)
+        usdValue: getUSDValue(amount, token),
+        usd: getUSDString(amount, token)
     }
 }

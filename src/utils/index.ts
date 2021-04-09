@@ -76,7 +76,7 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
 
 export const formattedNum = (number: any, usd = false) => {
     if (isNaN(number) || number === '' || number === undefined) {
-        return usd ? '$0.00' : 0
+        return usd ? '$0.00' : "0"
     }
     const num = parseFloat(number)
 
@@ -88,7 +88,7 @@ export const formattedNum = (number: any, usd = false) => {
         if (usd) {
             return '$0.00'
         }
-        return 0
+        return "0"
     }
 
     if (num < 0.0001 && num > 0) {
@@ -110,7 +110,7 @@ export const formattedNum = (number: any, usd = false) => {
         }
     }
 
-    return Number(parseFloat(String(num)).toFixed(5))
+    return parseFloat(String(num)).toFixed(5)
 }
 
 export function gradientColor(percent: any) {
@@ -189,8 +189,8 @@ export function gradientColorAsc(percent: any) {
     return '#ff3a31'
 }
 
-export function formattedPercent(percent: any) {
-    percent = parseFloat(percent)
+export function formattedPercent(percentString: string) {
+    const percent = parseFloat(percentString)
     if (!percent || percent === 0) {
         return '0%'
     }
@@ -204,8 +204,8 @@ export function formattedPercent(percent: any) {
     if (fixedPercent === '0.00') {
         return '0%'
     }
-    if (fixedPercent > 0) {
-        if (fixedPercent > 100) {
+    if (Number(fixedPercent) > 0) {
+        if (Number(fixedPercent) > 100) {
             return `${percent?.toFixed(0).toLocaleString()}%`
         } else {
             return `${fixedPercent}%`
