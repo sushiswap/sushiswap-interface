@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Alert, Dots, Button } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
@@ -15,6 +15,8 @@ import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
 import { formattedNum } from 'utils'
 import { getUSDValue } from 'kashi/functions/kashi'
+import { useETHBalances } from 'state/wallet/hooks'
+import { KashiContext } from 'kashi/context'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
     const { account, chainId } = useActiveWeb3React()
@@ -32,12 +34,16 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         BENTOBOX_ADDRESS
     )
 
+    const info = useContext(KashiContext).state.info
+
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
         KASHI_ADDRESS
     )
 
     // Calculated
-    const balance = useBento ? pair.asset.bentoBalance : pair.asset.balance
+    const assetNative = WETH[chainId || 1].address == pair.asset.address
+    console.log(info?.ethBalance.toFixed(18))
+    const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
     const max = balance.toFixed(pair.asset.decimals)
 
@@ -69,8 +75,8 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         if (pair.currentExchangeRate.isZero()) {
             transactionReview.add(
                 'Exchange Rate',
-                pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals),
-                pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals),
+                formattedNum(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+                formattedNum(pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
                 Direction.UP
             )
         }

@@ -6,7 +6,7 @@ import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10 } from 'kashi/functions/math'
-import { TransactionReview } from 'kashi/entities/TransactionReview'
+import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 import QuestionHelper from 'components/QuestionHelper'
@@ -15,6 +15,7 @@ import { Warnings } from 'kashi/entities/Warnings'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
+import { formattedNum } from 'utils'
 
 interface BorrowProps {
     pair: any
@@ -58,7 +59,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
     const nextMaxBorrowableOracle = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
     const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
-    const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+    const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.currentExchangeRate.gt(0) ? pair.currentExchangeRate : pair.oracleExchangeRate)
     const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
     const nextMaxBorrowSafe = nextMaxBorrowMinimum
         .muldiv('95', '100')
@@ -73,10 +74,41 @@ export default function Borrow({ pair }: BorrowProps) {
         ? nextMaxBorrowPossible.toFixed(pair.asset.decimals)
         : pair.maxBorrowable.possible.string
 
+    const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.decimals).isZero()
+    const borrowValueSet = !borrowValue.toBigNumber(pair.asset.decimals).isZero()
+
+    let actionName = "Do Nothing"
+    if (collateralValueSet) {
+        if (borrowValueSet) {
+            actionName = "Add collateral and borrow"
+        } else {
+            actionName = "Add collateral"
+        }
+    } else if (borrowValueSet) {
+        actionName = "Borrow"
+    }
+
     const transactionReview = new TransactionReview()
     if (collateralValue || borrowValue) {
+        if (collateralValueSet) {
+            transactionReview.addTokenAmount('Collateral', pair.userCollateralAmount.value, nextUserCollateralValue, pair.collateral)
+            transactionReview.addUSD('Collateral USD', pair.userCollateralAmount.value, nextUserCollateralValue, pair.collateral)
+        }
+        if (borrowValueSet) {
+            transactionReview.addTokenAmount('Borrowed', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
+            transactionReview.addUSD('Borrowed USD', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
+            if (pair.currentExchangeRate.isZero()) {
+                transactionReview.add(
+                    'Exchange Rate',
+                    formattedNum(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+                    formattedNum(pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+                    Direction.UP
+                )
+            }
+        }
         transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
-        transactionReview.addTokenAmount('Health', pair.health.value, nextHealth, pair.asset)
+        transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
+        transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }
 
     const warnings = new Warnings()
@@ -111,15 +143,12 @@ export default function Borrow({ pair }: BorrowProps) {
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
     async function onExecute(cooker: KashiCooker): Promise<string> {
-        console.log('onExecute')
         let summary = ""
-        if (collateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
-            console.log('add collateral')
+        if (collateralValueSet) {
             cooker.addCollateral(collateralValue.toBigNumber(pair.collateral.decimals), useBentoCollateral)
             summary = "Add collateral"
         }
-        if (borrowValue.toBigNumber(pair.asset.decimals).gt(0)) {
-            console.log('borrow asset')
+        if (borrowValueSet) {
             cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
             summary += (summary ? " and " : "") + "Borrow"
         }
@@ -135,7 +164,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2"> Add Collateral &quot;{pair.collateral.symbol}&quot; From </span>
+                    <span className="mx-2"> Add {pair.collateral.symbol} collateral from </span>
                     <span>
                         <Button
                             variant="outlined"
@@ -177,7 +206,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <span>
                         <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2"> Borrow Asset &quot;{pair.asset.symbol}&quot; To </span>
+                    <span className="mx-2"> Borrow {pair.asset.symbol} to </span>
                     <span>
                         <Button
                             variant="outlined"
@@ -228,7 +257,7 @@ export default function Borrow({ pair }: BorrowProps) {
             <div className="flex items-center mb-4">
                 <Checkbox color="pink" checked={swap} onChange={event => setSwap(event.target.checked)} />
                 <span className="text-secondary ml-2 mr-1">
-                    Swap {pair.asset.symbol} for {pair.collateral.symbol}
+                    Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
                 </span>
                 <QuestionHelper text="Lorem ipsum dolor sit amet." />
             </div>
@@ -277,7 +306,7 @@ export default function Borrow({ pair }: BorrowProps) {
                                 warnings.some(warning => warning.breaking)
                             }
                         >
-                            Borrow
+                            {actionName}
                         </Button>
                     )}
                 </>

@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId, WETH } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { toShare } from 'kashi/functions/bentobox'
@@ -130,15 +130,18 @@ export class KashiCooker {
 
     addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {
         let share: BigNumber
-        if (!fromBento) {
+        if (fromBento) {
             share = toShare(this.pair.collateral, amount)
         } else {
+            const useNative = this.pair.collateral.address === WETH[this.chainId].address
+
             this.add(
                 Action.BENTO_DEPOSIT,
                 defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [this.pair.collateral.address, this.account, amount, 0]
-                )
+                    [useNative ? ethers.constants.AddressZero : this.pair.collateral.address, this.account, amount, 0]
+                ),
+                useNative ? amount : ZERO
             )
             share = BigNumber.from(-2)
         }
@@ -151,22 +154,28 @@ export class KashiCooker {
     }
 
     addAsset(amount: BigNumber, fromBento: boolean): KashiCooker {
-        // TODO: WETH
         let share: BigNumber
         if (fromBento) {
             share = toShare(this.pair.asset, amount)
         } else {
+            const useNative = this.pair.asset.address === WETH[this.chainId].address
+            console.log(useNative)
+    
             this.add(
                 Action.BENTO_DEPOSIT,
                 defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [this.pair.asset.address, this.account, amount, 0]
-                )
+                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, amount, 0]
+                ),
+                useNative ? amount : ZERO
             )
             share = BigNumber.from(-2)
         }
 
-        this.add(Action.ADD_ASSET, defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false]))
+        this.add(
+            Action.ADD_ASSET, 
+            defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false])
+        )
         return this
     }
 
@@ -176,11 +185,13 @@ export class KashiCooker {
             ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [fraction, this.account])
         )
         if (!toBento) {
+            const useNative = this.pair.asset.address === WETH[this.chainId].address
+
             this.add(
                 Action.BENTO_WITHDRAW,
                 ethers.utils.defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [this.pair.asset.address, this.account, 0, -1]
+                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, 0, -1]
                 )
             )
         }
@@ -193,11 +204,13 @@ export class KashiCooker {
             ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [fraction, this.account])
         )
         if (!toBento) {
+            const useNative = this.pair.collateral.address === WETH[this.chainId].address
+
             this.add(
                 Action.BENTO_WITHDRAW,
                 ethers.utils.defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [this.pair.collateral.address, this.account, 0, -1]
+                    [useNative ? ethers.constants.AddressZero : this.pair.collateral.address, this.account, 0, -1]
                 )
             )
         }
@@ -207,11 +220,13 @@ export class KashiCooker {
     borrow(amount: BigNumber, toBento: boolean): KashiCooker {
         this.add(Action.BORROW, defaultAbiCoder.encode(['int256', 'address'], [amount, this.account]))
         if (!toBento) {
+            const useNative = this.pair.asset.address === WETH[this.chainId].address
+
             this.add(
                 Action.BENTO_WITHDRAW,
                 ethers.utils.defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [this.pair.asset.address, this.account, 0, -1]
+                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, 0, -1]
                 )
             )
         }
@@ -220,12 +235,15 @@ export class KashiCooker {
 
     repay(amount: BigNumber, fromBento: boolean): KashiCooker {
         if (!fromBento) {
+            const useNative = this.pair.asset.address === WETH[this.chainId].address
+
             this.add(
                 Action.BENTO_DEPOSIT,
                 defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [this.pair.asset.address, this.account, amount, 0]
-                )
+                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, amount, 0]
+                ),
+                useNative ? amount : ZERO
             )
         }
         this.add(Action.GET_REPAY_PART, defaultAbiCoder.encode(['int256'], [amount]))
@@ -246,7 +264,12 @@ export class KashiCooker {
         )
 
         try {
-            return { success: true, tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas) }
+            return { 
+                success: true,
+                tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas, {
+                    value: this.values.reduce((a, b) => a.add(b), ZERO)
+                })
+            }
         } catch (error) {
             return {
                 success: false,

@@ -13,6 +13,7 @@ import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
+import { formattedNum } from 'utils'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
     const { account, chainId } = useActiveWeb3React()
@@ -23,13 +24,6 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     const [value, setValue] = useState('')
     const [pinMax, setPinMax] = useState(false)
 
-    const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            value.toBigNumber(pair.asset.decimals).toString()
-        ),
-        BENTOBOX_ADDRESS
-    )
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
         KASHI_ADDRESS
     )
@@ -39,6 +33,10 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
         ? easyAmount(minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value), pair.asset).string
         : value
 
+    const fraction = pinMax
+        ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
+        : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
+
     const warnings = new Warnings()
         .add(
             pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)),
@@ -47,7 +45,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
             } balance is sufficient to withdraw and then try again.`,
             true
         )
-        .add(pair.totalAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)), "The isn't enough liquidity available at the moment to withdraw this amount. Please try withdrawing less or later.", true)
+        .add(pair.maxAssetAvailableFraction.lt(fraction), "The isn't enough liquidity available at the moment to withdraw this amount. Please try withdrawing less or later.", true)
 
     const transactionReview = new TransactionReview()
     if (displayValue && !warnings.broken) {
@@ -66,7 +64,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
             ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
             : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
 
-        await cooker.removeAsset(fraction, useBento)
+        cooker.removeAsset(fraction, useBento)
         return `Withdraw ${pair.asset.symbol}`
     }
 
@@ -94,7 +92,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                     </span>
                 </div>
                 <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {pair.currentUserAssetAmount.string} {pair.asset.symbol}
+                    Balance: {formattedNum(pair.currentUserAssetAmount.string)} {pair.asset.symbol}
                 </div>
             </div>
 
@@ -148,31 +146,16 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                             `Approve Kashi`
                         )}
                     </Button>
-                )}
+            )}
 
             {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-                <>
-                    {approvalState === ApprovalState.NOT_APPROVED ||
-                        (approvalState === ApprovalState.PENDING && (
-                            <Button color="blue" onClick={approve} className="mb-4">
-                                {approvalState === ApprovalState.PENDING ? (
-                                    <Dots>Approving {pair.asset.symbol}</Dots>
-                                ) : (
-                                    `Approve ${pair.asset.symbol}`
-                                )}
-                            </Button>
-                        ))}
-
-                    {!(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
-                        <Button
-                            color="blue"
-                            onClick={() => onCook(pair, onExecute)}
-                            disabled={displayValue.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
-                        >
-                            Withdraw
-                        </Button>
-                    )}
-                </>
+                <Button
+                    color="blue"
+                    onClick={() => onCook(pair, onExecute)}
+                    disabled={displayValue.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
+                >
+                    Withdraw
+                </Button>
             )}
         </>
     )

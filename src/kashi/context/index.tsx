@@ -28,12 +28,40 @@ interface Reducer {
 }
 
 interface State {
-    markets: number
+    info: {
+        ethBalance: BigNumber,
+        sushiBalance: BigNumber,
+        sushiBarBalance: BigNumber,
+        xsushiBalance: BigNumber,
+        xsushiSupply: BigNumber,
+        sushiBarAllowance: BigNumber,
+        factories: {}[],
+        ethRate: BigNumber,
+        sushiRate: BigNumber,
+        btcRate: BigNumber,
+        pendingSushi: BigNumber,
+        blockTimeStamp: BigNumber,
+        masterContractApproved: boolean[]
+    } | undefined,
     pairs: any[]
 }
 
 const initialState: State = {
-    markets: 0,
+    info: {
+        ethBalance: ZERO,
+        sushiBalance: ZERO,
+        sushiBarBalance: ZERO,
+        xsushiBalance: ZERO,
+        xsushiSupply: ZERO,
+        sushiBarAllowance: ZERO,
+        factories: [],
+        ethRate: ZERO,
+        sushiRate: ZERO,
+        btcRate: ZERO,
+        pendingSushi: ZERO,
+        blockTimeStamp: ZERO,
+        masterContractApproved: []
+    },
     pairs: []
 }
 
@@ -65,9 +93,10 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
             }
         case ActionType.UPDATE:
             // console.log('UPDATE PAIRS')
-            const { pairs } = action.payload
+            const { info, pairs } = action.payload
             return {
                 ...state,
+                info,
                 pairs
             }
         default:
@@ -118,6 +147,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const updatePairs = useCallback(
         async function() {
             if (boringHelperContract && bentoBoxContract) {
+                const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
+                console.log(info)
+
                 // Get the deployed pairs from the logs and decode
                 const logPairs = GetPairsFromLogs(
                     await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
@@ -167,6 +199,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 dispatch({
                     type: ActionType.UPDATE,
                     payload: {
+                        info,
                         pairs: pairs.map((pair: any, i: number) => {
                             pair.elapsedSeconds = BigNumber.from(Date.now())
                                 .div('1000')
@@ -297,6 +330,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                             pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
 
                             pair.oracle = getOracle(pair, chain, tokens)
+
+                            pair.interestPerYear = {
+                                value: pair.interestPerYear,
+                                string: pair.interestPerYear.toFixed(16)
+                            }
+
                             pair.supplyAPR = {
                                 value: pair.supplyAPR,
                                 string: Fraction.from(pair.supplyAPR, e10(16)).toString()

@@ -51,7 +51,7 @@ function Button({
 
 export default Button
 
-export function BackButton({ defaultRoute }: { defaultRoute: string }): JSX.Element {
+export function BackButton({ defaultRoute, className }: { defaultRoute: string, className?: string }): JSX.Element {
     const history = useHistory()
     return (
         <Button
@@ -62,7 +62,7 @@ export function BackButton({ defaultRoute }: { defaultRoute: string }): JSX.Elem
                     history.goBack()
                 }
             }}
-            className="p-2 mr-4 rounded-full bg-dark-900 w-10 h-10"
+            className={`p-2 mr-4 rounded-full bg-dark-900 w-10 h-10 ${className || ""}`}
         >
             <ChevronLeft className={'w-6 h-6'} />
         </Button>

@@ -6,7 +6,7 @@ import { useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { formattedNum, formattedPercent } from 'utils'
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import { GradientDot, Button, Card, Layout, BorrowCardHeader } from 'kashi/components'
+import { GradientDot, Button, Card, Layout, BorrowCardHeader, BackButton } from 'kashi/components'
 import { BigNumber } from 'ethers'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Borrow from './Borrow'
@@ -54,12 +54,14 @@ export default function BorrowPair({
                 <Card className="h-full bg-dark-900">
                     <div className="flex-col space-y-2">
                         <div className="flex justify-between">
+                            <div className="text-xl text-high-emphesis">Market Info</div>
+                        </div>
+                        <div className="flex justify-between">
                             <div className="text-lg text-secondary">Total</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
                                     {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                                 </div>
-                                <GradientDot percent={pair.totalAssetAmount.string} desc={false} />
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -68,12 +70,26 @@ export default function BorrowPair({
                                 <div className="text-lg text-high-emphesis">
                                     {formattedPercent(pair.utilization.string)}
                                 </div>
-                                <GradientDot percent={pair.utilization.string} />
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div className="text-lg text-secondary">Supply APR</div>
+                            <div className="flex items-center">
+                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentSupplyAPR.string)}</div>
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
+                            <div className="text-lg text-secondary">Borrow APR</div>
+                            <div className="flex items-center">
+                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentInterestPerYear.string)}</div>
                             </div>
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">Loan to Value</div>
                             <div className="text-lg text-high-emphesis">75%</div>
+                        </div>
+                        <div className="flex justify-between pt-3">
+                            <div className="text-xl text-high-emphesis">BentoBox</div>
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">{pair.asset.symbol} Strategy</div>
@@ -92,6 +108,7 @@ export default function BorrowPair({
                 header={
                     <BorrowCardHeader>
                         <div className="flex items-center">
+                            <BackButton className="hidden md:flex" defaultRoute="/bento/kashi/borrow" />
                             <div className="flex items-center space-x-2 mr-4">
                                 <img
                                     src={pair && getTokenIcon(pair?.collateral.address, chainId)}
@@ -107,84 +124,76 @@ export default function BorrowPair({
                             <div className="flex justify-between items-center">
                                 <div>
                                     <div className="text-3xl text-high-emphesis">
-                                        {pair && `${pair.collateral.symbol + ' / ' + pair.asset.symbol}`}
+                                        Borrow {pair.asset.symbol}
                                     </div>
                                     <div className="flex items-center">
+                                        <div className="text-sm text-secondary mr-1">Collateral:</div>
+                                        <div className="text-sm text-high-emphesis mr-2">
+                                            {pair.collateral.symbol}
+                                        </div>
                                         <div className="text-sm text-secondary mr-1">Oracle:</div>
-                                        <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
+                                        <div className="text-sm text-high-emphesis">{pair.oracle.name}</div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </BorrowCardHeader>
                 }
             >
-                {pair.currentExchangeRate.isZero() ? (
+                <div className="flex justify-between mb-8">
                     <div>
-                        <div className="mb-8 text-xl text-center">Oracle exchange rate not set!</div>
-                        <Button color="pink" onClick={onUpdateExchangeRate}>
-                            Set Exchange Rate
-                        </Button>
+                        <div className="text-secondary text-lg">Collateral</div>
+                        <div className="text-blue text-2xl">
+                            {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
+                        </div>
+                        <div className="text-high-emphesis text-lg">
+                            {formattedNum(pair.userCollateralAmount.usd, true)}
+                        </div>
                     </div>
-                ) : (
-                    <>
-                        {' '}
-                        <div className="flex justify-between mb-8">
-                            <div>
-                                <div className="text-secondary text-lg">Collateral Balance</div>
-                                <div className="text-blue text-2xl">
-                                    {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
-                                </div>
-                                <div className="text-high-emphesis text-lg">
-                                    {formattedNum(pair.userCollateralAmount.usd, true)}
-                                </div>
-                            </div>
-                            <div>
-                                <div className="text-secondary text-lg">Borrow Balance</div>
-                                <div className="text-pink text-2xl">
-                                    {formattedNum(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
-                                </div>
-                                <div className="text-high-emphesis text-lg">
-                                    {formattedNum(pair.currentUserBorrowAmount.usd, true)}
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <div>
-                                    <div className="text-secondary text-lg">Borrow APR</div>
-                                    <div className="text-high-emphesis text-2xl">
-                                        {formattedPercent(pair.currentInterestPerYear.string)}
-                                    </div>
-                                </div>
+                    <div>
+                        <div className="text-secondary text-lg">Borrowed</div>
+                        <div className="text-pink text-2xl">
+                            {formattedNum(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
+                        </div>
+                        <div className="text-high-emphesis text-lg">
+                            {formattedNum(pair.currentUserBorrowAmount.usd, true)}
+                        </div>
+                    </div>
+                    <div className="text-right">
+                        <div>
+                            <div className="text-secondary text-lg">APR</div>
+                            <div className="text-high-emphesis text-2xl">
+                                {formattedPercent(pair.interestPerYear.string)}
                             </div>
                         </div>
-                        <Tabs
-                            forceRenderTabPanel
-                            selectedIndex={tabIndex}
-                            onSelect={(index: number) => setTabIndex(index)}
+                    </div>
+                </div>
+                <Tabs
+                    forceRenderTabPanel
+                    selectedIndex={tabIndex}
+                    onSelect={(index: number) => setTabIndex(index)}
+                >
+                    <TabList className="flex rounded bg-dark-800 p-1">
+                        <Tab
+                            className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+                            selectedClassName="bg-dark-900 text-high-emphesis"
                         >
-                            <TabList className="flex rounded bg-dark-800 p-1">
-                                <Tab
-                                    className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
-                                    selectedClassName="bg-dark-900 text-high-emphesis"
-                                >
-                                    Borrow
-                                </Tab>
-                                <Tab
-                                    className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
-                                    selectedClassName="bg-dark-900 text-high-emphesis"
-                                >
-                                    Repay
-                                </Tab>
-                            </TabList>
-                            <TabPanel>
-                                <Borrow pair={pair} />
-                            </TabPanel>
-                            <TabPanel>
-                                <Repay pair={pair} />
-                            </TabPanel>
-                        </Tabs>
-                    </>
-                )}
+                            Borrow
+                        </Tab>
+                        <Tab
+                            className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+                            selectedClassName="bg-dark-900 text-high-emphesis"
+                        >
+                            Repay
+                        </Tab>
+                    </TabList>
+                    <TabPanel>
+                        <Borrow pair={pair} />
+                    </TabPanel>
+                    <TabPanel>
+                        <Repay pair={pair} />
+                    </TabPanel>
+                </Tabs>
 
                 <div>
                     <pre>
