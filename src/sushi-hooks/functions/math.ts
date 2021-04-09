@@ -38,7 +38,7 @@ BigNumber.prototype.toFixed = function(decimals?: number): string {
   return Fraction.from(this, decimals ? BigNumber.from(10).pow(BigNumber.from(decimals)) : ZERO).toString(decimals)
 }
 
-export function e10(exponent: BigNumber | Number | string): BigNumber {
+export function e10(exponent: BigNumber | number | string): BigNumber {
   return BigNumber.from('10').pow(BigNumber.from(exponent))
 }
 

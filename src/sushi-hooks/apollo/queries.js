@@ -125,7 +125,7 @@ export const liquidityPositionSubsetQuery = gql`
 `
 
 export const SUSHI_PAIRS = (ids, masterChefAddress) => {
-  let queryString = `query pools {
+  const queryString = `query pools {
     pairs(where: {id_in: ${JSON.stringify(ids)}}) {
         id
         token0 {
@@ -873,7 +873,7 @@ export const PAIRS_HISTORICAL_BULK = (block, pairs) => {
     return (pairsString += `"${pair}"`)
   })
   pairsString += ']'
-  let queryString = `
+  const queryString = `
   query pairs {
     pairs(first: 200, where: {id_in: ${pairsString}}, block: {number: ${block}}, orderBy: trackedReserveETH, orderDirection: desc) {
       id
