@@ -55,4 +55,14 @@ export class TransactionReview extends Array<Line> {
         )
         return this
     }
+
+    public addRate(name: string, from: BigNumber, to: BigNumber, pair: any) {
+        this.add(
+            name,
+            formattedNum(from.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+            formattedNum(to.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+            from.eq(to) ? Direction.FLAT : from.lt(to) ? Direction.UP : Direction.DOWN
+        )
+        return this
+    }
 }

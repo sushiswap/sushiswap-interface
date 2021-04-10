@@ -47,7 +47,7 @@ const QuestionMark = styled.span`
     font-size: 1rem;
 `
 
-export default function QuestionHelper({ text }: { text: string }) {
+export default function QuestionHelper({ text }: { text: any }) {
     const [show, setShow] = useState<boolean>(false)
 
     const open = useCallback(() => setShow(true), [setShow])

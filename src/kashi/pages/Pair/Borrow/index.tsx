@@ -57,7 +57,7 @@ export default function BorrowPair({
                             <div className="text-xl text-high-emphesis">Market Info</div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Total</div>
+                            <div className="text-lg text-secondary">Available</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
                                     {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
@@ -155,8 +155,9 @@ export default function BorrowPair({
                         <div className="text-pink text-2xl">
                             {formattedNum(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-high-emphesis text-lg">
-                            {formattedNum(pair.currentUserBorrowAmount.usd, true)}
+                        <div className="text-high-emphesis text-lg flex items-center">
+                            {formattedPercent(pair.health.string)}
+                            <GradientDot percent={pair.health.string}></GradientDot>
                         </div>
                     </div>
                     <div className="text-right">

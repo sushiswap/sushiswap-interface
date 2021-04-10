@@ -6,7 +6,7 @@ import { useActiveWeb3React } from 'hooks'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { e10, ZERO } from 'kashi/functions/math'
+import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
 import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
@@ -14,8 +14,6 @@ import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
 import { formattedNum } from 'utils'
-import { getUSDValue } from 'kashi/functions/kashi'
-import { useETHBalances } from 'state/wallet/hooks'
 import { KashiContext } from 'kashi/context'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
@@ -42,11 +40,10 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.asset.address
-    console.log(info?.ethBalance.toFixed(18))
     const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
-    const max = balance.toFixed(pair.asset.decimals)
-
+    const max = (useBento ? pair.asset.bentoBalance : assetNative ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO) : pair.asset.balance).toFixed(pair.asset.decimals)
+    
     const warnings = new Warnings()
         .add(
             balance?.lt(value.toBigNumber(pair.asset.decimals)),

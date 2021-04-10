@@ -1,21 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { Alert, Dots, Button, Checkbox } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
-import { minimum, e10 } from 'kashi/functions/math'
+import { minimum, e10, ZERO, maximum } from 'kashi/functions/math'
 import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 import QuestionHelper from 'components/QuestionHelper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Warnings } from 'kashi/entities/Warnings'
+import { Warning, Warnings } from 'kashi/entities/Warnings'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { formattedNum } from 'utils'
+import { KashiContext } from 'kashi/context'
+import WarningsView from 'kashi/components/Warnings'
 
 interface BorrowProps {
     pair: any
@@ -33,6 +35,9 @@ export default function Borrow({ pair }: BorrowProps) {
     const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
+    const [updateOracle, setUpdateOracle] = useState(false)
+    const [pinBorrowMax, setPinBorrowMax] = useState(false)
+
     const [swap, setSwap] = useState(false)
 
     const [approvalState, approve] = useApproveCallback(
@@ -48,36 +53,44 @@ export default function Borrow({ pair }: BorrowProps) {
         ),
         BENTOBOX_ADDRESS
     )
+
+    const info = useContext(KashiContext).state.info
+
     // Calculated
-    const balance = useBentoCollateral ? pair.collateral.bentoBalance : pair.collateral.balance
+    const assetNative = WETH[chainId || 1].address == pair.collateral.address
+    const balance = useBentoCollateral ? pair.collateral.bentoBalance : assetNative ? info?.ethBalance : pair.collateral.balance
+    console.log(info?.ethBalance.sub(e10(17)), info?.ethBalance)
+    const maxCollateral = (useBentoCollateral ? pair.collateral.bentoBalance : assetNative ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO) : pair.collateral.balance).toFixed(pair.collateral.decimals)
+    console.log(info?.ethBalance.sub(e10(17)), info?.ethBalance, maxCollateral)
+
+    const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
     const nextUserCollateralValue = pair.userCollateralAmount.value.add(
         collateralValue.toBigNumber(pair.collateral.decimals)
     )
 
-    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals))
-
     const nextMaxBorrowableOracle = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
     const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
-    const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.currentExchangeRate.gt(0) ? pair.currentExchangeRate : pair.oracleExchangeRate)
+    const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(e10(16).mul('75'), displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate)
     const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
     const nextMaxBorrowSafe = nextMaxBorrowMinimum
         .muldiv('95', '100')
-        .sub(pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals)))
-    const nextMaxBorrowPossible = minimum(nextMaxBorrowSafe, pair.totalAssetAmount.value)
+        .sub(pair.currentUserBorrowAmount.value)
+    const nextMaxBorrowPossible = maximum(minimum(nextMaxBorrowSafe, pair.maxAssetAvailable), ZERO)
 
+    const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
+
+    const displayBorrowValue = pinBorrowMax
+        ? maxBorrow
+        : borrowValue
+
+    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(displayBorrowValue.toBigNumber(pair.asset.decimals))
     const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum)
 
-    const maxCollateral = balance.toFixed(pair.collateral.decimals)
-
-    const maxBorrow = collateralValue
-        ? nextMaxBorrowPossible.toFixed(pair.asset.decimals)
-        : pair.maxBorrowable.possible.string
-
     const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.decimals).isZero()
-    const borrowValueSet = !borrowValue.toBigNumber(pair.asset.decimals).isZero()
+    const borrowValueSet = !displayBorrowValue.toBigNumber(pair.asset.decimals).isZero()
 
-    let actionName = "Do Nothing"
+    let actionName = "Nothing to do"
     if (collateralValueSet) {
         if (borrowValueSet) {
             actionName = "Add collateral and borrow"
@@ -88,8 +101,42 @@ export default function Borrow({ pair }: BorrowProps) {
         actionName = "Borrow"
     }
 
+    const borrowAmount = displayBorrowValue.toBigNumber(pair.asset.decimals)
+
+    const collateralWarnings = new Warnings()
+        .add(
+            balance?.lt(collateralValue.toBigNumber(pair.collateral.decimals)),
+            `Please make sure your ${
+                useBentoCollateral ? 'BentoBox' : 'wallet'
+            } balance is sufficient to deposit and then try again.`,
+            true
+        )    
+
+    const borrowWarnings = new Warnings()
+        .add(
+            nextMaxBorrowMinimum.lt(pair.currentUserBorrowAmount.value),
+            'You have surpassed your borrow limit and may be liquidated at any moment. Repay now or add collateral!',
+            true,
+            new Warning(
+                nextMaxBorrowSafe.lt(0),
+                'You have surpassed your borrow limit and assets are at a high risk of liquidation.',
+                true,
+                new Warning(
+                    displayBorrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowMinimum.sub(pair.currentUserBorrowAmount.value)),
+                    'You don\' have enough collateral to borrow this amount.',
+                    true,
+                    new Warning(
+                        displayBorrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
+                        'You will surpass your borrow limit and assets will be at a high risk of liquidation.',
+                        false
+                    )
+                )
+            )
+        )
+        .add(displayBorrowValue.length > 0 && pair.maxAssetAvailable.lt(displayBorrowValue.toBigNumber(pair.asset.decimals)), 'Not enough liquidity in this pair.', true)
+
     const transactionReview = new TransactionReview()
-    if (collateralValue || borrowValue) {
+    if ((collateralValue || displayBorrowValue) && !collateralWarnings.broken && (!borrowWarnings.broken || !displayBorrowValue)) {
         if (collateralValueSet) {
             transactionReview.addTokenAmount('Collateral', pair.userCollateralAmount.value, nextUserCollateralValue, pair.collateral)
             transactionReview.addUSD('Collateral USD', pair.userCollateralAmount.value, nextUserCollateralValue, pair.collateral)
@@ -97,38 +144,14 @@ export default function Borrow({ pair }: BorrowProps) {
         if (borrowValueSet) {
             transactionReview.addTokenAmount('Borrowed', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
             transactionReview.addUSD('Borrowed USD', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
-            if (pair.currentExchangeRate.isZero()) {
-                transactionReview.add(
-                    'Exchange Rate',
-                    formattedNum(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
-                    formattedNum(pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
-                    Direction.UP
-                )
-            }
+        }
+        if (displayUpdateOracle) {
+            transactionReview.addRate('Exchange Rate', pair.currentExchangeRate, pair.oracleExchangeRate, pair)
         }
         transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
         transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
         transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }
-
-    const warnings = new Warnings()
-        .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
-        .add(
-            borrowValue.length > 0 && nextUserCollateralValue.eq(0),
-            'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.',
-            true
-        )
-        .add(
-            pair.maxBorrowable.safe.value.lt(0),
-            'You have surpassed your borrow limit and assets are at a high risk of liquidation.',
-            true
-        )
-        .add(borrowValue.length > 0 && nextMaxBorrowPossible.lt(0), 'Not enough liquidity in this pair.', true)
-        .add(
-            borrowValue.length > 0 && nextMaxBorrowSafe.lt(BigNumber.from(0)),
-            'You will surpass your safe borrow limit and assets will be at a high risk of liquidation.',
-            false
-        )
 
     // Handlers
     function onLeverage() {
@@ -149,7 +172,10 @@ export default function Borrow({ pair }: BorrowProps) {
             summary = "Add collateral"
         }
         if (borrowValueSet) {
-            cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
+            if (displayUpdateOracle) {
+                cooker.updateExchangeRate(true, pair.currentExchangeRate.mul(96).div(100), pair.currentExchangeRate.mul(104).div(100))
+            }
+            cooker.borrow(displayBorrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
             summary += (summary ? " and " : "") + "Borrow"
         }
         return summary
@@ -178,8 +204,8 @@ export default function Borrow({ pair }: BorrowProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {Math.max(0, maxCollateral)}
+                <div className="text-base text-secondary">
+                    Balance: {formattedNum(Math.max(0, balance.toFixed(pair.collateral.decimals)))}
                 </div>
             </div>
 
@@ -220,23 +246,27 @@ export default function Borrow({ pair }: BorrowProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Max: {Math.max(0, Number(maxBorrow))}
+                <div className="text-base text-secondary">
+                    Max: {formattedNum(maxBorrow)}
                 </div>
             </div>
 
             <div className="flex items-center relative w-full mb-4">
                 <NumericalInput
                     className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={borrowValue}
+                    value={displayBorrowValue}
                     onUserInput={setBorrowValue}
+                    onFocus={() => {
+                        setBorrowValue(displayBorrowValue)
+                        setPinBorrowMax(false)
+                    }}
                 />
                 {account && (
                     <Button
                         variant="outlined"
                         color="pink"
                         onClick={() => {
-                            setBorrowValue(maxBorrow)
+                            setPinBorrowMax(true)
                         }}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
@@ -245,21 +275,28 @@ export default function Borrow({ pair }: BorrowProps) {
                 )}
             </div>
 
-            {warnings.map((warning, i) => (
-                <Alert
-                    key={i}
-                    type={warning.breaking ? 'error' : 'warning'}
-                    message={warning.message}
-                    className="mb-4"
-                />
-            ))}
+            <WarningsView warnings={collateralWarnings}></WarningsView>
+            <WarningsView warnings={borrowWarnings}></WarningsView>
+
+            { borrowValueSet && (displayUpdateOracle || pair.oracleExchangeRate.gt(pair.currentExchangeRate)) && (
+                <div className="flex items-center mb-4">
+                    <Checkbox color="pink" checked={displayUpdateOracle} disabled={pair.currentExchangeRate.isZero()} onChange={event => setUpdateOracle(event.target.checked)} />
+                    <span className="text-secondary ml-2 mr-1">
+                        Update exchange rate from the oracle
+                    </span>
+                    <QuestionHelper text={ pair.currentExchangeRate.gt(0)
+                        ? "The exchange rate from the oracle is only updated when needed. When the price in Kashi is different from the orcale, this may reduce the amount you can borrow. Updating the exchange rate from the oracle may increase your borrow limit."
+                        : "The exchange rate has not been updated from the oracle yet in this market. If you borrow, it will be updated." }
+                    />
+                </div>
+            )}
 
             <div className="flex items-center mb-4">
-                <Checkbox color="pink" checked={swap} onChange={event => setSwap(event.target.checked)} />
+                <Checkbox color="pink" checked={swap} onChange={event => setSwap(event.target.checked)} disabled={true} />
                 <span className="text-secondary ml-2 mr-1">
                     Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
                 </span>
-                <QuestionHelper text="Lorem ipsum dolor sit amet." />
+                <QuestionHelper text={( <span>Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction.<br /><br /> This feature will be enabled soon.</span> )} />
             </div>
 
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
@@ -300,10 +337,8 @@ export default function Borrow({ pair }: BorrowProps) {
                             color="pink"
                             onClick={() => onCook(pair, onExecute)}
                             disabled={
-                                (balance.eq(0) && pair.userCollateralAmount.value.eq(0)) ||
-                                (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
-                                    borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
-                                warnings.some(warning => warning.breaking)
+                                (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) && borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
+                                collateralWarnings.broken || (borrowValue.length > 0 && borrowWarnings.broken)
                             }
                         >
                             {actionName}

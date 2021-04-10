@@ -240,7 +240,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                             pair.currentAllAssetShares = toShare(pair.asset, pair.currentAllAssets.value)
 
-                            // Maximum amount of assets available for withdrawal
+                            // Maximum amount of assets available for withdrawal or borrow
                             pair.maxAssetAvailable = minimum(
                                 pair.totalAsset.elastic.muldiv(pair.currentAllAssets.value, pair.currentAllAssetShares),
                                 toAmount(
@@ -317,7 +317,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                             pair.maxBorrowable.safe = pair.maxBorrowable.minimum
                                 .muldiv('95', '100')
                                 .sub(pair.currentUserBorrowAmount.value)
-                            pair.maxBorrowable.possible = minimum(pair.maxBorrowable.safe, pair.totalAssetAmount.value)
+                            pair.maxBorrowable.possible = minimum(pair.maxBorrowable.safe, pair.maxAssetAvailable)
 
                             pair.safeMaxRemovable = ZERO
 
