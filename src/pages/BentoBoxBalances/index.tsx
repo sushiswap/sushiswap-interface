@@ -92,7 +92,7 @@ export default function BentoBalances(): JSX.Element {
 const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
     const [expand, setExpand] = useState<boolean>(false)
     const walletBalance = balance?.balance.toFixed(balance?.amount?.decimals)
-    const bentoBalance = balance?.bentoBalance.toFixed(balance?.amount?.decimals)
+    const bentoBalance = balance?.amount.value.toFixed(balance?.amount?.decimals)
     const { chainId } = useActiveWeb3React()
     return (
         <Paper className="bg-dark-800 ">

@@ -62,7 +62,7 @@ export default function Repay({ pair }: RepayProps) {
     const maxRemoveCollateral = maximum(pair.userCollateralAmount.value.sub(nextMinCollateralMinimum.mul(100).div(95)), ZERO).toFixed(pair.collateral.decimals)
 
     const displayRemoveValue = pinRemoveMax ? maxRemoveCollateral : removeValue
-    const displayRepayValue = pinRepayMax ? pair.currentUserBorrowAmount.string : repayValue
+    const displayRepayValue = pinRepayMax ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.decimals) : repayValue
 
     const nextUserCollateralAmount = pair.userCollateralAmount.value.sub(displayRemoveValue.toBigNumber(pair.collateral.decimals))
 
