@@ -11,7 +11,7 @@ function MarketHeader({ type = 'Borrow', search, term }: any) {
             <div className="flex flex-col md:flex-row items-center justify-between w-full">
                 <div className="flex items-center">
                     <div className="text-3xl text-high-emphesis mr-2">{type}</div>
-                    <Link to="/bento/kashi/create">
+                    <Link to="/bento/kashi/create" className={`${type === 'Borrow' ? 'text-pink' : 'text-blue'}`}>
                         <AddIcon className="fill-current w-5 h-5" />
                     </Link>
                 </div>
