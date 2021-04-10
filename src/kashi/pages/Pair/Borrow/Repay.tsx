@@ -99,7 +99,7 @@ export default function Repay({ pair }: RepayProps) {
             true
         )
         .add(
-            displayRepayValue.toBigNumber(pair.collateral.decimals).gt(pair.currentUserBorrowAmount.value),
+            displayRepayValue.toBigNumber(pair.asset.decimals).gt(pair.currentUserBorrowAmount.value),
             "You can\'t repay more than you owe. To fully repay, please click the 'max' button.",
             true,
             new Warning(
