@@ -282,10 +282,8 @@ export class KashiCooker {
                 // TODO: Put some warning in the UI or not allow repaying ETH directly from wallet, because this can't be pre-calculated
                 useNative ? toShare(this.pair.asset, toElastic(this.pair.totalBorrow, part, true)).mul(1001).div(1000) : ZERO
             )
-            this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [-1, this.account, false]))
-        } else {
-            this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, this.account, false]))
         }
+        this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, this.account, false]))
         return this
     }
 
