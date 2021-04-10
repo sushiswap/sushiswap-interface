@@ -243,7 +243,7 @@ export class KashiCooker {
                 Action.BENTO_WITHDRAW,
                 ethers.utils.defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, 0, -1]
+                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, amount, 0]
                 )
             )
         }
