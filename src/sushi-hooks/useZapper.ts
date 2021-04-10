@@ -17,22 +17,25 @@ const useZapper = () => {
   const [allowance, setAllowance] = useState('0')
 
   const zapIn = useCallback(
-    async (pairAddress, amount, minPoolTokens, swapTarget) => {
+    async (fromTokenContractAddress, pairAddress, amount, minPoolTokens, swapTarget) => {
       try {
         const tx = await zapperContract?.ZapIn(
-          '0x0000000000000000000000000000000000000000',
+          fromTokenContractAddress,
           pairAddress,
           amount,
           minPoolTokens,
           swapTarget,
-          // Unknown byte data param (swapData)
+          // Unknown byte data param (swapData), is maybe something to do with routing?
           0x0,
           // Affiliate
           '0x0000000000000000000000000000000000000000',
           // Transfer residual
           true,
           {
-            value: amount
+            // Value for transfer should be 0 unless it's an ETH transfer
+            value: fromTokenContractAddress === '0x0000000000000000000000000000000000000000' 
+              ? amount 
+              : 0
           }
         )
         return addTransaction(tx, { summary: 'Zap' })

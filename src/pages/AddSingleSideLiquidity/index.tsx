@@ -4,7 +4,7 @@ import { Link, useParams, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
 import { Text } from 'rebass'
-import { ArrowLeft } from 'react-feather'
+import { ArrowLeft, Type } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
 import { RowBetween, RowFixed } from '../../components/Row'
@@ -134,12 +134,12 @@ const PoolInfo = (
           />
         </RowBetween>
         <RowBetween>
-          <TypeDefaultCursor fontWeight={500} fontSize="22px">
+          <TYPE.subHeader fontWeight={500} fontSize="22px">
             {liquidityMinted?.toSignificant(6) || '0'}
-          </TypeDefaultCursor>
-          <TypeDefaultCursor fontWeight={500} fontSize="22px">
+          </TYPE.subHeader>
+          <TYPE.subHeader  fontWeight={500} fontSize="22px">
             { (currency0 && currency1) &&`${currency0?.symbol}/${currency1?.symbol}`}
-            </TypeDefaultCursor>
+            </TYPE.subHeader>
         </RowBetween>
       </PoolAllocationWrapper>
       <PoolBreakDownWrapper>
@@ -148,24 +148,24 @@ const PoolInfo = (
               <TYPE.darkGray fontSize="14px">Est. Pool Allocation</TYPE.darkGray>
               <PoolTokenRow>
                 <CurrencyLogo size="22px"  currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
-                <TypeDefaultCursor fontSize="14px">
+                <TYPE.small fontSize="14px">
                   {currencyZeroOutput?.toSignificant(6) || 0} {' '}
                   {currency0?.symbol}
-                </TypeDefaultCursor>
+                </TYPE.small>
               </PoolTokenRow>
               <PoolTokenRow>
                 <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
-                <TypeDefaultCursor fontSize="14px">
+                <TYPE.small fontSize="14px">
                   {currencyOneOutput?.toSignificant(6) || 0} {' '}
                   {currency1?.symbol}
-                </TypeDefaultCursor>
+                </TYPE.small>
               </PoolTokenRow>
             </div>
             <div style={{ height: '91px' }}>
-              <TYPE.darkGray style={{ textAlign: 'right' }} fontSize="14px">Pool Share</TYPE.darkGray>
-              <TypeDefaultCursorRight fontSize="14px">{poolTokenPercentage?.toSignificant(6) || '0'}%</TypeDefaultCursorRight>
-              <TYPE.darkGray fontSize="14px">Est. Slippage</TYPE.darkGray>
-              <TypeDefaultCursorRight fontSize="14px">{estimatedSlippage?.toSignificant(6) || '0'}%</TypeDefaultCursorRight>
+              <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">Pool Share</TYPE.darkGray>
+              <TYPE.small  marginBottom="8px" textAlign="right" fontSize="14px">{poolTokenPercentage?.toSignificant(6) || '0'}%</TYPE.small>
+              <TYPE.darkGray fontSize="14px" marginBottom="2px">Est. Slippage</TYPE.darkGray>
+              <TYPE.small textAlign="right" fontSize="14px">{estimatedSlippage?.toSignificant(6) || '0'}%</TYPE.small>
             </div>
         </RowBetween>
       </PoolBreakDownWrapper>
@@ -187,7 +187,7 @@ const CardHeader = () => {
         >
           <StyledArrowLeft />
         </Link>
-        <TypeDefaultCursor fontWeight={500} fontSize="22px">Zap Liquidity</TypeDefaultCursor>
+        <TYPE.largeHeader fontWeight={500} fontSize="22px">Zap Liquidity</TYPE.largeHeader>
         <Settings />
       </RowBetween>
     </Tabs>
@@ -256,6 +256,7 @@ const AddSingleSideLiquidity = ({
                     // disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
                     disabled={!parsedAmount || error !== undefined}
                     onClick={() => zapIn(
+                      currencyId === 'ETH' ? '0x0000000000000000000000000000000000000000' : currencyId,
                       poolAddress, 
                       parsedAmount?.raw.toString(),
                       0,

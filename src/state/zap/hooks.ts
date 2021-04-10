@@ -97,6 +97,7 @@ export function useDerivedZapInfo(
     currency
   );
   const isTradingCurrency0 = currency?.symbol === currency0?.symbol ? true : false
+  const isTradingCurrency1 = currency?.symbol === currency0?.symbol ? true : false
 
   const currencyZeroOutput = isTradingCurrency0
     ? tradeAmount
@@ -104,12 +105,12 @@ export function useDerivedZapInfo(
       tradeAmount,
       currency0 ?? undefined
     )?.outputAmount
-  const currencyOneOutput = isTradingCurrency0
-    ? useTradeExactIn(
-        tradeAmount, 
-        currency1 ?? undefined
-      )?.outputAmount
-    : tradeAmount
+  const currencyOneOutput = isTradingCurrency1
+    ? tradeAmount
+    : useTradeExactIn(
+      tradeAmount, 
+      currency1 ?? undefined
+    )?.outputAmount
   const bestTradeExactIn = useTradeExactIn(
     tradeAmount, 
     isTradingCurrency0 
