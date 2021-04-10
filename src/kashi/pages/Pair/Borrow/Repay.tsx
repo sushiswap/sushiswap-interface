@@ -14,7 +14,7 @@ import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { formattedNum } from 'utils'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
-import { toShare } from 'kashi/functions/bentobox'
+import { toAmount, toShare } from 'kashi/functions/bentobox'
 
 interface RepayProps {
     pair: any
@@ -49,7 +49,7 @@ export default function Repay({ pair }: RepayProps) {
 
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.asset.address
-    const balance = useBentoRepay ? pair.asset.bentoBalance :  assetNative ? info?.ethBalance : pair.asset.balance
+    const balance = useBentoRepay ? toAmount(pair.asset, pair.asset.bentoBalance) :  assetNative ? info?.ethBalance : pair.asset.balance
 
     const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
