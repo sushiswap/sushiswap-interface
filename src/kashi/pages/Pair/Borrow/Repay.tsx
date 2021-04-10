@@ -114,7 +114,7 @@ export default function Repay({ pair }: RepayProps) {
     // Handlers
     async function onExecute(cooker: KashiCooker) {
         let summary = ""
-        if (pinRepayMax && pair.userBorrowPart.gt(0)) {
+        if (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gt(pair.currentUserBorrowAmount.value)) {
             cooker.repayPart(pair.userBorrowPart, useBentoRepay)
             summary = "Repay Max"
         } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
