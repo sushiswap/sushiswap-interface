@@ -13,6 +13,7 @@ import BentoBoxImage from 'assets/kashi/bento-illustration.png'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { BackButton } from 'kashi/components'
+import { ZERO } from 'kashi/functions/math'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -60,8 +61,8 @@ export default function BentoBalances(): JSX.Element {
                                 <div className="text-lg text-secondary">
                                     {formattedNum(
                                         balances?.reduce((previousValue, currentValue) => {
-                                            return previousValue + Number(currentValue.amountUSD)
-                                        }, 0),
+                                            return previousValue.add(currentValue.bento.usdValue)
+                                        }, ZERO).toFixed(6),
                                         true
                                     )}
                                 </div>
@@ -91,8 +92,6 @@ export default function BentoBalances(): JSX.Element {
 
 const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
     const [expand, setExpand] = useState<boolean>(false)
-    const walletBalance = balance?.balance.toFixed(balance?.amount?.decimals)
-    const bentoBalance = balance?.amount.value.toFixed(balance?.amount?.decimals)
     const { chainId } = useActiveWeb3React()
     return (
         <Paper className="bg-dark-800 ">
@@ -110,14 +109,14 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
                 </div>
                 <div className="flex justify-end items-center">
                     <div>
-                        <div className="text-right">{formattedNum(walletBalance)} </div>
-                        <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
+                        <div className="text-right">{formattedNum(balance.wallet.string)} </div>
+                        <div className="text-secondary text-right">{formattedNum(balance.wallet.usd, true)}</div>
                     </div>
                 </div>
                 <div className="flex justify-end items-center">
                     <div>
-                        <div className="text-right">{formattedNum(bentoBalance)} </div>
-                        <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
+                        <div className="text-right">{formattedNum(balance.bento.string)} </div>
+                        <div className="text-secondary text-right">{formattedNum(balance.bento.usd, true)}</div>
                     </div>
                 </div>
             </div>

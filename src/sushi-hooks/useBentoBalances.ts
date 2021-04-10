@@ -1,26 +1,27 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useBentoBoxContract } from './useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import useTransactionStatus from './useTransactionStatus'
 import { useDefaultTokens } from 'hooks/Tokens'
 import orderBy from 'lodash/orderBy'
-import { Token } from '@sushiswap/sdk'
+import { Currency, Token, WETH } from '@sushiswap/sdk'
 
 import { useBoringHelperContract } from 'hooks/useContract'
+import { KashiContext, useKashiPair, useKashiPairs } from 'kashi'
+import { easyAmount } from 'kashi/functions/kashi'
+import { toAmount } from 'kashi/functions/bentobox'
+import { e10, ZERO } from 'kashi/functions'
 
 export interface BentoBalance {
     address: string
     name: string
     symbol: string
     decimals: number | string
-    balance: BigNumber
-    bentoBalance: BigNumber
-    amount: {
-        value: BigNumber
-        decimals: number
-    }
-    amountUSD: string
+    balance: any
+    bentoBalance: any
+    wallet: any
+    bento: any
 }
 
 function useBentoBalances(): BentoBalance[] {
@@ -33,33 +34,32 @@ function useBentoBalances(): BentoBalance[] {
     const [balances, setBalances] = useState<any>()
     const tokens = Object.values(useDefaultTokens()).filter((token: Token) => token.chainId === chainId)
 
+    const weth = WETH[chainId || 1].address
+    const info = useContext(KashiContext).state.info
+
     const fetchBentoBalances = useCallback(async () => {
-        const balances = await boringHelperContract?.getBalances(
+        const balanceData = await boringHelperContract?.getBalances(
             account,
             tokens.map((token: any) => token.address)
         )
 
         const balancesWithDetails = tokens
             .map((token, i) => {
-                const amount = BigNumber.from(balances[i].bentoShare).isZero()
-                    ? BigNumber.from(0)
-                    : BigNumber.from(balances[i].bentoBalance)
-                          .mul(BigNumber.from(balances[i].bentoAmount))
-                          .div(BigNumber.from(balances[i].bentoShare))
+                const fullToken = {
+                    ...token,
+                    ...balanceData[i],
+                    usd: e10(token.decimals).muldiv(info?.ethRate || ZERO, balanceData[i].rate)
+                }
 
-                const amountUSD = '0'
                 return {
                     address: token.address,
                     name: token.name || 'AAA',
-                    symbol: token.symbol || 'AAA',
+                    symbol: token.address === weth ? Currency.getNativeCurrencySymbol(chainId) : token.symbol,
                     decimals: token.decimals || 'AAA',
-                    balance: balances[i].balance,
-                    bentoBalance: balances[i].bentoBalance,
-                    amount: {
-                        value: amount,
-                        decimals: token.decimals
-                    },
-                    amountUSD: amountUSD
+                    balance: balanceData[i].balance,
+                    bentoBalance: balanceData[i].bentoBalance,
+                    wallet: easyAmount(balanceData[i].balance, fullToken),
+                    bento: easyAmount(toAmount(fullToken, balanceData[i].bentoBalance), fullToken)
                 }
             })
             .filter(token => token.balance.gt('0') || token.bentoBalance.gt('0'))
