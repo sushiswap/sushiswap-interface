@@ -18,7 +18,6 @@ function useBentoBox() {
             const tokenAddressChecksum = isAddress(tokenAddress)
             if (value && chainId) {
                 try {
-                    //ethers.constants.HashZero
                     if (tokenAddressChecksum === WETH[chainId].address) {
                         const tx = await bentoBoxContract?.deposit(
                             ethers.constants.AddressZero,
@@ -28,7 +27,6 @@ function useBentoBox() {
                             0,
                             { value }
                         )
-                        console.log(tx)
                         return addTransaction(tx, { summary: 'Deposit to Bentobox' })
                     } else {
                         const tx = await bentoBoxContract?.deposit(tokenAddressChecksum, account, account, value, 0)

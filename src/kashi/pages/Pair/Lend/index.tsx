@@ -169,21 +169,6 @@ export default function LendingPair({
                     </TabPanel>
                 </Tabs>
             </Card>
-            <pre>
-                {JSON.stringify(
-                    pair,
-                    (key, value) => {
-                        if (value?.type === 'BigNumber') {
-                            return BigNumber.from(value.hex).toString()
-                        }
-                        if (key.startsWith('_')) {
-                            return undefined
-                        }
-                        return value
-                    },
-                    2
-                )}
-            </pre>
         </Layout>
     )
 }

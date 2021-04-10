@@ -152,16 +152,12 @@ export default function CurrencyInputPanel({
     const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
     const decimals = sushiBalanceBigInt?.decimals
 
-    console.log('sushiBalance:', sushiBalance, sushiBalanceBigInt, decimals)
-
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
     const handleApprove = useCallback(async () => {
-        //console.log("SEEKING APPROVAL");
         try {
             setRequestedApproval(true)
             const txHash = await approve()
-            console.log(txHash)
             // user rejected tx or didn't go thru
             if (!txHash) {
                 setRequestedApproval(false)
@@ -187,8 +183,6 @@ export default function CurrencyInputPanel({
     const handleMaxDeposit = useCallback(() => {
         maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
     }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
-
-    // console.log('state:', depositValue, maxSelected)
 
     return (
         <>
@@ -254,7 +248,6 @@ export default function CurrencyInputPanel({
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
-                                    console.log('onClick, maxSelected:', maxSelected)
                                     if (maxSelected) {
                                         await saave(maxDepositAmountInput)
                                     } else {

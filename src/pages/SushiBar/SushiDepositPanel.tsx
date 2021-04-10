@@ -150,11 +150,9 @@ export default function CurrencyInputPanel({
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
     const handleApprove = useCallback(async () => {
-        //console.log("SEEKING APPROVAL");
         try {
             setRequestedApproval(true)
             const txHash = await approve()
-            console.log(txHash)
             // user rejected tx or didn't go thru
             if (!txHash) {
                 setRequestedApproval(false)

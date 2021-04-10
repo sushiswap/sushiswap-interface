@@ -8,7 +8,7 @@ import { getProviderOrSigner, getSigner } from 'utils'
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
 import BENTOBOX_ABI from '../../constants/sushiAbis/bentobox.json'
 import { KashiPermit } from 'kashi/hooks'
-import { ZERO } from 'kashi/functions'
+import { toElastic, ZERO } from 'kashi/functions'
 
 export async function signMasterContractApproval(
     bentoBoxContract: ethers.Contract | null,
@@ -46,7 +46,6 @@ export async function signMasterContractApproval(
         },
         message: message
     }
-    console.log('typedData:', typedData)
     const signer = getSigner(library, user)
     return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
 }
@@ -159,7 +158,6 @@ export class KashiCooker {
             share = toShare(this.pair.asset, amount)
         } else {
             const useNative = this.pair.asset.address === WETH[this.chainId].address
-            console.log(useNative)
     
             this.add(
                 Action.BENTO_DEPOSIT,
@@ -198,7 +196,26 @@ export class KashiCooker {
         return this
     }
 
-    removeCollateral(fraction: BigNumber, toBento: boolean): KashiCooker {
+    removeCollateral(share: BigNumber, toBento: boolean): KashiCooker {
+        this.add(
+            Action.REMOVE_COLLATERAL,
+            ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [share, this.account])
+        )
+        if (!toBento) {
+            const useNative = this.pair.collateral.address === WETH[this.chainId].address
+
+            this.add(
+                Action.BENTO_WITHDRAW,
+                ethers.utils.defaultAbiCoder.encode(
+                    ['address', 'address', 'int256', 'int256'],
+                    [useNative ? ethers.constants.AddressZero : this.pair.collateral.address, this.account, 0, share]
+                )
+            )
+        }
+        return this
+    }
+
+    removeCollateralFraction(fraction: BigNumber, toBento: boolean): KashiCooker {
         this.add(
             Action.REMOVE_COLLATERAL,
             ethers.utils.defaultAbiCoder.encode(['int256', 'address'], [fraction, this.account])
@@ -246,8 +263,29 @@ export class KashiCooker {
                 useNative ? amount : ZERO
             )
         }
-        this.add(Action.GET_REPAY_PART, defaultAbiCoder.encode(['int256'], [amount]))
+        this.add(Action.GET_REPAY_PART, defaultAbiCoder.encode(['int256'], [fromBento ? amount : -1]))
         this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [-1, this.account, false]))
+        return this
+    }
+
+    repayPart(part: BigNumber, fromBento: boolean): KashiCooker {
+        if (!fromBento) {
+            const useNative = this.pair.asset.address === WETH[this.chainId].address
+
+            this.add(Action.GET_REPAY_SHARE, defaultAbiCoder.encode(['int256'], [part]))
+            this.add(
+                Action.BENTO_DEPOSIT,
+                defaultAbiCoder.encode(
+                    ['address', 'address', 'int256', 'int256'],
+                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, 0, -1]
+                ),
+                // TODO: Put some warning in the UI or not allow repaying ETH directly from wallet, because this can't be pre-calculated
+                useNative ? toShare(this.pair.asset, toElastic(this.pair.totalBorrow, part, true)).mul(1001).div(1000) : ZERO
+            )
+            this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [-1, this.account, false]))
+        } else {
+            this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, this.account, false]))
+        }
         return this
     }
 

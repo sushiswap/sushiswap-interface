@@ -195,24 +195,6 @@ export default function BorrowPair({
                         <Repay pair={pair} />
                     </TabPanel>
                 </Tabs>
-
-                <div>
-                    <pre>
-                        {JSON.stringify(
-                            pair,
-                            (key, value) => {
-                                if (value?.type === 'BigNumber') {
-                                    return BigNumber.from(value.hex).toString()
-                                }
-                                if (key.startsWith('_')) {
-                                    return undefined
-                                }
-                                return value
-                            },
-                            2
-                        )}
-                    </pre>
-                </div>
             </Card>
         </Layout>
     )

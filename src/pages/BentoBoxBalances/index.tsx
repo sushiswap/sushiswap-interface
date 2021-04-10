@@ -1,13 +1,11 @@
-import React, { useContext, useState } from 'react'
-import styled, { ThemeContext } from 'styled-components'
-import { ChainId } from '@sushiswap/sdk'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 import { RowBetween } from '../../components/Row'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
 import { useActiveWeb3React } from 'hooks'
 import useBentoBalances, { BentoBalance } from 'sushi-hooks/useBentoBalances'
-import { formatFromBalance, formattedNum } from '../../utils'
-import { PlusSquare, MinusSquare, ChevronLeft } from 'react-feather'
+import { formattedNum } from '../../utils'
 import { Card, CardHeader, Paper, Layout, Search } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
@@ -24,7 +22,7 @@ export default function BentoBalances(): JSX.Element {
     // todo: include totalDeposits in balances
     const balances = useBentoBalances()
     // Search Setup
-    const options = { keys: ['symbol', 'name', 'address'], threshold: 0.4 }
+    const options = { keys: ['symbol', 'name'], threshold: 0.1 }
     const { result, search, term } = useFuse({
         data: balances && balances.length > 0 ? balances : [],
         options
@@ -93,8 +91,8 @@ export default function BentoBalances(): JSX.Element {
 
 const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
     const [expand, setExpand] = useState<boolean>(false)
-    const walletBalance = formatFromBalance(balance?.balance, balance?.amount?.decimals)
-    const bentoBalance = formatFromBalance(balance?.bentoBalance, balance?.amount?.decimals)
+    const walletBalance = balance?.balance.toFixed(balance?.amount?.decimals)
+    const bentoBalance = balance?.bentoBalance.toFixed(balance?.amount?.decimals)
     const { chainId } = useActiveWeb3React()
     return (
         <Paper className="bg-dark-800 ">
@@ -106,19 +104,19 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
                     <img
                         alt={balance.symbol}
                         src={getTokenIcon(balance.address, chainId)}
-                        className="block w-10 sm:w-14 rounded-lg mr-4"
+                        className="w-10 sm:w-14 rounded-lg mr-4"
                     />
-                    <div className="hidden sm:block">{balance && balance.symbol}</div>
+                    <div>{balance && balance.symbol}</div>
                 </div>
                 <div className="flex justify-end items-center">
                     <div>
-                        <div className="text-right">{walletBalance} </div>
+                        <div className="text-right">{formattedNum(walletBalance)} </div>
                         <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
                     </div>
                 </div>
                 <div className="flex justify-end items-center">
                     <div>
-                        <div className="text-right">{bentoBalance} </div>
+                        <div className="text-right">{formattedNum(bentoBalance)} </div>
                         <div className="text-secondary text-right">{formattedNum(balance.amountUSD, true)}</div>
                     </div>
                 </div>

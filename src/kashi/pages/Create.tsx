@@ -62,7 +62,6 @@ const CreatePair = () => {
                         .map(mfrom => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to == mto.to) }))
                         .filter(path => path.mto.length)
                     if (match.length) {
-                        console.log('FOUND', match[0].mfrom, match[0].mto[0])
                         multiply = match[0].mfrom.address!
                         divide = match[0].mto[0].address!
                         decimals =

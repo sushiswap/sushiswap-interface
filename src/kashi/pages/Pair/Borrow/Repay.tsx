@@ -1,16 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Alert, Button, TransactionReviewView, Dots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
-import { minimum, e10 } from 'kashi/functions/math'
-import { Warnings, TransactionReview, KashiCooker } from 'kashi/entities'
+import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
+import { Warnings, TransactionReview, KashiCooker, Warning } from 'kashi/entities'
 import { KASHI_ADDRESS, BENTOBOX_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
+import { formattedNum } from 'utils'
+import { KashiContext } from 'kashi/context'
+import WarningsView from 'kashi/components/Warnings'
+import { toShare } from 'kashi/functions/bentobox'
 
 interface RepayProps {
     pair: any
@@ -24,108 +28,134 @@ export default function Repay({ pair }: RepayProps) {
     const pendingApprovalMessage = useKashiApprovalPending()
 
     // State
-    const [useBentoRepayAsset, setUseBentoRepayAsset] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
-    const [useBentoRemoveCollateral, setUseBentoRemoveCollateral] = useState<boolean>(true)
+    const [useBentoRepay, setUseBentoRepayAsset] = useState<boolean>(pair.asset.bentoBalance.gt(0))
+    const [useBentoRemove, setUseBentoRemoveCollateral] = useState<boolean>(true)
 
-    const [repayAssetValue, setRepayAssetValue] = useState('0')
-    const [removeCollateralValue, setRemoveCollateralValue] = useState('')
-    const [pendingTx, setPendingTx] = useState(false)
+    const [repayValue, setRepayAssetValue] = useState('')
+    const [removeValue, setRemoveCollateralValue] = useState('')
+    const [updateOracle, setUpdateOracle] = useState(false)
+    const [pinRemoveMax, setPinRemoveMax] = useState(false)
+    const [pinRepayMax, setPinRepayMax] = useState(false)
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            repayAssetValue.toBigNumber(pair.asset.decimals).toString()
+            repayValue.toBigNumber(pair.asset.decimals).toString()
         ),
         BENTOBOX_ADDRESS
     )
 
+    const info = useContext(KashiContext).state.info
+
     // Calculated
-    const balance = useBentoRepayAsset ? pair.asset.bentoBalance : pair.asset.balance
+    const assetNative = WETH[chainId || 1].address == pair.asset.address
+    const balance = useBentoRepay ? pair.asset.bentoBalance :  assetNative ? info?.ethBalance : pair.asset.balance
 
-    const nextMaxBorrowableOracle = pair.userCollateralAmount.value
-        .sub(removeCollateralValue.toBigNumber(pair.collateral.decimals))
-        .muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
+    const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
-    const nextMaxBorrowableSpot = pair.userCollateralAmount.value
-        .sub(removeCollateralValue.toBigNumber(pair.collateral.decimals))
-        .muldiv(e10(16).mul('75'), pair.spotExchangeRate)
+    const nextUserBorrowAmount = pair.currentUserBorrowAmount.value.sub(repayValue.toBigNumber(pair.asset.decimals))
 
-    const nextMaxBorrowableStored = pair.userCollateralAmount.value
-        .sub(removeCollateralValue.toBigNumber(pair.collateral.decimals))
-        .muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+    const nextMinCollateralOracle = nextUserBorrowAmount.muldiv(pair.oracleExchangeRate, e10(16).mul('75')).add(1)
+    const nextMinCollateralSpot = nextUserBorrowAmount.muldiv(pair.spotExchangeRate, e10(16).mul('75')).add(1)
+    const nextMinCollateralStored = nextUserBorrowAmount.muldiv(displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate, e10(16).mul('75')).add(1)
+    const nextMinCollateralMinimum = maximum(nextMinCollateralOracle, nextMinCollateralSpot, nextMinCollateralStored)
+    const maxRemoveCollateral = maximum(pair.userCollateralAmount.value.sub(nextMinCollateralMinimum.mul(100).div(95)), ZERO).toFixed(pair.collateral.decimals)
 
+    const displayRemoveValue = pinRemoveMax ? maxRemoveCollateral : removeValue
+    const displayRepayValue = pinRepayMax ? pair.currentUserBorrowAmount.string : repayValue
+
+    const nextUserCollateralAmount = pair.userCollateralAmount.value.sub(displayRemoveValue.toBigNumber(pair.collateral.decimals))
+
+    const nextMaxBorrowableOracle = nextUserCollateralAmount.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
+    const nextMaxBorrowableSpot = nextUserCollateralAmount.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
+    const nextMaxBorrowableStored = nextUserCollateralAmount.muldiv(e10(16).mul('75'), displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate)
     const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
-    const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
-    const nextMaxBorrowPossible = minimum(nextMaxBorrowSafe, pair.totalAssetAmount.value)
+    const nextMaxBorrowSafe = nextMaxBorrowMinimum
+        .muldiv('95', '100')
+        .sub(pair.currentUserBorrowAmount.value)
+    const nextMaxBorrowPossible = maximum(minimum(nextMaxBorrowSafe, pair.maxAssetAvailable), ZERO)
+
+    const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
 
     const nextHealth = pair.currentUserBorrowAmount.value
-        .sub(repayAssetValue.toBigNumber(pair.asset.decimals))
+        .sub(displayRepayValue.toBigNumber(pair.asset.decimals))
         .muldiv(BigNumber.from('1000000000000000000'), nextMaxBorrowMinimum)
-
-    const transactionReview = new TransactionReview()
-
-    if (repayAssetValue || removeCollateralValue) {
-        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
-        transactionReview.addPercentage('Health', pair.health.value, nextHealth)
-    }
-
-    const warnings = new Warnings()
-        .add(pair.currentExchangeRate.isZero(), 'Oracle exchange rate has NOT been set', true)
-        .add(
-            pair.userCollateralAmount.value.isZero(),
-            'You have insufficient collateral. Please enter a smaller amount, add more collateral, or repay now.',
-            true
-        )
 
     const maxRepayAsset = balance.sub(pair.currentUserBorrowAmount.value).gte(0)
         ? pair.currentUserBorrowAmount.string
         : balance.toFixed(pair.asset.decimals)
 
-    const nextUserCollateralAmount = pair.userCollateralAmount.value.sub(
-        removeCollateralValue.toBigNumber(pair.collateral.decimals)
-    )
+    const transactionReview = new TransactionReview()
+    if (displayRepayValue || displayRemoveValue) {
+        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
+        transactionReview.addPercentage('Health', pair.health.value, nextHealth)
+    }
 
-    const maxRemoveCollateral = nextUserCollateralAmount.gt(0)
-        ? nextUserCollateralAmount
-              .sub(
-                  nextUserCollateralAmount
-                      .mul(
-                          nextMaxBorrowSafe.sub(
-                              nextMaxBorrowPossible.sub(
-                                  pair.currentUserBorrowAmount.value.sub(
-                                      repayAssetValue.toBigNumber(pair.asset.decimals)
-                                  )
-                              )
-                          )
-                      )
-                      .div(nextMaxBorrowSafe)
-              )
-              .toFixed(pair.collateral.decimals)
-        : '0'
+    const warnings = new Warnings()
+        .add(assetNative && !useBentoRepay && pinRepayMax, `You cannot MAX repay ${pair.asset.symbol} directly from your wallet. Please deposit your ${pair.asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`, true)
+        .add(
+            displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(pair.userCollateralAmount.value),
+            'You have insufficient collateral. Please enter a smaller amount or repay more.',
+            true
+        )
+        .add(
+            displayRepayValue.toBigNumber(pair.collateral.decimals).gt(pair.currentUserBorrowAmount.value),
+            "You can\'t repay more than you owe. To fully repay, please click the 'max' button.",
+            true,
+            new Warning(
+                balance?.lt(displayRepayValue.toBigNumber(pair.asset.decimals)),
+                `Please make sure your ${
+                    useBentoRepay ? 'BentoBox' : 'wallet'
+                } balance is sufficient to repay and then try again.`,
+                true
+            )
+        )
 
     // Handlers
     async function onExecute(cooker: KashiCooker) {
         let summary = ""
-        if (repayAssetValue.toBigNumber(pair.asset.decimals).gt(0)) {
-            cooker.repay(repayAssetValue.toBigNumber(pair.asset.decimals), useBentoRepayAsset)
+        if (pinRepayMax && pair.userBorrowPart.gt(0)) {
+            cooker.repayPart(pair.userBorrowPart, useBentoRepay)
+            summary = "Repay Max"
+        } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
+            cooker.repay(displayRepayValue.toBigNumber(pair.asset.decimals), useBentoRepay)
             summary = "Repay"
         }
-        if (removeCollateralValue.toBigNumber(pair.collateral.decimals).gt(0)) {
-            cooker.removeCollateral(
-                removeCollateralValue.toBigNumber(pair.collateral.decimals),
-                useBentoRemoveCollateral
-            )
-            summary += (summary ? " and " : "") + summary
+        if (displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0)) {
+            const share = pinRemoveMax
+                ? pair.userCollateralShare
+                : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
+
+            cooker.removeCollateral(share, useBentoRemove)
+            summary += (summary ? " and " : "") + "Remove Collateral"
         }
+        setPinRemoveMax(false)
+        setRemoveCollateralValue('')
+        setRepayAssetValue('')
         return summary
     }
 
     const showApprove =
         chainId &&
         pair.asset.address !== WETH[chainId].address &&
-        !useBentoRepayAsset &&
-        repayAssetValue &&
+        !useBentoRepay &&
+        displayRepayValue &&
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
+
+
+    const removeValueSet = !displayRemoveValue.toBigNumber(pair.collateral.decimals).isZero()
+    const repayValueSet = !displayRepayValue.toBigNumber(pair.asset.decimals).isZero()
+
+    let actionName = "Nothing to do"
+    if (removeValueSet) {
+        if (repayValueSet) {
+            actionName = "Repay and remove collateral"
+        } else {
+            actionName = "Remove collateral"
+        }
+    } else if (repayValueSet) {
+        actionName = "Repay"
+    }
 
     return (
         <>
@@ -136,90 +166,86 @@ export default function Repay({ pair }: RepayProps) {
                     <span>
                         <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2"> Repay Asset &quot;{pair.asset.symbol}&quot; From </span>
+                    <span className="mx-2"> Repay {pair.asset.symbol} trom </span>
                     <span>
                         <Button
                             variant="outlined"
                             color="pink"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
-                                setUseBentoRepayAsset(!useBentoRepayAsset)
+                                setUseBentoRepayAsset(!useBentoRepay)
                             }}
                         >
-                            {useBentoRepayAsset ? 'BentoBox' : 'Wallet'}
+                            {useBentoRepay ? 'BentoBox' : 'Wallet'}
                         </Button>
                     </span>
                 </div>
                 <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {balance.toFixed(pair.asset.decimals)}
+                    Balance: {formattedNum(balance.toFixed(pair.asset.decimals))}
                 </div>
             </div>
 
             <div className="flex items-center relative w-full mb-4">
                 <NumericalInput
                     className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={repayAssetValue}
+                    value={displayRepayValue}
                     onUserInput={setRepayAssetValue}
+                    onFocus={() => {
+                        setRepayAssetValue(displayRepayValue)
+                        setPinRepayMax(false)
+                    }}
                 />
                 {account && (
                     <Button
                         variant="outlined"
                         color="pink"
-                        onClick={() => {
-                            setRepayAssetValue(maxRepayAsset)
-                        }}
+                        onClick={() => setPinRepayMax(true)}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
                         MAX
                     </Button>
                 )}
             </div>
-
-            {showApprove && (
-                <Button color="pink" onClick={approve} className="mb-4">
-                    {approvalState === ApprovalState.PENDING ? (
-                        <Dots>Approving {pair.asset.symbol}</Dots>
-                    ) : (
-                        `Approve ${pair.asset.symbol}`
-                    )}
-                </Button>
-            )}
 
             <div className="flex items-center justify-between my-4">
                 <div className="flex items-center text-base text-secondary">
                     <span>
                         <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
                     </span>
-                    <span className="mx-2">Remove Collateral &quot;{pair.collateral.symbol}&quot; To</span>
+                    <span className="mx-2">Remove {pair.collateral.symbol} to</span>
                     <span>
                         <Button
                             variant="outlined"
                             color="pink"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
-                                setUseBentoRemoveCollateral(!useBentoRemoveCollateral)
+                                setUseBentoRemoveCollateral(!useBentoRemove)
                             }}
                         >
-                            {useBentoRemoveCollateral ? 'BentoBox' : 'Wallet'}
+                            {useBentoRemove ? 'BentoBox' : 'Wallet'}
                         </Button>
                     </span>
                 </div>
                 <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Max: {maxRemoveCollateral}
+                    Max: {formattedNum(maxRemoveCollateral)}
                 </div>
             </div>
 
             <div className="flex items-center relative w-full mb-4">
                 <NumericalInput
                     className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={removeCollateralValue}
+                    value={displayRemoveValue}
                     onUserInput={setRemoveCollateralValue}
+                    onFocus={() => {
+                        setRemoveCollateralValue(displayRemoveValue)
+                        setPinRemoveMax(false)
+                    }}
                 />
                 {account && (
                     <Button
                         variant="outlined"
                         color="pink"
-                        onClick={() => setRemoveCollateralValue(maxRemoveCollateral)}
+                        onClick={() => setPinRemoveMax(true)}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
                         MAX
@@ -227,15 +253,7 @@ export default function Repay({ pair }: RepayProps) {
                 )}
             </div>
 
-            {warnings.map((warning, i) => (
-                <Alert
-                    key={i}
-                    type={warning.breaking ? 'error' : 'warning'}
-                    message={warning.message}
-                    className="mb-4"
-                />
-            ))}
-
+            <WarningsView warnings={warnings}></WarningsView>
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
             {approveKashiFallback && (
@@ -245,32 +263,44 @@ export default function Repay({ pair }: RepayProps) {
                 />
             )}
 
-            {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
-                kashiApprovalState === BentoApprovalState.PENDING) &&
-                !kashiPermit && (
-                    <Button color="pink" onClick={onApprove} className="mb-4">
-                        {kashiApprovalState === BentoApprovalState.PENDING ? (
-                            <Dots>{pendingApprovalMessage}</Dots>
-                        ) : (
-                            `Approve Kashi`
-                        )}
-                    </Button>
-                )}
-
-            {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-                <Button
-                    color="pink"
-                    onClick={() => onCook(pair, onExecute)}
-                    disabled={
-                        pendingTx ||
-                        (balance.eq(0) && pair.userCollateralAmount.value.eq(0)) ||
-                        (repayAssetValue.toBigNumber(pair.asset.decimals).lte(0) &&
-                            removeCollateralValue.toBigNumber(pair.collateral.decimals).lte(0)) ||
-                        warnings.some(warning => warning.breaking)
-                    }
-                >
-                    Repay
+            {showApprove && (
+                <Button color="pink" onClick={approve} className="mb-4">
+                    {approvalState === ApprovalState.PENDING ? (
+                        <Dots>Approving {pair.asset.symbol}</Dots>
+                    ) : (
+                        `Approve ${pair.asset.symbol}`
+                    )}
                 </Button>
+            )}            
+
+            {!showApprove && (
+                <>
+                    {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
+                        kashiApprovalState === BentoApprovalState.PENDING) &&
+                        !kashiPermit && (
+                            <Button color="pink" onClick={onApprove} className="mb-4">
+                                {kashiApprovalState === BentoApprovalState.PENDING ? (
+                                    <Dots>{pendingApprovalMessage}</Dots>
+                                ) : (
+                                    `Approve Kashi`
+                                )}
+                            </Button>
+                        )}
+
+                    {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
+                        <Button
+                            color="pink"
+                            onClick={() => onCook(pair, onExecute)}
+                            disabled={
+                                (displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
+                                displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0)) ||
+                                warnings.some(warning => warning.breaking)
+                            }
+                        >
+                            {actionName}
+                        </Button>
+                    )}
+                </>
             )}
         </>
     )

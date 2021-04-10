@@ -4,9 +4,8 @@ import { Alert, Dots, Button, Checkbox } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10, ZERO, maximum } from 'kashi/functions/math'
-import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
+import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
 import QuestionHelper from 'components/QuestionHelper'
@@ -24,7 +23,7 @@ interface BorrowProps {
 }
 
 export default function Borrow({ pair }: BorrowProps) {
-    const { account, chainId, library } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const pendingApprovalMessage = useKashiApprovalPending()
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
         KASHI_ADDRESS
@@ -59,9 +58,7 @@ export default function Borrow({ pair }: BorrowProps) {
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.collateral.address
     const balance = useBentoCollateral ? pair.collateral.bentoBalance : assetNative ? info?.ethBalance : pair.collateral.balance
-    console.log(info?.ethBalance.sub(e10(17)), info?.ethBalance)
     const maxCollateral = (useBentoCollateral ? pair.collateral.bentoBalance : assetNative ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO) : pair.collateral.balance).toFixed(pair.collateral.decimals)
-    console.log(info?.ethBalance.sub(e10(17)), info?.ethBalance, maxCollateral)
 
     const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
@@ -278,7 +275,7 @@ export default function Borrow({ pair }: BorrowProps) {
             <WarningsView warnings={collateralWarnings}></WarningsView>
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
-            { borrowValueSet && (displayUpdateOracle || pair.oracleExchangeRate.gt(pair.currentExchangeRate)) && (
+            { borrowValueSet && (displayUpdateOracle || pair.currentExchangeRate.gt(pair.oracleExchangeRate)) && (
                 <div className="flex items-center mb-4">
                     <Checkbox color="pink" checked={displayUpdateOracle} disabled={pair.currentExchangeRate.isZero()} onChange={event => setUpdateOracle(event.target.checked)} />
                     <span className="text-secondary ml-2 mr-1">

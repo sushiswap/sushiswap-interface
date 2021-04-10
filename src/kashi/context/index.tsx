@@ -86,13 +86,10 @@ export const KashiContext = createContext<{
 const reducer: React.Reducer<State, Reducer> = (state, action) => {
     switch (action.type) {
         case ActionType.SYNC:
-            // TODO: Sync pairs
-            // console.log('SYNC PAIRS')
             return {
                 ...state
             }
         case ActionType.UPDATE:
-            // console.log('UPDATE PAIRS')
             const { info, pairs } = action.payload
             return {
                 ...state,
@@ -148,7 +145,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         async function() {
             if (boringHelperContract && bentoBoxContract) {
                 const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
-                console.log(info)
 
                 // Get the deployed pairs from the logs and decode
                 const logPairs = GetPairsFromLogs(
@@ -393,9 +389,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 }
 
 export function useKashiPairs() {
-    console.log('useKashiPairs start')
     const context = useContext(KashiContext)
-    console.log('useKashiPairs end')
     if (context === undefined) {
         throw new Error('useKashiPairs must be used within a KashiProvider')
     }

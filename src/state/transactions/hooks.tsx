@@ -74,7 +74,6 @@ export function isTransactionRecent(tx: TransactionDetails): boolean {
 export function useHasPendingApproval(tokenAddress: string | undefined, spender: string | undefined): boolean {
     const allTransactions = useAllTransactions()
 
-    //console.log('allTransactions:', allTransactions)
     return useMemo(
         () =>
             typeof tokenAddress === 'string' &&

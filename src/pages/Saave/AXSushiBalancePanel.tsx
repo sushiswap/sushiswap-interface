@@ -113,7 +113,6 @@ export default function CurrencyInputPanel({
 
     const aXSushiBalanceBigInt = useTokenBalance('0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a')
     const aXSushiBalance = formatFromBalance(aXSushiBalanceBigInt?.value, aXSushiBalanceBigInt?.decimals)
-    console.log('aXSushiBalance:', aXSushiBalance)
 
     return (
         <>

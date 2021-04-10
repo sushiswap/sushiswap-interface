@@ -4,6 +4,6 @@ export function toAmount(token: any, shares: BigNumber): BigNumber {
     return shares.muldiv(token.bentoAmount, token.bentoShare)
 }
 
-export function toShare(token: any, shares: BigNumber): BigNumber {
-    return shares.muldiv(token.bentoShare, token.bentoAmount)
+export function toShare(token: any, amount: BigNumber): BigNumber {
+    return amount.muldiv(token.bentoShare, token.bentoAmount)
 }
