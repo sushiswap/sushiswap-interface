@@ -122,9 +122,7 @@ export default function Repay({ pair }: RepayProps) {
             summary = "Repay"
         }
         if (displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0)) {
-            const share = pinRemoveMax
-                ? pair.userCollateralShare
-                : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
+            const share = toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
 
             cooker.removeCollateral(share, useBentoRemove)
             summary += (summary ? " and " : "") + "Remove Collateral"
