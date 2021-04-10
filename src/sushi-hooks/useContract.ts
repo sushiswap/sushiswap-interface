@@ -34,7 +34,6 @@ import {
   TIMELOCK_ADDRESS,
   ROUTER_ADDRESS
 } from '@sushiswap/sdk'
-import { chain } from 'lodash'
 
 // returns null on errors
 export function useContract(
