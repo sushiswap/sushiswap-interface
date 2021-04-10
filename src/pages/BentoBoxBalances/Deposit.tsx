@@ -75,12 +75,11 @@ export default function Deposit({
                     disabled={
                         pendingTx ||
                         !balance ||
-                        Number(value) === 0 ||
-                        Number(value) > Number(balance.value.toFixed(balance.decimals))
+                        value.toBigNumber(balance.decimals).lte(0)
                     }
                     onClick={async () => {
                         setPendingTx(true)
-                        await deposit(tokenAddress, balance.value)
+                        await deposit(tokenAddress, value.toBigNumber(balance.decimals))
                         setPendingTx(false)
                     }}
                 >
