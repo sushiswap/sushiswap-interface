@@ -170,7 +170,7 @@ export default function Borrow({ pair }: BorrowProps) {
         }
         if (borrowValueSet) {
             if (displayUpdateOracle) {
-                cooker.updateExchangeRate(true, pair.currentExchangeRate.mul(96).div(100), pair.currentExchangeRate.mul(104).div(100))
+                cooker.updateExchangeRate(true, ZERO, ZERO)
             }
             cooker.borrow(displayBorrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
             summary += (summary ? " and " : "") + "Borrow"
