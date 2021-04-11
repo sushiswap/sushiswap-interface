@@ -81,12 +81,12 @@ export default function LendingMarkets(): JSX.Element | null {
                                                 <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                                     <div className="hidden space-x-2 md:flex">
                                                         <img
-                                                            src={getTokenIcon(pair.collateral.address, chainId)}
+                                                            src={getTokenIcon(pair.asset.address, chainId)}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                                             alt=""
                                                         />
                                                         <img
-                                                            src={getTokenIcon(pair.asset.address, chainId)}
+                                                            src={getTokenIcon(pair.collateral.address, chainId)}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                                             alt=""
                                                         />

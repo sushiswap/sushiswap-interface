@@ -6,7 +6,7 @@ import orderBy from 'lodash/orderBy'
 import { Currency, Token, WETH } from '@sushiswap/sdk'
 
 import { useBoringHelperContract } from 'hooks/useContract'
-import { KashiContext } from 'kashi'
+import { KashiContext, useKashiPairs } from 'kashi'
 import { easyAmount } from 'kashi/functions/kashi'
 import { toAmount } from 'kashi/functions/bentobox'
 import { e10, ZERO } from 'kashi/functions'
@@ -37,7 +37,6 @@ function useBentoBalances(): BentoBalance[] {
     const info = useContext(KashiContext).state.info
 
     const fetchBentoBalances = useCallback(async () => {
-        console.log("Loading balances")
         const balanceData = await boringHelperContract?.getBalances(
             account,
             tokens.map((token: any) => token.address)
@@ -70,7 +69,7 @@ function useBentoBalances(): BentoBalance[] {
         if (account && bentoBoxContract && library) {
             fetchBentoBalances()
         }
-    }, [blockNumber, account, bentoBoxContract, library])
+    }, [blockNumber, account, bentoBoxContract, library, info])
 
     return balances
 }

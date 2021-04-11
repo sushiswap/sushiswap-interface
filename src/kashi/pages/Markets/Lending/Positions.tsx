@@ -22,12 +22,12 @@ function Positions({ pairs }: any): JSX.Element | null {
                                 <div className="grid gap-4 grid-cols-4 md:grid-cols-5 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-blue">
                                     <div className="hidden space-x-2 md:flex">
                                         <img
-                                            src={getTokenIcon(pair.collateral.address, chainId)}
+                                            src={getTokenIcon(pair.asset.address, chainId)}
                                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                             alt=""
                                         />
                                         <img
-                                            src={getTokenIcon(pair.asset.address, chainId)}
+                                            src={getTokenIcon(pair.collateral.address, chainId)}
                                             className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                             alt=""
                                         />

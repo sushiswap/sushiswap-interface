@@ -13,6 +13,7 @@ import Borrow from './Borrow'
 import Repay from './Repay'
 import { KashiCooker } from 'kashi/entities'
 import { useTransactionAdder } from 'state/transactions/hooks'
+import QuestionHelper from 'components/QuestionHelper'
 
 export default function BorrowPair({
     match: {
@@ -92,12 +93,11 @@ export default function BorrowPair({
                             <div className="text-xl text-high-emphesis">BentoBox</div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">{pair.asset.symbol} Strategy</div>
-                            <div className="text-lg text-high-emphesis">Inactive</div>
-                        </div>
-                        <div className="flex justify-between">
                             <div className="text-lg text-secondary">{pair.collateral.symbol} Strategy</div>
-                            <div className="text-lg text-high-emphesis">Inactive</div>
+                            <div className="text-lg text-high-emphesis">
+                                None
+                                <QuestionHelper text="BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox." />
+                            </div>
                         </div>
                     </div>
                 </Card>
@@ -111,12 +111,12 @@ export default function BorrowPair({
                             <BackButton className="hidden md:flex" defaultRoute="/bento/kashi/borrow" />
                             <div className="flex items-center space-x-2 mr-4">
                                 <img
-                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
+                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
                                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                     alt=""
                                 />
                                 <img
-                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
+                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
                                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                     alt=""
                                 />

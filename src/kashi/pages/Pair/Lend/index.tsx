@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
-import { useKashiPair } from 'kashi/context'
+import { KashiContext, useKashiPair, useKashiPairs } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { BackButton, LendCardHeader } from '../../../components'
 import { formattedNum, formattedPercent } from 'utils'
@@ -13,6 +13,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { BigNumber } from '@ethersproject/bignumber'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
+import QuestionHelper from 'components/QuestionHelper'
 
 export default function LendingPair({
     match: {
@@ -24,8 +25,9 @@ export default function LendingPair({
     const { chainId } = useActiveWeb3React()
 
     const pair = useKashiPair(pairAddress)
+    const info = useContext(KashiContext).state.info
 
-    if (!pair) return (
+    if (!pair) return info && info.blockTimeStamp.isZero() ? null : (
         <Redirect to="/bento/kashi/lend"></Redirect>
     )
 
@@ -79,11 +81,10 @@ export default function LendingPair({
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">{pair.asset.symbol} Strategy</div>
-                            <div className="text-lg text-high-emphesis">Inactive</div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="text-lg text-secondary">{pair.collateral.symbol} Strategy</div>
-                            <div className="text-lg text-high-emphesis">Inactive</div>
+                            <div className="text-lg text-high-emphesis">
+                                None
+                                <QuestionHelper text="BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox." />
+                            </div>
                         </div>
                     </div>
                 </Card>
@@ -97,12 +98,12 @@ export default function LendingPair({
                             <div className="flex items-center space-x-2 mr-4">
                                 <BackButton className="hidden md:flex" defaultRoute="/bento/kashi/lend" />
                                 <img
-                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
+                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
                                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                     alt=""
                                 />
                                 <img
-                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
+                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
                                     className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
                                     alt=""
                                 />

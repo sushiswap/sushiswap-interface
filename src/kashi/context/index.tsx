@@ -146,7 +146,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const updatePairs = useCallback(
         async function() {
             if (boringHelperContract && bentoBoxContract) {
-                console.log("Updating pairs")
                 const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
 
                 // Get the deployed pairs from the logs and decode

@@ -50,13 +50,12 @@ export default function BentoBalances(): JSX.Element {
                     <CardHeader className="flex justify-between items-center bg-dark-800">
                         <div className="md:hidden">
                             <div className="flex float-right items-center">
-                                <div className="">My&nbsp;BentoBox</div>
+                                <div className="">BentoBox</div>
                             </div>
                         </div>
                         <div className="flex w-full justify-between">
                             <div className="hidden md:flex items-center">
                                 <BackButton defaultRoute="/bento" />
-                                <BentoBoxLogo className="fill-current h-auto w-10 mr-2" />
                                 <div className="text-lg mr-2">My BentoBox</div>
                                 <div className="text-lg text-secondary">
                                     {formattedNum(
