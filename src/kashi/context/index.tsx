@@ -323,7 +323,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                 pair.currentUserAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
                                 pair.asset
                             ).add(getUSDValue(pair.userCollateralAmount.value, pair.collateral))
-                            pair.search = pair.collateral.symbol + '/' + pair.asset.symbol
+                            pair.search = pair.asset.symbol + '/' + pair.collateral.symbol
 
                             pair.oracle = getOracle(pair, chain, tokens)
 

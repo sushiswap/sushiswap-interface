@@ -53,25 +53,13 @@ export default function BorrowMarkets(): JSX.Element {
                 <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
                     <div
                         className="flex items-center cursor-pointer hover:text-secondary"
-                        onClick={() => requestSort('symbol')}
+                        onClick={() => requestSort('search')}
                     >
                         <div>Markets</div>
                         {sortConfig &&
-                            sortConfig.key === 'symbol' &&
+                            sortConfig.key === 'search' &&
                             ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                                 (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-                    </div>
-                    <div
-                        className="hidden md:block hover:text-secondary cursor-pointer"
-                        onClick={() => requestSort('collateral.symbol')}
-                    >
-                        <div className="flex items-center">
-                            <div>Collateral</div>
-                            {sortConfig &&
-                                sortConfig.key === 'collateral.symbol' &&
-                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-                        </div>
                     </div>
                     <div
                         className="hidden md:block hover:text-secondary cursor-pointer"
@@ -81,6 +69,18 @@ export default function BorrowMarkets(): JSX.Element {
                             <div>Borrow</div>
                             {sortConfig &&
                                 sortConfig.key === 'asset.symbol' &&
+                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                        </div>
+                    </div>
+                    <div
+                        className="hidden md:block hover:text-secondary cursor-pointer"
+                        onClick={() => requestSort('collateral.symbol')}
+                    >
+                        <div className="flex items-center">
+                            <div>Collateral</div>
+                            {sortConfig &&
+                                sortConfig.key === 'collateral.symbol' &&
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                                     (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                         </div>
@@ -102,31 +102,31 @@ export default function BorrowMarkets(): JSX.Element {
                     </div>
                     <div
                         className="hover:text-secondary cursor-pointer"
-                        onClick={() => requestSort('currentBorrowAmount.string')}
+                        onClick={() => requestSort('currentBorrowAmount.usdValue', 'descending')}
                     >
                         <div className="flex items-center justify-center sm:justify-end">
                             <div>Borrowed</div>
                             {sortConfig &&
-                                sortConfig.key === 'currentBorrowAmount.string' &&
+                                sortConfig.key === 'currentBorrowAmount.usdValue' &&
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                                     (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                         </div>
                     </div>
                     <div
                         className="hover:text-secondary cursor-pointer"
-                        onClick={() => requestSort('totalAssetAmount.usd')}
+                        onClick={() => requestSort('totalAssetAmount.usdValue', 'descending')}
                     >
                         <div className="flex items-center justify-end">
                             <div>Available</div>
                             {sortConfig &&
-                                sortConfig.key === 'totalAssetAmount.usd' &&
+                                sortConfig.key === 'totalAssetAmount.usdValue' &&
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                                     (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                         </div>
                     </div>
                     <div
                         className="hover:text-secondary cursor-pointer"
-                        onClick={() => requestSort('currentInterestPerYear.string')}
+                        onClick={() => requestSort('currentInterestPerYear.string', 'descending')}
                     >
                         <div className="flex items-center justify-end">
                             <div>APR</div>
@@ -162,15 +162,14 @@ export default function BorrowMarkets(): JSX.Element {
                                                     />
                                                 </div>
                                                 <div className="sm:items-end md:hidden">
-                                                    <div>{pair.collateral.symbol} /</div>
-                                                    <div><strong>{pair.asset.symbol}</strong></div>
+                                                    <div><strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}</div>
                                                     <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
                                                         {pair.oracle.name}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="hidden md:block">{pair.collateral.symbol}</div>
                                             <div className="text-white hidden md:block"><strong>{pair.asset.symbol}</strong></div>
+                                            <div className="hidden md:block">{pair.collateral.symbol}</div>
                                             <div className="hidden lg:block">{pair.oracle.name}</div>
                                             <div className="text-center sm:text-right">
                                                 <div>

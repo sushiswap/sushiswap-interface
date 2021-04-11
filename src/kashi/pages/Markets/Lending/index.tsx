@@ -12,6 +12,7 @@ import { ChevronUp, ChevronDown } from 'react-feather'
 import Positions from './Positions'
 import { useActiveWeb3React } from 'hooks'
 import { getCurrency } from 'kashi/constants'
+import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
 
 export default function LendingMarkets(): JSX.Element | null {
     const { chainId } = useActiveWeb3React()
@@ -55,117 +56,16 @@ export default function LendingMarkets(): JSX.Element | null {
                 )}
                 <div>
                     <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
-                        <div
-                            className="flex items-center cursor-pointer hover:text-secondary"
-                            onClick={() => requestSort('symbol')}
-                        >
-                            <div>Markets</div>
-                            {sortConfig &&
-                                sortConfig.key === 'symbol' &&
-                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} className="ml-2" />) ||
-                                    (sortConfig.direction === 'descending' && (
-                                        <ChevronDown size={12} className="ml-2" />
-                                    )))}
-                        </div>
-                        <div
-                            className="hidden md:block hover:text-secondary cursor-pointer"
-                            onClick={() => requestSort('collateral.symbol')}
-                        >
-                            <div className="flex items-center">
-                                <div>Collateral</div>
-                                {sortConfig &&
-                                    sortConfig.key === 'collateral.symbol' &&
-                                    ((sortConfig.direction === 'ascending' && (
-                                        <ChevronUp size={12} className="ml-2" />
-                                    )) ||
-                                        (sortConfig.direction === 'descending' && (
-                                            <ChevronDown size={12} className="ml-2" />
-                                        )))}
-                            </div>
-                        </div>
-                        <div
-                            className="hidden md:block hover:text-secondary cursor-pointer"
-                            onClick={() => requestSort('asset.symbol')}
-                        >
-                            <div className="flex items-center">
-                                <div>Lending</div>
-                                {sortConfig &&
-                                    sortConfig.key === 'asset.symbol' &&
-                                    ((sortConfig.direction === 'ascending' && (
-                                        <ChevronUp size={12} className="ml-2" />
-                                    )) ||
-                                        (sortConfig.direction === 'descending' && (
-                                            <ChevronDown size={12} className="ml-2" />
-                                        )))}
-                            </div>
-                        </div>
-                        <div
-                            className="hidden lg:block hover:text-secondary cursor-pointer"
-                            onClick={() => requestSort('oracle.name')}
-                        >
-                            <div className="flex items-center">
-                                <div className="flex">
-                                    Oracle{' '}
-                                    <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
-                                </div>
-                                {sortConfig &&
-                                    sortConfig.key === 'oracle.name' &&
-                                    ((sortConfig.direction === 'ascending' && (
-                                        <ChevronUp size={12} className="ml-2" />
-                                    )) ||
-                                        (sortConfig.direction === 'descending' && (
-                                            <ChevronDown size={12} className="ml-2" />
-                                        )))}
-                            </div>
-                        </div>
-                        <div
-                            className="hover:text-secondary cursor-pointer"
-                            onClick={() => requestSort('currentSupplyAPR.string')}
-                        >
-                            <div className="flex items-center justify-center sm:justify-end">
-                                <div>APR</div>
-                                {sortConfig &&
-                                    sortConfig.key === 'currentSupplyAPR.string' &&
-                                    ((sortConfig.direction === 'ascending' && (
-                                        <ChevronUp size={12} className="ml-2" />
-                                    )) ||
-                                        (sortConfig.direction === 'descending' && (
-                                            <ChevronDown size={12} className="ml-2" />
-                                        )))}
-                            </div>
-                        </div>
-                        <div
-                            className="hidden sm:block hover:text-secondary cursor-pointer"
-                            onClick={() => requestSort('utilization.string')}
-                        >
-                            <div className="flex items-center justify-end">
-                                <div>Borrowed</div>
-                                {sortConfig &&
-                                    sortConfig.key === 'utilization.string' &&
-                                    ((sortConfig.direction === 'ascending' && (
-                                        <ChevronUp size={12} className="ml-2" />
-                                    )) ||
-                                        (sortConfig.direction === 'descending' && (
-                                            <ChevronDown size={12} className="ml-2" />
-                                        )))}
-                            </div>
-                        </div>
-                        <div
-                            className="text-right hover:text-secondary cursor-pointer"
-                            onClick={() => requestSort('currentAllAssets.usd')}
-                        >
-                            <div className="flex items-center justify-end">
-                                <div>Total</div>
-                                {sortConfig &&
-                                    sortConfig.key === 'currentAllAssets.usd' &&
-                                    ((sortConfig.direction === 'ascending' && (
-                                        <ChevronUp size={12} className="ml-2" />
-                                    )) ||
-                                        (sortConfig.direction === 'descending' && (
-                                            <ChevronDown size={12} className="ml-2" />
-                                        )))}
-                            </div>
-                        </div>
+                        <ListHeaderWithSort className="" onSort={() => requestSort('search')} headerKey={"search"} sortConfig={sortConfig}>Markets</ListHeaderWithSort>
+                        <ListHeaderWithSort className="hidden md:flex" onSort={() => requestSort('asset.symbol')} headerKey={"asset.symbol"} sortConfig={sortConfig}>Lending</ListHeaderWithSort>
+                        <ListHeaderWithSort className="hidden md:flex" onSort={() => requestSort('collateral.symbol')} headerKey={"collateral.symbol"} sortConfig={sortConfig}>Collateral</ListHeaderWithSort>
+                        <ListHeaderWithSort className="hidden lg:flex" onSort={() => requestSort('oracle.name')} headerKey={"oracle.name"} sortConfig={sortConfig}>
+                            Oracle{' '}
+                            <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />                            
+                        </ListHeaderWithSort>
+                        <ListHeaderWithSort className="justify-end" onSort={() => requestSort('currentSupplyAPR.value', 'descending')} headerKey={"currentSupplyAPR.value"} sortConfig={sortConfig}>APR</ListHeaderWithSort>
+                        <ListHeaderWithSort className="hidden sm:flex justify-end" onSort={() => requestSort('utilization.value', 'descending')} headerKey={"utilization.value"} sortConfig={sortConfig}>Borrowed</ListHeaderWithSort>
+                        <ListHeaderWithSort className="justify-end" onSort={() => requestSort('currentAllAssets.usdValue', 'descending')} headerKey={"currentAllAssets.usdValue"} sortConfig={sortConfig}>Total</ListHeaderWithSort>
                     </div>
                     <div className="flex-col space-y-2">
                         {items &&
@@ -177,7 +77,7 @@ export default function LendingMarkets(): JSX.Element | null {
                                             to={'/bento/kashi/lend/' + String(pair.address).toLowerCase()}
                                             className="block text-high-emphesis"
                                         >
-                                            <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-blue">
+                                            <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm rounded bg-dark-800 hover:bg-dark-blue">
                                                 <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                                     <div className="hidden space-x-2 md:flex">
                                                         <img
@@ -192,15 +92,14 @@ export default function LendingMarkets(): JSX.Element | null {
                                                         />
                                                     </div>
                                                     <div className="sm:items-end md:hidden">
-                                                        <div>{pair.collateral.symbol} /</div>
-                                                        <div><strong>{pair.asset.symbol}</strong></div>
+                                                        <div><strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}</div>
                                                         <div className="mt-0 text-white-500 text-xs block lg:hidden">
                                                             {pair.oracle.name}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
                                                 <div className="text-left hidden md:block"><strong>{pair.asset.symbol}</strong></div>
+                                                <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
                                                 <div className="text-left hidden lg:block">{pair.oracle.name}</div>
                                                 <div className="text-center sm:text-right">
                                                     {formattedPercent(pair.currentSupplyAPR.string)}

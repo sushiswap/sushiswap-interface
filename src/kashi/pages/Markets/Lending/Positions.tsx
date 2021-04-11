@@ -34,7 +34,7 @@ function Positions({ pairs }: any): JSX.Element | null {
                                     </div>
                                     <div className="col-span-1 sm:block md:col-span-1">
                                         <div>
-                                            {pair.collateral.symbol} / {pair.asset.symbol}
+                                        <strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}
                                         </div>
                                         <div>{pair.oracle.name}</div>
                                     </div>
