@@ -1,17 +1,16 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useBentoBoxContract } from './useContract'
-import { BigNumber } from '@ethersproject/bignumber'
-import useTransactionStatus from './useTransactionStatus'
 import { useDefaultTokens } from 'hooks/Tokens'
 import orderBy from 'lodash/orderBy'
 import { Currency, Token, WETH } from '@sushiswap/sdk'
 
 import { useBoringHelperContract } from 'hooks/useContract'
-import { KashiContext, useKashiPair, useKashiPairs } from 'kashi'
+import { KashiContext } from 'kashi'
 import { easyAmount } from 'kashi/functions/kashi'
 import { toAmount } from 'kashi/functions/bentobox'
 import { e10, ZERO } from 'kashi/functions'
+import { useBlockNumber } from 'state/application/hooks'
 
 export interface BentoBalance {
     address: string
@@ -26,6 +25,7 @@ export interface BentoBalance {
 
 function useBentoBalances(): BentoBalance[] {
     const { chainId, library, account } = useActiveWeb3React()
+    const blockNumber = useBlockNumber()
 
     const boringHelperContract = useBoringHelperContract()
     const bentoBoxContract = useBentoBoxContract()
@@ -37,6 +37,7 @@ function useBentoBalances(): BentoBalance[] {
     const info = useContext(KashiContext).state.info
 
     const fetchBentoBalances = useCallback(async () => {
+        console.log("Loading balances")
         const balanceData = await boringHelperContract?.getBalances(
             account,
             tokens.map((token: any) => token.address)
@@ -69,7 +70,7 @@ function useBentoBalances(): BentoBalance[] {
         if (account && bentoBoxContract && library) {
             fetchBentoBalances()
         }
-    }, [account, bentoBoxContract, library])
+    }, [blockNumber, account, bentoBoxContract, library])
 
     return balances
 }

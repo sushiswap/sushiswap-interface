@@ -1,9 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import KashiLogo from 'assets/kashi/logo.png'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 import { formattedNum } from 'utils'
-import { BigNumber } from '@ethersproject/bignumber'
 
 interface LayoutProps {
     left?: JSX.Element
