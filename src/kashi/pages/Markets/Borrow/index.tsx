@@ -163,14 +163,14 @@ export default function BorrowMarkets(): JSX.Element {
                                                 </div>
                                                 <div className="sm:items-end md:hidden">
                                                     <div>{pair.collateral.symbol} /</div>
-                                                    <div>{pair.asset.symbol}</div>
+                                                    <div><strong>{pair.asset.symbol}</strong></div>
                                                     <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
                                                         {pair.oracle.name}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="hidden md:block">{pair.collateral.symbol}</div>
-                                            <div className="text-white hidden md:block">{pair.asset.symbol}</div>
+                                            <div className="text-white hidden md:block"><strong>{pair.asset.symbol}</strong></div>
                                             <div className="hidden lg:block">{pair.oracle.name}</div>
                                             <div className="text-center sm:text-right">
                                                 <div>

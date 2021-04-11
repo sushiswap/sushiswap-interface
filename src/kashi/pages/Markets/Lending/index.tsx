@@ -193,14 +193,14 @@ export default function LendingMarkets(): JSX.Element | null {
                                                     </div>
                                                     <div className="sm:items-end md:hidden">
                                                         <div>{pair.collateral.symbol} /</div>
-                                                        <div>{pair.asset.symbol}</div>
+                                                        <div><strong>{pair.asset.symbol}</strong></div>
                                                         <div className="mt-0 text-white-500 text-xs block lg:hidden">
                                                             {pair.oracle.name}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
-                                                <div className="text-left hidden md:block">{pair.asset.symbol}</div>
+                                                <div className="text-left hidden md:block"><strong>{pair.asset.symbol}</strong></div>
                                                 <div className="text-left hidden lg:block">{pair.oracle.name}</div>
                                                 <div className="text-center sm:text-right">
                                                     {formattedPercent(pair.currentSupplyAPR.string)}
@@ -221,6 +221,16 @@ export default function LendingMarkets(): JSX.Element | null {
                                     </div>
                                 )
                             })}
+                    </div>
+                    <div className="hidden flex-col space-y-2">
+                        {items &&
+                            items.length > 0 &&
+                            items.map(pair => {
+                                return (
+                                    <div key={pair.address}>
+                                        {pair.address}
+                                    </div>
+                        )})}
                     </div>
                 </div>
                 <div className="w-full py-6 text-center">
