@@ -1,5 +1,5 @@
 import { useActiveWeb3React } from 'hooks'
-import React, { createContext, useContext, useReducer, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
 import Fraction from '../../constants/Fraction'
 import { WETH, Currency, ChainId } from '@sushiswap/sdk'
@@ -16,6 +16,7 @@ import { e10, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
+import { useBlockNumber } from 'state/application/hooks'
 
 enum ActionType {
     UPDATE = 'UPDATE',
@@ -129,6 +130,7 @@ class Tokens extends Array {
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
     const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
+    const blockNumber = useBlockNumber()
 
     let { account, chainId } = useActiveWeb3React()
     const chain: ChainId = chainId || 1
@@ -144,6 +146,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const updatePairs = useCallback(
         async function() {
             if (boringHelperContract && bentoBoxContract) {
+                console.log("Updating pairs")
                 const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
 
                 // Get the deployed pairs from the logs and decode
@@ -374,7 +377,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         [boringHelperContract, bentoBoxContract, chainId, chain, account, tokens]
     )
 
-    useInterval(updatePairs, 10000)
+    useEffect(() => {
+        updatePairs()
+    }, [blockNumber, chainId, account])    
 
     return (
         <KashiContext.Provider
