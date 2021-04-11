@@ -250,6 +250,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
 function getTokenIcon(address: string, chainId: ChainId = 1): string {
     const RESULT = TOKEN_ICONS[chainId][address.toLowerCase()]
     if (!RESULT) {
+        console.log("Missing token icon", chainId, address)
         return UNKNOWN
     } else {
         return RESULT

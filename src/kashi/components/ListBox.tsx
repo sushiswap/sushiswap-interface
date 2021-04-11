@@ -1,8 +1,10 @@
 import React from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { getTokenIcon } from 'kashi/functions'
+import { useActiveWeb3React } from 'hooks'
 
 export default function ListBox({ label, tokens, selectedToken, setSelectedToken }: any) {
+    const { chainId } = useActiveWeb3React()
     return (
         <div className="flex items-center justify-center">
             <div className="w-full">
@@ -17,7 +19,7 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                                     <Listbox.Button className="cursor-default relative w-full rounded-md border bg-input border-none p-3 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         <span className="truncate flex items-center">
                                             <img
-                                                src={getTokenIcon(selectedToken.address)}
+                                                src={getTokenIcon(selectedToken.address, chainId)}
                                                 className="w-10 h-10 rounded-sm mr-4"
                                             />
                                             <span className="text-lg">{selectedToken.symbol}&nbsp;</span>
@@ -62,7 +64,7 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                                                     >
                                                         <span className="flex truncate items-center">
                                                             <img
-                                                                src={getTokenIcon(token.address)}
+                                                                src={getTokenIcon(token.address, chainId)}
                                                                 className="w-10 h-10 rounded-sm mr-4"
                                                             />
                                                             <span className="text-lg">{token.symbol}&nbsp;</span>

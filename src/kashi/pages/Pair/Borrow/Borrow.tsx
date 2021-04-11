@@ -282,7 +282,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         Update exchange rate from the oracle
                     </span>
                     <QuestionHelper text={ pair.currentExchangeRate.gt(0)
-                        ? "The exchange rate from the oracle is only updated when needed. When the price in Kashi is different from the orcale, this may reduce the amount you can borrow. Updating the exchange rate from the oracle may increase your borrow limit."
+                        ? "The exchange rate from the oracle is only updated when needed. When the price in Kashi is different from the oracle, this may reduce the amount you can borrow. Updating the exchange rate from the oracle may increase your borrow limit."
                         : "The exchange rate has not been updated from the oracle yet in this market. If you borrow, it will be updated." }
                     />
                 </div>

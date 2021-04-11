@@ -13,14 +13,17 @@ import { useActiveWeb3React } from 'hooks'
 import { ethers } from 'ethers'
 import { e10 } from 'kashi/functions/math'
 import { useBentoBoxContract } from 'sushi-hooks/useContract'
+import { useTransactionAdder } from 'state/transactions/hooks'
 
 const CreatePair = () => {
     const { chainId } = useActiveWeb3React()
     const bentoBoxContract = useBentoBoxContract()
+    const addTransaction = useTransactionAdder()
 
     const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
-    const [selectedCollateral, setSelectedCollateral] = useState({ name: 'Select a token', address: '0', decimals: 0 }) //useState(tokens[0])
-    const [selectedAsset, setSelectedAsset] = useState({ name: 'Select a token', address: '0', decimals: 0 }) //useState(tokens[1])
+    const empty = { symbol: '', name: 'Select a token', address: '0', decimals: 0 }
+    const [selectedCollateral, setSelectedCollateral] = useState(empty)
+    const [selectedAsset, setSelectedAsset] = useState(empty)
 
     const collateralTokens = tokens.filter((token: any) => {
         return token !== selectedAsset
@@ -85,7 +88,7 @@ const CreatePair = () => {
                 ['address', 'address', 'address', 'bytes'],
                 [selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData]
             )
-            await bentoBoxContract?.deploy(KASHI_ADDRESS, kashiData, true)
+            addTransaction(await bentoBoxContract?.deploy(KASHI_ADDRESS, kashiData, true), { summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`})
         } catch (e) {
             console.log(e)
         }
@@ -99,7 +102,7 @@ const CreatePair = () => {
                     backgroundImage={DepositGraphic}
                     title={'Create a new Kashi Market'}
                     description={
-                        'If you want to supply to a market that is not listed yet, you can use this tool to create a new pair based on Chainlink oracles.'
+                        'If you want to supply to a market that is not listed yet, you can use this tool to create a new pair.'
                     }
                 />
             }
@@ -116,6 +119,9 @@ const CreatePair = () => {
                 }
             >
                 <div className="space-y-6">
+                    <p>
+                        Currently only Chainlink oracles are available. Support for more oracles, such as SushiSwap on-chain time weighted average pricing (TWAP) oracles will be added later.
+                    </p>
                     <ListBox
                         label={'Collateral (LONG)'}
                         tokens={collateralTokens}
@@ -133,8 +139,8 @@ const CreatePair = () => {
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"
                         onClick={() => handleCreate()}
                         disabled={
-                            selectedCollateral === { name: 'Select a token', address: '0', decimals: 0 } ||
-                            selectedAsset === { name: 'Select a token', address: '0', decimals: 0 }
+                            selectedCollateral === empty ||
+                            selectedAsset === empty
                         }
                     >
                         Create Market
