@@ -29,7 +29,6 @@ function useBentoBalances(): BentoBalance[] {
 
     const boringHelperContract = useBoringHelperContract()
     const bentoBoxContract = useBentoBoxContract()
-    const currentTransactionStatus = useTransactionStatus()
 
     const [balances, setBalances] = useState<any>()
     const tokens = Object.values(useDefaultTokens()).filter((token: Token) => token.chainId === chainId)
@@ -70,7 +69,7 @@ function useBentoBalances(): BentoBalance[] {
         if (account && bentoBoxContract && library) {
             fetchBentoBalances()
         }
-    }, [account, bentoBoxContract, fetchBentoBalances, currentTransactionStatus, library])
+    }, [account, bentoBoxContract, library])
 
     return balances
 }

@@ -20,8 +20,8 @@ export const FixedHeightRow = styled(RowBetween)`
 `
 
 export default function BentoBalances(): JSX.Element {
-    // todo: include totalDeposits in balances
     const balances = useBentoBalances()
+
     // Search Setup
     const options = { keys: ['symbol', 'name'], threshold: 0.1 }
     const { result, search, term } = useFuse({
@@ -50,7 +50,7 @@ export default function BentoBalances(): JSX.Element {
                     <CardHeader className="flex justify-between items-center bg-dark-800">
                         <div className="md:hidden">
                             <div className="flex float-right items-center">
-                                <div className="">My BentoBox</div>
+                                <div className="">My&nbsp;BentoBox</div>
                             </div>
                         </div>
                         <div className="flex w-full justify-between">
@@ -67,7 +67,9 @@ export default function BentoBalances(): JSX.Element {
                                     )}
                                 </div>
                             </div>
-                            <Search search={search} term={term} />
+                            <div className="ml-3">
+                                <Search search={search} term={term} />
+                            </div>
                         </div>
                     </CardHeader>
                 }
@@ -81,7 +83,6 @@ export default function BentoBalances(): JSX.Element {
                     {items &&
                         items.length > 0 &&
                         items.map((balance: BentoBalance, i: number) => {
-                            // todo: remove increment for testing purposes
                             return <TokenBalance key={balance.address + '_' + i} balance={balance} />
                         })}
                 </div>
