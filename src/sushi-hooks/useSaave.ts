@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import { useSaaveContract, useSushiContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
-
 import { useActiveWeb3React } from '../hooks'
-import { BalanceProps } from './queries/useTokenBalance'
+import { BalanceProps } from './useTokenBalance'
 import Fraction from '../constants/Fraction'
+
 const { BigNumber } = ethers
 
 const useMaker = () => {
@@ -50,14 +50,6 @@ const useMaker = () => {
     const saave = useCallback(
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
-                // console.log(
-                //   'saave_amount:',
-                //   BigNumber.from(amount?.value).div(BigNumber.from(10).pow(amount?.decimals)),
-                //   BigNumber.from(amount?.value).mul(BigNumber.from(10).pow(amount?.decimals)),
-                //   BigNumber.from(amount?.value),
-                //   amount?.value,
-                //   ethers.utils.parseUnits('1', amount?.decimals)
-                // )
                 try {
                     const tx = await saaveContract?.saave(amount?.value)
                     return addTransaction(tx, { summary: 'SUSHI → xSUSHI → aXSUSHI' })

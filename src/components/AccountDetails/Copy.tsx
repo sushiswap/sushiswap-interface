@@ -25,7 +25,7 @@ const TransactionStatusText = styled.span`
     align-items: center;
 `
 
-export default function CopyHelper(props: { toCopy: string; children?: React.ReactNode }) {
+export default function CopyHelper(props: { toCopy: string; children?: React.ReactNode }): any {
     const [isCopied, setCopied] = useCopyClipboard()
 
     return (

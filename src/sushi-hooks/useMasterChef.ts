@@ -6,7 +6,7 @@ import { ethers } from 'ethers'
 
 const useMasterChef = () => {
     const addTransaction = useTransactionAdder()
-    const masterChefContract = useMasterChefContract(true) // withSigner
+    const masterChefContract = useMasterChefContract() // withSigner
 
     // Deposit
     const deposit = useCallback(

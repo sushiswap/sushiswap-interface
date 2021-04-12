@@ -26,6 +26,7 @@ import { transparentize } from 'polished'
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
     width: 100%;
+    padding: 16px;
 `
 
 const VoteCard = styled(DataCard)`

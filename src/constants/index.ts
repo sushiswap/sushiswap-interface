@@ -3,8 +3,6 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
 
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
 export { PRELOADED_PROPOSALS } from './proposals'
 
 export const POOL_DENY = ['14', '29', '45', '30']
@@ -25,9 +23,6 @@ export const PROPOSAL_LENGTH_IN_SECS = AVERAGE_BLOCK_TIME_IN_SECS * PROPOSAL_LEN
 
 export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
-
-// Boring Helper
-export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
 
 // SUSHI
 export const SUSHI: ChainTokenMap = {
@@ -54,7 +49,7 @@ export const SUSHI: ChainTokenMap = {
     ),
     [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
     [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
-    [ChainId.FANTOM]: new Token(ChainId.KOVAN, '0xae75A438b2E0cB8Bb01Ec1E1e376De11D44477CC', 18, 'SUSHI', 'SushiToken')
+    [ChainId.FANTOM]: new Token(ChainId.FANTOM, '0xae75A438b2E0cB8Bb01Ec1E1e376De11D44477CC', 18, 'SUSHI', 'SushiToken')
 }
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
@@ -384,3 +379,12 @@ export const BLOCKED_ADDRESSES: string[] = [
     '0x901bb9583b24D97e995513C6778dc6888AB6870e',
     '0xA7e5d5A720f06526557c513402f2e6B5fA20b008'
 ]
+
+// BentoBox Swappers
+export const BASE_SWAPPER: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: '0x0',
+    [ChainId.ROPSTEN]: '0xe4E2540D421e56b0B786d40c5F5268891288c6fb'
+}
+
+// Boring Helper
+export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'

@@ -18,6 +18,8 @@ const StyledMenuIcon = styled(MenuIcon)`
 `
 
 const MenuItem = styled(ExternalLink)`
+    display: flex;
+    align-items: center;
     flex: 1;
     padding: 0.5rem 0.5rem;
     color: ${({ theme }) => theme.text2};
@@ -32,7 +34,8 @@ const MenuItem = styled(ExternalLink)`
 `
 
 const MenuItemInternal = styled(StyledInternalLink)`
-    flex: 1;
+    display: flex;
+    align-items: center;
     padding: 0.5rem 0.5rem;
     color: ${({ theme }) => theme.text2};
     :hover {
@@ -79,7 +82,7 @@ export default function Menu() {
                         <Info size={14} />
                         About
                     </MenuItem>
-                    <MenuItem id="link" href="https://sushiswap.gitbook.io/sushiswap/">
+                    <MenuItem id="link" href="https://docs.sushi.com">
                         <BookOpen size={14} />
                         Docs
                     </MenuItem>

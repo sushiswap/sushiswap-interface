@@ -21,7 +21,6 @@ const ExtendedStyledMenuButton = styled(StyledMenuButton)`
 
 const ExtendedMenuFlyout = styled(MenuFlyout)`
     min-width: 10rem;
-
     ${({ theme }) => theme.mediaWidth.upToMedium`
     max-height: 232px;
     overflow: auto;

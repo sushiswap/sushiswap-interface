@@ -11,81 +11,6 @@ import Numeral from 'numeral'
 
 import Fraction from '../constants/Fraction'
 
-export const toK = (num: string) => {
-    return Numeral(num).format('0.[00]a')
-}
-
-const priceFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2
-})
-
-export const formattedNum = (number: any, usd = false) => {
-    if (isNaN(number) || number === '' || number === undefined) {
-        return usd ? '$0.00' : 0
-    }
-    const num = parseFloat(number)
-
-    if (num > 500000000) {
-        return (usd ? '$' : '') + toK(num.toFixed(0))
-    }
-
-    if (num === 0) {
-        if (usd) {
-            return '$0.00'
-        }
-        return 0
-    }
-
-    if (num < 0.0001 && num > 0) {
-        return usd ? '< $0.0001' : '< 0.0001'
-    }
-
-    if (num > 1000) {
-        return usd
-            ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
-            : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
-    }
-
-    if (usd) {
-        if (num < 0.1) {
-            return '$' + Number(parseFloat(String(num)).toFixed(4))
-        } else {
-            const usdString = priceFormatter.format(num)
-            return '$' + usdString.slice(1, usdString.length)
-        }
-    }
-
-    return Number(parseFloat(String(num)).toFixed(5))
-}
-
-export function formattedPercent(percent: any) {
-    percent = parseFloat(percent)
-    if (!percent || percent === 0) {
-        return '0%'
-    }
-    if (percent < 0.0001 && percent > 0) {
-        return '< 0.0001%'
-    }
-    if (percent < 0 && percent > -0.0001) {
-        return '< 0.0001%'
-    }
-    const fixedPercent = percent.toFixed(2)
-    if (fixedPercent === '0.00') {
-        return '0%'
-    }
-    if (fixedPercent > 0) {
-        if (fixedPercent > 100) {
-            return `${percent?.toFixed(0).toLocaleString()}%`
-        } else {
-            return `${fixedPercent}%`
-        }
-    } else {
-        return `${fixedPercent}%`
-    }
-}
-
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
     if (value) {
         return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
@@ -95,10 +20,17 @@ export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): 
 }
 export const formatToBalance = (value: string | undefined, decimals = 18) => {
     if (value) {
-        return { value: ethers.utils.parseUnits(value, decimals), decimals: decimals }
+        return { value: ethers.utils.parseUnits(Number(value).toFixed(decimals), decimals), decimals: decimals }
     } else {
         return { value: BigNumber.from(0), decimals: decimals }
     }
+}
+
+export function isWETH(value: any): string {
+    if (value.toLowerCase() === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
+        return 'ETH'
+    }
+    return value
 }
 
 export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
@@ -129,8 +61,6 @@ export function isAddress(value: any): string | false {
         return false
     }
 }
-
-// returns the checksummed address if the address is valid, otherwise returns false
 export function isAddressString(value: any): string {
     try {
         return getAddress(value)
@@ -139,14 +69,160 @@ export function isAddressString(value: any): string {
     }
 }
 
-// returns the checksummed address if the address is valid, otherwise returns false
-export function isWETH(value: any): string {
-    if (value.toLowerCase() === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
-        return 'ETH'
-    }
-    return value
+// Vision Formatting
+export const toK = (num: string) => {
+    return Numeral(num).format('0.[00]a')
 }
 
+// using a currency library here in case we want to add more in future
+const priceFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+})
+
+export const formattedNum = (number: any, usd = false) => {
+    if (isNaN(number) || number === '' || number === undefined) {
+        return usd ? '$0.00' : '0'
+    }
+    const num = parseFloat(number)
+
+    if (num > 500000000) {
+        return (usd ? '$' : '') + toK(num.toFixed(0))
+    }
+
+    if (num === 0) {
+        if (usd) {
+            return '$0.00'
+        }
+        return '0'
+    }
+
+    if (num < 0.0001 && num > 0) {
+        return usd ? '< $0.0001' : '< 0.0001'
+    }
+
+    if (num > 1000) {
+        return usd
+            ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+            : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+    }
+
+    if (usd) {
+        if (num < 0.1) {
+            return '$' + Number(parseFloat(String(num)).toFixed(4))
+        } else {
+            const usdString = priceFormatter.format(num)
+            return '$' + usdString.slice(1, usdString.length)
+        }
+    }
+
+    return parseFloat(String(num)).toFixed(5)
+}
+
+export function gradientColor(percent: any) {
+    percent = parseFloat(percent)
+    if (percent < 100 && percent >= 90) {
+        return '#ff3a31'
+    }
+    if (percent < 90 && percent >= 80) {
+        return '#f85815'
+    }
+    if (percent < 80 && percent >= 70) {
+        return '#ed7000'
+    }
+    if (percent < 70 && percent >= 60) {
+        return '#de8400'
+    }
+    if (percent < 60 && percent >= 50) {
+        return '#ce9700'
+    }
+    if (percent < 50 && percent >= 40) {
+        return '#bba700'
+    }
+    if (percent < 40 && percent >= 30) {
+        return '#a6b500'
+    }
+    if (percent < 30 && percent >= 20) {
+        return '#8fc21b'
+    }
+    if (percent < 20 && percent >= 10) {
+        return '#73ce42'
+    }
+    if (percent < 10 && percent >= 0) {
+        return '#4ed864'
+    }
+    if (percent == 0) {
+        return '#4ed864'
+    }
+    return '#ff3a31'
+}
+
+export function gradientColorAsc(percent: any) {
+    percent = parseFloat(percent)
+    if (percent < 10 && percent >= 0) {
+        return '#ff3a31'
+    }
+    if (percent < 20 && percent >= 10) {
+        return '#f85815'
+    }
+    if (percent < 30 && percent >= 20) {
+        return '#ed7000'
+    }
+    if (percent < 40 && percent >= 30) {
+        return '#de8400'
+    }
+    if (percent < 50 && percent >= 40) {
+        return '#ce9700'
+    }
+    if (percent < 60 && percent >= 50) {
+        return '#bba700'
+    }
+    if (percent < 70 && percent >= 60) {
+        return '#a6b500'
+    }
+    if (percent < 80 && percent >= 70) {
+        return '#8fc21b'
+    }
+    if (percent < 90 && percent >= 80) {
+        return '#73ce42'
+    }
+    if (percent < 100 && percent >= 90) {
+        return '#4ed864'
+    }
+    if (percent >= 100) {
+        return '#4ed864'
+    }
+    return '#ff3a31'
+}
+
+export function formattedPercent(percentString: any) {
+    const percent = parseFloat(percentString)
+    if (!percent || percent === 0) {
+        return '0%'
+    }
+    if (percent < 0.0001 && percent > 0) {
+        return '< 0.0001%'
+    }
+    if (percent < 0 && percent > -0.0001) {
+        return '< 0.0001%'
+    }
+    const fixedPercent = percent.toFixed(2)
+    if (fixedPercent === '0.00') {
+        return '0%'
+    }
+    if (Number(fixedPercent) > 0) {
+        if (Number(fixedPercent) > 100) {
+            return `${percent?.toFixed(0).toLocaleString()}%`
+        } else {
+            return `${fixedPercent}%`
+        }
+    } else {
+        return `${fixedPercent}%`
+    }
+}
+
+// Multichain Explorer
 const builders = {
     etherscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
         const prefix = `https://${chainName ? `${chainName}.` : ''}etherscan.io`

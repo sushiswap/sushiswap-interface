@@ -1,33 +1,33 @@
 [
-  {
-    "inputs": [
-      { "internalType": "address", "name": "who", "type": "address" },
-      { "internalType": "uint256[]", "name": "pids", "type": "uint256[]" }
-    ],
-    "name": "getPendingSushi",
-    "outputs": [
-      {
-        "components": [
-          { "internalType": "uint256", "name": "totalAllocPoint", "type": "uint256" },
-          { "internalType": "uint256", "name": "poolLength", "type": "uint256" }
+    {
+        "inputs": [
+            { "internalType": "address", "name": "who", "type": "address" },
+            { "internalType": "uint256[]", "name": "pids", "type": "uint256[]" }
         ],
-        "internalType": "struct BoringSushiPending.PoolsInfo",
-        "name": "",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          { "internalType": "uint256", "name": "pid", "type": "uint256" },
-          { "internalType": "address", "name": "lpToken", "type": "address" },
-          { "internalType": "uint256", "name": "allocPoint", "type": "uint256" },
-          { "internalType": "uint256", "name": "pendingSushi", "type": "uint256" }
+        "name": "getPendingSushi",
+        "outputs": [
+            {
+                "components": [
+                    { "internalType": "uint256", "name": "totalAllocPoint", "type": "uint256" },
+                    { "internalType": "uint256", "name": "poolLength", "type": "uint256" }
+                ],
+                "internalType": "struct BoringSushiPending.PoolsInfo",
+                "name": "",
+                "type": "tuple"
+            },
+            {
+                "components": [
+                    { "internalType": "uint256", "name": "pid", "type": "uint256" },
+                    { "internalType": "address", "name": "lpToken", "type": "address" },
+                    { "internalType": "uint256", "name": "allocPoint", "type": "uint256" },
+                    { "internalType": "uint256", "name": "pendingSushi", "type": "uint256" }
+                ],
+                "internalType": "struct BoringSushiPending.PoolInfo[]",
+                "name": "",
+                "type": "tuple[]"
+            }
         ],
-        "internalType": "struct BoringSushiPending.PoolInfo[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  }
+        "stateMutability": "view",
+        "type": "function"
+    }
 ]

@@ -61,7 +61,6 @@ const useSushiBar = () => {
     const leave = useCallback(
         // todo: this should be updated with BigNumber as opposed to string
         async (amount: string) => {
-            console.log('barContract:', barContract)
             try {
                 const tx = await barContract?.leave(ethers.utils.parseUnits(amount))
                 return addTransaction(tx, { summary: 'Leave SushiBar' })

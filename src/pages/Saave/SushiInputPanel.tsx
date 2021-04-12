@@ -11,7 +11,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance, { BalanceProps } from '../../sushi-hooks/queries/useTokenBalance'
+import useTokenBalance, { BalanceProps } from 'sushi-hooks/useTokenBalance'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatFromBalance, formatToBalance } from '../../utils'
 
@@ -157,7 +157,6 @@ export default function CurrencyInputPanel({
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
     const handleApprove = useCallback(async () => {
-        //console.log("SEEKING APPROVAL");
         try {
             setRequestedApproval(true)
             const txHash = await approve()
@@ -187,8 +186,6 @@ export default function CurrencyInputPanel({
     const handleMaxDeposit = useCallback(() => {
         maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
     }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
-
-    console.log('state:', depositValue, maxSelected)
 
     return (
         <>
@@ -254,7 +251,6 @@ export default function CurrencyInputPanel({
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
-                                    console.log('onClick, maxSelected:', maxSelected)
                                     if (maxSelected) {
                                         await saave(maxDepositAmountInput)
                                     } else {

@@ -44,6 +44,7 @@ export const Input = React.memo(function InnerInput({
     value,
     onUserInput,
     placeholder,
+    className,
     ...rest
 }: {
     value: string | number
@@ -75,9 +76,11 @@ export const Input = React.memo(function InnerInput({
             type="text"
             pattern="^[0-9]*[.,]?[0-9]*$"
             placeholder={placeholder || '0.0'}
+            min={0}
             minLength={1}
             maxLength={79}
             spellCheck="false"
+            className={className}
         />
     )
 })

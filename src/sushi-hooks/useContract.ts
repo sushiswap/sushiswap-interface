@@ -1,6 +1,8 @@
 import { Contract } from '@ethersproject/contracts'
 import { ChainId } from '@sushiswap/sdk'
 import { useMemo } from 'react'
+
+import ERC20_ABI from '../constants/sushiAbis/erc20.json'
 import SUSHI_ABI from '../constants/sushiAbis/sushi.json'
 import MASTERCHEF_ABI from '../constants/sushiAbis/masterchef.json'
 import FACTORY_ABI from '../constants/sushiAbis/factory.json'
@@ -8,22 +10,25 @@ import ROUTER_ABI from '../constants/sushiAbis/router.json'
 import BAR_ABI from '../constants/sushiAbis/bar.json'
 import MAKER_ABI from '../constants/sushiAbis/maker.json'
 import TIMELOCK_ABI from '../constants/sushiAbis/timelock.json'
+
 import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
-import BASEINFO_ABI from '../constants/sushiAbis/baseInfo.json'
-import USERINFO_ABI from '../constants/sushiAbis/userInfo.json'
-import MAKERINFO_ABI from '../constants/sushiAbis/makerInfo.json'
-import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
-import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
-import PENDING_ABI from '../constants/sushiAbis/pending.json'
-import BENTOHELPER_ABI from '../constants/sushiAbis/bentoHelper.json'
+import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
+import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
+import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
+import CHAINLINK_ORACLE_ABI from '../constants/sushiAbis/chainlinkOracle.json'
+
+import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
 import SUSHIROLL_ABI from '@sushiswap/core/build/abi/SushiRoll.json'
 
-import SAAVE_ABI from '../constants/sushiAbis/saave.json'
+import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
+import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
+import PENDING_ABI from '../constants/sushiAbis/pending.json'
 
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { getContract } from '../utils'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/index'
+import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 
 // Factory address already in SDK
 import {
@@ -36,14 +41,14 @@ import {
     ROUTER_ADDRESS
 } from '@sushiswap/sdk'
 
-import { BORING_HELPER_ADDRESS } from '../constants'
-import BORING_HELPER_ABI from '../constants/sushiAbis/boring-helper.json'
+import {
+    BENTOBOX_ADDRESS,
+    KASHI_ADDRESS,
+    KASHI_HELPER_ADDRESS,
+    SUSHISWAP_SWAPPER_ADDRESS,
+    CHAINLINK_ORACLE_ADDRESS
+} from 'kashi'
 
-// Need factory address from Uni as well
-import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
-
-// withSignerIfPossible equals true emulates the web3 .call({account: address})
-// use withSignerIfPossible if the functions need the current wallet address to sign
 // returns null on errors
 export function useContract(
     address: string | undefined | false,
@@ -63,9 +68,26 @@ export function useContract(
     }, [address, ABI, library, withSignerIfPossible, account])
 }
 
+export function usePendingContract(): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029'
+                break
+        }
+    }
+    return useContract(address, PENDING_ABI, false)
+}
+
 export function useMulticallContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
+}
+
+export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
+    return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
@@ -103,6 +125,22 @@ export function useTimelockContract(): Contract | null {
     return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
 
+export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract(BENTOBOX_ADDRESS, BENTOBOX_ABI, withSignerIfPossible)
+}
+
+export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract(KASHI_ADDRESS, KASHIPAIR_ABI, withSignerIfPossible)
+}
+
+export function useSushiSwapSwapper(): Contract | null {
+    return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
+}
+
+export function useChainlinkOracle(): Contract | null {
+    return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
+}
+
 // experimental:
 export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
@@ -129,67 +167,30 @@ export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
     return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 
-// TODO: Leaving these alone for now, since I'm unsure of whether these should
-// live in sushiswap/sdk or somewhere else. Sync with Bart on BentoBox.
-export function useBentoBoxContract(): Contract | null {
+// legacy:
+export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
-                break
-            case ChainId.ROPSTEN:
-                address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
-                break
-        }
-    }
-    return useContract(address, BENTOBOX_ABI, false)
+    return useContract(chainId ? KASHI_HELPER_ADDRESS[chainId] : undefined, KASHIPAIRHELPER_ABI, withSignerIfPossible)
 }
 
-export function useBaseInfoContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0xBb7dF27209ea65Ae02Fe02E76cC1C0247765dcFF'
-                break
-            case ChainId.ROPSTEN:
-                address = '0x39Bb002c6400f7F1679090fdAc722BC08e2a8C1e'
-                break
-        }
-    }
-    return useContract(address, BASEINFO_ABI, false)
+export function useUniV2FactoryContract(): Contract | null {
+    return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
 }
 
-export function useUserInfoContract(): Contract | null {
+export function useSushiRollContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
     if (chainId) {
         switch (chainId) {
             case ChainId.MAINNET:
-                address = '0x39Ec6247dE60d885239aD0bcE1bC9f1553f4EF75'
+                address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
                 break
             case ChainId.ROPSTEN:
-                address = '0xe8f852908A61e074032382E9B5058F86fe2a0ea7'
+                address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
                 break
         }
     }
-    return useContract(address, USERINFO_ABI, false)
-}
-
-export function useMakerInfoContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0x001c92D884fe654A6C5438fa85a222aA400C1999'
-                break
-        }
-    }
-    return useContract(address, MAKERINFO_ABI, false)
+    return useContract(address, SUSHIROLL_ABI, true)
 }
 
 export function useDashboardContract(): Contract | null {
@@ -222,57 +223,4 @@ export function useDashboard2Contract(): Contract | null {
         }
     }
     return useContract(address, DASHBOARD2_ABI, false)
-}
-
-export function usePendingContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029'
-                break
-        }
-    }
-    return useContract(address, PENDING_ABI, false)
-}
-
-export function useBentoHelperContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
-                break
-            case ChainId.ROPSTEN:
-                address = '0x74420A0a3828796694Dc9ac5ce35419e8fBb6dec'
-                break
-        }
-    }
-    return useContract(address, BENTOHELPER_ABI, false)
-}
-
-export function useUniV2FactoryContract(): Contract | null {
-    return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
-}
-
-export function useSushiRollContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
-                break
-            case ChainId.ROPSTEN:
-                address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
-                break
-        }
-    }
-    return useContract(address, SUSHIROLL_ABI, true)
-}
-
-export function useBoringHelperContract(): Contract | null {
-    return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
 }

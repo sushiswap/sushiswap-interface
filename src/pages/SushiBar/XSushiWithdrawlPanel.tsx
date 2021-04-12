@@ -11,7 +11,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import useTheme from '../../hooks/useTheme'
 
-import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import useTokenBalance from 'sushi-hooks/useTokenBalance'
 import { BigNumber } from '@ethersproject/bignumber'
 import { formatFromBalance, formatToBalance } from '../../utils'
 
@@ -155,11 +155,9 @@ export default function CurrencyInputPanel({
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
     const handleApprove = useCallback(async () => {
-        //console.log("SEEKING APPROVAL");
         try {
             setRequestedApproval(true)
             const txHash = await approve()
-            console.log(txHash)
             // user rejected tx or didn't go thru
             if (!txHash) {
                 setRequestedApproval(false)

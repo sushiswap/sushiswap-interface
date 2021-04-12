@@ -9,20 +9,26 @@ module.exports = {
             blue: '#27B0E6',
             pink: '#FA52A0',
             purple: '#A755DD',
-            background: '#0D0415'
+            background: '#0D0415',
+            'dark-1000': '#0D0415',
+            'dark-900': '#161522',
+            'dark-800': '#202231',
+            'dark-pink': '#221825',
+            'dark-blue': '#0F182A',
+            red: '#FF3838'
         },
-        // screens: {
-        //   sm: '480px',
-        //   md: '768px',
-        //   lg: '976px',
-        //   xl: '1440px'
-        // },
+        screens: {
+            sm: '480px',
+            md: '768px',
+            lg: '976px',
+            xl: '1440px'
+        },
         extend: {
-            // backgroundImage: theme => ({
-            //   ...defaultTheme.backgroundImage,
-            //   'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
-            //   'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')",
-            //  }),
+            backgroundImage: theme => ({
+                ...defaultTheme.backgroundImage,
+                'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
+                'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')"
+            }),
             fontFamily: {
                 sans: ['DM Sans', ...defaultTheme.fontFamily.sans]
             },
@@ -40,11 +46,6 @@ module.exports = {
             },
             backgroundColor: {
                 ...defaultTheme.backgroundColor,
-                'dark-1000': '#0D0415',
-                'dark-900': '#161522',
-                'dark-800': '#202231',
-                'dark-pink': '#221825',
-                'dark-blue': '#0F182A',
                 input: '#2E3348'
             },
             boxShadow: {
@@ -53,21 +54,29 @@ module.exports = {
                 'blue-glow': '0px 57px 90px -47px rgba(39, 176, 230, 0.17)',
                 'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
                 'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)'
+            },
+            ringWidth: {
+                ...defaultTheme.ringWidth,
+                DEFAULT: '1px'
             }
         }
     },
     variants: {
-        extend: {}
+        extend: {
+            opacity: ['disabled'],
+            backgroundColor: ['checked', 'disabled'],
+            borderColor: ['checked', 'disabled']
+        }
     },
     plugins: [
         require('@tailwindcss/typography'),
-        //require('@tailwindcss/forms'),
+        require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio')
     ],
     corePlugins: {
         fontFamily: true,
-        preflight: false
+        preflight: true
     },
     purge: process.env.NODE_ENV !== 'development' ? ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'] : false
 }

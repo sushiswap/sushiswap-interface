@@ -8,7 +8,7 @@ import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'sushi
 import sushiData from '@sushiswap/sushi-data'
 import _ from 'lodash'
 
-import { useBoringHelperContract } from './useContract'
+import { useBoringHelperContract } from 'hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../constants/Fraction'
 

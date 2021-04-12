@@ -24,8 +24,6 @@ function useTokenBalance(tokenAddress: string) {
 
     const getBalance = async (contract: Contract | null, owner: string | null | undefined): Promise<BalanceProps> => {
         try {
-            //console.log('token_contract:', contract)
-
             if (account && chainId && contract?.address === WETH[chainId].address) {
                 const ethBalance = await library?.getBalance(account)
                 return { value: BigNumber.from(ethBalance), decimals: 18 }
@@ -38,7 +36,6 @@ function useTokenBalance(tokenAddress: string) {
             //todo: return as BigNumber as opposed toString since information will
             //return Fraction.from(BigNumber.from(balance), BigNumber.from(10).pow(decimals)).toString()
         } catch (e) {
-            console.log('getBalance_error:', e)
             return { value: BigNumber.from(0), decimals: 18 }
         }
     }

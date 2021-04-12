@@ -20,11 +20,11 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import { MaxButton } from '../Pool/styleds'
 import { ChevronRight } from 'react-feather'
 import { formatUnits, parseUnits } from '@ethersproject/units'
-import { ZERO_ADDRESS } from '../../constants'
 import MetamaskError from '../../types/MetamaskError'
 import { useSushiRollContract } from '../../sushi-hooks/useContract'
 import Circle from '../../assets/images/blue-loader.svg'
 import LPToken from '../../types/LPToken'
+import { AddressZero } from '@ethersproject/constants'
 
 const Border = styled.div`
     width: 100%;
@@ -40,7 +40,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     const onPressMax = useCallback(() => {
         if (state.selectedLPToken) {
             let balance = state.selectedLPToken.balance.raw
-            if (state.selectedLPToken.address === ZERO_ADDRESS) {
+            if (state.selectedLPToken.address === AddressZero) {
                 // Subtract 0.01 ETH for gas fee
                 const fee = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
                 balance = JSBI.greaterThan(balance, fee) ? JSBI.subtract(balance, fee) : ZERO

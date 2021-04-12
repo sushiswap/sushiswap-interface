@@ -12,21 +12,18 @@ export const StyledMenuButton = styled.button`
   background-color: ${({ theme }) => theme.bg3};
   padding: 0.15rem 0.5rem;
   border-radius: 10px;
-
   :hover,
   :focus {
     cursor: pointer;
     outline: none;
     background-color: ${({ theme }) => theme.bg4};
   }
-
   svg {
     margin-top: 2px;
   }
   > * {
     stroke: ${({ theme }) => theme.text1};
   }
-
   // ${({ theme }) => theme.mediaWidth.upToMedium`
   //   margin-left: 4px;
   // `};
@@ -40,7 +37,6 @@ export const StyledMenu = styled.div`
     position: relative;
     border: none;
     text-align: left;
-
     ${({ theme }) => theme.mediaWidth.upToExtra2Small`
     margin-left: 0.2rem;
   `};

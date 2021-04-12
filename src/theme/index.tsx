@@ -4,11 +4,15 @@ import styled, {
     ThemeProvider as StyledComponentsThemeProvider,
     createGlobalStyle,
     css,
-    DefaultTheme
+    DefaultTheme,
+    keyframes
 } from 'styled-components'
 import { useIsDarkMode } from '../state/user/hooks'
 import { Text, TextProps } from 'rebass'
 import { Colors } from './styled'
+
+//import BentoBackground from '../assets/kashi/bento-background.jpg'
+import BrickWallBackground from '../assets/kashi/brickwall.png'
 
 export * from './components'
 
@@ -182,12 +186,19 @@ export const TYPE = {
 
 export const FixedGlobalStyle = createGlobalStyle`
 html, input, textarea, button {
+  font-family: "DM Sans", sans-serif;
+  font-display: fallback;
+}
+input, textarea {
   font-family: 'Inter', sans-serif;
   font-display: fallback;
 }
 @supports (font-variation-settings: normal) {
-  html, input, textarea, button {
-    font-family: 'Inter var', sans-serif;
+  html, button {
+    font-family: "DM Sans", sans-serif;
+  }
+  input, textarea {
+    // font-family: 'Inter var', sans-serif;
   }
 }
 
@@ -216,8 +227,13 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
-  
 }
+`
+
+const breatheAnimation = keyframes`
+  0% {filter: hue-rotate(0deg) brightness(1)}
+  100% {filter: hue-rotate(90deg) brightness(1.5)}
+  100% {filter: hue-rotate(360deg) brightness(1)}
 `
 
 export const ThemedGlobalStyle = createGlobalStyle`

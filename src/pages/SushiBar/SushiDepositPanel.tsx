@@ -1,20 +1,16 @@
 import React, { useState, useCallback } from 'react'
-import { Currency, Pair } from '@sushiswap/sdk'
+import { Pair } from '@sushiswap/sdk'
 import styled from 'styled-components'
 import { darken } from 'polished'
-
-import { RowBetween } from '../../components/Row'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import { TYPE } from '../../theme'
-
-import { useActiveWeb3React } from '../../hooks'
+import { RowBetween } from 'components/Row'
+import { Input as NumericalInput } from 'components/NumericalInput'
+import { TYPE } from 'theme'
+import { useActiveWeb3React } from 'hooks'
 import { useTranslation } from 'react-i18next'
-import useTheme from '../../hooks/useTheme'
-
-import useTokenBalance from '../../sushi-hooks/queries/useTokenBalance'
+import useTheme from 'hooks/useTheme'
+import useTokenBalance from 'sushi-hooks/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
-
-import useSushiBar from '../../sushi-hooks/useSushiBar'
+import useSushiBar from 'sushi-hooks/useSushiBar'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -154,11 +150,9 @@ export default function CurrencyInputPanel({
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
     const handleApprove = useCallback(async () => {
-        //console.log("SEEKING APPROVAL");
         try {
             setRequestedApproval(true)
             const txHash = await approve()
-            console.log(txHash)
             // user rejected tx or didn't go thru
             if (!txHash) {
                 setRequestedApproval(false)

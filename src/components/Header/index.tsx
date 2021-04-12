@@ -47,7 +47,6 @@ const HeaderFrame = styled.div`
     width: 100%;
     top: 0;
     position: relative;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding: 1rem;
     z-index: 2;
     ${({ theme }) => theme.mediaWidth.upToMedium`
@@ -364,6 +363,11 @@ export default function Header() {
                                 Vesting
                             </StyledNavLink>
                         </HideSmall>
+                    )}
+                    {[ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId || 1) != -1 && (
+                        <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
+                            Apps
+                        </StyledNavLink>
                     )}
                     {chainId && (
                         <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
