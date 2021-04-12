@@ -17,7 +17,7 @@ import { useCurrency } from 'hooks/Tokens'
 const ZERO = JSBI.BigInt(0)
 
 export function useZapState(): AppState['zap'] {
-  return useSelector<AppState, AppState['zap']>(state => state.zap);
+  return useSelector<AppState, AppState['zap']>(state => state.zap)
 }
 
 export function useZapActionHandlers(
@@ -26,7 +26,7 @@ export function useZapActionHandlers(
   onFieldInput: (typedValue: string) => void
 } {
   const dispatch = useDispatch<AppDispatch>()
-  
+
   const onFieldInput = useCallback(
     (typedValue: string) => {
       dispatch(typeInput({ field: Field.CURRENCY, typedValue, noLiquidity: noLiquidity === true }))
@@ -35,15 +35,15 @@ export function useZapActionHandlers(
   )
 
   return {
-    onFieldInput,
+    onFieldInput
   }
 }
 
 export function useDerivedZapInfo(
   currency: Currency | undefined,
-  pairAddress: string | undefined,
+  pairAddress: string | undefined
 ): {
-  currency:  Currency | undefined
+  currency: Currency | undefined
   pair?: Pair | null
   pairState: PairState
   currencyBalance: CurrencyAmount | undefined
@@ -62,10 +62,7 @@ export function useDerivedZapInfo(
   const { typedValue } = useZapState()
 
   // token
-  const currencyData = useMemo(
-    () => currency ?? undefined,
-    [currency]
-  )
+  const currencyData = useMemo(() => currency ?? undefined, [currency])
 
   // Pool Data
   const { token0, token1 } = usePool(pairAddress)
@@ -80,48 +77,35 @@ export function useDerivedZapInfo(
     pairState === PairState.NOT_EXISTS || Boolean(totalSupply && JSBI.equal(totalSupply.raw, ZERO))
 
   // balance
-  const balances = useCurrencyBalances(account ?? undefined, [
-    currency
-  ])
+  const balances = useCurrencyBalances(account ?? undefined, [currency])
   const currencyBalance = balances[0]
 
-  const parsedAmount = tryParseAmount(typedValue, currency);
+  const parsedAmount = tryParseAmount(typedValue, currency)
 
   // This math is currently incorrect
   // Shouldn't be diving by 2
   // Should instead be determining the x to y ratio
-  const tradeAmount = tryParseAmount(
-    (+typedValue / 2).toString(),
-    currency
-  );
+  const tradeAmount = tryParseAmount((+typedValue / 2).toString(), currency)
 
   // Zapping in requires either one or two trades
   // Only one trade if providing one of the input tokens of the pair
   // Two trades if providing neither
   const isTradingCurrency0 = currency?.symbol === currency0?.symbol
-  const isTradingCurrency1 = 
-    currency?.symbol === currency1?.symbol 
-    || currency === ETHER
+  const isTradingCurrency1 = currency?.symbol === currency1?.symbol || currency === ETHER
 
-  let currencyZeroOutput = useTradeExactIn(
-      tradeAmount,
-      currency0 ?? undefined
-    )?.outputAmount
-  let currencyOneOutput = useTradeExactIn(
-      tradeAmount, 
-      currency1 ?? undefined
-    )?.outputAmount
+  let currencyZeroOutput = useTradeExactIn(tradeAmount, currency0 ?? undefined)?.outputAmount
+  let currencyOneOutput = useTradeExactIn(tradeAmount, currency1 ?? undefined)?.outputAmount
   const bestTradeExactIn = useTradeExactIn(
-    tradeAmount, 
-    !isTradingCurrency0 && !isTradingCurrency1 
+    tradeAmount,
+    !isTradingCurrency0 && !isTradingCurrency1
       ? currency0 ?? undefined
       : isTradingCurrency0
-        ? currency1 ?? undefined
-        : currency0 ?? undefined
-    )
+      ? currency1 ?? undefined
+      : currency0 ?? undefined
+  )
 
   // We reset the values here in case the user is trading the base tokens.
-  // We need to reset because don't have a good way to not call diff # of 
+  // We need to reset because don't have a good way to not call diff # of
   // hooks each render otherwsie
   if (isTradingCurrency0) currencyZeroOutput = tradeAmount
   if (isTradingCurrency1) currencyOneOutput = tradeAmount

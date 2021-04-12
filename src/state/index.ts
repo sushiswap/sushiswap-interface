@@ -24,7 +24,7 @@ const store = configureStore({
     burn,
     multicall,
     lists,
-    zap,
+    zap
   },
   middleware: [...getDefaultMiddleware({ thunk: false, immutableCheck: false }), save({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })

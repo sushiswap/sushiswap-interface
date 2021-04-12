@@ -4,27 +4,22 @@ import { useContract } from '../useContract'
 import { isAddress } from '../../utils'
 
 const usePool = (poolAddress: string | undefined) => {
-  const [poolData, setPoolData] = useState<any>({});
+  const [poolData, setPoolData] = useState<any>({})
   const address = isAddress(poolAddress)
   const poolContract = useContract(address, IUniswapV2PairABI, false)
 
   const fetchPoolData = useCallback(async () => {
-    const [
-      reserves,
-      token0,
-      token1, 
-      totalSupply
-    ] = await Promise.all([
+    const [reserves, token0, token1, totalSupply] = await Promise.all([
       poolContract?.getReserves(),
       poolContract?.token0(),
       poolContract?.token1(),
-      poolContract?.totalSupply(),
+      poolContract?.totalSupply()
     ])
 
     setPoolData({
       reserves,
       token0,
-      token1, 
+      token1,
       totalSupply
     })
   }, [poolAddress])

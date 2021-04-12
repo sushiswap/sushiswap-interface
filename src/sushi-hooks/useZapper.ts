@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Currency, CurrencyAmount } from '@sushiswap/sdk';
+import { Currency, CurrencyAmount } from '@sushiswap/sdk'
 import { useZapperContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 import { useActiveWeb3React } from '../hooks'
-import { useApproveCallback } from 'hooks/useApproveCallback';
+import { useApproveCallback } from 'hooks/useApproveCallback'
 
 const useZapper = (currency?: Currency) => {
   const { chainId } = useActiveWeb3React()
@@ -28,16 +28,14 @@ const useZapper = (currency?: Currency) => {
           true,
           {
             // Value for transfer should be 0 unless it's an ETH transfer
-            value: fromTokenContractAddress === '0x0000000000000000000000000000000000000000' 
-              ? amount 
-              : 0
+            value: fromTokenContractAddress === '0x0000000000000000000000000000000000000000' ? amount : 0
           }
         )
         return addTransaction(tx, { summary: `Zap ${amount?.toSignificant(6)} ${currency?.symbol}` })
       } catch (e) {
         console.log(e)
       }
-    }, 
+    },
     [chainId]
   )
 
