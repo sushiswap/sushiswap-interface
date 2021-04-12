@@ -99,7 +99,7 @@ export const USD_CURRENCY: { [chainId in ChainId]?: Currency } = {
     [ChainId.BSC_TESTNET]: { address: '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd', decimals: 18 },
     [ChainId.HECO]: { address: '0x0298c2b32eaE4da002a15f36fdf7615BEa3DA047', decimals: 8 },
     [ChainId.HECO_TESTNET]: { address: '', decimals: 6 },
-    [ChainId.MATIC]: { address: '', decimals: 6 },
+    [ChainId.MATIC]: { address: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', decimals: 6 },
     [ChainId.MATIC_TESTNET]: { address: '', decimals: 6 },
     [ChainId.XDAI]: { address: '', decimals: 6 }
 }

@@ -105,7 +105,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
 async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
     let logs = []
     let success = false
-    if (chainId != ChainId.BSC) {
+    if (chainId != ChainId.BSC && chainId != ChainId.MATIC) {
         logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
         success = true
     }
