@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 const TYPE = {
     warning: {
-        color: 'bg-yellow-50 border-yellow-400 text-yellow-700',
+        color: 'bg-yellow-400 bg-opacity-25 text-high-emphesis',
         icon: (
             <svg
                 className="h-5 w-5 text-yellow-400"
@@ -20,10 +20,10 @@ const TYPE = {
         )
     },
     error: {
-        color: 'bg-red-50 border-red-400 text-red-700',
+        color: 'bg-red bg-opacity-25 text-high-emphesis',
         icon: (
             <svg
-                className="h-5 w-5 text-red-400"
+                className="h-5 w-5 text-red"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -54,7 +54,7 @@ export default function Alert({
     }
     const { color, icon } = TYPE[type]
     return (
-        <div className={`block w-full border-l-4 text-sm p-4 ${color} ${className}`}>
+        <div className={`block w-full rounded text-sm p-4 ${color} ${className}`}>
             <div className="flex">
                 <div className="flex-shrink-0">{icon}</div>
                 <div className="ml-3">
