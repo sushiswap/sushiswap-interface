@@ -4,15 +4,15 @@ import { ChevronLeft } from 'react-feather'
 
 const FILLED = {
     default: '',
-    blue: 'bg-blue w-full rounded text-base text-high-emphesis px-4 py-3',
-    pink: 'bg-pink w-full rounded text-base text-high-emphesis px-4 py-3',
+    blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
+    pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
     gradient: 'bg-gradient-to-r from-blue to-pink'
 }
 
 const OUTLINED = {
     default: '',
-    blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1',
-    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1',
+    blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1 hover:bg-opacity-40',
+    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1 hover:bg-opacity-40',
     gradient: 'bg-gradient-to-r from-blue to-pink'
 }
 
@@ -51,7 +51,7 @@ function Button({
 
 export default Button
 
-export function BackButton({ defaultRoute, className }: { defaultRoute: string, className?: string }): JSX.Element {
+export function BackButton({ defaultRoute, className }: { defaultRoute: string; className?: string }): JSX.Element {
     const history = useHistory()
     return (
         <Button
@@ -62,7 +62,7 @@ export function BackButton({ defaultRoute, className }: { defaultRoute: string, 
                     history.goBack()
                 }
             }}
-            className={`p-2 mr-4 rounded-full bg-dark-900 w-10 h-10 ${className || ""}`}
+            className={`p-2 mr-4 rounded-full bg-dark-900 w-10 h-10 ${className || ''}`}
         >
             <ChevronLeft className={'w-6 h-6'} />
         </Button>
