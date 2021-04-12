@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Currency, CurrencyAmount } from '@sushiswap/sdk';
+import { Currency, CurrencyAmount } from '@sushiswap/sdk'
 import { useZapperContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
