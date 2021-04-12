@@ -59,7 +59,7 @@ export default function Layout({ left = undefined, children = undefined, right =
                                 }`}
                             >
                                 <BentoBoxLogo className="fill-current h-auto w-6 mr-2" />
-                                <div className="whitespace-nowrap text-base">My BentoBox</div>
+                                <div className="whitespace-nowrap text-base">BentoBox</div>
                             </NavLink>
                             {netWorth && (
                                 <div
