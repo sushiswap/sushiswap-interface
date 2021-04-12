@@ -10,7 +10,6 @@ import { AutoColumn } from '../../components/Column'
 import { LightCard } from '../../components/Card'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 
-
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
   width: 100%;
@@ -51,7 +50,7 @@ const PoolList = () => {
         decimals: 18,
         getSymbol: () => '',
         getName: () => ''
-      } 
+      }
     },
     {
       poolName: 'ETH-UNI',
@@ -69,38 +68,44 @@ const PoolList = () => {
         decimals: 18,
         getSymbol: () => 'UNI',
         getName: () => 'Uniswap'
-      } 
-    },
+      }
+    }
   ]
 
   return (
     <PageWrapper>
       <Text>Select a pool to zap into</Text>
-      { mockData.map(pool => {
+      {mockData.map(pool => {
         return (
           <StyledPositionCard>
             <AutoColumn gap="12px">
-            <FixedHeightRow>
-                  <RowFixed>
-                    <Text fontWeight={500} fontSize={16}>
-                      {pool.poolName}
-                    </Text>
-                  </RowFixed>
-                </FixedHeightRow>
-                <FixedHeightRow>
-                  <RowFixed>
-                    <DoubleCurrencyLogo currency0={pool.asset0} currency1={pool.asset1} margin={true} size={20} />
-                  </RowFixed>
-                  <RowFixed>
-                    <ButtonEmpty padding="6px 8px" borderRadius="20px" width="fit-content" as={Link} to={`/zap/${pool.poolAddress}/ETH`}>
-                      Add Liquidity
-                    </ButtonEmpty>
-                  </RowFixed>
-                </FixedHeightRow>
+              <FixedHeightRow>
+                <RowFixed>
+                  <Text fontWeight={500} fontSize={16}>
+                    {pool.poolName}
+                  </Text>
+                </RowFixed>
+              </FixedHeightRow>
+              <FixedHeightRow>
+                <RowFixed>
+                  <DoubleCurrencyLogo currency0={pool.asset0} currency1={pool.asset1} margin={true} size={20} />
+                </RowFixed>
+                <RowFixed>
+                  <ButtonEmpty
+                    padding="6px 8px"
+                    borderRadius="20px"
+                    width="fit-content"
+                    as={Link}
+                    to={`/zap/${pool.poolAddress}/ETH`}
+                  >
+                    Add Liquidity
+                  </ButtonEmpty>
+                </RowFixed>
+              </FixedHeightRow>
             </AutoColumn>
           </StyledPositionCard>
         )
-      }) }
+      })}
     </PageWrapper>
   )
 }

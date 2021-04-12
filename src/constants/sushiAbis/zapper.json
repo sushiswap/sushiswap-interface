@@ -1,329 +1,416 @@
-[{
-	"inputs": [{
-		"internalType": "uint16",
-		"name": "_goodwill",
-		"type": "uint16"
-	}, {
-		"internalType": "uint16",
-		"name": "_affiliateSplit",
-		"type": "uint16"
-	}],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "constructor"
-}, {
-	"anonymous": false,
-	"inputs": [{
-		"indexed": true,
-		"internalType": "address",
-		"name": "previousOwner",
-		"type": "address"
-	}, {
-		"indexed": true,
-		"internalType": "address",
-		"name": "newOwner",
-		"type": "address"
-	}],
-	"name": "OwnershipTransferred",
-	"type": "event"
-}, {
-	"anonymous": false,
-	"inputs": [{
-		"indexed": false,
-		"internalType": "address",
-		"name": "sender",
-		"type": "address"
-	}, {
-		"indexed": false,
-		"internalType": "address",
-		"name": "pool",
-		"type": "address"
-	}, {
-		"indexed": false,
-		"internalType": "uint256",
-		"name": "tokensRec",
-		"type": "uint256"
-	}],
-	"name": "zapIn",
-	"type": "event"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "address",
-		"name": "_FromTokenContractAddress",
-		"type": "address"
-	}, {
-		"internalType": "address",
-		"name": "_pairAddress",
-		"type": "address"
-	}, {
-		"internalType": "uint256",
-		"name": "_amount",
-		"type": "uint256"
-	}, {
-		"internalType": "uint256",
-		"name": "_minPoolTokens",
-		"type": "uint256"
-	}, {
-		"internalType": "address",
-		"name": "_swapTarget",
-		"type": "address"
-	}, {
-		"internalType": "bytes",
-		"name": "swapData",
-		"type": "bytes"
-	}, {
-		"internalType": "address",
-		"name": "affiliate",
-		"type": "address"
-	}, {
-		"internalType": "bool",
-		"name": "transferResidual",
-		"type": "bool"
-	}],
-	"name": "ZapIn",
-	"outputs": [{
-		"internalType": "uint256",
-		"name": "",
-		"type": "uint256"
-	}],
-	"payable": true,
-	"stateMutability": "payable",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [],
-	"name": "_owner",
-	"outputs": [{
-		"internalType": "address payable",
-		"name": "",
-		"type": "address"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [{
-		"internalType": "address",
-		"name": "",
-		"type": "address"
-	}, {
-		"internalType": "address",
-		"name": "",
-		"type": "address"
-	}],
-	"name": "affiliateBalance",
-	"outputs": [{
-		"internalType": "uint256",
-		"name": "",
-		"type": "uint256"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [{
-		"internalType": "address",
-		"name": "",
-		"type": "address"
-	}],
-	"name": "affiliates",
-	"outputs": [{
-		"internalType": "bool",
-		"name": "",
-		"type": "bool"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "address[]",
-		"name": "tokens",
-		"type": "address[]"
-	}],
-	"name": "affilliateWithdraw",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [{
-		"internalType": "address",
-		"name": "",
-		"type": "address"
-	}],
-	"name": "feeWhitelist",
-	"outputs": [{
-		"internalType": "bool",
-		"name": "",
-		"type": "bool"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [],
-	"name": "goodwill",
-	"outputs": [{
-		"internalType": "uint16",
-		"name": "",
-		"type": "uint16"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [],
-	"name": "isOwner",
-	"outputs": [{
-		"internalType": "bool",
-		"name": "",
-		"type": "bool"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [],
-	"name": "owner",
-	"outputs": [{
-		"internalType": "address",
-		"name": "",
-		"type": "address"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [],
-	"name": "renounceOwnership",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "address",
-		"name": "_affiliate",
-		"type": "address"
-	}, {
-		"internalType": "bool",
-		"name": "_status",
-		"type": "bool"
-	}],
-	"name": "set_affiliate",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "address",
-		"name": "zapAddress",
-		"type": "address"
-	}, {
-		"internalType": "bool",
-		"name": "status",
-		"type": "bool"
-	}],
-	"name": "set_feeWhitelist",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "uint16",
-		"name": "_new_affiliateSplit",
-		"type": "uint16"
-	}],
-	"name": "set_new_affiliateSplit",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "uint16",
-		"name": "_new_goodwill",
-		"type": "uint16"
-	}],
-	"name": "set_new_goodwill",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [],
-	"name": "stopped",
-	"outputs": [{
-		"internalType": "bool",
-		"name": "",
-		"type": "bool"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [],
-	"name": "toggleContractActive",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": true,
-	"inputs": [{
-		"internalType": "address",
-		"name": "",
-		"type": "address"
-	}],
-	"name": "totalAffiliateBalance",
-	"outputs": [{
-		"internalType": "uint256",
-		"name": "",
-		"type": "uint256"
-	}],
-	"payable": false,
-	"stateMutability": "view",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "address payable",
-		"name": "newOwner",
-		"type": "address"
-	}],
-	"name": "transferOwnership",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}, {
-	"constant": false,
-	"inputs": [{
-		"internalType": "address[]",
-		"name": "tokens",
-		"type": "address[]"
-	}],
-	"name": "withdrawTokens",
-	"outputs": [],
-	"payable": false,
-	"stateMutability": "nonpayable",
-	"type": "function"
-}]
+[
+  {
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_goodwill",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "_affiliateSplit",
+        "type": "uint16"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokensRec",
+        "type": "uint256"
+      }
+    ],
+    "name": "zapIn",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_FromTokenContractAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_pairAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minPoolTokens",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_swapTarget",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "swapData",
+        "type": "bytes"
+      },
+      {
+        "internalType": "address",
+        "name": "affiliate",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "transferResidual",
+        "type": "bool"
+      }
+    ],
+    "name": "ZapIn",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "_owner",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "affiliateBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "affiliates",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "tokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "affilliateWithdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "feeWhitelist",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "goodwill",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "isOwner",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_affiliate",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "set_affiliate",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "zapAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "set_feeWhitelist",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_new_affiliateSplit",
+        "type": "uint16"
+      }
+    ],
+    "name": "set_new_affiliateSplit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "_new_goodwill",
+        "type": "uint16"
+      }
+    ],
+    "name": "set_new_goodwill",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "stopped",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "toggleContractActive",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "totalAffiliateBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "tokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "withdrawTokens",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
