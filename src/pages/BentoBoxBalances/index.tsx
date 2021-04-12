@@ -56,12 +56,14 @@ export default function BentoBalances(): JSX.Element {
                         <div className="flex w-full justify-between">
                             <div className="hidden md:flex items-center">
                                 <BackButton defaultRoute="/bento" />
-                                <div className="text-lg mr-2">My BentoBox</div>
+                                <div className="text-3xl text-high-emphesis mr-2">My BentoBox</div>
                                 <div className="text-lg text-secondary">
                                     {formattedNum(
-                                        balances?.reduce((previousValue, currentValue) => {
-                                            return previousValue.add(currentValue.bento.usdValue)
-                                        }, ZERO).toFixed(6),
+                                        balances
+                                            ?.reduce((previousValue, currentValue) => {
+                                                return previousValue.add(currentValue.bento.usdValue)
+                                            }, ZERO)
+                                            .toFixed(6),
                                         true
                                     )}
                                 </div>

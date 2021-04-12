@@ -13,10 +13,16 @@ export interface CheckboxProps {
 
 function Checkbox({
     color,
-    className,
+    className = '',
     ...rest
 }: CheckboxProps & React.InputHTMLAttributes<HTMLInputElement>): JSX.Element {
-    return <input type="checkbox" className={`appearance-none ${COLOR[color]} ${className}`} {...rest} />
+    return (
+        <input
+            type="checkbox"
+            className={`appearance-none h-5 w-5 bg-dark-1000 border-dark-800 ${COLOR[color]} ${className}`}
+            {...rest}
+        />
+    )
 }
 
 export default Checkbox
