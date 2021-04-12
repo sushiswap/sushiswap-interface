@@ -56,16 +56,62 @@ export default function LendingMarkets(): JSX.Element | null {
                 )}
                 <div>
                     <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
-                        <ListHeaderWithSort className="" onSort={() => requestSort('search')} headerKey={"search"} sortConfig={sortConfig}>Markets</ListHeaderWithSort>
-                        <ListHeaderWithSort className="hidden md:flex" onSort={() => requestSort('asset.symbol')} headerKey={"asset.symbol"} sortConfig={sortConfig}>Lending</ListHeaderWithSort>
-                        <ListHeaderWithSort className="hidden md:flex" onSort={() => requestSort('collateral.symbol')} headerKey={"collateral.symbol"} sortConfig={sortConfig}>Collateral</ListHeaderWithSort>
-                        <ListHeaderWithSort className="hidden lg:flex" onSort={() => requestSort('oracle.name')} headerKey={"oracle.name"} sortConfig={sortConfig}>
-                            Oracle{' '}
-                            <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />                            
+                        <ListHeaderWithSort
+                            className=""
+                            onSort={() => requestSort('search')}
+                            headerKey={'search'}
+                            sortConfig={sortConfig}
+                        >
+                            Markets
                         </ListHeaderWithSort>
-                        <ListHeaderWithSort className="justify-end" onSort={() => requestSort('currentSupplyAPR.value', 'descending')} headerKey={"currentSupplyAPR.value"} sortConfig={sortConfig}>APR</ListHeaderWithSort>
-                        <ListHeaderWithSort className="hidden sm:flex justify-end" onSort={() => requestSort('utilization.value', 'descending')} headerKey={"utilization.value"} sortConfig={sortConfig}>Borrowed</ListHeaderWithSort>
-                        <ListHeaderWithSort className="justify-end" onSort={() => requestSort('currentAllAssets.usdValue', 'descending')} headerKey={"currentAllAssets.usdValue"} sortConfig={sortConfig}>Total</ListHeaderWithSort>
+                        <ListHeaderWithSort
+                            className="hidden md:flex"
+                            onSort={() => requestSort('asset.symbol')}
+                            headerKey={'asset.symbol'}
+                            sortConfig={sortConfig}
+                        >
+                            Lending
+                        </ListHeaderWithSort>
+                        <ListHeaderWithSort
+                            className="hidden md:flex"
+                            onSort={() => requestSort('collateral.symbol')}
+                            headerKey={'collateral.symbol'}
+                            sortConfig={sortConfig}
+                        >
+                            Collateral
+                        </ListHeaderWithSort>
+                        <ListHeaderWithSort
+                            className="hidden lg:flex"
+                            onSort={() => requestSort('oracle.name')}
+                            headerKey={'oracle.name'}
+                            sortConfig={sortConfig}
+                        >
+                            Oracle <QuestionHelper text="The onchain oracle that tracks the pricing for this pair" />
+                        </ListHeaderWithSort>
+                        <ListHeaderWithSort
+                            className="justify-center sm:justify-end"
+                            onSort={() => requestSort('currentSupplyAPR.value', 'descending')}
+                            headerKey={'currentSupplyAPR.value'}
+                            sortConfig={sortConfig}
+                        >
+                            APR
+                        </ListHeaderWithSort>
+                        <ListHeaderWithSort
+                            className="hidden sm:flex justify-end"
+                            onSort={() => requestSort('utilization.value', 'descending')}
+                            headerKey={'utilization.value'}
+                            sortConfig={sortConfig}
+                        >
+                            Borrowed
+                        </ListHeaderWithSort>
+                        <ListHeaderWithSort
+                            className="justify-end"
+                            onSort={() => requestSort('currentAllAssets.usdValue', 'descending')}
+                            headerKey={'currentAllAssets.usdValue'}
+                            sortConfig={sortConfig}
+                        >
+                            Total
+                        </ListHeaderWithSort>
                     </div>
                     <div className="flex-col space-y-2">
                         {items &&
@@ -92,14 +138,21 @@ export default function LendingMarkets(): JSX.Element | null {
                                                         />
                                                     </div>
                                                     <div className="sm:items-end md:hidden">
-                                                        <div><strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}</div>
+                                                        <div>
+                                                            <strong>{pair.asset.symbol}</strong> /{' '}
+                                                            {pair.collateral.symbol}
+                                                        </div>
                                                         <div className="mt-0 text-white-500 text-xs block lg:hidden">
                                                             {pair.oracle.name}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="text-left hidden md:block"><strong>{pair.asset.symbol}</strong></div>
-                                                <div className="text-left hidden md:block">{pair.collateral.symbol}</div>
+                                                <div className="text-left hidden md:block">
+                                                    <strong>{pair.asset.symbol}</strong>
+                                                </div>
+                                                <div className="text-left hidden md:block">
+                                                    {pair.collateral.symbol}
+                                                </div>
                                                 <div className="text-left hidden lg:block">{pair.oracle.name}</div>
                                                 <div className="text-center sm:text-right">
                                                     {formattedPercent(pair.currentSupplyAPR.string)}
@@ -125,11 +178,8 @@ export default function LendingMarkets(): JSX.Element | null {
                         {items &&
                             items.length > 0 &&
                             items.map(pair => {
-                                return (
-                                    <div key={pair.address}>
-                                        {pair.address}
-                                    </div>
-                        )})}
+                                return <div key={pair.address}>{pair.address}</div>
+                            })}
                     </div>
                 </div>
                 <div className="w-full py-6 text-center">

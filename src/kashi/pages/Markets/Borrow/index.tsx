@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import QuestionHelper from '../../../../components/QuestionHelper'
-import { getTokenIcon } from '../../../functions'
+import { getTokenIcon, ZERO } from '../../../functions'
 import { formattedNum, formattedPercent } from '../../../../utils'
 import { useKashiPairs } from '../../../context'
 import { Card, MarketHeader, Layout } from '../../../components'
@@ -11,6 +11,7 @@ import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
 import BorrowPositions from './Positions'
 import { useActiveWeb3React } from 'hooks'
+import { getCurrency } from 'kashi/constants'
 
 export default function BorrowMarkets(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -27,8 +28,11 @@ export default function BorrowMarkets(): JSX.Element {
         return pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)
     })
 
+    const netWorth: string = pairs.reduce((a, b) => a.add(b.netWorth), ZERO).toFixed(getCurrency(chainId).decimals)
+
     return (
         <Layout
+            netWorth={netWorth}
             left={
                 <Card
                     className="h-full bg-dark-900"
@@ -162,16 +166,20 @@ export default function BorrowMarkets(): JSX.Element {
                                                     />
                                                 </div>
                                                 <div className="sm:items-end md:hidden">
-                                                    <div><strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}</div>
+                                                    <div>
+                                                        <strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}
+                                                    </div>
                                                     <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
                                                         {pair.oracle.name}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="text-white hidden md:block"><strong>{pair.asset.symbol}</strong></div>
+                                            <div className="text-white hidden md:block">
+                                                <strong>{pair.asset.symbol}</strong>
+                                            </div>
                                             <div className="hidden md:block">{pair.collateral.symbol}</div>
                                             <div className="hidden lg:block">{pair.oracle.name}</div>
-                                            <div className="text-center sm:text-right">
+                                            <div className="text-right">
                                                 <div>
                                                     {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
                                                 </div>
