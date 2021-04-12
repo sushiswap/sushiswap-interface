@@ -27,13 +27,13 @@ import { useActiveWeb3React } from '../hooks'
 
 // Factory address already in SDK
 import {
-  FACTORY_ADDRESS,
-  SUSHI_ADDRESS,
-  MASTERCHEF_ADDRESS,
-  BAR_ADDRESS,
-  MAKER_ADDRESS,
-  TIMELOCK_ADDRESS,
-  ROUTER_ADDRESS
+    FACTORY_ADDRESS,
+    SUSHI_ADDRESS,
+    MASTERCHEF_ADDRESS,
+    BAR_ADDRESS,
+    MAKER_ADDRESS,
+    TIMELOCK_ADDRESS,
+    ROUTER_ADDRESS
 } from '@sushiswap/sdk'
 
 import { BORING_HELPER_ADDRESS } from '../constants'
@@ -46,233 +46,233 @@ import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 // use withSignerIfPossible if the functions need the current wallet address to sign
 // returns null on errors
 export function useContract(
-  address: string | undefined | false,
-  ABI: any,
-  withSignerIfPossible = true
+    address: string | undefined | false,
+    ABI: any,
+    withSignerIfPossible = true
 ): Contract | null {
-  const { library, account } = useActiveWeb3React()
+    const { library, account } = useActiveWeb3React()
 
-  return useMemo(() => {
-    if (!address || !ABI || !library) return null
-    try {
-      return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
-    } catch (error) {
-      console.error('Failed to get contract', error)
-      return null
-    }
-  }, [address, ABI, library, withSignerIfPossible, account])
+    return useMemo(() => {
+        if (!address || !ABI || !library) return null
+        try {
+            return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
+        } catch (error) {
+            console.error('Failed to get contract', error)
+            return null
+        }
+    }, [address, ABI, library, withSignerIfPossible, account])
 }
 
 export function useMulticallContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && SUSHI_ADDRESS[chainId], SUSHI_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && SUSHI_ADDRESS[chainId], SUSHI_ABI, withSignerIfPossible)
 }
 
 export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
 }
 
 export function useRouterContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, false)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && BAR_ADDRESS[chainId], BAR_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BAR_ADDRESS[chainId], BAR_ABI, withSignerIfPossible)
 }
 
 export function useMakerContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MAKER_ADDRESS[chainId], MAKER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && MAKER_ADDRESS[chainId], MAKER_ABI, false)
 }
 
 export function useTimelockContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
 
 // experimental:
 export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x364762C00b32c4b448f39efaA9CeFC67a25603ff'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x364762C00b32c4b448f39efaA9CeFC67a25603ff'
+                break
+        }
     }
-  }
-  return useContract(address, SAAVE_ABI, withSignerIfPossible)
+    return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289'
+                break
+        }
     }
-  }
-  return useContract(address, SAAVE_ABI, withSignerIfPossible)
+    return useContract(address, SAAVE_ABI, withSignerIfPossible)
 }
 
 // TODO: Leaving these alone for now, since I'm unsure of whether these should
 // live in sushiswap/sdk or somewhere else. Sync with Bart on BentoBox.
 export function useBentoBoxContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xB5891167796722331b7ea7824F036b3Bdcb4531C'
+                break
+        }
     }
-  }
-  return useContract(address, BENTOBOX_ABI, false)
+    return useContract(address, BENTOBOX_ABI, false)
 }
 
 export function useBaseInfoContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xBb7dF27209ea65Ae02Fe02E76cC1C0247765dcFF'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x39Bb002c6400f7F1679090fdAc722BC08e2a8C1e'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0xBb7dF27209ea65Ae02Fe02E76cC1C0247765dcFF'
+                break
+            case ChainId.ROPSTEN:
+                address = '0x39Bb002c6400f7F1679090fdAc722BC08e2a8C1e'
+                break
+        }
     }
-  }
-  return useContract(address, BASEINFO_ABI, false)
+    return useContract(address, BASEINFO_ABI, false)
 }
 
 export function useUserInfoContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x39Ec6247dE60d885239aD0bcE1bC9f1553f4EF75'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xe8f852908A61e074032382E9B5058F86fe2a0ea7'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x39Ec6247dE60d885239aD0bcE1bC9f1553f4EF75'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xe8f852908A61e074032382E9B5058F86fe2a0ea7'
+                break
+        }
     }
-  }
-  return useContract(address, USERINFO_ABI, false)
+    return useContract(address, USERINFO_ABI, false)
 }
 
 export function useMakerInfoContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x001c92D884fe654A6C5438fa85a222aA400C1999'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x001c92D884fe654A6C5438fa85a222aA400C1999'
+                break
+        }
     }
-  }
-  return useContract(address, MAKERINFO_ABI, false)
+    return useContract(address, MAKERINFO_ABI, false)
 }
 
 export function useDashboardContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0xD132Ce8eA8865348Ac25E416d95ab1Ba84D216AF'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0xD132Ce8eA8865348Ac25E416d95ab1Ba84D216AF'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
+                break
+        }
     }
-  }
-  return useContract(address, DASHBOARD_ABI, false)
+    return useContract(address, DASHBOARD_ABI, false)
 }
 
 export function useDashboard2Contract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x1B13fC91c6f976959E7c236Ac1CF17E052d113Fc'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x1B13fC91c6f976959E7c236Ac1CF17E052d113Fc'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
+                break
+        }
     }
-  }
-  return useContract(address, DASHBOARD2_ABI, false)
+    return useContract(address, DASHBOARD2_ABI, false)
 }
 
 export function usePendingContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029'
+                break
+        }
     }
-  }
-  return useContract(address, PENDING_ABI, false)
+    return useContract(address, PENDING_ABI, false)
 }
 
 export function useBentoHelperContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
-        break
-      case ChainId.ROPSTEN:
-        address = '0x74420A0a3828796694Dc9ac5ce35419e8fBb6dec'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x835766B30eB2dCD07F392c7CB56d16E2141eef4D'
+                break
+            case ChainId.ROPSTEN:
+                address = '0x74420A0a3828796694Dc9ac5ce35419e8fBb6dec'
+                break
+        }
     }
-  }
-  return useContract(address, BENTOHELPER_ABI, false)
+    return useContract(address, BENTOHELPER_ABI, false)
 }
 
 export function useUniV2FactoryContract(): Contract | null {
-  return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
+    return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
 }
 
 export function useSushiRollContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
-        break
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
+                break
+        }
     }
-  }
-  return useContract(address, SUSHIROLL_ABI, true)
+    return useContract(address, SUSHIROLL_ABI, true)
 }
 
 export function useBoringHelperContract(): Contract | null {
-  return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
+    return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
 }
