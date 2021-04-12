@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux'
 import { RowBetween, AutoRow } from '../../components/Row'
 import { ButtonError, ButtonLight, ButtonConfirmed } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
-import { LightCard } from '../../components/Card'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
@@ -67,10 +66,6 @@ const StyledArrowLeft = styled(ArrowLeft)`
 const PoolTokenRow = styled.span`
   display: flex;
   margin: 10px 0;
-`
-
-const InfoCard = styled(DataCard)`
-  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
 `
 
 const PoolInfo = ({ poolAddress, currency }: { poolAddress: string; currency: Currency | undefined }) => {
@@ -169,7 +164,6 @@ const AddSingleSideLiquidity = ({
   },
   history
 }: RouteComponentProps<{ poolAddress?: string; currencyId?: string }>) => {
-  const theme = useContext(ThemeContext)
   const { account, chainId } = useActiveWeb3React()
 
   const currency = useCurrency(currencyId)

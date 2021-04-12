@@ -5,7 +5,7 @@ import { transparentize } from 'polished'
 import { Text } from 'rebass'
 
 import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonPrimaryNormal, ButtonSecondary, ButtonEmpty } from '../../components/Button'
+import { ButtonEmpty } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import { LightCard } from '../../components/Card'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
@@ -31,8 +31,6 @@ const StyledPositionCard = styled(LightCard)`
 `
 
 const PoolList = () => {
-  console.log('rendering')
-  const theme = useContext(ThemeContext)
   const mockData = [
     {
       poolName: 'ETH-WEENUS',
@@ -77,7 +75,7 @@ const PoolList = () => {
       <Text>Select a pool to zap into</Text>
       {mockData.map(pool => {
         return (
-          <StyledPositionCard>
+          <StyledPositionCard key={pool.poolAddress}>
             <AutoColumn gap="12px">
               <FixedHeightRow>
                 <RowFixed>
