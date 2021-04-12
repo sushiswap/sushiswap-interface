@@ -236,15 +236,12 @@ const AddSingleSideLiquidity = ({
   const handleCurrencyASelect = useCallback(
     (currency: Currency) => {
       const newCurrencyId = getCurrencyId(currency)
-      console.log(poolAddress, 'here is the pool Address')
       history.push(`/zap/${poolAddress}/${newCurrencyId}`)
     },
     [history, poolAddress]
   )
 
   const toggleWalletModal = useWalletModalToggle()
-
-  console.log({showApproveFlow, approval, error}, 'SHOULD I SHOW APPROVE??????????')
 
   return (
     <>

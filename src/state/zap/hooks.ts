@@ -122,8 +122,6 @@ export function useDerivedZapInfo(
 
   if (isTradingCurrency0) currencyZeroOutput = tradeAmount
   if (isTradingCurrency1) currencyOneOutput = tradeAmount
-  
-  console.log({ currency, currency0, currency1, currencyZeroOutput, currencyOneOutput, bestTradeExactIn, isTradingCurrency0, isTradingCurrency1 })
 
   const liquidityMinted = useMemo(() => {
     const [tokenAmountA, tokenAmountB] = [
