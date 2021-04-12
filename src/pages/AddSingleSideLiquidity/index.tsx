@@ -1,5 +1,5 @@
-import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@sushiswap/sdk'
-import React, { useContext, useMemo, useCallback } from 'react'
+import { Currency, currencyEquals, ETHER, TokenAmount, WETH, ChainId } from '@sushiswap/sdk'
+import React, { useContext, useMemo, useCallback, useState, useEffect } from 'react'
 import { Link, useParams, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
@@ -7,8 +7,8 @@ import { Text } from 'rebass'
 import { ArrowLeft, Type } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
-import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
+import { RowBetween, RowFixed, AutoRow } from '../../components/Row'
+import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import { LightCard } from '../../components/Card'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -17,6 +17,7 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Settings from '../../components/Settings'
 import PoolList from './PoolList';
 import { DataCard, CardSection } from 'components/earn/styled'
+import Loader from '../../components/Loader'
 
 import { AppDispatch } from 'state'
 import { useCurrency } from '../../hooks/Tokens'
@@ -31,6 +32,7 @@ import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useActiveWeb3React } from 'hooks'
 import { useWalletModalToggle } from 'state/application/hooks'
 import useZapper from 'sushi-hooks/useZapper'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 
 
 const PageWrapper = styled(AutoColumn)`
@@ -96,20 +98,6 @@ const PoolTokenRow = styled.span`
   margin: 10px 0;
 `
 
-// @ts-ignore
-const TypeDefaultCursor = ({ children, ...props }) => (
-  <TYPE.white {...props} style={{ cursor: "default" }}>
-    {children}
-  </TYPE.white>
-)
-
-// @ts-ignore
-const TypeDefaultCursorRight = ({ children, ...props }) => (
-  <TYPE.white {...props} style={{ cursor: "default", textAlign: 'right', marginTop: '10px' }}>
-    {children}
-  </TYPE.white>
-)
-
 const InfoCard = styled(DataCard)`
   background: ${({ theme }) => transparentize(0.5, theme.bg1)};
 `
@@ -118,7 +106,7 @@ const PoolInfo = (
   { poolAddress, currency }: { poolAddress: string, currency: Currency | undefined }
 ) => {
   const { token0, token1, totalSupply, reserves } = usePool(poolAddress)
-  const { liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, currencyZeroOutput, currencyOneOutput, estimatedSlippage } = useDerivedZapInfo(currency ?? undefined, poolAddress)
+  const { liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, currencyZeroOutput, currencyOneOutput, bestTrade } = useDerivedZapInfo(currency ?? undefined, poolAddress)
   const currency0 = useCurrency(token0)
   const currency1 = useCurrency(token1)
 
@@ -165,7 +153,7 @@ const PoolInfo = (
               <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">Pool Share</TYPE.darkGray>
               <TYPE.small  marginBottom="8px" textAlign="right" fontSize="14px">{poolTokenPercentage?.toSignificant(6) || '0'}%</TYPE.small>
               <TYPE.darkGray fontSize="14px" marginBottom="2px">Est. Slippage</TYPE.darkGray>
-              <TYPE.small textAlign="right" fontSize="14px">{estimatedSlippage?.toSignificant(6) || '0'}%</TYPE.small>
+              <TYPE.small textAlign="right" fontSize="14px">{bestTrade?.priceImpact?.toSignificant(6) || '0'}%</TYPE.small>
             </div>
         </RowBetween>
       </PoolBreakDownWrapper>
@@ -201,18 +189,53 @@ const AddSingleSideLiquidity = ({
   history
 }: RouteComponentProps<{ poolAddress?: string; currencyId?: string }>) => {
   const theme = useContext(ThemeContext)
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const currency = useCurrency(currencyId)
   const { typedValue } = useZapState()
   const { onFieldInput } = useZapActionHandlers(false)
-  const { currencyBalance, noLiquidity, parsedAmount, error } = useDerivedZapInfo(currency ?? undefined, undefined)
+  const { currencyBalance, noLiquidity, parsedAmount, error, bestTrade } = useDerivedZapInfo(currency ?? undefined, poolAddress)
   const formattedAmount = parsedAmount?.toSignificant(6) ?? '';
-  const { zapIn } = useZapper()
+  const { zapIn } = useZapper(currency ?? undefined)
+
+  const route = bestTrade?.route
+  const noRoute = !route
+
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.MAINNET:
+        address = '0xcff6eF0B9916682B37D80c19cFF8949bc1886bC2'
+        break
+      case ChainId.ROPSTEN:
+        address = '0x169c54a9826caf9f14bd30688296021533fe23ae'
+        break
+    }
+  }  
+
+  // // check whether the user has approved the router on the input token
+  const [approval, approveCallback] = useApproveCallback(parsedAmount, address)
+
+  // check if user has gone through approval process, used to show two step buttons, reset on token change
+  const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
+
+  // mark when a user has submitted an approval, reset onTokenSelection for input field
+  useEffect(() => {
+    if (approval === ApprovalState.PENDING) {
+      setApprovalSubmitted(true)
+    }
+  }, [approval, approvalSubmitted])
+
+  // show approve flow when: no error on inputs, not approved or pending, or approved in current session
+  const showApproveFlow =
+    !error &&
+    (approval === ApprovalState.NOT_APPROVED ||
+      approval === ApprovalState.PENDING ||
+      (approvalSubmitted && approval === ApprovalState.APPROVED))
 
   const handleCurrencyASelect = useCallback(
-    (currencyA: Currency) => {
-      const newCurrencyId = getCurrencyId(currencyA)
+    (currency: Currency) => {
+      const newCurrencyId = getCurrencyId(currency)
       console.log(poolAddress, 'here is the pool Address')
       history.push(`/zap/${poolAddress}/${newCurrencyId}`)
     },
@@ -220,6 +243,8 @@ const AddSingleSideLiquidity = ({
   )
 
   const toggleWalletModal = useWalletModalToggle()
+
+  console.log({showApproveFlow, approval, error}, 'SHOULD I SHOW APPROVE??????????')
 
   return (
     <>
@@ -250,20 +275,63 @@ const AddSingleSideLiquidity = ({
                   <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
                     Connect Wallet
                   </ButtonLight>
+                ) : !typedValue ? (
+                  <ButtonLight style={{ marginTop: '20px' }}>
+                    <TYPE.main mb="4px">Enter an amount</TYPE.main>
+                  </ButtonLight>
+                ) : noRoute ? (
+                  <ButtonLight style={{ marginTop: '20px' }}>
+                    <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
+                  </ButtonLight>
+                ) : showApproveFlow ? (
+                  <RowBetween>
+                    <ButtonConfirmed
+                      onClick={approveCallback}
+                      disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                      width="48%"
+                      altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
+                      confirmed={approval === ApprovalState.APPROVED}
+                    >
+                      {approval === ApprovalState.PENDING ? (
+                        <AutoRow gap="6px" justify="center">
+                          Approving <Loader stroke="white" />
+                        </AutoRow>
+                      ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
+                        'Approved'
+                      ) : (
+                        'Approve ' + currency?.getSymbol(chainId)
+                      )}
+                    </ButtonConfirmed>
+                    <ButtonError
+                      onClick={() => zapIn(
+                        currencyId === 'ETH' ? '0x0000000000000000000000000000000000000000' : currencyId,
+                        poolAddress, 
+                        parsedAmount,
+                        0,
+                        // Hard coded WETH for now
+                        '0x37f4d05b879c364187caa02678ba041f7b5f5c71'
+                      )}
+                      width="48%"
+                      id="swap-button"
+                      disabled={approval !== ApprovalState.APPROVED}
+                    >
+                    <Text fontSize={20} fontWeight={500}>
+                      {error ?? 'Zap'}
+                    </Text>
+                    </ButtonError>
+                  </RowBetween>
                 ) : (
                   <ButtonError
                     style={{ marginTop: '20px' }} 
-                    // disabled={!isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED}
-                    disabled={!parsedAmount || error !== undefined}
+                    disabled={!parsedAmount || error !== undefined || approval !== ApprovalState.APPROVED}
                     onClick={() => zapIn(
                       currencyId === 'ETH' ? '0x0000000000000000000000000000000000000000' : currencyId,
                       poolAddress, 
-                      parsedAmount?.raw.toString(),
+                      parsedAmount,
                       0,
-                      // Hard coded WETH for now, this needs to be based on optimal routing I think
-                      '0xc778417e063141139fce010982780140aa0cd5ab'
+                      // Hard coded WETH for now
+                      '0x37f4d05b879c364187caa02678ba041f7b5f5c71'
                     )}
-                    // error={!parsedAmount || error !== undefined}
                   >
                   <Text fontSize={20} fontWeight={500}>
                     {error ?? 'Zap'}

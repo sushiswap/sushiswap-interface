@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ETHER, JSBI, Pair, Percent, Price, TokenAmount } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, ETHER, JSBI, Pair, Percent, Price, TokenAmount, Trade } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PairState, usePair } from '../../data/Reserves'
@@ -43,20 +43,18 @@ export function useDerivedZapInfo(
   currency: Currency | undefined,
   pairAddress: string | undefined,
 ): {
-  // dependentField: Field
   currency:  Currency | undefined
   pair?: Pair | null
   pairState: PairState
   currencyBalance: CurrencyAmount | undefined
   parsedAmount: CurrencyAmount | undefined
   tradeAmount: CurrencyAmount | undefined
-  // price?: Price
   noLiquidity?: boolean
   currencyZeroOutput?: CurrencyAmount | undefined
   currencyOneOutput?: CurrencyAmount | undefined
   liquidityMinted?: TokenAmount
   poolTokenPercentage?: Percent
-  estimatedSlippage?: any
+  bestTrade?: Trade
   error?: string
 } {
   const { account, chainId } = useActiveWeb3React()
@@ -96,29 +94,36 @@ export function useDerivedZapInfo(
     (+typedValue / 2).toString(),
     currency
   );
-  const isTradingCurrency0 = currency?.symbol === currency0?.symbol ? true : false
-  const isTradingCurrency1 = currency?.symbol === currency0?.symbol ? true : false
 
-  const currencyZeroOutput = isTradingCurrency0
-    ? tradeAmount
-    : useTradeExactIn(
+  // Zapping in requires either one or two trades
+  // Only one trade if providing one of the input tokens of the pair
+  // Two trades if providing neither
+  const isTradingCurrency0 = currency?.symbol === currency0?.symbol
+  const isTradingCurrency1 = 
+    currency?.symbol === currency1?.symbol 
+    || currency === ETHER
+
+  let currencyZeroOutput = useTradeExactIn(
       tradeAmount,
       currency0 ?? undefined
     )?.outputAmount
-  const currencyOneOutput = isTradingCurrency1
-    ? tradeAmount
-    : useTradeExactIn(
+  let currencyOneOutput = useTradeExactIn(
       tradeAmount, 
       currency1 ?? undefined
     )?.outputAmount
   const bestTradeExactIn = useTradeExactIn(
     tradeAmount, 
-    isTradingCurrency0 
-      ? currency1 ?? undefined
-      : currency0 ?? undefined
+    !isTradingCurrency0 && !isTradingCurrency1 
+      ? currency0 ?? undefined
+      : isTradingCurrency0
+        ? currency1 ?? undefined
+        : currency0 ?? undefined
     )
+
+  if (isTradingCurrency0) currencyZeroOutput = tradeAmount
+  if (isTradingCurrency1) currencyOneOutput = tradeAmount
   
-  console.log({currencyZeroOutput, currencyOneOutput, bestTradeExactIn})
+  console.log({ currency, currency0, currency1, currencyZeroOutput, currencyOneOutput, bestTradeExactIn, isTradingCurrency0, isTradingCurrency1 })
 
   const liquidityMinted = useMemo(() => {
     const [tokenAmountA, tokenAmountB] = [
@@ -153,36 +158,6 @@ export function useDerivedZapInfo(
     error = 'Insufficient ' + currency?.getSymbol(chainId) + ' balance'
   }
 
-  // We should check here which route is better (token0 or token1)
-  // And provide that to the zap in contract as the swap target 
-  // const estimatedOutputValue = tryParseAmount((+typedValue * 0.000000002).toString(), currency)
-
-  // // // liquidity minted
-  // const liquidityMined = useMemo(() => {
-  //   // const {  }
-  // })
-
-  // const liquidityMinted = useMemo(() => {
-  //   const { [Field.CURRENCY]: currencyAAmount, [Field.CURRENCY]: currencyBAmount } = parsedAmounts
-  //   const [tokenAmountA, tokenAmountB] = [
-  //     wrappedCurrencyAmount(currencyAAmount, chainId),
-  //     wrappedCurrencyAmount(currencyBAmount, chainId)
-  //   ]
-  //   if (pair && totalSupply && tokenAmountA && tokenAmountB) {
-  //     return pair.getLiquidityMinted(totalSupply, tokenAmountA, tokenAmountB)
-  //   } else {
-  //     return undefined
-  //   }
-  // }, [chainId, pair, totalSupply])
-
-  // const poolTokenPercentage = useMemo(() => {
-  //   if (liquidityMinted && totalSupply) {
-  //     return new Percent(liquidityMinted.raw, totalSupply.add(liquidityMinted).raw)
-  //   } else {
-  //     return undefined
-  //   }
-  // }, [liquidityMinted, totalSupply])
-
   return {
     currency: currencyData,
     currencyBalance,
@@ -196,6 +171,6 @@ export function useDerivedZapInfo(
     poolTokenPercentage,
     currencyZeroOutput,
     currencyOneOutput,
-    estimatedSlippage: bestTradeExactIn?.priceImpact
+    bestTrade: bestTradeExactIn ?? undefined
   }
 }
