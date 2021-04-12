@@ -14,12 +14,14 @@ import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { BackButton } from 'kashi/components'
 import { ZERO } from 'kashi/functions/math'
+import { getCurrency } from 'kashi'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
 
 export default function BentoBalances(): JSX.Element {
+    const { chainId } = useActiveWeb3React()
     const balances = useBentoBalances()
 
     // Search Setup
@@ -64,7 +66,7 @@ export default function BentoBalances(): JSX.Element {
                                             ?.reduce((previousValue, currentValue) => {
                                                 return previousValue.add(currentValue.bento.usdValue)
                                             }, ZERO)
-                                            .toFixed(6),
+                                            .toFixed(getCurrency(chainId).decimals),
                                         true
                                     )}
                                 </span>

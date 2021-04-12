@@ -227,7 +227,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
     ],
     [ChainId.MATIC]: [
         { symbol: 'AAVE', name: 'AAVE Token', address: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', decimals: 18 },
-        { symbol: 'BTC', name: 'Bitcoin', address: '	0x3D417087f8Fcacf77feb6cF40DcBc764bF2f033a', decimals: 8 },
+        { symbol: 'BTC', name: 'Bitcoin', address: '0x3D417087f8Fcacf77feb6cF40DcBc764bF2f033a', decimals: 8 },
         { symbol: 'DAI', name: 'Dai Stablecoin', address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', decimals: 18 },
         { symbol: 'ETH', name: 'Ethereum', address: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb', decimals: 18 },
 
@@ -237,9 +237,6 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             address: '0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39',
             decimals: 18
         },
-
-        // Which?
-        { symbol: 'MATIC', name: 'Matic', address: '0x0000000000000000000000000000000000001010', decimals: 18 },
         {
             symbol: 'WMATIC',
             name: 'Wrapped Matic',
@@ -1028,7 +1025,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
-        '	0x87Ea38c9F24264Ec1Fff41B04ec94a97Caf99941': {
+        '0x87Ea38c9F24264Ec1Fff41B04ec94a97Caf99941': {
             from: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
             to: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
             decimals: 18,
@@ -1341,14 +1338,14 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             toDecimals: 18
         },
         '0x327e23A4855b6F663a28c5161541d69Af8973302': {
-            from: '0x0000000000000000000000000000000000001010',
+            from: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
             to: '0x1E8954b2b29CC5ae4952044cF71645E61309bfCb',
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
         },
         '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0': {
-            from: '0x0000000000000000000000000000000000001010',
+            from: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
             fromDecimals: 18,

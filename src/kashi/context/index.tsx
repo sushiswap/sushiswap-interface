@@ -7,9 +7,7 @@ import { takeFee, toElastic } from '../functions'
 import { ethers } from 'ethers'
 import { KASHI_ADDRESS, getCurrency } from '../constants'
 import { useBoringHelperContract } from 'hooks/useContract'
-import { useDefaultTokens } from 'hooks/Tokens'
 import { getOracle } from '../entities'
-import useInterval from 'hooks/useInterval'
 import { BigNumber } from '@ethersproject/bignumber'
 import _ from 'lodash'
 import { e10, minimum, ZERO } from 'kashi/functions/math'
@@ -17,6 +15,8 @@ import { rpcToObj } from 'kashi/functions/utils'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
 import { useBlockNumber } from 'state/application/hooks'
+import { bentobox } from '@sushiswap/sushi-data'
+import { useAllTokens } from 'hooks/Tokens'
 
 enum ActionType {
     UPDATE = 'UPDATE',
@@ -84,7 +84,7 @@ export const KashiContext = createContext<{
     dispatch: () => null
 })
 
-const reducer: React.Reducer<State, Reducer> = (state, action) => {
+const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
     switch (action.type) {
         case ActionType.SYNC:
             return {
@@ -102,7 +102,25 @@ const reducer: React.Reducer<State, Reducer> = (state, action) => {
     }
 }
 
-function GetPairsFromLogs(logs: any) {
+async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
+    let logs = []
+    let success = false
+    if (chainId != ChainId.BSC) {
+        logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
+        success = true
+    }
+    if (!success) {
+        logs = ((await bentobox.clones({masterAddress: '0x2cba6ab6574646badc84f0544d05059e57a5dc42', chainId})) as any).map((clone: any) => {
+            return {
+                args: {
+                    masterContract: '0x2cba6ab6574646badc84f0544d05059e57a5dc42',
+                    cloneAddress: clone.address,
+                    data: clone.data
+                }
+            }
+        })
+    }
+
     return logs.map((log: any) => {
         const deployParams = ethers.utils.defaultAbiCoder.decode(
             ['address', 'address', 'address', 'bytes'],
@@ -141,7 +159,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const bentoBoxContract = useBentoBoxContract()
 
     // Default token list fine for now, might want to more to the broader collection later.
-    const tokens = useDefaultTokens()
+    const tokens = useAllTokens()
 
     const updatePairs = useCallback(
         async function() {
@@ -149,17 +167,19 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
 
                 // Get the deployed pairs from the logs and decode
-                const logPairs = GetPairsFromLogs(
-                    await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
-                )
+                const logPairs = await GetPairs(bentoBoxContract, chainId || 1)
+                console.log(logPairs)
 
                 // Filter all pairs by supported oracles and verify the oracle setup
                 const allPairAddresses = logPairs
                     .filter((pair: any) => getOracle(pair, chain, tokens).valid)
                     .map((pair: any) => pair.address)
 
+                console.log(account, allPairAddresses)
+
                 // Get full info on all the verified pairs
                 const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
+                console.log("pairs", pairs)
 
                 // Get a list of all tokens in the pairs
                 const pairTokens = new Tokens()
@@ -173,6 +193,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 // Get balances, bentobox info and allowences for the tokens
                 const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
                 const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
+                console.log("balances", balances)
+
                 const missingTokens: any[] = []
                 balances.forEach((balance: any, i: number) => {
                     if (tokens[balance.token]) {

@@ -2855,10 +2855,10 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@sushiswap/sushi-data@^1.0.7":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.8.tgz#36a77a3c822089eaeea98a64c4337ae8c700c64e"
-  integrity sha512-4Vm83jFo5+iNTZqP6jDYB482s8OeSNulfNWJG97eDL/LfvmS4W81reDZueJlObSff8RKjWERzmzIn2mIg0kt5Q==
+"@sushiswap/sushi-data@1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.11.tgz#9b0ebf672c5b6b19821d0edfe9a4156fa0eff218"
+  integrity sha512-9ApR4R1QTTls6hIJ/5n25EPLZUZR6VAwqfuuJMxCs/BgAfkczuqJOCmUE18ksUWsQpQrwFj99n4+eV7CNmrmnA==
   dependencies:
     bluebird "^3.7.2"
     commander "6.1.0"
@@ -10186,9 +10186,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-"graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
+"graph-results-pager@git+https://github.com/LufyCZ/graph-results-pager.git":
   version "1.0.3"
-  resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
+  resolved "git+https://github.com/LufyCZ/graph-results-pager.git#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 
