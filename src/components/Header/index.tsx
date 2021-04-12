@@ -396,7 +396,7 @@ export default function Header() {
                     {/* <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
           </ExtendedStyledMenuButton> */}
-                    <LanguageSwitch />
+                    {/* <LanguageSwitch /> */}
                     <Menu />
                 </HeaderElementWrap>
             </HeaderControls>
