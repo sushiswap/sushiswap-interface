@@ -224,22 +224,22 @@ export default function Pool() {
               </EmptyProposals>
             )}
 
-            {chainId === ChainId.MAINNET && (
-              <AutoColumn justify={'center'} gap="xs">
-                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                  {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
-                  <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
-                    {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
-                  </StyledInternalLink>
-                </Text>
+            <AutoColumn justify={'center'} gap="xs">
+              <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
+                <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
+                  {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
+                </StyledInternalLink>
+              </Text>
+              {chainId === ChainId.MAINNET && (
                 <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                   Have Liquidity on Uniswap?{' '}
                   <StyledInternalLink id="migrate-pool-link" to={'/migrate/v2'}>
                     Migrate Now.
                   </StyledInternalLink>
                 </Text>
-              </AutoColumn>
-            )}
+              )}
+            </AutoColumn>
           </AutoColumn>
         </AutoColumn>
       </PageWrapper>
