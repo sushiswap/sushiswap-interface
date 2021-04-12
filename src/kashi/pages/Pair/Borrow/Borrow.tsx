@@ -129,7 +129,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 new Warning(
                     displayBorrowValue.length > 0 &&
                         borrowAmount.gt(nextMaxBorrowMinimum.sub(pair.currentUserBorrowAmount.value)),
-                    "You don' have enough collateral to borrow this amount.",
+                    "You don't have enough collateral to borrow this amount.",
                     true,
                     new Warning(
                         displayBorrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
