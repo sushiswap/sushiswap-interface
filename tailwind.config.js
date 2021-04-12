@@ -14,7 +14,8 @@ module.exports = {
             'dark-900': '#161522',
             'dark-800': '#202231',
             'dark-pink': '#221825',
-            'dark-blue': '#0F182A'
+            'dark-blue': '#0F182A',
+            red: '#FF3838'
         },
         screens: {
             sm: '480px',
@@ -63,8 +64,8 @@ module.exports = {
     variants: {
         extend: {
             opacity: ['disabled'],
-            backgroundColor: ['checked'],
-            borderColor: ['checked']
+            backgroundColor: ['checked', 'disabled'],
+            borderColor: ['checked', 'disabled']
         }
     },
     plugins: [

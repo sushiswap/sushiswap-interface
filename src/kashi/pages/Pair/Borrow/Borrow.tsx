@@ -129,7 +129,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 new Warning(
                     displayBorrowValue.length > 0 &&
                         borrowAmount.gt(nextMaxBorrowMinimum.sub(pair.currentUserBorrowAmount.value)),
-                    "You don' have enough collateral to borrow this amount.",
+                    "You don't have enough collateral to borrow this amount.",
                     true,
                     new Warning(
                         displayBorrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
@@ -314,7 +314,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         disabled={pair.currentExchangeRate.isZero()}
                         onChange={event => setUpdateOracle(event.target.checked)}
                     />
-                    <span className="text-secondary ml-2 mr-1">Update exchange rate from the oracle</span>
+                    <span className="text-primary ml-2 mr-1">Update exchange rate from the oracle</span>
                     <QuestionHelper
                         text={
                             pair.currentExchangeRate.gt(0)
@@ -331,9 +331,9 @@ export default function Borrow({ pair }: BorrowProps) {
                     checked={swap}
                     onChange={event => setSwap(event.target.checked)}
                     disabled={true}
-                    className="ml-4 cursor-not-allowed"
+                    className="cursor-not-allowed"
                 />
-                <span className="text-secondary ml-2 mr-1">
+                <span className="text-low-emphesis ml-2 mr-1">
                     Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
                 </span>
                 <QuestionHelper
