@@ -163,6 +163,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
     const updatePairs = useCallback(
         async function() {
+            if (!account || !chainId || [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId) == -1) {
+                return
+            }
             if (boringHelperContract && bentoBoxContract) {
                 const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
 
@@ -394,7 +397,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     )
 
     useEffect(() => {
-        updatePairs()
+        if (account && chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId) != -1) {
+            updatePairs()
+        }
     }, [blockNumber, chainId, account])    
 
     return (
@@ -426,13 +431,3 @@ export function useKashiPair(address: string) {
         return ethers.utils.getAddress(pair.address) === ethers.utils.getAddress(address)
     })
 }
-
-// export function withKashi<P extends object>(Component: React.ComponentType<P>): React.FC<Omit<P, keyof State>> {
-//   return function WrappedWithKashi(props) {
-//     return (
-//       <KashiContext.Consumer>
-//         {(value: KashiProviderProps) => <Component {...(props as P)} value={value} />}
-//       </KashiContext.Consumer>
-//     )
-//   }
-// }
