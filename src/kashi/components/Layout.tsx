@@ -11,20 +11,28 @@ interface LayoutProps {
     netWorth?: string
 }
 
-export default function Layout({ left = undefined, children = undefined, right = undefined, netWorth = "" }: LayoutProps) {
+export default function Layout({
+    left = undefined,
+    children = undefined,
+    right = undefined,
+    netWorth = ''
+}: LayoutProps) {
     const location = useLocation()
     return (
         <div className="container mx-auto px-0 sm:px-4">
             <div className={`mb-2 grid grid-cols-12 gap-4`}>
                 <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
                     <Link to="/bento/kashi/borrow" className="flex justify-center xl:justify-start xl:mx-8">
-                        <img src={KashiLogo} alt="" className="w-1/2 md:w-1/3 xl:w-full" />
+                        <img src={KashiLogo} alt="" className="object-scale-down w-1/2 md:w-1/3 xl:w-full" />
                     </Link>
                 </div>
                 <div className="flex col-span-12 xl:col-span-9 items-end">
                     <nav className="flex justify-between items-center w-full">
                         <div className="flex">
-                            <NavLink to="/bento/kashi/lend" className="border-transparent pl-4 pr-2 sm:pl-8 sm:pr-4 border-b-2">
+                            <NavLink
+                                to="/bento/kashi/lend"
+                                className="border-transparent pl-4 pr-2 sm:pl-8 sm:pr-4 border-b-2"
+                            >
                                 <div
                                     className={
                                         'flex items-center font-medium ' +

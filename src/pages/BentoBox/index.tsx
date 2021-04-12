@@ -23,7 +23,7 @@ function BentoBox(): JSX.Element {
             </div>
 
             <div className="relative flex flex-col items-center pt-48">
-                <img alt="" src={BentoBoxLogo} className="w-40 md:w-80 h-auto -mt-40 md:-mt-52" />
+                <img alt="" src={BentoBoxLogo} className="object-scale-down w-40 md:w-80 h-auto -mt-40 md:-mt-52" />
 
                 <div className="container mx-auto max-w-3xl">
                     <div className="font-bold text-center text-3xl md:text-6xl text-high-emphesis">BentoBox Apps</div>
