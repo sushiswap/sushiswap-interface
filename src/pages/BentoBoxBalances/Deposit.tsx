@@ -6,7 +6,7 @@ import useBentoBox from 'sushi-hooks/useBentoBox'
 import useTokenBalance from 'sushi-hooks/useTokenBalance'
 import { formattedNum } from '../../utils'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Token, TokenAmount } from '@sushiswap/sdk'
+import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { BENTOBOX_ADDRESS } from 'kashi'
 import { Button } from 'kashi/components'
 
@@ -34,6 +34,11 @@ export default function Deposit({
         ),
         BENTOBOX_ADDRESS
     )
+
+    const showApprove =
+        chainId &&
+        tokenAddress !== WETH[chainId].address &&
+        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
     return (
         <>
@@ -64,12 +69,12 @@ export default function Deposit({
                 )}
             </div>
 
-            {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
+            {showApprove && (
                 <Button color="blue" disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
                     {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
                 </Button>
             )}
-            {approvalState === ApprovalState.APPROVED && (
+            {!showApprove && (
                 <Button
                     color="blue"
                     disabled={

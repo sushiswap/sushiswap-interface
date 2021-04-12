@@ -52,17 +52,18 @@ function useBentoBalances(): BentoBalance[] {
 
                 return {
                     address: token.address,
-                    name: token.name || 'AAA',
+                    name: token.name,
                     symbol: token.address === weth ? Currency.getNativeCurrencySymbol(chainId) : token.symbol,
-                    decimals: token.decimals || 'AAA',
-                    balance: balanceData[i].balance,
+                    decimals: token.decimals,
+                    balance: token.address === weth ? info?.ethBalance : balanceData[i].balance,
                     bentoBalance: balanceData[i].bentoBalance,
-                    wallet: easyAmount(balanceData[i].balance, fullToken),
+                    wallet: easyAmount(token.address === weth ? info?.ethBalance : balanceData[i].balance, fullToken),
                     bento: easyAmount(toAmount(fullToken, balanceData[i].bentoBalance), fullToken)
                 }
             })
             .filter(token => token.balance.gt('0') || token.bentoBalance.gt('0'))
         setBalances(orderBy(balancesWithDetails, ['name'], ['asc']))
+        console.log(balancesWithDetails)
     }, [account, tokens, boringHelperContract])
 
     useEffect(() => {

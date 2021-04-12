@@ -1,8 +1,8 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
-import { useKashiPair } from 'kashi/context'
+import { KashiContext, useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import { formattedNum, formattedPercent } from 'utils'
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
@@ -25,6 +25,7 @@ export default function BorrowPair({
     const { account, library, chainId } = useActiveWeb3React()
 
     const pair = useKashiPair(pairAddress)
+    const info = useContext(KashiContext).state.info
 
     const addTransaction = useTransactionAdder()
     const onUpdateExchangeRate = useCallback(async () => {
@@ -35,9 +36,9 @@ export default function BorrowPair({
         addTransaction(result.tx, {summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate`})
     }, [pair])
 
-    if (!pair) return (
+    if (!pair) return info && info.blockTimeStamp.isZero() ? null : (
         <Redirect to="/bento/kashi/borrow"></Redirect>
-    )
+    )    
 
     return (
         <Layout

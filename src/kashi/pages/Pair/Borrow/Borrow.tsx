@@ -178,7 +178,7 @@ export default function Borrow({ pair }: BorrowProps) {
         if (displayUpdateOracle) {
             transactionReview.addRate('Exchange Rate', pair.currentExchangeRate, pair.oracleExchangeRate, pair)
         }
-        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe, pair.asset)
+        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)), pair.asset)
         transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
         transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }
