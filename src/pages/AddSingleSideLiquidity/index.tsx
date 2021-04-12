@@ -1,28 +1,28 @@
-import { Currency, currencyEquals, ETHER, TokenAmount, WETH, ChainId } from '@sushiswap/sdk'
-import React, { useContext, useMemo, useCallback, useState, useEffect } from 'react'
-import { Link, useParams, RouteComponentProps } from 'react-router-dom'
+import { Currency, ETHER, ChainId } from '@sushiswap/sdk'
+import React, { useContext, useCallback, useState, useEffect } from 'react'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
 import { Text } from 'rebass'
-import { ArrowLeft, Type } from 'react-feather'
+import { ArrowLeft } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
-import { RowBetween, RowFixed, AutoRow } from '../../components/Row'
-import { ButtonError, ButtonLight, ButtonPrimary, ButtonConfirmed } from '../../components/Button'
+import { RowBetween, AutoRow } from '../../components/Row'
+import { ButtonError, ButtonLight, ButtonConfirmed } from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
 import { LightCard } from '../../components/Card'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Settings from '../../components/Settings'
-import PoolList from './PoolList';
-import { DataCard, CardSection } from 'components/earn/styled'
+import PoolList from './PoolList'
+import { DataCard } from 'components/earn/styled'
 import Loader from '../../components/Loader'
 
 import { AppDispatch } from 'state'
 import { useCurrency } from '../../hooks/Tokens'
 import usePool from '../../sushi-hooks/queries/usePool'
-import { Field, resetZapState } from '../../state/zap/actions'
+import { resetZapState } from '../../state/zap/actions'
 import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../../state/zap/hooks'
 
 import { TYPE } from '../../theme'
@@ -34,35 +34,6 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import useZapper from 'sushi-hooks/useZapper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 
-
-const PageWrapper = styled(AutoColumn)`
-  max-width: 640px;
-  width: 100%;
-`
-
-const FixedHeightRow = styled(RowBetween)`
-  height: 24px;
-`
-
-const StyledPositionCard = styled(LightCard)`
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  border: none
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
-  /* background: ${({ theme }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, theme.bg3)} 0%, ${theme.bg3} 100%) `}; */
-  position: relative;
-  overflow: hidden;
-  margin: 6px 0; 
-`
-
-const StyledZapHeader = styled.div`
-  padding: 12px 1rem 0px 1.5rem;
-  margin-bottom: -4px;
-  width: 100%;
-  max-width: 420px;
-  color: ${({ theme }) => theme.text2};
-`
-
 const Wrapper = styled.div`
   position: relative;
   padding: 1rem;
@@ -72,7 +43,7 @@ const PoolAllocationWrapper = styled.div`
   margin-top: 1rem;
   background-color: ${({ theme }) => theme.bg1};
   border-radius: 4px 4px 0 0;
-  padding: 1rem
+  padding: 1rem;
 `
 
 const PoolBreakDownWrapper = styled.div`
@@ -102,11 +73,12 @@ const InfoCard = styled(DataCard)`
   background: ${({ theme }) => transparentize(0.5, theme.bg1)};
 `
 
-const PoolInfo = (
-  { poolAddress, currency }: { poolAddress: string, currency: Currency | undefined }
-) => {
-  const { token0, token1, totalSupply, reserves } = usePool(poolAddress)
-  const { liquidityMinted, poolTokenPercentage, currencyBalance, tradeAmount, currencyZeroOutput, currencyOneOutput, bestTrade } = useDerivedZapInfo(currency ?? undefined, poolAddress)
+const PoolInfo = ({ poolAddress, currency }: { poolAddress: string; currency: Currency | undefined }) => {
+  const { token0, token1 } = usePool(poolAddress)
+  const { liquidityMinted, poolTokenPercentage, currencyZeroOutput, currencyOneOutput, bestTrade } = useDerivedZapInfo(
+    currency ?? undefined,
+    poolAddress
+  )
   const currency0 = useCurrency(token0)
   const currency1 = useCurrency(token1)
 
@@ -115,9 +87,10 @@ const PoolInfo = (
       <PoolAllocationWrapper>
         <RowBetween style={{ marginBottom: '12px' }}>
           <TYPE.darkGray fontSize="14px">To</TYPE.darkGray>
-          <DoubleCurrencyLogo 
-            currency0={currency0 ?? undefined} currency1={currency1 ?? undefined}
-            margin={false} 
+          <DoubleCurrencyLogo
+            currency0={currency0 ?? undefined}
+            currency1={currency1 ?? undefined}
+            margin={false}
             size={20}
           />
         </RowBetween>
@@ -125,36 +98,42 @@ const PoolInfo = (
           <TYPE.subHeader fontWeight={500} fontSize="22px">
             {liquidityMinted?.toSignificant(6) || '0'}
           </TYPE.subHeader>
-          <TYPE.subHeader  fontWeight={500} fontSize="22px">
-            { (currency0 && currency1) &&`${currency0?.symbol}/${currency1?.symbol}`}
-            </TYPE.subHeader>
+          <TYPE.subHeader fontWeight={500} fontSize="22px">
+            {currency0 && currency1 && `${currency0?.symbol}/${currency1?.symbol}`}
+          </TYPE.subHeader>
         </RowBetween>
       </PoolAllocationWrapper>
       <PoolBreakDownWrapper>
         <RowBetween>
-            <div>
-              <TYPE.darkGray fontSize="14px">Est. Pool Allocation</TYPE.darkGray>
-              <PoolTokenRow>
-                <CurrencyLogo size="22px"  currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
-                <TYPE.small fontSize="14px">
-                  {currencyZeroOutput?.toSignificant(6) || 0} {' '}
-                  {currency0?.symbol}
-                </TYPE.small>
-              </PoolTokenRow>
-              <PoolTokenRow>
-                <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
-                <TYPE.small fontSize="14px">
-                  {currencyOneOutput?.toSignificant(6) || 0} {' '}
-                  {currency1?.symbol}
-                </TYPE.small>
-              </PoolTokenRow>
-            </div>
-            <div style={{ height: '91px' }}>
-              <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">Pool Share</TYPE.darkGray>
-              <TYPE.small  marginBottom="8px" textAlign="right" fontSize="14px">{poolTokenPercentage?.toSignificant(6) || '0'}%</TYPE.small>
-              <TYPE.darkGray fontSize="14px" marginBottom="2px">Est. Slippage</TYPE.darkGray>
-              <TYPE.small textAlign="right" fontSize="14px">{bestTrade?.priceImpact?.toSignificant(6) || '0'}%</TYPE.small>
-            </div>
+          <div>
+            <TYPE.darkGray fontSize="14px">Est. Pool Allocation</TYPE.darkGray>
+            <PoolTokenRow>
+              <CurrencyLogo size="22px" currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
+              <TYPE.small fontSize="14px">
+                {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
+              </TYPE.small>
+            </PoolTokenRow>
+            <PoolTokenRow>
+              <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
+              <TYPE.small fontSize="14px">
+                {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
+              </TYPE.small>
+            </PoolTokenRow>
+          </div>
+          <div style={{ height: '91px' }}>
+            <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">
+              Pool Share
+            </TYPE.darkGray>
+            <TYPE.small marginBottom="8px" textAlign="right" fontSize="14px">
+              {poolTokenPercentage?.toSignificant(6) || '0'}%
+            </TYPE.small>
+            <TYPE.darkGray fontSize="14px" marginBottom="2px">
+              Est. Slippage
+            </TYPE.darkGray>
+            <TYPE.small textAlign="right" fontSize="14px">
+              {bestTrade?.priceImpact?.toSignificant(6) || '0'}%
+            </TYPE.small>
+          </div>
         </RowBetween>
       </PoolBreakDownWrapper>
     </>
@@ -175,15 +154,17 @@ const CardHeader = () => {
         >
           <StyledArrowLeft />
         </Link>
-        <TYPE.largeHeader fontWeight={500} fontSize="22px">Zap Liquidity</TYPE.largeHeader>
+        <TYPE.largeHeader fontWeight={500} fontSize="22px">
+          Zap Liquidity
+        </TYPE.largeHeader>
         <Settings />
       </RowBetween>
     </Tabs>
   )
 }
 
-const AddSingleSideLiquidity = ({ 
-  match: { 
+const AddSingleSideLiquidity = ({
+  match: {
     params: { poolAddress, currencyId }
   },
   history
@@ -194,8 +175,7 @@ const AddSingleSideLiquidity = ({
   const currency = useCurrency(currencyId)
   const { typedValue } = useZapState()
   const { onFieldInput } = useZapActionHandlers(false)
-  const { currencyBalance, noLiquidity, parsedAmount, error, bestTrade } = useDerivedZapInfo(currency ?? undefined, poolAddress)
-  const formattedAmount = parsedAmount?.toSignificant(6) ?? '';
+  const { currencyBalance, parsedAmount, error, bestTrade } = useDerivedZapInfo(currency ?? undefined, poolAddress)
   const { zapIn } = useZapper(currency ?? undefined)
 
   const route = bestTrade?.route
@@ -211,7 +191,7 @@ const AddSingleSideLiquidity = ({
         address = '0x169c54a9826caf9f14bd30688296021533fe23ae'
         break
     }
-  }  
+  }
 
   // // check whether the user has approved the router on the input token
   const [approval, approveCallback] = useApproveCallback(parsedAmount, address)
@@ -245,7 +225,7 @@ const AddSingleSideLiquidity = ({
 
   return (
     <>
-      { !poolAddress ? (
+      {!poolAddress ? (
         <PoolList />
       ) : (
         <AppBody>
@@ -253,18 +233,18 @@ const AddSingleSideLiquidity = ({
           <Wrapper>
             <AutoColumn>
               <CurrencyInputPanel
-                  label={'From'}
-                  showMaxButton={true}
-                  onMax={() => {
-                    onFieldInput(maxAmountSpend(currencyBalance)?.toExact() ?? '') 
-                  }}
-                  value={typedValue ?? ''}
-                  currency={currency}
-                  onUserInput={onFieldInput}
-                  onCurrencySelect={handleCurrencyASelect}
-                  id="zap-currency-input"
-                  cornerRadiusBottomNone={false}
-                  showCommonBases
+                label={'From'}
+                showMaxButton={true}
+                onMax={() => {
+                  onFieldInput(maxAmountSpend(currencyBalance)?.toExact() ?? '')
+                }}
+                value={typedValue ?? ''}
+                currency={currency}
+                onUserInput={onFieldInput}
+                onCurrencySelect={handleCurrencyASelect}
+                id="zap-currency-input"
+                cornerRadiusBottomNone={false}
+                showCommonBases
               />
               <PoolInfo poolAddress={poolAddress} currency={currency ?? undefined} />
               <>
@@ -300,40 +280,44 @@ const AddSingleSideLiquidity = ({
                       )}
                     </ButtonConfirmed>
                     <ButtonError
-                      onClick={() => zapIn(
-                        currencyId === 'ETH' ? '0x0000000000000000000000000000000000000000' : currencyId,
-                        poolAddress, 
-                        parsedAmount,
-                        0,
-                        // Hard coded WETH for now
-                        '0x37f4d05b879c364187caa02678ba041f7b5f5c71'
-                      )}
+                      onClick={() =>
+                        zapIn(
+                          currencyId === 'ETH' ? '0x0000000000000000000000000000000000000000' : currencyId,
+                          poolAddress,
+                          parsedAmount,
+                          0,
+                          // Hard coded WETH for now
+                          '0x37f4d05b879c364187caa02678ba041f7b5f5c71'
+                        )
+                      }
                       width="48%"
                       id="swap-button"
                       disabled={approval !== ApprovalState.APPROVED}
                     >
-                    <Text fontSize={20} fontWeight={500}>
-                      {error ?? 'Zap'}
-                    </Text>
+                      <Text fontSize={20} fontWeight={500}>
+                        {error ?? 'Zap'}
+                      </Text>
                     </ButtonError>
                   </RowBetween>
                 ) : (
                   <ButtonError
-                    style={{ marginTop: '20px' }} 
+                    style={{ marginTop: '20px' }}
                     disabled={!parsedAmount || error !== undefined || approval !== ApprovalState.APPROVED}
-                    onClick={() => zapIn(
-                      currencyId === 'ETH' ? '0x0000000000000000000000000000000000000000' : currencyId,
-                      poolAddress, 
-                      parsedAmount,
-                      0,
-                      // Hard coded WETH for now
-                      '0x37f4d05b879c364187caa02678ba041f7b5f5c71'
-                    )}
+                    onClick={() =>
+                      zapIn(
+                        currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
+                        poolAddress,
+                        parsedAmount,
+                        0,
+                        // Hard coded Ropsten WETH for now
+                        '0xc778417e063141139fce010982780140aa0cd5ab'
+                      )
+                    }
                   >
-                  <Text fontSize={20} fontWeight={500}>
-                    {error ?? 'Zap'}
-                  </Text>
-                </ButtonError>
+                    <Text fontSize={20} fontWeight={500}>
+                      {error ?? 'Zap'}
+                    </Text>
+                  </ButtonError>
                 )}
               </>
             </AutoColumn>
