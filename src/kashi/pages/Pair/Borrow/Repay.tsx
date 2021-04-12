@@ -145,11 +145,9 @@ export default function Repay({ pair }: RepayProps) {
         if (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)) {
             cooker.repayPart(pair.userBorrowPart, useBentoRepay)
             summary = 'Repay Max'
-            console.log('Repay max')
         } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
             cooker.repay(displayRepayValue.toBigNumber(pair.asset.decimals), useBentoRepay)
             summary = 'Repay'
-            console.log('Repay')
         }
         if (
             displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||

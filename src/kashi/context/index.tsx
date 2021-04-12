@@ -168,18 +168,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                 // Get the deployed pairs from the logs and decode
                 const logPairs = await GetPairs(bentoBoxContract, chainId || 1)
-                console.log(logPairs)
 
                 // Filter all pairs by supported oracles and verify the oracle setup
                 const allPairAddresses = logPairs
                     .filter((pair: any) => getOracle(pair, chain, tokens).valid)
                     .map((pair: any) => pair.address)
 
-                console.log(account, allPairAddresses)
-
                 // Get full info on all the verified pairs
                 const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
-                console.log("pairs", pairs)
 
                 // Get a list of all tokens in the pairs
                 const pairTokens = new Tokens()
@@ -193,7 +189,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 // Get balances, bentobox info and allowences for the tokens
                 const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
                 const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
-                console.log("balances", balances)
 
                 const missingTokens: any[] = []
                 balances.forEach((balance: any, i: number) => {

@@ -63,7 +63,6 @@ function useBentoBalances(): BentoBalance[] {
             })
             .filter(token => token.balance.gt('0') || token.bentoBalance.gt('0'))
         setBalances(orderBy(balancesWithDetails, ['name'], ['asc']))
-        console.log(balancesWithDetails)
     }, [account, tokens, boringHelperContract])
 
     useEffect(() => {
