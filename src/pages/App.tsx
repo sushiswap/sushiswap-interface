@@ -56,7 +56,6 @@ const AppWrapper = styled.div`
     flex-flow: column;
     align-items: flex-start;
     overflow-x: hidden;
-    height: 100vh;
 `
 
 const HeaderWrapper = styled.div`
@@ -69,16 +68,17 @@ const BodyWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding-top: 30px;
+    padding-top: 50px;
     align-items: center;
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 1;
+    z-index: 10;
     ${({ theme }) => theme.mediaWidth.upToSmall`
-    padding-top: 10px;
-    /* padding: 0 16px;*/
-  `};
+        padding: 16px;
+        padding-top: 1rem;
+    `};
+    z-index: 1;
 `
 
 const Marginer = styled.div`

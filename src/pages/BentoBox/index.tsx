@@ -23,11 +23,11 @@ function BentoBox(): JSX.Element {
             </div>
 
             <div className="relative flex flex-col items-center pt-48">
-                <img alt="" src={BentoBoxLogo} className="w-80 h-auto -mt-52" />
+                <img alt="" src={BentoBoxLogo} className="w-40 md:w-80 h-auto -mt-40 md:-mt-52" />
 
                 <div className="container mx-auto max-w-3xl">
-                    <div className="font-bold text-center text-6xl text-high-emphesis">BentoBox Apps</div>
-                    <div className="font-medium text-center text-high-emphesis mt-4 mb-8 p-4">
+                    <div className="font-bold text-center text-3xl md:text-6xl text-high-emphesis">BentoBox Apps</div>
+                    <div className="font-medium text-center text-high-emphesis mt-0 md:mt-4 mb-8 p-4">
                         BentoBox is a revolutionary new way from SUSHI to interact with dapps on L1 in a highly gas
                         efficient manner. In order to use any one of the decentralized apps below you&apos;ll need to
                         first enable them and deposit any ERC20 asset to your BentoBox balance.
