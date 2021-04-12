@@ -54,7 +54,9 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.AVALANCHE]: {},
   [ChainId.FUJI]: {},
   [ChainId.HECO]: {},
-  [ChainId.HECO_TESTNET]: {}
+  [ChainId.HECO_TESTNET]: {},
+  [ChainId.HARMONY]: {},
+  [ChainId.HARMONY_TESTNET]: {}
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -122,7 +124,9 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     128: { ...map1[128], ...map2[128] }, // heco
     256: { ...map1[256], ...map2[256] }, // heco testnet
     43114: { ...map1[43114], ...map2[43114] }, // avax mainnet
-    43113: { ...map1[43113], ...map2[43113] } // avax testnet fuji
+    43113: { ...map1[43113], ...map2[43113] }, // avax testnet fuji
+    1666600000: { ...map1[1666600000], ...map2[1666600000] }, // harmony
+    1666700000: { ...map1[1666700000], ...map2[1666700000] } // harmony testnet
   }
 }
 

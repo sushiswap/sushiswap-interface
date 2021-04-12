@@ -297,7 +297,9 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
   [ChainId.AVALANCHE]: 'Avalanche',
   [ChainId.FUJI]: 'Fuji',
   [ChainId.HECO]: 'HECO',
-  [ChainId.HECO_TESTNET]: 'HECO Testnet'
+  [ChainId.HECO_TESTNET]: 'HECO Testnet',
+  [ChainId.HARMONY]: 'Harmony',
+  [ChainId.HARMONY_TESTNET]: 'Harmony Testnet'
 }
 
 export default function Header() {
@@ -346,16 +348,22 @@ export default function Header() {
           >
             {t('pool')}
           </StyledNavLink>
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/sushi'}>
-            SUSHI
-          </StyledNavLink> */}
-          {/* <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Vote
-          </StyledNavLink> */}
+          {chainId === ChainId.MAINNET && (
+            <StyledNavLink id={`yield-nav-link`} to={'/yield'}>
+              Yield
+            </StyledNavLink>
+          )}
           {chainId === ChainId.MAINNET && (
             <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
               Stake
             </StyledNavLink>
+          )}
+          {chainId === ChainId.MAINNET && (
+            <HideSmall>
+              <StyledNavLink id={`vesting-nav-link`} to={'/vesting'}>
+                Vesting
+              </StyledNavLink>
+            </HideSmall>
           )}
           {chainId && (
             <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
@@ -381,9 +389,9 @@ export default function Header() {
           </AccountElement>
         </HeaderElement>
         <HeaderElementWrap>
-          <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
+          {/* <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
             {darkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </ExtendedStyledMenuButton>
+          </ExtendedStyledMenuButton> */}
           <LanguageSwitch />
           <Menu />
         </HeaderElementWrap>

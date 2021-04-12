@@ -49,7 +49,7 @@ export function colors(darkMode: boolean): Colors {
     text5: darkMode ? '#2C2F36' : '#EDEEF2',
 
     // backgrounds / greys
-    bg1: darkMode ? '#18212e' : '#FFFFFF',
+    bg1: darkMode ? '#202231' : '#FFFFFF',
     bg2: darkMode ? '#202d3f' : '#F7F8FA',
     bg3: darkMode ? '#2a3a50' : '#EDEEF2',
     bg4: darkMode ? '#3a506f' : '#CED0D9',
@@ -83,7 +83,7 @@ export function colors(darkMode: boolean): Colors {
     yellow2: '#F3841E',
     blue1: '#0094ec',
 
-    borderRadius: '20px'
+    borderRadius: '10px'
 
     // dont wanna forget these blue yet
     // blue4: darkMode ? '#153d6f70' : '#C4D9F8',
@@ -120,7 +120,8 @@ export function theme(darkMode: boolean): DefaultTheme {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const darkMode = useIsDarkMode()
+  //const darkMode = useIsDarkMode()
+  const darkMode = true
 
   const themeObject = useMemo(() => theme(darkMode), [darkMode])
 
@@ -222,7 +223,8 @@ html {
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
-  background-color: ${({ theme }) => theme.bg2};
+  /*background-color: ${({ theme }) => theme.bg2};*/
+  background-color: #0D0415;
 }
 
 body {
@@ -230,6 +232,6 @@ body {
   background-position: 0 -30vh;
   background-repeat: no-repeat;
   background-image: ${({ theme }) =>
-    `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.8, '#db4690')} 0%, ${transparentize(1, '#db4690')} 100%)`};
-}
+    `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.9, '#27b0e6')} 0%, ${transparentize(1, '#27b0e6')} 100%)`};
+  }
 `

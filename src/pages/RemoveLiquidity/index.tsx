@@ -1,7 +1,7 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, Percent, WETH } from '@sushiswap/sdk'
+import { Currency, currencyEquals, ETHER, Percent, WETH, ChainId } from '@sushiswap/sdk'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { ArrowDown, Plus } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -112,62 +112,66 @@ export default function RemoveLiquidity({
       return approveCallback()
     }
 
-    // try to gather a signature for permission
-    const nonce = await pairContract.nonces(account)
+    if (chainId !== ChainId.HARMONY) {
+      // try to gather a signature for permission
+      const nonce = await pairContract.nonces(account)
 
-    const EIP712Domain = [
-      { name: 'name', type: 'string' },
-      { name: 'version', type: 'string' },
-      { name: 'chainId', type: 'uint256' },
-      { name: 'verifyingContract', type: 'address' }
-    ]
-    const domain = {
-      name: 'SushiSwap LP Token',
-      version: '1',
-      chainId: chainId,
-      verifyingContract: pair.liquidityToken.address
-    }
-    const Permit = [
-      { name: 'owner', type: 'address' },
-      { name: 'spender', type: 'address' },
-      { name: 'value', type: 'uint256' },
-      { name: 'nonce', type: 'uint256' },
-      { name: 'deadline', type: 'uint256' }
-    ]
-    const message = {
-      owner: account,
-      spender: getRouterAddress(chainId),
-      value: liquidityAmount.raw.toString(),
-      nonce: nonce.toHexString(),
-      deadline: deadline.toNumber()
-    }
-    const data = JSON.stringify({
-      types: {
-        EIP712Domain,
-        Permit
-      },
-      domain,
-      primaryType: 'Permit',
-      message
-    })
+      const EIP712Domain = [
+        { name: 'name', type: 'string' },
+        { name: 'version', type: 'string' },
+        { name: 'chainId', type: 'uint256' },
+        { name: 'verifyingContract', type: 'address' }
+      ]
+      const domain = {
+        name: 'SushiSwap LP Token',
+        version: '1',
+        chainId: chainId,
+        verifyingContract: pair.liquidityToken.address
+      }
+      const Permit = [
+        { name: 'owner', type: 'address' },
+        { name: 'spender', type: 'address' },
+        { name: 'value', type: 'uint256' },
+        { name: 'nonce', type: 'uint256' },
+        { name: 'deadline', type: 'uint256' }
+      ]
+      const message = {
+        owner: account,
+        spender: getRouterAddress(chainId),
+        value: liquidityAmount.raw.toString(),
+        nonce: nonce.toHexString(),
+        deadline: deadline.toNumber()
+      }
+      const data = JSON.stringify({
+        types: {
+          EIP712Domain,
+          Permit
+        },
+        domain,
+        primaryType: 'Permit',
+        message
+      })
 
-    library
-      .send('eth_signTypedData_v4', [account, data])
-      .then(splitSignature)
-      .then(signature => {
-        setSignatureData({
-          v: signature.v,
-          r: signature.r,
-          s: signature.s,
-          deadline: deadline.toNumber()
+      library
+        .send('eth_signTypedData_v4', [account, data])
+        .then(splitSignature)
+        .then(signature => {
+          setSignatureData({
+            v: signature.v,
+            r: signature.r,
+            s: signature.s,
+            deadline: deadline.toNumber()
+          })
         })
-      })
-      .catch(error => {
-        // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
-        if (error?.code !== 4001) {
-          approveCallback()
-        }
-      })
+        .catch(error => {
+          // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
+          if (error?.code !== 4001) {
+            approveCallback()
+          }
+        })
+    } else {
+      return approveCallback()
+    }
   }
 
   // wrapped onUserInput to clear signatures

@@ -23,6 +23,7 @@ import {
 //import Manage from './Earn/Manage'
 //import MigrateV1 from './MigrateV1'
 //import MigrateV1Exchange from './MigrateV1/MigrateV1Exchange'
+import MigrateV2 from './MigrateV2'
 import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
@@ -35,10 +36,12 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 //import VotePage from './Vote/VotePage'
 
 import SushiBar from './SushiBar'
+import Yield from './Yield'
 
 // Additional Tools
 import Tools from './Tools'
 import Saave from './Saave'
+import Vesting from './Vesting'
 
 import ComingSoonModal from '../components/ComingSoonModal'
 
@@ -99,6 +102,8 @@ function App() {
               {/* Tools */}
               <Route exact strict path="/tools" component={Tools} />
               <Route exact strict path="/saave" component={Saave} />
+              <Route exact strict path="/vesting" component={Vesting} />
+              {chainId === ChainId.MAINNET && <Route exact strict path="/migrate/v2" component={MigrateV2} />}
               {/* Pages */}
               {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
               <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
@@ -109,6 +114,7 @@ function App() {
               <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
               <Route exact strict path="/find" component={PoolFinder} />
               <Route exact strict path="/pool" component={Pool} />
+              <Route exact strict path="/yield" component={Yield} />
               {/* <Route exact strict path="/sushi" component={Earn} /> */}
               {/* <Route exact strict path="/vote" component={Vote} /> */}
               <Route exact strict path="/create" component={RedirectToAddLiquidity} />

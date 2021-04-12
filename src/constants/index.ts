@@ -7,6 +7,8 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export { PRELOADED_PROPOSALS } from './proposals'
 
+export const POOL_DENY = ['14', '29', '45', '30']
+
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
@@ -23,6 +25,9 @@ export const PROPOSAL_LENGTH_IN_SECS = AVERAGE_BLOCK_TIME_IN_SECS * PROPOSAL_LEN
 
 export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
+
+// Boring Helper
+export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
 
 // SUSHI
 export const SUSHI: ChainTokenMap = {
@@ -60,8 +65,13 @@ export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
 
 // TODO: specify merkle distributor for mainnet
 export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '0x090D4613473dEE047c3f2706764f49E0821D256e'
+  [ChainId.MAINNET]: '0xcBE6B83e77cdc011Cc18F6f0Df8444E5783ed982',
+  [ChainId.ROPSTEN]: '0x84d1f7202e0e7dac211617017ca72a2cb5e2b955'
 }
+
+// TODO: update weekly with new constant
+export const MERKLE_ROOT =
+  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-01/merkle-10959148-11003985.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
@@ -82,7 +92,9 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
   [ChainId.FUJI]: [WETH[ChainId.FUJI]],
   [ChainId.HECO]: [WETH[ChainId.HECO]],
-  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]]
+  [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]],
+  [ChainId.HARMONY]: [WETH[ChainId.HARMONY]],
+  [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]]
 }
 
 // Default Ethereum chain tokens
@@ -183,6 +195,16 @@ export const PLAY = new Token(
   'Metaverse NFT Index'
 )
 
+export const XSUSHI_CALL = new Token(
+  ChainId.MAINNET,
+  '0xada279f9301C01A4eF914127a6C2a493Ad733924',
+  18,
+  'XSUc25-0531',
+  'XSUSHI 25 Call [31 May 2021]'
+)
+
+export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
+
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
@@ -197,7 +219,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
     [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
     [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
-    [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]]
+    [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
+    [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
   }
 }
 

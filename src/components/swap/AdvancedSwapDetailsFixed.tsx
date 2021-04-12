@@ -16,7 +16,7 @@ const InfoLink = styled(ExternalLink)`
   width: 100%;
   border: 1px solid ${({ theme }) => theme.bg3};
   padding: 6px 6px;
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: center;
   font-size: 14px;
   color: ${({ theme }) => theme.text3};
