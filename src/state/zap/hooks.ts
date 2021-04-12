@@ -120,6 +120,9 @@ export function useDerivedZapInfo(
         : currency0 ?? undefined
     )
 
+  // We reset the values here in case the user is trading the base tokens.
+  // We need to reset because don't have a good way to not call diff # of 
+  // hooks each render otherwsie
   if (isTradingCurrency0) currencyZeroOutput = tradeAmount
   if (isTradingCurrency1) currencyOneOutput = tradeAmount
 

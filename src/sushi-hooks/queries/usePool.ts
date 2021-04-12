@@ -33,7 +33,7 @@ const usePool = (poolAddress: string | undefined) => {
     if (poolAddress) {
       fetchPoolData()
     }
-  }, [])
+  }, [poolAddress])
 
   return poolData
 }
