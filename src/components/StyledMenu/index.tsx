@@ -18,9 +18,11 @@ export const StyledMenuButton = styled.button`
     outline: none;
     background-color: ${({ theme }) => theme.bg4};
   }
+  /*
   svg {
     margin-top: 2px;
   }
+  */
   > * {
     stroke: ${({ theme }) => theme.text1};
   }
