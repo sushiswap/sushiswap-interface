@@ -28,7 +28,7 @@ import {
 //Feat Bento
 import Bento from './BentoBox'
 import BentoBalances from './BentoBoxBalances'
-import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
+// import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 //import Earn from './Earn'
 //import Manage from './Earn/Manage'
 //import MigrateV1 from './MigrateV1'
@@ -158,7 +158,7 @@ function App() {
                                 path="/create/:currencyIdA/:currencyIdB"
                                 component={RedirectDuplicateTokenIds}
                             />
-                            <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
+                            {/* <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} /> */}
                             <Route
                                 exact
                                 strict
@@ -166,6 +166,29 @@ function App() {
                                 component={RedirectOldRemoveLiquidityPathStructure}
                             />
                             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+
+                            {/* Redirects for app routes */}
+                            <Route
+                                exact
+                                strict
+                                path="/tokens/:address"
+                                render={({
+                                    match: {
+                                        params: { address }
+                                    }
+                                }) => <Redirect to={`/swap/${address}`} />}
+                            />
+                            <Route
+                                exact
+                                strict
+                                path="/pairs/:address"
+                                render={({
+                                    match: {
+                                        params: { address }
+                                    }
+                                }) => <Redirect to={`/add/${address}`} />}
+                            />
+
                             <Route component={RedirectPathToSwapOnly} />
                         </Switch>
                     </Web3ReactManager>
