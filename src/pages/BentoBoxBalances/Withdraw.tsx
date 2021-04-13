@@ -4,7 +4,7 @@ import useBentoBox from 'sushi-hooks/useBentoBox'
 import { formattedNum } from 'utils'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { useActiveWeb3React } from '../../hooks'
-import useBentoBalance from '../../sushi-hooks/useBentoBalance'
+import { useBentoBalance } from 'state/bentobox/hooks'
 
 function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSymbol: string }): JSX.Element {
     const { account } = useActiveWeb3React()
