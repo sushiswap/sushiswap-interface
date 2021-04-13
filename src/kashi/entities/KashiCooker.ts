@@ -2,11 +2,9 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { toShare } from 'kashi/functions/bentobox'
 import { getProviderOrSigner, getSigner } from 'utils'
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
-import BENTOBOX_ABI from '../../constants/sushiAbis/bentobox.json'
 import { KashiPermit } from 'kashi/hooks'
 import { toElastic, ZERO } from 'kashi/functions'
 
@@ -158,7 +156,7 @@ export class KashiCooker {
             share = toShare(this.pair.asset, amount)
         } else {
             const useNative = this.pair.asset.address === WETH[this.chainId].address
-    
+
             this.add(
                 Action.BENTO_DEPOSIT,
                 defaultAbiCoder.encode(
@@ -170,10 +168,7 @@ export class KashiCooker {
             share = BigNumber.from(-2)
         }
 
-        this.add(
-            Action.ADD_ASSET, 
-            defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false])
-        )
+        this.add(Action.ADD_ASSET, defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false]))
         return this
     }
 
@@ -280,7 +275,11 @@ export class KashiCooker {
                     [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, 0, -1]
                 ),
                 // TODO: Put some warning in the UI or not allow repaying ETH directly from wallet, because this can't be pre-calculated
-                useNative ? toShare(this.pair.asset, toElastic(this.pair.totalBorrow, part, true)).mul(1001).div(1000) : ZERO
+                useNative
+                    ? toShare(this.pair.asset, toElastic(this.pair.totalBorrow, part, true))
+                          .mul(1001)
+                          .div(1000)
+                    : ZERO
             )
         }
         this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, this.account, false]))
@@ -300,7 +299,7 @@ export class KashiCooker {
         )
 
         try {
-            return { 
+            return {
                 success: true,
                 tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas, {
                     value: this.values.reduce((a, b) => a.add(b), ZERO)

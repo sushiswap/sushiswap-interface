@@ -77,14 +77,26 @@ export function getUSDValue(amount: BigNumberish, token: any) {
 export function getUSDString(amount: BigNumberish, token: any) {
     return BigNumber.from(amount)
         .mul(token.usd)
-        .div(e10(token.decimals)).toFixed(getCurrency(token.chainId).decimals)
+        .div(e10(token.decimals))
+        .toFixed(getCurrency(token.chainId).decimals)
 }
 
-export function easyAmount(amount: BigNumber, token: any): { value: BigNumber, string: string, usdValue: BigNumber, usd: string} {
+export function easyAmount(
+    amount: BigNumber,
+    token: any
+): { value: BigNumber; string: string; usdValue: BigNumber; usd: string } {
     return {
         value: amount,
         string: amount.toFixed(token.decimals),
         usdValue: getUSDValue(amount, token),
         usd: getUSDString(amount, token)
     }
+}
+
+export function takeFee(amount: BigNumber) {
+    return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
+}
+
+export function addBorrowFee(amount: BigNumber) {
+    return amount.mul(BigNumber.from(10005)).div(BigNumber.from(10000))
 }

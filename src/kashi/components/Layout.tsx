@@ -16,7 +16,7 @@ export default function Layout({
     children = undefined,
     right = undefined,
     netWorth = ''
-}: LayoutProps) {
+}: LayoutProps): JSX.Element {
     const location = useLocation()
     return (
         <div className="container mx-auto px-0 sm:px-4">
