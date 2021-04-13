@@ -10,11 +10,11 @@ function Positions({ pairs }: any): JSX.Element | null {
     const { chainId } = useActiveWeb3React()
     return (
         <div>
-            <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pb-4 px-4 text-sm  text-secondary">
-                <div className="hover:text-secondary col-span-1 md:col-span-2">
+            <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
+                <div className="hover:text-secondary col-span-1 md:col-span-2 lg:col-span-3">
                     <span className="hidden md:inline-block">Your</span> Positions
                 </div>
-                <div className="text-right hover:text-secondary">Borrowed</div>
+                <div className="text-left hover:text-secondary">Borrowed</div>
                 <div className="text-right hover:text-secondary">Collateral</div>
                 <div className="hidden text-right md:block hover:text-secondary">Limit Used</div>
                 <div className="hidden text-right sm:block hover:text-secondary">APR</div>
@@ -24,7 +24,7 @@ function Positions({ pairs }: any): JSX.Element | null {
                     return (
                         <div key={pair.address}>
                             <Link to={'/bento/kashi/borrow/' + pair.address} className="block text-high-emphesis">
-                                <div className="grid gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
+                                <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                                     <div className="hidden space-x-2 md:flex">
                                         <img
                                             src={getTokenIcon(pair.asset.address, chainId)}
@@ -37,26 +37,22 @@ function Positions({ pairs }: any): JSX.Element | null {
                                             alt=""
                                         />
                                     </div>
-                                    <div className="sm:block">
+                                    <div className="sm:block md:col-span-1 lg:col-span-2">
                                         <div>
                                             <strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}
                                         </div>
                                         <div>{pair.oracle.name}</div>
                                     </div>
-                                    <div className="text-right">
-                                        <div>
-                                            {formattedNum(pair.currentUserBorrowAmount.string, false)}{' '}
-                                            {pair.asset.symbol}
-                                        </div>
+                                    <div className="text-left">
+                                        <div>{formattedNum(pair.currentUserBorrowAmount.string, false)}</div>
+                                        <div>{pair.asset.symbol}</div>
                                         <div className="text-secondary text-sm">
                                             {formattedNum(pair.currentUserBorrowAmount.usd, true)}
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div>
-                                            {formattedNum(pair.userCollateralAmount.string, false)}{' '}
-                                            {pair.collateral.symbol}
-                                        </div>
+                                        <div>{formattedNum(pair.userCollateralAmount.string, false)}</div>
+                                        <div>{pair.collateral.symbol}</div>
                                         <div className="text-secondary text-sm">
                                             {formattedNum(pair.userCollateralAmount.usd, true)}
                                         </div>

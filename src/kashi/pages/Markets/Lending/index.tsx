@@ -138,11 +138,11 @@ export default function LendingMarkets(): JSX.Element | null {
                                                         />
                                                     </div>
                                                     <div className="sm:items-end md:hidden">
-                                                        <div>
-                                                            <strong>{pair.asset.symbol}</strong> /{' '}
-                                                            {pair.collateral.symbol}
+                                                        <div className="flex flex-col md:flex-row">
+                                                            <div className="font-semibold">{pair.asset.symbol} / </div>
+                                                            <div>{pair.collateral.symbol}</div>
                                                         </div>
-                                                        <div className="mt-0 text-white-500 text-xs block lg:hidden">
+                                                        <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
                                                             {pair.oracle.name}
                                                         </div>
                                                     </div>

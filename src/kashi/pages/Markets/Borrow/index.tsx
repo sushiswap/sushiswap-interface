@@ -108,7 +108,7 @@ export default function BorrowMarkets(): JSX.Element {
                         className="hover:text-secondary cursor-pointer"
                         onClick={() => requestSort('currentBorrowAmount.usdValue', 'descending')}
                     >
-                        <div className="flex items-center justify-center sm:justify-end">
+                        <div className="flex items-center justify-start md:justify-end">
                             <div>Borrowed</div>
                             {sortConfig &&
                                 sortConfig.key === 'currentBorrowAmount.usdValue' &&
@@ -180,7 +180,7 @@ export default function BorrowMarkets(): JSX.Element {
                                             </div>
                                             <div className="hidden md:block">{pair.collateral.symbol}</div>
                                             <div className="hidden lg:block">{pair.oracle.name}</div>
-                                            <div className="text-right">
+                                            <div className="text-left md:text-right">
                                                 <div className="md:hidden">
                                                     <div className="flex flex-col">
                                                         <div>{formattedNum(pair.currentBorrowAmount.string)}</div>
