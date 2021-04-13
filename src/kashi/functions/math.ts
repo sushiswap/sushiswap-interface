@@ -42,6 +42,34 @@ export function e10(exponent: BigNumber | Number | string): BigNumber {
     return BigNumber.from('10').pow(BigNumber.from(exponent))
 }
 
+export interface BigNumberMath {
+    min(...values: BigNumberish[]): BigNumber
+    max(...values: BigNumberish[]): BigNumber
+}
+
+export class BigNumberMath implements BigNumberMath {
+    static min(...values: BigNumberish[]): BigNumber {
+        let lowest = BigNumber.from(values[0])
+        for (let i = 1; i < values.length; i++) {
+            const value = BigNumber.from(values[i])
+            if (value.lt(lowest)) {
+                lowest = value
+            }
+        }
+        return lowest
+    }
+    static max(...values: BigNumberish[]): BigNumber {
+        let highest = BigNumber.from(values[0])
+        for (let i = 1; i < values.length; i++) {
+            const value = BigNumber.from(values[i])
+            if (value.gt(highest)) {
+                highest = value
+            }
+        }
+        return highest
+    }
+}
+
 export function minimum(...values: BigNumberish[]): BigNumber {
     let lowest = BigNumber.from(values[0])
     for (let i = 1; i < values.length; i++) {
@@ -62,29 +90,6 @@ export function maximum(...values: BigNumberish[]): BigNumber {
         }
     }
     return highest
-}
-
-// try to parse a user entered amount for a number of decimals
-export function toBN(value: string, decimals: number): BigNumber | undefined {
-    try {
-        return ethers.utils.parseUnits(value, decimals)
-    } catch (error) {
-        console.debug(`Failed to parse input amount: "${value}"`, error)
-    }
-    return undefined
-}
-
-// parseValue ensures the value is a number and within accepted range.
-export function parseValue(value: number): number {
-    const val: number = parseFloat(value.toString())
-
-    if (isNaN(val)) {
-        throw new Error(`Input value is not a number`)
-    }
-    if (val > Number.MAX_SAFE_INTEGER || val < Number.MIN_SAFE_INTEGER) {
-        throw new RangeError('Input value is outside of safe integer range')
-    }
-    return val
 }
 
 // Rounds a number [value] up to a specified [precision].
