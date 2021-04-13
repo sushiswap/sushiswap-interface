@@ -9,7 +9,9 @@ function Positions({ pairs }: any): JSX.Element | null {
     return (
         <div>
             <div className="grid gap-4 grid-cols-4 md:grid-cols-5 pb-4 px-4 text-sm  text-secondary">
-                <div className="hover:text-secondary col-span-1 md:col-span-2">Your Positions</div>
+                <div className="hover:text-secondary col-span-1 md:col-span-2">
+                    <span className="hidden md:inline-block">Your</span> Positions
+                </div>
                 <div className="text-right hover:text-secondary">Lent</div>
                 <div className="text-right hover:text-secondary">Borrowed</div>
                 <div className="text-right hover:text-secondary">APR</div>
@@ -34,7 +36,7 @@ function Positions({ pairs }: any): JSX.Element | null {
                                     </div>
                                     <div className="col-span-1 sm:block md:col-span-1">
                                         <div>
-                                        <strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}
+                                            <strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}
                                         </div>
                                         <div>{pair.oracle.name}</div>
                                     </div>
