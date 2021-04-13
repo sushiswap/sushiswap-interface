@@ -6,11 +6,11 @@ import { formattedNum, formattedPercent } from '../../../../utils'
 import { useKashiPairs } from '../../../context'
 import { Card, MarketHeader, Layout } from '../../../components'
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { ChevronUp, ChevronDown } from 'react-feather'
 import BorrowPositions from './Positions'
 import { useActiveWeb3React } from 'hooks'
+import useFuse from 'hooks/useFuse'
 import { getCurrency } from 'kashi/constants'
 
 export default function BorrowMarkets(): JSX.Element {

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { RowBetween } from '../../components/Row'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
 import { useActiveWeb3React } from 'hooks'
@@ -10,15 +9,11 @@ import { Card, CardHeader, Paper, Layout, Search } from '../../kashi/components'
 import { getTokenIcon } from 'kashi/functions'
 import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
-import useFuse from 'sushi-hooks/useFuse'
+import useFuse from 'hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import { BackButton } from 'kashi/components'
 import { ZERO } from 'kashi/functions/math'
 import { getCurrency } from 'kashi'
-
-export const FixedHeightRow = styled(RowBetween)`
-    height: 24px;
-`
 
 export default function BentoBalances(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -59,17 +54,17 @@ export default function BentoBalances(): JSX.Element {
                             <div className="hidden md:flex items-center">
                                 <BackButton defaultRoute="/bento" />
                                 <div>
-                                <span className="text-3xl text-high-emphesis mr-2">BentoBox</span>
-                                <span className="text-lg text-secondary">
-                                    {formattedNum(
-                                        balances
-                                            ?.reduce((previousValue, currentValue) => {
-                                                return previousValue.add(currentValue.bento.usdValue)
-                                            }, ZERO)
-                                            .toFixed(getCurrency(chainId).decimals),
-                                        true
-                                    )}
-                                </span>
+                                    <span className="text-3xl text-high-emphesis mr-2">BentoBox</span>
+                                    <span className="text-lg text-secondary">
+                                        {formattedNum(
+                                            balances
+                                                ?.reduce((previousValue, currentValue) => {
+                                                    return previousValue.add(currentValue.bento.usdValue)
+                                                }, ZERO)
+                                                .toFixed(getCurrency(chainId).decimals),
+                                            true
+                                        )}
+                                    </span>
                                 </div>
                             </div>
                             <div className="ml-3">
