@@ -60,10 +60,12 @@ function Button({
 
 export default Button
 
+// export function IconButton() {}
+
 export function BackButton({ defaultRoute, className }: { defaultRoute: string; className?: string }): JSX.Element {
     const history = useHistory()
     return (
-        <Button
+        <button
             onClick={() => {
                 if (history.length < 3) {
                     history.push(defaultRoute)
@@ -71,9 +73,10 @@ export function BackButton({ defaultRoute, className }: { defaultRoute: string; 
                     history.goBack()
                 }
             }}
-            className={`p-2 mr-4 rounded-full bg-dark-900 w-10 h-10 ${className || ''}`}
+            className={`flex justify-center items-center p-2 mr-4 rounded-full bg-dark-900 w-12 h-12 ${className ||
+                ''}`}
         >
             <ChevronLeft className={'w-6 h-6'} />
-        </Button>
+        </button>
     )
 }
