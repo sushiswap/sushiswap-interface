@@ -6,8 +6,7 @@ import { Dots } from '../Pool/styleds'
 //import { useActiveWeb3React } from 'hooks'
 import { formattedNum, formattedPercent } from '../../utils'
 import { Card, CardHeader, Paper, Search, DoubleLogo } from './components'
-import useFuse from 'sushi-hooks/useFuse'
-import useSortableData from 'sushi-hooks/useSortableData'
+import { useFuse, useSortableData } from 'hooks'
 import useFarms from 'sushi-hooks/useFarms'
 
 import { ChevronUp, ChevronDown } from 'react-feather'
@@ -17,7 +16,7 @@ export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
 
-export default function BentoBalances(): JSX.Element {
+export default function Yield(): JSX.Element {
     const query = useFarms()
     const farms = query?.farms
     const userFarms = query?.userFarms
