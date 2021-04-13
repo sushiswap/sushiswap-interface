@@ -15,9 +15,11 @@ function Positions({ pairs }: any): JSX.Element | null {
                     <span className="hidden md:inline-block">Your</span> Positions
                 </div>
                 <div className="text-left hover:text-secondary">Borrowed</div>
-                <div className="text-right hover:text-secondary">Collateral</div>
-                <div className="hidden text-right md:block hover:text-secondary">Limit Used</div>
-                <div className="hidden text-right sm:block hover:text-secondary">APR</div>
+                <div className="hidden md:block text-right hover:text-secondary">Collateral</div>
+                <div className="text-right hover:text-secondary">
+                    Limit <span className="hidden md:inline-block">Used</span>
+                </div>
+                <div className="text-right hover:text-secondary">APR</div>
             </div>
             <div className="flex-col space-y-2">
                 {pairs.map((pair: any) => {
@@ -50,20 +52,18 @@ function Positions({ pairs }: any): JSX.Element | null {
                                             {formattedNum(pair.currentUserBorrowAmount.usd, true)}
                                         </div>
                                     </div>
-                                    <div className="text-right">
+                                    <div className="hidden md:block text-right">
                                         <div>{formattedNum(pair.userCollateralAmount.string, false)}</div>
                                         <div>{pair.collateral.symbol}</div>
                                         <div className="text-secondary text-sm">
                                             {formattedNum(pair.userCollateralAmount.usd, true)}
                                         </div>
                                     </div>
-                                    <div className="hidden md:flex justify-end items-center">
+                                    <div className="flex justify-end items-center">
                                         {formattedPercent(pair.health.string)}
                                         <GradientDot percent={pair.health.string} />
                                     </div>
-                                    <div className="hidden sm:block text-right">
-                                        {formattedPercent(pair.interestPerYear.string)}
-                                    </div>
+                                    <div className="text-right">{formattedPercent(pair.interestPerYear.string)}</div>
                                 </div>
                             </Link>
                         </div>
