@@ -42,34 +42,6 @@ export function e10(exponent: BigNumber | Number | string): BigNumber {
     return BigNumber.from('10').pow(BigNumber.from(exponent))
 }
 
-export interface BigNumberMath {
-    min(...values: BigNumberish[]): BigNumber
-    max(...values: BigNumberish[]): BigNumber
-}
-
-export class BigNumberMath implements BigNumberMath {
-    static min(...values: BigNumberish[]): BigNumber {
-        let lowest = BigNumber.from(values[0])
-        for (let i = 1; i < values.length; i++) {
-            const value = BigNumber.from(values[i])
-            if (value.lt(lowest)) {
-                lowest = value
-            }
-        }
-        return lowest
-    }
-    static max(...values: BigNumberish[]): BigNumber {
-        let highest = BigNumber.from(values[0])
-        for (let i = 1; i < values.length; i++) {
-            const value = BigNumber.from(values[i])
-            if (value.gt(highest)) {
-                highest = value
-            }
-        }
-        return highest
-    }
-}
-
 export function minimum(...values: BigNumberish[]): BigNumber {
     let lowest = BigNumber.from(values[0])
     for (let i = 1; i < values.length; i++) {
