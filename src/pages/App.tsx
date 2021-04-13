@@ -43,7 +43,7 @@ import BentoBalances from './BentoBoxBalances'
 import WalletRoute from '../hocs/WalletRoute'
 import PublicRoute from '../hocs/PublicRoute'
 import Connect from '../kashi/pages/Connect'
-import KashiCreate from '../kashi/pages/Create'
+import CreateMarkets from '../kashi/pages/Markets/Create'
 
 import LendPair from '../kashi/pages/Pair/Lend'
 import LendMarkets from '../kashi/pages/Markets/Lending'
@@ -136,7 +136,7 @@ function App() {
                                 />
                                 <WalletRoute exact strict path="/bento/kashi/lend" component={LendMarkets} />
                                 <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
-                                <WalletRoute exact strict path="/bento/kashi/create" component={KashiCreate} />
+                                <WalletRoute exact strict path="/bento/kashi/create" component={CreateMarkets} />
                                 <WalletRoute exact strict path="/bento/kashi/lend/:pairAddress" component={LendPair} />
                                 <WalletRoute
                                     exact

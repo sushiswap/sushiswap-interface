@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { Card, Layout, LendCardHeader, BackButton, ListBox, Button } from '../components'
+import { Card, Layout, LendCardHeader, BackButton, ListBox, Button } from '../../../components'
 
 import {
     CHAINLINK_TOKENS,
@@ -32,24 +32,24 @@ const CreatePair = () => {
     }, [selectedAsset])
 
     const getOracleData = (asset: any, collateral: any) => {
-        let mapping = CHAINLINK_MAPPING[chainId || 1] || {}
-        for (let address in mapping) {
+        const mapping = CHAINLINK_MAPPING[chainId || 1] || {}
+        for (const address in mapping) {
             mapping[address].address = address
         }
 
         let multiply = ethers.constants.AddressZero
         let divide = ethers.constants.AddressZero
-        let multiplyMatches = Object.values(mapping).filter(
+        const multiplyMatches = Object.values(mapping).filter(
             m => m.from == asset.address && m.to == collateral.address
         )
-        let oracleData = ''
+        const oracleData = ''
         let decimals = 0
         if (multiplyMatches.length) {
             const match = multiplyMatches[0]
             multiply = match.address!
             decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
         } else {
-            let divideMatches = Object.values(mapping).filter(
+            const divideMatches = Object.values(mapping).filter(
                 m => m.from == collateral.address && m.to == asset.address
             )
             if (divideMatches.length) {
@@ -66,20 +66,13 @@ const CreatePair = () => {
                     multiply = match[0].mfrom.address!
                     divide = match[0].mto[0].address!
                     decimals =
-                        18 +
-                        match[0].mfrom.decimals -
-                        match[0].mto[0].decimals -
-                        collateral.decimals +
-                        asset.decimals
+                        18 + match[0].mfrom.decimals - match[0].mto[0].decimals - collateral.decimals + asset.decimals
                 } else {
-                    return ""
+                    return ''
                 }
             }
         }
-        return ethers.utils.defaultAbiCoder.encode(
-            ['address', 'address', 'uint256'],
-            [multiply, divide, e10(decimals)]
-        )
+        return ethers.utils.defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
     }
 
     const assetTokens = tokens.filter((token: any) => {
@@ -93,7 +86,7 @@ const CreatePair = () => {
         try {
             const oracleData = getOracleData(selectedAsset, selectedCollateral)
             if (!oracleData) {
-                console.log("No path")
+                console.log('No path')
                 return
             }
 
@@ -101,7 +94,9 @@ const CreatePair = () => {
                 ['address', 'address', 'address', 'bytes'],
                 [selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData]
             )
-            addTransaction(await bentoBoxContract?.deploy(KASHI_ADDRESS, kashiData, true), { summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`})
+            addTransaction(await bentoBoxContract?.deploy(KASHI_ADDRESS, kashiData, true), {
+                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`
+            })
             setSelectedAsset(empty)
             setSelectedCollateral(empty)
         } catch (e) {
@@ -135,7 +130,8 @@ const CreatePair = () => {
             >
                 <div className="space-y-6">
                     <p>
-                        Currently only Chainlink oracles are available. Support for more oracles, such as SushiSwap on-chain time weighted average pricing (TWAP) oracles will be added later.
+                        Currently only Chainlink oracles are available. Support for more oracles, such as SushiSwap
+                        on-chain time weighted average pricing (TWAP) oracles will be added later.
                     </p>
                     <ListBox
                         label={'Asset to Borrow (SHORT)'}
@@ -153,10 +149,7 @@ const CreatePair = () => {
                         color="gradient"
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"
                         onClick={() => handleCreate()}
-                        disabled={
-                            selectedCollateral === empty ||
-                            selectedAsset === empty
-                        }
+                        disabled={selectedCollateral === empty || selectedAsset === empty}
                     >
                         Create Market
                     </Button>
