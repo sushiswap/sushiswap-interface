@@ -190,14 +190,28 @@ export default function BorrowMarkets(): JSX.Element {
                                                         {formattedNum(pair.currentBorrowAmount.usd, true)}
                                                     </div>
                                                 </div>
+                                                <div className="hidden md:block">
+                                                    {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.currentBorrowAmount.usd, true)}
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="flex flex-col md:flex-row md:space-x-1 md:text-right">
-                                                    <div>{formattedNum(pair.totalAssetAmount.string)}</div>
-                                                    <div> {pair.asset.symbol}</div>
+                                                <div className="md:hidden">
+                                                    <div className="flex flex-col">
+                                                        <div>{formattedNum(pair.totalAssetAmount.string)}</div>
+                                                        <div>{pair.asset.symbol}</div>
+                                                    </div>
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                    </div>
                                                 </div>
-                                                <div className="text-secondary">
-                                                    {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                <div className="hidden md:block">
+                                                    {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="text-right">
