@@ -3,8 +3,6 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 
 import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
 
-export { PRELOADED_PROPOSALS } from './proposals'
-
 export const POOL_DENY = ['14', '29', '45', '30']
 
 // a list of tokens by chain
@@ -21,7 +19,6 @@ export const AVERAGE_BLOCK_TIME_IN_SECS = 13
 export const PROPOSAL_LENGTH_IN_BLOCKS = 40_320
 export const PROPOSAL_LENGTH_IN_SECS = AVERAGE_BLOCK_TIME_IN_SECS * PROPOSAL_LENGTH_IN_BLOCKS
 
-export const GOVERNANCE_ADDRESS = '0x5e4be8Bc9637f0EAA1A755019e06A68ce081D58F'
 export const TIMELOCK_ADDRESS = '0x1a9C8182C09F50C8318d769245beA52c32BE35BC'
 
 // SUSHI
@@ -54,7 +51,6 @@ export const SUSHI: ChainTokenMap = {
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
     // [UNI_ADDRESS]: 'UNI',
-    [GOVERNANCE_ADDRESS]: 'Governance',
     [TIMELOCK_ADDRESS]: 'Timelock'
 }
 
