@@ -231,7 +231,7 @@ export default function Repay({ pair }: RepayProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
                     Balance: {formattedNum(balance.toFixed(pair.asset.decimals))}
                 </div>
             </div>
@@ -280,7 +280,7 @@ export default function Repay({ pair }: RepayProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
                     Max: {formattedNum(maxRemoveCollateral)}
                 </div>
             </div>

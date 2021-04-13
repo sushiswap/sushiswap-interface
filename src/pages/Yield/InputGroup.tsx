@@ -48,7 +48,7 @@ export default function InputGroup({
     const staked = useStakedBalance(pid)
     const pending = usePendingSushi(pid)
 
-    console.log('pending:', pending, pid)
+    //console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
