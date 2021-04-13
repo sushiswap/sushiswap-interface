@@ -27,8 +27,8 @@ import {
 } from './AddLiquidity/redirects'
 //Feat Bento
 import Bento from './BentoBox'
-import BentoBalances from './BentoBoxBalances'
-// import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
+import BentoBalances from './BentoBox/Balances'
+import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 //import Earn from './Earn'
 //import Manage from './Earn/Manage'
 //import MigrateV1 from './MigrateV1'
@@ -158,7 +158,7 @@ function App() {
                                 path="/create/:currencyIdA/:currencyIdB"
                                 component={RedirectDuplicateTokenIds}
                             />
-                            {/* <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} /> */}
+                            <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
                             <Route
                                 exact
                                 strict

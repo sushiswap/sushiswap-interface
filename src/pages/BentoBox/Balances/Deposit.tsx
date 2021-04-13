@@ -4,11 +4,11 @@ import { BENTOBOX_ADDRESS } from 'kashi'
 import { Button } from 'kashi/components'
 import React, { useState } from 'react'
 import useBentoBox from 'hooks/useBentoBox'
-import useTokenBalance from '../../sushi-hooks/useTokenBalance'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import { useActiveWeb3React } from '../../hooks'
-import { formattedNum } from '../../utils'
-import { Dots } from '../Pool/styleds'
+import useTokenBalance from 'sushi-hooks/useTokenBalance'
+import { Input as NumericalInput } from 'components/NumericalInput'
+import { useActiveWeb3React } from 'hooks'
+import { formattedNum } from 'utils'
+import { Dots } from '../../Pool/styleds'
 
 export default function Deposit({
     tokenAddress,
