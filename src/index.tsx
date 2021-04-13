@@ -23,6 +23,7 @@ import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
+import { KashiProvider } from 'kashi/context'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -73,9 +74,11 @@ ReactDOM.render(
                         <Updaters />
                         <ThemeProvider>
                             <ThemedGlobalStyle />
-                            <HashRouter>
-                                <App />
-                            </HashRouter>
+                            <KashiProvider>
+                                <HashRouter>
+                                    <App />
+                                </HashRouter>
+                            </KashiProvider>
                         </ThemeProvider>
                     </Provider>
                 </Blocklist>
