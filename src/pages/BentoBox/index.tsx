@@ -6,7 +6,7 @@ import Web3Status from 'components/Web3Status'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 import ComingSoon from '../../assets/kashi/coming-soon.png'
 import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
-import BentoBoxHero from '../../assets/kashi/bentobox-hero.png'
+import BentoBoxHero from '../../assets/kashi/bentobox-hero.jpg'
 function BentoBox(): JSX.Element {
     const { account } = useActiveWeb3React()
 
@@ -33,8 +33,8 @@ function BentoBox(): JSX.Element {
                 </div>
             </div>
 
-            <div className="container mx-auto px-6 max-w-5xl">
-                <div className="grid gap-12 grid-flow-auto grid-cols-4">
+            <div className="container mx-auto sm:px-6 max-w-5xl">
+                <div className="grid gap-4 sm:gap-12 grid-flow-auto grid-cols-4">
                     <Card className="col-span-2 md:col-span-1 w-full bg-dark-800 hover:bg-dark-900 cursor-pointer rounded shadow-pink-glow hover:shadow-pink-glow-hovered">
                         <div className="relative w-full">
                             <img alt="" src={KashiNeonSign} className="block m-auto w-full h-auto mb-4" />
