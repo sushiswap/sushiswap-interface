@@ -23,7 +23,7 @@ export default function Layout({
             <div className={`mb-2 grid grid-cols-12 gap-4`}>
                 <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
                     <Link to="/bento/kashi/borrow" className="flex justify-center xl:justify-start xl:mx-8">
-                        <img src={KashiLogo} alt="" className="h-auto w-1/2 md:w-1/3 xl:w-full" />
+                        <img src={KashiLogo} alt="" className="object-scale-down w-1/2 md:w-1/3 xl:w-full" />
                     </Link>
                 </div>
                 <div className="flex col-span-12 xl:col-span-9 items-end">

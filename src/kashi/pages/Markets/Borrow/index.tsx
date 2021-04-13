@@ -54,7 +54,7 @@ export default function BorrowMarkets(): JSX.Element {
                     </div>
                 )}
 
-                <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
+                <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
                     <div
                         className="flex items-center cursor-pointer hover:text-secondary"
                         onClick={() => requestSort('search')}
@@ -166,8 +166,9 @@ export default function BorrowMarkets(): JSX.Element {
                                                     />
                                                 </div>
                                                 <div className="sm:items-end md:hidden">
-                                                    <div>
-                                                        <strong>{pair.asset.symbol}</strong> / {pair.collateral.symbol}
+                                                    <div className="flex flex-col md:flex-row">
+                                                        <div className="font-semibold">{pair.asset.symbol} / </div>
+                                                        <div>{pair.collateral.symbol}</div>
                                                     </div>
                                                     <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
                                                         {pair.oracle.name}
@@ -180,19 +181,37 @@ export default function BorrowMarkets(): JSX.Element {
                                             <div className="hidden md:block">{pair.collateral.symbol}</div>
                                             <div className="hidden lg:block">{pair.oracle.name}</div>
                                             <div className="text-right">
-                                                <div>
-                                                    {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
+                                                <div className="md:hidden">
+                                                    <div className="flex flex-col">
+                                                        <div>{formattedNum(pair.currentBorrowAmount.string)}</div>
+                                                        <div>{pair.asset.symbol}</div>
+                                                    </div>
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.currentBorrowAmount.usd, true)}
+                                                    </div>
                                                 </div>
-                                                <div className="text-secondary">
-                                                    {formattedNum(pair.currentBorrowAmount.usd, true)}
+                                                <div className="hidden md:block">
+                                                    {formattedNum(pair.currentBorrowAmount.string)} {pair.asset.symbol}
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.currentBorrowAmount.usd, true)}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div>
-                                                    {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
+                                                <div className="md:hidden">
+                                                    <div className="flex flex-col">
+                                                        <div>{formattedNum(pair.totalAssetAmount.string)}</div>
+                                                        <div>{pair.asset.symbol}</div>
+                                                    </div>
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                    </div>
                                                 </div>
-                                                <div className="text-secondary">
-                                                    {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                <div className="hidden md:block">
+                                                    {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
+                                                    <div className="text-secondary">
+                                                        {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="text-right">
