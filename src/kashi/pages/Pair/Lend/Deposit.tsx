@@ -15,6 +15,7 @@ import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
 import { formattedNum } from 'utils'
 import { KashiContext } from 'kashi/context'
+import { MaxUint256 } from '@ethersproject/constants'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
     const { account, chainId } = useActiveWeb3React()
@@ -27,7 +28,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            value.toBigNumber(pair.asset.decimals).toString()
+            MaxUint256.toString()
         ),
         BENTOBOX_ADDRESS
     )
@@ -42,16 +43,20 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const assetNative = WETH[chainId || 1].address == pair.asset.address
     const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
-    const max = (useBento ? pair.asset.bentoBalance : assetNative ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO) : pair.asset.balance).toFixed(pair.asset.decimals)
-    
-    const warnings = new Warnings()
-        .add(
-            balance?.lt(value.toBigNumber(pair.asset.decimals)),
-            `Please make sure your ${
-                useBento ? 'BentoBox' : 'wallet'
-            } balance is sufficient to deposit and then try again.`,
-            true
-        )
+    const max = (useBento
+        ? pair.asset.bentoBalance
+        : assetNative
+        ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO)
+        : pair.asset.balance
+    ).toFixed(pair.asset.decimals)
+
+    const warnings = new Warnings().add(
+        balance?.lt(value.toBigNumber(pair.asset.decimals)),
+        `Please make sure your ${
+            useBento ? 'BentoBox' : 'wallet'
+        } balance is sufficient to deposit and then try again.`,
+        true
+    )
 
     const showApprove =
         chainId &&
@@ -181,11 +186,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                         <Button
                             color="blue"
                             onClick={() => onCook(pair, onExecute)}
-                            disabled={
-                                balance.eq(0) ||
-                                value.toBigNumber(pair.asset.decimals).lte(0) ||
-                                warnings.broken
-                            }
+                            disabled={balance.eq(0) || value.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
                         >
                             Deposit
                         </Button>

@@ -18,6 +18,7 @@ import { formattedNum } from 'utils'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
 import Badge from 'kashi/components/Badge'
+import { MaxUint256 } from '@ethersproject/constants'
 
 interface BorrowProps {
     pair: any
@@ -49,7 +50,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 pair.collateral.symbol,
                 pair.collateral.name
             ),
-            collateralValue.toBigNumber(pair.collateral.decimals).toString()
+            MaxUint256.toString()
         ),
         BENTOBOX_ADDRESS
     )
@@ -178,7 +179,12 @@ export default function Borrow({ pair }: BorrowProps) {
         if (displayUpdateOracle) {
             transactionReview.addRate('Exchange Rate', pair.currentExchangeRate, pair.oracleExchangeRate, pair)
         }
-        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)), pair.asset)
+        transactionReview.addTokenAmount(
+            'Borrow Limit',
+            pair.maxBorrowable.safe.value,
+            nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)),
+            pair.asset
+        )
         transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
         transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }

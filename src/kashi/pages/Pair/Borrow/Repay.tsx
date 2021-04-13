@@ -4,6 +4,7 @@ import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
+import { MaxUint256 } from '@ethersproject/constants'
 import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
 import { Warnings, TransactionReview, KashiCooker, Warning } from 'kashi/entities'
 import { KASHI_ADDRESS, BENTOBOX_ADDRESS } from 'kashi/constants'
@@ -40,7 +41,7 @@ export default function Repay({ pair }: RepayProps) {
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            repayValue.toBigNumber(pair.asset.decimals).toString()
+            MaxUint256.toString()
         ),
         BENTOBOX_ADDRESS
     )
@@ -49,6 +50,7 @@ export default function Repay({ pair }: RepayProps) {
 
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.asset.address
+
     const balance = useBentoRepay
         ? toAmount(pair.asset, pair.asset.bentoBalance)
         : assetNative
@@ -60,14 +62,17 @@ export default function Repay({ pair }: RepayProps) {
     const displayRepayValue = pinRepayMax
         ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.decimals)
         : repayValue
+
     const nextUserBorrowAmount = pair.currentUserBorrowAmount.value.sub(
         displayRepayValue.toBigNumber(pair.asset.decimals)
     )
 
     const nextMinCollateralOracle = nextUserBorrowAmount.muldiv(pair.oracleExchangeRate, e10(16).mul('75'))
     const nextMinCollateralSpot = nextUserBorrowAmount.muldiv(pair.spotExchangeRate, e10(16).mul('75'))
-    const nextMinCollateralStored = nextUserBorrowAmount
-        .muldiv(displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate, e10(16).mul('75'))
+    const nextMinCollateralStored = nextUserBorrowAmount.muldiv(
+        displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate,
+        e10(16).mul('75')
+    )
     const nextMinCollateralMinimum = maximum(nextMinCollateralOracle, nextMinCollateralSpot, nextMinCollateralStored)
     const nextMaxRemoveCollateral = maximum(
         pair.userCollateralAmount.value.sub(nextMinCollateralMinimum.mul(100).div(95)),
@@ -99,7 +104,12 @@ export default function Repay({ pair }: RepayProps) {
 
     const transactionReview = new TransactionReview()
     if (displayRepayValue || displayRemoveValue) {
-        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe.add(displayRepayValue.toBigNumber(pair.asset.decimals)), pair.asset)
+        transactionReview.addTokenAmount(
+            'Borrow Limit',
+            pair.maxBorrowable.safe.value,
+            nextMaxBorrowSafe.add(displayRepayValue.toBigNumber(pair.asset.decimals)),
+            pair.asset
+        )
         transactionReview.addPercentage('Health', pair.health.value, nextHealth)
     }
 
@@ -153,9 +163,12 @@ export default function Repay({ pair }: RepayProps) {
             displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||
             (pinRemoveMax && pair.userCollateralShare.gt(0))
         ) {
-            const share = pinRemoveMax && (nextUserBorrowAmount.isZero() || (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
-                ? pair.userCollateralShare
-                : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
+            const share =
+                pinRemoveMax &&
+                (nextUserBorrowAmount.isZero() ||
+                    (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
+                    ? pair.userCollateralShare
+                    : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
 
             cooker.removeCollateral(share, useBentoRemove)
             summary += (summary ? ' and ' : '') + 'Remove Collateral'
@@ -172,6 +185,12 @@ export default function Repay({ pair }: RepayProps) {
         !useBentoRepay &&
         displayRepayValue &&
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
+
+    console.log(
+        chainId && pair.asset.address !== WETH[chainId].address && !useBentoRepay,
+        approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING,
+        displayRepayValue && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
+    )
 
     const removeValueSet =
         !displayRemoveValue.toBigNumber(pair.collateral.decimals).isZero() ||
@@ -231,7 +250,10 @@ export default function Repay({ pair }: RepayProps) {
                     <Button
                         variant="outlined"
                         color="pink"
-                        onClick={() => setPinRepayMax(true)}
+                        onClick={() => {
+                            setPinRepayMax(true)
+                            setRepayAssetValue(displayRepayValue)
+                        }}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
                         MAX
