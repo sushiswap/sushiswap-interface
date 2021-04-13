@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { useCallback, useEffect, useState, useContext } from 'react'
+import { useCallback, useEffect, useState, useContext, useMemo } from 'react'
 import ERC20_ABI from '../../constants/abis/erc20.json'
 import { useActiveWeb3React, useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks'
 import { isAddress } from '../../utils'
@@ -10,6 +10,7 @@ import { KashiContext } from 'kashi'
 import { easyAmount, ZERO, e10, toAmount } from 'kashi/functions'
 import orderBy from 'lodash/orderBy'
 import { useBlockNumber } from 'state/application/hooks'
+import { useSingleCallResult } from 'state/multicall/hooks'
 
 export interface BentoBalance {
     address: string
@@ -62,13 +63,13 @@ export function useBentoBalances(): BentoBalance[] {
             })
             .filter(token => token.balance.gt('0') || token.bentoBalance.gt('0'))
         setBalances(orderBy(balancesWithDetails, ['name'], ['asc']))
-    }, [account, tokens, boringHelperContract])
+    }, [account, boringHelperContract, chainId, info, tokens, weth])
 
     useEffect(() => {
         if (account && bentoBoxContract && library) {
             fetchBentoBalances()
         }
-    }, [blockNumber, account, bentoBoxContract, library, info])
+    }, [account, blockNumber, bentoBoxContract, fetchBentoBalances, info, library])
 
     return balances
 }
@@ -108,4 +109,13 @@ export function useBentoBalance(tokenAddress: string): { value: BigNumber; decim
     }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract])
 
     return balance
+}
+
+export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {
+    const contract = useBentoBoxContract()
+
+    const inputs = useMemo(() => [masterContract, user], [masterContract, user])
+    const allowed = useSingleCallResult(contract, 'masterContractApproved', inputs).result
+
+    return useMemo(() => (allowed ? allowed[0] : undefined), [allowed])
 }
