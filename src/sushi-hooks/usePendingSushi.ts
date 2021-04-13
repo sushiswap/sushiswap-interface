@@ -20,7 +20,8 @@ const usePending = (pid: number) => {
     }, [account, masterChefContract, pid])
 
     useEffect(() => {
-        if (account && masterChefContract && pid) {
+        if (account && masterChefContract && String(pid)) {
+            // pid = 0 is evaluated as false
             fetchPending()
         }
     }, [account, currentBlockNumber, fetchPending, masterChefContract, pid])
