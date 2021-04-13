@@ -32,7 +32,6 @@ export default function BentoBalances(): JSX.Element {
     // Sorting Setup
     const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
 
-    console.log('userFarms:', userFarms)
     return (
         <div className="container max-w-2xl mx-auto px-0 sm:px-4">
             <Card

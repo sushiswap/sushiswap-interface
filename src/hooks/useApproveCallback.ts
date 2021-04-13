@@ -37,7 +37,6 @@ export function useApproveCallback(
         if (amountToApprove.currency === ETHER) return ApprovalState.APPROVED
         // we might not have enough data to know whether or not we need to approve
         if (!currentAllowance) return ApprovalState.UNKNOWN
-        console.log('get approval state', amountToApprove)
         // amountToApprove will be defined if currentAllowance is
         return currentAllowance.lessThan(amountToApprove)
             ? pendingApproval

@@ -11,7 +11,7 @@ const useMasterChef = () => {
     // Deposit
     const deposit = useCallback(
         async (pid: number, amount: string, name: string) => {
-            console.log('depositing...', pid, amount)
+            // console.log('depositing...', pid, amount)
             try {
                 const tx = await masterChefContract?.deposit(pid, ethers.utils.parseUnits(amount))
                 return addTransaction(tx, { summary: `Deposit ${name} LP` })

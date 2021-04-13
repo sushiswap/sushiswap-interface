@@ -186,12 +186,6 @@ export default function Repay({ pair }: RepayProps) {
         displayRepayValue &&
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
-    console.log(
-        chainId && pair.asset.address !== WETH[chainId].address && !useBentoRepay,
-        approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING,
-        displayRepayValue && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
-    )
-
     const removeValueSet =
         !displayRemoveValue.toBigNumber(pair.collateral.decimals).isZero() ||
         (pinRemoveMax && pair.userCollateralShare.gt(ZERO))
@@ -252,7 +246,6 @@ export default function Repay({ pair }: RepayProps) {
                         color="pink"
                         onClick={() => {
                             setPinRepayMax(true)
-                            setRepayAssetValue(displayRepayValue)
                         }}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
