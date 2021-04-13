@@ -1,21 +1,24 @@
 import { Fraction as SDKFraction } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { Zero, One } from '@ethersproject/constants'
 import { formatBalance, isEmptyValue, parseBalance } from '../utils'
 
 class Fraction {
-    static BASE = ethers.BigNumber.from(10).pow(18)
-    static NAN = new Fraction(ethers.constants.Zero, ethers.constants.Zero)
-    static ZERO = new Fraction(ethers.constants.Zero, ethers.constants.One)
-    static convert(sdk: SDKFraction) {
-        return new Fraction(
-            ethers.BigNumber.from(sdk.numerator.toString()),
-            ethers.BigNumber.from(sdk.denominator.toString())
-        )
+    static BASE = BigNumber.from(10).pow(18)
+
+    static NAN = new Fraction(Zero, Zero)
+
+    static ZERO = new Fraction(Zero, One)
+
+    static convert(sdk: SDKFraction): Fraction {
+        return new Fraction(BigNumber.from(sdk.numerator.toString()), BigNumber.from(sdk.denominator.toString()))
     }
-    static from(numerator: ethers.BigNumberish, denominator: ethers.BigNumberish) {
-        return new Fraction(ethers.BigNumber.from(numerator), ethers.BigNumber.from(denominator))
+
+    static from(numerator: BigNumberish, denominator: BigNumberish): Fraction {
+        return new Fraction(BigNumber.from(numerator), BigNumber.from(denominator))
     }
-    static parse(value: string) {
+
+    static parse(value: string): Fraction {
         return value === ''
             ? Fraction.NAN
             : isEmptyValue(value)
@@ -23,44 +26,44 @@ class Fraction {
             : new Fraction(parseBalance(value, 18), Fraction.BASE)
     }
 
-    numerator: ethers.BigNumber
-    denominator: ethers.BigNumber
+    numerator: BigNumber
+    denominator: BigNumber
 
-    private constructor(numerator: ethers.BigNumber, denominator: ethers.BigNumber) {
+    private constructor(numerator: BigNumber, denominator: BigNumber) {
         this.numerator = numerator
         this.denominator = denominator
     }
 
-    isZero() {
+    isZero(): boolean {
         return !this.isNaN() && this.numerator.isZero()
     }
 
-    isNaN() {
+    isNaN(): boolean {
         return this.denominator.isZero()
     }
 
-    eq(fraction: Fraction) {
+    eq(fraction: Fraction): boolean {
         return this.numerator
             .mul(fraction.denominator)
             .div(fraction.numerator)
             .eq(this.denominator)
     }
 
-    gt(fraction: Fraction) {
+    gt(fraction: Fraction): boolean {
         return this.numerator
             .mul(fraction.denominator)
             .div(fraction.numerator)
             .gt(this.denominator)
     }
 
-    lt(fraction: Fraction) {
+    lt(fraction: Fraction): boolean {
         return this.numerator
             .mul(fraction.denominator)
             .div(fraction.numerator)
             .lt(this.denominator)
     }
 
-    toString(maxFractions = 8) {
+    toString(maxFractions = 8): string {
         if (this.isNaN()) return ''
         if (this.isZero()) return '0'
         let str = formatBalance(this.numerator.mul(Fraction.BASE).div(this.denominator), 18, maxFractions)
@@ -68,8 +71,8 @@ class Fraction {
         return str
     }
 
-    apply(value: ethers.BigNumberish) {
-        return this.denominator.isZero() ? ethers.constants.Zero : this.numerator.mul(value).div(this.denominator)
+    apply(value: BigNumberish): BigNumber {
+        return this.denominator.isZero() ? Zero : this.numerator.mul(value).div(this.denominator)
     }
 }
 
