@@ -15,8 +15,6 @@ import { useKashiApprovalPending } from 'state/application/hooks'
 import { Warnings } from 'kashi/entities'
 import { formattedNum } from 'utils'
 import { KashiContext } from 'kashi/context'
-import { MaxUint256 } from '@ethersproject/constants'
-import { useTokenAllowance } from 'data/Allowances'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
     const { account, chainId } = useActiveWeb3React()
@@ -26,14 +24,10 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
     const [value, setValue] = useState('')
 
-    const token = new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name)
-
-    const currentAllowance = useTokenAllowance(token, account ?? undefined, BENTOBOX_ADDRESS)
-
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            currentAllowance?.equalTo('0') ? MaxUint256.toString() : value.toBigNumber(pair.asset.decimals).toString()
+            value.toBigNumber(pair.asset.decimals).toString()
         ),
         BENTOBOX_ADDRESS
     )

@@ -16,7 +16,6 @@ import { formattedNum } from 'utils'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
-import { useTokenAllowance } from 'data/Allowances'
 
 interface RepayProps {
     pair: any
@@ -39,20 +38,6 @@ export default function Repay({ pair }: RepayProps) {
     const [pinRemoveMax, setPinRemoveMax] = useState(false)
     const [pinRepayMax, setPinRepayMax] = useState(false)
 
-    const token = new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name)
-
-    const currentAllowance = useTokenAllowance(token, account ?? undefined, BENTOBOX_ADDRESS)
-
-    const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            token,
-            currentAllowance?.equalTo('0')
-                ? MaxUint256.toString()
-                : repayValue.toBigNumber(pair.asset.decimals).toString()
-        ),
-        BENTOBOX_ADDRESS
-    )
-
     const info = useContext(KashiContext).state.info
 
     // Calculated
@@ -69,6 +54,14 @@ export default function Repay({ pair }: RepayProps) {
     const displayRepayValue = pinRepayMax
         ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.decimals)
         : repayValue
+
+    const [approvalState, approve] = useApproveCallback(
+        new TokenAmount(
+            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
+            displayRepayValue.toBigNumber(pair.asset.decimals).toString()
+        ),
+        BENTOBOX_ADDRESS
+    )
 
     const nextUserBorrowAmount = pair.currentUserBorrowAmount.value.sub(
         displayRepayValue.toBigNumber(pair.asset.decimals)

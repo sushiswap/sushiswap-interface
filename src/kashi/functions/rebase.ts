@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Rebase } from '../entities'
 
-export function rebase(value: BigNumber, from: BigNumber, to: BigNumber) {
+export function rebase(value: BigNumber, from: BigNumber, to: BigNumber): BigNumber {
     return from ? value.mul(to).div(from) : BigNumber.from(0)
 }
 
