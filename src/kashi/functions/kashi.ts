@@ -12,9 +12,10 @@ import {
     PROTOCOL_FEE_DIVISOR,
     STARTING_INTEREST_PER_YEAR
 } from 'kashi/constants'
+
 import { e10, ZERO } from './math'
 
-export function accrue(pair: any, amount: BigNumber, includePrincipal = false) {
+export function accrue(pair: any, amount: BigNumber, includePrincipal = false): BigNumber {
     return amount
         .mul(pair.accrueInfo.interestPerSecond)
         .mul(pair.elapsedSeconds)
@@ -22,7 +23,12 @@ export function accrue(pair: any, amount: BigNumber, includePrincipal = false) {
         .add(includePrincipal ? amount : ZERO)
 }
 
-export function accrueTotalAssetWithFee(pair: any) {
+export function accrueTotalAssetWithFee(
+    pair: any
+): {
+    elastic: BigNumber
+    base: BigNumber
+} {
     const extraAmount = pair.totalBorrow.elastic
         .mul(pair.accrueInfo.interestPerSecond)
         .mul(pair.elapsedSeconds.add('3600')) // Project an hour into the future
@@ -35,7 +41,7 @@ export function accrueTotalAssetWithFee(pair: any) {
     }
 }
 
-export function interestAccrue(pair: any, interest: BigNumber) {
+export function interestAccrue(pair: any, interest: BigNumber): BigNumber {
     if (pair.totalBorrow.base.eq(0)) {
         return STARTING_INTEREST_PER_YEAR
     }
@@ -68,13 +74,13 @@ export function interestAccrue(pair: any, interest: BigNumber) {
     return currentInterest
 }
 
-export function getUSDValue(amount: BigNumberish, token: any) {
+export function getUSDValue(amount: BigNumberish, token: any): BigNumber {
     return BigNumber.from(amount)
         .mul(token.usd)
         .div(e10(token.decimals))
 }
 
-export function getUSDString(amount: BigNumberish, token: any) {
+export function getUSDString(amount: BigNumberish, token: any): string {
     return BigNumber.from(amount)
         .mul(token.usd)
         .div(e10(token.decimals))
@@ -93,10 +99,10 @@ export function easyAmount(
     }
 }
 
-export function takeFee(amount: BigNumber) {
+export function takeFee(amount: BigNumber): BigNumber {
     return amount.mul(BigNumber.from(9)).div(BigNumber.from(10))
 }
 
-export function addBorrowFee(amount: BigNumber) {
+export function addBorrowFee(amount: BigNumber): BigNumber {
     return amount.mul(BigNumber.from(10005)).div(BigNumber.from(10000))
 }
