@@ -122,15 +122,6 @@ export function useStakingContract(stakingAddress?: string, withSignerIfPossible
     return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
 }
 
-export function useSocksController(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId === ChainId.MAINNET ? '0x65770b5283117639760beA3F867b69b3697a91dd' : undefined,
-        UNISOCKS_ABI,
-        false
-    )
-}
-
 export function useBoringHelperContract(): Contract | null {
     return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
 }
