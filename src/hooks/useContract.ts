@@ -109,10 +109,6 @@ export function useMerkleDistributorContract(): Contract | null {
     return useContract(chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined, MERKLE_DISTRIBUTOR_ABI, true)
 }
 
-export function useGovernanceContract(): Contract | null {
-    return useContract(GOVERNANCE_ADDRESS, GOVERNANCE_ABI, true)
-}
-
 export function useUniContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId ? SUSHI[chainId]?.address : undefined, UNI_ABI, true)
