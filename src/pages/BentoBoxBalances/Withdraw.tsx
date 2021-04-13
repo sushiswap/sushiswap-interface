@@ -1,6 +1,6 @@
 import { Button } from 'kashi/components'
 import React, { useState } from 'react'
-import useBentoBox from 'sushi-hooks/useBentoBox'
+import useBentoBox from 'hooks/useBentoBox'
 import { formattedNum } from 'utils'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { useActiveWeb3React } from '../../hooks'

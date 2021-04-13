@@ -1,4 +1,5 @@
 import Header from './Header'
 import Shell from './Shell'
+import Content from './Content'
 
-export { Shell, Header }
+export { Content, Header, Shell }

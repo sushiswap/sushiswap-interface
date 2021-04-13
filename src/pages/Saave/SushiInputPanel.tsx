@@ -8,7 +8,7 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import { RowBetween } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks'
 import useTheme from '../../hooks/useTheme'
-import useSaave from '../../sushi-hooks/useSaave'
+import useSaave from '../../hooks/useSaave'
 import { TYPE } from '../../theme'
 import { formatFromBalance, formatToBalance } from '../../utils'
 

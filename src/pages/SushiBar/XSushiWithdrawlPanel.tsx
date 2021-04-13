@@ -8,7 +8,7 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import { RowBetween } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks'
 import useTheme from '../../hooks/useTheme'
-import useSushiBar from '../../sushi-hooks/useSushiBar'
+import useSushiBar from '../../hooks/useSushiBar'
 import { TYPE } from '../../theme'
 import { formatFromBalance, formatToBalance } from '../../utils'
 

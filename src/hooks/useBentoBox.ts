@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { WETH } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
 import { useCallback } from 'react'
-import { useActiveWeb3React, useBentoBoxContract } from '../hooks'
+import { useActiveWeb3React, useBentoBoxContract } from '.'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { isAddress } from '../utils'
 

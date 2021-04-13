@@ -1,9 +1,9 @@
 import { BigNumber } from 'ethers'
 import { useMemo } from 'react'
-import { useActiveWeb3React, useMasterChefContract } from '../../hooks'
-import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
+import { useActiveWeb3React, useMasterChefContract } from '.'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
 
-export function useAllPendingSushi() {
+export function useAllPendingSushi(): number {
     const { account } = useActiveWeb3React()
     const masterChef = useMasterChefContract()
     const numberOfPools = useSingleCallResult(masterChef, 'poolLength', undefined, NEVER_RELOAD)
