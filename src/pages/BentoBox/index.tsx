@@ -42,7 +42,7 @@ function BentoBox(): JSX.Element {
                                 <Link to={'/bento/kashi/borrow'}>
                                     <Button
                                         color="gradient"
-                                        className="w-full rounded text-base text-high-emphesis px-4 py-3"
+                                        className="w-full rounded text-lg font-semibold text-high-emphesis px-4 py-2"
                                     >
                                         Enter
                                     </Button>
@@ -55,32 +55,26 @@ function BentoBox(): JSX.Element {
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1  bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-blue-glow hover:shadow-blue-glow-hovered transition-colors">
                         <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
                         <Button
-                            color="gradient"
+                            color="default"
                             className="w-full rounded text-base text-high-emphesis px-4 py-3"
                             disabled
-                        >
-                            ...
-                        </Button>
+                        ></Button>
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1 bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-pink-glow hover:shadow-pink-glow-hovered transition-colors">
                         <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
                         <Button
-                            color="gradient"
+                            color="default"
                             className="w-full rounded text-base text-high-emphesis px-4 py-3"
                             disabled
-                        >
-                            ...
-                        </Button>
+                        ></Button>
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1 bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-blue-glow hover:shadow-blue-glow-hovered transition-colors">
                         <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
                         <Button
-                            color="gradient"
+                            color="default"
                             className="w-full rounded text-base text-high-emphesis px-4 py-3"
                             disabled
-                        >
-                            ...
-                        </Button>
+                        ></Button>
                     </Card>
                 </div>
             </div>
