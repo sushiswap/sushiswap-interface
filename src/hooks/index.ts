@@ -85,3 +85,6 @@ export function useInactiveListener(suppress = false) {
         return undefined
     }, [active, error, suppress, activate])
 }
+
+export { default as useFuse } from './useFuse'
+export { default as useSortableData } from './useSortableData'
