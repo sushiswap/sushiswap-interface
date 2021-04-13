@@ -23,5 +23,5 @@ export function useBentoMasterContractAllowed(masterContract?: string, user?: st
     const inputs = useMemo(() => [masterContract, user], [masterContract, user])
     const allowed = useSingleCallResult(contract, 'masterContractApproved', inputs).result
 
-    return useMemo(() => (allowed ? allowed[0] : undefined), [contract, allowed])
+    return useMemo(() => (allowed ? allowed[0] : undefined), [allowed])
 }
