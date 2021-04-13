@@ -230,6 +230,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoCollateral(!useBentoCollateral)
@@ -254,6 +255,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => setCollateralValue(maxCollateral)}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
@@ -272,6 +274,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoBorrow(!useBentoBorrow)
@@ -298,6 +301,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => {
                             setPinBorrowMax(true)
                         }}

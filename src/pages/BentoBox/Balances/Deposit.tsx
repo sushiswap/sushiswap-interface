@@ -59,6 +59,7 @@ export default function Deposit({
                     <Button
                         variant="outlined"
                         color="blue"
+                        size="small"
                         onClick={() => {
                             setValue(balance.value.toFixed(balance.decimals))
                         }}

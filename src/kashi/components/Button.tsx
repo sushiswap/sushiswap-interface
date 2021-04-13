@@ -3,8 +3,8 @@ import { ChevronLeft } from 'react-feather'
 import { useHistory } from 'react-router-dom'
 
 const SIZE = {
-    default: '',
-    small: '',
+    default: 'px-4 py-2',
+    small: 'px-2 py-1',
     large: ''
 }
 
@@ -12,7 +12,7 @@ const FILLED = {
     default: 'bg-transparent',
     blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
     pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
-    gradient: 'bg-gradient-to-r from-blue to-pink'
+    gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink'
 }
 
 const OUTLINED = {
@@ -50,7 +50,7 @@ function Button({
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX.Element {
     return (
         <button
-            className={`${VARIANT[variant][color]} ${SIZE[size]} focus:outline-none focus:ring disabled:opacity-50 ${className}`}
+            className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 ${className}`}
             {...rest}
         >
             {children}

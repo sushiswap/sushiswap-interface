@@ -42,7 +42,7 @@ function BentoBox(): JSX.Element {
                                 <Link to={'/bento/kashi/borrow'}>
                                     <Button
                                         color="gradient"
-                                        className="w-full rounded text-lg font-semibold text-high-emphesis px-4 py-2"
+                                        // className="w-full rounded text-lg text-high-emphesis px-4 py-2"
                                     >
                                         Enter
                                     </Button>

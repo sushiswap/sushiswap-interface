@@ -84,6 +84,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                         <Button
                             variant="outlined"
                             color="blue"
+                            size="small"
                             className="focus:ring focus:ring-blue"
                             onClick={() => {
                                 setUseBento(!useBento)
@@ -112,6 +113,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                     <Button
                         variant="outlined"
                         color="blue"
+                        size="small"
                         onClick={() => setPinMax(true)}
                         className="absolute right-4 focus:ring focus:ring-blue"
                     >

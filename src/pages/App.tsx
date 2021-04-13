@@ -46,6 +46,7 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import Tools from './Tools'
 import Vesting from './Vesting'
 import Yield from './Yield'
+import { Shell } from '../components/App'
 
 const AppWrapper = styled.div`
     display: flex;
@@ -100,7 +101,7 @@ function App() {
         <Suspense fallback={null}>
             <Route component={GoogleAnalyticsReporter} />
             <Route component={DarkModeQueryParamReader} />
-            <AppWrapper>
+            <div className="flex flex-col items-start overflow-x-hidden h-full">
                 <URLWarning />
                 <HeaderWrapper>
                     <Header />
@@ -194,7 +195,7 @@ function App() {
                     </Web3ReactManager>
                     <Marginer />
                 </BodyWrapper>
-            </AppWrapper>
+            </div>
         </Suspense>
     )
 }

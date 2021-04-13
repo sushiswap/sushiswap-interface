@@ -215,6 +215,7 @@ export default function Repay({ pair }: RepayProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoRepayAsset(!useBentoRepay)
@@ -243,6 +244,7 @@ export default function Repay({ pair }: RepayProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => {
                             setPinRepayMax(true)
                         }}
@@ -263,6 +265,7 @@ export default function Repay({ pair }: RepayProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoRemoveCollateral(!useBentoRemove)
@@ -291,6 +294,7 @@ export default function Repay({ pair }: RepayProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => setPinRemoveMax(true)}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
