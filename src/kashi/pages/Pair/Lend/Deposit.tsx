@@ -33,12 +33,10 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            currentAllowance?.equalTo('0') ? MaxUint256.toString() : value
+            currentAllowance?.equalTo('0') ? MaxUint256.toString() : value.toBigNumber(pair.asset.decimals).toString()
         ),
         BENTOBOX_ADDRESS
     )
-
-    console.log(approvalState)
 
     const info = useContext(KashiContext).state.info
 
@@ -71,8 +69,6 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         !useBento &&
         value &&
         (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
-
-    console.log(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
     const transactionReview = new TransactionReview()
 

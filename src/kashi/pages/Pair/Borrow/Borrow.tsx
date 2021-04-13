@@ -53,7 +53,12 @@ export default function Borrow({ pair }: BorrowProps) {
     const currentAllowance = useTokenAllowance(token, account ?? undefined, BENTOBOX_ADDRESS)
 
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(token, currentAllowance?.equalTo('0') ? MaxUint256.toString() : collateralValue),
+        new TokenAmount(
+            token,
+            currentAllowance?.equalTo('0')
+                ? MaxUint256.toString()
+                : collateralValue.toBigNumber(pair.collateral.decimals).toString()
+        ),
         BENTOBOX_ADDRESS
     )
 

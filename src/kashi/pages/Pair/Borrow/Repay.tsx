@@ -44,7 +44,12 @@ export default function Repay({ pair }: RepayProps) {
     const currentAllowance = useTokenAllowance(token, account ?? undefined, BENTOBOX_ADDRESS)
 
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(token, currentAllowance?.equalTo('0') ? MaxUint256.toString() : repayValue),
+        new TokenAmount(
+            token,
+            currentAllowance?.equalTo('0')
+                ? MaxUint256.toString()
+                : repayValue.toBigNumber(pair.asset.decimals).toString()
+        ),
         BENTOBOX_ADDRESS
     )
 
