@@ -54,7 +54,7 @@ export default function BorrowMarkets(): JSX.Element {
                     </div>
                 )}
 
-                <div className="grid  gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
+                <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
                     <div
                         className="flex items-center cursor-pointer hover:text-secondary"
                         onClick={() => requestSort('search')}
