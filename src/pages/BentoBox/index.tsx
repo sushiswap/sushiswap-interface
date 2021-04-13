@@ -28,7 +28,7 @@ function BentoBox(): JSX.Element {
                 <div className="container mx-auto max-w-3xl">
                     <div className="font-bold text-center text-3xl md:text-5xl text-high-emphesis">BentoBox Apps</div>
                     <div className="font-medium text-base md:text-lg lg:text-xl text-center text-high-emphesis mt-0 md:mt-4 mb-8 p-4">
-                        BentoBox is new a way to use dapps gas-efficiently and gain extra yield.
+                        BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield.
                     </div>
                 </div>
             </div>
