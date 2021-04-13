@@ -19,6 +19,7 @@ import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
 import Badge from 'kashi/components/Badge'
 import { MaxUint256 } from '@ethersproject/constants'
+import { useTokenAllowance } from 'data/Allowances'
 
 interface BorrowProps {
     pair: any
@@ -41,17 +42,18 @@ export default function Borrow({ pair }: BorrowProps) {
 
     const [swap, setSwap] = useState(false)
 
+    const token = new Token(
+        chainId || 1,
+        pair.collateral.address,
+        pair.collateral.decimals,
+        pair.collateral.symbol,
+        pair.collateral.name
+    )
+
+    const currentAllowance = useTokenAllowance(token, account ?? undefined, BENTOBOX_ADDRESS)
+
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(
-                chainId || 1,
-                pair.collateral.address,
-                pair.collateral.decimals,
-                pair.collateral.symbol,
-                pair.collateral.name
-            ),
-            MaxUint256.toString()
-        ),
+        new TokenAmount(token, currentAllowance?.equalTo('0') ? MaxUint256.toString() : collateralValue),
         BENTOBOX_ADDRESS
     )
 

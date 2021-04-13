@@ -38,6 +38,9 @@ export function useApproveCallback(
         // we might not have enough data to know whether or not we need to approve
         if (!currentAllowance) return ApprovalState.UNKNOWN
         // amountToApprove will be defined if currentAllowance is
+
+        console.log('lt', currentAllowance.lessThan(amountToApprove), amountToApprove)
+
         return currentAllowance.lessThan(amountToApprove)
             ? pendingApproval
                 ? ApprovalState.PENDING
