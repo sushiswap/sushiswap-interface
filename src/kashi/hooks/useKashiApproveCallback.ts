@@ -42,7 +42,13 @@ export type BentoApproveResult = {
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 function useKashiApproveCallback(
     masterContract: string
-): [BentoApprovalState, boolean, KashiPermit, () => void, (pair: any, execute: (cooker: KashiCooker) => Promise<string>) => void] {
+): [
+    BentoApprovalState,
+    boolean,
+    KashiPermit,
+    () => void,
+    (pair: any, execute: (cooker: KashiCooker) => Promise<string>) => void
+] {
     const { account, library, chainId } = useActiveWeb3React()
     const dispatch = useDispatch()
     const [approveKashiFallback, setApproveKashiFallback] = useState<boolean>(false)
@@ -139,13 +145,15 @@ function useKashiApproveCallback(
         let summary
         if (approvalState === BentoApprovalState.NOT_APPROVED && kashiPermit) {
             cooker.approve(kashiPermit)
-            summary = "Approve Kashi and " + execute(cooker)
+            //summary = "Approve Kashi and " + execute(cooker)
+            summary = execute(cooker)
         } else {
             summary = await execute(cooker)
         }
         const result = await cooker.cook()
         if (result.success) {
-            addTransaction(result.tx, { summary })
+            const summaries = result?.summary?.join('→')
+            addTransaction(result.tx, { summary: summaries })
             dispatch(setKashiApprovalPending('Deposit'))
             setKashiPermit(undefined)
             await result.tx.wait()
