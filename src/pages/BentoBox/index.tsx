@@ -6,7 +6,7 @@ import Web3Status from 'components/Web3Status'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 import ComingSoon from '../../assets/kashi/coming-soon.png'
 import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
-import BentoBoxHero from '../../assets/kashi/bentobox-hero.png'
+import BentoBoxHero from '../../assets/kashi/bentobox-hero.jpg'
 function BentoBox(): JSX.Element {
     const { account } = useActiveWeb3React()
 
