@@ -7,3 +7,7 @@
 button:focus {
   outline: none !important;
 }
+
+input:focus {
+  box-shadow: none !important;
+}
