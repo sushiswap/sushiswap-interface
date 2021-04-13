@@ -22,11 +22,11 @@ function BentoBox(): JSX.Element {
                 <img className="h-full w-full object-cover object-bottom opacity-50" src={BentoBoxHero} alt="" />
             </div>
 
-            <div className="relative flex flex-col items-center pt-36 sm:pt-48">
-                <img alt="" src={BentoBoxLogo} className="object-scale-down w-40 md:w-80 h-auto -mt-40 md:-mt-52" />
+            <div className="relative flex flex-col items-center pt-36 pt-4 sm:pt-48">
+                <img alt="" src={BentoBoxLogo} className="object-scale-down w-40 md:w-60 h-auto -mt-40 md:-mt-52" />
 
                 <div className="container mx-auto max-w-3xl">
-                    <div className="font-bold text-center text-3xl md:text-6xl text-high-emphesis">BentoBox Apps</div>
+                    <div className="font-bold text-center text-3xl md:text-5xl text-high-emphesis">BentoBox Apps</div>
                     <div className="font-medium text-center text-high-emphesis mt-0 md:mt-4 mb-8 p-4">
                         BentoBox is new a way to use dapps gas-efficiently and gain extra yield.
                     </div>
@@ -60,7 +60,7 @@ function BentoBox(): JSX.Element {
                             disabled
                         >
                             ...
-                        </Button>                        
+                        </Button>
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1 bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-pink-glow hover:shadow-pink-glow-hovered transition-colors">
                         <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
@@ -70,7 +70,7 @@ function BentoBox(): JSX.Element {
                             disabled
                         >
                             ...
-                        </Button>                        
+                        </Button>
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1 bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-blue-glow hover:shadow-blue-glow-hovered transition-colors">
                         <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
@@ -80,7 +80,7 @@ function BentoBox(): JSX.Element {
                             disabled
                         >
                             ...
-                        </Button>                        
+                        </Button>
                     </Card>
                 </div>
             </div>
