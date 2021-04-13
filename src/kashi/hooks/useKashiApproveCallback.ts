@@ -17,14 +17,13 @@ export enum BentoApprovalState {
     APPROVED
 }
 
-interface IKashiPermit {
+export interface KashiPermit {
     account: string
     masterContract: string
     v: number
     r: string
     s: string
 }
-export type KashiPermit = IKashiPermit | undefined
 
 export enum BentoApproveOutcome {
     SUCCESS,
@@ -44,14 +43,14 @@ function useKashiApproveCallback(
 ): [
     BentoApprovalState,
     boolean,
-    KashiPermit,
+    KashiPermit | undefined,
     () => void,
     (pair: any, execute: (cooker: KashiCooker) => Promise<string>) => void
 ] {
     const { account, library, chainId } = useActiveWeb3React()
     const dispatch = useDispatch()
     const [approveKashiFallback, setApproveKashiFallback] = useState<boolean>(false)
-    const [kashiPermit, setKashiPermit] = useState<KashiPermit>(undefined)
+    const [kashiPermit, setKashiPermit] = useState<KashiPermit | undefined>(undefined)
 
     useEffect(() => {
         setKashiPermit(undefined)

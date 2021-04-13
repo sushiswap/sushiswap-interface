@@ -4,7 +4,7 @@ import { ChainId, WETH } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
 import { toElastic, ZERO } from 'kashi/functions'
 import { toShare } from 'kashi/functions/bentobox'
-import { KashiPermit } from 'kashi/hooks'
+import { KashiPermit } from 'kashi/hooks/useKashiApproveCallback'
 import { getProviderOrSigner, getSigner } from 'utils'
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
 
