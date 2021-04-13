@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React, useContract } from 'hooks'
+import { WETH } from '@sushiswap/sdk'
 import ERC20_ABI from 'constants/abis/erc20.json'
+import { Contract } from 'ethers'
+import { useActiveWeb3React, useContract } from 'hooks'
+import { useCallback, useEffect, useState } from 'react'
 import { isAddress } from 'utils'
 import useTransactionStatus from './useTransactionStatus'
-import { WETH } from '@sushiswap/sdk'
 
 export interface BalanceProps {
     value: BigNumber

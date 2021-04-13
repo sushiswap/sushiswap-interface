@@ -10,9 +10,9 @@ import isZero from '../utils/isZero'
 import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './index'
 import { useV1ExchangeContract } from './useContract'
-import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
+import useTransactionDeadline from './useTransactionDeadline'
 
 export enum SwapCallbackState {
     INVALID,

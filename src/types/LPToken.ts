@@ -1,5 +1,5 @@
-import { ethers } from 'ethers'
 import { Token, TokenAmount } from '@sushiswap/sdk'
+import { ethers } from 'ethers'
 
 export default interface LPToken {
     id?: number

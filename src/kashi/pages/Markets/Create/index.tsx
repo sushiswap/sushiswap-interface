@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { BackButton, Button, Card, Layout, LendCardHeader, ListBox } from '../../../components'
+import { ethers } from 'ethers'
+import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
 import {
+    ChainlinkToken,
     CHAINLINK_MAPPING,
     CHAINLINK_ORACLE_ADDRESS,
     CHAINLINK_TOKENS,
-    ChainlinkToken,
     KASHI_ADDRESS
 } from 'kashi/constants'
-import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
-import { ethers } from 'ethers'
 import { e10 } from 'kashi/functions/math'
+import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
+import { BackButton, Button, Card, Layout, LendCardHeader, ListBox } from '../../../components'
 
 const CreatePair = () => {
     const { chainId } = useActiveWeb3React()

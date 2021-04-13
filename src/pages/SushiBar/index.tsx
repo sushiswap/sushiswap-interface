@@ -1,22 +1,18 @@
+import { transparentize } from 'polished'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-
+import { AutoColumn } from '../../components/Column'
+import { CardSection, DataCard } from '../../components/earn/styled'
+import { RowBetween } from '../../components/Row'
+import { Wrapper } from '../../components/swap/styleds'
+import { useActiveWeb3React } from '../../hooks'
+import { ExternalLink, TYPE } from '../../theme'
 //import { WrapperNoPadding } from '../../components/swap/styleds'
 //import { useDarkModeManager } from '../../state/user/hooks'
 import AppBody from '../AppBody'
 import SaaveHeader from './SushiBarHeader'
-import { Wrapper } from '../../components/swap/styleds'
-
 import SushiDepositPanel from './SushiDepositPanel'
 import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
-
-import { CardSection, DataCard } from '../../components/earn/styled'
-import { RowBetween } from '../../components/Row'
-import { AutoColumn } from '../../components/Column'
-import { TYPE, ExternalLink } from '../../theme'
-import { transparentize } from 'polished'
-
-import { useActiveWeb3React } from '../../hooks'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 420px;

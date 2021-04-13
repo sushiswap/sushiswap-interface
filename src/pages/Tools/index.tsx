@@ -1,19 +1,16 @@
+import { transparentize } from 'polished'
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import styled, { ThemeContext } from 'styled-components'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
-
-import { ExternalLink, TYPE, HideSmall } from '../../theme'
 import { Text } from 'rebass'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonPrimaryNormal, ButtonSecondary, ButtonEmpty } from '../../components/Button'
-import { AutoColumn } from '../../components/Column'
-
-import { useActiveWeb3React } from '../../hooks'
-import { CardSection, DataCard } from '../../components/earn/styled'
-import { transparentize } from 'polished'
-
+import styled, { ThemeContext } from 'styled-components'
+import { ButtonEmpty, ButtonPrimaryNormal, ButtonSecondary } from '../../components/Button'
 import { LightCard } from '../../components/Card'
+import { AutoColumn } from '../../components/Column'
+import { CardSection, DataCard } from '../../components/earn/styled'
+import { SwapPoolTabs } from '../../components/NavigationTabs'
+import { RowBetween, RowFixed } from '../../components/Row'
+import { useActiveWeb3React } from '../../hooks'
+import { ExternalLink, HideSmall, TYPE } from '../../theme'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;

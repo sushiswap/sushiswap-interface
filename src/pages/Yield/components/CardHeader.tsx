@@ -1,5 +1,3 @@
-import styled from 'styled-components'
-
 import React from 'react'
 
 // const CardHeader = styled.div<{ border?: boolean; market?: string }>`

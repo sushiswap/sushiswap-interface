@@ -1,6 +1,6 @@
+import { transparentize } from 'polished'
 import React from 'react'
 import styled from 'styled-components'
-import { transparentize } from 'polished'
 
 export const BodyWrapper = styled.div`
     position: relative;

@@ -1,9 +1,9 @@
+import { parseUnits } from '@ethersproject/units'
 import { useCallback, useEffect, useState } from 'react'
-import useLPTokensState, { LPTokensState } from './useLPTokensState'
-import useSushiRoll from './useSushiRoll'
 import { useActiveWeb3React } from '../hooks'
 import { useIsTransactionPending, useTransactionAdder } from '../state/transactions/hooks'
-import { parseUnits } from '@ethersproject/units'
+import useLPTokensState, { LPTokensState } from './useLPTokensState'
+import useSushiRoll from './useSushiRoll'
 
 export type MigrateMode = 'permit' | 'approve'
 

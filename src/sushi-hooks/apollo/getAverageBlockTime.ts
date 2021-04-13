@@ -1,6 +1,6 @@
-import { blocksQuery } from './queries'
-import { blockClient } from './client'
 import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subHours } from 'date-fns'
+import { blockClient } from './client'
+import { blocksQuery } from './queries'
 
 export async function getAverageBlockTime() {
     // Course timestamps used to make better use of the cache (startOfHour + startOfMinuite + startOfSecond)

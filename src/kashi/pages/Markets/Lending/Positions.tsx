@@ -1,8 +1,8 @@
+import { useActiveWeb3React } from 'hooks'
+import getTokenIcon from 'kashi/functions/getTokenIcon'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import getTokenIcon from 'kashi/functions/getTokenIcon'
-import { formattedPercent, formattedNum } from 'utils'
-import { useActiveWeb3React } from 'hooks'
+import { formattedNum, formattedPercent } from 'utils'
 
 function Positions({ pairs }: any): JSX.Element | null {
     const { chainId } = useActiveWeb3React()

@@ -1,7 +1,7 @@
-import React from 'react'
 import { Listbox, Transition } from '@headlessui/react'
-import { getTokenIcon } from 'kashi/functions'
 import { useActiveWeb3React } from 'hooks'
+import { getTokenIcon } from 'kashi/functions'
+import React from 'react'
 
 export default function ListBox({ label, tokens, selectedToken, setSelectedToken }: any) {
     const { chainId } = useActiveWeb3React()

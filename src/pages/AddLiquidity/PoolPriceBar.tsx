@@ -5,9 +5,9 @@ import { ThemeContext } from 'styled-components'
 import { AutoColumn } from '../../components/Column'
 import { AutoRow } from '../../components/Row'
 import { ONE_BIPS } from '../../constants'
+import { useActiveWeb3React } from '../../hooks'
 import { Field } from '../../state/mint/actions'
 import { TYPE } from '../../theme'
-import { useActiveWeb3React } from '../../hooks'
 
 export function PoolPriceBar({
     currencies,

@@ -1,8 +1,8 @@
-import { useDashboard2Contract, useDashboardContract, useUniV2FactoryContract } from 'hooks/useContract'
-import { useActiveWeb3React } from '../hooks'
-import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
+import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
+import { useDashboard2Contract, useDashboardContract, useUniV2FactoryContract } from 'hooks/useContract'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
 
 const LP_TOKENS_LIMIT = 100

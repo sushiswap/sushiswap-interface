@@ -1,17 +1,23 @@
-import React, { Suspense, useEffect, useRef } from 'react'
-import { Route, Switch, Redirect, useLocation } from 'react-router-dom'
 import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from '../hooks/index'
+import React, { Suspense, useEffect, useRef } from 'react'
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
-
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
 import URLWarning from '../components/Header/URLWarning'
 import Popups from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
-import { ApplicationModal } from '../state/application/actions'
-import { useModalOpen, useToggleModal } from '../state/application/hooks'
+import PublicRoute from '../hocs/PublicRoute'
+// Feat Kashi
+import WalletRoute from '../hocs/WalletRoute'
+import { useActiveWeb3React } from '../hooks/index'
+import Connect from '../kashi/pages/Connect'
+import BorrowMarkets from '../kashi/pages/Markets/Borrow'
+import CreateMarkets from '../kashi/pages/Markets/Create'
+import LendMarkets from '../kashi/pages/Markets/Lending'
+import BorrowPair from '../kashi/pages/Pair/Borrow'
+import LendPair from '../kashi/pages/Pair/Lend'
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 import AddLiquidity from './AddLiquidity'
 import {
@@ -19,42 +25,27 @@ import {
     RedirectOldAddLiquidityPathStructure,
     RedirectToAddLiquidity
 } from './AddLiquidity/redirects'
+//Feat Bento
+import Bento from './BentoBox'
+import BentoBalances from './BentoBoxBalances'
+import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 //import Earn from './Earn'
 //import Manage from './Earn/Manage'
 //import MigrateV1 from './MigrateV1'
 //import MigrateV1Exchange from './MigrateV1/MigrateV1Exchange'
 import MigrateV2 from './MigrateV2'
-import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
+import Saave from './Saave'
+import SushiBar from './SushiBar'
 import Swap from './Swap'
 import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
-
-import SushiBar from './SushiBar'
-import Yield from './Yield'
-
-//Feat Bento
-import Bento from './BentoBox'
-import BentoBalances from './BentoBoxBalances'
-
-// Feat Kashi
-import WalletRoute from '../hocs/WalletRoute'
-import PublicRoute from '../hocs/PublicRoute'
-import Connect from '../kashi/pages/Connect'
-import CreateMarkets from '../kashi/pages/Markets/Create'
-
-import LendPair from '../kashi/pages/Pair/Lend'
-import LendMarkets from '../kashi/pages/Markets/Lending'
-
-import BorrowPair from '../kashi/pages/Pair/Borrow'
-import BorrowMarkets from '../kashi/pages/Markets/Borrow'
-
 // Additional Tools
 import Tools from './Tools'
-import Saave from './Saave'
 import Vesting from './Vesting'
+import Yield from './Yield'
 
 const AppWrapper = styled.div`
     display: flex;

@@ -1,3 +1,4 @@
+import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
 import React, { useContext, useRef, useState } from 'react'
 import { Settings, X } from 'react-feather'
 import { Text } from 'rebass'
@@ -7,9 +8,9 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 import {
     useExpertModeManager,
-    useUserTransactionTTL,
+    useUserSingleHopOnly,
     useUserSlippageTolerance,
-    useUserSingleHopOnly
+    useUserTransactionTTL
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { ButtonError } from '../Button'
@@ -19,7 +20,6 @@ import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
-import { StyledMenuButton, MenuFlyout, StyledMenu } from 'components/StyledMenu'
 
 const StyledMenuIcon = styled(Settings)`
     height: 20px;

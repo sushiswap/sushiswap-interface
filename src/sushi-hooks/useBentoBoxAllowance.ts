@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Fraction } from 'entities'
+import { useCallback, useEffect, useState } from 'react'
+import ERC20_ABI from '../constants/abis/erc20.json'
 import { useActiveWeb3React, useBentoBoxContract, useContract } from '../hooks'
 import { isAddress } from '../utils'
-import ERC20_ABI from '../constants/abis/erc20.json'
-import { Fraction } from 'entities'
 
 const useAllowance = (tokenAddress: string) => {
     const { account } = useActiveWeb3React()

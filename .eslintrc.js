@@ -25,17 +25,7 @@ module.exports = {
         'react/prop-types': 'off',
         'react/display-name': 'off',
         'prettier/prettier': 'off',
-        'prefer-const': 'warn',
-        'sort-imports': [
-            'warn',
-            {
-                ignoreCase: false,
-                ignoreDeclarationSort: false,
-                ignoreMemberSort: false,
-                memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-                allowSeparatedGroups: false
-            }
-        ]
+        'prefer-const': 'warn'
     },
     settings: {
         react: {

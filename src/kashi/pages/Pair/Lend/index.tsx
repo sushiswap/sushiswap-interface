@@ -1,19 +1,15 @@
-import React, { useContext, useState } from 'react'
-import { ChainId, WETH } from '@sushiswap/sdk'
-import { Redirect, RouteComponentProps } from 'react-router-dom'
-import { useActiveWeb3React } from 'hooks'
-import { KashiContext, useKashiPair, useKashiPairs } from 'kashi/context'
-import { getTokenIcon } from 'kashi/functions'
-import { BackButton, LendCardHeader } from '../../../components'
-import { formattedNum, formattedPercent } from 'utils'
-import { Card, Layout, Paper } from '../../../components'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { GradientDot } from '../../../components'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import { BigNumber } from '@ethersproject/bignumber'
+import QuestionHelper from 'components/QuestionHelper'
+import { useActiveWeb3React } from 'hooks'
+import { KashiContext, useKashiPair } from 'kashi/context'
+import { getTokenIcon } from 'kashi/functions'
+import React, { useContext, useState } from 'react'
+import { Redirect, RouteComponentProps } from 'react-router-dom'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import { formattedNum, formattedPercent } from 'utils'
+import { BackButton, Card, GradientDot, Layout, LendCardHeader } from '../../../components'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
-import QuestionHelper from 'components/QuestionHelper'
 
 export default function LendingPair({
     match: {
@@ -27,9 +23,7 @@ export default function LendingPair({
     const pair = useKashiPair(pairAddress)
     const info = useContext(KashiContext).state.info
 
-    if (!pair) return info && info.blockTimeStamp.isZero() ? null : (
-        <Redirect to="/bento/kashi/lend"></Redirect>
-    )
+    if (!pair) return info && info.blockTimeStamp.isZero() ? null : <Redirect to="/bento/kashi/lend"></Redirect>
 
     return (
         <Layout
@@ -67,13 +61,17 @@ export default function LendingPair({
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">Supply APR</div>
                             <div className="flex items-center">
-                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentSupplyAPR.string)}</div>
+                                <div className="text-lg text-high-emphesis">
+                                    {formattedPercent(pair.currentSupplyAPR.string)}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">Borrow APR</div>
                             <div className="flex items-center">
-                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentInterestPerYear.string)}</div>
+                                <div className="text-lg text-high-emphesis">
+                                    {formattedPercent(pair.currentInterestPerYear.string)}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between pt-3">

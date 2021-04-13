@@ -1,7 +1,8 @@
 import './tailwind.css'
-import 'react-tabs/style/react-tabs.css'
 import '@fontsource/dm-sans/400.css'
-import { Web3ReactProvider, createWeb3ReactRoot } from '@web3-react/core'
+import 'react-tabs/style/react-tabs.css'
+import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
+import { KashiProvider } from 'kashi'
 import React, { StrictMode } from 'react'
 import { isMobile } from 'react-device-detect'
 import ReactDOM from 'react-dom'
@@ -18,9 +19,9 @@ import ListsUpdater from './state/lists/updater'
 import MulticallUpdater from './state/multicall/updater'
 import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
+
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
-import { KashiProvider } from 'kashi/context'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 

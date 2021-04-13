@@ -1,11 +1,11 @@
 import { Trade } from '@sushiswap/sdk'
+import { useActiveWeb3React } from 'hooks'
 import React, { Fragment, memo, useContext } from 'react'
 import { ChevronRight } from 'react-feather'
 import { Flex } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { TYPE } from '../../theme'
 import { unwrappedToken } from 'utils/wrappedCurrency'
-import { useActiveWeb3React } from 'hooks'
+import { TYPE } from '../../theme'
 
 export default memo(function SwapRoute({ trade }: { trade: Trade }) {
     const theme = useContext(ThemeContext)

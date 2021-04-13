@@ -1,6 +1,6 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { Fraction } from '../../entities'
 import { ethers } from 'ethers'
+import { Fraction } from '../../entities'
 
 declare global {
     interface String {

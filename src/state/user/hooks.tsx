@@ -1,10 +1,9 @@
 import { ChainId, Pair, Token } from '@sushiswap/sdk'
 import flatMap from 'lodash.flatmap'
-import ReactGA from 'react-ga'
 import { useCallback, useMemo } from 'react'
+import ReactGA from 'react-ga'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
-
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens } from '../../hooks/Tokens'
 import { AppDispatch, AppState } from '../index'
@@ -14,12 +13,12 @@ import {
     removeSerializedToken,
     SerializedPair,
     SerializedToken,
+    toggleURLWarning,
     updateUserDarkMode,
     updateUserDeadline,
     updateUserExpertMode,
-    updateUserSlippageTolerance,
-    toggleURLWarning,
-    updateUserSingleHopOnly
+    updateUserSingleHopOnly,
+    updateUserSlippageTolerance
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {

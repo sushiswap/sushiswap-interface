@@ -1,7 +1,6 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-
-import { fortmatic, injected, portis, lattice, walletconnect, walletlink, torus } from '../connectors'
+import { fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
 
 export const POOL_DENY = ['14', '29', '45', '30']
 

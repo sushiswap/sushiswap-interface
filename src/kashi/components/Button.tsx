@@ -1,6 +1,6 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import { ChevronLeft } from 'react-feather'
+import { useHistory } from 'react-router-dom'
 
 const FILLED = {
     default: '',

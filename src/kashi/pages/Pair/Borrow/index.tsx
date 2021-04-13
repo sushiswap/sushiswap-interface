@@ -1,19 +1,17 @@
-import React, { useState, useCallback, useContext } from 'react'
-import { ChainId, WETH } from '@sushiswap/sdk'
-import { Redirect, RouteComponentProps } from 'react-router-dom'
-import { useActiveWeb3React } from 'hooks'
-import { KashiContext, useKashiPair } from 'kashi/context'
-import { getTokenIcon } from 'kashi/functions'
-import { formattedNum, formattedPercent } from 'utils'
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import { GradientDot, Button, Card, Layout, BorrowCardHeader, BackButton } from 'kashi/components'
-import { BigNumber } from 'ethers'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import QuestionHelper from 'components/QuestionHelper'
+import { useActiveWeb3React } from 'hooks'
+import { BackButton, BorrowCardHeader, Card, GradientDot, Layout } from 'kashi/components'
+import { KashiContext, useKashiPair } from 'kashi/context'
+import { KashiCooker } from 'kashi/entities'
+import { getTokenIcon } from 'kashi/functions'
+import React, { useCallback, useContext, useState } from 'react'
+import { Redirect, RouteComponentProps } from 'react-router-dom'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { formattedNum, formattedPercent } from 'utils'
 import Borrow from './Borrow'
 import Repay from './Repay'
-import { KashiCooker } from 'kashi/entities'
-import { useTransactionAdder } from 'state/transactions/hooks'
-import QuestionHelper from 'components/QuestionHelper'
 
 export default function BorrowPair({
     match: {
@@ -29,16 +27,12 @@ export default function BorrowPair({
 
     const addTransaction = useTransactionAdder()
     const onUpdateExchangeRate = useCallback(async () => {
-        const result = await new KashiCooker(pair, account, library, chainId)
-            .updateExchangeRate()
-            .cook()
+        const result = await new KashiCooker(pair, account, library, chainId).updateExchangeRate().cook()
 
-        addTransaction(result.tx, {summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate`})
+        addTransaction(result.tx, { summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate` })
     }, [pair])
 
-    if (!pair) return info && info.blockTimeStamp.isZero() ? null : (
-        <Redirect to="/bento/kashi/borrow"></Redirect>
-    )    
+    if (!pair) return info && info.blockTimeStamp.isZero() ? null : <Redirect to="/bento/kashi/borrow"></Redirect>
 
     return (
         <Layout
@@ -77,13 +71,17 @@ export default function BorrowPair({
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">Supply APR</div>
                             <div className="flex items-center">
-                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentSupplyAPR.string)}</div>
+                                <div className="text-lg text-high-emphesis">
+                                    {formattedPercent(pair.currentSupplyAPR.string)}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">Borrow APR</div>
                             <div className="flex items-center">
-                                <div className="text-lg text-high-emphesis">{formattedPercent(pair.currentInterestPerYear.string)}</div>
+                                <div className="text-lg text-high-emphesis">
+                                    {formattedPercent(pair.currentInterestPerYear.string)}
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -124,19 +122,15 @@ export default function BorrowPair({
                             </div>
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <div className="text-3xl text-high-emphesis">
-                                        Borrow {pair.asset.symbol}
-                                    </div>
+                                    <div className="text-3xl text-high-emphesis">Borrow {pair.asset.symbol}</div>
                                     <div className="flex items-center">
                                         <div className="text-sm text-secondary mr-1">Collateral:</div>
-                                        <div className="text-sm text-high-emphesis mr-2">
-                                            {pair.collateral.symbol}
-                                        </div>
+                                        <div className="text-sm text-high-emphesis mr-2">{pair.collateral.symbol}</div>
                                         <div className="text-sm text-secondary mr-1">Oracle:</div>
                                         <div className="text-sm text-high-emphesis">{pair.oracle.name}</div>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </BorrowCardHeader>
                 }
@@ -170,11 +164,7 @@ export default function BorrowPair({
                         </div>
                     </div>
                 </div>
-                <Tabs
-                    forceRenderTabPanel
-                    selectedIndex={tabIndex}
-                    onSelect={(index: number) => setTabIndex(index)}
-                >
+                <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
                     <TabList className="flex rounded bg-dark-800 p-1">
                         <Tab
                             className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"

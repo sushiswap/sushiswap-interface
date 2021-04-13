@@ -1,10 +1,10 @@
+import { Button } from 'kashi/components'
 import React, { useState } from 'react'
+import useBentoBox from 'sushi-hooks/useBentoBox'
+import { formattedNum } from 'utils'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { useActiveWeb3React } from '../../hooks'
-import useBentoBox from 'sushi-hooks/useBentoBox'
 import useBentoBalance from '../../sushi-hooks/useBentoBalance'
-import { Button } from 'kashi/components'
-import { formattedNum } from 'utils'
 
 function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSymbol: string }): JSX.Element {
     const { account } = useActiveWeb3React()
@@ -47,9 +47,7 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
             </div>
             <Button
                 color="pink"
-                disabled={
-                    pendingTx || !balance || value.toBigNumber(balance.decimals).lte(0)
-                }
+                disabled={pendingTx || !balance || value.toBigNumber(balance.decimals).lte(0)}
                 onClick={async () => {
                     setPendingTx(true)
                     await withdraw(tokenAddress, value.toBigNumber(balance.decimals))

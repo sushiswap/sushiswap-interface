@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { ethers } from 'ethers'
 import PlaceHolder from 'assets/images/placeholder.png'
+import { ethers } from 'ethers'
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 //import EthereumLogo from "../../assets/img/eth.png";
 
 const isAddress = (value: any) => {

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useActiveWeb3React, useBentoBoxContract, useBoringHelperContract, useContract } from '../hooks'
-import ERC20_ABI from '../constants/abis/erc20.json'
-import { isAddress } from '../utils'
 import { BigNumber } from '@ethersproject/bignumber'
+import { useCallback, useEffect, useState } from 'react'
+import ERC20_ABI from '../constants/abis/erc20.json'
+import { useActiveWeb3React, useBentoBoxContract, useBoringHelperContract, useContract } from '../hooks'
+import { isAddress } from '../utils'
 import useTransactionStatus from './useTransactionStatus'
 
 function useBentoBalance(tokenAddress: string): { value: BigNumber; decimals: number } {

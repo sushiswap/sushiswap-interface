@@ -1,16 +1,15 @@
+import DepositGraphic from 'assets/kashi/deposit-graphic.png'
+import { useActiveWeb3React, useFuse, useSortableData } from 'hooks'
+import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
+import { getCurrency } from 'kashi/constants'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import QuestionHelper from '../../../../components/QuestionHelper'
-import { getTokenIcon, ZERO } from '../../../functions'
-import { formattedPercent, formattedNum } from '../../../../utils'
+import { formattedNum, formattedPercent } from '../../../../utils'
+import { Card, Layout, MarketHeader } from '../../../components'
 import { useKashiPairs } from '../../../context'
-import { Card, MarketHeader, Layout } from '../../../components'
-import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { ChevronUp, ChevronDown } from 'react-feather'
+import { getTokenIcon, ZERO } from '../../../functions'
 import Positions from './Positions'
-import { useActiveWeb3React, useFuse, useSortableData } from 'hooks'
-import { getCurrency } from 'kashi/constants'
-import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
 
 export default function LendingMarkets(): JSX.Element | null {
     const { chainId } = useActiveWeb3React()

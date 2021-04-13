@@ -1,7 +1,7 @@
-import { useCallback } from 'react'
-import { useMasterChefContract } from 'hooks'
-import { useTransactionAdder } from '../state/transactions/hooks'
 import { ethers } from 'ethers'
+import { useMasterChefContract } from 'hooks'
+import { useCallback } from 'react'
+import { useTransactionAdder } from '../state/transactions/hooks'
 
 const useMasterChef = () => {
     const addTransaction = useTransactionAdder()

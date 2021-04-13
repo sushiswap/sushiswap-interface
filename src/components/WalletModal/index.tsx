@@ -15,7 +15,6 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 import { ExternalLink } from '../../theme'
 import AccountDetails from '../AccountDetails'
-
 import Modal from '../Modal'
 import Option from './Option'
 import PendingView from './PendingView'

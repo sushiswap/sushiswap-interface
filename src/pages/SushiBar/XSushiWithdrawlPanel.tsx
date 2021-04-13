@@ -1,21 +1,16 @@
-import React, { useState, useCallback } from 'react'
 import { Pair } from '@sushiswap/sdk'
-import styled from 'styled-components'
 import { darken } from 'polished'
-
-import { RowBetween } from '../../components/Row'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import { TYPE } from '../../theme'
-
-import { useActiveWeb3React } from '../../hooks'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useTheme from '../../hooks/useTheme'
-
+import styled from 'styled-components'
 import useTokenBalance from 'sushi-hooks/useTokenBalance'
-import { BigNumber } from '@ethersproject/bignumber'
-import { formatFromBalance, formatToBalance } from '../../utils'
-
+import { Input as NumericalInput } from '../../components/NumericalInput'
+import { RowBetween } from '../../components/Row'
+import { useActiveWeb3React } from '../../hooks'
+import useTheme from '../../hooks/useTheme'
 import useSushiBar from '../../sushi-hooks/useSushiBar'
+import { TYPE } from '../../theme'
+import { formatFromBalance, formatToBalance } from '../../utils'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}

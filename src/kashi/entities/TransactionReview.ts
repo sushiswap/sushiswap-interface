@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { getUSDString, getUSDValue } from 'kashi/functions/kashi'
+import { getUSDString } from 'kashi/functions/kashi'
 import { formattedNum, formattedPercent } from 'utils'
 
 export enum Direction {

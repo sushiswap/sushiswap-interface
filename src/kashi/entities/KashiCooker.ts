@@ -2,11 +2,11 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
+import { toElastic, ZERO } from 'kashi/functions'
 import { toShare } from 'kashi/functions/bentobox'
+import { KashiPermit } from 'kashi/hooks'
 import { getProviderOrSigner, getSigner } from 'utils'
 import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
-import { KashiPermit } from 'kashi/hooks'
-import { toElastic, ZERO } from 'kashi/functions'
 
 export async function signMasterContractApproval(
     bentoBoxContract: ethers.Contract | null,

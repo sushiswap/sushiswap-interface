@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Card } from 'kashi/components'
-import { useActiveWeb3React } from 'hooks'
 import Web3Status from 'components/Web3Status'
-import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
-import ComingSoon from '../../assets/kashi/coming-soon.png'
-import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
+import { useActiveWeb3React } from 'hooks'
+import { Button, Card } from 'kashi/components'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import BentoBoxHero from '../../assets/kashi/bentobox-hero.jpg'
+import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
+import ComingSoon from '../../assets/kashi/coming-soon.png'
+import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 function BentoBox(): JSX.Element {
     const { account } = useActiveWeb3React()
 

@@ -12,7 +12,6 @@ import {
     PROTOCOL_FEE_DIVISOR,
     STARTING_INTEREST_PER_YEAR
 } from 'kashi/constants'
-
 import { e10, ZERO } from './math'
 
 export function accrue(pair: any, amount: BigNumber, includePrincipal = false): BigNumber {

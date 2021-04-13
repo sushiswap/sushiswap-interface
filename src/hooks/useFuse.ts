@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import Fuse from 'fuse.js'
+import { useState } from 'react'
 
 function fuzzySearch({ fuse, data, term }: any) {
     const result = fuse.search(`${term}`)

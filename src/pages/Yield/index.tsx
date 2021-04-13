@@ -1,15 +1,13 @@
+import { useFuse, useSortableData } from 'hooks'
 import React, { useState } from 'react'
+import { ChevronDown, ChevronUp } from 'react-feather'
 import styled from 'styled-components'
+import useFarms from 'sushi-hooks/useFarms'
 import { RowBetween } from '../../components/Row'
-import { Dots } from '../Pool/styleds'
-
 //import { useActiveWeb3React } from 'hooks'
 import { formattedNum, formattedPercent } from '../../utils'
-import { Card, CardHeader, Paper, Search, DoubleLogo } from './components'
-import { useFuse, useSortableData } from 'hooks'
-import useFarms from 'sushi-hooks/useFarms'
-
-import { ChevronUp, ChevronDown } from 'react-feather'
+import { Dots } from '../Pool/styleds'
+import { Card, CardHeader, DoubleLogo, Paper, Search } from './components'
 import InputGroup from './InputGroup'
 
 export const FixedHeightRow = styled(RowBetween)`

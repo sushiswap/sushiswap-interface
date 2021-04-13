@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React, useContract } from '../../hooks'
+import { Contract } from 'ethers'
+import { useCallback, useEffect, useState } from 'react'
 import ERC20_ABI from '../../constants/abis/erc20.json'
+import { useActiveWeb3React, useContract } from '../../hooks'
 import { useBlockNumber } from '../../state/application/hooks'
 import { isAddress } from '../../utils'
 

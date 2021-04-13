@@ -1,15 +1,12 @@
-import { isTradeBetter } from 'utils/trades'
-import { Currency, CurrencyAmount, Pair, Token, Trade, ChainId } from '@sushiswap/sdk'
-import flatMap from 'lodash.flatmap'
+import { ChainId, Currency, CurrencyAmount, Pair, Token, Trade } from '@sushiswap/sdk'
 import { useMemo } from 'react'
-
-import { BASES_TO_CHECK_TRADES_AGAINST, CUSTOM_BASES, BETTER_TRADE_LESS_HOPS_THRESHOLD } from '../constants'
+import { useUserSingleHopOnly } from 'state/user/hooks'
+import { isTradeBetter } from 'utils/trades'
+import { BASES_TO_CHECK_TRADES_AGAINST, BETTER_TRADE_LESS_HOPS_THRESHOLD, CUSTOM_BASES } from '../constants'
 import { PairState, usePairs } from '../data/Reserves'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
-
 import { useActiveWeb3React } from './index'
 import { useUnsupportedTokens } from './Tokens'
-import { useUserSingleHopOnly } from 'state/user/hooks'
 
 function generateAllRoutePairs(tokenA?: Token, tokenB?: Token, chainId?: ChainId): [Token, Token][] {
     const bases: Token[] = chainId ? BASES_TO_CHECK_TRADES_AGAINST[chainId] : []

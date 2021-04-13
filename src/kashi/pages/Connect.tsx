@@ -1,5 +1,5 @@
-import React from 'react'
 import WalletStandalone from 'components/WalletModal/Standalone'
+import React from 'react'
 
 const Connect = () => {
     return (

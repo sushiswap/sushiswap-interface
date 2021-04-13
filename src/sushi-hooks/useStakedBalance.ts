@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useActiveWeb3React, useMasterChefContract } from 'hooks'
+import { useCallback, useEffect, useState } from 'react'
 import { useBlockNumber } from 'state/application/hooks'
 
 export interface BalanceProps {

@@ -1,10 +1,10 @@
-import { useCallback } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React, useBentoBoxContract } from '../hooks'
-import { isAddress } from '../utils'
+import { BigNumber } from '@ethersproject/bignumber'
 import { WETH } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
-import { BigNumber } from '@ethersproject/bignumber'
+import { useCallback } from 'react'
+import { useActiveWeb3React, useBentoBoxContract } from '../hooks'
+import { useTransactionAdder } from '../state/transactions/hooks'
+import { isAddress } from '../utils'
 
 function useBentoBox() {
     const { account, chainId } = useActiveWeb3React()

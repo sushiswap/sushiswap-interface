@@ -1,12 +1,12 @@
-import { SUSHI, MERKLE_ROOT } from './../../constants/index'
-import { TokenAmount, JSBI, ChainId } from '@sushiswap/sdk'
 import { TransactionResponse } from '@ethersproject/providers'
+import { ChainId, JSBI, TokenAmount } from '@sushiswap/sdk'
 import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from '../../hooks'
 import { useMerkleDistributorContract } from '../../hooks/useContract'
-import { useSingleCallResult } from '../multicall/hooks'
 import { calculateGasMargin, isAddress } from '../../utils'
+import { useSingleCallResult } from '../multicall/hooks'
 import { useTransactionAdder } from '../transactions/hooks'
+import { MERKLE_ROOT, SUSHI } from './../../constants/index'
 
 interface UserClaimData {
     index: number

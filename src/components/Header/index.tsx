@@ -1,37 +1,26 @@
-import { ChainId, TokenAmount, Currency } from '@sushiswap/sdk'
-import React, { useState } from 'react'
-import { Text } from 'rebass'
-import { NavLink } from 'react-router-dom'
+import { ChainId, Currency, TokenAmount } from '@sushiswap/sdk'
+import { StyledMenuButton } from 'components/StyledMenu'
 import { darken } from 'polished'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
+import { NavLink } from 'react-router-dom'
+import { Text } from 'rebass'
 import styled from 'styled-components'
-
 // import Logo from '../../assets/svg/logo.svg'
 // import LogoDark from '../../assets/svg/logo_white.svg'
-
 import Logo from '../../assets/images/logo.png'
 import LogoHover from '../../assets/svg/logo_hover.svg'
-
 import { useActiveWeb3React } from '../../hooks'
+import usePrevious from '../../hooks/usePrevious'
 import { useDarkModeManager } from '../../state/user/hooks'
-import { useETHBalances, useAggregateUniBalance } from '../../state/wallet/hooks'
-import { CardNoise } from '../earn/styled'
-import { CountUp } from 'use-count-up'
-import { TYPE, ExternalLink } from '../../theme'
-
+import { useAggregateUniBalance, useETHBalances } from '../../state/wallet/hooks'
+import { ExternalLink } from '../../theme'
 import { YellowCard } from '../Card'
-import { Moon, Sun } from 'react-feather'
 import Menu from '../Menu'
-
+import Modal from '../Modal'
 import Row, { RowFixed } from '../Row'
 import Web3Status from '../Web3Status'
-import { Dots } from '../swap/styleds'
-import Modal from '../Modal'
 import UniBalanceContent from './UniBalanceContent'
-import usePrevious from '../../hooks/usePrevious'
-import LanguageSwitch from '../LanguageSwitch'
-import { StyledMenuButton } from 'components/StyledMenu'
 
 const ExtendedStyledMenuButton = styled(StyledMenuButton)`
     margin-left: 8px;
