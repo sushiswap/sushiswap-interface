@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
-import { useBentoBoxContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React, useBentoBoxContract } from '../hooks'
 import { isAddress } from '../utils'
 import { WETH } from '@sushiswap/sdk'
 import { ethers } from 'ethers'

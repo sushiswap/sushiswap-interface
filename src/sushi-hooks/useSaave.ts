@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-import { useSaaveContract, useSushiContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React, useSaaveContract, useSushiContract } from '../hooks'
 import { BalanceProps } from './useTokenBalance'
 import { Fraction } from 'entities'
 

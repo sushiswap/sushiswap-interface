@@ -1,10 +1,8 @@
 import { useCallback } from 'react'
-
 import { signERC2612Permit } from 'eth-permit'
 import { ethers } from 'ethers'
 import LPToken from '../types/LPToken'
-import { useSushiRollContract } from './useContract'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React, useSushiRollContract } from '../hooks'
 import ReactGA from 'react-ga'
 
 const useSushiRoll = () => {

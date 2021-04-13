@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React, useContract } from 'hooks'
 import ERC20_ABI from 'constants/abis/erc20.json'
-import { useContract } from './useContract'
 import { isAddress } from 'utils'
 import useTransactionStatus from './useTransactionStatus'
 import { WETH } from '@sushiswap/sdk'
@@ -20,7 +19,7 @@ function useTokenBalance(tokenAddress: string) {
     // allows balance to update given transaction updates
     const currentTransactionStatus = useTransactionStatus()
     const addressCheckSum = isAddress(tokenAddress)
-    const tokenContract = useContract(addressCheckSum, ERC20_ABI, false)
+    const tokenContract = useContract(addressCheckSum ? addressCheckSum : undefined, ERC20_ABI, false)
 
     const getBalance = async (contract: Contract | null, owner: string | null | undefined): Promise<BalanceProps> => {
         try {

@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React, useBentoBoxContract, useContract } from '../hooks'
 import { isAddress } from '../utils'
 import ERC20_ABI from '../constants/abis/erc20.json'
-import { useContract, useBentoBoxContract } from './useContract'
 import { Fraction } from 'entities'
 
 const useAllowance = (tokenAddress: string) => {
     const { account } = useActiveWeb3React()
     const bentoBoxContract = useBentoBoxContract(true) // withSigner
     const tokenAddressChecksum = isAddress(tokenAddress)
-    const tokenContract = useContract(tokenAddressChecksum, ERC20_ABI, true) // withSigner
+    const tokenContract = useContract(tokenAddressChecksum ? tokenAddressChecksum : undefined, ERC20_ABI, true) // withSigner
 
     const [allowance, setAllowance] = useState('0')
     const fetchAllowance = useCallback(async () => {

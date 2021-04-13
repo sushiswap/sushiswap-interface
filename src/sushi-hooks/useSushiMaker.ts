@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useMakerContract } from './useContract'
+import { useMakerContract } from 'hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 const useMaker = () => {

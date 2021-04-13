@@ -1,15 +1,13 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
-import { useBentoBoxContract } from './useContract'
 import { useDefaultTokens } from 'hooks/Tokens'
 import orderBy from 'lodash/orderBy'
 import { Currency, Token, WETH } from '@sushiswap/sdk'
-
-import { useBoringHelperContract } from 'hooks/useContract'
+import { useBentoBoxContract, useBoringHelperContract } from 'hooks/useContract'
 import { KashiContext, useKashiPairs } from 'kashi'
 import { easyAmount } from 'kashi/functions/kashi'
 import { toAmount } from 'kashi/functions/bentobox'
-import { e10, ZERO } from 'kashi/functions'
+import { ZERO, e10 } from 'kashi/functions'
 import { useBlockNumber } from 'state/application/hooks'
 
 export interface BentoBalance {

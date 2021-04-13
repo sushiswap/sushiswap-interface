@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from 'hooks'
-import { useMasterChefContract } from './useContract'
+import { useActiveWeb3React, useMasterChefContract } from 'hooks'
 import { useBlockNumber } from 'state/application/hooks'
 import { Fraction } from '../entities'
 

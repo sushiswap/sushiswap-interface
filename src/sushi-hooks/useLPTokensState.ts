@@ -1,4 +1,4 @@
-import { useDashboard2Contract, useDashboardContract, useUniV2FactoryContract } from './useContract'
+import { useDashboard2Contract, useDashboardContract, useUniV2FactoryContract } from 'hooks/useContract'
 import { useActiveWeb3React } from '../hooks'
 import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 import { useCallback, useEffect, useRef, useState } from 'react'
