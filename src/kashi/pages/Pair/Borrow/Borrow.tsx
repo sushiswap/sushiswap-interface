@@ -178,7 +178,12 @@ export default function Borrow({ pair }: BorrowProps) {
         if (displayUpdateOracle) {
             transactionReview.addRate('Exchange Rate', pair.currentExchangeRate, pair.oracleExchangeRate, pair)
         }
-        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)), pair.asset)
+        transactionReview.addTokenAmount(
+            'Borrow Limit',
+            pair.maxBorrowable.safe.value,
+            nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)),
+            pair.asset
+        )
         transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
         transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }
@@ -234,7 +239,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary">
+                <div className="text-base text-secondary text-right">
                     Balance: {formattedNum(Math.max(0, balance.toFixed(pair.collateral.decimals)))}
                 </div>
             </div>
@@ -276,7 +281,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary">Max: {formattedNum(maxBorrow)}</div>
+                <div className="text-base text-secondary text-right">Max: {formattedNum(maxBorrow)}</div>
             </div>
 
             <div className="flex items-center relative w-full mb-4">

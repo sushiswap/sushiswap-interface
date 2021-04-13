@@ -66,8 +66,10 @@ export default function Repay({ pair }: RepayProps) {
 
     const nextMinCollateralOracle = nextUserBorrowAmount.muldiv(pair.oracleExchangeRate, e10(16).mul('75'))
     const nextMinCollateralSpot = nextUserBorrowAmount.muldiv(pair.spotExchangeRate, e10(16).mul('75'))
-    const nextMinCollateralStored = nextUserBorrowAmount
-        .muldiv(displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate, e10(16).mul('75'))
+    const nextMinCollateralStored = nextUserBorrowAmount.muldiv(
+        displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate,
+        e10(16).mul('75')
+    )
     const nextMinCollateralMinimum = maximum(nextMinCollateralOracle, nextMinCollateralSpot, nextMinCollateralStored)
     const nextMaxRemoveCollateral = maximum(
         pair.userCollateralAmount.value.sub(nextMinCollateralMinimum.mul(100).div(95)),
@@ -99,7 +101,12 @@ export default function Repay({ pair }: RepayProps) {
 
     const transactionReview = new TransactionReview()
     if (displayRepayValue || displayRemoveValue) {
-        transactionReview.addTokenAmount('Borrow Limit', pair.maxBorrowable.safe.value, nextMaxBorrowSafe.add(displayRepayValue.toBigNumber(pair.asset.decimals)), pair.asset)
+        transactionReview.addTokenAmount(
+            'Borrow Limit',
+            pair.maxBorrowable.safe.value,
+            nextMaxBorrowSafe.add(displayRepayValue.toBigNumber(pair.asset.decimals)),
+            pair.asset
+        )
         transactionReview.addPercentage('Health', pair.health.value, nextHealth)
     }
 
@@ -153,9 +160,12 @@ export default function Repay({ pair }: RepayProps) {
             displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||
             (pinRemoveMax && pair.userCollateralShare.gt(0))
         ) {
-            const share = pinRemoveMax && (nextUserBorrowAmount.isZero() || (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
-                ? pair.userCollateralShare
-                : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
+            const share =
+                pinRemoveMax &&
+                (nextUserBorrowAmount.isZero() ||
+                    (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
+                    ? pair.userCollateralShare
+                    : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
 
             cooker.removeCollateral(share, useBentoRemove)
             summary += (summary ? ' and ' : '') + 'Remove Collateral'
@@ -212,7 +222,7 @@ export default function Repay({ pair }: RepayProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
                     Balance: {formattedNum(balance.toFixed(pair.asset.decimals))}
                 </div>
             </div>
@@ -258,7 +268,7 @@ export default function Repay({ pair }: RepayProps) {
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
+                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
                     Max: {formattedNum(maxRemoveCollateral)}
                 </div>
             </div>
