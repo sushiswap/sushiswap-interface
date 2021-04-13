@@ -3,3 +3,11 @@
 @tailwind components;
 
 @tailwind utilities;
+
+button:focus {
+  outline: none !important;
+}
+
+input:focus {
+  box-shadow: none !important;
+}

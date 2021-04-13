@@ -8,123 +8,136 @@ import LPToken from '../types/LPToken'
 const LP_TOKENS_LIMIT = 100
 
 export interface LPTokensState {
-  updateLPTokens: () => Promise<void>
-  lpTokens: LPToken[]
-  selectedLPToken?: LPToken
-  setSelectedLPToken: (token?: LPToken) => void
-  selectedLPTokenAllowed: boolean
-  setSelectedLPTokenAllowed: (allowed: boolean) => void
-  loading: boolean
-  updatingLPTokens: boolean
+    updateLPTokens: () => Promise<void>
+    lpTokens: LPToken[]
+    selectedLPToken?: LPToken
+    setSelectedLPToken: (token?: LPToken) => void
+    selectedLPTokenAllowed: boolean
+    setSelectedLPTokenAllowed: (allowed: boolean) => void
+    loading: boolean
+    updatingLPTokens: boolean
 }
 
 const useLPTokensState = () => {
-  const { account, chainId } = useActiveWeb3React()
-  const factoryContract = useUniV2FactoryContract()
-  const dashboardContract = useDashboardContract()
-  const dashboard2Contract = useDashboard2Contract()
-  const [lpTokens, setLPTokens] = useState<LPToken[]>([])
-  const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
-  const [selectedLPTokenAllowed, setSelectedLPTokenAllowed] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const updatingLPTokens = useRef(false)
+    const { account, chainId } = useActiveWeb3React()
+    const factoryContract = useUniV2FactoryContract()
+    const dashboardContract = useDashboardContract()
+    const dashboard2Contract = useDashboard2Contract()
+    const [lpTokens, setLPTokens] = useState<LPToken[]>([])
+    const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
+    const [selectedLPTokenAllowed, setSelectedLPTokenAllowed] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const updatingLPTokens = useRef(false)
 
-  const updateLPTokens = useCallback(async () => {
-    updatingLPTokens.current = true
-    try {
-      const length = await factoryContract?.allPairsLength()
+    const updateLPTokens = useCallback(async () => {
+        updatingLPTokens.current = true
+        try {
+            const length = await factoryContract?.allPairsLength()
 
-      const pages: number[] = []
-      for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
+            const pages: number[] = []
+            for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
 
-      const userLP = (
-        await Promise.all(
-          pages.map(page =>
-            dashboardContract?.findPairs(
-              account,
-              UNI_FACTORY_ADDRESS,
-              page,
-              Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
+            const userLP = (
+                await Promise.all(
+                    pages.map(page =>
+                        dashboardContract?.findPairs(
+                            account,
+                            UNI_FACTORY_ADDRESS,
+                            page,
+                            Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
+                        )
+                    )
+                )
+            ).flat()
+
+            const tokenDetails = (
+                await dashboardContract?.getTokenInfo(
+                    Array.from(new Set(userLP.reduce((a: any, b: any) => a.push(b.token, b.token0, b.token1) && a, [])))
+                )
+            ).reduce((acc: any, cur: any) => {
+                acc[cur[0]] = cur
+                return acc
+            }, {})
+
+            const balances = (
+                await dashboardContract?.findBalances(
+                    account,
+                    userLP.map(pair => pair.token)
+                )
+            ).map((el: any) => el.balance)
+
+            const userLPDetails = (
+                await dashboard2Contract?.getPairsFull(
+                    account,
+                    userLP.map(pair => pair.token)
+                )
+            ).reduce((acc: any, cur: any) => {
+                acc[cur[0]] = cur
+                return acc
+            }, {})
+
+            const data = await Promise.all(
+                userLP.map(async (pair, index) => {
+                    const { totalSupply } = userLPDetails[pair.token]
+                    const token = new Token(
+                        chainId as ChainId,
+                        tokenDetails[pair.token].token,
+                        tokenDetails[pair.token].decimals,
+                        tokenDetails[pair.token].symbol,
+                        tokenDetails[pair.token].name
+                    )
+                    const tokenA = tokenDetails[pair.token0]
+                    const tokenB = tokenDetails[pair.token1]
+
+                    return {
+                        address: pair.token,
+                        decimals: token.decimals,
+                        name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
+                        symbol: `${tokenA.symbol}-${tokenB.symbol}`,
+                        balance: new TokenAmount(token, balances[index]),
+                        totalSupply,
+                        tokenA: new Token(
+                            chainId as ChainId,
+                            tokenA.token,
+                            tokenA.decimals,
+                            tokenA.symbol,
+                            tokenA.name
+                        ),
+                        tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name)
+                    } as LPToken
+                })
             )
-          )
-        )
-      ).flat()
 
-      const tokenDetails = (
-        await dashboardContract?.getTokenInfo(
-          Array.from(new Set(userLP.reduce((a: any, b: any) => a.push(b.token, b.token0, b.token1) && a, [])))
-        )
-      ).reduce((acc: any, cur: any) => {
-        acc[cur[0]] = cur
-        return acc
-      }, {})
+            if (data) setLPTokens(data)
+        } finally {
+            setLoading(false)
+            updatingLPTokens.current = false
+        }
+    }, [factoryContract, dashboardContract, account, dashboard2Contract, chainId])
 
-      const balances = (
-        await dashboardContract?.findBalances(
-          account,
-          userLP.map(pair => pair.token)
-        )
-      ).map((el: any) => el.balance)
+    useEffect(() => {
+        if (
+            account &&
+            factoryContract &&
+            dashboard2Contract &&
+            dashboardContract &&
+            chainId &&
+            !updatingLPTokens.current
+        ) {
+            updateLPTokens()
+        }
+    }, [account, dashboard2Contract, dashboardContract, factoryContract, chainId, updateLPTokens])
 
-      const userLPDetails = (
-        await dashboard2Contract?.getPairsFull(
-          account,
-          userLP.map(pair => pair.token)
-        )
-      ).reduce((acc: any, cur: any) => {
-        acc[cur[0]] = cur
-        return acc
-      }, {})
-
-      const data = await Promise.all(
-        userLP.map(async (pair, index) => {
-          const { totalSupply } = userLPDetails[pair.token]
-          const token = new Token(
-            chainId as ChainId,
-            tokenDetails[pair.token].token,
-            tokenDetails[pair.token].decimals,
-            tokenDetails[pair.token].symbol,
-            tokenDetails[pair.token].name
-          )
-          const tokenA = tokenDetails[pair.token0]
-          const tokenB = tokenDetails[pair.token1]
-
-          return {
-            address: pair.token,
-            decimals: token.decimals,
-            name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
-            symbol: `${tokenA.symbol}-${tokenB.symbol}`,
-            balance: new TokenAmount(token, balances[index]),
-            totalSupply,
-            tokenA: new Token(chainId as ChainId, tokenA.token, tokenA.decimals, tokenA.symbol, tokenA.name),
-            tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name)
-          } as LPToken
-        })
-      )
-
-      if (data) setLPTokens(data)
-    } finally {
-      setLoading(false)
-      updatingLPTokens.current = false
+    return {
+        updateLPTokens,
+        lpTokens,
+        selectedLPToken,
+        setSelectedLPToken,
+        selectedLPTokenAllowed,
+        setSelectedLPTokenAllowed,
+        loading,
+        updatingLPTokens: updatingLPTokens.current
     }
-  }, [factoryContract, dashboardContract, account, dashboard2Contract, chainId])
-
-  useEffect(() => {
-    if (account && factoryContract && dashboard2Contract && dashboardContract && chainId && !updatingLPTokens.current) {
-      updateLPTokens()
-    }
-  }, [account, dashboard2Contract, dashboardContract, factoryContract, chainId, updateLPTokens])
-
-  return {
-    updateLPTokens,
-    lpTokens,
-    selectedLPToken,
-    setSelectedLPToken,
-    selectedLPTokenAllowed,
-    setSelectedLPTokenAllowed,
-    loading,
-    updatingLPTokens: updatingLPTokens.current
-  }
 }
 
 export default useLPTokensState

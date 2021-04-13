@@ -159,6 +159,13 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "DOMAIN_SEPARATOR",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "contract IERC20", "name": "", "type": "address" },
       { "internalType": "address", "name": "", "type": "address" }
@@ -202,7 +209,7 @@
       { "internalType": "bool", "name": "useCreate2", "type": "bool" }
     ],
     "name": "deploy",
-    "outputs": [],
+    "outputs": [{ "internalType": "address", "name": "cloneAddress", "type": "address" }],
     "stateMutability": "payable",
     "type": "function"
   },

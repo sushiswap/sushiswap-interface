@@ -1,3 +1,6 @@
 module.exports = {
-  plugins: [require('tailwindcss'), require('postcss-preset-env')({ stage: 1 })]
+  plugins: [
+    require('tailwindcss'),
+    require('postcss-preset-env')({ stage: 1 })
+  ]
 }
