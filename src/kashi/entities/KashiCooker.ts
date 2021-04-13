@@ -6,7 +6,7 @@ import { toElastic, ZERO } from 'kashi/functions'
 import { toShare } from 'kashi/functions/bentobox'
 import { KashiPermit } from 'kashi/hooks/useKashiApproveCallback'
 import { getProviderOrSigner, getSigner } from 'utils'
-import KASHIPAIR_ABI from '../../constants/sushiAbis/kashipair.json'
+import KASHIPAIR_ABI from '../../constants/abis/kashipair.json'
 
 export async function signMasterContractApproval(
     bentoBoxContract: ethers.Contract | null,

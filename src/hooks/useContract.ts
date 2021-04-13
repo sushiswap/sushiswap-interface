@@ -38,22 +38,21 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import WETH_ABI from '../constants/abis/weth.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
-import BAR_ABI from '../constants/sushiAbis/bar.json'
-import BENTOBOX_ABI from '../constants/sushiAbis/bentobox.json'
-import CHAINLINK_ORACLE_ABI from '../constants/sushiAbis/chainlinkOracle.json'
-import DASHBOARD_ABI from '../constants/sushiAbis/dashboard.json'
-import DASHBOARD2_ABI from '../constants/sushiAbis/dashboard2.json'
-import FACTORY_ABI from '../constants/sushiAbis/factory.json'
-import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
-import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
-import MAKER_ABI from '../constants/sushiAbis/maker.json'
-import MASTERCHEF_ABI from '../constants/sushiAbis/masterchef.json'
-import PENDING_ABI from '../constants/sushiAbis/pending.json'
-import ROUTER_ABI from '../constants/sushiAbis/router.json'
-import SAAVE_ABI from '../constants/sushiAbis/saave.json'
-import SUSHI_ABI from '../constants/sushiAbis/sushi.json'
-import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
-import TIMELOCK_ABI from '../constants/sushiAbis/timelock.json'
+import BAR_ABI from '../constants/abis/bar.json'
+import BENTOBOX_ABI from '../constants/abis/bentobox.json'
+import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
+import DASHBOARD_ABI from '../constants/abis/dashboard.json'
+import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
+import FACTORY_ABI from '../constants/abis/factory.json'
+import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
+import MAKER_ABI from '../constants/abis/maker.json'
+import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
+import PENDING_ABI from '../constants/abis/pending.json'
+import ROUTER_ABI from '../constants/abis/router.json'
+import SAAVE_ABI from '../constants/abis/saave.json'
+import SUSHI_ABI from '../constants/abis/sushi.json'
+import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
+import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
@@ -216,12 +215,6 @@ export function useSaaveContract(withSignerIfPossible?: boolean): Contract | nul
 }
 export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
     return useContract('0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289', SAAVE_ABI, withSignerIfPossible)
-}
-
-// legacy:
-export function useKashiPairHelperContract(withSignerIfPossible?: boolean): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    return useContract(chainId ? KASHI_HELPER_ADDRESS[chainId] : undefined, KASHIPAIRHELPER_ABI, withSignerIfPossible)
 }
 
 export function useUniV2FactoryContract(): Contract | null {
