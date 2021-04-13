@@ -22,7 +22,7 @@ import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
 import { BackArrow, CloseIcon, CustomLightSpinner, TYPE } from '../../theme'
 import LPToken from '../../types/LPToken'
 import MetamaskError from '../../types/MetamaskError'
-import { BodyWrapper } from '../AppBody'
+import AppBody from '../AppBody'
 import { EmptyState } from '../MigrateV1/EmptyState'
 import { MaxButton } from '../Pool/styleds'
 
@@ -329,7 +329,7 @@ const MigrateV2 = () => {
     const state = useMigrateState()
 
     return (
-        <BodyWrapper style={{ padding: 24 }}>
+        <AppBody style={{ padding: 24 }}>
             <AutoColumn gap="16px">
                 <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                     <BackArrow to="/pool" />
@@ -364,7 +364,7 @@ const MigrateV2 = () => {
                     </>
                 )}
             </AutoColumn>
-        </BodyWrapper>
+        </AppBody>
     )
 }
 

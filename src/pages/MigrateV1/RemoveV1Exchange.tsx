@@ -1,7 +1,5 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
-import { AddressZero } from '@ethersproject/constants'
-import { Contract } from '@ethersproject/contracts'
-import { CurrencyAmount, Fraction, JSBI, Percent, Token, TokenAmount, WETH } from '@sushiswap/sdk'
+import { JSBI, Token, TokenAmount, WETH, Fraction, Percent, CurrencyAmount } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 import { Redirect, RouteComponentProps } from 'react-router'
@@ -10,20 +8,22 @@ import { LightCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
 import { AutoRow } from '../../components/Row'
-import { Dots } from '../../components/swap/styleds'
 import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
-import { useTotalSupply } from '../../data/TotalSupply'
 import { useActiveWeb3React } from '../../hooks'
 import { useToken } from '../../hooks/Tokens'
 import { useV1ExchangeContract } from '../../hooks/useContract'
 import { NEVER_RELOAD, useSingleCallResult } from '../../state/multicall/hooks'
 import { useIsTransactionPending, useTransactionAdder } from '../../state/transactions/hooks'
-import { useETHBalances, useTokenBalance } from '../../state/wallet/hooks'
+import { useTokenBalance, useETHBalances } from '../../state/wallet/hooks'
 import { BackArrow, TYPE } from '../../theme'
 import { isAddress } from '../../utils'
-import { BodyWrapper } from '../AppBody'
+import AppBody from '../AppBody'
 import { EmptyState } from './EmptyState'
 import { V1LiquidityInfo } from './MigrateV1Exchange'
+import { AddressZero } from '@ethersproject/constants'
+import { Dots } from '../../components/swap/styleds'
+import { Contract } from '@ethersproject/contracts'
+import { useTotalSupply } from '../../data/TotalSupply'
 
 const WEI_DENOM = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
 const ZERO = JSBI.BigInt(0)
@@ -156,7 +156,7 @@ export default function RemoveV1Exchange({
     }
 
     return (
-        <BodyWrapper style={{ padding: 24 }} id="remove-v1-exchange">
+        <AppBody style={{ padding: 24 }} id="remove-v1-exchange">
             <AutoColumn gap="16px">
                 <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                     <BackArrow to="/migrate/v1" />
@@ -178,6 +178,6 @@ export default function RemoveV1Exchange({
                     <EmptyState message="Loading..." />
                 )}
             </AutoColumn>
-        </BodyWrapper>
+        </AppBody>
     )
 }

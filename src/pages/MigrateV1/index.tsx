@@ -1,23 +1,23 @@
 import { JSBI, Token } from '@sushiswap/sdk'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState, useEffect } from 'react'
 import { ThemeContext } from 'styled-components'
-import { LightCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
-import V1PositionCard from '../../components/PositionCard/V1'
-import QuestionHelper from '../../components/QuestionHelper'
 import { AutoRow } from '../../components/Row'
 import { SearchInput } from '../../components/SearchModal/styleds'
-import { Dots } from '../../components/swap/styleds'
 import { useAllTokenV1Exchanges } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens, useToken } from '../../hooks/Tokens'
-import { useCombinedActiveList } from '../../state/lists/hooks'
-import { useAddUserToken } from '../../state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { BackArrow, TYPE } from '../../theme'
-import { isTokenOnList } from '../../utils'
-import { BodyWrapper } from '../AppBody'
+import { LightCard } from '../../components/Card'
+import AppBody from '../AppBody'
 import { EmptyState } from './EmptyState'
+import V1PositionCard from '../../components/PositionCard/V1'
+import QuestionHelper from '../../components/QuestionHelper'
+import { Dots } from '../../components/swap/styleds'
+import { useAddUserToken } from '../../state/user/hooks'
+import { isTokenOnList } from '../../utils'
+import { useCombinedActiveList } from '../../state/lists/hooks'
 
 export default function MigrateV1() {
     const theme = useContext(ThemeContext)
@@ -69,7 +69,7 @@ export default function MigrateV1() {
     const isLoading = Object.keys(V1Exchanges)?.length === 0 || V1LiquidityBalancesLoading
 
     return (
-        <BodyWrapper style={{ padding: 24 }}>
+        <AppBody style={{ padding: 24 }}>
             <AutoColumn gap="16px">
                 <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                     <BackArrow to="/pool" />
@@ -113,6 +113,6 @@ export default function MigrateV1() {
                     </>
                 )}
             </AutoColumn>
-        </BodyWrapper>
+        </AppBody>
     )
 }
