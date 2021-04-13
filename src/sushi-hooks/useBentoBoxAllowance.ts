@@ -4,8 +4,7 @@ import { useActiveWeb3React } from '../hooks'
 import { isAddress } from '../utils'
 import ERC20_ABI from '../constants/abis/erc20.json'
 import { useContract, useBentoBoxContract } from './useContract'
-
-import Fraction from '../constants/Fraction'
+import { Fraction } from 'entities'
 
 const useAllowance = (tokenAddress: string) => {
     const { account } = useActiveWeb3React()

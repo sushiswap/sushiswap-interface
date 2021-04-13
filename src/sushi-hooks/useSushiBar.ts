@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { useSushiContract, useSushiBarContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../hooks'
-import Fraction from '../constants/Fraction'
+import { Fraction } from '../entities'
 import { BalanceProps } from './useTokenBalance'
 
 const { BigNumber } = ethers

@@ -8,8 +8,7 @@ import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER, ROUTER_
 import { TokenAddressMap } from '../state/lists/hooks'
 import { ethers } from 'ethers'
 import Numeral from 'numeral'
-
-import Fraction from '../constants/Fraction'
+import { Fraction } from '../entities'
 
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
     if (value) {

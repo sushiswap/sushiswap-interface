@@ -3,8 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { useActiveWeb3React } from 'hooks'
 import { useMasterChefContract } from './useContract'
 import { useBlockNumber } from 'state/application/hooks'
-
-import Fraction from 'constants/Fraction'
+import { Fraction } from '../entities'
 
 const usePending = (pid: number) => {
     const [balance, setBalance] = useState<string>('0')

@@ -3,7 +3,6 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { useActiveWeb3React } from 'hooks'
 import { useMasterChefContract } from './useContract'
 import { useBlockNumber } from 'state/application/hooks'
-//import Fraction from 'constants/Fraction'
 
 export interface BalanceProps {
     value: BigNumber

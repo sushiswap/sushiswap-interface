@@ -23,7 +23,7 @@ import Loader from 'components/Loader'
 import { ChevronRight } from 'react-feather'
 import { transparentize } from 'polished'
 
-import Fraction from '../../constants/Fraction'
+import Fraction from '../../entities/Fraction'
 import { formattedNum } from 'utils'
 
 const Dots = styled.span`

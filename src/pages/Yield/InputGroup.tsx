@@ -15,7 +15,7 @@ import { Token, TokenAmount, MASTERCHEF_ADDRESS } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
 import { Button } from './components'
 import { isAddressString, formattedNum, isWETH } from 'utils'
-import Fraction from 'constants/Fraction'
+import { Fraction } from 'entities'
 import { BigNumber } from '@ethersproject/bignumber'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {

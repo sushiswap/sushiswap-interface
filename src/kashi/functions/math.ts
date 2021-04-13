@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import Fraction from 'constants/Fraction'
+import { Fraction } from '../../entities'
 import { ethers } from 'ethers'
 
 declare global {
@@ -90,18 +90,4 @@ export function maximum(...values: BigNumberish[]): BigNumber {
         }
     }
     return highest
-}
-
-// Rounds a number [value] up to a specified [precision].
-export function roundTo(value: number, precision: number): number {
-    if (!Number.isFinite(value)) {
-        throw new Error('Input value is not a finite number')
-    }
-    if (!Number.isInteger(precision) || precision < 0) {
-        throw new Error('Precision is not a positive integer')
-    }
-    if (Number.isInteger(value)) {
-        return value
-    }
-    return parseFloat(value.toFixed(precision))
 }
