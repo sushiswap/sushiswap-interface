@@ -11,11 +11,11 @@ declare global {
 declare module '@ethersproject/bignumber' {
     interface BigNumber {
         muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
-        toFixed(decimals: number): string
+        toFixed(decimals: BigNumberish): string
     }
 }
 
-String.prototype.toBigNumber = function(decimals: number): BigNumber {
+String.prototype.toBigNumber = function(decimals: BigNumberish): BigNumber {
     try {
         return ethers.utils.parseUnits(String(this), decimals)
     } catch (error) {
@@ -32,8 +32,10 @@ BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumb
         : ZERO
 }
 
-BigNumber.prototype.toFixed = function(decimals?: number): string {
-    return Fraction.from(this, decimals ? BigNumber.from(10).pow(BigNumber.from(decimals)) : ZERO).toString(decimals)
+BigNumber.prototype.toFixed = function(decimals?: BigNumberish): string {
+    return Fraction.from(this, decimals ? BigNumber.from(10).pow(BigNumber.from(decimals)) : ZERO).toString(
+        BigNumber.from(decimals).toNumber()
+    )
 }
 
 export const ZERO = BigNumber.from('0')
