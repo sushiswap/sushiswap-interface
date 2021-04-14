@@ -334,28 +334,30 @@ export default function Borrow({ pair }: BorrowProps) {
                 </div>
             )}
 
-            <div className="flex items-center mb-4">
-                <Checkbox
-                    color="pink"
-                    checked={swap}
-                    onChange={event => setSwap(event.target.checked)}
-                    disabled={true}
-                    className="cursor-not-allowed"
-                />
-                <span className="text-low-emphesis ml-2 mr-1">
-                    Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
-                </span>
-                <QuestionHelper
-                    text={
-                        <span>
-                            Swapping your borrowed tokens for collateral allows for opening long/short positions with
-                            leverage in a single transaction.
-                            <br />
-                            <br /> This feature will be enabled soon.
-                        </span>
-                    }
-                />
-                <Badge color="pink" className="ml-auto">
+            <div className="flex flex-col md:flex-row items-center mb-4">
+                <div className="flex items-center">
+                    <Checkbox
+                        color="pink"
+                        checked={swap}
+                        onChange={event => setSwap(event.target.checked)}
+                        disabled={true}
+                        className="cursor-not-allowed"
+                    />
+                    <span className="text-low-emphesis text-xs md:text-sm ml-2 mr-1">
+                        Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
+                    </span>
+                    <QuestionHelper
+                        text={
+                            <span>
+                                Swapping your borrowed tokens for collateral allows for opening long/short positions
+                                with leverage in a single transaction.
+                                <br />
+                                <br /> This feature will be enabled soon.
+                            </span>
+                        }
+                    />
+                </div>
+                <Badge color="pink" className="block text-center mt-2 md:mt-0 ml-0 md:flex md:ml-auto">
                     COMING SOON
                 </Badge>
             </div>
