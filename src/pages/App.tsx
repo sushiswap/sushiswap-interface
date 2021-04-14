@@ -1,7 +1,6 @@
 import { ChainId } from '@sushiswap/sdk'
 import React, { Suspense, useEffect, useRef } from 'react'
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom'
-import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
@@ -46,46 +45,8 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import Tools from './Tools'
 import Vesting from './Vesting'
 import Yield from './Yield'
-import { Shell } from '../components/App'
 
-const AppWrapper = styled.div`
-    display: flex;
-    flex-flow: column;
-    align-items: flex-start;
-    overflow-x: hidden;
-    height: 100vh;
-`
-
-const HeaderWrapper = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap}
-    width: 100%;
-    justify-content: space-between;
-`
-
-const BodyWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding-top: 50px;
-    align-items: center;
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 10;
-
-    ${({ theme }) => theme.mediaWidth.upToSmall`
-    padding: 16px;
-    padding-top: 1rem;
-  `};
-
-    z-index: 1;
-`
-
-const Marginer = styled.div`
-    margin-top: 5rem;
-`
-
-function App() {
+function App(): JSX.Element {
     const { chainId } = useActiveWeb3React()
     const bodyRef = useRef<any>(null)
 
@@ -101,12 +62,15 @@ function App() {
         <Suspense fallback={null}>
             <Route component={GoogleAnalyticsReporter} />
             <Route component={DarkModeQueryParamReader} />
-            <div className="flex flex-col items-start overflow-x-hidden h-full">
+            <div className="flex flex-col items-start overflow-x-hidden h-screen">
                 <URLWarning />
-                <HeaderWrapper>
+                <div className="flex flex-row flex-nowrap justify-between w-screen">
                     <Header />
-                </HeaderWrapper>
-                <BodyWrapper ref={bodyRef}>
+                </div>
+                <div
+                    ref={bodyRef}
+                    className="flex flex-col flex-1 items-center justify-start w-screen overflow-y-auto overflow-x-hidden z-10 pt-20 mb-20"
+                >
                     <Popups />
                     <Polling />
                     <Web3ReactManager>
@@ -193,8 +157,7 @@ function App() {
                             <Route component={RedirectPathToSwapOnly} />
                         </Switch>
                     </Web3ReactManager>
-                    <Marginer />
-                </BodyWrapper>
+                </div>
             </div>
         </Suspense>
     )
