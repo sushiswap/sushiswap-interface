@@ -12,9 +12,8 @@ function BentoBox(): JSX.Element {
 
     return (
         <div>
-            {/* <div className="absolute bg-dark-1000 top-0 right-0 bottom-0 left-0" /> */}
             <div
-                className="absolute -top-32 right-0 left-0"
+                className="absolute top-0 right-0 left-0"
                 style={{
                     height: '700px'
                 }}
@@ -22,8 +21,8 @@ function BentoBox(): JSX.Element {
                 <img className="h-full w-full object-cover object-bottom opacity-50 z-10" src={BentoBoxHero} alt="" />
             </div>
 
-            <div className="relative flex flex-col items-center pt-36 pt-4 sm:pt-48">
-                <img alt="" src={BentoBoxLogo} className="object-scale-down w-40 md:w-60 h-auto -mt-40 md:-mt-52" />
+            <div className="relative flex flex-col items-center">
+                <img alt="" src={BentoBoxLogo} className="object-scale-down w-40 md:w-60 h-auto" />
 
                 <div className="container mx-auto max-w-3xl">
                     <div className="font-bold text-center text-3xl md:text-5xl text-high-emphesis">BentoBox Apps</div>
