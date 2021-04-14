@@ -28,7 +28,7 @@
         "@sushiswap/core": "^1.4.2",
         "@sushiswap/default-token-list": "5.9.0",
         "@sushiswap/sdk": "5.0.0-canary.6",
-        "@sushiswap/sushi-data": "1.0.11",
+        "@sushiswap/sushi-data": "1.0.12",
         "@tailwindcss/aspect-ratio": "^0.2.0",
         "@tailwindcss/forms": "^0.2.1",
         "@tailwindcss/line-clamp": "^0.2.0",
