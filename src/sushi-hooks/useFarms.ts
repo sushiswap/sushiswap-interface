@@ -49,7 +49,7 @@ const useFarms = () => {
         const liquidityPositions = results[1]?.data.liquidityPositions
         const averageBlockTime = results[2]
         const sushiPrice = results[3]
-        const kashiPairs = Array(results[4])
+        const kashiPairs = results[4]
         const pairs = pairsQuery?.data.pairs
 
         const KASHI_PAIRS = [200] // kashiPair pids

@@ -2855,10 +2855,10 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@sushiswap/sushi-data@1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.12.tgz#5b99d25d69e06d66930b78e5d7d053de9fae7d7b"
-  integrity sha512-vXCjfo2cPWGgZVRi254XlTZ6F25+xTIwnpAnIaIM+xZ33DhEnGdX+sOqlRrYOk+rjy83ylChfdm8QPoUSze/Ew==
+"@sushiswap/sushi-data@1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.14.tgz#9f2f5900cd26150c87ad84f72203d106a650ccae"
+  integrity sha512-/ijRR2BR7Xnhf5EAmTZM78fIWyMpKJ30AzCx5FvuPBGSdWR1c6u+82K1aFX1r2CuH4xmSwrf0BQOFJ4nBPblTw==
   dependencies:
     bluebird "^3.7.2"
     commander "6.1.0"
