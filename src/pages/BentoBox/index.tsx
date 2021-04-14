@@ -12,14 +12,14 @@ function BentoBox(): JSX.Element {
 
     return (
         <div>
-            <div className="absolute bg-dark-1000 top-0 right-0 bottom-0 left-0" />
+            {/* <div className="absolute bg-dark-1000 top-0 right-0 bottom-0 left-0" /> */}
             <div
                 className="absolute -top-32 right-0 left-0"
                 style={{
                     height: '700px'
                 }}
             >
-                <img className="h-full w-full object-cover object-bottom opacity-50" src={BentoBoxHero} alt="" />
+                <img className="h-full w-full object-cover object-bottom opacity-50 z-10" src={BentoBoxHero} alt="" />
             </div>
 
             <div className="relative flex flex-col items-center pt-36 pt-4 sm:pt-48">
