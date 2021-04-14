@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { Fraction } from 'entities'
+import { Fraction } from '../../entities'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
