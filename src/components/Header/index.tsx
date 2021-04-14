@@ -228,6 +228,7 @@ const StyledNavLink = styled(NavLink).attrs({
     font-size: 1rem;
     width: fit-content;
     margin: 0 12px;
+
     font-weight: 500;
 
     &.${activeClassName} {
@@ -240,6 +241,10 @@ const StyledNavLink = styled(NavLink).attrs({
     :focus {
         color: ${({ theme }) => darken(0.1, theme.text1)};
     }
+
+    ${({ theme }) => theme.mediaWidth.upToSmall`
+    margin: 0 8px;
+  `};
 `
 
 const StyledExternalLink = styled(ExternalLink).attrs({
