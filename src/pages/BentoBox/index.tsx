@@ -18,7 +18,11 @@ function BentoBox(): JSX.Element {
                     height: '700px'
                 }}
             >
-                <img className="h-full w-full object-cover object-bottom opacity-50 z-10" src={BentoBoxHero} alt="" />
+                <img
+                    className="h-full w-full object-cover object-bottom opacity-50 z-10 -mt-32"
+                    src={BentoBoxHero}
+                    alt=""
+                />
             </div>
 
             <div className="relative flex flex-col items-center">
