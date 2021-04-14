@@ -2832,10 +2832,10 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
-"@sushiswap/core@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-1.4.2.tgz#065a6613f842ab7ac6d12878072b59327bffa296"
-  integrity sha512-Khd2i6Bob9uk7dCgVkhUioEoxRP28m6aj25MegAHvnJyxZPVzZDhxSkeL6wdv5MeAp2DwHkYqUq03KDfVTTP4Q==
+"@sushiswap/core@2.0.0-canary.0":
+  version "2.0.0-canary.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
+  integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
 "@sushiswap/default-token-list@5.9.0":
   version "5.9.0"

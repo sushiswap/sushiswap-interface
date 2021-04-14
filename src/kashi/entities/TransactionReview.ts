@@ -16,7 +16,7 @@ interface Line {
 }
 
 export class TransactionReview extends Array<Line> {
-    public add(name: string, from: string, to: string, direction: Direction): TransactionReview {
+    public add(name: string, from: string, to: string, direction: Direction): this {
         this.push({
             name: name,
             from: from,
@@ -26,7 +26,7 @@ export class TransactionReview extends Array<Line> {
         return this
     }
 
-    public addTokenAmount(name: string, from: BigNumber, to: BigNumber, token: any): TransactionReview {
+    public addTokenAmount(name: string, from: BigNumber, to: BigNumber, token: any): this {
         this.add(
             name,
             formattedNum(from.toFixed(token.decimals)) + ' ' + token.symbol,
@@ -36,7 +36,7 @@ export class TransactionReview extends Array<Line> {
         return this
     }
 
-    public addUSD(name: string, from: BigNumber, to: BigNumber, token: any): TransactionReview {
+    public addUSD(name: string, from: BigNumber, to: BigNumber, token: any): this {
         this.add(
             name,
             formattedNum(getUSDString(from, token), true),
@@ -46,7 +46,7 @@ export class TransactionReview extends Array<Line> {
         return this
     }
 
-    public addPercentage(name: string, from: BigNumber, to: BigNumber) {
+    public addPercentage(name: string, from: BigNumber, to: BigNumber): this {
         this.add(
             name,
             formattedPercent(from.toFixed(16)),
@@ -56,7 +56,7 @@ export class TransactionReview extends Array<Line> {
         return this
     }
 
-    public addRate(name: string, from: BigNumber, to: BigNumber, pair: any) {
+    public addRate(name: string, from: BigNumber, to: BigNumber, pair: any): this {
         this.add(
             name,
             formattedNum(from.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),

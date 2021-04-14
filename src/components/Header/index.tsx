@@ -38,15 +38,19 @@ const HeaderFrame = styled.div`
     position: relative;
     padding: 1rem;
     z-index: 2;
+    height: 80px;
     ${({ theme }) => theme.mediaWidth.upToMedium`
     grid-template-columns: 1fr;
     padding: 0 1rem;
     width: calc(100%);
     position: relative;
+    height: 64px;
+
   `};
 
     ${({ theme }) => theme.mediaWidth.upToExtraSmall`
         padding: 0.5rem 1rem;
+
   `}
 `
 
@@ -67,7 +71,7 @@ const HeaderControls = styled.div`
     bottom: 0px;
     left: 0px;
     width: 100%;
-    z-index: 99;
+    // z-index: 99;
     height: 72px;
     border-radius: 12px 12px 0 0;
     background-color: ${({ theme }) => theme.bg1};
