@@ -16,7 +16,7 @@ import Loader from '../../components/Loader'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 import ProgressSteps from '../../components/ProgressSteps'
 import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsSection from '../../components/swap/AdvancedSwapDetailsSection'
+import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
 import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
@@ -328,8 +328,8 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-                    {/* <AutoColumn gap={isExpertMode ? 'md' : 'none'} style={{ paddingBottom: '1rem' }}> */}
-                    <AutoColumn gap={isExpertMode ? 'md' : '3px'}>
+
+                    <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
                                 independentField === Field.OUTPUT && !showWrap && trade ? 'From (estimated)' : 'From'
@@ -342,71 +342,30 @@ export default function Swap() {
                             onCurrencySelect={handleInputSelect}
                             otherCurrency={currencies[Field.OUTPUT]}
                             id="swap-currency-input"
-                            cornerRadiusBottomNone={isExpertMode ? false : true}
-                            //containerBackground={'#101b31'}
                         />
-                        {isExpertMode && !showWrap && (
-                            <AutoColumn justify="space-between">
-                                <AutoRow
-                                    justify={isExpertMode ? 'space-between' : 'center'}
-                                    style={{ padding: '0 1rem' }}
-                                >
-                                    <ArrowWrapper clickable>
-                                        <ArrowDown
-                                            size="16"
-                                            onClick={() => {
-                                                setApprovalSubmitted(false) // reset 2 step UI for approvals
-                                                onSwitchTokens()
-                                            }}
-                                            color={
-                                                currencies[Field.INPUT] && currencies[Field.OUTPUT]
-                                                    ? theme.primary1
-                                                    : theme.text2
-                                            }
-                                        />
-                                    </ArrowWrapper>
-                                    {recipient === null && !showWrap && isExpertMode ? (
-                                        <LinkStyledButton
-                                            id="add-recipient-button"
-                                            onClick={() => onChangeRecipient('')}
-                                        >
-                                            + Add a send (optional)
-                                        </LinkStyledButton>
-                                    ) : null}
-                                </AutoRow>
-                            </AutoColumn>
-                        )}
-                        {!isExpertMode && (
-                            <div style={{ position: 'relative', zIndex: 2 }}>
-                                <div
-                                    style={{
-                                        position: 'absolute',
-                                        width: '100%',
-                                        cursor: 'pointer',
-                                        marginTop: '-10px'
-                                    }}
-                                    onClick={() => {
-                                        setApprovalSubmitted(false) // reset 2 step UI for approvals
-                                        onSwitchTokens()
-                                    }}
-                                >
-                                    <svg
-                                        style={{ height: '1.4rem', width: '100%', margin: '0 auto' }}
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-                                        />
-                                    </svg>
-                                </div>
-                            </div>
-                        )}
+                        <AutoColumn justify="space-between">
+                            <AutoRow justify={isExpertMode ? 'space-between' : 'center'} style={{ padding: '0 1rem' }}>
+                                <ArrowWrapper clickable>
+                                    <ArrowDown
+                                        size="16"
+                                        onClick={() => {
+                                            setApprovalSubmitted(false) // reset 2 step UI for approvals
+                                            onSwitchTokens()
+                                        }}
+                                        color={
+                                            currencies[Field.INPUT] && currencies[Field.OUTPUT]
+                                                ? theme.primary1
+                                                : theme.text2
+                                        }
+                                    />
+                                </ArrowWrapper>
+                                {recipient === null && !showWrap && isExpertMode ? (
+                                    <LinkStyledButton id="add-recipient-button" onClick={() => onChangeRecipient('')}>
+                                        + Add a send (optional)
+                                    </LinkStyledButton>
+                                ) : null}
+                            </AutoRow>
+                        </AutoColumn>
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
@@ -416,8 +375,6 @@ export default function Swap() {
                             onCurrencySelect={handleOutputSelect}
                             otherCurrency={currencies[Field.INPUT]}
                             id="swap-currency-output"
-                            cornerRadiusTopNone={isExpertMode ? false : true}
-                            //containerBackground={'#16182b'}
                         />
 
                         {recipient !== null && !showWrap ? (
@@ -436,8 +393,47 @@ export default function Swap() {
                                 <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
                             </>
                         ) : null}
+
+                        {showWrap ? null : (
+                            <Card padding={showWrap ? '.25rem 1rem 0 1rem' : '0px'} borderRadius={'20px'}>
+                                <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
+                                    {Boolean(trade) && (
+                                        <RowBetween align="center">
+                                            <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                                Price
+                                            </Text>
+                                            <TradePrice
+                                                price={trade?.executionPrice}
+                                                showInverted={showInverted}
+                                                setShowInverted={setShowInverted}
+                                            />
+                                        </RowBetween>
+                                    )}
+                                    {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
+                                        <RowBetween align="center">
+                                            <ClickableText
+                                                fontWeight={500}
+                                                fontSize={14}
+                                                color={theme.text2}
+                                                onClick={toggleSettings}
+                                            >
+                                                Slippage Tolerance
+                                            </ClickableText>
+                                            <ClickableText
+                                                fontWeight={500}
+                                                fontSize={14}
+                                                color={theme.text2}
+                                                onClick={toggleSettings}
+                                            >
+                                                {allowedSlippage / 100}%
+                                            </ClickableText>
+                                        </RowBetween>
+                                    )}
+                                </AutoColumn>
+                            </Card>
+                        )}
                     </AutoColumn>
-                    <BottomGrouping style={{ paddingBottom: '1rem' }}>
+                    <BottomGrouping>
                         {swapIsUnsupported ? (
                             <ButtonPrimary disabled={true}>
                                 <TYPE.main mb="4px">Unsupported Asset</TYPE.main>
@@ -547,50 +543,11 @@ export default function Swap() {
                             <DefaultVersionLink />
                         ) : null}
                     </BottomGrouping>
-                    <AutoColumn>
-                        {showWrap ? null : (
-                            <Card padding={showWrap ? '.25rem 1rem 0 1rem' : '0px'} borderRadius={'20px'}>
-                                <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
-                                    {Boolean(trade) && (
-                                        <RowBetween align="center">
-                                            <Text fontWeight={500} fontSize={14} color={theme.text3}>
-                                                Price
-                                            </Text>
-                                            <TradePrice
-                                                price={trade?.executionPrice}
-                                                showInverted={showInverted}
-                                                setShowInverted={setShowInverted}
-                                            />
-                                        </RowBetween>
-                                    )}
-                                    {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
-                                        <RowBetween align="center">
-                                            <ClickableText
-                                                fontWeight={500}
-                                                fontSize={14}
-                                                color={theme.text2}
-                                                onClick={toggleSettings}
-                                            >
-                                                Slippage Tolerance
-                                            </ClickableText>
-                                            <ClickableText
-                                                fontWeight={500}
-                                                fontSize={14}
-                                                color={theme.text2}
-                                                onClick={toggleSettings}
-                                            >
-                                                {allowedSlippage / 100}%
-                                            </ClickableText>
-                                        </RowBetween>
-                                    )}
-                                </AutoColumn>
-                            </Card>
-                        )}
-                        <AdvancedSwapDetailsSection trade={trade} />
-                    </AutoColumn>
                 </Wrapper>
             </AppBody>
-            {!swapIsUnsupported ? null : (
+            {!swapIsUnsupported ? (
+                <AdvancedSwapDetailsDropdown trade={trade} />
+            ) : (
                 <UnsupportedCurrencyFooter
                     show={swapIsUnsupported}
                     currencies={[currencies.INPUT, currencies.OUTPUT]}

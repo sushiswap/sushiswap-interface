@@ -1,5 +1,6 @@
 import './tailwind.css'
 import '@fontsource/dm-sans/400.css'
+import '@fontsource/dm-sans/700.css'
 import 'react-tabs/style/react-tabs.css'
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import { KashiProvider } from 'kashi'
