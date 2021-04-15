@@ -1,7 +1,6 @@
 import { ChainId } from '@sushiswap/sdk'
 import React, { Suspense, useEffect, useRef } from 'react'
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom'
-import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
 import URLWarning from '../components/Header/URLWarning'
