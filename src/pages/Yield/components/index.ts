@@ -5,3 +5,4 @@ export { default as Paper } from './Paper'
 export { default as Search } from './Search'
 
 export { default as DoubleLogo } from './DoubleLogo'
+export { default as TokenLogo } from './TokenLogo'

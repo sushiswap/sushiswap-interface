@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { ethers } from 'ethers'
 import PlaceHolder from 'assets/images/placeholder.png'
+import KashiLogo from 'assets/kashi/kashi-neon.png'
 //import EthereumLogo from "../../assets/img/eth.png";
 
 const isAddress = (value: any) => {
@@ -24,10 +25,10 @@ const Image = styled.img<{ size: number }>`
     width: ${({ size }) => size};
     height: ${({ size }) => size};
     max-width: 100px;
-    background-color: white;
     border-radius: 50%;
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
 `
+// background-color: white;
+// box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
 
 export default function TokenLogo({ address, header = false, size, ...rest }: any) {
     const [error, setError] = useState(false)
@@ -41,6 +42,14 @@ export default function TokenLogo({ address, header = false, size, ...rest }: an
         return (
             <Inline>
                 <Image {...rest} alt={''} src={PlaceHolder} size={size} />
+            </Inline>
+        )
+    }
+
+    if (address === 'kashiLogo') {
+        return (
+            <Inline>
+                <Image {...rest} alt={''} src={KashiLogo} size={size} />
             </Inline>
         )
     }
