@@ -8,10 +8,10 @@ import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
 export default function SushiBar() {
     const { account } = useActiveWeb3React()
     return (
-        <div className="flex flex-col max-w-md w-full mx-auto">
-            <Paper className="bg-dark-800 p-4 space-y-4 ">
-                <div className="text-lg font-bold text-primary mb-2">SushiBar: Make SUSHI work for you</div>
-                <div className="text-sm text-secondary">
+        <div className="flex flex-col max-w-lg w-full mx-auto">
+            <Paper className="bg-dark-800 p-4 space-y-4 mb-4">
+                <div className="text-lg font-bold text-high-emphesis mb-2">SushiBar: Make SUSHI work for you</div>
+                <div className="text-sm text-primary">
                     <p className="mb-4">
                         Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.
                         Continuously compounding.
@@ -21,9 +21,9 @@ export default function SushiBar() {
                         your share of the SushiBar.
                     </p>
                 </div>
-                <div className="flex justify-between my-2">
+                <div className="flex flex-col justify-between my-2 space-y-2 text-sm">
                     <a
-                        style={{ color: 'white', textDecoration: 'underline' }}
+                        className="text-primary hover:text-high-emphesis"
                         target="_blank"
                         rel="noreferrer"
                         href="https://analytics.sushi.com/bar"
@@ -32,7 +32,7 @@ export default function SushiBar() {
                     </a>
                     {account && (
                         <a
-                            style={{ color: 'white', textDecoration: 'underline' }}
+                            className="text-primary hover:text-high-emphesis"
                             target="_blank"
                             rel="noreferrer"
                             href={'http://analytics.sushi.com/users/' + account}
@@ -42,8 +42,8 @@ export default function SushiBar() {
                     )}
                 </div>
             </Paper>
-            <Paper className="max-w-md w-full mx-auto">
-                <div className="text-center text-lg text-bold my-4">SUSHI → xSUSHI</div>
+            <Paper className="bg-dark-800 p-4 space-y-4">
+                <div className="text-lg font-bold text-high-emphesis mb-2">SUSHI → xSUSHI</div>
                 <SushiDepositPanel
                     label={''}
                     disableCurrencySelect={true}
