@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PlaceHolder from 'assets/images/placeholder.png'
 import KashiLogo from 'assets/kashi/kashi-neon.png'
 import { getAddress } from '@ethersproject/address'
