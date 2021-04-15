@@ -1,23 +1,11 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { ethers } from 'ethers'
+import { Zero } from '@ethersproject/constants'
+import { parseUnits } from '@ethersproject/units'
 import { Fraction } from '../../entities'
-
-declare global {
-    interface String {
-        toBigNumber(decimals: number): BigNumber
-    }
-}
-
-declare module '@ethersproject/bignumber' {
-    interface BigNumber {
-        muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
-        toFixed(decimals: BigNumberish): string
-    }
-}
 
 String.prototype.toBigNumber = function(decimals: BigNumberish): BigNumber {
     try {
-        return ethers.utils.parseUnits(String(this), decimals)
+        return parseUnits(this as string, decimals)
     } catch (error) {
         console.debug(`Failed to parse input amount: "${this}"`, error)
     }
@@ -29,13 +17,15 @@ BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumb
         ? BigNumber.from(this)
               .mul(multiplier)
               .div(divisor)
-        : ZERO
+        : Zero
 }
 
-BigNumber.prototype.toFixed = function(decimals?: BigNumberish): string {
-    return Fraction.from(this, decimals ? BigNumber.from(10).pow(BigNumber.from(decimals)) : ZERO).toString(
-        BigNumber.from(decimals).toNumber()
-    )
+BigNumber.prototype.toFixed = function(decimals: BigNumberish = 18, maxFractions: BigNumberish = 8): string {
+    return this.toFraction(decimals, 10).toString(BigNumber.from(maxFractions).toNumber())
+}
+
+BigNumber.prototype.toFraction = function(decimals: BigNumberish = 18): Fraction {
+    return Fraction.from(this, decimals ? BigNumber.from(10).pow(decimals) : Zero)
 }
 
 export const ZERO = BigNumber.from('0')
