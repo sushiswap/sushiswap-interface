@@ -3,7 +3,7 @@ import { JSBI, Token, TokenAmount, WETH, Fraction, Percent, CurrencyAmount } fro
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 import { Redirect, RouteComponentProps } from 'react-router'
-import { ButtonConfirmed } from '../../components/Button'
+import { ButtonConfirmed } from '../../components/ButtonLegacy'
 import { LightCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'

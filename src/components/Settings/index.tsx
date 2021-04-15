@@ -13,7 +13,7 @@ import {
     useUserTransactionTTL
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
-import { ButtonError } from '../Button'
+import { ButtonError } from '../ButtonLegacy'
 import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import QuestionHelper from '../QuestionHelper'

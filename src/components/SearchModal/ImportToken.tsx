@@ -1,5 +1,5 @@
 import { Currency, Token } from '@sushiswap/sdk'
-import { ButtonPrimary } from 'components/Button'
+import { ButtonPrimary } from 'components/ButtonLegacy'
 import Card from 'components/Card'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
