@@ -9,23 +9,23 @@ const TokenWrapper = styled.div<{ sizeraw: number; margin?: boolean }>`
     margin-right: ${({ sizeraw, margin }) => margin && (sizeraw / 3 + 8).toString() + 'px'};
 `
 
-const HigherLogo = styled(TokenLogo)`
+const HigherLogo = styled(TokenLogo)<{ higherRadius?: string }>`
     z-index: 2;
-    background-color: white;
-    border-radius: 50%;
+    /* background-color: white; */
+    border-radius: ${({ higherRadius }) => (higherRadius ? higherRadius : '50%')};
 `
 
 const CoveredLogo = styled(TokenLogo)`
     position: absolute;
     left: ${({ sizeraw }) => (sizeraw / 1.2).toString() + 'px'};
-    background-color: white;
+    /* background-color: white; */
     border-radius: 50%;
 `
 
-export default function DoubleTokenLogo({ a0, a1, size = 24, margin = false }: any) {
+export default function DoubleTokenLogo({ a0, a1, size = 24, margin = false, higherRadius }: any) {
     return (
         <TokenWrapper sizeraw={size} margin={margin}>
-            <HigherLogo address={a0} size={size.toString() + 'px'} sizeraw={size} />
+            <HigherLogo address={a0} size={size.toString() + 'px'} sizeraw={size} higherRadius={higherRadius} />
             <CoveredLogo address={a1} size={size.toString() + 'px'} sizeraw={size} />
         </TokenWrapper>
     )

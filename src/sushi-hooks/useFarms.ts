@@ -51,25 +51,41 @@ const useFarms = () => {
         const sushiPrice = results[3]
         const kashiPairs = results[4]
         const pairs = pairsQuery?.data.pairs
-
-        const KASHI_PAIRS = [200] // kashiPair pids
-
-        console.log('kashiPairs:', kashiPairs, pools)
+        const KASHI_PAIRS = _.range(190, 230, 1) // kashiPair pids 189-229
+        //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
 
         const farms = pools
             .filter((pool: any) => {
+                //console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))
                 return (
                     !POOL_DENY.includes(pool.id) &&
-                    (pairs.find((pair: any) => pair?.id === pool.pair) || KASHI_PAIRS.includes(pool.id))
+                    (pairs.find((pair: any) => pair?.id === pool.pair) || KASHI_PAIRS.includes(Number(pool.id)))
                 )
             })
             .map((pool: any) => {
-                if (KASHI_PAIRS.includes(pool.id)) {
+                if (KASHI_PAIRS.includes(Number(pool.id))) {
                     const pair = kashiPairs.find((pair: any) => pair.id === pool.pair)
+                    //console.log('kpair:', pair, pool)
                     return {
                         ...pool,
                         ...pair,
-                        type: 'kashiPair'
+                        type: 'KMP',
+                        pid: Number(pool.id),
+                        pairAddress: pair?.id,
+                        pairSymbol: pair?.symbol,
+                        liquidityPair: {
+                            collateral: {
+                                id: pair?.collateral,
+                                symbol: pair?.collateralSymbol,
+                                decimals: pair?.collateralDecimals
+                            },
+                            asset: { id: pair?.asset, symbol: pair?.assetSymbol, decimals: pair?.assetDecimals }
+                        },
+                        roiPerYear: pair?.roiPerYear,
+                        totalAssetBase: pair?.totalAssetBase
+                            ? pair?.totalAssetBase / Math.pow(10, pair?.assetDecimals)
+                            : 0,
+                        tvl: pair?.balanceUSD ? pair?.balanceUSD : 0
                     }
                 } else {
                     const pair = pairs.find((pair: any) => pair.id === pool.pair)
@@ -91,7 +107,7 @@ const useFarms = () => {
 
                     return {
                         ...pool,
-                        type: 'slp',
+                        type: 'SLP',
                         symbol: pair.token0.symbol + '-' + pair.token1.symbol,
                         name: pair.token0.name + ' ' + pair.token1.name,
                         pid: Number(pool.id),
@@ -120,23 +136,43 @@ const useFarms = () => {
 
         if (account) {
             const userFarmDetails = await boringHelperContract?.pollPools(account, pids)
+            //console.log('userFarmDetails:', userFarmDetails)
             const userFarms = userFarmDetails
                 .filter((farm: any) => {
                     return farm.balance.gt(BigNumber.from(0)) || farm.pending.gt(BigNumber.from(0))
                 })
                 .map((farm: any) => {
+                    //console.log('userFarm:', farm.pid.toNumber(), farm)
+
                     const pid = farm.pid.toNumber()
                     const farmDetails = sorted.find((pair: any) => pair.pid === pid)
-                    const deposited = Fraction.from(farm.balance, BigNumber.from(10).pow(18)).toString(18)
+                    let deposited
+                    let depositedUSD
+                    if (farmDetails && farmDetails.type === 'KMP') {
+                        deposited = Fraction.from(
+                            farm.balance,
+                            BigNumber.from(10).pow(farmDetails.liquidityPair.asset.decimals)
+                        ).toString()
+                        const totalAssetBaseAmount =
+                            farmDetails.totalAssetBase / Math.pow(10, farmDetails?.assetDecimals)
+                        depositedUSD =
+                            farmDetails.totalAssetBase && farmDetails.totalAssetBase > 0
+                                ? (Number(deposited) * Number(farmDetails.tvl)) / farmDetails.totalAssetBase
+                                : 0
+                    } else {
+                        deposited = Fraction.from(farm.balance, BigNumber.from(10).pow(18)).toString(18)
+                        depositedUSD =
+                            farmDetails.slpBalance && Number(farmDetails.slpBalance / 1e18) > 0
+                                ? (Number(deposited) * Number(farmDetails.tvl)) / (farmDetails.slpBalance / 1e18)
+                                : 0
+                    }
                     const pending = Fraction.from(farm.pending, BigNumber.from(10).pow(18)).toString(18)
 
                     return {
                         ...farmDetails,
+                        type: farmDetails.type, // KMP or SLP
                         depositedLP: deposited,
-                        depositedUSD:
-                            farmDetails.slpBalance && Number(farmDetails.slpBalance / 1e18) > 0
-                                ? (Number(deposited) * Number(farmDetails.tvl)) / (farmDetails.slpBalance / 1e18)
-                                : 0,
+                        depositedUSD: depositedUSD,
                         pendingSushi: pending
                     }
                 })

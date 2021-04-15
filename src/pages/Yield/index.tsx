@@ -5,7 +5,7 @@ import { Dots } from '../Pool/styleds'
 
 //import { useActiveWeb3React } from 'hooks'
 import { formattedNum, formattedPercent } from '../../utils'
-import { Card, CardHeader, Paper, Search, DoubleLogo } from './components'
+import { Card, CardHeader, Paper, Search, DoubleLogo, TokenLogo } from './components'
 import useFuse from 'sushi-hooks/useFuse'
 import useSortableData from 'sushi-hooks/useSortableData'
 import useFarms from 'sushi-hooks/useFarms'
@@ -127,92 +127,199 @@ export default function BentoBalances(): JSX.Element {
 const TokenBalance = ({ farm }: any) => {
     const [expand, setExpand] = useState<boolean>(false)
     return (
-        <Paper className="bg-dark-800">
-            <div
-                className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
-                onClick={() => setExpand(!expand)}
-            >
-                <div className="flex items-center">
-                    <div className="mr-4">
-                        <DoubleLogo
-                            a0={farm.liquidityPair.token0.id}
-                            a1={farm.liquidityPair.token1.id}
-                            size={26}
-                            margin={true}
-                        />
-                    </div>
-                    <div className="hidden sm:block">
-                        {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
-                    </div>
-                </div>
-                <div className="flex justify-end items-center">
-                    <div>
-                        <div className="text-right">{formattedNum(farm.tvl, true)} </div>
-                        <div className="text-secondary text-right">
-                            {formattedNum(farm.slpBalance / 1e18, false)} SLP
+        <>
+            {farm.type === 'SLP' && (
+                <Paper className="bg-dark-800">
+                    <div
+                        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        onClick={() => setExpand(!expand)}
+                    >
+                        <div className="flex items-center">
+                            <div className="mr-4">
+                                <DoubleLogo
+                                    a0={farm.liquidityPair.token0.id}
+                                    a1={farm.liquidityPair.token1.id}
+                                    size={32}
+                                    margin={true}
+                                />
+                            </div>
+                            <div className="hidden sm:block">
+                                {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.tvl, true)} </div>
+                                <div className="text-secondary text-right">
+                                    {formattedNum(farm.slpBalance / 1e18, false)} SLP
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div className="text-right font-semibold text-xl">
+                                {formattedPercent(farm.roiPerYear * 100)}{' '}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="flex justify-end items-center">
-                    <div className="text-right font-semibold text-xl">{formattedPercent(farm.roiPerYear * 100)} </div>
-                </div>
-            </div>
-            {expand && (
-                <InputGroup
-                    pid={farm.pid}
-                    pairAddress={farm.pairAddress}
-                    pairSymbol={farm.symbol}
-                    token0Address={farm.liquidityPair.token0.id}
-                    token1Address={farm.liquidityPair.token1.id}
-                />
+                    {expand && (
+                        <InputGroup
+                            pid={farm.pid}
+                            pairAddress={farm.pairAddress}
+                            pairSymbol={farm.symbol}
+                            token0Address={farm.liquidityPair.token0.id}
+                            token1Address={farm.liquidityPair.token1.id}
+                            type={'LP'}
+                        />
+                    )}
+                </Paper>
             )}
-        </Paper>
+            {farm.type === 'KMP' && (
+                <Paper className="bg-dark-800">
+                    <div
+                        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        onClick={() => setExpand(!expand)}
+                    >
+                        <div className="flex items-center">
+                            <div className="mr-4">
+                                <DoubleLogo
+                                    a0={'kashiLogo'}
+                                    a1={farm.liquidityPair.asset.id}
+                                    size={32}
+                                    margin={true}
+                                    higherRadius={'0px'}
+                                />
+                            </div>
+                            <div className="hidden sm:block">{farm && farm.symbol}</div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.tvl, true)} </div>
+                                <div className="text-secondary text-right">
+                                    {formattedNum(farm.totalAssetBase, false)} KMP
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div className="text-right font-semibold text-xl">
+                                {formattedPercent(farm.roiPerYear * 100)}{' '}
+                            </div>
+                        </div>
+                    </div>
+                    {expand && (
+                        <InputGroup
+                            pid={farm.pid}
+                            pairAddress={farm.pairAddress}
+                            pairSymbol={farm.symbol}
+                            token0Address={farm.liquidityPair.collateral.id}
+                            token1Address={farm.liquidityPair.asset.id}
+                            type={'KMP'}
+                            assetSymbol={farm.liquidityPair.asset.symbol}
+                            assetDecimals={farm.liquidityPair.asset.decimals}
+                        />
+                    )}
+                </Paper>
+            )}
+        </>
     )
 }
 
 const UserBalance = ({ farm }: any) => {
     const [expand, setExpand] = useState<boolean>(false)
     return (
-        <Paper className="bg-dark-800">
-            <div
-                className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
-                onClick={() => setExpand(!expand)}
-            >
-                <div className="flex items-center">
-                    <div className="mr-4">
-                        <DoubleLogo
-                            a0={farm.liquidityPair.token0.id}
-                            a1={farm.liquidityPair.token1.id}
-                            size={26}
-                            margin={true}
+        <>
+            {farm.type === 'SLP' && (
+                <Paper className="bg-dark-800">
+                    <div
+                        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        onClick={() => setExpand(!expand)}
+                    >
+                        <div className="flex items-center">
+                            <div className="mr-4">
+                                <DoubleLogo
+                                    a0={farm.liquidityPair.token0.id}
+                                    a1={farm.liquidityPair.token1.id}
+                                    size={26}
+                                    margin={true}
+                                />
+                            </div>
+                            <div className="hidden sm:block">
+                                {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.depositedUSD, true)} </div>
+                                <div className="text-secondary text-right">
+                                    {formattedNum(farm.depositedLP, false)} SLP
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.pendingSushi)} </div>
+                                <div className="text-secondary text-right">SUSHI</div>
+                            </div>
+                        </div>
+                    </div>
+                    {expand && (
+                        <InputGroup
+                            pid={farm.pid}
+                            pairAddress={farm.pairAddress}
+                            pairSymbol={farm.symbol}
+                            token0Address={farm.liquidityPair.token0.id}
+                            token1Address={farm.liquidityPair.token1.id}
+                            type={'LP'}
                         />
-                    </div>
-                    <div className="hidden sm:block">
-                        {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
-                    </div>
-                </div>
-                <div className="flex justify-end items-center">
-                    <div>
-                        <div className="text-right">{formattedNum(farm.depositedUSD, true)} </div>
-                        <div className="text-secondary text-right">{formattedNum(farm.depositedLP, false)} SLP</div>
-                    </div>
-                </div>
-                <div className="flex justify-end items-center">
-                    <div>
-                        <div className="text-right">{formattedNum(farm.pendingSushi)} </div>
-                        <div className="text-secondary text-right">SUSHI</div>
-                    </div>
-                </div>
-            </div>
-            {expand && (
-                <InputGroup
-                    pid={farm.pid}
-                    pairAddress={farm.pairAddress}
-                    pairSymbol={farm.symbol}
-                    token0Address={farm.liquidityPair.token0.id}
-                    token1Address={farm.liquidityPair.token1.id}
-                />
+                    )}
+                </Paper>
             )}
-        </Paper>
+            {farm.type === 'KMP' && (
+                <Paper className="bg-dark-800">
+                    <div
+                        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        onClick={() => setExpand(!expand)}
+                    >
+                        <div className="flex items-center">
+                            <div className="mr-4">
+                                <DoubleLogo
+                                    a0={'kashiLogo'}
+                                    a1={farm.liquidityPair.asset.id}
+                                    size={32}
+                                    margin={true}
+                                    higherRadius={'0px'}
+                                />
+                            </div>
+                            <div className="hidden sm:block">{farm && farm.symbol}</div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.depositedUSD, true)} </div>
+                                <div className="text-secondary text-right">
+                                    {formattedNum(farm.depositedLP, false)} KMP
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.pendingSushi)} </div>
+                                <div className="text-secondary text-right">SUSHI</div>
+                            </div>
+                        </div>
+                    </div>
+                    {expand && (
+                        <InputGroup
+                            pid={farm.pid}
+                            pairAddress={farm.pairAddress}
+                            pairSymbol={farm.symbol}
+                            token0Address={farm.liquidityPair.collateral.id}
+                            token1Address={farm.liquidityPair.asset.id}
+                            type={'KMP'}
+                            assetSymbol={farm.liquidityPair.asset.symbol}
+                            assetDecimals={farm.liquidityPair.asset.decimals}
+                        />
+                    )}
+                </Paper>
+            )}
+        </>
     )
 }

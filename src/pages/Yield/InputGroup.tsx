@@ -27,13 +27,19 @@ export default function InputGroup({
     pid,
     pairSymbol,
     token0Address,
-    token1Address
+    token1Address,
+    type,
+    assetSymbol,
+    assetDecimals = 18
 }: {
     pairAddress: string
     pid: number
     pairSymbol: string
     token0Address: string
     token1Address: string
+    type?: string
+    assetSymbol?: string
+    assetDecimals?: number
 }): JSX.Element {
     const history = useHistory()
     const { account, chainId } = useActiveWeb3React()
@@ -45,7 +51,7 @@ export default function InputGroup({
 
     //const { deposit } = useBentoBox()
     const balance = useTokenBalance(pairAddressChecksum)
-    const staked = useStakedBalance(pid)
+    const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
 
     //console.log('pending:', pending, pid)
@@ -65,21 +71,42 @@ export default function InputGroup({
     return (
         <>
             <div className="flex flex-col space-y-4 py-6">
-                {pending && Number(pending) > 0 && (
-                    <div className=" px-4">
-                        <Button
-                            color="default"
-                            onClick={async () => {
-                                setPendingTx(true)
-                                await harvest(pid, pairSymbol)
-                                setPendingTx(false)
-                            }}
-                        >
-                            Harvest{'  '}
-                            {formattedNum(pending)} SUSHI
-                        </Button>
-                    </div>
-                )}
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
+                    {type === 'LP' && (
+                        <>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
+                            >
+                                Add Liquidity
+                            </Button>
+                            <Button
+                                color="default"
+                                onClick={() =>
+                                    history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
+                                }
+                            >
+                                Remove Liquidity
+                            </Button>
+                        </>
+                    )}
+                    {type === 'KMP' && assetSymbol && (
+                        <>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
+                            >
+                                Lend {assetSymbol}
+                            </Button>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
+                            >
+                                Withdraw {assetSymbol}
+                            </Button>
+                        </>
+                    )}
+                </div>
 
                 {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
                     <div className="px-4">
@@ -94,7 +121,8 @@ export default function InputGroup({
                         <div className="text-center col-span-2 md:col-span-1">
                             {account && (
                                 <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                    Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))} LP
+                                    Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
+                                    {type}
                                 </div>
                             )}
                             <div className="flex items-center relative w-full mb-4">
@@ -128,7 +156,7 @@ export default function InputGroup({
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
-                                    await deposit(pid, depositValue, pairSymbol)
+                                    await deposit(pid, depositValue, pairSymbol, balance.decimals)
                                     setPendingTx(false)
                                 }}
                             >
@@ -139,7 +167,7 @@ export default function InputGroup({
                         <div className="text-center col-span-2 md:col-span-1">
                             {account && (
                                 <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                    Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} LP
+                                    Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                                 </div>
                             )}
                             <div className="flex items-center relative w-full mb-4">
@@ -173,7 +201,7 @@ export default function InputGroup({
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
-                                    await withdraw(pid, withdrawValue, pairSymbol)
+                                    await withdraw(pid, withdrawValue, pairSymbol, balance.decimals)
                                     setPendingTx(false)
                                 }}
                             >
@@ -182,20 +210,21 @@ export default function InputGroup({
                         </div>
                     </div>
                 )}
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
-                    <Button
-                        color="default"
-                        onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
-                    >
-                        Add Liquidity
-                    </Button>
-                    <Button
-                        color="default"
-                        onClick={() => history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
-                    >
-                        Remove Liquidity
-                    </Button>
-                </div>
+                {pending && Number(pending) > 0 && (
+                    <div className=" px-4">
+                        <Button
+                            color="default"
+                            onClick={async () => {
+                                setPendingTx(true)
+                                await harvest(pid, pairSymbol)
+                                setPendingTx(false)
+                            }}
+                        >
+                            Harvest{'  '}
+                            {formattedNum(pending)} SUSHI
+                        </Button>
+                    </div>
+                )}
             </div>
         </>
     )
