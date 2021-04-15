@@ -195,7 +195,7 @@ const TokenBalance = ({ farm }: any) => {
                             <div>
                                 <div className="text-right">{formattedNum(farm.tvl, true)} </div>
                                 <div className="text-secondary text-right">
-                                    {formattedNum(farm.totalAssetBase, false)} KMP
+                                    {formattedNum(farm.totalAssetStaked, false)} KMP
                                 </div>
                             </div>
                         </div>

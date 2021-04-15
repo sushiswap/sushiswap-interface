@@ -49,7 +49,10 @@ const useFarms = () => {
         const liquidityPositions = results[1]?.data.liquidityPositions
         const averageBlockTime = results[2]
         const sushiPrice = results[3]
-        const kashiPairs = results[4]
+        const kashiPairs = results[4].filter(result => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
+
+        //console.log('kashiPairs:', kashiPairs)
+
         const pairs = pairsQuery?.data.pairs
         const KASHI_PAIRS = _.range(190, 230, 1) // kashiPair pids 189-229
         //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
@@ -82,8 +85,8 @@ const useFarms = () => {
                             asset: { id: pair?.asset, symbol: pair?.assetSymbol, decimals: pair?.assetDecimals }
                         },
                         roiPerYear: pair?.roiPerYear,
-                        totalAssetBase: pair?.totalAssetBase
-                            ? pair?.totalAssetBase / Math.pow(10, pair?.assetDecimals)
+                        totalAssetStaked: pair?.totalAssetStaked
+                            ? pair?.totalAssetStaked / Math.pow(10, pair?.assetDecimals)
                             : 0,
                         tvl: pair?.balanceUSD ? pair?.balanceUSD : 0
                     }
@@ -146,6 +149,8 @@ const useFarms = () => {
 
                     const pid = farm.pid.toNumber()
                     const farmDetails = sorted.find((pair: any) => pair.pid === pid)
+
+                    console.log('farmDetails:', farmDetails)
                     let deposited
                     let depositedUSD
                     if (farmDetails && farmDetails.type === 'KMP') {
@@ -153,11 +158,9 @@ const useFarms = () => {
                             farm.balance,
                             BigNumber.from(10).pow(farmDetails.liquidityPair.asset.decimals)
                         ).toString()
-                        const totalAssetBaseAmount =
-                            farmDetails.totalAssetBase / Math.pow(10, farmDetails?.assetDecimals)
                         depositedUSD =
-                            farmDetails.totalAssetBase && farmDetails.totalAssetBase > 0
-                                ? (Number(deposited) * Number(farmDetails.tvl)) / farmDetails.totalAssetBase
+                            farmDetails.totalAssetStaked && farmDetails.totalAssetStaked > 0
+                                ? (Number(deposited) * Number(farmDetails.tvl)) / farmDetails.totalAssetStaked
                                 : 0
                     } else {
                         deposited = Fraction.from(farm.balance, BigNumber.from(10).pow(18)).toString(18)
