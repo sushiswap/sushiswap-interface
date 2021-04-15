@@ -28,7 +28,9 @@ module.exports = {
             backgroundImage: theme => ({
                 ...defaultTheme.backgroundImage,
                 'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
-                'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')"
+                'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')",
+                'chain-static': "url('/src/assets/images/chain-static.svg')",
+                'chain-animated': "url('/src/assets/images/chain-animated.gif')"
             }),
             fontFamily: {
                 sans: ['DM Sans', ...defaultTheme.fontFamily.sans]
@@ -66,6 +68,7 @@ module.exports = {
         extend: {
             opacity: ['disabled'],
             backgroundColor: ['checked', 'disabled'],
+            backgroundImage: ['hover', 'focus'],
             borderColor: ['checked', 'disabled']
         }
     },
