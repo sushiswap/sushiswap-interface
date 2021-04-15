@@ -45,12 +45,13 @@ import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, Redirec
 import Tools from './Tools'
 import Vesting from './Vesting'
 import Yield from './Yield'
+import ReactGA from 'react-ga'
 
 function App(): JSX.Element {
     const { chainId } = useActiveWeb3React()
     const bodyRef = useRef<any>(null)
 
-    const { pathname } = useLocation()
+    const { pathname, search } = useLocation()
 
     useEffect(() => {
         if (bodyRef.current) {
@@ -58,9 +59,12 @@ function App(): JSX.Element {
         }
     }, [pathname])
 
+    useEffect(() => {
+        ReactGA.pageview(`${pathname}${search}`)
+    }, [pathname, search])
+
     return (
         <Suspense fallback={null}>
-            <Route component={GoogleAnalyticsReporter} />
             <Route component={DarkModeQueryParamReader} />
             <div className="flex flex-col items-start overflow-x-hidden h-screen">
                 <URLWarning />
@@ -154,6 +158,7 @@ function App(): JSX.Element {
                                 }) => <Redirect to={`/add/${address}`} />}
                             />
 
+                            {/* Catch all */}
                             <Route component={RedirectPathToSwapOnly} />
                         </Switch>
                     </Web3ReactManager>
