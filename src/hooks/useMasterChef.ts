@@ -9,11 +9,12 @@ const useMasterChef = () => {
 
     // Deposit
     const deposit = useCallback(
-        async (pid: number, amount: string, name: string) => {
+        async (pid: number, amount: string, name: string, decimals = 18) => {
+            // KMP decimals depend on asset, SLP is always 18
             // console.log('depositing...', pid, amount)
             try {
-                const tx = await masterChefContract?.deposit(pid, ethers.utils.parseUnits(amount))
-                return addTransaction(tx, { summary: `Deposit ${name} LP` })
+                const tx = await masterChefContract?.deposit(pid, ethers.utils.parseUnits(amount, decimals))
+                return addTransaction(tx, { summary: `Deposit ${name}` })
             } catch (e) {
                 console.error(e)
                 return e
@@ -24,10 +25,10 @@ const useMasterChef = () => {
 
     // Withdraw
     const withdraw = useCallback(
-        async (pid: number, amount: string, name: string) => {
+        async (pid: number, amount: string, name: string, decimals = 18) => {
             try {
-                const tx = await masterChefContract?.withdraw(pid, ethers.utils.parseUnits(amount))
-                return addTransaction(tx, { summary: `Withdraw ${name} LP` })
+                const tx = await masterChefContract?.withdraw(pid, ethers.utils.parseUnits(amount, decimals))
+                return addTransaction(tx, { summary: `Withdraw ${name}` })
             } catch (e) {
                 console.error(e)
                 return e
@@ -40,7 +41,7 @@ const useMasterChef = () => {
         async (pid: number, name: string) => {
             try {
                 const tx = await masterChefContract?.deposit(pid, '0')
-                return addTransaction(tx, { summary: `Harvest ${name} LP` })
+                return addTransaction(tx, { summary: `Harvest ${name}` })
             } catch (e) {
                 console.error(e)
                 return e

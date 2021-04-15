@@ -138,6 +138,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'WAVES', name: 'WAVES', address: '0x1cF4592ebfFd730c7dc92c1bdFFDfc3B9EfCf29a', decimals: 18 },
         { symbol: 'WBTC', name: 'Wrapped BTC', address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', decimals: 8 },
         { symbol: 'wNXM', name: 'Wrapped NXM', address: '0x0d438F3b5175Bebc262bF23753C1E53d03432bDE', decimals: 18 },
+        { symbol: 'xSUSHI', name: 'SushiBar', address: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', decimals: 18 },
         { symbol: 'YFI', name: 'yearn.finance', address: '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e', decimals: 18 },
         { symbol: 'YFII', name: 'YFII.finance', address: '0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83', decimals: 18 },
         {
@@ -228,7 +229,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
     [ChainId.MATIC]: [
         { symbol: 'AAVE', name: 'AAVE Token', address: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', decimals: 18 },
         { symbol: 'DAI', name: 'Dai Stablecoin', address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', decimals: 18 },
-        { symbol: 'WETH', name: 'Wrapped Ethereum', address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', decimals: 18 },
+        {
+            symbol: 'WETH',
+            name: 'Wrapped Ethereum',
+            address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+            decimals: 18
+        },
         {
             symbol: 'WMATIC',
             name: 'Wrapped Matic',
@@ -721,6 +727,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
         },
         '0xe572CeF69f43c2E488b33924AF04BDacE19079cf': {
             from: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
+        '0xAE51d1f913eDB0f80562F270017806f3e9566029': {
+            from: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             decimals: 18,
             fromDecimals: 18,
