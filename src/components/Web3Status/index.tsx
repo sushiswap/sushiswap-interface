@@ -22,6 +22,7 @@ import Identicon from '../Identicon'
 import Loader from '../Loader'
 import { RowBetween } from '../Row'
 import WalletModal from '../WalletModal'
+import { ReactComponent as Chef } from '../../assets/images/chef.svg'
 
 const IconWrapper = styled.div<{ size?: number }>`
     ${({ theme }) => theme.flexColumnNoWrap};
@@ -132,7 +133,8 @@ const SOCK = (
 // eslint-disable-next-line react/prop-types
 function StatusIcon({ connector }: { connector: AbstractConnector }) {
     if (connector === injected) {
-        return <Identicon />
+        return <Chef width={20} height={20} />
+        // return <Identicon />
     } else if (connector === walletconnect) {
         return (
             <IconWrapper size={16}>
