@@ -7,16 +7,16 @@ module.exports = {
     theme: {
         colors: {
             ...defaultTheme.colors,
+            red: '#FF3838',
             blue: '#27B0E6',
             pink: '#FA52A0',
             purple: '#A755DD',
-            background: '#0D0415',
+            'dark-pink': '#221825',
+            'dark-blue': '#0F182A',
             'dark-1000': '#0D0415',
             'dark-900': '#161522',
             'dark-800': '#202231',
-            'dark-pink': '#221825',
-            'dark-blue': '#0F182A',
-            red: '#FF3838'
+            'dark-700': '#2E3348'
         },
         screens: {
             sm: '480px',
