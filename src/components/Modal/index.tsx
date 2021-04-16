@@ -125,7 +125,9 @@ export default function Modal({
                                 {...(isMobile
                                     ? {
                                           ...bind(),
-                                          style: { transform: y.interpolate(y => `translateY(${y > 0 ? y : 0}px)`) }
+                                          style: {
+                                              transform: y.interpolate(y => `translateY(${y > 0 ? y : 0}px)`)
+                                          }
                                       }
                                     : {})}
                                 aria-label="dialog content"
@@ -133,9 +135,13 @@ export default function Modal({
                                 maxHeight={maxHeight}
                                 mobile={isMobile}
                             >
-                                {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-                                {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
-                                {children}
+                                <div className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
+                                    <div className="flex flex-col h-full w-full bg-dark-900 rounded p-6">
+                                        {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
+                                        {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+                                        {children}
+                                    </div>
+                                </div>
                             </StyledDialogContent>
                         </StyledDialogOverlay>
                     )
