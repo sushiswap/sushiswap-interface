@@ -18,7 +18,7 @@ function Web3Network(): JSX.Element | null {
                     src={NETWORK_ICON[chainId]}
                     alt="Switch Network"
                     className="rounded-md mr-2"
-                    style={{ width: 20, height: 20 }}
+                    style={{ width: 22, height: 22 }}
                 />
                 <div className="text-primary">{NETWORK_LABEL[chainId]}</div>
             </div>
