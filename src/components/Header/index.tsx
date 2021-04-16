@@ -13,7 +13,10 @@ import Mainnet from '../../assets/networks/mainnet-network.jpg'
 
 import { ReactComponent as Burger } from '../../assets/images/burger.svg'
 import { ReactComponent as Chef } from '../../assets/images/chef.svg'
+import Sushi from '../../assets/kashi/tokens/sushi-square.jpg'
+import xSushi from '../../assets/kashi/tokens/xsushi-square.jpg'
 import Web3Network from 'components/Web3Network'
+import getLibrary from 'utils/getLibrary'
 
 const HeaderFrame = styled.div`
     display: grid;
@@ -66,40 +69,6 @@ const HeaderControls = styled.div`
     ${({ theme }) => theme.mediaWidth.upToExtraSmall`
     padding: 5px;
   `}
-`
-
-// const HeaderElement = styled.div`
-//     display: flex;
-//     align-items: center;
-
-//     /* addresses safari's lack of support for "gap" */
-//     & > *:not(:first-child) {
-//         margin-left: 8px;
-//     }
-
-//     ${({ theme }) => theme.mediaWidth.upToMedium`
-//     flex-direction: row-reverse;
-//     align-items: center;
-
-//     & > *:not(:first-child) {
-//       margin-left: 4px;
-//     }
-//   `};
-// `
-
-const AccountElement = styled.div<{ active: boolean }>`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: ${({ theme, active }) => (!active ? theme.bg1 : theme.bg3)};
-    border-radius: ${({ theme }) => theme.borderRadius};
-    white-space: nowrap;
-    width: 100%;
-    cursor: pointer;
-
-    :focus {
-        border: 1px solid blue;
-    }
 `
 
 const HideSmall = styled.span`
@@ -195,7 +164,7 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
 }
 
 export default function Header() {
-    const { account, chainId } = useActiveWeb3React()
+    const { account, chainId, library } = useActiveWeb3React()
     const { t } = useTranslation()
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
     return (
@@ -236,7 +205,7 @@ export default function Header() {
                             </StyledNavLink>
                         </HideSmall>
                     )}
-                    {[ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId || 1) != -1 && (
+                    {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].includes(chainId) && (
                         <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
                             Apps
                         </StyledNavLink>
@@ -253,7 +222,73 @@ export default function Header() {
             </div>
             <HeaderControls>
                 <div className="flex items-center space-x-2">
-                    <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 text-sm font-bold cursor-pointer select-none pointer-events-auto">
+                    <div
+                        className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                        onClick={() => {
+                            const params = {
+                                type: 'ERC20',
+                                options: {
+                                    address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                    symbol: 'XSUSHI',
+                                    decimals: 18,
+                                    image:
+                                        'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
+                                }
+                            }
+
+                            library
+                                ?.send('wallet_watchAsset', [params, account])
+                                .then(success => {
+                                    if (success) {
+                                        console.log('Successfully added XSUSHI to MetaMask')
+                                    } else {
+                                        throw new Error('Something went wrong.')
+                                    }
+                                })
+                                .catch(console.error)
+                        }}
+                    >
+                        <img
+                            src={xSushi}
+                            alt="Switch Network"
+                            style={{ minWidth: 32, minHeight: 32 }}
+                            className="rounded-md"
+                        />
+                    </div>
+                    <div
+                        className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                        onClick={() => {
+                            const params = {
+                                type: 'ERC20',
+                                options: {
+                                    address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                                    symbol: 'SUSHI',
+                                    decimals: 18,
+                                    image:
+                                        'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                }
+                            }
+
+                            library
+                                ?.send('wallet_watchAsset', [params, account])
+                                .then(success => {
+                                    if (success) {
+                                        console.log('Successfully added SUSHI to MetaMask')
+                                    } else {
+                                        throw new Error('Something went wrong.')
+                                    }
+                                })
+                                .catch(console.error)
+                        }}
+                    >
+                        <img
+                            src={Sushi}
+                            alt="Switch Network"
+                            style={{ minWidth: 32, minHeight: 32 }}
+                            className="rounded-md"
+                        />
+                    </div>
+                    <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
                         <Web3Network />
                     </div>
                     <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">

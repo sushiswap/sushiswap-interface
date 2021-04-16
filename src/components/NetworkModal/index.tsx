@@ -19,6 +19,17 @@ const PARAMS: {
         blockExplorerUrls: string[]
     }
 } = {
+    [ChainId.MAINNET]: {
+        chainId: '0x1',
+        chainName: 'Ethereum',
+        nativeCurrency: {
+            name: 'Ethereum',
+            symbol: 'ETH',
+            decimals: '18'
+        },
+        rpcUrls: ['https://mainnet.infura.io/v3'],
+        blockExplorerUrls: ['https://etherscan.com']
+    },
     [ChainId.FANTOM]: {
         chainId: '0xfa',
         chainName: 'Fantom',
