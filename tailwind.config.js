@@ -80,7 +80,21 @@ module.exports = {
         require('@tailwindcss/typography'),
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
-        require('@tailwindcss/aspect-ratio')
+        require('@tailwindcss/aspect-ratio'),
+        plugin(function({ addUtilities }) {
+            addUtilities({
+                '.gradiant-border-top': {
+                    background:
+                        'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left top no-repeat',
+                    backgroundSize: '100% 1px'
+                },
+                '.gradiant-border-bottom': {
+                    background:
+                        'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',
+                    backgroundSize: '100% 1px'
+                }
+            })
+        })
     ],
     corePlugins: {
         fontFamily: true,
