@@ -73,6 +73,28 @@ const PARAMS: {
         },
         rpcUrls: ['https://http-mainnet.hecochain.com'],
         blockExplorerUrls: ['https://hecoinfo.com']
+    },
+    [ChainId.XDAI]: {
+        chainId: '0x80',
+        chainName: 'xDai',
+        nativeCurrency: {
+            name: 'xDai Token',
+            symbol: 'xDai',
+            decimals: '18'
+        },
+        rpcUrls: ['https://rpc.xdaichain.com'],
+        blockExplorerUrls: ['https://blockscout.com/poa/xdai']
+    },
+    [ChainId.HARMONY]: {
+        chainId: '0x63564C40',
+        chainName: 'Harmony One',
+        nativeCurrency: {
+            name: 'One Token',
+            symbol: 'ONE',
+            decimals: '18'
+        },
+        rpcUrls: ['https://api.s0.t.hmny.io'],
+        blockExplorerUrls: ['https://explorer.harmony.one/']
     }
 }
 
