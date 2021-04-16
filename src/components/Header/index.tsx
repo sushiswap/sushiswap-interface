@@ -222,72 +222,76 @@ export default function Header() {
             </div>
             <HeaderControls>
                 <div className="flex items-center space-x-2">
-                    <div
-                        className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
-                        onClick={() => {
-                            const params = {
-                                type: 'ERC20',
-                                options: {
-                                    address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
-                                    symbol: 'XSUSHI',
-                                    decimals: 18,
-                                    image:
-                                        'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
-                                }
-                            }
-
-                            library
-                                ?.send('wallet_watchAsset', [params, account])
-                                .then(success => {
-                                    if (success) {
-                                        console.log('Successfully added XSUSHI to MetaMask')
-                                    } else {
-                                        throw new Error('Something went wrong.')
+                    {chainId && chainId === ChainId.MAINNET && (
+                        <>
+                            <div
+                                className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                onClick={() => {
+                                    const params = {
+                                        type: 'ERC20',
+                                        options: {
+                                            address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                            symbol: 'XSUSHI',
+                                            decimals: 18,
+                                            image:
+                                                'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
+                                        }
                                     }
-                                })
-                                .catch(console.error)
-                        }}
-                    >
-                        <img
-                            src={xSushi}
-                            alt="Switch Network"
-                            style={{ minWidth: 32, minHeight: 32 }}
-                            className="rounded-md"
-                        />
-                    </div>
-                    <div
-                        className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
-                        onClick={() => {
-                            const params = {
-                                type: 'ERC20',
-                                options: {
-                                    address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
-                                    symbol: 'SUSHI',
-                                    decimals: 18,
-                                    image:
-                                        'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
-                                }
-                            }
 
-                            library
-                                ?.send('wallet_watchAsset', [params, account])
-                                .then(success => {
-                                    if (success) {
-                                        console.log('Successfully added SUSHI to MetaMask')
-                                    } else {
-                                        throw new Error('Something went wrong.')
+                                    library
+                                        ?.send('wallet_watchAsset', [params, account])
+                                        .then(success => {
+                                            if (success) {
+                                                console.log('Successfully added XSUSHI to MetaMask')
+                                            } else {
+                                                throw new Error('Something went wrong.')
+                                            }
+                                        })
+                                        .catch(console.error)
+                                }}
+                            >
+                                <img
+                                    src={xSushi}
+                                    alt="Switch Network"
+                                    style={{ minWidth: 32, minHeight: 32 }}
+                                    className="rounded-md"
+                                />
+                            </div>
+                            <div
+                                className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                onClick={() => {
+                                    const params = {
+                                        type: 'ERC20',
+                                        options: {
+                                            address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                                            symbol: 'SUSHI',
+                                            decimals: 18,
+                                            image:
+                                                'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                        }
                                     }
-                                })
-                                .catch(console.error)
-                        }}
-                    >
-                        <img
-                            src={Sushi}
-                            alt="Switch Network"
-                            style={{ minWidth: 32, minHeight: 32 }}
-                            className="rounded-md"
-                        />
-                    </div>
+
+                                    library
+                                        ?.send('wallet_watchAsset', [params, account])
+                                        .then(success => {
+                                            if (success) {
+                                                console.log('Successfully added SUSHI to MetaMask')
+                                            } else {
+                                                throw new Error('Something went wrong.')
+                                            }
+                                        })
+                                        .catch(console.error)
+                                }}
+                            >
+                                <img
+                                    src={Sushi}
+                                    alt="Switch Network"
+                                    style={{ minWidth: 32, minHeight: 32 }}
+                                    className="rounded-md"
+                                />
+                            </div>
+                        </>
+                    )}
                     <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
                         <Web3Network />
                     </div>
