@@ -75,7 +75,7 @@ export default function Header(): JSX.Element {
                             <div
                                 className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                 onClick={() => {
-                                    const params = {
+                                    const params: any = {
                                         type: 'ERC20',
                                         options: {
                                             address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
@@ -86,16 +86,21 @@ export default function Header(): JSX.Element {
                                         }
                                     }
 
-                                    library
-                                        ?.send('wallet_watchAsset', [params, account])
-                                        .then(success => {
-                                            if (success) {
-                                                console.log('Successfully added XSUSHI to MetaMask')
-                                            } else {
-                                                throw new Error('Something went wrong.')
-                                            }
-                                        })
-                                        .catch(console.error)
+                                    if (library && library.provider.isMetaMask && library.provider.request) {
+                                        library.provider
+                                            .request({
+                                                method: 'wallet_watchAsset',
+                                                params
+                                            })
+                                            .then(success => {
+                                                if (success) {
+                                                    console.log('Successfully added XSUSHI to MetaMask')
+                                                } else {
+                                                    throw new Error('Something went wrong.')
+                                                }
+                                            })
+                                            .catch(console.error)
+                                    }
                                 }}
                             >
                                 <img
@@ -108,7 +113,7 @@ export default function Header(): JSX.Element {
                             <div
                                 className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                 onClick={() => {
-                                    const params = {
+                                    const params: any = {
                                         type: 'ERC20',
                                         options: {
                                             address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -119,16 +124,21 @@ export default function Header(): JSX.Element {
                                         }
                                     }
 
-                                    library
-                                        ?.send('wallet_watchAsset', [params, account])
-                                        .then(success => {
-                                            if (success) {
-                                                console.log('Successfully added SUSHI to MetaMask')
-                                            } else {
-                                                throw new Error('Something went wrong.')
-                                            }
-                                        })
-                                        .catch(console.error)
+                                    if (library && library.provider.isMetaMask && library.provider.request) {
+                                        library.provider
+                                            .request({
+                                                method: 'wallet_watchAsset',
+                                                params
+                                            })
+                                            .then(success => {
+                                                if (success) {
+                                                    console.log('Successfully added SUSHI to MetaMask')
+                                                } else {
+                                                    throw new Error('Something went wrong.')
+                                                }
+                                            })
+                                            .catch(console.error)
+                                    }
                                 }}
                             >
                                 <img
