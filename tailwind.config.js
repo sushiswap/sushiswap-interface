@@ -61,6 +61,10 @@ module.exports = {
             ringWidth: {
                 ...defaultTheme.ringWidth,
                 DEFAULT: '1px'
+            },
+            padding: {
+                ...defaultTheme.padding,
+                px: '1px'
             }
         }
     },

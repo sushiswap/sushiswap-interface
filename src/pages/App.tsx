@@ -3,7 +3,6 @@ import React, { Suspense, useEffect, useRef } from 'react'
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Polling from '../components/Header/Polling'
-import URLWarning from '../components/Header/URLWarning'
 import Popups from '../components/Popups'
 import Web3ReactManager from '../components/Web3ReactManager'
 import PublicRoute from '../hocs/PublicRoute'
@@ -27,10 +26,6 @@ import {
 import Bento from './BentoBox'
 import BentoBalances from './BentoBox/Balances'
 import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
-//import Earn from './Earn'
-//import Manage from './Earn/Manage'
-//import MigrateV1 from './MigrateV1'
-//import MigrateV1Exchange from './MigrateV1/MigrateV1Exchange'
 import MigrateV2 from './MigrateV2'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
@@ -66,7 +61,6 @@ function App(): JSX.Element {
         <Suspense fallback={null}>
             <Route component={DarkModeQueryParamReader} />
             <div className="flex flex-col items-start overflow-x-hidden h-screen">
-                <URLWarning />
                 <div className="flex flex-row flex-nowrap justify-between w-screen">
                     <Header />
                 </div>
