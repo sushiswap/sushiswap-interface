@@ -75,7 +75,7 @@ const PARAMS: {
         blockExplorerUrls: ['https://hecoinfo.com']
     },
     [ChainId.XDAI]: {
-        chainId: '0x80',
+        chainId: '0x64',
         chainName: 'xDai',
         nativeCurrency: {
             name: 'xDai Token',
