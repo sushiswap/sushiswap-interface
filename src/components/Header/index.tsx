@@ -225,7 +225,7 @@ export default function Header() {
                     {chainId && chainId === ChainId.MAINNET && (
                         <>
                             <div
-                                className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                 onClick={() => {
                                     const params = {
                                         type: 'ERC20',
@@ -253,12 +253,12 @@ export default function Header() {
                                 <img
                                     src={xSushi}
                                     alt="Switch Network"
-                                    style={{ minWidth: 32, minHeight: 32 }}
-                                    className="rounded-md"
+                                    style={{ minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36 }}
+                                    className="rounded-md object-contain"
                                 />
                             </div>
                             <div
-                                className="rounded bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                 onClick={() => {
                                     const params = {
                                         type: 'ERC20',
@@ -286,8 +286,8 @@ export default function Header() {
                                 <img
                                     src={Sushi}
                                     alt="Switch Network"
-                                    style={{ minWidth: 32, minHeight: 32 }}
-                                    className="rounded-md"
+                                    style={{ minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36 }}
+                                    className="rounded-md object-contain"
                                 />
                             </div>
                         </>

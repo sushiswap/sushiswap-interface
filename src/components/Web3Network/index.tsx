@@ -18,16 +18,16 @@ function Web3Network(): JSX.Element | null {
                     src={NETWORK_ICON[chainId]}
                     alt="Switch Network"
                     className="rounded-md mr-2"
-                    style={{ width: 22, height: 22 }}
+                    style={{ width: 20, height: 20 }}
                 />
                 <div className="text-primary">{NETWORK_LABEL[chainId]}</div>
             </div>
-            <div className="py-2 px-3">
+            {/* <div className="py-2 px-3">
                 <div
                     style={{ width: 22, height: 22 }}
                     className="bg-cover bg-center bg-chain-static hover:bg-chain-animated"
                 />
-            </div>
+            </div> */}
             <NetworkModel />
         </div>
     )
