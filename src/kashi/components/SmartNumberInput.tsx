@@ -18,6 +18,7 @@ type SmartNumberInputProps = {
 
     maxTitle?: string,
     max: BigNumber,
+    pinMax?: boolean,
     setPinMax?: any
 }
 
@@ -34,6 +35,7 @@ export default function SmartNumberInput({
 
     maxTitle = 'Max',
     max,
+    pinMax = false,
     setPinMax
 }: SmartNumberInputProps) {
     return (<>
@@ -70,7 +72,9 @@ export default function SmartNumberInput({
             value={value}
             onUserInput={setValue}
             onFocus={() => {
-                setValue('')
+                if (pinMax) {
+                    setValue('')
+                }
                 if (setPinMax) { setPinMax(false) }
             }}
         />

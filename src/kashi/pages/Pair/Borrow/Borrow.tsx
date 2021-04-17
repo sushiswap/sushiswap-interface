@@ -1,21 +1,16 @@
 import React, { useContext, useState } from 'react'
 import { WETH } from '@sushiswap/sdk'
-import { Button, Checkbox } from 'kashi/components'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
+import { Button } from 'kashi/components'
 import { useActiveWeb3React } from 'hooks'
 import { minimum, e10, ZERO, maximum } from 'kashi/functions/math'
 import { TransactionReview } from 'kashi/entities/TransactionReview'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
-import QuestionHelper from 'components/QuestionHelper'
 import { Warning, Warnings } from 'kashi/entities/Warnings'
 import { SUSHISWAP_MULTISWAPPER_ADDRESS } from 'kashi/constants'
-import { formattedNum } from 'utils'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
 import { useUserSlippageTolerance } from 'state/user/hooks'
-import Settings from '../../../../components/Settings'
 import { useTradeExactIn } from 'hooks/Trades'
 import { useCurrency } from 'hooks/Tokens'
 import { tryParseAmount } from 'state/swap/hooks'
@@ -24,10 +19,10 @@ import { Field } from 'state/swap/actions'
 import TradeReview from 'kashi/components/TradeReview'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, ethers } from 'ethers'
-import { useSushiSwapMultiSwapper } from 'sushi-hooks/useContract'
 import { toShare } from 'kashi/functions'
 import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Dots'
 import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
 
 interface BorrowProps {
     pair: any
@@ -35,7 +30,6 @@ interface BorrowProps {
 
 export default function Borrow({ pair }: BorrowProps) {
     const { account, chainId } = useActiveWeb3React()
-    const swapper = useSushiSwapMultiSwapper()
     const info = useContext(KashiContext).state.info
 
     // State
@@ -56,14 +50,13 @@ export default function Borrow({ pair }: BorrowProps) {
         ? pair.collateral.bentoBalance
         : assetNative ? info?.ethBalance : pair.collateral.balance
 
-    const maxCollateral = collateralBalance.toFixed(pair.collateral.decimals)
     const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
     // Swap
     const [allowedSlippage] = useUserSlippageTolerance() // 10 = 0.1%
     const parsedAmount = tryParseAmount(borrowValue, assetToken)
-    const trade = useTradeExactIn(parsedAmount, collateralToken) || undefined
-    const extraCollateral = swap ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.OUTPUT]?.toFixed(pair.collateral.decimals).toBigNumber(pair.collateral.decimals) || ZERO : ZERO
+    const foundTrade = useTradeExactIn(parsedAmount, collateralToken) || undefined
+    const extraCollateral = swap ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)[Field.OUTPUT]?.toFixed(pair.collateral.decimals).toBigNumber(pair.collateral.decimals) || ZERO : ZERO
     const nextUserCollateralValue = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals)).add(extraCollateral)
 
     // Calculate max borrow
@@ -87,16 +80,7 @@ export default function Borrow({ pair }: BorrowProps) {
     const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.decimals).isZero()
     const borrowValueSet = !displayBorrowValue.toBigNumber(pair.asset.decimals).isZero()
 
-    let actionName = 'Nothing to do'
-    if (collateralValueSet) {
-        if (borrowValueSet) {
-            actionName = swap ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
-        } else {
-            actionName = 'Add collateral'
-        }
-    } else if (borrowValueSet) {
-        actionName = swap ? 'Borrow, swap and add as collateral' : 'Borrow'
-    }
+    const trade = swap && borrowValueSet ? foundTrade : undefined
 
     const borrowAmount = displayBorrowValue.toBigNumber(pair.asset.decimals)
 
@@ -137,10 +121,6 @@ export default function Borrow({ pair }: BorrowProps) {
             true
         )
 
-    const actionDisabled = (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) && borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
-        collateralWarnings.broken || (borrowValue.length > 0 && borrowWarnings.broken)
-
-
     const transactionReview = new TransactionReview()
     if (
         (collateralValue || displayBorrowValue) &&
@@ -162,12 +142,7 @@ export default function Borrow({ pair }: BorrowProps) {
             )
         }
         if (borrowValueSet) {
-            transactionReview.addTokenAmount(
-                'Borrowed',
-                pair.currentUserBorrowAmount.value,
-                nextBorrowValue,
-                pair.asset
-            )
+            transactionReview.addTokenAmount('Borrowed', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
             transactionReview.addUSD('Borrowed USD', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
         }
         if (displayUpdateOracle) {
@@ -183,11 +158,21 @@ export default function Borrow({ pair }: BorrowProps) {
         transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }
 
-    // Handlers
-    function onSettings() {
-        console.log("Settings")
+    let actionName = 'Nothing to do'
+    if (collateralValueSet) {
+        if (borrowValueSet) {
+            actionName = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
+        } else {
+            actionName = 'Add collateral'
+        }
+    } else if (borrowValueSet) {
+        actionName = trade ? 'Borrow, swap and add as collateral' : 'Borrow'
     }
+    
+    const actionDisabled = (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) && borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
+        collateralWarnings.broken || (borrowValue.length > 0 && borrowWarnings.broken)
 
+    // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
         if (borrowValueSet) {
@@ -197,8 +182,8 @@ export default function Borrow({ pair }: BorrowProps) {
             cooker.borrow(displayBorrowValue.toBigNumber(pair.asset.decimals), swap || useBentoBorrow, swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : "")
             summary += (summary ? ' and ' : '') + 'Borrow'
         }
-        if (borrowValueSet && swap) {
-            const path = trade?.route.path.map(token => token.address) || []
+        if (borrowValueSet && trade) {
+            const path = trade.route.path.map(token => token.address) || []
             if (path.length > 4) { 
                 throw("Path too long")
             }
@@ -230,14 +215,10 @@ export default function Borrow({ pair }: BorrowProps) {
             <SmartNumberInput
                 color="pink"
                 token={pair.collateral}
-                value={collateralValue}
-                setValue={setCollateralValue}
-
+                value={collateralValue} setValue={setCollateralValue}
                 useBentoTitleDirection="down"
                 useBentoTitle={`Add ${pair.collateral.symbol} collateral from`}
-                useBento={useBentoCollateral}
-                setUseBento={setUseBentoCollateral}
-
+                useBento={useBentoCollateral} setUseBento={setUseBentoCollateral}
                 maxTitle="Balance"
                 max={collateralBalance}
             />
@@ -245,54 +226,28 @@ export default function Borrow({ pair }: BorrowProps) {
             <SmartNumberInput
                 color="pink"
                 token={pair.asset}
-                value={displayBorrowValue}
-                setValue={setBorrowValue}
-
+                value={displayBorrowValue} setValue={setBorrowValue}
                 useBentoTitleDirection="up"
                 useBentoTitle={`Borrow ${pair.asset.symbol} to`}
-                useBento={useBentoBorrow}
-                setUseBento={setUseBentoBorrow}
-
+                useBento={useBentoBorrow} setUseBento={setUseBentoBorrow}
                 maxTitle="Max"
                 max={nextMaxBorrowPossible}
-                setPinMax={setPinBorrowMax}
+                pinMax={pinBorrowMax} setPinMax={setPinBorrowMax}
             />
 
             <WarningsView warnings={collateralWarnings}></WarningsView>
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
-            {borrowValueSet && (displayUpdateOracle || pair.currentExchangeRate.gt(pair.oracleExchangeRate)) && (
-                <div className="flex items-center mb-4">
-                    <Checkbox
-                        color="pink"
-                        checked={displayUpdateOracle}
-                        disabled={pair.currentExchangeRate.isZero()}
-                        onChange={event => setUpdateOracle(event.target.checked)}
-                    />
-                    <span className="text-primary ml-2 mr-1">Update exchange rate from the oracle</span>
-                    <QuestionHelper
-                        text={
-                            pair.currentExchangeRate.gt(0)
-                                ? 'The exchange rate from the oracle is only updated when needed. When the price in Kashi is different from the oracle, this may reduce the amount you can borrow. Updating the exchange rate from the oracle may increase your borrow limit.'
-                                : 'The exchange rate has not been updated from the oracle yet in this market. If you borrow, it will be updated.'
-                        }
-                    />
-                </div>
-            )}
+            {borrowValueSet && (<>
+                <ExchangeRateCheckBox color="pink" pair={pair} updateOracle={updateOracle} setUpdateOracle={setUpdateOracle} desiredDirection="up" />
 
-            <div className="flex items-center mb-4">
-                <Checkbox
-                    color="pink"
-                    checked={swap}
-                    onChange={event => setSwap(event.target.checked)}
+                <SwapCheckbox color="pink" swap={swap} setSwap={setSwap} 
+                    title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
+                    help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction." 
                 />
-                <span className="text-primary ml-2 mr-1">
-                    Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
-                </span>
-                <QuestionHelper text="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction." />
-                {swap && (<Settings />)}
-            </div>
-            {swap && (<TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>)}
+
+                {swap && (<TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>)}
+            </>)}
 
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 

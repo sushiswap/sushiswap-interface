@@ -212,7 +212,7 @@ export default function Repay({ pair }: RepayProps) {
 
                 maxTitle="Balance"
                 max={balance}
-                setPinMax={setPinRepayMax}
+                pinMax={pinRepayMax} setPinMax={setPinRepayMax}
             />
 
             <SmartNumberInput
@@ -227,14 +227,14 @@ export default function Repay({ pair }: RepayProps) {
                 setUseBento={setUseBentoRemoveCollateral}
 
                 max={nextMaxRemoveCollateral}
-                setPinMax={setPinRemoveMax}
+                pinMax={pinRemoveMax} setPinMax={setPinRemoveMax}
             />
 
             <div className="flex items-center mb-4">
                 <Checkbox
                     color="pink"
                     checked={swap}
-                    onChange={event => setSwap(event.target.checked)}
+                    set={setSwap}
                 />
                 <span className="text-primary ml-2 mr-1">
                     Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral

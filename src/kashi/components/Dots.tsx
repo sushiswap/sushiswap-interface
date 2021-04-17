@@ -72,7 +72,7 @@ export function TokenApproveButton({children, value, token, needed, color}: any)
     const [approvalState, approve] = useApproveCallback(tryParseAmount(value, token), BENTOBOX_ADDRESS)
 
     const showApprove =
-        chainId &&
+        chainId && token &&
         token.address !== WETH[chainId].address &&
         needed &&
         value &&

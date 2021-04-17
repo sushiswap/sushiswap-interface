@@ -15,9 +15,9 @@ function TradeReview({ trade, allowedSlippage }: { trade: Trade | undefined, all
 
     return (
         <>
-            {trade && (
+            <div className="text-xl text-high-emphesis">Swap Review</div>
+            {trade ? (
                 <div className="py-4 mb-4">
-                    <div className="text-xl text-high-emphesis">Swap Review</div>
                     <div className="flex items-center justify-between">
                         <div className="text-lg text-secondary">
                             Minimum received
@@ -56,6 +56,10 @@ function TradeReview({ trade, allowedSlippage }: { trade: Trade | undefined, all
                             <SwapRoute trade={trade} />
                         </div>
                     </div>)}
+                </div>
+            ) : (
+                <div className="text-lg text-secondary">
+                    No liquidity found to do swap
                 </div>
             )}
         </>
