@@ -78,7 +78,8 @@ export default function ClaimModal() {
     const unclaimedAmount: TokenAmount | undefined = useUserUnclaimedAmount(account)
     //console.log('unclaimedAmount:', unclaimedAmount)
     const { claimSubmitted, claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
-    const claimConfirmed = Boolean(claimTxn?.receipt)
+    //const claimConfirmed = Boolean(claimTxn?.receipt)
+    const claimConfirmed = false
 
     function onClaim() {
         setAttempting(true)
