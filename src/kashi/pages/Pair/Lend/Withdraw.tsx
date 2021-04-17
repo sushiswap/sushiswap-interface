@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, Button, Dots } from 'kashi/components'
+import { Alert, Button, Dots, MovingDots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
@@ -141,7 +141,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                 !kashiPermit && (
                     <Button color="blue" onClick={onApprove} className="mb-4">
                         {kashiApprovalState === BentoApprovalState.PENDING ? (
-                            <Dots>{pendingApprovalMessage}</Dots>
+                            <MovingDots>{pendingApprovalMessage}</MovingDots>
                         ) : (
                             `Approve Kashi`
                         )}

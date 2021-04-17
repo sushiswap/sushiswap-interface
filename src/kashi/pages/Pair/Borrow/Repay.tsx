@@ -1,44 +1,48 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Button, TransactionReviewView, Dots } from 'kashi/components'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
+import { Alert, Button, TransactionReviewView, Dots, MovingDots, Checkbox } from 'kashi/components'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
-import { MaxUint256 } from '@ethersproject/constants'
 import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
 import { Warnings, TransactionReview, KashiCooker, Warning } from 'kashi/entities'
 import { KASHI_ADDRESS, BENTOBOX_ADDRESS } from 'kashi/constants'
 import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { formattedNum } from 'utils'
+import { WETH } from '@sushiswap/sdk'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
+import QuestionHelper from 'components/QuestionHelper'
+import Settings from '../../../../components/Settings'
+import { useCurrency } from 'hooks/Tokens'
+import { tryParseAmount } from 'state/swap/hooks'
+import SmartNumberInput from 'kashi/components/SmartNumberInput'
 
 interface RepayProps {
     pair: any
 }
 
 export default function Repay({ pair }: RepayProps) {
-    const { account, chainId } = useActiveWeb3React()
+    const { chainId } = useActiveWeb3React()
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
         KASHI_ADDRESS
     )
     const pendingApprovalMessage = useKashiApprovalPending()
+    const info = useContext(KashiContext).state.info
 
     // State
-    const [useBentoRepay, setUseBentoRepayAsset] = useState<boolean>(pair.asset.bentoBalance.gt(0))
+    const [useBentoRepay, setUseBentoRepay] = useState<boolean>(pair.asset.bentoBalance.gt(0))
     const [useBentoRemove, setUseBentoRemoveCollateral] = useState<boolean>(true)
 
     const [repayValue, setRepayAssetValue] = useState('')
     const [removeValue, setRemoveCollateralValue] = useState('')
-    const [updateOracle, setUpdateOracle] = useState(false)
+    const [updateOracle, ] = useState(false)
     const [pinRemoveMax, setPinRemoveMax] = useState(false)
     const [pinRepayMax, setPinRepayMax] = useState(false)
+    const [swap, setSwap] = useState(false)
 
-    const info = useContext(KashiContext).state.info
+    const assetToken = useCurrency(pair.asset.address) || undefined
+    const collateralToken = useCurrency(pair.collateral.address) || undefined
 
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.asset.address
@@ -55,13 +59,7 @@ export default function Repay({ pair }: RepayProps) {
         ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.decimals)
         : repayValue
 
-    const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            displayRepayValue.toBigNumber(pair.asset.decimals).toString()
-        ),
-        BENTOBOX_ADDRESS
-    )
+    const [approvalState, approve] = useApproveCallback(tryParseAmount(displayRepayValue, assetToken), BENTOBOX_ADDRESS)
 
     const nextUserBorrowAmount = pair.currentUserBorrowAmount.value.sub(
         displayRepayValue.toBigNumber(pair.asset.decimals)
@@ -114,20 +112,17 @@ export default function Repay({ pair }: RepayProps) {
     }
 
     const warnings = new Warnings()
-        .add(
+        .addError(
             assetNative && !useBentoRepay && pinRepayMax,
-            `You cannot MAX repay ${pair.asset.symbol} directly from your wallet. Please deposit your ${pair.asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`,
-            true
+            `You cannot MAX repay ${pair.asset.symbol} directly from your wallet. Please deposit your ${pair.asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`
         )
-        .add(
+        .addError(
             displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(pair.userCollateralAmount.value),
             'You have insufficient collateral. Please enter a smaller amount or repay more.',
-            true
         )
-        .add(
+        .addError(
             displayRepayValue.toBigNumber(pair.asset.decimals).gt(pair.currentUserBorrowAmount.value),
             "You can't repay more than you owe. To fully repay, please click the 'max' button.",
-            true,
             new Warning(
                 balance?.lt(displayRepayValue.toBigNumber(pair.asset.decimals)),
                 `Please make sure your ${
@@ -136,16 +131,14 @@ export default function Repay({ pair }: RepayProps) {
                 true
             )
         )
-        .add(
+        .addError(
             displayRemoveValue
                 .toBigNumber(pair.collateral.decimals)
                 .gt(maximum(pair.userCollateralAmount.value.sub(nextMinCollateralMinimum), ZERO)),
             'Removing this much collateral would put you into insolvency.',
-            true,
             new Warning(
                 displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(nextMaxRemoveCollateral),
-                'Removing this much collateral would put you very close to insolvency.',
-                false
+                'Removing this much collateral would put you very close to insolvency.'
             )
         )
 
@@ -206,99 +199,49 @@ export default function Repay({ pair }: RepayProps) {
         <>
             <div className="text-3xl text-high-emphesis mt-6 mb-4">Repay {pair.asset.symbol}</div>
 
-            <div className="flex items-center justify-between my-4">
-                <div className="flex items-center text-base text-secondary">
-                    <span>
-                        <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span className="mx-2"> Repay {pair.asset.symbol} trom </span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="pink"
-                            className="focus:ring focus:ring-pink"
-                            onClick={() => {
-                                setUseBentoRepayAsset(!useBentoRepay)
-                            }}
-                        >
-                            {useBentoRepay ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {formattedNum(balance.toFixed(pair.asset.decimals))}
-                </div>
-            </div>
+            <SmartNumberInput
+                color="pink"
+                token={pair.asset}
+                value={displayRepayValue}
+                setValue={setRepayAssetValue}
 
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={displayRepayValue}
-                    onUserInput={setRepayAssetValue}
-                    onFocus={() => {
-                        setRepayAssetValue('')
-                        setPinRepayMax(false)
-                    }}
+                useBentoTitleDirection="down"
+                useBentoTitle={`Repay ${pair.asset.symbol} from`}
+                useBento={useBentoRepay}
+                setUseBento={setUseBentoRepay}
+
+                maxTitle="Balance"
+                max={balance}
+                setPinMax={setPinRepayMax}
+            />
+
+            <SmartNumberInput
+                color="pink"
+                token={pair.collateral}
+                value={displayRemoveValue}
+                setValue={setRemoveCollateralValue}
+
+                useBentoTitleDirection="up"
+                useBentoTitle={`Remove ${pair.collateral.symbol} to`}
+                useBento={useBentoRemove}
+                setUseBento={setUseBentoRemoveCollateral}
+
+                max={nextMaxRemoveCollateral}
+                setPinMax={setPinRemoveMax}
+            />
+
+            <div className="flex items-center mb-4">
+                <Checkbox
+                    color="pink"
+                    checked={swap}
+                    onChange={event => setSwap(event.target.checked)}
                 />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="pink"
-                        onClick={() => {
-                            setPinRepayMax(true)
-                        }}
-                        className="absolute right-4 focus:ring focus:ring-pink"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
-
-            <div className="flex items-center justify-between my-4">
-                <div className="flex items-center text-base text-secondary">
-                    <span>
-                        <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span className="mx-2">Remove {pair.collateral.symbol} to</span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="pink"
-                            className="focus:ring focus:ring-pink"
-                            onClick={() => {
-                                setUseBentoRemoveCollateral(!useBentoRemove)
-                            }}
-                        >
-                            {useBentoRemove ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Max: {formattedNum(maxRemoveCollateral)}
-                </div>
-            </div>
-
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={displayRemoveValue}
-                    onUserInput={setRemoveCollateralValue}
-                    onFocus={() => {
-                        setRemoveCollateralValue(displayRemoveValue)
-                        setPinRemoveMax(false)
-                    }}
-                />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="pink"
-                        onClick={() => setPinRemoveMax(true)}
-                        className="absolute right-4 focus:ring focus:ring-pink"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
+                <span className="text-primary ml-2 mr-1">
+                    Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
+                </span>
+                <QuestionHelper text="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions." />
+                {swap && (<Settings />)}
+            </div>            
 
             <WarningsView warnings={warnings}></WarningsView>
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
@@ -312,11 +255,9 @@ export default function Repay({ pair }: RepayProps) {
 
             {showApprove && (
                 <Button color="pink" onClick={approve} className="mb-4">
-                    {approvalState === ApprovalState.PENDING ? (
-                        <Dots>Approving {pair.asset.symbol}</Dots>
-                    ) : (
-                        `Approve ${pair.asset.symbol}`
-                    )}
+                    <Dots pending={approvalState === ApprovalState.PENDING} pendingTitle={`Approving ${pair.asset.symbol}`}>
+                    Approve {pair.asset.symbol}
+                    </Dots>
                 </Button>
             )}
 
@@ -327,7 +268,7 @@ export default function Repay({ pair }: RepayProps) {
                         !kashiPermit && (
                             <Button color="pink" onClick={onApprove} className="mb-4">
                                 {kashiApprovalState === BentoApprovalState.PENDING ? (
-                                    <Dots>{pendingApprovalMessage}</Dots>
+                                    <MovingDots>{pendingApprovalMessage}</MovingDots>
                                 ) : (
                                     `Approve Kashi`
                                 )}

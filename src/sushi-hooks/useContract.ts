@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts'
 import { ChainId } from '@sushiswap/sdk'
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 
 import ERC20_ABI from '../constants/sushiAbis/erc20.json'
 import SUSHI_ABI from '../constants/sushiAbis/sushi.json'
@@ -16,6 +16,7 @@ import KASHIPAIR_ABI from '../constants/sushiAbis/kashipair.json'
 import KASHIPAIRHELPER_ABI from '../constants/sushiAbis/kashipairhelper.json'
 import BASE_SWAPPER_ABI from '../constants/sushiAbis/swapper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/sushiAbis/chainlinkOracle.json'
+import SUSHISWAP_MULTISWAPPER_ABI from '../constants/sushiAbis/sushiswapmultiswapper.json'
 
 import SAAVE_ABI from '../constants/sushiAbis/saave.json'
 import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
@@ -46,7 +47,8 @@ import {
     KASHI_ADDRESS,
     KASHI_HELPER_ADDRESS,
     SUSHISWAP_SWAPPER_ADDRESS,
-    CHAINLINK_ORACLE_ADDRESS
+    CHAINLINK_ORACLE_ADDRESS,
+    SUSHISWAP_MULTISWAPPER_ADDRESS
 } from 'kashi'
 
 // returns null on errors
@@ -139,6 +141,10 @@ export function useSushiSwapSwapper(): Contract | null {
 
 export function useChainlinkOracle(): Contract | null {
     return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
+}
+
+export function useSushiSwapMultiSwapper(): Contract | null {
+    return useContract(SUSHISWAP_MULTISWAPPER_ADDRESS, SUSHISWAP_MULTISWAPPER_ABI)
 }
 
 // experimental:

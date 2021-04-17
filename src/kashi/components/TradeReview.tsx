@@ -1,0 +1,65 @@
+import React from 'react'
+import { Trade } from '@sushiswap/sdk'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from 'utils/prices'
+import QuestionHelper from 'components/QuestionHelper'
+import FormattedPriceImpact from 'components/swap/FormattedPriceImpact'
+import { Field } from 'state/swap/actions'
+import { useActiveWeb3React } from 'hooks'
+import SwapRoute from 'components/swap/SwapRoute'
+
+function TradeReview({ trade, allowedSlippage }: { trade: Trade | undefined, allowedSlippage: any }) {
+    const { chainId } = useActiveWeb3React()
+    const showRoute = Boolean(trade && trade.route.path.length > 2)
+    const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage)
+    const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
+
+    return (
+        <>
+            {trade && (
+                <div className="py-4 mb-4">
+                    <div className="text-xl text-high-emphesis">Swap Review</div>
+                    <div className="flex items-center justify-between">
+                        <div className="text-lg text-secondary">
+                            Minimum received
+                            <QuestionHelper text="Your transaction will revert if there is a large, unfavorable price movement before it is confirmed." />
+                        </div>
+                        <div className="text-lg">
+                        { `${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4)} ${trade.outputAmount.currency.getSymbol(chainId)}` ?? '-'}
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <div className="text-lg text-secondary">
+                            Price Impact
+                            <QuestionHelper text="The difference between the market price and estimated price due to trade size." />
+                        </div>
+                        <div className="text-lg">
+                            <FormattedPriceImpact priceImpact={priceImpactWithoutFee} />
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <div className="text-lg text-secondary">
+                            Liquidity Provider Fee
+                            <QuestionHelper text="A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive." />
+                        </div>
+                        <div className="text-lg">
+                            {realizedLPFee
+                                ? `${realizedLPFee.toSignificant(4)} ${trade.inputAmount.currency.getSymbol(chainId)}`
+                                : '-'}
+                        </div>
+                    </div>
+                    {showRoute && (<div className="flex items-center justify-between">
+                        <div className="text-lg text-secondary">
+                            Route
+                            <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
+                        </div>
+                        <div className="text-lg">
+                            <SwapRoute trade={trade} />
+                        </div>
+                    </div>)}
+                </div>
+            )}
+        </>
+    )
+}
+
+export default TradeReview

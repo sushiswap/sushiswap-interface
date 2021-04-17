@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Dots, Button } from 'kashi/components'
+import { Alert, Dots, Button, MovingDots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { ArrowDownRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
@@ -162,7 +162,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                 !kashiPermit && (
                     <Button color="blue" onClick={onApprove} className="mb-4">
                         {kashiApprovalState === BentoApprovalState.PENDING ? (
-                            <Dots>{pendingApprovalMessage}</Dots>
+                            <MovingDots>{pendingApprovalMessage}</MovingDots>
                         ) : (
                             `Approve Kashi`
                         )}
@@ -174,7 +174,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                     {showApprove && (
                         <Button color="blue" onClick={approve} className="mb-4">
                             {approvalState === ApprovalState.PENDING ? (
-                                <Dots>Approving {pair.asset.symbol}</Dots>
+                                <MovingDots>Approving {pair.asset.symbol}</MovingDots>
                             ) : (
                                 `Approve ${pair.asset.symbol}`
                             )}

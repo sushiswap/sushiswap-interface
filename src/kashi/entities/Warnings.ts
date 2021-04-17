@@ -28,6 +28,16 @@ export class Warnings extends Array<Warning> {
         return this
     }
 
+    addWarning(active: boolean, message: string, or?: Warning) {
+        this._add(new Warning(active, message, false, or));
+        return this
+    }
+
+    addError(active: boolean, message: string, or?: Warning) {
+        this._add(new Warning(active, message, true, or));
+        return this
+    }
+
     get broken(): boolean {
         return this.some(warning => warning.breaking)
     }
