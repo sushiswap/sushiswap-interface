@@ -12,14 +12,17 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: '1INCH', name: '1INCH Token', address: '0x111111111117dC0aa78b770fA6A738034120C302', decimals: 18 },
         { symbol: 'AAVE', name: 'Aave Token', address: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9', decimals: 18 },
         { symbol: 'ADX', name: 'AdEx Network', address: '0xADE00C28244d5CE17D72E40330B1c318cD12B7c3', decimals: 18 },
+        { symbol: 'AKRO', name: 'Akropolis', address: '0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7', decimals: 18 },
         { symbol: 'ALPHA', name: 'AlphaToken', address: '0xa1faa113cbE53436Df28FF0aEe54275c13B40975', decimals: 18 },
         { symbol: 'AMP', name: 'Amp', address: '0xfF20817765cB7f73d4bde2e66e067E58D11095C2', decimals: 18 },
+        { symbol: 'ANKR', name: 'Ankr Network', address: '0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4', decimals: 18 },
         {
             symbol: 'ANT',
             name: 'Aragon Network Token',
             address: '0xa117000000f279D81A1D3cc75430fAA017FA5A2e',
             decimals: 18
         },
+        { symbol: 'AUCTION', name: 'Bounce Token', address: '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', decimals: 18 },
         { symbol: 'BADGER', name: 'Badger', address: '0x3472A5A71965499acd81997a54BBA8D852C6E53d', decimals: 18 },
         { symbol: 'BAL', name: 'Balancer', address: '0xba100000625a3754423978a60c9317c58a424e3D', decimals: 18 },
         { symbol: 'BAND', name: 'BandToken', address: '0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55', decimals: 18 },
@@ -29,6 +32,8 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             address: '0x0D8775F648430679A709E98d2b0Cb6250d2887EF',
             decimals: 18
         },
+        { symbol: 'BNT', name: 'Bancor', address: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C', decimals: 18 },
+        { symbol: 'BOR', name: 'BoringDAO', address: '0x3c9d6c1C73b31c837832c72E04D3152f051fc1A9', decimals: 18 },
         { symbol: 'BUSD', name: 'Binance USD', address: '0x4Fabb145d64652a948d72533023f6E7A623C7C53', decimals: 18 },
         {
             symbol: 'BZRX',
@@ -51,10 +56,13 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'DPI', name: 'DefiPulse Index', address: '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', decimals: 18 },
         { symbol: 'ENJ', name: 'Enjin Coin', address: '0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c', decimals: 18 },
         { symbol: 'ETH', name: 'Ethereum', address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', decimals: 18 },
+        { symbol: 'FRONT', name: 'Frontier Token', address: '0xf8C3527CC04340b208C854E985240c02F7B7793f', decimals: 18 },
+        { symbol: 'FRX', name: 'Frax Share', address: '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', decimals: 18 },
         { symbol: 'FTM', name: 'Fantom Token', address: '0x4E15361FD6b4BB609Fa63C81A2be19d873717870', decimals: 18 },
         { symbol: 'FTX Token', name: 'FTT', address: '0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9', decimals: 18 },
         { symbol: 'GRT', name: 'Graph Token', address: '0xc944E90C64B2c07662A292be6244BDf05Cda44a7', decimals: 18 },
         { symbol: 'HEGIC', name: 'Hegic', address: '0x584bC13c7D411c00c01A62e8019472dE68768430', decimals: 18 },
+        { symbol: 'HUSD', name: 'HUSD', address: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1', decimals: 8 },
         { symbol: 'INJ', name: 'Injective Token', address: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30', decimals: 18 },
         {
             symbol: 'KNC',
@@ -81,12 +89,17 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'MLN', name: 'Melon Token', address: '0xec67005c4E498Ec7f55E092bd1d35cbC47C91892', decimals: 18 },
         { symbol: 'MTA', name: 'Meta', address: '0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2', decimals: 18 },
         { symbol: 'NMR', name: 'Numeraire', address: '0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671', decimals: 18 },
+        { symbol: 'OCEAN', name: 'Ocean Token', address: '0x967da4048cD07aB37855c090aAF366e4ce1b9F48', decimals: 18 },
         { symbol: 'OGN', name: 'OriginToken', address: '0x8207c1FfC5B6804F6024322CcF34F29c3541Ae26', decimals: 18 },
+        { symbol: 'OKB', name: 'OKB', address: '0x75231F58b43240C9718Dd58B4967c5114342a86c', decimals: 18 },
         { symbol: 'OMG', name: 'OMGToken', address: '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07', decimals: 18 },
+        { symbol: 'ORN', name: 'Orion Protocol', address: '0x0258F474786DdFd37ABCE6df6BBb1Dd5dfC4434a', decimals: 8 },
         { symbol: 'OXT', name: 'Orchid', address: '0x4575f41308EC1483f3d399aa9a2826d74Da13Deb', decimals: 18 },
         { symbol: 'PAX', name: 'Paxos Standard', address: '0x8E870D67F660D95d5be530380D0eC0bd388289E1', decimals: 18 },
         { symbol: 'PAXG', name: 'Paxos Gold', address: '0x45804880De22913dAFE09f4980848ECE6EcbAf78', decimals: 18 },
         { symbol: 'PERP', name: 'Perpetual', address: '0xbC396689893D065F41bc2C6EcbeE5e0085233447', decimals: 18 },
+        { symbol: 'RAI', name: 'Rai Reflex Index', address: '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919', decimals: 18 },
+        { symbol: 'RARI', name: 'Rarible', address: '0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF', decimals: 18 },
         {
             symbol: 'RCN',
             name: 'Ripio Credit Network Token',
@@ -95,6 +108,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         },
         { symbol: 'REN', name: 'Republic Token', address: '0x408e41876cCCDC0F92210600ef50372656052a38', decimals: 18 },
         { symbol: 'REPv2', name: 'Reputation', address: '0x221657776846890989a759BA2973e427DfF5C9bB', decimals: 18 },
+        { symbol: 'RGT', name: 'Rari Governance Token', address: '0xD291E7a03283640FDc51b121aC401383A46cC623', decimals: 18 },
         {
             symbol: 'RLC',
             name: 'iEx.ec Network Token',
@@ -107,6 +121,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             address: '0x3155BA85D5F96b2d030a4966AF206230e46849cb',
             decimals: 18
         },
+        { symbol: 'SAND', name: 'SAND', address: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0', decimals: 18 },
         {
             symbol: 'SNX',
             name: 'Synthetix Network Token',
@@ -119,6 +134,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'SXP', name: 'Swipe', address: '0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9', decimals: 18 },
         { symbol: 'TOMOE', name: 'TomoChain', address: '0x05D3606d5c81EB9b7B18530995eC9B29da05FaBa', decimals: 18 },
         { symbol: 'TRU', name: 'TrueFi', address: '0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784', decimals: 8 },
+        { symbol: 'TRY', name: 'TRYfinance', address: '0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03', decimals: 18 },
         { symbol: 'TUSD', name: 'TrueUSD', address: '0x0000000000085d4780B73119b644AE5ecd22b376', decimals: 18 },
         {
             symbol: 'UMA',
@@ -128,6 +144,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         },
         { symbol: 'UNI', name: 'Uniswap', address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984', decimals: 18 },
         { symbol: 'USDC', name: 'USD Coin', address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', decimals: 6 },
+        { symbol: 'USDK', name: 'USDK', address: '0x1c48f86ae57291F7686349F12601910BD8D470bb', decimals: 18 },
         { symbol: 'USDT', name: 'Tether USD', address: '0xdAC17F958D2ee523a2206206994597C13D831ec7', decimals: 6 },
         {
             symbol: 'UST',
@@ -138,6 +155,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'WAVES', name: 'WAVES', address: '0x1cF4592ebfFd730c7dc92c1bdFFDfc3B9EfCf29a', decimals: 18 },
         { symbol: 'WBTC', name: 'Wrapped BTC', address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', decimals: 8 },
         { symbol: 'wNXM', name: 'Wrapped NXM', address: '0x0d438F3b5175Bebc262bF23753C1E53d03432bDE', decimals: 18 },
+        { symbol: 'WOM', name: 'WOM Token', address: '0xBd356a39BFf2cAda8E9248532DD879147221Cf76', decimals: 18 },
         { symbol: 'xSUSHI', name: 'SushiBar', address: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', decimals: 18 },
         { symbol: 'YFI', name: 'yearn.finance', address: '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e', decimals: 18 },
         { symbol: 'YFII', name: 'YFII.finance', address: '0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83', decimals: 18 },
@@ -265,6 +283,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        '0xc929ad75B72593967DE83E7F7Cda0493458261D9': {
+            from: '0x111111111117dC0aa78b770fA6A738034120C302',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x6Df09E975c830ECae5bd4eD9d90f3A95a4f88012': {
             from: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -286,6 +311,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        '0xB23D105dF4958B4b81757e12f2151B5b5183520B': {
+            from: '0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x89c7926c7c15fD5BFDB1edcFf7E7fC8283B578F6': {
             from: '0xa1faa113cbE53436Df28FF0aEe54275c13B40975',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -300,12 +332,26 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        '0x7eed379bf00005CfeD29feD4009669dE9Bcc21ce': {
+            from: '0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x8f83670260F8f7708143b836a2a6F11eF0aBac01': {
             from: '0xa117000000f279D81A1D3cc75430fAA017FA5A2e',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
+        },
+        '0xA6BCac72431A4178f07d016E1D912F56E6D989Ec': {
+            from: '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
         },
         '0x58921Ac140522867bf50b9E009599Da0CA4A2379': {
             from: '0x3472A5A71965499acd81997a54BBA8D852C6E53d',
@@ -341,6 +387,27 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
+        },
+        '0xCf61d1841B178fe82C8895fe60c2EDDa08314416': {
+            from: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
+        '0x1E6cF0D433de4FE882A437ABC654F58E1e78548c': {
+            from: '0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        '0xf8D0EaFd81104002234819ABe752bCa0d41b097F': {
+            from: '0x3c9d6c1C73b31c837832c72E04D3152f051fc1A9',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
         },
         '0xdeb288F737066589598e9214E782fa5A8eD689e8': {
             from: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
@@ -426,6 +493,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        '0xCd627aA160A6fA45Eb793D19Ef54f5062F20f33f': {
+            from: '0xD533a949740bb3306d119CC777fa900bA034cd52',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x773616E4d11A78F511299002da57A0a94577F1f4': {
             from: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -468,6 +542,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        '0xbf86e7B2565eAc3bFD80634176F31bd186566b06': {
+            from: '0xf8C3527CC04340b208C854E985240c02F7B7793f',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x2DE7E4a9488488e0058B95854CC2f7955B35dC9b': {
             from: '0x4E15361FD6b4BB609Fa63C81A2be19d873717870',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -481,6 +562,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
+        },
+        '0x6Ebc52C8C1089be9eB3945C4350B68B8E4C2233f': {
+            from: '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
         },
         '0x17D054eCac33D91F7340645341eFB5DE9009F1C1': {
             from: '0xc944E90C64B2c07662A292be6244BDf05Cda44a7',
@@ -502,6 +590,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             decimals: 8,
             fromDecimals: 18,
             toDecimals: 8
+        },
+        '0x1B61BAD1495161bCb6C03DDB0E41622c0270bB1A': {
+            from: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 8,
+            toDecimals: 18
         },
         '0xaE2EbE3c4D20cE13cE47cbb49b6d7ee631Cd816e': {
             from: '0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30',
@@ -608,6 +703,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        '0x9b0FC4bb9981e5333689d69BdBF66351B9861E62': {
+            from: '0x967da4048cD07aB37855c090aAF366e4ce1b9F48',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
         '0x2c881B6f3f6B5ff6C975813F87A4dad0b241C15b': {
             from: '0x8207c1FfC5B6804F6024322CcF34F29c3541Ae26',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -615,11 +717,25 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        '0x22134617Ae0f6CA8D89451e5Ae091c94f7D743DC': {
+            from: '0x75231F58b43240C9718Dd58B4967c5114342a86c',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x57C9aB3e56EE4a83752c181f241120a3DBba06a1': {
             from: '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             decimals: 18,
             fromDecimals: 18,
+            toDecimals: 18
+        },
+        '0xbA9B2a360eb8aBdb677d6d7f27E12De11AA052ef': {
+            from: '0x0258F474786DdFd37ABCE6df6BBb1Dd5dfC4434a',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 8,
             toDecimals: 18
         },
         '0xd75AAaE4AF0c398ca13e2667Be57AF2ccA8B5de6': {
@@ -645,6 +761,20 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
         },
         '0x3b41D5571468904D4e53b6a8d93A6BaC43f02dC9': {
             from: '0xbC396689893D065F41bc2C6EcbeE5e0085233447',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
+        '0x4ad7B025127e89263242aB68F0f9c4E5C033B489': {
+            from: '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
+        '0x2a784368b1D492f458Bf919389F42c18315765F5': {
+            from: '0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             decimals: 18,
             fromDecimals: 18,
@@ -678,6 +808,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        '0xc16935B445F4BDC172e408433c8f7101bbBbE368': {
+            from: '0xD291E7a03283640FDc51b121aC401383A46cC623',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
         '0x4cba1e1fdc738D0fe8DB3ee07728E2Bc4DA676c6': {
             from: '0x607F4C5BB672230e8672085532f7e901544a7375',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -691,6 +828,20 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
+        },
+        '0x48731cF7e84dc94C5f84577882c14Be11a5B7456': {
+            from: '0x3155BA85D5F96b2d030a4966AF206230e46849cb',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        '0x35E3f7E558C04cE7eEE1629258EcbbA03B36Ec56': {
+            from: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
         },
         '0x79291A9d692Df95334B1a0B3B4AE6bC606782f8c': {
             from: '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
@@ -755,6 +906,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 8,
             toDecimals: 8
         },
+        '0xB09fC5fD3f11Cf9eb5E1C5Dba43114e3C9f477b5': {
+            from: '0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x3886BA987236181D98F2401c507Fb8BeA7871dF2': {
             from: '0x0000000000085d4780B73119b644AE5ecd22b376',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -797,6 +955,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 6,
             toDecimals: 8
         },
+        '0xfAC81Ea9Dd29D8E9b212acd6edBEb6dE38Cb43Af': {
+            from: '0x1c48f86ae57291F7686349F12601910BD8D470bb',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46': {
             from: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -827,6 +992,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
         },
         '0xe5Dc0A609Ab8bCF15d3f35cFaa1Ff40f521173Ea': {
             from: '0x0d438F3b5175Bebc262bF23753C1E53d03432bDE',
+            to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+            decimals: 18,
+            fromDecimals: 18,
+            toDecimals: 18
+        },
+        '0xcEBD2026d3C99F2a7CE028acf372C154aB4638a9': {
+            from: '0xBd356a39BFf2cAda8E9248532DD879147221Cf76',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             decimals: 18,
             fromDecimals: 18,
