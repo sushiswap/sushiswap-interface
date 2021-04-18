@@ -1,22 +1,23 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Button, TransactionReviewView, Dots, MovingDots, Checkbox } from 'kashi/components'
+import { Button, TransactionReviewView } from 'kashi/components'
 import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
 import { Warnings, TransactionReview, KashiCooker, Warning } from 'kashi/entities'
-import { KASHI_ADDRESS, BENTOBOX_ADDRESS } from 'kashi/constants'
-import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
-import { useKashiApprovalPending } from 'state/application/hooks'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { WETH } from '@sushiswap/sdk'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
-import QuestionHelper from 'components/QuestionHelper'
-import Settings from '../../../../components/Settings'
 import { useCurrency } from 'hooks/Tokens'
 import { tryParseAmount } from 'state/swap/hooks'
 import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
+import TradeReview from 'kashi/components/TradeReview'
+import { useUserSlippageTolerance } from 'state/user/hooks'
+import { useTradeExactIn } from 'hooks/Trades'
+import { computeSlippageAdjustedAmounts } from 'utils/prices'
+import { Field } from 'state/swap/actions'
+import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
 
 interface RepayProps {
     pair: any
@@ -24,10 +25,6 @@ interface RepayProps {
 
 export default function Repay({ pair }: RepayProps) {
     const { chainId } = useActiveWeb3React()
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
-    const pendingApprovalMessage = useKashiApprovalPending()
     const info = useContext(KashiContext).state.info
 
     // State
@@ -36,9 +33,9 @@ export default function Repay({ pair }: RepayProps) {
 
     const [repayValue, setRepayAssetValue] = useState('')
     const [removeValue, setRemoveCollateralValue] = useState('')
-    const [updateOracle, ] = useState(false)
     const [pinRemoveMax, setPinRemoveMax] = useState(false)
     const [pinRepayMax, setPinRepayMax] = useState(false)
+    const [updateOracle, setUpdateOracle] = useState(false)
     const [swap, setSwap] = useState(false)
 
     const assetToken = useCurrency(pair.asset.address) || undefined
@@ -59,8 +56,6 @@ export default function Repay({ pair }: RepayProps) {
         ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.decimals)
         : repayValue
 
-    const [approvalState, approve] = useApproveCallback(tryParseAmount(displayRepayValue, assetToken), BENTOBOX_ADDRESS)
-
     const nextUserBorrowAmount = pair.currentUserBorrowAmount.value.sub(
         displayRepayValue.toBigNumber(pair.asset.decimals)
     )
@@ -80,6 +75,13 @@ export default function Repay({ pair }: RepayProps) {
 
     const displayRemoveValue = pinRemoveMax ? maxRemoveCollateral : removeValue
 
+    // Swap
+    const [allowedSlippage] = useUserSlippageTolerance() // 10 = 0.1%
+    const parsedAmount = tryParseAmount(displayRemoveValue, collateralToken)
+    const foundTrade = useTradeExactIn(parsedAmount, assetToken) || undefined
+    const extraRepay = swap ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)[Field.OUTPUT]?.toFixed(pair.asset.decimals).toBigNumber(pair.asset.decimals) || ZERO : ZERO
+    //const nextUserCollateralValue = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals)).add(extraCollateral)
+
     const nextUserCollateralAmount = pair.userCollateralAmount.value.sub(
         displayRemoveValue.toBigNumber(pair.collateral.decimals)
     )
@@ -93,8 +95,6 @@ export default function Repay({ pair }: RepayProps) {
     const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
     const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
     const nextMaxBorrowPossible = maximum(minimum(nextMaxBorrowSafe, pair.maxAssetAvailable), ZERO)
-
-    const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
 
     const nextHealth = pair.currentUserBorrowAmount.value
         .sub(displayRepayValue.toBigNumber(pair.asset.decimals))
@@ -172,17 +172,12 @@ export default function Repay({ pair }: RepayProps) {
         return summary
     }
 
-    const showApprove =
-        chainId &&
-        pair.asset.address !== WETH[chainId].address &&
-        !useBentoRepay &&
-        displayRepayValue &&
-        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
-
     const removeValueSet =
         !displayRemoveValue.toBigNumber(pair.collateral.decimals).isZero() ||
         (pinRemoveMax && pair.userCollateralShare.gt(ZERO))
     const repayValueSet = !displayRepayValue.toBigNumber(pair.asset.decimals).isZero()
+
+    const trade = swap && removeValueSet ? foundTrade : undefined
 
     let actionName = 'Nothing to do'
     if (removeValueSet) {
@@ -195,6 +190,9 @@ export default function Repay({ pair }: RepayProps) {
         actionName = 'Repay'
     }
 
+    const actionDisabled = (displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) && displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0) && (!pinRemoveMax || pair.userCollateralShare.isZero())) ||
+        warnings.some(warning => warning.breaking)
+
     return (
         <>
             <div className="text-3xl text-high-emphesis mt-6 mb-4">Repay {pair.asset.symbol}</div>
@@ -204,12 +202,10 @@ export default function Repay({ pair }: RepayProps) {
                 token={pair.asset}
                 value={displayRepayValue}
                 setValue={setRepayAssetValue}
-
                 useBentoTitleDirection="down"
                 useBentoTitle={`Repay ${pair.asset.symbol} from`}
                 useBento={useBentoRepay}
                 setUseBento={setUseBentoRepay}
-
                 maxTitle="Balance"
                 max={balance}
                 pinMax={pinRepayMax} setPinMax={setPinRepayMax}
@@ -220,77 +216,36 @@ export default function Repay({ pair }: RepayProps) {
                 token={pair.collateral}
                 value={displayRemoveValue}
                 setValue={setRemoveCollateralValue}
-
                 useBentoTitleDirection="up"
                 useBentoTitle={`Remove ${pair.collateral.symbol} to`}
                 useBento={useBentoRemove}
                 setUseBento={setUseBentoRemoveCollateral}
-
                 max={nextMaxRemoveCollateral}
                 pinMax={pinRemoveMax} setPinMax={setPinRemoveMax}
             />
 
-            <div className="flex items-center mb-4">
-                <Checkbox
-                    color="pink"
-                    checked={swap}
-                    set={setSwap}
-                />
-                <span className="text-primary ml-2 mr-1">
-                    Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
-                </span>
-                <QuestionHelper text="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions." />
-                {swap && (<Settings />)}
-            </div>            
-
             <WarningsView warnings={warnings}></WarningsView>
+
+            {removeValueSet && (<>
+                <ExchangeRateCheckBox color="pink" pair={pair} updateOracle={updateOracle} setUpdateOracle={setUpdateOracle} desiredDirection="up" />
+
+                <SwapCheckbox color="pink" swap={swap} setSwap={setSwap} 
+                    title={`Swap removed ${pair.collateral.symbol} for ${pair.asset.symbol} and repay`}
+                    help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions." 
+                />
+
+                {swap && (<TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>)}
+            </>)}
+
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-            {approveKashiFallback && (
-                <Alert
-                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
-                    className="mb-4"
-                />
-            )}
-
-            {showApprove && (
-                <Button color="pink" onClick={approve} className="mb-4">
-                    <Dots pending={approvalState === ApprovalState.PENDING} pendingTitle={`Approving ${pair.asset.symbol}`}>
-                    Approve {pair.asset.symbol}
-                    </Dots>
-                </Button>
-            )}
-
-            {!showApprove && (
-                <>
-                    {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
-                        kashiApprovalState === BentoApprovalState.PENDING) &&
-                        !kashiPermit && (
-                            <Button color="pink" onClick={onApprove} className="mb-4">
-                                {kashiApprovalState === BentoApprovalState.PENDING ? (
-                                    <MovingDots>{pendingApprovalMessage}</MovingDots>
-                                ) : (
-                                    `Approve Kashi`
-                                )}
-                            </Button>
-                        )}
-
-                    {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-                        <Button
-                            color="pink"
-                            onClick={() => onCook(pair, onExecute)}
-                            disabled={
-                                (displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
-                                    displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0) &&
-                                    (!pinRemoveMax || pair.userCollateralShare.isZero())) ||
-                                warnings.some(warning => warning.breaking)
-                            }
-                        >
-                            {actionName}
-                        </Button>
-                    )}
-                </>
-            )}
+            <KashiApproveButton color="pink" content={(onCook: any) => (
+                <TokenApproveButton value={displayRepayValue} token={collateralToken} needed={!useBentoRepay}>
+                    <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
+                        {actionName}
+                    </Button>
+                </TokenApproveButton>)
+            } />
         </>
     )
 }

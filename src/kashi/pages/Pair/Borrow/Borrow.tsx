@@ -20,7 +20,7 @@ import TradeReview from 'kashi/components/TradeReview'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, ethers } from 'ethers'
 import { toShare } from 'kashi/functions'
-import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Dots'
+import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
 import SmartNumberInput from 'kashi/components/SmartNumberInput'
 import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
 
