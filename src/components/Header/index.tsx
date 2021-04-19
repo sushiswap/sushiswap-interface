@@ -157,9 +157,9 @@ export default function Header(): JSX.Element {
                                 <div className="py-2 px-3 text-primary text-bold">
                                     {userEthBalance?.toSignificant(4)} {Currency.getNativeCurrencySymbol(chainId)}
                                 </div>
-                                <Web3Status />
                             </>
                         )}
+                        <Web3Status />
                     </div>
                 </div>
             </div>

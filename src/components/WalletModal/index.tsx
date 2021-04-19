@@ -124,6 +124,7 @@ export default function WalletModal({
     confirmedTransactions: string[] // hashes of confirmed
     ENSName?: string
 }) {
+    console.log('Wallet modal')
     // important that these are destructed from the account-specific web3-react context
     const { active, account, connector, activate, error } = useWeb3React()
 
@@ -134,6 +135,7 @@ export default function WalletModal({
     const [pendingError, setPendingError] = useState<boolean>()
 
     const walletModalOpen = useModalOpen(ApplicationModal.WALLET)
+
     const toggleWalletModal = useWalletModalToggle()
 
     const previousAccount = usePrevious(account)

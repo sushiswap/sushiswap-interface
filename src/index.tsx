@@ -64,7 +64,7 @@ function Updaters() {
 
 ReactDOM.render(
     <StrictMode>
-        {/* <FixedGlobalStyle /> */}
+        <FixedGlobalStyle />
         <Web3ReactProvider getLibrary={getLibrary}>
             <Web3ProviderNetwork getLibrary={getLibrary}>
                 <Blocklist>
