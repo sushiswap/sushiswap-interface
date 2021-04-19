@@ -135,6 +135,7 @@
         "serve": "^11.3.0",
         "start-server-and-test": "^1.11.0",
         "styled-components": "^4.2.0",
+        "swr": "^0.5.5",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat",
         "typescript": "^3.8.3",
         "use-count-up": "^2.2.5",

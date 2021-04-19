@@ -68,9 +68,9 @@ export default function Header(): JSX.Element {
                     <Burger title="Burger" className="w-5 h-5 fill-current" />
                 </div>
             </div>
-            <div className="flex flex-row items-center justify-center w-full p-4 gradiant-border-top fixed left-0 bottom-0 lg:relative lg:p-0 lg:bg-none">
+            <div className="flex flex-row items-center justify-center w-full p-4 fixed left-0 bottom-0 lg:relative lg:p-0 lg:bg-none">
                 <div className="flex items-center justify-around sm:justify-end space-x-2 w-full">
-                    {chainId && chainId === ChainId.MAINNET && (
+                    {chainId && chainId === ChainId.MAINNET && library && library.provider.isMetaMask && (
                         <>
                             <div
                                 className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
@@ -150,7 +150,12 @@ export default function Header(): JSX.Element {
                             </div>
                         </>
                     )}
-                    <Web3Network />
+                    {library && library.provider.isMetaMask && (
+                        <>
+                            <Web3Network />
+                        </>
+                    )}
+
                     <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
                         {account && chainId && userEthBalance && (
                             <>

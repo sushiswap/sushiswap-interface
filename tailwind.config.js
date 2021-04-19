@@ -99,9 +99,12 @@ module.exports = {
         plugin(function({ addUtilities }) {
             addUtilities({
                 '.gradiant-border-top': {
-                    background:
-                        'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left top no-repeat',
-                    backgroundSize: '100% 1px'
+                    // background:
+                    //     'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left top no-repeat',
+                    // backgroundSize: '100% 1px'
+                    borderTop: '1px solid',
+                    borderImageSlice: 1,
+                    borderImageSource: 'linear-gradient(to right, #743ad5, #d53a9d)'
                 },
                 '.gradiant-border-bottom': {
                     background:
