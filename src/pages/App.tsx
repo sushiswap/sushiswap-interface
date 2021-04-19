@@ -66,7 +66,7 @@ function App(): JSX.Element {
                 </div>
                 <div
                     ref={bodyRef}
-                    className="flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-16 px-4 md:pt-20 pb-20"
+                    className="flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-16 px-4 md:pt-20 pb-20"
                 >
                     <Popups />
                     <Polling />
@@ -133,7 +133,7 @@ function App(): JSX.Element {
                             <Route
                                 exact
                                 strict
-                                path="/tokens/:address"
+                                path="/token/:address"
                                 render={({
                                     match: {
                                         params: { address }
@@ -143,12 +143,19 @@ function App(): JSX.Element {
                             <Route
                                 exact
                                 strict
-                                path="/pairs/:address"
+                                path="/pair/:address"
                                 render={({
                                     match: {
                                         params: { address }
                                     }
-                                }) => <Redirect to={`/add/${address}`} />}
+                                }) => <Redirect to={`/pool`} />}
+                            />
+
+                            {/* Redirects for Legacy Hash Router paths */}
+                            <Route
+                                exact
+                                path="/"
+                                render={({ location }) => <Redirect to={location.hash.replace('#', '')} />}
                             />
 
                             {/* Catch all */}

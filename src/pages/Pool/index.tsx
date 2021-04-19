@@ -136,14 +136,18 @@ export default function Pool() {
                     <CardSection>
                         <AutoColumn gap="md">
                             <RowBetween>
-                                <TYPE.white fontWeight={600} color={theme.text1}>
+                                {/* <TYPE.white fontWeight={700} color={theme.text1}>
                                     Liquidity provider rewards
-                                </TYPE.white>
+                                </TYPE.white> */}
+                                <div className="text-base text-high-emphesis font-bold">Liquidity provider rewards</div>
                             </RowBetween>
                             <RowBetween>
-                                <TYPE.white fontSize={14} color={theme.text1}>
+                                <div className="text-gray-400 text-sm font-medium">
                                     {`Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.`}
-                                </TYPE.white>
+                                </div>
+                                {/* <TYPE.white fontWeight={500} fontSize={14} color={theme.text1}>
+                                    {`Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.`}
+                                </TYPE.white> */}
                             </RowBetween>
                             {/* <ExternalLink
                 style={{ color: 'white', textDecoration: 'underline' }}
@@ -160,7 +164,9 @@ export default function Pool() {
                     <AutoColumn gap="md" style={{ width: '100%' }}>
                         <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>
                             <HideSmall>
-                                <TYPE.mediumHeader style={{ marginTop: '0.5rem', justifySelf: 'flex-start' }}>
+                                <TYPE.mediumHeader
+                                    style={{ marginTop: '0.5rem', justifySelf: 'flex-start', paddingLeft: '0.75rem' }}
+                                >
                                     Your liquidity
                                 </TYPE.mediumHeader>
                             </HideSmall>
