@@ -38,7 +38,6 @@ export default function Borrow({ pair }: BorrowProps) {
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
     const [updateOracle, setUpdateOracle] = useState(false)
-    const [pinBorrowMax, setPinBorrowMax] = useState(false)
     const [swap, setSwap] = useState(false)
 
     const assetToken = useCurrency(pair.asset.address) || undefined
@@ -72,17 +71,15 @@ export default function Borrow({ pair }: BorrowProps) {
 
     const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
 
-    const displayBorrowValue = pinBorrowMax && !swap ? maxBorrow : borrowValue
-    
-    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(displayBorrowValue.toBigNumber(pair.asset.decimals))
+    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals))
     const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum)
 
     const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.decimals).isZero()
-    const borrowValueSet = !displayBorrowValue.toBigNumber(pair.asset.decimals).isZero()
+    const borrowValueSet = !borrowValue.toBigNumber(pair.asset.decimals).isZero()
 
     const trade = swap && borrowValueSet ? foundTrade : undefined
 
-    const borrowAmount = displayBorrowValue.toBigNumber(pair.asset.decimals)
+    const borrowAmount = borrowValue.toBigNumber(pair.asset.decimals)
 
     const collateralWarnings = new Warnings().add(
         collateralBalance?.lt(collateralValue.toBigNumber(pair.collateral.decimals)),
@@ -102,12 +99,12 @@ export default function Borrow({ pair }: BorrowProps) {
                 'You have surpassed your borrow limit and assets are at a high risk of liquidation.',
                 true,
                 new Warning(
-                    displayBorrowValue.length > 0 &&
+                    borrowValue.length > 0 &&
                         borrowAmount.gt(nextMaxBorrowMinimum.sub(pair.currentUserBorrowAmount.value)),
                     "You don't have enough collateral to borrow this amount.",
                     true,
                     new Warning(
-                        displayBorrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
+                        borrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
                         'You will surpass your borrow limit and assets will be at a high risk of liquidation.',
                         false
                     )
@@ -115,17 +112,17 @@ export default function Borrow({ pair }: BorrowProps) {
             )
         )
         .add(
-            displayBorrowValue.length > 0 &&
-                pair.maxAssetAvailable.lt(displayBorrowValue.toBigNumber(pair.asset.decimals)),
+            borrowValue.length > 0 &&
+                pair.maxAssetAvailable.lt(borrowValue.toBigNumber(pair.asset.decimals)),
             'Not enough liquidity in this pair.',
             true
         )
 
     const transactionReview = new TransactionReview()
     if (
-        (collateralValue || displayBorrowValue) &&
+        (collateralValue || borrowValue) &&
         !collateralWarnings.broken &&
-        (!borrowWarnings.broken || !displayBorrowValue)
+        (!borrowWarnings.broken || !borrowValue)
     ) {
         if (collateralValueSet) {
             transactionReview.addTokenAmount(
@@ -151,7 +148,7 @@ export default function Borrow({ pair }: BorrowProps) {
         transactionReview.addTokenAmount(
             'Borrow Limit',
             pair.maxBorrowable.safe.value,
-            nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)),
+            nextMaxBorrowSafe.sub(borrowValue.toBigNumber(pair.asset.decimals)),
             pair.asset
         )
         transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
@@ -179,7 +176,7 @@ export default function Borrow({ pair }: BorrowProps) {
             if (displayUpdateOracle) {
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
-            cooker.borrow(displayBorrowValue.toBigNumber(pair.asset.decimals), swap || useBentoBorrow, swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : "")
+            cooker.borrow(borrowValue.toBigNumber(pair.asset.decimals), swap || useBentoBorrow, swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : "")
             summary += (summary ? ' and ' : '') + 'Borrow'
         }
         if (borrowValueSet && trade) {
@@ -221,18 +218,18 @@ export default function Borrow({ pair }: BorrowProps) {
                 useBento={useBentoCollateral} setUseBento={setUseBentoCollateral}
                 maxTitle="Balance"
                 max={collateralBalance}
+                showMax={true}
             />
 
             <SmartNumberInput
                 color="pink"
                 token={pair.asset}
-                value={displayBorrowValue} setValue={setBorrowValue}
+                value={borrowValue} setValue={setBorrowValue}
                 useBentoTitleDirection="up"
                 useBentoTitle={`Borrow ${pair.asset.symbol} to`}
                 useBento={useBentoBorrow} setUseBento={setUseBentoBorrow}
                 maxTitle="Max"
                 max={nextMaxBorrowPossible}
-                pinMax={pinBorrowMax} setPinMax={setPinBorrowMax}
             />
 
             <WarningsView warnings={collateralWarnings}></WarningsView>

@@ -240,7 +240,7 @@ export default function Repay({ pair }: RepayProps) {
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
             <KashiApproveButton color="pink" content={(onCook: any) => (
-                <TokenApproveButton value={displayRepayValue} token={collateralToken} needed={!useBentoRepay}>
+                <TokenApproveButton value={displayRepayValue} token={assetToken} needed={!useBentoRepay}>
                     <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
                         {actionName}
                     </Button>

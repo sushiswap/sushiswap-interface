@@ -10,7 +10,7 @@ import { useBoringHelperContract } from 'hooks/useContract'
 import { getOracle } from '../entities'
 import { BigNumber } from '@ethersproject/bignumber'
 import _ from 'lodash'
-import { e10, minimum, ZERO } from 'kashi/functions/math'
+import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
@@ -254,6 +254,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                 pair.asset
                             )
 
+                            pair.marketHealth = pair.totalCollateralAmount.value.muldiv(
+                                e10(18),
+                                maximum(pair.currentExchangeRate, pair.oracleExchangeRate, pair.spotExchangeRate)
+                            ).muldiv(e10(18), pair.currentBorrowAmount.value)
+
                             pair.currentTotalAsset = accrueTotalAssetWithFee(pair)
 
                             pair.currentAllAssetShares = toShare(pair.asset, pair.currentAllAssets.value)
@@ -314,6 +319,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                 pair.userAssetFraction.muldiv(pair.currentBorrowAmount.value, pair.totalAsset.base),
                                 pair.asset
                             )
+
+                            // Value of protocol fees
+                            pair.feesEarned = easyAmount(pair.accrueInfo.feesEarnedFraction.muldiv(pair.currentAllAssets.value, pair.totalAsset.base), pair.asset)
 
                             // The user's maximum borrowable amount based on the collateral provided, using all three oracle values
                             pair.maxBorrowable = {

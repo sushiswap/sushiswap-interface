@@ -20,6 +20,7 @@ type SmartNumberInputProps = {
     max: BigNumber,
     pinMax?: boolean,
     setPinMax?: any
+    showMax?: boolean
 }
 
 export default function SmartNumberInput({
@@ -36,7 +37,8 @@ export default function SmartNumberInput({
     maxTitle = 'Max',
     max,
     pinMax = false,
-    setPinMax
+    setPinMax,
+    showMax = false
 }: SmartNumberInputProps) {
     return (<>
         <div className="flex items-center justify-between my-4">
@@ -78,7 +80,7 @@ export default function SmartNumberInput({
                 if (setPinMax) { setPinMax(false) }
             }}
         />
-        {max.gt(0) && (
+        {showMax && max.gt(0) && (
             <Button
                 variant="outlined"
                 color={color}
