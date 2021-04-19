@@ -133,7 +133,7 @@ function App(): JSX.Element {
                             <Route
                                 exact
                                 strict
-                                path="/tokens/:address"
+                                path="/token/:address"
                                 render={({
                                     match: {
                                         params: { address }
@@ -143,12 +143,19 @@ function App(): JSX.Element {
                             <Route
                                 exact
                                 strict
-                                path="/pairs/:address"
+                                path="/pair/:address"
                                 render={({
                                     match: {
                                         params: { address }
                                     }
-                                }) => <Redirect to={`/add/${address}`} />}
+                                }) => <Redirect to={`/pool`} />}
+                            />
+
+                            {/* Redirects for Legacy Hash Router paths */}
+                            <Route
+                                exact
+                                path="/"
+                                render={({ location }) => <Redirect to={location.hash.replace('#', '')} />}
                             />
 
                             {/* Catch all */}
