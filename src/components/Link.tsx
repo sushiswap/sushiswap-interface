@@ -15,9 +15,9 @@ function Link<S = H.LocationState>({
     ...rest
 }: React.PropsWithoutRef<ReactRouterLinkProps<S>> & React.RefAttributes<HTMLAnchorElement>): JSX.Element {
     return (
-        <a href={href} className={className} {...rest}>
+        <ReactRouterLink href={href} className={className} {...rest}>
             {children}
-        </a>
+        </ReactRouterLink>
     )
 }
 

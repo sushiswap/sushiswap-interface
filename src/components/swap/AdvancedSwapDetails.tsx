@@ -1,10 +1,10 @@
 import { Trade, TradeType } from '@sushiswap/sdk'
+import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import { useActiveWeb3React } from '../../hooks'
 import { Field } from '../../state/swap/actions'
 import { useUserSlippageTolerance } from '../../state/user/hooks'
-import { ExternalLink, TYPE } from '../../theme'
+import { TYPE, ExternalLink } from '../../theme'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../../utils/prices'
 import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
@@ -23,8 +23,8 @@ const InfoLink = styled(ExternalLink)`
 `
 
 function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippage: number }) {
-    const { chainId } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
+    const { chainId } = useActiveWeb3React()
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
     const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage)

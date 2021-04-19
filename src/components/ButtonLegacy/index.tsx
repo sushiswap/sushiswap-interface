@@ -11,7 +11,7 @@ const Base = styled(RebassButton)<{
     borderRadius?: string
     altDisabledStyle?: boolean
 }>`
-    padding: ${({ padding }) => (padding ? padding : '18px')};
+    padding: ${({ padding }) => (padding ? padding : '16px')};
     width: ${({ width }) => (width ? width : '100%')};
     font-weight: 500;
     text-align: center;
@@ -39,7 +39,7 @@ const Base = styled(RebassButton)<{
 
 const sheen = keyframes`{
   100% {
-    transform: rotateZ(60deg) translate(1em, -23em);
+    transform: rotateZ(60deg) translate(1em, -30em);
   }
 }`
 
@@ -86,7 +86,7 @@ export const ButtonPrimary = styled(Base)`
     top: -50%;
     right: -50%;
     bottom: -50%;
-    left: -120%;
+    left: -130%;
     background: linear-gradient(to bottom, rgba(229, 172, 142, 0), rgba(255,255,255,0.5) 50%, rgba(229, 172, 142, 0));
     transform: rotateZ(60deg) translate(-5em, 7.5em);
   }

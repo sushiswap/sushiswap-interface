@@ -18,9 +18,9 @@ export default function Header(): JSX.Element {
     const { t } = useTranslation()
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 w-screen relative p-4 flex-row gradiant-border-bottom">
+        <div className="grid grid-cols-1 lg:grid-cols-2 w-screen relative p-4 flex-row gradiant-border-bottom z-10">
             <div className="flex justify-between items-center lg:justify-start">
-                <img width={'40px'} src={Logo} alt="logo" className="mr-4" />
+                <img width={'32px'} src={Logo} alt="logo" className="mr-4" />
                 <div className="hidden sm:flex">
                     <NavLink id={`swap-nav-link`} to={'/swap'}>
                         {t('swap')}
@@ -150,9 +150,7 @@ export default function Header(): JSX.Element {
                             </div>
                         </>
                     )}
-                    <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
-                        <Web3Network />
-                    </div>
+                    <Web3Network />
                     <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
                         {account && chainId && userEthBalance && (
                             <>

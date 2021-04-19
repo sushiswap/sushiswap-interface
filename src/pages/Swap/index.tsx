@@ -312,7 +312,7 @@ export default function Swap() {
                 onConfirm={handleConfirmTokenWarning}
             />
             <SwapPoolTabs active={'swap'} />
-            <AppBody>
+            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl rounded">
                 <SwapHeader />
                 <Wrapper id="swap-page">
                     <ConfirmSwapModal
@@ -332,7 +332,9 @@ export default function Swap() {
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
-                                independentField === Field.OUTPUT && !showWrap && trade ? 'From (estimated)' : 'From'
+                                independentField === Field.OUTPUT && !showWrap && trade
+                                    ? 'Swap From (estimated):'
+                                    : 'Swap From:'
                             }
                             value={formattedAmounts[Field.INPUT]}
                             showMaxButton={!atMaxAmountInput}
@@ -369,7 +371,11 @@ export default function Swap() {
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
-                            label={independentField === Field.INPUT && !showWrap && trade ? 'To (estimated)' : 'To'}
+                            label={
+                                independentField === Field.INPUT && !showWrap && trade
+                                    ? 'Swap To (estimated):'
+                                    : 'Swap To:'
+                            }
                             showMaxButton={false}
                             currency={currencies[Field.OUTPUT]}
                             onCurrencySelect={handleOutputSelect}
@@ -544,7 +550,7 @@ export default function Swap() {
                         ) : null}
                     </BottomGrouping>
                 </Wrapper>
-            </AppBody>
+            </div>
             {!swapIsUnsupported ? (
                 <AdvancedSwapDetailsDropdown trade={trade} />
             ) : (

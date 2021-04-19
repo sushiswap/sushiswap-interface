@@ -15,14 +15,11 @@ function BentoBox(): JSX.Element {
             <div
                 className="absolute top-0 right-0 left-0"
                 style={{
-                    height: '700px'
+                    height: '700px',
+                    zIndex: -1
                 }}
             >
-                <img
-                    className="h-full w-full object-cover object-bottom opacity-50 z-10 -mt-32"
-                    src={BentoBoxHero}
-                    alt=""
-                />
+                <img className="h-full w-full object-cover object-bottom opacity-50 -mt-32" src={BentoBoxHero} alt="" />
             </div>
 
             <div className="relative flex flex-col items-center">
@@ -56,28 +53,13 @@ function BentoBox(): JSX.Element {
                         </div>
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1  bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-blue-glow hover:shadow-blue-glow-hovered transition-colors">
-                        <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
-                        <Button
-                            color="default"
-                            className="w-full rounded text-base text-high-emphesis px-4 py-3"
-                            disabled
-                        ></Button>
+                        <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto" />
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1 bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-pink-glow hover:shadow-pink-glow-hovered transition-colors">
-                        <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
-                        <Button
-                            color="default"
-                            className="w-full rounded text-base text-high-emphesis px-4 py-3"
-                            disabled
-                        ></Button>
+                        <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto" />
                     </Card>
                     <Card className="flex items-center justify-center col-span-2 md:col-span-1 bg-dark-800 hover:bg-dark-900 cursor-pointer shadow-blue-glow hover:shadow-blue-glow-hovered transition-colors">
-                        <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto mb-4" />
-                        <Button
-                            color="default"
-                            className="w-full rounded text-base text-high-emphesis px-4 py-3"
-                            disabled
-                        ></Button>
+                        <img src={ComingSoon} alt="Coming Soon" className="block m-auto w-full h-auto" />
                     </Card>
                 </div>
             </div>

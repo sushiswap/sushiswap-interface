@@ -8,7 +8,8 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
     padding-bottom: 16px;
     margin-top: -2rem;
     width: 100%;
-    max-width: 400px;
+    max-width: 36rem;
+    // max-width: 400px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     color: ${({ theme }) => theme.text2};

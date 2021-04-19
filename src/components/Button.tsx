@@ -3,22 +3,26 @@ import { ChevronLeft } from 'react-feather'
 import { useHistory } from 'react-router-dom'
 
 const SIZE = {
-    default: 'px-4 py-2',
+    default: 'p-3',
     small: 'px-2 py-1',
-    large: ''
+    large: 'px-4 py-2'
 }
 
 const FILLED = {
     default: 'bg-transparent',
-    blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
-    pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
+    primary:
+        'bg-dark-600 bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100 disabled:opacity-80',
+    blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100 disabled:opacity-80',
+    pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100 disabled:opacity-80',
     gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink'
 }
 
 const OUTLINED = {
     default: 'bg-transparent',
-    blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1 hover:bg-opacity-40',
-    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1 hover:bg-opacity-40',
+    primary: '',
+    blue:
+        'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue hover:bg-opacity-40 disabled:opacity-20 disabled:cursor-not-allowed',
+    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40 disabled:opacity-20',
     gradient: 'bg-gradient-to-r from-blue to-pink'
 }
 
@@ -27,14 +31,13 @@ const VARIANT = {
     filled: FILLED
 }
 
-export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'default'
+export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'default' | 'primary'
 
 export type ButtonSize = 'small' | 'large' | 'default'
 
 export type ButtonVariant = 'outlined' | 'filled'
 
 export interface ButtonProps {
-    children?: React.ReactChild | React.ReactChild[]
     color?: ButtonColor
     size?: ButtonSize
     variant?: ButtonVariant
@@ -42,7 +45,7 @@ export interface ButtonProps {
 
 function Button({
     children,
-    className,
+    className = '',
     color = 'default',
     size = 'default',
     variant = 'filled',
@@ -50,7 +53,7 @@ function Button({
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX.Element {
     return (
         <button
-            className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 ${className}`}
+            className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring ${className}`}
             {...rest}
         >
             {children}

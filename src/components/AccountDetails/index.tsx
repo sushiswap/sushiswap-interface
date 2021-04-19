@@ -52,9 +52,9 @@ const UpperSection = styled.div`
 `
 
 const InfoCard = styled.div`
-    padding: 1rem;
-    border: 1px solid ${({ theme }) => theme.bg3};
-    border-radius: 10px;
+    // padding: 1rem;
+    // border: 1px solid ${({ theme }) => theme.bg3};
+    // border-radius: 10px;
     position: relative;
     display: grid;
     grid-row-gap: 12px;
@@ -75,7 +75,7 @@ const AccountGroupingRow = styled.div`
 `
 
 const AccountSection = styled.div`
-    background-color: ${({ theme }) => theme.bg1};
+    // background-color: ${({ theme }) => theme.bg1};
     padding: 0rem 1rem;
     ${({ theme }) => theme.mediaWidth.upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
 `
@@ -97,7 +97,7 @@ const LowerSection = styled.div`
     padding: 1.5rem;
     flex-grow: 1;
     overflow: auto;
-    background-color: ${({ theme }) => theme.bg2};
+    // background-color: ${({ theme }) => theme.bg2};
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 

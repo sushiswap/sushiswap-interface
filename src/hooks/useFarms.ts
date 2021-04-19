@@ -57,13 +57,13 @@ const useFarms = () => {
             .filter((pool: any) => {
                 //console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))
                 return (
-                    !POOL_DENY.includes(pool.id) &&
-                    (pairs.find((pair: any) => pair?.id === pool.pair) || KASHI_PAIRS.includes(Number(pool.id)))
+                    !POOL_DENY.includes(pool?.id) &&
+                    (pairs.find((pair: any) => pair?.id === pool?.pair) || KASHI_PAIRS.includes(Number(pool?.id)))
                 )
             })
             .map((pool: any) => {
-                if (KASHI_PAIRS.includes(Number(pool.id))) {
-                    const pair = kashiPairs.find((pair: any) => pair.id === pool.pair)
+                if (KASHI_PAIRS.includes(Number(pool?.id))) {
+                    const pair = kashiPairs.find((pair: any) => pair?.id === pool?.pair)
                     //console.log('kpair:', pair, pool)
                     return {
                         ...pool,

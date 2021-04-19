@@ -2855,10 +2855,10 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@sushiswap/sushi-data@1.0.21":
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.21.tgz#1b27610db76dbce52d5c85ba32e0ec8e2fcf621a"
-  integrity sha512-PHeFUUslI/nnFeDZVWCX1Km4lajqAheIa/XYukiRrE6mlPS1H39U+ayFdVWOqaOdogAAkKga9iIiyzMIrqhcRw==
+"@sushiswap/sushi-data@^2.0.0-canary.2":
+  version "2.0.0-canary.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-2.0.0-canary.2.tgz#9130989960087e2b77a38fb496a817485ff096b1"
+  integrity sha512-cX0I9YzNqgvtWysUK+9+qgk0z/3UC7lE1IvKwgdLSZYsTCvNyBN9y1lO+LviWlxe4pUVlUriTbJ8G0u2tDp+AA==
   dependencies:
     bluebird "^3.7.2"
     commander "6.1.0"
@@ -12862,6 +12862,18 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
+
+lottie-react@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/lottie-react/-/lottie-react-2.1.0.tgz#24d20ea41dc10791b1253f408dcb6f3e995780be"
+  integrity sha512-sHDJb5aeh1letUIWqwidHoHZj07ZOZQoLuUgy0gqt9FB/XiCtAZ2+421Cn+ZkHR7anVvWljKhGgctQCtgFloUA==
+  dependencies:
+    lottie-web "^5.7.3"
+
+lottie-web@^5.7.3:
+  version "5.7.8"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.7.8.tgz#c7a2e42983bcb42093590a03ccdde8741d3f960e"
+  integrity sha512-VxKCZk33GwZac6mVHvT3grUFR/zrMsW85M7vxQPrgpJOP2IhcnjMbuD0h7muBkXgw84K9KmGulmcyzvhpzSMAg==
 
 lower-case@^2.0.2:
   version "2.0.2"

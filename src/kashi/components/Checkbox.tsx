@@ -12,7 +12,7 @@ export interface CheckboxProps {
 }
 
 function Checkbox({
-    color,
+    color = 'pink',
     className = '',
     ...rest
 }: CheckboxProps & React.InputHTMLAttributes<HTMLInputElement>): JSX.Element {

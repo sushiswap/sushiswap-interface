@@ -318,7 +318,7 @@ export default function AddLiquidity({
 
     return (
         <>
-            <AppBody>
+            <div className="bg-dark-900 w-full max-w-xl rounded">
                 <AddRemoveTabs creating={isCreate} adding={true} />
                 <Wrapper>
                     <TransactionConfirmationModal
@@ -485,7 +485,7 @@ export default function AddLiquidity({
                         )}
                     </AutoColumn>
                 </Wrapper>
-            </AppBody>
+            </div>
             {!addIsUnsupported ? (
                 pair && !noLiquidity && pairState !== PairState.INVALID ? (
                     <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
