@@ -92,7 +92,7 @@ export default function Header(): JSX.Element {
                                     {chainId && chainId === ChainId.MAINNET && library && library.provider.isMetaMask && (
                                         <>
                                             <div
-                                                className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                                className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                                 onClick={() => {
                                                     const params: any = {
                                                         type: 'ERC20',
@@ -134,7 +134,7 @@ export default function Header(): JSX.Element {
                                                 />
                                             </div>
                                             <div
-                                                className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                                className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                                 onClick={() => {
                                                     const params: any = {
                                                         type: 'ERC20',
@@ -178,9 +178,9 @@ export default function Header(): JSX.Element {
                                         </>
                                     )}
                                     {library && library.provider.isMetaMask && (
-                                        <>
+                                        <div className="hidden sm:inline-block">
                                             <Web3Network />
-                                        </>
+                                        </div>
                                     )}
 
                                     <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
