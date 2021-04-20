@@ -8,6 +8,7 @@ import { formattedNum, formattedPercent } from '../../utils'
 import { Card, CardHeader, Paper, Search, DoubleLogo, TokenLogo } from './components'
 import InputGroup from './InputGroup'
 import { Dots } from 'kashi/components'
+import { Helmet } from 'react-helmet'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -30,6 +31,9 @@ export default function Yield(): JSX.Element {
 
     return (
         <div className="container max-w-2xl mx-auto px-0 sm:px-4">
+            <Helmet>
+                <title>Yield | Sushi</title>
+            </Helmet>
             <Card
                 className="h-full bg-dark-900"
                 header={

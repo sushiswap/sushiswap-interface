@@ -49,6 +49,7 @@ import AppBody from '../AppBody'
 import { ClickableText } from '../Pool/styleds'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'
+import { Helmet } from 'react-helmet'
 
 export default function Swap() {
     const loadedUrlParams = useDefaultsFromURLSearch()
@@ -310,6 +311,9 @@ export default function Swap() {
 
     return (
         <>
+            <Helmet>
+                <title>Swap | Sushi</title>
+            </Helmet>
             <TokenWarningModal
                 isOpen={importTokensNotInDefault.length > 0 && !dismissTokenWarning}
                 tokens={importTokensNotInDefault}

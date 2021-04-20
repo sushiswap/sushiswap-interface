@@ -7,11 +7,15 @@ import BentoBoxHero from '../../assets/kashi/bentobox-hero.jpg'
 import BentoBoxLogo from '../../assets/kashi/bentobox-logo.svg'
 import ComingSoon from '../../assets/kashi/coming-soon.png'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
+import { Helmet } from 'react-helmet'
 function BentoBox(): JSX.Element {
     const { account } = useActiveWeb3React()
 
     return (
         <div>
+            <Helmet>
+                <title>BentoBox | Sushi</title>
+            </Helmet>
             <div
                 className="absolute top-0 right-0 left-0"
                 style={{

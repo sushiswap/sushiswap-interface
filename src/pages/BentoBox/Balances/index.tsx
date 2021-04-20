@@ -10,6 +10,7 @@ import { Card, CardHeader, Layout, Paper, Search } from '../../../kashi/componen
 import { formattedNum } from '../../../utils'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
+import { Helmet } from 'react-helmet'
 
 export default function BentoBalances(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -37,6 +38,9 @@ export default function BentoBalances(): JSX.Element {
                 />
             }
         >
+            <Helmet>
+                <title>BentoBox Balances | Sushi</title>
+            </Helmet>
             <Card
                 className="h-full bg-dark-900"
                 header={

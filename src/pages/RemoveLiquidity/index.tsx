@@ -39,6 +39,7 @@ import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import AppBody from '../AppBody'
 import { ClickableText, MaxButton, Wrapper } from '../Pool/styleds'
+import { Helmet } from 'react-helmet'
 
 export default function RemoveLiquidity({
     history,
@@ -349,6 +350,9 @@ export default function RemoveLiquidity({
     function modalHeader() {
         return (
             <AutoColumn gap={'md'} style={{ marginTop: '20px' }}>
+                <Helmet>
+                    <title>Remove Liquidity | Sushi</title>
+                </Helmet>
                 <RowBetween align="flex-end">
                     <Text fontSize={24} fontWeight={500}>
                         {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}

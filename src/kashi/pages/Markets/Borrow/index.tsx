@@ -10,6 +10,7 @@ import { Card, Layout, MarketHeader } from '../../../components'
 import { useKashiPairs } from '../../../context'
 import { getTokenIcon, ZERO } from '../../../functions'
 import BorrowPositions from './Positions'
+import { Helmet } from 'react-helmet'
 
 export default function BorrowMarkets(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -42,6 +43,9 @@ export default function BorrowMarkets(): JSX.Element {
                 />
             }
         >
+            <Helmet>
+                <title>Borrow | Sushi</title>
+            </Helmet>
             <Card
                 className="h-full bg-dark-900"
                 header={<MarketHeader type="Borrow" pairs={pairs} search={search} term={term} />}

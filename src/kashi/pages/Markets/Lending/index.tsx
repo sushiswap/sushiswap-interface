@@ -10,6 +10,7 @@ import { Card, Layout, MarketHeader } from '../../../components'
 import { useKashiPairs } from '../../../context'
 import { getTokenIcon, ZERO } from '../../../functions'
 import Positions from './Positions'
+import { Helmet } from 'react-helmet'
 
 export default function LendingMarkets(): JSX.Element | null {
     const { chainId } = useActiveWeb3React()
@@ -42,6 +43,9 @@ export default function LendingMarkets(): JSX.Element | null {
                 />
             }
         >
+            <Helmet>
+                <title>Lend | Sushi</title>
+            </Helmet>
             <Card
                 className="bg-dark-900"
                 header={<MarketHeader type="Lending" pairs={pairs} search={search} term={term} />}

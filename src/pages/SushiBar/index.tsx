@@ -4,11 +4,15 @@ import { useActiveWeb3React } from '../../hooks'
 import AppBody from '../AppBody'
 import SushiDepositPanel from './SushiDepositPanel'
 import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
+import { Helmet } from 'react-helmet'
 
 export default function SushiBar() {
     const { account } = useActiveWeb3React()
     return (
         <div className="flex flex-col max-w-lg w-full mx-auto">
+            <Helmet>
+                <title>Tools | Sushi</title>
+            </Helmet>
             <Paper className="bg-dark-800 p-4 space-y-4 mb-4">
                 <div className="text-lg font-bold text-high-emphesis mb-2">SushiBar: Make SUSHI work for you</div>
                 <div className="text-sm text-primary">

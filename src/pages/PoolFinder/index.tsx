@@ -18,6 +18,7 @@ import { StyledInternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import AppBody from '../AppBody'
 import { Dots } from '../Pool/styleds'
+import { Helmet } from 'react-helmet'
 
 enum Fields {
     TOKEN0 = 0,
@@ -78,6 +79,9 @@ export default function PoolFinder() {
 
     return (
         <AppBody>
+            <Helmet>
+                <title>Find Pool | Sushi</title>
+            </Helmet>
             <FindPoolTabs />
             <AutoColumn style={{ padding: '1rem' }} gap="md">
                 <BlueCard>

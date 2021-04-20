@@ -11,6 +11,7 @@ import { SwapPoolTabs } from '../../components/NavigationTabs'
 import { RowBetween, RowFixed } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks'
 import { ExternalLink, HideSmall, TYPE } from '../../theme'
+import { Helmet } from 'react-helmet'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -68,6 +69,9 @@ export default function Pool() {
 
     return (
         <>
+            <Helmet>
+                <title>Tools | Sushi</title>
+            </Helmet>
             <PageWrapper>
                 <SwapPoolTabs active={'pool'} />
                 <VoteCard>

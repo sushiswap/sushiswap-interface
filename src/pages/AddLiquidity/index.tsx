@@ -38,6 +38,7 @@ import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
 import Alert from '../../components/Alert'
+import { Helmet } from 'react-helmet'
 
 export default function AddLiquidity({
     match: {
@@ -319,6 +320,9 @@ export default function AddLiquidity({
 
     return (
         <>
+            <Helmet>
+                <title>BentoBox | Sushi</title>
+            </Helmet>
             <div className="bg-dark-900 w-full max-w-2xl rounded">
                 <AddRemoveTabs creating={isCreate} adding={true} />
                 <Wrapper>

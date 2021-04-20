@@ -12,6 +12,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { formattedNum, formattedPercent } from 'utils'
 import Borrow from './Borrow'
 import Repay from './Repay'
+import { Helmet } from 'react-helmet'
 
 export default function BorrowPair({
     match: {
@@ -102,6 +103,11 @@ export default function BorrowPair({
                 </Card>
             }
         >
+            <Helmet>
+                <title>
+                    Borrow {pair?.asset?.symbol}-{pair?.collateral?.symbol} | Sushi
+                </title>
+            </Helmet>
             <Card
                 className="h-full bg-dark-900"
                 header={

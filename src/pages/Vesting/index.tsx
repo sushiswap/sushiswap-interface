@@ -22,6 +22,7 @@ import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/h
 import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
 import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 import { TYPE } from '../../theme'
+import { Helmet } from 'react-helmet'
 
 const Dots = styled.span`
     &::after {
@@ -128,6 +129,9 @@ export default function ClaimModal() {
 
     return (
         <PageWrapper>
+            <Helmet>
+                <title>Vesting | Sushi</title>
+            </Helmet>
             {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
             <>
                 <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">

@@ -12,7 +12,7 @@ import AppBody from '../AppBody'
 import AXSushiBalancePanel from './AXSushiBalancePanel'
 import SaaveHeader from './SaaveHeader'
 import SushiInputPanel from './SushiInputPanel'
-
+import { Helmet } from 'react-helmet'
 const PageWrapper = styled(AutoColumn)`
     max-width: 420px;
     width: 100%;

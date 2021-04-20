@@ -12,6 +12,7 @@ import { e10 } from 'kashi/functions/math'
 import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { BackButton, Button, Card, Layout, LendCardHeader, ListBox } from '../../../components'
+import { Helmet } from 'react-helmet'
 
 const CreatePair = () => {
     const { chainId } = useActiveWeb3React()
@@ -115,6 +116,9 @@ const CreatePair = () => {
                 />
             }
         >
+            <Helmet>
+                <title>Create Market | Sushi</title>
+            </Helmet>
             <Card
                 className="h-full bg-dark-900"
                 header={

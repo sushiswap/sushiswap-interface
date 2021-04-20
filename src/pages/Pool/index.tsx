@@ -21,6 +21,7 @@ import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
 import Alert from '../../components/Alert'
+import { Helmet } from 'react-helmet'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
@@ -131,6 +132,9 @@ export default function Pool() {
 
     return (
         <>
+            <Helmet>
+                <title>Pool | Sushi</title>
+            </Helmet>
             <PageWrapper>
                 <SwapPoolTabs active={'pool'} />
                 <Alert
