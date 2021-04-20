@@ -34,7 +34,12 @@ import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redir
 import Saave from './Saave'
 import SushiBar from './SushiBar'
 import Swap from './Swap'
-import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
+import {
+    RedirectHashRoutes,
+    OpenClaimAddressModalAndRedirectToSwap,
+    RedirectPathToSwapOnly,
+    RedirectToSwap
+} from './Swap/redirects'
 // Additional Tools
 import Tools from './Tools'
 import Vesting from './Vesting'
@@ -151,6 +156,8 @@ function App(): JSX.Element {
                                 }) => <Redirect to={`/pool`} />}
                             />
 
+                            {/* Redirects for Legacy Hash Router paths */}
+                            <Route exact strict path="/" component={RedirectHashRoutes} />
                             {/* Catch all */}
                             <Route component={RedirectPathToSwapOnly} />
                         </Switch>
