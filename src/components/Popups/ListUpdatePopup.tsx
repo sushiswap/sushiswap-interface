@@ -9,7 +9,7 @@ import { useRemovePopup } from '../../state/application/hooks'
 import { acceptListUpdate } from '../../state/lists/actions'
 import { TYPE } from '../../theme'
 import listVersionLabel from '../../utils/listVersionLabel'
-import { ButtonSecondary } from '../Button'
+import { ButtonSecondary } from '../ButtonLegacy'
 import { AutoColumn } from '../Column'
 import { AutoRow } from '../Row'
 

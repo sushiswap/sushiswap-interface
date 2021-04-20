@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const TYPE = {
+    information: {
+        color: 'bg-purple bg-opacity-20 text-high-emphesis'
+    },
     warning: {
         color: 'bg-yellow-400 bg-opacity-25 text-high-emphesis',
         icon: (
@@ -47,8 +50,8 @@ export interface AlertProps {
 export default function Alert({
     message,
     type = 'warning',
-    className
-}: AlertProps & React.HTMLAttributes<HTMLDivElement>) {
+    className = ''
+}: AlertProps & React.HTMLAttributes<HTMLDivElement>): JSX.Element | null {
     if (!message) {
         return null
     }

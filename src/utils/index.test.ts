@@ -1,14 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
-import { TokenAmount, Token, ChainId, Percent, JSBI } from '@sushiswap/sdk'
-
+import { ChainId, JSBI, Percent, Token, TokenAmount } from '@sushiswap/sdk'
 import {
-    getExplorerLink,
-    calculateSlippageAmount,
-    isAddress,
-    shortenAddress,
+    basisPointsToPercent,
     calculateGasMargin,
-    basisPointsToPercent
+    calculateSlippageAmount,
+    getExplorerLink,
+    isAddress,
+    shortenAddress
 } from '.'
 
 describe('utils', () => {

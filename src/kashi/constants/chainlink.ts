@@ -247,7 +247,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
     [ChainId.MATIC]: [
         { symbol: 'AAVE', name: 'AAVE Token', address: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', decimals: 18 },
         { symbol: 'DAI', name: 'Dai Stablecoin', address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', decimals: 18 },
-        { symbol: 'WETH', name: 'Wrapped Ethereum', address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', decimals: 18 },
+        {
+            symbol: 'WETH',
+            name: 'Wrapped Ethereum',
+            address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+            decimals: 18
+        },
         {
             symbol: 'WMATIC',
             name: 'Wrapped Matic',

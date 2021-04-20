@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import { TYPE, CloseIcon, ExternalLink } from 'theme'
-import { ButtonEmpty } from 'components/Button'
-import Modal from 'components/Modal'
+import { Currency, Token } from '@sushiswap/sdk'
+import { ButtonEmpty } from 'components/ButtonLegacy'
 import Card, { OutlineCard } from 'components/Card'
-import { RowBetween, AutoRow } from 'components/Row'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
+import Modal from 'components/Modal'
+import { AutoRow, RowBetween } from 'components/Row'
 import { useActiveWeb3React } from 'hooks'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { CloseIcon, ExternalLink, TYPE } from 'theme'
 import { getExplorerLink } from 'utils'
-import { Currency, Token } from '@sushiswap/sdk'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { useUnsupportedTokens } from '../../hooks/Tokens'
 
@@ -18,7 +18,7 @@ const DetailsFooter = styled.div<{ show: boolean }>`
     padding-bottom: 20px;
     margin-top: -2rem;
     width: 100%;
-    max-width: 400px;
+    //max-width: 400px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     color: ${({ theme }) => theme.text2};

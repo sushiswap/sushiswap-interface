@@ -1,13 +1,13 @@
 import { Currency, Token } from '@sushiswap/sdk'
+import { TokenList } from '@uniswap/token-lists'
+import usePrevious from 'hooks/usePrevious'
 import React, { useCallback, useEffect, useState } from 'react'
 import useLast from '../../hooks/useLast'
 import Modal from '../Modal'
 import { CurrencySearch } from './CurrencySearch'
-import { ImportToken } from './ImportToken'
-import usePrevious from 'hooks/usePrevious'
-import Manage from './Manage'
-import { TokenList } from '@uniswap/token-lists'
 import { ImportList } from './ImportList'
+import { ImportToken } from './ImportToken'
+import Manage from './Manage'
 
 interface CurrencySearchModalProps {
     isOpen: boolean
@@ -65,7 +65,7 @@ export default function CurrencySearchModal({
         modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 80
 
     return (
-        <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight}>
+        <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight} padding={1}>
             {modalView === CurrencyModalView.search ? (
                 <CurrencySearch
                     isOpen={isOpen}

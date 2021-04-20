@@ -1,9 +1,9 @@
+import { useActiveWeb3React } from 'hooks'
+import getTokenIcon from 'kashi/functions/getTokenIcon'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import getTokenIcon from 'kashi/functions/getTokenIcon'
-import { formattedPercent, formattedNum } from 'utils'
+import { formattedNum, formattedPercent } from 'utils'
 import { GradientDot } from '../../../components'
-import { useActiveWeb3React } from 'hooks'
 
 // TODO: Use table component
 function Positions({ pairs }: any): JSX.Element | null {

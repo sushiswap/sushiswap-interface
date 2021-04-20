@@ -1,20 +1,17 @@
+import { transparentize } from 'polished'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-
-//import { WrapperNoPadding } from '../../components/swap/styleds'
-import { useDarkModeManager } from '../../state/user/hooks'
-import AppBody from '../AppBody'
-import SaaveHeader from './SaaveHeader'
-import { Wrapper } from '../../components/swap/styleds'
-
-import SushiInputPanel from './SushiInputPanel'
-import AXSushiBalancePanel from './AXSushiBalancePanel'
-
+import { AutoColumn } from '../../components/Column'
 import { CardSection, DataCard } from '../../components/earn/styled'
 import { RowBetween } from '../../components/Row'
-import { AutoColumn } from '../../components/Column'
-import { TYPE, ExternalLink } from '../../theme'
-import { transparentize } from 'polished'
+import { Wrapper } from '../../components/swap/styleds'
+//import { WrapperNoPadding } from '../../components/swap/styleds'
+import { useDarkModeManager } from '../../state/user/hooks'
+import { ExternalLink, TYPE } from '../../theme'
+import AppBody from '../AppBody'
+import AXSushiBalancePanel from './AXSushiBalancePanel'
+import SaaveHeader from './SaaveHeader'
+import SushiInputPanel from './SushiInputPanel'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 420px;

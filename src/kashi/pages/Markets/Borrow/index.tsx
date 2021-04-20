@@ -1,17 +1,15 @@
+import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
+import { useActiveWeb3React, useFuse, useSortableData } from 'hooks'
+import { getCurrency } from 'kashi/constants'
 import React from 'react'
+import { ChevronDown, ChevronUp } from 'react-feather'
 import { Link } from 'react-router-dom'
 import QuestionHelper from '../../../../components/QuestionHelper'
-import { getTokenIcon, ZERO } from '../../../functions'
 import { formattedNum, formattedPercent } from '../../../../utils'
+import { Card, Layout, MarketHeader } from '../../../components'
 import { useKashiPairs } from '../../../context'
-import { Card, MarketHeader, Layout } from '../../../components'
-import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import useFuse from 'sushi-hooks/useFuse'
-import useSortableData from 'sushi-hooks/useSortableData'
-import { ChevronUp, ChevronDown } from 'react-feather'
+import { getTokenIcon, ZERO } from '../../../functions'
 import BorrowPositions from './Positions'
-import { useActiveWeb3React } from 'hooks'
-import { getCurrency } from 'kashi/constants'
 
 export default function BorrowMarkets(): JSX.Element {
     const { chainId } = useActiveWeb3React()

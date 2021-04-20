@@ -1,5 +1,5 @@
-import { INITIAL_ALLOWED_SLIPPAGE, DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
 import { createReducer } from '@reduxjs/toolkit'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { updateVersion } from '../global/actions'
 import {
     addSerializedPair,
@@ -8,13 +8,13 @@ import {
     removeSerializedToken,
     SerializedPair,
     SerializedToken,
+    toggleURLWarning,
     updateMatchesDarkMode,
     updateUserDarkMode,
-    updateUserExpertMode,
-    updateUserSlippageTolerance,
     updateUserDeadline,
-    toggleURLWarning,
-    updateUserSingleHopOnly
+    updateUserExpertMode,
+    updateUserSingleHopOnly,
+    updateUserSlippageTolerance
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()

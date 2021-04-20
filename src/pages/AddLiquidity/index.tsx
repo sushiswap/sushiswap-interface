@@ -1,22 +1,23 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@sushiswap/sdk'
+import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
+import { useIsTransactionUnsupported } from 'hooks/Trades'
 import React, { useCallback, useContext, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 import { RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
+import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import { BlueCard, LightCard } from '../../components/Card'
 import { AutoColumn, ColumnCenter } from '../../components/Column'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { AddRemoveTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
-
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { PairState } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
@@ -25,20 +26,18 @@ import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
-
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useIsExpertMode, useUserSlippageTolerance } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract, getRouterAddress } from '../../utils'
+import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
+import { currencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
 import AppBody from '../AppBody'
 import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
-import { currencyId } from '../../utils/currencyId'
 import { PoolPriceBar } from './PoolPriceBar'
-import { useIsTransactionUnsupported } from 'hooks/Trades'
-import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
+import Alert from '../../components/Alert'
 
 export default function AddLiquidity({
     match: {
@@ -320,7 +319,7 @@ export default function AddLiquidity({
 
     return (
         <>
-            <AppBody>
+            <div className="bg-dark-900 w-full max-w-2xl rounded">
                 <AddRemoveTabs creating={isCreate} adding={true} />
                 <Wrapper>
                     <TransactionConfirmationModal
@@ -341,33 +340,22 @@ export default function AddLiquidity({
                     <AutoColumn gap="20px">
                         {noLiquidity ||
                             (isCreate ? (
-                                <ColumnCenter>
-                                    <BlueCard>
-                                        <AutoColumn gap="10px">
-                                            <TYPE.link fontWeight={600} color={'primaryText1'}>
-                                                You are the first liquidity provider.
-                                            </TYPE.link>
-                                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                                The ratio of tokens you add will set the price of this pool.
-                                            </TYPE.link>
-                                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                                Once you are happy with the rate click supply to review.
-                                            </TYPE.link>
-                                        </AutoColumn>
-                                    </BlueCard>
-                                </ColumnCenter>
+                                <Alert
+                                    message="When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review."
+                                    type="information"
+                                />
                             ) : (
-                                <ColumnCenter>
-                                    <BlueCard>
-                                        <AutoColumn gap="10px">
-                                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                                <b>Tip:</b> When you add liquidity, you will receive pool tokens
-                                                representing your position. These tokens automatically earn fees
-                                                proportional to your share of the pool, and can be redeemed at any time.
-                                            </TYPE.link>
-                                        </AutoColumn>
-                                    </BlueCard>
-                                </ColumnCenter>
+                                <Alert
+                                    showIcon={false}
+                                    message={
+                                        <>
+                                            <b>Tip:</b> When you add liquidity, you will receive pool tokens
+                                            representing your position. These tokens automatically earn fees
+                                            proportional to your share of the pool, and can be redeemed at any time.
+                                        </>
+                                    }
+                                    type="information"
+                                />
                             ))}
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.CURRENCY_A]}
@@ -487,12 +475,12 @@ export default function AddLiquidity({
                         )}
                     </AutoColumn>
                 </Wrapper>
-            </AppBody>
+            </div>
             {!addIsUnsupported ? (
                 pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                    <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
+                    <div className="w-full max-w-2xl flex flex-col mt-4">
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-                    </AutoColumn>
+                    </div>
                 ) : null
             ) : (
                 <UnsupportedCurrencyFooter

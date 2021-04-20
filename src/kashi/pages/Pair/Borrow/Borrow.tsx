@@ -1,23 +1,23 @@
-import React, { useContext, useState } from 'react'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { Alert, Dots, Button, Checkbox } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
-import { useActiveWeb3React } from 'hooks'
-import { minimum, e10, ZERO, maximum } from 'kashi/functions/math'
-import { TransactionReview } from 'kashi/entities/TransactionReview'
-import TransactionReviewView from 'kashi/components/TransactionReview'
-import { KashiCooker } from 'kashi/entities/KashiCooker'
 import QuestionHelper from 'components/QuestionHelper'
+import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Warning, Warnings } from 'kashi/entities/Warnings'
-import { useKashiApprovalPending } from 'state/application/hooks'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
-import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
-import { formattedNum } from 'utils'
-import { KashiContext } from 'kashi/context'
-import WarningsView from 'kashi/components/Warnings'
+import { Alert, Button, Checkbox, Dots } from 'kashi/components'
 import Badge from 'kashi/components/Badge'
+import TransactionReviewView from 'kashi/components/TransactionReview'
+import WarningsView from 'kashi/components/Warnings'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
+import { KashiContext } from 'kashi/context'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
+import { TransactionReview } from 'kashi/entities/TransactionReview'
+import { Warning, Warnings } from 'kashi/entities/Warnings'
+import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
+import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
+import React, { useContext, useState } from 'react'
+import { ArrowDownRight, ArrowUpRight } from 'react-feather'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { formattedNum } from 'utils'
 
 interface BorrowProps {
     pair: any
@@ -230,6 +230,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoCollateral(!useBentoCollateral)
@@ -254,6 +255,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => setCollateralValue(maxCollateral)}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
@@ -272,6 +274,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoBorrow(!useBentoBorrow)
@@ -298,6 +301,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => {
                             setPinBorrowMax(true)
                         }}
@@ -330,28 +334,30 @@ export default function Borrow({ pair }: BorrowProps) {
                 </div>
             )}
 
-            <div className="flex items-center mb-4">
-                <Checkbox
-                    color="pink"
-                    checked={swap}
-                    onChange={event => setSwap(event.target.checked)}
-                    disabled={true}
-                    className="cursor-not-allowed"
-                />
-                <span className="text-low-emphesis ml-2 mr-1">
-                    Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
-                </span>
-                <QuestionHelper
-                    text={
-                        <span>
-                            Swapping your borrowed tokens for collateral allows for opening long/short positions with
-                            leverage in a single transaction.
-                            <br />
-                            <br /> This feature will be enabled soon.
-                        </span>
-                    }
-                />
-                <Badge color="pink" className="ml-auto">
+            <div className="flex flex-col md:flex-row items-center mb-4">
+                <div className="flex items-center">
+                    <Checkbox
+                        color="pink"
+                        checked={swap}
+                        onChange={event => setSwap(event.target.checked)}
+                        disabled={true}
+                        className="cursor-not-allowed"
+                    />
+                    <span className="text-low-emphesis text-xs md:text-sm ml-2 mr-1">
+                        Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
+                    </span>
+                    <QuestionHelper
+                        text={
+                            <span>
+                                Swapping your borrowed tokens for collateral allows for opening long/short positions
+                                with leverage in a single transaction.
+                                <br />
+                                <br /> This feature will be enabled soon.
+                            </span>
+                        }
+                    />
+                </div>
+                <Badge color="pink" className="block text-center mt-2 md:mt-0 ml-0 md:flex md:ml-auto">
                     COMING SOON
                 </Badge>
             </div>

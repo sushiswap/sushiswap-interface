@@ -15,7 +15,6 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 import { ExternalLink } from '../../theme'
 import AccountDetails from '../AccountDetails'
-
 import Modal from '../Modal'
 import Option from './Option'
 import PendingView from './PendingView'
@@ -54,8 +53,8 @@ const HeaderRow = styled.div`
 `
 
 const ContentWrapper = styled.div`
-    background-color: ${({ theme }) => theme.bg2};
-    padding: 2rem;
+    // background-color: ${({ theme }) => theme.bg2};
+    // padding: 2rem;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 
@@ -135,6 +134,7 @@ export default function WalletModal({
     const [pendingError, setPendingError] = useState<boolean>()
 
     const walletModalOpen = useModalOpen(ApplicationModal.WALLET)
+
     const toggleWalletModal = useWalletModalToggle()
 
     const previousAccount = usePrevious(account)

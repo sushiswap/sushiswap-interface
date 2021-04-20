@@ -1,20 +1,19 @@
 import React, { useContext, useState } from 'react'
-import { Alert, Dots, Button } from 'kashi/components'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight } from 'react-feather'
-import { useActiveWeb3React } from 'hooks'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
-import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
+import { Input as NumericalInput } from 'components/NumericalInput'
+import { useActiveWeb3React } from 'hooks'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { Alert, Button, Dots } from 'kashi/components'
 import TransactionReviewView from 'kashi/components/TransactionReview'
-import { KashiCooker } from 'kashi/entities/KashiCooker'
-import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
-import { useKashiApprovalPending } from 'state/application/hooks'
-import { Warnings } from 'kashi/entities'
-import { formattedNum } from 'utils'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
 import { KashiContext } from 'kashi/context'
+import { KashiCooker, Warnings } from 'kashi/entities'
+import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
+import { e10, maximum, ZERO } from 'kashi/functions/math'
+import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
+import { ArrowDownRight } from 'react-feather'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { formattedNum } from 'utils'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
     const { account, chainId } = useActiveWeb3React()
@@ -107,6 +106,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                         <Button
                             variant="outlined"
                             color="blue"
+                            size="small"
                             className="focus:ring focus:ring-blue"
                             onClick={() => {
                                 setUseBento(!useBento)
@@ -131,6 +131,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                     <Button
                         variant="outlined"
                         color="blue"
+                        size="small"
                         onClick={() => setValue(max)}
                         className="absolute right-4 focus:ring focus:ring-blue"
                     >

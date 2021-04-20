@@ -1,11 +1,10 @@
-import React from 'react'
 import { Price } from '@sushiswap/sdk'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { StyledBalanceMaxMini } from './styleds'
 import { useActiveWeb3React } from '../../hooks'
+import { StyledBalanceMaxMini } from './styleds'
 
 interface TradePriceProps {
     price?: Price

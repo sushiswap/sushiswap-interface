@@ -1,27 +1,26 @@
-import React, { useContext, useMemo } from 'react'
-import styled, { ThemeContext } from 'styled-components'
-import { ChainId, Pair, JSBI } from '@sushiswap/sdk'
-import { Link } from 'react-router-dom'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
-
-import FullPositionCard from '../../components/PositionCard'
-import { useUserHasLiquidityInAllTokens } from '../../data/V1'
-import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
-import { StyledInternalLink, ExternalLink, TYPE, HideSmall } from '../../theme'
-import { Text } from 'rebass'
-import Card from '../../components/Card'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/Button'
-import { AutoColumn } from '../../components/Column'
-
-import { useActiveWeb3React } from '../../hooks'
-import { usePairs } from '../../data/Reserves'
-import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
-import { Dots } from '../../components/swap/styleds'
-import { CardSection, DataCard, CardNoise, CardBGImage } from '../../components/earn/styled'
-import { useStakingInfo } from '../../state/stake/hooks'
-import { BIG_INT_ZERO } from '../../constants'
+import { ChainId, JSBI, Pair } from '@sushiswap/sdk'
 import { transparentize } from 'polished'
+import React, { useContext, useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { Text } from 'rebass'
+import styled, { ThemeContext } from 'styled-components'
+import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/ButtonLegacy'
+import Card from '../../components/Card'
+import { AutoColumn } from '../../components/Column'
+import { CardSection, DataCard } from '../../components/earn/styled'
+import { SwapPoolTabs } from '../../components/NavigationTabs'
+import FullPositionCard from '../../components/PositionCard'
+import { RowBetween, RowFixed } from '../../components/Row'
+import { Dots } from '../../components/swap/styleds'
+import { BIG_INT_ZERO } from '../../constants'
+import { usePairs } from '../../data/Reserves'
+import { useUserHasLiquidityInAllTokens } from '../../data/V1'
+import { useActiveWeb3React } from '../../hooks'
+import { useStakingInfo } from '../../state/stake/hooks'
+import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
+import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
+import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
+import Alert from '../../components/Alert'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
@@ -134,35 +133,26 @@ export default function Pool() {
         <>
             <PageWrapper>
                 <SwapPoolTabs active={'pool'} />
-                <VoteCard>
-                    <CardSection>
-                        <AutoColumn gap="md">
-                            <RowBetween>
-                                <TYPE.white fontWeight={600} color={theme.text1}>
-                                    Liquidity provider rewards
-                                </TYPE.white>
-                            </RowBetween>
-                            <RowBetween>
-                                <TYPE.white fontSize={14} color={theme.text1}>
-                                    {`Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.`}
-                                </TYPE.white>
-                            </RowBetween>
-                            {/* <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
-                target="_blank"
-                href="https://uniswap.org/docs/v2/core-concepts/pools/"
-              >
-                <TYPE.white fontSize={14}>Read more about providing liquidity</TYPE.white>
-              </ExternalLink> */}
-                        </AutoColumn>
-                    </CardSection>
-                </VoteCard>
-
+                <Alert
+                    title="Liquidity provider rewards"
+                    message={
+                        <>
+                            <p className="text-gray-500">
+                                Liquidity providers earn a 0.25% fee on all trades proportional to their share of the
+                                pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
+                                your liquidity.
+                            </p>
+                        </>
+                    }
+                    type="information"
+                />
                 <AutoColumn gap="sm" justify="center">
                     <AutoColumn gap="md" style={{ width: '100%' }}>
                         <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>
                             <HideSmall>
-                                <TYPE.mediumHeader style={{ marginTop: '0.5rem', justifySelf: 'flex-start' }}>
+                                <TYPE.mediumHeader
+                                    style={{ marginTop: '0.5rem', justifySelf: 'flex-start', paddingLeft: '0.75rem' }}
+                                >
                                     Your liquidity
                                 </TYPE.mediumHeader>
                             </HideSmall>

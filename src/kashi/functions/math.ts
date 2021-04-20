@@ -1,23 +1,11 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import Fraction from 'constants/Fraction'
-import { ethers } from 'ethers'
+import { Zero } from '@ethersproject/constants'
+import { parseUnits } from '@ethersproject/units'
+import { Fraction } from '../../entities'
 
-declare global {
-    interface String {
-        toBigNumber(decimals: number): BigNumber
-    }
-}
-
-declare module '@ethersproject/bignumber' {
-    interface BigNumber {
-        muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
-        toFixed(decimals: number): string
-    }
-}
-
-String.prototype.toBigNumber = function(decimals: number): BigNumber {
+String.prototype.toBigNumber = function(decimals: BigNumberish): BigNumber {
     try {
-        return ethers.utils.parseUnits(String(this), decimals)
+        return parseUnits(this as string, decimals)
     } catch (error) {
         console.debug(`Failed to parse input amount: "${this}"`, error)
     }
@@ -29,45 +17,21 @@ BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumb
         ? BigNumber.from(this)
               .mul(multiplier)
               .div(divisor)
-        : ZERO
+        : Zero
 }
 
-BigNumber.prototype.toFixed = function(decimals?: number): string {
-    return Fraction.from(this, decimals ? BigNumber.from(10).pow(BigNumber.from(decimals)) : ZERO).toString(decimals)
+BigNumber.prototype.toFixed = function(decimals: BigNumberish = 18, maxFractions: BigNumberish = 8): string {
+    return this.toFraction(decimals, 10).toString(BigNumber.from(maxFractions).toNumber())
+}
+
+BigNumber.prototype.toFraction = function(decimals: BigNumberish = 18): Fraction {
+    return Fraction.from(this, decimals ? BigNumber.from(10).pow(decimals) : Zero)
 }
 
 export const ZERO = BigNumber.from('0')
 
 export function e10(exponent: BigNumber | Number | string): BigNumber {
     return BigNumber.from('10').pow(BigNumber.from(exponent))
-}
-
-export interface BigNumberMath {
-    min(...values: BigNumberish[]): BigNumber
-    max(...values: BigNumberish[]): BigNumber
-}
-
-export class BigNumberMath implements BigNumberMath {
-    static min(...values: BigNumberish[]): BigNumber {
-        let lowest = BigNumber.from(values[0])
-        for (let i = 1; i < values.length; i++) {
-            const value = BigNumber.from(values[i])
-            if (value.lt(lowest)) {
-                lowest = value
-            }
-        }
-        return lowest
-    }
-    static max(...values: BigNumberish[]): BigNumber {
-        let highest = BigNumber.from(values[0])
-        for (let i = 1; i < values.length; i++) {
-            const value = BigNumber.from(values[i])
-            if (value.gt(highest)) {
-                highest = value
-            }
-        }
-        return highest
-    }
 }
 
 export function minimum(...values: BigNumberish[]): BigNumber {
@@ -90,18 +54,4 @@ export function maximum(...values: BigNumberish[]): BigNumber {
         }
     }
     return highest
-}
-
-// Rounds a number [value] up to a specified [precision].
-export function roundTo(value: number, precision: number): number {
-    if (!Number.isFinite(value)) {
-        throw new Error('Input value is not a finite number')
-    }
-    if (!Number.isInteger(precision) || precision < 0) {
-        throw new Error('Precision is not a positive integer')
-    }
-    if (Number.isInteger(value)) {
-        return value
-    }
-    return parseFloat(value.toFixed(precision))
 }

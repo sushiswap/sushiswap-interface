@@ -1,18 +1,14 @@
 import { transparentize } from 'polished'
 import React, { useMemo } from 'react'
+import { Text, TextProps } from 'rebass'
 import styled, {
+    DefaultTheme,
     ThemeProvider as StyledComponentsThemeProvider,
     createGlobalStyle,
     css,
-    DefaultTheme,
     keyframes
 } from 'styled-components'
-import { useIsDarkMode } from '../state/user/hooks'
-import { Text, TextProps } from 'rebass'
 import { Colors } from './styled'
-
-//import BentoBackground from '../assets/kashi/bento-background.jpg'
-import BrickWallBackground from '../assets/kashi/brickwall.png'
 
 export * from './components'
 

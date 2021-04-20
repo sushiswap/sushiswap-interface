@@ -1,405 +1,274 @@
-import { ChainId, TokenAmount, Currency } from '@sushiswap/sdk'
-import React, { useState } from 'react'
-import { Text } from 'rebass'
-import { NavLink } from 'react-router-dom'
-import { darken } from 'polished'
+import { ChainId, Currency } from '@sushiswap/sdk'
+import React, { useState, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import styled from 'styled-components'
-
-// import Logo from '../../assets/svg/logo.svg'
-// import LogoDark from '../../assets/svg/logo_white.svg'
-
 import Logo from '../../assets/images/logo.png'
-import LogoHover from '../../assets/svg/logo_hover.svg'
-
 import { useActiveWeb3React } from '../../hooks'
-import { useDarkModeManager } from '../../state/user/hooks'
-import { useETHBalances, useAggregateUniBalance } from '../../state/wallet/hooks'
-import { CardNoise } from '../earn/styled'
-import { CountUp } from 'use-count-up'
-import { TYPE, ExternalLink } from '../../theme'
-
-import { YellowCard } from '../Card'
-import { Moon, Sun } from 'react-feather'
-import Menu from '../Menu'
-
-import Row, { RowFixed } from '../Row'
+import { useETHBalances } from '../../state/wallet/hooks'
+import { ReactComponent as Burger } from '../../assets/images/burger.svg'
+import { ReactComponent as X } from '../../assets/images/x.svg'
+import { ReactComponent as Chef } from '../../assets/images/chef.svg'
+import Sushi from '../../assets/kashi/tokens/sushi-square.jpg'
+import xSushi from '../../assets/kashi/tokens/xsushi-square.jpg'
+import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
-import { Dots } from '../swap/styleds'
-import Modal from '../Modal'
-import UniBalanceContent from './UniBalanceContent'
-import usePrevious from '../../hooks/usePrevious'
-import LanguageSwitch from '../LanguageSwitch'
-import { StyledMenuButton } from 'components/StyledMenu'
 
-const ExtendedStyledMenuButton = styled(StyledMenuButton)`
-    margin-left: 8px;
-`
+import MoreMenu from '../Menu'
 
-const HeaderFrame = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 120px;
-    align-items: center;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    width: 100%;
-    top: 0;
-    position: relative;
-    padding: 1rem;
-    z-index: 2;
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: 1fr;
-    padding: 0 1rem;
-    width: calc(100%);
-    position: relative;
-  `};
+import { ExternalLink, NavLink } from '../Link'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 
-    ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-        padding: 0.5rem 1rem;
-  `}
-`
-
-const HeaderControls = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-self: flex-end;
-
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-    flex-direction: row;
-    justify-content: space-between;
-    justify-self: center;
-    width: 100%;
-    max-width: 960px;
-    padding: 1rem;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    z-index: 99;
-    height: 72px;
-    border-radius: 12px 12px 0 0;
-    background-color: ${({ theme }) => theme.bg1};
-  `};
-
-    ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    padding: 5px;
-  `}
-`
-
-const HeaderElement = styled.div`
-    display: flex;
-    align-items: center;
-
-    /* addresses safari's lack of support for "gap" */
-    & > *:not(:first-child) {
-        margin-left: 8px;
-    }
-
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-    flex-direction: row-reverse;
-    align-items: center;
-
-    & > *:not(:first-child) {
-      margin-left: 4px;
-    }
-  `};
-`
-
-const HeaderElementWrap = styled.div`
-    display: flex;
-    align-items: center;
-`
-
-const HeaderRow = styled(RowFixed)`
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-   width: 100%;
-  `};
-`
-
-const HeaderLinks = styled(Row)`
-    justify-content: center;
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-    padding: 1rem 0 1rem 1rem;
-    justify-content: flex-end;
-`};
-`
-
-const AccountElement = styled.div<{ active: boolean }>`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: ${({ theme, active }) => (!active ? theme.bg1 : theme.bg3)};
-    border-radius: ${({ theme }) => theme.borderRadius};
-    white-space: nowrap;
-    width: 100%;
-    cursor: pointer;
-
-    :focus {
-        border: 1px solid blue;
-    }
-`
-
-const UNIAmount = styled(AccountElement)`
-    color: white;
-    padding: 4px 8px;
-    height: 36px;
-    font-weight: 500;
-    background-color: ${({ theme }) => theme.bg3};
-    background: radial-gradient(174.47% 188.91% at 1.84% 0%, #f537c3 0%, #00abff 100%), #edeef2;
-`
-
-const UNIWrapper = styled.span`
-    width: fit-content;
-    position: relative;
-    cursor: pointer;
-
-    :hover {
-        opacity: 0.8;
-    }
-
-    :active {
-        opacity: 0.9;
-    }
-`
-
-const HideSmall = styled.span`
-    ${({ theme }) => theme.mediaWidth.upToSmall`
-    display: none;
-  `};
-`
-
-const NetworkCard = styled(YellowCard)`
-    border-radius: ${({ theme }) => theme.borderRadius};
-    padding: 8px 12px;
-    white-space: nowrap;
-    ${({ theme }) => theme.mediaWidth.upToSmall`
-    margin: 0;
-    margin-right: 0.5rem;
-    width: initial;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-shrink: 1;
-  `};
-`
-
-const BalanceText = styled(Text)`
-    ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    display: none;
-  `};
-`
-
-const Title = styled.a`
-    display: flex;
-    align-items: center;
-    pointer-events: auto;
-    justify-self: flex-start;
-    margin-right: 12px;
-    ${({ theme }) => theme.mediaWidth.upToSmall`
-    justify-self: center;
-  `};
-    :hover {
-        cursor: pointer;
-    }
-`
-
-const StaticIcon = styled.div`
-    padding-left: 4px;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    :hover {
-        opacity: 0;
-    }
-`
-const HoverIcon = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-`
-
-const activeClassName = 'ACTIVE'
-
-const StyledNavLink = styled(NavLink).attrs({
-    activeClassName
-})`
-    ${({ theme }) => theme.flexRowNoWrap}
-    align-items: left;
-    border-radius: 3rem;
-    outline: none;
-    cursor: pointer;
-    text-decoration: none;
-    color: ${({ theme }) => theme.text2};
-    font-size: 1rem;
-    width: fit-content;
-    margin: 0 12px;
-    font-weight: 500;
-
-    &.${activeClassName} {
-        border-radius: ${({ theme }) => theme.borderRadius};
-        font-weight: 600;
-        color: ${({ theme }) => theme.text1};
-    }
-
-    :hover,
-    :focus {
-        color: ${({ theme }) => darken(0.1, theme.text1)};
-    }
-`
-
-const StyledExternalLink = styled(ExternalLink).attrs({
-    activeClassName
-})<{ isActive?: boolean }>`
-    ${({ theme }) => theme.flexRowNoWrap}
-    align-items: left;
-    border-radius: 3rem;
-    outline: none;
-    cursor: pointer;
-    text-decoration: none;
-    color: ${({ theme }) => theme.text2};
-    font-size: 1rem;
-    width: fit-content;
-    margin: 0 12px;
-    font-weight: 500;
-
-    &.${activeClassName} {
-        border-radius: ${({ theme }) => theme.borderRadius};
-        font-weight: 600;
-        color: ${({ theme }) => theme.text1};
-    }
-
-    :hover,
-    :focus {
-        color: ${({ theme }) => darken(0.1, theme.text1)};
-    }
-
-    ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-      display: none;
-`}
-`
-
-const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
-    [ChainId.RINKEBY]: 'Rinkeby',
-    [ChainId.ROPSTEN]: 'Ropsten',
-    [ChainId.GÖRLI]: 'Görli',
-    [ChainId.KOVAN]: 'Kovan',
-    [ChainId.FANTOM]: 'Fantom',
-    [ChainId.FANTOM_TESTNET]: 'Fantom Testnet',
-    [ChainId.MATIC]: 'Matic',
-    [ChainId.MATIC_TESTNET]: 'Matic Testnet',
-    [ChainId.XDAI]: 'xDai',
-    [ChainId.BSC]: 'BSC',
-    [ChainId.BSC_TESTNET]: 'BSC Testnet',
-    [ChainId.MOONBASE]: 'Moonbase',
-    [ChainId.AVALANCHE]: 'Avalanche',
-    [ChainId.FUJI]: 'Fuji',
-    [ChainId.HECO]: 'HECO',
-    [ChainId.HECO_TESTNET]: 'HECO Testnet',
-    [ChainId.HARMONY]: 'Harmony',
-    [ChainId.HARMONY_TESTNET]: 'Harmony Testnet'
+function classNames(...classes: string[]) {
+    return classes.filter(Boolean).join(' ')
 }
 
-export default function Header() {
-    const { account, chainId } = useActiveWeb3React()
+export default function Header(): JSX.Element {
+    const { account, chainId, library } = useActiveWeb3React()
     const { t } = useTranslation()
 
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
-    // const [isDark] = useDarkModeManager()
-    const [darkMode, toggleDarkMode] = useDarkModeManager()
-
-    const aggregateBalance: TokenAmount | undefined = useAggregateUniBalance()
-
-    const [showUniBalanceModal, setShowUniBalanceModal] = useState(false)
-
-    const countUpValue = aggregateBalance?.toFixed(0) ?? '0'
-    const countUpValuePrevious = usePrevious(countUpValue) ?? '0'
 
     return (
-        <HeaderFrame>
-            <Modal isOpen={showUniBalanceModal} onDismiss={() => setShowUniBalanceModal(false)}>
-                <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
-            </Modal>
-            <HeaderRow>
-                <Title href=".">
-                    <HoverIcon>
-                        <img width={'48px'} src={LogoHover} alt="logo" />
-                    </HoverIcon>
-                    <StaticIcon>
-                        <img width={'40px'} src={Logo} alt="logo" />
-                    </StaticIcon>
-                </Title>
-                <HeaderLinks>
-                    <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-                        {t('swap')}
-                    </StyledNavLink>
-                    <StyledNavLink
-                        id={`pool-nav-link`}
-                        to={'/pool'}
-                        isActive={(match, { pathname }) =>
-                            Boolean(match) ||
-                            pathname.startsWith('/add') ||
-                            pathname.startsWith('/remove') ||
-                            pathname.startsWith('/create') ||
-                            pathname.startsWith('/find')
-                        }
-                    >
-                        {t('pool')}
-                    </StyledNavLink>
-                    {chainId === ChainId.MAINNET && (
-                        <StyledNavLink id={`yield-nav-link`} to={'/yield'}>
-                            Yield
-                        </StyledNavLink>
-                    )}
-                    {chainId === ChainId.MAINNET && (
-                        <StyledNavLink id={`stake-nav-link`} to={'/stake'}>
-                            Stake
-                        </StyledNavLink>
-                    )}
-                    {chainId === ChainId.MAINNET && (
-                        <HideSmall>
-                            <StyledNavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                Vesting
-                            </StyledNavLink>
-                        </HideSmall>
-                    )}
-                    {[ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId || 1) != -1 && (
-                        <StyledNavLink id={`bento-nav-link`} to={'/bento'}>
-                            Apps
-                        </StyledNavLink>
-                    )}
-                    {chainId && (
-                        <StyledExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
-                            Analytics <span style={{ fontSize: '11px' }}>↗</span>
-                        </StyledExternalLink>
-                    )}
-                </HeaderLinks>
-            </HeaderRow>
-            <HeaderControls>
-                <HeaderElement>
-                    <HideSmall>
-                        {chainId && NETWORK_LABELS[chainId] && (
-                            <NetworkCard title={NETWORK_LABELS[chainId]}>{NETWORK_LABELS[chainId]}</NetworkCard>
-                        )}
-                    </HideSmall>
-                    <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
-                        {account && chainId && userEthBalance ? (
-                            <BalanceText style={{ flexShrink: 0 }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                                {userEthBalance?.toSignificant(4)} {Currency.getNativeCurrencySymbol(chainId)}
-                            </BalanceText>
-                        ) : null}
-                        <Web3Status />
-                    </AccountElement>
-                </HeaderElement>
-                <HeaderElementWrap>
-                    {/* <ExtendedStyledMenuButton onClick={() => toggleDarkMode()}>
-            {darkMode ? <Moon size={20} /> : <Sun size={20} />}
-          </ExtendedStyledMenuButton> */}
-                    {/* <LanguageSwitch /> */}
-                    <Menu />
-                </HeaderElementWrap>
-            </HeaderControls>
-        </HeaderFrame>
+        <Disclosure as="nav" className="w-screen bg-transparent gradiant-border-bottom z-10">
+            {({ open }) => (
+                <>
+                    <div className="px-4 py-1.5">
+                        <div className="flex items-center justify-between h-16">
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+                                    <img src={Logo} alt="Sushi" className="h-10 w-auto" />
+                                </div>
+                                <div className="hidden sm:block sm:ml-4">
+                                    <div className="flex space-x-2">
+                                        <NavLink id={`swap-nav-link`} to={'/swap'}>
+                                            {t('swap')}
+                                        </NavLink>
+                                        <NavLink
+                                            id={`pool-nav-link`}
+                                            to={'/pool'}
+                                            isActive={(match, { pathname }) =>
+                                                Boolean(match) ||
+                                                pathname.startsWith('/add') ||
+                                                pathname.startsWith('/remove') ||
+                                                pathname.startsWith('/create') ||
+                                                pathname.startsWith('/find')
+                                            }
+                                        >
+                                            {t('pool')}
+                                        </NavLink>
+                                        {chainId === ChainId.MAINNET && (
+                                            <NavLink id={`yield-nav-link`} to={'/yield'}>
+                                                Yield
+                                            </NavLink>
+                                        )}
+                                        {chainId === ChainId.MAINNET && (
+                                            <NavLink id={`stake-nav-link`} to={'/stake'}>
+                                                Stake
+                                            </NavLink>
+                                        )}
+                                        {chainId === ChainId.MAINNET && (
+                                            <NavLink id={`vesting-nav-link`} to={'/vesting'}>
+                                                Vesting
+                                            </NavLink>
+                                        )}
+                                        {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].includes(chainId) && (
+                                            <NavLink id={`bento-nav-link`} to={'/bento'}>
+                                                Apps
+                                            </NavLink>
+                                        )}
+                                        {chainId && (
+                                            <ExternalLink
+                                                id={`analytics-nav-link`}
+                                                href={'https://analytics.sushi.com'}
+                                            >
+                                                Analytics
+                                            </ExternalLink>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-row items-center justify-center w-full p-4 fixed left-0 bottom-0 bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
+                                <div className="flex items-center justify-around sm:justify-end space-x-2 w-full">
+                                    {chainId && chainId === ChainId.MAINNET && library && library.provider.isMetaMask && (
+                                        <>
+                                            <div
+                                                className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                                onClick={() => {
+                                                    const params: any = {
+                                                        type: 'ERC20',
+                                                        options: {
+                                                            address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                                            symbol: 'XSUSHI',
+                                                            decimals: 18,
+                                                            image:
+                                                                'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
+                                                        }
+                                                    }
+
+                                                    if (
+                                                        library &&
+                                                        library.provider.isMetaMask &&
+                                                        library.provider.request
+                                                    ) {
+                                                        library.provider
+                                                            .request({
+                                                                method: 'wallet_watchAsset',
+                                                                params
+                                                            })
+                                                            .then(success => {
+                                                                if (success) {
+                                                                    console.log('Successfully added XSUSHI to MetaMask')
+                                                                } else {
+                                                                    throw new Error('Something went wrong.')
+                                                                }
+                                                            })
+                                                            .catch(console.error)
+                                                    }
+                                                }}
+                                            >
+                                                <img
+                                                    src={xSushi}
+                                                    alt="Switch Network"
+                                                    style={{ minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36 }}
+                                                    className="rounded-md object-contain"
+                                                />
+                                            </div>
+                                            <div
+                                                className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                                onClick={() => {
+                                                    const params: any = {
+                                                        type: 'ERC20',
+                                                        options: {
+                                                            address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                                                            symbol: 'SUSHI',
+                                                            decimals: 18,
+                                                            image:
+                                                                'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                                        }
+                                                    }
+
+                                                    if (
+                                                        library &&
+                                                        library.provider.isMetaMask &&
+                                                        library.provider.request
+                                                    ) {
+                                                        library.provider
+                                                            .request({
+                                                                method: 'wallet_watchAsset',
+                                                                params
+                                                            })
+                                                            .then(success => {
+                                                                if (success) {
+                                                                    console.log('Successfully added SUSHI to MetaMask')
+                                                                } else {
+                                                                    throw new Error('Something went wrong.')
+                                                                }
+                                                            })
+                                                            .catch(console.error)
+                                                    }
+                                                }}
+                                            >
+                                                <img
+                                                    src={Sushi}
+                                                    alt="Switch Network"
+                                                    style={{ minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36 }}
+                                                    className="rounded-md object-contain"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
+                                    {library && library.provider.isMetaMask && (
+                                        <div className="hidden sm:inline-block">
+                                            <Web3Network />
+                                        </div>
+                                    )}
+
+                                    <div className="w-full sm:w-auto flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
+                                        {account && chainId && userEthBalance && (
+                                            <>
+                                                <div className="py-2 px-3 text-primary text-bold">
+                                                    {userEthBalance?.toSignificant(4)}{' '}
+                                                    {Currency.getNativeCurrencySymbol(chainId)}
+                                                </div>
+                                            </>
+                                        )}
+                                        <Web3Status />
+                                    </div>
+                                    <MoreMenu />
+                                </div>
+                            </div>
+                            <div className="-mr-2 flex sm:hidden">
+                                {/* Mobile menu button */}
+                                <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
+                                    <span className="sr-only">Open main menu</span>
+                                    {open ? (
+                                        <X title="Close" className="block h-6 w-6" aria-hidden="true" />
+                                    ) : (
+                                        <Burger title="Burger" className="block h-6 w-6" aria-hidden="true" />
+                                    )}
+                                </Disclosure.Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <Disclosure.Panel className="sm:hidden">
+                        <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
+                            {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
+                            {/* <a
+                                href="#"
+                                className="bg-gray-1000 text-white block px-3 py-2 rounded-md text-base font-medium"
+                            >
+                                Dashboard
+                            </a> */}
+
+                            <NavLink id={`swap-nav-link`} to={'/swap'}>
+                                {t('swap')}
+                            </NavLink>
+                            <NavLink
+                                id={`pool-nav-link`}
+                                to={'/pool'}
+                                isActive={(match, { pathname }) =>
+                                    Boolean(match) ||
+                                    pathname.startsWith('/add') ||
+                                    pathname.startsWith('/remove') ||
+                                    pathname.startsWith('/create') ||
+                                    pathname.startsWith('/find')
+                                }
+                            >
+                                {t('pool')}
+                            </NavLink>
+                            {chainId === ChainId.MAINNET && (
+                                <NavLink id={`yield-nav-link`} to={'/yield'}>
+                                    Yield
+                                </NavLink>
+                            )}
+                            {chainId === ChainId.MAINNET && (
+                                <NavLink id={`stake-nav-link`} to={'/stake'}>
+                                    Stake
+                                </NavLink>
+                            )}
+                            {chainId === ChainId.MAINNET && (
+                                <NavLink id={`vesting-nav-link`} to={'/vesting'}>
+                                    Vesting
+                                </NavLink>
+                            )}
+                            {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].includes(chainId) && (
+                                <NavLink id={`bento-nav-link`} to={'/bento'}>
+                                    Apps
+                                </NavLink>
+                            )}
+                            <NavLink id={`tool-nav-link`} to={'/tools'}>
+                                Tools
+                            </NavLink>
+                            {chainId && (
+                                <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
+                                    Analytics
+                                </ExternalLink>
+                            )}
+                        </div>
+                    </Disclosure.Panel>
+                </>
+            )}
+        </Disclosure>
     )
 }

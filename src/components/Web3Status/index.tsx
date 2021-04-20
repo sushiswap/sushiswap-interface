@@ -7,24 +7,22 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
 import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
+import LatticeIcon from '../../assets/images/gridPlusWallet.png'
 import PortisIcon from '../../assets/images/portisIcon.png'
 import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
-import LatticeIcon from '../../assets/images/gridPlusWallet.png'
-import { fortmatic, injected, portis, walletconnect, walletlink, lattice } from '../../connectors'
+import { fortmatic, injected, lattice, portis, walletconnect, walletlink } from '../../connectors'
 import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
-import { useHasSocks } from '../../hooks/useSocksBalance'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 import { TransactionDetails } from '../../state/transactions/reducer'
 import { shortenAddress } from '../../utils'
-import { ButtonSecondary } from '../Button'
-
+import { ButtonSecondary } from '../ButtonLegacy'
 import Identicon from '../Identicon'
 import Loader from '../Loader'
-
 import { RowBetween } from '../Row'
 import WalletModal from '../WalletModal'
+import { ReactComponent as Chef } from '../../assets/images/chef.svg'
 
 const IconWrapper = styled.div<{ size?: number }>`
     ${({ theme }) => theme.flexColumnNoWrap};
@@ -135,7 +133,8 @@ const SOCK = (
 // eslint-disable-next-line react/prop-types
 function StatusIcon({ connector }: { connector: AbstractConnector }) {
     if (connector === injected) {
-        return <Identicon />
+        return <Chef width={20} height={20} />
+        // return <Identicon />
     } else if (connector === walletconnect) {
         return (
             <IconWrapper size={16}>
@@ -186,28 +185,25 @@ function Web3StatusInner() {
     const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
 
     const hasPendingTransactions = !!pending.length
-    const hasSocks = useHasSocks()
+
     const toggleWalletModal = useWalletModalToggle()
 
     if (account) {
         return (
-            <Web3StatusConnected
+            <div
                 id="web3-status-connected"
+                className="flex items-center rounded-lg bg-dark-1000 text-sm text-secondary py-2 px-3"
                 onClick={toggleWalletModal}
-                pending={hasPendingTransactions}
             >
                 {hasPendingTransactions ? (
-                    <RowBetween>
-                        <Text>{pending?.length} Pending</Text> <Loader stroke="white" />
-                    </RowBetween>
+                    <div className="flex justify-between items-center">
+                        <div className="pr-2">{pending?.length} Pending</div> <Loader stroke="white" />
+                    </div>
                 ) : (
-                    <>
-                        {hasSocks ? SOCK : null}
-                        <Text>{ENSName || shortenAddress(account)}</Text>
-                    </>
+                    <div className="mr-2">{ENSName || shortenAddress(account)}</div>
                 )}
                 {!hasPendingTransactions && connector && <StatusIcon connector={connector} />}
-            </Web3StatusConnected>
+            </div>
         )
     } else if (error) {
         return (

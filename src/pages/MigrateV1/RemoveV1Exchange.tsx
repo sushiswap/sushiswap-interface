@@ -3,7 +3,7 @@ import { JSBI, Token, TokenAmount, WETH, Fraction, Percent, CurrencyAmount } fro
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 import { Redirect, RouteComponentProps } from 'react-router'
-import { ButtonConfirmed } from '../../components/Button'
+import { ButtonConfirmed } from '../../components/ButtonLegacy'
 import { LightCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
 import QuestionHelper from '../../components/QuestionHelper'
@@ -17,7 +17,7 @@ import { useIsTransactionPending, useTransactionAdder } from '../../state/transa
 import { useTokenBalance, useETHBalances } from '../../state/wallet/hooks'
 import { BackArrow, TYPE } from '../../theme'
 import { isAddress } from '../../utils'
-import { BodyWrapper } from '../AppBody'
+import AppBody from '../AppBody'
 import { EmptyState } from './EmptyState'
 import { V1LiquidityInfo } from './MigrateV1Exchange'
 import { AddressZero } from '@ethersproject/constants'
@@ -156,7 +156,7 @@ export default function RemoveV1Exchange({
     }
 
     return (
-        <BodyWrapper style={{ padding: 24 }} id="remove-v1-exchange">
+        <AppBody style={{ padding: 24 }} id="remove-v1-exchange">
             <AutoColumn gap="16px">
                 <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                     <BackArrow to="/migrate/v1" />
@@ -178,6 +178,6 @@ export default function RemoveV1Exchange({
                     <EmptyState message="Loading..." />
                 )}
             </AutoColumn>
-        </BodyWrapper>
+        </AppBody>
     )
 }

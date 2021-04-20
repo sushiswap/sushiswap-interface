@@ -1,22 +1,19 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
+import { Input as NumericalInput } from 'components/NumericalInput'
+import { Fraction } from '../../entities'
+import { ethers } from 'ethers'
+import { useActiveWeb3React } from 'hooks'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { Dots } from '../Pool/styleds'
-import { useActiveWeb3React } from 'hooks'
-
+import useMasterChef from 'hooks/useMasterChef'
+import usePendingSushi from 'hooks/usePendingSushi'
+import useStakedBalance from 'hooks/useStakedBalance'
 import useTokenBalance from 'sushi-hooks/useTokenBalance'
-import useStakedBalance from 'sushi-hooks/useStakedBalance'
-import usePendingSushi from 'sushi-hooks/usePendingSushi'
-import useMasterChef from 'sushi-hooks/useMasterChef'
-
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Token, TokenAmount, MASTERCHEF_ADDRESS } from '@sushiswap/sdk'
-
-import { ethers } from 'ethers'
+import { formattedNum, isAddressString, isWETH } from 'utils'
+import { Dots } from '../Pool/styleds'
 import { Button } from './components'
-import { isAddressString, formattedNum, isWETH } from 'utils'
-import Fraction from 'constants/Fraction'
-import { BigNumber } from '@ethersproject/bignumber'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
