@@ -65,7 +65,7 @@ export default function CurrencySearchModal({
         modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 80
 
     return (
-        <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight}>
+        <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight} padding={1}>
             {modalView === CurrencyModalView.search ? (
                 <CurrencySearch
                     isOpen={isOpen}
