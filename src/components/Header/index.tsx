@@ -88,7 +88,7 @@ export default function Header(): JSX.Element {
                             </div>
 
                             <div className="flex flex-row items-center justify-center w-full p-4 fixed left-0 bottom-0 bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
-                                <div className="flex items-center justify-around sm:justify-end space-x-2 w-full">
+                                <div className="flex items-center justify-between sm:justify-end space-x-2 w-full">
                                     {chainId && chainId === ChainId.MAINNET && library && library.provider.isMetaMask && (
                                         <>
                                             <div
