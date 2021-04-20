@@ -1,18 +1,16 @@
-import React, { useState } from 'react'
-import { Alert, Button, Dots } from 'kashi/components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowUpRight } from 'react-feather'
 import { useActiveWeb3React } from 'hooks'
-import { useApproveCallback, ApprovalState } from 'hooks/useApproveCallback'
-import { e10, minimum } from 'kashi/functions/math'
-import { easyAmount } from 'kashi/functions/kashi'
-import { TransactionReview, Warnings } from 'kashi/entities'
+import { Alert, Button, Dots } from 'kashi/components'
 import TransactionReviewView from 'kashi/components/TransactionReview'
+import { KASHI_ADDRESS } from 'kashi/constants'
+import { TransactionReview, Warnings } from 'kashi/entities'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
-import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
+import { easyAmount } from 'kashi/functions/kashi'
+import { e10, minimum } from 'kashi/functions/math'
+import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
+import React, { useState } from 'react'
+import { ArrowUpRight } from 'react-feather'
 import { useKashiApprovalPending } from 'state/application/hooks'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
-import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
 import { formattedNum } from 'utils'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
@@ -45,7 +43,11 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
             } balance is sufficient to withdraw and then try again.`,
             true
         )
-        .add(pair.maxAssetAvailableFraction.lt(fraction), "The isn't enough liquidity available at the moment to withdraw this amount. Please try withdrawing less or later.", true)
+        .add(
+            pair.maxAssetAvailableFraction.lt(fraction),
+            "The isn't enough liquidity available at the moment to withdraw this amount. Please try withdrawing less or later.",
+            true
+        )
 
     const transactionReview = new TransactionReview()
     if (displayValue && !warnings.broken) {
@@ -82,6 +84,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                         <Button
                             variant="outlined"
                             color="blue"
+                            size="small"
                             className="focus:ring focus:ring-blue"
                             onClick={() => {
                                 setUseBento(!useBento)
@@ -110,6 +113,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                     <Button
                         variant="outlined"
                         color="blue"
+                        size="small"
                         onClick={() => setPinMax(true)}
                         className="absolute right-4 focus:ring focus:ring-blue"
                     >
@@ -146,7 +150,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
                             `Approve Kashi`
                         )}
                     </Button>
-            )}
+                )}
 
             {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
                 <Button

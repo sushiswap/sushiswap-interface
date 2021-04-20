@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Search as SearchIcon } from 'react-feather'
 
 export default function Search({ term, search }: any) {

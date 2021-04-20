@@ -1,22 +1,20 @@
-import { useActiveWeb3React } from 'hooks'
-import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react'
-import { useBentoBoxContract } from 'sushi-hooks/useContract'
-import Fraction from '../../constants/Fraction'
-import { WETH, Currency, ChainId } from '@sushiswap/sdk'
-import { takeFee, toElastic } from '../functions'
-import { ethers } from 'ethers'
-import { KASHI_ADDRESS, getCurrency } from '../constants'
-import { useBoringHelperContract } from 'hooks/useContract'
-import { getOracle } from '../entities'
 import { BigNumber } from '@ethersproject/bignumber'
-import _ from 'lodash'
-import { e10, minimum, ZERO } from 'kashi/functions/math'
-import { rpcToObj } from 'kashi/functions/utils'
+import { ChainId, Currency, WETH } from '@sushiswap/sdk'
+import { bentobox } from '@sushiswap/sushi-data'
+import { ethers } from 'ethers'
+import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { useAllTokens } from 'hooks/Tokens'
+import { useBoringHelperContract } from 'hooks/useContract'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
+import { e10, minimum, ZERO } from 'kashi/functions/math'
+import { rpcToObj } from 'kashi/functions/utils'
+import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { useBlockNumber } from 'state/application/hooks'
-import { bentobox } from '@sushiswap/sushi-data'
-import { useAllTokens } from 'hooks/Tokens'
+import { Fraction } from '../../entities'
+import { getCurrency, KASHI_ADDRESS } from '../constants'
+import { getOracle } from '../entities'
+import { takeFee, toElastic } from '../functions'
 
 enum ActionType {
     UPDATE = 'UPDATE',
@@ -29,21 +27,23 @@ interface Reducer {
 }
 
 interface State {
-    info: {
-        ethBalance: BigNumber,
-        sushiBalance: BigNumber,
-        sushiBarBalance: BigNumber,
-        xsushiBalance: BigNumber,
-        xsushiSupply: BigNumber,
-        sushiBarAllowance: BigNumber,
-        factories: {}[],
-        ethRate: BigNumber,
-        sushiRate: BigNumber,
-        btcRate: BigNumber,
-        pendingSushi: BigNumber,
-        blockTimeStamp: BigNumber,
-        masterContractApproved: boolean[]
-    } | undefined,
+    info:
+        | {
+              ethBalance: BigNumber
+              sushiBalance: BigNumber
+              sushiBarBalance: BigNumber
+              xsushiBalance: BigNumber
+              xsushiSupply: BigNumber
+              sushiBarAllowance: BigNumber
+              factories: {}[]
+              ethRate: BigNumber
+              sushiRate: BigNumber
+              btcRate: BigNumber
+              pendingSushi: BigNumber
+              blockTimeStamp: BigNumber
+              masterContractApproved: boolean[]
+          }
+        | undefined
     pairs: any[]
 }
 
@@ -110,7 +110,10 @@ async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
         success = true
     }
     if (!success) {
-        logs = ((await bentobox.clones({masterAddress: '0x2cba6ab6574646badc84f0544d05059e57a5dc42', chainId})) as any).map((clone: any) => {
+        logs = ((await bentobox.clones({
+            masterAddress: '0x2cba6ab6574646badc84f0544d05059e57a5dc42',
+            chainId
+        })) as any).map((clone: any) => {
             return {
                 args: {
                     masterContract: '0x2cba6ab6574646badc84f0544d05059e57a5dc42',
@@ -150,7 +153,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
     const blockNumber = useBlockNumber()
 
-    let { account, chainId } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const chain: ChainId = chainId || 1
     const weth = WETH[chain].address
     const curreny: any = getCurrency(chain).address
@@ -167,7 +170,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 return
             }
             if (boringHelperContract && bentoBoxContract) {
-                const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS]))
+                const info = rpcToObj(
+                    await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS])
+                )
 
                 // Get the deployed pairs from the logs and decode
                 const logPairs = await GetPairs(bentoBoxContract, chainId || 1)
@@ -279,9 +284,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                             )
 
                             // Interest per year received by lenders as of now
-                            pair.supplyAPR = takeFee(
-                                pair.interestPerYear.muldiv(pair.utilization, e10(18))
-                            )
+                            pair.supplyAPR = takeFee(pair.interestPerYear.muldiv(pair.utilization, e10(18)))
 
                             // Interest payable by borrowers per year as of now
                             pair.currentInterestPerYear = interestAccrue(pair, pair.interestPerYear)
@@ -400,7 +403,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         if (account && chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId) != -1) {
             updatePairs()
         }
-    }, [blockNumber, chainId, account])    
+    }, [blockNumber, chainId, account])
 
     return (
         <KashiContext.Provider

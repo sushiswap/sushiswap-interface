@@ -1,15 +1,14 @@
+import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import React, { useContext } from 'react'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
-import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-
 import { Text } from 'rebass'
+import { ThemeContext } from 'styled-components'
+import { useActiveWeb3React } from '../../hooks'
+import { ButtonSecondary } from '../ButtonLegacy'
 import { AutoColumn } from '../Column'
-import { ButtonSecondary } from '../Button'
+import DoubleCurrencyLogo from '../DoubleLogo'
 import { RowBetween, RowFixed } from '../Row'
 import { FixedHeightRow, HoverCard } from './index'
-import DoubleCurrencyLogo from '../DoubleLogo'
-import { useActiveWeb3React } from '../../hooks'
-import { ThemeContext } from 'styled-components'
 
 interface PositionCardProps extends RouteComponentProps<{}> {
     token: Token

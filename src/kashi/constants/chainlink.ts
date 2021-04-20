@@ -22,7 +22,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             address: '0xa117000000f279D81A1D3cc75430fAA017FA5A2e',
             decimals: 18
         },
-        { symbol: 'AUCTION', name: 'Bounce Token', address: '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', decimals: 18 },
+        {
+            symbol: 'AUCTION',
+            name: 'Bounce Token',
+            address: '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096',
+            decimals: 18
+        },
         { symbol: 'BADGER', name: 'Badger', address: '0x3472A5A71965499acd81997a54BBA8D852C6E53d', decimals: 18 },
         { symbol: 'BAL', name: 'Balancer', address: '0xba100000625a3754423978a60c9317c58a424e3D', decimals: 18 },
         { symbol: 'BAND', name: 'BandToken', address: '0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55', decimals: 18 },
@@ -56,7 +61,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'DPI', name: 'DefiPulse Index', address: '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', decimals: 18 },
         { symbol: 'ENJ', name: 'Enjin Coin', address: '0xF629cBd94d3791C9250152BD8dfBDF380E2a3B9c', decimals: 18 },
         { symbol: 'ETH', name: 'Ethereum', address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', decimals: 18 },
-        { symbol: 'FRONT', name: 'Frontier Token', address: '0xf8C3527CC04340b208C854E985240c02F7B7793f', decimals: 18 },
+        {
+            symbol: 'FRONT',
+            name: 'Frontier Token',
+            address: '0xf8C3527CC04340b208C854E985240c02F7B7793f',
+            decimals: 18
+        },
         { symbol: 'FRX', name: 'Frax Share', address: '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', decimals: 18 },
         { symbol: 'FTM', name: 'Fantom Token', address: '0x4E15361FD6b4BB609Fa63C81A2be19d873717870', decimals: 18 },
         { symbol: 'FTX Token', name: 'FTT', address: '0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9', decimals: 18 },
@@ -98,7 +108,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'PAX', name: 'Paxos Standard', address: '0x8E870D67F660D95d5be530380D0eC0bd388289E1', decimals: 18 },
         { symbol: 'PAXG', name: 'Paxos Gold', address: '0x45804880De22913dAFE09f4980848ECE6EcbAf78', decimals: 18 },
         { symbol: 'PERP', name: 'Perpetual', address: '0xbC396689893D065F41bc2C6EcbeE5e0085233447', decimals: 18 },
-        { symbol: 'RAI', name: 'Rai Reflex Index', address: '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919', decimals: 18 },
+        {
+            symbol: 'RAI',
+            name: 'Rai Reflex Index',
+            address: '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919',
+            decimals: 18
+        },
         { symbol: 'RARI', name: 'Rarible', address: '0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF', decimals: 18 },
         {
             symbol: 'RCN',
@@ -108,7 +123,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         },
         { symbol: 'REN', name: 'Republic Token', address: '0x408e41876cCCDC0F92210600ef50372656052a38', decimals: 18 },
         { symbol: 'REPv2', name: 'Reputation', address: '0x221657776846890989a759BA2973e427DfF5C9bB', decimals: 18 },
-        { symbol: 'RGT', name: 'Rari Governance Token', address: '0xD291E7a03283640FDc51b121aC401383A46cC623', decimals: 18 },
+        {
+            symbol: 'RGT',
+            name: 'Rari Governance Token',
+            address: '0xD291E7a03283640FDc51b121aC401383A46cC623',
+            decimals: 18
+        },
         {
             symbol: 'RLC',
             name: 'iEx.ec Network Token',
@@ -247,7 +267,12 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
     [ChainId.MATIC]: [
         { symbol: 'AAVE', name: 'AAVE Token', address: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', decimals: 18 },
         { symbol: 'DAI', name: 'Dai Stablecoin', address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', decimals: 18 },
-        { symbol: 'WETH', name: 'Wrapped Ethereum', address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', decimals: 18 },
+        {
+            symbol: 'WETH',
+            name: 'Wrapped Ethereum',
+            address: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+            decimals: 18
+        },
         {
             symbol: 'WMATIC',
             name: 'Wrapped Matic',

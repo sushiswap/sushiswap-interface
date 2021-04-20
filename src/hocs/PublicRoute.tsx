@@ -1,6 +1,6 @@
-import React from 'react'
-import { Route, Redirect, useLocation, RouteComponentProps } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
+import React from 'react'
+import { Redirect, Route, RouteComponentProps, useLocation } from 'react-router-dom'
 
 // A wrapper for <Route> that redirects to the Connect Wallet
 // screen if you're not yet authenticated.

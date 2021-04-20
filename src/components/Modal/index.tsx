@@ -1,17 +1,17 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import { animated, useTransition, useSpring } from 'react-spring'
-import { DialogOverlay, DialogContent } from '@reach/dialog'
-import { isMobile } from 'react-device-detect'
+import { DialogContent, DialogOverlay } from '@reach/dialog'
 import '@reach/dialog/styles.css'
 import { transparentize } from 'polished'
+import React from 'react'
+import { isMobile } from 'react-device-detect'
+import { animated, useSpring, useTransition } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
+import styled, { css } from 'styled-components'
 
 const AnimatedDialogOverlay = animated(DialogOverlay)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
     &[data-reach-dialog-overlay] {
-        z-index: 2;
+        z-index: 10;
         background-color: transparent;
         overflow: hidden;
 
@@ -125,7 +125,9 @@ export default function Modal({
                                 {...(isMobile
                                     ? {
                                           ...bind(),
-                                          style: { transform: y.interpolate(y => `translateY(${y > 0 ? y : 0}px)`) }
+                                          style: {
+                                              transform: y.interpolate(y => `translateY(${y > 0 ? y : 0}px)`)
+                                          }
                                       }
                                     : {})}
                                 aria-label="dialog content"
@@ -133,9 +135,13 @@ export default function Modal({
                                 maxHeight={maxHeight}
                                 mobile={isMobile}
                             >
-                                {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-                                {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
-                                {children}
+                                <div className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
+                                    <div className="flex flex-col h-full w-full bg-dark-900 rounded p-6">
+                                        {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
+                                        {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+                                        {children}
+                                    </div>
+                                </div>
                             </StyledDialogContent>
                         </StyledDialogOverlay>
                     )

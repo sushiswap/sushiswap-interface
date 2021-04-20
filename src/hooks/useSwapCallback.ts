@@ -6,13 +6,13 @@ import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
-import isZero from '../utils/isZero'
+import { isZero } from 'functions'
 import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './index'
 import { useV1ExchangeContract } from './useContract'
-import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
+import useTransactionDeadline from './useTransactionDeadline'
 
 export enum SwapCallbackState {
     INVALID,

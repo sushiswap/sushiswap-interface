@@ -1,23 +1,19 @@
+import { useFuse, useSortableData } from 'hooks'
 import React, { useState } from 'react'
+import { ChevronDown, ChevronUp } from 'react-feather'
 import styled from 'styled-components'
+import useFarms from 'hooks/useFarms'
 import { RowBetween } from '../../components/Row'
-import { Dots } from '../Pool/styleds'
-
-//import { useActiveWeb3React } from 'hooks'
 import { formattedNum, formattedPercent } from '../../utils'
 import { Card, CardHeader, Paper, Search, DoubleLogo, TokenLogo } from './components'
-import useFuse from 'sushi-hooks/useFuse'
-import useSortableData from 'sushi-hooks/useSortableData'
-import useFarms from 'sushi-hooks/useFarms'
-
-import { ChevronUp, ChevronDown } from 'react-feather'
 import InputGroup from './InputGroup'
+import { Dots } from 'kashi/components'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
 
-export default function BentoBalances(): JSX.Element {
+export default function Yield(): JSX.Element {
     const query = useFarms()
     const farms = query?.farms
     const userFarms = query?.userFarms

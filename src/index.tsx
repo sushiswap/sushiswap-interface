@@ -1,19 +1,16 @@
 import './tailwind.css'
+import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
-import 'inter-ui'
-// import '@fontsource/dm-sans'
-// import '@fontsource/dm-sans/500.css'
-import '@fontsource/dm-sans/400.css'
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
+import { KashiProvider } from 'kashi'
 import React, { StrictMode } from 'react'
 import { isMobile } from 'react-device-detect'
 import ReactDOM from 'react-dom'
 import ReactGA from 'react-ga'
 import { Provider } from 'react-redux'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import Blocklist from './components/Blocklist'
 import { NetworkContextName } from './constants'
-import './i18n'
 import App from './pages/App'
 import store from './state'
 import ApplicationUpdater from './state/application/updater'
@@ -23,6 +20,8 @@ import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
+
+import './i18n'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -73,9 +72,11 @@ ReactDOM.render(
                         <Updaters />
                         <ThemeProvider>
                             <ThemedGlobalStyle />
-                            <HashRouter>
-                                <App />
-                            </HashRouter>
+                            <KashiProvider>
+                                <Router>
+                                    <App />
+                                </Router>
+                            </KashiProvider>
                         </ThemeProvider>
                     </Provider>
                 </Blocklist>

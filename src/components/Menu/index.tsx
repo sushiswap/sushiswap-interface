@@ -1,3 +1,4 @@
+import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
 import React, { useRef } from 'react'
 import { BookOpen, Code, Info, MessageCircle, PieChart, Tool } from 'react-feather'
 import styled from 'styled-components'
@@ -6,10 +7,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
-
 import { ExternalLink, StyledInternalLink } from '../../theme'
-import { ButtonPrimary } from '../Button'
-import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
 
 const StyledMenuIcon = styled(MenuIcon)`
     path {

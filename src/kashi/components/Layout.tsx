@@ -1,7 +1,7 @@
-import React from 'react'
-import KashiLogo from 'assets/kashi/logo.png'
-import { NavLink, Link, useLocation } from 'react-router-dom'
 import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
+import KashiLogo from 'assets/kashi/logo.png'
+import React from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { formattedNum } from 'utils'
 
 interface LayoutProps {

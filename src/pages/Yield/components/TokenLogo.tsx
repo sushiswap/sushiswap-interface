@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { ethers } from 'ethers'
 import PlaceHolder from 'assets/images/placeholder.png'
 import KashiLogo from 'assets/kashi/kashi-neon.png'
+import { getAddress } from '@ethersproject/address'
+import styled from 'styled-components'
 //import EthereumLogo from "../../assets/img/eth.png";
 
 const isAddress = (value: any) => {
     try {
-        return ethers.utils.getAddress(value.toLowerCase())
+        return getAddress(value.toLowerCase())
     } catch {
         return false
     }

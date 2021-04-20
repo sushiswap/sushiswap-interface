@@ -1,4 +1,4 @@
-import { FlattenSimpleInterpolation, ThemedCssFunction } from 'styled-components'
+import 'styled-components'
 
 export type Color = string
 export interface Colors {

@@ -1,27 +1,25 @@
 import React, { useCallback, useContext } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
 import { useDispatch } from 'react-redux'
 import styled, { ThemeContext } from 'styled-components'
-import { useActiveWeb3React } from '../../hooks'
-import { AppDispatch } from '../../state'
-import { clearAllTransactions } from '../../state/transactions/actions'
-import { shortenAddress } from '../../utils'
-import { AutoRow } from '../Row'
-import Copy from './Copy'
-import Transaction from './Transaction'
-
-import { SUPPORTED_WALLETS } from '../../constants'
-import { ReactComponent as Close } from '../../assets/images/x.svg'
-import { getExplorerLink } from '../../utils'
-import { injected, walletconnect, walletlink, fortmatic, portis, torus } from '../../connectors'
 import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
-import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
 import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
 import PortisIcon from '../../assets/images/portisIcon.png'
 import TorusIcon from '../../assets/images/torusIcon.png'
-import Identicon from '../Identicon'
-import { ButtonSecondary } from '../Button'
-import { ExternalLink as LinkIcon } from 'react-feather'
+import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
+import { ReactComponent as Close } from '../../assets/images/x.svg'
+import { fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
+import { SUPPORTED_WALLETS } from '../../constants'
+import { useActiveWeb3React } from '../../hooks'
+import { AppDispatch } from '../../state'
+import { clearAllTransactions } from '../../state/transactions/actions'
 import { ExternalLink, LinkStyledButton, TYPE } from '../../theme'
+import { getExplorerLink, shortenAddress } from '../../utils'
+import { ButtonSecondary } from '../ButtonLegacy'
+import Identicon from '../Identicon'
+import { AutoRow } from '../Row'
+import Copy from './Copy'
+import Transaction from './Transaction'
 
 const HeaderRow = styled.div`
     ${({ theme }) => theme.flexRowNoWrap};
@@ -54,9 +52,9 @@ const UpperSection = styled.div`
 `
 
 const InfoCard = styled.div`
-    padding: 1rem;
-    border: 1px solid ${({ theme }) => theme.bg3};
-    border-radius: 10px;
+    // padding: 1rem;
+    // border: 1px solid ${({ theme }) => theme.bg3};
+    // border-radius: 10px;
     position: relative;
     display: grid;
     grid-row-gap: 12px;
@@ -77,7 +75,7 @@ const AccountGroupingRow = styled.div`
 `
 
 const AccountSection = styled.div`
-    background-color: ${({ theme }) => theme.bg1};
+    // background-color: ${({ theme }) => theme.bg1};
     padding: 0rem 1rem;
     ${({ theme }) => theme.mediaWidth.upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
 `
@@ -99,7 +97,7 @@ const LowerSection = styled.div`
     padding: 1.5rem;
     flex-grow: 1;
     overflow: auto;
-    background-color: ${({ theme }) => theme.bg2};
+    // background-color: ${({ theme }) => theme.bg2};
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 

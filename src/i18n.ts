@@ -1,7 +1,7 @@
 import i18next from 'i18next'
-import { initReactI18next } from 'react-i18next'
-import XHR from 'i18next-xhr-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
+import XHR from 'i18next-xhr-backend'
+import { initReactI18next } from 'react-i18next'
 
 i18next
     .use(XHR)
@@ -9,13 +9,14 @@ i18next
     .use(initReactI18next)
     .init({
         backend: {
-            loadPath: `./locales/{{lng}}.json`
+            loadPath: `/locales/{{lng}}.json`
         },
         react: {
             useSuspense: true
         },
         fallbackLng: 'en',
         preload: ['en'],
+        debug: true,
         keySeparator: false,
         interpolation: { escapeValue: false }
     })

@@ -1,20 +1,19 @@
-import { Currency, ETHER, Token, ChainId } from '@sushiswap/sdk'
+import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-
-import EthereumLogo from '../../assets/images/ethereum-logo.png'
-import BinanceCoinLogo from '../../assets/images/binance-coin-logo.png'
-import FantomLogo from '../../assets/images/fantom-logo.png'
-import MaticLogo from '../../assets/images/matic-logo.png'
-import xDaiLogo from '../../assets/images/xdai-logo.png'
-import MoonbeamLogo from '../../assets/images/moonbeam-logo.png'
 import AvalancheLogo from '../../assets/images/avalanche-logo.png'
-import HecoLogo from '../../assets/images/heco-logo.png'
+import BinanceCoinLogo from '../../assets/images/binance-coin-logo.png'
+import EthereumLogo from '../../assets/images/ethereum-logo.png'
+import FantomLogo from '../../assets/images/fantom-logo.png'
 import HarmonyLogo from '../../assets/images/harmony-logo.png'
+import HecoLogo from '../../assets/images/heco-logo.png'
+import MaticLogo from '../../assets/images/matic-logo.png'
+import MoonbeamLogo from '../../assets/images/moonbeam-logo.png'
+import xDaiLogo from '../../assets/images/xdai-logo.png'
+import { useActiveWeb3React } from '../../hooks'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
-import { useActiveWeb3React } from '../../hooks'
 
 const getTokenLogoURL = (address: string) =>
     `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
@@ -23,15 +22,15 @@ const StyledNativeCurrencyLogo = styled.img<{ size: string }>`
     width: ${({ size }) => size};
     height: ${({ size }) => size};
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-    border-radius: 24px;
+    border-radius: 10px;
 `
 
 const StyledLogo = styled(Logo)<{ size: string }>`
     width: ${({ size }) => size};
     height: ${({ size }) => size};
-    border-radius: ${({ size }) => size};
+    // border-radius: ${({ size }) => size};
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-    background-color: ${({ theme }) => theme.white};
+    // background-color: ${({ theme }) => theme.white};
 `
 
 const logo: { readonly [chainId in ChainId]?: string } = {

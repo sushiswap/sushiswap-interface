@@ -1,14 +1,13 @@
 import { Web3Provider } from '@ethersproject/providers'
+import { ChainId } from '@sushiswap/sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
+import { LatticeConnector } from '@web3-react/lattice-connector'
+import { PortisConnector } from '@web3-react/portis-connector'
+import { TorusConnector } from '@web3-react/torus-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
-import { PortisConnector } from '@web3-react/portis-connector'
-import { LatticeConnector } from '@web3-react/lattice-connector'
-import { TorusConnector } from '@web3-react/torus-connector'
-
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
-import { ChainId } from '@sushiswap/sdk'
 
 const RPC = {
     [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',

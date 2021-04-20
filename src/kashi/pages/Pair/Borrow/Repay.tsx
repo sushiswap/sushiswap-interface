@@ -1,21 +1,20 @@
-import React, { useContext, useState } from 'react'
-import { Alert, Button, TransactionReviewView, Dots } from 'kashi/components'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
-import { useActiveWeb3React } from 'hooks'
 import { BigNumber } from '@ethersproject/bignumber'
-import { MaxUint256 } from '@ethersproject/constants'
-import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
-import { Warnings, TransactionReview, KashiCooker, Warning } from 'kashi/entities'
-import { KASHI_ADDRESS, BENTOBOX_ADDRESS } from 'kashi/constants'
-import { useKashiApproveCallback, BentoApprovalState } from 'kashi/hooks'
-import { useKashiApprovalPending } from 'state/application/hooks'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { formattedNum } from 'utils'
-import { KashiContext } from 'kashi/context'
+import { Input as NumericalInput } from 'components/NumericalInput'
+import { useActiveWeb3React } from 'hooks'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { Alert, Button, Dots, TransactionReviewView } from 'kashi/components'
 import WarningsView from 'kashi/components/Warnings'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
+import { KashiContext } from 'kashi/context'
+import { KashiCooker, TransactionReview, Warning, Warnings } from 'kashi/entities'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
+import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
+import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
+import React, { useContext, useState } from 'react'
+import { ArrowDownRight, ArrowUpRight } from 'react-feather'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { formattedNum } from 'utils'
 
 interface RepayProps {
     pair: any
@@ -216,6 +215,7 @@ export default function Repay({ pair }: RepayProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoRepayAsset(!useBentoRepay)
@@ -244,6 +244,7 @@ export default function Repay({ pair }: RepayProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => {
                             setPinRepayMax(true)
                         }}
@@ -264,6 +265,7 @@ export default function Repay({ pair }: RepayProps) {
                         <Button
                             variant="outlined"
                             color="pink"
+                            size="small"
                             className="focus:ring focus:ring-pink"
                             onClick={() => {
                                 setUseBentoRemoveCollateral(!useBentoRemove)
@@ -292,6 +294,7 @@ export default function Repay({ pair }: RepayProps) {
                     <Button
                         variant="outlined"
                         color="pink"
+                        size="small"
                         onClick={() => setPinRemoveMax(true)}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >

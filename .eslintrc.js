@@ -23,6 +23,7 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         'no-extend-native': 'off',
         'react/prop-types': 'off',
+        'react/display-name': 'off',
         'prettier/prettier': 'off',
         'prefer-const': 'warn'
     },

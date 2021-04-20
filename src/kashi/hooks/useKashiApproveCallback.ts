@@ -1,14 +1,13 @@
-import { useBentoMasterContractAllowed } from 'data/Allowances'
-import { ethers } from 'ethers'
-import { useActiveWeb3React } from 'hooks'
-import { KASHI_ADDRESS } from 'kashi/constants'
-import { KashiCooker, signMasterContractApproval } from 'kashi/entities/KashiCooker'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTransactionAdder } from 'state/transactions/hooks'
-import { useBentoBoxContract } from 'sushi-hooks/useContract'
-import { useKashiApprovalPending } from 'state/application/hooks'
+import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
+import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { KASHI_ADDRESS } from 'kashi/constants'
+import { KashiCooker, signMasterContractApproval } from 'kashi/entities'
 import { setKashiApprovalPending } from 'state/application/actions'
+import { useKashiApprovalPending } from 'state/application/hooks'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { useBentoMasterContractAllowed } from 'state/bentobox/hooks'
 
 export enum BentoApprovalState {
     UNKNOWN,
@@ -18,14 +17,13 @@ export enum BentoApprovalState {
     APPROVED
 }
 
-interface IKashiPermit {
+export interface KashiPermit {
     account: string
     masterContract: string
     v: number
     r: string
     s: string
 }
-export type KashiPermit = IKashiPermit | undefined
 
 export enum BentoApproveOutcome {
     SUCCESS,
@@ -45,14 +43,14 @@ function useKashiApproveCallback(
 ): [
     BentoApprovalState,
     boolean,
-    KashiPermit,
+    KashiPermit | undefined,
     () => void,
     (pair: any, execute: (cooker: KashiCooker) => Promise<string>) => void
 ] {
     const { account, library, chainId } = useActiveWeb3React()
     const dispatch = useDispatch()
     const [approveKashiFallback, setApproveKashiFallback] = useState<boolean>(false)
-    const [kashiPermit, setKashiPermit] = useState<KashiPermit>(undefined)
+    const [kashiPermit, setKashiPermit] = useState<KashiPermit | undefined>(undefined)
 
     useEffect(() => {
         setKashiPermit(undefined)
