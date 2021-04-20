@@ -8,12 +8,12 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
     padding-bottom: 16px;
     margin-top: -2rem;
     width: 100%;
-    max-width: 36rem;
-    // max-width: 400px;
+    max-width: 544px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     color: ${({ theme }) => theme.text2};
-    background-color: ${({ theme }) => theme.advancedBG};
+    background-color: #202231;
+    // background-color: ${({ theme }) => theme.advancedBG};
     z-index: -1;
 
     transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};

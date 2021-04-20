@@ -292,10 +292,7 @@ export default function CurrencyInputPanel({
                                 }}
                             />
                             {account && (
-                                <div
-                                    onClick={onMax}
-                                    className="font-medium cursor-pointer text-xs text-low-emphesis hidden md:inline"
-                                >
+                                <div onClick={onMax} className="font-medium cursor-pointer text-xs text-low-emphesis">
                                     {!hideBalance && !!currency && selectedCurrencyBalance
                                         ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
                                         : ' -'}
