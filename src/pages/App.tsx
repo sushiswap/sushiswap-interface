@@ -82,7 +82,7 @@ function App(): JSX.Element {
                                 exact
                                 strict
                                 path="/bento/kashi"
-                                render={() => <Redirect to="/bento/kashi/borrow" />}
+                                render={props => <Redirect to="/bento/kashi/borrow" {...props} />}
                             />
                             <WalletRoute exact strict path="/bento/kashi/lend" component={LendMarkets} />
                             <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
@@ -149,13 +149,6 @@ function App(): JSX.Element {
                                         params: { address }
                                     }
                                 }) => <Redirect to={`/pool`} />}
-                            />
-
-                            {/* Redirects for Legacy Hash Router paths */}
-                            <Route
-                                exact
-                                path="/"
-                                render={({ location }) => <Redirect to={location.hash.replace('#', '')} />}
                             />
 
                             {/* Catch all */}

@@ -22,6 +22,7 @@ function classNames(...classes: string[]) {
 export default function Header(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
     const { t } = useTranslation()
+
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
     return (

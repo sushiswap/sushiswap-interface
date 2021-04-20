@@ -136,7 +136,18 @@ export default function Pool() {
                 <Alert
                     title="Liquidity provider rewards"
                     showIcon={false}
-                    message="Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity."
+                    message={
+                        <>
+                            <p>
+                                Liquidity providers earn a 0.25% fee on all trades proportional to their share of the
+                                pool.
+                            </p>
+                            <p>
+                                Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
+                                liquidity.
+                            </p>
+                        </>
+                    }
                     type="information"
                 />
                 <AutoColumn gap="sm" justify="center">
