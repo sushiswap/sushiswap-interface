@@ -19,17 +19,6 @@ const PARAMS: {
         blockExplorerUrls: string[]
     }
 } = {
-    [ChainId.MAINNET]: {
-        chainId: '0x1',
-        chainName: 'Ethereum',
-        nativeCurrency: {
-            name: 'Ethereum',
-            symbol: 'ETH',
-            decimals: '18'
-        },
-        rpcUrls: ['https://mainnet.infura.io/v3'],
-        blockExplorerUrls: ['https://etherscan.com']
-    },
     [ChainId.FANTOM]: {
         chainId: '0xfa',
         chainName: 'Fantom',
@@ -84,18 +73,18 @@ const PARAMS: {
         },
         rpcUrls: ['https://rpc.xdaichain.com'],
         blockExplorerUrls: ['https://blockscout.com/poa/xdai']
-    },
-    [ChainId.HARMONY]: {
-        chainId: '0x63564C40',
-        chainName: 'Harmony One',
-        nativeCurrency: {
-            name: 'One Token',
-            symbol: 'ONE',
-            decimals: '18'
-        },
-        rpcUrls: ['https://api.s0.t.hmny.io'],
-        blockExplorerUrls: ['https://explorer.harmony.one/']
     }
+    // [ChainId.HARMONY]: {
+    //     chainId: '0x63564C40',
+    //     chainName: 'Harmony One',
+    //     nativeCurrency: {
+    //         name: 'One Token',
+    //         symbol: 'ONE',
+    //         decimals: '18'
+    //     },
+    //     rpcUrls: ['https://api.s0.t.hmny.io'],
+    //     blockExplorerUrls: ['https://explorer.harmony.one/']
+    // }
 }
 
 export default function NetworkModal(): JSX.Element | null {
