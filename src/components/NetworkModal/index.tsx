@@ -13,19 +13,30 @@ const PARAMS: {
         nativeCurrency: {
             name: string
             symbol: string
-            decimals: string
+            decimals: number
         }
         rpcUrls: string[]
         blockExplorerUrls: string[]
     }
 } = {
+    [ChainId.MAINNET]: {
+        chainId: '0x1',
+        chainName: 'Ethereum',
+        nativeCurrency: {
+            name: 'Ethereum',
+            symbol: 'ETH',
+            decimals: 18
+        },
+        rpcUrls: ['https://mainnet.infura.io/v3'],
+        blockExplorerUrls: ['https://etherscan.com']
+    },
     [ChainId.FANTOM]: {
         chainId: '0xfa',
         chainName: 'Fantom',
         nativeCurrency: {
             name: 'Fantom',
             symbol: 'FTM',
-            decimals: '18'
+            decimals: 18
         },
         rpcUrls: ['https://rpcapi.fantom.network'],
         blockExplorerUrls: ['https://ftmscan.com']
@@ -36,7 +47,7 @@ const PARAMS: {
         nativeCurrency: {
             name: 'Binance Coin',
             symbol: 'BNB',
-            decimals: '18'
+            decimals: 18
         },
         rpcUrls: ['https://bsc-dataseed.binance.org'],
         blockExplorerUrls: ['https://bscscan.com']
@@ -47,7 +58,7 @@ const PARAMS: {
         nativeCurrency: {
             name: 'Matic',
             symbol: 'MATIC',
-            decimals: '18'
+            decimals: 18
         },
         rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
         blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
@@ -58,7 +69,7 @@ const PARAMS: {
         nativeCurrency: {
             name: 'Heco Token',
             symbol: 'HT',
-            decimals: '18'
+            decimals: 18
         },
         rpcUrls: ['https://http-mainnet.hecochain.com'],
         blockExplorerUrls: ['https://hecoinfo.com']
@@ -69,22 +80,22 @@ const PARAMS: {
         nativeCurrency: {
             name: 'xDai Token',
             symbol: 'xDai',
-            decimals: '18'
+            decimals: 18
         },
         rpcUrls: ['https://rpc.xdaichain.com'],
         blockExplorerUrls: ['https://blockscout.com/poa/xdai']
+    },
+    [ChainId.HARMONY]: {
+        chainId: '0x63564C40',
+        chainName: 'Harmony One',
+        nativeCurrency: {
+            name: 'One Token',
+            symbol: 'ONE',
+            decimals: 18
+        },
+        rpcUrls: ['https://api.s0.t.hmny.io'],
+        blockExplorerUrls: ['https://explorer.harmony.one/']
     }
-    // [ChainId.HARMONY]: {
-    //     chainId: '0x63564C40',
-    //     chainName: 'Harmony One',
-    //     nativeCurrency: {
-    //         name: 'One Token',
-    //         symbol: 'ONE',
-    //         decimals: '18'
-    //     },
-    //     rpcUrls: ['https://api.s0.t.hmny.io'],
-    //     blockExplorerUrls: ['https://explorer.harmony.one/']
-    // }
 }
 
 export default function NetworkModal(): JSX.Element | null {
