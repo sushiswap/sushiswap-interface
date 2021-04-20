@@ -1,7 +1,7 @@
 {
     "name": "@sushiswap/interface",
     "description": "SushiSwap Interface",
-    "homepage": ".",
+    "homepage": "https://sushiswap-interface-git-canary-teamsushi.vercel.app",
     "private": true,
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -91,6 +91,7 @@
         "husky": "^6.0.0",
         "i18next": "^19.9.1",
         "i18next-browser-languagedetector": "^3.0.1",
+        "i18next-http-backend": "^1.2.1",
         "i18next-xhr-backend": "^2.0.1",
         "jazzicon": "^1.5.0",
         "lint-staged": "^10.0.0",
