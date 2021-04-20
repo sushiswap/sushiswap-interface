@@ -183,7 +183,7 @@ export default function Header(): JSX.Element {
                                         </div>
                                     )}
 
-                                    <div className="w-full sm:w-auto flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
+                                    <div className="w-auto flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
                                         {account && chainId && userEthBalance && (
                                             <>
                                                 <div className="py-2 px-3 text-primary text-bold">
