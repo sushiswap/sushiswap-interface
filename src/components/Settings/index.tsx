@@ -69,10 +69,12 @@ const ModalContentWrapper = styled.div`
 `
 
 const ExtendedMenuFlyout = styled(MenuFlyout)`
-    min-width: 20.125rem;
+    min-width: 22rem;
+    margin-right: -20px;
 
     ${({ theme }) => theme.mediaWidth.upToMedium`
-    min-width: 18.125rem;
+        min-width: 20rem;
+        margin-right: -10px;
   `};
 `
 
@@ -150,18 +152,14 @@ export default function SettingsTab() {
             {open && (
                 <ExtendedMenuFlyout>
                     <AutoColumn gap="md" style={{ padding: '1rem' }}>
-                        <Text fontWeight={600} fontSize={14}>
-                            Transaction Settings
-                        </Text>
+                        <div className="text-base font-semibold text-high-emphesis">Transaction Settings</div>
                         <TransactionSettings
                             rawSlippage={userSlippageTolerance}
                             setRawSlippage={setUserslippageTolerance}
                             deadline={ttl}
                             setDeadline={setTtl}
                         />
-                        <Text fontWeight={600} fontSize={14}>
-                            Interface Settings
-                        </Text>
+                        <div className="text-base font-semibold text-high-emphesis">Interface Settings</div>
                         <RowBetween>
                             <RowFixed>
                                 <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>

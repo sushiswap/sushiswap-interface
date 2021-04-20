@@ -76,7 +76,7 @@ export default function Menu() {
 
             {open && (
                 <ExtendedMenuFlyout>
-                    <MenuItem id="link" href="#">
+                    <MenuItem id="link" href="https://www.sushi.com">
                         <Info size={14} />
                         About
                     </MenuItem>

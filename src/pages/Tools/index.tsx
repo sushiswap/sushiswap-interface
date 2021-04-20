@@ -91,7 +91,9 @@ export default function Pool() {
                     <AutoColumn gap="md" style={{ width: '100%' }}>
                         <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>
                             <HideSmall>
-                                <TYPE.mediumHeader style={{ marginTop: '0.5rem', justifySelf: 'flex-start' }}>
+                                <TYPE.mediumHeader
+                                    style={{ marginTop: '0.5rem', justifySelf: 'flex-start', paddingLeft: '0.75rem' }}
+                                >
                                     Tools
                                 </TYPE.mediumHeader>
                             </HideSmall>
@@ -102,7 +104,7 @@ export default function Pool() {
                                     </ButtonSecondary>
                                 </ResponsiveExternalLink>
                                 <ResponsiveExternalLink href={''}>
-                                    <ButtonPrimaryNormal padding="6px 8px" borderRadius="20px">
+                                    <ButtonPrimaryNormal padding="6px 8px" borderRadius="10px">
                                         <Text fontWeight={500} fontSize={16}>
                                             Submit Tool
                                         </Text>

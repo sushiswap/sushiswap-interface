@@ -81,6 +81,7 @@ interface ModalProps {
     maxHeight?: number
     initialFocusRef?: React.RefObject<any>
     children?: React.ReactNode
+    padding?: number
 }
 
 export default function Modal({
@@ -89,7 +90,8 @@ export default function Modal({
     minHeight = false,
     maxHeight = 90,
     initialFocusRef,
-    children
+    children,
+    padding = 5
 }: ModalProps) {
     const fadeTransition = useTransition(isOpen, null, {
         config: { duration: 200 },
@@ -136,7 +138,9 @@ export default function Modal({
                                 mobile={isMobile}
                             >
                                 <div className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
-                                    <div className="flex flex-col h-full w-full bg-dark-900 rounded p-6">
+                                    <div
+                                        className={`flex flex-col h-full w-full bg-dark-900 rounded p-${padding} overflow-y-scroll`}
+                                    >
                                         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
                                         {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
                                         {children}

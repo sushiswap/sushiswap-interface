@@ -12,6 +12,8 @@ import xSushi from '../../assets/kashi/tokens/xsushi-square.jpg'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
 
+import MoreMenu from '../Menu'
+
 import { ExternalLink, NavLink } from '../Link'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 
@@ -90,7 +92,7 @@ export default function Header(): JSX.Element {
                                     {chainId && chainId === ChainId.MAINNET && library && library.provider.isMetaMask && (
                                         <>
                                             <div
-                                                className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                                className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                                 onClick={() => {
                                                     const params: any = {
                                                         type: 'ERC20',
@@ -132,7 +134,7 @@ export default function Header(): JSX.Element {
                                                 />
                                             </div>
                                             <div
-                                                className="rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
+                                                className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                                 onClick={() => {
                                                     const params: any = {
                                                         type: 'ERC20',
@@ -176,12 +178,12 @@ export default function Header(): JSX.Element {
                                         </>
                                     )}
                                     {library && library.provider.isMetaMask && (
-                                        <>
+                                        <div className="hidden sm:inline-block">
                                             <Web3Network />
-                                        </>
+                                        </div>
                                     )}
 
-                                    <div className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
+                                    <div className="w-full sm:w-auto flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
                                         {account && chainId && userEthBalance && (
                                             <>
                                                 <div className="py-2 px-3 text-primary text-bold">
@@ -192,6 +194,7 @@ export default function Header(): JSX.Element {
                                         )}
                                         <Web3Status />
                                     </div>
+                                    <MoreMenu />
                                 </div>
                             </div>
                             <div className="-mr-2 flex sm:hidden">
@@ -254,6 +257,9 @@ export default function Header(): JSX.Element {
                                     Apps
                                 </NavLink>
                             )}
+                            <NavLink id={`tool-nav-link`} to={'/tools'}>
+                                Tools
+                            </NavLink>
                             {chainId && (
                                 <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
                                     Analytics

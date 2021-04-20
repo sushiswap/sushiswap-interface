@@ -540,25 +540,25 @@ export default function RemoveLiquidity({
                                         <RowBetween>
                                             <MaxButton
                                                 onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '25')}
-                                                width="20%"
+                                                width="100%"
                                             >
                                                 25%
                                             </MaxButton>
                                             <MaxButton
                                                 onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '50')}
-                                                width="20%"
+                                                width="100%"
                                             >
                                                 50%
                                             </MaxButton>
                                             <MaxButton
                                                 onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '75')}
-                                                width="20%"
+                                                width="100%"
                                             >
                                                 75%
                                             </MaxButton>
                                             <MaxButton
                                                 onClick={() => onUserInput(Field.LIQUIDITY_PERCENT, '100')}
-                                                width="20%"
+                                                width="100%"
                                             >
                                                 Max
                                             </MaxButton>
@@ -746,9 +746,12 @@ export default function RemoveLiquidity({
             </div>
 
             {pair ? (
-                <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
+                // <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
+                //     <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
+                // </AutoColumn>
+                <div className="w-full max-w-2xl flex flex-col mt-4">
                     <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-                </AutoColumn>
+                </div>
             ) : null}
         </>
     )
