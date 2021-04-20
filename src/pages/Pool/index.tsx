@@ -20,6 +20,7 @@ import { useStakingInfo } from '../../state/stake/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
+import Alert from '../../components/Alert'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
@@ -132,34 +133,23 @@ export default function Pool() {
         <>
             <PageWrapper>
                 <SwapPoolTabs active={'pool'} />
-                <VoteCard>
-                    <CardSection>
-                        <AutoColumn gap="md">
-                            <RowBetween>
-                                {/* <TYPE.white fontWeight={700} color={theme.text1}>
-                                    Liquidity provider rewards
-                                </TYPE.white> */}
-                                <div className="text-base text-high-emphesis font-bold">Liquidity provider rewards</div>
-                            </RowBetween>
-                            <RowBetween>
-                                <div className="text-gray-400 text-sm font-medium">
-                                    {`Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.`}
-                                </div>
-                                {/* <TYPE.white fontWeight={500} fontSize={14} color={theme.text1}>
-                                    {`Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.`}
-                                </TYPE.white> */}
-                            </RowBetween>
-                            {/* <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
-                target="_blank"
-                href="https://uniswap.org/docs/v2/core-concepts/pools/"
-              >
-                <TYPE.white fontSize={14}>Read more about providing liquidity</TYPE.white>
-              </ExternalLink> */}
-                        </AutoColumn>
-                    </CardSection>
-                </VoteCard>
-
+                <Alert
+                    title="Liquidity provider rewards"
+                    showIcon={false}
+                    message={
+                        <>
+                            <p>
+                                Liquidity providers earn a 0.25% fee on all trades proportional to their share of the
+                                pool.
+                            </p>
+                            <p>
+                                Fees are added to the pool, accrue in real time and can be claimed by withdrawing your
+                                liquidity.
+                            </p>
+                        </>
+                    }
+                    type="information"
+                />
                 <AutoColumn gap="sm" justify="center">
                     <AutoColumn gap="md" style={{ width: '100%' }}>
                         <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>

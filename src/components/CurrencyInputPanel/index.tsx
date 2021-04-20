@@ -158,7 +158,7 @@ export default function CurrencyInputPanel({
     }, [setModalOpen])
 
     return (
-        <div id={id} className="rounded bg-dark-800 p-3.5">
+        <div id={id} className="rounded bg-dark-800 p-5">
             <div
                 className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row justify-between"
                 // hideInput={hideInput}
@@ -292,10 +292,7 @@ export default function CurrencyInputPanel({
                                 }}
                             />
                             {account && (
-                                <div
-                                    onClick={onMax}
-                                    className="font-medium cursor-pointer text-xs text-low-emphesis hidden md:inline"
-                                >
+                                <div onClick={onMax} className="font-medium cursor-pointer text-xs text-low-emphesis">
                                     {!hideBalance && !!currency && selectedCurrencyBalance
                                         ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
                                         : ' -'}

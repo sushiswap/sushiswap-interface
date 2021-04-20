@@ -485,7 +485,7 @@ export default function RemoveLiquidity({
 
     return (
         <>
-            <AppBody>
+            <div className="bg-dark-900 w-full max-w-2xl rounded">
                 <AddRemoveTabs creating={false} adding={false} />
                 <Wrapper>
                     <TransactionConfirmationModal
@@ -743,7 +743,7 @@ export default function RemoveLiquidity({
                         </div>
                     </AutoColumn>
                 </Wrapper>
-            </AppBody>
+            </div>
 
             {pair ? (
                 <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>

@@ -37,6 +37,7 @@ import AppBody from '../AppBody'
 import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
+import Alert from '../../components/Alert'
 
 export default function AddLiquidity({
     match: {
@@ -318,7 +319,7 @@ export default function AddLiquidity({
 
     return (
         <>
-            <div className="bg-dark-900 w-full max-w-xl rounded">
+            <div className="bg-dark-900 w-full max-w-2xl rounded">
                 <AddRemoveTabs creating={isCreate} adding={true} />
                 <Wrapper>
                     <TransactionConfirmationModal
@@ -339,33 +340,22 @@ export default function AddLiquidity({
                     <AutoColumn gap="20px">
                         {noLiquidity ||
                             (isCreate ? (
-                                <ColumnCenter>
-                                    <BlueCard>
-                                        <AutoColumn gap="10px">
-                                            <TYPE.link fontWeight={600} color={'primaryText1'}>
-                                                You are the first liquidity provider.
-                                            </TYPE.link>
-                                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                                The ratio of tokens you add will set the price of this pool.
-                                            </TYPE.link>
-                                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                                Once you are happy with the rate click supply to review.
-                                            </TYPE.link>
-                                        </AutoColumn>
-                                    </BlueCard>
-                                </ColumnCenter>
+                                <Alert
+                                    message="When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review."
+                                    type="information"
+                                />
                             ) : (
-                                <ColumnCenter>
-                                    <BlueCard>
-                                        <AutoColumn gap="10px">
-                                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                                <b>Tip:</b> When you add liquidity, you will receive pool tokens
-                                                representing your position. These tokens automatically earn fees
-                                                proportional to your share of the pool, and can be redeemed at any time.
-                                            </TYPE.link>
-                                        </AutoColumn>
-                                    </BlueCard>
-                                </ColumnCenter>
+                                <Alert
+                                    showIcon={false}
+                                    message={
+                                        <>
+                                            <b>Tip:</b> When you add liquidity, you will receive pool tokens
+                                            representing your position. These tokens automatically earn fees
+                                            proportional to your share of the pool, and can be redeemed at any time.
+                                        </>
+                                    }
+                                    type="information"
+                                />
                             ))}
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.CURRENCY_A]}

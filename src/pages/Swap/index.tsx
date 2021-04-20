@@ -47,6 +47,8 @@ import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody'
 import { ClickableText } from '../Pool/styleds'
+import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
+import Lottie from 'lottie-react'
 
 export default function Swap() {
     const loadedUrlParams = useDefaultsFromURLSearch()
@@ -304,6 +306,8 @@ export default function Swap() {
 
     const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
+    const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
+
     return (
         <>
             <TokenWarningModal
@@ -346,9 +350,34 @@ export default function Swap() {
                             id="swap-currency-input"
                         />
                         <AutoColumn justify="space-between">
-                            <AutoRow justify={isExpertMode ? 'space-between' : 'center'} style={{ padding: '0 1rem' }}>
-                                <ArrowWrapper clickable>
-                                    <ArrowDown
+                            <AutoRow
+                                justify={isExpertMode ? 'space-between' : 'flex-start'}
+                                style={{ padding: '0 1rem' }}
+                            >
+                                <button
+                                    className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10"
+                                    onClick={() => {
+                                        setApprovalSubmitted(false) // reset 2 step UI for approvals
+                                        onSwitchTokens()
+                                    }}
+                                >
+                                    <div
+                                        className="bg-dark-800 hover:bg-dark-700 rounded-full p-3"
+                                        onMouseEnter={() => setAnimateSwapArrows(true)}
+                                        onMouseLeave={() => setAnimateSwapArrows(false)}
+                                    >
+                                        <Lottie
+                                            animationData={swapArrowsAnimationData}
+                                            autoplay={animateSwapArrows}
+                                            loop={false}
+                                            style={{ width: 32, height: 32 }}
+
+                                            // className="text-secondary fill-current"
+                                        />
+                                    </div>
+                                </button>
+                                {/* <ArrowWrapper clickable>
+                                      <ArrowDown
                                         size="16"
                                         onClick={() => {
                                             setApprovalSubmitted(false) // reset 2 step UI for approvals
@@ -360,7 +389,7 @@ export default function Swap() {
                                                 : theme.text2
                                         }
                                     />
-                                </ArrowWrapper>
+                                </ArrowWrapper> */}
                                 {recipient === null && !showWrap && isExpertMode ? (
                                     <LinkStyledButton id="add-recipient-button" onClick={() => onChangeRecipient('')}>
                                         + Add a send (optional)

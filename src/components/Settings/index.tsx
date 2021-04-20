@@ -139,13 +139,13 @@ export default function SettingsTab() {
             </Modal>
             <StyledMenuButton onClick={toggle} id="open-settings-dialog-button">
                 <StyledMenuIcon />
-                {expertMode ? (
+                {/* {expertMode ? (
                     <EmojiWrapper>
                         <span role="img" aria-label="wizard-icon">
                             🧙
                         </span>
                     </EmojiWrapper>
-                ) : null}
+                ) : null} */}
             </StyledMenuButton>
             {open && (
                 <ExtendedMenuFlyout>

@@ -41,6 +41,7 @@ export function ExternalLink({
     href,
     children,
     rel = 'noopener noreferrer',
+    className = '',
     ...rest
 }: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & { href: string }): JSX.Element {
     const handleClick = useCallback(
@@ -67,7 +68,7 @@ export function ExternalLink({
             rel={rel}
             href={href}
             onClick={handleClick}
-            className="text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3"
+            className={`text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3 ${className}`}
             {...rest}
         >
             {children}

@@ -18,6 +18,7 @@ export function useModalOpen(modal: ApplicationModal): boolean {
 export function useToggleModal(modal: ApplicationModal): () => void {
     const open = useModalOpen(modal)
     const dispatch = useDispatch<AppDispatch>()
+    console.log('useToggleModal', open)
     return useCallback(() => dispatch(setOpenModal(open ? null : modal)), [dispatch, modal, open])
 }
 

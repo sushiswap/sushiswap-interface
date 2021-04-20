@@ -126,7 +126,7 @@ export default function NetworkModal(): JSX.Element | null {
                 ].map((key: ChainId, i: number) => {
                     if (chainId === key) {
                         return (
-                            <div className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
+                            <button key={i} className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
                                 <div className="flex items-center h-full w-full bg-dark-1000 rounded p-3">
                                     <img
                                         src={NETWORK_ICON[key]}
@@ -135,11 +135,11 @@ export default function NetworkModal(): JSX.Element | null {
                                     />
                                     <div className="text-primary font-bold">{NETWORK_LABEL[key]}</div>
                                 </div>
-                            </div>
+                            </button>
                         )
                     }
                     return (
-                        <div
+                        <button
                             key={i}
                             onClick={() => {
                                 toggleNetworkModal()
@@ -150,7 +150,7 @@ export default function NetworkModal(): JSX.Element | null {
                         >
                             <img src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md mr-2 w-8 h-8" />
                             <div className="text-primary font-bold">{NETWORK_LABEL[key]}</div>
-                        </div>
+                        </button>
                     )
                 })}
             </div>
