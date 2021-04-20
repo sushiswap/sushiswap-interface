@@ -75,7 +75,8 @@ export default function ClaimModal() {
     const unclaimedAmount: TokenAmount | undefined = useUserUnclaimedAmount(account)
     //console.log('unclaimedAmount:', unclaimedAmount)
     const { claimSubmitted, claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
-    const claimConfirmed = Boolean(claimTxn?.receipt)
+    //const claimConfirmed = Boolean(claimTxn?.receipt)
+    const claimConfirmed = false
 
     function onClaim() {
         setAttempting(true)
@@ -190,21 +191,22 @@ export default function ClaimModal() {
                                     </TYPE.white>
                                     <QuestionHelper text="Your Vested SUSHI will be released each week for the next 6 months. The amount released each week is determined by your historical farming rewards. You do not need to harvest each week as unclaimed amounts from each week will continue to accrue onto the next." />
                                 </RowBetween>
-                                <div style={{ display: 'flex', alignItems: 'baseline' }}>
+                                {/* <div style={{ display: 'flex', alignItems: 'baseline' }}> */}
+                                <div style={{ alignItems: 'baseline' }}>
                                     <TYPE.white fontWeight={700} fontSize={36} color={theme.text1}>
                                         {unclaimedAmount?.toFixed(4, { groupSeparator: ',' } ?? '-')}
                                     </TYPE.white>
                                     {account ? (
-                                        <TYPE.white fontWeight={700} fontSize={14} color={theme.text3} marginLeft={10}>
+                                        <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
                                             {totalLocked ? (
-                                                `/ ${formattedNum(totalLocked)} SUSHI`
+                                                `Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
                                             ) : (
-                                                <Dots>/ Fetching Total</Dots>
+                                                <Dots>Historical Total Locked: Fetching Total</Dots>
                                             )}
                                         </TYPE.white>
                                     ) : (
-                                        <TYPE.white fontWeight={700} fontSize={14} color={theme.text3} marginLeft={10}>
-                                            / Connect Wallet
+                                        <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
+                                            Historical Total Locked: Connect Wallet
                                         </TYPE.white>
                                     )}
                                 </div>
