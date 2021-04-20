@@ -478,9 +478,9 @@ export default function AddLiquidity({
             </div>
             {!addIsUnsupported ? (
                 pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                    <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
+                    <div className="w-full max-w-2xl flex flex-col mt-4">
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-                    </AutoColumn>
+                    </div>
                 ) : null
             ) : (
                 <UnsupportedCurrencyFooter
