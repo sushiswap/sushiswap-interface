@@ -138,7 +138,9 @@ export default function Modal({
                                 mobile={isMobile}
                             >
                                 <div className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
-                                    <div className={`flex flex-col h-full w-full bg-dark-900 rounded p-${padding}`}>
+                                    <div
+                                        className={`flex flex-col h-full w-full bg-dark-900 rounded p-${padding} overflow-y-scroll`}
+                                    >
                                         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
                                         {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
                                         {children}
