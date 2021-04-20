@@ -12,6 +12,8 @@ import xSushi from '../../assets/kashi/tokens/xsushi-square.jpg'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
 
+import MoreMenu from '../Menu'
+
 import { ExternalLink, NavLink } from '../Link'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 
@@ -192,6 +194,7 @@ export default function Header(): JSX.Element {
                                         )}
                                         <Web3Status />
                                     </div>
+                                    <MoreMenu />
                                 </div>
                             </div>
                             <div className="-mr-2 flex sm:hidden">
@@ -254,6 +257,9 @@ export default function Header(): JSX.Element {
                                     Apps
                                 </NavLink>
                             )}
+                            <NavLink id={`tool-nav-link`} to={'/tools'}>
+                                Tools
+                            </NavLink>
                             {chainId && (
                                 <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
                                     Analytics

@@ -42,8 +42,8 @@ export default function SushiBar() {
                     )}
                 </div>
             </Paper>
-            <Paper className="bg-dark-800 p-4 space-y-4">
-                <div className="text-lg font-bold text-high-emphesis mb-2">SUSHI → xSUSHI</div>
+            <Paper className="bg-dark-900 p-4">
+                <div className="text-lg font-bold text-high-emphesis mb-4">SUSHI → xSUSHI</div>
                 <SushiDepositPanel
                     label={''}
                     disableCurrencySelect={true}
