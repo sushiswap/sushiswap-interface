@@ -350,9 +350,6 @@ export default function RemoveLiquidity({
     function modalHeader() {
         return (
             <AutoColumn gap={'md'} style={{ marginTop: '20px' }}>
-                <Helmet>
-                    <title>Remove Liquidity | Sushi</title>
-                </Helmet>
                 <RowBetween align="flex-end">
                     <Text fontSize={24} fontWeight={500}>
                         {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
@@ -489,6 +486,9 @@ export default function RemoveLiquidity({
 
     return (
         <>
+            <Helmet>
+                <title>Remove Liquidity | Sushi</title>
+            </Helmet>
             <div className="bg-dark-900 w-full max-w-2xl rounded">
                 <AddRemoveTabs creating={false} adding={false} />
                 <Wrapper>

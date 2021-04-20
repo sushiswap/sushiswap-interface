@@ -30,97 +30,99 @@ export default function Yield(): JSX.Element {
     const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
 
     return (
-        <div className="container max-w-2xl mx-auto px-0 sm:px-4">
+        <>
             <Helmet>
                 <title>Yield | Sushi</title>
             </Helmet>
-            <Card
-                className="h-full bg-dark-900"
-                header={
-                    <CardHeader className="flex justify-between items-center bg-dark-800">
-                        <div className="flex w-full justify-between">
-                            <div className="hidden md:flex items-center">
-                                {/* <BackButton defaultRoute="/pool" /> */}
-                                <div className="text-lg mr-2 whitespace-nowrap">Yield Instruments</div>
-                            </div>
-                            <Search search={search} term={term} />
-                        </div>
-                    </CardHeader>
-                }
-            >
-                {/* UserFarms */}
-                {userFarms && userFarms.length > 0 && (
-                    <>
-                        <div className="pb-4">
-                            <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
-                                <div className="flex items-center">
-                                    <div>Your Yields</div>
+            <div className="container max-w-2xl mx-auto px-0 sm:px-4">
+                <Card
+                    className="h-full bg-dark-900"
+                    header={
+                        <CardHeader className="flex justify-between items-center bg-dark-800">
+                            <div className="flex w-full justify-between">
+                                <div className="hidden md:flex items-center">
+                                    {/* <BackButton defaultRoute="/pool" /> */}
+                                    <div className="text-lg mr-2 whitespace-nowrap">Yield Instruments</div>
                                 </div>
-                                <div className="flex items-center justify-end">
-                                    <div>Deposited</div>
-                                </div>
-                                <div className="flex items-center justify-end">
-                                    <div>Claim</div>
-                                </div>
+                                <Search search={search} term={term} />
                             </div>
-                            <div className="flex-col space-y-2">
-                                {userFarms.map((farm: any, i: number) => {
-                                    return <UserBalance key={farm.address + '_' + i} farm={farm} />
-                                })}
-                            </div>
-                        </div>
-                    </>
-                )}
-                {/* All Farms */}
-                <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
-                    <div
-                        className="flex items-center cursor-pointer hover:text-secondary"
-                        onClick={() => requestSort('symbol')}
-                    >
-                        <div>Instruments</div>
-                        {sortConfig &&
-                            sortConfig.key === 'symbol' &&
-                            ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-                    </div>
-                    <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
-                        <div className="flex items-center justify-end">
-                            <div>TVL</div>
-                            {sortConfig &&
-                                sortConfig.key === 'tvl' &&
-                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-                        </div>
-                    </div>
-                    <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
-                        <div className="flex items-center justify-end">
-                            <div>APR</div>
-                            {sortConfig &&
-                                sortConfig.key === 'roiPerYear' &&
-                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
-                        </div>
-                    </div>
-                </div>
-                <div className="flex-col space-y-2">
-                    {items && items.length > 0 ? (
-                        items.map((farm: any, i: number) => {
-                            return <TokenBalance key={farm.address + '_' + i} farm={farm} />
-                        })
-                    ) : (
+                        </CardHeader>
+                    }
+                >
+                    {/* UserFarms */}
+                    {userFarms && userFarms.length > 0 && (
                         <>
-                            {term ? (
-                                <div className="w-full text-center py-6">No Results.</div>
-                            ) : (
-                                <div className="w-full text-center py-6">
-                                    <Dots>Fetching Instruments</Dots>
+                            <div className="pb-4">
+                                <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
+                                    <div className="flex items-center">
+                                        <div>Your Yields</div>
+                                    </div>
+                                    <div className="flex items-center justify-end">
+                                        <div>Deposited</div>
+                                    </div>
+                                    <div className="flex items-center justify-end">
+                                        <div>Claim</div>
+                                    </div>
                                 </div>
-                            )}
+                                <div className="flex-col space-y-2">
+                                    {userFarms.map((farm: any, i: number) => {
+                                        return <UserBalance key={farm.address + '_' + i} farm={farm} />
+                                    })}
+                                </div>
+                            </div>
                         </>
                     )}
-                </div>
-            </Card>
-        </div>
+                    {/* All Farms */}
+                    <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
+                        <div
+                            className="flex items-center cursor-pointer hover:text-secondary"
+                            onClick={() => requestSort('symbol')}
+                        >
+                            <div>Instruments</div>
+                            {sortConfig &&
+                                sortConfig.key === 'symbol' &&
+                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                        </div>
+                        <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
+                            <div className="flex items-center justify-end">
+                                <div>TVL</div>
+                                {sortConfig &&
+                                    sortConfig.key === 'tvl' &&
+                                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                        (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                            </div>
+                        </div>
+                        <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
+                            <div className="flex items-center justify-end">
+                                <div>APR</div>
+                                {sortConfig &&
+                                    sortConfig.key === 'roiPerYear' &&
+                                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                        (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-col space-y-2">
+                        {items && items.length > 0 ? (
+                            items.map((farm: any, i: number) => {
+                                return <TokenBalance key={farm.address + '_' + i} farm={farm} />
+                            })
+                        ) : (
+                            <>
+                                {term ? (
+                                    <div className="w-full text-center py-6">No Results.</div>
+                                ) : (
+                                    <div className="w-full text-center py-6">
+                                        <Dots>Fetching Instruments</Dots>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                </Card>
+            </div>
+        </>
     )
 }
 

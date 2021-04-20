@@ -128,183 +128,196 @@ export default function ClaimModal() {
     const pendingTreasurySignature = false
 
     return (
-        <PageWrapper>
+        <>
+            {' '}
             <Helmet>
                 <title>Vesting | Sushi</title>
             </Helmet>
-            {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
-            <>
-                <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
-                    <div className="space-y-10 hidden md:block">
-                        <img
-                            src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
-                            style={{ width: '340px', height: '300px', maxWidth: 'none' }}
-                            alt=""
-                        />
-                        <VoteCard>
-                            <CardSection gap="sm">
-                                <RowBetween>
-                                    <TYPE.white fontWeight={500} color={theme.text1}>
-                                        Community Approval
-                                    </TYPE.white>
-                                </RowBetween>
-                                <div
-                                    className="text-sm text-gray-400 pt-2"
-                                    style={{ maxWidth: '300px', minHeight: '150px' }}
-                                >
-                                    Vesting is executed within the guidelines selected by the community in{' '}
-                                    <a
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                        href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
-                                    >
-                                        SIMP3
-                                    </a>
-                                    .
-                                    <br />
-                                    <br />
-                                    Please refer to the{' '}
-                                    <a
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                        href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794"
-                                    >
-                                        forum discussion
-                                    </a>{' '}
-                                    for deliberations on additional points.
-                                    <br />
-                                    <br />
-                                    Additional records and weekly merkle updates can be found on{' '}
-                                    <a
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                        href="https://github.com/sushiswap/sushi-vesting"
-                                    >
-                                        Github
-                                    </a>
-                                </div>
-                            </CardSection>
-                        </VoteCard>
-                    </div>
-                    <div>
-                        <VoteCard>
-                            <CardSection gap="sm">
-                                <RowBetween>
-                                    <TYPE.white fontWeight={500} color={theme.text1}>
-                                        Your Claimable SUSHI this Week
-                                    </TYPE.white>
-                                    <QuestionHelper text="Your Vested SUSHI will be released each week for the next 6 months. The amount released each week is determined by your historical farming rewards. You do not need to harvest each week as unclaimed amounts from each week will continue to accrue onto the next." />
-                                </RowBetween>
-                                {/* <div style={{ display: 'flex', alignItems: 'baseline' }}> */}
-                                <div style={{ alignItems: 'baseline' }}>
-                                    <TYPE.white fontWeight={700} fontSize={36} color={theme.text1}>
-                                        {unclaimedAmount?.toFixed(4, { groupSeparator: ',' } ?? '-')}
-                                    </TYPE.white>
-                                    {account ? (
-                                        <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
-                                            {totalLocked ? (
-                                                `Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
-                                            ) : (
-                                                <Dots>Historical Total Locked: Fetching Total</Dots>
-                                            )}
+            <PageWrapper>
+                {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
+                <>
+                    <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
+                        <div className="space-y-10 hidden md:block">
+                            <img
+                                src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
+                                style={{ width: '340px', height: '300px', maxWidth: 'none' }}
+                                alt=""
+                            />
+                            <VoteCard>
+                                <CardSection gap="sm">
+                                    <RowBetween>
+                                        <TYPE.white fontWeight={500} color={theme.text1}>
+                                            Community Approval
                                         </TYPE.white>
-                                    ) : (
-                                        <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
-                                            Historical Total Locked: Connect Wallet
+                                    </RowBetween>
+                                    <div
+                                        className="text-sm text-gray-400 pt-2"
+                                        style={{ maxWidth: '300px', minHeight: '150px' }}
+                                    >
+                                        Vesting is executed within the guidelines selected by the community in{' '}
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer noopener"
+                                            href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
+                                        >
+                                            SIMP3
+                                        </a>
+                                        .
+                                        <br />
+                                        <br />
+                                        Please refer to the{' '}
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer noopener"
+                                            href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794"
+                                        >
+                                            forum discussion
+                                        </a>{' '}
+                                        for deliberations on additional points.
+                                        <br />
+                                        <br />
+                                        Additional records and weekly merkle updates can be found on{' '}
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer noopener"
+                                            href="https://github.com/sushiswap/sushi-vesting"
+                                        >
+                                            Github
+                                        </a>
+                                    </div>
+                                </CardSection>
+                            </VoteCard>
+                        </div>
+                        <div>
+                            <VoteCard>
+                                <CardSection gap="sm">
+                                    <RowBetween>
+                                        <TYPE.white fontWeight={500} color={theme.text1}>
+                                            Your Claimable SUSHI this Week
                                         </TYPE.white>
-                                    )}
-                                </div>
+                                        <QuestionHelper text="Your Vested SUSHI will be released each week for the next 6 months. The amount released each week is determined by your historical farming rewards. You do not need to harvest each week as unclaimed amounts from each week will continue to accrue onto the next." />
+                                    </RowBetween>
+                                    {/* <div style={{ display: 'flex', alignItems: 'baseline' }}> */}
+                                    <div style={{ alignItems: 'baseline' }}>
+                                        <TYPE.white fontWeight={700} fontSize={36} color={theme.text1}>
+                                            {unclaimedAmount?.toFixed(4, { groupSeparator: ',' } ?? '-')}
+                                        </TYPE.white>
+                                        {account ? (
+                                            <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
+                                                {totalLocked ? (
+                                                    `Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
+                                                ) : (
+                                                    <Dots>Historical Total Locked: Fetching Total</Dots>
+                                                )}
+                                            </TYPE.white>
+                                        ) : (
+                                            <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
+                                                Historical Total Locked: Connect Wallet
+                                            </TYPE.white>
+                                        )}
+                                    </div>
 
-                                <ButtonPrimary
-                                    disabled={
-                                        !isAddress(account ?? '') ||
-                                        claimConfirmed ||
-                                        !unclaimedAmount ||
-                                        Number(unclaimedAmount?.toFixed(8)) <= 0 ||
-                                        pendingTreasurySignature
-                                    }
-                                    padding="16px 16px"
-                                    width="100%"
-                                    borderRadius="20px"
-                                    mt="0.5rem"
-                                    onClick={onClaim}
-                                >
-                                    {pendingTreasurySignature ? (
-                                        <Dots>Pending Treasury Transfer</Dots>
-                                    ) : (
-                                        <> {claimConfirmed ? 'Claimed' : 'Claim SUSHI'}</>
-                                    )}
+                                    <ButtonPrimary
+                                        disabled={
+                                            !isAddress(account ?? '') ||
+                                            claimConfirmed ||
+                                            !unclaimedAmount ||
+                                            Number(unclaimedAmount?.toFixed(8)) <= 0 ||
+                                            pendingTreasurySignature
+                                        }
+                                        padding="16px 16px"
+                                        width="100%"
+                                        borderRadius="20px"
+                                        mt="0.5rem"
+                                        onClick={onClaim}
+                                    >
+                                        {pendingTreasurySignature ? (
+                                            <Dots>Pending Treasury Transfer</Dots>
+                                        ) : (
+                                            <> {claimConfirmed ? 'Claimed' : 'Claim SUSHI'}</>
+                                        )}
 
-                                    {attempting && <Loader stroke="white" style={{ marginLeft: '10px' }} />}
-                                </ButtonPrimary>
-                            </CardSection>
-                        </VoteCard>
-                        <VoteCard style={{ marginTop: '10px' }}>
-                            <CardSection gap="md">
-                                <RowBetween style={{ marginBottom: '5px' }}>
-                                    <TYPE.white fontWeight={500} color={theme.text1}>
-                                        Things you can do with your SUSHI
-                                    </TYPE.white>
-                                </RowBetween>
-                                <LightCard as={Link} to={`/stake`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                                    <AutoColumn gap="12px">
-                                        <RowBetween>
-                                            <AutoRow>
-                                                <AutoRow marginBottom="2px">
-                                                    <TYPE.body fontWeight={500}>Stake SUSHI for xSUSHI</TYPE.body>
-                                                </AutoRow>
+                                        {attempting && <Loader stroke="white" style={{ marginLeft: '10px' }} />}
+                                    </ButtonPrimary>
+                                </CardSection>
+                            </VoteCard>
+                            <VoteCard style={{ marginTop: '10px' }}>
+                                <CardSection gap="md">
+                                    <RowBetween style={{ marginBottom: '5px' }}>
+                                        <TYPE.white fontWeight={500} color={theme.text1}>
+                                            Things you can do with your SUSHI
+                                        </TYPE.white>
+                                    </RowBetween>
+                                    <LightCard
+                                        as={Link}
+                                        to={`/stake`}
+                                        style={{ color: 'inherit', textDecoration: 'none' }}
+                                    >
+                                        <AutoColumn gap="12px">
+                                            <RowBetween>
                                                 <AutoRow>
-                                                    <TYPE.darkGray fontSize=".75rem">
-                                                        Gain governance rights with xSUSHI and earn 5% APR (0.05% of all
-                                                        swaps from all chains)
-                                                    </TYPE.darkGray>
+                                                    <AutoRow marginBottom="2px">
+                                                        <TYPE.body fontWeight={500}>Stake SUSHI for xSUSHI</TYPE.body>
+                                                    </AutoRow>
+                                                    <AutoRow>
+                                                        <TYPE.darkGray fontSize=".75rem">
+                                                            Gain governance rights with xSUSHI and earn 5% APR (0.05% of
+                                                            all swaps from all chains)
+                                                        </TYPE.darkGray>
+                                                    </AutoRow>
                                                 </AutoRow>
-                                            </AutoRow>
-                                            <ChevronRight />
-                                        </RowBetween>
-                                    </AutoColumn>
-                                </LightCard>
-                                <LightCard as={Link} to={`/saave`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                                    <AutoColumn gap="12px">
-                                        <RowBetween>
-                                            <AutoRow>
-                                                <AutoRow marginBottom="2px">
-                                                    <TYPE.body fontWeight={500}>Stack Yields with SAAVE</TYPE.body>
-                                                </AutoRow>
+                                                <ChevronRight />
+                                            </RowBetween>
+                                        </AutoColumn>
+                                    </LightCard>
+                                    <LightCard
+                                        as={Link}
+                                        to={`/saave`}
+                                        style={{ color: 'inherit', textDecoration: 'none' }}
+                                    >
+                                        <AutoColumn gap="12px">
+                                            <RowBetween>
                                                 <AutoRow>
-                                                    <TYPE.darkGray fontSize=".75rem">
-                                                        Stake into xSUSHI add collateral as axSUSHI on Aave all in one
-                                                        click
-                                                    </TYPE.darkGray>
+                                                    <AutoRow marginBottom="2px">
+                                                        <TYPE.body fontWeight={500}>Stack Yields with SAAVE</TYPE.body>
+                                                    </AutoRow>
+                                                    <AutoRow>
+                                                        <TYPE.darkGray fontSize=".75rem">
+                                                            Stake into xSUSHI add collateral as axSUSHI on Aave all in
+                                                            one click
+                                                        </TYPE.darkGray>
+                                                    </AutoRow>
                                                 </AutoRow>
-                                            </AutoRow>
-                                            <ChevronRight />
-                                        </RowBetween>
-                                    </AutoColumn>
-                                </LightCard>
-                                <LightCard style={{ color: 'inherit', textDecoration: 'none' }}>
-                                    <AutoColumn gap="12px">
-                                        <RowBetween>
-                                            <AutoRow>
-                                                <AutoRow marginBottom="2px">
-                                                    <TYPE.body fontWeight={500}>Deposit SUSHI into BentoBox</TYPE.body>
-                                                </AutoRow>
+                                                <ChevronRight />
+                                            </RowBetween>
+                                        </AutoColumn>
+                                    </LightCard>
+                                    <LightCard style={{ color: 'inherit', textDecoration: 'none' }}>
+                                        <AutoColumn gap="12px">
+                                            <RowBetween>
                                                 <AutoRow>
-                                                    <TYPE.darkGray fontSize=".75rem">
-                                                        (COMING SOON) Accrue automatic yield through flash loans and
-                                                        SUSHI strategies
-                                                    </TYPE.darkGray>
+                                                    <AutoRow marginBottom="2px">
+                                                        <TYPE.body fontWeight={500}>
+                                                            Deposit SUSHI into BentoBox
+                                                        </TYPE.body>
+                                                    </AutoRow>
+                                                    <AutoRow>
+                                                        <TYPE.darkGray fontSize=".75rem">
+                                                            (COMING SOON) Accrue automatic yield through flash loans and
+                                                            SUSHI strategies
+                                                        </TYPE.darkGray>
+                                                    </AutoRow>
                                                 </AutoRow>
-                                            </AutoRow>
-                                            {/* <ChevronRight /> */}
-                                        </RowBetween>
-                                    </AutoColumn>
-                                </LightCard>
-                            </CardSection>
-                        </VoteCard>
+                                                {/* <ChevronRight /> */}
+                                            </RowBetween>
+                                        </AutoColumn>
+                                    </LightCard>
+                                </CardSection>
+                            </VoteCard>
+                        </div>
                     </div>
-                </div>
-            </>
-        </PageWrapper>
+                </>
+            </PageWrapper>
+        </>
     )
 }

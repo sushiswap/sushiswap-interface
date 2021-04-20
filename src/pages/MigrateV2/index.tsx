@@ -25,6 +25,7 @@ import MetamaskError from '../../types/MetamaskError'
 import AppBody from '../AppBody'
 import { EmptyState } from '../MigrateV1/EmptyState'
 import { MaxButton } from '../Pool/styleds'
+import { Helmet } from 'react-helmet'
 
 const Border = styled.div`
     width: 100%;
@@ -329,42 +330,48 @@ const MigrateV2 = () => {
     const state = useMigrateState()
 
     return (
-        <AppBody style={{ padding: 24 }}>
-            <AutoColumn gap="16px">
-                <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
-                    <BackArrow to="/pool" />
-                    <TYPE.mediumHeader>Migrate Uniswap Liquidity</TYPE.mediumHeader>
-                    <div>
-                        <QuestionHelper text="Migrate your Uniswap LP tokens to SushiSwap LP tokens." />
-                    </div>
-                </AutoRow>
-                <TYPE.darkGray style={{ marginBottom: 8, fontWeight: 400 }}>
-                    For each pool shown below, click migrate to remove your liquidity from Uniswap and deposit it into
-                    Sushiswap.
-                </TYPE.darkGray>
+        <>
+            <Helmet>
+                <title>Migrate | Sushi</title>
+                <meta name="description" content="Migrate Uniswap LP tokens to Sushi LP tokens" />
+            </Helmet>
+            <AppBody style={{ padding: 24 }}>
+                <AutoColumn gap="16px">
+                    <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
+                        <BackArrow to="/pool" />
+                        <TYPE.mediumHeader>Migrate Uniswap Liquidity</TYPE.mediumHeader>
+                        <div>
+                            <QuestionHelper text="Migrate your Uniswap LP tokens to SushiSwap LP tokens." />
+                        </div>
+                    </AutoRow>
+                    <TYPE.darkGray style={{ marginBottom: 8, fontWeight: 400 }}>
+                        For each pool shown below, click migrate to remove your liquidity from Uniswap and deposit it
+                        into Sushiswap.
+                    </TYPE.darkGray>
 
-                {!account ? (
-                    <LightCard padding="40px">
-                        <TYPE.body color={theme.text3} textAlign="center">
-                            Connect to a wallet to view your V2 liquidity.
-                        </TYPE.body>
-                    </LightCard>
-                ) : state.loading ? (
-                    <LightCard padding="40px">
-                        <TYPE.body color={theme.text3} textAlign="center">
-                            <Dots>Loading</Dots>
-                        </TYPE.body>
-                    </LightCard>
-                ) : (
-                    <>
-                        <MigrateModeSelect state={state} />
-                        <UniswapLiquidityPairs state={state} />
-                        <AmountInput state={state} />
-                        <MigrateButtons state={state} />
-                    </>
-                )}
-            </AutoColumn>
-        </AppBody>
+                    {!account ? (
+                        <LightCard padding="40px">
+                            <TYPE.body color={theme.text3} textAlign="center">
+                                Connect to a wallet to view your V2 liquidity.
+                            </TYPE.body>
+                        </LightCard>
+                    ) : state.loading ? (
+                        <LightCard padding="40px">
+                            <TYPE.body color={theme.text3} textAlign="center">
+                                <Dots>Loading</Dots>
+                            </TYPE.body>
+                        </LightCard>
+                    ) : (
+                        <>
+                            <MigrateModeSelect state={state} />
+                            <UniswapLiquidityPairs state={state} />
+                            <AmountInput state={state} />
+                            <MigrateButtons state={state} />
+                        </>
+                    )}
+                </AutoColumn>
+            </AppBody>
+        </>
     )
 }
 

@@ -321,7 +321,7 @@ export default function AddLiquidity({
     return (
         <>
             <Helmet>
-                <title>BentoBox | Sushi</title>
+                <title>Add Liquidity | Sushi</title>
             </Helmet>
             <div className="bg-dark-900 w-full max-w-2xl rounded">
                 <AddRemoveTabs creating={isCreate} adding={true} />

@@ -26,68 +26,70 @@ export default function BentoBalances(): JSX.Element {
     // Sorting Setup
     const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults)
     return (
-        <Layout
-            left={
-                <Card
-                    className="h-full bg-dark-900"
-                    backgroundImage={BentoBoxImage}
-                    title={'Deposit tokens into BentoBox for all the yields.'}
-                    description={
-                        'BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets.'
-                    }
-                />
-            }
-        >
+        <>
             <Helmet>
                 <title>BentoBox Balances | Sushi</title>
             </Helmet>
-            <Card
-                className="h-full bg-dark-900"
-                header={
-                    <CardHeader className="flex justify-between items-center bg-dark-800">
-                        <div className="md:hidden">
-                            <div className="flex float-right items-center">
-                                <div className="">BentoBox</div>
-                            </div>
-                        </div>
-                        <div className="flex w-full justify-between">
-                            <div className="hidden md:flex items-center">
-                                <BackButton defaultRoute="/bento" />
-                                <div>
-                                    <span className="text-3xl text-high-emphesis mr-2">BentoBox</span>
-                                    <span className="text-lg text-secondary">
-                                        {formattedNum(
-                                            balances
-                                                ?.reduce((previousValue, currentValue) => {
-                                                    return previousValue.add(currentValue.bento.usdValue)
-                                                }, ZERO)
-                                                .toFixed(getCurrency(chainId).decimals),
-                                            true
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="ml-3">
-                                <Search search={search} term={term} />
-                            </div>
-                        </div>
-                    </CardHeader>
+            <Layout
+                left={
+                    <Card
+                        className="h-full bg-dark-900"
+                        backgroundImage={BentoBoxImage}
+                        title={'Deposit tokens into BentoBox for all the yields.'}
+                        description={
+                            'BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets.'
+                        }
+                    />
                 }
             >
-                <div className="grid gap-4 grid-flow-row auto-rows-max">
-                    <div className="px-4 grid grid-cols-3 text-sm  text-secondary select-none">
-                        <div>Token</div>
-                        <div className="text-right">Wallet</div>
-                        <div className="text-right">BentoBox</div>
+                <Card
+                    className="h-full bg-dark-900"
+                    header={
+                        <CardHeader className="flex justify-between items-center bg-dark-800">
+                            <div className="md:hidden">
+                                <div className="flex float-right items-center">
+                                    <div className="">BentoBox</div>
+                                </div>
+                            </div>
+                            <div className="flex w-full justify-between">
+                                <div className="hidden md:flex items-center">
+                                    <BackButton defaultRoute="/bento" />
+                                    <div>
+                                        <span className="text-3xl text-high-emphesis mr-2">BentoBox</span>
+                                        <span className="text-lg text-secondary">
+                                            {formattedNum(
+                                                balances
+                                                    ?.reduce((previousValue, currentValue) => {
+                                                        return previousValue.add(currentValue.bento.usdValue)
+                                                    }, ZERO)
+                                                    .toFixed(getCurrency(chainId).decimals),
+                                                true
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="ml-3">
+                                    <Search search={search} term={term} />
+                                </div>
+                            </div>
+                        </CardHeader>
+                    }
+                >
+                    <div className="grid gap-4 grid-flow-row auto-rows-max">
+                        <div className="px-4 grid grid-cols-3 text-sm  text-secondary select-none">
+                            <div>Token</div>
+                            <div className="text-right">Wallet</div>
+                            <div className="text-right">BentoBox</div>
+                        </div>
+                        {items &&
+                            items.length > 0 &&
+                            items.map((balance: BentoBalance, i: number) => {
+                                return <TokenBalance key={balance.address + '_' + i} balance={balance} />
+                            })}
                     </div>
-                    {items &&
-                        items.length > 0 &&
-                        items.map((balance: BentoBalance, i: number) => {
-                            return <TokenBalance key={balance.address + '_' + i} balance={balance} />
-                        })}
-                </div>
-            </Card>
-        </Layout>
+                </Card>
+            </Layout>
+        </>
     )
 }
 
