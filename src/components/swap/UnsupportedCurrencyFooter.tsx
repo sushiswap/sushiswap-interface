@@ -1,6 +1,6 @@
 import { Currency, Token } from '@sushiswap/sdk'
 import { ButtonEmpty } from 'components/ButtonLegacy'
-import Card, { OutlineCard } from 'components/Card'
+import Card, { OutlineCard } from 'components/CardLegacy'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import Modal from 'components/Modal'

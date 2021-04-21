@@ -6,7 +6,7 @@ import { ThemeContext } from 'styled-components'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import useToggledVersion, { DEFAULT_VERSION, Version } from '../../hooks/useToggledVersion'
 import { StyledInternalLink } from '../../theme'
-import { YellowCard } from '../Card'
+import { YellowCard } from '../CardLegacy'
 import { AutoColumn } from '../Column'
 
 function VersionLinkContainer({ children }: { children: React.ReactNode }) {

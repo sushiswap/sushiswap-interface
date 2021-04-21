@@ -205,7 +205,7 @@ body {
 }
 
  a {
-   color: ${colors(false).blue1}; 
+   color: #0993EC; 
  }
 
 * {
@@ -226,27 +226,12 @@ html {
 }
 `
 
-const breatheAnimation = keyframes`
-  0% {filter: hue-rotate(0deg) brightness(1)}
-  100% {filter: hue-rotate(90deg) brightness(1.5)}
-  100% {filter: hue-rotate(360deg) brightness(1)}
-`
-
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
   color: ${({ theme }) => theme.text1};
-  /*background-color: ${({ theme }) => theme.bg2};*/
   background-color: #0D0415;
 }
 
 body {
   min-height: 100vh;
-  background-position: 0 -30vh;
-  background-repeat: no-repeat;
-  background-image: ${({ theme }) =>
-      `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.9, '#27b0e6')} 0%, ${transparentize(
-          1,
-          '#27b0e6'
-      )} 100%)`};
-  }
 `

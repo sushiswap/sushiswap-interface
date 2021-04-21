@@ -1,7 +1,7 @@
 import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { BENTOBOX_ADDRESS } from 'kashi'
-import { Button } from 'kashi/components'
+import { Button } from 'components'
 import React, { useState } from 'react'
 import useBentoBox from 'hooks/useBentoBox'
 import useTokenBalance from 'sushi-hooks/useTokenBalance'

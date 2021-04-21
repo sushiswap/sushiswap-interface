@@ -1,7 +1,7 @@
 import { JSBI } from '@sushiswap/sdk'
 import React from 'react'
 import styled from 'styled-components'
-import { OutlineCard } from '../../components/Card'
+import { OutlineCard } from '../../components/CardLegacy'
 import { AutoColumn } from '../../components/Column'
 import PoolCard from '../../components/earn/PoolCard'
 import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled'

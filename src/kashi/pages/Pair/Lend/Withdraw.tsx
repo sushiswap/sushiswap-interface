@@ -1,6 +1,6 @@
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { useActiveWeb3React } from 'hooks'
-import { Alert, Button, Dots } from 'kashi/components'
+import { Alert, Button, Dots } from 'components'
 import TransactionReviewView from 'kashi/components/TransactionReview'
 import { KASHI_ADDRESS } from 'kashi/constants'
 import { TransactionReview, Warnings } from 'kashi/entities'

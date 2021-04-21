@@ -11,7 +11,8 @@ import {
 import { e10 } from 'kashi/functions/math'
 import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { BackButton, Button, Card, Layout, LendCardHeader, ListBox } from '../../../components'
+import { BackButton, Button } from 'components'
+import { Card, Layout, LendCardHeader, ListBox } from 'kashi/components'
 import { Helmet } from 'react-helmet'
 
 const CreatePair = () => {

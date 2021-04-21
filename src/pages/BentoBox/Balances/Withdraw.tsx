@@ -1,5 +1,5 @@
-import { Button } from 'kashi/components'
 import React, { useState } from 'react'
+import { Button } from 'components'
 import useBentoBox from 'hooks/useBentoBox'
 import { formattedNum } from 'utils'
 import { Input as NumericalInput } from 'components/NumericalInput'

@@ -149,6 +149,16 @@ module.exports = {
             outline: {
                 ...defaultTheme.outline,
                 'low-emphesis': '#575757'
+            },
+            animation: {
+                ellipsis: ' ellipsis 1.25s infinite'
+            },
+            keyframes: {
+                ellipsis: {
+                    '0%': { content: '"."' },
+                    '33%': { content: '".."' },
+                    '66%': { content: '"..."' }
+                }
             }
         }
     },
@@ -166,17 +176,8 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
-
         plugin(function({ addUtilities }) {
             addUtilities({
-                '.gradiant-border-top': {
-                    // background:
-                    //     'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left top no-repeat',
-                    // backgroundSize: '100% 1px'
-                    borderTop: '1px solid',
-                    borderImageSlice: 1,
-                    borderImageSource: 'linear-gradient(to right, #743ad5, #d53a9d)'
-                },
                 '.gradiant-border-bottom': {
                     background:
                         'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',

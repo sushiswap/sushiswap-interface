@@ -5,9 +5,9 @@ import styled from 'styled-components'
 import useFarms from 'hooks/useFarms'
 import { RowBetween } from '../../components/Row'
 import { formattedNum, formattedPercent } from '../../utils'
-import { Card, CardHeader, Paper, Search, DoubleLogo, TokenLogo } from './components'
+import { Card, CardHeader, Search, DoubleLogo } from './components'
 import InputGroup from './InputGroup'
-import { Dots } from 'kashi/components'
+import { Dots, Paper } from 'components'
 import { Helmet } from 'react-helmet'
 
 export const FixedHeightRow = styled(RowBetween)`

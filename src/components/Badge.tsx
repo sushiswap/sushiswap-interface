@@ -3,7 +3,6 @@ import React from 'react'
 export type BadgeColor = 'default' | 'blue' | 'pink'
 
 export interface BadgeProps {
-    children?: React.ReactChild | React.ReactChild[]
     color?: BadgeColor
 }
 

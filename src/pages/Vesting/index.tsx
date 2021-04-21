@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { TokenAmount } from '@sushiswap/sdk'
 import { ButtonPrimary } from 'components/ButtonLegacy'
-import { LightCard } from 'components/Card'
+import { LightCard } from 'components/CardLegacy'
 import { AutoColumn } from 'components/Column'
 //import Confetti from 'components/Confetti'
 import { CardSection, DataCard } from 'components/earn/styled'

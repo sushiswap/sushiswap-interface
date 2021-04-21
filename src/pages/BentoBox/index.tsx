@@ -1,6 +1,7 @@
 import Web3Status from 'components/Web3Status'
 import { useActiveWeb3React } from 'hooks'
-import { Button, Card } from 'kashi/components'
+import { Button } from 'components'
+import { Card } from 'kashi/components'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import BentoBoxHero from '../../assets/kashi/bentobox-hero.jpg'
