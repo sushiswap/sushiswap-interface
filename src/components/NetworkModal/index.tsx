@@ -96,6 +96,17 @@ const PARAMS: {
         },
         rpcUrls: ['https://api.s0.t.hmny.io'],
         blockExplorerUrls: ['https://explorer.harmony.one/']
+    },
+    [ChainId.AVALANCHE]: {
+        chainId: '0xA869',
+        chainName: 'Avalanche',
+        nativeCurrency: {
+            name: 'Avalanche  Token',
+            symbol: 'AVAX',
+            decimals: 18
+        },
+        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+        blockExplorerUrls: ['https://cchain.explorer.avax-test.network']
     }
 }
 
