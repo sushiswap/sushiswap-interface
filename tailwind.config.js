@@ -31,6 +31,76 @@ module.exports = {
             lg: '976px',
             xl: '1440px'
         },
+        fontSize: {
+            ...defaultTheme.fontSize,
+            hero: [
+                '48px',
+                {
+                    letterSpacing: '-0.02em;',
+                    lineHeight: '96px',
+                    fontWeight: 700
+                }
+            ],
+            h1: [
+                '36px',
+                {
+                    letterSpacing: '-0.02em;',
+                    lineHeight: '36px',
+                    fontWeight: 700
+                }
+            ],
+            h2: [
+                '30px',
+                {
+                    letterSpacing: '-0.01em;',
+                    lineHeight: '36px',
+                    fontWeight: 700
+                }
+            ],
+            h3: [
+                '28px',
+                {
+                    letterSpacing: '-0.01em;',
+                    lineHeight: '30px',
+                    fontWeight: 700
+                }
+            ],
+            h4: [
+                '24px',
+                {
+                    letterSpacing: '-0.01em;',
+                    lineHeight: '28px',
+                    fontWeight: 700
+                }
+            ],
+            h5: [
+                '24px',
+                {
+                    letterSpacing: '-0.01em;',
+                    lineHeight: '28px',
+                    fontWeight: 500
+                }
+            ],
+            body: [
+                '18px',
+                {
+                    letterSpacing: '-0.01em;',
+                    lineHeight: '26px'
+                }
+            ],
+            caption: [
+                '16px',
+                {
+                    lineHeight: '24px'
+                }
+            ],
+            'caption-2': [
+                '14px',
+                {
+                    lineHeight: '20px'
+                }
+            ]
+        },
         extend: {
             backgroundImage: theme => ({
                 ...defaultTheme.backgroundImage,
@@ -96,6 +166,7 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
+
         plugin(function({ addUtilities }) {
             addUtilities({
                 '.gradiant-border-top': {
