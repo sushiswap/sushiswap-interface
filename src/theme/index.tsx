@@ -186,7 +186,7 @@ html, input, textarea, button {
   font-display: fallback;
 }
 input, textarea {
-  font-family: 'Inter', sans-serif;
+  font-family: "DM Sans", sans-serif;
   font-display: fallback;
 }
 @supports (font-variation-settings: normal) {
@@ -194,7 +194,7 @@ input, textarea {
     font-family: "DM Sans", sans-serif;
   }
   input, textarea {
-    // font-family: 'Inter var', sans-serif;
+    // font-family: "DM Sans", sans-serif;
   }
 }
 
