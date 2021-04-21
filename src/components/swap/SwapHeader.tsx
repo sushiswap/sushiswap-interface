@@ -30,7 +30,7 @@ export default function SwapHeader({ input, output }: any): JSX.Element {
                 <NavLink
                     className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     activeClassName="bg-dark-900 text-high-emphesis font-bold border-gradient"
-                    to={`/add/${input ? input.symbol : 'ETH'}${output && output.address ? `/${output.address}` : ''}`}
+                    to={`/add/${input ? input.address : 'ETH'}${output && output.address ? `/${output.address}` : ''}`}
                 >
                     Liquidity
                 </NavLink>
