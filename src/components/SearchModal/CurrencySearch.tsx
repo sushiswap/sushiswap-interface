@@ -166,7 +166,13 @@ export function CurrencySearch({
                 />
             </div>
             {showCommonBases && (
-                <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
+                <div className="mb-4">
+                    <CommonBases
+                        chainId={chainId}
+                        onSelect={handleCurrencySelect}
+                        selectedCurrency={selectedCurrency}
+                    />
+                </div>
             )}
 
             {searchToken && !searchTokenIsAdded ? (
