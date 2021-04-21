@@ -122,7 +122,8 @@ export default function NetworkModal(): JSX.Element | null {
                     ChainId.MATIC,
                     ChainId.HECO,
                     ChainId.XDAI,
-                    ChainId.HARMONY
+                    ChainId.HARMONY,
+                    ChainId.AVALANCHE
                 ].map((key: ChainId, i: number) => {
                     if (chainId === key) {
                         return (
