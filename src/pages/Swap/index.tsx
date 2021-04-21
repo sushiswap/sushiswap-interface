@@ -45,7 +45,6 @@ import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } 
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
-import AppBody from '../AppBody'
 import { ClickableText } from '../Pool/styleds'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'

@@ -16,7 +16,6 @@ import { usePairAdder } from '../../state/user/hooks'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { StyledInternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
-import AppBody from '../AppBody'
 import { Dots } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
 
@@ -82,7 +81,7 @@ export default function PoolFinder() {
             <Helmet>
                 <title>Find Pool | Sushi</title>
             </Helmet>
-            <AppBody>
+            <div className="relative w-full max-w-lg rounded bg-dark-900">
                 <FindPoolTabs />
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
                     <BlueCard>
@@ -210,7 +209,7 @@ export default function PoolFinder() {
                     showCommonBases
                     selectedCurrency={(activeField === Fields.TOKEN0 ? currency1 : currency0) ?? undefined}
                 />
-            </AppBody>
+            </div>
         </>
     )
 }

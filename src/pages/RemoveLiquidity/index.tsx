@@ -37,7 +37,6 @@ import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRoute
 import { currencyId } from '../../utils/currencyId'
 import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import AppBody from '../AppBody'
 import { ClickableText, MaxButton, Wrapper } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
 

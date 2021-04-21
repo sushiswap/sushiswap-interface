@@ -22,7 +22,6 @@ import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
 import { BackArrow, CloseIcon, CustomLightSpinner, TYPE } from '../../theme'
 import LPToken from '../../types/LPToken'
 import MetamaskError from '../../types/MetamaskError'
-import AppBody from '../AppBody'
 import { EmptyState } from './EmptyState'
 import { MaxButton } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
@@ -335,7 +334,7 @@ const MigrateV2 = () => {
                 <title>Migrate | Sushi</title>
                 <meta name="description" content="Migrate Uniswap LP tokens to Sushi LP tokens" />
             </Helmet>
-            <AppBody style={{ padding: 24 }}>
+            <div className="relative w-full max-w-lg rounded bg-dark-900 p-8">
                 <AutoColumn gap="16px">
                     <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                         <BackArrow to="/pool" />
@@ -370,7 +369,7 @@ const MigrateV2 = () => {
                         </>
                     )}
                 </AutoColumn>
-            </AppBody>
+            </div>
         </>
     )
 }

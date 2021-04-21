@@ -6,7 +6,6 @@ import { RowBetween } from '../../components/Row'
 import { Wrapper } from '../../components/swap/styleds'
 import { useDarkModeManager } from '../../state/user/hooks'
 import { ExternalLink, TYPE } from '../../theme'
-import AppBody from '../AppBody'
 import AXSushiBalancePanel from './AXSushiBalancePanel'
 import SaaveHeader from './SaaveHeader'
 import SushiInputPanel from './SushiInputPanel'
@@ -82,7 +81,7 @@ export default function Saave() {
                         </AutoColumn>
                     </CardSection>
                 </VoteCard>
-                <AppBody>
+                <div className="relative w-full max-w-lg rounded bg-dark-900">
                     <SaaveHeader />
                     <Wrapper id="swap-page">
                         <AutoColumn style={{ paddingBottom: '10px' }}>
@@ -102,7 +101,7 @@ export default function Saave() {
                             />
                         </AutoColumn>
                     </Wrapper>
-                </AppBody>
+                </div>
             </PageWrapper>
         </>
     )

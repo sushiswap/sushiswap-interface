@@ -43,7 +43,6 @@ import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } 
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
-import AppBody from '../AppBody'
 import { ClickableText } from '../Pool/styleds'
 
 export default function Swap() {
@@ -304,7 +303,7 @@ export default function Swap() {
 
     return (
         <>
-            <AppBody>
+            <div className="relative w-full max-w-lg rounded bg-dark-900">
                 <SwapHeader />
                 <Wrapper id="swap-page">
                     <ConfirmSwapModal
@@ -581,7 +580,7 @@ export default function Swap() {
                         <AdvancedSwapDetailsSection trade={trade} />
                     </AutoColumn>
                 </Wrapper>
-            </AppBody>
+            </div>
             {!swapIsUnsupported ? null : (
                 <UnsupportedCurrencyFooter
                     show={swapIsUnsupported}
