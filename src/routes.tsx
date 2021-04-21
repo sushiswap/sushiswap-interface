@@ -1,7 +1,8 @@
-import React from 'react'
-import { useActiveWeb3React } from 'hooks'
 import { ChainId } from '@sushiswap/sdk'
+import React from 'react'
 import { Redirect, Route, RouteComponentProps, useLocation, Switch } from 'react-router-dom'
+import { useActiveWeb3React } from 'hooks'
+
 import Connect from './kashi/pages/Connect'
 import BorrowMarkets from './kashi/pages/Markets/Borrow'
 import CreateMarkets from './kashi/pages/Markets/Create'
@@ -31,68 +32,11 @@ import {
     RedirectPathToSwapOnly,
     RedirectToSwap
 } from './pages/Swap/redirects'
-// Additional Tools
 import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
 import Yield from './pages/Yield'
 
-// A wrapper for <Route> that redirects to the Connect Wallet
-// screen if you're not yet authenticated.
-export const PublicRoute = ({ component: Component, children, ...rest }: any) => {
-    const { account } = useActiveWeb3React()
-    const location = useLocation<any>()
-    return (
-        <>
-            <Route
-                {...rest}
-                render={(props: RouteComponentProps) =>
-                    account ? (
-                        <Redirect
-                            to={{
-                                pathname: location.state ? location.state.from.pathname : '/'
-                            }}
-                        />
-                    ) : Component ? (
-                        <Component {...props} />
-                    ) : (
-                        children
-                    )
-                }
-            />
-        </>
-    )
-}
-
-// A wrapper for <Route> that redirects to the Connect Wallet
-// screen if you're not yet authenticated.
-export const WalletRoute = ({ component: Component, children, ...rest }: any) => {
-    const { account } = useActiveWeb3React()
-    return (
-        <>
-            <Route
-                {...rest}
-                render={({ location, props, match }: any) => {
-                    return account ? (
-                        Component ? (
-                            <Component {...props} {...rest} match={match} />
-                        ) : (
-                            children
-                        )
-                    ) : (
-                        <Redirect
-                            to={{
-                                pathname: '/connect',
-                                state: { from: location }
-                            }}
-                        />
-                    )
-                }}
-            />
-        </>
-    )
-}
-
-function Routes() {
+function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
     return (
         <Switch>
@@ -173,3 +117,59 @@ function Routes() {
 }
 
 export default Routes
+
+// A wrapper for <Route> that redirects to the Connect Wallet
+// screen if you're not yet authenticated.
+export const PublicRoute = ({ component: Component, children, ...rest }: any) => {
+    const { account } = useActiveWeb3React()
+    const location = useLocation<any>()
+    return (
+        <>
+            <Route
+                {...rest}
+                render={(props: RouteComponentProps) =>
+                    account ? (
+                        <Redirect
+                            to={{
+                                pathname: location.state ? location.state.from.pathname : '/'
+                            }}
+                        />
+                    ) : Component ? (
+                        <Component {...props} />
+                    ) : (
+                        children
+                    )
+                }
+            />
+        </>
+    )
+}
+
+// A wrapper for <Route> that redirects to the Connect Wallet
+// screen if you're not yet authenticated.
+export const WalletRoute = ({ component: Component, children, ...rest }: any) => {
+    const { account } = useActiveWeb3React()
+    return (
+        <>
+            <Route
+                {...rest}
+                render={({ location, props, match }: any) => {
+                    return account ? (
+                        Component ? (
+                            <Component {...props} {...rest} match={match} />
+                        ) : (
+                            children
+                        )
+                    ) : (
+                        <Redirect
+                            to={{
+                                pathname: '/connect',
+                                state: { from: location }
+                            }}
+                        />
+                    )
+                }}
+            />
+        </>
+    )
+}
