@@ -23,7 +23,7 @@ const solutions = [
     },
     {
         name: 'Tools',
-        description: 'Tolls to optimize your workflow.',
+        description: 'Tools to optimize your workflow.',
         href: '/tools'
     },
     {
