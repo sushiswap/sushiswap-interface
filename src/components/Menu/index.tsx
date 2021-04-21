@@ -1,112 +1,88 @@
-import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
-import React, { useRef } from 'react'
-import { BookOpen, Code, Info, MessageCircle, PieChart, Tool } from 'react-feather'
-import styled from 'styled-components'
+/* This example requires Tailwind CSS v2.0+ */
+import React, { Fragment } from 'react'
+import { Popover, Transition } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/solid'
+import { classNames } from '../../functions/styling'
+import { ExternalLink } from '../Link'
 import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
-import { useActiveWeb3React } from '../../hooks'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { ApplicationModal } from '../../state/application/actions'
-import { useModalOpen, useToggleModal } from '../../state/application/hooks'
-import { ExternalLink, StyledInternalLink } from '../../theme'
-
-const StyledMenuIcon = styled(MenuIcon)`
-    path {
-        stroke: ${({ theme }) => theme.text1};
+const solutions = [
+    {
+        name: 'Docs',
+        description: 'Documentation for users of Sushi.',
+        href: 'https://docs.sushi.com'
+    },
+    {
+        name: 'Dev',
+        description: 'Documentation for developers of Sushi.',
+        href: 'https://dev.sushi.com'
+    },
+    {
+        name: 'Open Source',
+        description: 'Sushi is a supporter of Open Source.',
+        href: 'https://github.com/sushiswap'
+    },
+    {
+        name: 'Tools',
+        description: 'Tolls to optimize your workflow.',
+        href: '/tools'
+    },
+    {
+        name: 'Discord',
+        description: 'Join the community on Discord.',
+        href: 'https://discord.gg/NVPXN4e'
     }
-`
-
-const MenuItem = styled(ExternalLink)`
-    display: flex;
-    align-items: center;
-    flex: 1;
-    padding: 0.5rem 0.5rem;
-    color: ${({ theme }) => theme.text2};
-    :hover {
-        color: ${({ theme }) => theme.text1};
-        cursor: pointer;
-        text-decoration: none;
-    }
-    > svg {
-        margin-right: 8px;
-    }
-`
-
-const MenuItemInternal = styled(StyledInternalLink)`
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0.5rem;
-    color: ${({ theme }) => theme.text2};
-    :hover {
-        color: ${({ theme }) => theme.text1};
-        cursor: pointer;
-        text-decoration: none;
-    }
-    > svg {
-        margin-right: 8px;
-    }
-`
-
-const ExtendedStyledMenuButton = styled(StyledMenuButton)`
-    margin-right: 6px;
-`
-
-const ExtendedMenuFlyout = styled(MenuFlyout)`
-    ${({ theme }) => theme.mediaWidth.upToMedium`
-    top: -16.5rem;
-    margin-right: 6px;
-  `};
-`
-
-const CODE_LINK = 'https://github.com/sushiswap/sushiswap-interface'
+]
 
 export default function Menu() {
-    const { account } = useActiveWeb3React()
-
-    const node = useRef<HTMLDivElement>(null)
-    const open = useModalOpen(ApplicationModal.MENU)
-    const toggle = useToggleModal(ApplicationModal.MENU)
-    useOnClickOutside(node, open ? toggle : undefined)
-    const openClaimModal = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-
     return (
-        <StyledMenu ref={node}>
-            <ExtendedStyledMenuButton onClick={toggle}>
-                <StyledMenuIcon />
-            </ExtendedStyledMenuButton>
+        <Popover className="relative">
+            {({ open }) => (
+                <>
+                    <Popover.Button
+                        className={classNames(open ? 'text-secondary' : 'text-primary', 'focus:outline-none')}
+                    >
+                        <MenuIcon
+                            title="More"
+                            className={classNames(
+                                open ? 'text-gray-600' : 'text-gray-400',
+                                'inline-flex items-center ml-2 h-5 w-5 group-hover:text-secondary hover:text-high-emphesis'
+                            )}
+                            aria-hidden="true"
+                        />
+                    </Popover.Button>
 
-            {open && (
-                <ExtendedMenuFlyout>
-                    <MenuItem id="link" href="https://www.sushi.com">
-                        <Info size={14} />
-                        About
-                    </MenuItem>
-                    <MenuItem id="link" href="https://docs.sushi.com">
-                        <BookOpen size={14} />
-                        Docs
-                    </MenuItem>
-                    <MenuItem id="link" href={CODE_LINK}>
-                        <Code size={14} />
-                        Code
-                    </MenuItem>
-                    <MenuItem id="link" href="https://discord.gg/NVPXN4e">
-                        <MessageCircle size={14} />
-                        Discord
-                    </MenuItem>
-                    <MenuItem id="link" href="https://analytics.sushi.com/">
-                        <PieChart size={14} />
-                        Analytics
-                    </MenuItem>
-                    <MenuItemInternal id="link" to="/tools">
-                        <Tool size={14} />
-                        Tools
-                    </MenuItemInternal>
-                    {/* {account && (
-            <ButtonPrimary onClick={openClaimModal} padding="8px 16px" width="100%" borderradius="20px" mt="0.5rem">
-              Claim UNI
-            </ButtonPrimary>
-          )} */}
-                </ExtendedMenuFlyout>
+                    <Transition
+                        show={open}
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="opacity-0 translate-y-1"
+                        enterTo="opacity-100 translate-y-0"
+                        leave="transition ease-in duration-150"
+                        leaveFrom="opacity-100 translate-y-0"
+                        leaveTo="opacity-0 translate-y-1"
+                    >
+                        <Popover.Panel
+                            static
+                            className="absolute z-10 bottom-12 md:top-12 left-full transform -translate-x-full mt-3 px-2 w-screen max-w-xs sm:px-0"
+                        >
+                            <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                                <div className="relative grid gap-6 bg-dark-900 px-5 py-6 sm:gap-8 sm:p-8">
+                                    {solutions.map(item => (
+                                        <ExternalLink
+                                            key={item.name}
+                                            href={item.href}
+                                            className="-m-3 p-3 block rounded-md hover:bg-dark-800 transition ease-in-out duration-150"
+                                        >
+                                            <p className="text-base font-medium text-high-emphesis">{item.name}</p>
+                                            <p className="mt-1 text-sm text-secondary">{item.description}</p>
+                                        </ExternalLink>
+                                    ))}
+                                </div>
+                            </div>
+                        </Popover.Panel>
+                    </Transition>
+                </>
             )}
-        </StyledMenu>
+        </Popover>
     )
 }

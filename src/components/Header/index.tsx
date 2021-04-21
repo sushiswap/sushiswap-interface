@@ -1,25 +1,18 @@
 import { ChainId, Currency } from '@sushiswap/sdk'
-import React, { useState, Fragment } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Logo from '../../assets/images/logo.png'
 import { useActiveWeb3React } from '../../hooks'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { ReactComponent as Burger } from '../../assets/images/burger.svg'
 import { ReactComponent as X } from '../../assets/images/x.svg'
-import { ReactComponent as Chef } from '../../assets/images/chef.svg'
 import Sushi from '../../assets/kashi/tokens/sushi-square.jpg'
 import xSushi from '../../assets/kashi/tokens/xsushi-square.jpg'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
-
 import MoreMenu from '../Menu'
-
 import { ExternalLink, NavLink } from '../Link'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
-}
+import { Disclosure } from '@headlessui/react'
 
 export default function Header(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
