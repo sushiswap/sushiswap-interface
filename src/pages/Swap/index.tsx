@@ -313,6 +313,10 @@ export default function Swap() {
         <>
             <Helmet>
                 <title>Swap | Sushi</title>
+                <meta
+                    name="description"
+                    content="Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
+                />
             </Helmet>
             <TokenWarningModal
                 isOpen={importTokensNotInDefault.length > 0 && !dismissTokenWarning}
