@@ -38,6 +38,7 @@ import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
+import Header from '../../components/swap/SwapHeader'
 
 export default function AddLiquidity({
     match: {
@@ -323,7 +324,8 @@ export default function AddLiquidity({
                 <title>Add Liquidity | Sushi</title>
             </Helmet>
             <div className="bg-dark-900 w-full max-w-2xl rounded">
-                <AddRemoveTabs creating={isCreate} adding={true} />
+                {/* <AddRemoveTabs creating={isCreate} adding={true} /> */}
+                <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <Wrapper>
                     <TransactionConfirmationModal
                         isOpen={showConfirm}
