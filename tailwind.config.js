@@ -94,7 +94,7 @@ module.exports = {
                     lineHeight: '24px'
                 }
             ],
-            'caption-2': [
+            caption2: [
                 '14px',
                 {
                     lineHeight: '20px'

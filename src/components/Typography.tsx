@@ -1,11 +1,35 @@
-// export type TypographyWeight = 400 | 700
+import { classNames } from 'functions'
+import React from 'react'
+export type TypographyWeight = 400 | 700
 
-// export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'body' | 'caption'
+export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'body' | 'caption'
 
-// export interface TypographyProps {}
+const VARIANTS = {
+    hero: 'text-hero',
+    h1: 'text-h1',
+    h2: 'text-h2',
+    h3: 'text-h3',
+    h4: 'text-h4',
+    h5: 'text-h5',
+    body: 'text-body',
+    caption: 'text-caption2',
+    caption2: 'text-caption2'
+}
 
-function Typography() {
-    //
+export interface TypographyProps {
+    variant: TypographyVariant
+    weight: TypographyWeight
+    component: keyof React.ReactHTML
+    className: string
+}
+
+function Typography({
+    variant = 'body',
+    weight = 400,
+    component = 'div',
+    className = ''
+}: TypographyProps): JSX.Element {
+    return React.createElement(component, { className: classNames(VARIANTS[variant], className) })
 }
 
 export default Typography
