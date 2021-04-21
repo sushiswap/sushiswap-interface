@@ -46,6 +46,12 @@ export default function LendingPair({
                             <div className="text-xl text-high-emphesis">Market Info</div>
                         </div>
                         <div className="flex justify-between">
+                            <div className="text-lg text-secondary">Total</div>
+                            <div className="text-lg text-high-emphesis">
+                                {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
+                            </div>
+                        </div>
+                        <div className="flex justify-between">
                             <div className="text-lg text-secondary">Available</div>
                             <div className="text-lg text-high-emphesis">
                                 {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
@@ -57,7 +63,6 @@ export default function LendingPair({
                                 <div className="text-lg text-high-emphesis">
                                     {formattedPercent(pair.utilization.string)}
                                 </div>
-                                <GradientDot percent={pair.utilization.string} desc={false} />
                             </div>
                         </div>
                         <div className="flex justify-between">
@@ -76,6 +81,24 @@ export default function LendingPair({
                                 </div>
                             </div>
                         </div>
+                        <div className="flex justify-between">
+                            <div className="text-lg text-secondary">Collateral</div>
+                            <div className="flex items-center">
+                                <div className="text-lg text-high-emphesis">
+                                    {formattedNum(pair.totalCollateralAmount.string)} {pair.collateral.symbol}
+                                </div>
+                            </div>
+                        </div>
+                        {pair.utilization.value.gt(0) && (
+                            <div className="flex justify-between">
+                                <div className="text-lg text-secondary">Health</div>
+                                <div className="flex items-center">
+                                    <div className="text-lg text-high-emphesis">
+                                        {formattedPercent(pair.marketHealth.toFixed(16))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         <div className="flex justify-between pt-3">
                             <div className="text-xl text-high-emphesis">BentoBox</div>
                         </div>

@@ -323,7 +323,7 @@ export default function AddLiquidity({
             <Helmet>
                 <title>Add Liquidity | Sushi</title>
             </Helmet>
-            <div className="bg-dark-900 w-full max-w-2xl rounded">
+            <div className="bg-dark-900 w-full max-w-xl rounded">
                 {/* <AddRemoveTabs creating={isCreate} adding={true} /> */}
                 <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <Wrapper>

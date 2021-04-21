@@ -21,8 +21,8 @@ import {
     BENTOBOX_ADDRESS,
     CHAINLINK_ORACLE_ADDRESS,
     KASHI_ADDRESS,
-    KASHI_HELPER_ADDRESS,
-    SUSHISWAP_SWAPPER_ADDRESS
+    SUSHISWAP_SWAPPER_ADDRESS,
+    SUSHISWAP_MULTISWAPPER_ADDRESS
 } from 'kashi'
 import { useMemo } from 'react'
 import { BORING_HELPER_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
@@ -53,6 +53,7 @@ import SAAVE_ABI from '../constants/abis/saave.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
+import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
@@ -267,4 +268,8 @@ export function useDashboard2Contract(): Contract | null {
         }
     }
     return useContract(address, DASHBOARD2_ABI, false)
+}
+
+export function useSushiSwapMultiSwapper(): Contract | null {
+    return useContract(SUSHISWAP_MULTISWAPPER_ADDRESS, SUSHISWAP_MULTISWAPPER_ABI)
 }

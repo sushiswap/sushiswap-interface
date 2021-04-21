@@ -150,10 +150,8 @@ function useKashiApproveCallback(
         const result = await cooker.cook()
         if (result.success) {
             addTransaction(result.tx, { summary })
-            dispatch(setKashiApprovalPending('Deposit'))
             setKashiPermit(undefined)
             await result.tx.wait()
-            dispatch(setKashiApprovalPending(''))
         }
     }
 

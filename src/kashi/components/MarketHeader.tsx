@@ -4,8 +4,19 @@ import { Search } from 'react-feather'
 import { Link } from 'react-router-dom'
 import { BorrowCardHeader, LendCardHeader } from '.'
 
-function MarketHeader({ type = 'Borrow', search, term }: any) {
+function MarketHeader({ type = 'Borrow', lists }: any) {
+    if (lists.setTerm) {
+        lists = [lists]
+    }
+
     const Header = type === 'Borrow' ? BorrowCardHeader : LendCardHeader
+
+    function onSearch(term: any) {
+        lists.forEach((list: any) => {
+            list.setTerm(term)
+        })
+    }
+
     return (
         <Header>
             <div className="flex flex-col md:flex-row items-center justify-between w-full">
@@ -22,9 +33,9 @@ function MarketHeader({ type = 'Borrow', search, term }: any) {
                             className={`py-3 pl-4 pr-14 rounded w-full focus:outline-none focus:ring ${
                                 type === 'Borrow' ? 'focus:ring-pink' : 'focus:ring-blue'
                             }`}
-                            onChange={e => search(e.target.value)}
+                            onChange={e => onSearch(e.target.value)}
                             style={{ background: '#161522' }}
-                            value={term}
+                            value={lists[0].term}
                             placeholder="Search by symbol"
                         />
                         <div className="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">

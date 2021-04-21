@@ -128,7 +128,7 @@ export class KashiCooker {
     addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {
         let share: BigNumber
         if (fromBento) {
-            share = toShare(this.pair.collateral, amount)
+            share = amount.lt(0) ? amount : toShare(this.pair.collateral, amount)
         } else {
             const useNative = this.pair.collateral.address === WETH[this.chainId].address
 
@@ -229,8 +229,11 @@ export class KashiCooker {
         return this
     }
 
-    borrow(amount: BigNumber, toBento: boolean): KashiCooker {
-        this.add(Action.BORROW, defaultAbiCoder.encode(['int256', 'address'], [amount, this.account]))
+    borrow(amount: BigNumber, toBento: boolean, toAddress = ''): KashiCooker {
+        this.add(
+            Action.BORROW,
+            defaultAbiCoder.encode(['int256', 'address'], [amount, toAddress && toBento ? toAddress : this.account])
+        )
         if (!toBento) {
             const useNative = this.pair.asset.address === WETH[this.chainId].address
 
@@ -238,7 +241,12 @@ export class KashiCooker {
                 Action.BENTO_WITHDRAW,
                 ethers.utils.defaultAbiCoder.encode(
                     ['address', 'address', 'int256', 'int256'],
-                    [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, amount, 0]
+                    [
+                        useNative ? ethers.constants.AddressZero : this.pair.asset.address,
+                        toAddress || this.account,
+                        amount,
+                        0
+                    ]
                 )
             )
         }
@@ -284,6 +292,24 @@ export class KashiCooker {
         }
         this.add(Action.REPAY, defaultAbiCoder.encode(['int256', 'address', 'bool'], [part, this.account, false]))
         return this
+    }
+
+    action(
+        address: string,
+        value: BigNumberish,
+        data: string,
+        useValue1: boolean,
+        useValue2: boolean,
+        returnValues: number
+    ) {
+        this.add(
+            Action.CALL,
+            defaultAbiCoder.encode(
+                ['address', 'bytes', 'bool', 'bool', 'uint8'],
+                [address, data, useValue1, useValue2, returnValues]
+            ),
+            value
+        )
     }
 
     async cook() {

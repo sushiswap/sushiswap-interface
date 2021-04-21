@@ -1,23 +1,29 @@
-import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import QuestionHelper from 'components/QuestionHelper'
+import React, { useContext, useState } from 'react'
+import { WETH } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Alert, Button, Checkbox, Dots } from 'components'
 import Badge from 'components/Badge'
 import TransactionReviewView from 'kashi/components/TransactionReview'
-import WarningsView from 'kashi/components/Warnings'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
-import { KashiContext } from 'kashi/context'
 import { KashiCooker } from 'kashi/entities/KashiCooker'
-import { TransactionReview } from 'kashi/entities/TransactionReview'
 import { Warning, Warnings } from 'kashi/entities/Warnings'
-import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
-import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
-import React, { useContext, useState } from 'react'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
-import { useKashiApprovalPending } from 'state/application/hooks'
-import { formattedNum } from 'utils'
+import { SUSHISWAP_MULTISWAPPER_ADDRESS } from 'kashi/constants'
+import { KashiContext } from 'kashi/context'
+import WarningsView from 'kashi/components/Warnings'
+import { useUserSlippageTolerance } from 'state/user/hooks'
+import { useTradeExactIn } from 'hooks/Trades'
+import { useCurrency } from 'hooks/Tokens'
+import { tryParseAmount } from 'state/swap/hooks'
+import { TransactionReview } from 'kashi/entities'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from 'utils/prices'
+import { Field } from 'state/swap/actions'
+import TradeReview from 'kashi/components/TradeReview'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { BigNumber, ethers } from 'ethers'
+import { toShare, ZERO, e10, minimum, maximum } from 'kashi/functions'
+import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
+import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'components/Checkbox'
 
 interface BorrowProps {
     pair: any
@@ -25,10 +31,7 @@ interface BorrowProps {
 
 export default function Borrow({ pair }: BorrowProps) {
     const { account, chainId } = useActiveWeb3React()
-    const pendingApprovalMessage = useKashiApprovalPending()
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
+    const info = useContext(KashiContext).state.info
 
     // State
     const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -36,46 +39,35 @@ export default function Borrow({ pair }: BorrowProps) {
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
     const [updateOracle, setUpdateOracle] = useState(false)
-    const [pinBorrowMax, setPinBorrowMax] = useState(false)
-
     const [swap, setSwap] = useState(false)
 
-    const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(
-                chainId || 1,
-                pair.collateral.address,
-                pair.collateral.decimals,
-                pair.collateral.symbol,
-                pair.collateral.name
-            ),
-            collateralValue.toBigNumber(pair.collateral.decimals).toString()
-        ),
-        BENTOBOX_ADDRESS
-    )
-
-    const info = useContext(KashiContext).state.info
+    const assetToken = useCurrency(pair.asset.address) || undefined
+    const collateralToken = useCurrency(pair.collateral.address) || undefined
 
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.collateral.address
-    const balance = useBentoCollateral
+    const collateralBalance = useBentoCollateral
         ? pair.collateral.bentoBalance
         : assetNative
         ? info?.ethBalance
         : pair.collateral.balance
-    const maxCollateral = (useBentoCollateral
-        ? pair.collateral.bentoBalance
-        : assetNative
-        ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO)
-        : pair.collateral.balance
-    ).toFixed(pair.collateral.decimals)
 
     const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
-    const nextUserCollateralValue = pair.userCollateralAmount.value.add(
-        collateralValue.toBigNumber(pair.collateral.decimals)
-    )
+    // Swap
+    const [allowedSlippage] = useUserSlippageTolerance() // 10 = 0.1%
+    const parsedAmount = tryParseAmount(borrowValue, assetToken)
+    const foundTrade = useTradeExactIn(parsedAmount, collateralToken) || undefined
+    const extraCollateral = swap
+        ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)
+              [Field.OUTPUT]?.toFixed(pair.collateral.decimals)
+              .toBigNumber(pair.collateral.decimals) || ZERO
+        : ZERO
+    const nextUserCollateralValue = pair.userCollateralAmount.value
+        .add(collateralValue.toBigNumber(pair.collateral.decimals))
+        .add(extraCollateral)
 
+    // Calculate max borrow
     const nextMaxBorrowableOracle = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
     const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
     const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(
@@ -88,29 +80,18 @@ export default function Borrow({ pair }: BorrowProps) {
 
     const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
 
-    const displayBorrowValue = pinBorrowMax ? maxBorrow : borrowValue
-
-    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(displayBorrowValue.toBigNumber(pair.asset.decimals))
+    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals))
     const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum)
 
     const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.decimals).isZero()
-    const borrowValueSet = !displayBorrowValue.toBigNumber(pair.asset.decimals).isZero()
+    const borrowValueSet = !borrowValue.toBigNumber(pair.asset.decimals).isZero()
 
-    let actionName = 'Nothing to do'
-    if (collateralValueSet) {
-        if (borrowValueSet) {
-            actionName = 'Add collateral and borrow'
-        } else {
-            actionName = 'Add collateral'
-        }
-    } else if (borrowValueSet) {
-        actionName = 'Borrow'
-    }
+    const trade = swap && borrowValueSet ? foundTrade : undefined
 
-    const borrowAmount = displayBorrowValue.toBigNumber(pair.asset.decimals)
+    const borrowAmount = borrowValue.toBigNumber(pair.asset.decimals)
 
     const collateralWarnings = new Warnings().add(
-        balance?.lt(collateralValue.toBigNumber(pair.collateral.decimals)),
+        collateralBalance?.lt(collateralValue.toBigNumber(pair.collateral.decimals)),
         `Please make sure your ${
             useBentoCollateral ? 'BentoBox' : 'wallet'
         } balance is sufficient to deposit and then try again.`,
@@ -127,12 +108,12 @@ export default function Borrow({ pair }: BorrowProps) {
                 'You have surpassed your borrow limit and assets are at a high risk of liquidation.',
                 true,
                 new Warning(
-                    displayBorrowValue.length > 0 &&
+                    borrowValue.length > 0 &&
                         borrowAmount.gt(nextMaxBorrowMinimum.sub(pair.currentUserBorrowAmount.value)),
                     "You don't have enough collateral to borrow this amount.",
                     true,
                     new Warning(
-                        displayBorrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
+                        borrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
                         'You will surpass your borrow limit and assets will be at a high risk of liquidation.',
                         false
                     )
@@ -140,18 +121,13 @@ export default function Borrow({ pair }: BorrowProps) {
             )
         )
         .add(
-            displayBorrowValue.length > 0 &&
-                pair.maxAssetAvailable.lt(displayBorrowValue.toBigNumber(pair.asset.decimals)),
+            borrowValue.length > 0 && pair.maxAssetAvailable.lt(borrowValue.toBigNumber(pair.asset.decimals)),
             'Not enough liquidity in this pair.',
             true
         )
 
     const transactionReview = new TransactionReview()
-    if (
-        (collateralValue || displayBorrowValue) &&
-        !collateralWarnings.broken &&
-        (!borrowWarnings.broken || !displayBorrowValue)
-    ) {
+    if ((collateralValue || borrowValue) && !collateralWarnings.broken && (!borrowWarnings.broken || !borrowValue)) {
         if (collateralValueSet) {
             transactionReview.addTokenAmount(
                 'Collateral',
@@ -181,37 +157,76 @@ export default function Borrow({ pair }: BorrowProps) {
         transactionReview.addTokenAmount(
             'Borrow Limit',
             pair.maxBorrowable.safe.value,
-            nextMaxBorrowSafe.sub(displayBorrowValue.toBigNumber(pair.asset.decimals)),
+            nextMaxBorrowSafe.sub(borrowValue.toBigNumber(pair.asset.decimals)),
             pair.asset
         )
         transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
         transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
     }
 
-    // Handlers
-    function onLeverage() {
-        //
+    let actionName = 'Nothing to do'
+    if (collateralValueSet) {
+        if (borrowValueSet) {
+            actionName = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
+        } else {
+            actionName = 'Add collateral'
+        }
+    } else if (borrowValueSet) {
+        actionName = trade ? 'Borrow, swap and add as collateral' : 'Borrow'
     }
 
-    const showApprove =
-        chainId &&
-        pair.collateral.address !== WETH[chainId].address &&
-        !useBentoCollateral &&
-        collateralValue &&
-        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
+    const actionDisabled =
+        (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
+            borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
+        collateralWarnings.broken ||
+        (borrowValue.length > 0 && borrowWarnings.broken)
 
+    // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
-        if (collateralValueSet) {
-            cooker.addCollateral(collateralValue.toBigNumber(pair.collateral.decimals), useBentoCollateral)
-            summary = 'Add collateral'
-        }
         if (borrowValueSet) {
             if (displayUpdateOracle) {
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
-            cooker.borrow(displayBorrowValue.toBigNumber(pair.asset.decimals), useBentoBorrow)
+            cooker.borrow(
+                borrowValue.toBigNumber(pair.asset.decimals),
+                swap || useBentoBorrow,
+                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : ''
+            )
             summary += (summary ? ' and ' : '') + 'Borrow'
+        }
+        if (borrowValueSet && trade) {
+            const path = trade.route.path.map(token => token.address) || []
+            if (path.length > 4) {
+                throw 'Path too long'
+            }
+            const data = defaultAbiCoder.encode(
+                ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
+                [
+                    pair.asset.address,
+                    pair.collateral.address,
+                    extraCollateral,
+                    path.length > 2 ? path[2] : ethers.constants.AddressZero,
+                    path.length > 3 ? path[3] : ethers.constants.AddressZero,
+                    account,
+                    toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
+                ]
+            )
+            cooker.action(
+                SUSHISWAP_MULTISWAPPER_ADDRESS,
+                ZERO,
+                ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
+                false,
+                true,
+                1
+            )
+        }
+        if (collateralValueSet) {
+            cooker.addCollateral(
+                swap ? BigNumber.from(-1) : collateralValue.toBigNumber(pair.collateral.decimals),
+                useBentoCollateral
+            )
+            summary = 'Add collateral'
         }
         return summary
     }
@@ -220,197 +235,70 @@ export default function Borrow({ pair }: BorrowProps) {
         <>
             <div className="text-3xl text-high-emphesis mt-6 mb-4">Borrow {pair.asset.symbol}</div>
 
-            <div className="flex items-center justify-between my-4">
-                <div className="flex items-center text-base text-secondary">
-                    <span>
-                        <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span className="mx-2"> Add {pair.collateral.symbol} collateral from </span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="pink"
-                            size="small"
-                            className="focus:ring focus:ring-pink"
-                            onClick={() => {
-                                setUseBentoCollateral(!useBentoCollateral)
-                            }}
-                        >
-                            {useBentoCollateral ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary text-right">
-                    Balance: {formattedNum(Math.max(0, balance.toFixed(pair.collateral.decimals)))}
-                </div>
-            </div>
+            <SmartNumberInput
+                color="pink"
+                token={pair.collateral}
+                value={collateralValue}
+                setValue={setCollateralValue}
+                useBentoTitleDirection="down"
+                useBentoTitle={`Add ${pair.collateral.symbol} collateral from`}
+                useBento={useBentoCollateral}
+                setUseBento={setUseBentoCollateral}
+                maxTitle="Balance"
+                max={collateralBalance}
+                showMax={true}
+            />
 
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={collateralValue}
-                    onUserInput={setCollateralValue}
-                />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="pink"
-                        size="small"
-                        onClick={() => setCollateralValue(maxCollateral)}
-                        className="absolute right-4 focus:ring focus:ring-pink"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
-
-            <div className="flex items-center justify-between my-4">
-                <div className="flex items-center text-base text-secondary">
-                    <span>
-                        <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span className="mx-2"> Borrow {pair.asset.symbol} to </span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="pink"
-                            size="small"
-                            className="focus:ring focus:ring-pink"
-                            onClick={() => {
-                                setUseBentoBorrow(!useBentoBorrow)
-                            }}
-                        >
-                            {useBentoBorrow ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary text-right">Max: {formattedNum(maxBorrow)}</div>
-            </div>
-
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={displayBorrowValue}
-                    onUserInput={setBorrowValue}
-                    onFocus={() => {
-                        setBorrowValue(displayBorrowValue)
-                        setPinBorrowMax(false)
-                    }}
-                />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="pink"
-                        size="small"
-                        onClick={() => {
-                            setPinBorrowMax(true)
-                        }}
-                        className="absolute right-4 focus:ring focus:ring-pink"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
+            <SmartNumberInput
+                color="pink"
+                token={pair.asset}
+                value={borrowValue}
+                setValue={setBorrowValue}
+                useBentoTitleDirection="up"
+                useBentoTitle={`Borrow ${pair.asset.symbol} to`}
+                useBento={useBentoBorrow}
+                setUseBento={setUseBentoBorrow}
+                maxTitle="Max"
+                max={nextMaxBorrowPossible}
+            />
 
             <WarningsView warnings={collateralWarnings}></WarningsView>
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
-            {borrowValueSet && (displayUpdateOracle || pair.currentExchangeRate.gt(pair.oracleExchangeRate)) && (
-                <div className="flex items-center mb-4">
-                    <Checkbox
+            {borrowValueSet && (
+                <>
+                    <ExchangeRateCheckBox
                         color="pink"
-                        checked={displayUpdateOracle}
-                        disabled={pair.currentExchangeRate.isZero()}
-                        onChange={event => setUpdateOracle(event.target.checked)}
+                        pair={pair}
+                        updateOracle={updateOracle}
+                        setUpdateOracle={setUpdateOracle}
+                        desiredDirection="up"
                     />
-                    <span className="text-primary ml-2 mr-1">Update exchange rate from the oracle</span>
-                    <QuestionHelper
-                        text={
-                            pair.currentExchangeRate.gt(0)
-                                ? 'The exchange rate from the oracle is only updated when needed. When the price in Kashi is different from the oracle, this may reduce the amount you can borrow. Updating the exchange rate from the oracle may increase your borrow limit.'
-                                : 'The exchange rate has not been updated from the oracle yet in this market. If you borrow, it will be updated.'
-                        }
-                    />
-                </div>
-            )}
 
-            <div className="flex flex-col md:flex-row items-center mb-4">
-                <div className="flex items-center">
-                    <Checkbox
+                    <SwapCheckbox
                         color="pink"
-                        checked={swap}
-                        onChange={event => setSwap(event.target.checked)}
-                        disabled={true}
-                        className="cursor-not-allowed"
+                        swap={swap}
+                        setSwap={setSwap}
+                        title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
+                        help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
                     />
-                    <span className="text-low-emphesis text-xs md:text-sm ml-2 mr-1">
-                        Swap borrowed {pair.asset.symbol} for {pair.collateral.symbol} collateral
-                    </span>
-                    <QuestionHelper
-                        text={
-                            <span>
-                                Swapping your borrowed tokens for collateral allows for opening long/short positions
-                                with leverage in a single transaction.
-                                <br />
-                                <br /> This feature will be enabled soon.
-                            </span>
-                        }
-                    />
-                </div>
-                <Badge color="pink" className="block text-center mt-2 md:mt-0 ml-0 md:flex md:ml-auto">
-                    COMING SOON
-                </Badge>
-            </div>
+
+                    {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
+                </>
+            )}
 
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-            {approveKashiFallback && (
-                <Alert
-                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
-                    className="mb-4"
-                />
-            )}
-
-            {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
-                kashiApprovalState === BentoApprovalState.PENDING) &&
-                !kashiPermit && (
-                    <Button color="pink" onClick={onApprove} className="mb-4">
-                        {kashiApprovalState === BentoApprovalState.PENDING ? (
-                            <Dots>{pendingApprovalMessage}</Dots>
-                        ) : (
-                            `Approve Kashi`
-                        )}
-                    </Button>
-                )}
-
-            {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-                <>
-                    {showApprove && (
-                        <Button color="pink" onClick={approve} className="mb-4">
-                            {approvalState === ApprovalState.PENDING ? (
-                                <Dots>Approving {pair.collateral.symbol}</Dots>
-                            ) : (
-                                `Approve ${pair.collateral.symbol}`
-                            )}
-                        </Button>
-                    )}
-
-                    {!showApprove && (
-                        <Button
-                            color="pink"
-                            onClick={() => onCook(pair, onExecute)}
-                            disabled={
-                                (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
-                                    borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
-                                collateralWarnings.broken ||
-                                (borrowValue.length > 0 && borrowWarnings.broken)
-                            }
-                        >
+            <KashiApproveButton
+                color="pink"
+                content={(onCook: any) => (
+                    <TokenApproveButton value={collateralValue} token={collateralToken} needed={!useBentoCollateral}>
+                        <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
                             {actionName}
                         </Button>
-                    )}
-                </>
-            )}
+                    </TokenApproveButton>
+                )}
+            />
         </>
     )
 }
