@@ -1,4 +1,4 @@
-import './tailwind.css'
+import './styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
