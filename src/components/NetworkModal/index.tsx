@@ -5,6 +5,7 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
 import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
 import Modal from '../Modal'
+import ModalHeader from '../ModalHeader'
 
 const PARAMS: {
     [chainId in ChainId]?: {
@@ -107,7 +108,8 @@ export default function NetworkModal(): JSX.Element | null {
 
     return (
         <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
-            <div className="text-2xl font-bold mb-3 text-high-emphesis">Select a Network</div>
+            <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
+            {/* <div className="text-2xl font-bold mb-3 text-high-emphesis">Select a Network</div> */}
 
             <div className="text-lg text-primary mb-6">
                 You are currently browsing <span className="font-bold text-pink">SUSHI</span>

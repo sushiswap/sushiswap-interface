@@ -17,19 +17,21 @@ const VARIANTS = {
 }
 
 export interface TypographyProps {
-    variant: TypographyVariant
-    weight: TypographyWeight
-    component: keyof React.ReactHTML
-    className: string
+    variant?: TypographyVariant
+    weight?: TypographyWeight
+    component?: keyof React.ReactHTML
+    className?: string
+    children?: React.ReactChild | React.ReactChild[]
 }
 
 function Typography({
     variant = 'body',
     weight = 400,
     component = 'div',
-    className = ''
+    className = '',
+    children = []
 }: TypographyProps): JSX.Element {
-    return React.createElement(component, { className: classNames(VARIANTS[variant], className) })
+    return React.createElement(component, { className: classNames(VARIANTS[variant], className) }, children)
 }
 
 export default Typography
