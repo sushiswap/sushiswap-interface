@@ -23,7 +23,7 @@ import { BackArrow, CloseIcon, CustomLightSpinner, TYPE } from '../../theme'
 import LPToken from '../../types/LPToken'
 import MetamaskError from '../../types/MetamaskError'
 import AppBody from '../AppBody'
-import { EmptyState } from '../MigrateV1/EmptyState'
+import { EmptyState } from './EmptyState'
 import { MaxButton } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
 

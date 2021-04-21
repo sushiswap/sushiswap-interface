@@ -17,7 +17,6 @@ import {
 } from './pages/AddLiquidity/redirects'
 import Bento from './pages/BentoBox'
 import BentoBalances from './pages/BentoBox/Balances'
-import RemoveV1Exchange from './pages/MigrateV1/RemoveV1Exchange'
 import MigrateV2 from './pages/MigrateV2'
 import Pool from './pages/Pool'
 import PoolFinder from './pages/PoolFinder'
@@ -82,7 +81,6 @@ function Routes(): JSX.Element {
             <Route exact path="/create" component={AddLiquidity} />
             <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
             <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-            <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
             <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
 

@@ -1,12 +1,10 @@
-import { transparentize } from 'polished'
 import React, { useMemo } from 'react'
 import { Text, TextProps } from 'rebass'
 import styled, {
     DefaultTheme,
     ThemeProvider as StyledComponentsThemeProvider,
     createGlobalStyle,
-    css,
-    keyframes
+    css
 } from 'styled-components'
 import { Colors } from './styled'
 
@@ -148,9 +146,6 @@ export const TYPE = {
     body(props: TextProps) {
         return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />
     },
-    largeHeader(props: TextProps) {
-        return <TextWrapper fontWeight={600} fontSize={24} {...props} />
-    },
     mediumHeader(props: TextProps) {
         return <TextWrapper fontWeight={500} fontSize={20} {...props} />
     },
@@ -163,14 +158,8 @@ export const TYPE = {
     blue(props: TextProps) {
         return <TextWrapper fontWeight={500} color={'blue1'} {...props} />
     },
-    yellow(props: TextProps) {
-        return <TextWrapper fontWeight={500} color={'yellow1'} {...props} />
-    },
     darkGray(props: TextProps) {
         return <TextWrapper fontWeight={500} color={'text3'} {...props} />
-    },
-    gray(props: TextProps) {
-        return <TextWrapper fontWeight={500} color={'bg3'} {...props} />
     },
     italic(props: TextProps) {
         return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />
@@ -179,52 +168,6 @@ export const TYPE = {
         return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />
     }
 }
-
-export const FixedGlobalStyle = createGlobalStyle`
-html, input, textarea, button {
-  font-family: "DM Sans", sans-serif;
-  font-display: fallback;
-}
-input, textarea {
-  font-family: 'Inter', sans-serif;
-  font-display: fallback;
-}
-@supports (font-variation-settings: normal) {
-  html, button {
-    font-family: "DM Sans", sans-serif;
-  }
-  input, textarea {
-    // font-family: 'Inter var', sans-serif;
-  }
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
- a {
-   color: #0993EC; 
- }
-
-* {
-  box-sizing: border-box;
-}
-
-button {
-  user-select: none;
-}
-
-html {
-  font-size: 16px;
-  font-variant: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on, 'cv03' on;
-}
-`
 
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
