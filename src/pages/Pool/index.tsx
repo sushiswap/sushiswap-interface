@@ -7,7 +7,6 @@ import styled, { ThemeContext } from 'styled-components'
 import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/ButtonLegacy'
 import Card from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
-import { CardSection, DataCard } from '../../components/earn/styled'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 import FullPositionCard from '../../components/PositionCard'
 import { RowBetween, RowFixed } from '../../components/Row'
@@ -27,12 +26,6 @@ const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
     width: 100%;
     padding: 16px;
-`
-
-const VoteCard = styled(DataCard)`
-  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  overflow: hidden;
 `
 
 const TitleRow = styled(RowBetween)`

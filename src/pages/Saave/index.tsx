@@ -2,10 +2,8 @@ import { transparentize } from 'polished'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { AutoColumn } from '../../components/Column'
-import { CardSection, DataCard } from '../../components/earn/styled'
 import { RowBetween } from '../../components/Row'
 import { Wrapper } from '../../components/swap/styleds'
-//import { WrapperNoPadding } from '../../components/swap/styleds'
 import { useDarkModeManager } from '../../state/user/hooks'
 import { ExternalLink, TYPE } from '../../theme'
 import AppBody from '../AppBody'
@@ -13,9 +11,24 @@ import AXSushiBalancePanel from './AXSushiBalancePanel'
 import SaaveHeader from './SaaveHeader'
 import SushiInputPanel from './SushiInputPanel'
 import { Helmet } from 'react-helmet'
+
 const PageWrapper = styled(AutoColumn)`
     max-width: 420px;
     width: 100%;
+`
+
+export const CardSection = styled(AutoColumn)<{ disabled?: boolean }>`
+    padding: 1rem;
+    z-index: 1;
+    opacity: ${({ disabled }) => disabled && '0.4'};
+`
+
+export const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
+    background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
+    border-radius: ${({ theme }) => theme.borderRadius};
+    width: 100%;
+    position: relative;
+    overflow: hidden;
 `
 
 const VoteCard = styled(DataCard)`
