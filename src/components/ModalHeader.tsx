@@ -13,7 +13,7 @@ function ModalHeader({
     return (
         <div className={`relative mb-2 ${className}`}>
             {title && (
-                <Typography component="h2" variant="h5" className="mt-1">
+                <Typography component="h2" variant="h5" className="mt-2.5 font-bold">
                     {title}
                 </Typography>
             )}

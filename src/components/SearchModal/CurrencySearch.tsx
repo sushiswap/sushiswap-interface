@@ -205,14 +205,14 @@ export function CurrencySearch({
                     </TYPE.main>
                 </Column>
             )}
-            <div className="mt-6">
+            <div className="mt-3">
                 <Row justify="center">
                     <ButtonText onClick={showManageView} color={theme.blue1} className="list-token-manage-button">
                         <RowFixed>
                             <IconWrapper size="16px" marginRight="6px">
                                 <Edit />
                             </IconWrapper>
-                            <TYPE.main color={theme.blue1}>Manage Token Lists</TYPE.main>
+                            <TYPE.main color={theme.blue1}>Manage</TYPE.main>
                         </RowFixed>
                     </ButtonText>
                 </Row>
