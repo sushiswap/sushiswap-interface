@@ -1,4 +1,21 @@
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { Fraction } from 'entities'
+
 /// <reference types="react-scripts" />
+
+declare module '@ethersproject/bignumber' {
+    interface BigNumber {
+        muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
+        toFixed(decimals: BigNumberish): string
+        toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
+    }
+}
+
+declare global {
+    interface String {
+        toBigNumber(decimals: number): BigNumber
+    }
+}
 
 declare module 'jazzicon' {
     export default function(diameter: number, seed: number): HTMLElement
