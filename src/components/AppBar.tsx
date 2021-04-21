@@ -271,9 +271,6 @@ function AppBar(): JSX.Element {
                                         Apps
                                     </NavLink>
                                 )}
-                                <NavLink id={`tool-nav-link`} to={'/tools'}>
-                                    Tools
-                                </NavLink>
                                 {chainId && (
                                     <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
                                         Analytics

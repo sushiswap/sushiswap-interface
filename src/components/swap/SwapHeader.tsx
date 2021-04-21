@@ -7,7 +7,7 @@ import profileAnimationData from '../../assets/animation/wallet.json'
 import Lottie from 'lottie-react'
 import Gas from '../Gas'
 
-export default function SwapHeader(): JSX.Element {
+export default function SwapHeader({ input, output }: any): JSX.Element {
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
     return (
@@ -30,7 +30,7 @@ export default function SwapHeader(): JSX.Element {
                 <NavLink
                     className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     activeClassName="bg-dark-900 text-high-emphesis font-bold border-gradient"
-                    to="/pool"
+                    to={`/add/${input ? input.symbol : 'ETH'}${output && output.address ? `/${output.address}` : ''}`}
                 >
                     Liquidity
                 </NavLink>
