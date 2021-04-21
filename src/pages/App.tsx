@@ -1,12 +1,12 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 import { Route, Switch, useLocation } from 'react-router-dom'
-import { Header, Polling, Popups } from './components'
-import Web3ReactManager from './components/Web3ReactManager'
+import { Header, Polling, Popups } from '../components'
+import Web3ReactManager from '../components/Web3ReactManager'
 import ReactGA from 'react-ga'
-import Routes from './routes'
+import Routes from '../routes'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from './state'
-import { updateUserDarkMode } from './state/user/actions'
+import { AppDispatch } from '../state'
+import { updateUserDarkMode } from '../state/user/actions'
 import { parse } from 'qs'
 
 function App(): JSX.Element {

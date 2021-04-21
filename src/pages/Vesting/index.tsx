@@ -146,7 +146,6 @@ export default function ClaimModal() {
                 <title>Vesting | Sushi</title>
             </Helmet>
             <PageWrapper>
-                {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
                 <>
                     <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
                         <div className="space-y-10 hidden md:block">
