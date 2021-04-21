@@ -1,7 +1,7 @@
 import React from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { ChainId } from '@sushiswap/sdk'
-import { Redirect, Route, RouteComponentProps, useLocation } from 'react-router-dom'
+import { Redirect, Route, RouteComponentProps, useLocation, Switch } from 'react-router-dom'
 import Connect from './kashi/pages/Connect'
 import BorrowMarkets from './kashi/pages/Markets/Borrow'
 import CreateMarkets from './kashi/pages/Markets/Create'
@@ -95,7 +95,7 @@ export const WalletRoute = ({ component: Component, children, ...rest }: any) =>
 function Routes() {
     const { chainId } = useActiveWeb3React()
     return (
-        <>
+        <Switch>
             <PublicRoute exact path="/connect" component={Connect} />
             {/* BentoApps */}
             <Route exact strict path="/bento" component={Bento} />
@@ -168,7 +168,7 @@ function Routes() {
             <Route exact strict path="/" component={RedirectHashRoutes} />
             {/* Catch all */}
             <Route component={RedirectPathToSwapOnly} />
-        </>
+        </Switch>
     )
 }
 

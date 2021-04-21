@@ -1,9 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
 import React, { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { classNames } from '../../functions/styling'
-import { ExternalLink } from '../Link'
-import { ReactComponent as MenuIcon } from '../../assets/images/menu.svg'
+import { classNames } from '../functions/styling'
+import { ExternalLink } from './Link'
+import { ReactComponent as MenuIcon } from '../assets/images/menu.svg'
 const solutions = [
     {
         name: 'Docs',

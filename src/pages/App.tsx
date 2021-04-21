@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef } from 'react'
 import { Route, Switch, useLocation } from 'react-router-dom'
-import { Header, Polling, Popups } from '../components'
+import { AppBar, Polling, Popups } from '../components'
 import Web3ReactManager from '../components/Web3ReactManager'
 import ReactGA from 'react-ga'
 import Routes from '../routes'
@@ -49,9 +49,7 @@ function App(): JSX.Element {
     return (
         <Suspense fallback={null}>
             <div className="flex flex-col items-start overflow-x-hidden h-screen">
-                <div className="flex flex-row flex-nowrap justify-between w-screen">
-                    <Header />
-                </div>
+                <AppBar />
                 <div
                     ref={bodyRef}
                     className="flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20"
@@ -59,9 +57,7 @@ function App(): JSX.Element {
                     <Popups />
                     <Polling />
                     <Web3ReactManager>
-                        <Switch>
-                            <Routes />
-                        </Switch>
+                        <Routes />
                     </Web3ReactManager>
                 </div>
             </div>

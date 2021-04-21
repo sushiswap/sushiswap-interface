@@ -11,7 +11,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Blocklist from './components/Blocklist'
 import { NetworkContextName } from './constants'
-import App from './pages/_app'
+import App from './pages/App'
 import store from './state'
 import ApplicationUpdater from './state/application/updater'
 import ListsUpdater from './state/lists/updater'
@@ -22,6 +22,7 @@ import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
 
 import './i18n'
+import './bootstrap'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
