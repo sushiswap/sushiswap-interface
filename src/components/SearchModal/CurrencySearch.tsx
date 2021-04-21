@@ -23,21 +23,12 @@ import { filterTokens, useSortedTokensByQuery } from './filtering'
 import ImportRow from './ImportRow'
 import { useTokenComparator } from './sorting'
 import { PaddedColumn, SearchInput, Separator } from './styleds'
+import ModalHeader from '../ModalHeader'
 
 const ContentWrapper = styled(Column)`
     width: 100%;
     flex: 1 1;
     position: relative;
-`
-
-const Footer = styled.div`
-    width: 100%;
-    border-radius: 10px;
-    padding: 20px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    background-color: ${({ theme }) => theme.bg1};
-    border-top: 1px solid ${({ theme }) => theme.bg2};
 `
 
 interface CurrencySearchProps {
@@ -160,34 +151,24 @@ export function CurrencySearch({
 
     return (
         <ContentWrapper>
-            <PaddedColumn gap="16px">
-                <RowBetween>
-                    <Text fontWeight={500} fontSize={16}>
-                        Select a token
-                    </Text>
-                    <CloseIcon onClick={onDismiss} />
-                </RowBetween>
-                <Row>
-                    <SearchInput
-                        type="text"
-                        id="token-search-input"
-                        placeholder={t('tokenSearchPlaceholder')}
-                        autoComplete="off"
-                        value={searchQuery}
-                        ref={inputRef as RefObject<HTMLInputElement>}
-                        onChange={handleInput}
-                        onKeyDown={handleEnter}
-                    />
-                </Row>
-                {showCommonBases && (
-                    <CommonBases
-                        chainId={chainId}
-                        onSelect={handleCurrencySelect}
-                        selectedCurrency={selectedCurrency}
-                    />
-                )}
-            </PaddedColumn>
-            <Separator />
+            <ModalHeader onClose={onDismiss} title="Select a token" />
+            <div className="mt-3 mb-8">
+                <input
+                    type="text"
+                    id="token-search-input"
+                    placeholder={t('tokenSearchPlaceholder')}
+                    autoComplete="off"
+                    value={searchQuery}
+                    ref={inputRef as RefObject<HTMLInputElement>}
+                    onChange={handleInput}
+                    onKeyDown={handleEnter}
+                    className="w-full bg-transparent border-gradient-r-blue-pink-dark-900 border-transparent border-solid border-1 rounded placeholder-secondary focus:placeholder-primary  font-bold text-caption px-6 py-3.5"
+                />
+            </div>
+            {showCommonBases && (
+                <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
+            )}
+
             {searchToken && !searchTokenIsAdded ? (
                 <Column style={{ padding: '20px 0', height: '100%' }}>
                     <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
@@ -224,18 +205,18 @@ export function CurrencySearch({
                     </TYPE.main>
                 </Column>
             )}
-            <Footer>
+            <div className="mt-6">
                 <Row justify="center">
                     <ButtonText onClick={showManageView} color={theme.blue1} className="list-token-manage-button">
                         <RowFixed>
                             <IconWrapper size="16px" marginRight="6px">
                                 <Edit />
                             </IconWrapper>
-                            <TYPE.main color={theme.blue1}>Manage</TYPE.main>
+                            <TYPE.main color={theme.blue1}>Manage Token Lists</TYPE.main>
                         </RowFixed>
                     </ButtonText>
                 </Row>
-            </Footer>
+            </div>
         </ContentWrapper>
     )
 }

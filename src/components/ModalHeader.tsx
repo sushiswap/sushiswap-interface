@@ -1,9 +1,17 @@
 import React from 'react'
 import Typography from './Typography'
 
-function ModalHeader({ title = undefined, onClose }: { title?: string; onClose: () => void }): JSX.Element {
+function ModalHeader({
+    title = undefined,
+    onClose,
+    className = ''
+}: {
+    title?: string
+    className?: string
+    onClose: () => void
+}): JSX.Element {
     return (
-        <div className="relative mb-2">
+        <div className={`relative mb-2 ${className}`}>
             {title && (
                 <Typography component="h2" variant="h5" className="mt-1">
                     {title}

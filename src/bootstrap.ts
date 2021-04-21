@@ -22,10 +22,10 @@ BigNumber.prototype.muldiv = function(multiplier: BigNumberish, divisor: BigNumb
         : Zero
 }
 
-BigNumber.prototype.toFixed = function(decimals: BigNumberish = 18, maxFractions: BigNumberish = 8): string {
-    return this.toFraction(decimals, 10).toString(BigNumber.from(maxFractions).toNumber())
-}
-
 BigNumber.prototype.toFraction = function(decimals: BigNumberish = 18): Fraction {
     return Fraction.from(this, decimals ? BigNumber.from(10).pow(decimals) : Zero)
+}
+
+BigNumber.prototype.toFixed = function(decimals: BigNumberish = 18, maxFractions: BigNumberish = 8): string {
+    return this.toFraction(decimals, 10).toString(BigNumber.from(maxFractions).toNumber())
 }

@@ -5,6 +5,34 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     important: true,
     theme: {
+        linearBorderGradients: {
+            directions: {
+                // defaults to these values
+                t: 'to top',
+                tr: 'to top right',
+                r: 'to right',
+                br: 'to bottom right',
+                b: 'to bottom',
+                bl: 'to bottom left',
+                l: 'to left',
+                tl: 'to top left'
+            },
+            colors: {
+                // defaults to {}
+                'blue-pink': ['#27B0E6', '#FA52A0']
+            },
+            background: {
+                'dark-1000': '#0D0415',
+                'dark-900': '#161522',
+                'dark-800': '#202231'
+            },
+            border: {
+                // defaults to these values (optional)
+                '1': '1px',
+                '2': '2px',
+                '4': '4px'
+            }
+        },
         colors: {
             ...defaultTheme.colors,
             red: '#FF3838',
@@ -22,7 +50,9 @@ module.exports = {
             'dark-600': '#1C2D49',
             'dark-500': '#223D5E',
 
+            'high-emphesis': '#E3E3E3',
             primary: '#BFBFBF',
+            secondary: '#7F7F7F',
             'low-emphesis': '#575757'
         },
         screens: {
@@ -163,12 +193,14 @@ module.exports = {
         }
     },
     variants: {
+        linearBorderGradients: ['responsive', 'hover', 'dark'], // defaults to ['responsive']
         extend: {
             backgroundColor: ['checked', 'disabled'],
             backgroundImage: ['hover', 'focus'],
             borderColor: ['checked', 'disabled'],
             cursor: ['disabled'],
-            opacity: ['hover', 'disabled']
+            opacity: ['hover', 'disabled'],
+            placeholderColor: ['hover', 'active']
         }
     },
     plugins: [
@@ -176,6 +208,7 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
+        require('tailwindcss-border-gradient-radius'),
         plugin(function({ addUtilities }) {
             addUtilities({
                 '.gradiant-border-bottom': {

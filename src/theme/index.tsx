@@ -171,9 +171,14 @@ export const TYPE = {
 
 export const ThemedGlobalStyle = createGlobalStyle`
 html {
-  color: ${({ theme }) => theme.text1};
+  color: #BFBFBF;
   background-color: #0D0415;
 }
+
+input, textarea {
+    font-family: "DM Sans", sans-serif;
+    font-display: fallback;
+  }
 
 body {
   min-height: 100vh;

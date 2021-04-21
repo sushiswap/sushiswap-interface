@@ -109,8 +109,6 @@ export default function NetworkModal(): JSX.Element | null {
     return (
         <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
             <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
-            {/* <div className="text-2xl font-bold mb-3 text-high-emphesis">Select a Network</div> */}
-
             <div className="text-lg text-primary mb-6">
                 You are currently browsing <span className="font-bold text-pink">SUSHI</span>
                 <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
