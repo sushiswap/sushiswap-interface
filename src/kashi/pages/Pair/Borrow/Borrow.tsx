@@ -344,25 +344,23 @@ export default function Borrow({ pair }: BorrowProps) {
                                     </Button>
                                 ))}
                             </div>
-
-                            {/* <input
-                                type="range"
-                                // value={1}
-                                defaultValue={1}
-                                onChange={e => {
-                                    console.log(e.target.value)
-                                    setBorrowValue(
-                                        swapBorrowValue
-                                            .toBigNumber(pair.asset.decimals)
-                                            .mul(e.target.value)
-                                            .toFixed(pair.asset.decimals)
-                                    )
-                                }}
-                                min="1"
-                                max="3"
-                                step="1"
-                                className="slider w-full"
-                            /> */}
+                            {/* <div className="pb-6">
+                                <input
+                                    type="range"
+                                    onChange={e => console.log(e.target.value)}
+                                    min="1"
+                                    max="5"
+                                    step="1"
+                                    className="slider w-full"
+                                />
+                                <div className="w-full flex justify-between text-center px-2">
+                                    <div className="font-semibold">x1</div>
+                                    <div className="font-semibold">x1.25</div>
+                                    <div className="font-semibold">x1.50</div>
+                                    <div className="font-semibold">x1.75</div>
+                                    <div className="font-semibold">x2</div>
+                                </div>
+                            </div> */}
                         </>
                     )}
                     {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
