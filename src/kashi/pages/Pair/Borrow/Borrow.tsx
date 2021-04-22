@@ -10,12 +10,12 @@ import { Warning, Warnings } from 'kashi/entities/Warnings'
 import { SUSHISWAP_MULTISWAPPER_ADDRESS } from 'kashi/constants'
 import { KashiContext } from 'kashi/context'
 import WarningsView from 'kashi/components/Warnings'
-import { useUserSlippageTolerance } from 'state/user/hooks'
+import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
 import { useTradeExactIn } from 'hooks/Trades'
 import { useCurrency } from 'hooks/Tokens'
 import { tryParseAmount } from 'state/swap/hooks'
 import { TransactionReview } from 'kashi/entities'
-import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from 'utils/prices'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import { Field } from 'state/swap/actions'
 import TradeReview from 'kashi/components/TradeReview'
 import { defaultAbiCoder } from '@ethersproject/abi'
@@ -87,6 +87,13 @@ export default function Borrow({ pair }: BorrowProps) {
     const borrowValueSet = !borrowValue.toBigNumber(pair.asset.decimals).isZero()
 
     const trade = swap && borrowValueSet ? foundTrade : undefined
+
+    const [isExpertMode] = useExpertModeManager()
+
+    const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
+
+    // warnings on slippage
+    const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
     const borrowAmount = borrowValue.toBigNumber(pair.asset.decimals)
 
@@ -165,6 +172,7 @@ export default function Borrow({ pair }: BorrowProps) {
     }
 
     let actionName = 'Nothing to do'
+
     if (collateralValueSet) {
         if (borrowValueSet) {
             actionName = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
@@ -175,11 +183,18 @@ export default function Borrow({ pair }: BorrowProps) {
         actionName = trade ? 'Borrow, swap and add as collateral' : 'Borrow'
     }
 
+    if (swap && priceImpactSeverity > 3 && !isExpertMode) {
+        actionName = 'Price Impact High'
+    } else if (swap && priceImpactSeverity > 2) {
+        actionName = actionName + ' anyway'
+    }
+
     const actionDisabled =
         (collateralValue.toBigNumber(pair.collateral.decimals).lte(0) &&
             borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
         collateralWarnings.broken ||
-        (borrowValue.length > 0 && borrowWarnings.broken)
+        (borrowValue.length > 0 && borrowWarnings.broken) ||
+        (swap && priceImpactSeverity > 3 && !isExpertMode)
 
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
@@ -212,6 +227,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
                 ]
             )
+
             cooker.action(
                 SUSHISWAP_MULTISWAPPER_ADDRESS,
                 ZERO,
@@ -282,12 +298,27 @@ export default function Borrow({ pair }: BorrowProps) {
                         title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
                         help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
                     />
-
+                    {swap && trade && (
+                        <>
+                            <input
+                                type="range"
+                                onChange={e => console.log(e.target.value)}
+                                min="1"
+                                max="5"
+                                step="1"
+                                className="slider w-full"
+                            />
+                        </>
+                    )}
                     {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
                 </>
             )}
 
-            <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+            {console.log(priceImpactSeverity > 3, !isExpertMode)}
+
+            {priceImpactSeverity > 3 && !isExpertMode ? null : (
+                <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+            )}
 
             <KashiApproveButton
                 color="pink"
