@@ -330,11 +330,21 @@ export default function Borrow({ pair }: BorrowProps) {
                     />
                     {swap && trade && (
                         <>
-                            {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
-                                <button key={i} onClick={() => onMultiply(multipler)} className="mr-4">
-                                    {multipler}x
-                                </button>
-                            ))}
+                            <div className="mb-4">
+                                {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
+                                    <Button
+                                        variant="outlined"
+                                        size="small"
+                                        color="pink"
+                                        key={i}
+                                        onClick={() => onMultiply(multipler)}
+                                        className="mr-4"
+                                    >
+                                        {multipler}x
+                                    </Button>
+                                ))}
+                            </div>
+
                             {/* <input
                                 type="range"
                                 // value={1}
