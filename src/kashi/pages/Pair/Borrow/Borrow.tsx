@@ -65,7 +65,9 @@ export default function Borrow({ pair }: BorrowProps) {
               .toBigNumber(pair.collateral.decimals) || ZERO
         : ZERO
 
-    const swapCollateral = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals))
+    const swapCollateral = collateralValue.toBigNumber(pair.collateral.decimals)
+
+    console.log(swapCollateral.toFixed(pair.collateral.decimals))
 
     const nextUserCollateralValue = pair.userCollateralAmount.value
         .add(collateralValue.toBigNumber(pair.collateral.decimals))
@@ -252,14 +254,14 @@ export default function Borrow({ pair }: BorrowProps) {
     }
 
     function onMultiply(multiplier: string) {
-        const nextMaxBorrowableStored = swapCollateral
-            .add(
-                swapCollateral.muldiv(
-                    multiplier.toBigNumber(pair.collateral.decimals),
-                    '1'.toBigNumber(pair.collateral.decimals)
-                )
+        const multipliedCollateral = swapCollateral.add(
+            swapCollateral.muldiv(
+                multiplier.toBigNumber(pair.collateral.decimals),
+                '1'.toBigNumber(pair.collateral.decimals)
             )
-            .muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+        )
+
+        const multipliedBorrow = multipliedCollateral.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
 
         console.log({
             original: swapCollateral.toFixed(pair.collateral.decimals),
@@ -271,10 +273,10 @@ export default function Borrow({ pair }: BorrowProps) {
                     )
                 )
                 .toFixed(pair.collateral.decimals),
-            borrow: nextMaxBorrowableStored.toFixed(pair.asset.decimals)
+            borrow: multipliedBorrow.toFixed(pair.asset.decimals)
         })
 
-        setBorrowValue(nextMaxBorrowableStored.toFixed(pair.asset.decimals))
+        setBorrowValue(multipliedBorrow.toFixed(pair.asset.decimals))
     }
 
     return (
@@ -367,9 +369,9 @@ export default function Borrow({ pair }: BorrowProps) {
                 </>
             )}
 
-            {console.log(priceImpactSeverity > 3, !isExpertMode)}
+            {/* {console.log(priceImpactSeverity > 3, !isExpertMode)} */}
 
-            {priceImpactSeverity > 3 && !isExpertMode ? null : (
+            {swap && priceImpactSeverity > 3 && !isExpertMode ? null : (
                 <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
             )}
 
