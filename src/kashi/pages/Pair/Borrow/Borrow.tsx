@@ -38,6 +38,7 @@ export default function Borrow({ pair }: BorrowProps) {
     const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
+    const [swapBorrowValue, setSwapBorrowValue] = useState('')
     const [updateOracle, setUpdateOracle] = useState(false)
     const [swap, setSwap] = useState(false)
 
@@ -63,6 +64,9 @@ export default function Borrow({ pair }: BorrowProps) {
               [Field.OUTPUT]?.toFixed(pair.collateral.decimals)
               .toBigNumber(pair.collateral.decimals) || ZERO
         : ZERO
+
+    const swapCollateral = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals))
+
     const nextUserCollateralValue = pair.userCollateralAmount.value
         .add(collateralValue.toBigNumber(pair.collateral.decimals))
         .add(extraCollateral)
@@ -247,6 +251,32 @@ export default function Borrow({ pair }: BorrowProps) {
         return summary
     }
 
+    function onMultiply(multiplier: string) {
+        const nextMaxBorrowableStored = swapCollateral
+            .add(
+                swapCollateral.muldiv(
+                    multiplier.toBigNumber(pair.collateral.decimals),
+                    '1'.toBigNumber(pair.collateral.decimals)
+                )
+            )
+            .muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+
+        console.log({
+            original: swapCollateral.toFixed(pair.collateral.decimals),
+            multiplied: swapCollateral
+                .add(
+                    swapCollateral.muldiv(
+                        multiplier.toBigNumber(pair.collateral.decimals),
+                        '1'.toBigNumber(pair.collateral.decimals)
+                    )
+                )
+                .toFixed(pair.collateral.decimals),
+            borrow: nextMaxBorrowableStored.toFixed(pair.asset.decimals)
+        })
+
+        setBorrowValue(nextMaxBorrowableStored.toFixed(pair.asset.decimals))
+    }
+
     return (
         <>
             <div className="text-3xl text-high-emphesis mt-6 mb-4">Borrow {pair.asset.symbol}</div>
@@ -300,14 +330,29 @@ export default function Borrow({ pair }: BorrowProps) {
                     />
                     {swap && trade && (
                         <>
-                            <input
+                            {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
+                                <button key={i} onClick={() => onMultiply(multipler)} className="mr-4">
+                                    {multipler}x
+                                </button>
+                            ))}
+                            {/* <input
                                 type="range"
-                                onChange={e => console.log(e.target.value)}
+                                // value={1}
+                                defaultValue={1}
+                                onChange={e => {
+                                    console.log(e.target.value)
+                                    setBorrowValue(
+                                        swapBorrowValue
+                                            .toBigNumber(pair.asset.decimals)
+                                            .mul(e.target.value)
+                                            .toFixed(pair.asset.decimals)
+                                    )
+                                }}
                                 min="1"
-                                max="5"
+                                max="3"
                                 step="1"
                                 className="slider w-full"
-                            />
+                            /> */}
                         </>
                     )}
                     {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
