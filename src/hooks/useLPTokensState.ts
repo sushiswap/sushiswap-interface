@@ -10,8 +10,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
 
-const LP_TOKENS_LIMIT = 300
-
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
     lpTokens: LPToken[]
@@ -35,6 +33,10 @@ const useLPTokensState = () => {
     const [loading, setLoading] = useState(true)
     const updatingLPTokens = useRef(false)
 
+    const LP_TOKENS_LIMIT = chainId !== ChainId.BSC ? 300 : 10000
+
+    console.log('LP_TOKENS_LIMIT:', LP_TOKENS_LIMIT)
+
     const updateLPTokens = useCallback(async () => {
         updatingLPTokens.current = true
         try {
@@ -57,7 +59,7 @@ const useLPTokensState = () => {
                                 ? UNI_FACTORY_ADDRESS
                                 : '0xBCfCcbde45cE874adCB698cC183deBcF17952812',
                             page,
-                            Math.min(page + (chainId !== ChainId.BSC ? LP_TOKENS_LIMIT : 10000), length.toNumber())
+                            Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
                         )
                     )
                 )
@@ -128,7 +130,15 @@ const useLPTokensState = () => {
             setLoading(false)
             updatingLPTokens.current = false
         }
-    }, [factoryContract, pancakeFactoryContract, dashboardContract, account, dashboard2Contract, chainId])
+    }, [
+        chainId,
+        factoryContract,
+        pancakeFactoryContract,
+        dashboardContract,
+        account,
+        dashboard2Contract,
+        LP_TOKENS_LIMIT
+    ])
 
     useEffect(() => {
         if (
