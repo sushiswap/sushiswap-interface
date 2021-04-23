@@ -125,7 +125,7 @@ export default function ClaimModal() {
     }, [account])
 
     // remove once treasury signature passed
-    const pendingTreasurySignature = true
+    const pendingTreasurySignature = false
 
     return (
         <>
@@ -139,7 +139,9 @@ export default function ClaimModal() {
                     <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
                         <div className="space-y-10 hidden md:block">
                             <img
-                                src="https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png"
+                                src={
+                                    'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png'
+                                }
                                 style={{ width: '340px', height: '300px', maxWidth: 'none' }}
                                 alt=""
                             />
@@ -227,7 +229,7 @@ export default function ClaimModal() {
                                         }
                                         padding="16px 16px"
                                         width="100%"
-                                        borderRadius="20px"
+                                        borderRadius="10px"
                                         mt="0.5rem"
                                         onClick={onClaim}
                                     >
