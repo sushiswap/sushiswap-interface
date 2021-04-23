@@ -127,6 +127,15 @@ export default function ClaimModal() {
     // remove once treasury signature passed
     const pendingTreasurySignature = false
 
+    let VaultImage
+    if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) > 0) {
+        VaultImage = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png'
+    } else if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) <= 0) {
+        VaultImage = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-off.png'
+    } else if (pendingTreasurySignature) {
+        VaultImage = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-closed.png'
+    }
+
     return (
         <>
             {' '}
@@ -139,9 +148,7 @@ export default function ClaimModal() {
                     <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
                         <div className="space-y-10 hidden md:block">
                             <img
-                                src={
-                                    'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png'
-                                }
+                                src={VaultImage}
                                 style={{ width: '340px', height: '300px', maxWidth: 'none' }}
                                 alt=""
                             />
