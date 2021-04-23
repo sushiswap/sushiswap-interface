@@ -1,6 +1,11 @@
 import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
 import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
-import { useDashboard2Contract, useDashboardContract, useUniV2FactoryContract } from 'hooks/useContract'
+import {
+    useDashboard2Contract,
+    useDashboardContract,
+    usePancakeV1FactoryContract,
+    useUniV2FactoryContract
+} from 'hooks/useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
@@ -21,6 +26,7 @@ export interface LPTokensState {
 const useLPTokensState = () => {
     const { account, chainId } = useActiveWeb3React()
     const factoryContract = useUniV2FactoryContract()
+    const pancakeFactoryContract = usePancakeV1FactoryContract()
     const dashboardContract = useDashboardContract()
     const dashboard2Contract = useDashboard2Contract()
     const [lpTokens, setLPTokens] = useState<LPToken[]>([])
@@ -32,7 +38,12 @@ const useLPTokensState = () => {
     const updateLPTokens = useCallback(async () => {
         updatingLPTokens.current = true
         try {
-            const length = await factoryContract?.allPairsLength()
+            const length =
+                chainId !== ChainId.BSC
+                    ? await factoryContract?.allPairsLength()
+                    : await pancakeFactoryContract?.allPairsLength()
+
+            console.log({ length: length.toString() })
 
             const pages: number[] = []
             for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
@@ -42,7 +53,9 @@ const useLPTokensState = () => {
                     pages.map(page =>
                         dashboardContract?.findPairs(
                             account,
-                            UNI_FACTORY_ADDRESS,
+                            chainId !== ChainId.BSC
+                                ? UNI_FACTORY_ADDRESS
+                                : '0xBCfCcbde45cE874adCB698cC183deBcF17952812',
                             page,
                             Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
                         )
@@ -109,11 +122,13 @@ const useLPTokensState = () => {
             )
 
             if (data) setLPTokens(data)
+        } catch (error) {
+            console.error(error)
         } finally {
             setLoading(false)
             updatingLPTokens.current = false
         }
-    }, [factoryContract, dashboardContract, account, dashboard2Contract, chainId])
+    }, [factoryContract, pancakeFactoryContract, dashboardContract, account, dashboard2Contract, chainId])
 
     useEffect(() => {
         if (
