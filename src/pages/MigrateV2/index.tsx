@@ -79,20 +79,19 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 
 interface PositionCardProps {
     lpToken: LPToken
-    onClick: (lpToken: LPToken) => void
-    onDismiss: () => void
+    onToggle: (lpToken: LPToken) => void
     isSelected: boolean
     updating: boolean
 }
 
-const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: PositionCardProps) => {
+const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating }: PositionCardProps) => {
     const theme = useContext(ThemeContext)
     // console.log(updating)
     return (
-        <LightCard>
+        <LightCard onClick={() => onToggle(lpToken)}>
             <AutoColumn gap="12px">
                 <FixedHeightRow>
-                    <RowFixed onClick={() => onClick(lpToken)}>
+                    <RowFixed>
                         <DoubleCurrencyLogo
                             currency0={lpToken.tokenA}
                             currency1={lpToken.tokenB}
@@ -116,9 +115,9 @@ const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: Po
                     {updating ? (
                         <CustomLightSpinner src={Circle} alt="loader" size="20px" />
                     ) : isSelected ? (
-                        <CloseIcon onClick={onDismiss} />
+                        <CloseIcon />
                     ) : (
-                        <ChevronRight onClick={() => onClick(lpToken)} />
+                        <ChevronRight />
                     )}
                 </FixedHeightRow>
             </AutoColumn>
@@ -127,7 +126,9 @@ const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: Po
 }
 
 const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
-    const unsetMode = () => state.setMode(undefined)
+    function toggleMode(mode = undefined) {
+        state.setMode(mode !== state.mode ? mode : undefined)
+    }
 
     const items = [
         {
@@ -148,25 +149,23 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
             {items.reduce((acc: any, { key, text, description }: any) => {
                 if (state.mode === undefined || key === state.mode)
                     acc.push(
-                        <LightCard key={key}>
-                            <AutoColumn gap="12px">
-                                <RowFixed>
-                                    <AutoRow onClick={() => state.setMode(key)}>
-                                        <AutoRow marginBottom="2px">
-                                            <TYPE.body fontWeight={500}>{text}</TYPE.body>
-                                        </AutoRow>
+                        <div className="cursor-pointer">
+                            <LightCard key={key} onClick={() => toggleMode(key)}>
+                                <AutoColumn gap="12px">
+                                    <RowFixed>
                                         <AutoRow>
-                                            <TYPE.darkGray fontSize=".75rem">{description}</TYPE.darkGray>
+                                            <AutoRow marginBottom="2px">
+                                                <TYPE.body fontWeight={500}>{text}</TYPE.body>
+                                            </AutoRow>
+                                            <AutoRow>
+                                                <TYPE.darkGray fontSize=".75rem">{description}</TYPE.darkGray>
+                                            </AutoRow>
                                         </AutoRow>
-                                    </AutoRow>
-                                    {key === state.mode ? (
-                                        <CloseIcon onClick={unsetMode} />
-                                    ) : (
-                                        <ChevronRight onClick={unsetMode} />
-                                    )}
-                                </RowFixed>
-                            </AutoColumn>
-                        </LightCard>
+                                        {key === state.mode ? <CloseIcon /> : <ChevronRight />}
+                                    </RowFixed>
+                                </AutoColumn>
+                            </LightCard>
+                        </div>
                     )
                 return acc
             }, [])}
@@ -275,18 +274,11 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
 
 const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
     let content: JSX.Element
-    const onClick = useCallback(
-        lpToken => {
-            state.setAmount('')
-            state.setSelectedLPToken(lpToken)
-        },
-        [state]
-    )
 
-    const onDismiss = useCallback(() => {
+    function onToggle(lpToken: LPToken) {
+        state.setSelectedLPToken(state.selectedLPToken !== lpToken ? lpToken : undefined)
         state.setAmount('')
-        state.setSelectedLPToken(undefined)
-    }, [state])
+    }
 
     if (!state.mode) {
         content = <span />
@@ -298,14 +290,15 @@ const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; excha
                 {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
                     if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
                         acc.push(
-                            <LPTokenSelect
-                                lpToken={lpToken}
-                                key={lpToken.address}
-                                onClick={onClick}
-                                onDismiss={onDismiss}
-                                isSelected={state.selectedLPToken === lpToken}
-                                updating={state.updatingLPTokens}
-                            />
+                            <div className="cursor-pointer">
+                                <LPTokenSelect
+                                    lpToken={lpToken}
+                                    key={lpToken.address}
+                                    onToggle={onToggle}
+                                    isSelected={state.selectedLPToken === lpToken}
+                                    updating={state.updatingLPTokens}
+                                />
+                            </div>
                         )
                     }
                     return acc

@@ -38,7 +38,6 @@ const useLPTokensState = () => {
     console.log('LP_TOKENS_LIMIT:', LP_TOKENS_LIMIT)
 
     const updateLPTokens = useCallback(async () => {
-        updatingLPTokens.current = true
         try {
             const length =
                 chainId !== ChainId.BSC
@@ -48,8 +47,10 @@ const useLPTokensState = () => {
             console.log({ length: length.toString() })
 
             const pages: number[] = []
+
             for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
 
+            console.log('get expensive user lp call')
             const userLP = (
                 await Promise.all(
                     pages.map(page =>
@@ -123,7 +124,9 @@ const useLPTokensState = () => {
                 })
             )
 
-            if (data) setLPTokens(data)
+            if (data) {
+                setLPTokens(data)
+            }
         } catch (error) {
             console.error(error)
         } finally {
