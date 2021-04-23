@@ -222,6 +222,119 @@ export function useUniV2FactoryContract(): Contract | null {
     return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
 }
 
+export function usePancakeV1FactoryContract(): Contract | null {
+    return useContract(
+        '0xBCfCcbde45cE874adCB698cC183deBcF17952812',
+        [
+            {
+                inputs: [{ internalType: 'address', name: '_feeToSetter', type: 'address' }],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'constructor'
+            },
+            {
+                anonymous: false,
+                inputs: [
+                    { indexed: true, internalType: 'address', name: 'token0', type: 'address' },
+                    { indexed: true, internalType: 'address', name: 'token1', type: 'address' },
+                    { indexed: false, internalType: 'address', name: 'pair', type: 'address' },
+                    { indexed: false, internalType: 'uint256', name: '', type: 'uint256' }
+                ],
+                name: 'PairCreated',
+                type: 'event'
+            },
+            {
+                constant: true,
+                inputs: [],
+                name: 'INIT_CODE_PAIR_HASH',
+                outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function'
+            },
+            {
+                constant: true,
+                inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+                name: 'allPairs',
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function'
+            },
+            {
+                constant: true,
+                inputs: [],
+                name: 'allPairsLength',
+                outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function'
+            },
+            {
+                constant: false,
+                inputs: [
+                    { internalType: 'address', name: 'tokenA', type: 'address' },
+                    { internalType: 'address', name: 'tokenB', type: 'address' }
+                ],
+                name: 'createPair',
+                outputs: [{ internalType: 'address', name: 'pair', type: 'address' }],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function'
+            },
+            {
+                constant: true,
+                inputs: [],
+                name: 'feeTo',
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function'
+            },
+            {
+                constant: true,
+                inputs: [],
+                name: 'feeToSetter',
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function'
+            },
+            {
+                constant: true,
+                inputs: [
+                    { internalType: 'address', name: '', type: 'address' },
+                    { internalType: 'address', name: '', type: 'address' }
+                ],
+                name: 'getPair',
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
+                payable: false,
+                stateMutability: 'view',
+                type: 'function'
+            },
+            {
+                constant: false,
+                inputs: [{ internalType: 'address', name: '_feeTo', type: 'address' }],
+                name: 'setFeeTo',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function'
+            },
+            {
+                constant: false,
+                inputs: [{ internalType: 'address', name: '_feeToSetter', type: 'address' }],
+                name: 'setFeeToSetter',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function'
+            }
+        ],
+        false
+    )
+}
+
 export function useSushiRollContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
@@ -232,6 +345,9 @@ export function useSushiRollContract(): Contract | null {
                 break
             case ChainId.ROPSTEN:
                 address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
+                break
+            case ChainId.BSC:
+                address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
                 break
         }
     }
@@ -249,6 +365,10 @@ export function useDashboardContract(): Contract | null {
             case ChainId.ROPSTEN:
                 address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
                 break
+
+            case ChainId.BSC:
+                address = '0xCFbc963f223e39727e7d4075b759E97035457b48'
+                break
         }
     }
     return useContract(address, DASHBOARD_ABI, false)
@@ -265,11 +385,15 @@ export function useDashboard2Contract(): Contract | null {
             case ChainId.ROPSTEN:
                 address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
                 break
+            case ChainId.BSC:
+                address = '0x06d149A4a3f4Ac20e992F9321Af571b3B4Da64C4'
+                break
         }
     }
     return useContract(address, DASHBOARD2_ABI, false)
 }
 
 export function useSushiSwapMultiSwapper(): Contract | null {
-    return useContract(SUSHISWAP_MULTISWAPPER_ADDRESS, SUSHISWAP_MULTISWAPPER_ABI)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId], SUSHISWAP_MULTISWAPPER_ABI)
 }
