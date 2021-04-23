@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { formatUnits, parseUnits } from '@ethersproject/units'
-import { JSBI } from '@sushiswap/sdk'
+import { ChainId, JSBI } from '@sushiswap/sdk'
 import { useSushiRollContract } from 'hooks/useContract'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { ChevronRight } from 'react-feather'
@@ -99,9 +99,7 @@ const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: Po
                             margin={true}
                             size={20}
                         />
-                        <TYPE.body fontWeight={500} style={{ marginLeft: '' }}>
-                            {`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}
-                        </TYPE.body>
+                        <TYPE.body fontWeight={500}>{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</TYPE.body>
                         <Text
                             fontSize={12}
                             fontWeight={500}
@@ -177,7 +175,7 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
     )
 }
 
-const MigrateButtons = ({ state }: { state: MigrateState }) => {
+const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
     const [error, setError] = useState<MetamaskError>({})
     const sushiRollContract = useSushiRollContract()
     const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
@@ -268,13 +266,14 @@ const MigrateButtons = ({ state }: { state: MigrateState }) => {
                 )}
             </LightCard>
             <TYPE.darkGray fontSize="0.75rem" textAlign="center">
-                {`Your Uniswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
+                {}
+                {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
             </TYPE.darkGray>
         </AutoColumn>
     )
 }
 
-const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
+const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
     let content: JSX.Element
     const onClick = useCallback(
         lpToken => {
@@ -292,7 +291,7 @@ const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
     if (!state.mode) {
         content = <span />
     } else if (state.lpTokens.length === 0) {
-        content = <EmptyState message="No V2 Liquidity found." />
+        content = <EmptyState message="No Liquidity found." />
     } else {
         content = (
             <>
@@ -317,7 +316,7 @@ const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
 
     return (
         <>
-            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your Uniswap Liquidity</TYPE.mediumHeader>
+            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your {exchange} Liquidity</TYPE.mediumHeader>
             {content}
             <Border />
         </>
@@ -326,33 +325,40 @@ const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
 
 const MigrateV2 = () => {
     const theme = useContext(ThemeContext)
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const state = useMigrateState()
+
+    let exchange
+    if (chainId === ChainId.MAINNET) {
+        exchange = 'Uniswap'
+    } else if (chainId === ChainId.BSC) {
+        exchange = 'PancakeSwap'
+    }
 
     return (
         <>
             <Helmet>
                 <title>Migrate | Sushi</title>
-                <meta name="description" content="Migrate Uniswap LP tokens to Sushi LP tokens" />
+                <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
             <AppBody style={{ padding: 24 }}>
                 <AutoColumn gap="16px">
                     <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                         <BackArrow to="/pool" />
-                        <TYPE.mediumHeader>Migrate Uniswap Liquidity</TYPE.mediumHeader>
+                        <TYPE.mediumHeader>Migrate {exchange} Liquidity</TYPE.mediumHeader>
                         <div>
-                            <QuestionHelper text="Migrate your Uniswap LP tokens to SushiSwap LP tokens." />
+                            <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
                         </div>
                     </AutoRow>
                     <TYPE.darkGray style={{ marginBottom: 8, fontWeight: 400 }}>
-                        For each pool shown below, click migrate to remove your liquidity from Uniswap and deposit it
+                        For each pool shown below, click migrate to remove your liquidity from {exchange} and deposit it
                         into Sushiswap.
                     </TYPE.darkGray>
 
                     {!account ? (
                         <LightCard padding="40px">
                             <TYPE.body color={theme.text3} textAlign="center">
-                                Connect to a wallet to view your V2 liquidity.
+                                Connect to a wallet to view your liquidity.
                             </TYPE.body>
                         </LightCard>
                     ) : state.loading ? (
@@ -364,9 +370,9 @@ const MigrateV2 = () => {
                     ) : (
                         <>
                             <MigrateModeSelect state={state} />
-                            <UniswapLiquidityPairs state={state} />
+                            <UniswapLiquidityPairs state={state} exchange={exchange} />
                             <AmountInput state={state} />
-                            <MigrateButtons state={state} />
+                            <MigrateButtons state={state} exchange={exchange} />
                         </>
                     )}
                 </AutoColumn>
