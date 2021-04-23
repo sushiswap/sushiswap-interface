@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
 
-const LP_TOKENS_LIMIT = 100
+const LP_TOKENS_LIMIT = 300
 
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
@@ -57,7 +57,7 @@ const useLPTokensState = () => {
                                 ? UNI_FACTORY_ADDRESS
                                 : '0xBCfCcbde45cE874adCB698cC183deBcF17952812',
                             page,
-                            Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
+                            Math.min(page + (chainId !== ChainId.BSC ? LP_TOKENS_LIMIT : 10000), length.toNumber())
                         )
                     )
                 )
