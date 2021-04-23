@@ -4,6 +4,7 @@
  */
 export const UNSUPPORTED_LIST_URLS: string[] = []
 
+const YEARN_LIST = 'https://yearn.science/static/tokenlist.json'
 const COMPOUND_LIST = 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const NFTX_LIST = 'https://nftx.ethereumdb.com/v1/tokenlist/'
@@ -25,6 +26,7 @@ export const DEFAULT_LIST_OF_LISTS: string[] =
     process.env.NODE_ENV !== 'production'
         ? []
         : [
+              YEARN_LIST,
               COMPOUND_LIST,
               AAVE_LIST,
               SYNTHETIX_LIST,
