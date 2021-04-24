@@ -98,10 +98,9 @@ function App(): JSX.Element {
                             <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
                             <Route exact strict path="/yield" component={Yield} />
                             <Route exact strict path="/vesting" component={Vesting} />
-                            {chainId === ChainId.MAINNET ||
-                                (chainId === ChainId.BSC && (
-                                    <Route exact strict path="/migrate/v2" component={MigrateV2} />
-                                ))}
+                            {(chainId === ChainId.MAINNET || chainId === ChainId.BSC) && (
+                                <Route exact strict path="/migrate/v2" component={MigrateV2} />
+                            )}
 
                             {/* Tools */}
                             <Route exact strict path="/tools" component={Tools} />
