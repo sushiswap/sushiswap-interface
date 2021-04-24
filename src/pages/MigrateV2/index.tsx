@@ -2,38 +2,24 @@ import { AddressZero } from '@ethersproject/constants'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import { ChainId, JSBI } from '@sushiswap/sdk'
 import { useSushiRollContract } from 'hooks/useContract'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ChevronRight } from 'react-feather'
-import { Text } from 'rebass'
-import styled, { ThemeContext } from 'styled-components'
-import Circle from '../../assets/images/blue-loader.svg'
 import { ButtonConfirmed } from '../../components/ButtonLegacy'
-import { LightCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Input as NumericalInput } from '../../components/NumericalInput'
-import { FixedHeightRow } from '../../components/PositionCard'
 import QuestionHelper from '../../components/QuestionHelper'
-import { AutoRow, RowFixed } from '../../components/Row'
 import { Dots } from '../../components/swap/styleds'
 import { useActiveWeb3React } from '../../hooks'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
-import { BackArrow, CloseIcon, CustomLightSpinner, TYPE } from '../../theme'
+import { BackArrow, CloseIcon } from '../../theme'
 import LPToken from '../../types/LPToken'
 import MetamaskError from '../../types/MetamaskError'
-import AppBody from '../AppBody'
 import { EmptyState } from '../MigrateV1/EmptyState'
-import { MaxButton } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
-
-const Border = styled.div`
-    width: 100%;
-    height: 1px;
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
-    background-color: ${({ theme }) => theme.bg2};
-`
+import Typography from 'components/Typography'
+import { Button } from '../../components'
+import Badge from 'kashi/components/Badge'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -58,21 +44,29 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     }, [state])
 
     if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
-        return <span />
+        return null
     }
 
     return (
         <>
-            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Amount of Tokens</TYPE.mediumHeader>
-            <LightCard>
-                <FixedHeightRow>
-                    <NumericalInput value={state.amount} onUserInput={val => state.setAmount(val)} />
-                    <MaxButton onClick={onPressMax} width="10px">
-                        MAX
-                    </MaxButton>
-                </FixedHeightRow>
-            </LightCard>
-            <Border />
+            <Typography>Amount of Tokens</Typography>
+
+            <div className="flex items-center relative w-full mb-4">
+                <NumericalInput
+                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
+                    value={state.amount}
+                    onUserInput={val => state.setAmount(val)}
+                />
+                <Button
+                    variant="outlined"
+                    color="pink"
+                    size="small"
+                    onClick={onPressMax}
+                    className="absolute right-4 focus:ring focus:ring-pink"
+                >
+                    MAX
+                </Button>
+            </div>
         </>
     )
 }
@@ -86,9 +80,6 @@ interface PositionCardProps {
 }
 
 const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: PositionCardProps) => {
-    const theme = useContext(ThemeContext)
-
-    // console.log(updating)
     let version
     if (exchange === 'Uniswap') {
         version = 'v2'
@@ -98,40 +89,18 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
         version = ''
     }
     return (
-        <LightCard onClick={() => onToggle(lpToken)}>
-            <AutoColumn gap="12px">
-                <FixedHeightRow>
-                    <RowFixed>
-                        <DoubleCurrencyLogo
-                            currency0={lpToken.tokenA}
-                            currency1={lpToken.tokenB}
-                            margin={true}
-                            size={20}
-                        />
-                        <TYPE.body fontWeight={500}>{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</TYPE.body>
-                        <Text
-                            fontSize={12}
-                            fontWeight={500}
-                            ml="0.5rem"
-                            px="0.75rem"
-                            py="0.25rem"
-                            style={{ borderRadius: '1rem' }}
-                            backgroundColor={theme.yellow1}
-                            color={'black'}
-                        >
-                            {version}
-                        </Text>
-                    </RowFixed>
-                    {updating ? (
-                        <CustomLightSpinner src={Circle} alt="loader" size="20px" />
-                    ) : isSelected ? (
-                        <CloseIcon />
-                    ) : (
-                        <ChevronRight />
-                    )}
-                </FixedHeightRow>
-            </AutoColumn>
-        </LightCard>
+        <div
+            key={lpToken.address}
+            className="cursor-pointer flex justify-between items-center rounded px-3 py-5 bg-dark-800 hover:bg-dark-700"
+            onClick={() => onToggle(lpToken)}
+        >
+            <div className="flex items-center space-x-3">
+                <DoubleCurrencyLogo currency0={lpToken.tokenA} currency1={lpToken.tokenB} size={20} />
+                <Typography>{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
+                <Badge color="pink">{version}</Badge>
+            </div>
+            {isSelected ? <CloseIcon /> : <ChevronRight />}
+        </div>
     )
 }
 
@@ -144,7 +113,7 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
         {
             key: 'permit',
             text: 'Non-hardware Wallet',
-            description: 'Migration is done in one-click using your signature(permit)'
+            description: 'Migration is done in one-click using your signature (permit)'
         },
         {
             key: 'approve',
@@ -155,31 +124,29 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
 
     return (
         <>
-            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Wallet Type</TYPE.mediumHeader>
             {items.reduce((acc: any, { key, text, description }: any) => {
                 if (state.mode === undefined || key === state.mode)
                     acc.push(
-                        <div key={key} className="cursor-pointer">
-                            <LightCard onClick={() => toggleMode(key)}>
-                                <AutoColumn gap="12px">
-                                    <RowFixed>
-                                        <AutoRow>
-                                            <AutoRow marginBottom="2px">
-                                                <TYPE.body fontWeight={500}>{text}</TYPE.body>
-                                            </AutoRow>
-                                            <AutoRow>
-                                                <TYPE.darkGray fontSize=".75rem">{description}</TYPE.darkGray>
-                                            </AutoRow>
-                                        </AutoRow>
-                                        {key === state.mode ? <CloseIcon /> : <ChevronRight />}
-                                    </RowFixed>
-                                </AutoColumn>
-                            </LightCard>
+                        <div
+                            key={key}
+                            className="cursor-pointer flex justify-between items-center rounded p-3 bg-dark-800 hover:bg-dark-700"
+                            onClick={() => toggleMode(key)}
+                        >
+                            <div>
+                                <div>
+                                    <Typography variant="caption">{text}</Typography>
+                                </div>
+                                <div>
+                                    <Typography variant="caption2" className="text-secondary">
+                                        {description}
+                                    </Typography>
+                                </div>
+                            </div>
+                            {key === state.mode ? <CloseIcon /> : <ChevronRight />}
                         </div>
                     )
                 return acc
             }, [])}
-            <Border />
         </>
     )
 }
@@ -215,123 +182,96 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     }
 
     return (
-        <AutoColumn gap="20px">
-            <LightCard>
-                <AutoRow style={{ flex: '1', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                    <TYPE.body fontSize=".875rem" fontWeight={500}>
-                        {state.selectedLPToken.symbol}
-                    </TYPE.body>
-                    <TYPE.body fontSize=".875rem" fontWeight={500}>
-                        {state.amount}
-                    </TYPE.body>
-                </AutoRow>
-                {insufficientAmount ? (
-                    <AutoColumn gap="12px" style={{ flex: '1' }}>
-                        <TYPE.darkGray fontSize=".875rem" style={{ textAlign: 'center' }}>
-                            Insufficient Balance
-                        </TYPE.darkGray>
-                    </AutoColumn>
-                ) : state.loading ? (
-                    <Dots>Loading</Dots>
-                ) : (
-                    <AutoRow>
-                        {state.mode === 'approve' && (
-                            <AutoColumn gap="12px" style={{ flex: '1', marginRight: 12 }}>
-                                <ButtonConfirmed
-                                    onClick={approve}
-                                    confirmed={approval === ApprovalState.APPROVED}
-                                    disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
-                                    altDisabledStyle={approval === ApprovalState.PENDING}
-                                >
-                                    {approval === ApprovalState.PENDING ? (
-                                        <Dots>Approving</Dots>
-                                    ) : approval === ApprovalState.APPROVED ? (
-                                        'Approved'
-                                    ) : (
-                                        'Approve'
-                                    )}
-                                </ButtonConfirmed>
-                            </AutoColumn>
-                        )}
-                        <AutoColumn gap="12px" style={{ flex: '1' }}>
+        <div className="space-y-3">
+            <div className="flex justify-between">
+                <div className="text-sm text-primary">{state.selectedLPToken.symbol}</div>
+                <div className="text-sm text-primary">{state.amount}</div>
+            </div>
+            {insufficientAmount ? (
+                <div className="text-sm text-primary">Insufficient Balance</div>
+            ) : state.loading ? (
+                <Dots>Loading</Dots>
+            ) : (
+                <div>
+                    {state.mode === 'approve' && (
+                        <ButtonConfirmed
+                            onClick={approve}
+                            confirmed={approval === ApprovalState.APPROVED}
+                            disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
+                            altDisabledStyle={approval === ApprovalState.PENDING}
+                        >
+                            {approval === ApprovalState.PENDING ? (
+                                <Dots>Approving</Dots>
+                            ) : approval === ApprovalState.APPROVED ? (
+                                'Approved'
+                            ) : (
+                                'Approve'
+                            )}
+                        </ButtonConfirmed>
+                    )}
+                    {(state.mode === 'approve' && approval === ApprovalState.APPROVED) ||
+                        (state.mode === 'permit' && (
                             <ButtonConfirmed
-                                disabled={
-                                    noLiquidityTokens ||
-                                    state.isMigrationPending ||
-                                    (state.mode === 'approve' && approval !== ApprovalState.APPROVED) ||
-                                    isButtonDisabled
-                                }
+                                disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
                                 onClick={onPress}
                             >
                                 {state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
                             </ButtonConfirmed>
-                        </AutoColumn>
-                    </AutoRow>
-                )}
-                {error.message && error.code !== 4001 && (
-                    <TYPE.body color="red" fontWeight={500} fontSize="0.875rem" marginTop="1.5rem" textAlign="center">
-                        {error.message}
-                    </TYPE.body>
-                )}
-            </LightCard>
-            <TYPE.darkGray fontSize="0.75rem" textAlign="center">
-                {}
+                        ))}
+                </div>
+            )}
+            {error.message && error.code !== 4001 && (
+                <div className="text-red text-center font-medium">{error.message}</div>
+            )}
+            <div className="text-xs text-low-emphesis text-center">
                 {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
-            </TYPE.darkGray>
-        </AutoColumn>
+            </div>
+        </div>
     )
 }
 
-const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
-    let content: JSX.Element
-
+const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
     function onToggle(lpToken: LPToken) {
         state.setSelectedLPToken(state.selectedLPToken !== lpToken ? lpToken : undefined)
         state.setAmount('')
     }
 
     if (!state.mode) {
-        content = <span />
-    } else if (state.lpTokens.length === 0) {
-        content = <EmptyState message="No Liquidity found." />
-    } else {
-        content = (
-            <>
-                {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
-                    if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
-                        acc.push(
-                            <div key={lpToken.address} className="cursor-pointer">
-                                <LPTokenSelect
-                                    lpToken={lpToken}
-                                    onToggle={onToggle}
-                                    isSelected={state.selectedLPToken === lpToken}
-                                    updating={state.updatingLPTokens}
-                                    exchange={exchange}
-                                />
-                            </div>
-                        )
-                    }
-                    return acc
-                }, [])}
-            </>
-        )
+        return null
+    }
+
+    if (state.lpTokens.length === 0) {
+        return <EmptyState message="No Liquidity found." />
     }
 
     return (
         <>
-            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your {exchange} Liquidity</TYPE.mediumHeader>
-            {content}
-            <Border />
+            <Typography>Your {exchange} Liquidity</Typography>
+            {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
+                if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
+                    acc.push(
+                        <LPTokenSelect
+                            lpToken={lpToken}
+                            onToggle={onToggle}
+                            isSelected={state.selectedLPToken === lpToken}
+                            updating={state.updatingLPTokens}
+                            exchange={exchange}
+                        />
+                    )
+                }
+                return acc
+            }, [])}
         </>
     )
 }
 
 const MigrateV2 = () => {
-    const theme = useContext(ThemeContext)
     const { account, chainId } = useActiveWeb3React()
+
     const state = useMigrateState()
 
     let exchange
+
     if (chainId === ChainId.MAINNET) {
         exchange = 'Uniswap'
     } else if (chainId === ChainId.BSC) {
@@ -341,45 +281,37 @@ const MigrateV2 = () => {
     return (
         <>
             <Helmet>
-                <title>Migrate | Sushi</title>
+                <title>Migrate LP tokens | Sushi</title>
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
-            <AppBody style={{ padding: 24 }}>
-                <AutoColumn gap="16px">
-                    <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
-                        <BackArrow to="/pool" />
-                        <TYPE.mediumHeader>Migrate {exchange} Liquidity</TYPE.mediumHeader>
-                        <div>
-                            <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
-                        </div>
-                    </AutoRow>
-                    <TYPE.darkGray style={{ marginBottom: 8, fontWeight: 400 }}>
-                        For each pool shown below, click migrate to remove your liquidity from {exchange} and deposit it
-                        into Sushiswap.
-                    </TYPE.darkGray>
 
-                    {!account ? (
-                        <LightCard padding="40px">
-                            <TYPE.body color={theme.text3} textAlign="center">
-                                Connect to a wallet to view your liquidity.
-                            </TYPE.body>
-                        </LightCard>
-                    ) : state.loading ? (
-                        <LightCard padding="40px">
-                            <TYPE.body color={theme.text3} textAlign="center">
-                                <Dots>Loading</Dots>
-                            </TYPE.body>
-                        </LightCard>
-                    ) : (
-                        <>
-                            <MigrateModeSelect state={state} />
-                            <UniswapLiquidityPairs state={state} exchange={exchange} />
-                            <AmountInput state={state} />
-                            <MigrateButtons state={state} exchange={exchange} />
-                        </>
-                    )}
-                </AutoColumn>
-            </AppBody>
+            <div className="bg-dark-900 w-full max-w-lg rounded p-4 space-y-4">
+                <div className="flex justify-between items-center">
+                    <BackArrow to="/pool" />
+                    <h1 className="text-lg font-bold">Migrate {exchange} Liquidity</h1>
+                    <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
+                </div>
+
+                <Typography variant="caption">
+                    Select a wallet type, select a pair, input an amount, and click migrate to remove your liquidity
+                    from {exchange} and add to SushiSwap.
+                </Typography>
+
+                {!account ? (
+                    <Typography className="text-center p-4">Connect to a wallet to view your liquidity.</Typography>
+                ) : state.loading ? (
+                    <Typography className="text-center p-4">
+                        <Dots>Loading</Dots>
+                    </Typography>
+                ) : (
+                    <>
+                        <MigrateModeSelect state={state} />
+                        <ExchangeLiquidityPairs state={state} exchange={exchange} />
+                        <AmountInput state={state} />
+                        <MigrateButtons state={state} exchange={exchange} />
+                    </>
+                )}
+            </div>
         </>
     )
 }
