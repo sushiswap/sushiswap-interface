@@ -6,7 +6,8 @@ import {
     usePancakeV1FactoryContract,
     useUniV2FactoryContract
 } from 'hooks/useContract'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
 import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
 
@@ -23,7 +24,7 @@ export interface LPTokensState {
 
 const useLPTokensState = () => {
     const { account, chainId } = useActiveWeb3React()
-    const factoryContract = useUniV2FactoryContract()
+    const sushiFactoryContract = useUniV2FactoryContract()
     const pancakeFactoryContract = usePancakeV1FactoryContract()
     const dashboardContract = useDashboardContract()
     const dashboard2Contract = useDashboard2Contract()
@@ -33,23 +34,18 @@ const useLPTokensState = () => {
     const [loading, setLoading] = useState(true)
     const updatingLPTokens = useRef(false)
 
-    const LP_TOKENS_LIMIT = chainId !== ChainId.BSC ? 300 : 10000
-
-    console.log('LP_TOKENS_LIMIT:', LP_TOKENS_LIMIT)
+    const LP_TOKENS_LIMIT = 10000
 
     const updateLPTokens = useCallback(async () => {
+        console.log('Update tokens')
         updatingLPTokens.current = true
         try {
             const length =
                 chainId !== ChainId.BSC
-                    ? await factoryContract?.allPairsLength()
+                    ? await sushiFactoryContract?.allPairsLength()
                     : await pancakeFactoryContract?.allPairsLength()
-
-            console.log({ length: length.toString() })
-
             const pages: number[] = []
             for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
-
             const userLP = (
                 await Promise.all(
                     pages.map(page =>
@@ -64,7 +60,6 @@ const useLPTokensState = () => {
                     )
                 )
             ).flat()
-
             const tokenDetails = (
                 await dashboardContract?.getTokenInfo(
                     Array.from(new Set(userLP.reduce((a: any, b: any) => a.push(b.token, b.token0, b.token1) && a, [])))
@@ -73,14 +68,12 @@ const useLPTokensState = () => {
                 acc[cur[0]] = cur
                 return acc
             }, {})
-
             const balances = (
                 await dashboardContract?.findBalances(
                     account,
                     userLP.map(pair => pair.token)
                 )
             ).map((el: any) => el.balance)
-
             const userLPDetails = (
                 await dashboard2Contract?.getPairsFull(
                     account,
@@ -90,7 +83,6 @@ const useLPTokensState = () => {
                 acc[cur[0]] = cur
                 return acc
             }, {})
-
             const data = await Promise.all(
                 userLP.map(async (pair, index) => {
                     const { totalSupply } = userLPDetails[pair.token]
@@ -103,7 +95,6 @@ const useLPTokensState = () => {
                     )
                     const tokenA = tokenDetails[pair.token0]
                     const tokenB = tokenDetails[pair.token1]
-
                     return {
                         address: pair.token,
                         decimals: token.decimals,
@@ -122,36 +113,44 @@ const useLPTokensState = () => {
                     } as LPToken
                 })
             )
-
-            if (data) setLPTokens(data)
-        } catch (error) {
-            console.error(error)
+            if (data) {
+                setLPTokens(data)
+            }
         } finally {
             setLoading(false)
             updatingLPTokens.current = false
         }
     }, [
         chainId,
-        factoryContract,
+        account,
+        sushiFactoryContract,
         pancakeFactoryContract,
         dashboardContract,
-        account,
         dashboard2Contract,
         LP_TOKENS_LIMIT
     ])
 
     useEffect(() => {
         if (
-            account &&
-            factoryContract &&
-            dashboard2Contract &&
-            dashboardContract &&
             chainId &&
+            account &&
+            sushiFactoryContract &&
+            dashboardContract &&
+            dashboard2Contract &&
+            pancakeFactoryContract &&
             !updatingLPTokens.current
         ) {
             updateLPTokens()
         }
-    }, [account, dashboard2Contract, dashboardContract, factoryContract, chainId, updateLPTokens])
+    }, [
+        account,
+        chainId,
+        dashboardContract,
+        dashboard2Contract,
+        sushiFactoryContract,
+        pancakeFactoryContract,
+        updateLPTokens
+    ])
 
     return {
         updateLPTokens,
