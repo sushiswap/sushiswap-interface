@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { formatUnits, parseUnits } from '@ethersproject/units'
-import { JSBI } from '@sushiswap/sdk'
+import { ChainId, JSBI } from '@sushiswap/sdk'
 import { useSushiRollContract } from 'hooks/useContract'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { ChevronRight } from 'react-feather'
@@ -79,29 +79,36 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 
 interface PositionCardProps {
     lpToken: LPToken
-    onClick: (lpToken: LPToken) => void
-    onDismiss: () => void
+    onToggle: (lpToken: LPToken) => void
     isSelected: boolean
     updating: boolean
+    exchange: string | undefined
 }
 
-const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: PositionCardProps) => {
+const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: PositionCardProps) => {
     const theme = useContext(ThemeContext)
+
     // console.log(updating)
+    let version
+    if (exchange === 'Uniswap') {
+        version = 'v2'
+    } else if (exchange === 'PancakeSwap') {
+        version = 'v1'
+    } else {
+        version = ''
+    }
     return (
-        <LightCard>
+        <LightCard onClick={() => onToggle(lpToken)}>
             <AutoColumn gap="12px">
                 <FixedHeightRow>
-                    <RowFixed onClick={() => onClick(lpToken)}>
+                    <RowFixed>
                         <DoubleCurrencyLogo
                             currency0={lpToken.tokenA}
                             currency1={lpToken.tokenB}
                             margin={true}
                             size={20}
                         />
-                        <TYPE.body fontWeight={500} style={{ marginLeft: '' }}>
-                            {`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}
-                        </TYPE.body>
+                        <TYPE.body fontWeight={500}>{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</TYPE.body>
                         <Text
                             fontSize={12}
                             fontWeight={500}
@@ -112,15 +119,15 @@ const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: Po
                             backgroundColor={theme.yellow1}
                             color={'black'}
                         >
-                            V2
+                            {version}
                         </Text>
                     </RowFixed>
                     {updating ? (
                         <CustomLightSpinner src={Circle} alt="loader" size="20px" />
                     ) : isSelected ? (
-                        <CloseIcon onClick={onDismiss} />
+                        <CloseIcon />
                     ) : (
-                        <ChevronRight onClick={() => onClick(lpToken)} />
+                        <ChevronRight />
                     )}
                 </FixedHeightRow>
             </AutoColumn>
@@ -129,7 +136,9 @@ const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: Po
 }
 
 const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
-    const unsetMode = () => state.setMode(undefined)
+    function toggleMode(mode = undefined) {
+        state.setMode(mode !== state.mode ? mode : undefined)
+    }
 
     const items = [
         {
@@ -150,25 +159,23 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
             {items.reduce((acc: any, { key, text, description }: any) => {
                 if (state.mode === undefined || key === state.mode)
                     acc.push(
-                        <LightCard key={key}>
-                            <AutoColumn gap="12px">
-                                <RowFixed>
-                                    <AutoRow onClick={() => state.setMode(key)}>
-                                        <AutoRow marginBottom="2px">
-                                            <TYPE.body fontWeight={500}>{text}</TYPE.body>
-                                        </AutoRow>
+                        <div key={key} className="cursor-pointer">
+                            <LightCard onClick={() => toggleMode(key)}>
+                                <AutoColumn gap="12px">
+                                    <RowFixed>
                                         <AutoRow>
-                                            <TYPE.darkGray fontSize=".75rem">{description}</TYPE.darkGray>
+                                            <AutoRow marginBottom="2px">
+                                                <TYPE.body fontWeight={500}>{text}</TYPE.body>
+                                            </AutoRow>
+                                            <AutoRow>
+                                                <TYPE.darkGray fontSize=".75rem">{description}</TYPE.darkGray>
+                                            </AutoRow>
                                         </AutoRow>
-                                    </AutoRow>
-                                    {key === state.mode ? (
-                                        <CloseIcon onClick={unsetMode} />
-                                    ) : (
-                                        <ChevronRight onClick={unsetMode} />
-                                    )}
-                                </RowFixed>
-                            </AutoColumn>
-                        </LightCard>
+                                        {key === state.mode ? <CloseIcon /> : <ChevronRight />}
+                                    </RowFixed>
+                                </AutoColumn>
+                            </LightCard>
+                        </div>
                     )
                 return acc
             }, [])}
@@ -177,7 +184,7 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
     )
 }
 
-const MigrateButtons = ({ state }: { state: MigrateState }) => {
+const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
     const [error, setError] = useState<MetamaskError>({})
     const sushiRollContract = useSushiRollContract()
     const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
@@ -268,45 +275,40 @@ const MigrateButtons = ({ state }: { state: MigrateState }) => {
                 )}
             </LightCard>
             <TYPE.darkGray fontSize="0.75rem" textAlign="center">
-                {`Your Uniswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
+                {}
+                {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
             </TYPE.darkGray>
         </AutoColumn>
     )
 }
 
-const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
+const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
     let content: JSX.Element
-    const onClick = useCallback(
-        lpToken => {
-            state.setAmount('')
-            state.setSelectedLPToken(lpToken)
-        },
-        [state]
-    )
 
-    const onDismiss = useCallback(() => {
+    function onToggle(lpToken: LPToken) {
+        state.setSelectedLPToken(state.selectedLPToken !== lpToken ? lpToken : undefined)
         state.setAmount('')
-        state.setSelectedLPToken(undefined)
-    }, [state])
+    }
 
     if (!state.mode) {
         content = <span />
     } else if (state.lpTokens.length === 0) {
-        content = <EmptyState message="No V2 Liquidity found." />
+        content = <EmptyState message="No Liquidity found." />
     } else {
         content = (
             <>
                 {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
                     if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
                         acc.push(
-                            <LPTokenSelect
-                                lpToken={lpToken}
-                                key={lpToken.address}
-                                onClick={onClick}
-                                onDismiss={onDismiss}
-                                isSelected={state.selectedLPToken === lpToken}
-                                updating={state.updatingLPTokens}
-                            />
+                            <div key={lpToken.address} className="cursor-pointer">
+                                <LPTokenSelect
+                                    lpToken={lpToken}
+                                    onToggle={onToggle}
+                                    isSelected={state.selectedLPToken === lpToken}
+                                    updating={state.updatingLPTokens}
+                                    exchange={exchange}
+                                />
+                            </div>
                         )
                     }
                     return acc
@@ -317,7 +319,7 @@ const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
 
     return (
         <>
-            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your Uniswap Liquidity</TYPE.mediumHeader>
+            <TYPE.mediumHeader style={{ justifySelf: 'flex-start' }}>Your {exchange} Liquidity</TYPE.mediumHeader>
             {content}
             <Border />
         </>
@@ -326,33 +328,40 @@ const UniswapLiquidityPairs = ({ state }: { state: MigrateState }) => {
 
 const MigrateV2 = () => {
     const theme = useContext(ThemeContext)
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const state = useMigrateState()
+
+    let exchange
+    if (chainId === ChainId.MAINNET) {
+        exchange = 'Uniswap'
+    } else if (chainId === ChainId.BSC) {
+        exchange = 'PancakeSwap'
+    }
 
     return (
         <>
             <Helmet>
                 <title>Migrate | Sushi</title>
-                <meta name="description" content="Migrate Uniswap LP tokens to Sushi LP tokens" />
+                <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
             <AppBody style={{ padding: 24 }}>
                 <AutoColumn gap="16px">
                     <AutoRow style={{ alignItems: 'center', justifyContent: 'space-between' }} gap="8px">
                         <BackArrow to="/pool" />
-                        <TYPE.mediumHeader>Migrate Uniswap Liquidity</TYPE.mediumHeader>
+                        <TYPE.mediumHeader>Migrate {exchange} Liquidity</TYPE.mediumHeader>
                         <div>
-                            <QuestionHelper text="Migrate your Uniswap LP tokens to SushiSwap LP tokens." />
+                            <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
                         </div>
                     </AutoRow>
                     <TYPE.darkGray style={{ marginBottom: 8, fontWeight: 400 }}>
-                        For each pool shown below, click migrate to remove your liquidity from Uniswap and deposit it
+                        For each pool shown below, click migrate to remove your liquidity from {exchange} and deposit it
                         into Sushiswap.
                     </TYPE.darkGray>
 
                     {!account ? (
                         <LightCard padding="40px">
                             <TYPE.body color={theme.text3} textAlign="center">
-                                Connect to a wallet to view your V2 liquidity.
+                                Connect to a wallet to view your liquidity.
                             </TYPE.body>
                         </LightCard>
                     ) : state.loading ? (
@@ -364,9 +373,9 @@ const MigrateV2 = () => {
                     ) : (
                         <>
                             <MigrateModeSelect state={state} />
-                            <UniswapLiquidityPairs state={state} />
+                            <UniswapLiquidityPairs state={state} exchange={exchange} />
                             <AmountInput state={state} />
-                            <MigrateButtons state={state} />
+                            <MigrateButtons state={state} exchange={exchange} />
                         </>
                     )}
                 </AutoColumn>

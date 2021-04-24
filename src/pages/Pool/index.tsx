@@ -232,7 +232,15 @@ export default function Pool() {
                             {chainId === ChainId.MAINNET && (
                                 <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                                     Have Liquidity on Uniswap?{' '}
-                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate/v2'}>
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                        Migrate Now.
+                                    </StyledInternalLink>
+                                </Text>
+                            )}
+                            {chainId === ChainId.BSC && (
+                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                                    Have Liquidity on PancakeSwap?{' '}
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
                                         Migrate Now.
                                     </StyledInternalLink>
                                 </Text>
