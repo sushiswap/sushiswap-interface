@@ -92,7 +92,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
     let version
     if (exchange === 'Uniswap') {
         version = 'v2'
-    } else if (exchange === 'PancakeSwap') {
+    } else if (exchange === 'PancakeSwapV1') {
         version = 'v1'
     } else {
         version = ''
@@ -335,7 +335,7 @@ const MigrateV2 = () => {
     if (chainId === ChainId.MAINNET) {
         exchange = 'Uniswap'
     } else if (chainId === ChainId.BSC) {
-        exchange = 'PancakeSwap'
+        exchange = 'PancakeSwapV1'
     }
 
     return (

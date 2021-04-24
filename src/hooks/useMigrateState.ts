@@ -44,7 +44,7 @@ const useMigrateState: () => MigrateState = () => {
             if (chainId === ChainId.MAINNET) {
                 exchange = 'Uniswap'
             } else if (chainId === ChainId.BSC) {
-                exchange = 'PancakeSwap'
+                exchange = 'PancakeSwapV1'
             }
 
             addTransaction(tx, {
