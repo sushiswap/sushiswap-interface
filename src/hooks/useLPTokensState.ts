@@ -11,6 +11,9 @@ import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from
 import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
 
+import axios from 'axios'
+import { isAddressString } from 'utils'
+
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
     lpTokens: LPToken[]
@@ -63,52 +66,26 @@ const useLPTokensState = () => {
                     )
                 ).flat()
             } else if (chainId === ChainId.BSC) {
-                const LP_TOKENS_LIMIT = 10000 // BSC rate limits async, so have to get creative
-                console.log('Available Pairs:', length.toNumber(), LP_TOKENS_LIMIT)
-                const pages = []
-                for (let i = 0; i < length.toNumber(); i += LP_TOKENS_LIMIT) pages.push(i)
-                const activeLP = []
-                for (let i = 0; i < length.toNumber(); i += LP_TOKENS_LIMIT) {
-                    //for (let i = 0; i < pages.length; i++) {
-                    let tryCount = 0
-                    const maxTries = 3
-                    while (true) {
-                        try {
-                            // const subSetMin = Math.min(pages[i], length.toNumber)
-                            // const subset = [pages[i], pages[i + 1], pages[i + 2]]
-                            // console.log('subset:', subset)
-                            // const pairs = await Promise.all(
-                            //     subset.map(page =>
-                            //         dashboardContract?.findPairs(
-                            //             account,
-                            //             '0xBCfCcbde45cE874adCB698cC183deBcF17952812',
-                            //             i,
-                            //             Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
-                            //         )
-                            //     )
-                            // )
-                            console.log('step:', i, Math.min(i + LP_TOKENS_LIMIT, length.toNumber()))
-                            const pairs = await dashboardContract?.findPairs(
-                                account,
-                                '0xBCfCcbde45cE874adCB698cC183deBcF17952812',
-                                i,
-                                Math.min(i + LP_TOKENS_LIMIT, length.toNumber())
-                            )
-                            activeLP.push(pairs.flat())
-                            break
-                        } catch (e) {
-                            // handle exception
-                            if (++tryCount === maxTries) {
-                                throw e
-                            }
-                        }
+                // BSC rpc nodes are inconsistent, given array size better to fallback to covalenthq
+                userLP = []
+                const API_KEY = 'ckey_cba3674f2ce5450f9d5dd290589'
+                const query = await axios.get(
+                    `https://api.covalenthq.com/v1/56/address/${String(
+                        account
+                    ).toLowerCase()}/stacks/pancakeswap/balances/?key=${API_KEY}`
+                )
+                const activeLP: any[] = query.data.data.pancakeswap.balances.map((balance: any) => {
+                    return {
+                        token: isAddressString(balance.pool_token.contract_address),
+                        token0: isAddressString(balance.token_0.contract_address),
+                        token1: isAddressString(balance.token_1.contract_address)
                     }
-                }
+                })
                 userLP = activeLP.flat()
-                //console.log('User Pairs:', userLP)
             } else {
                 userLP = []
             }
+            //console.log('userLP:', userLP)
 
             const tokenDetails = (
                 await dashboardContract?.getTokenInfo(
@@ -118,12 +95,16 @@ const useLPTokensState = () => {
                 acc[cur[0]] = cur
                 return acc
             }, {})
+            //console.log('tokenDetails:', tokenDetails)
+
             const balances = (
                 await dashboardContract?.findBalances(
                     account,
                     userLP.map(pair => pair.token)
                 )
             ).map((el: any) => el.balance)
+            //console.log('balances:', balances)
+
             const userLPDetails = (
                 await dashboard2Contract?.getPairsFull(
                     account,
@@ -133,36 +114,45 @@ const useLPTokensState = () => {
                 acc[cur[0]] = cur
                 return acc
             }, {})
-            const data = await Promise.all(
-                userLP.map(async (pair, index) => {
-                    const { totalSupply } = userLPDetails[pair.token]
-                    const token = new Token(
-                        chainId as ChainId,
-                        tokenDetails[pair.token].token,
-                        tokenDetails[pair.token].decimals,
-                        tokenDetails[pair.token].symbol,
-                        tokenDetails[pair.token].name
-                    )
-                    const tokenA = tokenDetails[pair.token0]
-                    const tokenB = tokenDetails[pair.token1]
-                    return {
-                        address: pair.token,
-                        decimals: token.decimals,
-                        name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
-                        symbol: `${tokenA.symbol}-${tokenB.symbol}`,
-                        balance: new TokenAmount(token, balances[index]),
-                        totalSupply,
-                        tokenA: new Token(
-                            chainId as ChainId,
-                            tokenA.token,
-                            tokenA.decimals,
-                            tokenA.symbol,
-                            tokenA.name
-                        ),
-                        tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name)
-                    } as LPToken
-                })
-            )
+            const data =
+                balances.length > 0 //  since covalent is a few blocks behind, it might return a balance, but actual actionable balance is null, therefore if null return null
+                    ? await Promise.all(
+                          userLP.map(async (pair, index) => {
+                              const { totalSupply } = userLPDetails[pair.token]
+                              const token = new Token(
+                                  chainId as ChainId,
+                                  tokenDetails[pair.token].token,
+                                  tokenDetails[pair.token].decimals,
+                                  tokenDetails[pair.token].symbol,
+                                  tokenDetails[pair.token].name
+                              )
+                              const tokenA = tokenDetails[pair.token0]
+                              const tokenB = tokenDetails[pair.token1]
+                              return {
+                                  address: pair.token,
+                                  decimals: token.decimals,
+                                  name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
+                                  symbol: `${tokenA.symbol}-${tokenB.symbol}`,
+                                  balance: new TokenAmount(token, balances[index]),
+                                  totalSupply,
+                                  tokenA: new Token(
+                                      chainId as ChainId,
+                                      tokenA.token,
+                                      tokenA.decimals,
+                                      tokenA.symbol,
+                                      tokenA.name
+                                  ),
+                                  tokenB: new Token(
+                                      chainId as ChainId,
+                                      tokenB.token,
+                                      tokenB.decimals,
+                                      tokenB.symbol,
+                                      tokenB.name
+                                  )
+                              } as LPToken
+                          })
+                      )
+                    : null
             if (data) {
                 setLPTokens(data)
             }
