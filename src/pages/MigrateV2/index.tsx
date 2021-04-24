@@ -86,6 +86,7 @@ interface PositionCardProps {
 
 const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating }: PositionCardProps) => {
     const theme = useContext(ThemeContext)
+
     // console.log(updating)
     return (
         <LightCard onClick={() => onToggle(lpToken)}>
@@ -149,8 +150,8 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
             {items.reduce((acc: any, { key, text, description }: any) => {
                 if (state.mode === undefined || key === state.mode)
                     acc.push(
-                        <div className="cursor-pointer">
-                            <LightCard key={key} onClick={() => toggleMode(key)}>
+                        <div key={key} className="cursor-pointer">
+                            <LightCard onClick={() => toggleMode(key)}>
                                 <AutoColumn gap="12px">
                                     <RowFixed>
                                         <AutoRow>
@@ -290,10 +291,9 @@ const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; excha
                 {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
                     if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
                         acc.push(
-                            <div className="cursor-pointer">
+                            <div key={lpToken.address} className="cursor-pointer">
                                 <LPTokenSelect
                                     lpToken={lpToken}
-                                    key={lpToken.address}
                                     onToggle={onToggle}
                                     isSelected={state.selectedLPToken === lpToken}
                                     updating={state.updatingLPTokens}
