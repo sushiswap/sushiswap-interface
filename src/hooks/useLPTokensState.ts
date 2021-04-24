@@ -18,6 +18,7 @@ export interface LPTokensState {
 
 const useLPTokensState = () => {
     const { account, chainId } = useActiveWeb3React()
+
     const dashboardContract = useDashboardContract()
     const [lpTokens, setLPTokens] = useState<LPToken[]>([])
     const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
@@ -34,7 +35,7 @@ const useLPTokensState = () => {
             }
 
             const stack: any = {
-                [ChainId.MAINNET]: 'uniswap',
+                [ChainId.MAINNET]: 'uniswap_v2',
                 [ChainId.BSC]: 'pancakeswap'
             }
 
@@ -47,7 +48,7 @@ const useLPTokensState = () => {
 
             console.log({ data })
 
-            const userLP: any[] = data[chainId === ChainId.MAINNET ? 'uniswap_v2' : 'pancakeswap'].balances.filter(
+            const userLP: any[] = data?.[chainId === ChainId.MAINNET ? 'uniswap_v2' : 'pancakeswap']?.balances?.filter(
                 (balance: any) => balance.pool_token.balance !== '0'
             )
 
@@ -69,7 +70,7 @@ const useLPTokensState = () => {
                         )
                     )
                 )
-            ).reduce((acc: any, cur: any) => {
+            )?.reduce((acc: any, cur: any) => {
                 acc[cur[0]] = cur
                 return acc
             }, {})
@@ -79,7 +80,7 @@ const useLPTokensState = () => {
             const lpTokens = userLP.map((pair, index) => {
                 const token = new Token(
                     chainId as ChainId,
-                    pair.pool_token.contract_address,
+                    getAddress(pair.pool_token.contract_address),
                     tokenDetails[getAddress(pair.pool_token.contract_address)].decimals,
                     tokenDetails[getAddress(pair.pool_token.contract_address)].symbol,
                     tokenDetails[getAddress(pair.pool_token.contract_address)].name
