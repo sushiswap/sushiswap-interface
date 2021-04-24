@@ -47,7 +47,9 @@ const useLPTokensState = () => {
 
             console.log({ data })
 
-            const userLP: any[] = data.pancakeswap.balances.filter((balance: any) => balance.pool_token.balance !== '0')
+            const userLP: any[] = data[chainId === ChainId.MAINNET ? 'uniswap_v2' : 'pancakeswap'].balances.filter(
+                (balance: any) => balance.pool_token.balance !== '0'
+            )
 
             console.log('userLP:', userLP)
 
