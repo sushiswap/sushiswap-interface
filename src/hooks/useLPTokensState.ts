@@ -13,6 +13,7 @@ import LPToken from '../types/LPToken'
 
 import axios from 'axios'
 import { isAddressString } from 'utils'
+import { getAddress } from '@ethersproject/address'
 
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
@@ -69,18 +70,22 @@ const useLPTokensState = () => {
                 // BSC rpc nodes are inconsistent, given array size better to fallback to covalenthq
                 userLP = []
                 const API_KEY = 'ckey_cba3674f2ce5450f9d5dd290589'
-                const query = await axios.get(
+                const response = await fetch(
                     `https://api.covalenthq.com/v1/56/address/${String(
                         account
                     ).toLowerCase()}/stacks/pancakeswap/balances/?key=${API_KEY}`
                 )
-                const activeLP: any[] = query.data.data.pancakeswap.balances.map((balance: any) => {
-                    return {
-                        token: isAddressString(balance.pool_token.contract_address),
-                        token0: isAddressString(balance.token_0.contract_address),
-                        token1: isAddressString(balance.token_1.contract_address)
-                    }
-                })
+                const { data } = await response.json()
+                console.log({ data })
+                const activeLP: any[] = data.pancakeswap.balances
+                    .filter((balance: any) => balance.pool_token.balance !== '0')
+                    .map((balance: any) => {
+                        return {
+                            token: getAddress(balance.pool_token.contract_address),
+                            token0: getAddress(balance.token_0.contract_address),
+                            token1: getAddress(balance.token_1.contract_address)
+                        }
+                    })
                 userLP = activeLP.flat()
             } else {
                 userLP = []
@@ -103,7 +108,8 @@ const useLPTokensState = () => {
                     userLP.map(pair => pair.token)
                 )
             ).map((el: any) => el.balance)
-            //console.log('balances:', balances)
+
+            // console.log({ balances }, userLP.length, balances.length)
 
             const userLPDetails = (
                 await dashboard2Contract?.getPairsFull(
@@ -114,45 +120,49 @@ const useLPTokensState = () => {
                 acc[cur[0]] = cur
                 return acc
             }, {})
+            // console.log({ userLP })
+            // console.log({ userLPDetails })
+
             const data =
                 balances.length > 0 //  since covalent is a few blocks behind, it might return a balance, but actual actionable balance is null, therefore if null return null
-                    ? await Promise.all(
-                          userLP.map(async (pair, index) => {
-                              const { totalSupply } = userLPDetails[pair.token]
-                              const token = new Token(
+                    ? userLP.map((pair, index) => {
+                          const { totalSupply } = userLPDetails[pair.token]
+                          const token = new Token(
+                              chainId as ChainId,
+                              tokenDetails[pair.token].token,
+                              tokenDetails[pair.token].decimals,
+                              tokenDetails[pair.token].symbol,
+                              tokenDetails[pair.token].name
+                          )
+                          const tokenA = tokenDetails[pair.token0]
+                          const tokenB = tokenDetails[pair.token1]
+
+                          console.log({ bal: balances[index] })
+
+                          return {
+                              address: pair.token,
+                              decimals: token.decimals,
+                              name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
+                              symbol: `${tokenA.symbol}-${tokenB.symbol}`,
+                              balance: new TokenAmount(token, balances[index]),
+                              totalSupply,
+                              tokenA: new Token(
                                   chainId as ChainId,
-                                  tokenDetails[pair.token].token,
-                                  tokenDetails[pair.token].decimals,
-                                  tokenDetails[pair.token].symbol,
-                                  tokenDetails[pair.token].name
+                                  tokenA.token,
+                                  tokenA.decimals,
+                                  tokenA.symbol,
+                                  tokenA.name
+                              ),
+                              tokenB: new Token(
+                                  chainId as ChainId,
+                                  tokenB.token,
+                                  tokenB.decimals,
+                                  tokenB.symbol,
+                                  tokenB.name
                               )
-                              const tokenA = tokenDetails[pair.token0]
-                              const tokenB = tokenDetails[pair.token1]
-                              return {
-                                  address: pair.token,
-                                  decimals: token.decimals,
-                                  name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
-                                  symbol: `${tokenA.symbol}-${tokenB.symbol}`,
-                                  balance: new TokenAmount(token, balances[index]),
-                                  totalSupply,
-                                  tokenA: new Token(
-                                      chainId as ChainId,
-                                      tokenA.token,
-                                      tokenA.decimals,
-                                      tokenA.symbol,
-                                      tokenA.name
-                                  ),
-                                  tokenB: new Token(
-                                      chainId as ChainId,
-                                      tokenB.token,
-                                      tokenB.decimals,
-                                      tokenB.symbol,
-                                      tokenB.name
-                                  )
-                              } as LPToken
-                          })
-                      )
-                    : null
+                          } as LPToken
+                      })
+                    : []
             if (data) {
                 setLPTokens(data)
             }
