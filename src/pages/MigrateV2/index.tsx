@@ -83,11 +83,20 @@ interface PositionCardProps {
     onDismiss: () => void
     isSelected: boolean
     updating: boolean
+    exchange: string | undefined
 }
 
-const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: PositionCardProps) => {
+const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating, exchange }: PositionCardProps) => {
     const theme = useContext(ThemeContext)
     // console.log(updating)
+    let version
+    if (exchange === 'Uniswap') {
+        version = 'v2'
+    } else if (exchange === 'PancakeSwap') {
+        version = 'v1'
+    } else {
+        version = ''
+    }
     return (
         <LightCard>
             <AutoColumn gap="12px">
@@ -110,7 +119,7 @@ const LPTokenSelect = ({ lpToken, onClick, onDismiss, isSelected, updating }: Po
                             backgroundColor={theme.yellow1}
                             color={'black'}
                         >
-                            V2
+                            {version}
                         </Text>
                     </RowFixed>
                     {updating ? (
@@ -305,6 +314,7 @@ const UniswapLiquidityPairs = ({ state, exchange }: { state: MigrateState; excha
                                 onDismiss={onDismiss}
                                 isSelected={state.selectedLPToken === lpToken}
                                 updating={state.updatingLPTokens}
+                                exchange={exchange}
                             />
                         )
                     }
