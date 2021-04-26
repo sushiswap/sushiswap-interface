@@ -301,7 +301,7 @@ export class KashiCooker {
         useValue1: boolean,
         useValue2: boolean,
         returnValues: number
-    ) {
+    ): void {
         this.add(
             Action.CALL,
             defaultAbiCoder.encode(
