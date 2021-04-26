@@ -306,7 +306,7 @@ const MigrateV2 = () => {
                     </Typography>
                 ) : state.loading ? (
                     <Typography variant="body" className="text-primary text-center p-4">
-                        <Dots>Loading</Dots>
+                        <Dots>Loading liquidity positions</Dots>
                     </Typography>
                 ) : (
                     <>
