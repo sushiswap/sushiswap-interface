@@ -290,9 +290,7 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <Typography variant="hero" className="mb-4">
-                Migrate {exchange} Liquidity
-            </Typography>
+            <div className="text-3xl text-center mb-8 font-bold">Migrate {exchange} Liquidity</div>
 
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
                 {/* <div className="flex justify-between items-center p-3">
