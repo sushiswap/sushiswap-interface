@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
-import { Fraction } from '../entities'
-import { useActiveWeb3React, useSushiBarContract, useSushiContract } from '../hooks'
+import Fraction from '../entities/Fraction'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useSushiBarContract, useSushiContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 const { BigNumber } = ethers

@@ -1,4 +1,4 @@
-import { useMakerContract } from 'hooks'
+import { useMakerContract } from './useContract'
 import { useCallback } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 

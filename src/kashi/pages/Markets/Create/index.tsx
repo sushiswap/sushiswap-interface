@@ -1,6 +1,7 @@
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { ethers } from 'ethers'
-import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBentoBoxContract } from 'hooks/useContract'
 import {
     ChainlinkToken,
     CHAINLINK_MAPPING,
@@ -11,7 +12,8 @@ import {
 import { e10 } from 'kashi/functions/math'
 import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { BackButton, Button, Card, Layout, LendCardHeader, ListBox } from '../../../components'
+import { BackButton, Button, Card, Layout, ListBox } from '../../../components'
+import { LendCardHeader } from 'kashi/components/CardHeader'
 import { Helmet } from 'react-helmet'
 
 const CreatePair = () => {

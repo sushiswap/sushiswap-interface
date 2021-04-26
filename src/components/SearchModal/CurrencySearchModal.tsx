@@ -5,9 +5,10 @@ import React, { useCallback, useEffect, useState } from 'react'
 import useLast from '../../hooks/useLast'
 import Modal from '../Modal'
 import { CurrencySearch } from './CurrencySearch'
-import { ImportList } from './ImportList'
 import { ImportToken } from './ImportToken'
+import ImportList from './ImportList'
 import Manage from './Manage'
+import CurrencyModalView from './CurrencyModalView'
 
 interface CurrencySearchModalProps {
     isOpen: boolean
@@ -18,14 +19,7 @@ interface CurrencySearchModalProps {
     showCommonBases?: boolean
 }
 
-export enum CurrencyModalView {
-    search,
-    manage,
-    importToken,
-    importList
-}
-
-export default function CurrencySearchModal({
+function CurrencySearchModal({
     isOpen,
     onDismiss,
     onCurrencySelect,
@@ -105,3 +99,5 @@ export default function CurrencySearchModal({
         </Modal>
     )
 }
+
+export default CurrencySearchModal

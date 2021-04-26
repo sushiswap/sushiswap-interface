@@ -2,7 +2,7 @@ import { ReactComponent as AddIcon } from 'assets/svg/add.svg'
 import React from 'react'
 import { Search } from 'react-feather'
 import { Link } from 'react-router-dom'
-import { BorrowCardHeader, LendCardHeader } from '.'
+import { BorrowCardHeader, LendCardHeader } from './CardHeader'
 
 function MarketHeader({ type = 'Borrow', search, term }: any) {
     const Header = type === 'Borrow' ? BorrowCardHeader : LendCardHeader

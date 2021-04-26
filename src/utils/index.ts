@@ -7,7 +7,7 @@ import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Percent, ROUTER_ADDRESS
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ethers } from 'ethers'
 import Numeral from 'numeral'
-import { Fraction } from '../entities'
+import Fraction from 'entities/Fraction'
 import { TokenAddressMap } from '../state/lists/hooks'
 
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {

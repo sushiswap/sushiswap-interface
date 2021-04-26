@@ -1,7 +1,8 @@
-import { Fraction } from 'entities'
+import Fraction from '../entities/Fraction'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
-import { useActiveWeb3React, useSaaveContract, useSushiContract } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useSaaveContract, useSushiContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { BalanceProps } from './useTokenBalance'
 
@@ -20,9 +21,11 @@ const useMaker = () => {
         if (account) {
             try {
                 const allowance = await sushiContract?.allowance(account, saaveContract?.address)
+                console.log('allowance', allowance)
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
-            } catch {
+            } catch (error) {
+                console.error(error)
                 setAllowance('0')
             }
         }

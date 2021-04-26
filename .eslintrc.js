@@ -2,6 +2,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     extends: [
         'react-app',
+        'plugin:import/typescript',
         'plugin:react/recommended',
         'plugin:react-hooks/recommended',
         'plugin:@typescript-eslint/recommended',
@@ -21,6 +22,7 @@ module.exports = {
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+        'import/no-cycle': 'error',
         'no-extend-native': 'off',
         'react/prop-types': 'off',
         'react/display-name': 'off',

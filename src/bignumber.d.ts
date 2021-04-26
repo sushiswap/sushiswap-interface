@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { Fraction } from 'entities'
+import { Fraction } from '../entities/Fraction'
 
 declare module '@ethersproject/bignumber' {
     interface BigNumber {

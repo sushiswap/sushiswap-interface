@@ -4,9 +4,9 @@ import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
-import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens } from '../../hooks/Tokens'
-import { AppDispatch, AppState } from '../index'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useAllTokens } from 'hooks/Tokens'
+import { AppDispatch, AppState } from '..'
 import {
     addSerializedPair,
     addSerializedToken,

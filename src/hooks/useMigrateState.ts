@@ -1,6 +1,6 @@
 import { parseUnits } from '@ethersproject/units'
 import { useCallback, useEffect, useState } from 'react'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useIsTransactionPending, useTransactionAdder } from '../state/transactions/hooks'
 import useLPTokensState, { LPTokensState } from './useLPTokensState'
 import useSushiRoll from './useSushiRoll'

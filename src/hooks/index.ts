@@ -86,6 +86,5 @@ export function useInactiveListener(suppress = false) {
     }, [active, error, suppress, activate])
 }
 
-export * from './useContract'
 export { default as useFuse } from './useFuse'
 export { default as useSortableData } from './useSortableData'

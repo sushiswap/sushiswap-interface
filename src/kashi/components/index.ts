@@ -1,7 +1,7 @@
 export { default as Alert } from './Alert'
 export { BackButton, default as Button } from './Button'
 export { default as Card } from './Card'
-export { BorrowCardHeader, default as CardHeader, LendCardHeader } from './CardHeader'
+export { default as CardHeader } from './CardHeader'
 export { default as Checkbox } from './Checkbox'
 export { default as Dots } from './Dots'
 export { default as GradientDot } from './GradientDot'
