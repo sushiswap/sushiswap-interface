@@ -19,8 +19,9 @@ const useAllowance = (tokenAddress: string) => {
                 const allowance = await tokenContract?.allowance(account, bentoBoxContract?.address)
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
-            } catch {
+            } catch (error) {
                 setAllowance('0')
+                throw error
             }
         }
     }, [account, bentoBoxContract?.address, tokenContract])

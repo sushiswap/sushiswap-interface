@@ -25,8 +25,8 @@ const useMaker = () => {
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
             } catch (error) {
-                console.error(error)
                 setAllowance('0')
+                throw error
             }
         }
     }, [account, saaveContract?.address, sushiContract])

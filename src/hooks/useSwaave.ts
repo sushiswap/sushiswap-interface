@@ -21,8 +21,9 @@ const useSushiBar = () => {
                 const allowance = await sushiContract?.allowance(account, barContract?.address)
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
-            } catch {
+            } catch (error) {
                 setAllowance('0')
+                throw error
             }
         }
     }, [account, barContract, sushiContract])
