@@ -239,7 +239,7 @@ export default function Pool() {
                             )}
                             {chainId === ChainId.BSC && (
                                 <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                    Have Liquidity on PancakeSwapV1?{' '}
+                                    Have Liquidity on PancakeSwap?{' '}
                                     <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
                                         Migrate Now.
                                     </StyledInternalLink>

@@ -8,7 +8,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
-import { BscConnector } from '@binance-chain/bsc-connector'
+// import { BscConnector } from '@binance-chain/bsc-connector'
 
 const RPC = {
     [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
@@ -107,4 +107,4 @@ export const torus = new TorusConnector({
     chainId: 1
 })
 
-export const bsc = new BscConnector({ supportedChainIds: [56] })
+// export const bsc = new BscConnector({ supportedChainIds: [56] })

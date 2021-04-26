@@ -25,8 +25,7 @@ import {
 //Feat Bento
 import Bento from './BentoBox'
 import BentoBalances from './BentoBox/Balances'
-import RemoveV1Exchange from './MigrateV1/RemoveV1Exchange'
-import MigrateV2 from './MigrateV2'
+import Migrate from './Migrate'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
@@ -45,6 +44,7 @@ import Tools from './Tools'
 import Vesting from './Vesting'
 import Yield from './Yield'
 import ReactGA from 'react-ga'
+import Test from './Test'
 
 function App(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -98,10 +98,11 @@ function App(): JSX.Element {
                             <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
                             <Route exact strict path="/yield" component={Yield} />
                             <Route exact strict path="/vesting" component={Vesting} />
-                            <Route exact strict path="/migrate/v2" render={() => <Redirect to="/migrate" />} />
+
                             {(chainId === ChainId.MAINNET || chainId === ChainId.BSC) && (
-                                <Route exact strict path="/migrate" component={MigrateV2} />
+                                <Route exact strict path="/migrate" component={Migrate} />
                             )}
+                            <Route exact strict path="/migrate/v2" render={() => <Redirect to="/migrate" />} />
 
                             {/* Tools */}
                             <Route exact strict path="/tools" component={Tools} />
@@ -120,13 +121,13 @@ function App(): JSX.Element {
                             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
                             <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
                             <Route exact path="/create" component={AddLiquidity} />
+                            <Route exact path="/test" component={Test} />
                             <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
                             <Route
                                 exact
                                 path="/create/:currencyIdA/:currencyIdB"
                                 component={RedirectDuplicateTokenIds}
                             />
-                            <Route exact strict path="/remove/v1/:address" component={RemoveV1Exchange} />
                             <Route
                                 exact
                                 strict

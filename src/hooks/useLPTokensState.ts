@@ -18,7 +18,6 @@ export interface LPTokensState {
 
 const useLPTokensState = () => {
     const { account, chainId } = useActiveWeb3React()
-
     const dashboardContract = useDashboardContract()
     const [lpTokens, setLPTokens] = useState<LPToken[]>([])
     const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
@@ -34,25 +33,83 @@ const useLPTokensState = () => {
                 return
             }
 
-            const stack: any = {
-                [ChainId.MAINNET]: 'uniswap_v2',
-                [ChainId.BSC]: 'pancakeswap'
+            const requests: any = {
+                [ChainId.MAINNET]: [
+                    fetch(
+                        `https://api.covalenthq.com/v1/${ChainId.MAINNET}/address/${String(
+                            account
+                        ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+                    )
+                ],
+                [ChainId.BSC]: [
+                    fetch(
+                        `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+                            account
+                        ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+                    ),
+                    fetch(
+                        `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+                            account
+                        ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+                    )
+                ]
             }
 
-            const response = await fetch(
-                `https://api.covalenthq.com/v1/${chainId}/address/${String(account).toLowerCase()}/stacks/${
-                    stack[chainId]
-                }/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-            )
-            const { data } = await response.json()
+            const responses: any = await Promise.all(requests[chainId])
 
-            console.log({ data })
+            // const response = await fetch(
+            //     `https://api.covalenthq.com/v1/${chainId}/address/${String(account).toLowerCase()}/stacks/${
+            //         stack[chainId]
+            //     }/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+            // )
 
-            const userLP: any[] = data?.[chainId === ChainId.MAINNET ? 'uniswap_v2' : 'pancakeswap']?.balances?.filter(
-                (balance: any) => balance.pool_token.balance !== '0'
-            )
+            // const { data } = await response.json()
 
-            console.log('userLP:', userLP)
+            // console.log({ data })
+
+            // let data
+
+            // if (chainId === ChainId.MAINNET) {
+            //     data = (await responses[0].json()).data
+            // } else if (chainId === ChainId.BSC) {
+            //     data = [
+            //         ...
+            //     ]
+            // }
+
+            // const userLP: any[] = data?.[chainId === ChainId.MAINNET ? 'uniswap_v2' : 'pancakeswap']?.balances?.filter(
+            //     (balance: any) => balance.pool_token.balance !== '0'
+            // )
+
+            let userLP = []
+
+            if (chainId === ChainId.MAINNET) {
+                const { data } = await responses[0].json()
+                userLP = data?.['uniswap_v2']?.balances
+                    ?.filter((balance: any) => balance.pool_token.balance !== '0')
+                    .map((balance: any) => ({
+                        ...balance,
+                        version: 'v2'
+                    }))
+            } else if (chainId === ChainId.BSC) {
+                const { data: dataV1 } = await responses[0].json()
+                const { data: dataV2 } = await responses[1].json()
+
+                userLP = [
+                    ...dataV1?.['pancakeswap']?.balances
+                        ?.filter((balance: any) => balance.pool_token.balance !== '0')
+                        .map((balance: any) => ({
+                            ...balance,
+                            version: 'v1'
+                        })),
+                    ...dataV2?.['pancakeswap']?.balances
+                        ?.filter((balance: any) => balance.pool_token.balance !== '0')
+                        .map((balance: any) => ({
+                            ...balance,
+                            version: 'v2'
+                        }))
+                ]
+            }
 
             const tokenDetails = (
                 await dashboardContract?.getTokenInfo(
@@ -77,7 +134,7 @@ const useLPTokensState = () => {
 
             console.log({ tokenDetails })
 
-            const lpTokens = userLP.map((pair, index) => {
+            const lpTokens = userLP.map((pair: any, index: number) => {
                 const token = new Token(
                     chainId as ChainId,
                     getAddress(pair.pool_token.contract_address),
@@ -98,7 +155,8 @@ const useLPTokensState = () => {
                     balance: new TokenAmount(token, pair.pool_token.balance),
                     totalSupply: pair.pool_token.total_supply,
                     tokenA: new Token(chainId as ChainId, tokenA.token, tokenA.decimals, tokenA.symbol, tokenA.name),
-                    tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name)
+                    tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name),
+                    version: pair.version
                 } as LPToken
             })
             if (lpTokens) {

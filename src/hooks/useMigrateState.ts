@@ -21,7 +21,7 @@ export interface MigrateState extends LPTokensState {
 const useMigrateState: () => MigrateState = () => {
     const { library, account, chainId } = useActiveWeb3React()
     const state = useLPTokensState()
-    const { migrate, migrateWithPermit } = useSushiRoll()
+    const { migrate, migrateWithPermit } = useSushiRoll(state?.selectedLPToken?.version)
     const [mode, setMode] = useState<MigrateMode>()
     const [amount, setAmount] = useState('')
     const addTransaction = useTransactionAdder()
@@ -41,11 +41,17 @@ const useMigrateState: () => MigrateState = () => {
             const tx = await func(state.selectedLPToken, units)
 
             let exchange
+
             if (chainId === ChainId.MAINNET) {
                 exchange = 'Uniswap'
             } else if (chainId === ChainId.BSC) {
-                exchange = 'PancakeSwapV1'
+                exchange = 'PancakeSwap'
             }
+
+            // const exchange = {
+            //     [ChainId.MAINNET]: 'Uniswap',
+            //     [ChainId.BSC]: 'PancakeSwap'
+            // }
 
             addTransaction(tx, {
                 summary: `Migrate ${exchange} ${state.selectedLPToken.symbol} liquidity to SushiSwap`

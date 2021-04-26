@@ -15,7 +15,7 @@ import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
 import { BackArrow, CloseIcon } from '../../theme'
 import LPToken from '../../types/LPToken'
 import MetamaskError from '../../types/MetamaskError'
-import { EmptyState } from '../MigrateV1/EmptyState'
+import { EmptyState } from '../../components/EmptyState'
 import { Helmet } from 'react-helmet'
 import Typography from 'components/Typography'
 import { Button } from '../../components'
@@ -80,14 +80,6 @@ interface PositionCardProps {
 }
 
 const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: PositionCardProps) => {
-    let version
-    if (exchange === 'Uniswap') {
-        version = 'v2'
-    } else if (exchange === 'PancakeSwapV1') {
-        version = 'v1'
-    } else {
-        version = ''
-    }
     return (
         <div
             key={lpToken.address}
@@ -97,7 +89,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
             <div className="flex items-center space-x-3">
                 <DoubleCurrencyLogo currency0={lpToken.tokenA} currency1={lpToken.tokenB} size={20} />
                 <Typography>{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-                <Badge color="pink">{version}</Badge>
+                <Badge color="pink">{lpToken.version}</Badge>
             </div>
             {isSelected ? <CloseIcon /> : <ChevronRight />}
         </div>
@@ -153,7 +145,14 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
 
 const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
     const [error, setError] = useState<MetamaskError>({})
-    const sushiRollContract = useSushiRollContract()
+    const sushiRollContract = useSushiRollContract(state.selectedLPToken?.version)
+    console.log(
+        'sushiRollContract address',
+        sushiRollContract?.address,
+        state.selectedLPToken?.balance,
+        state.selectedLPToken?.version
+    )
+
     const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
     const noLiquidityTokens = !!state.selectedLPToken?.balance && state.selectedLPToken?.balance.equalTo(ZERO)
     const isButtonDisabled = !state.amount
@@ -246,7 +245,6 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
 
     return (
         <>
-            <Typography>Your {exchange} Liquidity</Typography>
             {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
                 if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
                     acc.push(
@@ -275,7 +273,7 @@ const MigrateV2 = () => {
     if (chainId === ChainId.MAINNET) {
         exchange = 'Uniswap'
     } else if (chainId === ChainId.BSC) {
-        exchange = 'PancakeSwapV1'
+        exchange = 'PancakeSwap'
     }
 
     return (
@@ -285,17 +283,12 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-4 space-y-4">
-                <div className="flex justify-between items-center">
+            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-4 space-y-3">
+                <div className="flex justify-between items-center p-3">
                     <BackArrow to="/pool" />
                     <h1 className="text-lg font-bold">Migrate {exchange} Liquidity</h1>
                     <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
                 </div>
-
-                <Typography variant="caption">
-                    Select a wallet type, select a pair, input an amount, and click migrate to remove your liquidity
-                    from {exchange} and add to SushiSwap.
-                </Typography>
 
                 {!account ? (
                     <Typography className="text-center p-4">Connect to a wallet to view your liquidity.</Typography>
@@ -306,6 +299,16 @@ const MigrateV2 = () => {
                 ) : (
                     <>
                         <MigrateModeSelect state={state} />
+                        {!state.loading && state.mode && (
+                            <div>
+                                <Typography variant="caption">Your {exchange} Liquidity</Typography>
+                                <Typography variant="caption2" className="text-secondary">
+                                    For each pool shown below, click migrate to remove your liquidity from {exchange}{' '}
+                                    and deposit it into SushiSwap.
+                                </Typography>
+                            </div>
+                        )}
+
                         <ExchangeLiquidityPairs state={state} exchange={exchange} />
                         <AmountInput state={state} />
                         <MigrateButtons state={state} exchange={exchange} />

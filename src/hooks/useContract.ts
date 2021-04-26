@@ -221,7 +221,7 @@ export function useUniV2FactoryContract(): Contract | null {
     return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
 }
 
-export function useSushiRollContract(): Contract | null {
+export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
     if (chainId) {
@@ -233,12 +233,24 @@ export function useSushiRollContract(): Contract | null {
                 address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
                 break
             case ChainId.BSC:
-                address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
+                if (version === 'v1') {
+                    address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
+                } else if (version === 'v2') {
+                    address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
+                }
                 break
         }
     }
     return useContract(address, SUSHIROLL_ABI, true)
 }
+
+// export function usePancakeRollV1Contract(): Contract | null {
+//     return useContract('0x677978dE066b3f5414eeA56644d9fCa3c75482a1', SUSHIROLL_ABI, true)
+// }
+
+// export function usePancakeRollV2Contract(): Contract | null {
+//     return useContract('', SUSHIROLL_ABI, true)
+// }
 
 export function useDashboardContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
