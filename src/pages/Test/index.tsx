@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useActiveWeb3React } from '../../hooks'
-import { toPancakeV1LiquidityToken, toPancakeV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
+import { useTrackedTokenPairs } from '../../state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { Helmet } from 'react-helmet'
 import { usePairs } from 'data/Reserves'

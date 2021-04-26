@@ -1,4 +1,4 @@
-import { ChainId, Pair, Token, PancakeV2Pair, PancakeV1Pair } from '@sushiswap/sdk'
+import { ChainId, Pair, Token } from '@sushiswap/sdk'
 import flatMap from 'lodash.flatmap'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
@@ -201,13 +201,13 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
     return new Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
 }
 
-export function toPancakeV1LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-    return new Token(tokenA.chainId, PancakeV1Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
-}
+// export function toPancakeV1LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
+//     return new Token(tokenA.chainId, PancakeV1Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
+// }
 
-export function toPancakeV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-    return new Token(tokenA.chainId, PancakeV2Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
-}
+// export function toPancakeV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
+//     return new Token(tokenA.chainId, PancakeV2Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
+// }
 
 /**
  * Returns all the pairs of tokens that are tracked by the user for the current chain ID.

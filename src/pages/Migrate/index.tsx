@@ -49,7 +49,9 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 
     return (
         <>
-            <Typography>Amount of Tokens</Typography>
+            <Typography variant="caption" className="text-secondary">
+                Amount of Tokens
+            </Typography>
 
             <div className="flex items-center relative w-full mb-4">
                 <NumericalInput
