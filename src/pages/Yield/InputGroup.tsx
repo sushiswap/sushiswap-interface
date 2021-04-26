@@ -105,44 +105,40 @@ export default function InputGroup({
                     )}
                 </div>
 
-                {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) && (
-                    <div className="px-4">
-                        <Button color="blue" disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
-                            {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
-                        </Button>
-                    </div>
-                )}
-                {approvalState === ApprovalState.APPROVED && (
-                    <div className="grid gap-4 grid-cols-2 px-4">
-                        {/* Deposit */}
-                        <div className="text-center col-span-2 md:col-span-1">
-                            {account && (
-                                <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                    Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
-                                    {type}
-                                </div>
-                            )}
-                            <div className="flex items-center relative w-full mb-4">
-                                <NumericalInput
-                                    className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
-                                    value={depositValue}
-                                    onUserInput={value => {
-                                        setDepositValue(value)
-                                    }}
-                                />
-                                {account && (
-                                    <Button
-                                        variant="outlined"
-                                        color="blue"
-                                        onClick={() => {
-                                            setDepositValue(fixedFormatting(balance.value, balance.decimals))
-                                        }}
-                                        className="absolute right-4 focus:ring focus:ring-blue border-0"
-                                    >
-                                        MAX
-                                    </Button>
-                                )}
+                <div className="grid gap-4 grid-cols-2 px-4">
+                    {/* Deposit */}
+                    <div className="text-center col-span-2 md:col-span-1">
+                        {account && (
+                            <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
+                                Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
                             </div>
+                        )}
+                        <div className="flex items-center relative w-full mb-4">
+                            <NumericalInput
+                                className="w-full p-3 bg-input rounded focus:ring focus:ring-blue pr-20"
+                                value={depositValue}
+                                onUserInput={value => {
+                                    setDepositValue(value)
+                                }}
+                            />
+                            {account && (
+                                <Button
+                                    variant="outlined"
+                                    color="blue"
+                                    onClick={() => {
+                                        setDepositValue(fixedFormatting(balance.value, balance.decimals))
+                                    }}
+                                    className="absolute right-4 focus:ring focus:ring-blue border-0"
+                                >
+                                    MAX
+                                </Button>
+                            )}
+                        </div>
+                        {approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING ? (
+                            <Button color="blue" disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
+                                {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
+                            </Button>
+                        ) : (
                             <Button
                                 color="blue"
                                 disabled={
@@ -159,54 +155,54 @@ export default function InputGroup({
                             >
                                 Deposit
                             </Button>
-                        </div>
-                        {/* Withdraw */}
-                        <div className="text-center col-span-2 md:col-span-1">
-                            {account && (
-                                <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                    Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
-                                </div>
-                            )}
-                            <div className="flex items-center relative w-full mb-4">
-                                <NumericalInput
-                                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                                    value={withdrawValue}
-                                    onUserInput={value => {
-                                        setWithdrawValue(value)
-                                    }}
-                                />
-                                {account && (
-                                    <Button
-                                        variant="outlined"
-                                        color="pink"
-                                        onClick={() => {
-                                            setWithdrawValue(fixedFormatting(staked.value, staked.decimals))
-                                        }}
-                                        className="absolute right-4 focus:ring focus:ring-pink border-0"
-                                    >
-                                        MAX
-                                    </Button>
-                                )}
-                            </div>
-                            <Button
-                                color="pink"
-                                className="border-0"
-                                disabled={
-                                    pendingTx ||
-                                    Number(withdrawValue) === 0 ||
-                                    Number(withdrawValue) > Number(fixedFormatting(staked.value, staked.decimals))
-                                }
-                                onClick={async () => {
-                                    setPendingTx(true)
-                                    await withdraw(pid, withdrawValue, pairSymbol, balance.decimals)
-                                    setPendingTx(false)
-                                }}
-                            >
-                                Withdraw
-                            </Button>
-                        </div>
+                        )}
                     </div>
-                )}
+                    {/* Withdraw */}
+                    <div className="text-center col-span-2 md:col-span-1">
+                        {account && (
+                            <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
+                                Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                            </div>
+                        )}
+                        <div className="flex items-center relative w-full mb-4">
+                            <NumericalInput
+                                className="w-full p-3 bg-input rounded focus:ring focus:ring-pink pr-20"
+                                value={withdrawValue}
+                                onUserInput={value => {
+                                    setWithdrawValue(value)
+                                }}
+                            />
+                            {account && (
+                                <Button
+                                    variant="outlined"
+                                    color="pink"
+                                    onClick={() => {
+                                        setWithdrawValue(fixedFormatting(staked.value, staked.decimals))
+                                    }}
+                                    className="absolute right-4 focus:ring focus:ring-pink border-0"
+                                >
+                                    MAX
+                                </Button>
+                            )}
+                        </div>
+                        <Button
+                            color="pink"
+                            className="border-0"
+                            disabled={
+                                pendingTx ||
+                                Number(withdrawValue) === 0 ||
+                                Number(withdrawValue) > Number(fixedFormatting(staked.value, staked.decimals))
+                            }
+                            onClick={async () => {
+                                setPendingTx(true)
+                                await withdraw(pid, withdrawValue, pairSymbol, balance.decimals)
+                                setPendingTx(false)
+                            }}
+                        >
+                            Withdraw
+                        </Button>
+                    </div>
+                </div>
                 {pending && Number(pending) > 0 && (
                     <div className=" px-4">
                         <Button

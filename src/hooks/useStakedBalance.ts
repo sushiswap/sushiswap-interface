@@ -12,6 +12,7 @@ export interface BalanceProps {
 const useStakedBalance = (pid: number, decimals = 18) => {
     // SLP is usually 18, KMP is 6
     const [balance, setBalance] = useState<BalanceProps>({ value: BigNumber.from(0), decimals: 18 })
+
     const { account } = useActiveWeb3React()
     const currentBlockNumber = useBlockNumber()
     const masterChefContract = useMasterChefContract()
