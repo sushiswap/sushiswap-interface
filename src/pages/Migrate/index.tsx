@@ -90,7 +90,10 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
         >
             <div className="flex items-center space-x-3">
                 <DoubleCurrencyLogo currency0={lpToken.tokenA} currency1={lpToken.tokenB} size={20} />
-                <Typography>{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
+                <Typography
+                    variant="body"
+                    className="text-primary"
+                >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
                 <Badge color="pink">{lpToken.version}</Badge>
             </div>
             {isSelected ? <CloseIcon /> : <ChevronRight />}
@@ -183,17 +186,19 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     }
 
     return (
-        <div className="space-y-3">
-            <div className="flex justify-between">
-                <div className="text-sm text-primary">{state.selectedLPToken.symbol}</div>
-                <div className="text-sm text-primary">{state.amount}</div>
-            </div>
+        <div className="space-y-4">
             {insufficientAmount ? (
                 <div className="text-sm text-primary">Insufficient Balance</div>
             ) : state.loading ? (
                 <Dots>Loading</Dots>
             ) : (
-                <div>
+                <>
+                    <div className="flex justify-between">
+                        <div className="text-sm text-secondary">
+                            Balance:{' '}
+                            <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
+                        </div>
+                    </div>
                     {state.mode === 'approve' && (
                         <ButtonConfirmed
                             onClick={approve}
@@ -219,7 +224,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                                 {state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
                             </ButtonConfirmed>
                         ))}
-                </div>
+                </>
             )}
             {error.message && error.code !== 4001 && (
                 <div className="text-red text-center font-medium">{error.message}</div>
@@ -285,17 +290,19 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-4 space-y-3">
+            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-4 space-y-4">
                 <div className="flex justify-between items-center p-3">
                     <BackArrow to="/pool" />
-                    <h1 className="text-lg font-bold">Migrate {exchange} Liquidity</h1>
+                    <h1 className="text-lg text-primary font-bold">Migrate {exchange} Liquidity</h1>
                     <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
                 </div>
 
                 {!account ? (
-                    <Typography className="text-center p-4">Connect to a wallet to view your liquidity.</Typography>
+                    <Typography variant="body" className="text-primary text-center p-4">
+                        Connect to a wallet to view your liquidity.
+                    </Typography>
                 ) : state.loading ? (
-                    <Typography className="text-center p-4">
+                    <Typography variant="body" className="text-primary text-center p-4">
                         <Dots>Loading</Dots>
                     </Typography>
                 ) : (
@@ -303,11 +310,11 @@ const MigrateV2 = () => {
                         <MigrateModeSelect state={state} />
                         {!state.loading && state.mode && (
                             <div>
-                                <Typography variant="caption">Your {exchange} Liquidity</Typography>
-                                <Typography variant="caption2" className="text-secondary">
+                                <Typography variant="body">Your {exchange} Liquidity</Typography>
+                                {/* <Typography variant="caption2" className="text-secondary">
                                     For each pool shown below, click migrate to remove your liquidity from {exchange}{' '}
                                     and deposit it into SushiSwap.
-                                </Typography>
+                                </Typography> */}
                             </div>
                         )}
 

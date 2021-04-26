@@ -35,27 +35,21 @@ const useLPTokensState = () => {
 
             const requests: any = {
                 [ChainId.MAINNET]: [
-                    fetch(
-                        `https://api.covalenthq.com/v1/${ChainId.MAINNET}/address/${String(
-                            account
-                        ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-                    )
+                    `https://api.covalenthq.com/v1/${ChainId.MAINNET}/address/${String(
+                        account
+                    ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
                 ],
                 [ChainId.BSC]: [
-                    fetch(
-                        `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
-                            account
-                        ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-                    ),
-                    fetch(
-                        `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
-                            account
-                        ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-                    )
+                    `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+                        account
+                    ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`,
+                    `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+                        account
+                    ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
                 ]
             }
 
-            const responses: any = await Promise.all(requests[chainId])
+            const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
 
             // const response = await fetch(
             //     `https://api.covalenthq.com/v1/${chainId}/address/${String(account).toLowerCase()}/stacks/${
