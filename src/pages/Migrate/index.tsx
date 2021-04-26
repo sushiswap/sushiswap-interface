@@ -230,7 +230,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                 <div className="text-red text-center font-medium">{error.message}</div>
             )}
             <div className="text-xs text-low-emphesis text-center">
-                {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become Sushiswap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
+                {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
             </div>
         </div>
     )
@@ -291,7 +291,7 @@ const MigrateV2 = () => {
             </Helmet>
 
             <Typography variant="hero" className="mb-4">
-                Migrate {exchange} Liquidity
+                Migrate Liquidity
             </Typography>
 
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
@@ -306,7 +306,7 @@ const MigrateV2 = () => {
                     </Typography>
                 ) : state.loading ? (
                     <Typography variant="body" className="text-primary text-center p-4">
-                        <Dots>Loading liquidity positions</Dots>
+                        <Dots>Loading your {exchange} liquidity positions</Dots>
                     </Typography>
                 ) : (
                     <>
