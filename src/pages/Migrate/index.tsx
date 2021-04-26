@@ -290,13 +290,16 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-4 space-y-4">
-                <div className="flex justify-between items-center p-3">
-                    <BackArrow to="/pool" />
-                    <h1 className="text-lg text-primary font-bold">Migrate {exchange} Liquidity</h1>
-                    <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
-                </div>
+            <Typography variant="hero" className="mb-4">
+                Migrate {exchange} Liquidity
+            </Typography>
 
+            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
+                {/* <div className="flex justify-between items-center p-3">
+                    <BackArrow to="/pool" />
+                    <div>Select your wallet</div>
+                    <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
+                </div> */}
                 {!account ? (
                     <Typography variant="body" className="text-primary text-center p-4">
                         Connect to a wallet to view your liquidity.
@@ -307,14 +310,15 @@ const MigrateV2 = () => {
                     </Typography>
                 ) : (
                     <>
+                        {!state.loading && <Typography variant="body">Your Wallet</Typography>}
                         <MigrateModeSelect state={state} />
                         {!state.loading && state.mode && (
                             <div>
-                                <Typography variant="body">Your {exchange} Liquidity</Typography>
-                                {/* <Typography variant="caption2" className="text-secondary">
-                                    For each pool shown below, click migrate to remove your liquidity from {exchange}{' '}
-                                    and deposit it into SushiSwap.
-                                </Typography> */}
+                                <Typography variant="body">Your Liquidity</Typography>
+                                <Typography variant="caption" className="text-secondary">
+                                    Click on a pool below, input the amount you wish to migrate or select max, and click
+                                    migrate.
+                                </Typography>
                             </div>
                         )}
 
