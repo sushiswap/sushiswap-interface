@@ -291,7 +291,7 @@ const MigrateV2 = () => {
             </Helmet>
 
             <Typography variant="hero" className="mb-4">
-                Migrate Liquidity
+                Migrate {exchange} Liquidity
             </Typography>
 
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
