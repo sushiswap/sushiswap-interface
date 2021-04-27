@@ -68,32 +68,32 @@ export const KASHI_ADDRESS = '0x2cBA6Ab6574646Badc84F0544d05059e57a5dc42'
 
 export const SUSHISWAP_SWAPPER_ADDRESS = '0x1766733112408b95239aD1951925567CB1203084'
 
-export const SUSHISWAP_MULTISWAPPER_ADDRESS = '0x9DBD9FF631d759D7cB0EB65b70d451a8Eb3aB050'
+// export const SUSHISWAP_MULTISWAPPER_ADDRESS = '0x4ad39BeE6F85BD5b5eE59ff001122e33E5b6C0f9'
 
-// export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
-//     [chainId in ChainId]: string
-// } = {
-//     [ChainId.MAINNET]: '0x4ad39BeE6F85BD5b5eE59ff001122e33E5b6C0f9',
-//     [ChainId.ROPSTEN]: '',
-//     [ChainId.RINKEBY]: '',
-//     [ChainId.GÖRLI]: '',
-//     [ChainId.KOVAN]: '0x9DBD9FF631d759D7cB0EB65b70d451a8Eb3aB050',
-//     [ChainId.FANTOM]: '',
-//     [ChainId.FANTOM_TESTNET]: '',
-//     [ChainId.MATIC]: '',
-//     [ChainId.MATIC_TESTNET]: '',
-//     [ChainId.XDAI]: '',
-//     [ChainId.BSC]: '',
-//     [ChainId.BSC_TESTNET]: '',
-//     [ChainId.ARBITRUM]: '',
-//     [ChainId.MOONBASE]: '',
-//     [ChainId.AVALANCHE]: '',
-//     [ChainId.FUJI]: '',
-//     [ChainId.HECO]: '',
-//     [ChainId.HECO_TESTNET]: '',
-//     [ChainId.HARMONY]: '',
-//     [ChainId.HARMONY_TESTNET]: ''
-// }
+export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
+    [chainId in ChainId]: string
+} = {
+    [ChainId.MAINNET]: '0x4ad39BeE6F85BD5b5eE59ff001122e33E5b6C0f9',
+    [ChainId.ROPSTEN]: '',
+    [ChainId.RINKEBY]: '',
+    [ChainId.GÖRLI]: '',
+    [ChainId.KOVAN]: '0x9DBD9FF631d759D7cB0EB65b70d451a8Eb3aB050',
+    [ChainId.FANTOM]: '',
+    [ChainId.FANTOM_TESTNET]: '',
+    [ChainId.MATIC]: '',
+    [ChainId.MATIC_TESTNET]: '',
+    [ChainId.XDAI]: '',
+    [ChainId.BSC]: '',
+    [ChainId.BSC_TESTNET]: '',
+    [ChainId.ARBITRUM]: '',
+    [ChainId.MOONBASE]: '',
+    [ChainId.AVALANCHE]: '',
+    [ChainId.FUJI]: '',
+    [ChainId.HECO]: '',
+    [ChainId.HECO_TESTNET]: '',
+    [ChainId.HARMONY]: '',
+    [ChainId.HARMONY_TESTNET]: ''
+}
 
 export const PEGGED_ORACLE_ADDRESS = '0x6cbfbB38498Df0E1e7A4506593cDB02db9001564'
 
