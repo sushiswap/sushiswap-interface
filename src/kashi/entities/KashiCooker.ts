@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
-import { toElastic, ZERO } from 'kashi/functions'
+import { toElastic, ZERO, maximum, minimum, e10 } from 'kashi/functions'
 import { toShare } from 'kashi/functions/bentobox'
 import { KashiPermit } from 'kashi/hooks/useKashiApproveCallback'
 import { getProviderOrSigner, getSigner } from 'utils'
@@ -125,6 +125,21 @@ export class KashiCooker {
         return this
     }
 
+    bentoDepositCollateral(amount: BigNumber): KashiCooker {
+        const useNative = this.pair.collateral.address === WETH[this.chainId].address
+
+        this.add(
+            Action.BENTO_DEPOSIT,
+            defaultAbiCoder.encode(
+                ['address', 'address', 'int256', 'int256'],
+                [useNative ? ethers.constants.AddressZero : this.pair.collateral.address, this.account, amount, 0]
+            ),
+            useNative ? amount : ZERO
+        )
+
+        return this
+    }
+
     addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {
         let share: BigNumber
         if (fromBento) {
@@ -230,6 +245,7 @@ export class KashiCooker {
     }
 
     borrow(amount: BigNumber, toBento: boolean, toAddress = ''): KashiCooker {
+        console.log('Borrow', { amount, toBento, toAddress })
         this.add(
             Action.BORROW,
             defaultAbiCoder.encode(['int256', 'address'], [amount, toAddress && toBento ? toAddress : this.account])
@@ -325,6 +341,11 @@ export class KashiCooker {
         )
 
         try {
+            console.log(
+                'cook data',
+                { actions: this.actions, values: this.values, data: this.datas }
+                // this.values.reduce((a, b) => a.add(b), ZERO)
+            )
             return {
                 success: true,
                 tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas, {
