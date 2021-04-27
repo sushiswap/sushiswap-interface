@@ -207,10 +207,17 @@ export default function Borrow({ pair }: BorrowProps) {
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
+        console.log('Cooker onExecute...')
         if (borrowValueSet) {
             if (displayUpdateOracle) {
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
+            console.log('Cooker borrow...')
+
+            if (swap && useBentoBorrow) {
+                cooker.bentoDepositCollateral(collateralValue.toBigNumber(pair.collateral.decimals))
+            }
+
             cooker.borrow(
                 borrowValue.toBigNumber(pair.asset.decimals),
                 swap || useBentoBorrow,
@@ -236,6 +243,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 account,
                 toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
             ])
+
             const data = defaultAbiCoder.encode(
                 ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
                 [
@@ -263,7 +271,7 @@ export default function Borrow({ pair }: BorrowProps) {
         if (collateralValueSet) {
             cooker.addCollateral(
                 swap ? BigNumber.from(-1) : collateralValue.toBigNumber(pair.collateral.decimals),
-                useBentoCollateral
+                useBentoCollateral || swap
             )
             summary = 'Add collateral'
         }
