@@ -332,6 +332,7 @@ export class KashiCooker {
                 })
             }
         } catch (error) {
+            console.error('KashiCooker Error: ', error)
             return {
                 success: false,
                 error: error
