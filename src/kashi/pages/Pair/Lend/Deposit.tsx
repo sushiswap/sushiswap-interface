@@ -92,7 +92,12 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
                 color="blue"
                 content={(onCook: any) => (
                     <TokenApproveButton value={value} token={assetToken} needed={!useBento}>
-                        <Button onClick={() => onCook(pair, onExecute)}>Deposit</Button>
+                        <Button
+                            onClick={() => onCook(pair, onExecute)}
+                            disabled={value.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
+                        >
+                            Deposit
+                        </Button>
                     </TokenApproveButton>
                 )}
             />
