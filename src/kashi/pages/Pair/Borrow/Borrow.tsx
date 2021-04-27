@@ -214,11 +214,11 @@ export default function Borrow({ pair }: BorrowProps) {
             cooker.borrow(
                 borrowValue.toBigNumber(pair.asset.decimals),
                 swap || useBentoBorrow,
-                swap && chainId ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId] : ''
+                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : ''
             )
             summary += (summary ? ' and ' : '') + 'Borrow'
         }
-        if (borrowValueSet && trade && chainId) {
+        if (borrowValueSet && trade) {
             const path = trade.route.path.map(token => token.address) || []
             if (path.length > 4) {
                 console.log('PATH TOO LONG!!!')
@@ -249,10 +249,10 @@ export default function Borrow({ pair }: BorrowProps) {
                 ]
             )
 
-            // console.log('Swap encoded data', data)
+            console.log('Swap encoded data', data)
 
             cooker.action(
-                SUSHISWAP_MULTISWAPPER_ADDRESS[chainId],
+                SUSHISWAP_MULTISWAPPER_ADDRESS,
                 ZERO,
                 ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
                 false,
