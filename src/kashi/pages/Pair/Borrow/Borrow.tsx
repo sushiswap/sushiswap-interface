@@ -65,6 +65,8 @@ export default function Borrow({ pair }: BorrowProps) {
               .toBigNumber(pair.collateral.decimals) || ZERO
         : ZERO
 
+    console.log('Extra collateral', extraCollateral)
+
     const swapCollateral = collateralValue.toBigNumber(pair.collateral.decimals)
 
     console.log(swapCollateral.toFixed(pair.collateral.decimals))
@@ -212,30 +214,45 @@ export default function Borrow({ pair }: BorrowProps) {
             cooker.borrow(
                 borrowValue.toBigNumber(pair.asset.decimals),
                 swap || useBentoBorrow,
-                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : ''
+                swap && chainId ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId] : ''
             )
             summary += (summary ? ' and ' : '') + 'Borrow'
         }
-        if (borrowValueSet && trade) {
+        if (borrowValueSet && trade && chainId) {
             const path = trade.route.path.map(token => token.address) || []
             if (path.length > 4) {
+                console.log('PATH TOO LONG!!!')
                 throw 'Path too long'
             }
+
+            console.log('path', path)
+
+            console.log('data', [
+                pair.asset.address,
+                pair.collateral.address,
+                extraCollateral,
+                path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                path.length > 3 ? path[2] : ethers.constants.AddressZero,
+                account,
+                toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
+            ])
             const data = defaultAbiCoder.encode(
                 ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
                 [
                     pair.asset.address,
                     pair.collateral.address,
                     extraCollateral,
-                    path.length > 2 ? path[2] : ethers.constants.AddressZero,
-                    path.length > 3 ? path[3] : ethers.constants.AddressZero,
+                    path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                    path.length > 3 ? path[2] : ethers.constants.AddressZero,
                     account,
                     toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
                 ]
             )
 
+            // console.log('Swap encoded data', data)
+
             cooker.action(
-                SUSHISWAP_MULTISWAPPER_ADDRESS,
+                SUSHISWAP_MULTISWAPPER_ADDRESS[chainId],
                 ZERO,
                 ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
                 false,
@@ -313,6 +330,43 @@ export default function Borrow({ pair }: BorrowProps) {
             <WarningsView warnings={collateralWarnings}></WarningsView>
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
+            {collateralValueSet && (
+                <div className="mb-4">
+                    {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
+                        <Button
+                            variant="outlined"
+                            size="default"
+                            color="pink"
+                            key={i}
+                            onClick={() => onMultiply(multipler)}
+                            className="mr-4 text-md focus:ring-pink"
+                        >
+                            {multipler}x
+                        </Button>
+                    ))}
+
+                    {/* <div className="pb-6">
+                        <input
+                            type="range"
+                            onChange={e => console.log(e.target.value)}
+                            min="1"
+                            max="5"
+                            step="1"
+                            className="slider w-full"
+                        />
+                        <div className="w-full flex justify-between text-center px-2">
+                            <div className="font-semibold">0.5x</div>
+                            <div className="font-semibold">0.75x</div>
+                            <div className="font-semibold">1x</div>
+                            <div className="font-semibold">1.25x</div>
+                            <div className="font-semibold">1.5x</div>
+                            <div className="font-semibold">1.75x</div>
+                            <div className="font-semibold">2x</div>
+                        </div>
+                    </div> */}
+                </div>
+            )}
+
             {borrowValueSet && (
                 <>
                     <ExchangeRateCheckBox
@@ -330,41 +384,6 @@ export default function Borrow({ pair }: BorrowProps) {
                         title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
                         help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
                     />
-                    {swap && trade && (
-                        <>
-                            <div className="mb-4">
-                                {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
-                                    <Button
-                                        variant="outlined"
-                                        size="small"
-                                        color="pink"
-                                        key={i}
-                                        onClick={() => onMultiply(multipler)}
-                                        className="mr-4"
-                                    >
-                                        {multipler}x
-                                    </Button>
-                                ))}
-                            </div>
-                            {/* <div className="pb-6">
-                                <input
-                                    type="range"
-                                    onChange={e => console.log(e.target.value)}
-                                    min="1"
-                                    max="5"
-                                    step="1"
-                                    className="slider w-full"
-                                />
-                                <div className="w-full flex justify-between text-center px-2">
-                                    <div className="font-semibold">x1</div>
-                                    <div className="font-semibold">x1.25</div>
-                                    <div className="font-semibold">x1.50</div>
-                                    <div className="font-semibold">x1.75</div>
-                                    <div className="font-semibold">x2</div>
-                                </div>
-                            </div> */}
-                        </>
-                    )}
                     {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
                 </>
             )}
