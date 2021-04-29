@@ -1480,7 +1480,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             toDecimals: 8
         },
         // vai-usd
-        '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7': {
+        '0x058316f8Bb13aCD442ee7A216C7b60CFB4Ea1B53': {
             from: '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,

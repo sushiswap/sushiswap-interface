@@ -85,11 +85,25 @@ import XVS from '../../assets/kashi/tokens/xvs-square.jpg'
 import YFI from '../../assets/kashi/tokens/yfi-square.jpg'
 import YFII from '../../assets/kashi/tokens/yfii-square.jpg'
 import ZRX from '../../assets/kashi/tokens/zrx-square.jpg'
-
 import RAMP from '../../assets/kashi/tokens/ramp-square.jpg'
 import SFI from '../../assets/kashi/tokens/sfi-square.jpg'
 import BTM from '../../assets/kashi/tokens/btm-square.jpg'
-
+import VAI from '../../assets/kashi/tokens/vai-square.jpg'
+import WOM from '../../assets/kashi/tokens/wom-square.jpg'
+import USDK from '../../assets/kashi/tokens/usdk-square.jpg'
+import TRY from '../../assets/kashi/tokens/try-square.jpg'
+import SAND from '../../assets/kashi/tokens/sand-square.jpg'
+import AKRO from '../../assets/kashi/tokens/akro-square.jpg'
+import ANKR from '../../assets/kashi/tokens/ankr-square.jpg'
+import BOR from '../../assets/kashi/tokens/bor-square.jpg'
+import AUCTION from '../../assets/kashi/tokens/auction-square.jpg'
+import FRONT from '../../assets/kashi/tokens/front-square.jpg'
+import OCEAN from '../../assets/kashi/tokens/ocean-square.jpg'
+import OKB from '../../assets/kashi/tokens/okb-square.jpg'
+import ORN from '../../assets/kashi/tokens/orn-square.jpg'
+import RAI from '../../assets/kashi/tokens/rai-square.jpg'
+import RARI from '../../assets/kashi/tokens/rari-square.jpg'
+import RGT from '../../assets/kashi/tokens/rgt-square.jpg'
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [ChainId.MAINNET]: {
         [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
@@ -176,7 +190,23 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750').toLowerCase()]: BTM,
         [String('0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f').toLowerCase()]: RAMP,
         [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT,
-        [String('0xb753428af26E81097e7fD17f40c88aaA3E04902c').toLowerCase()]: SFI
+        [String('0xb753428af26E81097e7fD17f40c88aaA3E04902c').toLowerCase()]: SFI,
+        [String('0xBd356a39BFf2cAda8E9248532DD879147221Cf76').toLowerCase()]: WOM,
+        [String('0x1c48f86ae57291F7686349F12601910BD8D470bb').toLowerCase()]: USDK,
+        [String('0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03').toLowerCase()]: TRY,
+        [String('0x3845badAde8e6dFF049820680d1F14bD3903a5d0').toLowerCase()]: SAND,
+        [String('0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7').toLowerCase()]: AKRO,
+        [String('0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4').toLowerCase()]: ANKR,
+        [String('0x3c9d6c1C73b31c837832c72E04D3152f051fc1A9').toLowerCase()]: BOR,
+        [String('0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096').toLowerCase()]: AUCTION,
+        [String('0xf8C3527CC04340b208C854E985240c02F7B7793f').toLowerCase()]: FRONT,
+        [String('0xdF574c24545E5FfEcb9a659c229253D4111d87e1').toLowerCase()]: HUSD,
+        [String('0x967da4048cD07aB37855c090aAF366e4ce1b9F48').toLowerCase()]: OCEAN,
+        [String('0x75231F58b43240C9718Dd58B4967c5114342a86c').toLowerCase()]: OKB,
+        [String('0x0258F474786DdFd37ABCE6df6BBb1Dd5dfC4434a').toLowerCase()]: ORN,
+        [String('0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919').toLowerCase()]: RAI,
+        [String('0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF').toLowerCase()]: RARI,
+        [String('0xD291E7a03283640FDc51b121aC401383A46cC623').toLowerCase()]: RGT
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
@@ -225,7 +255,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c').toLowerCase()]: BNB, // BNB
         [String('0x2170Ed0880ac9A755fd29B2688956BD959F933F8').toLowerCase()]: ETH,
         [String('0x87b008E57F640D94Ee44Fd893F0323AF933F9195').toLowerCase()]: UNKNOWN, // COIN
-        [String('0x8519EA49c997f50cefFa444d240fB655e89248Aa').toLowerCase()]: RAMP
+        [String('0x8519EA49c997f50cefFa444d240fB655e89248Aa').toLowerCase()]: RAMP,
+        [String('0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7').toLowerCase()]: VAI
     },
     [ChainId.MATIC]: {
         [String('0xD6DF932A45C0f255f85145f286eA0b292B21C90B').toLowerCase()]: AAVE,
