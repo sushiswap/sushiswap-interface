@@ -1086,6 +1086,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
+        },
+        '0xF9FCC6E1186Acf6529B1c1949453f51B4B6eEE67': {
+            from: '0x221657776846890989a759BA2973e427DfF5C9bB',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
         }
     },
     [ChainId.KOVAN]: {
