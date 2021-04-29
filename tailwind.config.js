@@ -18,7 +18,6 @@ module.exports = {
                 tl: 'to top left'
             },
             colors: {
-                // defaults to {}
                 'blue-pink': ['#27B0E6', '#FA52A0']
             },
             background: {
@@ -201,7 +200,9 @@ module.exports = {
             borderColor: ['checked', 'disabled'],
             cursor: ['disabled'],
             opacity: ['hover', 'disabled'],
-            placeholderColor: ['hover', 'active']
+            placeholderColor: ['hover', 'active'],
+            ringWidth: ['disabled'],
+            ringColor: ['disabled']
         }
     },
     plugins: [
