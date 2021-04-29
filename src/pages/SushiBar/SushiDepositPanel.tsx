@@ -8,7 +8,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import useSushiBar from 'hooks/useSushiBar'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { TYPE } from 'theme'
 import { formatFromBalance, formatToBalance } from '../../utils'
 

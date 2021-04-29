@@ -10,10 +10,11 @@ import { useHistory } from 'react-router-dom'
 import useMasterChef from 'hooks/useMasterChef'
 import usePendingSushi from 'hooks/usePendingSushi'
 import useStakedBalance from 'hooks/useStakedBalance'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
 import { Dots } from '../Pool/styleds'
 import { Button } from './components'
+// import { useTokenBalance } from '../../state/wallet/hooks'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)

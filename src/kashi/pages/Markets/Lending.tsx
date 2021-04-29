@@ -9,7 +9,7 @@ import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { useActiveWeb3React } from 'hooks'
 import { getCurrency } from 'kashi/constants'
 import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
-import useSearchAndSort from 'sushi-hooks/useSearchAndSort'
+import useSearchAndSort from 'hooks/useSearchAndSort'
 
 export default function LendingMarkets(): JSX.Element | null {
     const { chainId } = useActiveWeb3React()
