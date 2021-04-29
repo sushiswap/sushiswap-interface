@@ -338,6 +338,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // akro-usd
         '0xB23D105dF4958B4b81757e12f2151B5b5183520B': {
             from: '0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7',
             to: '0x0000000000000000000000000000000000000001',
@@ -619,6 +620,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // husd-eth
         '0x1B61BAD1495161bCb6C03DDB0E41622c0270bB1A': {
             from: '0xdF574c24545E5FfEcb9a659c229253D4111d87e1',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -836,6 +838,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        // rgt-eth
         '0xc16935B445F4BDC172e408433c8f7101bbBbE368': {
             from: '0xD291E7a03283640FDc51b121aC401383A46cC623',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -864,6 +867,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // sand-usd
         '0x35E3f7E558C04cE7eEE1629258EcbbA03B36Ec56': {
             from: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
             to: '0x0000000000000000000000000000000000000001',
