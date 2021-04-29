@@ -1,4 +1,4 @@
-import { Trade, TradeType } from '@sushiswap/sdk'
+import { ChainId, Trade, TradeType } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
@@ -118,6 +118,26 @@ export function AdvancedSwapDetailsFixed({ trade }: AdvancedSwapDetailsProps) {
                 !showRoute && (
                     <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
                         <InfoLink href={'https://analytics.sushi.com/'} target="_blank">
+                            View Analytics ↗
+                        </InfoLink>
+                    </AutoColumn>
+                )
+            )}
+            {chainId === ChainId.MATIC && trade && !showRoute ? (
+                <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
+                    <InfoLink
+                        href={
+                            'https://analytics-polygon.sushi.com/pairs/' + trade?.route.pairs[0].liquidityToken.address
+                        }
+                        target="_blank"
+                    >
+                        View Pair Analytics ↗
+                    </InfoLink>
+                </AutoColumn>
+            ) : (
+                !showRoute && (
+                    <AutoColumn style={{ padding: '12px 16px 0 16px' }}>
+                        <InfoLink href={'https://analytics-polygon.sushi.com/'} target="_blank">
                             View Analytics ↗
                         </InfoLink>
                     </AutoColumn>

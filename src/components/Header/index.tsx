@@ -68,10 +68,18 @@ export default function Header(): JSX.Element {
                                                 Apps
                                             </NavLink>
                                         )}
-                                        {chainId && (
+                                        {chainId && chainId === ChainId.MAINNET && (
                                             <ExternalLink
                                                 id={`analytics-nav-link`}
                                                 href={'https://analytics.sushi.com'}
+                                            >
+                                                Analytics
+                                            </ExternalLink>
+                                        )}
+                                        {chainId && chainId === ChainId.MATIC && (
+                                            <ExternalLink
+                                                id={`analytics-nav-link`}
+                                                href={'https://analytics-polygon.sushi.com'}
                                             >
                                                 Analytics
                                             </ExternalLink>
@@ -267,8 +275,13 @@ export default function Header(): JSX.Element {
                             <NavLink id={`tool-nav-link`} to={'/tools'}>
                                 Tools
                             </NavLink>
-                            {chainId && (
+                            {chainId && chainId === ChainId.MAINNET && (
                                 <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
+                                    Analytics
+                                </ExternalLink>
+                            )}
+                            {chainId && chainId === ChainId.MATIC && (
+                                <ExternalLink id={`analytics-nav-link`} href={'https://analytics-polygon.sushi.com'}>
                                     Analytics
                                 </ExternalLink>
                             )}
