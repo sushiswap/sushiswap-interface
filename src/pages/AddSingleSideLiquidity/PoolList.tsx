@@ -1,13 +1,19 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { ChevronDown, ChevronUp } from 'react-feather'
 import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
 import { Text } from 'rebass'
+import { Helmet } from 'react-helmet'
 
+import { useFuse, useSortableData } from 'hooks'
+import useFarms from 'hooks/useFarms'
+import { Dots, Paper } from 'components'
+import { formattedNum, formattedPercent } from '../../utils'
 import { RowBetween, RowFixed } from '../../components/Row'
 import Button from '../../components/Button'
 import { AutoColumn } from '../../components/Column'
-import Card from '../../components/Card'
+import { Card, CardHeader, Search, DoubleLogo } from '../Yield/components'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 
 const PageWrapper = styled(AutoColumn)`
@@ -30,78 +36,140 @@ const StyledPositionCard = styled(Card)`
   margin: 6px 0; 
 `
 
-const PoolList = () => {
-    const mockData = [
-        {
-            poolName: 'ETH-WEENUS',
-            poolAddress: '0x37f4d05b879c364187caa02678ba041f7b5f5c71',
-            asset0: {
-                address: '0x37f4d05b879c364187caa02678ba041f7b5f5c71',
-                symbol: 'ETH',
-                decimals: 18,
-                getSymbol: () => '',
-                getName: () => ''
-            },
-            asset1: {
-                address: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
-                symbol: 'WBTC',
-                decimals: 18,
-                getSymbol: () => '',
-                getName: () => ''
-            }
-        },
-        {
-            poolName: 'ETH-UNI',
-            poolAddress: '0x4fc5a04948935f850ef3504bf69b2672f5b4bdc6',
-            asset0: {
-                address: '0x0a180a76e4466bf68a7f86fb029bed3cccfaaac5',
-                symbol: 'WETH',
-                decimals: 18,
-                getSymbol: () => 'WETH',
-                getName: () => 'Wrapped Ether'
-            },
-            asset1: {
-                address: '0x71d82eb6a5051cff99582f4cdf2ae9cd402a4882',
-                symbol: 'UNI',
-                decimals: 18,
-                getSymbol: () => 'UNI',
-                getName: () => 'Uniswap'
-            }
-        }
-    ]
+const TokenBalance = ({ farm }: any) => {
+    const history = useHistory()
 
     return (
-        <PageWrapper>
-            <Text>Select a pool to zap into</Text>
-            {mockData.map(pool => {
-                return (
-                    <StyledPositionCard key={pool.poolAddress}>
-                        <AutoColumn gap="12px">
-                            <FixedHeightRow>
-                                <RowFixed>
-                                    <Text fontWeight={500} fontSize={16}>
-                                        {pool.poolName}
-                                    </Text>
-                                </RowFixed>
-                            </FixedHeightRow>
-                            <FixedHeightRow>
-                                <RowFixed>
-                                    <DoubleCurrencyLogo
-                                        currency0={pool.asset0}
-                                        currency1={pool.asset1}
-                                        margin={true}
-                                        size={20}
-                                    />
-                                </RowFixed>
-                                <RowFixed>
-                                    <Link to={`/zap/${pool.poolAddress}/ETH`}>Add Liquidity</Link>
-                                </RowFixed>
-                            </FixedHeightRow>
-                        </AutoColumn>
-                    </StyledPositionCard>
-                )
-            })}
-        </PageWrapper>
+        <>
+            {farm.type === 'SLP' && (
+                <Paper className="bg-dark-800">
+                    <div
+                        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        onClick={() => history.push(`zap/${farm.pairAddress}/ETH`)}
+                    >
+                        <div className="flex items-center">
+                            <div className="mr-4">
+                                <DoubleLogo
+                                    a0={farm.liquidityPair.token0.id}
+                                    a1={farm.liquidityPair.token1.id}
+                                    size={32}
+                                    margin={true}
+                                />
+                            </div>
+                            <div className="hidden sm:block">
+                                {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div>
+                                <div className="text-right">{formattedNum(farm.tvl, true)} </div>
+                                <div className="text-secondary text-right">
+                                    {formattedNum(farm.slpBalance / 1e18, false)} SLP
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <div className="text-right font-semibold text-xl">
+                                {formattedPercent(farm.roiPerYear * 100)}{' '}
+                            </div>
+                        </div>
+                    </div>
+                </Paper>
+            )}
+        </>
+    )
+}
+
+const PoolList = () => {
+    const query = useFarms()
+    const farms = query?.farms
+    const userFarms = query?.userFarms
+
+    // Search Setup
+    const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
+    const { result, search, term } = useFuse({
+        data: farms && farms.length > 0 ? farms : [],
+        options
+    })
+    const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
+    // Sorting Setup
+    const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults, {
+        key: 'tvl',
+        direction: 'descending'
+    })
+
+    return (
+        <>
+            <Helmet>
+                <title>Zap | Sushi</title>
+                <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
+            </Helmet>
+            <div className="container max-w-2xl mx-auto px-0 sm:px-4">
+                <Card
+                    className="h-full bg-dark-900"
+                    header={
+                        <CardHeader className="flex justify-between items-center bg-dark-800">
+                            <div className="flex w-full justify-between flex-col items-center">
+                                <div className="hidden md:flex items-center">
+                                    {/* <BackButton defaultRoute="/pool" /> */}
+                                    <div className="text-lg mr-2 mb-2 whitespace-nowrap">Select a Pool to Zap Into</div>
+                                </div>
+                                <Search search={search} term={term} />
+                            </div>
+                        </CardHeader>
+                    }
+                >
+                    {/* All Farms */}
+                    <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
+                        <div
+                            className="flex items-center cursor-pointer hover:text-secondary"
+                            onClick={() => requestSort('symbol')}
+                        >
+                            <div>Pool</div>
+                            {sortConfig &&
+                                sortConfig.key === 'symbol' &&
+                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                        </div>
+                        <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
+                            <div className="flex items-center justify-end">
+                                <div>TVL</div>
+                                {sortConfig &&
+                                    sortConfig.key === 'tvl' &&
+                                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                        (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                            </div>
+                        </div>
+                        <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
+                            <div className="flex items-center justify-end">
+                                <div>APR</div>
+                                {sortConfig &&
+                                    sortConfig.key === 'roiPerYear' &&
+                                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
+                                        (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-col space-y-2">
+                        {items && items.length > 0 ? (
+                            items.map((farm: any, i: number) => {
+                                return <TokenBalance key={farm.address + '_' + i} farm={farm} />
+                            })
+                        ) : (
+                            <>
+                                {term ? (
+                                    <div className="w-full text-center py-6">No Results.</div>
+                                ) : (
+                                    <div className="w-full text-center py-6">
+                                        <Dots>Fetching Instruments</Dots>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                </Card>
+            </div>
+        </>
     )
 }
 
