@@ -173,10 +173,10 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI,
         [String('0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83').toLowerCase()]: YFII,
         [String('0xE41d2489571d322189246DaFA5ebDe1F4699F498').toLowerCase()]: ZRX,
-        [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT,
+        [String('0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750').toLowerCase()]: BTM,
         [String('0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f').toLowerCase()]: RAMP,
-        [String('0xb753428af26E81097e7fD17f40c88aaA3E04902c').toLowerCase()]: SFI,
-        [String('0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750').toLowerCase()]: BTM
+        [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT,
+        [String('0xb753428af26E81097e7fD17f40c88aaA3E04902c').toLowerCase()]: SFI
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
@@ -223,7 +223,9 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63').toLowerCase()]: XVS, // XVS
         [String('0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e').toLowerCase()]: YFI,
         [String('0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c').toLowerCase()]: BNB, // BNB
-        [String('0x2170Ed0880ac9A755fd29B2688956BD959F933F8').toLowerCase()]: ETH
+        [String('0x2170Ed0880ac9A755fd29B2688956BD959F933F8').toLowerCase()]: ETH,
+        [String('0x87b008E57F640D94Ee44Fd893F0323AF933F9195').toLowerCase()]: UNKNOWN, // COIN
+        [String('0x8519EA49c997f50cefFa444d240fB655e89248Aa').toLowerCase()]: RAMP
     },
     [ChainId.MATIC]: {
         [String('0xD6DF932A45C0f255f85145f286eA0b292B21C90B').toLowerCase()]: AAVE,

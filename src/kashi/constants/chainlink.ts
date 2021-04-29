@@ -245,7 +245,10 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'XVS', name: 'Venus', address: '0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63', decimals: 18 },
         { symbol: 'YFI', name: 'yearn.finance', address: '0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e', decimals: 18 },
         { symbol: 'WBNB', name: 'Wrapped BNB', address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', decimals: 18 },
-        { symbol: 'WETH', name: 'Wrapped Ether', address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', decimals: 18 }
+        { symbol: 'WETH', name: 'Wrapped Ether', address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', decimals: 18 },
+        { symbol: 'COIN', name: 'coin_artist', address: '0x87b008E57F640D94Ee44Fd893F0323AF933F9195', decimals: 18 },
+        { symbol: 'RAMP', name: 'RAMP DEFI', address: '0x8519EA49c997f50cefFa444d240fB655e89248Aa', decimals: 18 },
+        { symbol: 'VAI', name: 'VAI Stablecoin', address: '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7', decimals: 18 }
     ],
     [ChainId.HECO]: [
         { symbol: 'AAVE', name: 'AAVE Token', address: '0x202b4936fE1a82A4965220860aE46d7d3939Bb25', decimals: 18 },
@@ -1064,7 +1067,6 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
-
         '0x2885d15b8Af22648b98B122b22FDF4D2a56c6023': {
             from: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
             to: '0x0000000000000000000000000000000000000001',
@@ -1453,8 +1455,33 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+        // yfi-usd
         '0xD7eAa5Bf3013A96e3d515c055Dbd98DbdC8c620D': {
             from: '0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        // coin-usd
+        '0x2d1AB79D059e21aE519d88F978cAF39d74E31AEB': {
+            from: '0x87b008E57F640D94Ee44Fd893F0323AF933F9195',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        // ramp-usd
+        '0xD1225da5FC21d17CaE526ee4b6464787c6A71b4C': {
+            from: '0x8519EA49c997f50cefFa444d240fB655e89248Aa',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        // vai-usd
+        '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7': {
+            from: '0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
             fromDecimals: 18,
