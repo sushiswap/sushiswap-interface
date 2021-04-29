@@ -5,7 +5,6 @@ import Web3ReactManager from '../components/Web3ReactManager'
 import ReactGA from 'react-ga'
 import Routes from '../routes'
 import { useDispatch } from 'react-redux'
-import Transactions from './Transactions'
 import { AppDispatch } from '../state'
 import { updateUserDarkMode } from '../state/user/actions'
 import { parse } from 'qs'
@@ -59,7 +58,6 @@ function App(): JSX.Element {
                     <Polling />
                     <Web3ReactManager>
                         <Routes />
-                            <Route exact path="/transactions" component={Transactions} />
                     </Web3ReactManager>
                 </div>
             </div>
