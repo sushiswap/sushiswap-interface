@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 import { Currency } from '@sushiswap/sdk'
 import { LinkStyledButton } from '../../theme'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
+import { shortenAddress } from '../../utils'
 
 const mock = {
     transactions: [
@@ -26,7 +27,7 @@ export default function Transactions() {
                 <title>Transactions | Sushi</title>
             </Helmet>
 
-            <div className="w-full max-w-2xl p-4">
+            <div className="w-full max-w-2xl p-4 mb-4">
                 <div className="mb-3">Go Back</div>
                 <div className="text-xl font-medium">Your History & Positions</div>
             </div>
@@ -34,10 +35,10 @@ export default function Transactions() {
             <div className="bg-dark-900 w-full max-w-2xl rounded mb-3 p-4">
                 <div className="flex justify-between">
                     <div>
-                        <div>0x25E6C5A2a60c960E5b0708c9C500C89e46399E22</div>
-                        <div className="text-sm text-gray-400">0.01373 ETH</div>
+                        <div>{shortenAddress('0x25E6C5A2a60c960E5b0708c9C500C89e46399E22')}</div>
+                        <div className="text-sm text-gray-400 font-semibold">0.01373 ETH</div>
                     </div>
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-gray-400 font-semibold">
                         <div>Copy Address</div>
                         <div>View on Explorer</div>
                     </div>
@@ -45,14 +46,16 @@ export default function Transactions() {
             </div>
 
             <div className="bg-dark-900 w-full max-w-2xl rounded p-4">
-                <div className="flex justify-between items-center rounded bg-dark-800 p-4 mt-4 mb-6">
-                    <div>Transaction History</div>
-                    <div>Liquidity Positions</div>
+                <div className="w-auto flex justify-between items-center rounded bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto mt-3 mb-6">
+                    <div className="w-3/6 p-3 text-center text-primary rounded-lg text-bold bg-dark-900">
+                        Transaction History
+                    </div>
+                    <div className="w-3/6 p-3 text-center text-secondary rounded-lg text-sm">Liquidity Positions</div>
                 </div>
                 <div className="flex justify-between mb-5">
                     <div className="text-xl font-medium">Your Transaction History</div>
                     <LinkStyledButton>
-                        <span className="text-sm">Clear History</span>
+                        <span className="text-sm font-semibold">Clear History</span>
                     </LinkStyledButton>
                 </div>
                 <div>
