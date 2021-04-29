@@ -299,7 +299,6 @@ export default function Borrow({ pair }: BorrowProps) {
                 maxTitle="Balance"
                 max={collateralBalance}
                 showMax={true}
-                disabled={swap}
             />
 
             <SmartNumberInput
@@ -313,15 +312,34 @@ export default function Borrow({ pair }: BorrowProps) {
                 setUseBento={setUseBentoBorrow}
                 maxTitle="Max"
                 max={nextMaxBorrowPossible}
-                disabled={swap}
             />
 
             {collateralValueSet && (
+                <SwapCheckbox
+                    color="pink"
+                    swap={swap}
+                    setSwap={setSwap}
+                    title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
+                    help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
+                />
+            )}
+
+            {borrowValueSet && (
+                <ExchangeRateCheckBox
+                    color="pink"
+                    pair={pair}
+                    updateOracle={updateOracle}
+                    setUpdateOracle={setUpdateOracle}
+                    desiredDirection="up"
+                />
+            )}
+
+            {collateralValueSet && (
                 <div className="mb-4">
-                    {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
+                    {['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2.0'].map((multipler, i) => (
                         <Button
                             variant="outlined"
-                            size="default"
+                            size="small"
                             color="pink"
                             key={i}
                             onClick={() => onMultiply(multipler)}
@@ -331,7 +349,7 @@ export default function Borrow({ pair }: BorrowProps) {
                         </Button>
                     ))}
 
-                    {/* <div className="my-4">
+                    {/* <div className="mb-4">
                         <input
                             type="range"
                             onChange={e => {
@@ -351,26 +369,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 </div>
             )}
 
-            {borrowValueSet && (
-                <>
-                    <ExchangeRateCheckBox
-                        color="pink"
-                        pair={pair}
-                        updateOracle={updateOracle}
-                        setUpdateOracle={setUpdateOracle}
-                        desiredDirection="up"
-                    />
-
-                    <SwapCheckbox
-                        color="pink"
-                        swap={swap}
-                        setSwap={setSwap}
-                        title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
-                        help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
-                    />
-                    {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
-                </>
-            )}
+            {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
 
             <WarningsView warnings={collateralWarnings}></WarningsView>
             <WarningsView warnings={borrowWarnings}></WarningsView>
