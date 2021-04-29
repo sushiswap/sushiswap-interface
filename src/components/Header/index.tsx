@@ -21,7 +21,7 @@ export default function Header(): JSX.Element {
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
     return (
-        <Disclosure as="nav" className="w-screen bg-transparent gradiant-border-bottom z-10">
+        <Disclosure as="nav" className="w-screen gradiant-border-bottom z-10 backdrop-filter backdrop-blur">
             {({ open }) => (
                 <>
                     <div className="px-4 py-1.5">
