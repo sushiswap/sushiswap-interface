@@ -46,7 +46,7 @@ export default function Borrow({ pair }: BorrowProps) {
     const collateralToken = useCurrency(pair.collateral.address) || undefined
 
     // Calculated
-    const assetNative = WETH[chainId || 1].address == pair.collateral.address
+    const assetNative = WETH[chainId || 1].address === pair.collateral.address
     const collateralBalance = useBentoCollateral
         ? pair.collateral.bentoBalance
         : assetNative
@@ -65,11 +65,7 @@ export default function Borrow({ pair }: BorrowProps) {
               .toBigNumber(pair.collateral.decimals) || ZERO
         : ZERO
 
-    console.log('Extra collateral', extraCollateral)
-
     const swapCollateral = collateralValue.toBigNumber(pair.collateral.decimals)
-
-    console.log(swapCollateral.toFixed(pair.collateral.decimals))
 
     const nextUserCollateralValue = pair.userCollateralAmount.value
         .add(collateralValue.toBigNumber(pair.collateral.decimals))
@@ -100,7 +96,6 @@ export default function Borrow({ pair }: BorrowProps) {
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
-    // warnings on slippage
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
     const borrowAmount = borrowValue.toBigNumber(pair.asset.decimals)
@@ -207,14 +202,13 @@ export default function Borrow({ pair }: BorrowProps) {
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
-        console.log('Cooker onExecute...')
+
         if (borrowValueSet) {
             if (displayUpdateOracle) {
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
-            console.log('Cooker borrow...')
 
-            if (swap && useBentoBorrow) {
+            if (swap && !useBentoCollateral) {
                 cooker.bentoDepositCollateral(collateralValue.toBigNumber(pair.collateral.decimals))
             }
 
@@ -228,21 +222,8 @@ export default function Borrow({ pair }: BorrowProps) {
         if (borrowValueSet && trade) {
             const path = trade.route.path.map(token => token.address) || []
             if (path.length > 4) {
-                console.log('PATH TOO LONG!!!')
                 throw 'Path too long'
             }
-
-            console.log('path', path)
-
-            console.log('data', [
-                pair.asset.address,
-                pair.collateral.address,
-                extraCollateral,
-                path.length > 2 ? path[1] : ethers.constants.AddressZero,
-                path.length > 3 ? path[2] : ethers.constants.AddressZero,
-                account,
-                toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
-            ])
 
             const data = defaultAbiCoder.encode(
                 ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
@@ -256,8 +237,6 @@ export default function Borrow({ pair }: BorrowProps) {
                     toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
                 ]
             )
-
-            console.log('Swap encoded data', data)
 
             cooker.action(
                 SUSHISWAP_MULTISWAPPER_ADDRESS,
@@ -320,6 +299,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 maxTitle="Balance"
                 max={collateralBalance}
                 showMax={true}
+                disabled={swap}
             />
 
             <SmartNumberInput
@@ -333,10 +313,8 @@ export default function Borrow({ pair }: BorrowProps) {
                 setUseBento={setUseBentoBorrow}
                 maxTitle="Max"
                 max={nextMaxBorrowPossible}
+                disabled={swap}
             />
-
-            <WarningsView warnings={collateralWarnings}></WarningsView>
-            <WarningsView warnings={borrowWarnings}></WarningsView>
 
             {collateralValueSet && (
                 <div className="mb-4">
@@ -353,23 +331,21 @@ export default function Borrow({ pair }: BorrowProps) {
                         </Button>
                     ))}
 
-                    {/* <div className="pb-6">
+                    {/* <div className="my-4">
                         <input
                             type="range"
-                            onChange={e => console.log(e.target.value)}
-                            min="1"
-                            max="5"
-                            step="1"
+                            onChange={e => {
+                                onMultiply(e.target.value)
+                            }}
+                            min="0"
+                            max="2"
+                            step="0.01"
                             className="slider w-full"
                         />
                         <div className="w-full flex justify-between text-center px-2">
-                            <div className="font-semibold">0.5x</div>
-                            <div className="font-semibold">0.75x</div>
                             <div className="font-semibold">1x</div>
-                            <div className="font-semibold">1.25x</div>
-                            <div className="font-semibold">1.5x</div>
-                            <div className="font-semibold">1.75x</div>
                             <div className="font-semibold">2x</div>
+                            <div className="font-semibold">3x</div>
                         </div>
                     </div> */}
                 </div>
@@ -396,10 +372,13 @@ export default function Borrow({ pair }: BorrowProps) {
                 </>
             )}
 
+            <WarningsView warnings={collateralWarnings}></WarningsView>
+            <WarningsView warnings={borrowWarnings}></WarningsView>
+
             {/* {console.log(priceImpactSeverity > 3, !isExpertMode)} */}
 
             {swap && priceImpactSeverity > 3 && !isExpertMode ? null : (
-                <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+                <TransactionReviewView transactionReview={transactionReview} />
             )}
 
             <KashiApproveButton

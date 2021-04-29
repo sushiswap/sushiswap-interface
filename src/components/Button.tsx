@@ -3,22 +3,22 @@ import { ChevronLeft } from 'react-feather'
 import { useHistory } from 'react-router-dom'
 
 const SIZE = {
-    default: 'px-4 py-2',
+    default: 'px-4 py-3',
     small: 'px-2 py-1',
-    large: ''
+    large: 'px-4 py-3'
 }
 
 const FILLED = {
     default: 'bg-transparent',
-    blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
-    pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
+    blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
+    pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink'
 }
 
 const OUTLINED = {
     default: 'bg-transparent',
-    blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1 hover:bg-opacity-40',
-    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1 hover:bg-opacity-40',
+    blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue hover:bg-opacity-40',
+    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40',
     gradient: 'bg-gradient-to-r from-blue to-pink'
 }
 
