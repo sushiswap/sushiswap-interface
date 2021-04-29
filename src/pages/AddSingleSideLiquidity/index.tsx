@@ -1,4 +1,4 @@
-import { Currency, ETHER, ChainId } from '@sushiswap/sdk'
+import { Currency, ETHER, ChainId, JSBI } from '@sushiswap/sdk'
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
@@ -7,8 +7,10 @@ import { Text } from 'rebass'
 import { ArrowLeft } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { RowBetween, AutoRow } from '../../components/Row'
-import Button from '../../components/Button'
+// import Button from '../../components/Button'
+import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import { AutoColumn } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
@@ -30,6 +32,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useWalletModalToggle } from 'state/application/hooks'
 import useZapper from 'sushi-hooks/useZapper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { useUserSlippageTolerance } from 'state/user/hooks'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -153,7 +156,7 @@ const CardHeader = () => {
                 >
                     <StyledArrowLeft />
                 </Link>
-                <TYPE.mediumHeader fontWeight={500} fontSize="22px">
+                <TYPE.mediumHeader fontWeight={500} fontSize="22px" style={{ marginBottom: '20px' }}>
                     Zap Liquidity
                 </TYPE.mediumHeader>
                 <Settings />
@@ -173,7 +176,10 @@ const AddSingleSideLiquidity = ({
     const currency = useCurrency(currencyId)
     const { typedValue } = useZapState()
     const { onFieldInput } = useZapActionHandlers(false)
-    const { currencyBalance, parsedAmount, error, bestTrade } = useDerivedZapInfo(currency ?? undefined, poolAddress)
+    const { currencyBalance, parsedAmount, error, bestTrade, liquidityMinted } = useDerivedZapInfo(
+        currency ?? undefined,
+        poolAddress
+    )
     const { zapIn } = useZapper(currency ?? undefined)
 
     const route = bestTrade?.route
@@ -196,6 +202,15 @@ const AddSingleSideLiquidity = ({
 
     // check if user has gone through approval process, used to show two step buttons, reset on token change
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
+
+    // get custom setting values for user in bips
+    const [allowedSlippage] = useUserSlippageTolerance()
+
+    // Get min tokens received based on user slippage preferences
+    const minTokensReceived = JSBI.divide(
+        JSBI.multiply(liquidityMinted?.raw || JSBI.BigInt(0), JSBI.BigInt(1000 - allowedSlippage)),
+        JSBI.BigInt(1000)
+    )
 
     // mark when a user has submitted an approval, reset onTokenSelection for input field
     useEffect(() => {
@@ -220,6 +235,19 @@ const AddSingleSideLiquidity = ({
     )
 
     const toggleWalletModal = useWalletModalToggle()
+
+    const zapCallback = useCallback(
+        () =>
+            zapIn(
+                currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
+                poolAddress,
+                parsedAmount,
+                minTokensReceived.toString(),
+                // Hard coded Ropsten WETH for now
+                '0xc778417e063141139fce010982780140aa0cd5ab'
+            ),
+        [currency, poolAddress, parsedAmount, minTokensReceived]
+    )
 
     return (
         <>
@@ -246,20 +274,20 @@ const AddSingleSideLiquidity = ({
                         <PoolInfo poolAddress={poolAddress} currency={currency ?? undefined} />
                         <>
                             {!account ? (
-                                <Button style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
+                                <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
                                     Connect Wallet
-                                </Button>
+                                </ButtonLight>
                             ) : !typedValue ? (
-                                <Button style={{ marginTop: '20px' }}>
+                                <ButtonLight disabled={true} style={{ marginTop: '20px' }}>
                                     <TYPE.main mb="4px">Enter an amount</TYPE.main>
-                                </Button>
+                                </ButtonLight>
                             ) : noRoute ? (
-                                <Button style={{ marginTop: '20px' }}>
+                                <ButtonError style={{ marginTop: '20px' }}>
                                     <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-                                </Button>
+                                </ButtonError>
                             ) : showApproveFlow ? (
                                 <RowBetween>
-                                    <Button
+                                    <ButtonPrimary
                                         onClick={approveCallback}
                                         disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
                                         style={{ width: '48%' }}
@@ -275,20 +303,9 @@ const AddSingleSideLiquidity = ({
                                         ) : (
                                             'Approve ' + currency?.getSymbol(chainId)
                                         )}
-                                    </Button>
-                                    <Button
-                                        onClick={() =>
-                                            zapIn(
-                                                currencyId === 'ETH'
-                                                    ? '0x0000000000000000000000000000000000000000'
-                                                    : currencyId,
-                                                poolAddress,
-                                                parsedAmount,
-                                                0,
-                                                // Hard coded WETH for now
-                                                '0x37f4d05b879c364187caa02678ba041f7b5f5c71'
-                                            )
-                                        }
+                                    </ButtonPrimary>
+                                    <ButtonPrimary
+                                        onClick={() => zapCallback()}
                                         style={{ width: '48%' }}
                                         id="swap-button"
                                         disabled={approval !== ApprovalState.APPROVED}
@@ -296,31 +313,20 @@ const AddSingleSideLiquidity = ({
                                         <Text fontSize={20} fontWeight={500}>
                                             {error ?? 'Zap'}
                                         </Text>
-                                    </Button>
+                                    </ButtonPrimary>
                                 </RowBetween>
                             ) : (
-                                <Button
+                                <ButtonPrimary
                                     style={{ marginTop: '20px' }}
                                     disabled={
                                         !parsedAmount || error !== undefined || approval !== ApprovalState.APPROVED
                                     }
-                                    onClick={() =>
-                                        zapIn(
-                                            currency === ETHER
-                                                ? '0x0000000000000000000000000000000000000000'
-                                                : currencyId,
-                                            poolAddress,
-                                            parsedAmount,
-                                            0,
-                                            // Hard coded Ropsten WETH for now
-                                            '0xc778417e063141139fce010982780140aa0cd5ab'
-                                        )
-                                    }
+                                    onClick={() => zapCallback()}
                                 >
                                     <Text fontSize={20} fontWeight={500}>
                                         {error ?? 'Zap'}
                                     </Text>
-                                </Button>
+                                </ButtonPrimary>
                             )}
                         </>
                     </AutoColumn>
