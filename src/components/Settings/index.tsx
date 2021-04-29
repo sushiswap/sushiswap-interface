@@ -10,7 +10,8 @@ import {
     useExpertModeManager,
     useUserSingleHopOnly,
     useUserSlippageTolerance,
-    useUserTransactionTTL
+    useUserTransactionTTL,
+    useUserArcherETHTip
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { ButtonError } from '../ButtonLegacy'
@@ -92,6 +93,8 @@ export default function SettingsTab() {
 
     const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
 
+    const [userArcherETHTip, setUserArcherETHTip] = useUserArcherETHTip()
+
     // show confirmation view before turning on
     const [showConfirmation, setShowConfirmation] = useState(false)
 
@@ -158,6 +161,8 @@ export default function SettingsTab() {
                             setRawSlippage={setUserslippageTolerance}
                             deadline={ttl}
                             setDeadline={setTtl}
+                            ethTip={userArcherETHTip}
+                            setETHTip={setUserArcherETHTip}
                         />
                         <div className="text-base font-semibold text-high-emphesis">Interface Settings</div>
                         <RowBetween>

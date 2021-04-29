@@ -244,6 +244,14 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
     ]
 }
 
+export const ARCHER_ROUTER_ADDRESS: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: '0x87535b160E251167FB7abE239d2467d1127219E4',
+}
+
+export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction'
+}
+
 export interface WalletInfo {
     connector?: AbstractConnector
     name: string
@@ -344,6 +352,8 @@ export const NetworkContextName = 'NETWORK'
 export const INITIAL_ALLOWED_SLIPPAGE = 50
 // 20 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 20
+// default tip amount, 0.05 ETH
+export const DEFAULT_ARCHER_ETH_TIP: JSBI = JSBI.multiply(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)), JSBI.BigInt(5))
 
 // used for rewards deadlines
 export const BIG_INT_SECONDS_IN_WEEK = JSBI.BigInt(60 * 60 * 24 * 7)

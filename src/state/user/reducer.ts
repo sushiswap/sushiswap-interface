@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, DEFAULT_ARCHER_ETH_TIP } from '../../constants'
 import { updateVersion } from '../global/actions'
 import {
     addSerializedPair,
@@ -14,7 +14,9 @@ import {
     updateUserDeadline,
     updateUserExpertMode,
     updateUserSingleHopOnly,
-    updateUserSlippageTolerance
+    updateUserSlippageTolerance,
+    updateUserUseArcher,
+    updateUserArcherETHTip
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -51,6 +53,8 @@ export interface UserState {
 
     timestamp: number
     URLWarningVisible: boolean
+    userUseArcher: boolean // use Archer or go directly to router
+    userArcherETHTip: string // ETH tip for Archer, as full BigInt string 
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -67,7 +71,9 @@ export const initialState: UserState = {
     tokens: {},
     pairs: {},
     timestamp: currentTimestamp(),
-    URLWarningVisible: true
+    URLWarningVisible: true,
+    userUseArcher: false,
+    userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString()
 }
 
 export default createReducer(initialState, builder =>
@@ -83,6 +89,10 @@ export default createReducer(initialState, builder =>
             // noinspection SuspiciousTypeOfGuard
             if (typeof state.userDeadline !== 'number') {
                 state.userDeadline = DEFAULT_DEADLINE_FROM_NOW
+            }
+
+            if (typeof state.userArcherETHTip !== 'number') {
+                state.userArcherETHTip = DEFAULT_ARCHER_ETH_TIP.toString()
             }
 
             state.lastUpdateVersionTimestamp = currentTimestamp()
@@ -143,5 +153,11 @@ export default createReducer(initialState, builder =>
         })
         .addCase(toggleURLWarning, state => {
             state.URLWarningVisible = !state.URLWarningVisible
+        })
+        .addCase(updateUserUseArcher, (state, action) => {
+            state.userUseArcher = action.payload.userUseArcher
+        })
+        .addCase(updateUserArcherETHTip, (state, action) => {
+            state.userArcherETHTip = action.payload.userArcherETHTip
         })
 )

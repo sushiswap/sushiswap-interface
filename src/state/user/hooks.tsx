@@ -18,7 +18,9 @@ import {
     updateUserDeadline,
     updateUserExpertMode,
     updateUserSingleHopOnly,
-    updateUserSlippageTolerance
+    updateUserSlippageTolerance,
+    updateUserUseArcher,
+    updateUserArcherETHTip
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -276,3 +278,37 @@ export function useTrackedTokenPairs(): [Token, Token][] {
         return Object.keys(keyed).map(key => keyed[key])
     }, [combinedList])
 }
+
+export function useUserUseArcher(): [boolean, (newUseArcher: boolean) => void] {
+    const dispatch = useDispatch<AppDispatch>()
+  
+    const useArcher = useSelector<AppState, AppState['user']['userUseArcher']>(
+      state => state.user.userUseArcher
+    )
+  
+    const setUseArcher = useCallback(
+      (newUseArcher: boolean) => {
+        dispatch(updateUserUseArcher({ userUseArcher: newUseArcher }))
+      },
+      [dispatch]
+    )
+  
+    return [useArcher, setUseArcher]
+  }
+  
+  export function useUserArcherETHTip(): [string, (newArcherETHTip: string) => void] {
+    const dispatch = useDispatch<AppDispatch>()
+    const userArcherETHTip = useSelector<AppState, AppState['user']['userArcherETHTip']>(state => {
+      return state.user.userArcherETHTip
+    })
+  
+    const setUserArcherETHTip = useCallback(
+      (newArcherETHTip: string) => {
+        dispatch(updateUserArcherETHTip({ userArcherETHTip: newArcherETHTip }))
+      },
+      [dispatch]
+    )
+  
+    return [userArcherETHTip, setUserArcherETHTip]
+  }
+  

@@ -24,7 +24,7 @@ import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../
 import SwapHeader from '../../components/swap/SwapHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import TokenWarningModal from '../../components/TokenWarningModal'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { ARCHER_RELAY_URI, ARCHER_ROUTER_ADDRESS, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
@@ -41,7 +41,7 @@ import {
     useSwapActionHandlers,
     useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } from '../../state/user/hooks'
+import { useExpertModeManager, useUserArcherETHTip, useUserSingleHopOnly, useUserSlippageTolerance, useUserTransactionTTL, useUserUseArcher } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
@@ -50,6 +50,7 @@ import { ClickableText } from '../Pool/styleds'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'
 import { Helmet } from 'react-helmet'
+import { getRouterAddress } from '../../utils'
 
 export default function Swap() {
     const loadedUrlParams = useDefaultsFromURLSearch()
@@ -88,6 +89,13 @@ export default function Swap() {
 
     // get custom setting values for user
     const [allowedSlippage] = useUserSlippageTolerance()
+    const [ttl] = useUserTransactionTTL()
+    const [useArcher] = useUserUseArcher()
+    const [archerETHTip] = useUserArcherETHTip()
+
+    // archer
+    const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
+    const doArcher = archerRelay !== undefined && useArcher
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
@@ -175,7 +183,9 @@ export default function Swap() {
     const noRoute = !route
 
     // check whether the user has approved the router on the input token
-    const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage)
+    const [approval, approveCallback] = useApproveCallbackFromTrade(
+        (doArcher ? ARCHER_ROUTER_ADDRESS[chainId ?? 1] : getRouterAddress(chainId)),
+        trade, allowedSlippage)
 
     // check if user has gone through approval process, used to show two step buttons, reset on token change
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
@@ -191,7 +201,8 @@ export default function Swap() {
     const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
 
     // the callback to execute the swap
-    const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient)
+    const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient,
+        doArcher ? ttl : undefined)
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
@@ -339,6 +350,7 @@ export default function Swap() {
                         onConfirm={handleSwap}
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
+                        archerETHTip={doArcher ? archerETHTip : undefined}
                     />
 
                     <AutoColumn gap={'md'}>
@@ -587,7 +599,7 @@ export default function Swap() {
                 </Wrapper>
             </div>
             {!swapIsUnsupported ? (
-                <AdvancedSwapDetailsDropdown trade={trade} />
+                <AdvancedSwapDetailsDropdown trade={trade} archerETHTip={doArcher ? archerETHTip : undefined} />
             ) : (
                 <UnsupportedCurrencyFooter
                     show={swapIsUnsupported}

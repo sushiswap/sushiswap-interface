@@ -1,4 +1,4 @@
-import { currencyEquals, Trade } from '@sushiswap/sdk'
+import { CurrencyAmount, currencyEquals, Trade } from '@sushiswap/sdk'
 import React, { useCallback, useMemo } from 'react'
 import { useActiveWeb3React } from '../../hooks'
 import TransactionConfirmationModal, {
@@ -34,7 +34,8 @@ export default function ConfirmSwapModal({
     swapErrorMessage,
     isOpen,
     attemptingTxn,
-    txHash
+    txHash,
+    archerETHTip
 }: {
     isOpen: boolean
     trade: Trade | undefined
@@ -47,6 +48,7 @@ export default function ConfirmSwapModal({
     onConfirm: () => void
     swapErrorMessage: string | undefined
     onDismiss: () => void
+    archerETHTip?: string
 }) {
     const { chainId } = useActiveWeb3React()
 
@@ -75,14 +77,17 @@ export default function ConfirmSwapModal({
                 disabledConfirm={showAcceptChanges}
                 swapErrorMessage={swapErrorMessage}
                 allowedSlippage={allowedSlippage}
+                archerETHTip={archerETHTip}
             />
         ) : null
-    }, [allowedSlippage, onConfirm, showAcceptChanges, swapErrorMessage, trade])
+    }, [allowedSlippage, onConfirm, showAcceptChanges, swapErrorMessage, trade, archerETHTip])
 
     // text to show while loading
     const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(6)} ${trade?.inputAmount?.currency?.getSymbol(
         chainId
     )} for ${trade?.outputAmount?.toSignificant(6)} ${trade?.outputAmount?.currency?.getSymbol(chainId)}`
+
+    const pendingText2 = archerETHTip ? `Plus ${CurrencyAmount.ether(archerETHTip).toSignificant(6)} ETH Miner Tip` : undefined
 
     const confirmationContent = useCallback(
         () =>
@@ -107,6 +112,7 @@ export default function ConfirmSwapModal({
             hash={txHash}
             content={confirmationContent}
             pendingText={pendingText}
+            pendingText2={pendingText2}
         />
     )
 }

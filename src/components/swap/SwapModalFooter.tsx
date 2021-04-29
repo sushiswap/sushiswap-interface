@@ -1,4 +1,4 @@
-import { Trade, TradeType } from '@sushiswap/sdk'
+import { CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
 import React, { useContext, useMemo, useState } from 'react'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
@@ -24,13 +24,15 @@ export default function SwapModalFooter({
     onConfirm,
     allowedSlippage,
     swapErrorMessage,
-    disabledConfirm
+    disabledConfirm,
+    archerETHTip
 }: {
     trade: Trade
     allowedSlippage: number
     onConfirm: () => void
     swapErrorMessage: string | undefined
-    disabledConfirm: boolean
+    disabledConfirm: boolean,
+    archerETHTip?: string
 }) {
     const { chainId } = useActiveWeb3React()
     const [showInverted, setShowInverted] = useState<boolean>(false)
@@ -110,6 +112,19 @@ export default function SwapModalFooter({
                             : '-'}
                     </TYPE.black>
                 </RowBetween>
+                { archerETHTip && (
+                <RowBetween>
+                    <RowFixed>
+                        <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+                        Miner Tip
+                        </TYPE.black>
+                        <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
+                    </RowFixed>
+                    <TYPE.black fontSize={14}>
+                        {CurrencyAmount.ether(archerETHTip).toExact()} ETH
+                    </TYPE.black>
+                </RowBetween>
+                )}
             </AutoColumn>
 
             <AutoRow>

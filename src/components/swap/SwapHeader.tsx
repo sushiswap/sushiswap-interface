@@ -1,15 +1,57 @@
 import React, { useState } from 'react'
 import Settings from '../Settings'
 import { NavLink } from '../Link'
+import Toggle from '../Toggle'
+import { useActiveWeb3React } from '../../hooks'
+import { ChainId } from '@sushiswap/sdk'
+import { useUserUseArcher } from '../../state/user/hooks'
+import QuestionHelper from '../QuestionHelper'
+import Logo from '../Logo'
+import styled from 'styled-components'
 import animationData from '../../assets/animation/settings-slider.json'
 import profileAnimationData from '../../assets/animation/wallet.json'
+import ArcherLogo from '../../assets/svg/archer-logo.svg'
 
 import Lottie from 'lottie-react'
 import Gas from '../Gas'
 
+
+const ArcherWrapper = styled.div<{ active?: boolean }>`
+    padding: 2px;
+    border: double 1px transparent;
+    border-radius: 0.375rem;
+    background-image: ${({ active }) => (active ? 'linear-gradient(#202231, #202231), linear-gradient(to right, #6AB04C , #5545BF)' : '#202231')} ;
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+`
+
+const ArcherLogoHolder = styled(Logo)<{ size: string }>`
+    width: ${({ size }) => size};
+    height: ${({ size }) => size};
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
+    cursor: pointer;
+`
+
+const ClickableArcherLogoWrapper = styled.div<{ size: string }>`
+    padding: 0;
+    margin: 0;
+    width: ${({ size }) => size};
+    height: ${({ size }) => size};
+`
+
+function ClickableArcherLogo({size} : {size: string}) {
+    return (
+        <ClickableArcherLogoWrapper size={size} onClick={() => window.open('https://archerdao.io', '_blank')}>
+            <ArcherLogoHolder size={size} srcs={[ArcherLogo]} />
+        </ClickableArcherLogoWrapper>
+    )
+}
+
 export default function SwapHeader(): JSX.Element {
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
+    const { chainId } = useActiveWeb3React()
+    const [useArcher, setUseArcher] = useUserUseArcher()
     return (
         <div className="flex justify-between space-x-3 pt-4 px-4">
             <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
@@ -35,6 +77,21 @@ export default function SwapHeader(): JSX.Element {
                     Liquidity
                 </NavLink>
             </div>
+            {
+                chainId === ChainId.MAINNET && (
+                    <ArcherWrapper className="flex items-center md:p-3" active={useArcher}>
+                        <ClickableArcherLogo size="32px"/>
+                        <QuestionHelper text="Use the Archer Network to mine the transaction." />
+                        <div className="pl-1">
+                            <Toggle
+                                id="toggle-archer-button"
+                                isActive={useArcher}
+                                toggle={() => setUseArcher(!useArcher)}
+                            />
+                        </div>
+                    </ArcherWrapper>
+                )
+            }
             <div className="flex items-center rounded md:border-2 md:border-dark-800 md:p-2">
                 <div className="grid grid-flow-col gap-3">
                     {/* <div className="hidden md:flex space-x-3 items-center bg-dark-800 hover:bg-dark-700 rounded-sm h-full w-full px-2 py-1.5 cursor-pointer">

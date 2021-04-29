@@ -1,4 +1,4 @@
-import { Trade, TradeType } from '@sushiswap/sdk'
+import { CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
@@ -13,7 +13,7 @@ import FormattedPriceImpact from './FormattedPriceImpact'
 import SwapRoute from './SwapRoute'
 import { ExternalLink } from '../Link'
 
-function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippage: number }) {
+function TradeSummary({ trade, allowedSlippage, archerETHTip }: { trade: Trade; allowedSlippage: number, archerETHTip?: string }) {
     const theme = useContext(ThemeContext)
     const { chainId } = useActiveWeb3React()
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
@@ -59,6 +59,18 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
                             : '-'}
                     </div>
                 </RowBetween>
+                
+                {archerETHTip && (
+                <RowBetween>
+                    <RowFixed>
+                        <div className="text-secondary text-sm">Miner Tip</div>
+                        <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
+                    </RowFixed>
+                    <div className="text-sm font-bold text-high-emphesis">
+                        {CurrencyAmount.ether(archerETHTip).toExact()} ETH
+                    </div>
+                </RowBetween>
+                )}
             </AutoColumn>
         </>
     )
@@ -66,9 +78,10 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
 
 export interface AdvancedSwapDetailsProps {
     trade?: Trade
+    archerETHTip?: string
 }
 
-export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
+export function AdvancedSwapDetails({ trade, archerETHTip }: AdvancedSwapDetailsProps) {
     const theme = useContext(ThemeContext)
 
     const [allowedSlippage] = useUserSlippageTolerance()
@@ -79,7 +92,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
         <AutoColumn gap="0px">
             {trade && (
                 <>
-                    <TradeSummary trade={trade} allowedSlippage={allowedSlippage} />
+                    <TradeSummary trade={trade} allowedSlippage={allowedSlippage} archerETHTip={archerETHTip} />
                     {showRoute && (
                         <>
                             <RowBetween style={{ padding: '0 16px' }}>

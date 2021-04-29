@@ -9,6 +9,8 @@ import { ethers } from 'ethers'
 import Numeral from 'numeral'
 import Fraction from 'entities/Fraction'
 import { TokenAddressMap } from '../state/lists/hooks'
+import ArcherSwapRouterABI from '../constants/abis/ArcherSwapRouter.json'
+import { ARCHER_ROUTER_ADDRESS } from '../constants'
 
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
     if (value) {
@@ -499,6 +501,10 @@ export function getRouterAddress(chainId?: ChainId) {
 // account is optional
 export function getRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
     return getContract(getRouterAddress(chainId), IUniswapV2Router02ABI, library, account)
+}
+
+export function getArcherRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
+    return getContract(ARCHER_ROUTER_ADDRESS[chainId as ChainId] ?? '', ArcherSwapRouterABI, library, account)
 }
 
 export function escapeRegExp(string: string): string {

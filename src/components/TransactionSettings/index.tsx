@@ -1,3 +1,4 @@
+import { CurrencyAmount, ETHER } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useContext, useRef, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
@@ -5,6 +6,7 @@ import { TYPE } from '../../theme'
 import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
+import { tryParseAmount } from '../../state/swap/hooks'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -13,6 +15,10 @@ enum SlippageError {
 }
 
 enum DeadlineError {
+    InvalidInput = 'InvalidInput'
+}
+
+enum ETHTipError {
     InvalidInput = 'InvalidInput'
 }
 
@@ -88,19 +94,23 @@ export interface SlippageTabsProps {
     setRawSlippage: (rawSlippage: number) => void
     deadline: number
     setDeadline: (deadline: number) => void
+    ethTip: string,
+    setETHTip: (ethTip: string) => void,
 }
 
-export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline }: SlippageTabsProps) {
+export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, ethTip, setETHTip }: SlippageTabsProps) {
     const theme = useContext(ThemeContext)
 
     const inputRef = useRef<HTMLInputElement>()
 
     const [slippageInput, setSlippageInput] = useState('')
     const [deadlineInput, setDeadlineInput] = useState('')
+    const [ethTipInput, setETHTipInput] = useState('')
 
     const slippageInputIsValid =
         slippageInput === '' || (rawSlippage / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
     const deadlineInputIsValid = deadlineInput === '' || (deadline / 60).toString() === deadlineInput
+    const ethTipInputIsValid = ethTipInput === '' || CurrencyAmount.ether(ethTip).toExact() === ethTipInput
 
     let slippageError: SlippageError | undefined
     if (slippageInput !== '' && !slippageInputIsValid) {
@@ -119,6 +129,13 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
     } else {
         deadlineError = undefined
     }
+
+    let ethTipError: ETHTipError | undefined
+    if (ethTipInput !== '' && !ethTipInputIsValid) {
+        ethTipError = ETHTipError.InvalidInput
+    } else {
+        ethTipError = undefined
+    } 
 
     function parseCustomSlippage(value: string) {
         setSlippageInput(value)
@@ -139,6 +156,16 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
             if (!Number.isNaN(valueAsInt) && valueAsInt > 0) {
                 setDeadline(valueAsInt)
             }
+        } catch {}
+    }
+
+    function parseCustomETHTip(value: string) {
+        setETHTipInput(value)
+    
+        try {
+          const valueAsCurrencyAmount = tryParseAmount(value, ETHER)
+          if (valueAsCurrencyAmount)
+            setETHTip(valueAsCurrencyAmount.raw.toString())
         } catch {}
     }
 
@@ -246,6 +273,31 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                     </OptionCustom>
                     <TYPE.body style={{ paddingLeft: '8px' }} fontSize={14}>
                         minutes
+                    </TYPE.body>
+                </RowFixed>
+            </AutoColumn>
+
+            <AutoColumn gap="sm">
+                <RowFixed>
+                    <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
+                        Miner Tip
+                    </TYPE.black>
+                    <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
+                    </RowFixed>
+                    <RowFixed>
+                    <OptionCustom style={{ width: '80px' }} tabIndex={-1}>
+                        <Input
+                        color={!!ethTipError ? 'red' : undefined}
+                        onBlur={() => {
+                            parseCustomETHTip(CurrencyAmount.ether(ethTip).toExact())
+                        }}
+                        placeholder={CurrencyAmount.ether(ethTip).toExact()}
+                        value={ethTipInput}
+                        onChange={e => parseCustomETHTip(e.target.value)}
+                        />
+                    </OptionCustom>
+                    <TYPE.body style={{ paddingLeft: '8px' }} fontSize={14}>
+                        ETH
                     </TYPE.body>
                 </RowFixed>
             </AutoColumn>
