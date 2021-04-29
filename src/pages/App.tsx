@@ -99,7 +99,7 @@ function App(): JSX.Element {
                             <Route exact strict path="/yield" component={Yield} />
                             <Route exact strict path="/vesting" component={Vesting} />
 
-                            {(chainId === ChainId.MAINNET || chainId === ChainId.BSC) && (
+                            {(chainId === ChainId.MAINNET || chainId === ChainId.BSC || chainId === ChainId.MATIC) && (
                                 <Route exact strict path="/migrate" component={Migrate} />
                             )}
                             <Route exact strict path="/migrate/v2" render={() => <Redirect to="/migrate" />} />
