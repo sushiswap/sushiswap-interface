@@ -53,12 +53,12 @@ function BentoBox(): JSX.Element {
                                 <img alt="" src={KashiNeonSign} className="block m-auto w-full h-auto mb-4" />
                                 {account ? (
                                     <Link to={'/bento/kashi/borrow'}>
-                                        <Button
-                                            color="gradient"
+                                        <div
+                                            className="w-full border-gradient py-2 text-center"
                                             // className="w-full rounded text-lg text-high-emphesis px-4 py-2"
                                         >
                                             Enter
-                                        </Button>
+                                        </div>
                                     </Link>
                                 ) : (
                                     <Web3Status />

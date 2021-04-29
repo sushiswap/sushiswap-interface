@@ -224,7 +224,6 @@ module.exports = {
             addUtilities(
                 {
                     '.border-gradient': {
-                        padding: '2px',
                         border: 'double 1px transparent',
                         borderRadius: '0.375rem',
                         backgroundImage:
