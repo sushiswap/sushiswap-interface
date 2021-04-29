@@ -245,6 +245,14 @@ export default function Pool() {
                                     </StyledInternalLink>
                                 </Text>
                             )}
+                            {chainId === ChainId.MATIC && (
+                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                                    Have Liquidity on QuickSwap?{' '}
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                        Migrate Now.
+                                    </StyledInternalLink>
+                                </Text>
+                            )}
                         </AutoColumn>
                     </AutoColumn>
                 </AutoColumn>
