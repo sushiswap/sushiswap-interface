@@ -185,7 +185,8 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             address: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
             decimals: 18
         },
-        { symbol: 'HT', name: 'Huobi Token', address: '0x6f259637dcD74C767781E37Bc6133cd6A68aa161', decimals: 18 }
+        { symbol: 'HT', name: 'Huobi Token', address: '0x6f259637dcD74C767781E37Bc6133cd6A68aa161', decimals: 18 },
+        { symbol: 'RAMP', name: 'RAMP DEFI', address: '0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f', decimals: 18 }
     ],
     [ChainId.KOVAN]: [
         { symbol: 'WETH', name: 'Wrapped Ether', address: '0xd0A1E359811322d97991E03f863a0C30C2cF029C', decimals: 18 },
@@ -1067,6 +1068,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
         },
         '0xE1329B3f6513912CAf589659777b66011AEE5880': {
             from: '0x6f259637dcD74C767781E37Bc6133cd6A68aa161',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        '0x4EA6Ec4C1691C62623122B213572b2be5A618C0d': {
+            from: '0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
             fromDecimals: 18,

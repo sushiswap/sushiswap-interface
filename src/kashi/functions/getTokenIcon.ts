@@ -86,6 +86,8 @@ import YFI from '../../assets/kashi/tokens/yfi-square.jpg'
 import YFII from '../../assets/kashi/tokens/yfii-square.jpg'
 import ZRX from '../../assets/kashi/tokens/zrx-square.jpg'
 
+import RAMP from '../../assets/kashi/tokens/ramp-square.jpg'
+
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [ChainId.MAINNET]: {
         [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
@@ -170,7 +172,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI,
         [String('0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83').toLowerCase()]: YFII,
         [String('0xE41d2489571d322189246DaFA5ebDe1F4699F498').toLowerCase()]: ZRX,
-        [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT // HT
+        [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT,
+        [String('0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f').toLowerCase()]: RAMP
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
