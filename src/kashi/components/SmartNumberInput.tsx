@@ -22,6 +22,7 @@ type SmartNumberInputProps = {
     setPinMax?: any
     showMax?: boolean
     disabled?: boolean
+    useBentoDisabled?: boolean
 }
 
 export default function SmartNumberInput({
@@ -40,7 +41,8 @@ export default function SmartNumberInput({
     pinMax = false,
     setPinMax,
     showMax = false,
-    disabled = false
+    disabled = false,
+    useBentoDisabled = false
 }: SmartNumberInputProps) {
     return (
         <>
@@ -59,10 +61,11 @@ export default function SmartNumberInput({
                             variant="outlined"
                             size="small"
                             color={color}
-                            className={'focus:ring focus:ring-' + color}
+                            className={'disabled:cursor-not-allowed focus:ring focus:ring-' + color}
                             onClick={() => {
                                 setUseBento(!useBento)
                             }}
+                            disabled={useBentoDisabled}
                         >
                             {useBento ? 'BentoBox' : 'Wallet'}
                         </Button>

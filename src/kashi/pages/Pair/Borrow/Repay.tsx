@@ -302,6 +302,7 @@ export default function Repay({ pair }: RepayProps) {
                 setPinMax={setPinRepayMax}
                 showMax={!swap}
                 disabled={swap}
+                useBentoDisabled={swap}
             />
 
             <SmartNumberInput
@@ -323,8 +324,6 @@ export default function Repay({ pair }: RepayProps) {
                 disabled={swap}
             />
 
-            <WarningsView warnings={warnings} />
-
             <SwapCheckbox
                 color="pink"
                 swap={swap}
@@ -332,33 +331,25 @@ export default function Repay({ pair }: RepayProps) {
                     resetRepayState()
                     setSwap(value)
                 }}
-                title={`Swap removed ${pair.collateral.symbol} for ${pair.asset.symbol} and repay`}
+                title={`Swap ${pair.collateral.symbol} collateral for ${pair.asset.symbol} and repay`}
                 help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions."
             />
 
+            {removeValueSet && (
+                <ExchangeRateCheckBox
+                    color="pink"
+                    pair={pair}
+                    updateOracle={updateOracle}
+                    setUpdateOracle={setUpdateOracle}
+                    desiredDirection="up"
+                />
+            )}
+
+            <WarningsView warnings={warnings} />
+
             {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
-            {/* <ExchangeRateCheckBox
-                color="pink"
-                pair={pair}
-                updateOracle={updateOracle}
-                setUpdateOracle={setUpdateOracle}
-                desiredDirection="up"
-            /> */}
-
-            {/* {removeValueSet && (
-                <>
-                    <ExchangeRateCheckBox
-                        color="pink"
-                        pair={pair}
-                        updateOracle={updateOracle}
-                        setUpdateOracle={setUpdateOracle}
-                        desiredDirection="up"
-                    />
-                </>
-            )} */}
-
-            {swap && priceImpactSeverity > 3 && isExpertMode ? null : (
+            {((swap && priceImpactSeverity < 3) || isExpertMode) && (
                 <TransactionReviewView transactionReview={transactionReview} />
             )}
 

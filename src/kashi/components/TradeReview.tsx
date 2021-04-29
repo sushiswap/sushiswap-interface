@@ -62,7 +62,7 @@ function TradeReview({ trade, allowedSlippage }: { trade: Trade | undefined; all
                     )}
                 </div>
             ) : (
-                <div className="text-lg text-secondary">No liquidity found to do swap</div>
+                <div className="text-lg text-secondary mb-4">No liquidity found to do swap</div>
             )}
         </>
     )

@@ -197,7 +197,8 @@ export default function Borrow({ pair }: BorrowProps) {
             borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
         collateralWarnings.broken ||
         (borrowValue.length > 0 && borrowWarnings.broken) ||
-        (swap && priceImpactSeverity > 3 && !isExpertMode)
+        (swap && priceImpactSeverity > 3 && !isExpertMode) ||
+        !collateralValueSet
 
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
@@ -335,48 +336,52 @@ export default function Borrow({ pair }: BorrowProps) {
             )}
 
             {collateralValueSet && (
-                <div className="mb-4">
-                    {['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2.0'].map((multipler, i) => (
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            color="pink"
-                            key={i}
-                            onClick={() => onMultiply(multipler)}
-                            className="mr-4 text-md focus:ring-pink"
-                        >
-                            {multipler}x
-                        </Button>
-                    ))}
+                <>
+                    <div className="mb-4">
+                        {['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2.0'].map((multipler, i) => (
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                color="pink"
+                                key={i}
+                                onClick={() => {
+                                    onMultiply(multipler)
+                                    setSwap(true)
+                                }}
+                                className="mr-4 text-md focus:ring-pink"
+                            >
+                                {multipler}x
+                            </Button>
+                        ))}
 
-                    {/* <div className="mb-4">
-                        <input
-                            type="range"
-                            onChange={e => {
-                                onMultiply(e.target.value)
-                            }}
-                            min="0"
-                            max="2"
-                            step="0.01"
-                            className="slider w-full"
-                        />
-                        <div className="w-full flex justify-between text-center px-2">
-                            <div className="font-semibold">1x</div>
-                            <div className="font-semibold">2x</div>
-                            <div className="font-semibold">3x</div>
-                        </div>
-                    </div> */}
-                </div>
+                        {/* <div className="mb-4">
+                                <input
+                                    type="range"
+                                    onChange={e => {
+                                        onMultiply(e.target.value)
+                                    }}
+                                    min="0"
+                                    max="2"
+                                    step="0.01"
+                                    className="slider w-full"
+                                />
+                                <div className="w-full flex justify-between text-center px-2">
+                                    <div className="font-semibold">1x</div>
+                                    <div className="font-semibold">2x</div>
+                                    <div className="font-semibold">3x</div>
+                                </div>
+                            </div> */}
+                    </div>
+                </>
             )}
 
-            {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
-
             <WarningsView warnings={collateralWarnings}></WarningsView>
+
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
-            {/* {console.log(priceImpactSeverity > 3, !isExpertMode)} */}
+            {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
-            {swap && priceImpactSeverity > 3 && !isExpertMode ? null : (
+            {collateralValueSet && ((swap && priceImpactSeverity < 3) || isExpertMode) && (
                 <TransactionReviewView transactionReview={transactionReview} />
             )}
 
