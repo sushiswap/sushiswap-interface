@@ -169,7 +169,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x23693431dE4CcCAe05d0CAF63bE0f1dcFcDf4906').toLowerCase()]: XTZ,
         [String('0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e').toLowerCase()]: YFI,
         [String('0xa1d0E215a23d7030842FC67cE582a6aFa3CCaB83').toLowerCase()]: YFII,
-        [String('0xE41d2489571d322189246DaFA5ebDe1F4699F498').toLowerCase()]: ZRX
+        [String('0xE41d2489571d322189246DaFA5ebDe1F4699F498').toLowerCase()]: ZRX,
+        [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT // HT
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,

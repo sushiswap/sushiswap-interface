@@ -67,7 +67,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             address: '0xf8C3527CC04340b208C854E985240c02F7B7793f',
             decimals: 18
         },
-        { symbol: 'FXS', name: 'Frax Share', address: '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', decimals: 18 },
+        { symbol: 'FRX', name: 'Frax Share', address: '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', decimals: 18 },
         { symbol: 'FTM', name: 'Fantom Token', address: '0x4E15361FD6b4BB609Fa63C81A2be19d873717870', decimals: 18 },
         { symbol: 'FTX Token', name: 'FTT', address: '0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9', decimals: 18 },
         { symbol: 'GRT', name: 'Graph Token', address: '0xc944E90C64B2c07662A292be6244BDf05Cda44a7', decimals: 18 },
@@ -154,6 +154,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         { symbol: 'SXP', name: 'Swipe', address: '0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9', decimals: 18 },
         { symbol: 'TOMOE', name: 'TomoChain', address: '0x05D3606d5c81EB9b7B18530995eC9B29da05FaBa', decimals: 18 },
         { symbol: 'TRU', name: 'TrueFi', address: '0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784', decimals: 8 },
+        { symbol: 'TRY', name: 'TRYfinance', address: '0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03', decimals: 18 },
         { symbol: 'TUSD', name: 'TrueUSD', address: '0x0000000000085d4780B73119b644AE5ecd22b376', decimals: 18 },
         {
             symbol: 'UMA',
@@ -183,7 +184,8 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
             name: '0x Protocol Token',
             address: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
             decimals: 18
-        }
+        },
+        { symbol: 'HT', name: 'Huobi Token', address: '0x6f259637dcD74C767781E37Bc6133cd6A68aa161', decimals: 18 }
     ],
     [ChainId.KOVAN]: [
         { symbol: 'WETH', name: 'Wrapped Ether', address: '0xd0A1E359811322d97991E03f863a0C30C2cF029C', decimals: 18 },
@@ -930,6 +932,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 8,
             toDecimals: 8
         },
+        '0xB09fC5fD3f11Cf9eb5E1C5Dba43114e3C9f477b5': {
+            from: '0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
         '0x3886BA987236181D98F2401c507Fb8BeA7871dF2': {
             from: '0x0000000000085d4780B73119b644AE5ecd22b376',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -1051,6 +1060,13 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
         },
         '0x2885d15b8Af22648b98B122b22FDF4D2a56c6023': {
             from: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 18,
+            toDecimals: 8
+        },
+        '0xE1329B3f6513912CAf589659777b66011AEE5880': {
+            from: '0x6f259637dcD74C767781E37Bc6133cd6A68aa161',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
             fromDecimals: 18,
