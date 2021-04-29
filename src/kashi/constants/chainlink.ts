@@ -429,6 +429,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // bor-usd
         '0xf8D0EaFd81104002234819ABe752bCa0d41b097F': {
             from: '0x3c9d6c1C73b31c837832c72E04D3152f051fc1A9',
             to: '0x0000000000000000000000000000000000000001',
@@ -1059,6 +1060,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
+
         '0x2885d15b8Af22648b98B122b22FDF4D2a56c6023': {
             from: '0xE41d2489571d322189246DaFA5ebDe1F4699F498',
             to: '0x0000000000000000000000000000000000000001',
@@ -1066,7 +1068,14 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
-
+        // btm-usd
+        '0x9fCCF42D21AB278e205e7Bb310D8979F8f4B5751': {
+            from: '0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750',
+            to: '0x0000000000000000000000000000000000000001',
+            decimals: 8,
+            fromDecimals: 8,
+            toDecimals: 8
+        },
         // bat-usd
         '0x9441D7556e7820B5ca42082cfa99487D56AcA958': {
             from: '0x0D8775F648430679A709E98d2b0Cb6250d2887EF',
@@ -1075,7 +1084,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
-
+        // rep-usd
         '0xF9FCC6E1186Acf6529B1c1949453f51B4B6eEE67': {
             from: '0x221657776846890989a759BA2973e427DfF5C9bB',
             to: '0x0000000000000000000000000000000000000001',
@@ -1083,6 +1092,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // ramp-usd
         '0x4EA6Ec4C1691C62623122B213572b2be5A618C0d': {
             from: '0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f',
             to: '0x0000000000000000000000000000000000000001',
@@ -1090,6 +1100,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // ht-usd
         '0xE1329B3f6513912CAf589659777b66011AEE5880': {
             from: '0x6f259637dcD74C767781E37Bc6133cd6A68aa161',
             to: '0x0000000000000000000000000000000000000001',
@@ -1097,6 +1108,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 8
         },
+        // sfi-eth
         '0xeA286b2584F79Cd4D322Fe107d9683971c890596': {
             from: '0xb753428af26E81097e7fD17f40c88aaA3E04902c',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',

@@ -88,12 +88,12 @@ import ZRX from '../../assets/kashi/tokens/zrx-square.jpg'
 
 import RAMP from '../../assets/kashi/tokens/ramp-square.jpg'
 import SFI from '../../assets/kashi/tokens/sfi-square.jpg'
+import BTM from '../../assets/kashi/tokens/btm-square.jpg'
 
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [ChainId.MAINNET]: {
         [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
         [String('0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9').toLowerCase()]: AAVE,
-
         [String('0xc14777C94229582E5758C5a79b83DDE876b9BE98').toLowerCase()]: ADA,
         [String('0xADE00C28244d5CE17D72E40330B1c318cD12B7c3').toLowerCase()]: ADX,
         [String('0xa1faa113cbE53436Df28FF0aEe54275c13B40975').toLowerCase()]: ALPHA,
@@ -175,7 +175,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xE41d2489571d322189246DaFA5ebDe1F4699F498').toLowerCase()]: ZRX,
         [String('0x6f259637dcD74C767781E37Bc6133cd6A68aa161').toLowerCase()]: HT,
         [String('0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f').toLowerCase()]: RAMP,
-        [String('0xb753428af26E81097e7fD17f40c88aaA3E04902c').toLowerCase()]: SFI
+        [String('0xb753428af26E81097e7fD17f40c88aaA3E04902c').toLowerCase()]: SFI,
+        [String('0xcB97e65F07DA24D46BcDD078EBebd7C6E6E3d750').toLowerCase()]: BTM
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
