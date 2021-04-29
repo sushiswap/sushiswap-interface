@@ -402,3 +402,107 @@ export function usePancakeV1FactoryContract(): Contract | null {
         false
     )
 }
+
+export function useQuickSwapFactoryContract(): Contract | null {
+    return useContract(
+        '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [
+            {
+                type: 'constructor',
+                stateMutability: 'nonpayable',
+                payable: false,
+                inputs: [{ type: 'address', name: '_feeToSetter', internalType: 'address' }]
+            },
+            {
+                type: 'event',
+                name: 'PairCreated',
+                inputs: [
+                    { type: 'address', name: 'token0', internalType: 'address', indexed: true },
+                    { type: 'address', name: 'token1', internalType: 'address', indexed: true },
+                    { type: 'address', name: 'pair', internalType: 'address', indexed: false },
+                    { type: 'uint256', name: '', internalType: 'uint256', indexed: false }
+                ],
+                anonymous: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'allPairs',
+                inputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+                name: 'allPairsLength',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [{ type: 'address', name: 'pair', internalType: 'address' }],
+                name: 'createPair',
+                inputs: [
+                    { type: 'address', name: 'tokenA', internalType: 'address' },
+                    { type: 'address', name: 'tokenB', internalType: 'address' }
+                ],
+                constant: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'feeTo',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'feeToSetter',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'getPair',
+                inputs: [
+                    { type: 'address', name: '', internalType: 'address' },
+                    { type: 'address', name: '', internalType: 'address' }
+                ],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [],
+                name: 'setFeeTo',
+                inputs: [{ type: 'address', name: '_feeTo', internalType: 'address' }],
+                constant: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [],
+                name: 'setFeeToSetter',
+                inputs: [{ type: 'address', name: '_feeToSetter', internalType: 'address' }],
+                constant: false
+            }
+        ],
+        false
+    )
+}

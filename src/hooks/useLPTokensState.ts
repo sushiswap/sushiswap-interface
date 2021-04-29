@@ -1,5 +1,5 @@
 import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
-import { useDashboardContract } from 'hooks/useContract'
+import { useDashboardContract, useDashboard2Contract, useQuickSwapFactoryContract } from 'hooks/useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useActiveWeb3React } from '../hooks'
 import LPToken from '../types/LPToken'
@@ -19,8 +19,8 @@ export interface LPTokensState {
 const useLPTokensState = () => {
     const { account, chainId } = useActiveWeb3React()
     const dashboardContract = useDashboardContract()
-    const quickSwapFactoryContract = useQuickSwapFactoryContract()
     const dashboard2Contract = useDashboard2Contract()
+    const quickSwapFactoryContract = useQuickSwapFactoryContract()
     const [lpTokens, setLPTokens] = useState<LPToken[]>([])
     const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
     const [selectedLPTokenAllowed, setSelectedLPTokenAllowed] = useState(false)
