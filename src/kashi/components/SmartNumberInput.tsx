@@ -22,7 +22,7 @@ type SmartNumberInputProps = {
     setPinMax?: any
     showMax?: boolean
     disabled?: boolean
-    useBentoDisabled?: boolean
+    switchDisabled?: boolean
 }
 
 export default function SmartNumberInput({
@@ -42,7 +42,7 @@ export default function SmartNumberInput({
     setPinMax,
     showMax = false,
     disabled = false,
-    useBentoDisabled = false
+    switchDisabled = false
 }: SmartNumberInputProps) {
     return (
         <>
@@ -65,7 +65,7 @@ export default function SmartNumberInput({
                             onClick={() => {
                                 setUseBento(!useBento)
                             }}
-                            disabled={useBentoDisabled}
+                            disabled={switchDisabled}
                         >
                             {useBento ? 'BentoBox' : 'Wallet'}
                         </Button>

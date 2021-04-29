@@ -300,9 +300,9 @@ export default function Repay({ pair }: RepayProps) {
                 max={balance}
                 pinMax={pinRepayMax}
                 setPinMax={setPinRepayMax}
-                showMax={!swap}
-                disabled={swap}
-                useBentoDisabled={swap}
+                showMax={!swap && !pair.currentUserBorrowAmount.value.isZero()}
+                disabled={swap || pair.currentUserBorrowAmount.value.isZero()}
+                switchDisabled={swap || pair.currentUserBorrowAmount.value.isZero()}
             />
 
             <SmartNumberInput
@@ -319,21 +319,24 @@ export default function Repay({ pair }: RepayProps) {
                 setPinMax={setPinRemoveMax}
                 showMax={
                     pair.currentUserBorrowAmount.value.eq(displayRepayValue.toBigNumber(pair.asset.decimals)) ||
-                    pair.currentUserBorrowAmount.value.eq(0)
+                    pair.currentUserBorrowAmount.value.isZero()
                 }
-                disabled={swap}
+                disabled={swap || pair.userCollateralAmount.value.isZero()}
+                switchDisabled={pair.userCollateralAmount.value.isZero()}
             />
 
-            <SwapCheckbox
-                color="pink"
-                swap={swap}
-                setSwap={(value: boolean) => {
-                    resetRepayState()
-                    setSwap(value)
-                }}
-                title={`Swap ${pair.collateral.symbol} collateral for ${pair.asset.symbol} and repay`}
-                help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions."
-            />
+            {!pair.currentUserBorrowAmount.value.isZero() && (
+                <SwapCheckbox
+                    color="pink"
+                    swap={swap}
+                    setSwap={(value: boolean) => {
+                        resetRepayState()
+                        setSwap(value)
+                    }}
+                    title={`Swap ${pair.collateral.symbol} collateral for ${pair.asset.symbol} and repay`}
+                    help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions."
+                />
+            )}
 
             {removeValueSet && (
                 <ExchangeRateCheckBox
