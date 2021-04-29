@@ -23,7 +23,7 @@ import { BigNumber, ethers } from 'ethers'
 import { toShare, ZERO, e10, minimum, maximum } from 'kashi/functions'
 import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
 import SmartNumberInput from 'kashi/components/SmartNumberInput'
-import { ExchangeRateCheckBox, SwapCheckbox } from 'components/Checkbox'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
 
 interface BorrowProps {
     pair: any
