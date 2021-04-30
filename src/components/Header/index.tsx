@@ -48,12 +48,12 @@ export default function Header(): JSX.Element {
                                         >
                                             {t('pool')}
                                         </NavLink>
-                                        {chainId === ChainId.MAINNET && (
+                                        {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
                                             <NavLink id={`yield-nav-link`} to={'/yield'}>
                                                 Yield
                                             </NavLink>
                                         )}
-                                        {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
+                                        {chainId === ChainId.MAINNET && (
                                             <NavLink id={`stake-nav-link`} to={'/stake'}>
                                                 Stake
                                             </NavLink>
@@ -252,7 +252,7 @@ export default function Header(): JSX.Element {
                             >
                                 {t('pool')}
                             </NavLink>
-                            {chainId === ChainId.MAINNET && (
+                            {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
                                     Yield
                                 </NavLink>

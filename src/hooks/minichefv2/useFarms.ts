@@ -7,8 +7,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { exchange_matic, minichefv2_matic } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
 import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
-import { POOL_DENY } from '../constants'
-import Fraction from '../entities/Fraction'
+import { POOL_DENY } from '../../constants'
+import Fraction from '../../entities/Fraction'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {

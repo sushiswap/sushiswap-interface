@@ -42,8 +42,8 @@ import {
 // Additional Tools
 import Tools from './Tools'
 import Vesting from './Vesting'
-import Yield from './Yield'
-import Yield2 from './Yield/V2'
+import Yield from './Yield/masterchefv1'
+import Yield2 from './Yield/minichefv2'
 import ReactGA from 'react-ga'
 import Test from './Test'
 
