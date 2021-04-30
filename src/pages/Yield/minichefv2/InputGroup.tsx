@@ -7,7 +7,7 @@ import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import useMasterChef from 'hooks/useMasterChef'
+import useMiniChefV2 from 'hooks/minichefv2/useMiniChefV2'
 import usePendingSushi from 'hooks/minichefv2/usePendingSushi'
 import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
 import useTokenBalance from 'sushi-hooks/useTokenBalance'
@@ -58,10 +58,11 @@ export default function InputGroup({
             new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''),
             ethers.constants.MaxUint256.toString()
         ),
-        MASTERCHEF_ADDRESS[1]
+        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F' //miniChef on Matic
     )
+    //console.log('Approval:', approvalState, ApprovalState.NOT_APPROVED)
 
-    const { deposit, withdraw, harvest } = useMasterChef()
+    const { deposit, withdraw, harvest } = useMiniChefV2()
 
     //console.log('depositValue:', depositValue)
 

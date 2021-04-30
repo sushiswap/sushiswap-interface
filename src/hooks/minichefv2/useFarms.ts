@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { exchange_matic, minichefv2_matic } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
-import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
+import { liquidityPositionSubsetQuery, pairSubsetQuery, miniChefPoolQuery } from 'apollo/queries'
 import { POOL_DENY } from '../../constants'
 import Fraction from '../../entities/Fraction'
 
@@ -20,7 +20,7 @@ const useFarms = () => {
         const results = await Promise.all([
             minichefv2_matic.query({
                 // results[0]
-                query: poolsQuery
+                query: miniChefPoolQuery
             }),
             exchange_matic.query({
                 // results[1]
@@ -61,10 +61,10 @@ const useFarms = () => {
                 const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
                 const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
                 const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
-                const rewardPerBlock =
-                    ((pool.allocPoint / pool.owner.totalAllocPoint) * pool.owner.sushiPerBlock) / 1e18
-                const roiPerBlock = (rewardPerBlock * sushiPrice) / balanceUSD
-                const roiPerHour = roiPerBlock * blocksPerHour
+                const rewardPerSecond =
+                    ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+                const roiPerSecond = (rewardPerSecond * sushiPrice) / balanceUSD
+                const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
                 const roiPerYear = roiPerMonth * 12
@@ -78,7 +78,7 @@ const useFarms = () => {
                     pairAddress: pair.id,
                     slpBalance: pool.balance,
                     liquidityPair: pair,
-                    roiPerBlock,
+                    roiPerSecond,
                     roiPerHour,
                     roiPerDay,
                     roiPerMonth,
