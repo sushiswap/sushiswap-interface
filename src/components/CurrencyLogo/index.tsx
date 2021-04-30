@@ -14,17 +14,20 @@ import { useActiveWeb3React } from '../../hooks'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
+import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
 
 const getTokenLogoURL = (address: string, chainId: any) => {
     let imageURL
-    console.log(chainId)
     if (chainId === ChainId.MAINNET) {
         imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
     } else if (chainId === ChainId.BSC) {
         imageURL = `https://v1exchange.pancakeswap.finance/images/coins/${address}.png`
+    } else if (chainId === ChainId.MATIC) {
+        imageURL = getMaticTokenLogoURL(address)
     } else {
         imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
     }
+    console.log('getTokenLogoURL:', chainId, imageURL)
     return imageURL
 }
 
