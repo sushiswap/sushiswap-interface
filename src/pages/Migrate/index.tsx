@@ -94,7 +94,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
                     variant="body"
                     className="text-primary"
                 >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-                <Badge color="pink">{lpToken.version}</Badge>
+                {lpToken.version && <Badge color="pink">{lpToken.version}</Badge>}
             </div>
             {isSelected ? <CloseIcon /> : <ChevronRight />}
         </div>
@@ -150,7 +150,9 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
 
 const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
     const [error, setError] = useState<MetamaskError>({})
-    const sushiRollContract = useSushiRollContract(state.selectedLPToken?.version)
+    const sushiRollContract = useSushiRollContract(
+        state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
+    )
     console.log(
         'sushiRollContract address',
         sushiRollContract?.address,

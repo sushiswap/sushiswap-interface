@@ -239,6 +239,9 @@ export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | nu
                     address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
                 }
                 break
+            case ChainId.MATIC:
+                address = '0x0053957E18A0994D3526Cf879A4cA7Be88e8936A'
+                break
         }
     }
     return useContract(address, SUSHIROLL_ABI, true)
