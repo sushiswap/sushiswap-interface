@@ -53,7 +53,7 @@ export default function Header(): JSX.Element {
                                                 Yield
                                             </NavLink>
                                         )}
-                                        {chainId === ChainId.MAINNET && (
+                                        {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
                                             <NavLink id={`stake-nav-link`} to={'/stake'}>
                                                 Stake
                                             </NavLink>
