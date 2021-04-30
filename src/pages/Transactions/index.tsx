@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { LinkStyledButton } from '../../theme'
 import { ThemeContext } from 'styled-components'
 import { shortenAddress } from '../../utils'
 import TransactionHistory from './TransactionHistory'
@@ -86,19 +85,11 @@ export default function Transactions() {
                         Liquidity Positions
                     </div>
                 </div>
-                <div className="flex justify-between mb-5">
-                    <div className="text-xl font-medium text-white">Your Transaction History</div>
-                    <LinkStyledButton>
-                        <span className="text-sm">Clear History</span>
-                    </LinkStyledButton>
-                </div>
-                <div>
-                    {showTransactions ? (
-                        <TransactionHistory transactions={mock.transactions} />
-                    ) : (
-                        <LiquidityPositions positions={mock.liquidity} />
-                    )}
-                </div>
+                {showTransactions ? (
+                    <TransactionHistory transactions={mock.transactions} />
+                ) : (
+                    <LiquidityPositions positions={mock.liquidity} />
+                )}
             </div>
         </>
     )
