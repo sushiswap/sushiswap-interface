@@ -47,6 +47,7 @@ import FACTORY_ABI from '../constants/abis/factory.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
+import MINICHEFV2_ABI from '../constants/abis/miniChefv2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
@@ -166,6 +167,19 @@ export function useSushiContract(withSignerIfPossible = true): Contract | null {
 export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
+}
+
+export function useMiniChefV2(withSignerIfPossible?: boolean): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MATIC:
+                address = '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F'
+                break
+        }
+    }
+    return useContract(address, MINICHEFV2_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
