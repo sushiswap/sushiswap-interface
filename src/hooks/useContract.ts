@@ -169,7 +169,7 @@ export function useMasterChefContract(withSignerIfPossible?: boolean): Contract 
     return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
 }
 
-export function useMiniChefV2(withSignerIfPossible?: boolean): Contract | null {
+export function useMiniChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
     if (chainId) {

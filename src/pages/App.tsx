@@ -43,6 +43,7 @@ import {
 import Tools from './Tools'
 import Vesting from './Vesting'
 import Yield from './Yield'
+import Yield2 from './Yield/V2'
 import ReactGA from 'react-ga'
 import Test from './Test'
 
@@ -95,24 +96,26 @@ function App(): JSX.Element {
                             <WalletRoute exact strict path="/bento/kashi/lend/:pairAddress" component={LendPair} />
                             <WalletRoute exact strict path="/bento/kashi/borrow/:pairAddress" component={BorrowPair} />
 
-                            <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
-                            <Route exact strict path="/yield" component={Yield} />
-                            <Route exact strict path="/vesting" component={Vesting} />
+                            {/* Migrate */}
+                            {chainId === ChainId.MAINNET && <Route exact strict path="/yield" component={Yield} />}
+                            {chainId === ChainId.MATIC && <Route exact strict path="/yield" component={Yield2} />}
+                            {chainId === ChainId.MAINNET && <Route exact strict path="/vesting" component={Vesting} />}
+                            {chainId === ChainId.MAINNET && (
+                                <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
+                            )}
 
+                            {/* Migrate */}
                             {(chainId === ChainId.MAINNET || chainId === ChainId.BSC || chainId === ChainId.MATIC) && (
                                 <Route exact strict path="/migrate" component={Migrate} />
                             )}
                             <Route exact strict path="/migrate/v2" render={() => <Redirect to="/migrate" />} />
 
                             {/* Tools */}
-                            <Route exact strict path="/tools" component={Tools} />
-                            <Route exact strict path="/saave" component={Saave} />
+                            {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
+                            {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
 
                             {/* Pages */}
-                            {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
-                                <Route exact strict path="/stake" component={SushiBar} />
-                            )}
-                            <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
+                            {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
                             <Route exact strict path="/swap" component={Swap} />
                             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                             <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
