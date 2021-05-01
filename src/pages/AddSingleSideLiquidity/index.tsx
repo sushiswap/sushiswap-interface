@@ -184,7 +184,7 @@ const AddSingleSideLiquidity = ({
         currency ?? undefined,
         poolAddress
     )
-    const { zapIn } = useZapper(currency ?? undefined)
+    const { zapIn, swap } = useZapper(currency ?? undefined)
 
     const route = bestTrade?.route
     const noRoute = !route
@@ -215,6 +215,7 @@ const AddSingleSideLiquidity = ({
 
     // Get min tokens received based on user slippage preferences
     const minTokensReceived = JSBI.divide(
+        // Take raw token (number * (10000 - ALLOWED_SLIPPAGE))/10000
         JSBI.multiply(liquidityMinted?.raw || JSBI.BigInt(0), JSBI.BigInt(10000 - allowedSlippage)),
         JSBI.BigInt(10000)
     )
@@ -248,22 +249,26 @@ const AddSingleSideLiquidity = ({
     console.log(bestTrade?.route.path.map(t => t.address))
 
     const zapCallback = useCallback(() => {
+        console.log(bestTrade)
+        // swap(bestTrade?.route.path.map(t => t.address))
         const swapData = routerIface.encodeFunctionData('swapExactTokensForTokens', [
-            1000,
-            900,
+            1000000,
+            10,
+            // path,
             bestTrade?.route.path.map(t => t.address),
-            account,
-            1619667584
+            '0x169c54a9826caf9f14bd30688296021533fe23ae',
+            // some random date in the future in about a month
+            1622582801
         ])
         zapIn(
             currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
             poolAddress,
             parsedAmount,
-            minTokensReceived.toString(),
+            0,
             // Hard coded for now
-            '0xc778417e063141139fce010982780140aa0cd5ab',
-            // swapData
-            0x0
+            '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
+            swapData
+            // 0x0
         )
     }, [currency, poolAddress, parsedAmount, minTokensReceived])
 
@@ -331,7 +336,7 @@ const AddSingleSideLiquidity = ({
                                         </Text>
                                     </ButtonPrimary>
                                 </RowBetween>
-                            ) : priceImpactSeverity > 1 ? (
+                            ) : priceImpactSeverity > 1 && error === undefined ? (
                                 <ButtonError
                                     disabled={priceImpactSeverity > 3}
                                     error={priceImpactSeverity > 1}

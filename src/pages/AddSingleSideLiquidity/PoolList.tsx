@@ -150,7 +150,7 @@ const PoolList = () => {
                                     <div className="w-full text-center py-6">No Results.</div>
                                 ) : (
                                     <div className="w-full text-center py-6">
-                                        <Dots>Fetching Instruments</Dots>
+                                        <Dots>Fetching Pools</Dots>
                                     </div>
                                 )}
                             </>

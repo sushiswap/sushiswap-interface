@@ -1,13 +1,14 @@
 import { useCallback } from 'react'
 import { Currency, CurrencyAmount } from '@sushiswap/sdk'
-import { useZapperContract } from '../hooks/useContract'
+import { useRouterContract, useZapperContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 import { useActiveWeb3React } from '../hooks'
 
 const useZapper = (currency?: Currency) => {
-    const { chainId } = useActiveWeb3React()
+    const { chainId, account } = useActiveWeb3React()
     const zapperContract = useZapperContract(true)
+    const routerContract = useRouterContract()
     const addTransaction = useTransactionAdder()
 
     const zapIn = useCallback(
@@ -48,7 +49,22 @@ const useZapper = (currency?: Currency) => {
         [currency, chainId]
     )
 
-    return { zapIn }
+    const swap = useCallback(
+        async path => {
+            const tx = await routerContract?.swapExactTokensForTokens(
+                1000000,
+                0,
+                path,
+                // bestTrade?.route.path.map(t => t.address),
+                account,
+                1622582801
+            )
+            return addTransaction(tx, { summary: `Swap test` })
+        },
+        [currency, chainId, account]
+    )
+
+    return { zapIn, swap }
 }
 
 export default useZapper
