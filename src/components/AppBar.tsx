@@ -106,7 +106,7 @@ function AppBar(): JSX.Element {
                                 <div className="flex flex-row items-center justify-center w-full p-4 fixed left-0 bottom-0 bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                                     <div className="flex items-center justify-between sm:justify-end space-x-2 w-full">
                                         {chainId &&
-                                            chainId === ChainId.MAINNET &&
+                                            [ChainId.MAINNET].includes(chainId) &&
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
@@ -160,14 +160,36 @@ function AppBar(): JSX.Element {
                                                             className="rounded-md object-contain"
                                                         />
                                                     </div>
+                                                </>
+                                            )}
+
+                                        {chainId &&
+                                            [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) &&
+                                            library &&
+                                            library.provider.isMetaMask && (
+                                                <>
                                                     <div
                                                         className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                                         onClick={() => {
+                                                            let address: string | undefined
+                                                            switch (chainId) {
+                                                                case ChainId.MAINNET:
+                                                                    address =
+                                                                        '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
+                                                                    break
+                                                                case ChainId.BSC:
+                                                                    address =
+                                                                        '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
+                                                                    break
+                                                                case ChainId.MATIC:
+                                                                    address =
+                                                                        '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
+                                                                    break
+                                                            }
                                                             const params: any = {
                                                                 type: 'ERC20',
                                                                 options: {
-                                                                    address:
-                                                                        '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                                                                    address: address,
                                                                     symbol: 'SUSHI',
                                                                     decimals: 18,
                                                                     image:
