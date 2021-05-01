@@ -169,6 +169,7 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
+        "react-tradingview-widget": "^1.3.2",
         "tailwindcss-border-gradient-radius": "^2.0.0"
     }
 }

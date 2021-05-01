@@ -24,6 +24,7 @@ import RemoveLiquidity from './pages/RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './pages/RemoveLiquidity/redirects'
 import Saave from './pages/Saave'
 import SushiBar from './pages/SushiBar'
+import Trade from './pages/Trade'
 import Swap from './pages/Swap'
 import {
     RedirectHashRoutes,
@@ -76,7 +77,8 @@ function Routes(): JSX.Element {
             {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
 
             {/* Pages */}
-            {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/trade" component={Trade} />}
+            <Route exact strict path="/trade" component={Swap} />
             <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
             <Route exact strict path="/swap" component={Swap} />
             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
