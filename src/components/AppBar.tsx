@@ -22,7 +22,10 @@ function AppBar(): JSX.Element {
 
     return (
         <header className="flex flex-row flex-nowrap justify-between w-screen">
-            <Disclosure as="nav" className="w-screen bg-transparent gradiant-border-bottom z-10">
+            <Disclosure
+                as="nav"
+                className="w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur"
+            >
                 {({ open }) => (
                     <>
                         <div className="px-4 py-1.5">
@@ -56,7 +59,7 @@ function AppBar(): JSX.Element {
                                             )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`stake-nav-link`} to={'/stake'}>
-                                                    Stake
+                                                    SushiBar
                                                 </NavLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
@@ -69,13 +72,21 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        Apps
+                                                        Bentobox Apps
                                                     </NavLink>
                                                 )}
-                                            {chainId && (
+                                            {chainId && chainId === ChainId.MAINNET && (
                                                 <ExternalLink
                                                     id={`analytics-nav-link`}
                                                     href={'https://analytics.sushi.com'}
+                                                >
+                                                    Analytics
+                                                </ExternalLink>
+                                            )}
+                                            {chainId && chainId === ChainId.MATIC && (
+                                                <ExternalLink
+                                                    id={`analytics-nav-link`}
+                                                    href={'https://analytics-polygon.sushi.com'}
                                                 >
                                                     Analytics
                                                 </ExternalLink>
@@ -193,6 +204,20 @@ function AppBar(): JSX.Element {
                                                     </div>
                                                 </>
                                             )}
+                                        {chainId && chainId === ChainId.MATIC && (
+                                            <div className="hidden sm:inline-block">
+                                                <a
+                                                    className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto"
+                                                    href="https://wallet.matic.network/bridge/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <div className="grid grid-flow-col auto-cols-max items-center rounded-lg bg-dark-1000 text-sm text-secondary py-2 px-3 pointer-events-auto">
+                                                        <div className="text-primary">Bridge Assets</div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        )}
                                         {library && library.provider.isMetaMask && (
                                             <div className="hidden sm:inline-block">
                                                 <Web3Network />
@@ -253,14 +278,15 @@ function AppBar(): JSX.Element {
                                 >
                                     {t('pool')}
                                 </NavLink>
-                                {chainId === ChainId.MAINNET && (
+
+                                {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
                                         Yield
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/stake'}>
-                                        Stake
+                                        SushiBar
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
@@ -270,11 +296,19 @@ function AppBar(): JSX.Element {
                                 )}
                                 {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].includes(chainId) && (
                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                        Apps
+                                        BentoBox Apps
                                     </NavLink>
                                 )}
                                 {chainId && (
                                     <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
+                                        Analytics
+                                    </ExternalLink>
+                                )}
+                                {chainId && chainId === ChainId.MATIC && (
+                                    <ExternalLink
+                                        id={`analytics-nav-link`}
+                                        href={'https://analytics-polygon.sushi.com'}
+                                    >
                                         Analytics
                                     </ExternalLink>
                                 )}
