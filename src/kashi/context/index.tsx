@@ -106,18 +106,19 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
 async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
     let logs = []
     let success = false
+    const masterAddress = KASHI_ADDRESS[chainId]
     if (chainId != ChainId.BSC && chainId != ChainId.MATIC) {
-        logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS))
+        logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(masterAddress))
         success = true
     }
     if (!success) {
         logs = ((await bentobox.clones({
-            masterAddress: '0x2cba6ab6574646badc84f0544d05059e57a5dc42',
+            masterAddress,
             chainId
         })) as any).map((clone: any) => {
             return {
                 args: {
-                    masterContract: '0x2cba6ab6574646badc84f0544d05059e57a5dc42',
+                    masterContract: masterAddress,
                     cloneAddress: clone.address,
                     data: clone.data
                 }
@@ -167,16 +168,25 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
     const updatePairs = useCallback(
         async function() {
-            if (!account || !chainId || [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId) == -1) {
+            if (
+                !account ||
+                !chainId ||
+                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].indexOf(chainId) == -1
+            ) {
                 return
             }
             if (boringHelperContract && bentoBoxContract) {
+                console.log('READY TO RUMBLE')
                 const info = rpcToObj(
-                    await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS])
+                    await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [
+                        KASHI_ADDRESS[chainId]
+                    ])
                 )
 
                 // Get the deployed pairs from the logs and decode
                 const logPairs = await GetPairs(bentoBoxContract, chainId || 1)
+
+                console.log({ logPairs })
 
                 // Filter all pairs by supported oracles and verify the oracle setup
                 const allPairAddresses = logPairs
@@ -417,7 +427,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     )
 
     useEffect(() => {
-        if (account && chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].indexOf(chainId) != -1) {
+        if (account && chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].indexOf(chainId) != -1) {
             updatePairs()
         }
     }, [blockNumber, chainId, account])

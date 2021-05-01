@@ -281,7 +281,7 @@ export const CHAINLINK_TOKENS: { [chainId in ChainId]?: ChainlinkToken[] } = {
         {
             symbol: 'WMATIC',
             name: 'Wrapped Matic',
-            address: '0x084666322d3ee89aAbDBBCd084323c9AF705C7f5',
+            address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
             decimals: 18
         },
 
@@ -1611,14 +1611,14 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             toDecimals: 8
         },
         '0x327e23A4855b6F663a28c5161541d69Af8973302': {
-            from: '0x084666322d3ee89aAbDBBCd084323c9AF705C7f5',
+            from: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
             to: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
             decimals: 18,
             fromDecimals: 18,
             toDecimals: 18
         },
         '0xAB594600376Ec9fD91F8e885dADF0CE036862dE0': {
-            from: '0x084666322d3ee89aAbDBBCd084323c9AF705C7f5',
+            from: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
             fromDecimals: 18,

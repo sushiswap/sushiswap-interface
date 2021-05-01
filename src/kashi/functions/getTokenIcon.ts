@@ -262,7 +262,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xD6DF932A45C0f255f85145f286eA0b292B21C90B').toLowerCase()]: AAVE,
         [String('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063').toLowerCase()]: DAI,
         [String('0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619').toLowerCase()]: ETH,
-        [String('0x084666322d3ee89aAbDBBCd084323c9AF705C7f5').toLowerCase()]: MATIC,
+        [String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase()]: MATIC,
         [String('0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174').toLowerCase()]: USDC,
         [String('0xc2132D05D31c914a87C6611C10748AEb04B58e8F').toLowerCase()]: USDT,
         [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: BTC // WBTC

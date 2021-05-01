@@ -22,10 +22,11 @@ import {
     CHAINLINK_ORACLE_ADDRESS,
     KASHI_ADDRESS,
     SUSHISWAP_SWAPPER_ADDRESS,
-    SUSHISWAP_MULTISWAPPER_ADDRESS
+    SUSHISWAP_MULTISWAPPER_ADDRESS,
+    BORING_HELPER_ADDRESS
 } from 'kashi'
 import { useMemo } from 'react'
-import { BORING_HELPER_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
+import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 import {
     ARGENT_WALLET_DETECTOR_ABI,
     ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -147,7 +148,8 @@ export function useStakingContract(stakingAddress?: string, withSignerIfPossible
 }
 
 export function useBoringHelperContract(): Contract | null {
-    return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BORING_HELPER_ADDRESS[chainId], BORING_HELPER_ABI, false)
 }
 
 export function usePendingContract(): Contract | null {
@@ -195,15 +197,18 @@ export function useTimelockContract(): Contract | null {
 }
 
 export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(BENTOBOX_ADDRESS, BENTOBOX_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BENTOBOX_ADDRESS[chainId], BENTOBOX_ABI, withSignerIfPossible)
 }
 
 export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(KASHI_ADDRESS, KASHIPAIR_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && KASHI_ADDRESS[chainId], KASHIPAIR_ABI, withSignerIfPossible)
 }
 
 export function useSushiSwapSwapper(): Contract | null {
-    return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && SUSHISWAP_SWAPPER_ADDRESS[chainId], BASE_SWAPPER_ABI, false)
 }
 
 export function useChainlinkOracle(): Contract | null {
