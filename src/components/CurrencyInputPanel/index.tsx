@@ -18,6 +18,10 @@ import Button from '../Button'
 import selectCoinAnimation from '../../assets/animation/select-coin.json'
 import Lottie from 'lottie-react'
 
+import { useUSDCPrice } from '../../hooks'
+import { formattedNum } from '../../utils'
+import { ChainId } from '@sushiswap/sdk'
+
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
     align-items: center;
@@ -157,6 +161,9 @@ export default function CurrencyInputPanel({
         setModalOpen(false)
     }, [setModalOpen])
 
+    const currencyUSDC = useUSDCPrice(currency ? currency : undefined)?.toFixed(18)
+    const valueUSDC = formattedNum(Number(value) * Number(currencyUSDC))
+
     return (
         <div id={id} className="rounded bg-dark-800 p-5">
             <div
@@ -293,10 +300,19 @@ export default function CurrencyInputPanel({
                                 }}
                             />
                             {account && (
-                                <div onClick={onMax} className="font-medium cursor-pointer text-xs text-low-emphesis">
-                                    {!hideBalance && !!currency && selectedCurrencyBalance
-                                        ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
-                                        : ' -'}
+                                <div className="flex flex-col">
+                                    <div
+                                        onClick={onMax}
+                                        className="font-medium cursor-pointer text-xs text-low-emphesis"
+                                    >
+                                        {!hideBalance && !!currency && selectedCurrencyBalance
+                                            ? (customBalanceText ?? 'Balance: ') +
+                                              selectedCurrencyBalance?.toSignificant(6)
+                                            : ' -'}
+                                    </div>
+                                    {chainId === ChainId.MAINNET && (
+                                        <div className="font-medium text-xs text-secondary">≈ {valueUSDC} USDC</div>
+                                    )}
                                 </div>
                             )}
                         </>
