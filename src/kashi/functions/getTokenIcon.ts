@@ -113,6 +113,7 @@ import LON from '../../assets/kashi/tokens/lon-square.jpg'
 import DNT from '../../assets/kashi/tokens/dnt-square.jpg'
 import ZEC from '../../assets/kashi/tokens/zec-square.jpg'
 import COIN from '../../assets/kashi/tokens/coin-square.jpg'
+import FRX from '../../assets/kashi/tokens/frx-square.jpg'
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [ChainId.MAINNET]: {
         [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
@@ -218,7 +219,8 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xD291E7a03283640FDc51b121aC401383A46cC623').toLowerCase()]: RGT,
         [String('0x0000000000095413afc295d19edeb1ad7b71c952').toLowerCase()]: LON,
         [String('0x0AbdAce70D3790235af448C88547603b945604ea').toLowerCase()]: DNT,
-        [String('0x1C5db575E2Ff833E46a2E9864C22F4B22E0B37C2').toLowerCase()]: ZEC // zec
+        [String('0x1C5db575E2Ff833E46a2E9864C22F4B22E0B37C2').toLowerCase()]: ZEC,
+        [String('0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0').toLowerCase()]: FRX // zec
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
