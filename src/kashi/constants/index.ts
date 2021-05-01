@@ -144,7 +144,7 @@ export const SUSHISWAP_SWAPPER_ADDRESS: {
 export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
     [chainId in ChainId]: string
 } = {
-    [ChainId.MAINNET]: '',
+    [ChainId.MAINNET]: '0x545820d5Cc05248da112419fEfb18522c63C8e12 ',
     [ChainId.ROPSTEN]: '',
     [ChainId.RINKEBY]: '',
     [ChainId.GÖRLI]: '',
@@ -167,7 +167,7 @@ export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
 }
 
 export const SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS = {
-    [ChainId.MAINNET]: '',
+    [ChainId.MAINNET]: '0xB527C5295c4Bc348cBb3a2E96B2494fD292075a7',
     [ChainId.ROPSTEN]: '',
     [ChainId.RINKEBY]: '',
     [ChainId.GÖRLI]: '',
