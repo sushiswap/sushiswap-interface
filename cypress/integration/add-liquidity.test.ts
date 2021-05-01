@@ -8,7 +8,7 @@ describe('Add Liquidity', () => {
     it('does not crash if ETH is duplicated', () => {
         cy.visit('/add/0xc778417E063141139Fce010982780140Aa0cD5Ab-0xc778417E063141139Fce010982780140Aa0cD5Ab')
         cy.get('#add-liquidity-input-tokena .font-bold').should('contain.text', 'WETH')
-        cy.get('#add-liquidity-input-tokenb .font-bold').should('not.contain.text', 'ETH')
+        cy.get('#add-liquidity-input-tokenb .font-bold').should('not.contain.text', 'WETH')
     })
 
     it('token not in storage is loaded', () => {
