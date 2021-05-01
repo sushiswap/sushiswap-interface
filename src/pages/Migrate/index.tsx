@@ -215,15 +215,14 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                             )}
                         </ButtonConfirmed>
                     )}
-                    {(state.mode === 'approve' && approval === ApprovalState.APPROVED) ||
-                        (state.mode === 'permit' && (
-                            <ButtonConfirmed
-                                disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
-                                onClick={onPress}
-                            >
-                                {state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
-                            </ButtonConfirmed>
-                        ))}
+                    {((state.mode === 'approve' && approval === ApprovalState.APPROVED) || state.mode === 'permit') && (
+                        <ButtonConfirmed
+                            disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
+                            onClick={onPress}
+                        >
+                            {state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
+                        </ButtonConfirmed>
+                    )}
                 </>
             )}
             {error.message && error.code !== 4001 && (
