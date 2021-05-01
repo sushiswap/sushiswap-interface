@@ -5,6 +5,7 @@ import { shortenAddress } from '../../utils'
 import TransactionHistory from './TransactionHistory'
 import LiquidityPositions from './LiquidityPositions'
 import { ChevronLeft, User, Copy, ExternalLink } from 'react-feather'
+import { Button } from 'components'
 
 const mock = {
     transactions: [
@@ -14,10 +15,50 @@ const mock = {
         'Swap 0.1237 ETH for 32.1245 SUSHI'
     ],
     liquidity: [
-        'Add 0.05 WBTC & 0.05 DIGG Liquidity',
-        'Add 0.06 WBTC & 0.05 DIGG Liquidity',
-        'Add 0.07 WBTC & 0.05 DIGG Liquidity',
-        'Add 0.08 WBTC & 0.05 DIGG Liquidity'
+        {
+            pairs: 'ETH / SUSHI',
+            pair1: {
+                name: 'ETH',
+                amount: '2.34567'
+            },
+            pair2: {
+                name: 'SUSHI',
+                amount: '32.34567'
+            }
+        },
+        {
+            pairs: 'ETH / COMP',
+            pair1: {
+                name: 'ETH',
+                amount: '2.345'
+            },
+            pair2: {
+                name: 'COMP',
+                amount: '32.345'
+            }
+        },
+        {
+            pairs: 'WBTC / DIGG',
+            pair1: {
+                name: 'WBTC',
+                amount: '2.345'
+            },
+            pair2: {
+                name: 'DIGG',
+                amount: '32.345'
+            }
+        },
+        {
+            pairs: 'LON / USDT',
+            pair1: {
+                name: 'LON',
+                amount: '2.345'
+            },
+            pair2: {
+                name: 'USDT',
+                amount: '32.345'
+            }
+        }
     ]
 }
 
@@ -31,12 +72,14 @@ export default function Transactions() {
                 <title>Transactions | Sushi</title>
             </Helmet>
 
-            <div className="w-full max-w-2xl p-4 mb-5">
-                <div className="flex items-center mb-3">
+            <div className="w-full max-w-2xl">
+                <Button size="small" className="flex items-center">
                     <ChevronLeft strokeWidth={2} size={18} color={theme.white} />
                     <span className="ml-1">Go Back</span>
+                </Button>
+                <div className="px-4 mb-5">
+                    <div className="text-xl font-medium text-white">Your History & Positions</div>
                 </div>
-                <div className="text-xl font-medium text-white">Your History & Positions</div>
             </div>
 
             <div className="bg-dark-900 w-full max-w-2xl rounded mb-3 p-4">
