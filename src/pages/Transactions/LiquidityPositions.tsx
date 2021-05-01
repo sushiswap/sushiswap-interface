@@ -6,15 +6,27 @@ import { Sliders } from 'react-feather'
 import { Button } from 'components'
 import { LinkStyledButton } from '../../theme'
 
+type Position = {
+    pairs: string
+    pair1: {
+        name: string
+        amount: string
+    }
+    pair2: {
+        name: string
+        amount: string
+    }
+}
+
 type Props = {
-    positions: string[]
+    positions: Position[]
 }
 
 export default function LiquidityPositions({ positions }: Props) {
     const theme = useContext(ThemeContext)
     return (
         <>
-            <div className="flex justify-between mb-5">
+            <div className="flex flex-col md:flex-row justify-start md:justify-between mb-6">
                 <div className="text-xl font-medium text-white">Your Liquidity Positions</div>
                 <div className="flex items-center text-sm">
                     <span className="mr-1">Dont see a pool you joined?</span>
@@ -22,18 +34,26 @@ export default function LiquidityPositions({ positions }: Props) {
                 </div>
             </div>
             <div>
-                {positions.map(t => (
-                    <div key={t} className="flex justify-between items-center rounded bg-dark-800 px-3 py-1 mb-3">
+                {positions.map((t, i) => (
+                    <div key={i} className="flex justify-between items-center rounded bg-dark-800 px-3 py-1 mb-3">
                         <DoubleCurrencyLogo
                             currency0={Currency.ETHER}
                             currency1={Currency.BNB}
-                            size={34}
+                            size={30}
                             margin={true}
                         />
-                        <div className="flex-1 text-sm px-3 py-2 text-center text-primary rounded-lg text-bold bg-dark-900">
-                            {t}
+                        <div className="flex-1 mr-2 py-2 rounded-lg text-xs md:text-sm md:text-bold text-white">{t.pairs}</div>
+                        <div className="flex flex-col md:flex-row justify-between flex-1 text-xs md:text-sm px-3 py-2 text-primary rounded-lg md:text-bold bg-dark-900">
+                            <div>
+                                <span className="text-white">{t.pair1.amount}</span>
+                                <span className="ml-1">{t.pair1.name}</span>
+                            </div>
+                            <div>
+                                <span className="text-white">{t.pair2.amount}</span>
+                                <span className="ml-1">{t.pair2.name}</span>
+                            </div>
                         </div>
-                        <div className="ml-4 self-center">
+                        <div className="ml-2 md:ml-4 md:mr-1 self-center">
                             <Sliders strokeWidth={2} size={18} color={theme.white} />
                         </div>
                     </div>
