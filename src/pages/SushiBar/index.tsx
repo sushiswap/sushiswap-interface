@@ -4,6 +4,7 @@ import { useActiveWeb3React } from '../../hooks'
 import SushiDepositPanel from './SushiDepositPanel'
 import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
 import { Helmet } from 'react-helmet'
+import { ArrowUpRight } from 'react-feather'
 
 export default function SushiBar() {
     const { account } = useActiveWeb3React()
@@ -31,21 +32,21 @@ export default function SushiBar() {
                     </div>
                     <div className="flex flex-col justify-between my-2 space-y-2 text-sm">
                         <a
-                            className="text-primary hover:text-high-emphesis"
+                            className="text-primary hover:text-high-emphesis flex"
                             target="_blank"
                             rel="noreferrer"
                             href="https://analytics.sushi.com/bar"
                         >
-                            View SushiBar Stats <span style={{ fontSize: '11px' }}>↗</span>
+                            View SushiBar Stats <ArrowUpRight size="16" />
                         </a>
                         {account && (
                             <a
-                                className="text-primary hover:text-high-emphesis"
+                                className="text-primary hover:text-high-emphesis flex"
                                 target="_blank"
                                 rel="noreferrer"
                                 href={'http://analytics.sushi.com/users/' + account}
                             >
-                                View your SushiBar Portfolio <span style={{ fontSize: '11px' }}>↗</span>
+                                View your SushiBar Portfolio <ArrowUpRight size="16" />
                             </a>
                         )}
                     </div>
