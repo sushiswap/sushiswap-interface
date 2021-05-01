@@ -25,17 +25,6 @@ const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
 
-const StyledPositionCard = styled(Card)`
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  border: none
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
-  /* background: ${({ theme }) =>
-      `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, theme.bg3)} 0%, ${theme.bg3} 100%) `}; */
-  position: relative;
-  overflow: hidden;
-  margin: 6px 0; 
-`
-
 const TokenBalance = ({ farm }: any) => {
     const history = useHistory()
 
@@ -106,7 +95,7 @@ const PoolList = () => {
             </Helmet>
             <div className="container max-w-2xl mx-auto px-0 sm:px-4">
                 <Card
-                    className="h-full bg-dark-900"
+                    className="h-full bg-dark-900 rounded"
                     header={
                         <CardHeader className="flex justify-between items-center bg-dark-800">
                             <div className="flex w-full justify-between flex-col items-center">

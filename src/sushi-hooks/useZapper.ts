@@ -16,7 +16,8 @@ const useZapper = (currency?: Currency) => {
             pairAddress,
             amount: CurrencyAmount | undefined,
             minPoolTokens,
-            swapTarget
+            swapTarget,
+            swapData
         ) => {
             try {
                 const tx = await zapperContract?.ZapIn(
@@ -26,7 +27,7 @@ const useZapper = (currency?: Currency) => {
                     minPoolTokens,
                     swapTarget,
                     // Unknown byte data param (swapData), is maybe something to do with routing for non native lp tokens?
-                    0x0,
+                    swapData,
                     // Affiliate
                     '0x0000000000000000000000000000000000000000',
                     // Transfer residual (Can save gas if set to false but unsure about math right now)

@@ -1,4 +1,5 @@
 import { Currency, ETHER, ChainId, JSBI } from '@sushiswap/sdk'
+import { ethers } from 'ethers'
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
@@ -11,33 +12,36 @@ import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { RowBetween, AutoRow } from '../../components/Row'
 // import Button from '../../components/Button'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import { AutoColumn } from '../../components/Column'
+import Column, { AutoColumn } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Settings from '../../components/Settings'
 import PoolList from './PoolList'
 import Loader from '../../components/Loader'
+import ProgressSteps from '../../components/ProgressSteps'
 
 import { AppDispatch } from 'state'
 import { useCurrency } from '../../hooks/Tokens'
 import usePool from '../../sushi-hooks/queries/usePool'
 import { resetZapState } from '../../state/zap/actions'
 import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../../state/zap/hooks'
+import ROUTER_ABI from '../../constants/abis/router.json'
 
 import { TYPE } from '../../theme'
 import { currencyId as getCurrencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React, useRouterContract } from 'hooks'
 import { useWalletModalToggle } from 'state/application/hooks'
 import useZapper from 'sushi-hooks/useZapper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useUserSlippageTolerance } from 'state/user/hooks'
+import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
     background-color: ${({ theme }) => theme.bg1};
-    border-radius: 4px 4px 0 0;
+    border-radius: 0.625rem 0.625rem 0 0;
     padding: 1rem;
 `
 
@@ -45,7 +49,7 @@ const PoolBreakDownWrapper = styled.div`
   background-color: ${({ theme }) => theme.bg1};
   border-top: 1px solid ${({ theme }) => theme.bg3};
   padding: 1rem
-  border-radius: 0 0 4px 4px;
+  border-radius: 0 0 0.625rem 0.625rem;
 `
 
 const Tabs = styled.div`
@@ -129,8 +133,8 @@ const PoolInfo = ({ poolAddress, currency }: { poolAddress: string; currency: Cu
                         <TYPE.small marginBottom="8px" textAlign="right" fontSize="14px">
                             {poolTokenPercentage?.toSignificant(6) || '0'}%
                         </TYPE.small>
-                        <TYPE.darkGray fontSize="14px" marginBottom="2px">
-                            Est. Slippage
+                        <TYPE.darkGray fontSize="14px" marginBottom="2px" textAlign="right">
+                            Price Impact
                         </TYPE.darkGray>
                         <TYPE.small textAlign="right" fontSize="14px">
                             {bestTrade?.priceImpact?.toSignificant(6) || '0'}%
@@ -185,6 +189,9 @@ const AddSingleSideLiquidity = ({
     const route = bestTrade?.route
     const noRoute = !route
 
+    const { priceImpactWithoutFee } = computeTradePriceBreakdown(bestTrade)
+    const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
+
     let address: string | undefined
     if (chainId) {
         switch (chainId) {
@@ -208,8 +215,8 @@ const AddSingleSideLiquidity = ({
 
     // Get min tokens received based on user slippage preferences
     const minTokensReceived = JSBI.divide(
-        JSBI.multiply(liquidityMinted?.raw || JSBI.BigInt(0), JSBI.BigInt(1000 - allowedSlippage)),
-        JSBI.BigInt(1000)
+        JSBI.multiply(liquidityMinted?.raw || JSBI.BigInt(0), JSBI.BigInt(10000 - allowedSlippage)),
+        JSBI.BigInt(10000)
     )
 
     // mark when a user has submitted an approval, reset onTokenSelection for input field
@@ -235,26 +242,37 @@ const AddSingleSideLiquidity = ({
     )
 
     const toggleWalletModal = useWalletModalToggle()
+    const router = useRouterContract()
+    const routerIface = new ethers.utils.Interface(ROUTER_ABI)
+    // routerIface.encodeFunctionData('transfer', )
+    console.log(bestTrade?.route.path.map(t => t.address))
 
-    const zapCallback = useCallback(
-        () =>
-            zapIn(
-                currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
-                poolAddress,
-                parsedAmount,
-                minTokensReceived.toString(),
-                // Hard coded Ropsten WETH for now
-                '0xc778417e063141139fce010982780140aa0cd5ab'
-            ),
-        [currency, poolAddress, parsedAmount, minTokensReceived]
-    )
+    const zapCallback = useCallback(() => {
+        const swapData = routerIface.encodeFunctionData('swapExactTokensForTokens', [
+            1000,
+            900,
+            bestTrade?.route.path.map(t => t.address),
+            account,
+            1619667584
+        ])
+        zapIn(
+            currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
+            poolAddress,
+            parsedAmount,
+            minTokensReceived.toString(),
+            // Hard coded for now
+            '0xc778417e063141139fce010982780140aa0cd5ab',
+            // swapData
+            0x0
+        )
+    }, [currency, poolAddress, parsedAmount, minTokensReceived])
 
     return (
         <>
             {!poolAddress ? (
                 <PoolList />
             ) : (
-                <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl rounded">
+                <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl rounded p-4">
                     <CardHeader />
                     <AutoColumn>
                         <CurrencyInputPanel
@@ -277,7 +295,7 @@ const AddSingleSideLiquidity = ({
                                 <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
                                     Connect Wallet
                                 </ButtonLight>
-                            ) : !typedValue ? (
+                            ) : !typedValue || typedValue === '0' ? (
                                 <ButtonLight disabled={true} style={{ marginTop: '20px' }}>
                                     <TYPE.main mb="4px">Enter an amount</TYPE.main>
                                 </ButtonLight>
@@ -290,9 +308,7 @@ const AddSingleSideLiquidity = ({
                                     <ButtonPrimary
                                         onClick={approveCallback}
                                         disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
-                                        style={{ width: '48%' }}
-                                        // altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
-                                        // confirmed={approval === ApprovalState.APPROVED}
+                                        style={{ width: '48%', marginTop: '20px' }}
                                     >
                                         {approval === ApprovalState.PENDING ? (
                                             <AutoRow gap="6px" justify="center">
@@ -306,7 +322,7 @@ const AddSingleSideLiquidity = ({
                                     </ButtonPrimary>
                                     <ButtonPrimary
                                         onClick={() => zapCallback()}
-                                        style={{ width: '48%' }}
+                                        style={{ width: '48%', marginTop: '20px' }}
                                         id="swap-button"
                                         disabled={approval !== ApprovalState.APPROVED}
                                     >
@@ -315,6 +331,19 @@ const AddSingleSideLiquidity = ({
                                         </Text>
                                     </ButtonPrimary>
                                 </RowBetween>
+                            ) : priceImpactSeverity > 1 ? (
+                                <ButtonError
+                                    disabled={priceImpactSeverity > 3}
+                                    error={priceImpactSeverity > 1}
+                                    style={{ marginTop: '20px' }}
+                                    onClick={() => zapCallback()}
+                                >
+                                    <Text fontSize={16} fontWeight={500}>
+                                        {priceImpactSeverity > 3
+                                            ? `Price Impact Too High`
+                                            : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                    </Text>
+                                </ButtonError>
                             ) : (
                                 <ButtonPrimary
                                     style={{ marginTop: '20px' }}
@@ -327,6 +356,11 @@ const AddSingleSideLiquidity = ({
                                         {error ?? 'Zap'}
                                     </Text>
                                 </ButtonPrimary>
+                            )}
+                            {showApproveFlow && (
+                                <Column style={{ marginTop: '1rem' }}>
+                                    <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />
+                                </Column>
                             )}
                         </>
                     </AutoColumn>
