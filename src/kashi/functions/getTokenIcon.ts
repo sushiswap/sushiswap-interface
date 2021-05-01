@@ -104,6 +104,15 @@ import ORN from '../../assets/kashi/tokens/orn-square.jpg'
 import RAI from '../../assets/kashi/tokens/rai-square.jpg'
 import RARI from '../../assets/kashi/tokens/rari-square.jpg'
 import RGT from '../../assets/kashi/tokens/rgt-square.jpg'
+import ONT from '../../assets/kashi/tokens/ont-square.jpg'
+import FIL from '../../assets/kashi/tokens/fil-square.jpg'
+import DOGE from '../../assets/kashi/tokens/doge-square.jpg'
+import ICE from '../../assets/kashi/tokens/ice-square.jpg'
+import CAKE from '../../assets/kashi/tokens/cake-square.jpg'
+import LON from '../../assets/kashi/tokens/lon-square.jpg'
+import DNT from '../../assets/kashi/tokens/dnt-square.jpg'
+import ZEC from '../../assets/kashi/tokens/zec-square.jpg'
+import COIN from '../../assets/kashi/tokens/coin-square.jpg'
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [ChainId.MAINNET]: {
         [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
@@ -206,7 +215,10 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x0258F474786DdFd37ABCE6df6BBb1Dd5dfC4434a').toLowerCase()]: ORN,
         [String('0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919').toLowerCase()]: RAI,
         [String('0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF').toLowerCase()]: RARI,
-        [String('0xD291E7a03283640FDc51b121aC401383A46cC623').toLowerCase()]: RGT
+        [String('0xD291E7a03283640FDc51b121aC401383A46cC623').toLowerCase()]: RGT,
+        [String('0x0000000000095413afc295d19edeb1ad7b71c952').toLowerCase()]: LON,
+        [String('0x0AbdAce70D3790235af448C88547603b945604ea').toLowerCase()]: DNT,
+        [String('0x1C5db575E2Ff833E46a2E9864C22F4B22E0B37C2').toLowerCase()]: ZEC // zec
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
@@ -254,9 +266,16 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e').toLowerCase()]: YFI,
         [String('0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c').toLowerCase()]: BNB, // BNB
         [String('0x2170Ed0880ac9A755fd29B2688956BD959F933F8').toLowerCase()]: ETH,
-        [String('0x87b008E57F640D94Ee44Fd893F0323AF933F9195').toLowerCase()]: UNKNOWN, // COIN
+        [String('0x87b008E57F640D94Ee44Fd893F0323AF933F9195').toLowerCase()]: COIN, // COIN
         [String('0x8519EA49c997f50cefFa444d240fB655e89248Aa').toLowerCase()]: RAMP,
-        [String('0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7').toLowerCase()]: VAI
+        [String('0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7').toLowerCase()]: VAI,
+        [String('0xFd7B3A77848f1C2D67E05E54d78d174a0C850335').toLowerCase()]: ONT,
+        [String('0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153').toLowerCase()]: FIL,
+        [String('0xba2ae424d960c26247dd6c32edc70b295c744c43').toLowerCase()]: DOGE,
+        [String('0xf16e81dce15B08F326220742020379B855B87DF9').toLowerCase()]: ICE,
+        [String('0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6').toLowerCase()]: EOS,
+        [String('0x16939ef78684453bfDFb47825F8a5F714f12623a').toLowerCase()]: XTZ,
+        [String('0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82').toLowerCase()]: CAKE
     },
     [ChainId.MATIC]: {
         [String('0xD6DF932A45C0f255f85145f286eA0b292B21C90B').toLowerCase()]: AAVE,
