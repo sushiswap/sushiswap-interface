@@ -58,23 +58,10 @@ function AppBar(): JSX.Element {
                                                 </NavLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`stake-nav-link`} to={'/stake'}>
+                                                <NavLink id={`stake-nav-link`} to={'/sushi-bar'}>
                                                     SushiBar
                                                 </NavLink>
                                             )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                                    Vesting
-                                                </NavLink>
-                                            )}
-                                            {chainId &&
-                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
-                                                    chainId
-                                                ) && (
-                                                    <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
-                                                        Lend
-                                                    </NavLink>
-                                                )}
                                             {chainId &&
                                                 [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
                                                     chainId
@@ -83,6 +70,20 @@ function AppBar(): JSX.Element {
                                                         BentoBox
                                                     </NavLink>
                                                 )}
+                                            {chainId === ChainId.MAINNET && (
+                                                <NavLink id={`vesting-nav-link`} to={'/vesting'}>
+                                                    Vesting
+                                                </NavLink>
+                                            )}
+                                            {/* {chainId &&
+                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
+                                                    chainId
+                                                ) && (
+                                                    <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
+                                                        Lend
+                                                    </NavLink>
+                                                )} */}
+
                                             {chainId && chainId === ChainId.MAINNET && (
                                                 <ExternalLink
                                                     id={`analytics-nav-link`}
