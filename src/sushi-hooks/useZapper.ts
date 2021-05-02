@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Currency, CurrencyAmount } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, ROUTER_ADDRESS } from '@sushiswap/sdk'
 import { useRouterContract, useZapperContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
@@ -12,20 +12,13 @@ const useZapper = (currency?: Currency) => {
     const addTransaction = useTransactionAdder()
 
     const zapIn = useCallback(
-        async (
-            fromTokenContractAddress,
-            pairAddress,
-            amount: CurrencyAmount | undefined,
-            minPoolTokens,
-            swapTarget,
-            swapData
-        ) => {
+        async (fromTokenContractAddress, pairAddress, amount: CurrencyAmount | undefined, minPoolTokens, swapData) => {
             const tx = await zapperContract?.ZapIn(
                 fromTokenContractAddress,
                 pairAddress,
                 amount?.raw.toString(),
                 minPoolTokens,
-                swapTarget,
+                ROUTER_ADDRESS[chainId || 1],
                 // Unknown byte data param (swapData), is maybe something to do with routing for non native lp tokens?
                 swapData,
                 // Affiliate
@@ -42,7 +35,7 @@ const useZapper = (currency?: Currency) => {
             )
             return addTransaction(tx, { summary: `Zap ${amount?.toSignificant(6)} ${currency?.symbol}` })
         },
-        [currency, chainId]
+        [account, currency, chainId]
     )
 
     const swap = useCallback(

@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux'
 
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { RowBetween, AutoRow } from '../../components/Row'
-// import Button from '../../components/Button'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import Column, { AutoColumn } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -255,8 +254,6 @@ const AddSingleSideLiquidity = ({
             poolAddress,
             parsedAmount,
             minTokensReceived.toString(),
-            // Sushsiwap Router
-            '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
             encodedSwapData
         ).then(
             () => dispatch(resetZapState()),
@@ -292,7 +289,7 @@ const AddSingleSideLiquidity = ({
                                 <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
                                     Connect Wallet
                                 </ButtonLight>
-                            ) : !typedValue || typedValue === '0' ? (
+                            ) : !typedValue || +typedValue === 0 ? (
                                 <ButtonLight disabled={true} style={{ marginTop: '20px' }}>
                                     <TYPE.main mb="4px">Enter an amount</TYPE.main>
                                 </ButtonLight>

@@ -58,6 +58,7 @@ import ZAPPER_ABI from '../constants/abis/zapper.json'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
+import { getZapperAddress } from 'constants/addresses'
 
 // returns null on errors
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -401,16 +402,6 @@ export function useSushiSwapMultiSwapper(): Contract | null {
 
 export function useZapperContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0xcff6eF0B9916682B37D80c19cFF8949bc1886bC2'
-                break
-            case ChainId.ROPSTEN:
-                address = '0x169c54a9826caf9f14bd30688296021533fe23ae'
-                break
-        }
-    }
+    const address = getZapperAddress(chainId)
     return useContract(address, ZAPPER_ABI, withSignerIfPossible)
 }

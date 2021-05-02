@@ -17,6 +17,7 @@ import usePool from '../../sushi-hooks/queries/usePool'
 import { useCurrency } from 'hooks/Tokens'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import { basisPointsToPercent } from 'utils'
+import { getZapperAddress } from 'constants/addresses'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -146,19 +147,20 @@ export function useDerivedZapInfo(
     // 0x0 (when one of the slp underlying tokens)
     const routerIface = new ethers.utils.Interface(ROUTER_ABI)
     const pct = basisPointsToPercent(allowedSlippage)
+    const zapperAddress = getZapperAddress(chainId)
     const encodedSwapData = useMemo(() => {
-        if (currencyZeroTrade !== undefined && currencyOneTrade !== undefined && parsedAmount !== undefined) {
+        if (!!currencyZeroTrade && !!currencyOneTrade && parsedAmount !== undefined) {
             if (
                 currency === ETHER &&
                 currency?.symbol !== currency0?.symbol &&
                 currency?.symbol !== currency1?.symbol
             ) {
+                console.log(currencyZeroTrade)
                 return routerIface.encodeFunctionData('swapExactETHForTokens', [
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
                     // path,
                     currencyZeroTrade?.route.path.map(t => t.address),
-                    // Zapper contract address
-                    '0x169c54a9826caf9f14bd30688296021533fe23ae',
+                    zapperAddress,
                     // some random date in the future in about a month
                     1622582801
                 ])
@@ -169,13 +171,13 @@ export function useDerivedZapInfo(
                 currency?.symbol !== currency0?.symbol &&
                 currency?.symbol !== currency1?.symbol
             ) {
+                console.log(currencyZeroTrade, parsedAmount)
                 return routerIface.encodeFunctionData('swapExactTokensForTokens', [
                     parsedAmount?.raw.toString(),
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
                     // path,
                     currencyZeroTrade?.route.path.map(t => t.address),
-                    // Zapper contract address
-                    '0x169c54a9826caf9f14bd30688296021533fe23ae',
+                    zapperAddress,
                     // some random date in the future in about a month
                     1622582801
                 ])
@@ -183,7 +185,7 @@ export function useDerivedZapInfo(
         }
 
         return 0x0
-    }, [currency, currency0, currency1, parsedAmount])
+    }, [zapperAddress, currency, currency0, currency1, parsedAmount])
 
     let error: string | undefined
     if (!account) {
