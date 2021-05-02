@@ -13,6 +13,7 @@ import usePendingReward from 'hooks/minichefv2/usePendingReward'
 import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
+import { WETH } from '@sushiswap/sdk'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
 
@@ -206,7 +207,13 @@ export default function InputGroup({
                         <>
                             <Button
                                 color="default"
-                                onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
+                                onClick={() =>
+                                    history.push(
+                                        `/add/${chainId && WETH[chainId] ? 'ETH' : token0Address}/${
+                                            chainId && WETH[chainId] ? 'ETH' : token1Address
+                                        }`
+                                    )
+                                }
                             >
                                 Add Liquidity
                             </Button>
