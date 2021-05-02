@@ -80,7 +80,7 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        Bentobox
+                                                        BentoBox
                                                     </NavLink>
                                                 )}
                                             {chainId && chainId === ChainId.MAINNET && (

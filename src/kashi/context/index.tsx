@@ -235,7 +235,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     payload: {
                         info,
                         pairs: pairs
-                            .filter((pair: any, i: number) => pair.asset !== pair.collateral)
+                            .filter((pair: any) => pair.asset !== pair.collateral)
                             .map((pair: any, i: number) => {
                                 pair.elapsedSeconds = BigNumber.from(Date.now())
                                     .div('1000')
