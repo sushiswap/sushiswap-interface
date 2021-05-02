@@ -13,7 +13,7 @@ import Web3Status from './Web3Status'
 import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
-
+import { ANALYTICS_URL } from '../constants'
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
     const { t } = useTranslation()
@@ -84,22 +84,21 @@ function AppBar(): JSX.Element {
                                                     </NavLink>
                                                 )} */}
 
-                                            {chainId && chainId === ChainId.MAINNET && (
-                                                <ExternalLink
-                                                    id={`analytics-nav-link`}
-                                                    href={'https://analytics.sushi.com'}
-                                                >
-                                                    Analytics
-                                                </ExternalLink>
-                                            )}
-                                            {chainId && chainId === ChainId.MATIC && (
-                                                <ExternalLink
-                                                    id={`analytics-nav-link`}
-                                                    href={'https://analytics-polygon.sushi.com'}
-                                                >
-                                                    Analytics
-                                                </ExternalLink>
-                                            )}
+                                            {chainId &&
+                                                [
+                                                    ChainId.MAINNET,
+                                                    ChainId.BSC,
+                                                    ChainId.XDAI,
+                                                    ChainId.FANTOM,
+                                                    ChainId.MATIC
+                                                ].includes(chainId) && (
+                                                    <ExternalLink
+                                                        id={`analytics-nav-link`}
+                                                        href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
+                                                    >
+                                                        Analytics
+                                                    </ExternalLink>
+                                                )}
                                         </div>
                                     </div>
                                 </div>
