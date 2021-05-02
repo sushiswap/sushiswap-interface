@@ -16,7 +16,8 @@ const mockData = {
     numSushi: 0.1,
     xSushiPerSushi: 0.8,
     sushiBalance: 123.4567,
-    xSushiBalance: 8309.6
+    xSushiBalance: 8309.6,
+    weightedApr: 15.34
 }
 
 export default function XSushi() {
@@ -46,8 +47,21 @@ export default function XSushi() {
                             />
                         </div>
                     </div>
-                    <div className="hidden md:block">
-                        <BalanceCard />
+                    <div className="hidden md:block w-72 ml-6">
+                        <BalanceCard
+                            sushiBalance={mockData.sushiBalance}
+                            xSushiBalance={mockData.xSushiBalance}
+                            weightedApr={mockData.weightedApr}
+                        />
+                    </div>
+                </div>
+                <div className="flex justify-center w-full">
+                    <div className="md:hidden flex justify-center w-full max-w-xl h-56 mt-6">
+                        <BalanceCard
+                            sushiBalance={mockData.sushiBalance}
+                            xSushiBalance={mockData.xSushiBalance}
+                            weightedApr={mockData.weightedApr}
+                        />
                     </div>
                 </div>
             </div>

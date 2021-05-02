@@ -1,5 +1,59 @@
 import React from 'react'
+import SushiImage from '../../assets/images/sushi.png'
+import XSushiImage from '../../assets/images/xsushi.png'
+import MoreInfoSymbol from '../../assets/images/more-info.svg'
+import ButtonDark from './ButtonDark'
 
-export default function BalanceCard() {
-    return <div className="flex flex-col w-72 h-full bg-dark-900 ml-6 rounded"></div>
+interface BalanceCardProps {
+    sushiBalance: number
+    xSushiBalance: number
+    weightedApr: number
+}
+
+export default function BalanceCard({ sushiBalance, xSushiBalance, weightedApr }: BalanceCardProps) {
+    return (
+        <div className="flex flex-col w-full h-full bg-dark-900 rounded px-4 md:px-8 pt-6 pb-5 md:pt-7 md:pb-9">
+            <div className="flex flex-wrap">
+                <div className="flex flex-col flex-grow md:mb-14">
+                    <p className="mb-3 text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Balance</p>
+                    <div className="flex items-center">
+                        <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={XSushiImage} alt="sushi" />
+                        <div className="flex flex-col justify-center">
+                            <p className="text-caption2 md:text-lg font-bold text-high-emphesis">
+                                {xSushiBalance.toPrecision(7)}
+                            </p>
+                            <p className="text-caption2 md:text-caption text-primary">xSUSHI</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col flex-grow ml-8 md:ml-0">
+                    <div className="flex flex-nowrap mb-3">
+                        <p className="text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Earnings</p>
+                        <img className="ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
+                    </div>
+                    <div className="flex items-center">
+                        <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={SushiImage} alt="sushi" />
+                        <div className="flex flex-col justify-center">
+                            <p className="text-caption2 md:text-lg font-bold text-high-emphesis">
+                                {sushiBalance.toPrecision(7)}
+                            </p>
+                            <p className="text-caption2 md:text-caption text-primary">SUSHI</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col w-full mt-7 mb-24 md:mb-0">
+                    <div className="flex justify-between items-center">
+                        <div className="flex flex-nowrap items-center">
+                            <p className="text-caption md:text-lg font-bold text-high-emphesis">Weighted APR</p>
+                            <img className="ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
+                        </div>
+                        <p className="text-caption text-primary">{`${weightedApr}%`}</p>
+                    </div>
+                    <ButtonDark className="h-8 mt-4 mx-6 md:mx-0 text-caption2 font-bold">Your History</ButtonDark>
+                </div>
+            </div>
+        </div>
+    )
 }
