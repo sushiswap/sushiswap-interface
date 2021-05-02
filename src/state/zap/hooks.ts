@@ -18,6 +18,7 @@ import { useCurrency } from 'hooks/Tokens'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import { basisPointsToPercent } from 'utils'
 import { getZapperAddress } from 'constants/addresses'
+import useTransactionDeadline from 'hooks/useTransactionDeadline'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -141,10 +142,13 @@ export function useDerivedZapInfo(
     // get custom setting values for user in bips
     const [allowedSlippage] = useUserSlippageTolerance()
 
-    // TYPES OF TRADES
+    // get custom tx deadline
+    const deadline = useTransactionDeadline()
+
+    // TYPES OF TRADES VIA SWAP DATA
     // SWAP EXACT TOKENS FOR TOKENS (when any non ether input)
     // SWAP EXACT ETH FOR TOKENS  (when input is eth and neither currency is weth)
-    // 0x0 (when one of the slp underlying tokens)
+    // 0x0 (when one of the pool underlying tokens)
     const routerIface = new ethers.utils.Interface(ROUTER_ABI)
     const pct = basisPointsToPercent(allowedSlippage)
     const zapperAddress = getZapperAddress(chainId)
@@ -161,8 +165,7 @@ export function useDerivedZapInfo(
                     // path,
                     currencyZeroTrade?.route.path.map(t => t.address),
                     zapperAddress,
-                    // some random date in the future in about a month
-                    1622582801
+                    deadline
                 ])
             }
 
@@ -178,14 +181,13 @@ export function useDerivedZapInfo(
                     // path,
                     currencyZeroTrade?.route.path.map(t => t.address),
                     zapperAddress,
-                    // some random date in the future in about a month
-                    1622582801
+                    deadline
                 ])
             }
         }
 
         return 0x0
-    }, [zapperAddress, currency, currency0, currency1, parsedAmount])
+    }, [zapperAddress, currency, currencyZeroTrade, currencyOneTrade, currency0, currency1, parsedAmount])
 
     let error: string | undefined
     if (!account) {
