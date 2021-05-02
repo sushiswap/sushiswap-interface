@@ -30,7 +30,7 @@ export default function BalanceCard({ sushiBalance, xSushiBalance, weightedApr }
                 <div className="flex flex-col flex-grow">
                     <div className="flex flex-nowrap mb-3 ml-8 md:ml-0">
                         <p className="text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Earnings</p>
-                        <img className="ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
+                        <img className="cursor-pointer ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
                     </div>
                     <div className="flex items-center ml-8 md:ml-0">
                         <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={SushiImage} alt="sushi" />
@@ -47,7 +47,7 @@ export default function BalanceCard({ sushiBalance, xSushiBalance, weightedApr }
                     <div className="flex justify-between items-center">
                         <div className="flex flex-nowrap items-center flex-1">
                             <p className="text-caption md:text-lg font-bold text-high-emphesis">Weighted APR</p>
-                            <img className="ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
+                            <img className="cursor-pointer ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
                         </div>
                         <div className="flex flex-1 md:flex-initial">
                             <p className="text-caption text-primary ml-5 md:ml-0">{`${weightedApr}%`}</p>

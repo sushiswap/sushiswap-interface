@@ -40,7 +40,7 @@ export default function APRCard({ apr, numSushi }: any) {
                     <p className="whitespace-nowrap text-caption2 md:text-lg md:leading-5 font-bold text-high-emphesis">
                         Staking APR{' '}
                     </p>
-                    <img className="ml-3" src={MoreInfoSymbol} alt={'more info'} />
+                    <img className="cursor-pointer ml-3" src={MoreInfoSymbol} alt={'more info'} />
                 </div>
                 <div className="flex">
                     <ButtonSelect className="text-xs md:text-sm font-medium md:font-bold text-dark-900 py-1 px-4 md:py-1.5 md:px-7">

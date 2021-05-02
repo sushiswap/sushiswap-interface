@@ -2,6 +2,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../../components'
 import { Input as NumericalInput } from '../../components/NumericalInput'
+import ErrorTriangle from '../../assets/images/error-triangle.svg'
+
+const INPUT_CHAR_LIMIT = 18
+
+const StyledNumericalInput = styled(NumericalInput)`
+    caret-color: #e3e3e3;
+`
 
 const tabStyle =
     'flex justify-center items-center h-full w-full rounded-lg cursor-pointer text-caption2 md:text-caption'
@@ -22,6 +29,9 @@ interface StakeCardProps {
 export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance }: StakeCardProps) {
     const [activeTab, setActiveTab] = useState(0)
     const [input, setInput] = useState('')
+
+    const insufficientFunds = activeTab == 0 ? parseFloat(input) > sushiBalance : parseFloat(input) > xSushiBalance
+    const inputError = insufficientFunds
 
     return (
         <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl pt-2 pb-6 md:pb-9 px-3 md:pt-4 md:px-8 rounded">
@@ -59,20 +69,40 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
                 </div>
             </div>
 
-            <NumericalInput
+            <StyledNumericalInput
                 value={input}
-                onUserInput={setInput}
-                className="w-full h-11 md:h-14 px-3 md:px-5 bg-dark-800 mt-5 rounded"
+                onUserInput={v => {
+                    if (v.length <= INPUT_CHAR_LIMIT) setInput(v)
+                }}
+                className={`w-full h-11 md:h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-caption2 md:text-lg font-bold text-dark-800${
+                    inputError ? ' pl-9 md:pl-12' : ''
+                }`}
                 placeholder=" "
             />
+            {/* input overlay: */}
             <div className="relative h-0 bottom-11 md:bottom-14 w-full pointer-events-none">
-                <div className="flex justify-between items-center h-11 md:h-14 px-3 md:px-5">
-                    <p className="text-caption2 md:text-lg font-bold text-secondary">{!input ? '0 SUSHI' : ''}</p>
-                    <div className="pointer-events-auto flex items-center text-secondary text-caption2 md:text-caption">
-                        <p>Balance:&nbsp;</p>
-                        <p className="text-caption font-bold">
-                            {(activeTab === 0 ? sushiBalance : xSushiBalance).toPrecision(6)}
+                <div
+                    className={`flex justify-between items-center h-11 md:h-14 rounded px-3 md:px-5 ${
+                        inputError ? ' border border-red' : ''
+                    }`}
+                >
+                    <div className="flex">
+                        {inputError && <img className="w-4 md:w-5 mr-2" src={ErrorTriangle} alt="error" />}
+                        <p
+                            className={`text-caption2 md:text-lg font-bold ${
+                                input ? 'text-high-emphesis' : 'text-secondary'
+                            }`}
+                        >
+                            {`${input ? input : '0'} ${activeTab === 0 ? '' : 'x'}SUSHI`}
                         </p>
+                    </div>
+                    <div className="pointer-events-auto flex items-center text-secondary text-caption2 md:text-caption">
+                        <div className={input ? 'hidden md:flex md:items-center' : 'flex items-center'}>
+                            <p>Balance:&nbsp;</p>
+                            <p className="text-caption font-bold">
+                                {(activeTab === 0 ? sushiBalance : xSushiBalance).toPrecision(6)}
+                            </p>
+                        </div>
                         <button
                             className={`
                                 focus:outline-none focus:ring hover:bg-opacity-40
@@ -89,8 +119,18 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
                 </div>
             </div>
 
-            <button className={input ? buttonStyleEnabled : buttonStyleDisabled}>
-                {!input ? 'Enter Amount' : activeTab === 0 ? 'Confirm Staking' : 'Confirm Withdrawal'}
+            <button
+                className={
+                    input ? `${buttonStyleEnabled}${insufficientFunds ? ' opacity-60' : ''}` : buttonStyleDisabled
+                }
+            >
+                {!input
+                    ? 'Enter Amount'
+                    : insufficientFunds
+                    ? 'Insufficient Balance'
+                    : activeTab === 0
+                    ? 'Confirm Staking'
+                    : 'Confirm Withdrawal'}
             </button>
         </div>
     )
