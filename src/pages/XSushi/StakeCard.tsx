@@ -62,11 +62,11 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
             <NumericalInput
                 value={input}
                 onUserInput={setInput}
-                className="w-full h-11 md:h-13 px-3 md:px-5 bg-dark-800 mt-5 rounded"
+                className="w-full h-11 md:h-14 px-3 md:px-5 bg-dark-800 mt-5 rounded"
                 placeholder=" "
             />
-            <div className="relative h-0 bottom-8 md:bottom-9 pointer-events-none">
-                <div className="flex justify-between items-center px-3 md:px-5">
+            <div className="relative h-0 bottom-11 md:bottom-14 w-full pointer-events-none">
+                <div className="flex justify-between items-center h-11 md:h-14 px-3 md:px-5">
                     <p className="text-caption2 md:text-lg font-bold text-secondary">{!input ? '0 SUSHI' : ''}</p>
                     <div className="pointer-events-auto flex items-center text-secondary text-caption2 md:text-caption">
                         <p>Balance:&nbsp;</p>
@@ -75,12 +75,12 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
                         </p>
                         <button
                             className={`
-                      focus:outline-none focus:ring hover:bg-opacity-40
-                      md:bg-cyan-blue md:bg-opacity-30
-                      border border-secondary md:border-cyan-blue
-                      rounded-2xl py-1 px-2 md:py-1 md:px-3 ml-3 md:ml-4
-                      text-xs md:text-caption2 font-bold md:font-normal md:text-cyan-blue
-                  `}
+                                focus:outline-none focus:ring hover:bg-opacity-40
+                                md:bg-cyan-blue md:bg-opacity-30
+                                border border-secondary md:border-cyan-blue
+                                rounded-2xl py-1 px-2 md:py-1 md:px-3 ml-3 md:ml-4
+                                text-xs md:text-caption2 font-bold md:font-normal md:text-cyan-blue
+                            `}
                             onClick={() => setInput((activeTab === 0 ? sushiBalance : xSushiBalance).toString())}
                         >
                             MAX
