@@ -1,8 +1,10 @@
 import { Currency, CurrencyAmount, ETHER, JSBI, Pair, Percent, Price, TokenAmount, Trade } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { ethers } from 'ethers'
 import { PairState, usePair } from '../../data/Reserves'
 import { useTotalSupply } from '../../data/TotalSupply'
+import ROUTER_ABI from '../../constants/abis/router.json'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useTradeExactIn } from '../../hooks/Trades'
@@ -13,6 +15,8 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 import usePool from '../../sushi-hooks/queries/usePool'
 import { useCurrency } from 'hooks/Tokens'
+import { useUserSlippageTolerance } from 'state/user/hooks'
+import { basisPointsToPercent } from 'utils'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -55,6 +59,7 @@ export function useDerivedZapInfo(
     liquidityMinted?: TokenAmount
     poolTokenPercentage?: Percent
     bestTrade?: Trade
+    encodedSwapData: string | number
     error?: string
 } {
     const { account, chainId } = useActiveWeb3React()
@@ -91,8 +96,10 @@ export function useDerivedZapInfo(
     // Only one trade if providing one of the input tokens of the pair
     // Two trades if providing neither
     const isTradingCurrency0 = currency?.symbol === currency0?.symbol
-    const isTradingCurrency1 = currency?.symbol === currency1?.symbol || currency === ETHER
+    const isTradingCurrency1 = currency?.symbol === currency1?.symbol || currency1 === ETHER
 
+    const currencyZeroTrade = useTradeExactIn(tradeAmount, currency0 ?? undefined)
+    const currencyOneTrade = useTradeExactIn(tradeAmount, currency1 ?? undefined)
     let currencyZeroOutput = useTradeExactIn(tradeAmount, currency0 ?? undefined)?.outputAmount
     let currencyOneOutput = useTradeExactIn(tradeAmount, currency1 ?? undefined)?.outputAmount
     const bestTradeExactIn = useTradeExactIn(
@@ -120,7 +127,7 @@ export function useDerivedZapInfo(
         } else {
             return undefined
         }
-    }, [chainId, parsedAmount])
+    }, [chainId, currencyOneOutput, currencyZeroOutput, pair, totalSupply])
 
     const poolTokenPercentage = useMemo(() => {
         if (liquidityMinted && totalSupply) {
@@ -129,6 +136,54 @@ export function useDerivedZapInfo(
             return undefined
         }
     }, [liquidityMinted, totalSupply])
+
+    // get custom setting values for user in bips
+    const [allowedSlippage] = useUserSlippageTolerance()
+
+    // TYPES OF TRADES
+    // SWAP EXACT TOKENS FOR TOKENS (when any non ether input)
+    // SWAP EXACT ETH FOR TOKENS  (when input is eth and neither currency is weth)
+    // 0x0 (when one of the slp underlying tokens)
+    const routerIface = new ethers.utils.Interface(ROUTER_ABI)
+    const pct = basisPointsToPercent(allowedSlippage)
+    const encodedSwapData = useMemo(() => {
+        if (currencyZeroTrade !== undefined && currencyOneTrade !== undefined && parsedAmount !== undefined) {
+            if (
+                currency === ETHER &&
+                currency?.symbol !== currency0?.symbol &&
+                currency?.symbol !== currency1?.symbol
+            ) {
+                return routerIface.encodeFunctionData('swapExactETHForTokens', [
+                    currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
+                    // path,
+                    currencyZeroTrade?.route.path.map(t => t.address),
+                    // Zapper contract address
+                    '0x169c54a9826caf9f14bd30688296021533fe23ae',
+                    // some random date in the future in about a month
+                    1622582801
+                ])
+            }
+
+            if (
+                currency !== ETHER &&
+                currency?.symbol !== currency0?.symbol &&
+                currency?.symbol !== currency1?.symbol
+            ) {
+                return routerIface.encodeFunctionData('swapExactTokensForTokens', [
+                    parsedAmount?.raw.toString(),
+                    currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
+                    // path,
+                    currencyZeroTrade?.route.path.map(t => t.address),
+                    // Zapper contract address
+                    '0x169c54a9826caf9f14bd30688296021533fe23ae',
+                    // some random date in the future in about a month
+                    1622582801
+                ])
+            }
+        }
+
+        return 0x0
+    }, [currency, currency0, currency1, parsedAmount])
 
     let error: string | undefined
     if (!account) {
@@ -156,6 +211,7 @@ export function useDerivedZapInfo(
         poolTokenPercentage,
         currencyZeroOutput,
         currencyOneOutput,
+        encodedSwapData,
         bestTrade: bestTradeExactIn ?? undefined
     }
 }

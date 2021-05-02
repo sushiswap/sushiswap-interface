@@ -1,5 +1,4 @@
-import { Currency, ETHER, ChainId, JSBI } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
+import { Currency, ETHER, ChainId, JSBI, Percent } from '@sushiswap/sdk'
 import React, { useContext, useCallback, useState, useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
@@ -24,9 +23,7 @@ import ProgressSteps from '../../components/ProgressSteps'
 import { AppDispatch } from 'state'
 import { useCurrency } from '../../hooks/Tokens'
 import usePool from '../../sushi-hooks/queries/usePool'
-import { resetZapState } from '../../state/zap/actions'
 import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../../state/zap/hooks'
-import ROUTER_ABI from '../../constants/abis/router.json'
 
 import { TYPE } from '../../theme'
 import { currencyId as getCurrencyId } from '../../utils/currencyId'
@@ -35,8 +32,9 @@ import { useActiveWeb3React, useRouterContract } from 'hooks'
 import { useWalletModalToggle } from 'state/application/hooks'
 import useZapper from 'sushi-hooks/useZapper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { useUserSlippageTolerance } from 'state/user/hooks'
 import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
+import { resetZapState } from 'state/zap/actions'
+import { useUserSlippageTolerance } from 'state/user/hooks'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -180,11 +178,18 @@ const AddSingleSideLiquidity = ({
     const currency = useCurrency(currencyId)
     const { typedValue } = useZapState()
     const { onFieldInput } = useZapActionHandlers(false)
-    const { currencyBalance, parsedAmount, error, bestTrade, liquidityMinted } = useDerivedZapInfo(
-        currency ?? undefined,
-        poolAddress
-    )
+    const {
+        currencyBalance,
+        parsedAmount,
+        error,
+        bestTrade,
+        liquidityMinted,
+        currencyOneOutput,
+        currencyZeroOutput,
+        encodedSwapData
+    } = useDerivedZapInfo(currency ?? undefined, poolAddress)
     const { zapIn, swap } = useZapper(currency ?? undefined)
+    const dispatch = useDispatch<AppDispatch>()
 
     const route = bestTrade?.route
     const noRoute = !route
@@ -213,7 +218,7 @@ const AddSingleSideLiquidity = ({
     // get custom setting values for user in bips
     const [allowedSlippage] = useUserSlippageTolerance()
 
-    // Get min tokens received based on user slippage preferences
+    // Get min pooltokens received based on user slippage preferences
     const minTokensReceived = JSBI.divide(
         // Take raw token (number * (10000 - ALLOWED_SLIPPAGE))/10000
         JSBI.multiply(liquidityMinted?.raw || JSBI.BigInt(0), JSBI.BigInt(10000 - allowedSlippage)),
@@ -243,32 +248,19 @@ const AddSingleSideLiquidity = ({
     )
 
     const toggleWalletModal = useWalletModalToggle()
-    const router = useRouterContract()
-    const routerIface = new ethers.utils.Interface(ROUTER_ABI)
-    // routerIface.encodeFunctionData('transfer', )
-    console.log(bestTrade?.route.path.map(t => t.address))
 
     const zapCallback = useCallback(() => {
-        console.log(bestTrade)
-        // swap(bestTrade?.route.path.map(t => t.address))
-        const swapData = routerIface.encodeFunctionData('swapExactTokensForTokens', [
-            1000000,
-            10,
-            // path,
-            bestTrade?.route.path.map(t => t.address),
-            '0x169c54a9826caf9f14bd30688296021533fe23ae',
-            // some random date in the future in about a month
-            1622582801
-        ])
         zapIn(
             currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
             poolAddress,
             parsedAmount,
-            0,
-            // Hard coded for now
+            minTokensReceived.toString(),
+            // Sushsiwap Router
             '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
-            swapData
-            // 0x0
+            encodedSwapData
+        ).then(
+            () => dispatch(resetZapState()),
+            err => console.log(err, 'ZAP ERR???')
         )
     }, [currency, poolAddress, parsedAmount, minTokensReceived])
 
