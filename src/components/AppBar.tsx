@@ -14,6 +14,7 @@ import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
 import { ANALYTICS_URL } from '../constants'
+
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
     const { t } = useTranslation()
@@ -314,6 +315,12 @@ function AppBar(): JSX.Element {
                                         Yield
                                     </NavLink>
                                 )}
+                                {chainId &&
+                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                                        <NavLink id={`bento-nav-link`} to={'/bento'}>
+                                            BentoBox
+                                        </NavLink>
+                                    )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/stake'}>
                                         SushiBar
@@ -325,30 +332,20 @@ function AppBar(): JSX.Element {
                                     </NavLink>
                                 )}
                                 {chainId &&
-                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                                        <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
-                                            Kashi Lend
-                                        </NavLink>
+                                    [
+                                        ChainId.MAINNET,
+                                        ChainId.BSC,
+                                        ChainId.XDAI,
+                                        ChainId.FANTOM,
+                                        ChainId.MATIC
+                                    ].includes(chainId) && (
+                                        <ExternalLink
+                                            id={`analytics-nav-link`}
+                                            href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
+                                        >
+                                            Analytics
+                                        </ExternalLink>
                                     )}
-                                {chainId &&
-                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                                        <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                            BentoBox Apps
-                                        </NavLink>
-                                    )}
-                                {chainId && chainId !== ChainId.MATIC && (
-                                    <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
-                                        Analytics
-                                    </ExternalLink>
-                                )}
-                                {chainId && chainId === ChainId.MATIC && (
-                                    <ExternalLink
-                                        id={`analytics-nav-link`}
-                                        href={'https://analytics-polygon.sushi.com'}
-                                    >
-                                        Analytics
-                                    </ExternalLink>
-                                )}
                             </div>
                         </Disclosure.Panel>
                     </>
