@@ -1,4 +1,4 @@
-import { Trade, TradeType } from '@sushiswap/sdk'
+import { ChainId, Trade, TradeType } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
@@ -70,6 +70,7 @@ export interface AdvancedSwapDetailsProps {
 
 export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
     const theme = useContext(ThemeContext)
+    const { chainId } = useActiveWeb3React()
 
     const [allowedSlippage] = useUserSlippageTolerance()
 
@@ -91,11 +92,24 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
                             </RowBetween>
                         </>
                     )}
-                    {!showRoute && (
+
+                    {chainId === ChainId.MAINNET && !showRoute && (
                         <div className="flex justify-center pt-3 px-4">
                             <ExternalLink
                                 href={
                                     'https://analytics.sushi.com/pairs/' + trade.route.pairs[0].liquidityToken.address
+                                }
+                            >
+                                View pair analytics
+                            </ExternalLink>
+                        </div>
+                    )}
+                    {chainId === ChainId.MATIC && !showRoute && (
+                        <div className="flex justify-center pt-3 px-4">
+                            <ExternalLink
+                                href={
+                                    'https://analytics-polygon.sushi.com/pairs/' +
+                                    trade.route.pairs[0].liquidityToken.address
                                 }
                             >
                                 View pair analytics
