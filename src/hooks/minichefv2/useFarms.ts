@@ -79,6 +79,8 @@ const useFarms = () => {
                 const roiPerMonth = roiPerDay * 30
                 const roiPerYear = roiPerMonth * 12
 
+                console.log('pool:', pool.balance)
+
                 return {
                     ...pool,
                     type: 'SLP',
@@ -86,7 +88,7 @@ const useFarms = () => {
                     name: pair.token0.name + ' ' + pair.token1.name,
                     pid: Number(pool.id),
                     pairAddress: pair.id,
-                    slpBalance: pool.balance,
+                    slpBalance: pool.slpBalance,
                     liquidityPair: pair,
                     rewardTokens: [
                         '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a', //SUSHI on Matic

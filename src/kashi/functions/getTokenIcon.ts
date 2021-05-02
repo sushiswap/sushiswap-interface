@@ -40,6 +40,7 @@ import HUSD from '../../assets/kashi/tokens/husd-square.jpg'
 import INJ from '../../assets/kashi/tokens/inj-square.jpg'
 import KNC from '../../assets/kashi/tokens/knc-square.jpg'
 import KP3R from '../../assets/kashi/tokens/kp3r-square.jpg'
+import KRILL from '../../assets/kashi/tokens/krill-square.jpg'
 import LINK from '../../assets/kashi/tokens/link-square.jpg'
 import LRC from '../../assets/kashi/tokens/lrc-square.jpg'
 import LTC from '../../assets/kashi/tokens/ltc-square.jpg'
@@ -284,6 +285,7 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063').toLowerCase()]: DAI,
         [String('0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619').toLowerCase()]: ETH,
         [String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase()]: MATIC,
+        [String('0x05089C9EBFFa4F0AcA269e32056b1b36B37ED71b').toLowerCase()]: KRILL,
         [String('0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174').toLowerCase()]: USDC,
         [String('0xc2132D05D31c914a87C6611C10748AEb04B58e8F').toLowerCase()]: USDT,
         [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: BTC, // WBTC

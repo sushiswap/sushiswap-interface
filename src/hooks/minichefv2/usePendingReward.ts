@@ -27,6 +27,7 @@ const usePending = (pid: number) => {
         const formatted = Fraction.from(BigNumber.from(pending?.rewardAmounts[0]), BigNumber.from(10).pow(18)).toString(
             18
         )
+        //console.log('pending:', pending)
         setBalance(formatted)
     }, [miniChefV2Contract, library, pid, account])
 

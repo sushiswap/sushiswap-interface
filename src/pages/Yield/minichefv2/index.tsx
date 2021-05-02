@@ -15,6 +15,8 @@ import { useActiveWeb3React } from '../../../hooks'
 import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
 import { getTokenIcon } from 'kashi/functions'
 
+import DoubleRewardBadge from '../../../assets/images/2x-square.jpg'
+
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
@@ -95,7 +97,8 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hidden md:block ml-4">
                             <div className="flex items-center justify-start">
-                                <div>Pool Rewards</div>
+                                <div className="pr-2">Pool Rewards</div>
+                                <Badge color="blue">2x</Badge>
                             </div>
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
