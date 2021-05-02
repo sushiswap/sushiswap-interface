@@ -84,6 +84,8 @@ const CreatePair = () => {
 
     const handleCreate = async () => {
         try {
+            console.log(selectedAsset, selectedCollateral)
+
             const oracleData = getOracleData(selectedAsset, selectedCollateral)
             if (!oracleData) {
                 console.log('No path')
@@ -152,12 +154,17 @@ const CreatePair = () => {
                         tokens={collateralTokens}
                         selectedToken={selectedCollateral}
                         setSelectedToken={setSelectedCollateral}
+                        disabled={selectedAsset === empty}
                     />
                     <Button
                         color="gradient"
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"
                         onClick={() => handleCreate()}
-                        disabled={selectedCollateral === empty || selectedAsset === empty}
+                        disabled={
+                            selectedCollateral === empty ||
+                            selectedAsset === empty ||
+                            selectedCollateral === selectedAsset
+                        }
                     >
                         Create Market
                     </Button>
