@@ -70,16 +70,16 @@ function Routes(): JSX.Element {
             {(chainId === ChainId.MAINNET || chainId === ChainId.BSC || chainId === ChainId.MATIC) && (
                 <Route exact strict path="/migrate" component={Migrate} />
             )}
-            <Route exact strict path="/migrate/v2" render={() => <Redirect to="/migrate" />} />
 
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
 
             {/* Pages */}
-            {chainId === ChainId.MAINNET && <Route exact strict path="/trade" component={Trade} />}
+            {/* {chainId === ChainId.MAINNET && <Route exact strict path="/trade" component={Trade} />} */}
             <Route exact strict path="/trade" component={Swap} />
-            <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
+
+            <Route exact strict path="/sushi-bar" component={SushiBar} />
             <Route exact strict path="/swap" component={Swap} />
             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
             <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
@@ -119,6 +119,7 @@ function Routes(): JSX.Element {
 
             {/* Redirects for Legacy Hash Router paths */}
             <Route exact strict path="/" component={RedirectHashRoutes} />
+
             {/* Catch all */}
             <Route component={RedirectPathToSwapOnly} />
         </Switch>
