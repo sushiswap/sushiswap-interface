@@ -430,6 +430,7 @@ export function useZapperContract(withSignerIfPossible?: boolean): Contract | nu
     const { chainId } = useActiveWeb3React()
     const address = getZapperAddress(chainId)
     return useContract(address, ZAPPER_ABI, withSignerIfPossible)
+}
 
 export function useQuickSwapFactoryContract(): Contract | null {
     return useContract(

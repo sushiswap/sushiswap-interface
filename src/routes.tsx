@@ -34,7 +34,6 @@ import {
 } from './pages/Swap/redirects'
 import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
-import Yield from './pages/Yield'
 import AddSingleSideLiquidity from './pages/AddSingleSideLiquidity'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
