@@ -58,7 +58,7 @@ function AppBar(): JSX.Element {
                                                 </NavLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`stake-nav-link`} to={'/stake'}>
+                                                <NavLink id={`stake-nav-link`} to={'/sushibar'}>
                                                     SushiBar
                                                 </NavLink>
                                             )}
@@ -315,7 +315,7 @@ function AppBar(): JSX.Element {
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
-                                    <NavLink id={`stake-nav-link`} to={'/stake'}>
+                                    <NavLink id={`stake-nav-link`} to={'/sushibar'}>
                                         SushiBar
                                     </NavLink>
                                 )}
@@ -327,7 +327,7 @@ function AppBar(): JSX.Element {
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
-                                            Kashi Lend
+                                            Kashi Lending
                                         </NavLink>
                                     )}
                                 {chainId &&
