@@ -201,7 +201,7 @@ export default function Borrow({ pair }: BorrowProps) {
         collateralWarnings.broken ||
         (borrowValue.length > 0 && borrowWarnings.broken) ||
         (swap && priceImpactSeverity > 3 && !isExpertMode) ||
-        !collateralValueSet
+        (pair.userCollateralAmount.value.isZero() && !collateralValueSet)
 
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
@@ -221,7 +221,6 @@ export default function Borrow({ pair }: BorrowProps) {
                 swap || useBentoBorrow,
                 swap ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1] : ''
             )
-            summary += (summary ? ' and ' : '') + 'Borrow'
         }
         if (borrowValueSet && trade) {
             const path = trade.route.path.map(token => token.address) || []
@@ -267,8 +266,18 @@ export default function Borrow({ pair }: BorrowProps) {
                 swap ? BigNumber.from(-1) : collateralValue.toBigNumber(pair.collateral.decimals),
                 useBentoCollateral || swap
             )
-            summary = 'Add collateral'
         }
+
+        if (collateralValueSet) {
+            if (borrowValueSet) {
+                summary = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
+            } else {
+                summary = 'Add collateral'
+            }
+        } else if (borrowValueSet) {
+            summary = trade ? 'Borrow, swap and add as collateral' : 'Borrow'
+        }
+
         return summary
     }
 
