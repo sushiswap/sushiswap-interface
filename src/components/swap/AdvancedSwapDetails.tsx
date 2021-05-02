@@ -90,19 +90,24 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
                             </RowBetween>
                         </>
                     )}
-                    {!showRoute && (
-                        <div className="flex justify-center pt-3 px-4">
-                            <ExternalLink
-                                href={`${
-                                    chainId && ANALYTICS_URL[chainId]
-                                        ? ANALYTICS_URL[chainId]
-                                        : 'https://analytics.sushi.com'
-                                }/pairs/${trade.route.pairs[0].liquidityToken.address}`}
-                            >
-                                View pair analytics
-                            </ExternalLink>
-                        </div>
-                    )}
+
+                    {!showRoute &&
+                        chainId &&
+                        [ChainId.MAINNET, ChainId.BSC, ChainId.FANTOM, ChainId.XDAI, ChainId.MATIC].includes(
+                            chainId
+                        ) && (
+                            <div className="flex justify-center pt-3 px-4">
+                                <ExternalLink
+                                    href={`${
+                                        chainId && ANALYTICS_URL[chainId]
+                                            ? ANALYTICS_URL[chainId]
+                                            : 'https://analytics.sushi.com'
+                                    }/pairs/${trade.route.pairs[0].liquidityToken.address}`}
+                                >
+                                    View pair analytics
+                                </ExternalLink>
+                            </div>
+                        )}
                 </>
             )}
         </AutoColumn>

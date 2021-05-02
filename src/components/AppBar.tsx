@@ -322,7 +322,7 @@ function AppBar(): JSX.Element {
                                         </NavLink>
                                     )}
                                 {chainId === ChainId.MAINNET && (
-                                    <NavLink id={`stake-nav-link`} to={'/stake'}>
+                                    <NavLink id={`stake-nav-link`} to={'/sushibar'}>
                                         SushiBar
                                     </NavLink>
                                 )}
