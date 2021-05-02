@@ -51,10 +51,9 @@ export default function InputGroup({
     const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
 
-    console.log('Hello')
-    console.log('balance:', balance)
-    console.log('staked:', staked)
-    console.log('pending:', pending, pid)
+    // console.log('balance:', balance)
+    // console.log('staked:', staked)
+    // console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
@@ -72,43 +71,36 @@ export default function InputGroup({
     return (
         <>
             <div className="flex flex-col space-y-4 py-6">
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
-                    {type === 'LP' && (
-                        <>
-                            <Button
-                                color="default"
-                                onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
-                            >
-                                Add Liquidity
-                            </Button>
-                            <Button
-                                color="default"
-                                onClick={() =>
-                                    history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
-                                }
-                            >
-                                Remove Liquidity
-                            </Button>
-                        </>
-                    )}
-                    {type === 'KMP' && assetSymbol && (
-                        <>
-                            <Button
-                                color="default"
-                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
-                            >
-                                Lend {assetSymbol}
-                            </Button>
-                            <Button
-                                color="default"
-                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
-                            >
-                                Withdraw {assetSymbol}
-                            </Button>
-                        </>
-                    )}
+                {pending && Number(pending) > 0 && (
+                    <div className=" px-4">
+                        <Button
+                            color="default"
+                            onClick={async () => {
+                                setPendingTx(true)
+                                await harvest(pid, pairSymbol)
+                                setPendingTx(false)
+                            }}
+                        >
+                            Harvest{'  '}
+                            {formattedNum(pending)} {'SUSHI & MATIC'}
+                        </Button>
+                    </div>
+                )}
+                <div className="px-4">
+                    <div className="bg-dark-850 text-gray-500 block w-full rounded text-sm p-4">
+                        <div className="flex items-center">
+                            <div className="ml-3">
+                                <p>
+                                    <b>Tip:</b> In order to start earning rewards, you will need to first acquire some
+                                    SLP by adding liquidity to the specified pair. Once you have SLP you can stake it
+                                    into this yield farm to start earning rewards. Unstake anytime and then you can
+                                    convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to
+                                    receive you rewards at any time.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div className="grid gap-4 grid-cols-2 px-4">
                     {/* Deposit */}
                     <div className="text-center col-span-2 md:col-span-1">
@@ -157,7 +149,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                Deposit
+                                Stake
                             </Button>
                         )}
                     </div>
@@ -165,7 +157,7 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                Staked: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -203,25 +195,46 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Withdraw
+                            Unstake
                         </Button>
                     </div>
                 </div>
-                {pending && Number(pending) > 0 && (
-                    <div className=" px-4">
-                        <Button
-                            color="default"
-                            onClick={async () => {
-                                setPendingTx(true)
-                                await harvest(pid, pairSymbol)
-                                setPendingTx(false)
-                            }}
-                        >
-                            Harvest{'  '}
-                            {formattedNum(pending)} SUSHI
-                        </Button>
-                    </div>
-                )}
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
+                    {type === 'SLP' && (
+                        <>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
+                            >
+                                Add Liquidity
+                            </Button>
+                            <Button
+                                color="default"
+                                onClick={() =>
+                                    history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
+                                }
+                            >
+                                Remove Liquidity
+                            </Button>
+                        </>
+                    )}
+                    {type === 'KMP' && assetSymbol && (
+                        <>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
+                            >
+                                Lend {assetSymbol}
+                            </Button>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
+                            >
+                                Withdraw {assetSymbol}
+                            </Button>
+                        </>
+                    )}
+                </div>
             </div>
         </>
     )
