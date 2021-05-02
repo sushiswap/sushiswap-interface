@@ -27,12 +27,12 @@ export default function BalanceCard({ sushiBalance, xSushiBalance, weightedApr }
                     </div>
                 </div>
 
-                <div className="flex flex-col flex-grow ml-8 md:ml-0">
-                    <div className="flex flex-nowrap mb-3">
+                <div className="flex flex-col flex-grow">
+                    <div className="flex flex-nowrap mb-3 ml-8 md:ml-0">
                         <p className="text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Earnings</p>
                         <img className="ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center ml-8 md:ml-0">
                         <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={SushiImage} alt="sushi" />
                         <div className="flex flex-col justify-center">
                             <p className="text-caption2 md:text-lg font-bold text-high-emphesis">
@@ -45,11 +45,13 @@ export default function BalanceCard({ sushiBalance, xSushiBalance, weightedApr }
 
                 <div className="flex flex-col w-full mt-7 mb-24 md:mb-0">
                     <div className="flex justify-between items-center">
-                        <div className="flex flex-nowrap items-center">
+                        <div className="flex flex-nowrap items-center flex-1">
                             <p className="text-caption md:text-lg font-bold text-high-emphesis">Weighted APR</p>
                             <img className="ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} />
                         </div>
-                        <p className="text-caption text-primary">{`${weightedApr}%`}</p>
+                        <div className="flex flex-1 md:flex-initial">
+                            <p className="text-caption text-primary ml-5 md:ml-0">{`${weightedApr}%`}</p>
+                        </div>
                     </div>
                     <ButtonDark className="h-8 mt-4 mx-6 md:mx-0 text-caption2 font-bold">Your History</ButtonDark>
                 </div>
