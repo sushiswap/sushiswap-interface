@@ -19,7 +19,7 @@ const useZapper = (currency?: Currency) => {
                 amount?.raw.toString(),
                 minPoolTokens,
                 ROUTER_ADDRESS[chainId || 1],
-                // Unknown byte data param (swapData), is maybe something to do with routing for non native lp tokens?
+                // Call data for swap if necessary
                 swapData,
                 // Affiliate
                 '0x0000000000000000000000000000000000000000',
@@ -38,22 +38,7 @@ const useZapper = (currency?: Currency) => {
         [account, currency, chainId]
     )
 
-    const swap = useCallback(
-        async path => {
-            const tx = await routerContract?.swapExactTokensForTokens(
-                1000000,
-                0,
-                path,
-                // bestTrade?.route.path.map(t => t.address),
-                account,
-                1622582801
-            )
-            return addTransaction(tx, { summary: `Swap test` })
-        },
-        [currency, chainId, account]
-    )
-
-    return { zapIn, swap }
+    return { zapIn }
 }
 
 export default useZapper

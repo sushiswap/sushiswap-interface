@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ETHER, JSBI, Pair, Percent, Price, TokenAmount, Trade } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, ETHER, JSBI, Pair, Percent, Price, TokenAmount, Trade, WETH } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ethers } from 'ethers'
@@ -72,7 +72,7 @@ export function useDerivedZapInfo(
     const currencyData = useMemo(() => currency ?? undefined, [currency])
 
     // Pool Data
-    const { reserves, token0, token1 } = usePool(pairAddress)
+    const { reserves, token0, token1, ratio } = usePool(pairAddress)
     const currency0 = useCurrency(token0)
     const currency1 = useCurrency(token1)
 
@@ -92,13 +92,19 @@ export function useDerivedZapInfo(
     // This math is currently incorrect
     // Shouldn't be diving by 2
     // Should instead be determining the x to y ratio
+    console.log({ currency0, currency1 }, 'HEREHERHERHEREHREH')
+    // const rawTradeAmount = JSBI()
     const tradeAmount = tryParseAmount((+typedValue / 2).toString(), currency)
 
     // Zapping in requires either one or two trades
     // Only one trade if providing one of the input tokens of the pair
     // Two trades if providing neither
-    const isTradingCurrency0 = currency?.symbol === currency0?.symbol
-    const isTradingCurrency1 = currency?.symbol === currency1?.symbol || currency1 === ETHER
+    const isTradingCurrency0 =
+        currency?.symbol === currency0?.symbol ||
+        (currency0?.symbol === WETH[chainId || 1].symbol && currency === ETHER)
+    const isTradingCurrency1 =
+        currency?.symbol === currency1?.symbol ||
+        (currency1?.symbol === WETH[chainId || 1].symbol && currency === ETHER)
 
     const currencyZeroTrade = useTradeExactIn(tradeAmount, currency0 ?? undefined)
     const currencyOneTrade = useTradeExactIn(tradeAmount, currency1 ?? undefined)
@@ -118,6 +124,8 @@ export function useDerivedZapInfo(
     // hooks each render otherwsie
     if (isTradingCurrency0) currencyZeroOutput = tradeAmount
     if (isTradingCurrency1) currencyOneOutput = tradeAmount
+
+    console.log(isTradingCurrency0, isTradingCurrency1, currencyZeroOutput, currencyOneOutput)
 
     const liquidityMinted = useMemo(() => {
         const [tokenAmountA, tokenAmountB] = [

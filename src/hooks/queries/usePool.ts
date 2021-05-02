@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
 import { useContract } from '../../hooks/index'
 import { isAddress } from '../../utils'
+import { BigNumber } from '@ethersproject/bignumber'
 
 const usePool = (poolAddress: string | undefined) => {
     const [poolData, setPoolData] = useState<any>({})
@@ -16,11 +17,15 @@ const usePool = (poolAddress: string | undefined) => {
             poolContract?.totalSupply()
         ])
 
+        const ratio = +reserves?.reserve0 / +reserves?.reserve1
+        console.log(ratio, reserves, 'here is ration')
+
         setPoolData({
             reserves,
             token0,
             token1,
-            totalSupply
+            totalSupply,
+            ratio
         })
     }, [poolAddress])
 

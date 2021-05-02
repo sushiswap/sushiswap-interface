@@ -34,6 +34,7 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import { resetZapState } from 'state/zap/actions'
 import { useUserSlippageTolerance } from 'state/user/hooks'
+import { getZapperAddress } from 'constants/addresses'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -187,7 +188,7 @@ const AddSingleSideLiquidity = ({
         currencyZeroOutput,
         encodedSwapData
     } = useDerivedZapInfo(currency ?? undefined, poolAddress)
-    const { zapIn, swap } = useZapper(currency ?? undefined)
+    const { zapIn } = useZapper(currency ?? undefined)
     const dispatch = useDispatch<AppDispatch>()
 
     const route = bestTrade?.route
@@ -195,21 +196,10 @@ const AddSingleSideLiquidity = ({
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(bestTrade)
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
-
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0xcff6eF0B9916682B37D80c19cFF8949bc1886bC2'
-                break
-            case ChainId.ROPSTEN:
-                address = '0x169c54a9826caf9f14bd30688296021533fe23ae'
-                break
-        }
-    }
+    const zapperAddress = getZapperAddress(chainId)
 
     // // check whether the user has approved the router on the input token
-    const [approval, approveCallback] = useApproveCallback(parsedAmount, address)
+    const [approval, approveCallback] = useApproveCallback(parsedAmount, zapperAddress)
 
     // check if user has gone through approval process, used to show two step buttons, reset on token change
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
