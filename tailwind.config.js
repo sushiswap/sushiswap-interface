@@ -18,12 +18,14 @@ module.exports = {
                 tl: 'to top left'
             },
             colors: {
-                'blue-pink': ['#27B0E6', '#FA52A0']
+                'blue-pink': ['#27B0E6', '#FA52A0'],
+                'pink-red-light-brown': ['#FE5A75', '#FEC464']
             },
             background: {
                 'dark-1000': '#0D0415',
                 'dark-900': '#161522',
-                'dark-800': '#202231'
+                'dark-800': '#202231',
+                'dark-pink-red': '#4e3034'
             },
             border: {
                 // defaults to these values (optional)
@@ -39,6 +41,10 @@ module.exports = {
             pink: '#FA52A0',
             purple: '#A755DD',
             green: '#7CFF6B',
+
+            'pink-red': '#FE5A75',
+            'light-brown': '#FEC464',
+            'cyan-blue': '#0993EC',
 
             'dark-pink': '#221825',
             'dark-blue': '#0F182A',
