@@ -140,6 +140,36 @@ export class KashiCooker {
         return this
     }
 
+    bentoWithdrawCollateral(amount: BigNumber, share: BigNumber): KashiCooker {
+        const useNative = this.pair.collateral.address === WETH[this.chainId].address
+
+        this.add(
+            Action.BENTO_WITHDRAW,
+            defaultAbiCoder.encode(
+                ['address', 'address', 'int256', 'int256'],
+                [useNative ? ethers.constants.AddressZero : this.pair.collateral.address, this.account, amount, share]
+            ),
+            useNative ? amount : ZERO
+        )
+
+        return this
+    }
+
+    bentoTransferCollateral(share: BigNumber, toAddress: string): KashiCooker {
+        this.add(
+            Action.BENTO_TRANSFER,
+            defaultAbiCoder.encode(['address', 'address', 'int256'], [this.pair.collateral.address, toAddress, share])
+        )
+
+        return this
+    }
+
+    repayShare(part: BigNumber): KashiCooker {
+        this.add(Action.GET_REPAY_SHARE, defaultAbiCoder.encode(['int256'], [part]))
+
+        return this
+    }
+
     addCollateral(amount: BigNumber, fromBento: boolean): KashiCooker {
         let share: BigNumber
         if (fromBento) {
@@ -334,6 +364,9 @@ export class KashiCooker {
                 success: false
             }
         }
+
+        console.log('pair address', this.pair.address)
+
         const kashiPairCloneContract = new Contract(
             this.pair.address,
             KASHIPAIR_ABI,
@@ -346,6 +379,7 @@ export class KashiCooker {
                 { actions: this.actions, values: this.values, data: this.datas }
                 // this.values.reduce((a, b) => a.add(b), ZERO)
             )
+
             return {
                 success: true,
                 tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas, {

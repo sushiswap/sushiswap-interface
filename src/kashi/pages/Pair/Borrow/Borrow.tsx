@@ -23,7 +23,7 @@ import { BigNumber, ethers } from 'ethers'
 import { toShare, ZERO, e10, minimum, maximum } from 'kashi/functions'
 import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
 import SmartNumberInput from 'kashi/components/SmartNumberInput'
-import { ExchangeRateCheckBox, SwapCheckbox } from 'components/Checkbox'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
 
 interface BorrowProps {
     pair: any
@@ -46,7 +46,10 @@ export default function Borrow({ pair }: BorrowProps) {
     const collateralToken = useCurrency(pair.collateral.address) || undefined
 
     // Calculated
-    const assetNative = WETH[chainId || 1].address == pair.collateral.address
+    const assetNative = WETH[chainId || 1].address === pair.collateral.address
+
+    console.log({ assetNative: assetNative })
+
     const collateralBalance = useBentoCollateral
         ? pair.collateral.bentoBalance
         : assetNative
@@ -65,11 +68,7 @@ export default function Borrow({ pair }: BorrowProps) {
               .toBigNumber(pair.collateral.decimals) || ZERO
         : ZERO
 
-    console.log('Extra collateral', extraCollateral)
-
     const swapCollateral = collateralValue.toBigNumber(pair.collateral.decimals)
-
-    console.log(swapCollateral.toFixed(pair.collateral.decimals))
 
     const nextUserCollateralValue = pair.userCollateralAmount.value
         .add(collateralValue.toBigNumber(pair.collateral.decimals))
@@ -100,7 +99,6 @@ export default function Borrow({ pair }: BorrowProps) {
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
-    // warnings on slippage
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
     const borrowAmount = borrowValue.toBigNumber(pair.asset.decimals)
@@ -202,46 +200,44 @@ export default function Borrow({ pair }: BorrowProps) {
             borrowValue.toBigNumber(pair.asset.decimals).lte(0)) ||
         collateralWarnings.broken ||
         (borrowValue.length > 0 && borrowWarnings.broken) ||
-        (swap && priceImpactSeverity > 3 && !isExpertMode)
+        (swap && priceImpactSeverity > 3 && !isExpertMode) ||
+        !collateralValueSet
 
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
-        console.log('Cooker onExecute...')
+
         if (borrowValueSet) {
             if (displayUpdateOracle) {
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
-            console.log('Cooker borrow...')
 
-            if (swap && useBentoBorrow) {
+            if (swap && !useBentoCollateral) {
                 cooker.bentoDepositCollateral(collateralValue.toBigNumber(pair.collateral.decimals))
             }
 
             cooker.borrow(
                 borrowValue.toBigNumber(pair.asset.decimals),
                 swap || useBentoBorrow,
-                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : ''
+                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1] : ''
             )
             summary += (summary ? ' and ' : '') + 'Borrow'
         }
         if (borrowValueSet && trade) {
             const path = trade.route.path.map(token => token.address) || []
             if (path.length > 4) {
-                console.log('PATH TOO LONG!!!')
                 throw 'Path too long'
             }
 
-            console.log('path', path)
-
-            console.log('data', [
+            console.log('debug', [
                 pair.asset.address,
                 pair.collateral.address,
                 extraCollateral,
                 path.length > 2 ? path[1] : ethers.constants.AddressZero,
                 path.length > 3 ? path[2] : ethers.constants.AddressZero,
                 account,
-                toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
+                toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals)),
+                borrowValue.toBigNumber(pair.asset.decimals)
             ])
 
             const data = defaultAbiCoder.encode(
@@ -257,10 +253,8 @@ export default function Borrow({ pair }: BorrowProps) {
                 ]
             )
 
-            console.log('Swap encoded data', data)
-
             cooker.action(
-                SUSHISWAP_MULTISWAPPER_ADDRESS,
+                SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1],
                 ZERO,
                 ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
                 false,
@@ -335,71 +329,74 @@ export default function Borrow({ pair }: BorrowProps) {
                 max={nextMaxBorrowPossible}
             />
 
-            <WarningsView warnings={collateralWarnings}></WarningsView>
-            <WarningsView warnings={borrowWarnings}></WarningsView>
-
             {collateralValueSet && (
-                <div className="mb-4">
-                    {['0.5', '1', '1.5', '2.0'].map((multipler, i) => (
-                        <Button
-                            variant="outlined"
-                            size="default"
-                            color="pink"
-                            key={i}
-                            onClick={() => onMultiply(multipler)}
-                            className="mr-4 text-md focus:ring-pink"
-                        >
-                            {multipler}x
-                        </Button>
-                    ))}
-
-                    {/* <div className="pb-6">
-                        <input
-                            type="range"
-                            onChange={e => console.log(e.target.value)}
-                            min="1"
-                            max="5"
-                            step="1"
-                            className="slider w-full"
-                        />
-                        <div className="w-full flex justify-between text-center px-2">
-                            <div className="font-semibold">0.5x</div>
-                            <div className="font-semibold">0.75x</div>
-                            <div className="font-semibold">1x</div>
-                            <div className="font-semibold">1.25x</div>
-                            <div className="font-semibold">1.5x</div>
-                            <div className="font-semibold">1.75x</div>
-                            <div className="font-semibold">2x</div>
-                        </div>
-                    </div> */}
-                </div>
+                <SwapCheckbox
+                    color="pink"
+                    swap={swap}
+                    setSwap={setSwap}
+                    title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
+                    help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
+                />
             )}
 
             {borrowValueSet && (
-                <>
-                    <ExchangeRateCheckBox
-                        color="pink"
-                        pair={pair}
-                        updateOracle={updateOracle}
-                        setUpdateOracle={setUpdateOracle}
-                        desiredDirection="up"
-                    />
+                <ExchangeRateCheckBox
+                    color="pink"
+                    pair={pair}
+                    updateOracle={updateOracle}
+                    setUpdateOracle={setUpdateOracle}
+                    desiredDirection="up"
+                />
+            )}
 
-                    <SwapCheckbox
-                        color="pink"
-                        swap={swap}
-                        setSwap={setSwap}
-                        title={`Swap borrowed ${pair.asset.symbol} for ${pair.collateral.symbol} collateral`}
-                        help="Swapping your borrowed tokens for collateral allows for opening long/short positions with leverage in a single transaction."
-                    />
-                    {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
+            {collateralValueSet && (
+                <>
+                    <div className="mb-4">
+                        {['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2.0'].map((multipler, i) => (
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                color="pink"
+                                key={i}
+                                onClick={() => {
+                                    onMultiply(multipler)
+                                    setSwap(true)
+                                }}
+                                className="mr-4 text-md focus:ring-pink"
+                            >
+                                {multipler}x
+                            </Button>
+                        ))}
+
+                        {/* <div className="mb-4">
+                                <input
+                                    type="range"
+                                    onChange={e => {
+                                        onMultiply(e.target.value)
+                                    }}
+                                    min="0"
+                                    max="2"
+                                    step="0.01"
+                                    className="slider w-full"
+                                />
+                                <div className="w-full flex justify-between text-center px-2">
+                                    <div className="font-semibold">1x</div>
+                                    <div className="font-semibold">2x</div>
+                                    <div className="font-semibold">3x</div>
+                                </div>
+                            </div> */}
+                    </div>
                 </>
             )}
 
-            {/* {console.log(priceImpactSeverity > 3, !isExpertMode)} */}
+            <WarningsView warnings={collateralWarnings}></WarningsView>
 
-            {swap && priceImpactSeverity > 3 && !isExpertMode ? null : (
-                <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+            <WarningsView warnings={borrowWarnings}></WarningsView>
+
+            {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
+
+            {collateralValueSet && ((swap && priceImpactSeverity < 3) || isExpertMode) && (
+                <TransactionReviewView transactionReview={transactionReview} />
             )}
 
             <KashiApproveButton

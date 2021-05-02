@@ -4,6 +4,7 @@ import { useActiveWeb3React } from '../hooks'
 import { useIsTransactionPending, useTransactionAdder } from '../state/transactions/hooks'
 import useLPTokensState, { LPTokensState } from './useLPTokensState'
 import useSushiRoll from './useSushiRoll'
+import { ChainId } from '@sushiswap/sdk'
 
 export type MigrateMode = 'permit' | 'approve'
 
@@ -18,9 +19,9 @@ export interface MigrateState extends LPTokensState {
 }
 
 const useMigrateState: () => MigrateState = () => {
-    const { library, account } = useActiveWeb3React()
+    const { library, account, chainId } = useActiveWeb3React()
     const state = useLPTokensState()
-    const { migrate, migrateWithPermit } = useSushiRoll()
+    const { migrate, migrateWithPermit } = useSushiRoll(state?.selectedLPToken?.version)
     const [mode, setMode] = useState<MigrateMode>()
     const [amount, setAmount] = useState('')
     const addTransaction = useTransactionAdder()
@@ -39,14 +40,31 @@ const useMigrateState: () => MigrateState = () => {
             const func = mode === 'approve' ? migrate : migrateWithPermit
             const tx = await func(state.selectedLPToken, units)
 
-            addTransaction(tx, { summary: `Migrate Uniswap ${state.selectedLPToken.symbol} liquidity to Sushiswap` })
+            let exchange
+
+            if (chainId === ChainId.MAINNET) {
+                exchange = 'Uniswap'
+            } else if (chainId === ChainId.BSC) {
+                exchange = 'PancakeSwap'
+            } else if (chainId === ChainId.MATIC) {
+                exchange = 'QuickSwap'
+            }
+
+            // const exchange = {
+            //     [ChainId.MAINNET]: 'Uniswap',
+            //     [ChainId.BSC]: 'PancakeSwap'
+            // }
+
+            addTransaction(tx, {
+                summary: `Migrate ${exchange} ${state.selectedLPToken.symbol} liquidity to SushiSwap`
+            })
             setPendingMigrationHash(tx.hash)
 
             await tx.wait()
             state.setSelectedLPToken(undefined)
             await state.updateLPTokens()
         }
-    }, [mode, state, account, library, amount, migrate, migrateWithPermit, addTransaction])
+    }, [mode, state, account, library, amount, migrate, migrateWithPermit, chainId, addTransaction])
 
     return {
         ...state,

@@ -38,9 +38,7 @@ export type BentoApproveResult = {
 }
 
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
-function useKashiApproveCallback(
-    masterContract: string
-): [
+function useKashiApproveCallback(): [
     BentoApprovalState,
     boolean,
     KashiPermit | undefined,
@@ -56,8 +54,10 @@ function useKashiApproveCallback(
         setKashiPermit(undefined)
     }, [account, chainId])
 
+    const masterContract = chainId && KASHI_ADDRESS[chainId]
+
     const pendingApproval = useKashiApprovalPending()
-    const currentAllowed = useBentoMasterContractAllowed(KASHI_ADDRESS, account || ethers.constants.AddressZero)
+    const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
     const addTransaction = useTransactionAdder()
 
     // check the current approval status
@@ -66,7 +66,7 @@ function useKashiApproveCallback(
         if (!currentAllowed && pendingApproval) return BentoApprovalState.PENDING
 
         return currentAllowed ? BentoApprovalState.APPROVED : BentoApprovalState.NOT_APPROVED
-    }, [currentAllowed, masterContract, pendingApproval])
+    }, [masterContract, currentAllowed, pendingApproval])
 
     const bentoBoxContract = useBentoBoxContract()
 
@@ -97,7 +97,7 @@ function useKashiApproveCallback(
         try {
             const signature = await signMasterContractApproval(
                 bentoBoxContract,
-                KASHI_ADDRESS,
+                masterContract,
                 account,
                 library,
                 true,
@@ -126,7 +126,7 @@ function useKashiApproveCallback(
         } else {
             const tx = await bentoBoxContract?.setMasterContractApproval(
                 account,
-                KASHI_ADDRESS,
+                masterContract,
                 true,
                 0,
                 ethers.constants.HashZero,

@@ -8,7 +8,7 @@ import { getTokenIcon, ZERO } from '../../functions'
 import { formattedNum, formattedPercent } from '../../../utils'
 import { useKashiPairs } from '../../context'
 import { Card, MarketHeader, Layout, GradientDot } from '../../components'
-import useSearchAndSort from 'sushi-hooks/useSearchAndSort'
+import useSearchAndSort from 'hooks/useSearchAndSort'
 import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
 import Helmet from 'react-helmet'
 

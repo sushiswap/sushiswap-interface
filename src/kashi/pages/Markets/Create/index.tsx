@@ -90,11 +90,16 @@ const CreatePair = () => {
                 return
             }
 
+            console.log([selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData])
+
             const kashiData = ethers.utils.defaultAbiCoder.encode(
                 ['address', 'address', 'address', 'bytes'],
                 [selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData]
             )
-            addTransaction(await bentoBoxContract?.deploy(KASHI_ADDRESS, kashiData, true), {
+
+            console.log(kashiData)
+
+            addTransaction(await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true), {
                 summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`
             })
             setSelectedAsset(empty)

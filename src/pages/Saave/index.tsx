@@ -78,6 +78,11 @@ export default function Saave() {
                                     Read the contract
                                 </TYPE.white>
                             </ExternalLink>
+                            <RowBetween>
+                                <TYPE.white fontSize={14} color={theme.text2}>
+                                    {`To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon.`}
+                                </TYPE.white>
+                            </RowBetween>
                         </AutoColumn>
                     </CardSection>
                 </VoteCard>

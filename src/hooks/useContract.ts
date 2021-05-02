@@ -22,10 +22,11 @@ import {
     CHAINLINK_ORACLE_ADDRESS,
     KASHI_ADDRESS,
     SUSHISWAP_SWAPPER_ADDRESS,
-    SUSHISWAP_MULTISWAPPER_ADDRESS
+    SUSHISWAP_MULTISWAPPER_ADDRESS,
+    BORING_HELPER_ADDRESS
 } from 'kashi'
 import { useMemo } from 'react'
-import { BORING_HELPER_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
+import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 import {
     ARGENT_WALLET_DETECTOR_ABI,
     ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -47,6 +48,7 @@ import FACTORY_ABI from '../constants/abis/factory.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
+import MINICHEFV2_ABI from '../constants/abis/miniChefV2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
@@ -149,7 +151,8 @@ export function useStakingContract(stakingAddress?: string, withSignerIfPossible
 }
 
 export function useBoringHelperContract(): Contract | null {
-    return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BORING_HELPER_ADDRESS[chainId], BORING_HELPER_ABI, false)
 }
 
 export function usePendingContract(): Contract | null {
@@ -169,6 +172,19 @@ export function useSushiContract(withSignerIfPossible = true): Contract | null {
 export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
+}
+
+export function useMiniChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MATIC:
+                address = '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F'
+                break
+        }
+    }
+    return useContract(address, MINICHEFV2_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
@@ -197,15 +213,18 @@ export function useTimelockContract(): Contract | null {
 }
 
 export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(BENTOBOX_ADDRESS, BENTOBOX_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BENTOBOX_ADDRESS[chainId], BENTOBOX_ABI, withSignerIfPossible)
 }
 
 export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(KASHI_ADDRESS, KASHIPAIR_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && KASHI_ADDRESS[chainId], KASHIPAIR_ABI, withSignerIfPossible)
 }
 
 export function useSushiSwapSwapper(): Contract | null {
-    return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && SUSHISWAP_SWAPPER_ADDRESS[chainId], BASE_SWAPPER_ABI, false)
 }
 
 export function useChainlinkOracle(): Contract | null {
@@ -337,7 +356,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
     )
 }
 
-export function useSushiRollContract(): Contract | null {
+export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
     if (chainId) {
@@ -349,7 +368,14 @@ export function useSushiRollContract(): Contract | null {
                 address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
                 break
             case ChainId.BSC:
-                address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
+                if (version === 'v1') {
+                    address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
+                } else if (version === 'v2') {
+                    address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
+                }
+                break
+            case ChainId.MATIC:
+                address = '0x0053957E18A0994D3526Cf879A4cA7Be88e8936A'
                 break
         }
     }
@@ -404,4 +430,107 @@ export function useZapperContract(withSignerIfPossible?: boolean): Contract | nu
     const { chainId } = useActiveWeb3React()
     const address = getZapperAddress(chainId)
     return useContract(address, ZAPPER_ABI, withSignerIfPossible)
+
+export function useQuickSwapFactoryContract(): Contract | null {
+    return useContract(
+        '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [
+            {
+                type: 'constructor',
+                stateMutability: 'nonpayable',
+                payable: false,
+                inputs: [{ type: 'address', name: '_feeToSetter', internalType: 'address' }]
+            },
+            {
+                type: 'event',
+                name: 'PairCreated',
+                inputs: [
+                    { type: 'address', name: 'token0', internalType: 'address', indexed: true },
+                    { type: 'address', name: 'token1', internalType: 'address', indexed: true },
+                    { type: 'address', name: 'pair', internalType: 'address', indexed: false },
+                    { type: 'uint256', name: '', internalType: 'uint256', indexed: false }
+                ],
+                anonymous: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'allPairs',
+                inputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+                name: 'allPairsLength',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [{ type: 'address', name: 'pair', internalType: 'address' }],
+                name: 'createPair',
+                inputs: [
+                    { type: 'address', name: 'tokenA', internalType: 'address' },
+                    { type: 'address', name: 'tokenB', internalType: 'address' }
+                ],
+                constant: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'feeTo',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'feeToSetter',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'getPair',
+                inputs: [
+                    { type: 'address', name: '', internalType: 'address' },
+                    { type: 'address', name: '', internalType: 'address' }
+                ],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [],
+                name: 'setFeeTo',
+                inputs: [{ type: 'address', name: '_feeTo', internalType: 'address' }],
+                constant: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [],
+                name: 'setFeeToSetter',
+                inputs: [{ type: 'address', name: '_feeToSetter', internalType: 'address' }],
+                constant: false
+            }
+        ],
+        false
+    )
 }

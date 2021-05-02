@@ -2,20 +2,25 @@ import { useFuse, useSortableData } from 'hooks'
 import React, { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import styled from 'styled-components'
-import useFarms from 'hooks/useFarms'
-import { RowBetween } from '../../components/Row'
-import { formattedNum, formattedPercent } from '../../utils'
-import { Card, CardHeader, Search, DoubleLogo } from './components'
+import useFarmsV2 from 'hooks/minichefv2/useFarms'
+import { RowBetween } from '../../../components/Row'
+import { formattedNum, formattedPercent } from '../../../utils'
+import { Card, CardHeader, Paper, Search, DoubleLogo, TokenLogo } from '../components'
 import InputGroup from './InputGroup'
-import { Dots, Paper } from 'components'
+import { SimpleDots as Dots } from 'kashi/components'
 import { Helmet } from 'react-helmet'
+
+import { useActiveWeb3React } from '../../../hooks'
+import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
 
 export default function Yield(): JSX.Element {
-    const query = useFarms()
+    const { chainId } = useActiveWeb3React()
+
+    const query = useFarmsV2()
     const farms = query?.farms
     const userFarms = query?.userFarms
 
@@ -43,7 +48,7 @@ export default function Yield(): JSX.Element {
                             <div className="flex w-full justify-between">
                                 <div className="hidden md:flex items-center">
                                     {/* <BackButton defaultRoute="/pool" /> */}
-                                    <div className="text-lg mr-2 whitespace-nowrap">Yield Instruments</div>
+                                    <div className="text-lg mr-2 whitespace-nowrap">Yield Instruments v2</div>
                                 </div>
                                 <Search search={search} term={term} />
                             </div>

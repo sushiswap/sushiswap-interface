@@ -11,20 +11,23 @@ import { useCurrency } from 'hooks/Tokens'
 import { tryParseAmount } from 'state/swap/hooks'
 import SmartNumberInput from 'kashi/components/SmartNumberInput'
 import { Button } from 'components'
-import { ExchangeRateCheckBox, SwapCheckbox } from 'components/Checkbox'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
 import TradeReview from 'kashi/components/TradeReview'
-import { useUserSlippageTolerance } from 'state/user/hooks'
-import { useTradeExactIn } from 'hooks/Trades'
-import { computeSlippageAdjustedAmounts } from 'utils/prices'
+import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
+import { useTradeExactIn, useTradeExactOut } from 'hooks/Trades'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import { Field } from 'state/swap/actions'
 import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
+import { SUSHISWAP_MULTISWAPPER_ADDRESS, SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS } from 'kashi/constants'
+import { ethers } from 'ethers'
+import { defaultAbiCoder } from '@ethersproject/abi'
 
 interface RepayProps {
     pair: any
 }
 
 export default function Repay({ pair }: RepayProps) {
-    const { chainId } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const info = useContext(KashiContext).state.info
 
     // State
@@ -42,7 +45,7 @@ export default function Repay({ pair }: RepayProps) {
     const collateralToken = useCurrency(pair.collateral.address) || undefined
 
     // Calculated
-    const assetNative = WETH[chainId || 1].address == pair.asset.address
+    const assetNative = WETH[chainId || 1].address === pair.asset.address
 
     const balance = useBentoRepay
         ? toAmount(pair.asset, pair.asset.bentoBalance)
@@ -77,13 +80,15 @@ export default function Repay({ pair }: RepayProps) {
 
     // Swap
     const [allowedSlippage] = useUserSlippageTolerance() // 10 = 0.1%
-    const parsedAmount = tryParseAmount(displayRemoveValue, collateralToken)
-    const foundTrade = useTradeExactIn(parsedAmount, assetToken) || undefined
-    const extraRepay = swap
+    const parsedAmount = tryParseAmount(pair.currentUserBorrowAmount.string, assetToken)
+    const foundTrade = useTradeExactOut(collateralToken, parsedAmount) || undefined
+
+    const maxAmountIn = swap
         ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)
-              [Field.OUTPUT]?.toFixed(pair.asset.decimals)
-              .toBigNumber(pair.asset.decimals) || ZERO
+              [Field.INPUT]?.toFixed(pair.collateral.decimals)
+              .toBigNumber(pair.collateral.decimals) || ZERO
         : ZERO
+
     //const nextUserCollateralValue = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals)).add(extraCollateral)
 
     const nextUserCollateralAmount = pair.userCollateralAmount.value.sub(
@@ -105,6 +110,7 @@ export default function Repay({ pair }: RepayProps) {
         .muldiv(BigNumber.from('1000000000000000000'), nextMaxBorrowMinimum)
 
     const transactionReview = new TransactionReview()
+
     if (displayRepayValue || displayRemoveValue) {
         transactionReview.addTokenAmount(
             'Borrow Limit',
@@ -146,42 +152,20 @@ export default function Repay({ pair }: RepayProps) {
             )
         )
 
-    // Handlers
-    async function onExecute(cooker: KashiCooker) {
-        let summary = ''
-        if (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)) {
-            cooker.repayPart(pair.userBorrowPart, useBentoRepay)
-            summary = 'Repay Max'
-        } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
-            cooker.repay(displayRepayValue.toBigNumber(pair.asset.decimals), useBentoRepay)
-            summary = 'Repay'
-        }
-        if (
-            displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||
-            (pinRemoveMax && pair.userCollateralShare.gt(0))
-        ) {
-            const share =
-                pinRemoveMax &&
-                (nextUserBorrowAmount.isZero() ||
-                    (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
-                    ? pair.userCollateralShare
-                    : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
-
-            cooker.removeCollateral(share, useBentoRemove)
-            summary += (summary ? ' and ' : '') + 'Remove Collateral'
-        }
-        setPinRemoveMax(false)
-        setRemoveCollateralValue('')
-        setRepayAssetValue('')
-        return summary
-    }
-
     const removeValueSet =
         !displayRemoveValue.toBigNumber(pair.collateral.decimals).isZero() ||
         (pinRemoveMax && pair.userCollateralShare.gt(ZERO))
+
     const repayValueSet = !displayRepayValue.toBigNumber(pair.asset.decimals).isZero()
 
-    const trade = swap && removeValueSet ? foundTrade : undefined
+    const trade = swap ? foundTrade : undefined
+    // const trade = swap && removeValueSet ? foundTrade : undefined
+
+    const [isExpertMode] = useExpertModeManager()
+
+    const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
+
+    const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
     let actionName = 'Nothing to do'
 
@@ -193,13 +177,114 @@ export default function Repay({ pair }: RepayProps) {
         }
     } else if (repayValueSet) {
         actionName = 'Repay'
+    } else if (swap) {
+        actionName = 'Flash repay'
     }
 
+    // const actionDisabled = false
+
     const actionDisabled =
-        (displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
+        (!swap &&
+            !trade &&
+            displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
             displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0) &&
             (!pinRemoveMax || pair.userCollateralShare.isZero())) ||
         warnings.some(warning => warning.breaking)
+
+    function resetRepayState() {
+        setPinRepayMax(false)
+        setPinRemoveMax(false)
+        setRemoveCollateralValue('')
+        setRepayAssetValue('')
+    }
+
+    // Handlers
+    async function onExecute(cooker: KashiCooker) {
+        let summary = ''
+
+        if (swap && trade) {
+            const share = toShare(pair.collateral, pair.userCollateralAmount.value)
+
+            console.log({ share, userCollateralShare: pair.userCollateralShare })
+
+            cooker.removeCollateral(pair.userCollateralShare, true)
+            cooker.bentoTransferCollateral(
+                pair.userCollateralShare,
+                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1]
+            )
+            cooker.repayShare(pair.userBorrowPart)
+
+            const path = trade.route.path.map(token => token.address) || []
+
+            console.log('debug', [
+                pair.collateral.address,
+                pair.asset.address,
+                maxAmountIn,
+                path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                path.length > 3 ? path[2] : ethers.constants.AddressZero,
+                account,
+                pair.userCollateralShare
+            ])
+
+            const data = defaultAbiCoder.encode(
+                ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
+                [
+                    pair.collateral.address,
+                    pair.asset.address,
+                    maxAmountIn,
+                    path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                    path.length > 3 ? path[2] : ethers.constants.AddressZero,
+                    account,
+                    pair.userCollateralShare
+                ]
+            )
+
+            console.log('encoded', data)
+
+            cooker.action(
+                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],
+                ZERO,
+                ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
+                true,
+                false,
+                1
+            )
+
+            cooker.repayPart(pair.userBorrowPart, true)
+
+            if (useBentoRemove) {
+                cooker.bentoWithdrawCollateral(ZERO, BigNumber.from(-1))
+            }
+
+            summary = 'Repay All'
+        } else {
+            if (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)) {
+                cooker.repayPart(pair.userBorrowPart, useBentoRepay)
+                summary = 'Repay Max'
+            } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
+                cooker.repay(displayRepayValue.toBigNumber(pair.asset.decimals), useBentoRepay)
+                summary = 'Repay'
+            }
+            if (
+                displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||
+                (pinRemoveMax && pair.userCollateralShare.gt(0))
+            ) {
+                const share =
+                    pinRemoveMax &&
+                    (nextUserBorrowAmount.isZero() ||
+                        (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
+                        ? pair.userCollateralShare
+                        : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
+
+                cooker.removeCollateral(share, useBentoRemove)
+                summary += (summary ? ' and ' : '') + 'Remove Collateral'
+            }
+        }
+
+        resetRepayState()
+
+        return summary
+    }
 
     return (
         <>
@@ -218,7 +303,9 @@ export default function Repay({ pair }: RepayProps) {
                 max={balance}
                 pinMax={pinRepayMax}
                 setPinMax={setPinRepayMax}
-                showMax
+                showMax={!swap && !pair.currentUserBorrowAmount.value.isZero()}
+                disabled={swap || pair.currentUserBorrowAmount.value.isZero()}
+                switchDisabled={swap || pair.currentUserBorrowAmount.value.isZero()}
             />
 
             <SmartNumberInput
@@ -235,35 +322,42 @@ export default function Repay({ pair }: RepayProps) {
                 setPinMax={setPinRemoveMax}
                 showMax={
                     pair.currentUserBorrowAmount.value.eq(displayRepayValue.toBigNumber(pair.asset.decimals)) ||
-                    pair.currentUserBorrowAmount.value.eq(0)
+                    pair.currentUserBorrowAmount.value.isZero()
                 }
+                disabled={swap || pair.userCollateralAmount.value.isZero()}
+                switchDisabled={pair.userCollateralAmount.value.isZero()}
             />
 
-            <WarningsView warnings={warnings}></WarningsView>
-
-            {removeValueSet && (
-                <>
-                    <ExchangeRateCheckBox
-                        color="pink"
-                        pair={pair}
-                        updateOracle={updateOracle}
-                        setUpdateOracle={setUpdateOracle}
-                        desiredDirection="up"
-                    />
-
-                    <SwapCheckbox
-                        color="pink"
-                        swap={swap}
-                        setSwap={setSwap}
-                        title={`Swap removed ${pair.collateral.symbol} for ${pair.asset.symbol} and repay`}
-                        help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions."
-                    />
-
-                    {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage}></TradeReview>}
-                </>
+            {!pair.currentUserBorrowAmount.value.isZero() && (
+                <SwapCheckbox
+                    color="pink"
+                    swap={swap}
+                    setSwap={(value: boolean) => {
+                        resetRepayState()
+                        setSwap(value)
+                    }}
+                    title={`Swap ${pair.collateral.symbol} collateral for ${pair.asset.symbol} and repay`}
+                    help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions."
+                />
             )}
 
-            <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+            {removeValueSet && (
+                <ExchangeRateCheckBox
+                    color="pink"
+                    pair={pair}
+                    updateOracle={updateOracle}
+                    setUpdateOracle={setUpdateOracle}
+                    desiredDirection="up"
+                />
+            )}
+
+            <WarningsView warnings={warnings} />
+
+            {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
+
+            {((swap && priceImpactSeverity < 3) || isExpertMode) && (
+                <TransactionReviewView transactionReview={transactionReview} />
+            )}
 
             <KashiApproveButton
                 color="pink"

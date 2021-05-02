@@ -56,6 +56,19 @@ export default function Layout({
                                     <div className="whitespace-nowrap text-base">Borrow</div>
                                 </div>
                             </NavLink>
+
+                            <NavLink to="/bento/kashi/create" className="border-transparent px-2 sm:px-4 border-b-2">
+                                <div
+                                    className={
+                                        'flex items-center font-medium ' +
+                                        (location.pathname.startsWith('/bento/kashi/create')
+                                            ? 'text-high-emphesis'
+                                            : 'text-secondary hover:text-primary')
+                                    }
+                                >
+                                    <div className="whitespace-nowrap text-base">Create</div>
+                                </div>
+                            </NavLink>
                         </div>
                         <div className="flex pr-2 sm:pr-4">
                             <NavLink

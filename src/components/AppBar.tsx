@@ -22,7 +22,10 @@ function AppBar(): JSX.Element {
 
     return (
         <header className="flex flex-row flex-nowrap justify-between w-screen">
-            <Disclosure as="nav" className="w-screen bg-transparent gradiant-border-bottom z-10">
+            <Disclosure
+                as="nav"
+                className="w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur"
+            >
                 {({ open }) => (
                     <>
                         <div className="px-4 py-1.5">
@@ -49,14 +52,14 @@ function AppBar(): JSX.Element {
                                             >
                                                 {t('pool')}
                                             </NavLink>
-                                            {chainId === ChainId.MAINNET && (
+                                            {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
                                                     Yield
                                                 </NavLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`stake-nav-link`} to={'/stake'}>
-                                                    Stake
+                                                    SushiBar
                                                 </NavLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
@@ -65,15 +68,33 @@ function AppBar(): JSX.Element {
                                                 </NavLink>
                                             )}
                                             {chainId &&
-                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].includes(chainId) && (
-                                                    <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        Apps
+                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
+                                                    chainId
+                                                ) && (
+                                                    <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
+                                                        Lend
                                                     </NavLink>
                                                 )}
-                                            {chainId && (
+                                            {chainId &&
+                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
+                                                    chainId
+                                                ) && (
+                                                    <NavLink id={`bento-nav-link`} to={'/bento'}>
+                                                        Bentobox
+                                                    </NavLink>
+                                                )}
+                                            {chainId && chainId === ChainId.MAINNET && (
                                                 <ExternalLink
                                                     id={`analytics-nav-link`}
                                                     href={'https://analytics.sushi.com'}
+                                                >
+                                                    Analytics
+                                                </ExternalLink>
+                                            )}
+                                            {chainId && chainId === ChainId.MATIC && (
+                                                <ExternalLink
+                                                    id={`analytics-nav-link`}
+                                                    href={'https://analytics-polygon.sushi.com'}
                                                 >
                                                     Analytics
                                                 </ExternalLink>
@@ -85,7 +106,7 @@ function AppBar(): JSX.Element {
                                 <div className="flex flex-row items-center justify-center w-full p-4 fixed left-0 bottom-0 bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                                     <div className="flex items-center justify-between sm:justify-end space-x-2 w-full">
                                         {chainId &&
-                                            chainId === ChainId.MAINNET &&
+                                            [ChainId.MAINNET].includes(chainId) &&
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
@@ -139,14 +160,36 @@ function AppBar(): JSX.Element {
                                                             className="rounded-md object-contain"
                                                         />
                                                     </div>
+                                                </>
+                                            )}
+
+                                        {chainId &&
+                                            [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) &&
+                                            library &&
+                                            library.provider.isMetaMask && (
+                                                <>
                                                     <div
                                                         className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
                                                         onClick={() => {
+                                                            let address: string | undefined
+                                                            switch (chainId) {
+                                                                case ChainId.MAINNET:
+                                                                    address =
+                                                                        '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
+                                                                    break
+                                                                case ChainId.BSC:
+                                                                    address =
+                                                                        '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
+                                                                    break
+                                                                case ChainId.MATIC:
+                                                                    address =
+                                                                        '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
+                                                                    break
+                                                            }
                                                             const params: any = {
                                                                 type: 'ERC20',
                                                                 options: {
-                                                                    address:
-                                                                        '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+                                                                    address: address,
                                                                     symbol: 'SUSHI',
                                                                     decimals: 18,
                                                                     image:
@@ -191,6 +234,20 @@ function AppBar(): JSX.Element {
                                                     </div>
                                                 </>
                                             )}
+                                        {chainId && chainId === ChainId.MATIC && (
+                                            <div className="hidden sm:inline-block">
+                                                <a
+                                                    className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto"
+                                                    href="https://wallet.matic.network/bridge/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <div className="grid grid-flow-col auto-cols-max items-center rounded-lg bg-dark-1000 text-sm text-secondary py-2 px-3 pointer-events-auto">
+                                                        <div className="text-primary">Bridge Assets</div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        )}
                                         {library && library.provider.isMetaMask && (
                                             <div className="hidden sm:inline-block">
                                                 <Web3Network />
@@ -251,14 +308,15 @@ function AppBar(): JSX.Element {
                                 >
                                     {t('pool')}
                                 </NavLink>
-                                {chainId === ChainId.MAINNET && (
+
+                                {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
                                         Yield
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/stake'}>
-                                        Stake
+                                        SushiBar
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
@@ -266,13 +324,28 @@ function AppBar(): JSX.Element {
                                         Vesting
                                     </NavLink>
                                 )}
-                                {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC].includes(chainId) && (
-                                    <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                        Apps
-                                    </NavLink>
-                                )}
-                                {chainId && (
+                                {chainId &&
+                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                                        <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
+                                            Kashi Lend
+                                        </NavLink>
+                                    )}
+                                {chainId &&
+                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                                        <NavLink id={`bento-nav-link`} to={'/bento'}>
+                                            BentoBox Apps
+                                        </NavLink>
+                                    )}
+                                {chainId && chainId !== ChainId.MATIC && (
                                     <ExternalLink id={`analytics-nav-link`} href={'https://analytics.sushi.com'}>
+                                        Analytics
+                                    </ExternalLink>
+                                )}
+                                {chainId && chainId === ChainId.MATIC && (
+                                    <ExternalLink
+                                        id={`analytics-nav-link`}
+                                        href={'https://analytics-polygon.sushi.com'}
+                                    >
                                         Analytics
                                     </ExternalLink>
                                 )}

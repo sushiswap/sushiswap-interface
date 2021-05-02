@@ -3,7 +3,7 @@ import { darken } from 'polished'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { RowBetween } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks'
@@ -28,12 +28,6 @@ const LabelRow = styled.div`
         cursor: pointer;
         color: ${({ theme }) => darken(0.2, theme.text2)};
     }
-`
-
-const Aligner = styled.span`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 `
 
 const InputPanel = styled.div<{ hideInput?: boolean }>`

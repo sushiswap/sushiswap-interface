@@ -4,7 +4,7 @@ import { BENTOBOX_ADDRESS } from 'kashi'
 import { Button } from 'components'
 import React, { useState } from 'react'
 import useBentoBox from 'hooks/useBentoBox'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { useActiveWeb3React } from 'hooks'
 import { formattedNum } from 'utils'
@@ -32,7 +32,7 @@ export default function Deposit({
             new Token(chainId || 1, tokenAddress, balance.decimals, tokenSymbol, ''),
             value.toBigNumber(balance.decimals).toString()
         ),
-        BENTOBOX_ADDRESS
+        chainId && BENTOBOX_ADDRESS[chainId]
     )
 
     const showApprove =

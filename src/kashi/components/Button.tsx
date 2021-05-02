@@ -9,9 +9,8 @@ import { WETH } from '@sushiswap/sdk'
 import Dots from './Dots'
 
 export function KashiApproveButton({ content, color }: any): any {
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
+    const { chainId } = useActiveWeb3React()
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback()
     const showApprove =
         (kashiApprovalState === BentoApprovalState.NOT_APPROVED || kashiApprovalState === BentoApprovalState.PENDING) &&
         !kashiPermit
@@ -39,7 +38,10 @@ export function KashiApproveButton({ content, color }: any): any {
 
 export function TokenApproveButton({ children, value, token, needed, color }: any): any {
     const { chainId } = useActiveWeb3React()
-    const [approvalState, approve] = useApproveCallback(tryParseAmount(value, token), BENTOBOX_ADDRESS)
+    const [approvalState, approve] = useApproveCallback(
+        tryParseAmount(value, token),
+        chainId && BENTOBOX_ADDRESS[chainId]
+    )
 
     const showApprove =
         chainId &&

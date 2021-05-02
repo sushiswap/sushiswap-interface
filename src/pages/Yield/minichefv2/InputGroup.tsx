@@ -1,19 +1,19 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { Fraction } from '../../entities'
+import { Fraction } from '../../../entities'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import useMasterChef from 'hooks/useMasterChef'
-import usePendingSushi from 'hooks/usePendingSushi'
-import useStakedBalance from 'hooks/useStakedBalance'
-import useTokenBalance from 'sushi-hooks/useTokenBalance'
+import useMiniChefV2 from 'hooks/minichefv2/useMiniChefV2'
+import usePendingSushi from 'hooks/minichefv2/usePendingSushi'
+import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
-import { Dots } from '../Pool/styleds'
-import { Button } from './components'
+import { Dots } from '../../Pool/styleds'
+import { Button } from '../components'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -51,19 +51,21 @@ export default function InputGroup({
     const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
 
-    //console.log('pending:', pending, pid)
+    console.log('Hello')
+    console.log('balance:', balance)
+    console.log('staked:', staked)
+    console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''),
             ethers.constants.MaxUint256.toString()
         ),
-        MASTERCHEF_ADDRESS[1]
+        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F' //miniChef on Matic
     )
+    //console.log('Approval:', approvalState, ApprovalState.NOT_APPROVED)
 
-    console.log('yield approvalState', approvalState)
-
-    const { deposit, withdraw, harvest } = useMasterChef()
+    const { deposit, withdraw, harvest } = useMiniChefV2()
 
     //console.log('depositValue:', depositValue)
 
@@ -117,7 +119,7 @@ export default function InputGroup({
                         )}
                         <div className="flex items-center relative w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
+                                className="w-full p-3 bg-input rounded focus:ring focus:ring-blue pr-20"
                                 value={depositValue}
                                 onUserInput={value => {
                                     setDepositValue(value)
@@ -136,7 +138,6 @@ export default function InputGroup({
                                 </Button>
                             )}
                         </div>
-
                         {approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING ? (
                             <Button color="blue" disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
                                 {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
@@ -169,7 +170,7 @@ export default function InputGroup({
                         )}
                         <div className="flex items-center relative w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
+                                className="w-full p-3 bg-input rounded focus:ring focus:ring-pink pr-20"
                                 value={withdrawValue}
                                 onUserInput={value => {
                                     setWithdrawValue(value)

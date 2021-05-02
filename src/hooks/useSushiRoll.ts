@@ -1,14 +1,24 @@
+import { ChainId } from '@sushiswap/sdk'
 import { signERC2612Permit } from 'eth-permit'
 import { ethers } from 'ethers'
 import { useCallback } from 'react'
 import ReactGA from 'react-ga'
-import { useActiveWeb3React, useSushiRollContract } from '../hooks'
+import { useActiveWeb3React } from '../hooks'
+import { useSushiRollContract } from '../hooks/useContract'
 import LPToken from '../types/LPToken'
 
-const useSushiRoll = () => {
-    const { library, account } = useActiveWeb3React()
-    const sushiRoll = useSushiRollContract()
+const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
+    const { chainId, library, account } = useActiveWeb3React()
+    const sushiRoll = useSushiRollContract(version)
     const ttl = 60 * 20
+
+    let from = ''
+
+    if (chainId === ChainId.MAINNET) {
+        from = 'Uniswap'
+    } else if (chainId === ChainId.BSC) {
+        from = 'PancakeSwap'
+    }
 
     const migrate = useCallback(
         async (lpToken: LPToken, amount: ethers.BigNumber) => {
@@ -30,14 +40,14 @@ const useSushiRoll = () => {
 
                 ReactGA.event({
                     category: 'Migrate',
-                    action: 'Uniswap->Sushiswap',
+                    action: `${from}->Sushiswap`,
                     label: 'migrate'
                 })
 
                 return tx
             }
         },
-        [sushiRoll, ttl]
+        [sushiRoll, ttl, from]
     )
 
     const migrateWithPermit = useCallback(
@@ -64,6 +74,8 @@ const useSushiRoll = () => {
                     permit.s
                 ]
 
+                console.log('migrate with permit', args)
+
                 const gasLimit = await sushiRoll.estimateGas.migrateWithPermit(...args)
                 const tx = await sushiRoll.migrateWithPermit(...args, {
                     gasLimit: gasLimit.mul(120).div(100)
@@ -71,14 +83,14 @@ const useSushiRoll = () => {
 
                 ReactGA.event({
                     category: 'Migrate',
-                    action: 'Uniswap->Sushiswap',
+                    action: `${from}->Sushiswap`,
                     label: 'migrateWithPermit'
                 })
 
                 return tx
             }
         },
-        [account, library, sushiRoll, ttl]
+        [account, library, sushiRoll, ttl, from]
     )
 
     return {

@@ -21,6 +21,8 @@ type SmartNumberInputProps = {
     pinMax?: boolean
     setPinMax?: any
     showMax?: boolean
+    disabled?: boolean
+    switchDisabled?: boolean
 }
 
 export default function SmartNumberInput({
@@ -38,7 +40,9 @@ export default function SmartNumberInput({
     max,
     pinMax = false,
     setPinMax,
-    showMax = false
+    showMax = false,
+    disabled = false,
+    switchDisabled = false
 }: SmartNumberInputProps) {
     return (
         <>
@@ -57,10 +61,11 @@ export default function SmartNumberInput({
                             variant="outlined"
                             size="small"
                             color={color}
-                            className={'focus:ring focus:ring-' + color}
+                            className={'disabled:cursor-not-allowed focus:ring focus:ring-' + color}
                             onClick={() => {
                                 setUseBento(!useBento)
                             }}
+                            disabled={switchDisabled}
                         >
                             {useBento ? 'BentoBox' : 'Wallet'}
                         </Button>
@@ -73,7 +78,10 @@ export default function SmartNumberInput({
 
             <div className="flex items-center relative w-full mb-4">
                 <NumericalInput
-                    className={'w-full p-3 bg-input rounded focus:ring focus:ring-' + color}
+                    className={
+                        'w-full p-3 bg-input rounded disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring focus:ring-' +
+                        color
+                    }
                     value={value}
                     onUserInput={setValue}
                     onFocus={() => {
@@ -84,6 +92,7 @@ export default function SmartNumberInput({
                             setPinMax(false)
                         }
                     }}
+                    disabled={disabled}
                 />
                 {showMax && max.gt(0) && (
                     <Button

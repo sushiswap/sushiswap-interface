@@ -383,4 +383,4 @@ export const BASE_SWAPPER: { [chainId in ChainId]?: string } = {
 }
 
 // Boring Helper
-export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
+// export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
