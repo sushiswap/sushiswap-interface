@@ -11,15 +11,15 @@ const TokenWrapper = styled.div<{ sizeraw: number; margin?: boolean }>`
 
 const HigherLogo = styled(TokenLogo)<{ higherRadius?: string }>`
     z-index: 2;
-    background-color: white;
-    border-radius: ${({ higherRadius }) => (higherRadius ? higherRadius : '8px')};
+    // background-color: white;
+    border-radius: ${({ higherRadius }) => (higherRadius ? higherRadius : '50%')};
 `
 
 const CoveredLogo = styled(TokenLogo)`
     position: absolute;
     left: ${({ sizeraw }) => (sizeraw / 1.2).toString() + 'px'};
-    background-color: white;
-    border-radius: 8px;
+    // background-color: white;
+    border-radius: 50%;
 `
 
 export default function DoubleTokenLogo({ a0, a1, size = 24, margin = false, higherRadius }: any) {

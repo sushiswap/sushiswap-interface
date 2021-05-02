@@ -14,7 +14,11 @@ export const miniChefPoolQuery = gql`
         pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
             id
             pair
-            rewarder
+            rewarder {
+                id
+                rewardToken
+                rewardPerSecond
+            }
             allocPoint
             lastRewardTime
             accSushiPerShare

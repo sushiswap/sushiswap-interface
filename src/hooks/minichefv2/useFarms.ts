@@ -25,9 +25,9 @@ const useFarms = () => {
                 query: liquidityPositionSubsetQuery,
                 variables: { user: String('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F').toLowerCase() } //minichef
             }),
-            sushiData.sushi.priceUSD(),
+            sushiData.sushi.priceUSD()
             //getAverageBlockTime(chainId),
-            sushiData.exchange.token({ token_address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0' }) // matic
+            //sushiData.exchange.token({ token_address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0' }) // matic
         ])
 
         const pools = results[0]?.data.pools
@@ -44,10 +44,10 @@ const useFarms = () => {
         const liquidityPositions = results[1]?.data.liquidityPositions
         const sushiPrice = results[2]
         //const averageBlockTime = results[3]
-        const maticPrice = results[3]
         const pairs = pairsQuery?.data.pairs
 
-        console.log('maticPrice:', maticPrice)
+        //const maticPrice = results[3]
+        //console.log('maticPrice:', maticPrice)
 
         const farms = pools
             .filter((pool: any) => {
@@ -67,6 +67,9 @@ const useFarms = () => {
                 const rewardPerSecond =
                     ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
                 const rewardPerDay = rewardPerSecond * 3600 * 24
+
+                const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
+                const secondaryRewardPerDay = secondaryRewardPerSecond * 3600 * 24
 
                 //console.log('rewardPerDay:', rewardPerDay)
 
@@ -90,6 +93,7 @@ const useFarms = () => {
                         '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270' // MATIC on Matic
                     ],
                     sushiRewardPerDay: rewardPerDay,
+                    secondaryRewardPerDay: secondaryRewardPerDay,
                     roiPerSecond,
                     roiPerHour,
                     roiPerDay,

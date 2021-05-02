@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useMiniChefV2 from 'hooks/minichefv2/useMiniChefV2'
 import usePendingSushi from 'hooks/minichefv2/usePendingSushi'
+import usePendingReward from 'hooks/minichefv2/usePendingReward'
 import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
@@ -50,6 +51,7 @@ export default function InputGroup({
     const balance = useTokenBalance(pairAddressChecksum)
     const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
+    const reward = usePendingReward(pid)
 
     // console.log('balance:', balance)
     // console.log('staked:', staked)
@@ -82,7 +84,7 @@ export default function InputGroup({
                             }}
                         >
                             Harvest{'  '}
-                            {formattedNum(pending)} {'SUSHI & MATIC'}
+                            {formattedNum(pending)} {'SUSHI'} {'&'} {formattedNum(reward)} {'MATIC'}
                         </Button>
                     </div>
                 )}

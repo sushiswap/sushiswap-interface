@@ -163,11 +163,11 @@ const TokenBalance = ({ farm }: any) => {
                         </div>
                     </div>
                     <div
-                        className="grid grid-cols-3 md:grid-cols-4 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        className="grid grid-cols-3 md:grid-cols-12 py-4 px-4 cursor-pointer select-none rounded text-sm"
                         onClick={() => setExpand(!expand)}
                     >
-                        <div className="flex flex-col space-y-2">
-                            <div className="mr-4 flex flex-row space-x-2">
+                        <div className="md:col-span-3 flex flex-col space-y-2">
+                            <div className="mr-4 flex flex-row space-x-2 items-center">
                                 <div>
                                     <img
                                         src={getTokenIcon(farm.liquidityPair.token0.id, chainId)}
@@ -184,7 +184,7 @@ const TokenBalance = ({ farm }: any) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="hidden md:flex flex-row space-x-2 justify-start ml-4">
+                        <div className="md:col-span-4 hidden md:flex flex-row space-x-2 justify-start items-center ml-4">
                             <div>
                                 <img
                                     src={getTokenIcon(farm.rewardTokens?.[0], chainId)}
@@ -199,8 +199,16 @@ const TokenBalance = ({ farm }: any) => {
                                     alt=""
                                 />
                             </div>
+                            <div className="flex flex-col pl-2 space-y-1">
+                                <div className="text-gray-500 text-xs">
+                                    {formattedNum(farm.sushiRewardPerDay)} SUSHI / day
+                                </div>
+                                <div className="text-gray-500 text-xs">
+                                    {formattedNum(farm.secondaryRewardPerDay)} MATIC / day
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex justify-end items-center">
+                        <div className="md:col-span-2 flex justify-end items-center">
                             <div>
                                 {/* <div className="text-right">{formattedNum(farm.tvl, true)} </div> */}
                                 <div className="text-gray-500 text-right font-semibold text-md sm:text-lg">
@@ -209,7 +217,7 @@ const TokenBalance = ({ farm }: any) => {
                                 <div className="text-gray-500 text-right text-xs">Staked</div>
                             </div>
                         </div>
-                        <div className="flex justify-end items-center">
+                        <div className="md:col-span-3 flex justify-end items-center">
                             <div>
                                 <div className="text-gray-500 text-right font-semibold text-md sm:text-lg">
                                     {formattedPercent(farm.roiPerMonth * 100)}{' '}
