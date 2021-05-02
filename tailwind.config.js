@@ -133,6 +133,10 @@ module.exports = {
             ]
         },
         extend: {
+            lineHeight: {
+                ...defaultTheme.lineHeight,
+                '48px': '48px'
+            },
             backgroundImage: theme => ({
                 ...defaultTheme.backgroundImage,
                 'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",

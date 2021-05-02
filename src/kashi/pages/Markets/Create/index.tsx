@@ -11,8 +11,8 @@ import {
 import { e10 } from 'kashi/functions/math'
 import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { BackButton, Button } from 'components'
-import { Card, Layout, LendCardHeader, ListBox } from 'kashi/components'
+import { Button } from 'components'
+import { Card, Layout, CardHeader, ListBox } from 'kashi/components'
 import { Helmet } from 'react-helmet'
 
 const CreatePair = () => {
@@ -130,12 +130,9 @@ const CreatePair = () => {
             <Card
                 className="h-full bg-dark-900"
                 header={
-                    <LendCardHeader>
-                        <div className="flex items-center">
-                            <BackButton defaultRoute={'/bento/kashi/lend'} />
-                            <div className="text-3xl text-high-emphesis">Create a Market</div>
-                        </div>
-                    </LendCardHeader>
+                    <CardHeader className="bg-dark-800">
+                        <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
+                    </CardHeader>
                 }
             >
                 <div className="space-y-6">
