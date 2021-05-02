@@ -73,9 +73,6 @@ function Routes(): JSX.Element {
 
             {/* SushiBar Staking */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/sushibar" component={SushiBar} />}
-            <Route exact strict path="/stake" render={() => <Redirect to="/sushibar" />} />
-            <Route exact strict path="/sushi-bar" render={() => <Redirect to="/sushibar" />} />
-
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
