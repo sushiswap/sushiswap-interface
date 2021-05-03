@@ -120,7 +120,7 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <QuestionHelper text={t`Add xSushi to your metamask wallet`}>
+                                                    <QuestionHelper text={t('Add xSushi to your metamask wallet')}>
                                                         <div
                                                             className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
                                                             onClick={() => {
@@ -180,7 +180,7 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <QuestionHelper text={t`Add Sushi to your metamask wallet`}>
+                                                    <QuestionHelper text={t('Add Sushi to your metamask wallet')}>
                                                         <div
                                                             className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
                                                             onClick={() => {
@@ -264,7 +264,7 @@ function AppBar(): JSX.Element {
                                         )}
                                         {library && library.provider.isMetaMask && (
                                             <div className="hidden sm:inline-block">
-                                                <QuestionHelper text={t`Switch networks`}>
+                                                <QuestionHelper text={t('Switch networks')}>
                                                     <Web3Network />
                                                 </QuestionHelper>
                                             </div>
