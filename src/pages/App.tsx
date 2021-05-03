@@ -39,6 +39,8 @@ import {
     RedirectPathToSwapOnly,
     RedirectToSwap
 } from './Swap/redirects'
+import Inari from './Inari'
+
 // Additional Tools
 import Tools from './Tools'
 import Vesting from './Vesting'
@@ -107,6 +109,7 @@ function App(): JSX.Element {
                             {/* Tools */}
                             <Route exact strict path="/tools" component={Tools} />
                             <Route exact strict path="/saave" component={Saave} />
+                            <Route exact strict path="/inari" component={Inari} />
 
                             {/* Pages */}
                             {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
