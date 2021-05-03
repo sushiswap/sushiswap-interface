@@ -14,6 +14,7 @@ import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
 import { ANALYTICS_URL } from '../constants'
+import QuestionHelper from './QuestionHelper'
 
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
@@ -119,56 +120,58 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <div
-                                                        className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
-                                                        onClick={() => {
-                                                            const params: any = {
-                                                                type: 'ERC20',
-                                                                options: {
-                                                                    address:
-                                                                        '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
-                                                                    symbol: 'XSUSHI',
-                                                                    decimals: 18,
-                                                                    image:
-                                                                        'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
+                                                    <QuestionHelper text={t`Add xSushi to your metamask wallet`}>
+                                                        <div
+                                                            className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
+                                                            onClick={() => {
+                                                                const params: any = {
+                                                                    type: 'ERC20',
+                                                                    options: {
+                                                                        address:
+                                                                            '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                                                        symbol: 'XSUSHI',
+                                                                        decimals: 18,
+                                                                        image:
+                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
+                                                                    }
                                                                 }
-                                                            }
 
-                                                            if (
-                                                                library &&
-                                                                library.provider.isMetaMask &&
-                                                                library.provider.request
-                                                            ) {
-                                                                library.provider
-                                                                    .request({
-                                                                        method: 'wallet_watchAsset',
-                                                                        params
-                                                                    })
-                                                                    .then(success => {
-                                                                        if (success) {
-                                                                            console.log(
-                                                                                'Successfully added XSUSHI to MetaMask'
-                                                                            )
-                                                                        } else {
-                                                                            throw new Error('Something went wrong.')
-                                                                        }
-                                                                    })
-                                                                    .catch(console.error)
-                                                            }
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={xSushi}
-                                                            alt="Switch Network"
-                                                            style={{
-                                                                minWidth: 36,
-                                                                minHeight: 36,
-                                                                maxWidth: 36,
-                                                                maxHeight: 36
+                                                                if (
+                                                                    library &&
+                                                                    library.provider.isMetaMask &&
+                                                                    library.provider.request
+                                                                ) {
+                                                                    library.provider
+                                                                        .request({
+                                                                            method: 'wallet_watchAsset',
+                                                                            params
+                                                                        })
+                                                                        .then(success => {
+                                                                            if (success) {
+                                                                                console.log(
+                                                                                    'Successfully added XSUSHI to MetaMask'
+                                                                                )
+                                                                            } else {
+                                                                                throw new Error('Something went wrong.')
+                                                                            }
+                                                                        })
+                                                                        .catch(console.error)
+                                                                }
                                                             }}
-                                                            className="rounded-md object-contain"
-                                                        />
-                                                    </div>
+                                                        >
+                                                            <img
+                                                                src={xSushi}
+                                                                alt="Switch Network"
+                                                                style={{
+                                                                    minWidth: 36,
+                                                                    minHeight: 36,
+                                                                    maxWidth: 36,
+                                                                    maxHeight: 36
+                                                                }}
+                                                                className="rounded-md object-contain"
+                                                            />
+                                                        </div>
+                                                    </QuestionHelper>
                                                 </>
                                             )}
 
@@ -177,70 +180,72 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <div
-                                                        className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 p-0.5 cursor-pointer"
-                                                        onClick={() => {
-                                                            let address: string | undefined
-                                                            switch (chainId) {
-                                                                case ChainId.MAINNET:
-                                                                    address =
-                                                                        '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
-                                                                    break
-                                                                case ChainId.BSC:
-                                                                    address =
-                                                                        '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
-                                                                    break
-                                                                case ChainId.MATIC:
-                                                                    address =
-                                                                        '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
-                                                                    break
-                                                            }
-                                                            const params: any = {
-                                                                type: 'ERC20',
-                                                                options: {
-                                                                    address: address,
-                                                                    symbol: 'SUSHI',
-                                                                    decimals: 18,
-                                                                    image:
-                                                                        'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                                    <QuestionHelper text={t`Add Sushi to your metamask wallet`}>
+                                                        <div
+                                                            className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
+                                                            onClick={() => {
+                                                                let address: string | undefined
+                                                                switch (chainId) {
+                                                                    case ChainId.MAINNET:
+                                                                        address =
+                                                                            '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
+                                                                        break
+                                                                    case ChainId.BSC:
+                                                                        address =
+                                                                            '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
+                                                                        break
+                                                                    case ChainId.MATIC:
+                                                                        address =
+                                                                            '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
+                                                                        break
                                                                 }
-                                                            }
+                                                                const params: any = {
+                                                                    type: 'ERC20',
+                                                                    options: {
+                                                                        address: address,
+                                                                        symbol: 'SUSHI',
+                                                                        decimals: 18,
+                                                                        image:
+                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                                                    }
+                                                                }
 
-                                                            if (
-                                                                library &&
-                                                                library.provider.isMetaMask &&
-                                                                library.provider.request
-                                                            ) {
-                                                                library.provider
-                                                                    .request({
-                                                                        method: 'wallet_watchAsset',
-                                                                        params
-                                                                    })
-                                                                    .then(success => {
-                                                                        if (success) {
-                                                                            console.log(
-                                                                                'Successfully added SUSHI to MetaMask'
-                                                                            )
-                                                                        } else {
-                                                                            throw new Error('Something went wrong.')
-                                                                        }
-                                                                    })
-                                                                    .catch(console.error)
-                                                            }
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={Sushi}
-                                                            alt="Switch Network"
-                                                            style={{
-                                                                minWidth: 36,
-                                                                minHeight: 36,
-                                                                maxWidth: 36,
-                                                                maxHeight: 36
+                                                                if (
+                                                                    library &&
+                                                                    library.provider.isMetaMask &&
+                                                                    library.provider.request
+                                                                ) {
+                                                                    library.provider
+                                                                        .request({
+                                                                            method: 'wallet_watchAsset',
+                                                                            params
+                                                                        })
+                                                                        .then(success => {
+                                                                            if (success) {
+                                                                                console.log(
+                                                                                    'Successfully added SUSHI to MetaMask'
+                                                                                )
+                                                                            } else {
+                                                                                throw new Error('Something went wrong.')
+                                                                            }
+                                                                        })
+                                                                        .catch(console.error)
+                                                                }
                                                             }}
-                                                            className="rounded-md object-contain"
-                                                        />
-                                                    </div>
+                                                        >
+                                                            <img
+                                                                src={Sushi}
+                                                                alt="Switch Network"
+                                                                style={{
+                                                                    minWidth: 36,
+                                                                    minHeight: 36,
+                                                                    maxWidth: 36,
+                                                                    maxHeight: 36
+                                                                }}
+                                                                className="rounded-md object-contain"
+                                                            />
+                                                        </div>
+                                                    </QuestionHelper>
                                                 </>
                                             )}
                                         {chainId && chainId === ChainId.MATIC && (
@@ -259,7 +264,9 @@ function AppBar(): JSX.Element {
                                         )}
                                         {library && library.provider.isMetaMask && (
                                             <div className="hidden sm:inline-block">
-                                                <Web3Network />
+                                                <QuestionHelper text={t`Switch networks`}>
+                                                    <Web3Network />
+                                                </QuestionHelper>
                                             </div>
                                         )}
 
