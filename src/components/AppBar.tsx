@@ -264,9 +264,7 @@ function AppBar(): JSX.Element {
                                         )}
                                         {library && library.provider.isMetaMask && (
                                             <div className="hidden sm:inline-block">
-                                                <QuestionHelper text={t('Switch networks')}>
-                                                    <Web3Network />
-                                                </QuestionHelper>
+                                                <Web3Network />
                                             </div>
                                         )}
 
