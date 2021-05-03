@@ -110,7 +110,7 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
                             {`${input ? input : '0'} ${activeTab === 0 ? '' : 'x'}SUSHI`}
                         </p>
                     </div>
-                    <div className="pointer-events-auto flex items-center text-secondary text-caption2 md:text-caption">
+                    <div className="flex items-center text-secondary text-caption2 md:text-caption">
                         <div className={input ? 'hidden md:flex md:items-center' : 'flex items-center'}>
                             <p>Balance:&nbsp;</p>
                             <p className="text-caption font-bold">
@@ -119,6 +119,7 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
                         </div>
                         <button
                             className={`
+                                pointer-events-auto 
                                 focus:outline-none focus:ring hover:bg-opacity-40
                                 md:bg-cyan-blue md:bg-opacity-30
                                 border border-secondary md:border-cyan-blue
