@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, Token, Trade } from '@sushiswap/sdk'
+import { CurrencyAmount, JSBI, Token, Trade, ChainId } from '@sushiswap/sdk'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -49,8 +49,15 @@ import { ClickableText } from '../Pool/styleds'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'
 import { Helmet } from 'react-helmet'
+import { DarkCard, DarkBlueCard } from '../../components/CardLegacy'
+
+import { useNetworkModalToggle } from '../../state/application/hooks'
+
+import PolygonLogo from '../../assets/images/matic-logo.png'
 
 export default function Swap() {
+    const toggleNetworkModal = useNetworkModalToggle()
+
     const loadedUrlParams = useDefaultsFromURLSearch()
 
     // token warning stuff
@@ -258,6 +265,7 @@ export default function Swap() {
         recipientAddress,
         account,
         trade,
+        chainId,
         singleHopOnly
     ])
 
@@ -339,7 +347,24 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-
+                    {/* {chainId && chainId === ChainId.MATIC && (
+                        <div className="max-w-xl pb-4 cursor-pointer">
+                            <DarkCard>
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <div className="text-gray-300">Welcome to Sushi on Matic/Polygon!</div>
+                                        <div className="text-gray-600 text-sm">New network, new features</div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-dark-600"
+                                    >
+                                        Read Tutorial
+                                    </button>
+                                </div>
+                            </DarkCard>
+                        </div>
+                    )} */}
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
@@ -404,6 +429,7 @@ export default function Swap() {
                                 ) : null}
                             </AutoRow>
                         </AutoColumn>
+
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
@@ -583,6 +609,25 @@ export default function Swap() {
                             <DefaultVersionLink />
                         ) : null}
                     </BottomGrouping>
+                    {!trade && chainId && chainId === ChainId.MAINNET && (
+                        <div
+                            className="hidden sm:block w-full cursor-pointer pt-4"
+                            style={{ maxWidth: '574px' }}
+                            onClick={() => toggleNetworkModal()}
+                        >
+                            <DarkCard>
+                                <div className="flex justify-between items-center overflow-hidden">
+                                    <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
+                                    <div className="pl-32">
+                                        <div className="text-gray-300">Check out Sushi on Matic/Polygon!</div>
+                                        <div className="text-gray-600 text-sm">
+                                            Click here to switch to Polygon using Metamask
+                                        </div>
+                                    </div>
+                                </div>
+                            </DarkCard>
+                        </div>
+                    )}
                 </Wrapper>
             </div>
             {!swapIsUnsupported ? (
