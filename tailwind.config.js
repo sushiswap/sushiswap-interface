@@ -44,6 +44,7 @@ module.exports = {
             'dark-blue': '#0F182A',
             'dark-1000': '#0D0415',
             'dark-900': '#161522',
+            'dark-850': '#1d1e2c',
             'dark-800': '#202231',
             'dark-700': '#2E3348',
             'dark-600': '#1C2D49',
@@ -132,6 +133,10 @@ module.exports = {
             ]
         },
         extend: {
+            lineHeight: {
+                ...defaultTheme.lineHeight,
+                '48px': '48px'
+            },
             backgroundImage: theme => ({
                 ...defaultTheme.backgroundImage,
                 'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",

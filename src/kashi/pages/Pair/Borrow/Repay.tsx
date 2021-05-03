@@ -178,7 +178,7 @@ export default function Repay({ pair }: RepayProps) {
     } else if (repayValueSet) {
         actionName = 'Repay'
     } else if (swap) {
-        actionName = 'Flash repay'
+        actionName = 'Automic repay'
     }
 
     // const actionDisabled = false
@@ -208,7 +208,10 @@ export default function Repay({ pair }: RepayProps) {
             console.log({ share, userCollateralShare: pair.userCollateralShare })
 
             cooker.removeCollateral(pair.userCollateralShare, true)
-            cooker.bentoTransferCollateral(pair.userCollateralShare, SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS)
+            cooker.bentoTransferCollateral(
+                pair.userCollateralShare,
+                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1]
+            )
             cooker.repayShare(pair.userBorrowPart)
 
             const path = trade.route.path.map(token => token.address) || []
@@ -239,7 +242,7 @@ export default function Repay({ pair }: RepayProps) {
             console.log('encoded', data)
 
             cooker.action(
-                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS,
+                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],
                 ZERO,
                 ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
                 true,
@@ -350,7 +353,7 @@ export default function Repay({ pair }: RepayProps) {
 
             <WarningsView warnings={warnings} />
 
-            {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
+            {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
             {((swap && priceImpactSeverity < 3) || isExpertMode) && (
                 <TransactionReviewView transactionReview={transactionReview} />

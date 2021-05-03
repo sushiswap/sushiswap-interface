@@ -3,12 +3,18 @@ import { useActiveWeb3React } from 'hooks'
 import { getTokenIcon } from 'kashi/functions'
 import React from 'react'
 
-export default function ListBox({ label, tokens, selectedToken, setSelectedToken }: any) {
+export default function ListBox({ label, tokens, selectedToken, setSelectedToken, disabled = false }: any) {
     const { chainId } = useActiveWeb3React()
     return (
         <div className="flex items-center justify-center">
             <div className="w-full">
-                <Listbox as="div" className="space-y-1" value={selectedToken} onChange={setSelectedToken}>
+                <Listbox
+                    as="div"
+                    className="space-y-1"
+                    value={selectedToken}
+                    onChange={setSelectedToken}
+                    disabled={disabled}
+                >
                     {({ open }) => (
                         <>
                             <Listbox.Label className="block text-base leading-5 font-medium text-gray-700 pb-2">

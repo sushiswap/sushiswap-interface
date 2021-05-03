@@ -24,9 +24,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     const [value, setValue] = useState('')
     const [pinMax, setPinMax] = useState(false)
 
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback()
 
     // Calculated
     const max = minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value)

@@ -47,6 +47,9 @@ export default function Borrow({ pair }: BorrowProps) {
 
     // Calculated
     const assetNative = WETH[chainId || 1].address === pair.collateral.address
+
+    console.log({ assetNative: assetNative })
+
     const collateralBalance = useBentoCollateral
         ? pair.collateral.bentoBalance
         : assetNative
@@ -198,7 +201,7 @@ export default function Borrow({ pair }: BorrowProps) {
         collateralWarnings.broken ||
         (borrowValue.length > 0 && borrowWarnings.broken) ||
         (swap && priceImpactSeverity > 3 && !isExpertMode) ||
-        !collateralValueSet
+        (pair.userCollateralAmount.value.isZero() && !collateralValueSet)
 
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
@@ -216,15 +219,25 @@ export default function Borrow({ pair }: BorrowProps) {
             cooker.borrow(
                 borrowValue.toBigNumber(pair.asset.decimals),
                 swap || useBentoBorrow,
-                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS : ''
+                swap ? SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1] : ''
             )
-            summary += (summary ? ' and ' : '') + 'Borrow'
         }
         if (borrowValueSet && trade) {
             const path = trade.route.path.map(token => token.address) || []
             if (path.length > 4) {
                 throw 'Path too long'
             }
+
+            console.log('debug', [
+                pair.asset.address,
+                pair.collateral.address,
+                extraCollateral,
+                path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                path.length > 3 ? path[2] : ethers.constants.AddressZero,
+                account,
+                toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals)),
+                borrowValue.toBigNumber(pair.asset.decimals)
+            ])
 
             const data = defaultAbiCoder.encode(
                 ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
@@ -240,7 +253,7 @@ export default function Borrow({ pair }: BorrowProps) {
             )
 
             cooker.action(
-                SUSHISWAP_MULTISWAPPER_ADDRESS,
+                SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1],
                 ZERO,
                 ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
                 false,
@@ -253,8 +266,18 @@ export default function Borrow({ pair }: BorrowProps) {
                 swap ? BigNumber.from(-1) : collateralValue.toBigNumber(pair.collateral.decimals),
                 useBentoCollateral || swap
             )
-            summary = 'Add collateral'
         }
+
+        if (collateralValueSet) {
+            if (borrowValueSet) {
+                summary = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
+            } else {
+                summary = 'Add collateral'
+            }
+        } else if (borrowValueSet) {
+            summary = trade ? 'Borrow, swap and add as collateral' : 'Borrow'
+        }
+
         return summary
     }
 
@@ -379,7 +402,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
-            {swap && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
+            {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
             {collateralValueSet && ((swap && priceImpactSeverity < 3) || isExpertMode) && (
                 <TransactionReviewView transactionReview={transactionReview} />

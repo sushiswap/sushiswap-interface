@@ -22,10 +22,30 @@ import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
 
+const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
+    background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
+    border-radius: ${({ theme }) => theme.borderRadius};
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+`
+
+const CardSection = styled(AutoColumn)<{ disabled?: boolean }>`
+    padding: 1rem;
+    z-index: 1;
+    opacity: ${({ disabled }) => disabled && '0.4'};
+`
+
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
     width: 100%;
     padding: 16px;
+`
+
+const VoteCard = styled(DataCard)`
+  background: ${({ theme }) => transparentize(0.5, theme.bg1)};
+  /* border: 1px solid ${({ theme }) => theme.text4}; */
+  overflow: hidden;
 `
 
 const TitleRow = styled(RowBetween)`
@@ -225,7 +245,23 @@ export default function Pool() {
                             {chainId === ChainId.MAINNET && (
                                 <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                                     Have Liquidity on Uniswap?{' '}
-                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate/v2'}>
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                        Migrate Now.
+                                    </StyledInternalLink>
+                                </Text>
+                            )}
+                            {chainId === ChainId.BSC && (
+                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                                    Have Liquidity on PancakeSwap?{' '}
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                        Migrate Now.
+                                    </StyledInternalLink>
+                                </Text>
+                            )}
+                            {chainId === ChainId.MATIC && (
+                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                                    Have Liquidity on QuickSwap?{' '}
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
                                         Migrate Now.
                                     </StyledInternalLink>
                                 </Text>
