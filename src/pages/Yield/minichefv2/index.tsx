@@ -52,7 +52,7 @@ export default function Yield(): JSX.Element {
                                     {/* <BackButton defaultRoute="/pool" /> */}
                                     <div className="text-lg mr-2 whitespace-nowrap flex items-center">
                                         <div className="mr-2">Yield Instruments</div>
-                                        <Badge color="blue">v2</Badge>
+                                        <Badge color="blue">V2 Rewarder</Badge>
                                     </div>
                                 </div>
                                 <Search search={search} term={term} />
@@ -98,7 +98,7 @@ export default function Yield(): JSX.Element {
                         <div className="hidden md:block ml-4">
                             <div className="flex items-center justify-start">
                                 <div className="pr-2">Pool Rewards</div>
-                                <Badge color="blue">2x</Badge>
+                                <Badge color="pink">2X </Badge>
                             </div>
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
