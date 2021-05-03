@@ -198,6 +198,8 @@ export default function Repay({ pair }: RepayProps) {
         setRepayAssetValue('')
     }
 
+    console.log('useBentoRemove', useBentoRemove)
+
     // Handlers
     async function onExecute(cooker: KashiCooker) {
         let summary = ''
@@ -252,7 +254,7 @@ export default function Repay({ pair }: RepayProps) {
 
             cooker.repayPart(pair.userBorrowPart, true)
 
-            if (useBentoRemove) {
+            if (!useBentoRemove) {
                 cooker.bentoWithdrawCollateral(ZERO, BigNumber.from(-1))
             }
 
