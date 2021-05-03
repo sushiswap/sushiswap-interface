@@ -7,7 +7,6 @@ import styled, { ThemeContext } from 'styled-components'
 import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/ButtonLegacy'
 import Card from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
-import { CardSection, DataCard } from '../../components/earn/styled'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 import FullPositionCard from '../../components/PositionCard'
 import { RowBetween, RowFixed } from '../../components/Row'
@@ -15,13 +14,27 @@ import { Dots } from '../../components/swap/styleds'
 import { BIG_INT_ZERO } from '../../constants'
 import { usePairs } from '../../data/Reserves'
 import { useUserHasLiquidityInAllTokens } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useStakingInfo } from '../../state/stake/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
+
+const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
+    background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
+    border-radius: ${({ theme }) => theme.borderRadius};
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+`
+
+const CardSection = styled(AutoColumn)<{ disabled?: boolean }>`
+    padding: 1rem;
+    z-index: 1;
+    opacity: ${({ disabled }) => disabled && '0.4'};
+`
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
@@ -240,6 +253,14 @@ export default function Pool() {
                             {chainId === ChainId.BSC && (
                                 <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                                     Have Liquidity on PancakeSwap?{' '}
+                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                        Migrate Now.
+                                    </StyledInternalLink>
+                                </Text>
+                            )}
+                            {chainId === ChainId.MATIC && (
+                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                                    Have Liquidity on QuickSwap?{' '}
                                     <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
                                         Migrate Now.
                                     </StyledInternalLink>

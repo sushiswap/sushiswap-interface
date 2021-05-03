@@ -1,20 +1,26 @@
+import React, { useContext, useState } from 'react'
+import { TransactionReviewView, WarningsView } from 'kashi/components'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { useActiveWeb3React } from 'hooks'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Alert, Button, Dots, TransactionReviewView } from 'kashi/components'
-import WarningsView from 'kashi/components/Warnings'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
+import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
+import { WETH } from '@sushiswap/sdk'
 import { KashiContext } from 'kashi/context'
 import { KashiCooker, TransactionReview, Warning, Warnings } from 'kashi/entities'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
-import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
-import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
-import React, { useContext, useState } from 'react'
-import { ArrowDownRight, ArrowUpRight } from 'react-feather'
-import { useKashiApprovalPending } from 'state/application/hooks'
-import { formattedNum } from 'utils'
+import { useCurrency } from 'hooks/Tokens'
+import { tryParseAmount } from 'state/swap/hooks'
+import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import { Button } from 'components'
+import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
+import TradeReview from 'kashi/components/TradeReview'
+import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
+import { useTradeExactIn, useTradeExactOut } from 'hooks/Trades'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
+import { Field } from 'state/swap/actions'
+import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
+import { SUSHISWAP_MULTISWAPPER_ADDRESS, SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS } from 'kashi/constants'
+import { ethers } from 'ethers'
+import { defaultAbiCoder } from '@ethersproject/abi'
 
 interface RepayProps {
     pair: any
@@ -22,25 +28,24 @@ interface RepayProps {
 
 export default function Repay({ pair }: RepayProps) {
     const { account, chainId } = useActiveWeb3React()
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
-    const pendingApprovalMessage = useKashiApprovalPending()
+    const info = useContext(KashiContext).state.info
 
     // State
-    const [useBentoRepay, setUseBentoRepayAsset] = useState<boolean>(pair.asset.bentoBalance.gt(0))
+    const [useBentoRepay, setUseBentoRepay] = useState<boolean>(pair.asset.bentoBalance.gt(0))
     const [useBentoRemove, setUseBentoRemoveCollateral] = useState<boolean>(true)
 
     const [repayValue, setRepayAssetValue] = useState('')
     const [removeValue, setRemoveCollateralValue] = useState('')
-    const [updateOracle, setUpdateOracle] = useState(false)
     const [pinRemoveMax, setPinRemoveMax] = useState(false)
     const [pinRepayMax, setPinRepayMax] = useState(false)
+    const [updateOracle, setUpdateOracle] = useState(false)
+    const [swap, setSwap] = useState(false)
 
-    const info = useContext(KashiContext).state.info
+    const assetToken = useCurrency(pair.asset.address) || undefined
+    const collateralToken = useCurrency(pair.collateral.address) || undefined
 
     // Calculated
-    const assetNative = WETH[chainId || 1].address == pair.asset.address
+    const assetNative = WETH[chainId || 1].address === pair.asset.address
 
     const balance = useBentoRepay
         ? toAmount(pair.asset, pair.asset.bentoBalance)
@@ -53,14 +58,6 @@ export default function Repay({ pair }: RepayProps) {
     const displayRepayValue = pinRepayMax
         ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.decimals)
         : repayValue
-
-    const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            displayRepayValue.toBigNumber(pair.asset.decimals).toString()
-        ),
-        BENTOBOX_ADDRESS
-    )
 
     const nextUserBorrowAmount = pair.currentUserBorrowAmount.value.sub(
         displayRepayValue.toBigNumber(pair.asset.decimals)
@@ -81,6 +78,19 @@ export default function Repay({ pair }: RepayProps) {
 
     const displayRemoveValue = pinRemoveMax ? maxRemoveCollateral : removeValue
 
+    // Swap
+    const [allowedSlippage] = useUserSlippageTolerance() // 10 = 0.1%
+    const parsedAmount = tryParseAmount(pair.currentUserBorrowAmount.string, assetToken)
+    const foundTrade = useTradeExactOut(collateralToken, parsedAmount) || undefined
+
+    const maxAmountIn = swap
+        ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)
+              [Field.INPUT]?.toFixed(pair.collateral.decimals)
+              .toBigNumber(pair.collateral.decimals) || ZERO
+        : ZERO
+
+    //const nextUserCollateralValue = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.decimals)).add(extraCollateral)
+
     const nextUserCollateralAmount = pair.userCollateralAmount.value.sub(
         displayRemoveValue.toBigNumber(pair.collateral.decimals)
     )
@@ -95,13 +105,12 @@ export default function Repay({ pair }: RepayProps) {
     const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
     const nextMaxBorrowPossible = maximum(minimum(nextMaxBorrowSafe, pair.maxAssetAvailable), ZERO)
 
-    const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
-
     const nextHealth = pair.currentUserBorrowAmount.value
         .sub(displayRepayValue.toBigNumber(pair.asset.decimals))
         .muldiv(BigNumber.from('1000000000000000000'), nextMaxBorrowMinimum)
 
     const transactionReview = new TransactionReview()
+
     if (displayRepayValue || displayRemoveValue) {
         transactionReview.addTokenAmount(
             'Borrow Limit',
@@ -113,20 +122,17 @@ export default function Repay({ pair }: RepayProps) {
     }
 
     const warnings = new Warnings()
-        .add(
+        .addError(
             assetNative && !useBentoRepay && pinRepayMax,
-            `You cannot MAX repay ${pair.asset.symbol} directly from your wallet. Please deposit your ${pair.asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`,
-            true
+            `You cannot MAX repay ${pair.asset.symbol} directly from your wallet. Please deposit your ${pair.asset.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`
         )
-        .add(
+        .addError(
             displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(pair.userCollateralAmount.value),
-            'You have insufficient collateral. Please enter a smaller amount or repay more.',
-            true
+            'You have insufficient collateral. Please enter a smaller amount or repay more.'
         )
-        .add(
+        .addError(
             displayRepayValue.toBigNumber(pair.asset.decimals).gt(pair.currentUserBorrowAmount.value),
             "You can't repay more than you owe. To fully repay, please click the 'max' button.",
-            true,
             new Warning(
                 balance?.lt(displayRepayValue.toBigNumber(pair.asset.decimals)),
                 `Please make sure your ${
@@ -135,62 +141,34 @@ export default function Repay({ pair }: RepayProps) {
                 true
             )
         )
-        .add(
+        .addError(
             displayRemoveValue
                 .toBigNumber(pair.collateral.decimals)
                 .gt(maximum(pair.userCollateralAmount.value.sub(nextMinCollateralMinimum), ZERO)),
             'Removing this much collateral would put you into insolvency.',
-            true,
             new Warning(
                 displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(nextMaxRemoveCollateral),
-                'Removing this much collateral would put you very close to insolvency.',
-                false
+                'Removing this much collateral would put you very close to insolvency.'
             )
         )
-
-    // Handlers
-    async function onExecute(cooker: KashiCooker) {
-        let summary = ''
-        if (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)) {
-            cooker.repayPart(pair.userBorrowPart, useBentoRepay)
-            summary = 'Repay Max'
-        } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
-            cooker.repay(displayRepayValue.toBigNumber(pair.asset.decimals), useBentoRepay)
-            summary = 'Repay'
-        }
-        if (
-            displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||
-            (pinRemoveMax && pair.userCollateralShare.gt(0))
-        ) {
-            const share =
-                pinRemoveMax &&
-                (nextUserBorrowAmount.isZero() ||
-                    (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
-                    ? pair.userCollateralShare
-                    : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
-
-            cooker.removeCollateral(share, useBentoRemove)
-            summary += (summary ? ' and ' : '') + 'Remove Collateral'
-        }
-        setPinRemoveMax(false)
-        setRemoveCollateralValue('')
-        setRepayAssetValue('')
-        return summary
-    }
-
-    const showApprove =
-        chainId &&
-        pair.asset.address !== WETH[chainId].address &&
-        !useBentoRepay &&
-        displayRepayValue &&
-        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
     const removeValueSet =
         !displayRemoveValue.toBigNumber(pair.collateral.decimals).isZero() ||
         (pinRemoveMax && pair.userCollateralShare.gt(ZERO))
+
     const repayValueSet = !displayRepayValue.toBigNumber(pair.asset.decimals).isZero()
 
+    const trade = swap ? foundTrade : undefined
+    // const trade = swap && removeValueSet ? foundTrade : undefined
+
+    const [isExpertMode] = useExpertModeManager()
+
+    const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
+
+    const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
+
     let actionName = 'Nothing to do'
+
     if (removeValueSet) {
         if (repayValueSet) {
             actionName = 'Repay and remove collateral'
@@ -199,160 +177,198 @@ export default function Repay({ pair }: RepayProps) {
         }
     } else if (repayValueSet) {
         actionName = 'Repay'
+    } else if (swap) {
+        actionName = 'Automic repay'
+    }
+
+    // const actionDisabled = false
+
+    const actionDisabled =
+        (!swap &&
+            !trade &&
+            displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
+            displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0) &&
+            (!pinRemoveMax || pair.userCollateralShare.isZero())) ||
+        warnings.some(warning => warning.breaking)
+
+    function resetRepayState() {
+        setPinRepayMax(false)
+        setPinRemoveMax(false)
+        setRemoveCollateralValue('')
+        setRepayAssetValue('')
+    }
+
+    // Handlers
+    async function onExecute(cooker: KashiCooker) {
+        let summary = ''
+
+        if (swap && trade) {
+            const share = toShare(pair.collateral, pair.userCollateralAmount.value)
+
+            console.log({ share, userCollateralShare: pair.userCollateralShare })
+
+            cooker.removeCollateral(pair.userCollateralShare, true)
+            cooker.bentoTransferCollateral(
+                pair.userCollateralShare,
+                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1]
+            )
+            cooker.repayShare(pair.userBorrowPart)
+
+            const path = trade.route.path.map(token => token.address) || []
+
+            console.log('debug', [
+                pair.collateral.address,
+                pair.asset.address,
+                maxAmountIn,
+                path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                path.length > 3 ? path[2] : ethers.constants.AddressZero,
+                account,
+                pair.userCollateralShare
+            ])
+
+            const data = defaultAbiCoder.encode(
+                ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
+                [
+                    pair.collateral.address,
+                    pair.asset.address,
+                    maxAmountIn,
+                    path.length > 2 ? path[1] : ethers.constants.AddressZero,
+                    path.length > 3 ? path[2] : ethers.constants.AddressZero,
+                    account,
+                    pair.userCollateralShare
+                ]
+            )
+
+            console.log('encoded', data)
+
+            cooker.action(
+                SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],
+                ZERO,
+                ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
+                true,
+                false,
+                1
+            )
+
+            cooker.repayPart(pair.userBorrowPart, true)
+
+            if (useBentoRemove) {
+                cooker.bentoWithdrawCollateral(ZERO, BigNumber.from(-1))
+            }
+
+            summary = 'Repay All'
+        } else {
+            if (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)) {
+                cooker.repayPart(pair.userBorrowPart, useBentoRepay)
+                summary = 'Repay Max'
+            } else if (displayRepayValue.toBigNumber(pair.asset.decimals).gt(0)) {
+                cooker.repay(displayRepayValue.toBigNumber(pair.asset.decimals), useBentoRepay)
+                summary = 'Repay'
+            }
+            if (
+                displayRemoveValue.toBigNumber(pair.collateral.decimals).gt(0) ||
+                (pinRemoveMax && pair.userCollateralShare.gt(0))
+            ) {
+                const share =
+                    pinRemoveMax &&
+                    (nextUserBorrowAmount.isZero() ||
+                        (pinRepayMax && pair.userBorrowPart.gt(0) && balance.gte(pair.currentUserBorrowAmount.value)))
+                        ? pair.userCollateralShare
+                        : toShare(pair.collateral, displayRemoveValue.toBigNumber(pair.collateral.decimals))
+
+                cooker.removeCollateral(share, useBentoRemove)
+                summary += (summary ? ' and ' : '') + 'Remove Collateral'
+            }
+        }
+
+        resetRepayState()
+
+        return summary
     }
 
     return (
         <>
             <div className="text-3xl text-high-emphesis mt-6 mb-4">Repay {pair.asset.symbol}</div>
 
-            <div className="flex items-center justify-between my-4">
-                <div className="flex items-center text-base text-secondary">
-                    <span>
-                        <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span className="mx-2"> Repay {pair.asset.symbol} trom </span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="pink"
-                            size="small"
-                            className="focus:ring focus:ring-pink"
-                            onClick={() => {
-                                setUseBentoRepayAsset(!useBentoRepay)
-                            }}
-                        >
-                            {useBentoRepay ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {formattedNum(balance.toFixed(pair.asset.decimals))}
-                </div>
-            </div>
+            <SmartNumberInput
+                color="pink"
+                token={pair.asset}
+                value={displayRepayValue}
+                setValue={setRepayAssetValue}
+                useBentoTitleDirection="down"
+                useBentoTitle={`Repay ${pair.asset.symbol} from`}
+                useBento={useBentoRepay}
+                setUseBento={setUseBentoRepay}
+                maxTitle="Balance"
+                max={balance}
+                pinMax={pinRepayMax}
+                setPinMax={setPinRepayMax}
+                showMax={!swap && !pair.currentUserBorrowAmount.value.isZero()}
+                disabled={swap || pair.currentUserBorrowAmount.value.isZero()}
+                switchDisabled={swap || pair.currentUserBorrowAmount.value.isZero()}
+            />
 
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={displayRepayValue}
-                    onUserInput={setRepayAssetValue}
-                    onFocus={() => {
-                        setRepayAssetValue('')
-                        setPinRepayMax(false)
+            <SmartNumberInput
+                color="pink"
+                token={pair.collateral}
+                value={displayRemoveValue}
+                setValue={setRemoveCollateralValue}
+                useBentoTitleDirection="up"
+                useBentoTitle={`Remove ${pair.collateral.symbol} to`}
+                useBento={useBentoRemove}
+                setUseBento={setUseBentoRemoveCollateral}
+                max={nextMaxRemoveCollateral}
+                pinMax={pinRemoveMax}
+                setPinMax={setPinRemoveMax}
+                showMax={
+                    pair.currentUserBorrowAmount.value.eq(displayRepayValue.toBigNumber(pair.asset.decimals)) ||
+                    pair.currentUserBorrowAmount.value.isZero()
+                }
+                disabled={swap || pair.userCollateralAmount.value.isZero()}
+                switchDisabled={pair.userCollateralAmount.value.isZero()}
+            />
+
+            {!pair.currentUserBorrowAmount.value.isZero() && (
+                <SwapCheckbox
+                    color="pink"
+                    swap={swap}
+                    setSwap={(value: boolean) => {
+                        resetRepayState()
+                        setSwap(value)
                     }}
-                />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="pink"
-                        size="small"
-                        onClick={() => {
-                            setPinRepayMax(true)
-                        }}
-                        className="absolute right-4 focus:ring focus:ring-pink"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
-
-            <div className="flex items-center justify-between my-4">
-                <div className="flex items-center text-base text-secondary">
-                    <span>
-                        <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span className="mx-2">Remove {pair.collateral.symbol} to</span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="pink"
-                            size="small"
-                            className="focus:ring focus:ring-pink"
-                            onClick={() => {
-                                setUseBentoRemoveCollateral(!useBentoRemove)
-                            }}
-                        >
-                            {useBentoRemove ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Max: {formattedNum(maxRemoveCollateral)}
-                </div>
-            </div>
-
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
-                    value={displayRemoveValue}
-                    onUserInput={setRemoveCollateralValue}
-                    onFocus={() => {
-                        setRemoveCollateralValue(displayRemoveValue)
-                        setPinRemoveMax(false)
-                    }}
-                />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="pink"
-                        size="small"
-                        onClick={() => setPinRemoveMax(true)}
-                        className="absolute right-4 focus:ring focus:ring-pink"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
-
-            <WarningsView warnings={warnings}></WarningsView>
-            <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
-
-            {approveKashiFallback && (
-                <Alert
-                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
-                    className="mb-4"
+                    title={`Swap ${pair.collateral.symbol} collateral for ${pair.asset.symbol} and repay`}
+                    help="Swapping your removed collateral tokens and repay allows for reducing your borrow by using your collateral and/or to unwind leveraged positions."
                 />
             )}
 
-            {showApprove && (
-                <Button color="pink" onClick={approve} className="mb-4">
-                    {approvalState === ApprovalState.PENDING ? (
-                        <Dots>Approving {pair.asset.symbol}</Dots>
-                    ) : (
-                        `Approve ${pair.asset.symbol}`
-                    )}
-                </Button>
+            {removeValueSet && (
+                <ExchangeRateCheckBox
+                    color="pink"
+                    pair={pair}
+                    updateOracle={updateOracle}
+                    setUpdateOracle={setUpdateOracle}
+                    desiredDirection="up"
+                />
             )}
 
-            {!showApprove && (
-                <>
-                    {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
-                        kashiApprovalState === BentoApprovalState.PENDING) &&
-                        !kashiPermit && (
-                            <Button color="pink" onClick={onApprove} className="mb-4">
-                                {kashiApprovalState === BentoApprovalState.PENDING ? (
-                                    <Dots>{pendingApprovalMessage}</Dots>
-                                ) : (
-                                    `Approve Kashi`
-                                )}
-                            </Button>
-                        )}
+            <WarningsView warnings={warnings} />
 
-                    {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-                        <Button
-                            color="pink"
-                            onClick={() => onCook(pair, onExecute)}
-                            disabled={
-                                (displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
-                                    displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0) &&
-                                    (!pinRemoveMax || pair.userCollateralShare.isZero())) ||
-                                warnings.some(warning => warning.breaking)
-                            }
-                        >
+            {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
+
+            {((swap && priceImpactSeverity < 3) || isExpertMode) && (
+                <TransactionReviewView transactionReview={transactionReview} />
+            )}
+
+            <KashiApproveButton
+                color="pink"
+                content={(onCook: any) => (
+                    <TokenApproveButton value={displayRepayValue} token={assetToken} needed={!useBentoRepay}>
+                        <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
                             {actionName}
                         </Button>
-                    )}
-                </>
-            )}
+                    </TokenApproveButton>
+                )}
+            />
         </>
     )
 }

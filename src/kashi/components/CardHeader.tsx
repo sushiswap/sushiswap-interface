@@ -1,18 +1,10 @@
 import React from 'react'
-
-// const CardHeader = styled.div<{ border?: boolean; market?: string }>`
-//   display: flex;
-//   align-items: center;
-//   background: ${({ theme }) => theme.extraDarkPurple};
-//   border-radius: 10px 10px 0 0;
-//   padding: 32px 32px 26px;
-//   border-bottom: 6px solid
-//     ${({ market, border, theme }) =>
-//       border ? `${market === 'Supply' ? theme.primaryBlue : theme.primaryPink}` : 'transparent'};
-// `
+import { classNames } from 'functions'
 
 export default function CardHeader({ className, children }: any) {
-    return <div className={`${className} flex items-center rounded-t px-4 sm:px-8 py-4 sm:py-6`}>{children}</div>
+    return (
+        <div className={classNames('flex items-center rounded-t px-4 sm:px-8 py-4 sm:py-6', className)}>{children}</div>
+    )
 }
 
 export function BorrowCardHeader({ children }: any) {

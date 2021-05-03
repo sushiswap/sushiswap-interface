@@ -5,6 +5,33 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     important: true,
     theme: {
+        linearBorderGradients: {
+            directions: {
+                // defaults to these values
+                t: 'to top',
+                tr: 'to top right',
+                r: 'to right',
+                br: 'to bottom right',
+                b: 'to bottom',
+                bl: 'to bottom left',
+                l: 'to left',
+                tl: 'to top left'
+            },
+            colors: {
+                'blue-pink': ['#27B0E6', '#FA52A0']
+            },
+            background: {
+                'dark-1000': '#0D0415',
+                'dark-900': '#161522',
+                'dark-800': '#202231'
+            },
+            border: {
+                // defaults to these values (optional)
+                '1': '1px',
+                '2': '2px',
+                '4': '4px'
+            }
+        },
         colors: {
             ...defaultTheme.colors,
             red: '#FF3838',
@@ -17,12 +44,16 @@ module.exports = {
             'dark-blue': '#0F182A',
             'dark-1000': '#0D0415',
             'dark-900': '#161522',
+            'dark-850': '#1d1e2c',
             'dark-800': '#202231',
             'dark-700': '#2E3348',
             'dark-600': '#1C2D49',
             'dark-500': '#223D5E',
 
+            // TODO: bad... these are causing issues with text colors
+            // 'high-emphesis': '#E3E3E3',
             primary: '#BFBFBF',
+            secondary: '#7F7F7F',
             'low-emphesis': '#575757'
         },
         screens: {
@@ -94,7 +125,7 @@ module.exports = {
                     lineHeight: '24px'
                 }
             ],
-            'caption-2': [
+            caption2: [
                 '14px',
                 {
                     lineHeight: '20px'
@@ -102,6 +133,10 @@ module.exports = {
             ]
         },
         extend: {
+            lineHeight: {
+                ...defaultTheme.lineHeight,
+                '48px': '48px'
+            },
             backgroundImage: theme => ({
                 ...defaultTheme.backgroundImage,
                 'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
@@ -149,16 +184,30 @@ module.exports = {
             outline: {
                 ...defaultTheme.outline,
                 'low-emphesis': '#575757'
+            },
+            animation: {
+                ellipsis: ' ellipsis 1.25s infinite'
+            },
+            keyframes: {
+                ellipsis: {
+                    '0%': { content: '"."' },
+                    '33%': { content: '".."' },
+                    '66%': { content: '"..."' }
+                }
             }
         }
     },
     variants: {
+        linearBorderGradients: ['responsive', 'hover', 'dark'], // defaults to ['responsive']
         extend: {
             backgroundColor: ['checked', 'disabled'],
             backgroundImage: ['hover', 'focus'],
             borderColor: ['checked', 'disabled'],
             cursor: ['disabled'],
-            opacity: ['hover', 'disabled']
+            opacity: ['hover', 'disabled'],
+            placeholderColor: ['hover', 'active'],
+            ringWidth: ['disabled'],
+            ringColor: ['disabled']
         }
     },
     plugins: [
@@ -166,17 +215,9 @@ module.exports = {
         require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
-
+        require('tailwindcss-border-gradient-radius'),
         plugin(function({ addUtilities }) {
             addUtilities({
-                '.gradiant-border-top': {
-                    // background:
-                    //     'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left top no-repeat',
-                    // backgroundSize: '100% 1px'
-                    borderTop: '1px solid',
-                    borderImageSlice: 1,
-                    borderImageSource: 'linear-gradient(to right, #743ad5, #d53a9d)'
-                },
                 '.gradiant-border-bottom': {
                     background:
                         'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',
@@ -188,7 +229,6 @@ module.exports = {
             addUtilities(
                 {
                     '.border-gradient': {
-                        padding: '2px',
                         border: 'double 1px transparent',
                         borderRadius: '0.375rem',
                         backgroundImage:

@@ -1,9 +1,15 @@
 import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
-import { useDashboardContract } from 'hooks/useContract'
+import {
+    useDashboardContract,
+    useDashboard2Contract,
+    useQuickSwapFactoryContract,
+    useBoringHelperContract
+} from 'hooks/useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import LPToken from '../types/LPToken'
 import { getAddress } from '@ethersproject/address'
+import { chunk } from 'lodash'
 
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
@@ -18,155 +24,213 @@ export interface LPTokensState {
 
 const useLPTokensState = () => {
     const { account, chainId } = useActiveWeb3React()
+    const boringHelperContract = useBoringHelperContract()
     const dashboardContract = useDashboardContract()
+    const quickSwapFactoryContract = useQuickSwapFactoryContract()
     const [lpTokens, setLPTokens] = useState<LPToken[]>([])
     const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
     const [selectedLPTokenAllowed, setSelectedLPTokenAllowed] = useState(false)
     const [loading, setLoading] = useState(true)
     const updatingLPTokens = useRef(false)
-
     const updateLPTokens = useCallback(async () => {
-        console.log('Update tokens')
-        updatingLPTokens.current = true
         try {
-            if (!chainId || ![ChainId.MAINNET, ChainId.BSC].includes(chainId)) {
-                return
-            }
+            updatingLPTokens.current = true
+            if (ChainId.MATIC === chainId) {
+                const LP_TOKENS_LIMIT = 500
+                const length = await quickSwapFactoryContract?.allPairsLength()
+                const pages: number[] = []
+                for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
+                const pairs = (
+                    await Promise.all(
+                        pages.map(page =>
+                            boringHelperContract?.getPairs(
+                                '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', // Factory address
+                                page,
+                                Math.min(page + LP_TOKENS_LIMIT, length.toNumber())
+                            )
+                        )
+                    )
+                )
+                    .flat()
+                    .filter(pair => pair.token0 !== '0x1f6c3E047f529f82f743a7378A212a3d62fAA390')
 
-            const requests: any = {
-                [ChainId.MAINNET]: [
-                    `https://api.covalenthq.com/v1/${ChainId.MAINNET}/address/${String(
-                        account
-                    ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-                ],
-                [ChainId.BSC]: [
-                    `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
-                        account
-                    ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`,
-                    `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
-                        account
-                    ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-                ]
-            }
+                const pairAddresses = pairs.map(pair => pair[0])
+                const pollPairs = await boringHelperContract?.pollPairs(account, pairAddresses)
+                const tokenAddresses = Array.from(
+                    new Set(pairs.reduce((a: any, b: any) => a.push(b.token, b.token0, b.token1) && a, []))
+                ).flat()
+                const tokenDetails = (await boringHelperContract?.getTokenInfo(tokenAddresses)).reduce(
+                    (acc: any, cur: any) => {
+                        acc[cur[0]] = cur
+                        return acc
+                    },
+                    {}
+                )
 
-            const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
+                const data = pairs.map((pair, index) => {
+                    const token = new Token(
+                        chainId as ChainId,
+                        tokenDetails[pair.token].token,
+                        tokenDetails[pair.token].decimals,
+                        tokenDetails[pair.token].symbol,
+                        tokenDetails[pair.token].name
+                    )
 
-            // const response = await fetch(
-            //     `https://api.covalenthq.com/v1/${chainId}/address/${String(account).toLowerCase()}/stacks/${
-            //         stack[chainId]
-            //     }/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-            // )
+                    const tokenA = tokenDetails[pair.token0]
+                    const tokenB = tokenDetails[pair.token1]
 
-            // const { data } = await response.json()
+                    return {
+                        address: token.address,
+                        decimals: token.decimals,
+                        name: token.name,
+                        symbol: token.symbol,
+                        balance: new TokenAmount(token, pollPairs[index].balance),
+                        totalSupply: pair.totalSupply,
+                        tokenA: new Token(
+                            chainId as ChainId,
+                            tokenA.token,
+                            tokenA.decimals,
+                            tokenA.symbol,
+                            tokenA.name
+                        ),
+                        tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name)
+                    } as LPToken
+                })
 
-            // console.log({ data })
+                if (data) setLPTokens(data)
 
-            // let data
+                // MAINNET, BSC
+            } else if (chainId && [ChainId.MAINNET, ChainId.BSC].includes(chainId)) {
+                const requests: any = {
+                    [ChainId.MAINNET]: [
+                        `https://api.covalenthq.com/v1/${ChainId.MAINNET}/address/${String(
+                            account
+                        ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+                    ],
+                    [ChainId.BSC]: [
+                        `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+                            account
+                        ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`,
+                        `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
+                            account
+                        ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+                    ]
+                }
 
-            // if (chainId === ChainId.MAINNET) {
-            //     data = (await responses[0].json()).data
-            // } else if (chainId === ChainId.BSC) {
-            //     data = [
-            //         ...
-            //     ]
-            // }
+                const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
 
-            // const userLP: any[] = data?.[chainId === ChainId.MAINNET ? 'uniswap_v2' : 'pancakeswap']?.balances?.filter(
-            //     (balance: any) => balance.pool_token.balance !== '0'
-            // )
+                let userLP = []
 
-            let userLP = []
-
-            if (chainId === ChainId.MAINNET) {
-                const { data } = await responses[0].json()
-                userLP = data?.['uniswap_v2']?.balances
-                    ?.filter((balance: any) => balance.pool_token.balance !== '0')
-                    .map((balance: any) => ({
-                        ...balance,
-                        version: 'v2'
-                    }))
-            } else if (chainId === ChainId.BSC) {
-                const { data: dataV1 } = await responses[0].json()
-                const { data: dataV2 } = await responses[1].json()
-
-                userLP = [
-                    ...dataV1?.['pancakeswap']?.balances
-                        ?.filter((balance: any) => balance.pool_token.balance !== '0')
-                        .map((balance: any) => ({
-                            ...balance,
-                            version: 'v1'
-                        })),
-                    ...dataV2?.['pancakeswap']?.balances
+                if (chainId === ChainId.MAINNET) {
+                    const { data } = await responses[0].json()
+                    userLP = data?.['uniswap_v2']?.balances
                         ?.filter((balance: any) => balance.pool_token.balance !== '0')
                         .map((balance: any) => ({
                             ...balance,
                             version: 'v2'
                         }))
-                ]
-            }
+                } else if (chainId === ChainId.BSC) {
+                    const { data: dataV1 } = await responses[0].json()
+                    const { data: dataV2 } = await responses[1].json()
 
-            const tokenDetails = (
-                await dashboardContract?.getTokenInfo(
-                    Array.from(
-                        new Set(
-                            userLP.reduce(
-                                (a: any, b: any) =>
-                                    a.push(
-                                        b.pool_token.contract_address,
-                                        b.token_0.contract_address,
-                                        b.token_1.contract_address
-                                    ) && a,
-                                []
+                    userLP = [
+                        ...dataV1?.['pancakeswap']?.balances
+                            ?.filter((balance: any) => balance.pool_token.balance !== '0')
+                            .map((balance: any) => ({
+                                ...balance,
+                                version: 'v1'
+                            })),
+                        ...dataV2?.['pancakeswap']?.balances
+                            ?.filter((balance: any) => balance.pool_token.balance !== '0')
+                            .map((balance: any) => ({
+                                ...balance,
+                                version: 'v2'
+                            }))
+                    ]
+                }
+
+                const tokenDetails = (
+                    await dashboardContract?.getTokenInfo(
+                        Array.from(
+                            new Set(
+                                userLP.reduce(
+                                    (a: any, b: any) =>
+                                        a.push(
+                                            b.pool_token.contract_address,
+                                            b.token_0.contract_address,
+                                            b.token_1.contract_address
+                                        ) && a,
+                                    []
+                                )
                             )
                         )
                     )
-                )
-            )?.reduce((acc: any, cur: any) => {
-                acc[cur[0]] = cur
-                return acc
-            }, {})
+                )?.reduce((acc: any, cur: any) => {
+                    acc[cur[0]] = cur
+                    return acc
+                }, {})
 
-            console.log({ tokenDetails })
+                console.log({ tokenDetails })
 
-            const lpTokens = userLP.map((pair: any, index: number) => {
-                const token = new Token(
-                    chainId as ChainId,
-                    getAddress(pair.pool_token.contract_address),
-                    tokenDetails[getAddress(pair.pool_token.contract_address)].decimals,
-                    tokenDetails[getAddress(pair.pool_token.contract_address)].symbol,
-                    tokenDetails[getAddress(pair.pool_token.contract_address)].name
-                )
-                const tokenA = tokenDetails[getAddress(pair.token_0.contract_address)]
-                const tokenB = tokenDetails[getAddress(pair.token_1.contract_address)]
+                const lpTokens = userLP.map((pair: any, index: number) => {
+                    const token = new Token(
+                        chainId as ChainId,
+                        getAddress(pair.pool_token.contract_address),
+                        tokenDetails[getAddress(pair.pool_token.contract_address)].decimals,
+                        tokenDetails[getAddress(pair.pool_token.contract_address)].symbol,
+                        tokenDetails[getAddress(pair.pool_token.contract_address)].name
+                    )
+                    const tokenA = tokenDetails[getAddress(pair.token_0.contract_address)]
+                    const tokenB = tokenDetails[getAddress(pair.token_1.contract_address)]
 
-                console.log({ tokenA, tokenB })
+                    console.log({ tokenA, tokenB })
 
-                return {
-                    address: getAddress(pair.pool_token.contract_address),
-                    decimals: token.decimals,
-                    name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
-                    symbol: `${tokenA.symbol}-${tokenB.symbol}`,
-                    balance: new TokenAmount(token, pair.pool_token.balance),
-                    totalSupply: pair.pool_token.total_supply,
-                    tokenA: new Token(chainId as ChainId, tokenA.token, tokenA.decimals, tokenA.symbol, tokenA.name),
-                    tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name),
-                    version: pair.version
-                } as LPToken
-            })
-            if (lpTokens) {
-                setLPTokens(lpTokens)
+                    return {
+                        address: getAddress(pair.pool_token.contract_address),
+                        decimals: token.decimals,
+                        name: `${tokenA.symbol}-${tokenB.symbol} LP Token`,
+                        symbol: `${tokenA.symbol}-${tokenB.symbol}`,
+                        balance: new TokenAmount(token, pair.pool_token.balance),
+                        totalSupply: pair.pool_token.total_supply,
+                        tokenA: new Token(
+                            chainId as ChainId,
+                            tokenA.token,
+                            tokenA.decimals,
+                            tokenA.symbol,
+                            tokenA.name
+                        ),
+                        tokenB: new Token(
+                            chainId as ChainId,
+                            tokenB.token,
+                            tokenB.decimals,
+                            tokenB.symbol,
+                            tokenB.name
+                        ),
+                        version: pair.version
+                    } as LPToken
+                })
+                if (lpTokens) {
+                    setLPTokens(lpTokens)
+                }
             }
         } finally {
             setLoading(false)
             updatingLPTokens.current = false
         }
-    }, [chainId, account, dashboardContract])
+    }, [chainId, account, boringHelperContract, dashboardContract, quickSwapFactoryContract])
 
     useEffect(() => {
-        if (chainId && account && dashboardContract && !updatingLPTokens.current) {
+        console.log('Use effect...', {
+            chainId,
+            account,
+            boringHelperContract,
+            updatingLPTokensCurrent: !updatingLPTokens.current
+        })
+
+        if (chainId && account && boringHelperContract && !updatingLPTokens.current) {
             updateLPTokens()
         }
-    }, [account, chainId, dashboardContract, updateLPTokens])
+    }, [account, chainId, boringHelperContract, updateLPTokens])
 
     return {
         updateLPTokens,

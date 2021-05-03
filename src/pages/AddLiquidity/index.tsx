@@ -10,7 +10,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import { BlueCard, LightCard } from '../../components/Card'
+import { BlueCard, LightCard } from '../../components/CardLegacy'
 import { AutoColumn, ColumnCenter } from '../../components/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
@@ -19,7 +19,7 @@ import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { PairState } from '../../data/Reserves'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
@@ -33,12 +33,12 @@ import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRoute
 import { currencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import AppBody from '../AppBody'
 import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
 import { PoolPriceBar } from './PoolPriceBar'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
+import Header from '../../components/swap/SwapHeader'
 
 export default function AddLiquidity({
     match: {
@@ -323,8 +323,9 @@ export default function AddLiquidity({
             <Helmet>
                 <title>Add Liquidity | Sushi</title>
             </Helmet>
-            <div className="bg-dark-900 w-full max-w-2xl rounded">
-                <AddRemoveTabs creating={isCreate} adding={true} />
+            <div className="bg-dark-900 w-full max-w-xl rounded">
+                {/* <AddRemoveTabs creating={isCreate} adding={true} /> */}
+                <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <Wrapper>
                     <TransactionConfirmationModal
                         isOpen={showConfirm}
@@ -482,7 +483,7 @@ export default function AddLiquidity({
             </div>
             {!addIsUnsupported ? (
                 pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                    <div className="w-full max-w-2xl flex flex-col mt-4">
+                    <div className="w-full max-w-xl flex flex-col mt-4">
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
                     </div>
                 ) : null

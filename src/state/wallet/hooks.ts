@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from '@sushiswap/sdk'
 import { useMemo } from 'react'
 import ERC20_INTERFACE from '../../constants/abis/erc20'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useMulticallContract } from '../../hooks/useContract'
 import { isAddress } from '../../utils'

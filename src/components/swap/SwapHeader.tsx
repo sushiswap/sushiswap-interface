@@ -7,7 +7,7 @@ import profileAnimationData from '../../assets/animation/wallet.json'
 import Lottie from 'lottie-react'
 import Gas from '../Gas'
 
-export default function SwapHeader(): JSX.Element {
+export default function SwapHeader({ input = undefined, output = undefined }: any): JSX.Element {
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
     return (
@@ -15,8 +15,13 @@ export default function SwapHeader(): JSX.Element {
             <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
                 <NavLink
                     className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
-                    activeClassName="text-high-emphesis font-bold md:bg-dark-900 md:border-gradient"
-                    to="/swap"
+                    activeClassName="font-bold text-high-emphesis md:bg-dark-900 md:border-gradient"
+                    to={{
+                        pathname: '/swap',
+                        search: `?inputCurrency=${input && input.address ? input.address : 'ETH'}${
+                            output && output.address ? `&outputCurrency=${output.address}` : ''
+                        }`
+                    }}
                 >
                     Swap
                 </NavLink>
@@ -29,8 +34,10 @@ export default function SwapHeader(): JSX.Element {
                 </NavLink> */}
                 <NavLink
                     className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
-                    activeClassName="bg-dark-900 text-high-emphesis font-bold border-gradient"
-                    to="/pool"
+                    activeClassName="text-high-emphesis font-bold md:bg-dark-900 md:border-gradient"
+                    to={`/add/${input && input.address ? input.address : 'ETH'}${
+                        output && output.address ? `/${output.address}` : ''
+                    }`}
                 >
                     Liquidity
                 </NavLink>

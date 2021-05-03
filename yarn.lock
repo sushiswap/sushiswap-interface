@@ -2115,11 +2115,6 @@
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.0.0.tgz#661b50ebfd25041abb45d8eedd85e7559056bcaf"
   integrity sha512-mjqRJrgkbcHQBfAHnqH0yRxO/y/22jYrdltpE7WkurafREKZ+pj5bPBwYHMt935Sdz/n16yRcVmsSCqDFHee9A==
 
-"@heroicons/react@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@heroicons/react/-/react-1.0.1.tgz#66d25f6441920bd5c2146ea27fd33995885452dd"
-  integrity sha512-uikw2gKCmqnvjVxitecWfFLMOKyL9BTFcU4VM3hHj9OMwpkCr5Ke+MRMyY2/aQVmsYs4VTq7NCFX05MYwAHi3g==
-
 "@hot-loader/react-dom@^17.0.1":
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/@hot-loader/react-dom/-/react-dom-17.0.1.tgz#0c75b4dd068f819435dafb3e8809ca1749695656"
@@ -2842,10 +2837,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
-"@sushiswap/default-token-list@5.12.0":
-  version "5.12.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-5.12.0.tgz#e18a88648e0940de4772056988b71ea4f1459b90"
-  integrity sha512-U0UKI+AxnacsScJq6RLocnJ5TCAH41U8tgi9DS3iK34uRq/ECq8ncskaYTFiuxduS/z6WpDtgflLXFJrDBAzIw==
+"@sushiswap/default-token-list@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.0.1.tgz#aa9091ad6cec827d6b0e8aaf50e42ecac1262f18"
+  integrity sha512-faY9UHY9PhC1I5e4Sk/vZyzwdWEy1Y7xkyWSiwVJH5MUBh8OEibTeh4e41BeZ+KtxOyW+kQGQyE1RL2go471SA==
 
 "@sushiswap/sdk@5.0.0-canary.6":
   version "5.0.0-canary.6"
@@ -6636,7 +6631,7 @@ color@^0.11.1:
     color-convert "^1.3.0"
     color-string "^0.3.0"
 
-color@^3.0.0, color@^3.1.3:
+color@^3.0.0, color@^3.1.2, color@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/color/-/color-3.1.3.tgz#ca67fb4e7b97d611dcde39eceed422067d91596e"
   integrity sha512-xgXAcTHa2HeFCGLE9Xs/R82hujGtu9Jd9x4NW3T34+OMs7VoPsjwzRczKHvTAHeJwWFwX5j15+MgAppE8ztObQ==
@@ -15941,13 +15936,6 @@ react-clientside-effect@^1.2.2:
   dependencies:
     "@babel/runtime" "^7.12.13"
 
-react-confetti@^6.0.0:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/react-confetti/-/react-confetti-6.0.1.tgz#d4f57b5a021dd908a6243b8f63b6009b00818d10"
-  integrity sha512-ZpOTBrqSNhWE4rRXCZ6E6U+wGd7iYHF5MGrqwikoiBpgBq9Akdu0DcLW+FdFnLjyZYC+VfAiV2KeFgYRMyMrkA==
-  dependencies:
-    tween-functions "^1.2.0"
-
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.4.tgz#a7ccb60257a1ca2e0efe7a83e38e6700d17aa37a"
@@ -16268,6 +16256,11 @@ react-tabs@^3.2.1:
   dependencies:
     clsx "^1.1.0"
     prop-types "^15.5.0"
+
+react-tradingview-widget@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/react-tradingview-widget/-/react-tradingview-widget-1.3.2.tgz#c3af17bd5f72c4ea40bdf217778f01b100243b74"
+  integrity sha512-PQSf2G0zkw9AmE8BlzqNbkzv8GvmJssf+bklG9qal2xQOPVOJ8BHUa7PJuhPfINWvv+h4vKUsj2mdDu9iOOwew==
 
 react-transition-group@^4.4.1:
   version "4.4.1"
@@ -18254,6 +18247,14 @@ table@^6.0.4:
     slice-ansi "^4.0.0"
     string-width "^4.2.0"
 
+tailwindcss-border-gradient-radius@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-border-gradient-radius/-/tailwindcss-border-gradient-radius-2.0.0.tgz#b4071260e1e5d2517fe91351549987bb5af4dda5"
+  integrity sha512-CDAkVgeSa0RqpnNHfF+JTHKCuR3izZLlMeCASkCGES9T/th2JN/Vaqnp2l77l+lJqv96ECnSFQ4YatcuslBcvg==
+  dependencies:
+    color "^3.1.2"
+    lodash "^4.17.19"
+
 tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-1.1.3.tgz#a1fccc06b58db61fd7a45da2da44f5f3a3e67ba2"
@@ -18708,11 +18709,6 @@ tunnel-agent@^0.6.0:
   integrity sha1-J6XeoGs2sEoKmWZ3SykIaPD8QP0=
   dependencies:
     safe-buffer "^5.0.1"
-
-tween-functions@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
-  integrity sha1-GuOlDnxguz3vd06scHrLynO7w/8=
 
 tweetnacl-util@^0.15.0:
   version "0.15.1"

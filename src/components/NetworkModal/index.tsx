@@ -1,10 +1,11 @@
 import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React from 'react'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
 import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
 import Modal from '../Modal'
+import ModalHeader from '../ModalHeader'
 
 const PARAMS: {
     [chainId in ChainId]?: {
@@ -95,6 +96,17 @@ const PARAMS: {
         },
         rpcUrls: ['https://api.s0.t.hmny.io'],
         blockExplorerUrls: ['https://explorer.harmony.one/']
+    },
+    [ChainId.AVALANCHE]: {
+        chainId: '0xA869',
+        chainName: 'Avalanche',
+        nativeCurrency: {
+            name: 'Avalanche  Token',
+            symbol: 'AVAX',
+            decimals: 18
+        },
+        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+        blockExplorerUrls: ['https://cchain.explorer.avax-test.network']
     }
 }
 
@@ -107,8 +119,7 @@ export default function NetworkModal(): JSX.Element | null {
 
     return (
         <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
-            <div className="text-2xl font-bold mb-3 text-high-emphesis">Select a Network</div>
-
+            <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
             <div className="text-lg text-primary mb-6">
                 You are currently browsing <span className="font-bold text-pink">SUSHI</span>
                 <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
@@ -122,7 +133,8 @@ export default function NetworkModal(): JSX.Element | null {
                     ChainId.MATIC,
                     ChainId.HECO,
                     ChainId.XDAI,
-                    ChainId.HARMONY
+                    ChainId.HARMONY,
+                    ChainId.AVALANCHE
                 ].map((key: ChainId, i: number) => {
                     if (chainId === key) {
                         return (

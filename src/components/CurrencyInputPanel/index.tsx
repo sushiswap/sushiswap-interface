@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useTheme from '../../hooks/useTheme'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { TYPE } from '../../theme'
@@ -17,6 +17,10 @@ import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import Button from '../Button'
 import selectCoinAnimation from '../../assets/animation/select-coin.json'
 import Lottie from 'lottie-react'
+
+import { useUSDCPrice } from '../../hooks'
+import { formattedNum } from '../../utils'
+import { ChainId } from '@sushiswap/sdk'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -157,6 +161,9 @@ export default function CurrencyInputPanel({
         setModalOpen(false)
     }, [setModalOpen])
 
+    const currencyUSDC = useUSDCPrice(currency ? currency : undefined)?.toFixed(18)
+    const valueUSDC = formattedNum(Number(value) * Number(currencyUSDC))
+
     return (
         <div id={id} className="rounded bg-dark-800 p-5">
             <div
@@ -246,7 +253,7 @@ export default function CurrencyInputPanel({
                                                       currency.symbol.length
                                                   )
                                                 : currency?.getSymbol(chainId)) || (
-                                                <div className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full py-1 px-2 text-secondary text-xs font-medium mt-1 whitespace-nowrap ">
+                                                <div className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full px-2 py-1 text-secondary text-xs font-medium mt-1 whitespace-nowrap ">
                                                     {t('selectToken')}
                                                 </div>
                                             )}
@@ -279,9 +286,10 @@ export default function CurrencyInputPanel({
                             {account && currency && showMaxButton && label !== 'To' && (
                                 <Button
                                     onClick={onMax}
-                                    className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full py-1 px-2 text-secondary text-xs font-medium whitespace-nowrap"
+                                    size="small"
+                                    className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full text-secondary text-xs font-medium whitespace-nowrap"
                                 >
-                                    MAX
+                                    Max
                                 </Button>
                             )}
                             <NumericalInput
@@ -292,10 +300,19 @@ export default function CurrencyInputPanel({
                                 }}
                             />
                             {account && (
-                                <div onClick={onMax} className="font-medium cursor-pointer text-xs text-low-emphesis">
-                                    {!hideBalance && !!currency && selectedCurrencyBalance
-                                        ? (customBalanceText ?? 'Balance: ') + selectedCurrencyBalance?.toSignificant(6)
-                                        : ' -'}
+                                <div className="flex flex-col">
+                                    <div
+                                        onClick={onMax}
+                                        className="font-medium cursor-pointer text-xs text-low-emphesis"
+                                    >
+                                        {!hideBalance && !!currency && selectedCurrencyBalance
+                                            ? (customBalanceText ?? 'Balance: ') +
+                                              selectedCurrencyBalance?.toSignificant(6)
+                                            : ' -'}
+                                    </div>
+                                    {chainId === ChainId.MAINNET && (
+                                        <div className="font-medium text-xs text-secondary">≈ {valueUSDC} USDC</div>
+                                    )}
                                 </div>
                             )}
                         </>

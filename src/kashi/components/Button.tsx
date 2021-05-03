@@ -1,82 +1,63 @@
 import React from 'react'
-import { ChevronLeft } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
+import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
+import { Alert, Button } from 'components'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { tryParseAmount } from 'state/swap/hooks'
+import { WETH } from '@sushiswap/sdk'
+import Dots from './Dots'
 
-const SIZE = {
-    default: 'px-4 py-2',
-    small: 'px-2 py-1',
-    large: ''
-}
+export function KashiApproveButton({ content, color }: any): any {
+    const { chainId } = useActiveWeb3React()
+    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback()
+    const showApprove =
+        (kashiApprovalState === BentoApprovalState.NOT_APPROVED || kashiApprovalState === BentoApprovalState.PENDING) &&
+        !kashiPermit
+    const showChildren = kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit
 
-const FILLED = {
-    default: 'bg-transparent',
-    blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
-    pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis px-4 py-3 hover:bg-opacity-100',
-    gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink'
-}
-
-const OUTLINED = {
-    default: 'bg-transparent',
-    blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1 hover:bg-opacity-40',
-    pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1 hover:bg-opacity-40',
-    gradient: 'bg-gradient-to-r from-blue to-pink'
-}
-
-const VARIANT = {
-    outlined: OUTLINED,
-    filled: FILLED
-}
-
-export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'default'
-
-export type ButtonSize = 'small' | 'large' | 'default'
-
-export type ButtonVariant = 'outlined' | 'filled'
-
-export interface ButtonProps {
-    children?: React.ReactChild | React.ReactChild[]
-    color?: ButtonColor
-    size?: ButtonSize
-    variant?: ButtonVariant
-}
-
-function Button({
-    children,
-    className,
-    color = 'default',
-    size = 'default',
-    variant = 'filled',
-    ...rest
-}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX.Element {
     return (
-        <button
-            className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 ${className}`}
-            {...rest}
-        >
-            {children}
-        </button>
+        <>
+            {approveKashiFallback && (
+                <Alert
+                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
+                    className="mb-4"
+                />
+            )}
+
+            {showApprove && (
+                <Button color={color} onClick={onApprove} className="mb-4">
+                    Approve Kashi
+                </Button>
+            )}
+
+            {showChildren && React.cloneElement(content(onCook), { color })}
+        </>
     )
 }
 
-export default Button
+export function TokenApproveButton({ children, value, token, needed, color }: any): any {
+    const { chainId } = useActiveWeb3React()
+    const [approvalState, approve] = useApproveCallback(
+        tryParseAmount(value, token),
+        chainId && BENTOBOX_ADDRESS[chainId]
+    )
 
-// export function IconButton() {}
+    const showApprove =
+        chainId &&
+        token &&
+        token.address !== WETH[chainId].address &&
+        needed &&
+        value &&
+        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
-export function BackButton({ defaultRoute, className }: { defaultRoute: string; className?: string }): JSX.Element {
-    const history = useHistory()
-    return (
-        <button
-            onClick={() => {
-                if (history.length < 3) {
-                    history.push(defaultRoute)
-                } else {
-                    history.goBack()
-                }
-            }}
-            className={`flex justify-center items-center p-2 mr-4 rounded-full bg-dark-900 w-12 h-12 ${className ||
-                ''}`}
-        >
-            <ChevronLeft className={'w-6 h-6'} />
-        </button>
+    return showApprove ? (
+        <Button color={color} onClick={approve} className="mb-4">
+            <Dots pending={approvalState === ApprovalState.PENDING} pendingTitle={`Approving ${token.symbol}`}>
+                Approve {token.symbol}
+            </Dots>
+        </Button>
+    ) : (
+        React.cloneElement(children, { color })
     )
 }

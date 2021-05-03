@@ -9,7 +9,7 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import QuestionHelper from '../../components/QuestionHelper'
 import { Dots } from '../../components/swap/styleds'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
 import { BackArrow, CloseIcon } from '../../theme'
@@ -94,7 +94,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
                     variant="body"
                     className="text-primary"
                 >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-                <Badge color="pink">{lpToken.version}</Badge>
+                {lpToken.version && <Badge color="pink">{lpToken.version}</Badge>}
             </div>
             {isSelected ? <CloseIcon /> : <ChevronRight />}
         </div>
@@ -150,7 +150,9 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
 
 const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
     const [error, setError] = useState<MetamaskError>({})
-    const sushiRollContract = useSushiRollContract(state.selectedLPToken?.version)
+    const sushiRollContract = useSushiRollContract(
+        state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
+    )
     console.log(
         'sushiRollContract address',
         sushiRollContract?.address,
@@ -228,7 +230,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
             {error.message && error.code !== 4001 && (
                 <div className="text-red text-center font-medium">{error.message}</div>
             )}
-            <div className="text-xs text-low-emphesis text-center">
+            <div className="text-sm text-low-emphesis text-center">
                 {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
             </div>
         </div>
@@ -280,6 +282,8 @@ const MigrateV2 = () => {
         exchange = 'Uniswap'
     } else if (chainId === ChainId.BSC) {
         exchange = 'PancakeSwap'
+    } else if (chainId === ChainId.MATIC) {
+        exchange = 'QuickSwap'
     }
 
     return (
@@ -289,7 +293,7 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <div className="text-3xl text-center mb-8 font-bold">Migrate {exchange} Liquidity</div>
+            <div className="text-2xl text-center mb-8">Migrate {exchange} Liquidity</div>
 
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
                 {/* <div className="flex justify-between items-center p-3">
