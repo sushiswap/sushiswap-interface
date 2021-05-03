@@ -15,7 +15,7 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Loader from '../../components/Loader'
 import ProgressSteps from '../../components/ProgressSteps'
 import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsSection from '../../components/swap/AdvancedSwapDetailsSection'
+import { AdvancedSwapDetails } from '../../components/swap/AdvancedSwapDetails'
 import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
@@ -577,7 +577,7 @@ export default function Swap() {
                                 </AutoColumn>
                             </Card>
                         )}
-                        <AdvancedSwapDetailsSection trade={trade} />
+                        <AdvancedSwapDetails trade={trade} />
                     </AutoColumn>
                 </Wrapper>
             </div>

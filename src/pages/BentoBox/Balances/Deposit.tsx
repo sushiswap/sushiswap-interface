@@ -32,7 +32,7 @@ export default function Deposit({
             new Token(chainId || 1, tokenAddress, balance.decimals, tokenSymbol, ''),
             value.toBigNumber(balance.decimals).toString()
         ),
-        BENTOBOX_ADDRESS
+        chainId && BENTOBOX_ADDRESS[chainId]
     )
 
     const showApprove =

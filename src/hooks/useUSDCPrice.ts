@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { USDC } from '../constants'
 import { PairState, usePairs } from '../data/Reserves'
 import { useActiveWeb3React } from '../hooks'
-import { wrappedCurrency } from './wrappedCurrency'
+import { wrappedCurrency } from '../utils/wrappedCurrency'
 
 /**
  * Returns the price in USDC of the input currency

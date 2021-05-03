@@ -40,6 +40,7 @@ import HUSD from '../../assets/kashi/tokens/husd-square.jpg'
 import INJ from '../../assets/kashi/tokens/inj-square.jpg'
 import KNC from '../../assets/kashi/tokens/knc-square.jpg'
 import KP3R from '../../assets/kashi/tokens/kp3r-square.jpg'
+import KRILL from '../../assets/kashi/tokens/krill-square.jpg'
 import LINK from '../../assets/kashi/tokens/link-square.jpg'
 import LRC from '../../assets/kashi/tokens/lrc-square.jpg'
 import LTC from '../../assets/kashi/tokens/ltc-square.jpg'
@@ -104,6 +105,16 @@ import ORN from '../../assets/kashi/tokens/orn-square.jpg'
 import RAI from '../../assets/kashi/tokens/rai-square.jpg'
 import RARI from '../../assets/kashi/tokens/rari-square.jpg'
 import RGT from '../../assets/kashi/tokens/rgt-square.jpg'
+import ONT from '../../assets/kashi/tokens/ont-square.jpg'
+import FIL from '../../assets/kashi/tokens/fil-square.jpg'
+import DOGE from '../../assets/kashi/tokens/doge-square.jpg'
+import ICE from '../../assets/kashi/tokens/ice-square.jpg'
+import CAKE from '../../assets/kashi/tokens/cake-square.jpg'
+import LON from '../../assets/kashi/tokens/lon-square.jpg'
+import DNT from '../../assets/kashi/tokens/dnt-square.jpg'
+import ZEC from '../../assets/kashi/tokens/zec-square.jpg'
+import COIN from '../../assets/kashi/tokens/coin-square.jpg'
+import FRX from '../../assets/kashi/tokens/frx-square.jpg'
 const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
     [ChainId.MAINNET]: {
         [String('0x111111111117dC0aa78b770fA6A738034120C302').toLowerCase()]: INCH,
@@ -206,7 +217,11 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x0258F474786DdFd37ABCE6df6BBb1Dd5dfC4434a').toLowerCase()]: ORN,
         [String('0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919').toLowerCase()]: RAI,
         [String('0xFca59Cd816aB1eaD66534D82bc21E7515cE441CF').toLowerCase()]: RARI,
-        [String('0xD291E7a03283640FDc51b121aC401383A46cC623').toLowerCase()]: RGT
+        [String('0xD291E7a03283640FDc51b121aC401383A46cC623').toLowerCase()]: RGT,
+        [String('0x0000000000095413afc295d19edeb1ad7b71c952').toLowerCase()]: LON,
+        [String('0x0AbdAce70D3790235af448C88547603b945604ea').toLowerCase()]: DNT,
+        [String('0x1C5db575E2Ff833E46a2E9864C22F4B22E0B37C2').toLowerCase()]: ZEC,
+        [String('0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0').toLowerCase()]: FRX // zec
     },
     [ChainId.ROPSTEN]: {
         [String('0x443Fd8D5766169416aE42B8E050fE9422f628419').toLowerCase()]: BAT,
@@ -254,18 +269,27 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x88f1A5ae2A3BF98AEAF342D26B30a79438c9142e').toLowerCase()]: YFI,
         [String('0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c').toLowerCase()]: BNB, // BNB
         [String('0x2170Ed0880ac9A755fd29B2688956BD959F933F8').toLowerCase()]: ETH,
-        [String('0x87b008E57F640D94Ee44Fd893F0323AF933F9195').toLowerCase()]: UNKNOWN, // COIN
+        [String('0x87b008E57F640D94Ee44Fd893F0323AF933F9195').toLowerCase()]: COIN, // COIN
         [String('0x8519EA49c997f50cefFa444d240fB655e89248Aa').toLowerCase()]: RAMP,
-        [String('0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7').toLowerCase()]: VAI
+        [String('0x4BD17003473389A42DAF6a0a729f6Fdb328BbBd7').toLowerCase()]: VAI,
+        [String('0xFd7B3A77848f1C2D67E05E54d78d174a0C850335').toLowerCase()]: ONT,
+        [String('0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153').toLowerCase()]: FIL,
+        [String('0xba2ae424d960c26247dd6c32edc70b295c744c43').toLowerCase()]: DOGE,
+        [String('0xf16e81dce15B08F326220742020379B855B87DF9').toLowerCase()]: ICE,
+        [String('0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6').toLowerCase()]: EOS,
+        [String('0x16939ef78684453bfDFb47825F8a5F714f12623a').toLowerCase()]: XTZ,
+        [String('0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82').toLowerCase()]: CAKE
     },
     [ChainId.MATIC]: {
         [String('0xD6DF932A45C0f255f85145f286eA0b292B21C90B').toLowerCase()]: AAVE,
         [String('0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063').toLowerCase()]: DAI,
         [String('0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619').toLowerCase()]: ETH,
-        [String('0x084666322d3ee89aAbDBBCd084323c9AF705C7f5').toLowerCase()]: MATIC,
+        [String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase()]: MATIC,
+        [String('0x05089C9EBFFa4F0AcA269e32056b1b36B37ED71b').toLowerCase()]: KRILL,
         [String('0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174').toLowerCase()]: USDC,
         [String('0xc2132D05D31c914a87C6611C10748AEb04B58e8F').toLowerCase()]: USDT,
-        [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: BTC // WBTC
+        [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: BTC, // WBTC
+        [String('0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a').toLowerCase()]: SUSHI // SUSHI
     },
     [ChainId.HECO]: {
         [String('0x202b4936fE1a82A4965220860aE46d7d3939Bb25').toLowerCase()]: AAVE,

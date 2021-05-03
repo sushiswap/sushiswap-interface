@@ -364,6 +364,9 @@ export class KashiCooker {
                 success: false
             }
         }
+
+        console.log('pair address', this.pair.address)
+
         const kashiPairCloneContract = new Contract(
             this.pair.address,
             KASHIPAIR_ABI,

@@ -4,6 +4,35 @@ import gql from 'graphql-tag'
 const FACTORY_ADDRESS = '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac'
 const BUNDLE_ID = '1'
 
+export const miniChefPoolQuery = gql`
+    query poolsQuery(
+        $first: Int! = 1000
+        $skip: Int! = 0
+        $orderBy: String! = "timestamp"
+        $orderDirection: String! = "desc"
+    ) {
+        pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
+            id
+            pair
+            rewarder {
+                id
+                rewardToken
+                rewardPerSecond
+            }
+            allocPoint
+            lastRewardTime
+            accSushiPerShare
+            slpBalance
+            userCount
+            miniChef {
+                id
+                sushiPerSecond
+                totalAllocPoint
+            }
+        }
+    }
+`
+
 export const poolsQuery = gql`
     query poolsQuery(
         $first: Int! = 1000

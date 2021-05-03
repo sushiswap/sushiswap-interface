@@ -1,20 +1,21 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { Fraction } from '../../entities'
+import { Fraction } from '../../../entities'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import useMasterChef from 'hooks/useMasterChef'
-import usePendingSushi from 'hooks/usePendingSushi'
-import useStakedBalance from 'hooks/useStakedBalance'
+import useMiniChefV2 from 'hooks/minichefv2/useMiniChefV2'
+import usePendingSushi from 'hooks/minichefv2/usePendingSushi'
+import usePendingReward from 'hooks/minichefv2/usePendingReward'
+import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
-import { Dots } from '../Pool/styleds'
-import { Button } from './components'
-// import { useTokenBalance } from '../../state/wallet/hooks'
+import { WETH } from '@sushiswap/sdk'
+import { Dots } from '../../Pool/styleds'
+import { Button } from '../components'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -51,63 +52,58 @@ export default function InputGroup({
     const balance = useTokenBalance(pairAddressChecksum)
     const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
+    const reward = usePendingReward(pid)
 
-    //console.log('pending:', pending, pid)
+    // console.log('balance:', balance)
+    // console.log('staked:', staked)
+    // console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
             new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''),
             ethers.constants.MaxUint256.toString()
         ),
-        MASTERCHEF_ADDRESS[1]
+        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F' //miniChef on Matic
     )
+    //console.log('Approval:', approvalState, ApprovalState.NOT_APPROVED)
 
-    console.log('yield approvalState', approvalState)
-
-    const { deposit, withdraw, harvest } = useMasterChef()
+    const { deposit, withdraw, harvest } = useMiniChefV2()
 
     //console.log('depositValue:', depositValue)
 
     return (
         <>
             <div className="flex flex-col space-y-4 py-6">
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
-                    {type === 'LP' && (
-                        <>
-                            <Button
-                                color="default"
-                                onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
-                            >
-                                Add Liquidity
-                            </Button>
-                            <Button
-                                color="default"
-                                onClick={() =>
-                                    history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
-                                }
-                            >
-                                Remove Liquidity
-                            </Button>
-                        </>
-                    )}
-                    {type === 'KMP' && assetSymbol && (
-                        <>
-                            <Button
-                                color="default"
-                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
-                            >
-                                Lend {assetSymbol}
-                            </Button>
-                            <Button
-                                color="default"
-                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
-                            >
-                                Withdraw {assetSymbol}
-                            </Button>
-                        </>
-                    )}
+                {pending && Number(pending) > 0 && (
+                    <div className=" px-4">
+                        <Button
+                            color="default"
+                            onClick={async () => {
+                                setPendingTx(true)
+                                await harvest(pid, pairSymbol)
+                                setPendingTx(false)
+                            }}
+                        >
+                            Harvest{'  '}
+                            {formattedNum(pending)} {'SUSHI'} {'&'} {formattedNum(reward)} {'MATIC'}
+                        </Button>
+                    </div>
+                )}
+                <div className="px-4">
+                    <div className="bg-dark-850 text-gray-500 block w-full rounded text-sm p-4">
+                        <div className="flex items-center">
+                            <div className="ml-3">
+                                <p>
+                                    <b>Tip:</b> In order to start earning rewards, you will need to first acquire some
+                                    SLP by adding liquidity to the specified pair. Once you have SLP you can stake it
+                                    into this yield farm to start earning rewards. Unstake anytime and then you can
+                                    convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to
+                                    receive you rewards at any time.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
                 <div className="grid gap-4 grid-cols-2 px-4">
                     {/* Deposit */}
                     <div className="text-center col-span-2 md:col-span-1">
@@ -118,7 +114,7 @@ export default function InputGroup({
                         )}
                         <div className="flex items-center relative w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
+                                className="w-full p-3 bg-input rounded focus:ring focus:ring-blue pr-20"
                                 value={depositValue}
                                 onUserInput={value => {
                                     setDepositValue(value)
@@ -137,7 +133,6 @@ export default function InputGroup({
                                 </Button>
                             )}
                         </div>
-
                         {approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING ? (
                             <Button color="blue" disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
                                 {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
@@ -157,7 +152,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                Deposit
+                                Stake
                             </Button>
                         )}
                     </div>
@@ -165,12 +160,12 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                Staked: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 bg-input rounded focus:ring focus:ring-pink"
+                                className="w-full p-3 bg-input rounded focus:ring focus:ring-pink pr-20"
                                 value={withdrawValue}
                                 onUserInput={value => {
                                     setWithdrawValue(value)
@@ -203,25 +198,52 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Withdraw
+                            Unstake
                         </Button>
                     </div>
                 </div>
-                {pending && Number(pending) > 0 && (
-                    <div className=" px-4">
-                        <Button
-                            color="default"
-                            onClick={async () => {
-                                setPendingTx(true)
-                                await harvest(pid, pairSymbol)
-                                setPendingTx(false)
-                            }}
-                        >
-                            Harvest{'  '}
-                            {formattedNum(pending)} SUSHI
-                        </Button>
-                    </div>
-                )}
+                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
+                    {type === 'SLP' && (
+                        <>
+                            <Button
+                                color="default"
+                                onClick={() =>
+                                    history.push(
+                                        `/add/${chainId && WETH[chainId] ? 'ETH' : token0Address}/${
+                                            chainId && WETH[chainId] ? 'ETH' : token1Address
+                                        }`
+                                    )
+                                }
+                            >
+                                Add Liquidity
+                            </Button>
+                            <Button
+                                color="default"
+                                onClick={() =>
+                                    history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
+                                }
+                            >
+                                Remove Liquidity
+                            </Button>
+                        </>
+                    )}
+                    {type === 'KMP' && assetSymbol && (
+                        <>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
+                            >
+                                Lend {assetSymbol}
+                            </Button>
+                            <Button
+                                color="default"
+                                onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
+                            >
+                                Withdraw {assetSymbol}
+                            </Button>
+                        </>
+                    )}
+                </div>
             </div>
         </>
     )
