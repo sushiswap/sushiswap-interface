@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Button } from '../../components'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import ErrorTriangle from '../../assets/images/error-triangle.svg'
+import { useActiveWeb3React } from '../../hooks'
+import { useWalletModalToggle } from '../../state/application/hooks'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -17,8 +18,10 @@ const inactiveTabStyle = `${tabStyle} text-secondary`
 
 const buttonStyle =
     'flex justify-center items-center w-full h-10 md:h-14 rounded font-bold md:font-medium md:text-lg mt-5 text-sm focus:outline-none focus:ring'
-const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r from-pink-red to-light-brown`
+const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r from-pink-red to-light-brown hover:opacity-90`
+const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
+const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
 
 interface StakeCardProps {
     xSushiPerSushi: number
@@ -27,11 +30,22 @@ interface StakeCardProps {
 }
 
 export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance }: StakeCardProps) {
+    const { account } = useActiveWeb3React()
+    const walletConnected = !!account
+    const toggleWalletModal = useWalletModalToggle()
+
     const [activeTab, setActiveTab] = useState(0)
     const [input, setInput] = useState('')
 
     const insufficientFunds = activeTab == 0 ? parseFloat(input) > sushiBalance : parseFloat(input) > xSushiBalance
     const inputError = insufficientFunds
+
+    const handleClickButton = () => {
+        if (!walletConnected) {
+            toggleWalletModal()
+        }
+        // TODO
+    }
 
     return (
         <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl pt-2 pb-6 md:pb-9 px-3 md:pt-4 md:px-8 rounded">
@@ -121,10 +135,19 @@ export default function StakeCard({ xSushiPerSushi, sushiBalance, xSushiBalance 
 
             <button
                 className={
-                    input ? `${buttonStyleEnabled}${insufficientFunds ? ' opacity-60' : ''}` : buttonStyleDisabled
+                    !walletConnected
+                        ? buttonStyleConnectWallet
+                        : input
+                        ? insufficientFunds
+                            ? buttonStyleInsufficientFunds
+                            : buttonStyleEnabled
+                        : buttonStyleDisabled
                 }
+                onClick={handleClickButton}
             >
-                {!input
+                {!walletConnected
+                    ? 'Connect Wallet'
+                    : !input
                     ? 'Enter Amount'
                     : insufficientFunds
                     ? 'Insufficient Balance'

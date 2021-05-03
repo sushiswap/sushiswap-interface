@@ -2,7 +2,6 @@ import React from 'react'
 import SushiImage from '../../assets/images/sushi.png'
 import XSushiImage from '../../assets/images/xsushi.png'
 import MoreInfoSymbol from '../../assets/images/more-info.svg'
-import ButtonDark from './ButtonDark'
 
 interface BalanceCardProps {
     sushiBalance: number
@@ -53,7 +52,17 @@ export default function BalanceCard({ sushiBalance, xSushiBalance, weightedApr }
                             <p className="text-caption text-primary ml-5 md:ml-0">{`${weightedApr}%`}</p>
                         </div>
                     </div>
-                    <ButtonDark className="h-8 mt-4 mx-6 md:mx-0 text-caption2 font-bold">Your History</ButtonDark>
+                    <button
+                        className={`
+                            flex flex-grow justify-center items-center
+                            h-8 mt-4 mx-6 md:mx-0 rounded
+                            bg-dark-700 text-high-emphesis
+                            focus:outline-none focus:ring hover:bg-opacity-80
+                            text-caption2 font-bold
+                        `}
+                    >
+                        Your History
+                    </button>
                 </div>
             </div>
         </div>

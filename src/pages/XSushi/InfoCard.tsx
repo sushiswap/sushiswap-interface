@@ -28,7 +28,7 @@ export default function InfoCard() {
                 <div className="text-body font-bold md:text-h5 text-high-emphesis self-end mb-3 md:mb-7">
                     Maximize yield by staking for xSUSHI
                 </div>
-                <div className="pl-6 pr-3 min-w-max self-start md:hidden">
+                <div className="pl-6 pr-3 mb-1 min-w-max self-start md:hidden">
                     <img src={XSushiSignSmall} alt="xsushi sign" width="74px" />
                 </div>
             </div>
@@ -38,12 +38,12 @@ export default function InfoCard() {
             </div>
             <div className="flex">
                 <div className="mr-14 md:mr-9">
-                    <StyledLink className="text-body text-caption2 md:text-lg md:leading-5">
+                    <StyledLink className="text-body whitespace-nowrap text-caption2 md:text-lg md:leading-5">
                         Enter the Kitchen
                     </StyledLink>
                 </div>
                 <div>
-                    <StyledLink className="text-body text-caption2 md:text-lg md:leading-5">
+                    <StyledLink className="text-body whitespace-nowrap text-caption2 md:text-lg md:leading-5">
                         Tips for using xSUSHI
                     </StyledLink>
                 </div>
