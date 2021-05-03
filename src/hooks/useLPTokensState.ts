@@ -36,7 +36,7 @@ const useLPTokensState = () => {
         try {
             updatingLPTokens.current = true
             if (ChainId.MATIC === chainId) {
-                const LP_TOKENS_LIMIT = 300
+                const LP_TOKENS_LIMIT = 500
                 const length = await quickSwapFactoryContract?.allPairsLength()
                 const pages: number[] = []
                 for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)

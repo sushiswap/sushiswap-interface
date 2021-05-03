@@ -79,7 +79,7 @@ const useFarms = () => {
                 const roiPerMonth = roiPerDay * 30
                 const roiPerYear = roiPerMonth * 12
 
-                console.log('pool:', pool.balance)
+                console.log('pool:', pool.slpBalance)
 
                 return {
                     ...pool,

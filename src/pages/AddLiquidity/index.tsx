@@ -483,7 +483,7 @@ export default function AddLiquidity({
             </div>
             {!addIsUnsupported ? (
                 pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                    <div className="w-full max-w-2xl flex flex-col mt-4">
+                    <div className="w-full max-w-xl flex flex-col mt-4">
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
                     </div>
                 ) : null

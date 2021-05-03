@@ -214,15 +214,15 @@ const TokenBalance = ({ farm }: any) => {
                         <div className="md:col-span-2 flex justify-end items-center">
                             <div>
                                 {/* <div className="text-right">{formattedNum(farm.tvl, true)} </div> */}
-                                <div className="text-gray-500 text-right font-semibold text-md sm:text-lg">
+                                <div className="text-gray-500 text-right font-semibold text-sm sm:text-sm">
                                     {formattedNum(farm.slpBalance / 1e18, false)} SLP
                                 </div>
-                                <div className="text-gray-500 text-right text-xs">Staked</div>
+                                <div className="text-gray-500 text-right text-xs">Market Staked</div>
                             </div>
                         </div>
                         <div className="md:col-span-3 flex justify-end items-center">
                             <div>
-                                <div className="text-gray-500 text-right font-semibold text-md sm:text-lg">
+                                <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
                                     {formattedPercent(farm.roiPerMonth * 100)}{' '}
                                 </div>
                                 <div className="text-gray-500 text-right text-xs">per month</div>

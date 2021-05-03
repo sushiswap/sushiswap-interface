@@ -6,13 +6,13 @@ import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import useMiniChefV2 from 'hooks/minichefv2/useMiniChefV2'
 import usePendingSushi from 'hooks/minichefv2/usePendingSushi'
 import usePendingReward from 'hooks/minichefv2/usePendingReward'
 import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
 import useTokenBalance from 'hooks/useTokenBalance'
-import { formattedNum, isAddressString, isWETH } from 'utils'
+import { formattedNum, isAddressString, isWETH, isAddress } from 'utils'
 import { WETH } from '@sushiswap/sdk'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
@@ -95,10 +95,13 @@ export default function InputGroup({
                             <div className="ml-3">
                                 <p>
                                     <b>Tip:</b> In order to start earning rewards, you will need to first acquire some
-                                    SLP by adding liquidity to the specified pair. Once you have SLP you can stake it
-                                    into this yield farm to start earning rewards. Unstake anytime and then you can
-                                    convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to
-                                    receive you rewards at any time.
+                                    SLP by adding liquidity to the specified pair or{' '}
+                                    <Link to="/migrate" className="underline text-blue">
+                                        migrating existing liquidity.
+                                    </Link>{' '}
+                                    Once you have SLP you can stake it into this yield farm to start earning rewards.
+                                    Unstake anytime and then you can convert your SLP back to base tokens by clicking
+                                    Remove Liquidity. Click Harvest to receive you rewards at any time.
                                 </p>
                             </div>
                         </div>
@@ -160,7 +163,7 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Staked: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                Your Staked: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -209,8 +212,14 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() =>
                                     history.push(
-                                        `/add/${chainId && WETH[chainId] ? 'ETH' : token0Address}/${
-                                            chainId && WETH[chainId] ? 'ETH' : token1Address
+                                        `/add/${
+                                            chainId && WETH[chainId].address === isAddress(token0Address)
+                                                ? 'ETH'
+                                                : token0Address
+                                        }/${
+                                            chainId && WETH[chainId].address === isAddress(token1Address)
+                                                ? 'ETH'
+                                                : token1Address
                                         }`
                                     )
                                 }
