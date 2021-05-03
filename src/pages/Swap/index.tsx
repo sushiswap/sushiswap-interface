@@ -348,11 +348,11 @@ export default function Swap() {
                         onDismiss={handleConfirmDismiss}
                     />
                     {chainId && chainId === ChainId.MATIC && (
-                        <div className="max-w-xl pb-4 cursor-pointer">
+                        <div className="max-w-xl pb-4">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-gray-300">Welcome to Sushi on Matic/Polygon!</div>
+                                        <div className="text-gray-300">Welcome to Sushi on Polygon (Matic)</div>
                                         <div className="text-gray-600 text-sm">New network, new features</div>
                                     </div>
                                     <a
