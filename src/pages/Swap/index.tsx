@@ -347,7 +347,7 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-                    {/* {chainId && chainId === ChainId.MATIC && (
+                    {chainId && chainId === ChainId.MATIC && (
                         <div className="max-w-xl pb-4 cursor-pointer">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
@@ -355,16 +355,18 @@ export default function Swap() {
                                         <div className="text-gray-300">Welcome to Sushi on Matic/Polygon!</div>
                                         <div className="text-gray-600 text-sm">New network, new features</div>
                                     </div>
-                                    <button
-                                        type="button"
+                                    <a
+                                        href="https://ayokiroll.medium.com/cf7e932f3a8"
+                                        target="_blank"
+                                        rel="noreferrer noopener"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-dark-600"
                                     >
                                         Read Tutorial
-                                    </button>
+                                    </a>
                                 </div>
                             </DarkCard>
                         </div>
-                    )} */}
+                    )}
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
@@ -619,7 +621,7 @@ export default function Swap() {
                                 <div className="flex justify-between items-center overflow-hidden">
                                     <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
                                     <div className="pl-32">
-                                        <div className="text-gray-300">Check out Sushi on Matic/Polygon!</div>
+                                        <div className="text-gray-300">Check out Sushi on Polygon (Matic)</div>
                                         <div className="text-gray-600 text-sm">
                                             Click here to switch to Polygon using Metamask
                                         </div>
