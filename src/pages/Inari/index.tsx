@@ -13,11 +13,6 @@ import InariHeader from './InariHeader'
 import SushiInputPanel from './SushiInputPanel'
 import { Helmet } from 'react-helmet'
 
-const PageWrapper = styled(AutoColumn)`
-    max-width: 420px;
-    width: 100%;
-`
-
 export default function Inari() {
     const theme = useContext(ThemeContext)
     const darkMode = useDarkModeManager()
@@ -28,13 +23,12 @@ export default function Inari() {
                 <title>Inari | Sushi</title>
                 <meta name="description" content="Migrate SUSHI -> xSUSHI -> BENTO" />
             </Helmet>
-            <PageWrapper>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl w-full">
                 <AppBody>
-                    <InariHeader
-                        label={'SUSHI → xSUSHI → BENTO'}
-                    />
+                    <InariHeader label={'SUSHI → xSUSHI → BENTO'} />
                     <Wrapper id="swap-page">
-                        <AutoColumn style={{ paddingBottom: '10px' }}>
+                        <AutoColumn>
                             <SushiInputPanel
                                 label={''}
                                 disableCurrencySelect={true}
@@ -47,10 +41,8 @@ export default function Inari() {
                     </Wrapper>
                 </AppBody>
 
-                <AppBody style={{ marginTop: '20px' }}>
-                    <InariHeader
-                        label={'SUSHI → xSUSHI → AAVE'}
-                    />
+                <AppBody>
+                    <InariHeader label={'SUSHI → xSUSHI → AAVE'} />
                     <Wrapper id="swap-page">
                         <AutoColumn style={{ paddingBottom: '10px' }}>
                             <SushiInputPanel
@@ -65,10 +57,8 @@ export default function Inari() {
                     </Wrapper>
                 </AppBody>
 
-                <AppBody style={{ marginTop: '20px' }}>
-                    <InariHeader
-                        label={'SUSHI → xSUSHI → CREAM -> BENTO'}
-                    />
+                <AppBody>
+                    <InariHeader label={'SUSHI → xSUSHI → CREAM -> BENTO'} />
                     <Wrapper id="swap-page">
                         <AutoColumn style={{ paddingBottom: '10px' }}>
                             <SushiInputPanel
@@ -83,10 +73,8 @@ export default function Inari() {
                     </Wrapper>
                 </AppBody>
 
-                <AppBody style={{ marginTop: '20px' }}>
-                    <InariHeader
-                        label={'SUSHI → xSUSHI → CREAM'}
-                    />
+                <AppBody>
+                    <InariHeader label={'SUSHI → xSUSHI → CREAM'} />
                     <Wrapper id="swap-page">
                         <AutoColumn style={{ paddingBottom: '10px' }}>
                             <SushiInputPanel
@@ -100,7 +88,7 @@ export default function Inari() {
                         </AutoColumn>
                     </Wrapper>
                 </AppBody>
-            </PageWrapper>
+            </div>
         </>
     )
 }
