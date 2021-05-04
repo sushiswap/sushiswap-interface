@@ -2,10 +2,12 @@ import React from 'react'
 import SushiImage from '../../assets/images/sushi.png'
 import XSushiImage from '../../assets/images/xsushi.png'
 import MoreInfoSymbol from '../../assets/images/more-info.svg'
+import { BalanceProps } from '../../hooks/useTokenBalance'
+import { formatFromBalance } from '../../utils'
 
 interface BalanceCardProps {
     sushiEarnings: number
-    xSushiBalance: number
+    xSushiBalance: BalanceProps
     weightedApr: number
 }
 
@@ -19,7 +21,7 @@ export default function BalanceCard({ sushiEarnings, xSushiBalance, weightedApr 
                         <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={XSushiImage} alt="sushi" />
                         <div className="flex flex-col justify-center">
                             <p className="text-caption2 md:text-lg font-bold text-high-emphesis">
-                                {xSushiBalance.toPrecision(7)}
+                                {formatFromBalance(xSushiBalance.value)}
                             </p>
                             <p className="text-caption2 md:text-caption text-primary">xSUSHI</p>
                         </div>

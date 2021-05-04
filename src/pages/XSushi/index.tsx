@@ -1,28 +1,29 @@
 import { Paper } from 'kashi'
 import React from 'react'
 import { useActiveWeb3React } from '../../hooks'
-import SushiDepositPanel from '../SushiBar/SushiDepositPanel'
-import XSushiWithdrawlPanel from '../SushiBar/XSushiWithdrawlPanel'
 import { Helmet } from 'react-helmet'
-import styled from 'styled-components'
 import XSushiSign from '../../assets/images/xsushi-text-sign.png'
 import InfoCard from './InfoCard'
 import APRCard from './APRCard'
 import StakeCard from './StakeCard'
 import BalanceCard from './BalanceCard'
+import { ChainId } from '@sushiswap/sdk'
+import { SUSHI, XSUSHI } from '../../constants'
+import useTokenBalance from '../../hooks/useTokenBalance'
 
 const mockData = {
     apr: 21.4,
     numSushi: 0.1,
-    xSushiPerSushi: 0.8,
-    sushiBalance: 123.4567,
     sushiEarnings: 345.27898,
-    xSushiBalance: 8309.6,
     weightedApr: 15.34
 }
 
 export default function XSushi() {
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
+
+    const sushiBalance = useTokenBalance(SUSHI[ChainId.MAINNET]?.address ?? '')
+    const xSushiBalance = useTokenBalance(XSUSHI?.address ?? '')
+
     return (
         <>
             <Helmet>
@@ -41,17 +42,13 @@ export default function XSushi() {
                             <APRCard apr={mockData.apr} numSushi={mockData.numSushi} />
                         </div>
                         <div>
-                            <StakeCard
-                                xSushiPerSushi={mockData.xSushiPerSushi}
-                                sushiBalance={mockData.sushiBalance}
-                                xSushiBalance={mockData.xSushiBalance}
-                            />
+                            <StakeCard sushiBalance={sushiBalance} xSushiBalance={xSushiBalance} />
                         </div>
                     </div>
                     <div className="hidden md:block w-72 ml-6">
                         <BalanceCard
                             sushiEarnings={mockData.sushiEarnings}
-                            xSushiBalance={mockData.xSushiBalance}
+                            xSushiBalance={xSushiBalance}
                             weightedApr={mockData.weightedApr}
                         />
                     </div>
@@ -60,7 +57,7 @@ export default function XSushi() {
                     <div className="md:hidden flex justify-center w-full max-w-xl h-56 mt-6">
                         <BalanceCard
                             sushiEarnings={mockData.sushiEarnings}
-                            xSushiBalance={mockData.xSushiBalance}
+                            xSushiBalance={xSushiBalance}
                             weightedApr={mockData.weightedApr}
                         />
                     </div>
