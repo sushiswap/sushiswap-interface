@@ -19,22 +19,22 @@ msgstr "הוסף נזילות"
 
 #: src/components/AppBar.tsx:69
 #: src/components/AppBar.tsx:249
-msgid "Analytics"
-msgstr "ניתוח"
+#~ msgid "Analytics"
+#~ msgstr "ניתוח"
 
-#: src/pages/Saave/SushiInputPanel.tsx:175
+#: src/pages/Saave/SushiInputPanel.tsx:176
 #: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:173
 msgid "Approve"
 msgstr "לאשׁר"
 
 #: src/components/AppBar.tsx:54
 #: src/components/AppBar.tsx:233
-msgid "BentoBox"
-msgstr "BentoBox"
+#~ msgid "BentoBox"
+#~ msgstr "BentoBox"
 
 #: src/components/AppBar.tsx:178
-msgid "Bridge Assets"
-msgstr ""
+#~ msgid "Bridge Assets"
+#~ msgstr ""
 
 #: src/components/Web3Status/index.tsx:179
 msgid "Connect to a wallet"
@@ -53,14 +53,14 @@ msgid "Import Pool"
 msgstr "יבוא פול"
 
 #: src/components/AppBar.tsx:229
-msgid "Kashi Lending"
-msgstr ""
+#~ msgid "Kashi Lending"
+#~ msgstr ""
 
 #: src/components/AppBar.tsx:47
-msgid "Lend"
-msgstr ""
+#~ msgid "Lend"
+#~ msgstr ""
 
-#: src/pages/Saave/SushiInputPanel.tsx:171
+#: src/pages/Saave/SushiInputPanel.tsx:172
 #: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:169
 msgid "MAX"
 msgstr "מקסימום"
@@ -82,15 +82,13 @@ msgid "Oops! An unknown error occurred. Please refresh the page, or visit from a
 msgstr ""
 
 #: src/components/AppBar.tsx:201
-msgid "Open main menu"
-msgstr ""
+#~ msgid "Open main menu"
+#~ msgstr ""
 
 #: src/components/Web3Status/index.tsx:164
 msgid "Pending"
 msgstr "ממתין לאישור"
 
-#: src/components/AppBar.tsx:40
-#: src/components/AppBar.tsx:221
 #: src/components/NavigationTabs/index.tsx:57
 msgid "Pool"
 msgstr ""
@@ -99,7 +97,7 @@ msgstr ""
 msgid "Remove Liquidity"
 msgstr "הוצאה של נזילות"
 
-#: src/pages/Saave/SushiInputPanel.tsx:162
+#: src/pages/Saave/SushiInputPanel.tsx:163
 msgid "SUSHI Balance"
 msgstr ""
 
@@ -113,21 +111,19 @@ msgstr "בחר טוקן"
 
 #: src/components/AppBar.tsx:50
 #: src/components/AppBar.tsx:236
-msgid "SushiBar"
-msgstr "SushiBar"
+#~ msgid "SushiBar"
+#~ msgstr "SushiBar"
 
-#: src/components/AppBar.tsx:33
-#: src/components/AppBar.tsx:214
 #: src/components/NavigationTabs/index.tsx:54
 #: src/pages/Swap/index.tsx:243
 msgid "Swap"
 msgstr "להחלִיף"
 
-#: src/pages/Swap/index.tsx:255
+#: src/pages/Swap/index.tsx:267
 msgid "Swap From (est.):"
 msgstr ""
 
-#: src/pages/Swap/index.tsx:256
+#: src/pages/Swap/index.tsx:268
 msgid "Swap From:"
 msgstr ""
 
@@ -137,8 +133,8 @@ msgstr ""
 
 #: src/components/AppBar.tsx:57
 #: src/components/AppBar.tsx:239
-msgid "Vesting"
-msgstr ""
+#~ msgid "Vesting"
+#~ msgstr ""
 
 #: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:189
 msgid "Withdraw"
@@ -150,8 +146,8 @@ msgstr ""
 
 #: src/components/AppBar.tsx:43
 #: src/components/AppBar.tsx:225
-msgid "Yield"
-msgstr ""
+#~ msgid "Yield"
+#~ msgstr ""
 
 #: src/components/Web3Status/index.tsx:174
 msgid "You are on the wrong network"

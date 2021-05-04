@@ -19,22 +19,22 @@ msgstr "Add Liquidity"
 
 #: src/components/AppBar.tsx:69
 #: src/components/AppBar.tsx:249
-msgid "Analytics"
-msgstr "Analytics"
+#~ msgid "Analytics"
+#~ msgstr "Analytics"
 
-#: src/pages/Saave/SushiInputPanel.tsx:175
+#: src/pages/Saave/SushiInputPanel.tsx:176
 #: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:173
 msgid "Approve"
 msgstr "Approve"
 
 #: src/components/AppBar.tsx:54
 #: src/components/AppBar.tsx:233
-msgid "BentoBox"
-msgstr "BentoBox"
+#~ msgid "BentoBox"
+#~ msgstr "BentoBox"
 
 #: src/components/AppBar.tsx:178
-msgid "Bridge Assets"
-msgstr "Bridge Assets"
+#~ msgid "Bridge Assets"
+#~ msgstr "Bridge Assets"
 
 #: src/components/Web3Status/index.tsx:179
 msgid "Connect to a wallet"
@@ -53,14 +53,14 @@ msgid "Import Pool"
 msgstr "Import Pool"
 
 #: src/components/AppBar.tsx:229
-msgid "Kashi Lending"
-msgstr "Kashi Lending"
+#~ msgid "Kashi Lending"
+#~ msgstr "Kashi Lending"
 
 #: src/components/AppBar.tsx:47
-msgid "Lend"
-msgstr "Lend"
+#~ msgid "Lend"
+#~ msgstr "Lend"
 
-#: src/pages/Saave/SushiInputPanel.tsx:171
+#: src/pages/Saave/SushiInputPanel.tsx:172
 #: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:169
 msgid "MAX"
 msgstr "MAX"
@@ -82,15 +82,13 @@ msgid "Oops! An unknown error occurred. Please refresh the page, or visit from a
 msgstr "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 
 #: src/components/AppBar.tsx:201
-msgid "Open main menu"
-msgstr "Open main menu"
+#~ msgid "Open main menu"
+#~ msgstr "Open main menu"
 
 #: src/components/Web3Status/index.tsx:164
 msgid "Pending"
 msgstr "Pending"
 
-#: src/components/AppBar.tsx:40
-#: src/components/AppBar.tsx:221
 #: src/components/NavigationTabs/index.tsx:57
 msgid "Pool"
 msgstr "Pool"
@@ -99,7 +97,7 @@ msgstr "Pool"
 msgid "Remove Liquidity"
 msgstr "Remove Liquidity"
 
-#: src/pages/Saave/SushiInputPanel.tsx:162
+#: src/pages/Saave/SushiInputPanel.tsx:163
 msgid "SUSHI Balance"
 msgstr "SUSHI Balance"
 
@@ -113,21 +111,19 @@ msgstr "Select a token"
 
 #: src/components/AppBar.tsx:50
 #: src/components/AppBar.tsx:236
-msgid "SushiBar"
-msgstr "SushiBar"
+#~ msgid "SushiBar"
+#~ msgstr "SushiBar"
 
-#: src/components/AppBar.tsx:33
-#: src/components/AppBar.tsx:214
 #: src/components/NavigationTabs/index.tsx:54
 #: src/pages/Swap/index.tsx:243
 msgid "Swap"
 msgstr "Swap"
 
-#: src/pages/Swap/index.tsx:255
+#: src/pages/Swap/index.tsx:267
 msgid "Swap From (est.):"
 msgstr "Swap From (est.):"
 
-#: src/pages/Swap/index.tsx:256
+#: src/pages/Swap/index.tsx:268
 msgid "Swap From:"
 msgstr "Swap From:"
 
@@ -136,8 +132,8 @@ msgstr "Swap From:"
 
 #: src/components/AppBar.tsx:57
 #: src/components/AppBar.tsx:239
-msgid "Vesting"
-msgstr "Vesting"
+#~ msgid "Vesting"
+#~ msgstr "Vesting"
 
 #: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:189
 msgid "Withdraw"
@@ -148,8 +144,8 @@ msgstr "Withdraw"
 
 #: src/components/AppBar.tsx:43
 #: src/components/AppBar.tsx:225
-msgid "Yield"
-msgstr "Yield"
+#~ msgid "Yield"
+#~ msgstr "Yield"
 
 #: src/components/Web3Status/index.tsx:174
 msgid "You are on the wrong network"
