@@ -1,7 +1,6 @@
 import { Pair } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from '../../components/NumericalInput'
@@ -101,7 +100,6 @@ export default function CurrencyInputPanel({
     cornerRadiusBottomNone,
     cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
-    const { t } = useTranslation()
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 

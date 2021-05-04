@@ -1,0 +1,170 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2021-05-03 17:09+0200\n"
+"Mime-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: es-AR\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/components/NavigationTabs/index.tsx:82
+msgid "Add Liquidity"
+msgstr ""
+
+#: src/components/AppBar.tsx:69
+#: src/components/AppBar.tsx:249
+msgid "Analytics"
+msgstr ""
+
+#: src/pages/Saave/SushiInputPanel.tsx:175
+#: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:173
+msgid "Approve"
+msgstr ""
+
+#: src/components/AppBar.tsx:54
+#: src/components/AppBar.tsx:233
+msgid "BentoBox"
+msgstr ""
+
+#: src/components/AppBar.tsx:178
+msgid "Bridge Assets"
+msgstr ""
+
+#: src/components/Web3Status/index.tsx:179
+msgid "Connect to a wallet"
+msgstr ""
+
+#: src/components/NavigationTabs/index.tsx:82
+msgid "Create a pair"
+msgstr ""
+
+#: src/components/Web3Status/index.tsx:174
+msgid "Error"
+msgstr ""
+
+#: src/components/NavigationTabs/index.tsx:67
+msgid "Import Pool"
+msgstr ""
+
+#: src/components/AppBar.tsx:229
+msgid "Kashi Lending"
+msgstr ""
+
+#: src/components/AppBar.tsx:47
+msgid "Lend"
+msgstr ""
+
+#: src/pages/Saave/SushiInputPanel.tsx:171
+#: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:169
+msgid "MAX"
+msgstr ""
+
+#: src/components/SearchModal/CurrencySearch.tsx:132
+msgid "Manage"
+msgstr ""
+
+#: src/components/CurrencyInputPanel/index.tsx:156
+msgid "Max"
+msgstr ""
+
+#: src/components/SearchModal/CurrencySearch.tsx:122
+msgid "No results found"
+msgstr ""
+
+#: src/components/Web3ReactManager/index.tsx:48
+msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
+msgstr ""
+
+#: src/components/AppBar.tsx:201
+msgid "Open main menu"
+msgstr ""
+
+#: src/components/Web3Status/index.tsx:164
+msgid "Pending"
+msgstr ""
+
+#: src/components/AppBar.tsx:40
+#: src/components/AppBar.tsx:221
+#: src/components/NavigationTabs/index.tsx:57
+msgid "Pool"
+msgstr ""
+
+#: src/components/NavigationTabs/index.tsx:82
+msgid "Remove Liquidity"
+msgstr ""
+
+#: src/pages/Saave/SushiInputPanel.tsx:162
+msgid "SUSHI Balance"
+msgstr ""
+
+#: src/components/SearchModal/CurrencySearch.tsx:106
+msgid "Search name or paste address"
+msgstr ""
+
+#: src/components/CurrencyInputPanel/index.tsx:142
+msgid "Select a token"
+msgstr ""
+
+#: src/components/AppBar.tsx:50
+#: src/components/AppBar.tsx:236
+msgid "SushiBar"
+msgstr ""
+
+#: src/components/AppBar.tsx:33
+#: src/components/AppBar.tsx:214
+#: src/components/NavigationTabs/index.tsx:54
+#: src/pages/Swap/index.tsx:243
+msgid "Swap"
+msgstr ""
+
+#: src/pages/Swap/index.tsx:255
+msgid "Swap From (est.):"
+msgstr ""
+
+#: src/pages/Swap/index.tsx:256
+msgid "Swap From:"
+msgstr ""
+
+#: src/components/Web3ReactManager/index.tsx:48
+#~ msgid "Unknown error"
+#~ msgstr ""
+
+#: src/components/AppBar.tsx:57
+#: src/components/AppBar.tsx:239
+msgid "Vesting"
+msgstr ""
+
+#: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:189
+msgid "Withdraw"
+msgstr ""
+
+#: src/components/Web3Status/index.tsx:174
+#~ msgid "Wrong Network"
+#~ msgstr ""
+
+#: src/components/AppBar.tsx:43
+#: src/components/AppBar.tsx:225
+msgid "Yield"
+msgstr ""
+
+#: src/components/Web3Status/index.tsx:174
+msgid "You are on the wrong network"
+msgstr ""
+
+#: src/components/Gas/index.tsx:7
+msgid "failed to load"
+msgstr ""
+
+#: src/components/Gas/index.tsx:9
+msgid "loading..."
+msgstr ""
+
+#: src/pages/SushiBar/XSushiWithdrawlPanel.tsx:160
+msgid "xSUSHI Balance"
+msgstr ""

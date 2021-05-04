@@ -50,7 +50,7 @@ import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'
 import { Helmet } from 'react-helmet'
 import { DarkCard, DarkBlueCard } from '../../components/CardLegacy'
-
+import { t } from '@lingui/macro'
 import { useNetworkModalToggle } from '../../state/application/hooks'
 
 import PolygonLogo from '../../assets/images/matic-logo.png'
@@ -319,7 +319,7 @@ export default function Swap() {
     return (
         <>
             <Helmet>
-                <title>Swap | Sushi</title>
+                <title>{t`Swap`} | Sushi</title>
                 <meta
                     name="description"
                     content="Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
@@ -369,8 +369,8 @@ export default function Swap() {
                         <CurrencyInputPanel
                             label={
                                 independentField === Field.OUTPUT && !showWrap && trade
-                                    ? 'Swap From (est.):'
-                                    : 'Swap From:'
+                                    ? t`Swap From (est.):`
+                                    : t`Swap From:`
                             }
                             value={formattedAmounts[Field.INPUT]}
                             showMaxButton={!atMaxAmountInput}

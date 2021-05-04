@@ -1,7 +1,7 @@
 import { Pair } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { t } from '@lingui/macro'
 import styled from 'styled-components'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from '../../components/NumericalInput'
@@ -137,7 +137,6 @@ export default function CurrencyInputPanel({
     cornerRadiusBottomNone,
     cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
-    const { t } = useTranslation()
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
@@ -205,7 +204,7 @@ export default function CurrencyInputPanel({
                                         fontSize={14}
                                         style={{ display: 'inline', cursor: 'pointer' }}
                                     >
-                                        SUSHI Balance: {sushiBalance}
+                                        {t`SUSHI Balance`}: {sushiBalance}
                                     </TYPE.body>
                                 )}
                             </RowBetween>
@@ -225,14 +224,14 @@ export default function CurrencyInputPanel({
                                     }}
                                 />
                                 {account && label !== 'To' && (
-                                    <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>
+                                    <StyledBalanceMax onClick={handleMaxDeposit}>{t`MAX`}</StyledBalanceMax>
                                 )}
                             </>
                         )}
                         {!allowance || Number(allowance) === 0 ? (
                             <ButtonSelect onClick={handleApprove}>
                                 <Aligner>
-                                    <StyledButtonName>Approve</StyledButtonName>
+                                    <StyledButtonName>{t`Approve`}</StyledButtonName>
                                 </Aligner>
                             </ButtonSelect>
                         ) : (

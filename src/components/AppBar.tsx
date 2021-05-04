@@ -1,6 +1,5 @@
 import { ChainId, Currency } from '@sushiswap/sdk'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import Logo from '../assets/images/logo.png'
 import { useActiveWeb3React } from '../hooks'
 import { useETHBalances } from '../state/wallet/hooks'
@@ -14,10 +13,10 @@ import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
 import { ANALYTICS_URL } from '../constants'
+import { t } from '@lingui/macro'
 
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
-    const { t } = useTranslation()
 
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
@@ -38,7 +37,7 @@ function AppBar(): JSX.Element {
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
                                             <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                                {t('swap')}
+                                                {t`Swap`}
                                             </NavLink>
                                             <NavLink
                                                 id={`pool-nav-link`}
@@ -51,11 +50,11 @@ function AppBar(): JSX.Element {
                                                     pathname.startsWith('/find')
                                                 }
                                             >
-                                                {t('pool')}
+                                                {t`Pool`}
                                             </NavLink>
                                             {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                                    Yield
+                                                    {t`Yield`}
                                                 </NavLink>
                                             )}
                                             {chainId &&
@@ -63,12 +62,12 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                                        Lend
+                                                        {t`Lend`}
                                                     </NavLink>
                                                 )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`stake-nav-link`} to={'/sushi-bar'}>
-                                                    SushiBar
+                                                    {t`SushiBar`}
                                                 </NavLink>
                                             )}
                                             {chainId &&
@@ -76,12 +75,12 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        BentoBox
+                                                        {t`BentoBox`}
                                                     </NavLink>
                                                 )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                                    Vesting
+                                                    {t`Vesting`}
                                                 </NavLink>
                                             )}
                                             {/* {chainId &&
@@ -105,7 +104,7 @@ function AppBar(): JSX.Element {
                                                         id={`analytics-nav-link`}
                                                         href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                                     >
-                                                        Analytics
+                                                        {t`Analytics`}
                                                     </ExternalLink>
                                                 )}
                                         </div>
@@ -252,7 +251,7 @@ function AppBar(): JSX.Element {
                                                     rel="noopener noreferrer"
                                                 >
                                                     <div className="grid grid-flow-col auto-cols-max items-center rounded-lg bg-dark-1000 text-sm text-secondary py-2 px-3 pointer-events-auto">
-                                                        <div className="text-primary">Bridge Assets</div>
+                                                        <div className="text-primary">{t`Bridge Assets`}</div>
                                                     </div>
                                                 </a>
                                             </div>
@@ -280,7 +279,7 @@ function AppBar(): JSX.Element {
                                 <div className="-mr-2 flex sm:hidden">
                                     {/* Mobile menu button */}
                                     <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
-                                        <span className="sr-only">Open main menu</span>
+                                        <span className="sr-only">{t`Open main menu`}</span>
                                         {open ? (
                                             <X title="Close" className="block h-6 w-6" aria-hidden="true" />
                                         ) : (
@@ -302,7 +301,7 @@ function AppBar(): JSX.Element {
                             </a> */}
 
                                 <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                    {t('swap')}
+                                    {t`Swap`}
                                 </NavLink>
                                 <NavLink
                                     id={`pool-nav-link`}
@@ -315,34 +314,34 @@ function AppBar(): JSX.Element {
                                         pathname.startsWith('/find')
                                     }
                                 >
-                                    {t('pool')}
+                                    {t`Pool`}
                                 </NavLink>
 
                                 {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                        Yield
+                                        {t`Yield`}
                                     </NavLink>
                                 )}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                            Kashi Lending
+                                            {t`Kashi Lending`}
                                         </NavLink>
                                     )}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                            BentoBox
+                                            {t`BentoBox`}
                                         </NavLink>
                                     )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/sushibar'}>
-                                        SushiBar
+                                        {t`SushiBar`}
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                        Vesting
+                                        {t`Vesting`}
                                     </NavLink>
                                 )}
                                 {chainId &&
@@ -357,7 +356,7 @@ function AppBar(): JSX.Element {
                                             id={`analytics-nav-link`}
                                             href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                         >
-                                            Analytics
+                                            {t`Analytics`}
                                         </ExternalLink>
                                     )}
                             </div>

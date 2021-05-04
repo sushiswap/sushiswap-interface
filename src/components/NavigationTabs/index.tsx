@@ -1,14 +1,13 @@
 import { darken } from 'polished'
 import React from 'react'
 import { ArrowLeft } from 'react-feather'
-import { useTranslation } from 'react-i18next'
+import { t } from '@lingui/macro'
 import { useDispatch } from 'react-redux'
 import { Link as HistoryLink, NavLink } from 'react-router-dom'
 import { AppDispatch } from 'state'
 import { resetMintState } from 'state/mint/actions'
 import styled from 'styled-components'
 import { RowBetween } from '../Row'
-// import QuestionHelper from '../QuestionHelper'
 import Settings from '../Settings'
 
 const Tabs = styled.div`
@@ -55,15 +54,15 @@ const StyledArrowLeft = styled(ArrowLeft)`
     color: ${({ theme }) => theme.text1};
 `
 
+// This seems to be legacy code, should we remove this? Notice the display: 'none'
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
-    const { t } = useTranslation()
     return (
         <Tabs style={{ marginBottom: '20px', display: 'none' }}>
             <StyledNavLink id={`swap-nav-link`} to={'/swap'} isActive={() => active === 'swap'}>
-                {t('swap')}
+                {t`Swap`}
             </StyledNavLink>
             <StyledNavLink id={`pool-nav-link`} to={'/pool'} isActive={() => active === 'pool'}>
-                {t('pool')}
+                {t`Pool`}
             </StyledNavLink>
         </Tabs>
     )
@@ -76,7 +75,7 @@ export function FindPoolTabs() {
                 <HistoryLink to="/pool">
                     <StyledArrowLeft />
                 </HistoryLink>
-                <ActiveText>Import Pool</ActiveText>
+                <ActiveText>{t`Import Pool`}</ActiveText>
                 <Settings />
             </RowBetween>
         </Tabs>
@@ -98,7 +97,7 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
                 >
                     <StyledArrowLeft />
                 </HistoryLink>
-                <ActiveText>{creating ? 'Create a pair' : adding ? 'Add Liquidity' : 'Remove Liquidity'}</ActiveText>
+                <ActiveText>{creating ? t`Create a pair` : adding ? t`Add Liquidity` : t`Remove Liquidity`}</ActiveText>
                 <Settings />
             </RowBetween>
         </Tabs>

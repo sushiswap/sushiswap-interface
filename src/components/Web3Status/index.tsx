@@ -3,7 +3,6 @@ import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { darken, lighten } from 'polished'
 import React, { useMemo } from 'react'
 import { Activity } from 'react-feather'
-import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
 import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
@@ -18,11 +17,10 @@ import { isTransactionRecent, useAllTransactions } from '../../state/transaction
 import { TransactionDetails } from '../../state/transactions/reducer'
 import { shortenAddress } from '../../utils'
 import { ButtonSecondary } from '../ButtonLegacy'
-import Identicon from '../Identicon'
 import Loader from '../Loader'
-import { RowBetween } from '../Row'
 import WalletModal from '../WalletModal'
 import { ReactComponent as Chef } from '../../assets/images/chef.svg'
+import { t } from '@lingui/macro'
 
 const IconWrapper = styled.div<{ size?: number }>`
     ${({ theme }) => theme.flexColumnNoWrap};
@@ -170,7 +168,6 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
 }
 
 function Web3StatusInner() {
-    const { t } = useTranslation()
     const { account, connector, error } = useWeb3React()
 
     const { ENSName } = useENSName(account ?? undefined)
@@ -197,7 +194,10 @@ function Web3StatusInner() {
             >
                 {hasPendingTransactions ? (
                     <div className="flex justify-between items-center">
-                        <div className="pr-2">{pending?.length} Pending</div> <Loader stroke="white" />
+                        <div className="pr-2">
+                            {pending?.length} {t`Pending`}
+                        </div>{' '}
+                        <Loader stroke="white" />
                     </div>
                 ) : (
                     <div className="mr-2">{ENSName || shortenAddress(account)}</div>
@@ -209,13 +209,13 @@ function Web3StatusInner() {
         return (
             <Web3StatusError onClick={toggleWalletModal}>
                 <NetworkIcon />
-                <Text>{error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error'}</Text>
+                <Text>{error instanceof UnsupportedChainIdError ? t`You are on the wrong network` : t`Error`}</Text>
             </Web3StatusError>
         )
     } else {
         return (
             <Web3StatusConnect id="connect-wallet" onClick={toggleWalletModal} faded={!account}>
-                <Text>{t('Connect to a wallet')}</Text>
+                <Text>{t`Connect to a wallet`}</Text>
             </Web3StatusConnect>
         )
     }

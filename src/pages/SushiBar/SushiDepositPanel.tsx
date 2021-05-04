@@ -5,7 +5,6 @@ import { useActiveWeb3React } from 'hooks'
 import useTheme from 'hooks/useTheme'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import useSushiBar from 'hooks/useSushiBar'
 import useTokenBalance from 'hooks/useTokenBalance'
@@ -137,7 +136,6 @@ export default function CurrencyInputPanel({
     cornerRadiusBottomNone,
     cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
-    const { t } = useTranslation()
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
