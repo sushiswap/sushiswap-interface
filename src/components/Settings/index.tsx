@@ -11,7 +11,8 @@ import {
     useUserSingleHopOnly,
     useUserSlippageTolerance,
     useUserTransactionTTL,
-    useUserArcherETHTip
+    useUserArcherETHTip,
+    useUserUseArcher
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { ButtonError } from '../ButtonLegacy'
@@ -93,6 +94,7 @@ export default function SettingsTab() {
 
     const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
 
+    const [userUseArcher, setUserUseArcher] = useUserUseArcher()
     const [userArcherETHTip, setUserArcherETHTip] = useUserArcherETHTip()
 
     // show confirmation view before turning on
@@ -163,6 +165,8 @@ export default function SettingsTab() {
                             setDeadline={setTtl}
                             ethTip={userArcherETHTip}
                             setETHTip={setUserArcherETHTip}
+                            useArcher={userUseArcher}
+                            setUseArcher={setUserUseArcher}
                         />
                         <div className="text-base font-semibold text-high-emphesis">Interface Settings</div>
                         <RowBetween>

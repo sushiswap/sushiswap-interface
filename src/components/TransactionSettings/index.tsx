@@ -7,6 +7,7 @@ import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
 import { tryParseAmount } from '../../state/swap/hooks'
+import Toggle from '../Toggle'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -96,9 +97,11 @@ export interface SlippageTabsProps {
     setDeadline: (deadline: number) => void
     ethTip: string,
     setETHTip: (ethTip: string) => void,
+    useArcher: boolean,
+    setUseArcher: (useArcher: boolean) => void
 }
 
-export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, ethTip, setETHTip }: SlippageTabsProps) {
+export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, ethTip, setETHTip, useArcher, setUseArcher }: SlippageTabsProps) {
     const theme = useContext(ThemeContext)
 
     const inputRef = useRef<HTMLInputElement>()
@@ -278,9 +281,24 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
             </AutoColumn>
 
             <AutoColumn gap="sm">
+                <RowBetween>
+                    <RowFixed>
+                        <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>
+                            MEV Shield by Archer DAO
+                        </TYPE.black>
+                        <QuestionHelper text="Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners" />
+                    </RowFixed>
+                        <Toggle
+                            id="toggle-use-archer"
+                            isActive={useArcher}
+                            toggle={() => setUseArcher(!useArcher)} />
+                </RowBetween>
+            </AutoColumn>
+
+            <AutoColumn gap="sm">
                 <RowFixed>
                     <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
-                        Miner Tip
+                        MEV Shield Miner Tip
                     </TYPE.black>
                     <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
                     </RowFixed>
@@ -301,6 +319,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                     </TYPE.body>
                 </RowFixed>
             </AutoColumn>
+            
         </AutoColumn>
     )
 }
