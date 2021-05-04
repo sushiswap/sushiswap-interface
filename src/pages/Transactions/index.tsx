@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
 import { shortenAddress } from '../../utils'
@@ -6,6 +6,9 @@ import TransactionHistory from './TransactionHistory'
 import LiquidityPositions from './LiquidityPositions'
 import { ChevronLeft, User, Copy, ExternalLink } from 'react-feather'
 import { Button } from 'components'
+import { useActiveWeb3React } from 'hooks'
+import { useETHBalances } from 'state/wallet/hooks'
+import { Currency } from '@sushiswap/sdk'
 
 const mock = {
     transactions: [
@@ -13,57 +16,14 @@ const mock = {
         'Swap 0.1235 ETH for 32.1245 SUSHI',
         'Swap 0.1236 ETH for 32.1245 SUSHI',
         'Swap 0.1237 ETH for 32.1245 SUSHI'
-    ],
-    liquidity: [
-        {
-            pairs: 'ETH / SUSHI',
-            pair1: {
-                name: 'ETH',
-                amount: '2.34567'
-            },
-            pair2: {
-                name: 'SUSHI',
-                amount: '32.34567'
-            }
-        },
-        {
-            pairs: 'ETH / COMP',
-            pair1: {
-                name: 'ETH',
-                amount: '2.345'
-            },
-            pair2: {
-                name: 'COMP',
-                amount: '32.345'
-            }
-        },
-        {
-            pairs: 'WBTC / DIGG',
-            pair1: {
-                name: 'WBTC',
-                amount: '2.345'
-            },
-            pair2: {
-                name: 'DIGG',
-                amount: '32.345'
-            }
-        },
-        {
-            pairs: 'LON / USDT',
-            pair1: {
-                name: 'LON',
-                amount: '2.345'
-            },
-            pair2: {
-                name: 'USDT',
-                amount: '32.345'
-            }
-        }
     ]
 }
 
 export default function Transactions() {
     const theme = useContext(ThemeContext)
+    const { account, chainId } = useActiveWeb3React()
+    const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+
     const [showTransactions, setShowTransactions] = useState(true)
 
     return (
@@ -89,10 +49,14 @@ export default function Transactions() {
                             <User strokeWidth={1} size={34} color={theme.white} />
                         </div>
                         <div className="ml-3">
-                            <div className="font-semibold text-gray-300">
-                                {shortenAddress('0x25E6C5A2a60c960E5b0708c9C500C89e46399E22')}
+                            <div className="font-semibold text-gray-300">{account && shortenAddress(account)}</div>
+                            <div className="text-sm text-primary">
+                                {account && chainId && userEthBalance && (
+                                    <div>
+                                        {userEthBalance?.toSignificant(4)} {Currency.getNativeCurrencySymbol(chainId)}
+                                    </div>
+                                )}
                             </div>
-                            <div className="text-sm text-primary">0.01373 ETH</div>
                         </div>
                     </div>
 
@@ -128,11 +92,7 @@ export default function Transactions() {
                         Liquidity Positions
                     </div>
                 </div>
-                {showTransactions ? (
-                    <TransactionHistory transactions={mock.transactions} />
-                ) : (
-                    <LiquidityPositions positions={mock.liquidity} />
-                )}
+                {showTransactions ? <TransactionHistory transactions={mock.transactions} /> : <LiquidityPositions />}
             </div>
         </>
     )
