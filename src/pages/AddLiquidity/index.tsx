@@ -436,7 +436,11 @@ export default function AddLiquidity({
                             currencies[Field.CURRENCY_B] &&
                             pairState !== PairState.INVALID && (
                                 <>
-                                    <LiquidityPrice currencies={currencies} price={price} />
+                                    <LiquidityPrice
+                                        input={currencies[Field.CURRENCY_A]}
+                                        output={currencies[Field.CURRENCY_B]}
+                                        price={price}
+                                    />
                                     {/* <PoolPriceBar
                                         currencies={currencies}
                                         poolTokenPercentage={poolTokenPercentage}

@@ -1,15 +1,6 @@
-import { Trade, TradeType } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
-import { Field } from '../../state/swap/actions'
-import { useUserSlippageTolerance } from '../../state/user/hooks'
-import { TYPE } from '../../theme'
-import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../../utils/prices'
+import React from 'react'
 import { AutoColumn } from '../Column'
-import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
-import { ExternalLink } from '../Link'
 
 function TradeSummary() {
     return (
@@ -59,24 +50,13 @@ function TradeSummary() {
 }
 
 export interface AdvancedLiquidityDetailsProps {
-    trade?: Trade
     show?: Boolean
 }
 
-export function AdvancedLiquidityDetails({ trade }: AdvancedLiquidityDetailsProps) {
-    const theme = useContext(ThemeContext)
-
-    const [allowedSlippage] = useUserSlippageTolerance()
-
-    const showRoute = Boolean(trade && trade.route.path.length > 2)
-
+export function AdvancedLiquidityDetails() {
     return (
         <AutoColumn gap="0px">
-            {
-                <>
-                    <TradeSummary />
-                </>
-            }
+            <TradeSummary />
         </AutoColumn>
     )
 }
