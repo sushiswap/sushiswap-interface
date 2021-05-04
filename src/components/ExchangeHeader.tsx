@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Settings from '../Settings'
-import { NavLink } from '../Link'
-import animationData from '../../assets/animation/settings-slider.json'
-import profileAnimationData from '../../assets/animation/wallet.json'
+import Settings from './Settings'
+import { NavLink } from './Link'
+import animationData from '../assets/animation/settings-slider.json'
+import profileAnimationData from '../assets/animation/wallet.json'
 
 import Lottie from 'lottie-react'
-import Gas from '../Gas'
+import Gas from './Gas'
 
 export default function SwapHeader({ input = undefined, output = undefined }: any): JSX.Element {
     const [animateSettings, setAnimateSettings] = useState(false)
@@ -38,6 +38,16 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
                     to={`/add/${input && input.address ? input.address : 'ETH'}${
                         output && output.address ? `/${output.address}` : ''
                     }`}
+                    isActive={(match, location) => {
+                        console.log({ match, location })
+                        return (
+                            location.pathname === '/pool' ||
+                            location.pathname.includes('/add') ||
+                            location.pathname.includes('/remove') ||
+                            location.pathname.includes('/migrate') ||
+                            location.pathname.includes('/create')
+                        )
+                    }}
                 >
                     Liquidity
                 </NavLink>

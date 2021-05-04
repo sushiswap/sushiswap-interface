@@ -21,7 +21,7 @@ import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/Bette
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/swap/SwapHeader'
+import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import TokenWarningModal from '../../components/TokenWarningModal'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
@@ -331,7 +331,7 @@ export default function Swap() {
                 onConfirm={handleConfirmTokenWarning}
             />
             <SwapPoolTabs active={'swap'} />
-            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl rounded">
+            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-2xl rounded">
                 <SwapHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
                 <Wrapper id="swap-page">
                     <ConfirmSwapModal
@@ -613,8 +613,7 @@ export default function Swap() {
                     </BottomGrouping>
                     {!trade && chainId && chainId === ChainId.MAINNET && (
                         <div
-                            className="hidden sm:block w-full cursor-pointer pt-4"
-                            style={{ maxWidth: '574px' }}
+                            className="hidden sm:block w-full cursor-pointer pt-4 w-full"
                             onClick={() => toggleNetworkModal()}
                         >
                             <DarkCard>

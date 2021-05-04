@@ -170,7 +170,8 @@ module.exports = {
                 'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
                 'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)',
 
-                'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)'
+                'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)',
+                'liquidity-purple-glow': '0px 50px 250px -47px rgba(123, 97, 255, 0.23);'
             },
             ringWidth: {
                 ...defaultTheme.ringWidth,

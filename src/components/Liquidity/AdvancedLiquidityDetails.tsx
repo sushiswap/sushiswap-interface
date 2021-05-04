@@ -1,5 +1,5 @@
 import { Trade, TradeType } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { Field } from '../../state/swap/actions'
@@ -12,7 +12,6 @@ import { RowBetween, RowFixed } from '../Row'
 import { ExternalLink } from '../Link'
 
 function TradeSummary() {
-
     return (
         <>
             <AutoColumn style={{ padding: '0 16px' }} className="text-sm">
@@ -23,9 +22,7 @@ function TradeSummary() {
                     <RowFixed>
                         <div className="text-white">
                             1.576 →&nbsp;
-                            <span className="text-green">
-                                1.787 ETH/SUSHI SLP
-                            </span>
+                            <span className="text-green">1.787 ETH/SUSHI SLP</span>
                         </div>
                     </RowFixed>
                 </RowBetween>
@@ -36,9 +33,7 @@ function TradeSummary() {
                     <RowFixed>
                         <div className="text-white">
                             &lt; 0.01% →&nbsp;
-                            <span className="text-green">
-                                0.01%
-                            </span>
+                            <span className="text-green">0.01%</span>
                         </div>
                     </RowFixed>
                 </RowBetween>
@@ -77,11 +72,11 @@ export function AdvancedLiquidityDetails({ trade }: AdvancedLiquidityDetailsProp
 
     return (
         <AutoColumn gap="0px">
-            {(
+            {
                 <>
                     <TradeSummary />
                 </>
-            )}
+            }
         </AutoColumn>
     )
 }

@@ -8,7 +8,6 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
     padding-bottom: 16px;
     margin-top: -2rem;
     width: 100%;
-    max-width: 544px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     color: ${({ theme }) => theme.text2};
@@ -20,11 +19,10 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
     transition: transform 300ms ease-in-out;
 `
 
-export default function AdvancedSwapDetailsDropdown({ trade, show, ...rest }: AdvancedLiquidityDetailsProps) {
+export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: AdvancedLiquidityDetailsProps) {
     const lastTrade = useLastTruthy(trade)
-
     return (
-        <AdvancedDetailsFooter show={Boolean(show)}>
+        <AdvancedDetailsFooter show={Boolean(trade)}>
             <AdvancedLiquidityDetails {...rest} trade={trade ?? lastTrade ?? undefined} />
         </AdvancedDetailsFooter>
     )

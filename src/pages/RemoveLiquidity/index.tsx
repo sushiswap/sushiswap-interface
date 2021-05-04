@@ -488,7 +488,7 @@ export default function RemoveLiquidity({
             <Helmet>
                 <title>Remove Liquidity | Sushi</title>
             </Helmet>
-            <div className="bg-dark-900 w-full max-w-2xl rounded">
+            <div className="bg-dark-900 w-full max-w-2xl rounded  shadow-liquidity-purple-glow">
                 <AddRemoveTabs creating={false} adding={false} />
                 <Wrapper>
                     <TransactionConfirmationModal

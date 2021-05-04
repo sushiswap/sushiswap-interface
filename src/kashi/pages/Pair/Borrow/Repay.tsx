@@ -357,7 +357,7 @@ export default function Repay({ pair }: RepayProps) {
 
             {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
-            {((swap && priceImpactSeverity < 3) || isExpertMode) && (
+            {swap && (priceImpactSeverity < 3 || isExpertMode) && (
                 <TransactionReviewView transactionReview={transactionReview} />
             )}
 

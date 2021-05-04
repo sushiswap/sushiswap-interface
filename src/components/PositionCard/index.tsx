@@ -79,84 +79,39 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     return (
         <>
             {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
-                <GreyCard border={border}>
-                    <AutoColumn gap="12px">
-                        <FixedHeightRow>
-                            <RowFixed>
-                                <Text fontWeight={500} fontSize={16}>
-                                    Your position
-                                </Text>
-                            </RowFixed>
-                        </FixedHeightRow>
-                        <FixedHeightRow onClick={() => setShowMore(!showMore)}>
-                            <RowFixed>
-                                <DoubleCurrencyLogo
-                                    currency0={currency0}
-                                    currency1={currency1}
-                                    margin={true}
-                                    size={20}
-                                />
-                                <Text fontWeight={500} fontSize={20}>
-                                    {currency0.getSymbol(chainId)}/{currency1.getSymbol(chainId)}
-                                </Text>
-                            </RowFixed>
-                            <RowFixed>
-                                <Text fontWeight={500} fontSize={20}>
-                                    {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
-                                </Text>
-                            </RowFixed>
-                        </FixedHeightRow>
-                        <AutoColumn gap="4px">
-                            <FixedHeightRow>
-                                <Text fontSize={16} fontWeight={500}>
-                                    Your pool share:
-                                </Text>
-                                <Text fontSize={16} fontWeight={500}>
-                                    {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
-                                </Text>
-                            </FixedHeightRow>
-                            <FixedHeightRow>
-                                <Text fontSize={16} fontWeight={500}>
-                                    {currency0.getSymbol(chainId)}:
-                                </Text>
-                                {token0Deposited ? (
-                                    <RowFixed>
-                                        <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
-                                            {token0Deposited?.toSignificant(6)}
-                                        </Text>
-                                    </RowFixed>
-                                ) : (
-                                    '-'
-                                )}
-                            </FixedHeightRow>
-                            <FixedHeightRow>
-                                <Text fontSize={16} fontWeight={500}>
-                                    {currency1.getSymbol(chainId)}:
-                                </Text>
-                                {token1Deposited ? (
-                                    <RowFixed>
-                                        <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
-                                            {token1Deposited?.toSignificant(6)}
-                                        </Text>
-                                    </RowFixed>
-                                ) : (
-                                    '-'
-                                )}
-                            </FixedHeightRow>
-                        </AutoColumn>
-                    </AutoColumn>
-                </GreyCard>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-purple rounded p-4 bg-opacity-20 w-full mt-4 whitespace-nowrap">
+                    <div className="flex justify-between">
+                        <div className="text-high-emphesis">Your Pool Tokens</div>
+                        <div className="text-primary font-bold">
+                            {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                        </div>
+                    </div>
+                    <div className="flex justify-between">
+                        <div className="text-high-emphesis">Your Pool Share</div>
+                        <div className="text-primary font-bold">
+                            {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
+                        </div>
+                    </div>
+                    <div className="flex justify-between">
+                        <div className="text-high-emphesis">Pooled {currency0.getSymbol(chainId)}</div>
+                        <div className="text-primary font-bold">{token0Deposited?.toSignificant(6)}</div>
+                    </div>
+                    <div className="flex justify-between">
+                        <div className="text-high-emphesis">Pooled {currency1.getSymbol(chainId)}</div>
+                        <div className="text-primary font-bold">{token1Deposited?.toSignificant(6)}</div>
+                    </div>
+                </div>
             ) : (
-                <LightCard>
-                    <TYPE.subHeader style={{ textAlign: 'center' }}>
+                <div className="bg-purple rounded p-4 bg-opacity-20 w-full mt-4">
+                    <p>
                         <span role="img" aria-label="wizard-icon">
                             ⭐️
                         </span>{' '}
                         By adding liquidity you&apos;ll earn 0.25% of all trades on this pair proportional to your share
                         of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
                         your liquidity.
-                    </TYPE.subHeader>
-                </LightCard>
+                    </p>
+                </div>
             )}
         </>
     )

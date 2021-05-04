@@ -20,7 +20,7 @@ import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/Bette
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/swap/SwapHeader'
+import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion } from '../../data/V1'
