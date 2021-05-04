@@ -1,6 +1,6 @@
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
 import QuestionHelper from 'components/QuestionHelper'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { BackButton } from 'components'
 import { BorrowCardHeader, Card, GradientDot, Layout } from 'kashi/components'
 import { KashiContext, useKashiPair } from 'kashi/context'

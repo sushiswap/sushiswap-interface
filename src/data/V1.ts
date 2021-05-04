@@ -14,7 +14,7 @@ import {
     WETH
 } from '@sushiswap/sdk'
 import { useMemo } from 'react'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useAllTokens } from '../hooks/Tokens'
 import { useV1FactoryContract } from '../hooks/useContract'
 import { Version } from '../hooks/useToggledVersion'

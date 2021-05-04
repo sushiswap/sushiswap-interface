@@ -1,5 +1,6 @@
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
-import { useActiveWeb3React, useFuse, useSortableData } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useFuse, useSortableData } from 'hooks'
 import { getCurrency } from 'kashi'
 import { BackButton, Paper } from 'components'
 import { getTokenIcon } from 'kashi/functions'

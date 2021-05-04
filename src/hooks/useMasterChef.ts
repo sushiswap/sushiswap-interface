@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { useMasterChefContract } from 'hooks'
+import { useMasterChefContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 

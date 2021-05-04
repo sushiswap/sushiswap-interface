@@ -8,6 +8,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
+// import { BscConnector } from '@binance-chain/bsc-connector'
 
 const RPC = {
     [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
@@ -17,7 +18,7 @@ const RPC = {
     [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
     [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
     [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
-    //[ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
+    // [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
     [ChainId.MATIC]:
         'https://apis.ankr.com/e22bfa5f5a124b9aa1f911b742f6adfe/c06bb163c3c2a10a4028959f4d82836d/polygon/full/main',
     [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
@@ -107,3 +108,5 @@ export const walletlink = new WalletLinkConnector({
 export const torus = new TorusConnector({
     chainId: 1
 })
+
+// export const bsc = new BscConnector({ supportedChainIds: [56] })

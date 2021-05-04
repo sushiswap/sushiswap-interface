@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers'
 import { useMemo } from 'react'
-import { useActiveWeb3React, useMasterChefContract } from '.'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useMasterChefContract } from './useContract'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
 
 export function useAllPendingSushi(): number {

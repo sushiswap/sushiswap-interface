@@ -2,9 +2,9 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, Currency, WETH } from '@sushiswap/sdk'
 import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
-import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
-import { useBoringHelperContract } from 'hooks/useContract'
+import { useBoringHelperContract, useBentoBoxContract } from 'hooks/useContract'
 import _ from 'lodash'
 import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
@@ -107,7 +107,7 @@ async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
     let logs = []
     let success = false
     const masterAddress = KASHI_ADDRESS[chainId]
-    if (chainId != ChainId.BSC && chainId != ChainId.MATIC) {
+    if (chainId !== ChainId.BSC && chainId !== ChainId.MATIC) {
         logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(masterAddress))
         success = true
     }
@@ -171,7 +171,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             if (
                 !account ||
                 !chainId ||
-                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].indexOf(chainId) == -1
+                ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId)
             ) {
                 return
             }

@@ -1,7 +1,8 @@
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
-import { Fraction } from '../entities'
-import { useActiveWeb3React, useSushiBarContract, useSushiContract } from '../hooks'
+import Fraction from '../entities/Fraction'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useSushiBarContract, useSushiContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { BalanceProps } from './useTokenBalance'
 
@@ -21,8 +22,9 @@ const useSushiBar = () => {
                 const allowance = await sushiContract?.allowance(account, barContract?.address)
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
-            } catch {
+            } catch (error) {
                 setAllowance('0')
+                throw error
             }
         }
     }, [account, barContract, sushiContract])

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { RowBetween } from '../../components/Row'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useTheme from '../../hooks/useTheme'
 import useSaave from '../../hooks/useSaave'
 import { TYPE } from '../../theme'
@@ -145,6 +145,8 @@ export default function CurrencyInputPanel({
     const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
     const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
     const decimals = sushiBalanceBigInt?.decimals
+
+    console.log('sushi allowance:', allowance)
 
     console.log('sushiBalance:', sushiBalance, sushiBalanceBigInt, decimals)
 

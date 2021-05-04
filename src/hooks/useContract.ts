@@ -58,7 +58,7 @@ import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
-import { useActiveWeb3React } from './index'
+import { useActiveWeb3React } from './useActiveWeb3React'
 
 // returns null on errors
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -380,6 +380,14 @@ export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | nu
     return useContract(address, SUSHIROLL_ABI, true)
 }
 
+// export function usePancakeRollV1Contract(): Contract | null {
+//     return useContract('0x677978dE066b3f5414eeA56644d9fCa3c75482a1', SUSHIROLL_ABI, true)
+// }
+
+// export function usePancakeRollV2Contract(): Contract | null {
+//     return useContract('', SUSHIROLL_ABI, true)
+// }
+
 export function useDashboardContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
@@ -391,7 +399,6 @@ export function useDashboardContract(): Contract | null {
             case ChainId.ROPSTEN:
                 address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
                 break
-
             case ChainId.BSC:
                 address = '0xCFbc963f223e39727e7d4075b759E97035457b48'
                 break

@@ -3,7 +3,7 @@ import Card from 'components/Card'
 import Column from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import Row, { RowBetween, RowFixed } from 'components/Row'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useToken } from 'hooks/Tokens'
 import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
 import { useRemoveUserAddedToken, useUserAddedTokens } from 'state/user/hooks'
@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { ButtonText, ExternalLink, ExternalLinkIcon, TrashIcon, TYPE } from 'theme'
 import { getExplorerLink, isAddress } from 'utils'
 import useTheme from '../../hooks/useTheme'
-import { CurrencyModalView } from './CurrencySearchModal'
+import CurrencyModalView from './CurrencyModalView'
 import ImportRow from './ImportRow'
 import { PaddedColumn, SearchInput, Separator } from './styleds'
 
@@ -34,7 +34,7 @@ const Footer = styled.div`
     text-align: center;
 `
 
-export default function ManageTokens({
+function ManageTokens({
     setModalView,
     setImportToken
 }: {
@@ -142,3 +142,5 @@ export default function ManageTokens({
         </Wrapper>
     )
 }
+
+export default ManageTokens

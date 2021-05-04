@@ -1,10 +1,10 @@
-import { Currency, Pair } from '@sushiswap/sdk'
+import { Currency, Pair, ChainId } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useTheme from '../../hooks/useTheme'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import CurrencyLogo from '../CurrencyLogo'
@@ -14,10 +14,8 @@ import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import Button from '../Button'
 import selectCoinAnimation from '../../assets/animation/select-coin.json'
 import Lottie from 'lottie-react'
-
 import { useUSDCPrice } from '../../hooks'
 import { formattedNum } from '../../utils'
-import { ChainId } from '@sushiswap/sdk'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}

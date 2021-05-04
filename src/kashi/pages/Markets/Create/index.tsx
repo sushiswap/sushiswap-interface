@@ -1,6 +1,7 @@
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { ethers } from 'ethers'
-import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBentoBoxContract } from 'hooks/useContract'
 import {
     ChainlinkToken,
     CHAINLINK_MAPPING,

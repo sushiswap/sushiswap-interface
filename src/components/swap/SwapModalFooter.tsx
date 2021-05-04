@@ -3,7 +3,7 @@ import React, { useContext, useMemo, useState } from 'react'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { Field } from '../../state/swap/actions'
 import { TYPE } from '../../theme'
 import {

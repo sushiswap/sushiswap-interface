@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React from 'react'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'

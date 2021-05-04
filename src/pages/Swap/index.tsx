@@ -21,12 +21,12 @@ import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/Bette
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/swap/SwapHeader'
+import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import TokenWarningModal from '../../components/TokenWarningModal'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
@@ -331,7 +331,7 @@ export default function Swap() {
                 onConfirm={handleConfirmTokenWarning}
             />
             <SwapPoolTabs active={'swap'} />
-            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl rounded">
+            <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-2xl rounded">
                 <SwapHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
                 <Wrapper id="swap-page">
                     <ConfirmSwapModal
@@ -347,24 +347,26 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-                    {/* {chainId && chainId === ChainId.MATIC && (
-                        <div className="max-w-xl pb-4 cursor-pointer">
+                    {chainId && chainId === ChainId.MATIC && (
+                        <div className="max-w-xl pb-4">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-gray-300">Welcome to Sushi on Matic/Polygon!</div>
+                                        <div className="text-gray-300">Welcome to Sushi on Polygon (Matic)</div>
                                         <div className="text-gray-600 text-sm">New network, new features</div>
                                     </div>
-                                    <button
-                                        type="button"
+                                    <a
+                                        href="https://ayokiroll.medium.com/cf7e932f3a8"
+                                        target="_blank"
+                                        rel="noreferrer noopener"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-dark-600"
                                     >
                                         Read Tutorial
-                                    </button>
+                                    </a>
                                 </div>
                             </DarkCard>
                         </div>
-                    )} */}
+                    )}
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
@@ -611,15 +613,14 @@ export default function Swap() {
                     </BottomGrouping>
                     {!trade && chainId && chainId === ChainId.MAINNET && (
                         <div
-                            className="hidden sm:block w-full cursor-pointer pt-4"
-                            style={{ maxWidth: '574px' }}
+                            className="hidden sm:block w-full cursor-pointer pt-4 w-full"
                             onClick={() => toggleNetworkModal()}
                         >
                             <DarkCard>
                                 <div className="flex justify-between items-center overflow-hidden">
                                     <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
                                     <div className="pl-32">
-                                        <div className="text-gray-300">Check out Sushi on Matic/Polygon!</div>
+                                        <div className="text-gray-300">Check out Sushi on Polygon (Matic)</div>
                                         <div className="text-gray-600 text-sm">
                                             Click here to switch to Polygon using Metamask
                                         </div>

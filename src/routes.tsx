@@ -1,8 +1,7 @@
 import { ChainId } from '@sushiswap/sdk'
 import React from 'react'
 import { Redirect, Route, RouteComponentProps, useLocation, Switch } from 'react-router-dom'
-import { useActiveWeb3React } from 'hooks'
-
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import Connect from './kashi/pages/Connect'
 import BorrowMarkets from './kashi/pages/Markets/Borrow'
 import CreateMarkets from './kashi/pages/Markets/Create'

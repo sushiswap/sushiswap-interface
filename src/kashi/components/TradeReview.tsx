@@ -4,7 +4,7 @@ import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from 'util
 import QuestionHelper from 'components/QuestionHelper'
 import FormattedPriceImpact from 'components/swap/FormattedPriceImpact'
 import { Field } from 'state/swap/actions'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import SwapRoute from 'components/swap/SwapRoute'
 
 function TradeReview({ trade, allowedSlippage }: { trade: Trade | undefined; allowedSlippage: any }) {

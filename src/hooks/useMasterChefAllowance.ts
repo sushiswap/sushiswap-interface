@@ -2,7 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 import ERC20_ABI from '../constants/abis/erc20.json'
-import { useActiveWeb3React, useContract, useMasterChefContract } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useContract, useMasterChefContract } from '../hooks/useContract'
 import { isAddress } from '../utils'
 
 const useAllowance = (lpAddress: string) => {

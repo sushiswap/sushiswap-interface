@@ -1,7 +1,7 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { ChainId, JSBI, TokenAmount } from '@sushiswap/sdk'
 import { useEffect, useState } from 'react'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useMerkleDistributorContract } from '../../hooks/useContract'
 import { calculateGasMargin, isAddress } from '../../utils'
 import { useSingleCallResult } from '../multicall/hooks'

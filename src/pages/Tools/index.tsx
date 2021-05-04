@@ -8,7 +8,7 @@ import { LightCard } from '../../components/CardLegacy'
 import { AutoColumn } from '../../components/Column'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 import { RowBetween, RowFixed } from '../../components/Row'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ExternalLink, HideSmall, TYPE } from '../../theme'
 import { Helmet } from 'react-helmet'
 

@@ -33,3 +33,5 @@ cypress/fixtures/example.json
 .vercel
 
 .eslintcache
+
+analysis/index.html

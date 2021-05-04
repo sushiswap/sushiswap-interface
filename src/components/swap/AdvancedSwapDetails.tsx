@@ -1,5 +1,5 @@
 import { Trade, TradeType, ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React, { useContext } from 'react'
 import { ThemeContext } from 'styled-components'
 import { Field } from '../../state/swap/actions'

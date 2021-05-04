@@ -1,8 +1,7 @@
 import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subHours } from 'date-fns'
 import { blockClient, blockClient_matic } from './client'
 import { blocksQuery } from './queries'
-
-import { useActiveWeb3React } from '../hooks/index'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { ChainId } from '@sushiswap/sdk'
 
 export async function getAverageBlockTime(chainId?: any) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../state/application/hooks'
 import { ExternalLink, TYPE } from '../theme'
 import { getExplorerLink } from '../utils'

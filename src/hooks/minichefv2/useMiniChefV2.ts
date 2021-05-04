@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { useMiniChefV2Contract } from 'hooks/useContract'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 
 import { useCallback } from 'react'
 import { useTransactionAdder } from '../../state/transactions/hooks'

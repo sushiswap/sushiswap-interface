@@ -2,7 +2,7 @@ import React from 'react'
 
 const TYPE = {
     information: {
-        color: 'bg-low-emphesis bg-opacity-20 text-high-emphesis',
+        color: 'bg-purple bg-opacity-20 text-high-emphesis',
         icon: (
             <svg
                 width="33"
@@ -81,7 +81,7 @@ export default function Alert({
             {title && <div className="text-2xl font-medium mb-1">{title}</div>}
             <div className="flex items-center">
                 {showIcon && <div className="flex-shrink-0">{icon}</div>}
-                <div className={`${!showIcon ? 'ml-0' : 'ml-3'}`}>
+                <div className={!showIcon ? 'ml-0' : 'ml-3'}>
                     <p>{message}</p>
                 </div>
             </div>

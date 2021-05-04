@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { StyledBalanceMaxMini } from './styleds'
 
 interface TradePriceProps {

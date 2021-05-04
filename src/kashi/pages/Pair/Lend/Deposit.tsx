@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Button } from 'components'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { WETH } from '@sushiswap/sdk'
 import { e10, ZERO } from 'kashi/functions/math'
 import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'

@@ -1,5 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { getTokenIcon } from 'kashi/functions'
 import React from 'react'
 

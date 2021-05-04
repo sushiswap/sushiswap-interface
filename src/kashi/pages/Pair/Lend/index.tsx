@@ -1,6 +1,6 @@
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import QuestionHelper from 'components/QuestionHelper'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { KashiContext, useKashiPair } from 'kashi/context'
 import { getTokenIcon } from 'kashi/functions'
 import React, { useContext, useState } from 'react'
