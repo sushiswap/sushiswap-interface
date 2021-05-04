@@ -11,6 +11,7 @@ import { ExternalLink, TYPE } from '../../theme'
 import AppBody from '../AppBody'
 import InariHeader from './InariHeader'
 import SushiInputPanel from './SushiInputPanel'
+import WithdrawalPanel from './WithdrawalPanel'
 import { Helmet } from 'react-helmet'
 
 export default function Inari() {
@@ -34,7 +35,18 @@ export default function Inari() {
                                 disableCurrencySelect={true}
                                 id="stake-liquidity-token"
                                 buttonText="Deposit"
-                                cornerRadiusBottomTop={true}
+                                cornerRadiusBottomNone={true}
+                                functionText={'SUSHI → xSUSHI → BENTO'}
+                            />
+                            <WithdrawalPanel
+                                label={''}
+                                disableCurrencySelect={true}
+                                customBalanceText={'Available to withdraw: '}
+                                id="withdraw-liquidity-token"
+                                buttonText="Withdraw"
+                                cornerRadiusTopNone={true}
+                                tokenName={'BENTO'}
+                                tokenBalanceText={'0xF5BCE5077908a1b7370B9ae04AdC565EBd643966'}
                                 functionText={'SUSHI → xSUSHI → BENTO'}
                             />
                         </AutoColumn>
@@ -50,7 +62,18 @@ export default function Inari() {
                                 disableCurrencySelect={true}
                                 id="stake-liquidity-token"
                                 buttonText="Deposit"
-                                cornerRadiusBottomTop={true}
+                                cornerRadiusBottomNone={true}
+                                functionText={'SUSHI → xSUSHI → AAVE'}
+                            />
+                            <WithdrawalPanel
+                                label={''}
+                                disableCurrencySelect={true}
+                                customBalanceText={'Available to withdraw: '}
+                                id="withdraw-liquidity-token"
+                                buttonText="Withdraw"
+                                cornerRadiusTopNone={true}
+                                tokenName={'aXSUSHI'}
+                                tokenBalanceText={'0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a'}
                                 functionText={'SUSHI → xSUSHI → AAVE'}
                             />
                         </AutoColumn>
@@ -66,7 +89,18 @@ export default function Inari() {
                                 disableCurrencySelect={true}
                                 id="stake-liquidity-token"
                                 buttonText="Deposit"
-                                cornerRadiusBottomTop={true}
+                                cornerRadiusBottomNone={true}
+                                functionText={'SUSHI → xSUSHI → CREAM -> BENTO'}
+                            />
+                            <WithdrawalPanel
+                                label={''}
+                                disableCurrencySelect={true}
+                                customBalanceText={'Available to withdraw: '}
+                                id="withdraw-liquidity-token"
+                                buttonText="Withdraw"
+                                cornerRadiusTopNone={true}
+                                tokenName={'BENTO'}
+                                tokenBalanceText={'0xF5BCE5077908a1b7370B9ae04AdC565EBd643966'}
                                 functionText={'SUSHI → xSUSHI → CREAM -> BENTO'}
                             />
                         </AutoColumn>
@@ -82,7 +116,18 @@ export default function Inari() {
                                 disableCurrencySelect={true}
                                 id="stake-liquidity-token"
                                 buttonText="Deposit"
-                                cornerRadiusBottomTop={true}
+                                cornerRadiusBottomNone={true}
+                                functionText={'SUSHI → xSUSHI → CREAM'}
+                            />
+                            <WithdrawalPanel
+                                label={''}
+                                disableCurrencySelect={true}
+                                customBalanceText={'Available to withdraw: '}
+                                id="withdraw-liquidity-token"
+                                buttonText="Withdraw"
+                                cornerRadiusTopNone={true}
+                                tokenName={'crXSUSHI'}
+                                tokenBalanceText={'0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2'}
                                 functionText={'SUSHI → xSUSHI → CREAM'}
                             />
                         </AutoColumn>

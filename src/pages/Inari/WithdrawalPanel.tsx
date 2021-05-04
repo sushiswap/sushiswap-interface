@@ -113,38 +113,45 @@ const StyledBalanceMax = styled.button`
 
 interface CurrencyInputPanelProps {
     label?: string
+    lpTokenAddress?: string
     disableCurrencySelect?: boolean
+    hideBalance?: boolean
+    pair?: Pair | null
     hideInput?: boolean
     id: string
+    customBalanceText?: string
     buttonText?: string
     cornerRadiusBottomNone?: boolean
     cornerRadiusTopNone?: boolean
+    tokenName?: string
+    tokenBalanceText: string
     functionText?: string
 }
 
 export default function CurrencyInputPanel({
     label = 'Input',
+    lpTokenAddress,
     disableCurrencySelect = false,
+    hideBalance = false,
     hideInput = false,
     id,
+    customBalanceText,
     buttonText,
     cornerRadiusBottomNone,
     cornerRadiusTopNone,
+    tokenName,
+    tokenBalanceText,
     functionText,
 }: CurrencyInputPanelProps) {
     const { t } = useTranslation()
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
-    const { allowance, approve, stakeSushiToBento, stakeSushiToAave, stakeSushiToCream, stakeSushiToCreamToBento } = useInari()
+    const { allowance, approve, unstakeSushiFromBento, unstakeSushiFromAave, unstakeSushiFromCreamFromBento, unstakeSushiFromCream } = useInari()
 
-    const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
-    const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
-    const decimals = sushiBalanceBigInt?.decimals
-
-    console.log('sushi allowance:', allowance)
-
-    console.log('sushiBalance:', sushiBalance, sushiBalanceBigInt, decimals)
+    const tokenBalanceBigInt = useTokenBalance(tokenBalanceText)
+    const tokenBalance = formatFromBalance(tokenBalanceBigInt?.value, tokenBalanceBigInt?.decimals)
+    const decimals = tokenBalanceBigInt?.decimals
 
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
@@ -152,7 +159,6 @@ export default function CurrencyInputPanel({
         try {
             setRequestedApproval(true)
             const txHash = await approve()
-            console.log(txHash)
             // user rejected tx or didn't go thru
             if (!txHash) {
                 setRequestedApproval(false)
@@ -173,22 +179,22 @@ export default function CurrencyInputPanel({
         setDepositValue(depositValue)
     }, [])
     // used for max input button
-    const maxDepositAmountInput = sushiBalanceBigInt
+    const maxDepositAmountInput = tokenBalanceBigInt
     //const atMaxDepositAmount = true
     const handleMaxDeposit = useCallback(() => {
-        maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
-    }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
+        maxDepositAmountInput && onUserDepositInput(tokenBalance, true)
+    }, [maxDepositAmountInput, onUserDepositInput, tokenBalance])
 
-    // handle Inari contract
-    const stakeFunction = (amount: BalanceProps | undefined) => {
+    // handle withdraw function
+    const leave = (amount: BalanceProps | undefined) => {
         if (functionText === 'SUSHI → xSUSHI → BENTO') {
-            stakeSushiToBento(amount)
+            unstakeSushiFromBento(amount)
         } else if (functionText === 'SUSHI → xSUSHI → AAVE') {
-            stakeSushiToAave(amount)
+            unstakeSushiFromAave(amount)
         } else if (functionText === 'SUSHI → xSUSHI → CREAM -> BENTO') {
-            stakeSushiToCreamToBento(amount)
+            unstakeSushiFromCreamFromBento(amount)
         } else if (functionText === 'SUSHI → xSUSHI → CREAM') {
-            stakeSushiToCream(amount)
+            unstakeSushiFromCream(amount)
         }
     }
 
@@ -215,7 +221,7 @@ export default function CurrencyInputPanel({
                                         fontSize={14}
                                         style={{ display: 'inline', cursor: 'pointer' }}
                                     >
-                                        SUSHI Balance: {sushiBalance}
+                                        {tokenName} Balance: {tokenBalance}
                                     </TYPE.body>
                                 )}
                             </RowBetween>
@@ -240,7 +246,7 @@ export default function CurrencyInputPanel({
                             </>
                         )}
                         {!allowance || Number(allowance) === 0 ? (
-                            <ButtonSelect onClick={handleApprove}>
+                            <ButtonSelect onClick={handleApprove} disabled={requestedApproval}>
                                 <Aligner>
                                     <StyledButtonName>Approve</StyledButtonName>
                                 </Aligner>
@@ -249,23 +255,22 @@ export default function CurrencyInputPanel({
                             <ButtonSelect
                                 disabled={
                                     pendingTx ||
-                                    !sushiBalance ||
+                                    !tokenBalance ||
                                     Number(depositValue) === 0 ||
-                                    // todo this should be a bigInt comparison
-                                    Number(depositValue) > Number(sushiBalance)
+                                    Number(depositValue) > Number(tokenBalance)
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
                                     if (maxSelected) {
-                                        await stakeFunction(maxDepositAmountInput)
+                                        await leave(maxDepositAmountInput)
                                     } else {
-                                        await stakeFunction(formatToBalance(depositValue, decimals))
+                                        await leave(formatToBalance(depositValue, decimals))
                                     }
                                     setPendingTx(false)
                                 }}
                             >
                                 <Aligner>
-                                    <StyledButtonName>{buttonText}</StyledButtonName>
+                                    <StyledButtonName>Withdraw</StyledButtonName>
                                 </Aligner>
                             </ButtonSelect>
                         )}

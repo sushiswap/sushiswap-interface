@@ -51,7 +51,7 @@ export const MINIMUM_INTEREST_PER_YEAR = BigNumber.from(79274480)
 export const MAXIMUM_INTEREST_PER_YEAR = BigNumber.from(317097920000)
     .mul(BigNumber.from(60))
     .mul(BigNumber.from(60))
-    .mul(BigNumber.from(24))
+    .mul(BigNumber.from(24))        
     .mul(BigNumber.from(365)) // approx 1000% APR
 
 export const INTEREST_ELASTICITY = BigNumber.from('28800000000000000000000000000000000000000') // Half or double in 28800 seconds (8 hours) if linear
@@ -62,11 +62,11 @@ export const PROTOCOL_FEE = BigNumber.from('10000') // 10%
 
 export const PROTOCOL_FEE_DIVISOR = BigNumber.from('100000')
 
-export const AAVE_ADDRESS = '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9'
+export const AAVE_ADDRESS = '0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a'
 
 export const BENTOBOX_ADDRESS = '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966'
 
-export const CREAM_ADDRESS = '0x2ba592F78dB6436527729929AAf6c908497cB200'
+export const CREAM_ADDRESS = '0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2'
 
 export const KASHI_ADDRESS = '0x2cBA6Ab6574646Badc84F0544d05059e57a5dc42'
 

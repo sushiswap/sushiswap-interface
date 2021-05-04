@@ -1,22 +1,14 @@
 [
     {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
                 "internalType": "address",
-                "name": "previousAdmin",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "newAdmin",
+                "name": "admin",
                 "type": "address"
             }
         ],
-        "name": "AdminChanged",
-        "type": "event"
+        "stateMutability": "nonpayable",
+        "type": "constructor"
     },
     {
         "anonymous": false,
@@ -49,19 +41,6 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "newAdmin",
-                "type": "address"
-            }
-        ],
-        "name": "changeAdmin",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "implementation",
         "outputs": [
@@ -72,29 +51,6 @@
             }
         ],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_logic",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_admin",
-                "type": "address"
-            },
-            {
-                "internalType": "bytes",
-                "name": "_data",
-                "type": "bytes"
-            }
-        ],
-        "name": "initialize",
-        "outputs": [],
-        "stateMutability": "payable",
         "type": "function"
     },
     {
