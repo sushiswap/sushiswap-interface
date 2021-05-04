@@ -1,11 +1,8 @@
-import React, { useContext, useMemo } from 'react'
-import { Currency, JSBI, Pair } from '@sushiswap/sdk'
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import { ThemeContext } from 'styled-components'
-import { Sliders } from 'react-feather'
+import React, { useMemo } from 'react'
+import { JSBI, Pair } from '@sushiswap/sdk'
 import { Button } from 'components'
 import { LinkStyledButton } from '../../theme'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useTokenBalancesWithLoadingIndicator } from 'state/wallet/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { usePairs } from 'data/Reserves'
@@ -24,7 +21,6 @@ type Position = {
         amount: string
     }
 }
-
 
 export default function LiquidityPositions() {
     const { account } = useActiveWeb3React()

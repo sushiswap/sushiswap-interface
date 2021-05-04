@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { JSBI, Pair } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { unwrappedToken } from 'utils/wrappedCurrency'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTotalSupply } from 'data/TotalSupply'
