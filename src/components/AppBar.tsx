@@ -1,5 +1,6 @@
 import { ChainId, Currency } from '@sushiswap/sdk'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Logo from '../assets/images/logo.png'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
@@ -19,14 +20,25 @@ import QuestionHelper from './QuestionHelper'
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
     const { t } = useTranslation()
+    const { pathname } = useLocation()
+
+    const [navClassList, setNavClassList] = useState("w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur")
 
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+
+    useEffect(() => {
+        if(pathname === '/trade') {
+            setNavClassList("w-screen bg-transparent z-10 backdrop-filter backdrop-blur")
+        } else {
+            setNavClassList("w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur")
+        }
+    }, [pathname])
 
     return (
         <header className="flex flex-row flex-nowrap justify-between w-screen">
             <Disclosure
                 as="nav"
-                className="w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur"
+                className={navClassList}
             >
                 {({ open }) => (
                     <>
