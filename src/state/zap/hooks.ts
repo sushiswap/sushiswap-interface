@@ -88,12 +88,6 @@ export function useDerivedZapInfo(
     const currencyBalance = balances[0]
 
     const parsedAmount = tryParseAmount(typedValue, currency)
-
-    // This math is currently incorrect
-    // Shouldn't be diving by 2
-    // Should instead be determining the x to y ratio
-    console.log({ currency0, currency1 }, 'HEREHERHERHEREHREH')
-    // const rawTradeAmount = JSBI()
     const tradeAmount = tryParseAmount((+typedValue / 2).toString(), currency)
 
     // Zapping in requires either one or two trades
@@ -124,8 +118,6 @@ export function useDerivedZapInfo(
     // hooks each render otherwsie
     if (isTradingCurrency0) currencyZeroOutput = tradeAmount
     if (isTradingCurrency1) currencyOneOutput = tradeAmount
-
-    console.log(isTradingCurrency0, isTradingCurrency1, currencyZeroOutput, currencyOneOutput)
 
     const liquidityMinted = useMemo(() => {
         const [tokenAmountA, tokenAmountB] = [
@@ -167,7 +159,6 @@ export function useDerivedZapInfo(
                 currency?.symbol !== currency0?.symbol &&
                 currency?.symbol !== currency1?.symbol
             ) {
-                console.log(currencyZeroTrade)
                 return routerIface.encodeFunctionData('swapExactETHForTokens', [
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
                     // path,
@@ -182,7 +173,6 @@ export function useDerivedZapInfo(
                 currency?.symbol !== currency0?.symbol &&
                 currency?.symbol !== currency1?.symbol
             ) {
-                console.log(currencyZeroTrade, parsedAmount)
                 return routerIface.encodeFunctionData('swapExactTokensForTokens', [
                     parsedAmount?.raw.toString(),
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
