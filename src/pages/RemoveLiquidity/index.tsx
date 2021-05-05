@@ -44,6 +44,7 @@ import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/Advance
 import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
+import { Alert } from '../../components'
 
 export default function RemoveLiquidity({
     history,
@@ -539,15 +540,18 @@ export default function RemoveLiquidity({
                         pendingText={pendingText}
                     />
                     <AutoColumn gap="md">
-                        <BlueCard>
-                            <AutoColumn gap="10px">
-                                <TYPE.link fontWeight={400} color={'primaryText1'}>
+                        <Alert
+                            showIcon={false}
+                            message={
+                                <>
                                     <b>Tip:</b> Removing pool tokens converts your position back into underlying tokens
                                     at the current rate, proportional to your share of the pool. Accrued fees are
                                     included in the amounts you receive.
-                                </TYPE.link>
-                            </AutoColumn>
-                        </BlueCard>
+                                </>
+                            }
+                            type="information"
+                        />
+
                         <LiquidityHeader input={currencyA} output={currencyB} />
                         <PercentInputPanel
                             value={formattedAmounts[Field.LIQUIDITY_PERCENT]}
