@@ -197,12 +197,14 @@ const AddSingleSideLiquidity = ({
     },
     history
 }: RouteComponentProps<{ poolAddress?: string; currencyId?: string }>) => {
+    console.log('render')
     const { account, chainId } = useActiveWeb3React()
 
     const currency = useCurrency(currencyId)
-    const { typedValue } = useZapState()
+    // const { typedValue } = useZapState()
     const { onFieldInput } = useZapActionHandlers(false)
     const {
+        typedValue,
         currencyBalance,
         parsedAmount,
         error,
@@ -211,7 +213,7 @@ const AddSingleSideLiquidity = ({
         currencyOneOutput,
         currencyZeroOutput,
         isTradingUnderlying,
-        encodedSwapData
+        encodeSwapData
     } = useDerivedZapInfo(currency ?? undefined, poolAddress)
     const { zapIn } = useZapper(currency ?? undefined)
     const dispatch = useDispatch<AppDispatch>()
@@ -264,6 +266,8 @@ const AddSingleSideLiquidity = ({
     const toggleWalletModal = useWalletModalToggle()
 
     const zapCallback = useCallback(() => {
+        const swapData = encodeSwapData()
+
         zapIn(
             currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
             poolAddress,
@@ -274,7 +278,7 @@ const AddSingleSideLiquidity = ({
                 ? poolAddress
                 : ROUTER_ADDRESS[chainId || 1],
             minTokensReceived.toString(),
-            encodedSwapData
+            swapData
         ).then(
             () => dispatch(resetZapState()),
             err => console.log(err, 'zap error')
