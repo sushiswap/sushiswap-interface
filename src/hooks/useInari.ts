@@ -2,7 +2,7 @@ import { Fraction } from '../entities'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
 import useActiveWeb3React from '../hooks/useActiveWeb3React'
-import { useInariContract, useSushiContract, useBentoBoxContract, useAaveContract, useCreamContract } from '../hooks/useContract'
+import { useInariContract, useSushiContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { BalanceProps } from './useTokenBalance'
 
@@ -14,9 +14,6 @@ const useInari = () => {
     const addTransaction = useTransactionAdder()
     const sushiContract = useSushiContract(true) // withSigner
     const inariContract = useInariContract(true)
-    const bentoBoxContract = useBentoBoxContract(true)
-    const aaveContract = useAaveContract(true)
-    const creamContract = useCreamContract(true)
 
     // Allowance
     const [allowance, setAllowance] = useState('0')
@@ -56,14 +53,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.stakeSushiToAave(aaveContract?.address, amount?.value)
+                    const tx = await inariContract?.stakeSushiToAave(account, amount?.value)
                     return addTransaction(tx, { summary: 'SUSHI → xSUSHI → AAVE' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, aaveContract?.address]
+        [account, addTransaction]
     )
 
     // Unstake AAVE -> xSUSHI -> SUSHI
@@ -71,14 +68,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.unstakeSushiFromAave(aaveContract?.address, amount?.value)
+                    const tx = await inariContract?.unstakeSushiFromAave(account, amount?.value)
                     return addTransaction(tx, { summary: 'AAVE -> xSUSHI -> SUSHI' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, aaveContract?.address]
+        [account, addTransaction]
     )
 
     // Stake SUSHI → xSUSHI → BENTO
@@ -86,14 +83,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.stakeSushiToBento( bentoBoxContract?.address, amount?.value)
+                    const tx = await inariContract?.stakeSushiToBento(account, amount?.value)
                     return addTransaction(tx, { summary: 'SUSHI → xSUSHI → BENTO' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, bentoBoxContract?.address]
+        [account, addTransaction]
     )
 
     // Unstake BENTO -> xSUSHI -> SUSHI
@@ -101,14 +98,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.unstakeSushiFromBento( bentoBoxContract?.address, amount?.value)
+                    const tx = await inariContract?.unstakeSushiFromBento(account, amount?.value)
                     return addTransaction(tx, { summary: 'BENTO -> xSUSHI -> SUSHI' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, bentoBoxContract?.address]
+        [account, addTransaction]
     )
 
     // Stake SUSHI → xSUSHI → CREAM -> BENTO
@@ -116,14 +113,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.stakeSushiToCreamToBento(bentoBoxContract?.address, amount?.value)
+                    const tx = await inariContract?.stakeSushiToCreamToBento(account, amount?.value)
                     return addTransaction(tx, { summary: 'SUSHI -> xSUSHI -> CREAM -> BENTO' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, bentoBoxContract?.address]
+        [account, addTransaction]
     )
 
     // Unstake BENTO -> CREAM -> xSUSHI -> SUSHI
@@ -131,14 +128,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.unstakeSushiFromCreamFromBento(bentoBoxContract?.address, amount?.value)
+                    const tx = await inariContract?.unstakeSushiFromCreamFromBento(account, amount?.value)
                     return addTransaction(tx, { summary: 'BENTO -> CREAM -> xSUSHI -> SUSHI' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, bentoBoxContract?.address]
+        [account, addTransaction]
     )
 
     // Stake SUSHI → xSUSHI → CREAM
@@ -146,14 +143,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.stakeSushiToCreamToBento(creamContract?.address, amount?.value)
+                    const tx = await inariContract?.stakeSushiToCreamToBento(account, amount?.value)
                     return addTransaction(tx, { summary: 'SUSHI -> xSUSHI -> CREAM' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, creamContract?.address]
+        [account, addTransaction]
     )
 
     // Unstake CREAM → xSUSHI → SUSHI
@@ -161,14 +158,14 @@ const useInari = () => {
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await inariContract?.unstakeSushiFromCream(creamContract?.address, amount?.value)
+                    const tx = await inariContract?.unstakeSushiFromCream(account, amount?.value)
                     return addTransaction(tx, { summary: 'CREAM → xSUSHI → SUSHI' })
                 } catch (e) {
                     return e
                 }
             }
         },
-        [addTransaction, creamContract?.address]
+        [account, addTransaction]
     )
 
     return { allowance, approve, stakeSushiToAave, unstakeSushiFromAave, stakeSushiToBento, unstakeSushiFromBento,

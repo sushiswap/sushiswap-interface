@@ -18,10 +18,8 @@ import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
 import {
-    AAVE_ADDRESS,
     BENTOBOX_ADDRESS,
     CHAINLINK_ORACLE_ADDRESS,
-    CREAM_ADDRESS,
     INARI_ADDRESS,
     KASHI_ADDRESS,
     KASHI_HELPER_ADDRESS,
@@ -41,11 +39,9 @@ import ERC20_ABI from '../constants/abis/erc20.json'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import WETH_ABI from '../constants/abis/weth.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
-import AAVE_ABI from '../constants/abis/aave.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
 import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
-import CREAM_ABI from '../constants/abis/cream.json'
 import DASHBOARD_ABI from '../constants/abis/dashboard.json'
 import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
 import FACTORY_ABI from '../constants/abis/factory.json'
@@ -217,14 +213,6 @@ export function useChainlinkOracle(): Contract | null {
 
 export function useInariContract(withSignerIfPossible?: boolean): Contract | null {
     return useContract(INARI_ADDRESS, INARI_ABI, withSignerIfPossible)
-}
-
-export function useAaveContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(AAVE_ADDRESS, AAVE_ABI, withSignerIfPossible)
-}
-
-export function useCreamContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(CREAM_ADDRESS, CREAM_ABI, withSignerIfPossible)
 }
 
 // experimental:
