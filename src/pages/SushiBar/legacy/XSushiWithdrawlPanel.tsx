@@ -1,16 +1,16 @@
 import { Pair } from '@sushiswap/sdk'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { RowBetween } from 'components/Row'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import useTheme from 'hooks/useTheme'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import useSushiBar from 'hooks/useSushiBar'
 import useTokenBalance from 'hooks/useTokenBalance'
-import { TYPE } from 'theme'
-import { formatFromBalance, formatToBalance } from '../../utils'
+import { Input as NumericalInput } from '../../../components/NumericalInput'
+import { RowBetween } from '../../../components/Row'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import useTheme from '../../../hooks/useTheme'
+import useSushiBar from '../../../hooks/useSushiBar'
+import { TYPE } from '../../../theme'
+import { formatFromBalance, formatToBalance } from '../../../utils'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -141,11 +141,11 @@ export default function CurrencyInputPanel({
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
-    const { allowance, approve, enter } = useSushiBar()
+    const { allowance, approve, leave } = useSushiBar()
 
-    const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
-    const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
-    const decimals = sushiBalanceBigInt?.decimals
+    const xSushiBalanceBigInt = useTokenBalance('0x8798249c2e607446efb7ad49ec89dd1865ff4272')
+    const xSushiBalance = formatFromBalance(xSushiBalanceBigInt?.value, xSushiBalanceBigInt?.decimals)
+    const decimals = xSushiBalanceBigInt?.decimals
 
     // handle approval
     const [requestedApproval, setRequestedApproval] = useState(false)
@@ -173,11 +173,11 @@ export default function CurrencyInputPanel({
         setDepositValue(depositValue)
     }, [])
     // used for max input button
-    const maxDepositAmountInput = sushiBalanceBigInt
+    const maxDepositAmountInput = xSushiBalanceBigInt
     //const atMaxDepositAmount = true
     const handleMaxDeposit = useCallback(() => {
-        maxDepositAmountInput && onUserDepositInput(sushiBalance, true)
-    }, [maxDepositAmountInput, onUserDepositInput, sushiBalance])
+        maxDepositAmountInput && onUserDepositInput(xSushiBalance, true)
+    }, [maxDepositAmountInput, onUserDepositInput, xSushiBalance])
 
     return (
         <>
@@ -202,7 +202,7 @@ export default function CurrencyInputPanel({
                                         fontSize={14}
                                         style={{ display: 'inline', cursor: 'pointer' }}
                                     >
-                                        SUSHI Balance: {sushiBalance}
+                                        xSUSHI Balance: {xSushiBalance}
                                     </TYPE.body>
                                 )}
                             </RowBetween>
@@ -236,22 +236,22 @@ export default function CurrencyInputPanel({
                             <ButtonSelect
                                 disabled={
                                     pendingTx ||
-                                    !sushiBalance ||
+                                    !xSushiBalance ||
                                     Number(depositValue) === 0 ||
-                                    Number(depositValue) > Number(sushiBalance)
+                                    Number(depositValue) > Number(xSushiBalance)
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
                                     if (maxSelected) {
-                                        await enter(maxDepositAmountInput)
+                                        await leave(maxDepositAmountInput)
                                     } else {
-                                        await enter(formatToBalance(depositValue, decimals))
+                                        await leave(formatToBalance(depositValue, decimals))
                                     }
                                     setPendingTx(false)
                                 }}
                             >
                                 <Aligner>
-                                    <StyledButtonName>Deposit</StyledButtonName>
+                                    <StyledButtonName>Withdraw</StyledButtonName>
                                 </Aligner>
                             </ButtonSelect>
                         )}

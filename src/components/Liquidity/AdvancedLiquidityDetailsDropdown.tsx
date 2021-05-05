@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useLastTruthy } from '../../hooks/useLast'
 import { AdvancedLiquidityDetails, AdvancedLiquidityDetailsProps } from './AdvancedLiquidityDetails'
 
 const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
@@ -19,11 +18,10 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
     transition: transform 300ms ease-in-out;
 `
 
-export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: AdvancedLiquidityDetailsProps) {
-    const lastTrade = useLastTruthy(trade)
+export default function AdvancedSwapDetailsDropdown({ show, ...rest }: AdvancedLiquidityDetailsProps) {
     return (
-        <AdvancedDetailsFooter show={Boolean(trade)}>
-            <AdvancedLiquidityDetails {...rest} trade={trade ?? lastTrade ?? undefined} />
+        <AdvancedDetailsFooter show={Boolean(show)}>
+            <AdvancedLiquidityDetails {...rest} />
         </AdvancedDetailsFooter>
     )
 }
