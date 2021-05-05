@@ -17,15 +17,11 @@ const usePool = (poolAddress: string | undefined) => {
             poolContract?.totalSupply()
         ])
 
-        const ratio = +reserves?.reserve0 / +reserves?.reserve1
-        console.log(ratio, reserves, 'here is ration')
-
         setPoolData({
             reserves,
             token0,
             token1,
-            totalSupply,
-            ratio
+            totalSupply
         })
     }, [poolAddress])
 

@@ -1,5 +1,5 @@
-import { Currency, ETHER, ChainId, JSBI, Percent } from '@sushiswap/sdk'
-import React, { useContext, useCallback, useState, useEffect } from 'react'
+import { Currency, ETHER, ChainId, JSBI, Percent, ROUTER_ADDRESS, WETH } from '@sushiswap/sdk'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { transparentize } from 'polished'
@@ -36,6 +36,7 @@ import { resetZapState } from 'state/zap/actions'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import { getZapperAddress } from 'constants/addresses'
 import { Alert } from 'components'
+import { pool } from '@sushiswap/sushi-data/typings/masterchef'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -46,7 +47,7 @@ const PoolAllocationWrapper = styled.div`
 
 const PoolBreakDownWrapper = styled.div`
   background-color: ${({ theme }) => theme.bg1};
-  border-top: 1px solid ${({ theme }) => theme.bg3};
+  border-top: 1px solid rgba(42, 58, 80, 0.4);
   padding: 1rem
   border-radius: 0 0 0.625rem 0.625rem;
 `
@@ -95,9 +96,17 @@ const PoolInfo = ({ poolAddress, currency }: { poolAddress: string; currency: Cu
                     <TYPE.subHeader fontWeight={500} fontSize="22px">
                         {liquidityMinted?.toSignificant(6) || '0'}
                     </TYPE.subHeader>
-                    <TYPE.subHeader fontWeight={500} fontSize="22px">
-                        {currency0 && currency1 && `${currency0?.symbol}/${currency1?.symbol}`}
-                    </TYPE.subHeader>
+                    <div className="inline-flex">
+                        <TYPE.subHeader fontWeight={500} fontSize="22px">
+                            {currency0 && currency1 && `${currency0?.symbol}${' '}`}
+                        </TYPE.subHeader>
+                        <TYPE.darkGray fontWeight={500} fontSize="22px" className="mx-1">
+                            /
+                        </TYPE.darkGray>
+                        <TYPE.subHeader fontWeight={500} fontSize="22px">
+                            {`${' '}${currency1?.symbol}`}
+                        </TYPE.subHeader>
+                    </div>
                 </RowBetween>
             </PoolAllocationWrapper>
             <PoolBreakDownWrapper>
@@ -200,6 +209,7 @@ const AddSingleSideLiquidity = ({
         liquidityMinted,
         currencyOneOutput,
         currencyZeroOutput,
+        isTradingUnderlying,
         encodedSwapData
     } = useDerivedZapInfo(currency ?? undefined, poolAddress)
     const { zapIn } = useZapper(currency ?? undefined)
@@ -257,13 +267,18 @@ const AddSingleSideLiquidity = ({
             currency === ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
             poolAddress,
             parsedAmount,
+            currency === ETHER && isTradingUnderlying
+                ? WETH[chainId || 1].address
+                : isTradingUnderlying
+                ? poolAddress
+                : ROUTER_ADDRESS[chainId || 1],
             minTokensReceived.toString(),
             encodedSwapData
         ).then(
             () => dispatch(resetZapState()),
-            err => console.log(err, 'ZAP ERR???')
+            err => console.log(err, 'zap error')
         )
-    }, [currency, poolAddress, parsedAmount, minTokensReceived])
+    }, [currency, poolAddress, chainId, parsedAmount, minTokensReceived])
 
     return (
         <>

@@ -1,24 +1,29 @@
 import { useCallback } from 'react'
-import { Currency, CurrencyAmount, ROUTER_ADDRESS } from '@sushiswap/sdk'
-import { useRouterContract, useZapperContract } from '../hooks/useContract'
+import { Currency, CurrencyAmount } from '@sushiswap/sdk'
+import { useZapperContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
-
 import { useActiveWeb3React } from '../hooks'
 
 const useZapper = (currency?: Currency) => {
     const { chainId, account } = useActiveWeb3React()
     const zapperContract = useZapperContract(true)
-    const routerContract = useRouterContract()
     const addTransaction = useTransactionAdder()
 
     const zapIn = useCallback(
-        async (fromTokenContractAddress, pairAddress, amount: CurrencyAmount | undefined, minPoolTokens, swapData) => {
+        async (
+            fromTokenContractAddress,
+            pairAddress,
+            amount: CurrencyAmount | undefined,
+            swapTarget,
+            minPoolTokens,
+            swapData
+        ) => {
             const tx = await zapperContract?.ZapIn(
                 fromTokenContractAddress,
                 pairAddress,
                 amount?.raw.toString(),
                 minPoolTokens,
-                ROUTER_ADDRESS[chainId || 1],
+                swapTarget,
                 // Call data for swap if necessary
                 swapData,
                 // Affiliate

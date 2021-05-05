@@ -1,4 +1,16 @@
-import { Currency, CurrencyAmount, ETHER, JSBI, Pair, Percent, Price, TokenAmount, Trade, WETH } from '@sushiswap/sdk'
+import {
+    Currency,
+    CurrencyAmount,
+    ETHER,
+    JSBI,
+    Pair,
+    Percent,
+    Price,
+    TokenAmount,
+    Trade,
+    WETH,
+    ROUTER_ADDRESS
+} from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ethers } from 'ethers'
@@ -19,6 +31,7 @@ import { useUserSlippageTolerance } from 'state/user/hooks'
 import { basisPointsToPercent } from 'utils'
 import { getZapperAddress } from 'constants/addresses'
 import useTransactionDeadline from 'hooks/useTransactionDeadline'
+import useDebounce from 'hooks/useDebounce'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -62,6 +75,7 @@ export function useDerivedZapInfo(
     poolTokenPercentage?: Percent
     bestTrade?: Trade
     encodedSwapData: string | number
+    isTradingUnderlying: boolean
     error?: string
 } {
     const { account, chainId } = useActiveWeb3React()
@@ -100,10 +114,10 @@ export function useDerivedZapInfo(
         currency?.symbol === currency1?.symbol ||
         (currency1?.symbol === WETH[chainId || 1].symbol && currency === ETHER)
 
-    const currencyZeroTrade = useTradeExactIn(tradeAmount, currency0 ?? undefined)
-    const currencyOneTrade = useTradeExactIn(tradeAmount, currency1 ?? undefined)
-    let currencyZeroOutput = useTradeExactIn(tradeAmount, currency0 ?? undefined)?.outputAmount
-    let currencyOneOutput = useTradeExactIn(tradeAmount, currency1 ?? undefined)?.outputAmount
+    const currencyZeroTrade = useDebounce(useTradeExactIn(tradeAmount, currency0 ?? undefined), 200)
+    const currencyOneTrade = useDebounce(useTradeExactIn(tradeAmount, currency1 ?? undefined), 200)
+    let currencyZeroOutput = currencyZeroTrade?.outputAmount
+    let currencyOneOutput = currencyOneTrade?.outputAmount
     const bestTradeExactIn = useTradeExactIn(
         tradeAmount,
         !isTradingCurrency0 && !isTradingCurrency1
@@ -118,6 +132,8 @@ export function useDerivedZapInfo(
     // hooks each render otherwsie
     if (isTradingCurrency0) currencyZeroOutput = tradeAmount
     if (isTradingCurrency1) currencyOneOutput = tradeAmount
+
+    const isTradingUnderlying = isTradingCurrency0 || isTradingCurrency1
 
     const liquidityMinted = useMemo(() => {
         const [tokenAmountA, tokenAmountB] = [
@@ -152,6 +168,9 @@ export function useDerivedZapInfo(
     const routerIface = new ethers.utils.Interface(ROUTER_ABI)
     const pct = basisPointsToPercent(allowedSlippage)
     const zapperAddress = getZapperAddress(chainId)
+
+    // These is a pretty heavy call so using a debounce on the trade
+    // to make input more responsive
     const encodedSwapData = useMemo(() => {
         if (!!currencyZeroTrade && !!currencyOneTrade && parsedAmount !== undefined) {
             if (
@@ -161,7 +180,6 @@ export function useDerivedZapInfo(
             ) {
                 return routerIface.encodeFunctionData('swapExactETHForTokens', [
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
-                    // path,
                     currencyZeroTrade?.route.path.map(t => t.address),
                     zapperAddress,
                     deadline
@@ -176,7 +194,6 @@ export function useDerivedZapInfo(
                 return routerIface.encodeFunctionData('swapExactTokensForTokens', [
                     parsedAmount?.raw.toString(),
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
-                    // path,
                     currencyZeroTrade?.route.path.map(t => t.address),
                     zapperAddress,
                     deadline
@@ -214,6 +231,7 @@ export function useDerivedZapInfo(
         currencyZeroOutput,
         currencyOneOutput,
         encodedSwapData,
+        isTradingUnderlying,
         bestTrade: bestTradeExactIn ?? undefined
     }
 }
