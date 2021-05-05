@@ -65,7 +65,7 @@ function AppBar(): JSX.Element {
                                             >
                                                 {t('pool')}
                                             </NavLink>
-                                            {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                                            {chainId && [ChainId.MAINNET].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
                                                     Yield
                                                 </NavLink>
@@ -334,7 +334,7 @@ function AppBar(): JSX.Element {
                                     {t('pool')}
                                 </NavLink>
 
-                                {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
+                                {chainId === ChainId.MAINNET && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
                                         Yield
                                     </NavLink>
