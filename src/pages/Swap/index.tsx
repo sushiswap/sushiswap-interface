@@ -352,14 +352,14 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-gray-300">Welcome to Sushi on Polygon (Matic)</div>
-                                        <div className="text-gray-600 text-sm">New network, new features</div>
+                                        <div className="text-high-emphesis">Welcome to Sushi on Polygon (Matic)</div>
+                                        <div className="text-high-emphesis text-sm">New network, new features</div>
                                     </div>
                                     <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
                                         target="_blank"
                                         rel="noreferrer noopener"
-                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-dark-600"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-high-emphesis text-high-emphesis"
                                     >
                                         Read Tutorial
                                     </a>
@@ -620,8 +620,8 @@ export default function Swap() {
                                 <div className="flex justify-between items-center overflow-hidden">
                                     <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
                                     <div className="pl-32">
-                                        <div className="text-gray-300">Check out Sushi on Polygon (Matic)</div>
-                                        <div className="text-gray-600 text-sm">
+                                        <div className="text-high-emphesis">Check out Sushi on Polygon (Matic)</div>
+                                        <div className="text-high-emphesis text-sm">
                                             Click here to switch to Polygon using Metamask
                                         </div>
                                     </div>

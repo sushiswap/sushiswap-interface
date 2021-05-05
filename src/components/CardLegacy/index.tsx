@@ -28,7 +28,7 @@ export const DarkCard = styled(Card)`
     overflow: hidden;
     background-origin: border-box;
     position: relative;
-    background-color: #0d0d1f;
+    background-color: #332147;
     &:hover {
         background-origin: border-box;
         &::after {
