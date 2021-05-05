@@ -11,7 +11,7 @@ import {
 function Link<S = H.LocationState>({
     href = '#',
     children,
-    className = 'text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3',
+    className = 'text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-1 md:p-2',
     ...rest
 }: React.PropsWithoutRef<ReactRouterLinkProps<S>> & React.RefAttributes<HTMLAnchorElement>): JSX.Element {
     return (
@@ -26,7 +26,7 @@ export default Link
 export function NavLink<S = H.LocationState>({
     href = '#',
     children,
-    className = 'text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3',
+    className = 'text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3 whitespace-nowrap',
     ...rest
 }: React.PropsWithoutRef<ReactRouterNavLinkProps<S>> & React.RefAttributes<HTMLAnchorElement>): JSX.Element {
     return (

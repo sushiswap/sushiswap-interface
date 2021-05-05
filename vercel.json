@@ -26,5 +26,9 @@
                 }
             ]
         }
+    ],
+    "redirects": [
+        { "source": "/stake", "destination": "/sushi-bar", "permanent": true },
+        { "source": "/migrate/v2", "destination": "/migrate", "permanent": true }
     ]
 }

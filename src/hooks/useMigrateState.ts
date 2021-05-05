@@ -46,12 +46,9 @@ const useMigrateState: () => MigrateState = () => {
                 exchange = 'Uniswap'
             } else if (chainId === ChainId.BSC) {
                 exchange = 'PancakeSwap'
+            } else if (chainId === ChainId.MATIC) {
+                exchange = 'QuickSwap'
             }
-
-            // const exchange = {
-            //     [ChainId.MAINNET]: 'Uniswap',
-            //     [ChainId.BSC]: 'PancakeSwap'
-            // }
 
             addTransaction(tx, {
                 summary: `Migrate ${exchange} ${state.selectedLPToken.symbol} liquidity to SushiSwap`

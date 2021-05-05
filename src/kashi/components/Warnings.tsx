@@ -1,6 +1,6 @@
 import { Warnings } from 'kashi/entities'
 import React from 'react'
-import Alert from './Alert'
+import { Alert } from 'components'
 
 function WarningsView({ warnings }: { warnings: Warnings }) {
     return (

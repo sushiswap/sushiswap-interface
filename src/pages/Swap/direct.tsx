@@ -9,22 +9,22 @@ import { ThemeContext } from 'styled-components'
 import { isTradeBetter } from 'utils/trades'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import Card, { GreyCard } from '../../components/Card'
+import Card, { GreyCard } from '../../components/CardLegacy'
 import Column, { AutoColumn } from '../../components/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Loader from '../../components/Loader'
 import ProgressSteps from '../../components/ProgressSteps'
 import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsSection from '../../components/swap/AdvancedSwapDetailsSection'
+import { AdvancedSwapDetails } from '../../components/swap/AdvancedSwapDetails'
 import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/swap/SwapHeader'
+import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
@@ -43,7 +43,6 @@ import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } 
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
-import AppBody from '../AppBody'
 import { ClickableText } from '../Pool/styleds'
 
 export default function Swap() {
@@ -304,7 +303,7 @@ export default function Swap() {
 
     return (
         <>
-            <AppBody>
+            <div className="relative w-full max-w-lg rounded bg-dark-900">
                 <SwapHeader />
                 <Wrapper id="swap-page">
                     <ConfirmSwapModal
@@ -578,10 +577,10 @@ export default function Swap() {
                                 </AutoColumn>
                             </Card>
                         )}
-                        <AdvancedSwapDetailsSection trade={trade} />
+                        <AdvancedSwapDetails trade={trade} />
                     </AutoColumn>
                 </Wrapper>
-            </AppBody>
+            </div>
             {!swapIsUnsupported ? null : (
                 <UnsupportedCurrencyFooter
                     show={swapIsUnsupported}

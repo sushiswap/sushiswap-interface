@@ -12,8 +12,8 @@ import {
 import { e10 } from 'kashi/functions/math'
 import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { BackButton, Button, Card, Layout, ListBox } from '../../../components'
-import { LendCardHeader } from 'kashi/components/CardHeader'
+import { Button } from 'components'
+import { Card, Layout, CardHeader, ListBox } from 'kashi/components'
 import { Helmet } from 'react-helmet'
 
 const CreatePair = () => {
@@ -85,17 +85,24 @@ const CreatePair = () => {
 
     const handleCreate = async () => {
         try {
+            console.log(selectedAsset, selectedCollateral)
+
             const oracleData = getOracleData(selectedAsset, selectedCollateral)
             if (!oracleData) {
                 console.log('No path')
                 return
             }
 
+            console.log([selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData])
+
             const kashiData = ethers.utils.defaultAbiCoder.encode(
                 ['address', 'address', 'address', 'bytes'],
                 [selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData]
             )
-            addTransaction(await bentoBoxContract?.deploy(KASHI_ADDRESS, kashiData, true), {
+
+            console.log(kashiData)
+
+            addTransaction(await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true), {
                 summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`
             })
             setSelectedAsset(empty)
@@ -124,12 +131,9 @@ const CreatePair = () => {
             <Card
                 className="h-full bg-dark-900"
                 header={
-                    <LendCardHeader>
-                        <div className="flex items-center">
-                            <BackButton defaultRoute={'/bento/kashi/lend'} />
-                            <div className="text-3xl text-high-emphesis">Create a Market</div>
-                        </div>
-                    </LendCardHeader>
+                    <CardHeader className="bg-dark-800">
+                        <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
+                    </CardHeader>
                 }
             >
                 <div className="space-y-6">
@@ -148,12 +152,17 @@ const CreatePair = () => {
                         tokens={collateralTokens}
                         selectedToken={selectedCollateral}
                         setSelectedToken={setSelectedCollateral}
+                        disabled={selectedAsset === empty}
                     />
                     <Button
                         color="gradient"
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"
                         onClick={() => handleCreate()}
-                        disabled={selectedCollateral === empty || selectedAsset === empty}
+                        disabled={
+                            selectedCollateral === empty ||
+                            selectedAsset === empty ||
+                            selectedCollateral === selectedAsset
+                        }
                     >
                         Create Market
                     </Button>

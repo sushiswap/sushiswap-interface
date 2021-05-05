@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
 import { Text } from 'rebass'
 import { ButtonDropdownLight } from '../../components/ButtonLegacy'
-import { BlueCard, LightCard } from '../../components/Card'
+import { BlueCard, LightCard } from '../../components/CardLegacy'
 import { AutoColumn, ColumnCenter } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { FindPoolTabs } from '../../components/NavigationTabs'
@@ -11,12 +11,11 @@ import { MinimalPositionCard } from '../../components/PositionCard'
 import Row from '../../components/Row'
 import CurrencySearchModal from '../../components/SearchModal/CurrencySearchModal'
 import { PairState, usePair } from '../../data/Reserves'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { usePairAdder } from '../../state/user/hooks'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { StyledInternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
-import AppBody from '../AppBody'
 import { Dots } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
 
@@ -82,7 +81,7 @@ export default function PoolFinder() {
             <Helmet>
                 <title>Find Pool | Sushi</title>
             </Helmet>
-            <AppBody>
+            <div className="relative w-full max-w-lg rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <FindPoolTabs />
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
                     <BlueCard>
@@ -210,7 +209,7 @@ export default function PoolFinder() {
                     showCommonBases
                     selectedCurrency={(activeField === Fields.TOKEN0 ? currency1 : currency0) ?? undefined}
                 />
-            </AppBody>
+            </div>
         </>
     )
 }

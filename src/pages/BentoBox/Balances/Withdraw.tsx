@@ -1,9 +1,9 @@
-import { Button } from 'kashi/components'
 import React, { useState } from 'react'
+import { Button } from 'components'
 import useBentoBox from 'hooks/useBentoBox'
 import { formattedNum } from 'utils'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBentoBalance } from 'state/bentobox/hooks'
 
 function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSymbol: string }): JSX.Element {

@@ -1,10 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { TokenAmount } from '@sushiswap/sdk'
 import { ButtonPrimary } from 'components/ButtonLegacy'
-import { LightCard } from 'components/Card'
+import { LightCard } from 'components/CardLegacy'
 import { AutoColumn } from 'components/Column'
-//import Confetti from 'components/Confetti'
-import { CardSection, DataCard } from 'components/earn/styled'
 import Loader from 'components/Loader'
 import QuestionHelper from 'components/QuestionHelper'
 import { AutoRow, RowBetween } from 'components/Row'
@@ -16,7 +14,7 @@ import { Link } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
 import { formattedNum } from 'utils'
 import Fraction from '../../entities/Fraction'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
 import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
@@ -49,6 +47,20 @@ const PageWrapper = styled(AutoColumn)`
     max-width: 900px;
     width: 100%;
     margin: 0 auto;
+`
+
+export const CardSection = styled(AutoColumn)<{ disabled?: boolean }>`
+    padding: 1rem;
+    z-index: 1;
+    opacity: ${({ disabled }) => disabled && '0.4'};
+`
+
+export const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
+    background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
+    border-radius: ${({ theme }) => theme.borderRadius};
+    width: 100%;
+    position: relative;
+    overflow: hidden;
 `
 
 const VoteCard = styled(DataCard)`
@@ -143,7 +155,6 @@ export default function ClaimModal() {
                 <title>Vesting | Sushi</title>
             </Helmet>
             <PageWrapper>
-                {/* <Confetti start={Boolean(isOpen && claimConfirmed)} /> */}
                 <>
                     <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
                         <div className="space-y-10 hidden md:block">

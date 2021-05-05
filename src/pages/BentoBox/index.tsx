@@ -1,6 +1,7 @@
 import Web3Status from 'components/Web3Status'
-import { useActiveWeb3React } from 'hooks'
-import { Button, Card } from 'kashi/components'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { Button } from 'components'
+import { Card } from 'kashi/components'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import BentoBoxHero from '../../assets/kashi/bentobox-hero.jpg'
@@ -52,12 +53,12 @@ function BentoBox(): JSX.Element {
                                 <img alt="" src={KashiNeonSign} className="block m-auto w-full h-auto mb-4" />
                                 {account ? (
                                     <Link to={'/bento/kashi/borrow'}>
-                                        <Button
-                                            color="gradient"
+                                        <div
+                                            className="w-full border-gradient py-2 text-center"
                                             // className="w-full rounded text-lg text-high-emphesis px-4 py-2"
                                         >
                                             Enter
-                                        </Button>
+                                        </div>
                                     </Link>
                                 ) : (
                                     <Web3Status />
