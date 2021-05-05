@@ -115,8 +115,8 @@ export function useDerivedZapInfo(
         currency?.symbol === currency1?.symbol ||
         (currency1?.symbol === WETH[chainId || 1].symbol && currency === ETHER)
 
-    const currencyZeroTrade = useTradeExactIn(tradeAmount, currency0 ?? undefined)
-    const currencyOneTrade = useTradeExactIn(tradeAmount, currency1 ?? undefined)
+    const currencyZeroTrade = useDebounce(useTradeExactIn(tradeAmount, currency0 ?? undefined), 200)
+    const currencyOneTrade = useDebounce(useTradeExactIn(tradeAmount, currency1 ?? undefined), 200)
     let currencyZeroOutput = currencyZeroTrade?.outputAmount
     let currencyOneOutput = currencyOneTrade?.outputAmount
     const bestTradeExactIn = useTradeExactIn(
