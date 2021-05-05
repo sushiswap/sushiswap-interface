@@ -621,7 +621,7 @@ export default function RemoveLiquidity({
             </div>
 
             <div className="w-full max-w-2xl flex flex-col mt-4">
-                <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue)} />
+                <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue && parseInt(typedValue))} />
             </div>
             {pair ? (
                 // <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
