@@ -102,8 +102,8 @@ export function useDerivedZapInfo(
     const balances = useCurrencyBalances(account ?? undefined, [currency])
     const currencyBalance = balances[0]
 
-    const parsedAmount = tryParseAmount(typedValue, currency)
-    const tradeAmount = tryParseAmount((+typedValue / 2).toString(), currency)
+    const parsedAmount = useDebounce(tryParseAmount(typedValue, currency), 200)
+    const tradeAmount = useDebounce(tryParseAmount((+typedValue / 2).toString(), currency), 200)
 
     // Zapping in requires either one or two trades
     // Only one trade if providing one of the input tokens of the pair
@@ -115,8 +115,8 @@ export function useDerivedZapInfo(
         currency?.symbol === currency1?.symbol ||
         (currency1?.symbol === WETH[chainId || 1].symbol && currency === ETHER)
 
-    const currencyZeroTrade = useDebounce(useTradeExactIn(tradeAmount, currency0 ?? undefined), 200)
-    const currencyOneTrade = useDebounce(useTradeExactIn(tradeAmount, currency1 ?? undefined), 200)
+    const currencyZeroTrade = useTradeExactIn(tradeAmount, currency0 ?? undefined)
+    const currencyOneTrade = useTradeExactIn(tradeAmount, currency1 ?? undefined)
     let currencyZeroOutput = currencyZeroTrade?.outputAmount
     let currencyOneOutput = currencyOneTrade?.outputAmount
     const bestTradeExactIn = useTradeExactIn(

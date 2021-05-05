@@ -311,11 +311,7 @@ const AddSingleSideLiquidity = ({
                                 <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
                                     Connect Wallet
                                 </ButtonLight>
-                            ) : !typedValue || +typedValue === 0 ? (
-                                <ButtonLight disabled={true} style={{ marginTop: '20px' }}>
-                                    <TYPE.main mb="4px">Enter an amount</TYPE.main>
-                                </ButtonLight>
-                            ) : noRoute ? (
+                            ) : noRoute && bestTrade?.inputAmount ? (
                                 <ButtonError style={{ marginTop: '20px' }}>
                                     <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
                                 </ButtonError>
