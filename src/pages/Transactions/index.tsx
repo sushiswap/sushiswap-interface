@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
-import { shortenAddress } from '../../utils'
+import { getExplorerLink, shortenAddress } from '../../utils'
 import TransactionHistory from './TransactionHistory'
 import LiquidityPositions from './LiquidityPositions'
 import { ChevronLeft, User, Copy, ExternalLink } from 'react-feather'
-import { Button } from 'components'
+import { Button, Dots } from 'components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useETHBalances } from 'state/wallet/hooks'
 import { Currency } from '@sushiswap/sdk'
@@ -24,15 +24,15 @@ export default function Transactions() {
     const { account, chainId } = useActiveWeb3React()
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
-    const [showTransactions, setShowTransactions] = useState(true)
+    const [showTransactions, setShowTransactions] = useState(false)
 
     return (
         <>
             <Helmet>
-                <title>Transactions | Sushi</title>
+                <title>Positions | Sushi</title>
             </Helmet>
 
-            <div className="w-full max-w-2xl">
+            {/* <div className="w-full max-w-2xl">
                 <Button size="small" className="flex items-center">
                     <ChevronLeft strokeWidth={2} size={18} color={theme.white} />
                     <span className="ml-1">Go Back</span>
@@ -40,7 +40,7 @@ export default function Transactions() {
                 <div className="px-4 mb-5">
                     <div className="text-xl font-medium text-white">Your History & Positions</div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="bg-dark-900 w-full max-w-2xl rounded mb-3 p-4">
                 <div className="flex justify-between">
@@ -51,23 +51,35 @@ export default function Transactions() {
                         <div className="ml-3">
                             <div className="font-semibold text-gray-300">{account && shortenAddress(account)}</div>
                             <div className="text-sm text-primary">
-                                {account && chainId && userEthBalance && (
-                                    <div>
-                                        {userEthBalance?.toSignificant(4)} {Currency.getNativeCurrencySymbol(chainId)}
-                                    </div>
+                                {account && chainId && (
+                                    <>
+                                        {userEthBalance ? (
+                                            <div>
+                                                {userEthBalance?.toSignificant(4)}{' '}
+                                                {Currency.getNativeCurrencySymbol(chainId)}
+                                            </div>
+                                        ) : (
+                                            <Dots>Loading</Dots>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </div>
                     </div>
 
                     <div className="text-sm text-primary font-semibold">
-                        <div className="flex items-center">
+                        {/* <div className="flex items-center">
                             <Copy strokeWidth={0.5} size={14} color={theme.white} />
                             <div className="ml-1">Copy Address</div>
-                        </div>
+                        </div> */}
                         <div className="flex items-center">
                             <ExternalLink strokeWidth={0.5} size={14} color={theme.white} />
-                            <div className="ml-1">View on Explorer</div>
+                            {/* <div className="ml-1">View on Explorer</div> */}
+                            {chainId && account && (
+                                <a href={getExplorerLink(chainId, account, 'address')}>
+                                    <span style={{ marginLeft: '4px' }}>View on explorer</span>
+                                </a>
+                            )}
                         </div>
                     </div>
                 </div>
