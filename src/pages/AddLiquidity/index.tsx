@@ -348,7 +348,7 @@ export default function AddLiquidity({
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
             </div>
-            <div className="bg-dark-900 w-full max-w-2xl rounded z-10  shadow-liquidity-purple-glow">
+            <div className="bg-dark-900 w-full max-w-2xl rounded z-10 shadow-liquidity-purple-glow">
                 <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <Wrapper>
                     <TransactionConfirmationModal

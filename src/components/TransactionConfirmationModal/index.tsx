@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     width: 100%;
 `
 const Section = styled(AutoColumn)`
-    padding: 24px;
+    // padding: 24px;
 `
 
 const BottomSection = styled(Section)`
