@@ -73,12 +73,12 @@ export const Input = React.memo(function InnerInput({
             autoCorrect="off"
             // text-specific options
             type="text"
-            pattern="^[0-9]*[\%]*$"
-            placeholder={placeholder || '100%'}
+            pattern="^[0-9]*$"
+            placeholder={placeholder || '100'}
             min={0}
-            max={'100'}
+            max={100}
             minLength={1}
-            maxLength={4}
+            maxLength={3}
             spellCheck="false"
             className={className}
         />

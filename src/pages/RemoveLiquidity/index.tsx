@@ -84,11 +84,13 @@ export default function RemoveLiquidity({
     const formattedAmounts = {
         [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('')
             ? ''
+            : parsedAmounts[Field.LIQUIDITY_PERCENT].greaterThan('100')
+            ? '100'
             : parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('0')
-            ? '0%'
+            ? '0'
             : parsedAmounts[Field.LIQUIDITY_PERCENT].lessThan(new Percent('1', '100'))
-            ? '<1%'
-            : parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0) + '%',
+            ? '<1'
+            : parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
         [Field.LIQUIDITY]:
             independentField === Field.LIQUIDITY ? typedValue : parsedAmounts[Field.LIQUIDITY]?.toSignificant(6) ?? '',
         [Field.CURRENCY_A]:
