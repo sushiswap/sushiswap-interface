@@ -1,5 +1,6 @@
 import { ChainId, Currency } from '@sushiswap/sdk'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import Logo from '../assets/images/logo.png'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useETHBalances } from '../state/wallet/hooks'
@@ -18,15 +19,25 @@ import { t } from '@lingui/macro'
 
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
+    const { pathname } = useLocation()
+
+    const [navClassList, setNavClassList] = useState(
+        'w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur'
+    )
 
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
+    useEffect(() => {
+        if (pathname === '/trade') {
+            setNavClassList('w-screen bg-transparent z-10 backdrop-filter backdrop-blur')
+        } else {
+            setNavClassList('w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur')
+        }
+    }, [pathname])
+
     return (
         <header className="flex flex-row flex-nowrap justify-between w-screen">
-            <Disclosure
-                as="nav"
-                className="w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur"
-            >
+            <Disclosure as="nav" className={navClassList}>
                 {({ open }) => (
                     <>
                         <div className="px-4 py-1.5">
@@ -58,6 +69,11 @@ function AppBar(): JSX.Element {
                                                     {t`Yield`}
                                                 </NavLink>
                                             )}
+                                            {chainId === ChainId.MAINNET && (
+                                                <NavLink id={`sushibar-nav-link`} to={'/sushibar'}>
+                                                  {t`SushiBar`}
+                                                </NavLink>
+                                            )}
                                             {chainId &&
                                                 [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
                                                     chainId
@@ -66,11 +82,6 @@ function AppBar(): JSX.Element {
                                                         {t`Lend`}
                                                     </NavLink>
                                                 )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`stake-nav-link`} to={'/sushi-bar'}>
-                                                    {t`SushiBar`}
-                                                </NavLink>
-                                            )}
                                             {chainId &&
                                                 [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
                                                     chainId

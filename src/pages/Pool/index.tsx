@@ -92,6 +92,12 @@ const EmptyProposals = styled.div`
     align-items: center;
 `
 
+const migrateFrom: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'Uniswap',
+    [ChainId.BSC]: 'PancakeSwap',
+    [ChainId.MATIC]: 'QuickSwap'
+}
+
 export default function Pool() {
     const theme = useContext(ThemeContext)
     const history = useHistory()
@@ -216,32 +222,14 @@ export default function Pool() {
                             </EmptyProposals>
                         )}
 
-                        <div className="grid-flow-row gap-1">
-                            {chainId === ChainId.MAINNET && (
-                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                    Have Liquidity on Uniswap?{' '}
-                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
-                                        Migrate Now.
-                                    </StyledInternalLink>
-                                </Text>
-                            )}
-                            {chainId === ChainId.BSC && (
-                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                    Have Liquidity on PancakeSwap?{' '}
-                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
-                                        Migrate Now.
-                                    </StyledInternalLink>
-                                </Text>
-                            )}
-                            {chainId === ChainId.MATIC && (
-                                <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                    Have Liquidity on QuickSwap?{' '}
-                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
-                                        Migrate Now.
-                                    </StyledInternalLink>
-                                </Text>
-                            )}
-                        </div>
+                        {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                            <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
+                                Have Liquidity on {(chainId && migrateFrom[chainId]) ?? ''}?{' '}
+                                <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                    Migrate Now.
+                                </StyledInternalLink>
+                            </Text>
+                        )}
                         <div className="grid grid-cols-2 gap-4">
                             <Button id="join-pool-button" color="gradient" onClick={() => history.push('/add/ETH')}>
                                 Add Liquidity

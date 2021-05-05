@@ -87,14 +87,14 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
                         </div>
                     </div>
                     <div className="flex justify-between">
+                        <div className="text-high-emphesis">Pooled {currency0.getSymbol(chainId)}</div>
+                        <div className="text-primary font-bold">{token0Deposited?.toSignificant(6)}</div>
+                    </div>
+                    <div className="flex justify-between">
                         <div className="text-high-emphesis">Your Pool Share</div>
                         <div className="text-primary font-bold">
                             {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
                         </div>
-                    </div>
-                    <div className="flex justify-between">
-                        <div className="text-high-emphesis">Pooled {currency0.getSymbol(chainId)}</div>
-                        <div className="text-primary font-bold">{token0Deposited?.toSignificant(6)}</div>
                     </div>
                     <div className="flex justify-between">
                         <div className="text-high-emphesis">Pooled {currency1.getSymbol(chainId)}</div>

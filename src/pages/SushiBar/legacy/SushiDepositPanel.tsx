@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import useSushiBar from 'hooks/useSushiBar'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { TYPE } from 'theme'
-import { formatFromBalance, formatToBalance } from '../../utils'
+import { formatFromBalance, formatToBalance } from '../../../utils'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}

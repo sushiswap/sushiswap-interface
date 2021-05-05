@@ -29,7 +29,7 @@ export function useApproveCallback(
     const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
     const pendingApproval = useHasPendingApproval(token?.address, spender)
 
-    // console.log({ token, currentAllowance, pendingApproval })
+    console.log({ token, currentAllowance, amountToApprove, pendingApproval })
 
     // check the current approval status
     const approvalState: ApprovalState = useMemo(() => {

@@ -2,13 +2,14 @@ import React from 'react'
 import { Currency, Price } from '@sushiswap/sdk'
 import { AutoRow } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { Field } from '../../state/mint/actions'
 
 export default function LiquidityPrice({
-    currencies,
+    input,
+    output,
     price
 }: {
-    currencies: { [field in Field]?: Currency }
+    input?: Currency
+    output?: Currency
     price?: Price
 }): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -21,8 +22,7 @@ export default function LiquidityPrice({
             >
                 <div>Current Rate</div>
                 <div>
-                    {price?.toSignificant(6) ?? '-'} {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} per{' '}
-                    {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}
+                    {price?.toSignificant(6) ?? '-'} {output?.getSymbol(chainId)} per {input?.getSymbol(chainId)}
                 </div>
             </AutoRow>
         </div>

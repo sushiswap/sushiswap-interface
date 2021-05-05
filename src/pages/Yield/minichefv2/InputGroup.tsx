@@ -59,10 +59,7 @@ export default function InputGroup({
     // console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''),
-            ethers.constants.MaxUint256.toString()
-        ),
+        new TokenAmount(new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''), depositValue),
         '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F' //miniChef on Matic
     )
     //console.log('Approval:', approvalState, ApprovalState.NOT_APPROVED)

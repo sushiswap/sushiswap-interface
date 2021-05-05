@@ -15,6 +15,7 @@ const useSushiBar = () => {
     const barContract = useSushiBarContract(true) // withSigner
 
     const [allowance, setAllowance] = useState('0')
+    const [exchangeRate, setExchangeRate] = useState('0')
 
     const fetchAllowance = useCallback(async () => {
         if (account) {
@@ -36,6 +37,25 @@ const useSushiBar = () => {
         const refreshInterval = setInterval(fetchAllowance, 10000)
         return () => clearInterval(refreshInterval)
     }, [account, barContract, fetchAllowance, sushiContract])
+
+    const fetchExchangeRate = useCallback(async () => {
+        if (account) {
+            try {
+                const xSushiSupply = await barContract?.totalSupply()
+                const sushiStaked = await sushiContract?.balanceOf(barContract?.address)
+                const rate = Fraction.from(BigNumber.from(xSushiSupply), BigNumber.from(sushiStaked)).toString()
+                setExchangeRate(rate)
+            } catch {
+                setExchangeRate('0')
+            }
+        }
+    }, [account, barContract, sushiContract])
+
+    useEffect(() => {
+        if (account && sushiContract && barContract) {
+            fetchExchangeRate()
+        }
+    }, [account, barContract, sushiContract, fetchExchangeRate])
 
     const approve = useCallback(async () => {
         try {
@@ -68,7 +88,7 @@ const useSushiBar = () => {
                 try {
                     const tx = await barContract?.leave(amount?.value)
                     //const tx = await barContract?.leave(ethers.utils.parseUnits(amount)) // where amount is string
-                    return addTransaction(tx, { summary: 'Enter SushiBar' })
+                    return addTransaction(tx, { summary: 'Leave SushiBar' })
                 } catch (e) {
                     return e
                 }
@@ -77,7 +97,7 @@ const useSushiBar = () => {
         [addTransaction, barContract]
     )
 
-    return { allowance, approve, enter, leave }
+    return { exchangeRate, allowance, approve, enter, leave }
 }
 
 export default useSushiBar
