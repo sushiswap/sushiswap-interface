@@ -348,7 +348,7 @@ export default function Swap() {
                         onDismiss={handleConfirmDismiss}
                     />
                     {chainId && chainId === ChainId.MATIC && (
-                        <div className="max-w-2xl pb-4">
+                        <div className="hidden md:block pb-4">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
