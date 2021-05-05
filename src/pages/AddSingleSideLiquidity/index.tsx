@@ -8,7 +8,7 @@ import { ArrowLeft } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
-import { RowBetween, AutoRow } from '../../components/Row'
+import { RowBetween, AutoRow, RowFixed } from '../../components/Row'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import Column, { AutoColumn } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -35,6 +35,7 @@ import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import { resetZapState } from 'state/zap/actions'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import { getZapperAddress } from 'constants/addresses'
+import { Alert } from 'components'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -148,8 +149,8 @@ const CardHeader = () => {
     const dispatch = useDispatch<AppDispatch>()
 
     return (
-        <Tabs>
-            <RowBetween style={{ padding: '1rem 1rem 0 1rem' }}>
+        <AutoColumn>
+            <RowBetween style={{ padding: '1rem 0rem 1rem' }}>
                 <Link
                     to="/zap"
                     onClick={() => {
@@ -163,7 +164,20 @@ const CardHeader = () => {
                 </TYPE.mediumHeader>
                 <Settings />
             </RowBetween>
-        </Tabs>
+            <RowBetween style={{ padding: '0rem 0rem 1rem' }}>
+                <Alert
+                    showIcon={true}
+                    message={
+                        <>
+                            Zaps allow you to LP in any pool with any asset. Please be careful when zapping low
+                            liquidity tokens as there may be very high slippage. ETH, WBTC, USDC, DAI and SUSHI are the
+                            safest tokens to zap with.
+                        </>
+                    }
+                    type="information"
+                />
+            </RowBetween>
+        </AutoColumn>
     )
 }
 
