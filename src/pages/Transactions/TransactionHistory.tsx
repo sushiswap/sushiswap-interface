@@ -7,6 +7,7 @@ import { LinkStyledButton } from '../../theme'
 import { Dots } from '../../components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { getExplorerLink } from '../../utils'
+import { NETWORK_LABEL } from '../../constants/networks'
 
 // type Props = {
 //     transactions: string[]
@@ -18,7 +19,9 @@ export default function TransactionHistory({ transactions }: any) {
     return (
         <>
             <div className="flex justify-between mb-6 flex-col sm:flex-row items-start">
-                <div className="text-xl font-medium text-white">Your Transaction History</div>
+                <div className="text-xl font-medium text-white">
+                    Your Transaction History {chainId && `on ${NETWORK_LABEL[chainId]}`}
+                </div>
                 {/* <LinkStyledButton>
                     <span className="text-sm">Clear History</span>
                 </LinkStyledButton> */}
