@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import ErrorTriangle from '../../assets/images/error-triangle.svg'
@@ -8,6 +8,8 @@ import { BalanceProps } from '../../hooks/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
 import useSushiBar from '../../hooks/useSushiBar'
 import TransactionFailedModal from './TransactionFailedModal'
+
+import sushiData from '@sushiswap/sushi-data'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -49,7 +51,16 @@ interface StakeCardProps {
 export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProps) {
     const { account } = useActiveWeb3React()
 
-    const { allowance, exchangeRate, approve, enter, leave } = useSushiBar()
+    const { allowance, approve, enter, leave } = useSushiBar()
+
+    const [exchangeRate, setExchangeRate] = useState<any>()
+    useEffect(() => {
+        const fetchData = async () => {
+            const results = await Promise.all([sushiData.bar.info()])
+            setExchangeRate(results[0].ratio)
+        }
+        fetchData()
+    }, [])
 
     const xSushiPerSushi = parseFloat(exchangeRate)
 
@@ -154,7 +165,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         {activeTab === 0 ? 'Stake SUSHI' : 'Unstake'}
                     </p>
                     <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-caption md:font-normal">
-                        {`1 SUSHI = ${xSushiPerSushi.toFixed(1)} xSUSHI`}
+                        {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
                     </div>
                 </div>
 

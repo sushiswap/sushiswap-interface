@@ -43,7 +43,7 @@ export default function APRCard({ numSushi }: any) {
             </div>
             <div className="flex flex-col">
                 <p className="text-right text-high-emphesis font-bold text-lg md:text-h4 mb-1">
-                    {`${Apr ? Apr.toFixed(2) : 'Loading...'}`}
+                    {`${Apr ? Apr.toFixed(2) + '%' : 'Loading...'}`}
                 </p>
                 <p className="text-right text-primary w-32 md:w-64 text-caption2 md:text-base">{`Yesterday's APR`}</p>
             </div>
