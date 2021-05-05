@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { JSBI, Pair } from '@sushiswap/sdk'
-import { Button } from 'components'
+import { Button, Dots } from 'components'
 import { LinkStyledButton } from '../../theme'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useTokenBalancesWithLoadingIndicator } from 'state/wallet/hooks'
@@ -72,19 +72,37 @@ export default function LiquidityPositions() {
         )
     })
 
+    console.log('v2PairsWithoutStakedAmount:', v2PairsWithoutStakedAmount)
+
     return (
         <>
             <div className="flex flex-col md:flex-row justify-start md:justify-between mb-6">
                 <div className="text-xl font-medium text-white">Your Liquidity Positions</div>
-                <div className="flex items-center text-sm">
-                    <span className="mr-1">Dont see a pool you joined?</span>
+                <div className="flex items-center text-sm pr-2">
+                    <span className="mr-1 text-gray-500">Dont see a pool you joined?</span>
                     <LinkStyledButton>import it</LinkStyledButton>
                 </div>
             </div>
             <div>
-                {v2PairsWithoutStakedAmount.map(v2Pair => (
-                    <Position key={v2Pair.liquidityToken.address} pair={v2Pair} />
-                ))}
+                {!account ? (
+                    <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
+                        Connect to a wallet to view your liquidity.
+                    </div>
+                ) : v2IsLoading ? (
+                    <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
+                        <Dots>Loading</Dots>
+                    </div>
+                ) : allV2PairsWithLiquidity?.length > 0 || stakingPairs?.length > 0 ? (
+                    <>
+                        {v2PairsWithoutStakedAmount.map(v2Pair => (
+                            <Position key={v2Pair.liquidityToken.address} pair={v2Pair} />
+                        ))}
+                    </>
+                ) : (
+                    <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
+                        No liquidity positions found.
+                    </div>
+                )}
                 <div className="flex gap-4 mt-5 mb-1">
                     <Button size="large" color="gradient">
                         Add Liquidity

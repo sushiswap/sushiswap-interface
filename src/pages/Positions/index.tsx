@@ -71,12 +71,14 @@ export default function Positions() {
                             <div className="ml-1">Copy Address</div>
                         </div> */}
                         <div className="flex items-center">
-                            <ExternalLink strokeWidth={0.5} size={14} color={theme.white} />
                             {/* <div className="ml-1">View on Explorer</div> */}
                             {chainId && account && (
-                                <a href={getExplorerLink(chainId, account, 'address')}>
-                                    <span style={{ marginLeft: '4px' }}>View on explorer</span>
-                                </a>
+                                <>
+                                    <ExternalLink strokeWidth={0.5} size={14} color={theme.white} />
+                                    <a href={getExplorerLink(chainId, account, 'address')}>
+                                        <span style={{ marginLeft: '4px' }}>View on explorer</span>
+                                    </a>
+                                </>
                             )}
                         </div>
                     </div>
