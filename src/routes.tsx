@@ -35,6 +35,7 @@ import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
+import Transactions from 'pages/Transactions'
 
 function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -86,6 +87,7 @@ function Routes(): JSX.Element {
             <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
             <Route exact strict path="/find" component={PoolFinder} />
             <Route exact strict path="/pool" component={Pool} />
+            <Route exact strict path="/transactions" component={Transactions} />
             <Route exact strict path="/create" component={RedirectToAddLiquidity} />
             <Route exact path="/add" component={AddLiquidity} />
             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
