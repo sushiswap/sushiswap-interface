@@ -405,7 +405,7 @@ export default function Borrow({ pair }: BorrowProps) {
             {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
             {(collateralValueSet ||
-                (borrowValueSet && pair.userCollateralValue.isZero()) ||
+                (borrowValueSet && !pair.userCollateralAmount.value.isZero()) ||
                 (swap && (priceImpactSeverity < 3 || isExpertMode))) && (
                 <TransactionReviewView transactionReview={transactionReview} />
             )}
