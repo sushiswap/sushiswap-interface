@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Currency, CurrencyAmount } from '@sushiswap/sdk'
 import { useZapperContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 
 const useZapper = (currency?: Currency) => {
     const { chainId, account } = useActiveWeb3React()

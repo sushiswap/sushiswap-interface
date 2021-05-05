@@ -27,7 +27,8 @@ import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../../stat
 import { TYPE } from '../../theme'
 import { currencyId as getCurrencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
-import { useActiveWeb3React, useRouterContract } from 'hooks'
+import { useRouterContract } from 'hooks/useContract'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useWalletModalToggle } from 'state/application/hooks'
 import useZapper from 'hooks/useZapper'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -183,7 +184,7 @@ const CardHeader = () => {
                             safest tokens to zap with.
                         </>
                     }
-                    type="information"
+                    type="warning"
                 />
             </RowBetween>
         </AutoColumn>
