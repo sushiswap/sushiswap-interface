@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import ErrorTriangle from '../../assets/images/error-triangle.svg'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { ethers } from 'ethers'
+import { BAR_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { BalanceProps } from '../../hooks/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
 import useSushiBar from '../../hooks/useSushiBar'
 import TransactionFailedModal from './TransactionFailedModal'
+import { Button, Dots } from '../../components'
 
 import sushiData from '@sushiswap/sushi-data'
 
@@ -37,7 +41,7 @@ const activeTabStyle = `${tabStyle} text-high-emphesis font-bold bg-dark-900`
 const inactiveTabStyle = `${tabStyle} text-secondary`
 
 const buttonStyle =
-    'flex justify-center items-center w-full h-10 md:h-14 rounded font-bold md:font-medium md:text-lg mt-5 text-sm focus:outline-none focus:ring'
+    'flex justify-center items-center w-full h-14 rounded font-bold md:font-medium md:text-lg mt-5 text-sm focus:outline-none focus:ring'
 const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r from-pink-red to-light-brown hover:opacity-90`
 const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
@@ -51,7 +55,7 @@ interface StakeCardProps {
 export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProps) {
     const { account } = useActiveWeb3React()
 
-    const { allowance, approve, enter, leave } = useSushiBar()
+    const { allowance, enter, leave } = useSushiBar()
 
     const [exchangeRate, setExchangeRate] = useState<any>()
     useEffect(() => {
@@ -70,7 +74,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
     const [activeTab, setActiveTab] = useState(0)
     const [modalOpen, setModalOpen] = useState(false)
 
-    const balance: BalanceProps = activeTab == 0 ? sushiBalance : xSushiBalance
+    const balance: BalanceProps = activeTab === 0 ? sushiBalance : xSushiBalance
     const formattedBalance = formatFromBalance(balance.value)
 
     const [input, setInput] = useState<string>('')
@@ -87,7 +91,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
         setUsingBalance(true)
     }
 
-    const insufficientFunds = (activeTab == 0 ? sushiBalance : xSushiBalance).value.lt(parsedInput.value)
+    const insufficientFunds = (activeTab === 0 ? sushiBalance : xSushiBalance).value.lt(parsedInput.value)
     const inputError = insufficientFunds
 
     const [pendingTx, setPendingTx] = useState(false)
@@ -107,21 +111,21 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                     const success = await sendTx(() => approve())
                     if (!success) {
                         setPendingTx(false)
-                        setModalOpen(true)
+                        //setModalOpen(true)
                         return
                     }
                 }
                 const success = await sendTx(() => enter(parsedInput))
                 if (!success) {
                     setPendingTx(false)
-                    setModalOpen(true)
+                    //setModalOpen(true)
                     return
                 }
             } else if (activeTab === 1) {
                 const success = await sendTx(() => leave(parsedInput))
                 if (!success) {
                     setPendingTx(false)
-                    setModalOpen(true)
+                    //setModalOpen(true)
                     return
                 }
             }
@@ -131,11 +135,21 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
         }
     }
 
+    const [approvalState, approve] = useApproveCallback(
+        new TokenAmount(
+            new Token(1, '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 18, 'SUSHI', ''),
+            parsedInput.value.toString()
+        ),
+        BAR_ADDRESS[1]
+    )
+
+    console.log('approvalState:', approvalState, parsedInput.value.toString())
+
     return (
         <>
             <TransactionFailedModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} />
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl pt-2 pb-6 md:pb-9 px-3 md:pt-4 md:px-8 rounded">
-                <div className="flex w-full h-10 md:h-14 bg-dark-800 rounded">
+                <div className="flex w-full h-14 bg-dark-800 rounded">
                     <div
                         className="h-full w-6/12 p-0.5"
                         onClick={() => {
@@ -172,15 +186,15 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                 <StyledNumericalInput
                     value={input}
                     onUserInput={handleInput}
-                    className={`w-full h-11 md:h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-caption2 md:text-lg font-bold text-dark-800${
+                    className={`w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-caption2 md:text-lg font-bold text-dark-800${
                         inputError ? ' pl-9 md:pl-12' : ''
                     }`}
                     placeholder=" "
                 />
                 {/* input overlay: */}
-                <div className="relative h-0 bottom-11 md:bottom-14 w-full pointer-events-none">
+                <div className="relative h-0 bottom-14 w-full pointer-events-none">
                     <div
-                        className={`flex justify-between items-center h-11 md:h-14 rounded px-3 md:px-5 ${
+                        className={`flex justify-between items-center h-14 rounded px-3 md:px-5 ${
                             inputError ? ' border border-red' : ''
                         }`}
                     >
@@ -215,29 +229,39 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         </div>
                     </div>
                 </div>
-
-                <button
-                    className={
-                        buttonDisabled
-                            ? buttonStyleDisabled
-                            : !walletConnected
-                            ? buttonStyleConnectWallet
+                {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) &&
+                activeTab === 0 ? (
+                    <Button
+                        className={`${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`}
+                        disabled={approvalState === ApprovalState.PENDING}
+                        onClick={approve}
+                    >
+                        {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
+                    </Button>
+                ) : (
+                    <button
+                        className={
+                            buttonDisabled
+                                ? buttonStyleDisabled
+                                : !walletConnected
+                                ? buttonStyleConnectWallet
+                                : insufficientFunds
+                                ? buttonStyleInsufficientFunds
+                                : buttonStyleEnabled
+                        }
+                        onClick={handleClickButton}
+                    >
+                        {!walletConnected
+                            ? 'Connect Wallet'
+                            : !input
+                            ? 'Enter Amount'
                             : insufficientFunds
-                            ? buttonStyleInsufficientFunds
-                            : buttonStyleEnabled
-                    }
-                    onClick={handleClickButton}
-                >
-                    {!walletConnected
-                        ? 'Connect Wallet'
-                        : !input
-                        ? 'Enter Amount'
-                        : insufficientFunds
-                        ? 'Insufficient Balance'
-                        : activeTab === 0
-                        ? 'Confirm Staking'
-                        : 'Confirm Withdrawal'}
-                </button>
+                            ? 'Insufficient Balance'
+                            : activeTab === 0
+                            ? 'Confirm Staking'
+                            : 'Confirm Withdrawal'}
+                    </button>
+                )}
             </div>
         </>
     )

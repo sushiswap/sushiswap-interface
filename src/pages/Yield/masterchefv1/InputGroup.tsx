@@ -54,10 +54,7 @@ export default function InputGroup({
     //console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''),
-            ethers.constants.MaxUint256.toString()
-        ),
+        new TokenAmount(new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''), depositValue),
         MASTERCHEF_ADDRESS[1]
     )
 
