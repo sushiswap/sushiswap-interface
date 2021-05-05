@@ -95,59 +95,6 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "kashiPair",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            }
-        ],
-        "name": "assetBalanceFromKashi",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "share",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "contract IKashi",
-                "name": "kashiPair",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "skim",
-                "type": "bool"
-            }
-        ],
-        "name": "assetBalanceToKashi",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "fraction",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
                 "name": "aToken",
                 "type": "address"
             },
@@ -159,35 +106,6 @@
         ],
         "name": "balanceFromAave",
         "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "contract IERC20",
-                "name": "token",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            }
-        ],
-        "name": "balanceFromBento",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "amountOut",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "shareOut",
-                "type": "uint256"
-            }
-        ],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -457,7 +375,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "fromBento",
+        "name": "depositFromBento",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -470,6 +388,24 @@
                 "type": "uint256"
             }
         ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "depositToken",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -589,6 +525,44 @@
             }
         ],
         "name": "permitToken",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "masterContract",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "approved",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint8",
+                "name": "v",
+                "type": "uint8"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "r",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "s",
+                "type": "bytes32"
+            }
+        ],
+        "name": "setBentoApproval",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -916,7 +890,7 @@
                 "type": "address"
             }
         ],
-        "name": "withdrawETHBalance",
+        "name": "withdrawETHbalance",
         "outputs": [],
         "stateMutability": "payable",
         "type": "function"
