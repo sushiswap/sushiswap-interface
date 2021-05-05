@@ -197,11 +197,9 @@ const AddSingleSideLiquidity = ({
     },
     history
 }: RouteComponentProps<{ poolAddress?: string; currencyId?: string }>) => {
-    console.log('render')
     const { account, chainId } = useActiveWeb3React()
 
     const currency = useCurrency(currencyId)
-    // const { typedValue } = useZapState()
     const { onFieldInput } = useZapActionHandlers(false)
     const {
         typedValue,

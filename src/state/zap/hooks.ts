@@ -171,8 +171,6 @@ export function useDerivedZapInfo(
     const pct = basisPointsToPercent(allowedSlippage)
     const zapperAddress = getZapperAddress(chainId)
 
-    // These is a pretty heavy call so using a debounce on the trade
-    // to make input more responsive
     const encodeSwapData = () => {
         if (!!currencyZeroTrade && !!currencyOneTrade && parsedAmount !== undefined) {
             if (
