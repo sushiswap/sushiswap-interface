@@ -24,21 +24,18 @@ export default function Transactions() {
     const { account, chainId } = useActiveWeb3React()
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
-    // const [transactions, setTransactions] = useState<any>()
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const results = await Promise.all([
-    //             sushiData.bar.info(),
-    //             sushiData.exchange.dayData(),
-    //             sushiData.sushi.priceUSD()
-    //         ])
-    //         const APR =
-    //             (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) * 365) / (results[0].ratio * results[2])
+    const [transactions, setTransactions] = useState<any>()
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await fetch(
+                `https://api.covalenthq.com/v1/${chainId}/address/${account}/stacks/sushiswap/acts/?&key=ckey_cba3674f2ce5450f9d5dd290589&swaps=true&quote-currency=usd`
+            ).then(res => res.json())
 
-    //         setApr(APR)
-    //     }
-    //     fetchData()
-    // }, [])
+            console.log('result.data.items:', result?.data?.items)
+            setTransactions(result?.data?.items)
+        }
+        fetchData()
+    }, [account, chainId])
 
     return (
         <>
@@ -111,7 +108,7 @@ export default function Transactions() {
                         Transaction History
                     </Link>
                 </div>
-                <TransactionHistory transactions={mock.transactions} />
+                <TransactionHistory transactions={transactions} />
             </div>
         </>
     )
