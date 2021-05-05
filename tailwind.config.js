@@ -44,6 +44,7 @@ module.exports = {
             'dark-blue': '#0F182A',
             'dark-1000': '#0D0415',
             'dark-900': '#161522',
+            'dark-850': '#1d1e2c',
             'dark-800': '#202231',
             'dark-700': '#2E3348',
             'dark-600': '#1C2D49',
@@ -132,6 +133,10 @@ module.exports = {
             ]
         },
         extend: {
+            lineHeight: {
+                ...defaultTheme.lineHeight,
+                '48px': '48px'
+            },
             backgroundImage: theme => ({
                 ...defaultTheme.backgroundImage,
                 'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
@@ -165,7 +170,8 @@ module.exports = {
                 'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
                 'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)',
 
-                'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)'
+                'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)',
+                'liquidity-purple-glow': '0px 50px 250px -47px rgba(123, 97, 255, 0.23);'
             },
             ringWidth: {
                 ...defaultTheme.ringWidth,

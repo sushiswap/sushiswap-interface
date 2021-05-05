@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useMiniChefV2Contract } from 'hooks/useContract'
 import { useCallback, useEffect, useState } from 'react'
 import { useBlockNumber } from 'state/application/hooks'

@@ -24,7 +24,7 @@ import Column, { AutoColumn } from '../Column'
 import ListLogo from '../ListLogo'
 import Row, { RowBetween, RowFixed } from '../Row'
 import ListToggle from '../Toggle/ListToggle'
-import { CurrencyModalView } from './CurrencySearchModal'
+import CurrencyModalView from './CurrencyModalView'
 import { PaddedColumn, SearchInput, Separator, SeparatorDark } from './styleds'
 
 const Wrapper = styled(Column)`
@@ -228,7 +228,7 @@ const ListContainer = styled.div`
     padding-bottom: 80px;
 `
 
-export function ManageLists({
+function ManageLists({
     setModalView,
     setImportList,
     setListUrl
@@ -390,3 +390,5 @@ export function ManageLists({
         </Wrapper>
     )
 }
+
+export default ManageLists

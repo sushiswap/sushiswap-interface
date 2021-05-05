@@ -50,7 +50,7 @@ function Button({
 }: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX.Element {
     return (
         <button
-            className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 ${className}`}
+            className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 font-medium ${className}`}
             {...rest}
         >
             {children}

@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import sushiData from '@sushiswap/sushi-data'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBoringHelperContract } from 'hooks/useContract'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
@@ -8,7 +8,7 @@ import { exchange, masterchef } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
 import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
 import { POOL_DENY } from '../constants'
-import { Fraction } from '../entities'
+import Fraction from '../entities/Fraction'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {

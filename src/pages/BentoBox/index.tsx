@@ -1,5 +1,5 @@
 import Web3Status from 'components/Web3Status'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { Button } from 'components'
 import { Card } from 'kashi/components'
 import React from 'react'

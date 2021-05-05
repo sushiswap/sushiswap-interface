@@ -9,7 +9,7 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import QuestionHelper from '../../components/QuestionHelper'
 import { Dots } from '../../components/swap/styleds'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
 import { BackArrow, CloseIcon } from '../../theme'
@@ -230,7 +230,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
             {error.message && error.code !== 4001 && (
                 <div className="text-red text-center font-medium">{error.message}</div>
             )}
-            <div className="text-xs text-low-emphesis text-center">
+            <div className="text-sm text-low-emphesis text-center">
                 {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
             </div>
         </div>

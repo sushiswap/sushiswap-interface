@@ -5,7 +5,7 @@ import { getAddress } from '@ethersproject/address'
 import styled from 'styled-components'
 //import EthereumLogo from "../../assets/img/eth.png";
 import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from '../../../hooks'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { getMaticTokenLogoURL } from '../../../constants/maticTokenMapping'
 
 const getTokenLogoURL = (address: string, chainId: any) => {

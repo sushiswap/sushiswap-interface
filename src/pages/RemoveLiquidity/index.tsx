@@ -21,7 +21,7 @@ import Row, { RowBetween, RowFixed } from '../../components/Row'
 import Slider from '../../components/Slider'
 import { Dots } from '../../components/swap/styleds'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { usePairContract } from '../../hooks/useContract'
@@ -488,7 +488,7 @@ export default function RemoveLiquidity({
             <Helmet>
                 <title>Remove Liquidity | Sushi</title>
             </Helmet>
-            <div className="bg-dark-900 w-full max-w-2xl rounded">
+            <div className="bg-dark-900 w-full max-w-2xl rounded  shadow-liquidity-purple-glow">
                 <AddRemoveTabs creating={false} adding={false} />
                 <Wrapper>
                     <TransactionConfirmationModal

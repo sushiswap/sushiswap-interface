@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button } from 'components'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { e10, minimum } from 'kashi/functions/math'
 import { easyAmount } from 'kashi/functions/kashi'
 import { TransactionReview, Warnings } from 'kashi/entities'

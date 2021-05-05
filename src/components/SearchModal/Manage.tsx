@@ -6,8 +6,8 @@ import { ArrowLeft } from 'react-feather'
 import { Text } from 'rebass'
 import styled from 'styled-components'
 import { CloseIcon } from 'theme'
-import { CurrencyModalView } from './CurrencySearchModal'
-import { ManageLists } from './ManageLists'
+import CurrencyModalView from './CurrencyModalView'
+import ManageLists from './ManageLists'
 import ManageTokens from './ManageTokens'
 import { PaddedColumn, Separator } from './styleds'
 
@@ -41,7 +41,7 @@ const ToggleOption = styled.div<{ active?: boolean }>`
     }
 `
 
-export default function Manage({
+function Manage({
     onDismiss,
     setModalView,
     setImportList,
@@ -87,3 +87,5 @@ export default function Manage({
         </Wrapper>
     )
 }
+
+export default Manage

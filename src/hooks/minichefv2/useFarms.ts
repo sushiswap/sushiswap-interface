@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import sushiData from '@sushiswap/sushi-data'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBoringHelperContract } from 'hooks/useContract'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
@@ -25,8 +25,9 @@ const useFarms = () => {
                 query: liquidityPositionSubsetQuery,
                 variables: { user: String('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F').toLowerCase() } //minichef
             }),
-            getAverageBlockTime(chainId),
             sushiData.sushi.priceUSD()
+            //getAverageBlockTime(chainId),
+            //sushiData.exchange.token({ token_address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0' }) // matic
         ])
 
         const pools = results[0]?.data.pools
@@ -41,9 +42,12 @@ const useFarms = () => {
         })
 
         const liquidityPositions = results[1]?.data.liquidityPositions
-        const averageBlockTime = results[2]
-        const sushiPrice = results[3]
+        const sushiPrice = results[2]
+        //const averageBlockTime = results[3]
         const pairs = pairsQuery?.data.pairs
+
+        //const maticPrice = results[3]
+        //console.log('maticPrice:', maticPrice)
 
         const farms = pools
             .filter((pool: any) => {
@@ -55,18 +59,27 @@ const useFarms = () => {
                 const liquidityPosition = liquidityPositions.find(
                     (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                 )
-                const blocksPerHour = 3600 / averageBlockTime
+                //const blocksPerHour = 3600 / averageBlockTime
                 const balance = Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1
                 const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
                 const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
                 const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
                 const rewardPerSecond =
                     ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
-                const roiPerSecond = (rewardPerSecond * sushiPrice) / balanceUSD
+                const rewardPerDay = rewardPerSecond * 3600 * 24
+
+                const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
+                const secondaryRewardPerDay = secondaryRewardPerSecond * 3600 * 24
+
+                //console.log('rewardPerDay:', rewardPerDay)
+
+                const roiPerSecond = (rewardPerSecond * 2 * sushiPrice) / balanceUSD // *2 with matic rewards
                 const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
                 const roiPerYear = roiPerMonth * 12
+
+                console.log('pool:', pool.slpBalance)
 
                 return {
                     ...pool,
@@ -75,8 +88,14 @@ const useFarms = () => {
                     name: pair.token0.name + ' ' + pair.token1.name,
                     pid: Number(pool.id),
                     pairAddress: pair.id,
-                    slpBalance: pool.balance,
+                    slpBalance: pool.slpBalance,
                     liquidityPair: pair,
+                    rewardTokens: [
+                        '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a', //SUSHI on Matic
+                        '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270' // MATIC on Matic
+                    ],
+                    sushiRewardPerDay: rewardPerDay,
+                    secondaryRewardPerDay: secondaryRewardPerDay,
                     roiPerSecond,
                     roiPerHour,
                     roiPerDay,

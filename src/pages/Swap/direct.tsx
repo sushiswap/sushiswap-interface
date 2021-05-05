@@ -15,16 +15,16 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Loader from '../../components/Loader'
 import ProgressSteps from '../../components/ProgressSteps'
 import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsSection from '../../components/swap/AdvancedSwapDetailsSection'
+import { AdvancedSwapDetails } from '../../components/swap/AdvancedSwapDetails'
 import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/swap/SwapHeader'
+import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import { getTradeVersion } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
@@ -577,7 +577,7 @@ export default function Swap() {
                                 </AutoColumn>
                             </Card>
                         )}
-                        <AdvancedSwapDetailsSection trade={trade} />
+                        <AdvancedSwapDetails trade={trade} />
                     </AutoColumn>
                 </Wrapper>
             </div>

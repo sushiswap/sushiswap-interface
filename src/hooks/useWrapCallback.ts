@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { tryParseAmount } from '../state/swap/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useCurrencyBalance } from '../state/wallet/hooks'
-import { useActiveWeb3React } from './index'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useWETHContract } from './useContract'
 
 export enum WrapType {

@@ -6,7 +6,7 @@ import {
     useBoringHelperContract
 } from 'hooks/useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import LPToken from '../types/LPToken'
 import { getAddress } from '@ethersproject/address'
 import { chunk } from 'lodash'
@@ -36,7 +36,7 @@ const useLPTokensState = () => {
         try {
             updatingLPTokens.current = true
             if (ChainId.MATIC === chainId) {
-                const LP_TOKENS_LIMIT = 300
+                const LP_TOKENS_LIMIT = 500
                 const length = await quickSwapFactoryContract?.allPairsLength()
                 const pages: number[] = []
                 for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)

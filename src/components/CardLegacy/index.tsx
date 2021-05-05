@@ -1,7 +1,7 @@
 import React from 'react'
 import { CardProps, Text } from 'rebass'
 import { Box } from 'rebass/styled-components'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 const Card = styled(Box)<{ width?: string; padding?: string; border?: string; borderRadius?: string }>`
     width: ${({ width }) => width ?? '100%'};
@@ -16,6 +16,68 @@ export default Card
 export const LightCard = styled(Card)`
     border: 1px solid ${({ theme }) => theme.bg2};
     background-color: ${({ theme }) => theme.bg1};
+`
+
+const sheen = keyframes`{
+    100% {
+      transform: rotateZ(60deg) translate(1em, -40em);
+    }
+  }`
+
+export const DarkCard = styled(Card)`
+    overflow: hidden;
+    background-origin: border-box;
+    position: relative;
+    background-color: #0d0d1f;
+    &:hover {
+        background-origin: border-box;
+        &::after {
+            animation: ${sheen} 0.4s forwards;
+        }
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        top: -80%;
+        right: -20%;
+        bottom: -50%;
+        left: -120%;
+        background: linear-gradient(
+            to bottom,
+            rgba(229, 172, 142, 0),
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(229, 172, 142, 0)
+        );
+        transform: rotateZ(70deg) translate(-5em, 7.5em);
+    }
+`
+
+export const DarkBlueCard = styled(Card)`
+    overflow: hidden;
+    background-origin: border-box;
+    position: relative;
+    background-color: #12182c;
+    &:hover {
+        background-origin: border-box;
+        &::after {
+            animation: ${sheen} 0.4s forwards;
+        }
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        top: -80%;
+        right: -20%;
+        bottom: -50%;
+        left: -120%;
+        background: linear-gradient(
+            to bottom,
+            rgba(229, 172, 142, 0),
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(229, 172, 142, 0)
+        );
+        transform: rotateZ(70deg) translate(-5em, 7.5em);
+    }
 `
 
 export const LightGreyCard = styled(Card)`

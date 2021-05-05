@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { TransactionReviewView, WarningsView } from 'kashi/components'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { BigNumber } from '@ethersproject/bignumber'
 import { minimum, e10, maximum, ZERO } from 'kashi/functions/math'
 import { WETH } from '@sushiswap/sdk'
@@ -178,7 +178,7 @@ export default function Repay({ pair }: RepayProps) {
     } else if (repayValueSet) {
         actionName = 'Repay'
     } else if (swap) {
-        actionName = 'Flash repay'
+        actionName = 'Automic repay'
     }
 
     // const actionDisabled = false
@@ -197,6 +197,8 @@ export default function Repay({ pair }: RepayProps) {
         setRemoveCollateralValue('')
         setRepayAssetValue('')
     }
+
+    console.log('useBentoRemove', useBentoRemove)
 
     // Handlers
     async function onExecute(cooker: KashiCooker) {
@@ -252,7 +254,7 @@ export default function Repay({ pair }: RepayProps) {
 
             cooker.repayPart(pair.userBorrowPart, true)
 
-            if (useBentoRemove) {
+            if (!useBentoRemove) {
                 cooker.bentoWithdrawCollateral(ZERO, BigNumber.from(-1))
             }
 
@@ -355,7 +357,7 @@ export default function Repay({ pair }: RepayProps) {
 
             {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
-            {((swap && priceImpactSeverity < 3) || isExpertMode) && (
+            {swap && (priceImpactSeverity < 3 || isExpertMode) && (
                 <TransactionReviewView transactionReview={transactionReview} />
             )}
 

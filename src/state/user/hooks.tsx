@@ -4,9 +4,9 @@ import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
-import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens } from '../../hooks/Tokens'
-import { AppDispatch, AppState } from '../index'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useAllTokens } from 'hooks/Tokens'
+import { AppDispatch, AppState } from '..'
 import {
     addSerializedPair,
     addSerializedToken,
@@ -200,6 +200,14 @@ export function useURLWarningToggle(): () => void {
 export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
     return new Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
 }
+
+// export function toPancakeV1LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
+//     return new Token(tokenA.chainId, PancakeV1Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
+// }
+
+// export function toPancakeV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
+//     return new Token(tokenA.chainId, PancakeV2Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
+// }
 
 /**
  * Returns all the pairs of tokens that are tracked by the user for the current chain ID.

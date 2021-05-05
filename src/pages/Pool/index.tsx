@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Pair } from '@sushiswap/sdk'
 import { transparentize } from 'polished'
 import React, { useContext, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Text } from 'rebass'
 import styled, { ThemeContext } from 'styled-components'
 import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/ButtonLegacy'
@@ -14,13 +14,15 @@ import { Dots } from '../../components/swap/styleds'
 import { BIG_INT_ZERO } from '../../constants'
 import { usePairs } from '../../data/Reserves'
 import { useUserHasLiquidityInAllTokens } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useStakingInfo } from '../../state/stake/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
+import ExchangeHeader from '../../components/ExchangeHeader'
+import Button from '../../components/Button'
 
 const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
     background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
@@ -92,6 +94,7 @@ const EmptyProposals = styled.div`
 
 export default function Pool() {
     const theme = useContext(ThemeContext)
+    const history = useHistory()
     const { account, chainId } = useActiveWeb3React()
 
     // fetch the user's balances of all tracked V2 LP tokens
@@ -148,49 +151,27 @@ export default function Pool() {
             <Helmet>
                 <title>Pool | Sushi</title>
             </Helmet>
-            <PageWrapper>
-                <SwapPoolTabs active={'pool'} />
-                <Alert
-                    title="Liquidity provider rewards"
-                    message={
-                        <>
-                            <p className="text-gray-500">
-                                Liquidity providers earn a 0.25% fee on all trades proportional to their share of the
-                                pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
-                                your liquidity.
-                            </p>
-                        </>
-                    }
-                    type="information"
-                />
-                <AutoColumn gap="sm" justify="center">
-                    <AutoColumn gap="md" style={{ width: '100%' }}>
-                        <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>
-                            <HideSmall>
-                                <TYPE.mediumHeader
-                                    style={{ marginTop: '0.5rem', justifySelf: 'flex-start', paddingLeft: '0.75rem' }}
-                                >
-                                    Your liquidity
-                                </TYPE.mediumHeader>
-                            </HideSmall>
-                            <ButtonRow>
-                                <ResponsiveButtonSecondary as={Link} padding="6px 8px" to="/create/ETH">
-                                    Create a pair
-                                </ResponsiveButtonSecondary>
-                                <ResponsiveButtonPrimary
-                                    id="join-pool-button"
-                                    as={Link}
-                                    padding="6px 8px"
-                                    borderRadius="10px"
-                                    to="/add/ETH"
-                                >
-                                    <Text fontWeight={500} fontSize={16}>
-                                        Add Liquidity
-                                    </Text>
-                                </ResponsiveButtonPrimary>
-                            </ButtonRow>
-                        </TitleRow>
-
+            <div className="bg-dark-900 w-full max-w-2xl rounded shadow-liquidity-purple-glow">
+                <ExchangeHeader />
+                <div id="pool-page" className="p-4">
+                    <SwapPoolTabs active={'pool'} />
+                    <Alert
+                        title="Liquidity Provider Rewards"
+                        message="Liquidity providers earn a 0.25% fee on all trades proportional to their share of
+                        the pool. Fees are added to the pool, accrue in real time and can be claimed by
+                        withdrawing your liquidity."
+                        type="information"
+                    />
+                    <div className="flex justify-between items-center my-4">
+                        <div className="text-xl text-high-emphesis font-medium">Your Liquidity Positions</div>
+                        <div className="text-sm font-bold">
+                            Don&apos;t see a pool you joined?{' '}
+                            <Link id="import-pool-link" to="/find" className="text-blue">
+                                Import it.
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="grid grid-flow-row gap-3">
                         {!account ? (
                             <Card padding="40px">
                                 <TYPE.body color={theme.text3} textAlign="center">
@@ -235,13 +216,7 @@ export default function Pool() {
                             </EmptyProposals>
                         )}
 
-                        <AutoColumn justify={'center'} gap="xs">
-                            <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                {hasV1Liquidity ? 'Uniswap V1 liquidity found!' : "Don't see a pool you joined?"}{' '}
-                                <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
-                                    {hasV1Liquidity ? 'Migrate now.' : 'Import it.'}
-                                </StyledInternalLink>
-                            </Text>
+                        <div className="grid-flow-row gap-1">
                             {chainId === ChainId.MAINNET && (
                                 <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
                                     Have Liquidity on Uniswap?{' '}
@@ -266,10 +241,23 @@ export default function Pool() {
                                     </StyledInternalLink>
                                 </Text>
                             )}
-                        </AutoColumn>
-                    </AutoColumn>
-                </AutoColumn>
-            </PageWrapper>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <Button id="join-pool-button" color="gradient" onClick={() => history.push('/add/ETH')}>
+                                Add Liquidity
+                            </Button>
+                            <Button
+                                id="create-pool-button"
+                                color="default"
+                                className="bg-dark-800"
+                                onClick={() => history.push('/create/ETH')}
+                            >
+                                Create a pair
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

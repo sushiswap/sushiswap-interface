@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import useBentoBox from 'hooks/useBentoBox'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from 'components/NumericalInput'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { formattedNum } from 'utils'
 import { Dots } from '../../Pool/styleds'
 

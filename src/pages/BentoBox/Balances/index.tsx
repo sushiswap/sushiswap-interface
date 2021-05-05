@@ -1,5 +1,6 @@
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
-import { useActiveWeb3React, useFuse, useSortableData } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useFuse, useSortableData } from 'hooks'
 import { getCurrency } from 'kashi'
 import { BackButton, Paper } from 'components'
 import { getTokenIcon } from 'kashi/functions'
@@ -46,29 +47,21 @@ export default function BentoBalances(): JSX.Element {
                     className="h-full bg-dark-900"
                     header={
                         <CardHeader className="flex justify-between items-center bg-dark-800">
-                            <div className="md:hidden">
-                                <div className="flex float-right items-center">
-                                    <div className="">BentoBox</div>
-                                </div>
-                            </div>
-                            <div className="flex w-full justify-between">
-                                <div className="hidden md:flex items-center">
-                                    <BackButton defaultRoute="/bento" />
+                            <div className="flex flex-col md:flex-row items-center justify-between w-full">
+                                <div className="flex items-baseline">
+                                    <div className="text-3xl text-high-emphesis mr-4">BentoBox</div>
                                     <div>
-                                        <span className="text-3xl text-high-emphesis mr-2">BentoBox</span>
-                                        <span className="text-lg text-secondary">
-                                            {formattedNum(
-                                                balances
-                                                    ?.reduce((previousValue, currentValue) => {
-                                                        return previousValue.add(currentValue.bento.usdValue)
-                                                    }, ZERO)
-                                                    .toFixed(getCurrency(chainId).decimals),
-                                                true
-                                            )}
-                                        </span>
+                                        {formattedNum(
+                                            balances
+                                                ?.reduce((previousValue, currentValue) => {
+                                                    return previousValue.add(currentValue.bento.usdValue)
+                                                }, ZERO)
+                                                .toFixed(getCurrency(chainId).decimals),
+                                            true
+                                        )}
                                     </div>
                                 </div>
-                                <div className="ml-3">
+                                <div className="flex justify-end w-full py-4 md:py-0">
                                     <Search search={search} term={term} />
                                 </div>
                             </div>

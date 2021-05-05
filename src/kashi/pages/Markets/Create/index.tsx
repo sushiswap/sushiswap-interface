@@ -1,6 +1,7 @@
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { ethers } from 'ethers'
-import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBentoBoxContract } from 'hooks/useContract'
 import {
     ChainlinkToken,
     CHAINLINK_MAPPING,
@@ -11,8 +12,8 @@ import {
 import { e10 } from 'kashi/functions/math'
 import React, { useEffect, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { BackButton, Button } from 'components'
-import { Card, Layout, LendCardHeader, ListBox } from 'kashi/components'
+import { Button } from 'components'
+import { Card, Layout, CardHeader, ListBox } from 'kashi/components'
 import { Helmet } from 'react-helmet'
 
 const CreatePair = () => {
@@ -84,6 +85,8 @@ const CreatePair = () => {
 
     const handleCreate = async () => {
         try {
+            console.log(selectedAsset, selectedCollateral)
+
             const oracleData = getOracleData(selectedAsset, selectedCollateral)
             if (!oracleData) {
                 console.log('No path')
@@ -128,12 +131,9 @@ const CreatePair = () => {
             <Card
                 className="h-full bg-dark-900"
                 header={
-                    <LendCardHeader>
-                        <div className="flex items-center">
-                            <BackButton defaultRoute={'/bento/kashi/lend'} />
-                            <div className="text-3xl text-high-emphesis">Create a Market</div>
-                        </div>
-                    </LendCardHeader>
+                    <CardHeader className="bg-dark-800">
+                        <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
+                    </CardHeader>
                 }
             >
                 <div className="space-y-6">
@@ -152,12 +152,17 @@ const CreatePair = () => {
                         tokens={collateralTokens}
                         selectedToken={selectedCollateral}
                         setSelectedToken={setSelectedCollateral}
+                        disabled={selectedAsset === empty}
                     />
                     <Button
                         color="gradient"
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"
                         onClick={() => handleCreate()}
-                        disabled={selectedCollateral === empty || selectedAsset === empty}
+                        disabled={
+                            selectedCollateral === empty ||
+                            selectedAsset === empty ||
+                            selectedCollateral === selectedAsset
+                        }
                     >
                         Create Market
                     </Button>

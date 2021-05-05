@@ -2,9 +2,9 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, Currency, WETH } from '@sushiswap/sdk'
 import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
-import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
-import { useBoringHelperContract } from 'hooks/useContract'
+import { useBoringHelperContract, useBentoBoxContract } from 'hooks/useContract'
 import _ from 'lodash'
 import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
@@ -107,7 +107,7 @@ async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
     let logs = []
     let success = false
     const masterAddress = KASHI_ADDRESS[chainId]
-    if (chainId != ChainId.BSC && chainId != ChainId.MATIC) {
+    if (chainId !== ChainId.BSC && chainId !== ChainId.MATIC) {
         logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(masterAddress))
         success = true
     }
@@ -171,7 +171,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
             if (
                 !account ||
                 !chainId ||
-                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].indexOf(chainId) == -1
+                ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId)
             ) {
                 return
             }
@@ -234,191 +234,206 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     type: ActionType.UPDATE,
                     payload: {
                         info,
-                        pairs: pairs.map((pair: any, i: number) => {
-                            pair.elapsedSeconds = BigNumber.from(Date.now())
-                                .div('1000')
-                                .sub(pair.accrueInfo.lastAccrued)
+                        pairs: pairs
+                            .filter((pair: any) => pair.asset !== pair.collateral)
+                            .map((pair: any, i: number) => {
+                                pair.elapsedSeconds = BigNumber.from(Date.now())
+                                    .div('1000')
+                                    .sub(pair.accrueInfo.lastAccrued)
 
-                            // Interest per year at last accrue, this will apply during the next accrue
-                            pair.interestPerYear = pair.accrueInfo.interestPerSecond
-                                .mul('60')
-                                .mul('60')
-                                .mul('24')
-                                .mul('365')
+                                // Interest per year at last accrue, this will apply during the next accrue
+                                pair.interestPerYear = pair.accrueInfo.interestPerSecond
+                                    .mul('60')
+                                    .mul('60')
+                                    .mul('24')
+                                    .mul('365')
 
-                            // The total collateral in the market (stable, doesn't accrue)
-                            pair.totalCollateralAmount = easyAmount(
-                                toAmount(pair.collateral, pair.totalCollateralShare),
-                                pair.collateral
-                            )
+                                // The total collateral in the market (stable, doesn't accrue)
+                                pair.totalCollateralAmount = easyAmount(
+                                    toAmount(pair.collateral, pair.totalCollateralShare),
+                                    pair.collateral
+                                )
 
-                            // The total assets unborrowed in the market (stable, doesn't accrue)
-                            pair.totalAssetAmount = easyAmount(
-                                toAmount(pair.asset, pair.totalAsset.elastic),
-                                pair.asset
-                            )
+                                // The total assets unborrowed in the market (stable, doesn't accrue)
+                                pair.totalAssetAmount = easyAmount(
+                                    toAmount(pair.asset, pair.totalAsset.elastic),
+                                    pair.asset
+                                )
 
-                            // The total assets borrowed in the market right now
-                            pair.currentBorrowAmount = easyAmount(
-                                accrue(pair, pair.totalBorrow.elastic, true),
-                                pair.asset
-                            )
+                                // The total assets borrowed in the market right now
+                                pair.currentBorrowAmount = easyAmount(
+                                    accrue(pair, pair.totalBorrow.elastic, true),
+                                    pair.asset
+                                )
 
-                            // The total amount of assets, both borrowed and still available right now
-                            pair.currentAllAssets = easyAmount(
-                                pair.totalAssetAmount.value.add(pair.currentBorrowAmount.value),
-                                pair.asset
-                            )
+                                // The total amount of assets, both borrowed and still available right now
+                                pair.currentAllAssets = easyAmount(
+                                    pair.totalAssetAmount.value.add(pair.currentBorrowAmount.value),
+                                    pair.asset
+                                )
 
-                            pair.marketHealth = pair.totalCollateralAmount.value
-                                .muldiv(
+                                pair.marketHealth = pair.totalCollateralAmount.value
+                                    .muldiv(
+                                        e10(18),
+                                        maximum(
+                                            pair.currentExchangeRate,
+                                            pair.oracleExchangeRate,
+                                            pair.spotExchangeRate
+                                        )
+                                    )
+                                    .muldiv(e10(18), pair.currentBorrowAmount.value)
+
+                                pair.currentTotalAsset = accrueTotalAssetWithFee(pair)
+
+                                pair.currentAllAssetShares = toShare(pair.asset, pair.currentAllAssets.value)
+
+                                // Maximum amount of assets available for withdrawal or borrow
+                                pair.maxAssetAvailable = minimum(
+                                    pair.totalAsset.elastic.muldiv(
+                                        pair.currentAllAssets.value,
+                                        pair.currentAllAssetShares
+                                    ),
+                                    toAmount(
+                                        pair.asset,
+                                        toElastic(pair.currentTotalAsset, pair.totalAsset.base.sub(1000), false)
+                                    )
+                                )
+
+                                pair.maxAssetAvailableFraction = pair.maxAssetAvailable.muldiv(
+                                    pair.currentTotalAsset.base,
+                                    pair.currentAllAssets.value
+                                )
+
+                                // The percentage of assets that is borrowed out right now
+                                pair.utilization = e10(18).muldiv(
+                                    pair.currentBorrowAmount.value,
+                                    pair.currentAllAssets.value
+                                )
+
+                                // Interest per year received by lenders as of now
+                                pair.supplyAPR = takeFee(pair.interestPerYear.muldiv(pair.utilization, e10(18)))
+
+                                // Interest payable by borrowers per year as of now
+                                pair.currentInterestPerYear = interestAccrue(pair, pair.interestPerYear)
+
+                                // Interest per year received by lenders as of now
+                                pair.currentSupplyAPR = takeFee(
+                                    pair.currentInterestPerYear.muldiv(pair.utilization, e10(18))
+                                )
+
+                                // The user's amount of collateral (stable, doesn't accrue)
+                                pair.userCollateralAmount = easyAmount(
+                                    toAmount(pair.collateral, pair.userCollateralShare),
+                                    pair.collateral
+                                )
+
+                                // The user's amount of assets (stable, doesn't accrue)
+                                pair.currentUserAssetAmount = easyAmount(
+                                    pair.userAssetFraction.muldiv(pair.currentAllAssets.value, pair.totalAsset.base),
+                                    pair.asset
+                                )
+
+                                // The user's amount borrowed right now
+                                pair.currentUserBorrowAmount = easyAmount(
+                                    pair.userBorrowPart.muldiv(pair.currentBorrowAmount.value, pair.totalBorrow.base),
+                                    pair.asset
+                                )
+
+                                // The user's amount of assets that are currently lent
+                                pair.currentUserLentAmount = easyAmount(
+                                    pair.userAssetFraction.muldiv(pair.currentBorrowAmount.value, pair.totalAsset.base),
+                                    pair.asset
+                                )
+
+                                // Value of protocol fees
+                                pair.feesEarned = easyAmount(
+                                    pair.accrueInfo.feesEarnedFraction.muldiv(
+                                        pair.currentAllAssets.value,
+                                        pair.totalAsset.base
+                                    ),
+                                    pair.asset
+                                )
+
+                                // The user's maximum borrowable amount based on the collateral provided, using all three oracle values
+                                pair.maxBorrowable = {
+                                    oracle: pair.userCollateralAmount.value.muldiv(
+                                        e10(16).mul('75'),
+                                        pair.oracleExchangeRate
+                                    ),
+                                    spot: pair.userCollateralAmount.value.muldiv(
+                                        e10(16).mul('75'),
+                                        pair.spotExchangeRate
+                                    ),
+                                    stored: pair.userCollateralAmount.value.muldiv(
+                                        e10(16).mul('75'),
+                                        pair.currentExchangeRate
+                                    )
+                                }
+                                pair.maxBorrowable.minimum = minimum(
+                                    pair.maxBorrowable.oracle,
+                                    pair.maxBorrowable.spot,
+                                    pair.maxBorrowable.stored
+                                )
+                                pair.maxBorrowable.safe = pair.maxBorrowable.minimum
+                                    .muldiv('95', '100')
+                                    .sub(pair.currentUserBorrowAmount.value)
+                                pair.maxBorrowable.possible = minimum(pair.maxBorrowable.safe, pair.maxAssetAvailable)
+
+                                pair.safeMaxRemovable = ZERO
+
+                                pair.health = pair.currentUserBorrowAmount.value.muldiv(
                                     e10(18),
-                                    maximum(pair.currentExchangeRate, pair.oracleExchangeRate, pair.spotExchangeRate)
+                                    pair.maxBorrowable.minimum
                                 )
-                                .muldiv(e10(18), pair.currentBorrowAmount.value)
 
-                            pair.currentTotalAsset = accrueTotalAssetWithFee(pair)
+                                pair.netWorth = getUSDValue(
+                                    pair.currentUserAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
+                                    pair.asset
+                                ).add(getUSDValue(pair.userCollateralAmount.value, pair.collateral))
+                                pair.search = pair.asset.symbol + '/' + pair.collateral.symbol
 
-                            pair.currentAllAssetShares = toShare(pair.asset, pair.currentAllAssets.value)
+                                pair.oracle = getOracle(pair, chain, tokens)
 
-                            // Maximum amount of assets available for withdrawal or borrow
-                            pair.maxAssetAvailable = minimum(
-                                pair.totalAsset.elastic.muldiv(pair.currentAllAssets.value, pair.currentAllAssetShares),
-                                toAmount(
-                                    pair.asset,
-                                    toElastic(pair.currentTotalAsset, pair.totalAsset.base.sub(1000), false)
-                                )
-                            )
+                                pair.interestPerYear = {
+                                    value: pair.interestPerYear,
+                                    string: pair.interestPerYear.toFixed(16)
+                                }
 
-                            pair.maxAssetAvailableFraction = pair.maxAssetAvailable.muldiv(
-                                pair.currentTotalAsset.base,
-                                pair.currentAllAssets.value
-                            )
+                                pair.supplyAPR = {
+                                    value: pair.supplyAPR,
+                                    string: Fraction.from(pair.supplyAPR, e10(16)).toString()
+                                }
+                                pair.currentSupplyAPR = {
+                                    value: pair.currentSupplyAPR,
+                                    string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString()
+                                }
+                                pair.currentInterestPerYear = {
+                                    value: pair.currentInterestPerYear,
+                                    string: Fraction.from(
+                                        pair.currentInterestPerYear,
+                                        BigNumber.from(10).pow(16)
+                                    ).toString()
+                                }
+                                pair.utilization = {
+                                    value: pair.utilization,
+                                    string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString()
+                                }
+                                pair.health = {
+                                    value: pair.health,
+                                    string: Fraction.from(pair.health, e10(16))
+                                }
+                                pair.maxBorrowable = {
+                                    oracle: easyAmount(pair.maxBorrowable.oracle, pair.asset),
+                                    spot: easyAmount(pair.maxBorrowable.spot, pair.asset),
+                                    stored: easyAmount(pair.maxBorrowable.stored, pair.asset),
+                                    minimum: easyAmount(pair.maxBorrowable.minimum, pair.asset),
+                                    safe: easyAmount(pair.maxBorrowable.safe, pair.asset),
+                                    possible: easyAmount(pair.maxBorrowable.possible, pair.asset)
+                                }
+                                pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
 
-                            // The percentage of assets that is borrowed out right now
-                            pair.utilization = e10(18).muldiv(
-                                pair.currentBorrowAmount.value,
-                                pair.currentAllAssets.value
-                            )
-
-                            // Interest per year received by lenders as of now
-                            pair.supplyAPR = takeFee(pair.interestPerYear.muldiv(pair.utilization, e10(18)))
-
-                            // Interest payable by borrowers per year as of now
-                            pair.currentInterestPerYear = interestAccrue(pair, pair.interestPerYear)
-
-                            // Interest per year received by lenders as of now
-                            pair.currentSupplyAPR = takeFee(
-                                pair.currentInterestPerYear.muldiv(pair.utilization, e10(18))
-                            )
-
-                            // The user's amount of collateral (stable, doesn't accrue)
-                            pair.userCollateralAmount = easyAmount(
-                                toAmount(pair.collateral, pair.userCollateralShare),
-                                pair.collateral
-                            )
-
-                            // The user's amount of assets (stable, doesn't accrue)
-                            pair.currentUserAssetAmount = easyAmount(
-                                pair.userAssetFraction.muldiv(pair.currentAllAssets.value, pair.totalAsset.base),
-                                pair.asset
-                            )
-
-                            // The user's amount borrowed right now
-                            pair.currentUserBorrowAmount = easyAmount(
-                                pair.userBorrowPart.muldiv(pair.currentBorrowAmount.value, pair.totalBorrow.base),
-                                pair.asset
-                            )
-
-                            // The user's amount of assets that are currently lent
-                            pair.currentUserLentAmount = easyAmount(
-                                pair.userAssetFraction.muldiv(pair.currentBorrowAmount.value, pair.totalAsset.base),
-                                pair.asset
-                            )
-
-                            // Value of protocol fees
-                            pair.feesEarned = easyAmount(
-                                pair.accrueInfo.feesEarnedFraction.muldiv(
-                                    pair.currentAllAssets.value,
-                                    pair.totalAsset.base
-                                ),
-                                pair.asset
-                            )
-
-                            // The user's maximum borrowable amount based on the collateral provided, using all three oracle values
-                            pair.maxBorrowable = {
-                                oracle: pair.userCollateralAmount.value.muldiv(
-                                    e10(16).mul('75'),
-                                    pair.oracleExchangeRate
-                                ),
-                                spot: pair.userCollateralAmount.value.muldiv(e10(16).mul('75'), pair.spotExchangeRate),
-                                stored: pair.userCollateralAmount.value.muldiv(
-                                    e10(16).mul('75'),
-                                    pair.currentExchangeRate
-                                )
-                            }
-                            pair.maxBorrowable.minimum = minimum(
-                                pair.maxBorrowable.oracle,
-                                pair.maxBorrowable.spot,
-                                pair.maxBorrowable.stored
-                            )
-                            pair.maxBorrowable.safe = pair.maxBorrowable.minimum
-                                .muldiv('95', '100')
-                                .sub(pair.currentUserBorrowAmount.value)
-                            pair.maxBorrowable.possible = minimum(pair.maxBorrowable.safe, pair.maxAssetAvailable)
-
-                            pair.safeMaxRemovable = ZERO
-
-                            pair.health = pair.currentUserBorrowAmount.value.muldiv(e10(18), pair.maxBorrowable.minimum)
-
-                            pair.netWorth = getUSDValue(
-                                pair.currentUserAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
-                                pair.asset
-                            ).add(getUSDValue(pair.userCollateralAmount.value, pair.collateral))
-                            pair.search = pair.asset.symbol + '/' + pair.collateral.symbol
-
-                            pair.oracle = getOracle(pair, chain, tokens)
-
-                            pair.interestPerYear = {
-                                value: pair.interestPerYear,
-                                string: pair.interestPerYear.toFixed(16)
-                            }
-
-                            pair.supplyAPR = {
-                                value: pair.supplyAPR,
-                                string: Fraction.from(pair.supplyAPR, e10(16)).toString()
-                            }
-                            pair.currentSupplyAPR = {
-                                value: pair.currentSupplyAPR,
-                                string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString()
-                            }
-                            pair.currentInterestPerYear = {
-                                value: pair.currentInterestPerYear,
-                                string: Fraction.from(
-                                    pair.currentInterestPerYear,
-                                    BigNumber.from(10).pow(16)
-                                ).toString()
-                            }
-                            pair.utilization = {
-                                value: pair.utilization,
-                                string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString()
-                            }
-                            pair.health = {
-                                value: pair.health,
-                                string: Fraction.from(pair.health, e10(16))
-                            }
-                            pair.maxBorrowable = {
-                                oracle: easyAmount(pair.maxBorrowable.oracle, pair.asset),
-                                spot: easyAmount(pair.maxBorrowable.spot, pair.asset),
-                                stored: easyAmount(pair.maxBorrowable.stored, pair.asset),
-                                minimum: easyAmount(pair.maxBorrowable.minimum, pair.asset),
-                                safe: easyAmount(pair.maxBorrowable.safe, pair.asset),
-                                possible: easyAmount(pair.maxBorrowable.possible, pair.asset)
-                            }
-                            pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
-
-                            return pair
-                        })
+                                return pair
+                            })
                     }
                 })
             }

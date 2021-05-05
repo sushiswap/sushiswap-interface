@@ -1,8 +1,7 @@
 import { ChainId } from '@sushiswap/sdk'
 import React from 'react'
 import { Redirect, Route, RouteComponentProps, useLocation, Switch } from 'react-router-dom'
-import { useActiveWeb3React } from 'hooks'
-
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import Connect from './kashi/pages/Connect'
 import BorrowMarkets from './kashi/pages/Markets/Borrow'
 import CreateMarkets from './kashi/pages/Markets/Create'
@@ -71,16 +70,18 @@ function Routes(): JSX.Element {
             {(chainId === ChainId.MAINNET || chainId === ChainId.BSC || chainId === ChainId.MATIC) && (
                 <Route exact strict path="/migrate" component={Migrate} />
             )}
-            <Route exact strict path="/migrate/v2" render={() => <Redirect to="/migrate" />} />
 
+            {/* SushiBar Staking */}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/sushibar" component={SushiBar} />}
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
 
             {/* Pages */}
-            {chainId === ChainId.MAINNET && <Route exact strict path="/trade" component={Trade} />}
+            {/* {chainId === ChainId.MAINNET && <Route exact strict path="/trade" component={Trade} />} */}
             <Route exact strict path="/trade" component={Swap} />
-            <Route exact path="/sushibar" render={() => <Redirect to="/stake" />} />
+
+            <Route exact strict path="/sushi-bar" component={SushiBar} />
             <Route exact strict path="/swap" component={Swap} />
             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
             <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
@@ -123,6 +124,7 @@ function Routes(): JSX.Element {
 
             {/* Redirects for Legacy Hash Router paths */}
             <Route exact strict path="/" component={RedirectHashRoutes} />
+
             {/* Catch all */}
             <Route component={RedirectPathToSwapOnly} />
         </Switch>

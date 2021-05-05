@@ -18,7 +18,7 @@ import { useAllLists } from 'state/lists/hooks'
 import styled from 'styled-components'
 import { CloseIcon, TYPE } from 'theme'
 import { ExternalLink } from '../../theme/components'
-import { CurrencyModalView } from './CurrencySearchModal'
+import CurrencyModalView from './CurrencyModalView'
 import { Checkbox, PaddedColumn, TextDot } from './styleds'
 
 const Wrapper = styled.div`
@@ -34,7 +34,7 @@ interface ImportProps {
     setModalView: (view: CurrencyModalView) => void
 }
 
-export function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
+function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
     const theme = useTheme()
     const dispatch = useDispatch<AppDispatch>()
 
@@ -165,3 +165,5 @@ export function ImportList({ listURL, list, setModalView, onDismiss }: ImportPro
         </Wrapper>
     )
 }
+
+export default ImportList

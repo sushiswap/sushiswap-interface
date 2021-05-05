@@ -5,7 +5,7 @@ import { isTradeBetter } from 'utils/trades'
 import { BASES_TO_CHECK_TRADES_AGAINST, BETTER_TRADE_LESS_HOPS_THRESHOLD, CUSTOM_BASES } from '../constants'
 import { PairState, usePairs } from '../data/Reserves'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
-import { useActiveWeb3React } from './index'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useUnsupportedTokens } from './Tokens'
 
 function generateAllRoutePairs(tokenA?: Token, tokenB?: Token, chainId?: ChainId): [Token, Token][] {

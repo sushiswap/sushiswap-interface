@@ -62,7 +62,9 @@ export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
 // TODO: update weekly with new constant
 export const MERKLE_ROOT =
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-01/merkle-10959148-11003985.json'
-    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-02/merkle-10959148-11049116.json'
+    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-02/merkle-10959148-11049116.json'
+    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-03/merkle-10959148-11094829.json'
+    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-04/merkle-10959148-11140426.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
@@ -384,3 +386,11 @@ export const BASE_SWAPPER: { [chainId in ChainId]?: string } = {
 
 // Boring Helper
 // export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
+
+export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'https://analytics.sushi.com',
+    [ChainId.MATIC]: 'https://analytics-polygon.sushi.com',
+    [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
+    [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
+    [ChainId.XDAI]: 'https://analytics-xdai.sushi.com'
+}

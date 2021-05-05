@@ -1,7 +1,7 @@
 import { Pair } from '@sushiswap/sdk'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { RowBetween } from 'components/Row'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'

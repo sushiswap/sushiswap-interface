@@ -1,5 +1,6 @@
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import { useActiveWeb3React, useFuse, useSortableData } from 'hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useFuse, useSortableData } from 'hooks'
 import { getCurrency } from 'kashi/constants'
 import React from 'react'
 import { ChevronDown, ChevronUp } from 'react-feather'

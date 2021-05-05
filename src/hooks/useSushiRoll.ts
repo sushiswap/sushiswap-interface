@@ -3,7 +3,7 @@ import { signERC2612Permit } from 'eth-permit'
 import { ethers } from 'ethers'
 import { useCallback } from 'react'
 import ReactGA from 'react-ga'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useSushiRollContract } from '../hooks/useContract'
 import LPToken from '../types/LPToken'
 
