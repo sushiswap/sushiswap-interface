@@ -2,7 +2,7 @@ import React from 'react'
 
 const TYPE = {
     information: {
-        color: 'bg-dark-950 text-gray-500',
+        color: 'bg-purple bg-opacity-20 text-high-emphesis',
         icon: (
             <svg
                 width="33"
