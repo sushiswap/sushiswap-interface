@@ -76,8 +76,9 @@ export const Input = React.memo(function InnerInput({
             pattern="^[0-9]*[\%]*$"
             placeholder={placeholder || '100%'}
             min={0}
+            max={'100'}
             minLength={1}
-            maxLength={79}
+            maxLength={4}
             spellCheck="false"
             className={className}
         />
