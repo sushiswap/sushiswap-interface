@@ -13,7 +13,6 @@ import { RowBetween, RowFixed } from '../../components/Row'
 import { Dots } from '../../components/swap/styleds'
 import { BIG_INT_ZERO } from '../../constants'
 import { usePairs } from '../../data/Reserves'
-import { useUserHasLiquidityInAllTokens } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useStakingInfo } from '../../state/stake/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
@@ -134,8 +133,6 @@ export default function Pool() {
         v2Pairs?.some(V2Pair => !V2Pair)
 
     const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
-
-    const hasV1Liquidity = useUserHasLiquidityInAllTokens()
 
     // show liquidity even if its deposited in rewards contract
     const stakingInfo = useStakingInfo()
