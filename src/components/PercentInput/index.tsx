@@ -63,6 +63,10 @@ export const Input = React.memo(function InnerInput({
             {...rest}
             value={value}
             onChange={event => {
+                if (+event.target.value > 100) {
+                    return
+                }
+                
                 // replace commas with periods, because uniswap exclusively uses period as the decimal separator
                 enforcer(event.target.value.replace(/,/g, '.').replace(/%/g, ''))
             }}
@@ -73,7 +77,7 @@ export const Input = React.memo(function InnerInput({
             autoCorrect="off"
             // text-specific options
             type="text"
-            pattern="^[0-9]*$"
+            pattern="^([0-9]|[1-9][0-9]|100)$"
             placeholder={placeholder || '100'}
             min={0}
             max={100}
