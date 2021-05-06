@@ -3,13 +3,12 @@ import { Contract } from '@ethersproject/contracts'
 import { JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@sushiswap/sdk'
 import { useMemo } from 'react'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
-import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
+import { getTradeVersion } from '../data/V1'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
 import { isZero } from 'functions'
 import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './useActiveWeb3React'
-import { useV1ExchangeContract } from './useContract'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
 import useTransactionDeadline from './useTransactionDeadline'
@@ -54,14 +53,12 @@ function useSwapCallArguments(
     const recipient = recipientAddressOrName === null ? account : recipientAddress
     const deadline = useTransactionDeadline()
 
-    const v1Exchange = useV1ExchangeContract(useV1TradeExchangeAddress(trade), true)
-
     return useMemo(() => {
         const tradeVersion = getTradeVersion(trade)
         if (!trade || !recipient || !library || !account || !tradeVersion || !chainId || !deadline) return []
 
         const contract: Contract | null =
-            tradeVersion === Version.v2 ? getRouterContract(chainId, library, account) : v1Exchange
+            tradeVersion === Version.v2 ? getRouterContract(chainId, library, account) : null
         if (!contract) {
             return []
         }
@@ -101,7 +98,7 @@ function useSwapCallArguments(
                 break
         }
         return swapMethods.map(parameters => ({ parameters, contract }))
-    }, [account, allowedSlippage, chainId, deadline, library, recipient, trade, v1Exchange])
+    }, [account, allowedSlippage, chainId, deadline, library, recipient, trade])
 }
 
 // returns a function that will execute a swap, if the parameters are all valid
