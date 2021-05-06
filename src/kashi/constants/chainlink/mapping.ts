@@ -593,13 +593,6 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             fromDecimals: 18,
             toDecimals: 18
         },
-        '0xDC3EA94CD0AC27d9A86C180091e7f78C683d3699': {
-            from: '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
-            to: '0x0000000000000000000000000000000000000001',
-            decimals: 8,
-            fromDecimals: 18,
-            toDecimals: 8
-        },
         '0x050c048c9a0CD0e76f166E2539F87ef2acCEC58f': {
             from: '0x476c5E26a75bd202a9683ffD34359C0CC15be0fF',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
