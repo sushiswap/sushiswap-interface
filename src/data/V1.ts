@@ -13,7 +13,6 @@ import {
 } from '@sushiswap/sdk'
 import { useMemo } from 'react'
 import { useV1FactoryContract } from '../hooks/useContract'
-import { Version } from '../hooks/useToggledVersion'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { useETHBalances, useTokenBalance } from '../state/wallet/hooks'
 
@@ -86,11 +85,4 @@ export function useV1Trade(
         console.debug('Failed to create V1 trade', error)
     }
     return v1Trade
-}
-
-export function getTradeVersion(trade?: Trade): Version | undefined {
-    const isV1 = trade?.route?.pairs?.some(pair => pair instanceof MockV1Pair)
-    if (isV1) return Version.v1
-    if (isV1 === false) return Version.v2
-    return undefined
 }

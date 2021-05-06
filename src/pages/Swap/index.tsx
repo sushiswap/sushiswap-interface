@@ -6,7 +6,6 @@ import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { isTradeBetter } from 'utils/trades'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import Card, { GreyCard } from '../../components/CardLegacy'
@@ -25,7 +24,6 @@ import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import TokenWarningModal from '../../components/TokenWarningModal'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
-import { getTradeVersion } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
@@ -49,7 +47,7 @@ import { ClickableText } from '../Pool/styleds'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'
 import { Helmet } from 'react-helmet'
-import { DarkCard, DarkBlueCard } from '../../components/CardLegacy'
+import { DarkCard } from '../../components/CardLegacy'
 
 import { useNetworkModalToggle } from '../../state/application/hooks'
 
@@ -98,7 +96,6 @@ export default function Swap() {
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
     const {
-        v1Trade,
         v2Trade,
         currencyBalances,
         parsedAmount,
@@ -114,14 +111,10 @@ export default function Swap() {
     const { address: recipientAddress } = useENSAddress(recipient)
     const toggledVersion = useToggledVersion()
     const tradesByVersion = {
-        [Version.v1]: v1Trade,
         [Version.v2]: v2Trade
     }
     const trade = showWrap ? undefined : tradesByVersion[toggledVersion]
     const defaultTrade = showWrap ? undefined : tradesByVersion[DEFAULT_VERSION]
-
-    const betterTradeLinkV2: Version | undefined =
-        toggledVersion === Version.v1 && isTradeBetter(v1Trade, v2Trade) ? Version.v2 : undefined
 
     const parsedAmounts = showWrap
         ? {
@@ -237,8 +230,7 @@ export default function Swap() {
                             : 'Swap w/ Send',
                     label: [
                         trade?.inputAmount?.currency?.getSymbol(chainId),
-                        trade?.outputAmount?.currency?.getSymbol(chainId),
-                        getTradeVersion(trade)
+                        trade?.outputAmount?.currency?.getSymbol(chainId)
                     ].join('/')
                 })
 
@@ -607,9 +599,7 @@ export default function Swap() {
                             </Column>
                         )}
                         {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-                        {betterTradeLinkV2 && !swapIsUnsupported && toggledVersion === Version.v1 ? (
-                            <BetterTradeLink version={betterTradeLinkV2} />
-                        ) : toggledVersion !== DEFAULT_VERSION && defaultTrade ? (
+                        {defaultTrade ? (
                             <DefaultVersionLink />
                         ) : null}
                     </BottomGrouping>
