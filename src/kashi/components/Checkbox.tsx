@@ -9,7 +9,7 @@ export function ExchangeRateCheckBox({ color, pair, updateOracle, setUpdateOracl
             : pair.oracleExchangeRate.gt(pair.currentExchangeRate)
 
     return (
-        displayUpdateOracle && (
+        show && (
             <div className="flex items-center mb-4">
                 <Checkbox
                     color={color}

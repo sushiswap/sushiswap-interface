@@ -219,10 +219,11 @@ export default function Borrow({ pair }: BorrowProps) {
 
         if (borrowValueSet) {
             if (
-                displayUpdateOracle ||
-                pair.currentExchangeRate.toFixed(pair.asset.decimals) /
-                    pair.oracleExchangeRate.toFixed(pair.asset.decimals) >
-                    1.05
+                displayUpdateOracle
+                // ||
+                // pair.currentExchangeRate.toFixed(pair.asset.decimals) /
+                //     pair.oracleExchangeRate.toFixed(pair.asset.decimals) >
+                //     1.05
             ) {
                 console.log(
                     displayUpdateOracle,
