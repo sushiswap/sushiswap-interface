@@ -66,17 +66,21 @@ const useFarms = () => {
                 const liquidityPosition = liquidityPositions.find(
                     (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                 )
-                //const blocksPerHour = 3600 / averageBlockTime
-                const balance = Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1
-                const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
-                const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
-                const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
+
+                const balance = Number(pool.slpBalance / 1e18)
+
+                const balanceUSD = (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD)
+
                 const rewardPerSecond =
                     ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
-                const rewardPerDay = rewardPerSecond * 3600 * 24
 
-                const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
-                const secondaryRewardPerDay = secondaryRewardPerSecond * 3600 * 24
+                const rewardPerDay = rewardPerSecond * 86400
+
+                const secondaryRewardPerSecond =
+                    ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
+                // const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
+                const secondaryRewardPerDay = secondaryRewardPerSecond * 86400
 
                 //console.log('rewardPerDay:', rewardPerDay)
 
