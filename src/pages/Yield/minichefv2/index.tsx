@@ -10,6 +10,7 @@ import InputGroup from './InputGroup'
 import { SimpleDots as Dots } from 'kashi/components'
 import Badge from '../../../components/Badge'
 import { Helmet } from 'react-helmet'
+import { t, Trans } from '@lingui/macro'
 
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
@@ -39,7 +40,7 @@ export default function Yield(): JSX.Element {
     return (
         <>
             <Helmet>
-                <title>Yield | Sushi</title>
+                <title>{t`Yield`} | Sushi</title>
                 <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
             </Helmet>
             <div className="container max-w-4xl mx-auto px-0 sm:px-4">
@@ -51,8 +52,8 @@ export default function Yield(): JSX.Element {
                                 <div className="hidden md:flex items-center">
                                     {/* <BackButton defaultRoute="/pool" /> */}
                                     <div className="text-lg mr-2 whitespace-nowrap flex items-center">
-                                        <div className="mr-2">Yield Instruments</div>
-                                        <Badge color="blue">V2 Rewarder</Badge>
+                                        <div className="mr-2">{t`Yield Instruments`}</div>
+                                        <Badge color="blue">{t`V2 Rewarder`}</Badge>
                                     </div>
                                 </div>
                                 <Search search={search} term={term} />
@@ -66,13 +67,13 @@ export default function Yield(): JSX.Element {
                             <div className="pb-4">
                                 <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
                                     <div className="flex items-center">
-                                        <div>Your Yields</div>
+                                        <div>{t`Your Yields`}</div>
                                     </div>
                                     <div className="flex items-center justify-end">
-                                        <div>Deposited</div>
+                                        <div>{t`Deposited`}</div>
                                     </div>
                                     <div className="flex items-center justify-end">
-                                        <div>Claim</div>
+                                        <div>{t`Claim`}</div>
                                     </div>
                                 </div>
                                 <div className="flex-col space-y-2">
@@ -89,7 +90,7 @@ export default function Yield(): JSX.Element {
                             className="flex items-center cursor-pointer hover:text-secondary"
                             onClick={() => requestSort('symbol')}
                         >
-                            <div>Instruments</div>
+                            <div>{t`Instruments`}</div>
                             {sortConfig &&
                                 sortConfig.key === 'symbol' &&
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -97,13 +98,15 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hidden md:block ml-4">
                             <div className="flex items-center justify-start">
-                                <div className="pr-2">Pool Rewards</div>
-                                <Badge color="blue">2X</Badge>
+                                <Trans>
+                                    <div className="pr-2">Pool Rewards</div>
+                                    <Badge color="blue">2X</Badge>
+                                </Trans>
                             </div>
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
                             <div className="flex items-center justify-end">
-                                <div>TVL</div>
+                                <div>{t`TVL`}</div>
                                 {sortConfig &&
                                     sortConfig.key === 'tvl' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -112,7 +115,7 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
                             <div className="flex items-center justify-end">
-                                <div>APR</div>
+                                <div>{t`APR`}</div>
                                 {sortConfig &&
                                     sortConfig.key === 'roiPerYear' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -128,10 +131,10 @@ export default function Yield(): JSX.Element {
                         ) : (
                             <>
                                 {term ? (
-                                    <div className="w-full text-center py-6">No Results.</div>
+                                    <div className="w-full text-center py-6">{t`No Results`}</div>
                                 ) : (
                                     <div className="w-full text-center py-6">
-                                        <Dots>Fetching Instruments</Dots>
+                                        <Dots>{t`Fetching Instruments`}</Dots>
                                     </div>
                                 )}
                             </>
@@ -217,15 +220,17 @@ const TokenBalance = ({ farm }: any) => {
                                 <div className="text-gray-500 text-right font-semibold text-sm sm:text-sm">
                                     {formattedNum(farm.slpBalance / 1e18, false)} SLP
                                 </div>
-                                <div className="text-gray-500 text-right text-xs">Market Staked</div>
+                                <div className="text-gray-500 text-right text-xs">{t`Market Staked`}</div>
                             </div>
                         </div>
                         <div className="md:col-span-3 flex justify-end items-center">
                             <div>
-                                <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
-                                    {formattedPercent(farm.roiPerMonth * 100)}{' '}
-                                </div>
-                                <div className="text-gray-500 text-right text-xs">per month</div>
+                                <Trans>
+                                    <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
+                                        {formattedPercent(farm.roiPerMonth * 100)}{' '}
+                                    </div>
+                                    <div className="text-gray-500 text-right text-xs">per month</div>
+                                </Trans>
                             </div>
                         </div>
                     </div>

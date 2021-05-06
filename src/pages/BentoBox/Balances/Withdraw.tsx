@@ -5,6 +5,7 @@ import { formattedNum } from 'utils'
 import { Input as NumericalInput } from 'components/NumericalInput'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBentoBalance } from 'state/bentobox/hooks'
+import { t } from '@lingui/macro'
 
 function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSymbol: string }): JSX.Element {
     const { account } = useActiveWeb3React()
@@ -21,7 +22,7 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
         <>
             {account && (
                 <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                    Bento Balance: {formattedNum(balance ? balance.value.toFixed(balance.decimals) : 0)}
+                    {t`Bento Balance: ${formattedNum(balance ? balance.value.toFixed(balance.decimals) : 0)}`}
                 </div>
             )}
             <div className="flex items-center relative w-full mb-4">
@@ -42,7 +43,7 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
                         }}
                         className="absolute right-4 focus:ring focus:ring-pink"
                     >
-                        MAX
+                        {t`MAX`}
                     </Button>
                 )}
             </div>
@@ -55,7 +56,7 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
                     setPendingTx(false)
                 }}
             >
-                Withdraw
+                {t`Withdraw`}
             </Button>
         </>
     )

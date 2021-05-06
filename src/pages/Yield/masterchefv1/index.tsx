@@ -9,6 +9,7 @@ import { Card, CardHeader, Paper, Search, DoubleLogo, TokenLogo } from '../compo
 import InputGroup from './InputGroup'
 import { SimpleDots as Dots } from 'kashi/components'
 import { Helmet } from 'react-helmet'
+import { t } from '@lingui/macro'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -32,7 +33,7 @@ export default function Yield(): JSX.Element {
     return (
         <>
             <Helmet>
-                <title>Yield | Sushi</title>
+                <title>{t`Yield`} | Sushi</title>
                 <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
             </Helmet>
             <div className="container max-w-2xl mx-auto">
@@ -43,7 +44,7 @@ export default function Yield(): JSX.Element {
                             <div className="flex w-full justify-between">
                                 <div className="hidden md:flex items-center">
                                     {/* <BackButton defaultRoute="/pool" /> */}
-                                    <div className="text-lg mr-2 whitespace-nowrap">Yield Instruments</div>
+                                    <div className="text-lg mr-2 whitespace-nowrap">{t`Yield Instruments`}</div>
                                 </div>
                                 <Search search={search} term={term} />
                             </div>
@@ -56,13 +57,13 @@ export default function Yield(): JSX.Element {
                             <div className="pb-4">
                                 <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
                                     <div className="flex items-center">
-                                        <div>Your Yields</div>
+                                        <div>{t`Your Yields`}</div>
                                     </div>
                                     <div className="flex items-center justify-end">
-                                        <div>Deposited</div>
+                                        <div>{t`Deposited`}</div>
                                     </div>
                                     <div className="flex items-center justify-end">
-                                        <div>Claim</div>
+                                        <div>{t`Claim`}</div>
                                     </div>
                                 </div>
                                 <div className="flex-col space-y-2">
@@ -79,7 +80,7 @@ export default function Yield(): JSX.Element {
                             className="flex items-center cursor-pointer hover:text-secondary"
                             onClick={() => requestSort('symbol')}
                         >
-                            <div>Instruments</div>
+                            <div>{t`Instruments`}</div>
                             {sortConfig &&
                                 sortConfig.key === 'symbol' &&
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -87,7 +88,7 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
                             <div className="flex items-center justify-end">
-                                <div>TVL</div>
+                                <div>{t`TVL`}</div>
                                 {sortConfig &&
                                     sortConfig.key === 'tvl' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -96,7 +97,7 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
                             <div className="flex items-center justify-end">
-                                <div>APR</div>
+                                <div>{t`APR`}</div>
                                 {sortConfig &&
                                     sortConfig.key === 'roiPerYear' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -112,10 +113,10 @@ export default function Yield(): JSX.Element {
                         ) : (
                             <>
                                 {term ? (
-                                    <div className="w-full text-center py-6">No Results.</div>
+                                    <div className="w-full text-center py-6">{t`No Results`}</div>
                                 ) : (
                                     <div className="w-full text-center py-6">
-                                        <Dots>Fetching Instruments</Dots>
+                                        <Dots>{t`Fetching Instruments`}</Dots>
                                     </div>
                                 )}
                             </>

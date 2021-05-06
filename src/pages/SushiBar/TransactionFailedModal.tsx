@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from '../../components/Modal'
 import RejectedIcon from '../../assets/images/transaction-rejected.png'
 import { CloseIcon } from '../../theme'
+import { t } from '@lingui/macro'
 
 interface TransactionFailedModalProps {
     isOpen: boolean
@@ -27,7 +28,7 @@ export default function TransactionFailedModal({ isOpen, onDismiss }: Transactio
                         onClick={onDismiss}
                         className="flex justify-center items-center w-full h-12 rounded bg-pink hover:bg-opacity-90 text-lg font-medium text-high-emphesis"
                     >
-                        Dismiss
+                        {t`Dismiss`}
                     </button>
                 </div>
             </div>

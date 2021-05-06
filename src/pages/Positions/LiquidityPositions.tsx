@@ -9,6 +9,7 @@ import { usePairs } from 'data/Reserves'
 import { useStakingInfo } from 'state/stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import Position from './Position'
+import { t, Trans } from '@lingui/macro'
 
 type Position = {
     pairs: string
@@ -77,20 +78,22 @@ export default function LiquidityPositions() {
     return (
         <>
             <div className="flex flex-col md:flex-row justify-start md:justify-between mb-6">
-                <div className="text-xl font-medium text-white">Your Liquidity Positions</div>
+                <div className="text-xl font-medium text-white">{t`Your Liquidity Positions`}</div>
                 <div className="flex items-center text-sm pr-2">
-                    <span className="mr-1 text-gray-500">Dont see a pool you joined?</span>
-                    <LinkStyledButton>import it</LinkStyledButton>
+                    <Trans>
+                        <span className="mr-1 text-gray-500">Dont see a pool you joined?</span>
+                        <LinkStyledButton>import it</LinkStyledButton>
+                    </Trans>
                 </div>
             </div>
             <div>
                 {!account ? (
                     <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
-                        Connect to a wallet to view your liquidity.
+                        {t`Connect to a wallet to view your liquidity`}
                     </div>
                 ) : v2IsLoading ? (
                     <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
-                        <Dots>Loading</Dots>
+                        <Dots>{t`Loading`}</Dots>
                     </div>
                 ) : allV2PairsWithLiquidity?.length > 0 || stakingPairs?.length > 0 ? (
                     <>
@@ -100,15 +103,15 @@ export default function LiquidityPositions() {
                     </>
                 ) : (
                     <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
-                        No liquidity positions found.
+                        {t`No liquidity positions found`}
                     </div>
                 )}
                 <div className="flex gap-4 mt-5 mb-1">
                     <Button size="large" color="gradient">
-                        Add Liquidity
+                        {t`Add Liquidity`}
                     </Button>
                     <Button size="large" className="w-full bg-dark-800 text-secondary">
-                        Create a Pair
+                        {t`Create a Pair`}
                     </Button>
                 </div>
             </div>

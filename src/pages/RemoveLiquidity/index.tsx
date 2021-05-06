@@ -44,6 +44,7 @@ import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/Advance
 import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
+import { t, Trans } from '@lingui/macro'
 
 export default function RemoveLiquidity({
     history,
@@ -387,7 +388,7 @@ export default function RemoveLiquidity({
                 </RowBetween>
 
                 <TYPE.italic fontSize={12} color={theme.text2} textAlign="left" padding={'12px 0 0 0'}>
-                    {`Output is estimated. If the price changes by more than ${allowedSlippage /
+                    {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </TYPE.italic>
             </AutoColumn>
@@ -399,7 +400,7 @@ export default function RemoveLiquidity({
             <>
                 <RowBetween>
                     <Text color={theme.text2} fontWeight={500} fontSize={16}>
-                        {'SUSHI ' + currencyA?.getSymbol(chainId) + '/' + currencyB?.getSymbol(chainId)} Burned
+                        {t`SUSHI ${currencyA?.getSymbol(chainId)}/${currencyB?.getSymbol(chainId)} Burned`}
                     </Text>
                     <RowFixed>
                         <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} margin={true} />
@@ -412,7 +413,7 @@ export default function RemoveLiquidity({
                     <>
                         <RowBetween>
                             <Text color={theme.text2} fontWeight={500} fontSize={16}>
-                                Price
+                                {t`Price`}
                             </Text>
                             <Text fontWeight={500} fontSize={16} color={theme.text1}>
                                 1 {currencyA?.getSymbol(chainId)} ={' '}
@@ -433,14 +434,14 @@ export default function RemoveLiquidity({
                     onClick={onRemove}
                 >
                     <Text fontWeight={500} fontSize={20}>
-                        Confirm
+                        {t`Confirm`}
                     </Text>
                 </ButtonPrimary>
             </>
         )
     }
 
-    const pendingText = `Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
+    const pendingText = t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
         chainId
     )} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.getSymbol(chainId)}`
 
@@ -497,7 +498,7 @@ export default function RemoveLiquidity({
     return (
         <>
             <Helmet>
-                <title>Remove Liquidity | Sushi</title>
+                <title>{t`Remove Liquidity`} | Sushi</title>
             </Helmet>
 
             <div className="w-full max-w-2xl mb-5 px-4">
@@ -505,7 +506,7 @@ export default function RemoveLiquidity({
                     className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     to={'/pool'}
                 >
-                    View Your Liquidity Positions &gt;
+                    {t`View Your Liquidity Positions >`}
                 </NavLink>
                 {/* <button
                     style={{
@@ -530,7 +531,7 @@ export default function RemoveLiquidity({
                         hash={txHash ? txHash : ''}
                         content={() => (
                             <ConfirmationModalContent
-                                title={'You will receive'}
+                                title={t`You will receive`}
                                 onDismiss={handleDismissConfirmation}
                                 topContent={modalHeader}
                                 bottomContent={modalBottom}
@@ -542,9 +543,11 @@ export default function RemoveLiquidity({
                         <BlueCard>
                             <AutoColumn gap="10px">
                                 <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                    <b>Tip:</b> Removing pool tokens converts your position back into underlying tokens
-                                    at the current rate, proportional to your share of the pool. Accrued fees are
-                                    included in the amounts you receive.
+                                    <Trans>
+                                        <b>Tip:</b> Removing pool tokens converts your position back into underlying
+                                        tokens at the current rate, proportional to your share of the pool. Accrued fees
+                                        are included in the amounts you receive.
+                                    </Trans>
                                 </TYPE.link>
                             </AutoColumn>
                         </BlueCard>
@@ -577,7 +580,7 @@ export default function RemoveLiquidity({
                         )}
                         <div style={{ position: 'relative' }}>
                             {!account ? (
-                                <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                                <ButtonLight onClick={toggleWalletModal}>{t`Connect Wallet`}</ButtonLight>
                             ) : (
                                 <RowBetween>
                                     <ButtonConfirmed
@@ -589,11 +592,11 @@ export default function RemoveLiquidity({
                                         fontSize={16}
                                     >
                                         {approval === ApprovalState.PENDING ? (
-                                            <Dots>Approving</Dots>
+                                            <Dots>{t`Approving`}</Dots>
                                         ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
-                                            'Approved'
+                                            t`Approved`
                                         ) : (
-                                            'Approve'
+                                            t`Approve`
                                         )}
                                     </ButtonConfirmed>
                                     <ButtonError
@@ -610,7 +613,7 @@ export default function RemoveLiquidity({
                                         }
                                     >
                                         <Text fontSize={16} fontWeight={500}>
-                                            {error || 'Confirm Withdrawal'}
+                                            {error || t`Confirm Withdrawal`}
                                         </Text>
                                     </ButtonError>
                                 </RowBetween>

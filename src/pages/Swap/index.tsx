@@ -352,8 +352,8 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-gray-300">Welcome to Sushi on Polygon (Matic)</div>
-                                        <div className="text-gray-600 text-sm">New network, new features</div>
+                                        <div className="text-gray-300">{t`Welcome to Sushi on Polygon (Matic)`}</div>
+                                        <div className="text-gray-600 text-sm">{t`New network, new features`}</div>
                                     </div>
                                     <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
@@ -361,7 +361,7 @@ export default function Swap() {
                                         rel="noreferrer noopener"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-dark-600"
                                     >
-                                        Read Tutorial
+                                        {t`Read Tutorial`}
                                     </a>
                                 </div>
                             </DarkCard>
@@ -436,7 +436,9 @@ export default function Swap() {
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
                             label={
-                                independentField === Field.INPUT && !showWrap && trade ? 'Swap To (est.):' : 'Swap To:'
+                                independentField === Field.INPUT && !showWrap && trade
+                                    ? t`Swap To (est.):`
+                                    : t`Swap To:`
                             }
                             showMaxButton={false}
                             currency={currencies[Field.OUTPUT]}
@@ -455,7 +457,7 @@ export default function Swap() {
                                         id="remove-recipient-button"
                                         onClick={() => onChangeRecipient(null)}
                                     >
-                                        - Remove send
+                                        - {t`Remove send`}
                                     </LinkStyledButton>
                                 </AutoRow>
                                 <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
@@ -468,7 +470,7 @@ export default function Swap() {
                                     {Boolean(trade) && (
                                         <RowBetween align="center">
                                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                                Price
+                                                {t`Price`}
                                             </Text>
                                             <TradePrice
                                                 price={trade?.executionPrice}
@@ -485,7 +487,7 @@ export default function Swap() {
                                                 color={theme.text2}
                                                 onClick={toggleSettings}
                                             >
-                                                Slippage Tolerance
+                                                {t`Slippage Tolerance`}
                                             </ClickableText>
                                             <ClickableText
                                                 fontWeight={500}
@@ -504,23 +506,23 @@ export default function Swap() {
                     <BottomGrouping>
                         {swapIsUnsupported ? (
                             <ButtonPrimary disabled={true}>
-                                <TYPE.main mb="4px">Unsupported Asset</TYPE.main>
+                                <TYPE.main mb="4px">{t`Unsupported Asset`}</TYPE.main>
                             </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>{t`Connect Wallet`}</ButtonLight>
                         ) : showWrap ? (
                             <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                                 {wrapInputError ??
                                     (wrapType === WrapType.WRAP
-                                        ? 'Wrap'
+                                        ? t`Wrap`
                                         : wrapType === WrapType.UNWRAP
-                                        ? 'Unwrap'
+                                        ? t`Unwrap`
                                         : null)}
                             </ButtonPrimary>
                         ) : noRoute && userHasSpecifiedInputOutput ? (
                             <GreyCard style={{ textAlign: 'center' }}>
-                                <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-                                {singleHopOnly && <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>}
+                                <TYPE.main mb="4px">{t`Insufficient liquidity for this trade`}</TYPE.main>
+                                {singleHopOnly && <TYPE.main mb="4px">{t`Try enabling multi-hop trades`}</TYPE.main>}
                             </GreyCard>
                         ) : showApproveFlow ? (
                             <RowBetween>
@@ -536,9 +538,9 @@ export default function Swap() {
                                             Approving <Loader stroke="white" />
                                         </AutoRow>
                                     ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                                        'Approved'
+                                        t`Approved`
                                     ) : (
-                                        'Approve ' + currencies[Field.INPUT]?.getSymbol(chainId)
+                                        t`Approve ${currencies[Field.INPUT]?.getSymbol(chainId)}`
                                     )}
                                 </ButtonConfirmed>
                                 <ButtonError
@@ -566,8 +568,10 @@ export default function Swap() {
                                 >
                                     <Text fontSize={16} fontWeight={500}>
                                         {priceImpactSeverity > 3 && !isExpertMode
-                                            ? `Price Impact High`
-                                            : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                            ? t`Price Impact High`
+                                            : priceImpactSeverity > 2
+                                            ? t`Swap Anyway`
+                                            : t`Swap`}
                                     </Text>
                                 </ButtonError>
                             </RowBetween>
@@ -594,8 +598,10 @@ export default function Swap() {
                                     {swapInputError
                                         ? swapInputError
                                         : priceImpactSeverity > 3 && !isExpertMode
-                                        ? `Price Impact Too High`
-                                        : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                        ? t`Price Impact Too High`
+                                        : priceImpactSeverity > 2
+                                        ? t`Swap Anyway`
+                                        : t`Swap`}
                                 </Text>
                             </ButtonError>
                         )}
@@ -620,9 +626,9 @@ export default function Swap() {
                                 <div className="flex justify-between items-center overflow-hidden">
                                     <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
                                     <div className="pl-32">
-                                        <div className="text-gray-300">Check out Sushi on Polygon (Matic)</div>
+                                        <div className="text-gray-300">{t`Check out Sushi on Polygon (Matic)`}</div>
                                         <div className="text-gray-600 text-sm">
-                                            Click here to switch to Polygon using Metamask
+                                            {t`Click here to switch to Polygon using Metamask`}
                                         </div>
                                     </div>
                                 </div>

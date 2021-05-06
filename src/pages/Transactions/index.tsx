@@ -9,6 +9,7 @@ import { Button, Dots } from 'components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useETHBalances } from 'state/wallet/hooks'
 import { Currency } from '@sushiswap/sdk'
+import { t } from '@lingui/macro'
 
 const mock = {
     transactions: [
@@ -27,7 +28,7 @@ export default function Transactions() {
     return (
         <>
             <Helmet>
-                <title>Transactions | Sushi</title>
+                <title>{t`Transactions`} | Sushi</title>
             </Helmet>
 
             {/* <div className="w-full max-w-2xl">
@@ -57,7 +58,7 @@ export default function Transactions() {
                                                 {Currency.getNativeCurrencySymbol(chainId)}
                                             </div>
                                         ) : (
-                                            <Dots>Loading</Dots>
+                                            <Dots>{t`Loading`}</Dots>
                                         )}
                                     </>
                                 )}
@@ -75,7 +76,7 @@ export default function Transactions() {
                             {/* <div className="ml-1">View on Explorer</div> */}
                             {chainId && account && (
                                 <a href={getExplorerLink(chainId, account, 'address')}>
-                                    <span style={{ marginLeft: '4px' }}>View on explorer</span>
+                                    <span style={{ marginLeft: '4px' }}>{t`View on explorer`}</span>
                                 </a>
                             )}
                         </div>
@@ -86,13 +87,13 @@ export default function Transactions() {
             <div className="bg-dark-900 w-full max-w-2xl rounded p-4">
                 <div className="w-auto flex justify-between items-center rounded bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto mt-3 mb-6">
                     <Link to={'/pool'} className={`w-3/6 p-3 text-center rounded-lg text-secondary`}>
-                        Liquidity Positions
+                        {t`Liquidity Positions`}
                     </Link>
                     <Link
                         to={'/transactions'}
                         className={`w-3/6 p-3 text-center rounded-lg text-primary text-bold bg-dark-900 `}
                     >
-                        Transaction History
+                        {t`Transaction History`}
                     </Link>
                 </div>
                 <TransactionHistory transactions={mock.transactions} />

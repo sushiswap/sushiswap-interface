@@ -16,6 +16,7 @@ import { formattedNum, isAddressString, isWETH, isAddress } from 'utils'
 import { WETH } from '@sushiswap/sdk'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
+import { t, Trans } from '@lingui/macro'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -81,8 +82,9 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Harvest{'  '}
-                            {formattedNum(pending)} {'SUSHI'} {'&'} {formattedNum(reward)} {'MATIC'}
+                            <Trans>
+                                Harvest {formattedNum(pending)} SUSHI & {formattedNum(reward)} MATIC
+                            </Trans>
                         </Button>
                     </div>
                 )}
@@ -91,14 +93,16 @@ export default function InputGroup({
                         <div className="flex items-center">
                             <div className="ml-3">
                                 <p>
-                                    <b>Tip:</b> In order to start earning rewards, you will need to first acquire some
-                                    SLP by adding liquidity to the specified pair or{' '}
-                                    <Link to="/migrate" className="underline text-blue">
-                                        migrating existing liquidity.
-                                    </Link>{' '}
-                                    Once you have SLP you can stake it into this yield farm to start earning rewards.
-                                    Unstake anytime and then you can convert your SLP back to base tokens by clicking
-                                    Remove Liquidity. Click Harvest to receive you rewards at any time.
+                                    <Trans>
+                                        <b>Tip:</b> In order to start earning rewards, you will need to first acquire
+                                        some SLP by adding liquidity to the specified pair or{' '}
+                                        <Link to="/migrate" className="underline text-blue">
+                                            migrating existing liquidity.
+                                        </Link>{' '}
+                                        Once you have SLP you can stake it into this yield farm to start earning
+                                        rewards. Unstake anytime and then you can convert your SLP back to base tokens
+                                        by clicking Remove Liquidity. Click Harvest to receive you rewards at any time.
+                                    </Trans>
                                 </p>
                             </div>
                         </div>

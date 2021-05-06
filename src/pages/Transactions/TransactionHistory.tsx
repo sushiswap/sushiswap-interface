@@ -4,6 +4,7 @@ import DoubleCurrencyLogo from 'components/DoubleLogo'
 import { ThemeContext } from 'styled-components'
 import { CheckCircle, ArrowUpRight } from 'react-feather'
 import { LinkStyledButton } from '../../theme'
+import { t } from '@lingui/macro'
 
 type Props = {
     transactions: string[]
@@ -14,9 +15,9 @@ export default function TransactionHistory({ transactions }: Props) {
     return (
         <>
             <div className="flex justify-between mb-6 flex-col sm:flex-row items-start">
-                <div className="text-xl font-medium text-white">Your Transaction History</div>
+                <div className="text-xl font-medium text-white">{t`Your Transaction History`}</div>
                 <LinkStyledButton>
-                    <span className="text-sm">Clear History</span>
+                    <span className="text-sm">{t`Clear History`}</span>
                 </LinkStyledButton>
             </div>
             <div>

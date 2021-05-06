@@ -11,6 +11,7 @@ import { RowBetween, RowFixed } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ExternalLink, HideSmall, TYPE } from '../../theme'
 import { Helmet } from 'react-helmet'
+import { t } from '@lingui/macro'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -83,7 +84,7 @@ export default function Pool() {
     return (
         <>
             <Helmet>
-                <title>Tools | Sushi</title>
+                <title>{t`Tools`} | Sushi</title>
             </Helmet>
             <PageWrapper>
                 <SwapPoolTabs active={'pool'} />
@@ -92,12 +93,12 @@ export default function Pool() {
                         <AutoColumn gap="md">
                             <RowBetween>
                                 <TYPE.white fontWeight={600} color={theme.text1}>
-                                    Helpful Sushi Tools
+                                    {t`Helpful Sushi Tools`}
                                 </TYPE.white>
                             </RowBetween>
                             <RowBetween>
                                 <TYPE.white fontSize={14} color={theme.text2}>
-                                    {`Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned.`}
+                                    {t`Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned.`}
                                 </TYPE.white>
                             </RowBetween>
                         </AutoColumn>
@@ -111,19 +112,19 @@ export default function Pool() {
                                 <TYPE.mediumHeader
                                     style={{ marginTop: '0.5rem', justifySelf: 'flex-start', paddingLeft: '0.75rem' }}
                                 >
-                                    Tools
+                                    {t`Tools`}
                                 </TYPE.mediumHeader>
                             </HideSmall>
                             <ButtonRow>
                                 <ResponsiveExternalLink href={''}>
                                     <ButtonSecondary padding="6px 8px" borderRadius="20px">
-                                        Request Tool
+                                        {t`Request Tool`}
                                     </ButtonSecondary>
                                 </ResponsiveExternalLink>
                                 <ResponsiveExternalLink href={''}>
                                     <ButtonPrimaryNormal padding="6px 8px" borderRadius="10px">
                                         <Text fontWeight={500} fontSize={16}>
-                                            Submit Tool
+                                            {t`Submit Tool`}
                                         </Text>
                                     </ButtonPrimaryNormal>
                                 </ResponsiveExternalLink>
@@ -143,7 +144,7 @@ export default function Pool() {
                                     <RowFixed>
                                         {/* <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} /> */}
                                         <Text fontWeight={500} fontSize={14}>
-                                            One click SUSHI → xSUSHI → aXSUSHI
+                                            {t`One click SUSHI → xSUSHI → aXSUSHI`}
                                         </Text>
                                     </RowFixed>
                                     <RowFixed>
@@ -154,7 +155,7 @@ export default function Pool() {
                                             as={Link}
                                             to={`/saave`}
                                         >
-                                            Manage
+                                            {t`Manage`}
                                         </ButtonEmpty>
                                     </RowFixed>
                                 </FixedHeightRow>
