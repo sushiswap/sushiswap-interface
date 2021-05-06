@@ -65,7 +65,7 @@ function AppBar(): JSX.Element {
                                             >
                                                 {t('pool')}
                                             </NavLink>
-                                            {chainId && [ChainId.MAINNET].includes(chainId) && (
+                                            {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
                                                     Yield
                                                 </NavLink>
@@ -96,15 +96,6 @@ function AppBar(): JSX.Element {
                                                     Vesting
                                                 </NavLink>
                                             )}
-                                            {/* {chainId &&
-                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
-                                                    chainId
-                                                ) && (
-                                                    <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
-                                                        Lend
-                                                    </NavLink>
-                                                )} */}
-
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
@@ -334,7 +325,7 @@ function AppBar(): JSX.Element {
                                     {t('pool')}
                                 </NavLink>
 
-                                {chainId === ChainId.MAINNET && (
+                                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
                                         Yield
                                     </NavLink>
