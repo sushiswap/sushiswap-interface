@@ -1,20 +1,22 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
-import { Input as NumericalInput } from 'components/NumericalInput'
+import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Fraction } from '../../../entities'
 import { ethers } from 'ethers'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import useMasterChef from 'hooks/useMasterChef'
-import usePendingSushi from 'hooks/usePendingSushi'
-import useStakedBalance from 'hooks/useStakedBalance'
-import useTokenBalance from 'hooks/useTokenBalance'
+import useMasterChef from '../../../hooks/useMasterChef'
+import usePendingSushi from '../../../hooks/usePendingSushi'
+import useStakedBalance from '../../../hooks/useStakedBalance'
+import useTokenBalance from '../../../hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
 import { t } from '@lingui/macro'
+
+import { tryParseAmount } from '../../../state/swap/hooks'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -55,7 +57,7 @@ export default function InputGroup({
     //console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''), depositValue),
+        tryParseAmount(depositValue, new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, '')),
         MASTERCHEF_ADDRESS[1]
     )
 

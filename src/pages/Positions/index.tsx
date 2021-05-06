@@ -49,7 +49,7 @@ export default function Positions() {
                         </div>
                         <div className="ml-3">
                             <div className="font-semibold text-gray-300">{account && shortenAddress(account)}</div>
-                            <div className="text-sm text-primary">
+                            <div className="text-sm text-gray-500">
                                 {account && chainId && (
                                     <>
                                         {userEthBalance ? (

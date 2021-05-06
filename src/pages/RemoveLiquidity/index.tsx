@@ -45,6 +45,7 @@ import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
 import { t, Trans } from '@lingui/macro'
+import { Alert } from '../../components'
 
 export default function RemoveLiquidity({
     history,
@@ -387,7 +388,7 @@ export default function RemoveLiquidity({
                     </RowFixed>
                 </RowBetween>
 
-                <TYPE.italic fontSize={12} color={theme.text2} textAlign="left" padding={'12px 0 0 0'}>
+                <TYPE.italic fontSize={14} className="text-gray-500" textAlign="left" padding={'20px 0 20px 0'}>
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </TYPE.italic>
@@ -540,17 +541,19 @@ export default function RemoveLiquidity({
                         pendingText={pendingText}
                     />
                     <AutoColumn gap="md">
-                        <BlueCard>
-                            <AutoColumn gap="10px">
-                                <TYPE.link fontWeight={400} color={'primaryText1'}>
+                        <Alert
+                            showIcon={false}
+                            message={
+                                <>
                                     <Trans>
                                         <b>Tip:</b> Removing pool tokens converts your position back into underlying
                                         tokens at the current rate, proportional to your share of the pool. Accrued fees
                                         are included in the amounts you receive.
                                     </Trans>
-                                </TYPE.link>
-                            </AutoColumn>
-                        </BlueCard>
+                                </>
+                            }
+                            type="information"
+                        />
                         <LiquidityHeader input={currencyA} output={currencyB} />
                         <PercentInputPanel
                             value={formattedAmounts[Field.LIQUIDITY_PERCENT]}
@@ -623,14 +626,14 @@ export default function RemoveLiquidity({
                 </Wrapper>
             </div>
 
-            <div className="w-full max-w-2xl flex flex-col mt-4">
+            {/* <div className="w-full max-w-2xl flex flex-col mt-4">
                 <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue && parseInt(typedValue))} />
-            </div>
+            </div> */}
             {pair ? (
                 // <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
                 //     <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
                 // </AutoColumn>
-                <div className="w-full max-w-2xl flex flex-col mt-4">
+                <div className="w-full max-w-2xl flex flex-col">
                     <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
                 </div>
             ) : null}

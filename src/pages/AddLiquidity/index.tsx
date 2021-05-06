@@ -256,7 +256,7 @@ export default function AddLiquidity({
                         <Trans>Pool Tokens</Trans>
                     </Text>
                 </Row>
-                <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
+                <TYPE.italic fontSize={14} className="text-gray-500" textAlign="left" padding={'20px 0 20px 0'}>
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </TYPE.italic>

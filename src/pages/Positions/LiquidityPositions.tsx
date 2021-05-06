@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
-import { JSBI, Pair } from '@sushiswap/sdk'
+import { Link } from 'react-router-dom'
+import { ChainId, JSBI, Pair } from '@sushiswap/sdk'
 import { Button, Dots } from 'components'
-import { LinkStyledButton } from '../../theme'
+import { StyledInternalLink } from '../../theme'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useTokenBalancesWithLoadingIndicator } from 'state/wallet/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
@@ -10,6 +11,15 @@ import { useStakingInfo } from 'state/stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import Position from './Position'
 import { t } from '@lingui/macro'
+
+import { AutoColumn } from '../../components/Column'
+import { Text } from 'rebass'
+
+const migrateFrom: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'Uniswap',
+    [ChainId.BSC]: 'PancakeSwap',
+    [ChainId.MATIC]: 'QuickSwap'
+}
 
 type Position = {
     pairs: string
@@ -24,7 +34,7 @@ type Position = {
 }
 
 export default function LiquidityPositions() {
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
 
     // fetch the user's balances of all tracked V2 LP tokens
     const trackedTokenPairs = useTrackedTokenPairs()
@@ -73,15 +83,13 @@ export default function LiquidityPositions() {
         )
     })
 
-    console.log('v2PairsWithoutStakedAmount:', v2PairsWithoutStakedAmount)
-
     return (
         <>
             <div className="flex flex-col md:flex-row justify-start md:justify-between mb-6">
                 <div className="text-xl font-medium text-white">{t`Your Liquidity Positions`}</div>
-                <div className="flex items-center text-sm pr-2">
+                <div className="flex items-center pr-2">
                     <span className="mr-1 text-gray-500">{t`Dont see a pool you joined?`}</span>
-                    <LinkStyledButton>{t`import it`}</LinkStyledButton>
+                    <StyledInternalLink to={'/find'}>{t`Import it`}</StyledInternalLink>
                 </div>
             </div>
             <div>
@@ -104,13 +112,27 @@ export default function LiquidityPositions() {
                         {t`No liquidity positions found`}
                     </div>
                 )}
+                <AutoColumn justify={'center'} gap="xs" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+                    {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                        <Text textAlign="center" fontSize={16} style={{ padding: '.5rem 0 .5rem 0' }}>
+                            Have Liquidity on {(chainId && migrateFrom[chainId]) ?? ''}?{' '}
+                            <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                Migrate Now.
+                            </StyledInternalLink>
+                        </Text>
+                    )}
+                </AutoColumn>
                 <div className="flex gap-4 mt-5 mb-1">
-                    <Button size="large" color="gradient">
-                        {t`Add Liquidity`}
-                    </Button>
-                    <Button size="large" className="w-full bg-dark-800 text-secondary">
-                        {t`Create a Pair`}
-                    </Button>
+                    <Link to="/add/ETH" className="w-full">
+                        <Button size="large" color="gradient">
+                            {t`Add Liquidity`}
+                        </Button>
+                    </Link>
+                    <Link to="/create/ETH" className="w-full">
+                        <Button size="large" className="w-full bg-dark-800 text-secondary">
+                            {t`Create a Pair`}
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </>

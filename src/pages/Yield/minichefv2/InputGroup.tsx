@@ -1,22 +1,24 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
-import { Input as NumericalInput } from 'components/NumericalInput'
+import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Fraction } from '../../../entities'
 import { ethers } from 'ethers'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
-import useMiniChefV2 from 'hooks/minichefv2/useMiniChefV2'
-import usePendingSushi from 'hooks/minichefv2/usePendingSushi'
-import usePendingReward from 'hooks/minichefv2/usePendingReward'
-import useStakedBalance from 'hooks/minichefv2/useStakedBalance'
-import useTokenBalance from 'hooks/useTokenBalance'
-import { formattedNum, isAddressString, isWETH, isAddress } from 'utils'
+import useMiniChefV2 from '../../../hooks/minichefv2/useMiniChefV2'
+import usePendingSushi from '../../../hooks/minichefv2/usePendingSushi'
+import usePendingReward from '../../../hooks/minichefv2/usePendingReward'
+import useStakedBalance from '../../../hooks/minichefv2/useStakedBalance'
+import useTokenBalance from '../../../hooks/useTokenBalance'
+import { formattedNum, isAddressString, isWETH, isAddress } from '../../../utils'
 import { WETH } from '@sushiswap/sdk'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
 import { t, Trans } from '@lingui/macro'
+
+import { tryParseAmount } from '../../../state/swap/hooks'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -60,7 +62,7 @@ export default function InputGroup({
     // console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, ''), depositValue),
+        tryParseAmount(depositValue, new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, '')),
         '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F' //miniChef on Matic
     )
     //console.log('Approval:', approvalState, ApprovalState.NOT_APPROVED)

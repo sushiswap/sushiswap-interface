@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
@@ -25,6 +25,22 @@ export default function Transactions() {
     const { account, chainId } = useActiveWeb3React()
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
+    // const [transactions, setTransactions] = useState<any>()
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const results = await Promise.all([
+    //             sushiData.bar.info(),
+    //             sushiData.exchange.dayData(),
+    //             sushiData.sushi.priceUSD()
+    //         ])
+    //         const APR =
+    //             (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) * 365) / (results[0].ratio * results[2])
+
+    //         setApr(APR)
+    //     }
+    //     fetchData()
+    // }, [])
+
     return (
         <>
             <Helmet>
@@ -49,7 +65,7 @@ export default function Transactions() {
                         </div>
                         <div className="ml-3">
                             <div className="font-semibold text-gray-300">{account && shortenAddress(account)}</div>
-                            <div className="text-sm text-primary">
+                            <div className="text-sm text-gray-500">
                                 {account && chainId && (
                                     <>
                                         {userEthBalance ? (
