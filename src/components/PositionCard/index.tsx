@@ -57,8 +57,6 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     const currency0 = showUnwrapped ? pair.token0 : unwrappedToken(pair.token0)
     const currency1 = showUnwrapped ? pair.token1 : unwrappedToken(pair.token1)
 
-    const [showMore, setShowMore] = useState(false)
-
     const userPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
     const totalPoolTokens = useTotalSupply(pair.liquidityToken)
 
@@ -71,7 +69,6 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
         !!pair &&
         !!totalPoolTokens &&
         !!userPoolBalance &&
-        // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
         JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
             ? [
                   pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
