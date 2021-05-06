@@ -62,14 +62,18 @@ export default function RemoveLiquidityReceiveDetails({
                     </AutoColumn>
                 </div>
                 <RowBetween className="space-x-6">
-                    <div className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
+                    <div
+                        id="remove-liquidity-tokena"
+                        className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
                         <CurrencyLogo currency={currencyA} size="46px" style={{ marginRight: '12px' }} />
                         <AutoColumn>
                             <div className="text-white">{amountA}</div>
                             <div className="text-sm">{currencyA?.getSymbol(chainId)}</div>
                         </AutoColumn>
                     </div>
-                    <div className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
+                    <div
+                        id="remove-liquidity-tokenb"
+                        className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
                         <CurrencyLogo currency={currencyB} size="46px" style={{ marginRight: '12px' }} />
                         <AutoColumn>
                             <div className="text-white">{amountB}</div>

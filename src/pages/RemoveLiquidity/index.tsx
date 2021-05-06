@@ -576,7 +576,7 @@ export default function RemoveLiquidity({
                             amountB={formattedAmounts[Field.CURRENCY_B] || '-'}
                             hasWETH={oneCurrencyIsWETH}
                             hasETH={oneCurrencyIsETH}
-                            id="liquidit-receive"
+                            id="liquidity-receive"
                         />
                         {currencyA && currencyB && pair && (
                             <LiquidityPrice input={currencyA} output={currencyB} price={price} />
