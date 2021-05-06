@@ -69,92 +69,6 @@ const PoolTokenRow = styled.span`
     margin: 10px 0;
 `
 
-const PoolInfo = ({ poolAddress, currency }: { poolAddress: string; currency: Currency | undefined }) => {
-    const { token0, token1 } = usePool(poolAddress)
-    const {
-        liquidityMinted,
-        poolTokenPercentage,
-        currencyZeroOutput,
-        currencyOneOutput,
-        bestTrade
-    } = useDerivedZapInfo(currency ?? undefined, poolAddress)
-    const currency0 = useCurrency(token0)
-    const currency1 = useCurrency(token1)
-
-    return (
-        <>
-            <PoolAllocationWrapper>
-                <RowBetween style={{ marginBottom: '12px' }}>
-                    <TYPE.darkGray fontSize="14px">To</TYPE.darkGray>
-                    <DoubleCurrencyLogo
-                        currency0={currency0 ?? undefined}
-                        currency1={currency1 ?? undefined}
-                        margin={false}
-                        size={20}
-                    />
-                </RowBetween>
-                <RowBetween>
-                    <TYPE.subHeader fontWeight={500} fontSize="22px">
-                        {liquidityMinted?.toSignificant(6) || '0'}
-                    </TYPE.subHeader>
-                    <div className="inline-flex">
-                        <TYPE.subHeader fontWeight={500} fontSize="22px">
-                            {currency0 && currency1 && `${currency0?.symbol}${' '}`}
-                        </TYPE.subHeader>
-                        <TYPE.darkGray fontWeight={500} fontSize="22px" className="mx-1">
-                            /
-                        </TYPE.darkGray>
-                        <TYPE.subHeader fontWeight={500} fontSize="22px">
-                            {`${' '}${currency1?.symbol}`}
-                        </TYPE.subHeader>
-                    </div>
-                </RowBetween>
-            </PoolAllocationWrapper>
-            <PoolBreakDownWrapper>
-                <RowBetween>
-                    <div>
-                        <TYPE.darkGray fontSize="14px">Est. Pool Allocation</TYPE.darkGray>
-                        <PoolTokenRow>
-                            <CurrencyLogo
-                                size="22px"
-                                currency={currency0 ?? undefined}
-                                style={{ marginRight: '6px' }}
-                            />
-                            <TYPE.small fontSize="14px">
-                                {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
-                            </TYPE.small>
-                        </PoolTokenRow>
-                        <PoolTokenRow>
-                            <CurrencyLogo
-                                size="22px"
-                                currency={currency1 ?? undefined}
-                                style={{ marginRight: '6px' }}
-                            />
-                            <TYPE.small fontSize="14px">
-                                {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
-                            </TYPE.small>
-                        </PoolTokenRow>
-                    </div>
-                    <div style={{ height: '91px' }}>
-                        <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">
-                            Pool Share
-                        </TYPE.darkGray>
-                        <TYPE.small marginBottom="8px" textAlign="right" fontSize="14px">
-                            {poolTokenPercentage?.toSignificant(6) || '0'}%
-                        </TYPE.small>
-                        <TYPE.darkGray fontSize="14px" marginBottom="2px" textAlign="right">
-                            Price Impact
-                        </TYPE.darkGray>
-                        <TYPE.small textAlign="right" fontSize="14px">
-                            {bestTrade?.priceImpact?.toSignificant(6) || '0'}%
-                        </TYPE.small>
-                    </div>
-                </RowBetween>
-            </PoolBreakDownWrapper>
-        </>
-    )
-}
-
 const CardHeader = () => {
     const dispatch = useDispatch<AppDispatch>()
 
@@ -203,6 +117,11 @@ const AddSingleSideLiquidity = ({
     const { onFieldInput } = useZapActionHandlers(false)
     const {
         typedValue,
+        currency0,
+        currency1,
+        token0,
+        token1,
+        poolTokenPercentage,
         currencyBalance,
         parsedAmount,
         error,
@@ -305,7 +224,74 @@ const AddSingleSideLiquidity = ({
                             cornerRadiusBottomNone={false}
                             showCommonBases
                         />
-                        <PoolInfo poolAddress={poolAddress} currency={currency ?? undefined} />
+                        <PoolAllocationWrapper>
+                            <RowBetween style={{ marginBottom: '12px' }}>
+                                <TYPE.darkGray fontSize="14px">To</TYPE.darkGray>
+                                <DoubleCurrencyLogo
+                                    currency0={currency0 ?? undefined}
+                                    currency1={currency1 ?? undefined}
+                                    margin={false}
+                                    size={20}
+                                />
+                            </RowBetween>
+                            <RowBetween>
+                                <TYPE.subHeader fontWeight={500} fontSize="22px">
+                                    {liquidityMinted?.toSignificant(6) || '0'}
+                                </TYPE.subHeader>
+                                <div className="inline-flex">
+                                    <TYPE.subHeader fontWeight={500} fontSize="22px">
+                                        {currency0 && currency1 && `${currency0?.symbol}${' '}`}
+                                    </TYPE.subHeader>
+                                    <TYPE.darkGray fontWeight={500} fontSize="22px" className="mx-1">
+                                        /
+                                    </TYPE.darkGray>
+                                    <TYPE.subHeader fontWeight={500} fontSize="22px">
+                                        {`${' '}${currency1?.symbol}`}
+                                    </TYPE.subHeader>
+                                </div>
+                            </RowBetween>
+                        </PoolAllocationWrapper>
+                        <PoolBreakDownWrapper>
+                            <RowBetween>
+                                <div>
+                                    <TYPE.darkGray fontSize="14px">Est. Pool Allocation</TYPE.darkGray>
+                                    <PoolTokenRow>
+                                        <CurrencyLogo
+                                            size="22px"
+                                            currency={currency0 ?? undefined}
+                                            style={{ marginRight: '6px' }}
+                                        />
+                                        <TYPE.small fontSize="14px">
+                                            {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
+                                        </TYPE.small>
+                                    </PoolTokenRow>
+                                    <PoolTokenRow>
+                                        <CurrencyLogo
+                                            size="22px"
+                                            currency={currency1 ?? undefined}
+                                            style={{ marginRight: '6px' }}
+                                        />
+                                        <TYPE.small fontSize="14px">
+                                            {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
+                                        </TYPE.small>
+                                    </PoolTokenRow>
+                                </div>
+                                <div style={{ height: '91px' }}>
+                                    <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">
+                                        Pool Share
+                                    </TYPE.darkGray>
+                                    <TYPE.small marginBottom="8px" textAlign="right" fontSize="14px">
+                                        {poolTokenPercentage?.toSignificant(6) || '0'}%
+                                    </TYPE.small>
+                                    <TYPE.darkGray fontSize="14px" marginBottom="2px" textAlign="right">
+                                        Price Impact
+                                    </TYPE.darkGray>
+                                    <TYPE.small textAlign="right" fontSize="14px">
+                                        {bestTrade?.priceImpact?.toSignificant(6) || '0'}%
+                                    </TYPE.small>
+                                </div>
+                            </RowBetween>
+                        </PoolBreakDownWrapper>
                         <>
                             {!account ? (
                                 <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>

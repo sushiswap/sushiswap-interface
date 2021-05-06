@@ -64,6 +64,10 @@ export function useDerivedZapInfo(
 ): {
     typedValue: string
     currency: Currency | undefined
+    currency0: Currency | undefined
+    currency1: Currency | undefined
+    token0: string | undefined
+    token1: string | undefined
     pair?: Pair | null
     pairState: PairState
     currencyBalance: CurrencyAmount | undefined
@@ -102,8 +106,8 @@ export function useDerivedZapInfo(
     const balances = useCurrencyBalances(account ?? undefined, [currency])
     const currencyBalance = balances[0]
 
-    const parsedAmount = useDebounce(tryParseAmount(typedValue, currency), 200)
-    const tradeAmount = useDebounce(tryParseAmount((+typedValue / 2).toString(), currency), 200)
+    const parsedAmount = tryParseAmount(typedValue, currency)
+    const tradeAmount = tryParseAmount((+typedValue / 2).toString(), currency)
 
     // Zapping in requires either one or two trades
     // Only one trade if providing one of the input tokens of the pair
@@ -220,6 +224,10 @@ export function useDerivedZapInfo(
     return {
         typedValue,
         currency: currencyData,
+        currency0: currency0 ?? undefined,
+        currency1: currency1 ?? undefined,
+        token0,
+        token1,
         currencyBalance,
         pair,
         pairState,
