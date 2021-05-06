@@ -1,15 +1,12 @@
 import { Currency, ETHER, JSBI, TokenAmount } from '@sushiswap/sdk'
-import React, { useCallback, useEffect, useState } from 'react'
-import { Plus } from 'react-feather'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { ThemeContext } from 'styled-components'
 import { Text } from 'rebass'
-import { ButtonDropdownLight } from '../../components/ButtonLegacy'
 import { BlueCard, LightCard } from '../../components/CardLegacy'
-import { AutoColumn, ColumnCenter } from '../../components/Column'
-import CurrencyLogo from '../../components/CurrencyLogo'
+import { AutoColumn } from '../../components/Column'
+import { AutoRow } from '../../components/Row'
 import { FindPoolTabs } from '../../components/NavigationTabs'
 import { MinimalPositionCard } from '../../components/PositionCard'
-import Row from '../../components/Row'
-import CurrencySearchModal from '../../components/SearchModal/CurrencySearchModal'
 import { PairState, usePair } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { usePairAdder } from '../../state/user/hooks'
@@ -21,6 +18,9 @@ import { Helmet } from 'react-helmet'
 import { t, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
+import CurrencySelectPanel from '../../components/CurrencySelectPanel'
+import { Plus } from 'react-feather'
+
 enum Fields {
     TOKEN0 = 0,
     TOKEN1 = 1
@@ -29,8 +29,8 @@ enum Fields {
 export default function PoolFinder() {
     const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
+    const theme = useContext(ThemeContext)
 
-    const [showSearch, setShowSearch] = useState<boolean>(false)
     const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
     const [currency0, setCurrency0] = useState<Currency | null>(ETHER)
@@ -56,20 +56,27 @@ export default function PoolFinder() {
     const position: TokenAmount | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken)
     const hasPosition = Boolean(position && JSBI.greaterThan(position.raw, JSBI.BigInt(0)))
 
+    const switchTokens = useCallback(() => {
+        setCurrency0(currency1)
+        setCurrency1(currency0)
+    }, [currency0, currency1])
+
     const handleCurrencySelect = useCallback(
         (currency: Currency) => {
             if (activeField === Fields.TOKEN0) {
+                if(currency === currency1)
+                    switchTokens()
+                else
                 setCurrency0(currency)
             } else {
+                if(currency === currency0)
+                    switchTokens()
+                else
                 setCurrency1(currency)
             }
         },
         [activeField]
     )
-
-    const handleSearchDismiss = useCallback(() => {
-        setShowSearch(false)
-    }, [setShowSearch])
 
     const prerequisiteMessage = (
         <LightCard padding="45px 10px">
@@ -123,11 +130,18 @@ export default function PoolFinder() {
                         <Plus size="16" color="#888D9B" />
                     </ColumnCenter>
 
-                    <ButtonDropdownLight
-                        onClick={() => {
-                            setShowSearch(true)
-                            setActiveField(Fields.TOKEN1)
-                        }}
+                    <AutoColumn gap={'md'}>
+                        <CurrencySelectPanel
+                            currency={currency0}
+                            onClick={() => setActiveField(Fields.TOKEN0)}
+                            onCurrencySelect={handleCurrencySelect}
+                            otherCurrency={currency1}
+                            id="pool-currency-input"
+                        />
+                        <AutoColumn justify="space-between">
+                            <AutoRow
+                                justify={'flex-start'}
+                                style={{ padding: '0 1rem' }}
                     >
                         {currency1 ? (
                             <Row>
@@ -144,13 +158,15 @@ export default function PoolFinder() {
                     </ButtonDropdownLight>
 
                     {hasPosition && (
-                        <ColumnCenter
+                        <AutoRow
                             style={{
                                 justifyItems: 'center',
                                 backgroundColor: '',
                                 padding: '12px 0px',
                                 borderRadius: '12px'
                             }}
+                            justify={'center'}
+                            gap={'0 3px'}
                         >
                             <Text textAlign="center" fontWeight={500}>
                                 {i18n._(t`Pool Found!`)}
@@ -158,7 +174,7 @@ export default function PoolFinder() {
                             <StyledInternalLink to={`/pool`}>
                                 <Text textAlign="center">{i18n._(t`Manage this pool`)}</Text>
                             </StyledInternalLink>
-                        </ColumnCenter>
+                        </AutoRow>
                     )}
 
                     {currency0 && currency1 ? (
@@ -210,14 +226,6 @@ export default function PoolFinder() {
                         prerequisiteMessage
                     )}
                 </AutoColumn>
-
-                <CurrencySearchModal
-                    isOpen={showSearch}
-                    onCurrencySelect={handleCurrencySelect}
-                    onDismiss={handleSearchDismiss}
-                    showCommonBases
-                    selectedCurrency={(activeField === Fields.TOKEN0 ? currency1 : currency0) ?? undefined}
-                />
             </div>
         </>
     )
