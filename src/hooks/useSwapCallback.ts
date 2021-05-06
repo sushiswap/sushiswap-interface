@@ -7,7 +7,6 @@ import { getTradeVersion } from '../data/V1'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterContract, isAddress, shortenAddress } from '../utils'
 import { isZero } from 'functions'
-import v1SwapArguments from '../utils/v1SwapArguments'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
@@ -86,15 +85,6 @@ function useSwapCallArguments(
                         })
                     )
                 }
-                break
-            case Version.v1:
-                swapMethods.push(
-                    v1SwapArguments(trade, {
-                        allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
-                        recipient,
-                        deadline: deadline.toNumber()
-                    })
-                )
                 break
         }
         return swapMethods.map(parameters => ({ parameters, contract }))
