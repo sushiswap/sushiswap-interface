@@ -15,7 +15,6 @@ import Loader from '../../components/Loader'
 import ProgressSteps from '../../components/ProgressSteps'
 import { AutoRow, RowBetween } from '../../components/Row'
 import { AdvancedSwapDetails } from '../../components/swap/AdvancedSwapDetails'
-import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
@@ -27,7 +26,6 @@ import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
-import useToggledVersion, { DEFAULT_VERSION, Version } from '../../hooks/useToggledVersion'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
 import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/swap/actions'
@@ -83,13 +81,7 @@ export default function Swap() {
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
-    const {
-        v2Trade,
-        currencyBalances,
-        parsedAmount,
-        currencies,
-        inputError: swapInputError
-    } = useDerivedSwapInfo()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
     const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
         currencies[Field.INPUT],
         currencies[Field.OUTPUT],
@@ -97,12 +89,8 @@ export default function Swap() {
     )
     const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
     const { address: recipientAddress } = useENSAddress(recipient)
-    const toggledVersion = useToggledVersion()
-    const tradesByVersion = {
-        [Version.v2]: v2Trade
-    }
-    const trade = showWrap ? undefined : tradesByVersion[toggledVersion]
-    const defaultTrade = showWrap ? undefined : tradesByVersion[DEFAULT_VERSION]
+
+    const trade = showWrap ? undefined : v2Trade
 
     const parsedAmounts = showWrap
         ? {
@@ -216,10 +204,7 @@ export default function Swap() {
                             : (recipientAddress ?? recipient) === account
                             ? 'Swap w/o Send + recipient'
                             : 'Swap w/ Send',
-                    label: [
-                        trade?.inputAmount?.currency?.symbol,
-                        trade?.outputAmount?.currency?.symbol
-                    ].join('/')
+                    label: [trade?.inputAmount?.currency?.symbol, trade?.outputAmount?.currency?.symbol].join('/')
                 })
 
                 ReactGA.event({
@@ -524,9 +509,6 @@ export default function Swap() {
                             </Column>
                         )}
                         {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-                        {defaultTrade ? (
-                            <DefaultVersionLink />
-                        ) : null}
                     </BottomGrouping>
                     <AutoColumn>
                         {showWrap ? null : (
