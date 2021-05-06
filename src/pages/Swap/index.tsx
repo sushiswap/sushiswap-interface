@@ -347,7 +347,7 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-                    {chainId && chainId === ChainId.MATIC && (
+                    {/* {chainId && chainId === ChainId.MATIC && (
                         <div className="hidden md:block pb-4">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
@@ -366,7 +366,7 @@ export default function Swap() {
                                 </div>
                             </DarkCard>
                         </div>
-                    )}
+                    )} */}
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
