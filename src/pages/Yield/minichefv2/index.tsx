@@ -10,7 +10,7 @@ import InputGroup from './InputGroup'
 import { SimpleDots as Dots } from 'kashi/components'
 import Badge from '../../../components/Badge'
 import { Helmet } from 'react-helmet'
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
 
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
@@ -98,10 +98,8 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hidden md:block ml-4">
                             <div className="flex items-center justify-start">
-                                <Trans>
-                                    <div className="pr-2">Pool Rewards</div>
-                                    <Badge color="blue">2X</Badge>
-                                </Trans>
+                                <div className="pr-2">{t`Pool Rewards`}</div>
+                                <Badge color="blue">2X</Badge>
                             </div>
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
@@ -225,12 +223,10 @@ const TokenBalance = ({ farm }: any) => {
                         </div>
                         <div className="md:col-span-3 flex justify-end items-center">
                             <div>
-                                <Trans>
-                                    <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
-                                        {formattedPercent(farm.roiPerMonth * 100)}{' '}
-                                    </div>
-                                    <div className="text-gray-500 text-right text-xs">per month</div>
-                                </Trans>
+                                <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
+                                    {formattedPercent(farm.roiPerMonth * 100)}{' '}
+                                </div>
+                                <div className="text-gray-500 text-right text-xs">{t`per month`}</div>
                             </div>
                         </div>
                     </div>

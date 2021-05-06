@@ -227,12 +227,10 @@ export default function Pool() {
 
                         {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                             <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                <Trans>
-                                    Have Liquidity on {(chainId && migrateFrom[chainId]) ?? ''}?{' '}
-                                    <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
-                                        Migrate Now
-                                    </StyledInternalLink>
-                                </Trans>
+                                {t`Have Liquidity on ${(chainId && migrateFrom[chainId]) ?? ''}?`}{' '}
+                                <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
+                                    {t`Migrate Now`}
+                                </StyledInternalLink>
                             </Text>
                         )}
                         <div className="grid grid-cols-2 gap-4">

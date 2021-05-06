@@ -9,7 +9,7 @@ import { usePairs } from 'data/Reserves'
 import { useStakingInfo } from 'state/stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import Position from './Position'
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
 
 type Position = {
     pairs: string
@@ -80,10 +80,8 @@ export default function LiquidityPositions() {
             <div className="flex flex-col md:flex-row justify-start md:justify-between mb-6">
                 <div className="text-xl font-medium text-white">{t`Your Liquidity Positions`}</div>
                 <div className="flex items-center text-sm pr-2">
-                    <Trans>
-                        <span className="mr-1 text-gray-500">Dont see a pool you joined?</span>
-                        <LinkStyledButton>import it</LinkStyledButton>
-                    </Trans>
+                    <span className="mr-1 text-gray-500">{t`Dont see a pool you joined?`}</span>
+                    <LinkStyledButton>{t`import it`}</LinkStyledButton>
                 </div>
             </div>
             <div>

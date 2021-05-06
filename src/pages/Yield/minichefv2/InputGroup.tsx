@@ -113,7 +113,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
+                                {t`Wallet Balance`}: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
+                                {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -133,7 +134,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-blue border-0"
                                 >
-                                    MAX
+                                    {t`MAX`}
                                 </Button>
                             )}
                         </div>
@@ -156,7 +157,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                Stake
+                                {t`Stake`}
                             </Button>
                         )}
                     </div>
@@ -164,7 +165,7 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Your Staked: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                {t`Your Staked`}: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -184,7 +185,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-pink border-0"
                                 >
-                                    MAX
+                                    {t`MAX`}
                                 </Button>
                             )}
                         </div>
@@ -202,7 +203,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Unstake
+                            {t`Unstake`}
                         </Button>
                     </div>
                 </div>
@@ -225,7 +226,7 @@ export default function InputGroup({
                                     )
                                 }
                             >
-                                Add Liquidity
+                                {t`Add Liquidity`}
                             </Button>
                             <Button
                                 color="default"
@@ -233,7 +234,7 @@ export default function InputGroup({
                                     history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
                                 }
                             >
-                                Remove Liquidity
+                                {t`Remove Liquidity`}
                             </Button>
                         </>
                     )}
@@ -243,13 +244,13 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                Lend {assetSymbol}
+                                {t`Lend`} {assetSymbol}
                             </Button>
                             <Button
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                Withdraw {assetSymbol}
+                                {t`Withdraw`} {assetSymbol}
                             </Button>
                         </>
                     )}

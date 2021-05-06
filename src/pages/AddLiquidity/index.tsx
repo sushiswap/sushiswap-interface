@@ -251,10 +251,9 @@ export default function AddLiquidity({
                 </RowFlat>
                 <Row>
                     <Text fontSize="24px">
-                        <Trans>
-                            {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
-                            {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} Pool Tokens
-                        </Trans>
+                        {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
+                        {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
+                        <Trans>Pool Tokens</Trans>
                     </Text>
                 </Row>
                 <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>

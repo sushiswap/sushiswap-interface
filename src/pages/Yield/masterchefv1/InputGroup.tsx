@@ -108,9 +108,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                {t`Wallet Balance: ${formattedNum(
-                                    fixedFormatting(balance.value, balance.decimals)
-                                )} ${type}`}
+                                {t`Wallet Balance`}: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
+                                {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -161,7 +160,7 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                {t`Deposited: ${formattedNum(fixedFormatting(staked.value, staked.decimals))} ${type}`}
+                                {t`Deposited`}: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">

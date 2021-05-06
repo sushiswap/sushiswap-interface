@@ -45,7 +45,7 @@ export default function Deposit({
         <>
             {account && (
                 <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                    {t`Wallet Balance: ${formattedNum(balance.value.toFixed(balance.decimals))}`}
+                    {t`Wallet Balance`}: {formattedNum(balance.value.toFixed(balance.decimals))}
                 </div>
             )}
             <div className="flex items-center relative w-full mb-4">

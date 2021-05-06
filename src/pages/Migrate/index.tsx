@@ -20,7 +20,7 @@ import { Helmet } from 'react-helmet'
 import Typography from 'components/Typography'
 import { Button } from '../../components'
 import Badge from 'kashi/components/Badge'
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -198,10 +198,8 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                 <>
                     <div className="flex justify-between">
                         <div className="text-sm text-secondary">
-                            <Trans>
-                                Balance:{' '}
-                                <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
-                            </Trans>
+                            {t`Balance`}:{' '}
+                            <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
                         </div>
                     </div>
                     {state.mode === 'approve' && (

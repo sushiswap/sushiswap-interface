@@ -211,7 +211,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         </div>
                         <div className="flex items-center text-secondary text-caption2 md:text-caption">
                             <div className={input ? 'hidden md:flex md:items-center' : 'flex items-center'}>
-                                <p>{t`Balance:`}&nbsp;</p>
+                                <p>{t`Balance`}:&nbsp;</p>
                                 <p className="text-caption font-bold">{formattedBalance}</p>
                             </div>
                             <button
