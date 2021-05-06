@@ -831,7 +831,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             toDecimals: 18
         },
         // lon-eth
-        '	0x13A8F2cC27ccC2761ca1b21d2F3E762445f201CE': {
+        '0x13A8F2cC27ccC2761ca1b21d2F3E762445f201CE': {
             from: '0x0000000000095413afc295d19edeb1ad7b71c952',
             to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             decimals: 18,
@@ -839,7 +839,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             toDecimals: 18
         },
         // snx-usd
-        '	0xDC3EA94CD0AC27d9A86C180091e7f78C683d3699': {
+        '0xDC3EA94CD0AC27d9A86C180091e7f78C683d3699': {
             from: '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
@@ -855,7 +855,7 @@ export const CHAINLINK_MAPPING: { [chainId in ChainId]?: ChainlinkMappingList } 
             toDecimals: 18
         },
         // renZEC-usd
-        '	0x0f59666EDE214281e956cb3b2D0d69415AfF4A01': {
+        '0x0f59666EDE214281e956cb3b2D0d69415AfF4A01': {
             from: '0x1C5db575E2Ff833E46a2E9864C22F4B22E0B37C2',
             to: '0x0000000000000000000000000000000000000001',
             decimals: 8,
