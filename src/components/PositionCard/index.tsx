@@ -102,7 +102,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
                     </div>
                 </div>
             ) : (
-                <div className="bg-purple rounded p-4 bg-opacity-60 w-full mt-4">
+                <div className="bg-purple rounded p-4 bg-opacity-20 w-full mt-4">
                     <p>
                         <span role="img" aria-label="wizard-icon">
                             ⭐️
