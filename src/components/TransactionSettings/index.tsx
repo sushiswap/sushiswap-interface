@@ -5,6 +5,7 @@ import { TYPE } from '../../theme'
 import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
+import { t } from '@lingui/macro'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -147,9 +148,11 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
             <AutoColumn gap="sm">
                 <RowFixed>
                     <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>
-                        Slippage tolerance
+                        {t`Slippage tolerance`}
                     </TYPE.black>
-                    <QuestionHelper text="Your transaction will revert if the price changes unfavorably by more than this percentage." />
+                    <QuestionHelper
+                        text={t`Your transaction will revert if the price changes unfavorably by more than this percentage.`}
+                    />
                 </RowFixed>
                 <RowBetween>
                     <Option
@@ -217,10 +220,10 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                         }}
                     >
                         {slippageError === SlippageError.InvalidInput
-                            ? 'Enter a valid slippage percentage'
+                            ? t`Enter a valid slippage percentage`
                             : slippageError === SlippageError.RiskyLow
-                            ? 'Your transaction may fail'
-                            : 'Your transaction may be frontrun'}
+                            ? t`Your transaction may fail`
+                            : t`Your transaction may be frontrun`}
                     </RowBetween>
                 )}
             </AutoColumn>
@@ -228,9 +231,9 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
             <AutoColumn gap="sm">
                 <RowFixed>
                     <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
-                        Transaction deadline
+                        {t`Transaction deadline`}
                     </TYPE.black>
-                    <QuestionHelper text="Your transaction will revert if it is pending for more than this long." />
+                    <QuestionHelper text={t`Your transaction will revert if it is pending for more than this long.`} />
                 </RowFixed>
                 <RowFixed>
                     <OptionCustom style={{ width: '80px' }} tabIndex={-1}>
@@ -245,7 +248,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                         />
                     </OptionCustom>
                     <TYPE.body style={{ paddingLeft: '8px' }} fontSize={14}>
-                        minutes
+                        {t`minutes`}
                     </TYPE.body>
                 </RowFixed>
             </AutoColumn>

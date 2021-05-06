@@ -524,7 +524,7 @@ export default function Swap() {
                                     {swapInputError
                                         ? swapInputError
                                         : priceImpactSeverity > 3 && !isExpertMode
-                                        ? `Price Impact Too High`
+                                        ? t`Price Impact Too High`
                                         : priceImpactSeverity > 2
                                         ? t`Swap Anyway`
                                         : t`Swap`}

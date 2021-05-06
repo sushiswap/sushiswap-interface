@@ -10,6 +10,7 @@ import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { getCurrency } from 'kashi/constants'
 import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
 import useSearchAndSort from 'hooks/useSearchAndSort'
+import { t } from '@lingui/macro'
 
 export default function LendingMarkets(): JSX.Element | null {
     const { chainId } = useActiveWeb3React()
@@ -35,10 +36,8 @@ export default function LendingMarkets(): JSX.Element | null {
                 <Card
                     className="h-full bg-dark-900"
                     backgroundImage={DepositGraphic}
-                    title={'Lend your assets, earn yield with no impermanent loss'}
-                    description={
-                        'Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency.'
-                    }
+                    title={t`Lend your assets, earn yield with no impermanent loss`}
+                    description={t`Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency.`}
                 />
             }
         >

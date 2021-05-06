@@ -5,6 +5,7 @@ import SushiDepositPanel from './SushiDepositPanel'
 import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
 import { Helmet } from 'react-helmet'
 import { ArrowUpRight } from 'react-feather'
+import { t } from '@lingui/macro'
 
 export default function SushiBar() {
     const { account } = useActiveWeb3React()
@@ -19,15 +20,15 @@ export default function SushiBar() {
             </Helmet>
             <div className="flex flex-col max-w-lg w-full mx-auto">
                 <Paper className="bg-dark-800 p-4 space-y-4 mb-4">
-                    <div className="text-lg font-bold text-high-emphesis mb-2">SushiBar: Make SUSHI work for you</div>
+                    <div className="text-lg font-bold text-high-emphesis mb-2">{t`SushiBar: Make SUSHI work for you`}</div>
                     <div className="text-sm text-primary">
                         <p className="mb-4">
-                            Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.
-                            Continuously compounding.
+                            {t`Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.
+                            Continuously compounding.`}
                         </p>
                         <p>
-                            xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional
-                            to your share of the SushiBar.
+                            {t`xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional
+                            to your share of the SushiBar.`}
                         </p>
                     </div>
                     <div className="flex flex-col justify-between my-2 space-y-2 text-sm">
@@ -37,7 +38,7 @@ export default function SushiBar() {
                             rel="noreferrer"
                             href="https://analytics.sushi.com/bar"
                         >
-                            View SushiBar Stats <ArrowUpRight size="16" />
+                            {t`View SushiBar Stats`} <ArrowUpRight size="16" />
                         </a>
                         {account && (
                             <a
@@ -46,7 +47,7 @@ export default function SushiBar() {
                                 rel="noreferrer"
                                 href={'http://analytics.sushi.com/users/' + account}
                             >
-                                View your SushiBar Portfolio <ArrowUpRight size="16" />
+                                {t`View your SushiBar Portfolio`} <ArrowUpRight size="16" />
                             </a>
                         )}
                     </div>
@@ -58,7 +59,7 @@ export default function SushiBar() {
                         disableCurrencySelect={true}
                         customBalanceText={'Available to deposit: '}
                         id="stake-liquidity-token"
-                        buttonText="Deposit"
+                        buttonText={t`Deposit`}
                         cornerRadiusBottomNone={true}
                     />
                     <XSushiWithdrawlPanel
@@ -66,7 +67,7 @@ export default function SushiBar() {
                         disableCurrencySelect={true}
                         customBalanceText={'Available to withdraw: '}
                         id="withdraw-liquidity-token"
-                        buttonText="Withdraw"
+                        buttonText={t`Withdraw`}
                         cornerRadiusTopNone={true}
                     />
                 </Paper>

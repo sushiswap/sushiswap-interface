@@ -6,6 +6,7 @@ import { STAKING_REWARDS_INTERFACE } from '../../constants/abis/staking-rewards'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
+import { t } from '@lingui/macro'
 
 export const STAKING_GENESIS = 1600387200
 
@@ -261,10 +262,10 @@ export function useDerivedStakeInfo(
 
     let error: string | undefined
     if (!account) {
-        error = 'Connect Wallet'
+        error = t`Connect Wallet`
     }
     if (!parsedAmount) {
-        error = error ?? 'Enter an amount'
+        error = error ?? t`Enter an amount`
     }
 
     return {
@@ -290,10 +291,10 @@ export function useDerivedUnstakeInfo(
 
     let error: string | undefined
     if (!account) {
-        error = 'Connect Wallet'
+        error = t`Connect Wallet`
     }
     if (!parsedAmount) {
-        error = error ?? 'Enter an amount'
+        error = error ?? t`Enter an amount`
     }
 
     return {

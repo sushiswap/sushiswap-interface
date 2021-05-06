@@ -13,6 +13,7 @@ import { useV1ExchangeContract } from './useContract'
 import useENS from './useENS'
 import { Version } from './useToggledVersion'
 import useTransactionDeadline from './useTransactionDeadline'
+import { t } from '@lingui/macro'
 
 export enum SwapCallbackState {
     INVALID,
@@ -176,11 +177,10 @@ export function useSwapCallback(
                                         switch (callError.reason) {
                                             case 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT':
                                             case 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT':
-                                                errorMessage =
-                                                    'This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.'
+                                                errorMessage = t`This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.`
                                                 break
                                             default:
-                                                errorMessage = `The transaction cannot succeed due to error: ${callError.reason}. This is probably an issue with one of the tokens you are swapping.`
+                                                errorMessage = t`The transaction cannot succeed due to error: ${callError.reason}. This is probably an issue with one of the tokens you are swapping.`
                                         }
                                         return { call, error: new Error(errorMessage) }
                                     })

@@ -170,7 +170,7 @@ export default function Pool() {
                         type="information"
                     />
                     <div className="flex justify-between items-center my-4">
-                        <div className="text-xl text-high-emphesis font-medium">Your Liquidity Positions</div>
+                        <div className="text-xl text-high-emphesis font-medium">{t`Your Liquidity Positions`}</div>
                         <div className="text-sm font-bold">
                             <Trans>
                                 Don&apos;t see a pool you joined?{' '}
