@@ -16,7 +16,14 @@ import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 import { useLanguageData } from '../../language/hooks'
 
 const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+    border: 2px solid rgb(23, 21, 34);
+    border-radius: 10px;
     font-size: 1.25rem;
+    height: 40px;
+
+    &:hover {
+        border-color: rgb(33, 34, 49);
+    }
 `
 
 const ExtendedMenuFlyout = styled(MenuFlyout)`
@@ -47,6 +54,7 @@ const MenuItem = styled.span`
 `
 
 const MenuItemFlag = styled.img`
+    display: inline;
     margin-right: 0.625rem;
     width: 20px;
     height: 20px;

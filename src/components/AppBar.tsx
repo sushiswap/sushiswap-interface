@@ -16,6 +16,7 @@ import { Disclosure } from '@headlessui/react'
 import { ANALYTICS_URL } from '../constants'
 import QuestionHelper from './QuestionHelper'
 import { t } from '@lingui/macro'
+import LanguageSwitch from './LanguageSwitch'
 
 function AppBar(): JSX.Element {
     const { account, chainId, library } = useActiveWeb3React()
@@ -71,7 +72,7 @@ function AppBar(): JSX.Element {
                                             )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`sushibar-nav-link`} to={'/sushibar'}>
-                                                  {t`SushiBar`}
+                                                    {t`SushiBar`}
                                                 </NavLink>
                                             )}
                                             {chainId &&
@@ -289,6 +290,7 @@ function AppBar(): JSX.Element {
                                             )}
                                             <Web3Status />
                                         </div>
+                                        <LanguageSwitch />
                                         <MoreMenu />
                                     </div>
                                 </div>
