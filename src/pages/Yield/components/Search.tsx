@@ -1,5 +1,6 @@
 import React from 'react'
 import { Search as SearchIcon } from 'react-feather'
+import { t } from '@lingui/macro'
 
 export default function Search({ term, search }: any) {
     return (
@@ -9,7 +10,7 @@ export default function Search({ term, search }: any) {
                 onChange={e => search(e.target.value)}
                 style={{ background: '#161522' }}
                 value={term}
-                placeholder="Search by name, symbol, address"
+                placeholder={t`Search by name, symbol, address`}
             />
             <div className="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
                 <SearchIcon size={16} />
