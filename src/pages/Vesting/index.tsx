@@ -137,7 +137,7 @@ export default function ClaimModal() {
     }, [account])
 
     // remove once treasury signature passed
-    const pendingTreasurySignature = false
+    const pendingTreasurySignature = true
 
     let VaultImage
     if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) > 0) {
