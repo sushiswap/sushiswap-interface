@@ -65,7 +65,7 @@ export default function CurrencySelectPanel({
                 className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row justify-between"
             >
                 <div
-                    className="w-full sm:w-2/5"
+                    className="w-full"
                     onClick={onClick}
                 >
                     <CurrencySelect
@@ -79,9 +79,7 @@ export default function CurrencySelectPanel({
                     >
                         <div className="flex">
                             {currency ? (
-                                <div className="flex-1">
                                     <CurrencyLogo currency={currency} size={'54px'} />
-                                </div>
                             ) : (
                                 <div className="bg-dark-700 rounded" style={{ maxWidth: 54, maxHeight: 54 }}>
                                     <div style={{ width: 54, height: 54 }}>
@@ -90,7 +88,7 @@ export default function CurrencySelectPanel({
                                 </div>
                             )}
    
-                            <div className="flex flex-1 flex-col items-start justify-center mx-3.5">
+                            <div className="flex flex-col items-start justify-center mx-3.5">
                                 <div className="flex items-center">
                                     <div className="text-lg md:text-2xl font-bold">
                                         {(currency && currency.symbol && currency.symbol.length > 20
