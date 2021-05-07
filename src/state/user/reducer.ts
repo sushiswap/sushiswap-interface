@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, DEFAULT_ARCHER_ETH_TIP } from '../../constants'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE, DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_PRICE } from '../../constants'
 import { updateVersion } from '../global/actions'
 import {
     addSerializedPair,
@@ -16,7 +16,9 @@ import {
     updateUserSingleHopOnly,
     updateUserSlippageTolerance,
     updateUserUseArcher,
-    updateUserArcherETHTip
+    updateUserArcherETHTip,
+    updateUserArcherGasPrice,
+    updateUserArcherTipManualOverride
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -54,7 +56,9 @@ export interface UserState {
     timestamp: number
     URLWarningVisible: boolean
     userUseArcher: boolean // use Archer or go directly to router
-    userArcherETHTip: string // ETH tip for Archer, as full BigInt string 
+    userArcherETHTip: string // ETH tip for Archer, as full BigInt string
+    userArcherGasPrice: string // current gas price
+    userArcherTipManualOverride: boolean // is user manually entering tip
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -73,7 +77,9 @@ export const initialState: UserState = {
     timestamp: currentTimestamp(),
     URLWarningVisible: true,
     userUseArcher: false,
-    userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString()
+    userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
+    userArcherGasPrice: DEFAULT_ARCHER_GAS_PRICE.toString(),
+    userArcherTipManualOverride: false
 }
 
 export default createReducer(initialState, builder =>
@@ -159,5 +165,11 @@ export default createReducer(initialState, builder =>
         })
         .addCase(updateUserArcherETHTip, (state, action) => {
             state.userArcherETHTip = action.payload.userArcherETHTip
+        })
+        .addCase(updateUserArcherGasPrice, (state, action) => {
+            state.userArcherGasPrice = action.payload.userArcherGasPrice
+        })
+        .addCase(updateUserArcherTipManualOverride, (state, action) => {
+            state.userArcherTipManualOverride = action.payload.userArcherTipManualOverride
         })
 )

@@ -30,3 +30,5 @@ export const removeSerializedPair = createAction<{ chainId: number; tokenAAddres
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
 export const updateUserUseArcher = createAction<{ userUseArcher: boolean }>('user/updateUserUseArcher')
 export const updateUserArcherETHTip = createAction<{ userArcherETHTip: string }>('user/updateArcherETHTip')
+export const updateUserArcherGasPrice = createAction<{ userArcherGasPrice: string }>('user/updateArcherGasPrice')
+export const updateUserArcherTipManualOverride = createAction<{ userArcherTipManualOverride: boolean }>('user/updateUserArcherTipManualOverride')

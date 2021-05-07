@@ -41,7 +41,7 @@ import {
     useSwapActionHandlers,
     useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useUserArcherETHTip, useUserSingleHopOnly, useUserSlippageTolerance, useUserTransactionTTL, useUserUseArcher } from '../../state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance, useUserTransactionTTL, useUserUseArcher, useUserArcherETHTip, useUserArcherTipManualOverride } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
@@ -106,7 +106,7 @@ export default function Swap() {
         parsedAmount,
         currencies,
         inputError: swapInputError
-    } = useDerivedSwapInfo()
+    } = useDerivedSwapInfo(doArcher)
     const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
         currencies[Field.INPUT],
         currencies[Field.OUTPUT],
@@ -197,7 +197,7 @@ export default function Swap() {
         }
     }, [approval, approvalSubmitted])
 
-    const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
+    const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT], doArcher ? archerETHTip : undefined)
     const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
 
     // the callback to execute the swap

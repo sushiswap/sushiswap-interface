@@ -121,7 +121,7 @@ export default function SwapModalFooter({
                         <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
                     </RowFixed>
                     <TYPE.black fontSize={14}>
-                        {CurrencyAmount.ether(archerETHTip).toExact()} ETH
+                        {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
                     </TYPE.black>
                 </RowBetween>
                 )}

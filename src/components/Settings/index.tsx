@@ -12,7 +12,8 @@ import {
     useUserSlippageTolerance,
     useUserTransactionTTL,
     useUserArcherETHTip,
-    useUserUseArcher
+    useUserUseArcher,
+    useUserArcherTipManualOverride
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { ButtonError } from '../ButtonLegacy'
@@ -96,6 +97,7 @@ export default function SettingsTab() {
 
     const [userUseArcher, setUserUseArcher] = useUserUseArcher()
     const [userArcherETHTip, setUserArcherETHTip] = useUserArcherETHTip()
+    const [userUseArcherTipManualOverride, setUserUseArcherTipManualOverride] = useUserArcherTipManualOverride()
 
     // show confirmation view before turning on
     const [showConfirmation, setShowConfirmation] = useState(false)
@@ -167,6 +169,8 @@ export default function SettingsTab() {
                             setETHTip={setUserArcherETHTip}
                             useArcher={userUseArcher}
                             setUseArcher={setUserUseArcher}
+                            archerTipManualOverride={userUseArcherTipManualOverride}
+                            setArcherTipManualOverride={setUserUseArcherTipManualOverride}
                         />
                         <div className="text-base font-semibold text-high-emphesis">Interface Settings</div>
                         <RowBetween>

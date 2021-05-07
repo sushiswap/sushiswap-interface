@@ -20,7 +20,9 @@ import {
     updateUserSingleHopOnly,
     updateUserSlippageTolerance,
     updateUserUseArcher,
-    updateUserArcherETHTip
+    updateUserArcherETHTip,
+    updateUserArcherGasPrice,
+    updateUserArcherTipManualOverride
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -281,34 +283,60 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
 export function useUserUseArcher(): [boolean, (newUseArcher: boolean) => void] {
     const dispatch = useDispatch<AppDispatch>()
-  
     const useArcher = useSelector<AppState, AppState['user']['userUseArcher']>(
-      state => state.user.userUseArcher
+        state => state.user.userUseArcher
     )
-  
+
     const setUseArcher = useCallback(
-      (newUseArcher: boolean) => {
-        dispatch(updateUserUseArcher({ userUseArcher: newUseArcher }))
-      },
-      [dispatch]
+        (newUseArcher: boolean) => {
+            dispatch(updateUserUseArcher({ userUseArcher: newUseArcher }))
+        }, [dispatch]
     )
-  
+
     return [useArcher, setUseArcher]
-  }
-  
-  export function useUserArcherETHTip(): [string, (newArcherETHTip: string) => void] {
+}
+
+export function useUserArcherETHTip(): [string, (newArcherETHTip: string) => void] {
     const dispatch = useDispatch<AppDispatch>()
     const userArcherETHTip = useSelector<AppState, AppState['user']['userArcherETHTip']>(state => {
-      return state.user.userArcherETHTip
+        return state.user.userArcherETHTip
     })
-  
+
     const setUserArcherETHTip = useCallback(
-      (newArcherETHTip: string) => {
-        dispatch(updateUserArcherETHTip({ userArcherETHTip: newArcherETHTip }))
-      },
-      [dispatch]
+        (newArcherETHTip: string) => {
+            dispatch(updateUserArcherETHTip({ userArcherETHTip: newArcherETHTip }))
+        }, [dispatch]
     )
-  
+
     return [userArcherETHTip, setUserArcherETHTip]
-  }
-  
+}
+
+export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void] {
+    const dispatch = useDispatch<AppDispatch>()
+    const userArcherGasPrice = useSelector<AppState, AppState['user']['userArcherGasPrice']>(state => {
+        return state.user.userArcherGasPrice
+    })
+
+    const setUserArcherGasPrice = useCallback(
+        (newArcherGasPrice: string) => {
+            dispatch(updateUserArcherGasPrice({ userArcherGasPrice: newArcherGasPrice }))
+        }, [dispatch]
+    )
+
+    return [userArcherGasPrice, setUserArcherGasPrice]
+}
+
+export function useUserArcherTipManualOverride(): [boolean, (newUseArcher: boolean) => void] {
+    const dispatch = useDispatch<AppDispatch>()
+    const userArcherTipManualOverride = useSelector<AppState, AppState['user']['userArcherTipManualOverride']>(
+        state => state.user.userArcherTipManualOverride
+    )
+
+    const setUserArcherTipManualOverride = useCallback(
+        (newArcherTipManualOverride: boolean) => {
+            dispatch(updateUserArcherTipManualOverride({ userArcherTipManualOverride: newArcherTipManualOverride }))
+        }, [dispatch]
+    )
+
+    return [userArcherTipManualOverride, setUserArcherTipManualOverride]
+}

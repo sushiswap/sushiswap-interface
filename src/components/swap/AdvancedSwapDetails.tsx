@@ -67,7 +67,7 @@ function TradeSummary({ trade, allowedSlippage, archerETHTip }: { trade: Trade; 
                         <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
                     </RowFixed>
                     <div className="text-sm font-bold text-high-emphesis">
-                        {CurrencyAmount.ether(archerETHTip).toExact()} ETH
+                        {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
                     </div>
                 </RowBetween>
                 )}

@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@sushiswap/sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,10 +13,15 @@ import useToggledVersion, { Version } from '../../hooks/useToggledVersion'
 import { isAddress } from '../../utils'
 import { computeSlippageAdjustedAmounts } from '../../utils/prices'
 import { AppDispatch, AppState } from '../index'
-import { useUserSlippageTolerance } from '../user/hooks'
+import { useUserSlippageTolerance, useUserArcherGasPrice, useUserArcherETHTip, useUserArcherTipManualOverride } from '../user/hooks'
+import { useSwapCallArguments, EstimatedSwapCall, SuccessfulCall } from '../../hooks/useSwapCallback'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { SwapState } from './reducer'
+import { DEFAULT_ARCHER_ETH_TIP } from '../../constants'
+import getArcherGasPrice from '../../utils/getArcherGasPrice'
+import isZero from '../../utils/isZero'
+import { useBlockNumber } from '../../state/application/hooks'
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -106,7 +111,7 @@ function involvesAddress(trade: Trade, checksummedAddress: string): boolean {
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(): {
+export function useDerivedSwapInfo(doArcher = false): {
     currencies: { [field in Field]?: Currency }
     currencyBalances: { [field in Field]?: CurrencyAmount }
     parsedAmount: CurrencyAmount | undefined
@@ -206,6 +211,88 @@ export function useDerivedSwapInfo(): {
     if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
         inputError = 'Insufficient ' + amountIn.currency.getSymbol(chainId) + ' balance'
     }
+
+    const swapCalls = useSwapCallArguments(v2Trade as Trade, allowedSlippage, to, doArcher)
+
+    const [, setUserETHTip] = useUserArcherETHTip()
+    const [userGasPrice, setUserGasPrice] = useUserArcherGasPrice()
+    const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
+    const blockNumber = useBlockNumber()
+
+    useEffect(() => {
+        if (doArcher) {
+            setUserTipManualOverride(false)
+            setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
+        }
+    }, [doArcher, setUserTipManualOverride, setUserETHTip])
+
+    useEffect(() => {
+        async function getCurrentGasPrice() {
+            const gasPrice = await getArcherGasPrice(ChainId.MAINNET)
+            setUserGasPrice(gasPrice.toString())
+        }
+        if (doArcher) {
+            getCurrentGasPrice()
+        }
+    }, [doArcher, blockNumber, userTipManualOverride, setUserGasPrice])
+
+    useEffect(() => {
+        async function calculateSuggestedEthTip() {
+            const estimatedCalls: EstimatedSwapCall[] = await Promise.all(
+                swapCalls.map(call => {
+                const {
+                    parameters: { methodName, args, value },
+                    contract
+                } = call
+                const options = !value || isZero(value) ? {} : { value }
+        
+                return contract.estimateGas[methodName](...args, options)
+                    .then(gasEstimate => {
+                        return {
+                            call,
+                            gasEstimate
+                        }
+                    })
+                    .catch(gasError => {
+                        console.debug('Gas estimate failed, trying eth_call to extract error', call)
+                        return contract.callStatic[methodName](...args, options)
+                            .then(result => {
+                                console.debug('Unexpected successful call after failed estimate gas', call, gasError, result)
+                                    return { call, error: new Error('Unexpected issue with estimating the gas. Please try again.') }
+                            })
+                            .catch(callError => {
+                                console.debug('Call threw error', call, callError)
+                                let errorMessage: string
+                                if (callError.reason.endsWith('_AMOUNT')) {
+                                    errorMessage =
+                                        'This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.'
+                                }
+                                else {
+                                    errorMessage = `The transaction cannot succeed due to error: ${callError.reason}. This is probably an issue with one of the tokens you are swapping.`
+                                }
+                                return { call, error: new Error(errorMessage) }
+                            })
+                    })
+                })
+            )
+        
+            // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
+            const successfulEstimation = estimatedCalls.find(
+                (el, ix, list): el is SuccessfulCall =>
+                'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
+            )
+        
+            if (!successfulEstimation) {
+                setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
+            } else {
+                setUserETHTip(successfulEstimation.gasEstimate.mul(userGasPrice).toString())
+            }
+        }
+
+        if(v2Trade && swapCalls && doArcher && !userTipManualOverride) {
+            calculateSuggestedEthTip()
+        }
+    }, [v2Trade, swapCalls, doArcher, userTipManualOverride, userGasPrice, setUserETHTip])
 
     return {
         currencies,

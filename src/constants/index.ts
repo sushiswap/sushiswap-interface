@@ -1,5 +1,6 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import { BigNumber } from '@ethersproject/bignumber'
 import { fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
 
 export const POOL_DENY = ['14', '29', '45', '30']
@@ -252,6 +253,14 @@ export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
     [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction'
 }
 
+export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'https://api.archerdao.io/v1/stats'
+}
+
+export const GASNOW_URI: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'https://www.gasnow.org/api/v3/gas/price'
+}
+
 export interface WalletInfo {
     connector?: AbstractConnector
     name: string
@@ -352,8 +361,11 @@ export const NetworkContextName = 'NETWORK'
 export const INITIAL_ALLOWED_SLIPPAGE = 50
 // 20 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 20
-// default tip amount, 0.05 ETH
-export const DEFAULT_ARCHER_ETH_TIP: JSBI = JSBI.multiply(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)), JSBI.BigInt(5))
+// default tip amount, 0.03 ETH
+export const DEFAULT_ARCHER_ETH_TIP: JSBI = JSBI.multiply(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)), JSBI.BigInt(3))
+// default gas price to use if all other sources unavailable
+export const DEFAULT_ARCHER_GAS_PRICE: BigNumber = BigNumber.from(114000000000)
+
 
 // used for rewards deadlines
 export const BIG_INT_SECONDS_IN_WEEK = JSBI.BigInt(60 * 60 * 24 * 7)

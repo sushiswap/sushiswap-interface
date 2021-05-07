@@ -1,4 +1,4 @@
-import { CurrencyAmount, ETHER } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, ETHER } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useContext, useRef, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
@@ -8,6 +8,7 @@ import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
 import { tryParseAmount } from '../../state/swap/hooks'
 import Toggle from '../Toggle'
+import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -98,12 +99,14 @@ export interface SlippageTabsProps {
     ethTip: string,
     setETHTip: (ethTip: string) => void,
     useArcher: boolean,
-    setUseArcher: (useArcher: boolean) => void
+    setUseArcher: (useArcher: boolean) => void,
+    archerTipManualOverride: boolean,
+    setArcherTipManualOverride: (archerTipManualOverride: boolean) => void
 }
 
-export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, ethTip, setETHTip, useArcher, setUseArcher }: SlippageTabsProps) {
+export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, ethTip, setETHTip, useArcher, setUseArcher, archerTipManualOverride, setArcherTipManualOverride }: SlippageTabsProps) {
     const theme = useContext(ThemeContext)
-
+    const { chainId } = useActiveWeb3React()
     const inputRef = useRef<HTMLInputElement>()
 
     const [slippageInput, setSlippageInput] = useState('')
@@ -113,7 +116,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
     const slippageInputIsValid =
         slippageInput === '' || (rawSlippage / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
     const deadlineInputIsValid = deadlineInput === '' || (deadline / 60).toString() === deadlineInput
-    const ethTipInputIsValid = ethTipInput === '' || CurrencyAmount.ether(ethTip).toExact() === ethTipInput
+    const ethTipInputIsValid = ethTipInput === '' || ethTipInput === '0' || CurrencyAmount.ether(ethTip).toExact() === ethTipInput
 
     let slippageError: SlippageError | undefined
     if (slippageInput !== '' && !slippageInputIsValid) {
@@ -166,9 +169,17 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
         setETHTipInput(value)
     
         try {
-          const valueAsCurrencyAmount = tryParseAmount(value, ETHER)
-          if (valueAsCurrencyAmount)
-            setETHTip(valueAsCurrencyAmount.raw.toString())
+            if(value === '0') {
+                setArcherTipManualOverride(false)
+            } else {
+                const valueAsCurrencyAmount = tryParseAmount(value, ETHER)
+                if (valueAsCurrencyAmount) {
+                    setArcherTipManualOverride(true)
+                    setETHTip(valueAsCurrencyAmount.raw.toString())
+                } else {
+                    setArcherTipManualOverride(false)
+                }
+            }         
         } catch {}
     }
 
@@ -280,6 +291,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                 </RowFixed>
             </AutoColumn>
 
+            { chainId === ChainId.MAINNET && (
             <AutoColumn gap="sm">
                 <RowBetween>
                     <RowFixed>
@@ -293,8 +305,22 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                             isActive={useArcher}
                             toggle={() => setUseArcher(!useArcher)} />
                 </RowBetween>
+                <RowBetween>
+                    <RowFixed>
+                        <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>
+                            MEV Shield Manual Tip
+                        </TYPE.black>
+                        <QuestionHelper text="Manually override the automatic miner tip calculation" />
+                    </RowFixed>
+                        <Toggle
+                            id="toggle-archer-manual-tip"
+                            isActive={archerTipManualOverride}
+                            toggle={() => setArcherTipManualOverride(!archerTipManualOverride)} />
+                </RowBetween>
             </AutoColumn>
+            )}
 
+            { chainId === ChainId.MAINNET && (
             <AutoColumn gap="sm">
                 <RowFixed>
                     <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
@@ -319,6 +345,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                     </TYPE.body>
                 </RowFixed>
             </AutoColumn>
+            )}
             
         </AutoColumn>
     )
