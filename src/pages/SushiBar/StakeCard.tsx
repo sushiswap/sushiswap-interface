@@ -96,7 +96,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
 
     const [pendingTx, setPendingTx] = useState(false)
 
-    const buttonDisabled = !input || pendingTx
+    const buttonDisabled = !input || pendingTx || Number(input) === 0
 
     const handleClickButton = async () => {
         if (buttonDisabled) return

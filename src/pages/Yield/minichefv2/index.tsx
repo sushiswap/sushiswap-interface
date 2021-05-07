@@ -17,6 +17,8 @@ import { getTokenIcon } from 'kashi/functions'
 
 import DoubleRewardBadge from '../../../assets/images/2x-square.jpg'
 
+import _ from 'lodash'
+
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
@@ -25,6 +27,8 @@ export default function Yield(): JSX.Element {
     const query = useFarmsV2()
     const farms = query?.farms
     const userFarms = query?.userFarms
+
+    const tvl = _.sumBy(farms, 'tvl')
 
     // Search Setup
     const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
@@ -48,11 +52,16 @@ export default function Yield(): JSX.Element {
                     header={
                         <CardHeader className="flex justify-between items-center bg-dark-800">
                             <div className="flex w-full justify-between">
-                                <div className="hidden md:flex items-center">
+                                <div className="hidden md:block items-center">
                                     {/* <BackButton defaultRoute="/pool" /> */}
                                     <div className="text-lg mr-2 whitespace-nowrap flex items-center">
                                         <div className="mr-2">Yield Instruments</div>
                                         <Badge color="blue">V2 Rewarder</Badge>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <div className="text-sm text-gray-500 mr-2">
+                                            Total Deposits: {farms && farms.length > 0 && formattedNum(tvl, true)}
+                                        </div>
                                     </div>
                                 </div>
                                 <Search search={search} term={term} />
@@ -112,7 +121,7 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
                             <div className="flex items-center justify-end">
-                                <div>APR</div>
+                                <div>Rewards APR</div>
                                 {sortConfig &&
                                     sortConfig.key === 'roiPerYear' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -223,9 +232,11 @@ const TokenBalance = ({ farm }: any) => {
                         <div className="md:col-span-3 flex justify-end items-center">
                             <div>
                                 <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
-                                    {formattedPercent(farm.roiPerMonth * 100)}{' '}
+                                    {formattedPercent(farm.roiPerYear * 100)}{' '}
+                                    {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
                                 </div>
-                                <div className="text-gray-500 text-right text-xs">per month</div>
+                                <div className="text-gray-500 text-right text-xs">annualized</div>
+                                {/* <div className="text-gray-500 text-right text-xs">per month</div> */}
                             </div>
                         </div>
                     </div>

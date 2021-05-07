@@ -80,7 +80,9 @@ export default function useWrapCallback(
                               }
                           }
                         : undefined,
-                inputError: sufficientBalance ? undefined : 'Insufficient WETH balance'
+                inputError: sufficientBalance
+                    ? undefined
+                    : `Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
             }
         } else {
             return NOT_APPLICABLE

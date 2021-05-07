@@ -24,6 +24,7 @@ import { RedirectOldRemoveLiquidityPathStructure } from './pages/RemoveLiquidity
 import Saave from './pages/Saave'
 import SushiBar from './pages/SushiBar'
 import SushiBarTransactions from './pages/SushiBar/SushiBarTransactions'
+import SushiBarTips from './pages/SushiBar/Tips'
 import Trade from './pages/Trade'
 import Swap from './pages/Swap'
 import {
@@ -65,7 +66,7 @@ function Routes(): JSX.Element {
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
             )}
             {chainId === ChainId.MAINNET && <Route exact strict path="/yield" component={MasterChefV1} />}
-            {/* {chainId === ChainId.MATIC && <Route exact strict path="/yield" component={MiniChefV2} />} */}
+            {chainId === ChainId.MATIC && <Route exact strict path="/yield" component={MiniChefV2} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/vesting" component={Vesting} />}
 
             {/* Migrate */}
@@ -78,6 +79,7 @@ function Routes(): JSX.Element {
             {chainId === ChainId.MAINNET && (
                 <Route exact strict path="/sushibar/transactions" component={SushiBarTransactions} />
             )}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/sushibar/tips" component={SushiBarTips} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}

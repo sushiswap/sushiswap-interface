@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { exchange_matic, minichefv2_matic } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
-import { liquidityPositionSubsetQuery, pairSubsetQuery, miniChefPoolQuery } from 'apollo/queries'
+import { tokenQuery, liquidityPositionSubsetQuery, pairSubsetQuery, miniChefPoolQuery } from 'apollo/queries'
 import { POOL_DENY } from '../../constants'
 import Fraction from '../../entities/Fraction'
 
@@ -25,7 +25,12 @@ const useFarms = () => {
                 query: liquidityPositionSubsetQuery,
                 variables: { user: String('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F').toLowerCase() } //minichef
             }),
-            sushiData.sushi.priceUSD()
+            sushiData.sushi.priceUSD(),
+            exchange_matic.query({
+                query: tokenQuery,
+                variables: { id: String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase() } //matic
+            }),
+            sushiData.exchange.ethPrice()
             //getAverageBlockTime(chainId),
             //sushiData.exchange.token({ token_address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0' }) // matic
         ])
@@ -45,33 +50,46 @@ const useFarms = () => {
         const sushiPrice = results[2]
         //const averageBlockTime = results[3]
         const pairs = pairsQuery?.data.pairs
+        const maticPrice = results[3].data.token.derivedETH * results[4]
+        //console.log('maticPrice:', maticPrice)
 
         //const maticPrice = results[3]
         //console.log('maticPrice:', maticPrice)
 
+        //console.log('pools:', pools)
         const farms = pools
             .filter((pool: any) => {
                 //console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))
-                return !POOL_DENY.includes(pool?.id) && pairs.find((pair: any) => pair?.id === pool?.pair)
+                console.log(pool.id, Number(pool.miniChef.totalAllocPoint) > 0)
+                return (
+                    !POOL_DENY.includes(pool?.id) &&
+                    pairs.find((pair: any) => pair?.id === pool?.pair) &&
+                    Number(pool.miniChef.totalAllocPoint) > 0 &&
+                    !['4'].includes(pool?.id) // manual filter for now
+                )
             })
             .map((pool: any) => {
                 const pair = pairs.find((pair: any) => pair.id === pool.pair)
                 const liquidityPosition = liquidityPositions.find(
                     (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                 )
-                //const blocksPerHour = 3600 / averageBlockTime
-                const balance = Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1
-                const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
-                const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
-                const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
-                const rewardPerSecond =
-                    ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
-                const rewardPerDay = rewardPerSecond * 3600 * 24
 
-                const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
-                const secondaryRewardPerDay = secondaryRewardPerSecond * 3600 * 24
+                const totalAllocPoint = 1000 //pool.miniChef.totalAllocPoint
 
-                //console.log('rewardPerDay:', rewardPerDay)
+                const balance = Number(pool.slpBalance / 1e18)
+                const balanceUSD = (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD)
+
+                const rewardPerSecond = ((pool.allocPoint / totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+                const rewardPerDay = rewardPerSecond * 86400
+
+                console.log('pool:', pool.allocPoint, totalAllocPoint, pool.miniChef.sushiPerSecond)
+
+                const secondaryRewardPerSecond =
+                    ((pool.allocPoint / totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+                const secondaryRewardPerDay = secondaryRewardPerSecond * 86400
+
+                // const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
+                console.log('rewardsPerDay:', rewardPerDay * 10, secondaryRewardPerDay * 10)
 
                 const roiPerSecond = (rewardPerSecond * 2 * sushiPrice) / balanceUSD // *2 with matic rewards
                 const roiPerHour = roiPerSecond * 3600
@@ -79,7 +97,7 @@ const useFarms = () => {
                 const roiPerMonth = roiPerDay * 30
                 const roiPerYear = roiPerMonth * 12
 
-                console.log('pool:', pool.slpBalance)
+                //console.log('pool:', pool.slpBalance)
 
                 return {
                     ...pool,

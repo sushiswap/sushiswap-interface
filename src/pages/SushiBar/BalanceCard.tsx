@@ -64,20 +64,22 @@ export default function BalanceCard({
                             <p className="text-caption text-primary ml-5 md:ml-0">{`${weightedApr}%`}</p>
                         </div>
                     </div> */}
-                    <a
-                        href={`https://analytics.sushi.com/users/${account}`}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className={`
+                    {account && (
+                        <a
+                            href={`https://analytics.sushi.com/users/${account}`}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className={`
                             flex flex-grow justify-center items-center
                             h-14 mt-6 rounded
                             bg-dark-700 text-high-emphesis
                             focus:outline-none focus:ring hover:bg-opacity-80
                             text-caption2 font-bold cursor-pointer
                         `}
-                    >
-                        Your SushiBar Stats
-                    </a>
+                        >
+                            Your SushiBar Stats
+                        </a>
+                    )}
                 </div>
             </div>
         </div>

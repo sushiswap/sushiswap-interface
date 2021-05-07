@@ -33,8 +33,8 @@ export default function InfoCard() {
                 </div> */}
             </div>
             <div className="text-gray-500 text-sm leading-5 md:text-caption max-w-lg mb-2 md:mb-4 pr-3 md:pr-0">
-                For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve
+                For every swap on the exchange on every chain, 0.05% of swap volume are distributed as SUSHI
+                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
                 xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
                 Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
                 SUSHI and any additional from fees.
