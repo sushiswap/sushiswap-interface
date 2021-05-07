@@ -60,7 +60,7 @@ export default function Yield(): JSX.Element {
                                     </div>
                                     <div className="flex items-center">
                                         <div className="text-sm text-gray-500 mr-2">
-                                            Total Deposits: {formattedNum(tvl, true)}
+                                            Total Deposits: {farms && farms.length > 0 && formattedNum(tvl, true)}
                                         </div>
                                     </div>
                                 </div>
