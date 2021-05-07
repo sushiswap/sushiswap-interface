@@ -1,4 +1,4 @@
-import { JSBI, Pair, Percent, TokenAmount } from '@sushiswap/sdk'
+import { Fraction, JSBI, Pair, Percent, TokenAmount } from '@sushiswap/sdk'
 import { darken, transparentize } from 'polished'
 import React, { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'react-feather'
@@ -12,6 +12,7 @@ import { useColor } from '../../hooks/useColor'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
+import shortenString from 'utils/shortenString'
 import { unwrappedToken } from '../../utils/wrappedCurrency'
 import { ButtonEmpty, ButtonPrimary, ButtonPrimaryNormal } from '../ButtonLegacy'
 import Card, { GreyCard, LightCard } from '../CardLegacy'
@@ -73,6 +74,11 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
               ]
             : [undefined, undefined]
 
+    const formatBalance = () => {
+        if(userPoolBalance?.divide('10000000000').lessThan(new Fraction('1', '100000'))) return '<0.00001'
+        return userPoolBalance?.toSignificant(4)
+    }
+
     return (
         <>
             {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
@@ -80,20 +86,21 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
                     <AutoColumn gap={'md'}>
                         <Text fontWeight={400} fontSize={18}>Your Position</Text>
                         <RowBetween>
-                            <div className="flex">
+                            <div className="flex items-center">
                                 <DoubleCurrencyLogo
                                     currency0={pair.token0}
                                     currency1={pair.token1} 
                                     size={42}
-                                    margin={true}
                                 />
-                                <Text fontWeight={500} fontSize={24}>
-                                    {`${pair.token0.getSymbol(chainId)}/${pair.token1.getSymbol(chainId)}`}
+                                <Text fontWeight={500} fontSize={24} className={'ml-3'}>
+                                    {shortenString(`${pair.token0.getSymbol(chainId)}/${pair.token1.getSymbol(chainId)}`, 8)}
                                 </Text>
                             </div>
                             <div className="flex">
                                 <Text fontSize={16} fontWeight={400}>
-                                    {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                                    {
+                                        userPoolBalance ? formatBalance() : '-'
+                                    }
                                 </Text>
                                 <Text fontSize={16} fontWeight={400} color={'#7F7F7F'}>
                                     &nbsp;
@@ -104,7 +111,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
                         <div className="flex flex-col rounded bg-dark-900 space-y-1 p-3 w-full mt-3 text-high-emphesis">
                             <RowBetween>
                                 <Text fontSize={14} fontWeight={400}>
-                                    Your pool share
+                                    Your Pool Share
                                 </Text>
                                 <Text fontSize={14} fontWeight={700}>
                                     {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
