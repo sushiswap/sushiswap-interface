@@ -348,12 +348,14 @@ export default function Swap() {
                         onDismiss={handleConfirmDismiss}
                     />
                     {chainId && chainId === ChainId.MATIC && (
-                        <div className="hidden md:block pb-4">
+                        <div className="hidden md:block pb-4 space-y-2">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">Welcome to Sushi on Polygon (Matic)</div>
-                                        <div className="text-purple text-sm">New network, new features</div>
+                                        <div className="text-white">
+                                            300M+ TVL on Polygon! Optimized routing enabled
+                                        </div>
+                                        <div className="text-purple text-sm">Enjoy the lowest slippage on Polygon</div>
                                     </div>
                                     <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
