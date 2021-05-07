@@ -23,6 +23,7 @@ import RemoveLiquidity from './pages/RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './pages/RemoveLiquidity/redirects'
 import Saave from './pages/Saave'
 import SushiBar from './pages/SushiBar'
+import SushiBarTransactions from './pages/SushiBar/SushiBarTransactions'
 import Trade from './pages/Trade'
 import Swap from './pages/Swap'
 import {
@@ -74,6 +75,9 @@ function Routes(): JSX.Element {
 
             {/* SushiBar Staking */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/sushibar" component={SushiBar} />}
+            {chainId === ChainId.MAINNET && (
+                <Route exact strict path="/sushibar/transactions" component={SushiBarTransactions} />
+            )}
             {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
