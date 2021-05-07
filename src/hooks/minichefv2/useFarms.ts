@@ -29,7 +29,8 @@ const useFarms = () => {
             exchange_matic.query({
                 query: tokenQuery,
                 variables: { id: String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase() } //matic
-            })
+            }),
+            sushiData.exchange.ethPrice()
             //getAverageBlockTime(chainId),
             //sushiData.exchange.token({ token_address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0' }) // matic
         ])
@@ -49,9 +50,8 @@ const useFarms = () => {
         const sushiPrice = results[2]
         //const averageBlockTime = results[3]
         const pairs = pairsQuery?.data.pairs
-
-        const maticPrice = results[3]
-        console.log('maticPrice:', maticPrice)
+        const maticPrice = results[3].data.token.derivedETH * results[4]
+        //console.log('maticPrice:', maticPrice)
 
         //const maticPrice = results[3]
         //console.log('maticPrice:', maticPrice)

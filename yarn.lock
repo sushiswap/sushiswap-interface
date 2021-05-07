@@ -2503,6 +2503,19 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
   integrity sha512-o+TYF8vBcyySRsb2kqBDv/KMeme8a2nwWoG+lAWzbDmWfb2/MrVWYCVYDYvjXdSoI/Cujqy1i0gIDrkdxa9chA==
 
+"@lufycz/sushi-data@^2.0.0-canary-20":
+  version "2.0.0-canary-20"
+  resolved "https://registry.yarnpkg.com/@lufycz/sushi-data/-/sushi-data-2.0.0-canary-20.tgz#06725c41dc11bb845738a57210876423a2f8ee48"
+  integrity sha512-EEtI1ZvtDQKPXpLQjq2S9dqFZam8zI9Mi+fDw+bCSRAMlg+zrlp2Dba6/KL3FUJWrszeIsTn+PScFQ8kIvle8A==
+  dependencies:
+    date-fns "^2.17.0"
+    graph-results-pager LufyCZ/graph-results-pager#types
+    graphql "14.5.8"
+    graphql-request "^3.4.0"
+    isomorphic-ws "^4.0.1"
+    subscriptions-transport-ws "0.9.16"
+    ws "^7.4.4"
+
 "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
@@ -2837,7 +2850,7 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
-"@sushiswap/default-token-list@^6.3.0":
+"@sushiswap/default-token-list@^6.4.0":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.4.0.tgz#2ea86239afb1a425eb4cda8fdc48e2693e8f5460"
   integrity sha512-6e8MUgg4V6vbct+gk8CLTW++VNgCC+kbKlbsjZ3gtk5gQATXNbv7DyOcvbDyMouPfzIOxx+ncIOmS7sjYnHuMw==
@@ -10227,6 +10240,12 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
+
+graph-results-pager@LufyCZ/graph-results-pager#types:
+  version "1.0.3"
+  resolved "https://codeload.github.com/LufyCZ/graph-results-pager/tar.gz/d8667ea547e338b09026acef3e5b25da3e7208b7"
+  dependencies:
+    node-fetch "2.6.1"
 
 "graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
   version "1.0.3"
