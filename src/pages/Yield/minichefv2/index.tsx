@@ -223,9 +223,11 @@ const TokenBalance = ({ farm }: any) => {
                         <div className="md:col-span-3 flex justify-end items-center">
                             <div>
                                 <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
-                                    {formattedPercent(farm.roiPerMonth * 100)}{' '}
+                                    {formattedPercent(farm.roiPerYear * 100)}{' '}
+                                    {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
                                 </div>
-                                <div className="text-gray-500 text-right text-xs">per month</div>
+                                <div className="text-gray-500 text-right text-xs">annualized</div>
+                                {/* <div className="text-gray-500 text-right text-xs">per month</div> */}
                             </div>
                         </div>
                     </div>
