@@ -118,7 +118,7 @@ export const formattedNum = (number: any, usd = false) => {
         }
     }
 
-    return parseFloat(String(num)).toFixed(5)
+    return parseFloat(String(num)).toPrecision(4)
 }
 
 export function gradientColor(percent: any) {

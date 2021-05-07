@@ -1,52 +1,34 @@
 import React, { useContext, useState } from 'react'
-import { Token, TokenAmount, WETH } from '@sushiswap/sdk'
-import { Input as NumericalInput } from 'components/NumericalInput'
-import { useActiveWeb3React } from 'hooks'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { Alert, Button, Dots } from 'kashi/components'
-import TransactionReviewView from 'kashi/components/TransactionReview'
-import { BENTOBOX_ADDRESS, KASHI_ADDRESS } from 'kashi/constants'
-import { KashiContext } from 'kashi/context'
-import { KashiCooker, Warnings } from 'kashi/entities'
+import { Button } from 'components'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { WETH } from '@sushiswap/sdk'
+import { e10, ZERO } from 'kashi/functions/math'
 import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
-import { e10, maximum, ZERO } from 'kashi/functions/math'
-import { BentoApprovalState, useKashiApproveCallback } from 'kashi/hooks'
-import { ArrowDownRight } from 'react-feather'
-import { useKashiApprovalPending } from 'state/application/hooks'
+import TransactionReviewView from 'kashi/components/TransactionReview'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
+import { Warnings } from 'kashi/entities'
 import { formattedNum } from 'utils'
+import { KashiContext } from 'kashi/context'
+import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import WarningsView from 'kashi/components/Warnings'
+import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
+import { useCurrency } from 'hooks/Tokens'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
-    const { account, chainId } = useActiveWeb3React()
-    const pendingApprovalMessage = useKashiApprovalPending()
+    const { chainId } = useActiveWeb3React()
+    const assetToken = useCurrency(pair.asset.address) || undefined
 
     // State
     const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
     const [value, setValue] = useState('')
 
-    const [approvalState, approve] = useApproveCallback(
-        new TokenAmount(
-            new Token(chainId || 1, pair.asset.address, pair.asset.decimals, pair.asset.symbol, pair.asset.name),
-            value.toBigNumber(pair.asset.decimals).toString()
-        ),
-        BENTOBOX_ADDRESS
-    )
-
     const info = useContext(KashiContext).state.info
-
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback(
-        KASHI_ADDRESS
-    )
 
     // Calculated
     const assetNative = WETH[chainId || 1].address == pair.asset.address
     const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
-    const max = (useBento
-        ? pair.asset.bentoBalance
-        : assetNative
-        ? maximum(info?.ethBalance.sub(e10(17)) || ZERO, ZERO)
-        : pair.asset.balance
-    ).toFixed(pair.asset.decimals)
+    const max = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
     const warnings = new Warnings().add(
         balance?.lt(value.toBigNumber(pair.asset.decimals)),
@@ -55,13 +37,6 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         } balance is sufficient to deposit and then try again.`,
         true
     )
-
-    const showApprove =
-        chainId &&
-        pair.asset.address !== WETH[chainId].address &&
-        !useBento &&
-        value &&
-        (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
     const transactionReview = new TransactionReview()
 
@@ -96,103 +71,36 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         <>
             <div className="text-3xl text-high-emphesis mt-6">Deposit {pair.asset.symbol}</div>
 
-            <div className="flex justify-between my-4">
-                <div className="text-base text-secondary">
-                    <span>
-                        <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
-                    </span>
-                    <span> from </span>
-                    <span>
-                        <Button
-                            variant="outlined"
-                            color="blue"
-                            size="small"
-                            className="focus:ring focus:ring-blue"
-                            onClick={() => {
-                                setUseBento(!useBento)
-                            }}
-                        >
-                            {useBento ? 'BentoBox' : 'Wallet'}
-                        </Button>
-                    </span>
-                </div>
-                <div className="text-base text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    Balance: {formattedNum(max)} {pair.asset.symbol}
-                </div>
-            </div>
+            <SmartNumberInput
+                color="blue"
+                token={pair.asset}
+                value={value}
+                setValue={setValue}
+                useBentoTitleDirection="down"
+                useBentoTitle="from"
+                useBento={useBento}
+                setUseBento={setUseBento}
+                maxTitle="Balance"
+                max={max}
+                showMax={true}
+            />
 
-            <div className="flex items-center relative w-full mb-4">
-                <NumericalInput
-                    className="w-full p-3 bg-input rounded focus:ring focus:ring-blue"
-                    value={value}
-                    onUserInput={setValue}
-                />
-                {account && (
-                    <Button
-                        variant="outlined"
-                        color="blue"
-                        size="small"
-                        onClick={() => setValue(max)}
-                        className="absolute right-4 focus:ring focus:ring-blue"
-                    >
-                        MAX
-                    </Button>
-                )}
-            </div>
-
-            {warnings.map((warning, i) => (
-                <Alert
-                    key={i}
-                    type={warning.breaking ? 'error' : 'warning'}
-                    message={warning.message}
-                    className="mb-4"
-                />
-            ))}
-
+            <WarningsView warnings={warnings}></WarningsView>
             <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
 
-            {approveKashiFallback && (
-                <Alert
-                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
-                    className="mb-4"
-                />
-            )}
-
-            {(kashiApprovalState === BentoApprovalState.NOT_APPROVED ||
-                kashiApprovalState === BentoApprovalState.PENDING) &&
-                !kashiPermit && (
-                    <Button color="blue" onClick={onApprove} className="mb-4">
-                        {kashiApprovalState === BentoApprovalState.PENDING ? (
-                            <Dots>{pendingApprovalMessage}</Dots>
-                        ) : (
-                            `Approve Kashi`
-                        )}
-                    </Button>
-                )}
-
-            {(kashiApprovalState === BentoApprovalState.APPROVED || kashiPermit) && (
-                <>
-                    {showApprove && (
-                        <Button color="blue" onClick={approve} className="mb-4">
-                            {approvalState === ApprovalState.PENDING ? (
-                                <Dots>Approving {pair.asset.symbol}</Dots>
-                            ) : (
-                                `Approve ${pair.asset.symbol}`
-                            )}
-                        </Button>
-                    )}
-
-                    {!showApprove && (
+            <KashiApproveButton
+                color="blue"
+                content={(onCook: any) => (
+                    <TokenApproveButton value={value} token={assetToken} needed={!useBento}>
                         <Button
-                            color="blue"
                             onClick={() => onCook(pair, onExecute)}
-                            disabled={balance.eq(0) || value.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
+                            disabled={value.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
                         >
                             Deposit
                         </Button>
-                    )}
-                </>
-            )}
+                    </TokenApproveButton>
+                )}
+            />
         </>
     )
 }

@@ -10,16 +10,15 @@ import { RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import { BlueCard, LightCard } from '../../components/Card'
-import { AutoColumn, ColumnCenter } from '../../components/Column'
+import { LightCard } from '../../components/CardLegacy'
+import { AutoRow } from '../../components/Row'
+import { AutoColumn } from '../../components/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { AddRemoveTabs } from '../../components/NavigationTabs'
-import { MinimalPositionCard } from '../../components/PositionCard'
 import Row, { RowBetween, RowFlat } from '../../components/Row'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { PairState } from '../../data/Reserves'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
@@ -33,12 +32,18 @@ import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRoute
 import { currencyId } from '../../utils/currencyId'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import AppBody from '../AppBody'
 import { Dots, Wrapper } from '../Pool/styleds'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
-import { PoolPriceBar } from './PoolPriceBar'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
+import Header from '../../components/ExchangeHeader'
+import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
+import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
+import { NavLink } from '../../components/Link'
+import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/AdvancedLiquidityDetailsDropdown'
+import Button from '../../components/Button'
+import { MinimalPositionCard } from '../../components/PositionCard'
+import { PoolPriceBar } from './PoolPriceBar'
 
 export default function AddLiquidity({
     match: {
@@ -251,7 +256,7 @@ export default function AddLiquidity({
                             ' Pool Tokens'}
                     </Text>
                 </Row>
-                <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
+                <TYPE.italic fontSize={14} className="text-gray-500" textAlign="left" padding={'20px 0 20px 0'}>
                     {`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </TYPE.italic>
@@ -323,8 +328,28 @@ export default function AddLiquidity({
             <Helmet>
                 <title>Add Liquidity | Sushi</title>
             </Helmet>
-            <div className="bg-dark-900 w-full max-w-2xl rounded">
-                <AddRemoveTabs creating={isCreate} adding={true} />
+            <div className="w-full max-w-2xl mb-5 px-4">
+                <NavLink
+                    className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
+                    to={'/pool'}
+                >
+                    View Your Liquidity Positions &gt;
+                </NavLink>
+                {/* <button
+                    style={{
+                        backgroundColor: 'rgba(167, 85, 221, 0.25)',
+                        border: '1px solid #A755DD',
+                        borderRadius: 20,
+                        padding: '5px 40px'
+                        fontSize: 14,
+                    }}
+                >
+                    FARM THE {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}-
+                    {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
+                </button> */}
+            </div>
+            <div className="bg-dark-900 w-full max-w-2xl rounded z-10 shadow-liquidity-purple-glow">
+                <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <Wrapper>
                     <TransactionConfirmationModal
                         isOpen={showConfirm}
@@ -341,7 +366,7 @@ export default function AddLiquidity({
                         )}
                         pendingText={pendingText}
                     />
-                    <AutoColumn gap="20px">
+                    <AutoColumn gap="md">
                         {noLiquidity ||
                             (isCreate ? (
                                 <Alert
@@ -349,18 +374,27 @@ export default function AddLiquidity({
                                     type="information"
                                 />
                             ) : (
-                                <Alert
-                                    showIcon={false}
-                                    message={
-                                        <>
-                                            <b>Tip:</b> When you add liquidity, you will receive pool tokens
-                                            representing your position. These tokens automatically earn fees
-                                            proportional to your share of the pool, and can be redeemed at any time.
-                                        </>
-                                    }
-                                    type="information"
-                                />
+                                <>
+                                    <Alert
+                                        showIcon={false}
+                                        message={
+                                            <>
+                                                <b>Tip:</b> When you add liquidity, you will receive pool tokens
+                                                representing your position. These tokens automatically earn fees
+                                                proportional to your share of the pool, and can be redeemed at any time.
+                                            </>
+                                        }
+                                        type="information"
+                                    />
+                                    {pair && !noLiquidity && pairState !== PairState.INVALID && (
+                                        <LiquidityHeader
+                                            input={currencies[Field.CURRENCY_A]}
+                                            output={currencies[Field.CURRENCY_B]}
+                                        />
+                                    )}
+                                </>
                             ))}
+
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.CURRENCY_A]}
                             onUserInput={onFieldAInput}
@@ -373,9 +407,19 @@ export default function AddLiquidity({
                             id="add-liquidity-input-tokena"
                             showCommonBases
                         />
-                        <ColumnCenter>
-                            <Plus size="16" color={theme.text2} />
-                        </ColumnCenter>
+
+                        <AutoColumn justify="space-between">
+                            <AutoRow
+                                justify={expertMode ? 'space-between' : 'flex-start'}
+                                style={{ padding: '0 1rem' }}
+                            >
+                                <button className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10">
+                                    <div className="bg-dark-800 hover:bg-dark-700 rounded-full p-3">
+                                        <Plus size="32" color={theme.text2} />
+                                    </div>
+                                </button>
+                            </AutoRow>
+                        </AutoColumn>
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.CURRENCY_B]}
                             onUserInput={onFieldBInput}
@@ -392,21 +436,17 @@ export default function AddLiquidity({
                             currencies[Field.CURRENCY_B] &&
                             pairState !== PairState.INVALID && (
                                 <>
-                                    <LightCard padding="0px" borderRadius={'20px'}>
-                                        <RowBetween padding="1rem">
-                                            <TYPE.subHeader fontWeight={500} fontSize={14}>
-                                                {noLiquidity ? 'Initial prices' : 'Prices'} and pool share
-                                            </TYPE.subHeader>
-                                        </RowBetween>{' '}
-                                        <LightCard padding="1rem" borderRadius={'20px'}>
-                                            <PoolPriceBar
-                                                currencies={currencies}
-                                                poolTokenPercentage={poolTokenPercentage}
-                                                noLiquidity={noLiquidity}
-                                                price={price}
-                                            />
-                                        </LightCard>
-                                    </LightCard>
+                                    <LiquidityPrice
+                                        input={currencies[Field.CURRENCY_A]}
+                                        output={currencies[Field.CURRENCY_B]}
+                                        price={price}
+                                    />
+                                    {/* <PoolPriceBar
+                                        currencies={currencies}
+                                        poolTokenPercentage={poolTokenPercentage}
+                                        noLiquidity={noLiquidity}
+                                        price={price}
+                                    /> */}
                                 </>
                             )}
 
@@ -472,7 +512,7 @@ export default function AddLiquidity({
                                     }
                                 >
                                     <Text fontSize={20} fontWeight={500}>
-                                        {error ?? 'Supply'}
+                                        {error ?? 'Confirm Adding Liquidity'}
                                     </Text>
                                 </ButtonError>
                             </AutoColumn>
@@ -480,18 +520,20 @@ export default function AddLiquidity({
                     </AutoColumn>
                 </Wrapper>
             </div>
-            {!addIsUnsupported ? (
-                pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                    <div className="w-full max-w-2xl flex flex-col mt-4">
+            <div className="w-full max-w-2xl z-0">
+                {!addIsUnsupported ? (
+                    pair && !noLiquidity && pairState !== PairState.INVALID ? (
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-                    </div>
-                ) : null
-            ) : (
-                <UnsupportedCurrencyFooter
-                    show={addIsUnsupported}
-                    currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]}
-                />
-            )}
+                    ) : (
+                        <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue)} />
+                    )
+                ) : (
+                    <UnsupportedCurrencyFooter
+                        show={addIsUnsupported}
+                        currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]}
+                    />
+                )}
+            </div>
         </>
     )
 }

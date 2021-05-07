@@ -10,18 +10,21 @@ import HecoLogo from '../../assets/images/heco-logo.png'
 import MaticLogo from '../../assets/images/matic-logo.png'
 import MoonbeamLogo from '../../assets/images/moonbeam-logo.png'
 import xDaiLogo from '../../assets/images/xdai-logo.png'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import Logo from '../Logo'
 
+import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
+
 const getTokenLogoURL = (address: string, chainId: any) => {
     let imageURL
-    console.log(chainId)
     if (chainId === ChainId.MAINNET) {
         imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
     } else if (chainId === ChainId.BSC) {
         imageURL = `https://v1exchange.pancakeswap.finance/images/coins/${address}.png`
+    } else if (chainId === ChainId.MATIC) {
+        imageURL = getMaticTokenLogoURL(address)
     } else {
         imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
     }
@@ -40,6 +43,7 @@ const StyledLogo = styled(Logo)<{ size: string }>`
     height: ${({ size }) => size};
     // border-radius: ${({ size }) => size};
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
+    border-radius: 50%;
     // background-color: ${({ theme }) => theme.white};
 `
 

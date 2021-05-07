@@ -4,7 +4,7 @@ import { AlertTriangle, ArrowUpCircle } from 'react-feather'
 import { Text } from 'rebass'
 import styled, { ThemeContext } from 'styled-components'
 import Circle from '../../assets/images/blue-loader.svg'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ExternalLink } from '../../theme'
 import { CloseIcon, CustomLightSpinner } from '../../theme/components'
 import { getExplorerLink } from '../../utils'
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     width: 100%;
 `
 const Section = styled(AutoColumn)`
-    padding: 24px;
+    // padding: 24px;
 `
 
 const BottomSection = styled(Section)`

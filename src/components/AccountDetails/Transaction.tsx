@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react'
 import { CheckCircle, Triangle } from 'react-feather'
 import styled from 'styled-components'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTransactions } from '../../state/transactions/hooks'
 import { ExternalLink } from '../../theme'
 import { getExplorerLink } from '../../utils'

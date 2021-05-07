@@ -1,10 +1,9 @@
-import { CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks'
+import { CurrencyAmount, Trade, TradeType, ChainId } from '@sushiswap/sdk'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
+import { ThemeContext } from 'styled-components'
 import { Field } from '../../state/swap/actions'
 import { useUserSlippageTolerance } from '../../state/user/hooks'
-import { TYPE } from '../../theme'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../../utils/prices'
 import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
@@ -12,9 +11,9 @@ import { RowBetween, RowFixed } from '../Row'
 import FormattedPriceImpact from './FormattedPriceImpact'
 import SwapRoute from './SwapRoute'
 import { ExternalLink } from '../Link'
+import { ANALYTICS_URL } from '../../constants'
 
 function TradeSummary({ trade, allowedSlippage, archerETHTip }: { trade: Trade; allowedSlippage: number, archerETHTip?: string }) {
-    const theme = useContext(ThemeContext)
     const { chainId } = useActiveWeb3React()
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
@@ -82,7 +81,7 @@ export interface AdvancedSwapDetailsProps {
 }
 
 export function AdvancedSwapDetails({ trade, archerETHTip }: AdvancedSwapDetailsProps) {
-    const theme = useContext(ThemeContext)
+    const { chainId } = useActiveWeb3React()
 
     const [allowedSlippage] = useUserSlippageTolerance()
 
@@ -104,17 +103,24 @@ export function AdvancedSwapDetails({ trade, archerETHTip }: AdvancedSwapDetails
                             </RowBetween>
                         </>
                     )}
-                    {!showRoute && (
-                        <div className="flex justify-center pt-3 px-4">
-                            <ExternalLink
-                                href={
-                                    'https://analytics.sushi.com/pairs/' + trade.route.pairs[0].liquidityToken.address
-                                }
-                            >
-                                View pair analytics
-                            </ExternalLink>
-                        </div>
-                    )}
+
+                    {!showRoute &&
+                        chainId &&
+                        [ChainId.MAINNET, ChainId.BSC, ChainId.FANTOM, ChainId.XDAI, ChainId.MATIC].includes(
+                            chainId
+                        ) && (
+                            <div className="flex justify-center pt-3 px-4">
+                                <ExternalLink
+                                    href={`${
+                                        chainId && ANALYTICS_URL[chainId]
+                                            ? ANALYTICS_URL[chainId]
+                                            : 'https://analytics.sushi.com'
+                                    }/pairs/${trade.route.pairs[0].liquidityToken.address}`}
+                                >
+                                    View pair analytics
+                                </ExternalLink>
+                            </div>
+                        )}
                 </>
             )}
         </AutoColumn>

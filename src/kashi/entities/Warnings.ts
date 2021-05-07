@@ -1,6 +1,6 @@
 export class Warning {
     active = false
-    message = ""
+    message = ''
     breaking = false
     or: Warning | undefined = undefined
 
@@ -24,7 +24,17 @@ export class Warnings extends Array<Warning> {
     }
 
     add(active: boolean, message: string, breaking = false, or?: Warning) {
-        this._add(new Warning(active, message, breaking, or));
+        this._add(new Warning(active, message, breaking, or))
+        return this
+    }
+
+    addWarning(active: boolean, message: string, or?: Warning) {
+        this._add(new Warning(active, message, false, or))
+        return this
+    }
+
+    addError(active: boolean, message: string, or?: Warning) {
+        this._add(new Warning(active, message, true, or))
         return this
     }
 

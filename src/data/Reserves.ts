@@ -3,7 +3,7 @@ import { Interface } from '@ethersproject/abi'
 import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
 import { Currency, Pair, TokenAmount } from '@sushiswap/sdk'
 import { useMemo } from 'react'
-import { useActiveWeb3React } from '../hooks'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
 

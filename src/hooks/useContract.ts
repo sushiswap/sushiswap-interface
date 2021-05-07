@@ -21,11 +21,12 @@ import {
     BENTOBOX_ADDRESS,
     CHAINLINK_ORACLE_ADDRESS,
     KASHI_ADDRESS,
-    KASHI_HELPER_ADDRESS,
-    SUSHISWAP_SWAPPER_ADDRESS
+    SUSHISWAP_SWAPPER_ADDRESS,
+    SUSHISWAP_MULTISWAPPER_ADDRESS,
+    BORING_HELPER_ADDRESS
 } from 'kashi'
 import { useMemo } from 'react'
-import { BORING_HELPER_ADDRESS, MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
+import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 import {
     ARGENT_WALLET_DETECTOR_ABI,
     ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
@@ -47,12 +48,14 @@ import FACTORY_ABI from '../constants/abis/factory.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
+import MINICHEFV2_ABI from '../constants/abis/miniChefV2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
+import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './useActiveWeb3React'
@@ -146,7 +149,8 @@ export function useStakingContract(stakingAddress?: string, withSignerIfPossible
 }
 
 export function useBoringHelperContract(): Contract | null {
-    return useContract(BORING_HELPER_ADDRESS, BORING_HELPER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BORING_HELPER_ADDRESS[chainId], BORING_HELPER_ABI, false)
 }
 
 export function usePendingContract(): Contract | null {
@@ -166,6 +170,19 @@ export function useSushiContract(withSignerIfPossible = true): Contract | null {
 export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
+}
+
+export function useMiniChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MATIC:
+                address = '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F'
+                break
+        }
+    }
+    return useContract(address, MINICHEFV2_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
@@ -194,15 +211,18 @@ export function useTimelockContract(): Contract | null {
 }
 
 export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(BENTOBOX_ADDRESS, BENTOBOX_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && BENTOBOX_ADDRESS[chainId], BENTOBOX_ABI, withSignerIfPossible)
 }
 
 export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(KASHI_ADDRESS, KASHIPAIR_ABI, withSignerIfPossible)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && KASHI_ADDRESS[chainId], KASHIPAIR_ABI, withSignerIfPossible)
 }
 
 export function useSushiSwapSwapper(): Contract | null {
-    return useContract(SUSHISWAP_SWAPPER_ADDRESS, BASE_SWAPPER_ABI, false)
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && SUSHISWAP_SWAPPER_ADDRESS[chainId], BASE_SWAPPER_ABI, false)
 }
 
 export function useChainlinkOracle(): Contract | null {
@@ -219,75 +239,6 @@ export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
 
 export function useUniV2FactoryContract(): Contract | null {
     return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
-}
-
-export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
-                break
-            case ChainId.ROPSTEN:
-                address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
-                break
-            case ChainId.BSC:
-                if (version === 'v1') {
-                    address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
-                } else if (version === 'v2') {
-                    address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
-                }
-                break
-        }
-    }
-    return useContract(address, SUSHIROLL_ABI, true)
-}
-
-// export function usePancakeRollV1Contract(): Contract | null {
-//     return useContract('0x677978dE066b3f5414eeA56644d9fCa3c75482a1', SUSHIROLL_ABI, true)
-// }
-
-// export function usePancakeRollV2Contract(): Contract | null {
-//     return useContract('', SUSHIROLL_ABI, true)
-// }
-
-export function useDashboardContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0xD132Ce8eA8865348Ac25E416d95ab1Ba84D216AF'
-                break
-            case ChainId.ROPSTEN:
-                address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
-                break
-            case ChainId.BSC:
-                address = '0xCFbc963f223e39727e7d4075b759E97035457b48'
-                break
-        }
-    }
-    return useContract(address, DASHBOARD_ABI, false)
-}
-
-export function useDashboard2Contract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    let address: string | undefined
-    if (chainId) {
-        switch (chainId) {
-            case ChainId.MAINNET:
-                address = '0x1B13fC91c6f976959E7c236Ac1CF17E052d113Fc'
-                break
-            case ChainId.ROPSTEN:
-                address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
-                break
-            case ChainId.BSC:
-                address = '0x06d149A4a3f4Ac20e992F9321Af571b3B4Da64C4'
-                break
-        }
-    }
-    return useContract(address, DASHBOARD2_ABI, false)
 }
 
 export function usePancakeV1FactoryContract(): Contract | null {
@@ -397,6 +348,187 @@ export function usePancakeV1FactoryContract(): Contract | null {
                 payable: false,
                 stateMutability: 'nonpayable',
                 type: 'function'
+            }
+        ],
+        false
+    )
+}
+
+export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
+                break
+            case ChainId.BSC:
+                if (version === 'v1') {
+                    address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
+                } else if (version === 'v2') {
+                    address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
+                }
+                break
+            case ChainId.MATIC:
+                address = '0x0053957E18A0994D3526Cf879A4cA7Be88e8936A'
+                break
+        }
+    }
+    return useContract(address, SUSHIROLL_ABI, true)
+}
+
+// export function usePancakeRollV1Contract(): Contract | null {
+//     return useContract('0x677978dE066b3f5414eeA56644d9fCa3c75482a1', SUSHIROLL_ABI, true)
+// }
+
+// export function usePancakeRollV2Contract(): Contract | null {
+//     return useContract('', SUSHIROLL_ABI, true)
+// }
+
+export function useDashboardContract(): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0xD132Ce8eA8865348Ac25E416d95ab1Ba84D216AF'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
+                break
+            case ChainId.BSC:
+                address = '0xCFbc963f223e39727e7d4075b759E97035457b48'
+                break
+        }
+    }
+    return useContract(address, DASHBOARD_ABI, false)
+}
+
+export function useDashboard2Contract(): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    let address: string | undefined
+    if (chainId) {
+        switch (chainId) {
+            case ChainId.MAINNET:
+                address = '0x1B13fC91c6f976959E7c236Ac1CF17E052d113Fc'
+                break
+            case ChainId.ROPSTEN:
+                address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
+                break
+            case ChainId.BSC:
+                address = '0x06d149A4a3f4Ac20e992F9321Af571b3B4Da64C4'
+                break
+        }
+    }
+    return useContract(address, DASHBOARD2_ABI, false)
+}
+
+export function useSushiSwapMultiSwapper(): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    return useContract(chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId], SUSHISWAP_MULTISWAPPER_ABI)
+}
+
+export function useQuickSwapFactoryContract(): Contract | null {
+    return useContract(
+        '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+        [
+            {
+                type: 'constructor',
+                stateMutability: 'nonpayable',
+                payable: false,
+                inputs: [{ type: 'address', name: '_feeToSetter', internalType: 'address' }]
+            },
+            {
+                type: 'event',
+                name: 'PairCreated',
+                inputs: [
+                    { type: 'address', name: 'token0', internalType: 'address', indexed: true },
+                    { type: 'address', name: 'token1', internalType: 'address', indexed: true },
+                    { type: 'address', name: 'pair', internalType: 'address', indexed: false },
+                    { type: 'uint256', name: '', internalType: 'uint256', indexed: false }
+                ],
+                anonymous: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'allPairs',
+                inputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+                name: 'allPairsLength',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [{ type: 'address', name: 'pair', internalType: 'address' }],
+                name: 'createPair',
+                inputs: [
+                    { type: 'address', name: 'tokenA', internalType: 'address' },
+                    { type: 'address', name: 'tokenB', internalType: 'address' }
+                ],
+                constant: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'feeTo',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'feeToSetter',
+                inputs: [],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'view',
+                payable: false,
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
+                name: 'getPair',
+                inputs: [
+                    { type: 'address', name: '', internalType: 'address' },
+                    { type: 'address', name: '', internalType: 'address' }
+                ],
+                constant: true
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [],
+                name: 'setFeeTo',
+                inputs: [{ type: 'address', name: '_feeTo', internalType: 'address' }],
+                constant: false
+            },
+            {
+                type: 'function',
+                stateMutability: 'nonpayable',
+                payable: false,
+                outputs: [],
+                name: 'setFeeToSetter',
+                inputs: [{ type: 'address', name: '_feeToSetter', internalType: 'address' }],
+                constant: false
             }
         ],
         false

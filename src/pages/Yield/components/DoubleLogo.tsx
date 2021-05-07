@@ -11,14 +11,14 @@ const TokenWrapper = styled.div<{ sizeraw: number; margin?: boolean }>`
 
 const HigherLogo = styled(TokenLogo)<{ higherRadius?: string }>`
     z-index: 2;
-    /* background-color: white; */
+    // background-color: white;
     border-radius: ${({ higherRadius }) => (higherRadius ? higherRadius : '50%')};
 `
 
 const CoveredLogo = styled(TokenLogo)`
     position: absolute;
     left: ${({ sizeraw }) => (sizeraw / 1.2).toString() + 'px'};
-    /* background-color: white; */
+    // background-color: white;
     border-radius: 50%;
 `
 

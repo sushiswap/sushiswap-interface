@@ -8,7 +8,7 @@ import { Field } from '../state/swap/actions'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterAddress } from '../utils'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
-import { useActiveWeb3React } from './index'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useTokenContract } from './useContract'
 import { Version } from './useToggledVersion'
 
@@ -29,7 +29,7 @@ export function useApproveCallback(
     const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
     const pendingApproval = useHasPendingApproval(token?.address, spender)
 
-    // console.log({ token, currentAllowance, pendingApproval })
+    console.log({ token, currentAllowance, amountToApprove, pendingApproval })
 
     // check the current approval status
     const approvalState: ApprovalState = useMemo(() => {
