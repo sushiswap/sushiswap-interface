@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { exchange_matic, minichefv2_matic } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
-import { liquidityPositionSubsetQuery, pairSubsetQuery, miniChefPoolQuery } from 'apollo/queries'
+import { tokenQuery, liquidityPositionSubsetQuery, pairSubsetQuery, miniChefPoolQuery } from 'apollo/queries'
 import { POOL_DENY } from '../../constants'
 import Fraction from '../../entities/Fraction'
 
@@ -25,7 +25,11 @@ const useFarms = () => {
                 query: liquidityPositionSubsetQuery,
                 variables: { user: String('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F').toLowerCase() } //minichef
             }),
-            sushiData.sushi.priceUSD()
+            sushiData.sushi.priceUSD(),
+            exchange_matic.query({
+                query: tokenQuery,
+                variables: { id: String('0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270').toLowerCase() } //matic
+            })
             //getAverageBlockTime(chainId),
             //sushiData.exchange.token({ token_address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0' }) // matic
         ])
@@ -46,10 +50,13 @@ const useFarms = () => {
         //const averageBlockTime = results[3]
         const pairs = pairsQuery?.data.pairs
 
+        const maticPrice = results[3]
+        console.log('maticPrice:', maticPrice)
+
         //const maticPrice = results[3]
         //console.log('maticPrice:', maticPrice)
 
-        console.log('pools:', pools)
+        //console.log('pools:', pools)
         const farms = pools
             .filter((pool: any) => {
                 //console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))

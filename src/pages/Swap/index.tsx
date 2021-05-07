@@ -347,26 +347,26 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-                    {/* {chainId && chainId === ChainId.MATIC && (
+                    {chainId && chainId === ChainId.MATIC && (
                         <div className="hidden md:block pb-4">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-high-emphesis">Welcome to Sushi on Polygon (Matic)</div>
-                                        <div className="text-high-emphesis text-sm">New network, new features</div>
+                                        <div className="text-white">Welcome to Sushi on Polygon (Matic)</div>
+                                        <div className="text-purple text-sm">New network, new features</div>
                                     </div>
                                     <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
                                         target="_blank"
                                         rel="noreferrer noopener"
-                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-high-emphesis text-high-emphesis"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
                                     >
                                         Read Tutorial
                                     </a>
                                 </div>
                             </DarkCard>
                         </div>
-                    )} */}
+                    )}
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
