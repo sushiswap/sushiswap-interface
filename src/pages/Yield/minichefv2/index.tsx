@@ -17,6 +17,8 @@ import { getTokenIcon } from 'kashi/functions'
 
 import DoubleRewardBadge from '../../../assets/images/2x-square.jpg'
 
+import _ from 'lodash'
+
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
@@ -25,6 +27,8 @@ export default function Yield(): JSX.Element {
     const query = useFarmsV2()
     const farms = query?.farms
     const userFarms = query?.userFarms
+
+    const tvl = _.sumBy(farms, 'tvl')
 
     // Search Setup
     const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
@@ -48,11 +52,16 @@ export default function Yield(): JSX.Element {
                     header={
                         <CardHeader className="flex justify-between items-center bg-dark-800">
                             <div className="flex w-full justify-between">
-                                <div className="hidden md:flex items-center">
+                                <div className="hidden md:block items-center">
                                     {/* <BackButton defaultRoute="/pool" /> */}
                                     <div className="text-lg mr-2 whitespace-nowrap flex items-center">
                                         <div className="mr-2">Yield Instruments</div>
                                         <Badge color="blue">V2 Rewarder</Badge>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <div className="text-sm text-gray-500 mr-2">
+                                            Total Deposits: {formattedNum(tvl, true)}
+                                        </div>
                                     </div>
                                 </div>
                                 <Search search={search} term={term} />
