@@ -1,4 +1,4 @@
-import { JSBI, Pair, Percent, TokenAmount } from '@sushiswap/sdk'
+import { Fraction, JSBI, Pair, Percent, TokenAmount } from '@sushiswap/sdk'
 import { darken, transparentize } from 'polished'
 import React, { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'react-feather'
@@ -12,6 +12,7 @@ import { useColor } from '../../hooks/useColor'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
+import shortenString from 'utils/shortenString'
 import { unwrappedToken } from '../../utils/wrappedCurrency'
 import { ButtonEmpty, ButtonPrimary, ButtonPrimaryNormal } from '../ButtonLegacy'
 import Card, { GreyCard, LightCard } from '../CardLegacy'
@@ -75,6 +76,11 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
                   pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false)
               ]
             : [undefined, undefined]
+
+    const formatBalance = () => {
+        if(userPoolBalance?.divide('10000000000').lessThan(new Fraction('1', '100000'))) return '<0.00001'
+        return userPoolBalance?.toSignificant(4)
+    }
 
     return (
         <>
