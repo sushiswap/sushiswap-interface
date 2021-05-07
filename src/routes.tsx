@@ -34,9 +34,7 @@ import AddSingleSideLiquidity from './pages/AddSingleSideLiquidity'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
 import Transactions from './pages/Transactions'
-import PublicRoute from 'components/PublicRoute'
-import WalletRoute from 'components/WalletRoute'
-import Kashi from 'kashi/routes'
+import Yield from './pages/Onsen/Yield'
 
 function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -56,6 +54,7 @@ function Routes(): JSX.Element {
             {chainId === ChainId.MAINNET && <Route exact strict path="/yield" component={MasterChefV1} />}
             {chainId === ChainId.MATIC && <Route exact strict path="/yield" component={MiniChefV2} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/vesting" component={Vesting} />}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/onsen/yield" component={Yield} />}
 
             {/* Migrate */}
             {(chainId === ChainId.MAINNET || chainId === ChainId.BSC || chainId === ChainId.MATIC) && (
