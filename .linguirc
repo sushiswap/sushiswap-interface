@@ -9,7 +9,7 @@
     compileNamespace: 'cjs',
     extractBabelOptions: {},
     fallbackLocales: {},
-    format: 'po',
+    format: 'minimal',
     locales: ['de', 'en', 'es-AR', 'es', 'it', 'he', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja', 'fr'],
     orderBy: 'messageId',
     pseudoLocale: '',

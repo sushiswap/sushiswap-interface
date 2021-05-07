@@ -37,6 +37,7 @@ export default function BorrowPair({
 
     if (!pair) return info && info.blockTimeStamp.isZero() ? null : <Redirect to="/bento/kashi/borrow"></Redirect>
 
+    const symbol = 'ETH'
     return (
         <Layout
             left={
@@ -175,9 +176,7 @@ export default function BorrowPair({
                         <Tab
                             className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
                             selectedClassName="bg-dark-900 text-high-emphesis"
-                        >
-                            {t`Borrow`}
-                        </Tab>
+                        ></Tab>
                         <Tab
                             className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
                             selectedClassName="bg-dark-900 text-high-emphesis"

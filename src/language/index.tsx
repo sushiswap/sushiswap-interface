@@ -30,7 +30,6 @@ export const LanguageContext = React.createContext<{
 })
 
 const LanguageProvider: FC = ({ children }) => {
-    console.log(getInitialLocale())
     const [language, setLanguage] = useState(getInitialLocale())
     const [init, setInit] = useState(true)
 
@@ -54,11 +53,15 @@ const LanguageProvider: FC = ({ children }) => {
         activate(language)
     }, [language])
 
+    if (init) return <></>
+
     return (
-        <LanguageContext.Provider value={{ setLanguage: _setLanguage, language }}>
+        <I18nProvider i18n={i18n}>
             <Helmet htmlAttributes={{ lang: language }} />
-            {!init && <I18nProvider i18n={i18n}>{children}</I18nProvider>}
-        </LanguageContext.Provider>
+            <LanguageContext.Provider value={{ setLanguage: _setLanguage, language }}>
+                {children}
+            </LanguageContext.Provider>
+        </I18nProvider>
     )
 }
 

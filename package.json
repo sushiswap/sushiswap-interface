@@ -149,7 +149,8 @@
     },
     "scripts": {
         "analyze": "source-map-explorer 'build/static/js/*.js' --only-mapped --html analysis/index.html",
-        "prebuild": "lingui extract && lingui compile",
+        "prebuild": "lingui compile",
+        "prestart": "lingui compile",
         "start": "cross-env PORT=3000 react-app-rewired start",
         "dev": "cross-env PORT=3001 react-app-rewired start",
         "build": "cross-env CI= GENERATE_SOURCEMAP=false react-app-rewired build",
@@ -158,8 +159,7 @@
         "test": "react-app-rewired test --env=jsdom",
         "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
         "prepare": "husky install",
-        "lingui:extract": "lingui extract",
-        "lingui:compile": "lingui compile"
+        "lingui": "lingui extract && lingui compile"
     },
     "browserslist": {
         "production": [

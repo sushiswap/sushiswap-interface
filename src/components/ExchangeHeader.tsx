@@ -6,6 +6,7 @@ import profileAnimationData from '../assets/animation/wallet.json'
 
 import Lottie from 'lottie-react'
 import Gas from './Gas'
+import { t } from '@lingui/macro'
 
 export default function SwapHeader({ input = undefined, output = undefined }: any): JSX.Element {
     const [animateSettings, setAnimateSettings] = useState(false)
@@ -23,7 +24,7 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
                         }`
                     }}
                 >
-                    Swap
+                    {t`Swap`}
                 </NavLink>
                 {/* <NavLink
                     className="py-2 px-4 rounded-md text-center text-secondary hover:text-high-emphesis text-xs font-medium"
@@ -49,7 +50,7 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
                         )
                     }}
                 >
-                    Liquidity
+                    {t`Liquidity`}
                 </NavLink>
             </div>
             <div className="flex items-center rounded md:border-2 md:border-dark-800 md:p-2">
