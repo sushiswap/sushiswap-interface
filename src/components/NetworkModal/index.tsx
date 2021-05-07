@@ -61,7 +61,7 @@ const PARAMS: {
             symbol: 'MATIC',
             decimals: 18
         },
-        rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
+        rpcUrls: ['https://matic-mainnet.chainstacklabs.com/'],
         blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
     },
     [ChainId.HECO]: {
