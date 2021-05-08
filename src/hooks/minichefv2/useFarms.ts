@@ -95,8 +95,10 @@ const useFarms = () => {
                 const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
-                const feeFactorPerMonth = 0.03
-                const roiPerYear = (1 + ((roiPerMonth + feeFactorPerMonth / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
+                const feeFactorAnnualized = 0.05
+                //where (1 + r/n )** n – 1
+                const roiPerYear = (1 + ((roiPerMonth + feeFactorAnnualized / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
+                //const roiPerYear = (1 + ((roiPerDay + feeFactorAnnualized / 365) * 365) / 365) ** 365 - 1 // compounding daily APY
                 //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)
 
