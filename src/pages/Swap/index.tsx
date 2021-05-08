@@ -41,7 +41,7 @@ import {
     useSwapActionHandlers,
     useSwapState
 } from '../../state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance, useUserTransactionTTL, useUserUseArcher, useUserArcherETHTip, useUserArcherTipManualOverride } from '../../state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance, useUserTransactionTTL, useUserUseArcher, useUserArcherETHTip, useUserArcherGasPrice } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
@@ -98,6 +98,7 @@ export default function Swap() {
     const [ttl] = useUserTransactionTTL()
     const [useArcher] = useUserUseArcher()
     const [archerETHTip] = useUserArcherETHTip()
+    const [archerGasPrice] = useUserArcherGasPrice()
 
     // archer
     const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
@@ -646,7 +647,7 @@ export default function Swap() {
                 </Wrapper>
             </div>
             {!swapIsUnsupported ? (
-                <AdvancedSwapDetailsDropdown trade={trade} archerETHTip={doArcher ? archerETHTip : undefined} />
+                <AdvancedSwapDetailsDropdown trade={trade} archerETHTip={doArcher ? archerETHTip : undefined} archerGasPrice={doArcher ? archerGasPrice : undefined} />
             ) : (
                 <UnsupportedCurrencyFooter
                     show={swapIsUnsupported}

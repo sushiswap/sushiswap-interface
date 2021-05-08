@@ -1,4 +1,4 @@
-import { CurrencyAmount, Trade, TradeType, ChainId } from '@sushiswap/sdk'
+import { CurrencyAmount, Trade, TradeType, ChainId, JSBI } from '@sushiswap/sdk'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React, { useContext } from 'react'
 import { ThemeContext } from 'styled-components'
@@ -13,7 +13,7 @@ import SwapRoute from './SwapRoute'
 import { ExternalLink } from '../Link'
 import { ANALYTICS_URL } from '../../constants'
 
-function TradeSummary({ trade, allowedSlippage, archerETHTip }: { trade: Trade; allowedSlippage: number, archerETHTip?: string }) {
+function TradeSummary({ trade, allowedSlippage, archerETHTip, archerGasPrice }: { trade: Trade; allowedSlippage: number, archerETHTip?: string, archerGasPrice?: string }) {
     const { chainId } = useActiveWeb3React()
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
@@ -59,14 +59,14 @@ function TradeSummary({ trade, allowedSlippage, archerETHTip }: { trade: Trade; 
                     </div>
                 </RowBetween>
                 
-                {archerETHTip && (
+                {(archerETHTip && archerGasPrice) && (
                 <RowBetween>
                     <RowFixed>
                         <div className="text-secondary text-sm">Miner Tip</div>
                         <QuestionHelper text="Tip in ETH to pay to miner to include your transaction if using the Archer Network. Must be greater than competitive gas cost or transaction will not be mined." />
                     </RowFixed>
                     <div className="text-sm font-bold text-high-emphesis">
-                        {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
+                        {`${CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH (~${CurrencyAmount.ether(archerGasPrice).multiply(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(9))).toFixed(0)} gwei)`}
                     </div>
                 </RowBetween>
                 )}
@@ -78,9 +78,10 @@ function TradeSummary({ trade, allowedSlippage, archerETHTip }: { trade: Trade; 
 export interface AdvancedSwapDetailsProps {
     trade?: Trade
     archerETHTip?: string
+    archerGasPrice?: string
 }
 
-export function AdvancedSwapDetails({ trade, archerETHTip }: AdvancedSwapDetailsProps) {
+export function AdvancedSwapDetails({ trade, archerETHTip, archerGasPrice }: AdvancedSwapDetailsProps) {
     const { chainId } = useActiveWeb3React()
 
     const [allowedSlippage] = useUserSlippageTolerance()
@@ -91,7 +92,7 @@ export function AdvancedSwapDetails({ trade, archerETHTip }: AdvancedSwapDetails
         <AutoColumn gap="0px">
             {trade && (
                 <>
-                    <TradeSummary trade={trade} allowedSlippage={allowedSlippage} archerETHTip={archerETHTip} />
+                    <TradeSummary trade={trade} allowedSlippage={allowedSlippage} archerETHTip={archerETHTip} archerGasPrice={archerGasPrice} />
                     {showRoute && (
                         <>
                             <RowBetween style={{ padding: '0 16px' }}>
