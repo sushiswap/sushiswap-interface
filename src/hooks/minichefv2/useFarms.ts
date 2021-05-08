@@ -95,8 +95,9 @@ const useFarms = () => {
                 const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
-                const roiPerYear = roiPerMonth * 12 + 0.05
-
+                const feeFactorPerMonth = 0.03
+                const roiPerYear = (1 + ((roiPerMonth + feeFactorPerMonth / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
+                //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)
 
                 return {
@@ -121,7 +122,7 @@ const useFarms = () => {
                     roiPerYear,
                     rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
                     tvl: liquidityPosition?.liquidityTokenBalance
-                        ? (pair.reserveUSD / pair.totalSupply) * liquidityPosition.liquidityTokenBalance * 1.05
+                        ? (pair.reserveUSD / pair.totalSupply) * liquidityPosition.liquidityTokenBalance
                         : 0.1
                 }
             })
