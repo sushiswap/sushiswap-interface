@@ -60,7 +60,7 @@ const useFarms = () => {
         const farms = pools
             .filter((pool: any) => {
                 //console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))
-                console.log(pool.id, Number(pool.miniChef.totalAllocPoint) > 0)
+                //console.log(pool.id, Number(pool.miniChef.totalAllocPoint) > 0)
                 return (
                     !POOL_DENY.includes(pool?.id) &&
                     pairs.find((pair: any) => pair?.id === pool?.pair) &&
@@ -82,21 +82,24 @@ const useFarms = () => {
                 const rewardPerSecond = ((pool.allocPoint / totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
                 const rewardPerDay = rewardPerSecond * 86400
 
-                console.log('pool:', pool.allocPoint, totalAllocPoint, pool.miniChef.sushiPerSecond)
+                //console.log('pool:', pool.allocPoint, totalAllocPoint, pool.miniChef.sushiPerSecond)
 
                 const secondaryRewardPerSecond =
                     ((pool.allocPoint / totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
                 const secondaryRewardPerDay = secondaryRewardPerSecond * 86400
 
                 // const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
-                console.log('rewardsPerDay:', rewardPerDay * 10, secondaryRewardPerDay * 10)
+                //console.log('rewardsPerDay:', rewardPerDay * 10, secondaryRewardPerDay * 10)
 
                 const roiPerSecond = (rewardPerSecond * 2 * sushiPrice) / balanceUSD // *2 with matic rewards
                 const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
-                const roiPerYear = roiPerMonth * 12
-
+                const feeFactorAnnualized = 0.05
+                //where (1 + r/n )** n – 1
+                const roiPerYear = (1 + ((roiPerMonth + feeFactorAnnualized / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
+                //const roiPerYear = (1 + ((roiPerDay + feeFactorAnnualized / 365) * 365) / 365) ** 365 - 1 // compounding daily APY
+                //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)
 
                 return {
