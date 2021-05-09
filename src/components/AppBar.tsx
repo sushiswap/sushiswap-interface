@@ -11,6 +11,7 @@ import Sushi from '../assets/kashi/tokens/sushi-square.jpg'
 import xSushi from '../assets/kashi/tokens/xsushi-square.jpg'
 import Web3Network from './Web3Network'
 import Web3Status from './Web3Status'
+import Web3Faucet from './Web3Faucet'
 import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
@@ -281,6 +282,18 @@ function AppBar(): JSX.Element {
                                             )}
                                             <Web3Status />
                                         </div>
+
+                                        {
+                                            chainId && [
+                                                ChainId.GÖRLI,
+                                                ChainId.KOVAN,
+                                                ChainId.RINKEBY,
+                                                ChainId.ROPSTEN
+                                            ].includes(chainId) && (
+                                                <Web3Faucet />
+                                            )
+                                        }
+                                        
                                         <MoreMenu />
                                     </div>
                                 </div>
