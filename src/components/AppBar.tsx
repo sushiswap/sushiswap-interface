@@ -8,6 +8,7 @@ import { ReactComponent as Burger } from '../assets/images/burger.svg'
 import { ReactComponent as X } from '../assets/images/x.svg'
 import Web3Network from './Web3Network'
 import Web3Status from './Web3Status'
+import Web3Faucet from './Web3Faucet'
 import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
@@ -284,6 +285,18 @@ function AppBar(): JSX.Element {
                                             <Web3Status />
                                         </div>
                                         <LanguageSwitch />
+
+                                        {
+                                            chainId && [
+                                                ChainId.GÖRLI,
+                                                ChainId.KOVAN,
+                                                ChainId.RINKEBY,
+                                                ChainId.ROPSTEN
+                                            ].includes(chainId) && (
+                                                <Web3Faucet />
+                                            )
+                                        }
+                                        
                                         <MoreMenu />
                                     </div>
                                 </div>
