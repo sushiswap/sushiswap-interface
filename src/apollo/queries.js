@@ -149,6 +149,15 @@ export const pairFieldsQuery = gql`
     ${pairTokenFieldsQuery}
 `
 
+export const pairTimeTravelQuery = gql`
+    query pairTimeTravelQuery($id: String!, $block: Block_height!) {
+        pair(id: $id, block: $block) {
+            ...pairFields
+        }
+    }
+    ${pairFieldsQuery}
+`
+
 export const pairSubsetQuery = gql`
     query pairSubsetQuery(
         $first: Int! = 1000

@@ -5,10 +5,17 @@ import { useBoringHelperContract } from 'hooks/useContract'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { exchange_matic, minichefv2_matic } from 'apollo/client'
-import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
-import { tokenQuery, liquidityPositionSubsetQuery, pairSubsetQuery, miniChefPoolQuery } from 'apollo/queries'
+import { getOneDayBlock } from 'apollo/getAverageBlockTime'
+import {
+    tokenQuery,
+    liquidityPositionSubsetQuery,
+    pairSubsetQuery,
+    pairTimeTravelQuery,
+    miniChefPoolQuery
+} from 'apollo/queries'
 import { POOL_DENY } from '../../constants'
 import Fraction from '../../entities/Fraction'
+import { resetIdCounter } from 'react-tabs'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {
@@ -45,13 +52,28 @@ const useFarms = () => {
             query: pairSubsetQuery,
             variables: { pairAddresses }
         })
+        const oneDayBlock = await getOneDayBlock(chainId)
+        const pairs24AgoQuery = await Promise.all(
+            pairAddresses.map((address: string) => {
+                //console.log(address, oneDayBlock)
+                return exchange_matic.query({
+                    query: pairTimeTravelQuery,
+                    variables: { id: address, block: oneDayBlock }
+                })
+            })
+        )
+        const pairs24Ago = pairs24AgoQuery.map((query: any) => {
+            return {
+                ...query?.data?.pair
+            }
+        })
 
         const liquidityPositions = results[1]?.data.liquidityPositions
         const sushiPrice = results[2]
         //const averageBlockTime = results[3]
         const pairs = pairsQuery?.data.pairs
         const maticPrice = results[3].data.token.derivedETH * results[4]
-        //console.log('maticPrice:', maticPrice)
+        console.log('maticPrice:', maticPrice)
 
         //const maticPrice = results[3]
         //console.log('maticPrice:', maticPrice)
@@ -70,6 +92,7 @@ const useFarms = () => {
             })
             .map((pool: any) => {
                 const pair = pairs.find((pair: any) => pair.id === pool.pair)
+                const pair24Ago = pairs24Ago.find((pair: any) => pair.id === pool.pair)
                 const liquidityPosition = liquidityPositions.find(
                     (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                 )
@@ -91,13 +114,16 @@ const useFarms = () => {
                 // const secondaryRewardPerSecond = pool.rewarder.rewardPerSecond / 1e18
                 //console.log('rewardsPerDay:', rewardPerDay * 10, secondaryRewardPerDay * 10)
 
-                const roiPerSecond = (rewardPerSecond * 2 * sushiPrice) / balanceUSD // *2 with matic rewards
+                // const roiPerSecond = (rewardPerSecond * 2 * sushiPrice) / balanceUSD // *2 with matic rewards
+                const roiPerSecond = (rewardPerSecond * sushiPrice + secondaryRewardPerSecond * maticPrice) / balanceUSD // *2 with matic rewards
                 const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
-                const feeFactorAnnualized = 0.05
+                //const oneYearFees = 0.05
+                const oneDayVolume = pair.volumeUSD - pair24Ago.volumeUSD
+                const oneYearFees = (oneDayVolume * 0.003 * 365) / pair.reserveUSD
                 //where (1 + r/n )** n – 1
-                const roiPerYear = (1 + ((roiPerMonth + feeFactorAnnualized / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
+                const roiPerYear = (1 + ((roiPerMonth + oneYearFees / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
                 //const roiPerYear = (1 + ((roiPerDay + feeFactorAnnualized / 365) * 365) / 365) ** 365 - 1 // compounding daily APY
                 //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)

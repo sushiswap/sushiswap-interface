@@ -173,6 +173,6 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@lufycz/sushi-data": "^2.0.0-canary-20"
+        "@lufycz/sushi-data": "^2.0.0-canary-21"
     }
 }

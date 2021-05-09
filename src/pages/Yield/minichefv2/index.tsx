@@ -121,7 +121,7 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
                             <div className="flex items-center justify-end">
-                                <div>Rewards APY</div>
+                                <div>APY (incl. Fees)</div>
                                 {sortConfig &&
                                     sortConfig.key === 'roiPerYear' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
