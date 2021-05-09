@@ -11,12 +11,12 @@
   "keywords": ["uniswap", "unsupported"],
   "tokens": [
     {
-      "name": "Gold Tether",
-      "address": "0x4922a015c4407F87432B179bb209e125432E4a2A",
-      "symbol": "XAUt",
-      "decimals": 6,
-      "chainId": 1,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x4922a015c4407F87432B179bb209e125432E4a2A/logo.png"
+      "name": "sᴀғᴇмooɴᴅᴀo",
+      "address": "0x66201279497c533A54FCa644E3c30a9B89342c00",
+      "symbol": "SAFEMOOND",
+      "decimals": 9,
+      "chainId": 56,
+      "logoURI": "./public/images/logo.png"
     }
   ]
 }
