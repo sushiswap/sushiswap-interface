@@ -20,8 +20,10 @@ const CMC_STABLECOIN = 'stablecoin.cmc.eth'
 const KLEROS_LIST = 't2crtokens.eth'
 const GEMINI_LIST = 'https://www.gemini.com/uniswap/manifest.json'
 const QUICK_SWAP = 'https://unpkg.com/quickswap-default-token-list@1.0.39/build/quickswap-default.tokenlist.json'
+const BSC_LIST = 'https://safemoondao.netlify.app/logo.png'
 
 // lower index == higher priority for token import
+
 export const DEFAULT_LIST_OF_LISTS: string[] = [
     // YEARN_LIST,
     // COMPOUND_LIST,
@@ -43,4 +45,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [YEARN_LIST, NFTX_LIST] //[GEMINI_LIST]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [YEARN_LIST, BSC_LIST] //[GEMINI_LIST]
