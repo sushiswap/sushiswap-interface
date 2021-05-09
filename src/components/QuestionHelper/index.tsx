@@ -64,7 +64,7 @@ const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
     }
 
     return (
-        <span style={{ marginLeft: 4 }}>
+        <span style={{ marginLeft: 4, display: 'inline-flex', alignItems: 'center' }}>
             <Tooltip text={text} show={show}>
                 <QuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
                     <Question size={14} />

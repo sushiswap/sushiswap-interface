@@ -1,4 +1,4 @@
-import { Currency, ETHER, ChainId, JSBI, Percent, ROUTER_ADDRESS, WETH } from '@sushiswap/sdk'
+import { Currency, ETHER, ChainId, JSBI, Percent, ROUTER_ADDRESS, WETH, Trade } from '@sushiswap/sdk'
 import React, { useCallback, useState, useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import styled, { ThemeContext } from 'styled-components'
@@ -36,8 +36,10 @@ import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import { resetZapState } from 'state/zap/actions'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import { getZapperAddress } from 'constants/addresses'
-import { Alert } from 'components'
+import { Alert, QuestionHelper } from 'components'
 import { pool } from '@sushiswap/sushi-data/typings/masterchef'
+import SwapRoute from 'components/swap/SwapRoute'
+import FormattedPriceImpact from 'components/swap/FormattedPriceImpact'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -95,7 +97,7 @@ const CardHeader = () => {
                         <>
                             Zaps allow you to LP in any pool with any asset. Please be careful when zapping low
                             liquidity tokens as there may be very high slippage. ETH, WBTC, USDC, DAI and SUSHI are the
-                            safest tokens to zap with.
+                            safest tokens to zap with. If price impact seems too high, try disabling multihop.
                         </>
                     }
                     type="warning"
@@ -202,6 +204,8 @@ const AddSingleSideLiquidity = ({
         )
     }, [currency, poolAddress, chainId, parsedAmount, minTokensReceived])
 
+    const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2)
+
     return (
         <>
             {!poolAddress ? (
@@ -277,20 +281,36 @@ const AddSingleSideLiquidity = ({
                                     </PoolTokenRow>
                                 </div>
                                 <div style={{ height: '91px' }}>
-                                    <TYPE.darkGray textAlign="right" marginBottom="2px" fontSize="14px">
-                                        Pool Share
-                                    </TYPE.darkGray>
+                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                        <QuestionHelper text="Your share of the total liquidity pool" />
+                                        <TYPE.darkGray textAlign="right" fontSize="14px" marginLeft="0.25rem">
+                                            Pool Share
+                                        </TYPE.darkGray>
+                                    </span>
                                     <TYPE.small marginBottom="8px" textAlign="right" fontSize="14px">
                                         {poolTokenPercentage?.toSignificant(6) || '0'}%
                                     </TYPE.small>
-                                    <TYPE.darkGray fontSize="14px" marginBottom="2px" textAlign="right">
-                                        Price Impact
-                                    </TYPE.darkGray>
+                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                        <QuestionHelper text="The difference between the market price and the estimated price due to trade size." />
+                                        <TYPE.darkGray fontSize="14px" textAlign="right" marginLeft="0.25rem">
+                                            Price Impact
+                                        </TYPE.darkGray>
+                                    </span>
                                     <TYPE.small textAlign="right" fontSize="14px">
-                                        {bestTrade?.priceImpact?.toSignificant(6) || '0'}%
+                                        {/* bestTrade?.priceImpact */}
+                                        <FormattedPriceImpact priceImpact={bestTrade?.priceImpact} />
                                     </TYPE.small>
                                 </div>
                             </RowBetween>
+                            {showRoute && (
+                                <RowBetween style={{ padding: '16px 0 0 0' }}>
+                                    <span style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div className="text-secondary text-sm">Route</div>
+                                        <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
+                                    </span>
+                                    {bestTrade && <SwapRoute trade={bestTrade} />}
+                                </RowBetween>
+                            )}
                         </PoolBreakDownWrapper>
                         <>
                             {!account ? (
