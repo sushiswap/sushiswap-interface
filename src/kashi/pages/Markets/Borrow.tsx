@@ -1,17 +1,16 @@
 import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { useFuse, useSortableData } from 'hooks'
 import { getCurrency } from 'kashi/constants'
 import React from 'react'
-import { ChevronDown, ChevronUp } from 'react-feather'
 import { Link } from 'react-router-dom'
-import { getTokenIcon, ZERO } from '../../functions'
+import { ZERO } from '../../functions'
 import { formattedNum, formattedPercent } from '../../../utils'
 import { useKashiPairs } from '../../context'
 import { Card, MarketHeader, Layout, GradientDot } from '../../components'
 import useSearchAndSort from 'hooks/useSearchAndSort'
 import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
 import Helmet from 'react-helmet'
+import AsyncTokenIcon from '../../components/AsyncTokenIcon'
 
 export default function BorrowMarkets(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -103,15 +102,15 @@ export default function BorrowMarkets(): JSX.Element {
                                             >
                                                 <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                                                     <div className="hidden space-x-2 md:flex">
-                                                        <img
-                                                            src={getTokenIcon(pair.asset.address, chainId)}
+                                                        <AsyncTokenIcon
+                                                            address={pair.asset.address}
+                                                            chainId={chainId}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                            alt=""
                                                         />
-                                                        <img
-                                                            src={getTokenIcon(pair.collateral.address, chainId)}
+                                                        <AsyncTokenIcon
+                                                            address={pair.collateral.address}
+                                                            chainId={chainId}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                            alt=""
                                                         />
                                                     </div>
                                                     <div className="sm:block md:col-span-1 lg:col-span-2">
@@ -206,15 +205,15 @@ export default function BorrowMarkets(): JSX.Element {
                                         <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                                             <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                                 <div className="hidden space-x-2 md:flex">
-                                                    <img
-                                                        src={getTokenIcon(pair.asset.address, chainId)}
+                                                    <AsyncTokenIcon
+                                                        address={pair.asset.address}
+                                                        chainId={chainId}
                                                         className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                        alt=""
                                                     />
-                                                    <img
-                                                        src={getTokenIcon(pair.collateral.address, chainId)}
+                                                    <AsyncTokenIcon
+                                                        address={pair.collateral.address}
+                                                        chainId={chainId}
                                                         className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                        alt=""
                                                     />
                                                 </div>
                                                 <div className="sm:items-end md:hidden">

@@ -3,7 +3,6 @@ import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useFuse, useSortableData } from 'hooks'
 import { getCurrency } from 'kashi'
 import { BackButton, Paper } from 'components'
-import { getTokenIcon } from 'kashi/functions'
 import { ZERO } from 'kashi/functions/math'
 import React, { useState } from 'react'
 import { useBentoBalances, BentoBalance } from 'state/bentobox/hooks'
@@ -12,6 +11,7 @@ import { formattedNum } from '../../../utils'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
 import { Helmet } from 'react-helmet'
+import AsyncTokenIcon from '../../../kashi/components/AsyncTokenIcon'
 
 export default function BentoBalances(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -96,9 +96,9 @@ const TokenBalance = ({ balance }: { balance: BentoBalance }) => {
                 onClick={() => setExpand(!expand)}
             >
                 <div className="flex items-center">
-                    <img
-                        alt={balance.symbol}
-                        src={getTokenIcon(balance.address, chainId)}
+                    <AsyncTokenIcon
+                        address={balance.address}
+                        chainId={chainId}
                         className="w-10 sm:w-14 rounded-lg mr-4"
                     />
                     <div>{balance && balance.symbol}</div>

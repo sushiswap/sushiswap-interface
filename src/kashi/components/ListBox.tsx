@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { getTokenIcon } from 'kashi/functions'
 import React from 'react'
+import AsyncTokenIcon from './AsyncTokenIcon'
 
 export default function ListBox({ label, tokens, selectedToken, setSelectedToken, disabled = false }: any) {
     const { chainId } = useActiveWeb3React()
@@ -24,8 +24,9 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                                 <span className="inline-block w-full rounded-md shadow-sm">
                                     <Listbox.Button className="cursor-default relative w-full rounded-md border bg-input border-none p-3 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         <span className="truncate flex items-center">
-                                            <img
-                                                src={getTokenIcon(selectedToken.address, chainId)}
+                                            <AsyncTokenIcon
+                                                address={selectedToken.address}
+                                                chainId={chainId}
                                                 className="w-10 h-10 rounded-sm mr-4"
                                             />
                                             <span className="text-lg">{selectedToken.symbol}&nbsp;</span>
@@ -69,8 +70,9 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                                                         } cursor-pointer relative p-3`}
                                                     >
                                                         <span className="flex truncate items-center">
-                                                            <img
-                                                                src={getTokenIcon(token.address, chainId)}
+                                                            <AsyncTokenIcon
+                                                                address={token.address}
+                                                                chainId={chainId}
                                                                 className="w-10 h-10 rounded-sm mr-4"
                                                             />
                                                             <span className="text-lg">{token.symbol}&nbsp;</span>

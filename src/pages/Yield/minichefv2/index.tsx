@@ -13,9 +13,9 @@ import { Helmet } from 'react-helmet'
 
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
-import { getTokenIcon } from 'kashi/functions'
 
 import DoubleRewardBadge from '../../../assets/images/2x-square.jpg'
+import AsyncTokenIcon from '../../../kashi/components/AsyncTokenIcon'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -172,34 +172,34 @@ const TokenBalance = ({ farm }: any) => {
                         <div className="md:col-span-3 flex flex-col space-y-2">
                             <div className="mr-4 flex flex-row space-x-2 items-center">
                                 <div>
-                                    <img
-                                        src={getTokenIcon(farm.liquidityPair.token0.id, chainId)}
+                                    <AsyncTokenIcon
+                                        address={farm.liquidityPair.token0.id}
+                                        chainId={chainId}
                                         className="block w-10 h-10 rounded-sm"
-                                        alt=""
                                     />
                                 </div>
                                 <div>
-                                    <img
-                                        src={getTokenIcon(farm.liquidityPair.token1.id, chainId)}
+                                    <AsyncTokenIcon
+                                        address={farm.liquidityPair.token1.id}
+                                        chainId={chainId}
                                         className="block w-10 h-10 rounded-sm"
-                                        alt=""
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="md:col-span-4 hidden md:flex flex-row space-x-2 justify-start items-center ml-4">
                             <div>
-                                <img
-                                    src={getTokenIcon(farm.rewardTokens?.[0], chainId)}
+                                <AsyncTokenIcon
+                                    address={farm.rewardTokens?.[0]}
+                                    chainId={chainId}
                                     className="block w-10 h-10 rounded-sm"
-                                    alt=""
                                 />
                             </div>
                             <div>
-                                <img
-                                    src={getTokenIcon(farm.rewardTokens?.[1], chainId)}
+                                <AsyncTokenIcon
+                                    address={farm.rewardTokens?.[1]}
+                                    chainId={chainId}
                                     className="block w-10 h-10 rounded-sm"
-                                    alt=""
                                 />
                             </div>
                             <div className="flex flex-col pl-2 space-y-1">

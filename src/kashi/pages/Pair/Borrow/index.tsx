@@ -5,7 +5,6 @@ import { BackButton } from 'components'
 import { BorrowCardHeader, Card, GradientDot, Layout } from 'kashi/components'
 import { KashiContext, useKashiPair } from 'kashi/context'
 import { KashiCooker } from 'kashi/entities'
-import { getTokenIcon } from 'kashi/functions'
 import React, { useCallback, useContext, useState } from 'react'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
@@ -14,6 +13,7 @@ import { formattedNum, formattedPercent } from 'utils'
 import Borrow from './Borrow'
 import Repay from './Repay'
 import { Helmet } from 'react-helmet'
+import AsyncTokenIcon from '../../../components/AsyncTokenIcon'
 
 export default function BorrowPair({
     match: {
@@ -116,16 +116,20 @@ export default function BorrowPair({
                         <div className="flex items-center">
                             <BackButton className="hidden md:flex" defaultRoute="/bento/kashi/borrow" />
                             <div className="flex items-center space-x-2 mr-4">
-                                <img
-                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
-                                    className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                                    alt=""
-                                />
-                                <img
-                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
-                                    className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                                    alt=""
-                                />
+                                {pair && (
+                                    <>
+                                        <AsyncTokenIcon
+                                            address={pair?.asset.address}
+                                            chainId={chainId}
+                                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                        />
+                                        <AsyncTokenIcon
+                                            address={pair?.collateral.address}
+                                            chainId={chainId}
+                                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                        />
+                                    </>
+                                )}
                             </div>
                             <div className="flex justify-between items-center">
                                 <div>

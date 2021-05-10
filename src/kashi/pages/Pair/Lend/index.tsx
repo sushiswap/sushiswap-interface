@@ -2,7 +2,6 @@ import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import QuestionHelper from 'components/QuestionHelper'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { KashiContext, useKashiPair } from 'kashi/context'
-import { getTokenIcon } from 'kashi/functions'
 import React, { useContext, useState } from 'react'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
@@ -12,6 +11,7 @@ import { Card, GradientDot, Layout, LendCardHeader } from '../../../components'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
 import { Helmet } from 'react-helmet'
+import AsyncTokenIcon from '../../../components/AsyncTokenIcon'
 
 export default function LendingPair({
     match: {
@@ -125,16 +125,20 @@ export default function LendingPair({
                         <div className="flex items-center">
                             <div className="flex items-center space-x-2 mr-4">
                                 <BackButton className="hidden md:flex" defaultRoute="/bento/kashi/lend" />
-                                <img
-                                    src={pair && getTokenIcon(pair?.asset.address, chainId)}
-                                    className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                                    alt=""
-                                />
-                                <img
-                                    src={pair && getTokenIcon(pair?.collateral.address, chainId)}
-                                    className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
-                                    alt=""
-                                />
+                                {pair && (
+                                    <>
+                                        <AsyncTokenIcon
+                                            address={pair?.asset.address}
+                                            chainId={chainId}
+                                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                        />
+                                        <AsyncTokenIcon
+                                            address={pair?.collateral.address}
+                                            chainId={chainId}
+                                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                        />
+                                    </>
+                                )}
                             </div>
                             <div className="flex justify-between items-center">
                                 <div>
