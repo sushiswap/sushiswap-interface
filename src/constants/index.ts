@@ -1,6 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import { fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
+
+import { AbstractConnector } from '@web3-react/abstract-connector'
 
 export const POOL_DENY = ['14', '29', '45', '30']
 
@@ -88,7 +89,9 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
     [ChainId.HECO]: [WETH[ChainId.HECO]],
     [ChainId.HECO_TESTNET]: [WETH[ChainId.HECO_TESTNET]],
     [ChainId.HARMONY]: [WETH[ChainId.HARMONY]],
-    [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]]
+    [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]],
+    [ChainId.OKEX]: [WETH[ChainId.OKEX]],
+    [ChainId.OKEX_TESTNET]: [WETH[ChainId.OKEX_TESTNET]]
 }
 
 // Default Ethereum chain tokens

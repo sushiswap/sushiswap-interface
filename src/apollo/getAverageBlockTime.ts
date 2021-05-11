@@ -1,8 +1,9 @@
-import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subHours, subDays } from 'date-fns'
 import { blockClient, blockClient_matic } from './client'
-import { blocksQuery, blockQuery } from './queries'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { blockQuery, blocksQuery } from './queries'
+import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHours } from 'date-fns'
+
 import { ChainId } from '@sushiswap/sdk'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 
 export async function getOneDayBlock(chainId?: any) {
     const date = startOfMinute(subDays(Date.now(), 1))

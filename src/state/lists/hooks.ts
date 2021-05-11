@@ -1,12 +1,13 @@
-import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
 import { ChainId, Token } from '@sushiswap/sdk'
 import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
+
+import { AppState } from '../index'
+import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
+import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
+import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
+import sortByListPriority from 'utils/listSort'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import sortByListPriority from 'utils/listSort'
-import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
-import { AppState } from '../index'
-import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
 
 type TagDetails = Tags[keyof Tags]
 export interface TagInfo extends TagDetails {
@@ -56,7 +57,9 @@ const EMPTY_LIST: TokenAddressMap = {
     [ChainId.HECO]: {},
     [ChainId.HECO_TESTNET]: {},
     [ChainId.HARMONY]: {},
-    [ChainId.HARMONY_TESTNET]: {}
+    [ChainId.HARMONY_TESTNET]: {},
+    [ChainId.OKEX]: {},
+    [ChainId.OKEX_TESTNET]: {}
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -126,7 +129,9 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
         43114: { ...map1[43114], ...map2[43114] }, // avax mainnet
         43113: { ...map1[43113], ...map2[43113] }, // avax testnet fuji
         1666600000: { ...map1[1666600000], ...map2[1666600000] }, // harmony
-        1666700000: { ...map1[1666700000], ...map2[1666700000] } // harmony testnet
+        1666700000: { ...map1[1666700000], ...map2[1666700000] }, // harmony testnet
+        66: { ...map1[66], ...map2[66] }, // okex
+        65: { ...map1[65], ...map2[65] } // okex testnet
     }
 }
 
