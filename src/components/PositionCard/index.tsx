@@ -85,7 +85,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
                 <div className="rounded bg-dark-800 p-5">
                     <AutoColumn gap={'md'}>
                         <Text fontWeight={400} fontSize={18}>Your Position</Text>
-                        <RowBetween>
+                        <div className="flex flex-col md:flex-row md:justify-between">
                             <div className="flex items-center">
                                 <DoubleCurrencyLogo
                                     currency0={pair.token0}
@@ -96,7 +96,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
                                     {shortenString(`${pair.token0.getSymbol(chainId)}/${pair.token1.getSymbol(chainId)}`, 8)}
                                 </Text>
                             </div>
-                            <div className="flex">
+                            <div className="flex items-center mt-3 md:mt-0">
                                 <Text fontSize={16} fontWeight={400}>
                                     {
                                         userPoolBalance ? formatBalance() : '-'
@@ -107,7 +107,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
                                     Pool Tokens
                                 </Text>
                             </div>
-                        </RowBetween>
+                        </div>
                         <div className="flex flex-col rounded bg-dark-900 space-y-1 p-3 w-full mt-3 text-high-emphesis">
                             <RowBetween>
                                 <Text fontSize={14} fontWeight={400}>
