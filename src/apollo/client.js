@@ -21,7 +21,13 @@ export const minichefv2_matic = new ApolloClient({
         uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/matic-minichef'
     }),
     cache: new InMemoryCache(),
-    shouldBatch: true
+    shouldBatch: true,
+    defaultOptions: {
+        query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all'
+        }
+    }
 })
 
 export const client = new ApolloClient({
@@ -45,6 +51,12 @@ export const exchange_matic = new ApolloClient({
         uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/matic-exchange'
     }),
     cache: new InMemoryCache(),
+    defaultOptions: {
+        query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all'
+        }
+    },
     shouldBatch: true
 })
 
@@ -67,5 +79,11 @@ export const blockClient_matic = new ApolloClient({
     link: createHttpLink({
         uri: 'https://api.thegraph.com/subgraphs/name/matthewlilley/polygon-blocks'
     }),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    defaultOptions: {
+        query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all'
+        }
+    }
 })
