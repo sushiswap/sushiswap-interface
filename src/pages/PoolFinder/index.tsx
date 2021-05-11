@@ -2,6 +2,7 @@ import { Currency, ETHER, JSBI, TokenAmount } from '@sushiswap/sdk'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 import { Text } from 'rebass'
+import Alert from '../../components/Alert'
 import { BlueCard, LightCard } from '../../components/CardLegacy'
 import { AutoColumn } from '../../components/Column'
 import { AutoRow } from '../../components/Row'
@@ -91,14 +92,16 @@ export default function PoolFinder() {
             <div className="relative w-full max-w-lg rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <FindPoolTabs />
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
-                    <BlueCard>
-                        <AutoColumn gap="10px">
-                            <TYPE.link fontWeight={400} color={'primaryText1'}>
+                    <Alert
+                        showIcon={false}
+                        message={
+                            <>
                                 <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
                                 interface.
-                            </TYPE.link>
-                        </AutoColumn>
-                    </BlueCard>
+                            </>
+                        }
+                        type="information"
+                    />
 
                     <AutoColumn gap={'md'}>
                         <CurrencySelectPanel
