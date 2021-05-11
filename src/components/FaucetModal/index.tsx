@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { ReactComponent as Close } from '../../assets/images/x.svg'
 import { useFaucetContract } from '../../hooks/useContract'
@@ -6,6 +6,7 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useFaucetModalToggle } from '../../state/application/hooks'
 import { TYPE } from '../../theme'
 import Modal from '../Modal'
+import TransactionConfirmationModal, { TransactionErrorContent } from '../TransactionConfirmationModal'
 
 const Wrapper = styled.div`
     ${({ theme }) => theme.flexColumnNoWrap}
@@ -81,9 +82,37 @@ export default function FaucetModal() {
     const toggleFaucetModal = useFaucetModalToggle()
     const faucetContract = useFaucetContract(true)
 
+    const [isRunning, setRunning] = useState(false)
+    const [isWaiting, setWaiting] = useState(false)
+    const [faucetErrorMessage, setError] = useState('')
+    const [txHash, setTxHash] = useState('')
+
     const claimFaucet = useCallback(() => {
+        setRunning(true)
+        setWaiting(true)
+        setError('')
+        setTxHash('')
         faucetContract?.drip()
+        .then((tx: any) => {
+            setWaiting(false)
+            setTxHash(tx.hash)
+        })
+        .catch((err: any) => {
+            if (err.code === 4001) {
+                setError('Transaction rejected.')
+            } else {
+                console.error(`Claim failed`, err, 'drip')
+                setError(`Claim failed: ${err.message}`)
+            }
+            setWaiting(false)
+        })
     }, [faucetContract])
+
+    useEffect(() => {
+        if(faucetModalOpen) {
+            setRunning(false)
+        }
+    }, [faucetModalOpen])
 
     function getModalContent() {
         return (
@@ -105,9 +134,24 @@ export default function FaucetModal() {
         )
     }
 
+    const confirmationContent = useCallback(
+        () => <TransactionErrorContent onDismiss={toggleFaucetModal} message={faucetErrorMessage} />,
+        [toggleFaucetModal, faucetErrorMessage]
+    )
+
     return (
-        <Modal isOpen={faucetModalOpen} onDismiss={toggleFaucetModal} minHeight={false} maxHeight={90}>
-            <Wrapper>{getModalContent()}</Wrapper>
-        </Modal>
+        !isRunning ?
+            <Modal isOpen={faucetModalOpen} onDismiss={toggleFaucetModal} minHeight={false} maxHeight={90}>
+                <Wrapper>{getModalContent()}</Wrapper>
+            </Modal>
+        :
+            <TransactionConfirmationModal
+                isOpen={faucetModalOpen}
+                onDismiss={toggleFaucetModal}
+                attemptingTxn={isWaiting}
+                hash={txHash}
+                content={confirmationContent}
+                pendingText={'Claiming test tokens'}
+            />
     )
 }
