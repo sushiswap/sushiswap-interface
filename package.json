@@ -173,10 +173,5 @@
             "last 1 safari version"
         ]
     },
-    "license": "GPL-3.0-or-later",
-    "husky": {
-        "hooks": {
-            "pre-commit": "lingui extract && lingui compile"
-        }
-    }
+    "license": "GPL-3.0-or-later"
 }
