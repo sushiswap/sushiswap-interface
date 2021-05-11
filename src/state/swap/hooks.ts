@@ -15,6 +15,7 @@ import { useUserSlippageTolerance } from '../user/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { SwapState } from './reducer'
+import { t } from '@lingui/macro'
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -155,23 +156,23 @@ export function useDerivedSwapInfo(): {
     }
 
     if (!parsedAmount) {
-        inputError = inputError ?? 'Enter an amount'
+        inputError = inputError ?? t`Enter an amount`
     }
 
     if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
-        inputError = inputError ?? 'Select a token'
+        inputError = inputError ?? t`Select a token`
     }
 
     const formattedTo = isAddress(to)
     if (!to || !formattedTo) {
-        inputError = inputError ?? 'Enter a recipient'
+        inputError = inputError ?? t`Enter a recipient`
     } else {
         if (
             BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
             (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
             (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
         ) {
-            inputError = inputError ?? 'Invalid recipient'
+            inputError = inputError ?? t`Invalid recipient`
         }
     }
 
@@ -187,7 +188,7 @@ export function useDerivedSwapInfo(): {
     ]
 
     if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-        inputError = 'Insufficient ' + amountIn.currency.getSymbol(chainId) + ' balance'
+        inputError = t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`
     }
 
     return {

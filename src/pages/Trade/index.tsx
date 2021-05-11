@@ -2,15 +2,16 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget'
 import Swap from './index'
+import { t } from '@lingui/macro'
 
 export default function TradeLayout() {
     return (
         <>
             <Helmet>
-                <title>Trade | Sushi</title>
+                <title>{t`Trade`} | Sushi</title>
                 <meta
                     name="description"
-                    content="Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
+                    content={t`Sushi allows for swapping of ERC20 compatible tokens across multiple networks`}
                 />
             </Helmet>
             <div className="w-full">

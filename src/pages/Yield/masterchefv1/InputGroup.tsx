@@ -14,6 +14,7 @@ import useTokenBalance from '../../../hooks/useTokenBalance'
 import { formattedNum, isAddressString, isWETH } from 'utils'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
+import { t } from '@lingui/macro'
 
 import { tryParseAmount } from '../../../state/swap/hooks'
 
@@ -74,7 +75,7 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
                             >
-                                Add Liquidity
+                                {t`Add Liquidity`}
                             </Button>
                             <Button
                                 color="default"
@@ -82,7 +83,7 @@ export default function InputGroup({
                                     history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
                                 }
                             >
-                                Remove Liquidity
+                                {t`Remove Liquidity`}
                             </Button>
                         </>
                     )}
@@ -92,13 +93,13 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                Lend {assetSymbol}
+                                {t`Lend ${assetSymbol}`}
                             </Button>
                             <Button
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                Withdraw {assetSymbol}
+                                {t`Withdraw ${assetSymbol}`}
                             </Button>
                         </>
                     )}
@@ -109,7 +110,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
+                                {t`Wallet Balance`}: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
+                                {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -129,7 +131,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-blue border-0"
                                 >
-                                    MAX
+                                    {t`MAX`}
                                 </Button>
                             )}
                         </div>
@@ -152,7 +154,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                Deposit
+                                {t`Deposit`}
                             </Button>
                         )}
                     </div>
@@ -160,7 +162,7 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Deposited: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                {t`Deposited`}: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -180,7 +182,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-pink border-0"
                                 >
-                                    MAX
+                                    {t`MAX`}
                                 </Button>
                             )}
                         </div>
@@ -198,7 +200,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Withdraw
+                            {t`Withdraw`}
                         </Button>
                     </div>
                 </div>
@@ -212,8 +214,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Harvest{'  '}
-                            {formattedNum(pending)} SUSHI
+                            {t`Harvest ${formattedNum(pending)} SUSHI`}
                         </Button>
                     </div>
                 )}

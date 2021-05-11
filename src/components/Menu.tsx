@@ -4,30 +4,32 @@ import { Popover, Transition } from '@headlessui/react'
 import { classNames } from '../functions/styling'
 import { ExternalLink } from './Link'
 import { ReactComponent as MenuIcon } from '../assets/images/menu.svg'
+import { t } from '@lingui/macro'
+
 const solutions = [
     {
-        name: 'Docs',
-        description: 'Documentation for users of Sushi.',
+        name: t`Docs`,
+        description: t`Documentation for users of Sushi.`,
         href: 'https://docs.sushi.com'
     },
     {
-        name: 'Dev',
-        description: 'Documentation for developers of Sushi.',
+        name: t`Dev`,
+        description: t`Documentation for developers of Sushi.`,
         href: 'https://dev.sushi.com'
     },
     {
-        name: 'Open Source',
-        description: 'Sushi is a supporter of Open Source.',
+        name: t`Open Source`,
+        description: t`Sushi is a supporter of Open Source.`,
         href: 'https://github.com/sushiswap'
     },
     {
-        name: 'Tools',
-        description: 'Tools to optimize your workflow.',
+        name: t`Tools`,
+        description: t`Tools to optimize your workflow.`,
         href: '/tools'
     },
     {
-        name: 'Discord',
-        description: 'Join the community on Discord.',
+        name: t`Discord`,
+        description: t`Join the community on Discord.`,
         href: 'https://discord.gg/NVPXN4e'
     }
 ]

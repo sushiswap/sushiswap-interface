@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { t } from '@lingui/macro'
 import styled from 'styled-components'
 import { network } from '../../connectors'
 import { NetworkContextName } from '../../constants'
@@ -19,7 +19,6 @@ const Message = styled.h2`
 `
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {
-    const { t } = useTranslation()
     const { active } = useWeb3React()
     const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
 
@@ -57,7 +56,7 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
     if (!active && networkError) {
         return (
             <MessageWrapper>
-                <Message>{t('unknownError')}</Message>
+                <Message>{t`Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device`}</Message>
             </MessageWrapper>
         )
     }

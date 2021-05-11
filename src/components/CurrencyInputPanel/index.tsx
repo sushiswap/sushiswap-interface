@@ -1,17 +1,15 @@
 import { Currency, Pair, ChainId } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useTheme from '../../hooks/useTheme'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { TYPE } from '../../theme'
 import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import { Input as NumericalInput } from '../NumericalInput'
-import { RowBetween } from '../Row'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import Button from '../Button'
 import selectCoinAnimation from '../../assets/animation/select-coin.json'
@@ -147,8 +145,6 @@ export default function CurrencyInputPanel({
     cornerRadiusTopNone,
     containerBackground
 }: CurrencyInputPanelProps) {
-    const { t } = useTranslation()
-
     const [modalOpen, setModalOpen] = useState(false)
     const { account, chainId } = useActiveWeb3React()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
@@ -251,7 +247,7 @@ export default function CurrencyInputPanel({
                                                   )
                                                 : currency?.getSymbol(chainId)) || (
                                                 <div className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full px-2 py-1 text-secondary text-xs font-medium mt-1 whitespace-nowrap ">
-                                                    {t('selectToken')}
+                                                    {t`Select a token`}
                                                 </div>
                                             )}
                                         </div>
@@ -286,7 +282,7 @@ export default function CurrencyInputPanel({
                                     size="small"
                                     className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full text-secondary text-xs font-medium whitespace-nowrap"
                                 >
-                                    Max
+                                    {t`Max`}
                                 </Button>
                             )}
                             <NumericalInput

@@ -12,6 +12,7 @@ import { Card, GradientDot, Layout, LendCardHeader } from '../../../components'
 import Deposit from './Deposit'
 import Withdraw from './Withdraw'
 import { Helmet } from 'react-helmet'
+import { t } from '@lingui/macro'
 
 export default function LendingPair({
     match: {
@@ -33,32 +34,30 @@ export default function LendingPair({
                 <Card
                     className="h-full bg-dark-900"
                     backgroundImage={DepositGraphic}
-                    title={'Lend assets for interest from borrowers.'}
-                    description={
-                        "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
-                    }
+                    title={t`Lend assets for interest from borrowers.`}
+                    description={t`Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want.`}
                 />
             }
             right={
                 <Card className="h-full bg-dark-900">
                     <div className="flex-col space-y-2">
                         <div className="flex justify-between">
-                            <div className="text-xl text-high-emphesis">Market Info</div>
+                            <div className="text-xl text-high-emphesis">{t`Market Info`}</div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Total</div>
+                            <div className="text-lg text-secondary">{t`Total`}</div>
                             <div className="text-lg text-high-emphesis">
                                 {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Available</div>
+                            <div className="text-lg text-secondary">{t`Available`}</div>
                             <div className="text-lg text-high-emphesis">
                                 {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Borrowed</div>
+                            <div className="text-lg text-secondary">{t`Borrowed`}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
                                     {formattedPercent(pair.utilization.string)}
@@ -66,7 +65,7 @@ export default function LendingPair({
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Supply APR</div>
+                            <div className="text-lg text-secondary">{t`Supply APR`}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
                                     {formattedPercent(pair.currentSupplyAPR.string)}
@@ -74,7 +73,7 @@ export default function LendingPair({
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Borrow APR</div>
+                            <div className="text-lg text-secondary">{t`Borrow APR`}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
                                     {formattedPercent(pair.currentInterestPerYear.string)}
@@ -82,7 +81,7 @@ export default function LendingPair({
                             </div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">Collateral</div>
+                            <div className="text-lg text-secondary">{t`Collateral`}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
                                     {formattedNum(pair.totalCollateralAmount.string)} {pair.collateral.symbol}
@@ -91,7 +90,7 @@ export default function LendingPair({
                         </div>
                         {pair.utilization.value.gt(0) && (
                             <div className="flex justify-between">
-                                <div className="text-lg text-secondary">Health</div>
+                                <div className="text-lg text-secondary">{t`Health`}</div>
                                 <div className="flex items-center">
                                     <div className="text-lg text-high-emphesis">
                                         {formattedPercent(pair.marketHealth.toFixed(16))}
@@ -100,13 +99,15 @@ export default function LendingPair({
                             </div>
                         )}
                         <div className="flex justify-between pt-3">
-                            <div className="text-xl text-high-emphesis">BentoBox</div>
+                            <div className="text-xl text-high-emphesis">{t`BentoBox`}</div>
                         </div>
                         <div className="flex justify-between">
-                            <div className="text-lg text-secondary">{pair.asset.symbol} Strategy</div>
+                            <div className="text-lg text-secondary">{t`${pair.asset.symbol} Strategy`}</div>
                             <div className="text-lg text-high-emphesis">
-                                None
-                                <QuestionHelper text="BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox." />
+                                {t`None`}
+                                <QuestionHelper
+                                    text={t`BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox.`}
+                                />
                             </div>
                         </div>
                     </div>

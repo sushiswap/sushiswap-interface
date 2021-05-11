@@ -1,10 +1,11 @@
-import React from 'react'
+import { BalanceProps } from '../../hooks/useTokenBalance'
 import { Link } from 'react-router-dom'
+import MoreInfoSymbol from '../../assets/images/more-info.svg'
+import React from 'react'
 import SushiImage from '../../assets/images/sushi.png'
 import XSushiImage from '../../assets/images/xsushi.png'
-import MoreInfoSymbol from '../../assets/images/more-info.svg'
-import { BalanceProps } from '../../hooks/useTokenBalance'
 import { formatFromBalance } from '../../utils'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 interface BalanceCardProps {
@@ -25,7 +26,7 @@ export default function BalanceCard({
         <div className="flex flex-col w-full bg-dark-900 rounded px-4 md:px-8 pt-6 pb-5 md:pt-7 md:pb-9">
             <div className="flex flex-wrap">
                 <div className="flex flex-col flex-grow md:mb-14">
-                    <p className="mb-3 text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Balance</p>
+                    <p className="mb-3 text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">{t`Balance`}</p>
                     <div className="flex items-center">
                         <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={XSushiImage} alt="sushi" />
                         <div className="flex flex-col justify-center">
@@ -39,7 +40,7 @@ export default function BalanceCard({
 
                 <div className="flex flex-col flex-grow">
                     <div className="flex flex-nowrap mb-3 ml-8 md:ml-0">
-                        <p className="text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Unstaked</p>
+                        <p className="text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">{t`Unstaked`}</p>
                         {/* <img className="cursor-pointer ml-2 w-4" src={MoreInfoSymbol} alt={'more info'} /> */}
                     </div>
                     <div className="flex items-center ml-8 md:ml-0">
@@ -70,14 +71,14 @@ export default function BalanceCard({
                             target="_blank"
                             rel="noreferrer noopener"
                             className={`
-                            flex flex-grow justify-center items-center
-                            h-14 mt-6 rounded
-                            bg-dark-700 text-high-emphesis
-                            focus:outline-none focus:ring hover:bg-opacity-80
-                            text-caption2 font-bold cursor-pointer
-                        `}
+                                flex flex-grow justify-center items-center
+                                h-14 mt-6 rounded
+                                bg-dark-700 text-high-emphesis
+                                focus:outline-none focus:ring hover:bg-opacity-80
+                                text-caption2 font-bold cursor-pointer
+                            `}
                         >
-                            Your SushiBar Stats
+                            {t`Your SushiBar Stats`}
                         </a>
                     )}
                 </div>

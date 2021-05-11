@@ -9,6 +9,9 @@
 # production
 /build
 
+# catalogs
+/src/language/locales/**/*.js
+
 # misc
 .DS_Store
 .env

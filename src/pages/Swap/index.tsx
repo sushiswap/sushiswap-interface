@@ -1,36 +1,15 @@
-import { CurrencyAmount, JSBI, Token, Trade, ChainId } from '@sushiswap/sdk'
-import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
-import { useIsTransactionUnsupported } from 'hooks/Trades'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { ArrowDown } from 'react-feather'
-import ReactGA from 'react-ga'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
-import AddressInputPanel from '../../components/AddressInputPanel'
+import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
+import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
+import { AutoRow, RowBetween } from '../../components/Row'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import Card, { GreyCard } from '../../components/CardLegacy'
+import { ChainId, CurrencyAmount, JSBI, Token, Trade } from '@sushiswap/sdk'
 import Column, { AutoColumn } from '../../components/Column'
-import CurrencyInputPanel from '../../components/CurrencyInputPanel'
-import Loader from '../../components/Loader'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
-import ProgressSteps from '../../components/ProgressSteps'
-import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
-import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
-import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
-import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/ExchangeHeader'
-import TradePrice from '../../components/swap/TradePrice'
-import TokenWarningModal from '../../components/TokenWarningModal'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { DarkBlueCard, DarkCard } from '../../components/CardLegacy'
+import { LinkStyledButton, TYPE } from '../../theme'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
-import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
-import useENSAddress from '../../hooks/useENSAddress'
-import { useSwapCallback } from '../../hooks/useSwapCallback'
-import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
-import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
-import { Field } from '../../state/swap/actions'
 import {
     useDefaultsFromURLSearch,
     useDerivedSwapInfo,
@@ -38,18 +17,39 @@ import {
     useSwapState
 } from '../../state/swap/hooks'
 import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } from '../../state/user/hooks'
-import { LinkStyledButton, TYPE } from '../../theme'
-import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
+import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
+import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
+
+import AddressInputPanel from '../../components/AddressInputPanel'
+import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
+import { ArrowDown } from 'react-feather'
 import { ClickableText } from '../Pool/styleds'
-import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
-import Lottie from 'lottie-react'
+import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
+import CurrencyInputPanel from '../../components/CurrencyInputPanel'
+import { Field } from '../../state/swap/actions'
 import { Helmet } from 'react-helmet'
-import { DarkCard } from '../../components/CardLegacy'
-
-import { useNetworkModalToggle } from '../../state/application/hooks'
-
+import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import Loader from '../../components/Loader'
+import Lottie from 'lottie-react'
 import PolygonLogo from '../../assets/images/matic-logo.png'
+import ProgressSteps from '../../components/ProgressSteps'
+import ReactGA from 'react-ga'
+import SwapHeader from '../../components/ExchangeHeader'
+import { SwapPoolTabs } from '../../components/NavigationTabs'
+import { Text } from 'rebass'
+import { ThemeContext } from 'styled-components'
+import TokenWarningModal from '../../components/TokenWarningModal'
+import TradePrice from '../../components/swap/TradePrice'
+import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
+import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
+import { maxAmountSpend } from '../../utils/maxAmountSpend'
+import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import useENSAddress from '../../hooks/useENSAddress'
+import { useIsTransactionUnsupported } from 'hooks/Trades'
+import { useNetworkModalToggle } from '../../state/application/hooks'
+import { useSwapCallback } from '../../hooks/useSwapCallback'
 
 export default function Swap() {
     const toggleNetworkModal = useNetworkModalToggle()
@@ -299,7 +299,7 @@ export default function Swap() {
     return (
         <>
             <Helmet>
-                <title>Swap | Sushi</title>
+                <title>{t`Swap`} | Sushi</title>
                 <meta
                     name="description"
                     content="Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
@@ -332,10 +332,8 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">
-                                            300M+ TVL on Polygon! Optimized routing enabled
-                                        </div>
-                                        <div className="text-purple text-sm">Enjoy the lowest slippage on Polygon</div>
+                                        <div className="text-white">{t`300M+ TVL on Polygon! Optimized routing enabled`}</div>
+                                        <div className="text-purple text-sm">{t`Enjoy the lowest slippage on Polygon`}</div>
                                     </div>
                                     <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
@@ -343,7 +341,7 @@ export default function Swap() {
                                         rel="noreferrer noopener"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
                                     >
-                                        Read Tutorial
+                                        {t`Read Tutorial`}
                                     </a>
                                 </div>
                             </DarkCard>
@@ -353,8 +351,8 @@ export default function Swap() {
                         <CurrencyInputPanel
                             label={
                                 independentField === Field.OUTPUT && !showWrap && trade
-                                    ? 'Swap From (est.):'
-                                    : 'Swap From:'
+                                    ? t`Swap From (est.):`
+                                    : t`Swap From:`
                             }
                             value={formattedAmounts[Field.INPUT]}
                             showMaxButton={!atMaxAmountInput}
@@ -418,7 +416,9 @@ export default function Swap() {
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
                             label={
-                                independentField === Field.INPUT && !showWrap && trade ? 'Swap To (est.):' : 'Swap To:'
+                                independentField === Field.INPUT && !showWrap && trade
+                                    ? t`Swap To (est.):`
+                                    : t`Swap To:`
                             }
                             showMaxButton={false}
                             currency={currencies[Field.OUTPUT]}
@@ -437,7 +437,7 @@ export default function Swap() {
                                         id="remove-recipient-button"
                                         onClick={() => onChangeRecipient(null)}
                                     >
-                                        - Remove send
+                                        - {t`Remove send`}
                                     </LinkStyledButton>
                                 </AutoRow>
                                 <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
@@ -450,7 +450,7 @@ export default function Swap() {
                                     {Boolean(trade) && (
                                         <RowBetween align="center">
                                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                                Price
+                                                {t`Price`}
                                             </Text>
                                             <TradePrice
                                                 price={trade?.executionPrice}
@@ -467,7 +467,7 @@ export default function Swap() {
                                                 color={theme.text2}
                                                 onClick={toggleSettings}
                                             >
-                                                Slippage Tolerance
+                                                {t`Slippage Tolerance`}
                                             </ClickableText>
                                             <ClickableText
                                                 fontWeight={500}
@@ -486,23 +486,23 @@ export default function Swap() {
                     <BottomGrouping>
                         {swapIsUnsupported ? (
                             <ButtonPrimary disabled={true}>
-                                <TYPE.main mb="4px">Unsupported Asset</TYPE.main>
+                                <TYPE.main mb="4px">{t`Unsupported Asset`}</TYPE.main>
                             </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>{t`Connect Wallet`}</ButtonLight>
                         ) : showWrap ? (
                             <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                                 {wrapInputError ??
                                     (wrapType === WrapType.WRAP
-                                        ? 'Wrap'
+                                        ? t`Wrap`
                                         : wrapType === WrapType.UNWRAP
-                                        ? 'Unwrap'
+                                        ? t`Unwrap`
                                         : null)}
                             </ButtonPrimary>
                         ) : noRoute && userHasSpecifiedInputOutput ? (
                             <GreyCard style={{ textAlign: 'center' }}>
-                                <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-                                {singleHopOnly && <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>}
+                                <TYPE.main mb="4px">{t`Insufficient liquidity for this trade`}</TYPE.main>
+                                {singleHopOnly && <TYPE.main mb="4px">{t`Try enabling multi-hop trades`}</TYPE.main>}
                             </GreyCard>
                         ) : showApproveFlow ? (
                             <RowBetween>
@@ -518,9 +518,9 @@ export default function Swap() {
                                             Approving <Loader stroke="white" />
                                         </AutoRow>
                                     ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                                        'Approved'
+                                        t`Approved`
                                     ) : (
-                                        'Approve ' + currencies[Field.INPUT]?.getSymbol(chainId)
+                                        t`Approve ${currencies[Field.INPUT]?.getSymbol(chainId)}`
                                     )}
                                 </ButtonConfirmed>
                                 <ButtonError
@@ -548,8 +548,10 @@ export default function Swap() {
                                 >
                                     <Text fontSize={16} fontWeight={500}>
                                         {priceImpactSeverity > 3 && !isExpertMode
-                                            ? `Price Impact High`
-                                            : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                            ? t`Price Impact High`
+                                            : priceImpactSeverity > 2
+                                            ? t`Swap Anyway`
+                                            : t`Swap`}
                                     </Text>
                                 </ButtonError>
                             </RowBetween>
@@ -576,8 +578,10 @@ export default function Swap() {
                                     {swapInputError
                                         ? swapInputError
                                         : priceImpactSeverity > 3 && !isExpertMode
-                                        ? `Price Impact Too High`
-                                        : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                        ? t`Price Impact Too High`
+                                        : priceImpactSeverity > 2
+                                        ? t`Swap Anyway`
+                                        : t`Swap`}
                                 </Text>
                             </ButtonError>
                         )}
@@ -590,16 +594,16 @@ export default function Swap() {
                     </BottomGrouping>
                     {!trade && chainId && chainId === ChainId.MAINNET && (
                         <div
-                            className="hidden sm:block w-full cursor-pointer pt-4 w-full"
+                            className="hidden sm:block w-full cursor-pointer pt-4"
                             onClick={() => toggleNetworkModal()}
                         >
                             <DarkCard>
                                 <div className="flex justify-between items-center overflow-hidden">
                                     <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
                                     <div className="pl-32">
-                                        <div className="text-high-emphesis">Check out Sushi on Polygon (Matic)</div>
+                                        <div className="text-high-emphesis">{t`Check out Sushi on Polygon (Matic)`}</div>
                                         <div className="text-high-emphesis text-sm">
-                                            Click here to switch to Polygon using Metamask
+                                            {t`Click here to switch to Polygon using Metamask`}
                                         </div>
                                     </div>
                                 </div>

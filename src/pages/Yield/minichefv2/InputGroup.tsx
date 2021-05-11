@@ -16,6 +16,7 @@ import { formattedNum, isAddressString, isWETH, isAddress } from '../../../utils
 import { WETH } from '@sushiswap/sdk'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
+import { t, Trans } from '@lingui/macro'
 
 import { tryParseAmount } from '../../../state/swap/hooks'
 
@@ -83,8 +84,9 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Harvest{'  '}
-                            {formattedNum(pending)} {'SUSHI'} {'&'} {formattedNum(reward)} {'MATIC'}
+                            <Trans>
+                                Harvest {formattedNum(pending)} SUSHI & {formattedNum(reward)} MATIC
+                            </Trans>
                         </Button>
                     </div>
                 )}
@@ -93,14 +95,16 @@ export default function InputGroup({
                         <div className="flex items-center">
                             <div className="ml-3">
                                 <p>
-                                    <b>Tip:</b> In order to start earning rewards, you will need to first acquire some
-                                    SLP by adding liquidity to the specified pair or{' '}
-                                    <Link to="/migrate" className="underline text-blue">
-                                        migrating existing liquidity.
-                                    </Link>{' '}
-                                    Once you have SLP you can stake it into this yield farm to start earning rewards.
-                                    Unstake anytime and then you can convert your SLP back to base tokens by clicking
-                                    Remove Liquidity. Click Harvest to receive you rewards at any time.
+                                    <Trans>
+                                        <b>Tip:</b> In order to start earning rewards, you will need to first acquire
+                                        some SLP by adding liquidity to the specified pair or{' '}
+                                        <Link to="/migrate" className="underline text-blue">
+                                            migrating existing liquidity.
+                                        </Link>{' '}
+                                        Once you have SLP you can stake it into this yield farm to start earning
+                                        rewards. Unstake anytime and then you can convert your SLP back to base tokens
+                                        by clicking Remove Liquidity. Click Harvest to receive you rewards at any time.
+                                    </Trans>
                                 </p>
                             </div>
                         </div>
@@ -111,7 +115,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Wallet Balance: {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
+                                {t`Wallet Balance`}: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
+                                {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -131,7 +136,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-blue border-0"
                                 >
-                                    MAX
+                                    {t`MAX`}
                                 </Button>
                             )}
                         </div>
@@ -154,7 +159,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                Stake
+                                {t`Stake`}
                             </Button>
                         )}
                     </div>
@@ -162,7 +167,7 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                Your Staked: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                {t`Your Staked`}: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -182,7 +187,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-pink border-0"
                                 >
-                                    MAX
+                                    {t`MAX`}
                                 </Button>
                             )}
                         </div>
@@ -200,7 +205,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            Unstake
+                            {t`Unstake`}
                         </Button>
                     </div>
                 </div>
@@ -223,7 +228,7 @@ export default function InputGroup({
                                     )
                                 }
                             >
-                                Add Liquidity
+                                {t`Add Liquidity`}
                             </Button>
                             <Button
                                 color="default"
@@ -231,7 +236,7 @@ export default function InputGroup({
                                     history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
                                 }
                             >
-                                Remove Liquidity
+                                {t`Remove Liquidity`}
                             </Button>
                         </>
                     )}
@@ -241,13 +246,13 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                Lend {assetSymbol}
+                                {t`Lend`} {assetSymbol}
                             </Button>
                             <Button
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                Withdraw {assetSymbol}
+                                {t`Withdraw`} {assetSymbol}
                             </Button>
                         </>
                     )}

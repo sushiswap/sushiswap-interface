@@ -1,13 +1,15 @@
+import { ArrowUpRight, CheckCircle } from 'react-feather'
 import React, { useContext } from 'react'
+
 import { Currency } from '@sushiswap/sdk'
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import { ThemeContext } from 'styled-components'
-import { CheckCircle, ArrowUpRight } from 'react-feather'
-import { LinkStyledButton } from '../../theme'
 import { Dots } from '../../components'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { getExplorerLink } from '../../utils'
+import DoubleCurrencyLogo from 'components/DoubleLogo'
+import { LinkStyledButton } from '../../theme'
 import { NETWORK_LABEL } from '../../constants/networks'
+import { ThemeContext } from 'styled-components'
+import { getExplorerLink } from '../../utils'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 // type Props = {
 //     transactions: string[]
@@ -20,10 +22,10 @@ export default function TransactionHistory({ transactions }: any) {
         <>
             <div className="flex justify-between mb-6 flex-col sm:flex-row items-start">
                 <div className="text-xl font-medium text-white">
-                    Your Transaction History {chainId && `on ${NETWORK_LABEL[chainId]}`}
+                    {t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`}
                 </div>
                 {/* <LinkStyledButton>
-                    <span className="text-sm">Clear History</span>
+                    <span className="text-sm">{t`Clear History`}</span>
                 </LinkStyledButton> */}
             </div>
             <div>

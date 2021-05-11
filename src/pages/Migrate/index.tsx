@@ -1,25 +1,27 @@
-import { AddressZero } from '@ethersproject/constants'
-import { formatUnits, parseUnits } from '@ethersproject/units'
-import { ChainId, JSBI } from '@sushiswap/sdk'
-import { useSushiRollContract } from 'hooks/useContract'
-import React, { useCallback, useEffect, useState } from 'react'
-import { ChevronRight } from 'react-feather'
-import { ButtonConfirmed } from '../../components/ButtonLegacy'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import QuestionHelper from '../../components/QuestionHelper'
-import { Dots } from '../../components/swap/styleds'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
 import { BackArrow, CloseIcon } from '../../theme'
-import LPToken from '../../types/LPToken'
-import MetamaskError from '../../types/MetamaskError'
+import { ChainId, JSBI } from '@sushiswap/sdk'
+import React, { useCallback, useEffect, useState } from 'react'
+import { formatUnits, parseUnits } from '@ethersproject/units'
+import useMigrateState, { MigrateState } from '../../hooks/useMigrateState'
+
+import { AddressZero } from '@ethersproject/constants'
+import Badge from 'kashi/components/Badge'
+import { Button } from '../../components'
+import { ButtonConfirmed } from '../../components/ButtonLegacy'
+import { ChevronRight } from 'react-feather'
+import { Dots } from '../../components/swap/styleds'
+import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { EmptyState } from '../../components/EmptyState'
 import { Helmet } from 'react-helmet'
+import LPToken from '../../types/LPToken'
+import MetamaskError from '../../types/MetamaskError'
+import { Input as NumericalInput } from '../../components/NumericalInput'
+import QuestionHelper from '../../components/QuestionHelper'
 import Typography from 'components/Typography'
-import { Button } from '../../components'
-import Badge from 'kashi/components/Badge'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useSushiRollContract } from 'hooks/useContract'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -61,7 +63,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     return (
         <>
             <Typography variant="caption" className="text-secondary">
-                Amount of Tokens
+                {t`Amount of Tokens`}
             </Typography>
 
             <div className="flex items-center relative w-full mb-4">
@@ -77,7 +79,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
                     onClick={onPressMax}
                     className="absolute right-4 focus:ring focus:ring-pink"
                 >
-                    MAX
+                    {t`MAX`}
                 </Button>
             </div>
         </>
@@ -120,13 +122,13 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
     const items = [
         {
             key: 'permit',
-            text: 'Non-hardware Wallet',
-            description: 'Migration is done in one-click using your signature (permit)'
+            text: t`Non-hardware Wallet`,
+            description: t`Migration is done in one-click using your signature (permit)`
         },
         {
             key: 'approve',
-            text: 'Hardware Wallet',
-            description: 'You need to first approve LP tokens and then migrate it'
+            text: t`Hardware Wallet`,
+            description: t`You need to first approve LP tokens and then migrate it`
         }
     ]
 
@@ -201,14 +203,14 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     return (
         <div className="space-y-4">
             {insufficientAmount ? (
-                <div className="text-sm text-primary">Insufficient Balance</div>
+                <div className="text-sm text-primary">{t`Insufficient Balance`}</div>
             ) : state.loading ? (
-                <Dots>Loading</Dots>
+                <Dots>{t`Loading`}</Dots>
             ) : (
                 <>
                     <div className="flex justify-between">
                         <div className="text-sm text-secondary">
-                            Balance:{' '}
+                            {t`Balance`}:{' '}
                             <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
                         </div>
                     </div>
@@ -220,11 +222,11 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                             altDisabledStyle={approval === ApprovalState.PENDING}
                         >
                             {approval === ApprovalState.PENDING ? (
-                                <Dots>Approving</Dots>
+                                <Dots>{t`Approving`}</Dots>
                             ) : approval === ApprovalState.APPROVED ? (
-                                'Approved'
+                                t`Approved`
                             ) : (
-                                'Approve'
+                                t`Approve`
                             )}
                         </ButtonConfirmed>
                     )}
@@ -233,7 +235,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                             disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
                             onClick={onPress}
                         >
-                            {state.isMigrationPending ? <Dots>Migrating</Dots> : 'Migrate'}
+                            {state.isMigrationPending ? <Dots>{t`Migrating`}</Dots> : t`Migrate`}
                         </ButtonConfirmed>
                     )}
                 </>
@@ -242,7 +244,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                 <div className="text-red text-center font-medium">{error.message}</div>
             )}
             <div className="text-sm text-low-emphesis text-center">
-                {`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
+                {t`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
             </div>
         </div>
     )
@@ -254,14 +256,12 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
         state.setAmount('')
     }
 
-    if (!state.mode || state.lpTokens.length === 0) {
-        return (
-            <div className="rounded p-3 bg-dark-800 cursor-not-allowed text-center">
-                <Typography variant="body" className="text-secondary">
-                    {!state.mode ? 'Select a wallet type first' : 'No LP tokens found'}
-                </Typography>
-            </div>
-        )
+    if (!state.mode) {
+        return null
+    }
+
+    if (state.lpTokens.length === 0) {
+        return <EmptyState message={t`No Liquidity found`} />
     }
 
     return (
@@ -306,7 +306,7 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <div className="text-2xl text-center mb-8">Migrate {exchange} Liquidity</div>
+            <div className="text-2xl text-center mb-8">{t`Migrate ${exchange} Liquidity`}</div>
 
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
                 {/* <div className="flex justify-between items-center p-3">
@@ -316,22 +316,22 @@ const MigrateV2 = () => {
                 </div> */}
                 {!account ? (
                     <Typography variant="body" className="text-primary text-center p-4">
-                        Connect to a wallet to view your liquidity.
+                        {t`Connect to a wallet to view your liquidity`}
                     </Typography>
                 ) : state.loading ? (
                     <Typography variant="body" className="text-primary text-center p-4">
-                        <Dots>Loading your {exchange} liquidity positions</Dots>
+                        <Dots>{t`Loading your {exchange} liquidity positions`}</Dots>
                     </Typography>
                 ) : (
                     <>
-                        {!state.loading && <Typography variant="body">Your Wallet</Typography>}
+                        {!state.loading && <Typography variant="body">{t`Your Wallet`}</Typography>}
                         <MigrateModeSelect state={state} />
                         {!state.loading && (
                             <div>
-                                <Typography variant="body">Your Liquidity</Typography>
+                                <Typography variant="body">{t`Your Liquidity`}</Typography>
                                 <Typography variant="caption" className="text-secondary">
-                                    Click on a pool below, input the amount you wish to migrate or select max, and click
-                                    migrate.
+                                    {t`Click on a pool below, input the amount you wish to migrate or select max, and click
+                                    migrate`}
                                 </Typography>
                             </div>
                         )}

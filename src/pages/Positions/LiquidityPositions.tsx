@@ -10,6 +10,7 @@ import { usePairs } from 'data/Reserves'
 import { useStakingInfo } from 'state/stake/hooks'
 import { BIG_INT_ZERO } from '../../constants'
 import Position from './Position'
+import { t } from '@lingui/macro'
 
 import { AutoColumn } from '../../components/Column'
 import { Text } from 'rebass'
@@ -85,20 +86,20 @@ export default function LiquidityPositions() {
     return (
         <>
             <div className="flex flex-col md:flex-row justify-start md:justify-between mb-6">
-                <div className="text-xl font-medium text-white">Your Liquidity Positions</div>
+                <div className="text-xl font-medium text-white">{t`Your Liquidity Positions`}</div>
                 <div className="flex items-center pr-2">
-                    <span className="mr-1 text-gray-500">Dont see a pool you joined?</span>
-                    <StyledInternalLink to={'/find'}>Import it</StyledInternalLink>
+                    <span className="mr-1 text-gray-500">{t`Dont see a pool you joined?`}</span>
+                    <StyledInternalLink to={'/find'}>{t`Import it`}</StyledInternalLink>
                 </div>
             </div>
             <div>
                 {!account ? (
                     <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
-                        Connect to a wallet to view your liquidity.
+                        {t`Connect to a wallet to view your liquidity`}
                     </div>
                 ) : v2IsLoading ? (
                     <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
-                        <Dots>Loading</Dots>
+                        <Dots>{t`Loading`}</Dots>
                     </div>
                 ) : allV2PairsWithLiquidity?.length > 0 || stakingPairs?.length > 0 ? (
                     <>
@@ -108,7 +109,7 @@ export default function LiquidityPositions() {
                     </>
                 ) : (
                     <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
-                        No liquidity positions found.
+                        {t`No liquidity positions found`}
                     </div>
                 )}
                 <AutoColumn justify={'center'} gap="xs" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
@@ -124,12 +125,12 @@ export default function LiquidityPositions() {
                 <div className="flex gap-4 mt-5 mb-1">
                     <Link to="/add/ETH" className="w-full">
                         <Button size="large" color="gradient">
-                            Add Liquidity
+                            {t`Add Liquidity`}
                         </Button>
                     </Link>
                     <Link to="/create/ETH" className="w-full">
                         <Button size="large" className="w-full bg-dark-800 text-secondary">
-                            Create a Pair
+                            {t`Create a Pair`}
                         </Button>
                     </Link>
                 </div>

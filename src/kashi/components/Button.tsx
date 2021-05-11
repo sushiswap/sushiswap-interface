@@ -7,6 +7,7 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { tryParseAmount } from 'state/swap/hooks'
 import { WETH } from '@sushiswap/sdk'
 import Dots from './Dots'
+import { t } from '@lingui/macro'
 
 export function KashiApproveButton({ content, color }: any): any {
     const { chainId } = useActiveWeb3React()
@@ -20,14 +21,14 @@ export function KashiApproveButton({ content, color }: any): any {
         <>
             {approveKashiFallback && (
                 <Alert
-                    message="Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used."
+                    message={t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used`}
                     className="mb-4"
                 />
             )}
 
             {showApprove && (
                 <Button color={color} onClick={onApprove} className="mb-4">
-                    Approve Kashi
+                    {t`Approve Kashi`}
                 </Button>
             )}
 
@@ -54,7 +55,7 @@ export function TokenApproveButton({ children, value, token, needed, color }: an
     return showApprove ? (
         <Button color={color} onClick={approve} className="mb-4">
             <Dots pending={approvalState === ApprovalState.PENDING} pendingTitle={`Approving ${token.symbol}`}>
-                Approve {token.symbol}
+                {t`Approve`} {token.symbol}
             </Dots>
         </Button>
     ) : (

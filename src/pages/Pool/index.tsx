@@ -22,6 +22,7 @@ import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
 import ExchangeHeader from '../../components/ExchangeHeader'
 import Button from '../../components/Button'
+import { t, Trans } from '@lingui/macro'
 
 const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
     background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
@@ -152,39 +153,41 @@ export default function Pool() {
     return (
         <>
             <Helmet>
-                <title>Pool | Sushi</title>
+                <title>{t`Pool`} | Sushi</title>
             </Helmet>
             <div className="bg-dark-900 w-full max-w-2xl rounded shadow-liquidity-purple-glow">
                 <ExchangeHeader />
                 <div id="pool-page" className="p-4">
                     <SwapPoolTabs active={'pool'} />
                     <Alert
-                        title="Liquidity Provider Rewards"
-                        message="Liquidity providers earn a 0.25% fee on all trades proportional to their share of
+                        title={t`Liquidity Provider Rewards`}
+                        message={t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
                         the pool. Fees are added to the pool, accrue in real time and can be claimed by
-                        withdrawing your liquidity."
+                        withdrawing your liquidity`}
                         type="information"
                     />
                     <div className="flex justify-between items-center my-4">
-                        <div className="text-xl text-high-emphesis font-medium">Your Liquidity Positions</div>
+                        <div className="text-xl text-high-emphesis font-medium">{t`Your Liquidity Positions`}</div>
                         <div className="text-sm font-bold">
-                            Don&apos;t see a pool you joined?{' '}
-                            <Link id="import-pool-link" to="/find" className="text-blue">
-                                Import it.
-                            </Link>
+                            <Trans>
+                                Don&apos;t see a pool you joined?{' '}
+                                <Link id="import-pool-link" to="/find" className="text-blue">
+                                    Import it.
+                                </Link>
+                            </Trans>
                         </div>
                     </div>
                     <div className="grid grid-flow-row gap-3">
                         {!account ? (
                             <Card padding="40px">
                                 <TYPE.body color={theme.text3} textAlign="center">
-                                    Connect to a wallet to view your liquidity.
+                                    {t`Connect to a wallet to view your liquidity`}
                                 </TYPE.body>
                             </Card>
                         ) : v2IsLoading ? (
                             <EmptyProposals>
                                 <TYPE.body color={theme.text3} textAlign="center">
-                                    <Dots>Loading</Dots>
+                                    <Dots>{t`Loading`}</Dots>
                                 </TYPE.body>
                             </EmptyProposals>
                         ) : allV2PairsWithLiquidity?.length > 0 || stakingPairs?.length > 0 ? (
@@ -214,22 +217,22 @@ export default function Pool() {
                         ) : (
                             <EmptyProposals>
                                 <TYPE.body color={theme.text3} textAlign="center">
-                                    No liquidity found.
+                                    {t`No liquidity found`}
                                 </TYPE.body>
                             </EmptyProposals>
                         )}
 
                         {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                             <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                Have Liquidity on {(chainId && migrateFrom[chainId]) ?? ''}?{' '}
+                                {t`Have Liquidity on ${(chainId && migrateFrom[chainId]) ?? ''}?`}{' '}
                                 <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
-                                    Migrate Now.
+                                    {t`Migrate Now`}
                                 </StyledInternalLink>
                             </Text>
                         )}
                         <div className="grid grid-cols-2 gap-4">
                             <Button id="join-pool-button" color="gradient" onClick={() => history.push('/add/ETH')}>
-                                Add Liquidity
+                                {t`Add Liquidity`}
                             </Button>
                             <Button
                                 id="create-pool-button"
@@ -237,7 +240,7 @@ export default function Pool() {
                                 className="bg-dark-800"
                                 onClick={() => history.push('/create/ETH')}
                             >
-                                Create a pair
+                                {t`Create a pair`}
                             </Button>
                         </div>
                     </div>

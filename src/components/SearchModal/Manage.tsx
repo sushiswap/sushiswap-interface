@@ -10,6 +10,7 @@ import CurrencyModalView from './CurrencyModalView'
 import ManageLists from './ManageLists'
 import ManageTokens from './ManageTokens'
 import { PaddedColumn, Separator } from './styleds'
+import { t } from '@lingui/macro'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -63,7 +64,7 @@ function Manage({
                 <RowBetween>
                     <ArrowLeft style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.search)} />
                     <Text fontWeight={500} fontSize={20}>
-                        Manage
+                        {t`Manage`}
                     </Text>
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
@@ -72,10 +73,10 @@ function Manage({
             <PaddedColumn style={{ paddingBottom: 0 }}>
                 <ToggleWrapper>
                     <ToggleOption onClick={() => setShowLists(!showLists)} active={showLists}>
-                        Lists
+                        {t`Lists`}
                     </ToggleOption>
                     <ToggleOption onClick={() => setShowLists(!showLists)} active={!showLists}>
-                        Tokens
+                        {t`Tokens`}
                     </ToggleOption>
                 </ToggleWrapper>
             </PaddedColumn>

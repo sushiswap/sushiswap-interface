@@ -1,9 +1,11 @@
 import { Currency, ETHER, WETH, currencyEquals } from '@sushiswap/sdk'
-import { useMemo } from 'react'
+
+import { t } from '@lingui/macro'
 import { tryParseAmount } from '../state/swap/hooks'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useActiveWeb3React } from './useActiveWeb3React'
+import { useCurrencyBalance } from '../state/wallet/hooks'
+import { useMemo } from 'react'
+import { useTransactionAdder } from '../state/transactions/hooks'
 import { useWETHContract } from './useContract'
 
 export enum WrapType {
@@ -58,7 +60,7 @@ export default function useWrapCallback(
                         : undefined,
                 inputError: sufficientBalance
                     ? undefined
-                    : `Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
+                    : t`Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
             }
         } else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
             return {
@@ -69,7 +71,7 @@ export default function useWrapCallback(
                               try {
                                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
                                   addTransaction(txReceipt, {
-                                      summary: `Unwrap ${inputAmount.toSignificant(
+                                      summary: t`Unwrap ${inputAmount.toSignificant(
                                           6
                                       )} W${Currency.getNativeCurrencySymbol(
                                           chainId
@@ -80,9 +82,7 @@ export default function useWrapCallback(
                               }
                           }
                         : undefined,
-                inputError: sufficientBalance
-                    ? undefined
-                    : `Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
+                inputError: sufficientBalance ? undefined : t`Insufficient WETH balance`
             }
         } else {
             return NOT_APPLICABLE

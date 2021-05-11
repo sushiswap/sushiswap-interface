@@ -12,6 +12,7 @@ import { formatFromBalance, formatToBalance } from '../../utils'
 import useSushiBar from '../../hooks/useSushiBar'
 import TransactionFailedModal from './TransactionFailedModal'
 import { Button, Dots } from '../../components'
+import { t } from '@lingui/macro'
 
 import sushiData from '@sushiswap/sushi-data'
 
@@ -158,7 +159,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         }}
                     >
                         <div className={activeTab === 0 ? activeTabStyle : inactiveTabStyle}>
-                            <p>Stake SUSHI</p>
+                            <p>{t`Stake SUSHI`}</p>
                         </div>
                     </div>
                     <div
@@ -169,14 +170,14 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         }}
                     >
                         <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
-                            <p>Unstake</p>
+                            <p>{t`Unstake`}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center w-full mt-6">
                     <p className="text-large md:text-h5 font-bold text-high-emphesis">
-                        {activeTab === 0 ? 'Stake SUSHI' : 'Unstake'}
+                        {activeTab === 0 ? t`Stake SUSHI` : t`Unstake`}
                     </p>
                     <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-caption md:font-normal">
                         {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
@@ -210,7 +211,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         </div>
                         <div className="flex items-center text-secondary text-caption2 md:text-caption">
                             <div className={input ? 'hidden md:flex md:items-center' : 'flex items-center'}>
-                                <p>Balance:&nbsp;</p>
+                                <p>{t`Balance`}:&nbsp;</p>
                                 <p className="text-caption font-bold">{formattedBalance}</p>
                             </div>
                             <button
@@ -224,7 +225,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                                 `}
                                 onClick={handleClickMax}
                             >
-                                MAX
+                                {t`MAX`}
                             </button>
                         </div>
                     </div>
@@ -236,7 +237,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         disabled={approvalState === ApprovalState.PENDING}
                         onClick={approve}
                     >
-                        {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
+                        {approvalState === ApprovalState.PENDING ? <Dots>{t`Approving`} </Dots> : t`Approve`}
                     </Button>
                 ) : (
                     <button
@@ -252,14 +253,14 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         onClick={handleClickButton}
                     >
                         {!walletConnected
-                            ? 'Connect Wallet'
+                            ? t`Connect Wallet`
                             : !input
-                            ? 'Enter Amount'
+                            ? t`Enter Amount`
                             : insufficientFunds
-                            ? 'Insufficient Balance'
+                            ? t`Insufficient Balance`
                             : activeTab === 0
-                            ? 'Confirm Staking'
-                            : 'Confirm Withdrawal'}
+                            ? t`Confirm Staking`
+                            : t`Confirm Withdrawal`}
                     </button>
                 )}
             </div>
