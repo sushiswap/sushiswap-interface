@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import sushiData from '@sushiswap/sushi-data'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBoringHelperContract } from 'hooks/useContract'
-import _ from 'lodash'
+import orderBy from 'lodash/orderBy'
 import { useCallback, useEffect, useState } from 'react'
 import { exchange_matic, minichefv2_matic } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
@@ -109,7 +109,7 @@ const useFarms = () => {
             })
 
         //console.log('farms:', farms)
-        const sorted = _.orderBy(farms, ['pid'], ['desc'])
+        const sorted = orderBy(farms, ['pid'], ['desc'])
 
         const pids = sorted.map(pool => {
             return pool.pid

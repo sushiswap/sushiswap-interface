@@ -2,7 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import sushiData from '@sushiswap/sushi-data'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBoringHelperContract } from 'hooks/useContract'
-import _ from 'lodash'
+import range from 'lodash/range'
+import orderBy from 'lodash/orderBy'
 import { useCallback, useEffect, useState } from 'react'
 import { exchange, masterchef } from 'apollo/client'
 import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
@@ -50,7 +51,7 @@ const useFarms = () => {
         //console.log('kashiPairs:', kashiPairs)
 
         const pairs = pairsQuery?.data.pairs
-        const KASHI_PAIRS = _.range(190, 230, 1) // kashiPair pids 189-229
+        const KASHI_PAIRS = range(190, 230, 1) // kashiPair pids 189-229
         //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
 
         const farms = pools
@@ -127,7 +128,7 @@ const useFarms = () => {
             })
 
         //console.log('farms:', farms)
-        const sorted = _.orderBy(farms, ['pid'], ['desc'])
+        const sorted = orderBy(farms, ['pid'], ['desc'])
 
         const pids = sorted.map(pool => {
             return pool.pid

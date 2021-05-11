@@ -25,8 +25,8 @@ const AsyncTokenIcon = ({
             setLoadedSrc(src)
         }
 
-        image.src = src
         image.addEventListener('load', handleLoad)
+        image.src = src
         return () => {
             image.removeEventListener('load', handleLoad)
         }

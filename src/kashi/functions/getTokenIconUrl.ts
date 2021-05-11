@@ -196,9 +196,9 @@ function getTokenIconUrl(address: string, chainId: ChainId = 1): string {
     const RESULT = TOKEN_ICONS[chainId][address.toLowerCase()]
     if (!RESULT) {
         console.log('Missing token icon', chainId, address)
-        return `https://cdn.jsdelivr.net/gh/sushiswap/sushiswap-content@latest/tokens/square/unknown.png`
+        return `${process.env.PUBLIC_URL}/images/tokens/unknown.png`
     } else {
-        return `https://cdn.jsdelivr.net/gh/sushiswap/sushi-content@latest/tokens/square/${RESULT.toLowerCase()}.jpg`
+        return `${process.env.PUBLIC_URL}/images/tokens/${RESULT.toLowerCase()}.jpg`
     }
 }
 

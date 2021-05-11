@@ -9,7 +9,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import LPToken from '../types/LPToken'
 import { getAddress } from '@ethersproject/address'
-import { chunk } from 'lodash'
 
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
