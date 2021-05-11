@@ -193,13 +193,12 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
 }
 
 function getTokenIconUrl(address: string, chainId: ChainId = 1): string {
-    console.log(address)
     const RESULT = TOKEN_ICONS[chainId][address.toLowerCase()]
     if (!RESULT) {
         console.log('Missing token icon', chainId, address)
-        return `https://cdn.jsdelivr.net/gh/sushiswap/sushiswap-interface@ec86e70c75f7e0b2d7c99a1050f27a766abc7e54/src/assets/kashi/tokens/unknown.png`
+        return `https://cdn.jsdelivr.net/gh/sushiswap/sushiswap-content@latest/tokens/square/unknown.png`
     } else {
-        return `https://cdn.jsdelivr.net/gh/sushiswap/sushiswap-interface@ec86e70c75f7e0b2d7c99a1050f27a766abc7e54/src/assets/kashi/tokens/${RESULT.toLowerCase()}.jpg`
+        return `https://cdn.jsdelivr.net/gh/sushiswap/sushi-content@latest/tokens/square/${RESULT.toLowerCase()}.jpg`
     }
 }
 
