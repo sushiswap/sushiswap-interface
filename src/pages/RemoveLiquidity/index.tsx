@@ -579,7 +579,7 @@ export default function RemoveLiquidity({
                             {!account ? (
                                 <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
                             ) : (
-                                <RowBetween>
+                                <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:justify-between">
                                     <ButtonConfirmed
                                         onClick={onAttemptToApprove}
                                         confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
@@ -613,7 +613,7 @@ export default function RemoveLiquidity({
                                             {error || 'Confirm Withdrawal'}
                                         </Text>
                                     </ButtonError>
-                                </RowBetween>
+                                </div>
                             )}
                         </div>
                     </AutoColumn>
