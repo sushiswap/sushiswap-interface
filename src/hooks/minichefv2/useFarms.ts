@@ -73,7 +73,7 @@ const useFarms = () => {
         //const averageBlockTime = results[3]
         const pairs = pairsQuery?.data.pairs
         const maticPrice = results[3].data.token.derivedETH * results[4]
-        console.log('maticPrice:', maticPrice)
+        //console.log('maticPrice:', maticPrice)
 
         //const maticPrice = results[3]
         //console.log('maticPrice:', maticPrice)
@@ -115,6 +115,8 @@ const useFarms = () => {
                 //console.log('rewardsPerDay:', rewardPerDay * 10, secondaryRewardPerDay * 10)
 
                 // const roiPerSecond = (rewardPerSecond * 2 * sushiPrice) / balanceUSD // *2 with matic rewards
+                // console.log('rewardPerSecond:', rewardPerSecond)
+                // console.log('secondaryRewardPerSecond:', secondaryRewardPerSecond)
                 const roiPerSecond = (rewardPerSecond * sushiPrice + secondaryRewardPerSecond * maticPrice) / balanceUSD // *2 with matic rewards
                 const roiPerHour = roiPerSecond * 3600
                 const roiPerDay = roiPerHour * 24
@@ -122,8 +124,9 @@ const useFarms = () => {
                 //const oneYearFees = 0.05
                 const oneDayVolume = pair.volumeUSD - pair24Ago.volumeUSD
                 const oneYearFees = (oneDayVolume * 0.003 * 365) / pair.reserveUSD
+                const oneMonthFees = oneYearFees / 12
                 //where (1 + r/n )** n – 1
-                const roiPerYear = (1 + ((roiPerMonth + oneYearFees / 12) * 12) / 12) ** 12 - 1 // compounding monthly APY
+                const roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 120) ** 120 - 1 // compounding 3 days APY
                 //const roiPerYear = (1 + ((roiPerDay + feeFactorAnnualized / 365) * 365) / 365) ** 365 - 1 // compounding daily APY
                 //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)
