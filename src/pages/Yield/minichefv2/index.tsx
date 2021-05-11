@@ -5,15 +5,15 @@ import React, { useState } from 'react'
 import { formattedNum, formattedPercent } from '../../../utils'
 import { useFuse, useSortableData } from 'hooks'
 
+import AsyncTokenIcon from '../../../kashi/components/AsyncTokenIcon'
 import Badge from '../../../components/Badge'
 import { SimpleDots as Dots } from 'kashi/components'
 import DoubleRewardBadge from '../../../assets/images/2x-square.jpg'
 import { Helmet } from 'react-helmet'
 import InputGroup from './InputGroup'
 import { RowBetween } from '../../../components/Row'
-import _ from 'lodash'
-import { getTokenIcon } from 'kashi/functions'
 import styled from 'styled-components'
+import { sumBy } from 'lodash'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import useFarmsV2 from 'hooks/minichefv2/useFarms'
@@ -27,7 +27,7 @@ export default function Yield(): JSX.Element {
     const farms = query?.farms
     const userFarms = query?.userFarms
 
-    const tvl = _.sumBy(farms, 'tvl')
+    const tvl = sumBy(farms, 'tvl')
 
     // Search Setup
     const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
@@ -180,34 +180,34 @@ const TokenBalance = ({ farm }: any) => {
                         <div className="md:col-span-3 flex flex-col space-y-2">
                             <div className="mr-4 flex flex-row space-x-2 items-center">
                                 <div>
-                                    <img
-                                        src={getTokenIcon(farm.liquidityPair.token0.id, chainId)}
+                                    <AsyncTokenIcon
+                                        address={farm.liquidityPair.token0.id}
+                                        chainId={chainId}
                                         className="block w-10 h-10 rounded-sm"
-                                        alt=""
                                     />
                                 </div>
                                 <div>
-                                    <img
-                                        src={getTokenIcon(farm.liquidityPair.token1.id, chainId)}
+                                    <AsyncTokenIcon
+                                        address={farm.liquidityPair.token1.id}
+                                        chainId={chainId}
                                         className="block w-10 h-10 rounded-sm"
-                                        alt=""
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="md:col-span-4 hidden md:flex flex-row space-x-2 justify-start items-center ml-4">
                             <div>
-                                <img
-                                    src={getTokenIcon(farm.rewardTokens?.[0], chainId)}
+                                <AsyncTokenIcon
+                                    address={farm.rewardTokens?.[0]}
+                                    chainId={chainId}
                                     className="block w-10 h-10 rounded-sm"
-                                    alt=""
                                 />
                             </div>
                             <div>
-                                <img
-                                    src={getTokenIcon(farm.rewardTokens?.[1], chainId)}
+                                <AsyncTokenIcon
+                                    address={farm.rewardTokens?.[1]}
+                                    chainId={chainId}
                                     className="block w-10 h-10 rounded-sm"
-                                    alt=""
                                 />
                             </div>
                             <div className="flex flex-col pl-2 space-y-1">
