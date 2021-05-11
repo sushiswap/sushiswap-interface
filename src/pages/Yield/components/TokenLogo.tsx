@@ -4,6 +4,28 @@ import KashiLogo from 'assets/kashi/kashi-neon.png'
 import { getAddress } from '@ethersproject/address'
 import styled from 'styled-components'
 //import EthereumLogo from "../../assets/img/eth.png";
+import { ChainId } from '@sushiswap/sdk'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { getMaticTokenLogoURL } from '../../../constants/maticTokenMapping'
+
+const getTokenLogoURL = (address: string, chainId: any) => {
+    let imageURL
+    if (chainId === ChainId.MAINNET) {
+        imageURL = `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${isAddress(
+            address
+        )}/logo.png`
+    } else if (chainId === ChainId.BSC) {
+        imageURL = `https://v1exchange.pancakeswap.finance/images/coins/${isAddress(address)}.png`
+    } else if (chainId === ChainId.MATIC) {
+        imageURL = getMaticTokenLogoURL(address)
+    } else {
+        imageURL = `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${isAddress(
+            address
+        )}/logo.png`
+    }
+    console.log('getTokenLogoURL:', chainId, imageURL)
+    return imageURL
+}
 
 const isAddress = (value: any) => {
     try {
@@ -31,6 +53,7 @@ const Image = styled.img<{ size: number }>`
 // box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
 
 export default function TokenLogo({ address, header = false, size, ...rest }: any) {
+    const { chainId } = useActiveWeb3React()
     const [error, setError] = useState(false)
 
     useEffect(() => {
@@ -62,9 +85,7 @@ export default function TokenLogo({ address, header = false, size, ...rest }: an
     }
     //console.log('address:', isAddress(address))
 
-    const path = `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${isAddress(
-        address
-    )}/logo.png`
+    const path = getTokenLogoURL(address, chainId)
 
     return (
         <Inline>

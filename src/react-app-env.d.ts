@@ -1,5 +1,7 @@
 /// <reference types="react-scripts" />
 
+declare module 'react-tradingview-widget'
+
 declare module 'jazzicon' {
     export default function(diameter: number, seed: number): HTMLElement
 }

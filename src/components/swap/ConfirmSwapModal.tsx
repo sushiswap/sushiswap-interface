@@ -1,6 +1,6 @@
 import { currencyEquals, Trade } from '@sushiswap/sdk'
 import React, { useCallback, useMemo } from 'react'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import TransactionConfirmationModal, {
     ConfirmationModalContent,
     TransactionErrorContent

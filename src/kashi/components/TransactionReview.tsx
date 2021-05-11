@@ -1,6 +1,8 @@
 import { Direction, TransactionReview } from 'kashi/entities'
 import React from 'react'
 
+import { ArrowDownRight, ArrowUpRight, ArrowRight } from 'react-feather'
+
 function TransactionReviewView({ transactionReview }: { transactionReview: TransactionReview }) {
     return (
         <>
@@ -13,11 +15,22 @@ function TransactionReviewView({ transactionReview }: { transactionReview: Trans
                                 <div className="text-lg text-secondary">{line.name}:</div>
                                 <div className="text-lg">
                                     {line.from}
-                                    {line.direction === Direction.FLAT
-                                        ? ' ➙ '
-                                        : line.direction === Direction.UP
-                                        ? ' ➚ '
-                                        : ' ➘ '}
+                                    {line.direction === Direction.FLAT ? (
+                                        <ArrowRight
+                                            size="1rem"
+                                            style={{ display: 'inline', marginRight: '6px', marginLeft: '6px' }}
+                                        />
+                                    ) : line.direction === Direction.UP ? (
+                                        <ArrowUpRight
+                                            size="1rem"
+                                            style={{ display: 'inline', marginRight: '6px', marginLeft: '6px' }}
+                                        />
+                                    ) : (
+                                        <ArrowDownRight
+                                            size="1rem"
+                                            style={{ display: 'inline', marginRight: '6px', marginLeft: '6px' }}
+                                        />
+                                    )}
                                     {line.to}
                                 </div>
                             </div>

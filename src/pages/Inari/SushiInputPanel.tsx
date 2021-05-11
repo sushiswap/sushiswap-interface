@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import useTokenBalance, { BalanceProps } from 'sushi-hooks/useTokenBalance'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { RowBetween } from '../../components/Row'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useTheme from '../../hooks/useTheme'
 import useInari from '../../hooks/useInari'
 import { TYPE } from '../../theme'
@@ -136,13 +136,13 @@ export default function CurrencyInputPanel({
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
-    const { allowance, approve, stakeSushiToBento, stakeSushiToAave, stakeSushiToCream, stakeSushiToCreamToBento } = useInari()
+    const { sushiAllowance, approveSushi, stakeSushiToBento, stakeSushiToAave, stakeSushiToCream, stakeSushiToCreamToBento } = useInari()
 
     const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
     const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
     const decimals = sushiBalanceBigInt?.decimals
 
-    console.log('sushi allowance:', allowance)
+    console.log('sushi allowance:', sushiAllowance)
 
     console.log('sushiBalance:', sushiBalance, sushiBalanceBigInt, decimals)
 
@@ -151,7 +151,7 @@ export default function CurrencyInputPanel({
     const handleApprove = useCallback(async () => {
         try {
             setRequestedApproval(true)
-            const txHash = await approve()
+            const txHash = await approveSushi()
             console.log(txHash)
             // user rejected tx or didn't go thru
             if (!txHash) {
@@ -160,7 +160,7 @@ export default function CurrencyInputPanel({
         } catch (e) {
             console.log(e)
         }
-    }, [approve, setRequestedApproval])
+    }, [approveSushi, setRequestedApproval])
 
     // disable buttons if pendingTx, todo: styles could be improved
     const [pendingTx, setPendingTx] = useState(false)
@@ -185,7 +185,7 @@ export default function CurrencyInputPanel({
             stakeSushiToBento(amount)
         } else if (functionText === 'SUSHI → xSUSHI → AAVE') {
             stakeSushiToAave(amount)
-        } else if (functionText === 'SUSHI → xSUSHI → CREAM -> BENTO') {
+        } else if (functionText === 'SUSHI → xSUSHI → CREAM → BENTO') {
             stakeSushiToCreamToBento(amount)
         } else if (functionText === 'SUSHI → xSUSHI → CREAM') {
             stakeSushiToCream(amount)
@@ -239,7 +239,7 @@ export default function CurrencyInputPanel({
                                 )}
                             </>
                         )}
-                        {!allowance || Number(allowance) === 0 ? (
+                        {!sushiAllowance || Number(sushiAllowance) === 0 ? (
                             <ButtonSelect onClick={handleApprove}>
                                 <Aligner>
                                     <StyledButtonName>Approve</StyledButtonName>

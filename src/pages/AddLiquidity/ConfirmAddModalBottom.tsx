@@ -4,7 +4,7 @@ import { Text } from 'rebass'
 import { ButtonPrimary } from '../../components/ButtonLegacy'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { RowBetween, RowFixed } from '../../components/Row'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { Field } from '../../state/mint/actions'
 import { TYPE } from '../../theme'
 
