@@ -1,14 +1,15 @@
-import { getAddress } from '@ethersproject/address'
-import { BigNumber } from '@ethersproject/bignumber'
-import { AddressZero } from '@ethersproject/constants'
-import { Contract } from '@ethersproject/contracts'
-import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Percent, ROUTER_ADDRESS, Token } from '@sushiswap/sdk'
-import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { ethers } from 'ethers'
-import Numeral from 'numeral'
+import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
+
+import { AddressZero } from '@ethersproject/constants'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Contract } from '@ethersproject/contracts'
 import Fraction from 'entities/Fraction'
+import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
+import Numeral from 'numeral'
 import { TokenAddressMap } from '../state/lists/hooks'
+import { ethers } from 'ethers'
+import { getAddress } from '@ethersproject/address'
 
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
     if (value) {
@@ -339,6 +340,28 @@ const builders = {
             default:
                 return `${prefix}/${type}/${data}`
         }
+    },
+    okex: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+        const prefix = 'https://www.oklink.com/okexchain'
+        switch (type) {
+            case 'transaction':
+                return `${prefix}/tx/${data}`
+            case 'token':
+                return `${prefix}/tokenAddr/${data}`
+            default:
+                return `${prefix}/${type}/${data}`
+        }
+    },
+    okexTestnet: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+        const prefix = 'https://www.oklink.com/okexchain-test'
+        switch (type) {
+            case 'transaction':
+                return `${prefix}/tx/${data}`
+            case 'token':
+                return `${prefix}/tokenAddr/${data}`
+            default:
+                return `${prefix}/${type}/${data}`
+        }
     }
 }
 
@@ -429,6 +452,14 @@ const chains: ChainObject = {
     [ChainId.HARMONY_TESTNET]: {
         chainName: '',
         builder: builders.harmonyTestnet
+    },
+    [ChainId.OKEX]: {
+        chainName: '',
+        builder: builders.okex
+    },
+    [ChainId.OKEX_TESTNET]: {
+        chainName: '',
+        builder: builders.okexTestnet
     }
 }
 

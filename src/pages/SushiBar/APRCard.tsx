@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import MoreInfoSymbol from '../../assets/images/more-info.svg'
 import sushiData from '@sushiswap/sushi-data'
 
-export default function APRCard({ numSushi }: any) {
+export default function APRCard() {
     const [Apr, setApr] = useState<any>()
     useEffect(() => {
         const fetchData = async () => {

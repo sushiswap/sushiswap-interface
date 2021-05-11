@@ -4,6 +4,31 @@ import gql from 'graphql-tag'
 const FACTORY_ADDRESS = '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac'
 const BUNDLE_ID = '1'
 
+export const tokenFieldsQuery = gql`
+    fragment tokenFields on Token {
+        id
+        symbol
+        name
+        decimals
+        totalSupply
+        volume
+        volumeUSD
+        untrackedVolumeUSD
+        txCount
+        liquidity
+        derivedETH
+    }
+`
+
+export const tokenQuery = gql`
+    query tokenQuery($id: String!) {
+        token(id: $id) {
+            ...tokenFields
+        }
+    }
+    ${tokenFieldsQuery}
+`
+
 export const miniChefPoolQuery = gql`
     query poolsQuery(
         $first: Int! = 1000
@@ -122,6 +147,15 @@ export const pairFieldsQuery = gql`
         timestamp
     }
     ${pairTokenFieldsQuery}
+`
+
+export const pairTimeTravelQuery = gql`
+    query pairTimeTravelQuery($id: String!, $block: Block_height!) {
+        pair(id: $id, block: $block) {
+            ...pairFields
+        }
+    }
+    ${pairFieldsQuery}
 `
 
 export const pairSubsetQuery = gql`

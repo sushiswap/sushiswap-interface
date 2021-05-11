@@ -44,7 +44,18 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     }, [state])
 
     if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
-        return null
+        return (
+            <>
+                <Typography variant="caption" className="text-secondary">
+                    Amount of Tokens
+                </Typography>
+                <div className="rounded p-3 bg-dark-800 cursor-not-allowed text-center">
+                    <Typography variant="body" className="text-secondary">
+                        {state.mode && state.lpTokens.length === 0 ? 'No LP tokens found' : 'Select an LP Token'}
+                    </Typography>
+                </div>
+            </>
+        )
     }
 
     return (
@@ -168,8 +179,8 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
         setError({})
     }, [state.selectedLPToken])
 
-    if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
-        return <span />
+    if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken || !state.amount) {
+        return <ButtonConfirmed disabled={true}>Migrate</ButtonConfirmed>
     }
 
     const insufficientAmount = JSBI.lessThan(
@@ -243,12 +254,14 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
         state.setAmount('')
     }
 
-    if (!state.mode) {
-        return null
-    }
-
-    if (state.lpTokens.length === 0) {
-        return <EmptyState message="No Liquidity found." />
+    if (!state.mode || state.lpTokens.length === 0) {
+        return (
+            <div className="rounded p-3 bg-dark-800 cursor-not-allowed text-center">
+                <Typography variant="body" className="text-secondary">
+                    {!state.mode ? 'Select a wallet type first' : 'No LP tokens found'}
+                </Typography>
+            </div>
+        )
     }
 
     return (
@@ -313,7 +326,7 @@ const MigrateV2 = () => {
                     <>
                         {!state.loading && <Typography variant="body">Your Wallet</Typography>}
                         <MigrateModeSelect state={state} />
-                        {!state.loading && state.mode && (
+                        {!state.loading && (
                             <div>
                                 <Typography variant="body">Your Liquidity</Typography>
                                 <Typography variant="caption" className="text-secondary">
@@ -322,7 +335,6 @@ const MigrateV2 = () => {
                                 </Typography>
                             </div>
                         )}
-
                         <ExchangeLiquidityPairs state={state} exchange={exchange} />
                         <AmountInput state={state} />
                         <MigrateButtons state={state} exchange={exchange} />

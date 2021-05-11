@@ -8,16 +8,21 @@ import { formatFromBalance } from '../../utils'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 interface BalanceCardProps {
-    sushiEarnings: number
+    sushiEarnings?: number
     xSushiBalance: BalanceProps
     sushiBalance: BalanceProps
-    weightedApr: number
+    weightedApr?: number
 }
 
-export default function BalanceCard({ sushiEarnings, xSushiBalance, sushiBalance, weightedApr }: BalanceCardProps) {
+export default function BalanceCard({
+    xSushiBalance,
+    sushiBalance,
+    sushiEarnings = 0,
+    weightedApr = 0
+}: BalanceCardProps) {
     const { account } = useActiveWeb3React()
     return (
-        <div className="flex flex-col w-full h-full bg-dark-900 rounded px-4 md:px-8 pt-6 pb-5 md:pt-7 md:pb-9">
+        <div className="flex flex-col w-full bg-dark-900 rounded px-4 md:px-8 pt-6 pb-5 md:pt-7 md:pb-9">
             <div className="flex flex-wrap">
                 <div className="flex flex-col flex-grow md:mb-14">
                     <p className="mb-3 text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">Balance</p>
@@ -49,7 +54,7 @@ export default function BalanceCard({ sushiEarnings, xSushiBalance, sushiBalance
                     </div>
                 </div>
 
-                <div className="flex flex-col w-full mt-7 mb-24 md:mb-0">
+                <div className="flex flex-col w-full mt-7 mb-4 md:mb-0">
                     {/* <div className="flex justify-between items-center">
                         <div className="flex flex-nowrap items-center flex-1">
                             <p className="text-caption md:text-lg font-bold text-high-emphesis">Weighted APR</p>
@@ -59,20 +64,22 @@ export default function BalanceCard({ sushiEarnings, xSushiBalance, sushiBalance
                             <p className="text-caption text-primary ml-5 md:ml-0">{`${weightedApr}%`}</p>
                         </div>
                     </div> */}
-                    <a
-                        href={`https://analytics.sushi.com/users/${account}`}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className={`
+                    {account && (
+                        <a
+                            href={`https://analytics.sushi.com/users/${account}`}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className={`
                             flex flex-grow justify-center items-center
                             h-14 mt-6 rounded
                             bg-dark-700 text-high-emphesis
                             focus:outline-none focus:ring hover:bg-opacity-80
                             text-caption2 font-bold cursor-pointer
                         `}
-                    >
-                        Your SushiBar Stats
-                    </a>
+                        >
+                            Your SushiBar Stats
+                        </a>
+                    )}
                 </div>
             </div>
         </div>

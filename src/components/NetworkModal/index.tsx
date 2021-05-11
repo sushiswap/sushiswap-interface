@@ -1,11 +1,12 @@
-import { ChainId } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import React from 'react'
-import { ApplicationModal } from '../../state/application/actions'
-import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
 import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
+import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
+
+import { ApplicationModal } from '../../state/application/actions'
+import { ChainId } from '@sushiswap/sdk'
 import Modal from '../Modal'
 import ModalHeader from '../ModalHeader'
+import React from 'react'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 
 const PARAMS: {
     [chainId in ChainId]?: {
@@ -61,7 +62,7 @@ const PARAMS: {
             symbol: 'MATIC',
             decimals: 18
         },
-        rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
+        rpcUrls: ['https://rpc-mainnet.maticvigil.com'], //['https://matic-mainnet.chainstacklabs.com/'],
         blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
     },
     [ChainId.HECO]: {
@@ -98,15 +99,26 @@ const PARAMS: {
         blockExplorerUrls: ['https://explorer.harmony.one/']
     },
     [ChainId.AVALANCHE]: {
-        chainId: '0xA869',
+        chainId: '0xA86A',
         chainName: 'Avalanche',
         nativeCurrency: {
-            name: 'Avalanche  Token',
+            name: 'Avalanche Token',
             symbol: 'AVAX',
             decimals: 18
         },
-        rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
-        blockExplorerUrls: ['https://cchain.explorer.avax-test.network']
+        rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
+        blockExplorerUrls: ['https://explorer.avax.network']
+    },
+    [ChainId.OKEX]: {
+        chainId: '0x42',
+        chainName: 'OKEx',
+        nativeCurrency: {
+            name: 'OKEx Token',
+            symbol: 'OKT',
+            decimals: 18
+        },
+        rpcUrls: ['https://exchainrpc.okex.org'],
+        blockExplorerUrls: ['https://www.oklink.com/okexchain']
     }
 }
 
@@ -134,7 +146,8 @@ export default function NetworkModal(): JSX.Element | null {
                     ChainId.HECO,
                     ChainId.XDAI,
                     ChainId.HARMONY,
-                    ChainId.AVALANCHE
+                    ChainId.AVALANCHE,
+                    ChainId.OKEX
                 ].map((key: ChainId, i: number) => {
                     if (chainId === key) {
                         return (

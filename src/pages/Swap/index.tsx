@@ -6,7 +6,6 @@ import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import { isTradeBetter } from 'utils/trades'
 import AddressInputPanel from '../../components/AddressInputPanel'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import Card, { GreyCard } from '../../components/CardLegacy'
@@ -17,7 +16,6 @@ import { SwapPoolTabs } from '../../components/NavigationTabs'
 import ProgressSteps from '../../components/ProgressSteps'
 import { AutoRow, RowBetween } from '../../components/Row'
 import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
-import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
@@ -25,13 +23,11 @@ import SwapHeader from '../../components/ExchangeHeader'
 import TradePrice from '../../components/swap/TradePrice'
 import TokenWarningModal from '../../components/TokenWarningModal'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
-import { getTradeVersion } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
-import useToggledVersion, { DEFAULT_VERSION, Version } from '../../hooks/useToggledVersion'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
 import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/swap/actions'
@@ -49,7 +45,7 @@ import { ClickableText } from '../Pool/styleds'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import Lottie from 'lottie-react'
 import { Helmet } from 'react-helmet'
-import { DarkCard, DarkBlueCard } from '../../components/CardLegacy'
+import { DarkCard } from '../../components/CardLegacy'
 
 import { useNetworkModalToggle } from '../../state/application/hooks'
 
@@ -97,14 +93,7 @@ export default function Swap() {
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
-    const {
-        v1Trade,
-        v2Trade,
-        currencyBalances,
-        parsedAmount,
-        currencies,
-        inputError: swapInputError
-    } = useDerivedSwapInfo()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
     const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
         currencies[Field.INPUT],
         currencies[Field.OUTPUT],
@@ -112,16 +101,8 @@ export default function Swap() {
     )
     const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
     const { address: recipientAddress } = useENSAddress(recipient)
-    const toggledVersion = useToggledVersion()
-    const tradesByVersion = {
-        [Version.v1]: v1Trade,
-        [Version.v2]: v2Trade
-    }
-    const trade = showWrap ? undefined : tradesByVersion[toggledVersion]
-    const defaultTrade = showWrap ? undefined : tradesByVersion[DEFAULT_VERSION]
 
-    const betterTradeLinkV2: Version | undefined =
-        toggledVersion === Version.v1 && isTradeBetter(v1Trade, v2Trade) ? Version.v2 : undefined
+    const trade = showWrap ? undefined : v2Trade
 
     const parsedAmounts = showWrap
         ? {
@@ -237,8 +218,7 @@ export default function Swap() {
                             : 'Swap w/ Send',
                     label: [
                         trade?.inputAmount?.currency?.getSymbol(chainId),
-                        trade?.outputAmount?.currency?.getSymbol(chainId),
-                        getTradeVersion(trade)
+                        trade?.outputAmount?.currency?.getSymbol(chainId)
                     ].join('/')
                 })
 
@@ -348,18 +328,20 @@ export default function Swap() {
                         onDismiss={handleConfirmDismiss}
                     />
                     {chainId && chainId === ChainId.MATIC && (
-                        <div className="hidden md:block pb-4">
+                        <div className="hidden md:block pb-4 space-y-2">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-gray-300">Welcome to Sushi on Polygon (Matic)</div>
-                                        <div className="text-gray-600 text-sm">New network, new features</div>
+                                        <div className="text-white">
+                                            300M+ TVL on Polygon! Optimized routing enabled
+                                        </div>
+                                        <div className="text-purple text-sm">Enjoy the lowest slippage on Polygon</div>
                                     </div>
                                     <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
                                         target="_blank"
                                         rel="noreferrer noopener"
-                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-dark-600"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
                                     >
                                         Read Tutorial
                                     </a>
@@ -605,11 +587,6 @@ export default function Swap() {
                             </Column>
                         )}
                         {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-                        {betterTradeLinkV2 && !swapIsUnsupported && toggledVersion === Version.v1 ? (
-                            <BetterTradeLink version={betterTradeLinkV2} />
-                        ) : toggledVersion !== DEFAULT_VERSION && defaultTrade ? (
-                            <DefaultVersionLink />
-                        ) : null}
                     </BottomGrouping>
                     {!trade && chainId && chainId === ChainId.MAINNET && (
                         <div
@@ -620,8 +597,8 @@ export default function Swap() {
                                 <div className="flex justify-between items-center overflow-hidden">
                                     <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
                                     <div className="pl-32">
-                                        <div className="text-gray-300">Check out Sushi on Polygon (Matic)</div>
-                                        <div className="text-gray-600 text-sm">
+                                        <div className="text-high-emphesis">Check out Sushi on Polygon (Matic)</div>
+                                        <div className="text-high-emphesis text-sm">
                                             Click here to switch to Polygon using Metamask
                                         </div>
                                     </div>

@@ -79,7 +79,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     return (
         <>
             {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-dark-800 rounded p-4 bg-opacity-60 w-full mt-4 whitespace-nowrap">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-purple rounded p-4 bg-opacity-20 w-full mt-4 whitespace-nowrap">
                     <div className="flex justify-between">
                         <div className="text-high-emphesis">Your Pool Tokens</div>
                         <div className="text-primary font-bold">
@@ -102,7 +102,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
                     </div>
                 </div>
             ) : (
-                <div className="bg-dark-850 rounded p-4 bg-opacity-60 w-full mt-4">
+                <div className="bg-purple rounded p-4 bg-opacity-20 w-full mt-4">
                     <p>
                         <span role="img" aria-label="wizard-icon">
                             ⭐️
