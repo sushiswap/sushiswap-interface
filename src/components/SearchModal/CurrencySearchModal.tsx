@@ -59,7 +59,7 @@ function CurrencySearchModal({
         modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 80
 
     return (
-        <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight} padding={1}>
+        <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight} noPadding={true}>
             {modalView === CurrencyModalView.search ? (
                 <CurrencySearch
                     isOpen={isOpen}
@@ -73,26 +73,34 @@ function CurrencySearchModal({
                     showManageView={() => setModalView(CurrencyModalView.manage)}
                 />
             ) : modalView === CurrencyModalView.importToken && importToken ? (
-                <ImportToken
-                    tokens={[importToken]}
-                    onDismiss={onDismiss}
-                    onBack={() =>
-                        setModalView(
-                            prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search
-                        )
-                    }
-                    handleCurrencySelect={handleCurrencySelect}
-                />
+                <div className="p-0">
+                    <ImportToken
+                        tokens={[importToken]}
+                        onDismiss={onDismiss}
+                        onBack={() =>
+                            setModalView(
+                                prevView && prevView !== CurrencyModalView.importToken
+                                    ? prevView
+                                    : CurrencyModalView.search
+                            )
+                        }
+                        handleCurrencySelect={handleCurrencySelect}
+                    />
+                </div>
             ) : modalView === CurrencyModalView.importList && importList && listURL ? (
-                <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
+                <div className="p-0">
+                    <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
+                </div>
             ) : modalView === CurrencyModalView.manage ? (
-                <Manage
-                    onDismiss={onDismiss}
-                    setModalView={setModalView}
-                    setImportToken={setImportToken}
-                    setImportList={setImportList}
-                    setListUrl={setListUrl}
-                />
+                <div className="p-0">
+                    <Manage
+                        onDismiss={onDismiss}
+                        setModalView={setModalView}
+                        setImportToken={setImportToken}
+                        setImportList={setImportList}
+                        setListUrl={setListUrl}
+                    />
+                </div>
             ) : (
                 ''
             )}

@@ -29,6 +29,7 @@ const ContentWrapper = styled(Column)`
     width: 100%;
     flex: 1 1;
     position: relative;
+    padding: 1.5rem;
 `
 
 interface CurrencySearchProps {
