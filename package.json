@@ -71,7 +71,7 @@
         "@web3-react/portis-connector": "^6.1.9",
         "@web3-react/torus-connector": "^6.1.9",
         "@web3-react/walletconnect-connector": "^6.1.9",
-        "@web3-react/walletlink-connector": "^6.1.9",
+        "@web3-react/walletlink-connector": "^6.2.0",
         "ajv": "^6.12.3",
         "autoprefixer": "^9",
         "cids": "^1.0.0",
