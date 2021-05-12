@@ -171,7 +171,7 @@ const TokenBalance = ({ farm }: any) => {
                             {formattedNum(farm.tvl, true)}
                         </div>
                         <div className="font-semibold text-sm sm:text-base text-right">
-                            {formattedPercent(farm.roiPerYear * 100)}{' '}
+                            {farm.roiPerYear > 100 ? '10000%+' : formattedPercent(farm.roiPerYear * 100)}
                         </div>
                     </div>
                     <div
@@ -232,7 +232,7 @@ const TokenBalance = ({ farm }: any) => {
                         <div className="md:col-span-3 flex justify-end items-center">
                             <div>
                                 <div className="text-gray-500 text-right font-semibold text-base sm:text-lg">
-                                    {formattedPercent(farm.roiPerYear * 100)}{' '}
+                                    {farm.roiPerYear > 100 ? '10000%+' : formattedPercent(farm.roiPerYear * 100)}
                                     {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
                                 </div>
                                 <div className="text-gray-500 text-right text-xs">annualized</div>
