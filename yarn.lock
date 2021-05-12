@@ -2850,15 +2850,15 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
-"@sushiswap/default-token-list@^6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.4.0.tgz#2ea86239afb1a425eb4cda8fdc48e2693e8f5460"
-  integrity sha512-6e8MUgg4V6vbct+gk8CLTW++VNgCC+kbKlbsjZ3gtk5gQATXNbv7DyOcvbDyMouPfzIOxx+ncIOmS7sjYnHuMw==
+"@sushiswap/default-token-list@^6.9.0":
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.9.0.tgz#ef8b9e772c1d69886efc3f1f49923ac14153cca1"
+  integrity sha512-DfTvQ1m9ljh+HocYlGudXGIE+3o97KrdYhYVT5KkGi0NNQLYJdT+btEZDBnjMszoHar30lgpeUrgpwmvmbZ6tQ==
 
-"@sushiswap/sdk@5.0.0-canary.6":
-  version "5.0.0-canary.6"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.6.tgz#abec1c3d548d8f3b18d714715c3d09c6bd4afc88"
-  integrity sha512-d/Cy1Sf9tkJ9H0aduLzPUWpPYQpreKXHD+o22mhJi2tbHjLrdrOhPhmrnqpHXJ8zYa4gsvBI86dPLePh4Yx1NA==
+"@sushiswap/sdk@5.0.0-canary.7":
+  version "5.0.0-canary.7"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.7.tgz#a7179314300dc98644a1b30446f0f7fe9c0e693f"
+  integrity sha512-21IsU1yB+RETZZs2ORoMLNTRNYNln10bDTVwX7wpntCCdjeACnOyYb/I8yli2cNaajJWPZt62gGoCP5ntndSyg==
   dependencies:
     "@uniswap/v2-core" "^1.0.0"
     big.js "^5.2.2"
