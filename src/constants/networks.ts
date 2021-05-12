@@ -61,6 +61,6 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
     [ChainId.HECO_TESTNET]: 'HECO Testnet',
     [ChainId.HARMONY]: 'Harmony',
     [ChainId.HARMONY_TESTNET]: 'Harmony Testnet',
-    [ChainId.OKEX]: 'OKEx',
-    [ChainId.OKEX_TESTNET]: 'OKEx'
+    [ChainId.OKEX]: 'OKExChain',
+    [ChainId.OKEX_TESTNET]: 'OKExChain'
 }
