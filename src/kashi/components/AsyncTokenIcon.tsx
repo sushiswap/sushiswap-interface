@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getTokenIconUrl } from '../functions'
+
 import { ChainId } from '@sushiswap/sdk'
 import Circle from '../../assets/images/blue-loader.svg'
 import { CustomLightSpinner } from '../../theme'
+import { getTokenIconUrl } from '../functions'
 
 const AsyncTokenIcon = ({
     address,
@@ -33,7 +34,7 @@ const AsyncTokenIcon = ({
         return () => {
             image.removeEventListener('load', handleLoad)
         }
-    }, [address])
+    }, [chainId, address])
 
     return loadedSrc ? (
         <img src={loadedSrc} className={className} alt="" />

@@ -1,7 +1,8 @@
 import { Listbox, Transition } from '@headlessui/react'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+
+import AsyncTokenIcon from '../../../components/AsyncTokenIcon'
 import React from 'react'
-import AsyncTokenIcon from './AsyncTokenIcon'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 
 export default function ListBox({ label, tokens, selectedToken, setSelectedToken, disabled = false }: any) {
     const { chainId } = useActiveWeb3React()

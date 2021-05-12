@@ -3,7 +3,6 @@ export { BorrowCardHeader, default as CardHeader, LendCardHeader } from './CardH
 export { default as Checkbox } from '../../components/Checkbox'
 export { default as GradientDot } from './GradientDot'
 export { default as Layout } from './Layout'
-export { default as ListBox } from './ListBox'
 export { default as MarketHeader } from './MarketHeader'
 export { default as Paper } from '../../components/Paper'
 export { default as Search } from './Search'
