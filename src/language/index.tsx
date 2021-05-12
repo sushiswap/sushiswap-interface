@@ -9,6 +9,9 @@ import { detect, fromStorage, fromNavigator } from '@lingui/detect-locale'
 export const locales = ['de', 'en', 'es-AR', 'es', 'it', 'he', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja']
 export const defaultLocale = 'en'
 
+// Don't load plurals
+locales.map(locale => i18n.loadLocaleData(locale, { plurals: () => null }))
+
 const isLocaleValid = (locale: string) => locales.includes(locale)
 const getInitialLocale = () => {
     const detectedLocale = detect(fromStorage('lang'), fromNavigator(), () => defaultLocale)
@@ -16,7 +19,7 @@ const getInitialLocale = () => {
 }
 
 async function activate(locale: string) {
-    const { messages } = await import(/* webpackChunkName: "i18n-[index]" */ `./locales/${locale}/catalog.js`)
+    const { messages } = await import(`@lingui/loader!./locales/${locale}/catalog.json`)
     i18n.load(locale, messages)
     i18n.activate(locale)
 }
@@ -34,8 +37,15 @@ const LanguageProvider: FC = ({ children }) => {
     const [init, setInit] = useState(true)
 
     const _setLanguage = (language: string): void => {
-        localStorage.setItem('lang', language)
-        setLanguage(language)
+        if (!init) {
+            activate(language).then(() => {
+                localStorage.setItem('lang', language)
+                setLanguage(language)
+            })
+        } else {
+            localStorage.setItem('lang', language)
+            setLanguage(language)
+        }
     }
 
     useEffect(() => {
@@ -47,16 +57,10 @@ const LanguageProvider: FC = ({ children }) => {
         load()
     }, [])
 
-    useEffect(() => {
-        if (init) return
-
-        activate(language)
-    }, [language])
-
     if (init) return <></>
 
     return (
-        <I18nProvider i18n={i18n}>
+        <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
             <Helmet htmlAttributes={{ lang: language }} />
             <LanguageContext.Provider value={{ setLanguage: _setLanguage, language }}>
                 {children}

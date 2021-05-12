@@ -46,6 +46,7 @@ import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
 import { t, Trans } from '@lingui/macro'
 import { Alert } from '../../components'
+import { useLingui } from '@lingui/react'
 
 export default function RemoveLiquidity({
     history,
@@ -53,6 +54,7 @@ export default function RemoveLiquidity({
         params: { currencyIdA, currencyIdB }
     }
 }: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
+    const { i18n } = useLingui()
     const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined]
     const { account, chainId, library } = useActiveWeb3React()
     const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
@@ -403,7 +405,7 @@ export default function RemoveLiquidity({
             <>
                 <RowBetween>
                     <Text color={theme.text2} fontWeight={500} fontSize={16}>
-                        {t`SUSHI ${currencyA?.getSymbol(chainId)}/${currencyB?.getSymbol(chainId)} Burned`}
+                        {i18n._(t`SUSHI ${currencyA?.getSymbol(chainId)}/${currencyB?.getSymbol(chainId)} Burned`)}
                     </Text>
                     <RowFixed>
                         <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} margin={true} />
@@ -416,7 +418,7 @@ export default function RemoveLiquidity({
                     <>
                         <RowBetween>
                             <Text color={theme.text2} fontWeight={500} fontSize={16}>
-                                {t`Price`}
+                                {i18n._(t`Price`)}
                             </Text>
                             <Text fontWeight={500} fontSize={16} color={theme.text1}>
                                 1 {currencyA?.getSymbol(chainId)} ={' '}
@@ -437,7 +439,7 @@ export default function RemoveLiquidity({
                     onClick={onRemove}
                 >
                     <Text fontWeight={500} fontSize={20}>
-                        {t`Confirm`}
+                        {i18n._(t`Confirm`)}
                     </Text>
                 </ButtonPrimary>
             </>
@@ -501,7 +503,7 @@ export default function RemoveLiquidity({
     return (
         <>
             <Helmet>
-                <title>{t`Remove Liquidity`} | Sushi</title>
+                <title>{i18n._(t`Remove Liquidity`)} | Sushi</title>
             </Helmet>
 
             <div className="w-full max-w-2xl mb-5 px-4">
@@ -509,7 +511,7 @@ export default function RemoveLiquidity({
                     className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     to={'/pool'}
                 >
-                    {t`View Your Liquidity Positions >`}
+                    {i18n._(t`View Your Liquidity Positions >`)}
                 </NavLink>
                 {/* <button
                     style={{
@@ -534,7 +536,7 @@ export default function RemoveLiquidity({
                         hash={txHash ? txHash : ''}
                         content={() => (
                             <ConfirmationModalContent
-                                title={t`You will receive`}
+                                title={i18n._(t`You will receive`)}
                                 onDismiss={handleDismissConfirmation}
                                 topContent={modalHeader}
                                 bottomContent={modalBottom}
@@ -585,7 +587,7 @@ export default function RemoveLiquidity({
                         )}
                         <div style={{ position: 'relative' }}>
                             {!account ? (
-                                <ButtonLight onClick={toggleWalletModal}>{t`Connect Wallet`}</ButtonLight>
+                                <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
                             ) : (
                                 <RowBetween>
                                     <ButtonConfirmed
@@ -597,11 +599,11 @@ export default function RemoveLiquidity({
                                         fontSize={16}
                                     >
                                         {approval === ApprovalState.PENDING ? (
-                                            <Dots>{t`Approving`}</Dots>
+                                            <Dots>{i18n._(t`Approving`)}</Dots>
                                         ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
-                                            t`Approved`
+                                            i18n._(t`Approved`)
                                         ) : (
-                                            t`Approve`
+                                            i18n._(t`Approve`)
                                         )}
                                     </ButtonConfirmed>
                                     <ButtonError
@@ -618,7 +620,7 @@ export default function RemoveLiquidity({
                                         }
                                     >
                                         <Text fontSize={16} fontWeight={500}>
-                                            {error || t`Confirm Withdrawal`}
+                                            {error || i18n._(t`Confirm Withdrawal`)}
                                         </Text>
                                     </ButtonError>
                                 </RowBetween>

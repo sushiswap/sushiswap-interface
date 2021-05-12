@@ -13,8 +13,10 @@ import { getCurrency } from 'kashi/constants'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useKashiPairs } from '../../context'
 import useSearchAndSort from 'hooks/useSearchAndSort'
+import { useLingui } from '@lingui/react'
 
 export default function BorrowMarkets(): JSX.Element {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const fullPairs = useKashiPairs()
 
@@ -39,13 +41,15 @@ export default function BorrowMarkets(): JSX.Element {
                 <Card
                     className="h-full bg-dark-900"
                     backgroundImage={BorrowGraphic}
-                    title={t`Borrow assets and leverage up`}
-                    description={t`Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest.`}
+                    title={i18n._(t`Borrow assets and leverage up`)}
+                    description={i18n._(
+                        t`Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest.`
+                    )}
                 />
             }
         >
             <Helmet>
-                <title>{t`Borrow`} | Sushi</title>
+                <title>{i18n._(t`Borrow`)} | Sushi</title>
             </Helmet>
             <Card className="h-full bg-dark-900" header={<MarketHeader type="Borrow" lists={[pairs, positions]} />}>
                 {positions.items && positions.items.length > 0 && (
@@ -67,7 +71,7 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="currentUserBorrowAmount.usdValue"
                                     direction="descending"
                                 >
-                                    {t`Borrowed`}
+                                    {i18n._(t`Borrowed`)}
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
                                     className="hidden md:flex justify-end"
@@ -75,7 +79,7 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="userCollateralAmount.usdValue"
                                     direction="descending"
                                 >
-                                    {t`Collateral`}
+                                    {i18n._(t`Collateral`)}
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
                                     className="hidden lg:flex justify-end"
@@ -93,7 +97,7 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="interestPerYear.value"
                                     direction="descending"
                                 >
-                                    {t`APR`}
+                                    {i18n._(t`APR`)}
                                 </ListHeaderWithSort>
                             </div>
                             <div className="flex-col space-y-2">
@@ -161,16 +165,16 @@ export default function BorrowMarkets(): JSX.Element {
 
                 <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
                     <ListHeaderWithSort sort={pairs} sortKey="search">
-                        {t`Markets`}
+                        {i18n._(t`Markets`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="asset.symbol">
-                        {t`Borrow`}
+                        {i18n._(t`Borrow`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="collateral.symbol">
-                        {t`Collateral`}
+                        {i18n._(t`Collateral`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort className="hidden lg:flex" sort={pairs} sortKey="oracle.name">
-                        {t`Oracle`}
+                        {i18n._(t`Oracle`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort
                         className="justify-end"
@@ -178,7 +182,7 @@ export default function BorrowMarkets(): JSX.Element {
                         sortKey="currentBorrowAmount.usdValue"
                         direction="descending"
                     >
-                        {t`Borrowed`}
+                        {i18n._(t`Borrowed`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort
                         className="justify-end"
@@ -186,7 +190,7 @@ export default function BorrowMarkets(): JSX.Element {
                         sortKey="totalAssetAmount.usdValue"
                         direction="descending"
                     >
-                        {t`Available`}
+                        {i18n._(t`Available`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort
                         className="justify-end"
@@ -194,7 +198,7 @@ export default function BorrowMarkets(): JSX.Element {
                         sortKey="currentInterestPerYear.value"
                         direction="descending"
                     >
-                        {t`APR`}
+                        {i18n._(t`APR`)}
                     </ListHeaderWithSort>
                 </div>
                 <div className="flex-col space-y-2">

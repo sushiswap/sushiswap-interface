@@ -7,6 +7,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const STAKING_GENESIS = 1600387200
 
@@ -251,6 +252,7 @@ export function useDerivedStakeInfo(
     parsedAmount?: CurrencyAmount
     error?: string
 } {
+    const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
 
     const parsedInput: CurrencyAmount | undefined = tryParseAmount(typedValue, stakingToken)
@@ -262,10 +264,10 @@ export function useDerivedStakeInfo(
 
     let error: string | undefined
     if (!account) {
-        error = t`Connect Wallet`
+        error = i18n._(t`Connect Wallet`)
     }
     if (!parsedAmount) {
-        error = error ?? t`Enter an amount`
+        error = error ?? i18n._(t`Enter an amount`)
     }
 
     return {
@@ -282,6 +284,7 @@ export function useDerivedUnstakeInfo(
     parsedAmount?: CurrencyAmount
     error?: string
 } {
+    const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
 
     const parsedInput: CurrencyAmount | undefined = tryParseAmount(typedValue, stakingAmount.token)
@@ -291,10 +294,10 @@ export function useDerivedUnstakeInfo(
 
     let error: string | undefined
     if (!account) {
-        error = t`Connect Wallet`
+        error = i18n._(t`Connect Wallet`)
     }
     if (!parsedAmount) {
-        error = error ?? t`Enter an amount`
+        error = error ?? i18n._(t`Enter an amount`)
     }
 
     return {

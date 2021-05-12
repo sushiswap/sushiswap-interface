@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import MoreInfoSymbol from '../../assets/images/more-info.svg'
 import sushiData from '@sushiswap/sushi-data'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function APRCard() {
+    const { i18n } = useLingui()
     const [Apr, setApr] = useState<any>()
     useEffect(() => {
         const fetchData = async () => {
@@ -24,7 +25,7 @@ export default function APRCard() {
             <div className="flex flex-col">
                 <div className="flex flex-nowrap justify-center items-center mb-4 md:mb-2">
                     <p className="whitespace-nowrap text-caption2 md:text-lg md:leading-5 font-bold text-high-emphesis">
-                        {t`Staking APR`}{' '}
+                        {i18n._(t`Staking APR`)}{' '}
                     </p>
                     {/* <img className="cursor-pointer ml-3" src={MoreInfoSymbol} alt={'more info'} /> */}
                 </div>
@@ -38,15 +39,17 @@ export default function APRCard() {
                         text-xs md:text-sm font-medium md:font-bold text-dark-900
                         bg-light-yellow hover:bg-opacity-90`}
                     >
-                        {t`View Stats`}
+                        {i18n._(t`View Stats`)}
                     </a>
                 </div>
             </div>
             <div className="flex flex-col">
                 <p className="text-right text-high-emphesis font-bold text-lg md:text-h4 mb-1">
-                    {`${Apr ? Apr.toFixed(2) + '%' : t`Loading...`}`}
+                    {`${Apr ? Apr.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
                 </p>
-                <p className="text-right text-primary w-32 md:w-64 text-caption2 md:text-base">{t`Yesterday's APR`}</p>
+                <p className="text-right text-primary w-32 md:w-64 text-caption2 md:text-base">
+                    {i18n._(t`Yesterday's APR`)}
+                </p>
             </div>
         </div>
     )

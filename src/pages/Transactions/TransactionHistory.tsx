@@ -10,22 +10,25 @@ import { ThemeContext } from 'styled-components'
 import { getExplorerLink } from '../../utils'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 // type Props = {
 //     transactions: string[]
 // }
 
 export default function TransactionHistory({ transactions }: any) {
+    const { i18n } = useLingui()
+
     const theme = useContext(ThemeContext)
     const { account, chainId } = useActiveWeb3React()
     return (
         <>
             <div className="flex justify-between mb-6 flex-col sm:flex-row items-start">
                 <div className="text-xl font-medium text-white">
-                    {t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`}
+                    {i18n._(t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`)}
                 </div>
                 {/* <LinkStyledButton>
-                    <span className="text-sm">{t`Clear History`}</span>
+                    <span className="text-sm">{i18n._(t`Clear History`)}</span>
                 </LinkStyledButton> */}
             </div>
             <div>

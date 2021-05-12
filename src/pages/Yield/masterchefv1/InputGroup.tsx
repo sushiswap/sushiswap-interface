@@ -1,8 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
+import { MASTERCHEF_ADDRESS, Token } from '@sushiswap/sdk'
 import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Fraction } from '../../../entities'
-import { ethers } from 'ethers'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
 import React, { useState } from 'react'
@@ -17,6 +16,7 @@ import { Button } from '../components'
 import { t } from '@lingui/macro'
 
 import { tryParseAmount } from '../../../state/swap/hooks'
+import { useLingui } from '@lingui/react'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -41,6 +41,7 @@ export default function InputGroup({
     assetSymbol?: string
     assetDecimals?: number
 }): JSX.Element {
+    const { i18n } = useLingui()
     const history = useHistory()
     const { account, chainId } = useActiveWeb3React()
     const [pendingTx, setPendingTx] = useState(false)
@@ -75,7 +76,7 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/add/${isWETH(token0Address)}/${isWETH(token1Address)}`)}
                             >
-                                {t`Add Liquidity`}
+                                {i18n._(t`Add Liquidity`)}
                             </Button>
                             <Button
                                 color="default"
@@ -83,7 +84,7 @@ export default function InputGroup({
                                     history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
                                 }
                             >
-                                {t`Remove Liquidity`}
+                                {i18n._(t`Remove Liquidity`)}
                             </Button>
                         </>
                     )}
@@ -93,13 +94,13 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                {t`Lend ${assetSymbol}`}
+                                {i18n._(t`Lend ${assetSymbol}`)}
                             </Button>
                             <Button
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                {t`Withdraw ${assetSymbol}`}
+                                {i18n._(t`Withdraw ${assetSymbol}`)}
                             </Button>
                         </>
                     )}
@@ -110,8 +111,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                {t`Wallet Balance`}: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
-                                {type}
+                                {i18n._(t`Wallet Balance`)}:{' '}
+                                {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -131,7 +132,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-blue border-0"
                                 >
-                                    {t`MAX`}
+                                    {i18n._(t`MAX`)}
                                 </Button>
                             )}
                         </div>
@@ -154,7 +155,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                {t`Deposit`}
+                                {i18n._(t`Deposit`)}
                             </Button>
                         )}
                     </div>
@@ -162,7 +163,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                {t`Deposited`}: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                {i18n._(t`Deposited`)}: {formattedNum(fixedFormatting(staked.value, staked.decimals))}{' '}
+                                {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -182,7 +184,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-pink border-0"
                                 >
-                                    {t`MAX`}
+                                    {i18n._(t`MAX`)}
                                 </Button>
                             )}
                         </div>
@@ -200,7 +202,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            {t`Withdraw`}
+                            {i18n._(t`Withdraw`)}
                         </Button>
                     </div>
                 </div>
@@ -214,7 +216,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            {t`Harvest ${formattedNum(pending)} SUSHI`}
+                            {i18n._(t`Harvest ${formattedNum(pending)} SUSHI`)}
                         </Button>
                     </div>
                 )}

@@ -7,6 +7,7 @@ import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useMemo } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useWETHContract } from './useContract'
+import { useLingui } from '@lingui/react'
 
 export enum WrapType {
     NOT_APPLICABLE,
@@ -26,6 +27,7 @@ export default function useWrapCallback(
     outputCurrency: Currency | undefined,
     typedValue: string | undefined
 ): { wrapType: WrapType; execute?: undefined | (() => Promise<void>); inputError?: string } {
+    const { i18n } = useLingui()
     const { chainId, account } = useActiveWeb3React()
     const wethContract = useWETHContract()
     const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
@@ -60,7 +62,7 @@ export default function useWrapCallback(
                         : undefined,
                 inputError: sufficientBalance
                     ? undefined
-                    : t`Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
+                    : i18n._(t`Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`)
             }
         } else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
             return {
@@ -82,7 +84,7 @@ export default function useWrapCallback(
                               }
                           }
                         : undefined,
-                inputError: sufficientBalance ? undefined : t`Insufficient WETH balance`
+                inputError: sufficientBalance ? undefined : i18n._(t`Insufficient WETH balance`)
             }
         } else {
             return NOT_APPLICABLE

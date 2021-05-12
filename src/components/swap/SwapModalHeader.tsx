@@ -14,6 +14,7 @@ import CurrencyLogo from '../CurrencyLogo'
 import { RowBetween, RowFixed } from '../Row'
 import { SwapShowAcceptChanges, TruncatedText } from './styleds'
 import { t, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function SwapModalHeader({
     trade,
@@ -28,6 +29,7 @@ export default function SwapModalHeader({
     showAcceptChanges: boolean
     onAcceptChanges: () => void
 }) {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
         trade,
@@ -92,7 +94,7 @@ export default function SwapModalHeader({
                     <RowBetween>
                         <RowFixed>
                             <AlertTriangle size={20} style={{ marginRight: '8px', minWidth: 24 }} />
-                            <TYPE.main color={theme.primary1}> {t`Price Updated`}</TYPE.main>
+                            <TYPE.main color={theme.primary1}> {i18n._(t`Price Updated`)}</TYPE.main>
                         </RowFixed>
                         <ButtonPrimary
                             style={{
@@ -103,7 +105,7 @@ export default function SwapModalHeader({
                             }}
                             onClick={onAcceptChanges}
                         >
-                            {t`Accept`}
+                            {i18n._(t`Accept`)}
                         </ButtonPrimary>
                     </RowBetween>
                 </SwapShowAcceptChanges>

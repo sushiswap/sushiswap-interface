@@ -16,6 +16,7 @@ import selectCoinAnimation from '../../assets/animation/select-coin.json'
 import Lottie from 'lottie-react'
 import { useUSDCPrice } from '../../hooks'
 import { formattedNum } from '../../utils'
+import { useLingui } from '@lingui/react'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -145,6 +146,7 @@ export default function CurrencyInputPanel({
     cornerRadiusTopNone,
     containerBackground
 }: CurrencyInputPanelProps) {
+    const { i18n } = useLingui()
     const [modalOpen, setModalOpen] = useState(false)
     const { account, chainId } = useActiveWeb3React()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
@@ -247,7 +249,7 @@ export default function CurrencyInputPanel({
                                                   )
                                                 : currency?.getSymbol(chainId)) || (
                                                 <div className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full px-2 py-1 text-secondary text-xs font-medium mt-1 whitespace-nowrap ">
-                                                    {t`Select a token`}
+                                                    {i18n._(t`Select a token`)}
                                                 </div>
                                             )}
                                         </div>
@@ -282,7 +284,7 @@ export default function CurrencyInputPanel({
                                     size="small"
                                     className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full text-secondary text-xs font-medium whitespace-nowrap"
                                 >
-                                    {t`Max`}
+                                    {i18n._(t`Max`)}
                                 </Button>
                             )}
                             <NumericalInput

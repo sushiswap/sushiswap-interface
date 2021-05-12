@@ -8,8 +8,10 @@ import { tryParseAmount } from 'state/swap/hooks'
 import { WETH } from '@sushiswap/sdk'
 import Dots from './Dots'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export function KashiApproveButton({ content, color }: any): any {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback()
     const showApprove =
@@ -21,14 +23,16 @@ export function KashiApproveButton({ content, color }: any): any {
         <>
             {approveKashiFallback && (
                 <Alert
-                    message={t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used`}
+                    message={i18n._(
+                        t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used`
+                    )}
                     className="mb-4"
                 />
             )}
 
             {showApprove && (
                 <Button color={color} onClick={onApprove} className="mb-4">
-                    {t`Approve Kashi`}
+                    {i18n._(t`Approve Kashi`)}
                 </Button>
             )}
 
@@ -38,6 +42,7 @@ export function KashiApproveButton({ content, color }: any): any {
 }
 
 export function TokenApproveButton({ children, value, token, needed, color }: any): any {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const [approvalState, approve] = useApproveCallback(
         tryParseAmount(value, token),
@@ -55,7 +60,7 @@ export function TokenApproveButton({ children, value, token, needed, color }: an
     return showApprove ? (
         <Button color={color} onClick={approve} className="mb-4">
             <Dots pending={approvalState === ApprovalState.PENDING} pendingTitle={`Approving ${token.symbol}`}>
-                {t`Approve`} {token.symbol}
+                {i18n._(t`Approve`)} {token.symbol}
             </Dots>
         </Button>
     ) : (

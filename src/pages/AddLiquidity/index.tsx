@@ -11,11 +11,10 @@ import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import { LightCard } from '../../components/CardLegacy'
-import { AutoRow } from '../../components/Row'
+import Row, { AutoRow, RowBetween, RowFlat } from '../../components/Row'
 import { AutoColumn } from '../../components/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import Row, { RowBetween, RowFlat } from '../../components/Row'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { PairState } from '../../data/Reserves'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -41,10 +40,9 @@ import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import { NavLink } from '../../components/Link'
 import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/AdvancedLiquidityDetailsDropdown'
-import Button from '../../components/Button'
 import { MinimalPositionCard } from '../../components/PositionCard'
-import { PoolPriceBar } from './PoolPriceBar'
 import { t, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function AddLiquidity({
     match: {
@@ -52,6 +50,7 @@ export default function AddLiquidity({
     },
     history
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
+    const { i18n } = useLingui()
     const { account, chainId, library } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
 
@@ -326,14 +325,14 @@ export default function AddLiquidity({
     return (
         <>
             <Helmet>
-                <title>{t`Add Liquidity`} | Sushi</title>
+                <title>{i18n._(t`Add Liquidity`)} | Sushi</title>
             </Helmet>
             <div className="w-full max-w-2xl mb-5 px-4">
                 <NavLink
                     className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     to={'/pool'}
                 >
-                    {t`View Your Liquidity Positions`} &gt;
+                    {i18n._(t`View Your Liquidity Positions`)} &gt;
                 </NavLink>
                 {/* <button
                     style={{
@@ -358,7 +357,7 @@ export default function AddLiquidity({
                         hash={txHash}
                         content={() => (
                             <ConfirmationModalContent
-                                title={noLiquidity ? t`You are creating a pool` : t`You will receive`}
+                                title={noLiquidity ? i18n._(t`You are creating a pool`) : i18n._(t`You will receive`)}
                                 onDismiss={handleDismissConfirmation}
                                 topContent={modalHeader}
                                 bottomContent={modalBottom}
@@ -370,7 +369,9 @@ export default function AddLiquidity({
                         {noLiquidity ||
                             (isCreate ? (
                                 <Alert
-                                    message={t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`}
+                                    message={i18n._(
+                                        t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
+                                    )}
                                     type="information"
                                 />
                             ) : (
@@ -452,10 +453,10 @@ export default function AddLiquidity({
 
                         {addIsUnsupported ? (
                             <ButtonPrimary disabled={true}>
-                                <TYPE.main mb="4px">{t`Unsupported Asset`}</TYPE.main>
+                                <TYPE.main mb="4px">{i18n._(t`Unsupported Asset`)}</TYPE.main>
                             </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>{t`Connect Wallet`}</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
                         ) : (
                             <AutoColumn gap={'md'}>
                                 {(approvalA === ApprovalState.NOT_APPROVED ||
@@ -477,7 +478,11 @@ export default function AddLiquidity({
                                                             )}`}
                                                         </Dots>
                                                     ) : (
-                                                        t`Approve ${currencies[Field.CURRENCY_A]?.getSymbol(chainId)}`
+                                                        i18n._(
+                                                            t`Approve ${currencies[Field.CURRENCY_A]?.getSymbol(
+                                                                chainId
+                                                            )}`
+                                                        )
                                                     )}
                                                 </ButtonPrimary>
                                             )}
@@ -494,7 +499,11 @@ export default function AddLiquidity({
                                                             )}`}
                                                         </Dots>
                                                     ) : (
-                                                        t`Approve ${currencies[Field.CURRENCY_B]?.getSymbol(chainId)}`
+                                                        i18n._(
+                                                            t`Approve ${currencies[Field.CURRENCY_B]?.getSymbol(
+                                                                chainId
+                                                            )}`
+                                                        )
                                                     )}
                                                 </ButtonPrimary>
                                             )}
@@ -516,7 +525,7 @@ export default function AddLiquidity({
                                     }
                                 >
                                     <Text fontSize={20} fontWeight={500}>
-                                        {error ?? t`Confirm Adding Liquidity`}
+                                        {error ?? i18n._(t`Confirm Adding Liquidity`)}
                                     </Text>
                                 </ButtonError>
                             </AutoColumn>

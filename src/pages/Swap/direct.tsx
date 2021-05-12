@@ -41,8 +41,10 @@ import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import { ClickableText } from '../Pool/styleds'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function Swap() {
+    const { i18n } = useLingui()
     const loadedUrlParams = useDefaultsFromURLSearch()
 
     // token warning stuff
@@ -301,7 +303,9 @@ export default function Swap() {
                     <AutoColumn gap={isExpertMode ? 'md' : '3px'}>
                         <CurrencyInputPanel
                             label={
-                                independentField === Field.OUTPUT && !showWrap && trade ? t`From (estimated)` : t`From`
+                                independentField === Field.OUTPUT && !showWrap && trade
+                                    ? i18n._(t`From (estimated)`)
+                                    : i18n._(t`From`)
                             }
                             value={formattedAmounts[Field.INPUT]}
                             showMaxButton={!atMaxAmountInput}
@@ -339,7 +343,7 @@ export default function Swap() {
                                             id="add-recipient-button"
                                             onClick={() => onChangeRecipient('')}
                                         >
-                                            {t`+ Add a send (optional)`}
+                                            {i18n._(t`+ Add a send (optional)`)}
                                         </LinkStyledButton>
                                     ) : null}
                                 </AutoRow>
@@ -379,7 +383,11 @@ export default function Swap() {
                         <CurrencyInputPanel
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
-                            label={independentField === Field.INPUT && !showWrap && trade ? t`To (estimated)` : t`To`}
+                            label={
+                                independentField === Field.INPUT && !showWrap && trade
+                                    ? i18n._(t`To (estimated)`)
+                                    : i18n._(t`To`)
+                            }
                             showMaxButton={false}
                             currency={currencies[Field.OUTPUT]}
                             onCurrencySelect={handleOutputSelect}
@@ -399,7 +407,7 @@ export default function Swap() {
                                         id="remove-recipient-button"
                                         onClick={() => onChangeRecipient(null)}
                                     >
-                                        {t`- Remove send`}
+                                        {i18n._(t`- Remove send`)}
                                     </LinkStyledButton>
                                 </AutoRow>
                                 <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
@@ -417,15 +425,17 @@ export default function Swap() {
                             <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                                 {wrapInputError ??
                                     (wrapType === WrapType.WRAP
-                                        ? t`Wrap`
+                                        ? i18n._(t`Wrap`)
                                         : wrapType === WrapType.UNWRAP
-                                        ? t`Unwrap`
+                                        ? i18n._(t`Unwrap`)
                                         : null)}
                             </ButtonPrimary>
                         ) : noRoute && userHasSpecifiedInputOutput ? (
                             <GreyCard style={{ textAlign: 'center' }}>
-                                <TYPE.main mb="4px">{t`Insufficient liquidity for this trade`}</TYPE.main>
-                                {singleHopOnly && <TYPE.main mb="4px">{t`Try enabling multi-hop trades`}</TYPE.main>}
+                                <TYPE.main mb="4px">{i18n._(t`Insufficient liquidity for this trade`)}</TYPE.main>
+                                {singleHopOnly && (
+                                    <TYPE.main mb="4px">{i18n._(t`Try enabling multi-hop trades`)}</TYPE.main>
+                                )}
                             </GreyCard>
                         ) : showApproveFlow ? (
                             <RowBetween>
@@ -441,9 +451,9 @@ export default function Swap() {
                                             Approving <Loader stroke="white" />
                                         </AutoRow>
                                     ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                                        t`Approved`
+                                        i18n._(t`Approved`)
                                     ) : (
-                                        t`Approve ${currencies[Field.INPUT]?.getSymbol(chainId)}`
+                                        i18n._(t`Approve ${currencies[Field.INPUT]?.getSymbol(chainId)}`)
                                     )}
                                 </ButtonConfirmed>
                                 <ButtonError
@@ -471,10 +481,10 @@ export default function Swap() {
                                 >
                                     <Text fontSize={16} fontWeight={500}>
                                         {priceImpactSeverity > 3 && !isExpertMode
-                                            ? t`Price Impact High`
+                                            ? i18n._(t`Price Impact High`)
                                             : priceImpactSeverity > 2
-                                            ? t`Swap Anyway`
-                                            : t`Swap`}
+                                            ? i18n._(t`Swap Anyway`)
+                                            : i18n._(t`Swap`)}
                                     </Text>
                                 </ButtonError>
                             </RowBetween>
@@ -501,10 +511,10 @@ export default function Swap() {
                                     {swapInputError
                                         ? swapInputError
                                         : priceImpactSeverity > 3 && !isExpertMode
-                                        ? t`Price Impact Too High`
+                                        ? i18n._(t`Price Impact Too High`)
                                         : priceImpactSeverity > 2
-                                        ? t`Swap Anyway`
-                                        : t`Swap`}
+                                        ? i18n._(t`Swap Anyway`)
+                                        : i18n._(t`Swap`)}
                                 </Text>
                             </ButtonError>
                         )}
@@ -522,7 +532,7 @@ export default function Swap() {
                                     {Boolean(trade) && (
                                         <RowBetween align="center">
                                             <Text fontWeight={500} fontSize={14} color={theme.text3}>
-                                                {t`Price`}
+                                                {i18n._(t`Price`)}
                                             </Text>
                                             <TradePrice
                                                 price={trade?.executionPrice}
@@ -539,7 +549,7 @@ export default function Swap() {
                                                 color={theme.text2}
                                                 onClick={toggleSettings}
                                             >
-                                                {t`Slippage Tolerance`}
+                                                {i18n._(t`Slippage Tolerance`)}
                                             </ClickableText>
                                             <ClickableText
                                                 fontWeight={500}

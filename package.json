@@ -23,6 +23,7 @@
         "@hot-loader/react-dom": "^17.0.1",
         "@lingui/cli": "^3.8.10",
         "@lingui/detect-locale": "^3.8.10",
+        "@lingui/loader": "^3.8.10",
         "@lingui/macro": "^3.8.10",
         "@lingui/react": "^3.8.10",
         "@popperjs/core": "^2.4.4",

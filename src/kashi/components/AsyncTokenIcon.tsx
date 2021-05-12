@@ -15,7 +15,10 @@ const AsyncTokenIcon = ({
 }): JSX.Element => {
     const [loadedSrc, setLoadedSrc] = useState<string>()
 
+    // Address gets changed after chainId so only run this on address change
+    // to avoid missing token icon error on chainId change
     useEffect(() => {
+        setLoadedSrc('')
         if (!(address && chainId)) return
 
         const src = getTokenIconUrl(address, chainId)
@@ -30,7 +33,7 @@ const AsyncTokenIcon = ({
         return () => {
             image.removeEventListener('load', handleLoad)
         }
-    }, [address, chainId])
+    }, [address])
 
     return loadedSrc ? (
         <img src={loadedSrc} className={className} alt="" />

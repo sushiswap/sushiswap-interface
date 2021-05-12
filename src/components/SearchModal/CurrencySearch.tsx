@@ -22,6 +22,7 @@ import { filterTokens, useSortedTokensByQuery } from './filtering'
 import ImportRow from './ImportRow'
 import { useTokenComparator } from './sorting'
 import ModalHeader from '../ModalHeader'
+import { useLingui } from '@lingui/react'
 
 const ContentWrapper = styled(Column)`
     width: 100%;
@@ -52,6 +53,8 @@ export function CurrencySearch({
     showImportView,
     setImportToken
 }: CurrencySearchProps) {
+    const { i18n } = useLingui()
+
     const { chainId } = useActiveWeb3React()
     const theme = useTheme()
 
@@ -153,7 +156,7 @@ export function CurrencySearch({
                 <input
                     type="text"
                     id="token-search-input"
-                    placeholder={t`Search name or paste address`}
+                    placeholder={i18n._(t`Search name or paste address`)}
                     autoComplete="off"
                     value={searchQuery}
                     ref={inputRef as RefObject<HTMLInputElement>}
@@ -204,7 +207,7 @@ export function CurrencySearch({
             ) : (
                 <Column style={{ padding: '20px', height: '100%' }}>
                     <TYPE.main color={theme.text3} textAlign="center" mb="20px">
-                        {t`No results found`}
+                        {i18n._(t`No results found`)}
                     </TYPE.main>
                 </Column>
             )}
@@ -215,7 +218,7 @@ export function CurrencySearch({
                             <IconWrapper size="16px" marginRight="6px">
                                 <Edit />
                             </IconWrapper>
-                            <TYPE.main color={theme.blue1}>{t`Manage`}</TYPE.main>
+                            <TYPE.main color={theme.blue1}>{i18n._(t`Manage`)}</TYPE.main>
                         </RowFixed>
                     </ButtonText>
                 </Row>

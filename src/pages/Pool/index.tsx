@@ -17,12 +17,13 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useStakingInfo } from '../../state/stake/hooks'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../state/user/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
-import { HideSmall, StyledInternalLink, TYPE } from '../../theme'
+import { StyledInternalLink, TYPE } from '../../theme'
 import Alert from '../../components/Alert'
 import { Helmet } from 'react-helmet'
 import ExchangeHeader from '../../components/ExchangeHeader'
 import Button from '../../components/Button'
 import { t, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const DataCard = styled(AutoColumn)<{ disabled?: boolean }>`
     background: radial-gradient(76.02% 75.41% at 1.84% 0%, #ff007a 0%, #0094ec 100%);
@@ -99,6 +100,7 @@ const migrateFrom: { [chainId in ChainId]?: string } = {
 }
 
 export default function Pool() {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
     const history = useHistory()
     const { account, chainId } = useActiveWeb3React()
@@ -153,21 +155,23 @@ export default function Pool() {
     return (
         <>
             <Helmet>
-                <title>{t`Pool`} | Sushi</title>
+                <title>{i18n._(t`Pool`)} | Sushi</title>
             </Helmet>
             <div className="bg-dark-900 w-full max-w-2xl rounded shadow-liquidity-purple-glow">
                 <ExchangeHeader />
                 <div id="pool-page" className="p-4">
                     <SwapPoolTabs active={'pool'} />
                     <Alert
-                        title={t`Liquidity Provider Rewards`}
+                        title={i18n._(t`Liquidity Provider Rewards`)}
                         message={t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
                         the pool. Fees are added to the pool, accrue in real time and can be claimed by
                         withdrawing your liquidity`}
                         type="information"
                     />
                     <div className="flex justify-between items-center my-4">
-                        <div className="text-xl text-high-emphesis font-medium">{t`Your Liquidity Positions`}</div>
+                        <div className="text-xl text-high-emphesis font-medium">
+                            {i18n._(t`Your Liquidity Positions`)}
+                        </div>
                         <div className="text-sm font-bold">
                             <Trans>
                                 Don&apos;t see a pool you joined?{' '}
@@ -181,13 +185,13 @@ export default function Pool() {
                         {!account ? (
                             <Card padding="40px">
                                 <TYPE.body color={theme.text3} textAlign="center">
-                                    {t`Connect to a wallet to view your liquidity`}
+                                    {i18n._(t`Connect to a wallet to view your liquidity`)}
                                 </TYPE.body>
                             </Card>
                         ) : v2IsLoading ? (
                             <EmptyProposals>
                                 <TYPE.body color={theme.text3} textAlign="center">
-                                    <Dots>{t`Loading`}</Dots>
+                                    <Dots>{i18n._(t`Loading`)}</Dots>
                                 </TYPE.body>
                             </EmptyProposals>
                         ) : allV2PairsWithLiquidity?.length > 0 || stakingPairs?.length > 0 ? (
@@ -217,22 +221,22 @@ export default function Pool() {
                         ) : (
                             <EmptyProposals>
                                 <TYPE.body color={theme.text3} textAlign="center">
-                                    {t`No liquidity found`}
+                                    {i18n._(t`No liquidity found`)}
                                 </TYPE.body>
                             </EmptyProposals>
                         )}
 
                         {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                             <Text textAlign="center" fontSize={14} style={{ padding: '.5rem 0 .5rem 0' }}>
-                                {t`Have Liquidity on ${(chainId && migrateFrom[chainId]) ?? ''}?`}{' '}
+                                {i18n._(t`Have Liquidity on ${(chainId && migrateFrom[chainId]) ?? ''}?`)}{' '}
                                 <StyledInternalLink id="migrate-pool-link" to={'/migrate'}>
-                                    {t`Migrate Now`}
+                                    {i18n._(t`Migrate Now`)}
                                 </StyledInternalLink>
                             </Text>
                         )}
                         <div className="grid grid-cols-2 gap-4">
                             <Button id="join-pool-button" color="gradient" onClick={() => history.push('/add/ETH')}>
-                                {t`Add Liquidity`}
+                                {i18n._(t`Add Liquidity`)}
                             </Button>
                             <Button
                                 id="create-pool-button"
@@ -240,7 +244,7 @@ export default function Pool() {
                                 className="bg-dark-800"
                                 onClick={() => history.push('/create/ETH')}
                             >
-                                {t`Create a pair`}
+                                {i18n._(t`Create a pair`)}
                             </Button>
                         </div>
                     </div>
