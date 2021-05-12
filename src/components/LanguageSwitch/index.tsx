@@ -127,6 +127,11 @@ function LanguageSwitch() {
     useOnClickOutside(node, open ? toggle : undefined)
     const { language, setLanguage } = useLanguageData()
 
+    const onClick = (key: string) => {
+        setLanguage(key)
+        toggle()
+    }
+
     return (
         <StyledMenu ref={node}>
             <ExtendedStyledMenuButton onClick={toggle}>
@@ -135,7 +140,7 @@ function LanguageSwitch() {
             {open && (
                 <ExtendedMenuFlyout>
                     {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
-                        <MenuItem onClick={() => setLanguage(key)} key={key}>
+                        <MenuItem onClick={() => onClick(key)} key={key}>
                             <MenuItemFlag src={flag} alt={language} />
                             {language}{' '}
                             {dialect && (

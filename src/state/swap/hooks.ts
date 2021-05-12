@@ -16,6 +16,7 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { SwapState } from './reducer'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -112,6 +113,7 @@ export function useDerivedSwapInfo(): {
     v2Trade: Trade | undefined
     inputError?: string
 } {
+    const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
 
     const {
@@ -156,23 +158,23 @@ export function useDerivedSwapInfo(): {
     }
 
     if (!parsedAmount) {
-        inputError = inputError ?? t`Enter an amount`
+        inputError = inputError ?? i18n._(t`Enter an amount`)
     }
 
     if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
-        inputError = inputError ?? t`Select a token`
+        inputError = inputError ?? i18n._(t`Select a token`)
     }
 
     const formattedTo = isAddress(to)
     if (!to || !formattedTo) {
-        inputError = inputError ?? t`Enter a recipient`
+        inputError = inputError ?? i18n._(t`Enter a recipient`)
     } else {
         if (
             BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
             (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
             (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
         ) {
-            inputError = inputError ?? t`Invalid recipient`
+            inputError = inputError ?? i18n._(t`Invalid recipient`)
         }
     }
 
@@ -188,7 +190,7 @@ export function useDerivedSwapInfo(): {
     ]
 
     if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-        inputError = t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`
+        inputError = i18n._(t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`)
     }
 
     return {

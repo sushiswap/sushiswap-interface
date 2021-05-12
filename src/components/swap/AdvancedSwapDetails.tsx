@@ -13,8 +13,11 @@ import SwapRoute from './SwapRoute'
 import { ExternalLink } from '../Link'
 import { ANALYTICS_URL } from '../../constants'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippage: number }) {
+    const { i18n } = useLingui()
+
     const { chainId } = useActiveWeb3React()
     const { priceImpactWithoutFee, realizedLPFee } = computeTradePriceBreakdown(trade)
     const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
@@ -26,10 +29,12 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
                 <RowBetween>
                     <RowFixed>
                         <div className="text-secondary text-sm">
-                            {isExactIn ? t`Minimum received` : t`Maximum sold`}
+                            {isExactIn ? i18n._(t`Minimum received`) : i18n._(t`Maximum sold`)}
                         </div>
                         <QuestionHelper
-                            text={t`Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.`}
+                            text={i18n._(
+                                t`Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.`
+                            )}
                         />
                     </RowFixed>
                     <RowFixed>
@@ -46,9 +51,11 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
                 </RowBetween>
                 <RowBetween>
                     <RowFixed>
-                        <div className="text-secondary text-sm">{t`Price Impact`}</div>
+                        <div className="text-secondary text-sm">{i18n._(t`Price Impact`)}</div>
                         <QuestionHelper
-                            text={t`The difference between the market price and estimated price due to trade size.`}
+                            text={i18n._(
+                                t`The difference between the market price and estimated price due to trade size.`
+                            )}
                         />
                     </RowFixed>
                     <FormattedPriceImpact priceImpact={priceImpactWithoutFee} />
@@ -56,9 +63,11 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
 
                 <RowBetween>
                     <RowFixed>
-                        <div className="text-secondary text-sm">{t`Liquidity Provider Fee`}</div>
+                        <div className="text-secondary text-sm">{i18n._(t`Liquidity Provider Fee`)}</div>
                         <QuestionHelper
-                            text={t`A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive.`}
+                            text={i18n._(
+                                t`A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive.`
+                            )}
                         />
                     </RowFixed>
                     <div className="text-sm font-bold text-high-emphesis">
@@ -77,6 +86,7 @@ export interface AdvancedSwapDetailsProps {
 }
 
 export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
 
     const [allowedSlippage] = useUserSlippageTolerance()
@@ -92,9 +102,11 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
                         <>
                             <RowBetween style={{ padding: '0 16px' }}>
                                 <span style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div className="text-secondary text-sm">{t`Route`}</div>
+                                    <div className="text-secondary text-sm">{i18n._(t`Route`)}</div>
                                     <QuestionHelper
-                                        text={t`Routing through these tokens resulted in the best price for your trade.`}
+                                        text={i18n._(
+                                            t`Routing through these tokens resulted in the best price for your trade.`
+                                        )}
                                     />
                                 </span>
                                 <SwapRoute trade={trade} />
@@ -115,7 +127,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
                                             : 'https://analytics.sushi.com'
                                     }/pairs/${trade.route.pairs[0].liquidityToken.address}`}
                                 >
-                                    {t`View pair analytics`}
+                                    {i18n._(t`View pair analytics`)}
                                 </ExternalLink>
                             </div>
                         )}

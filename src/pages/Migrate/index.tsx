@@ -1,5 +1,5 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BackArrow, CloseIcon } from '../../theme'
+import { CloseIcon } from '../../theme'
 import { ChainId, JSBI } from '@sushiswap/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -17,15 +17,16 @@ import { Helmet } from 'react-helmet'
 import LPToken from '../../types/LPToken'
 import MetamaskError from '../../types/MetamaskError'
 import { Input as NumericalInput } from '../../components/NumericalInput'
-import QuestionHelper from '../../components/QuestionHelper'
 import Typography from 'components/Typography'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useSushiRollContract } from 'hooks/useContract'
+import { useLingui } from '@lingui/react'
 
 const ZERO = JSBI.BigInt(0)
 
 const AmountInput = ({ state }: { state: MigrateState }) => {
+    const { i18n } = useLingui()
     const onPressMax = useCallback(() => {
         if (state.selectedLPToken) {
             let balance = state.selectedLPToken.balance.raw
@@ -63,7 +64,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
     return (
         <>
             <Typography variant="caption" className="text-secondary">
-                {t`Amount of Tokens`}
+                {i18n._(t`Amount of Tokens`)}
             </Typography>
 
             <div className="flex items-center relative w-full mb-4">
@@ -79,7 +80,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
                     onClick={onPressMax}
                     className="absolute right-4 focus:ring focus:ring-pink"
                 >
-                    {t`MAX`}
+                    {i18n._(t`MAX`)}
                 </Button>
             </div>
         </>
@@ -115,6 +116,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
 }
 
 const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
+    const { i18n } = useLingui()
     function toggleMode(mode = undefined) {
         state.setMode(mode !== state.mode ? mode : undefined)
     }
@@ -122,13 +124,13 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
     const items = [
         {
             key: 'permit',
-            text: t`Non-hardware Wallet`,
-            description: t`Migration is done in one-click using your signature (permit)`
+            text: i18n._(t`Non-hardware Wallet`),
+            description: i18n._(t`Migration is done in one-click using your signature (permit)`)
         },
         {
             key: 'approve',
-            text: t`Hardware Wallet`,
-            description: t`You need to first approve LP tokens and then migrate it`
+            text: i18n._(t`Hardware Wallet`),
+            description: i18n._(t`You need to first approve LP tokens and then migrate it`)
         }
     ]
 
@@ -162,6 +164,8 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
 }
 
 const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
+    const { i18n } = useLingui()
+
     const [error, setError] = useState<MetamaskError>({})
     const sushiRollContract = useSushiRollContract(
         state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
@@ -203,14 +207,14 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     return (
         <div className="space-y-4">
             {insufficientAmount ? (
-                <div className="text-sm text-primary">{t`Insufficient Balance`}</div>
+                <div className="text-sm text-primary">{i18n._(t`Insufficient Balance`)}</div>
             ) : state.loading ? (
-                <Dots>{t`Loading`}</Dots>
+                <Dots>{i18n._(t`Loading`)}</Dots>
             ) : (
                 <>
                     <div className="flex justify-between">
                         <div className="text-sm text-secondary">
-                            {t`Balance`}:{' '}
+                            {i18n._(t`Balance`)}:{' '}
                             <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
                         </div>
                     </div>
@@ -222,11 +226,11 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                             altDisabledStyle={approval === ApprovalState.PENDING}
                         >
                             {approval === ApprovalState.PENDING ? (
-                                <Dots>{t`Approving`}</Dots>
+                                <Dots>{i18n._(t`Approving`)}</Dots>
                             ) : approval === ApprovalState.APPROVED ? (
-                                t`Approved`
+                                i18n._(t`Approved`)
                             ) : (
-                                t`Approve`
+                                i18n._(t`Approve`)
                             )}
                         </ButtonConfirmed>
                     )}
@@ -235,7 +239,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                             disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
                             onClick={onPress}
                         >
-                            {state.isMigrationPending ? <Dots>{t`Migrating`}</Dots> : t`Migrate`}
+                            {state.isMigrationPending ? <Dots>{i18n._(t`Migrating`)}</Dots> : i18n._(t`Migrate`)}
                         </ButtonConfirmed>
                     )}
                 </>
@@ -244,13 +248,17 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                 <div className="text-red text-center font-medium">{error.message}</div>
             )}
             <div className="text-sm text-low-emphesis text-center">
-                {t`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`}
+                {i18n._(
+                    t`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`
+                )}
             </div>
         </div>
     )
 }
 
 const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
+    const { i18n } = useLingui()
+
     function onToggle(lpToken: LPToken) {
         state.setSelectedLPToken(state.selectedLPToken !== lpToken ? lpToken : undefined)
         state.setAmount('')
@@ -261,7 +269,7 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
     }
 
     if (state.lpTokens.length === 0) {
-        return <EmptyState message={t`No Liquidity found`} />
+        return <EmptyState message={i18n._(t`No Liquidity found`)} />
     }
 
     return (
@@ -285,6 +293,7 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
 }
 
 const MigrateV2 = () => {
+    const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
 
     const state = useMigrateState()
@@ -306,7 +315,7 @@ const MigrateV2 = () => {
                 <meta name="description" content="Migrate LP tokens to Sushi LP tokens" />
             </Helmet>
 
-            <div className="text-2xl text-center mb-8">{t`Migrate ${exchange} Liquidity`}</div>
+            <div className="text-2xl text-center mb-8">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
 
             <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-lg rounded p-5 space-y-4">
                 {/* <div className="flex justify-between items-center p-3">
@@ -316,19 +325,19 @@ const MigrateV2 = () => {
                 </div> */}
                 {!account ? (
                     <Typography variant="body" className="text-primary text-center p-4">
-                        {t`Connect to a wallet to view your liquidity`}
+                        {i18n._(t`Connect to a wallet to view your liquidity`)}
                     </Typography>
                 ) : state.loading ? (
                     <Typography variant="body" className="text-primary text-center p-4">
-                        <Dots>{t`Loading your {exchange} liquidity positions`}</Dots>
+                        <Dots>{i18n._(t`Loading your {exchange} liquidity positions`)}</Dots>
                     </Typography>
                 ) : (
                     <>
-                        {!state.loading && <Typography variant="body">{t`Your Wallet`}</Typography>}
+                        {!state.loading && <Typography variant="body">{i18n._(t`Your Wallet`)}</Typography>}
                         <MigrateModeSelect state={state} />
                         {!state.loading && (
                             <div>
-                                <Typography variant="body">{t`Your Liquidity`}</Typography>
+                                <Typography variant="body">{i18n._(t`Your Liquidity`)}</Typography>
                                 <Typography variant="caption" className="text-secondary">
                                     {t`Click on a pool below, input the amount you wish to migrate or select max, and click
                                     migrate`}

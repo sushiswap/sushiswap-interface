@@ -1,4 +1,4 @@
-import { BackButton, Paper } from 'components'
+import { Paper } from 'components'
 import { BentoBalance, useBentoBalances } from 'state/bentobox/hooks'
 import { Card, CardHeader, Layout, Search } from '../../../kashi/components'
 import React, { useState } from 'react'
@@ -14,8 +14,10 @@ import { formattedNum } from '../../../utils'
 import { getCurrency } from 'kashi'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 export default function BentoBalances(): JSX.Element {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const balances = useBentoBalances()
 
@@ -38,8 +40,10 @@ export default function BentoBalances(): JSX.Element {
                     <Card
                         className="h-full bg-dark-900"
                         backgroundImage={BentoBoxImage}
-                        title={t`Deposit tokens into BentoBox for all the yields`}
-                        description={t`BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets`}
+                        title={i18n._(t`Deposit tokens into BentoBox for all the yields`)}
+                        description={i18n._(
+                            t`BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets`
+                        )}
                     />
                 }
             >
@@ -49,7 +53,7 @@ export default function BentoBalances(): JSX.Element {
                         <CardHeader className="flex justify-between items-center bg-dark-800">
                             <div className="flex flex-col md:flex-row items-center justify-between w-full">
                                 <div className="flex items-baseline">
-                                    <div className="text-3xl text-high-emphesis mr-4">{t`BentoBox`}</div>
+                                    <div className="text-3xl text-high-emphesis mr-4">{i18n._(t`BentoBox`)}</div>
                                     <div>
                                         {formattedNum(
                                             balances
@@ -70,9 +74,9 @@ export default function BentoBalances(): JSX.Element {
                 >
                     <div className="grid gap-4 grid-flow-row auto-rows-max">
                         <div className="px-4 grid grid-cols-3 text-sm  text-secondary select-none">
-                            <div>{t`Token`}</div>
-                            <div className="text-right">{t`Wallet`}</div>
-                            <div className="text-right">{t`BentoBox`}</div>
+                            <div>{i18n._(t`Token`)}</div>
+                            <div className="text-right">{i18n._(t`Wallet`)}</div>
+                            <div className="text-right">{i18n._(t`BentoBox`)}</div>
                         </div>
                         {items &&
                             items.length > 0 &&

@@ -9,6 +9,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { Field } from '../../state/mint/actions'
 import { TYPE } from '../../theme'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export function PoolPriceBar({
     currencies,
@@ -21,6 +22,7 @@ export function PoolPriceBar({
     poolTokenPercentage?: Percent
     price?: Price
 }) {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
     return (
@@ -51,7 +53,7 @@ export function PoolPriceBar({
                         %
                     </TYPE.black>
                     <Text fontWeight={500} fontSize={14} color={theme.text2} pt={1}>
-                        {t`Share of Pool`}
+                        {i18n._(t`Share of Pool`)}
                     </Text>
                 </AutoColumn>
             </AutoRow>

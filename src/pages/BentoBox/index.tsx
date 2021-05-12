@@ -1,6 +1,5 @@
 import Web3Status from 'components/Web3Status'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { Button } from 'components'
 import { Card } from 'kashi/components'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -10,8 +9,11 @@ import ComingSoon from '../../assets/kashi/coming-soon.png'
 import KashiNeonSign from '../../assets/kashi/kashi-neon.png'
 import { Helmet } from 'react-helmet'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 function BentoBox(): JSX.Element {
+    const { i18n } = useLingui()
+
     const { account } = useActiveWeb3React()
 
     return (
@@ -40,10 +42,12 @@ function BentoBox(): JSX.Element {
 
                     <div className="container mx-auto max-w-3xl">
                         <div className="font-bold text-center text-3xl md:text-5xl text-high-emphesis">
-                            {t`BentoBox Apps`}
+                            {i18n._(t`BentoBox Apps`)}
                         </div>
                         <div className="font-medium text-base md:text-lg lg:text-xl text-center text-high-emphesis mt-0 md:mt-4 mb-8 p-4">
-                            {t`BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield.`}
+                            {i18n._(
+                                t`BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield.`
+                            )}
                         </div>
                     </div>
                 </div>
@@ -59,7 +63,7 @@ function BentoBox(): JSX.Element {
                                             className="w-full border-gradient py-2 text-center"
                                             // className="w-full rounded text-lg text-high-emphesis px-4 py-2"
                                         >
-                                            {t`Enter`}
+                                            {i18n._(t`Enter`)}
                                         </div>
                                     </Link>
                                 ) : (

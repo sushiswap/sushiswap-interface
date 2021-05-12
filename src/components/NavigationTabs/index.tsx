@@ -9,6 +9,7 @@ import { resetMintState } from 'state/mint/actions'
 import styled from 'styled-components'
 import { RowBetween } from '../Row'
 import Settings from '../Settings'
+import { useLingui } from '@lingui/react'
 
 const Tabs = styled.div`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -56,26 +57,30 @@ const StyledArrowLeft = styled(ArrowLeft)`
 
 // This seems to be legacy code, should we remove this? Notice the display: 'none'
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
+    const { i18n } = useLingui()
+
     return (
         <Tabs style={{ marginBottom: '20px', display: 'none' }}>
             <StyledNavLink id={`swap-nav-link`} to={'/swap'} isActive={() => active === 'swap'}>
-                {t`Swap`}
+                {i18n._(t`Swap`)}
             </StyledNavLink>
             <StyledNavLink id={`pool-nav-link`} to={'/pool'} isActive={() => active === 'pool'}>
-                {t`Pool`}
+                {i18n._(t`Pool`)}
             </StyledNavLink>
         </Tabs>
     )
 }
 
 export function FindPoolTabs() {
+    const { i18n } = useLingui()
+
     return (
         <Tabs>
             <RowBetween style={{ padding: '1rem 1rem 0 1rem' }}>
                 <HistoryLink to="/pool">
                     <StyledArrowLeft />
                 </HistoryLink>
-                <ActiveText>{t`Import Pool`}</ActiveText>
+                <ActiveText>{i18n._(t`Import Pool`)}</ActiveText>
                 <Settings />
             </RowBetween>
         </Tabs>
@@ -83,6 +88,8 @@ export function FindPoolTabs() {
 }
 
 export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating: boolean }) {
+    const { i18n } = useLingui()
+
     // reset states on back
     const dispatch = useDispatch<AppDispatch>()
 
@@ -97,7 +104,13 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
                 >
                     <StyledArrowLeft />
                 </HistoryLink>
-                <ActiveText>{creating ? t`Create a pair` : adding ? t`Add Liquidity` : t`Remove Liquidity`}</ActiveText>
+                <ActiveText>
+                    {creating
+                        ? i18n._(t`Create a pair`)
+                        : adding
+                        ? i18n._(t`Add Liquidity`)
+                        : i18n._(t`Remove Liquidity`)}
+                </ActiveText>
                 <Settings />
             </RowBetween>
         </Tabs>

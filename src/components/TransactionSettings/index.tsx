@@ -6,6 +6,7 @@ import { AutoColumn } from '../Column'
 import QuestionHelper from '../QuestionHelper'
 import { RowBetween, RowFixed } from '../Row'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -92,6 +93,7 @@ export interface SlippageTabsProps {
 }
 
 export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline }: SlippageTabsProps) {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
 
     const inputRef = useRef<HTMLInputElement>()
@@ -148,10 +150,12 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
             <AutoColumn gap="sm">
                 <RowFixed>
                     <TYPE.black fontWeight={400} fontSize={14} color={theme.text2}>
-                        {t`Slippage tolerance`}
+                        {i18n._(t`Slippage tolerance`)}
                     </TYPE.black>
                     <QuestionHelper
-                        text={t`Your transaction will revert if the price changes unfavorably by more than this percentage.`}
+                        text={i18n._(
+                            t`Your transaction will revert if the price changes unfavorably by more than this percentage.`
+                        )}
                     />
                 </RowFixed>
                 <RowBetween>
@@ -220,10 +224,10 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                         }}
                     >
                         {slippageError === SlippageError.InvalidInput
-                            ? t`Enter a valid slippage percentage`
+                            ? i18n._(t`Enter a valid slippage percentage`)
                             : slippageError === SlippageError.RiskyLow
-                            ? t`Your transaction may fail`
-                            : t`Your transaction may be frontrun`}
+                            ? i18n._(t`Your transaction may fail`)
+                            : i18n._(t`Your transaction may be frontrun`)}
                     </RowBetween>
                 )}
             </AutoColumn>
@@ -231,9 +235,11 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
             <AutoColumn gap="sm">
                 <RowFixed>
                     <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
-                        {t`Transaction deadline`}
+                        {i18n._(t`Transaction deadline`)}
                     </TYPE.black>
-                    <QuestionHelper text={t`Your transaction will revert if it is pending for more than this long.`} />
+                    <QuestionHelper
+                        text={i18n._(t`Your transaction will revert if it is pending for more than this long.`)}
+                    />
                 </RowFixed>
                 <RowFixed>
                     <OptionCustom style={{ width: '80px' }} tabIndex={-1}>
@@ -248,7 +254,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                         />
                     </OptionCustom>
                     <TYPE.body style={{ paddingLeft: '8px' }} fontSize={14}>
-                        {t`minutes`}
+                        {i18n._(t`minutes`)}
                     </TYPE.body>
                 </RowFixed>
             </AutoColumn>

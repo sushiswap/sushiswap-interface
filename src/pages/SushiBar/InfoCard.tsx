@@ -1,7 +1,7 @@
 import React from 'react'
-import XSushiSignSmall from '../../assets/images/xsushi-sign-small.png'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const StyledLink = styled.a`
     text-decoration: none;
@@ -23,11 +23,12 @@ const StyledLink = styled.a`
 `
 
 export default function InfoCard() {
+    const { i18n } = useLingui()
     return (
         <div className="flex flex-col max-w-xl w-full mb-2 mt-auto">
             <div className="flex max-w-lg">
                 <div className="text-body font-bold md:text-h5 text-high-emphesis self-end mb-3 md:mb-7">
-                    {t`Maximize yield by staking SUSHI for xSUSHI`}
+                    {i18n._(t`Maximize yield by staking SUSHI for xSUSHI`)}
                 </div>
                 {/* <div className="pl-6 pr-3 mb-1 min-w-max self-start md:hidden">
                     <img src={XSushiSignSmall} alt="xsushi sign" />

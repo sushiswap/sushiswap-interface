@@ -3,6 +3,7 @@ import Modal from '../../components/Modal'
 import RejectedIcon from '../../assets/images/transaction-rejected.png'
 import { CloseIcon } from '../../theme'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface TransactionFailedModalProps {
     isOpen: boolean
@@ -10,6 +11,8 @@ interface TransactionFailedModalProps {
 }
 
 export default function TransactionFailedModal({ isOpen, onDismiss }: TransactionFailedModalProps) {
+    const { i18n } = useLingui()
+
     return (
         <Modal isOpen={isOpen} onDismiss={onDismiss} padding={28}>
             <div className=" h-60">
@@ -28,7 +31,7 @@ export default function TransactionFailedModal({ isOpen, onDismiss }: Transactio
                         onClick={onDismiss}
                         className="flex justify-center items-center w-full h-12 rounded bg-pink hover:bg-opacity-90 text-lg font-medium text-high-emphesis"
                     >
-                        {t`Dismiss`}
+                        {i18n._(t`Dismiss`)}
                     </button>
                 </div>
             </div>

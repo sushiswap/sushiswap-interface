@@ -11,6 +11,7 @@ import useTokenBalance from 'hooks/useTokenBalance'
 import { TYPE } from 'theme'
 import { formatFromBalance, formatToBalance } from '../../../utils'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -137,6 +138,7 @@ export default function CurrencyInputPanel({
     cornerRadiusBottomNone,
     cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
+    const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
@@ -201,7 +203,7 @@ export default function CurrencyInputPanel({
                                         fontSize={14}
                                         style={{ display: 'inline', cursor: 'pointer' }}
                                     >
-                                        {t`SUSHI Balance`}: {sushiBalance}
+                                        {i18n._(t`SUSHI Balance`)}: {sushiBalance}
                                     </TYPE.body>
                                 )}
                             </RowBetween>
@@ -221,14 +223,14 @@ export default function CurrencyInputPanel({
                                     }}
                                 />
                                 {account && label !== 'To' && (
-                                    <StyledBalanceMax onClick={handleMaxDeposit}>{t`MAX`}</StyledBalanceMax>
+                                    <StyledBalanceMax onClick={handleMaxDeposit}>{i18n._(t`MAX`)}</StyledBalanceMax>
                                 )}
                             </>
                         )}
                         {!allowance || Number(allowance) === 0 ? (
                             <ButtonSelect onClick={handleApprove} disabled={requestedApproval}>
                                 <Aligner>
-                                    <StyledButtonName>{t`Approve`}</StyledButtonName>
+                                    <StyledButtonName>{i18n._(t`Approve`)}</StyledButtonName>
                                 </Aligner>
                             </ButtonSelect>
                         ) : (
@@ -250,7 +252,7 @@ export default function CurrencyInputPanel({
                                 }}
                             >
                                 <Aligner>
-                                    <StyledButtonName>{t`Deposit`}</StyledButtonName>
+                                    <StyledButtonName>{i18n._(t`Deposit`)}</StyledButtonName>
                                 </Aligner>
                             </ButtonSelect>
                         )}

@@ -1,5 +1,4 @@
-import { Card, CardHeader, DoubleLogo, Paper, Search, TokenLogo } from '../components'
-import { ChainId, Currency, ETHER, Token } from '@sushiswap/sdk'
+import { Card, CardHeader, DoubleLogo, Paper, Search } from '../components'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import React, { useState } from 'react'
 import { formattedNum, formattedPercent } from '../../../utils'
@@ -8,7 +7,6 @@ import { useFuse, useSortableData } from 'hooks'
 import AsyncTokenIcon from '../../../kashi/components/AsyncTokenIcon'
 import Badge from '../../../components/Badge'
 import { SimpleDots as Dots } from 'kashi/components'
-import DoubleRewardBadge from '../../../assets/images/2x-square.jpg'
 import { Helmet } from 'react-helmet'
 import InputGroup from './InputGroup'
 import { RowBetween } from '../../../components/Row'
@@ -17,12 +15,14 @@ import { sumBy } from 'lodash'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import useFarmsV2 from 'hooks/minichefv2/useFarms'
+import { useLingui } from '@lingui/react'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `
 
 export default function Yield(): JSX.Element {
+    const { i18n } = useLingui()
     const query = useFarmsV2()
     const farms = query?.farms
     const userFarms = query?.userFarms
@@ -42,7 +42,7 @@ export default function Yield(): JSX.Element {
     return (
         <>
             <Helmet>
-                <title>{t`Yield`} | Sushi</title>
+                <title>{i18n._(t`Yield`)} | Sushi</title>
                 <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
             </Helmet>
             <div className="container max-w-4xl mx-auto px-0 sm:px-4">
@@ -54,8 +54,8 @@ export default function Yield(): JSX.Element {
                                 <div className="hidden md:block items-center">
                                     {/* <BackButton defaultRoute="/pool" /> */}
                                     <div className="text-lg mr-2 whitespace-nowrap flex items-center">
-                                        <div className="mr-2">{t`Yield Instruments`}</div>
-                                        <Badge color="blue">{t`V2 Rewarder`}</Badge>
+                                        <div className="mr-2">{i18n._(t`Yield Instruments`)}</div>
+                                        <Badge color="blue">{i18n._(t`V2 Rewarder`)}</Badge>
                                     </div>
                                     <div className="flex items-center">
                                         <div className="text-sm text-gray-500 mr-2">
@@ -74,13 +74,13 @@ export default function Yield(): JSX.Element {
                             <div className="pb-4">
                                 <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
                                     <div className="flex items-center">
-                                        <div>{t`Your Yields`}</div>
+                                        <div>{i18n._(t`Your Yields`)}</div>
                                     </div>
                                     <div className="flex items-center justify-end">
-                                        <div>{t`Deposited`}</div>
+                                        <div>{i18n._(t`Deposited`)}</div>
                                     </div>
                                     <div className="flex items-center justify-end">
-                                        <div>{t`Claim`}</div>
+                                        <div>{i18n._(t`Claim`)}</div>
                                     </div>
                                 </div>
                                 <div className="flex-col space-y-2">
@@ -97,7 +97,7 @@ export default function Yield(): JSX.Element {
                             className="flex items-center cursor-pointer hover:text-secondary"
                             onClick={() => requestSort('symbol')}
                         >
-                            <div>{t`Instruments`}</div>
+                            <div>{i18n._(t`Instruments`)}</div>
                             {sortConfig &&
                                 sortConfig.key === 'symbol' &&
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -105,13 +105,13 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hidden md:block ml-4">
                             <div className="flex items-center justify-start">
-                                <div className="pr-2">{t`Pool Rewards`}</div>
+                                <div className="pr-2">{i18n._(t`Pool Rewards`)}</div>
                                 <Badge color="blue">2X</Badge>
                             </div>
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
                             <div className="flex items-center justify-end">
-                                <div>{t`TVL`}</div>
+                                <div>{i18n._(t`TVL`)}</div>
                                 {sortConfig &&
                                     sortConfig.key === 'tvl' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -120,7 +120,7 @@ export default function Yield(): JSX.Element {
                         </div>
                         <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
                             <div className="flex items-center justify-end">
-                                <div>{t`APY (incl. Fees)`}</div>
+                                <div>{i18n._(t`APY (incl. Fees)`)}</div>
                                 {sortConfig &&
                                     sortConfig.key === 'roiPerYear' &&
                                     ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
@@ -136,10 +136,10 @@ export default function Yield(): JSX.Element {
                         ) : (
                             <>
                                 {term ? (
-                                    <div className="w-full text-center py-6">{t`No Results`}</div>
+                                    <div className="w-full text-center py-6">{i18n._(t`No Results`)}</div>
                                 ) : (
                                     <div className="w-full text-center py-6">
-                                        <Dots>{t`Fetching Instruments`}</Dots>
+                                        <Dots>{i18n._(t`Fetching Instruments`)}</Dots>
                                     </div>
                                 )}
                             </>
@@ -152,6 +152,7 @@ export default function Yield(): JSX.Element {
 }
 
 const TokenBalance = ({ farm }: any) => {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const [expand, setExpand] = useState<boolean>(false)
     return (
@@ -225,7 +226,7 @@ const TokenBalance = ({ farm }: any) => {
                                 <div className="text-gray-500 text-right font-semibold text-sm sm:text-sm">
                                     {formattedNum(farm.slpBalance / 1e18, false)} SLP
                                 </div>
-                                <div className="text-gray-500 text-right text-xs">{t`Market Staked`}</div>
+                                <div className="text-gray-500 text-right text-xs">{i18n._(t`Market Staked`)}</div>
                             </div>
                         </div>
                         <div className="md:col-span-3 flex justify-end items-center">
@@ -234,7 +235,7 @@ const TokenBalance = ({ farm }: any) => {
                                     {formattedPercent(farm.roiPerYear * 100)}{' '}
                                     {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
                                 </div>
-                                <div className="text-gray-500 text-right text-xs">{t`annualized`}</div>
+                                <div className="text-gray-500 text-right text-xs">{i18n._(t`annualized`)}</div>
                             </div>
                         </div>
                     </div>

@@ -22,6 +22,7 @@ import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 import { TYPE } from '../../theme'
 import { Helmet } from 'react-helmet'
 import { t, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const Dots = styled.span`
     &::after {
@@ -71,6 +72,7 @@ const VoteCard = styled(DataCard)`
 `
 
 export default function ClaimModal() {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
 
     const isOpen = useModalOpen(ApplicationModal.SELF_CLAIM)
@@ -153,7 +155,7 @@ export default function ClaimModal() {
         <>
             {' '}
             <Helmet>
-                <title>{t`Vesting`} | Sushi</title>
+                <title>{i18n._(t`Vesting`)} | Sushi</title>
             </Helmet>
             <PageWrapper>
                 <>
@@ -168,7 +170,7 @@ export default function ClaimModal() {
                                 <CardSection gap="sm">
                                     <RowBetween>
                                         <TYPE.white fontWeight={500} color={theme.text1}>
-                                            {t`Community Approval`}
+                                            {i18n._(t`Community Approval`)}
                                         </TYPE.white>
                                     </RowBetween>
                                     <div
@@ -216,7 +218,7 @@ export default function ClaimModal() {
                                 <CardSection gap="sm">
                                     <RowBetween>
                                         <TYPE.white fontWeight={500} color={theme.text1}>
-                                            {t`Your Claimable SUSHI this Week`}
+                                            {i18n._(t`Your Claimable SUSHI this Week`)}
                                         </TYPE.white>
                                         <QuestionHelper text="Your Vested SUSHI will be released each week for the next 6 months. The amount released each week is determined by your historical farming rewards. You do not need to harvest each week as unclaimed amounts from each week will continue to accrue onto the next." />
                                     </RowBetween>
@@ -228,14 +230,16 @@ export default function ClaimModal() {
                                         {account ? (
                                             <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
                                                 {totalLocked ? (
-                                                    t`Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
+                                                    i18n._(
+                                                        t`Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
+                                                    )
                                                 ) : (
-                                                    <Dots>{t`Historical Total Locked: Fetching Total`}</Dots>
+                                                    <Dots>{i18n._(t`Historical Total Locked: Fetching Total`)}</Dots>
                                                 )}
                                             </TYPE.white>
                                         ) : (
                                             <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
-                                                {t`Historical Total Locked: Connect Wallet`}
+                                                {i18n._(t`Historical Total Locked: Connect Wallet`)}
                                             </TYPE.white>
                                         )}
                                     </div>
@@ -255,9 +259,9 @@ export default function ClaimModal() {
                                         onClick={onClaim}
                                     >
                                         {pendingTreasurySignature ? (
-                                            <Dots>{t`Pending Treasury Transfer`}</Dots>
+                                            <Dots>{i18n._(t`Pending Treasury Transfer`)}</Dots>
                                         ) : (
-                                            <> {claimConfirmed ? t`Claimed` : t`Claim SUSHI`}</>
+                                            <> {claimConfirmed ? i18n._(t`Claimed`) : i18n._(t`Claim SUSHI`)}</>
                                         )}
 
                                         {attempting && <Loader stroke="white" style={{ marginLeft: '10px' }} />}
@@ -268,7 +272,7 @@ export default function ClaimModal() {
                                 <CardSection gap="md">
                                     <RowBetween style={{ marginBottom: '5px' }}>
                                         <TYPE.white fontWeight={500} color={theme.text1}>
-                                            {t`Things you can do with your SUSHI`}
+                                            {i18n._(t`Things you can do with your SUSHI`)}
                                         </TYPE.white>
                                     </RowBetween>
                                     <LightCard
@@ -280,9 +284,9 @@ export default function ClaimModal() {
                                             <RowBetween>
                                                 <AutoRow>
                                                     <AutoRow marginBottom="2px">
-                                                        <TYPE.body
-                                                            fontWeight={500}
-                                                        >{t`Stake SUSHI for xSUSHI`}</TYPE.body>
+                                                        <TYPE.body fontWeight={500}>
+                                                            {i18n._(t`Stake SUSHI for xSUSHI`)}
+                                                        </TYPE.body>
                                                     </AutoRow>
                                                     <AutoRow>
                                                         <TYPE.darkGray fontSize=".75rem">
@@ -304,9 +308,9 @@ export default function ClaimModal() {
                                             <RowBetween>
                                                 <AutoRow>
                                                     <AutoRow marginBottom="2px">
-                                                        <TYPE.body
-                                                            fontWeight={500}
-                                                        >{t`Stack Yields with SAAVE`}</TYPE.body>
+                                                        <TYPE.body fontWeight={500}>
+                                                            {i18n._(t`Stack Yields with SAAVE`)}
+                                                        </TYPE.body>
                                                     </AutoRow>
                                                     <AutoRow>
                                                         <TYPE.darkGray fontSize=".75rem">
@@ -325,7 +329,7 @@ export default function ClaimModal() {
                                                 <AutoRow>
                                                     <AutoRow marginBottom="2px">
                                                         <TYPE.body fontWeight={500}>
-                                                            {t`Deposit SUSHI into BentoBox`}
+                                                            {i18n._(t`Deposit SUSHI into BentoBox`)}
                                                         </TYPE.body>
                                                     </AutoRow>
                                                     <AutoRow>

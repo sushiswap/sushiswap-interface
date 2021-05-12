@@ -1,24 +1,23 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { MASTERCHEF_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
+import { Token, WETH } from '@sushiswap/sdk'
 import { Input as NumericalInput } from '../../../components/NumericalInput'
 import { Fraction } from '../../../entities'
-import { ethers } from 'ethers'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import useMiniChefV2 from '../../../hooks/minichefv2/useMiniChefV2'
 import usePendingSushi from '../../../hooks/minichefv2/usePendingSushi'
 import usePendingReward from '../../../hooks/minichefv2/usePendingReward'
 import useStakedBalance from '../../../hooks/minichefv2/useStakedBalance'
 import useTokenBalance from '../../../hooks/useTokenBalance'
-import { formattedNum, isAddressString, isWETH, isAddress } from '../../../utils'
-import { WETH } from '@sushiswap/sdk'
+import { formattedNum, isAddress, isAddressString, isWETH } from '../../../utils'
 import { Dots } from '../../Pool/styleds'
 import { Button } from '../components'
 import { t, Trans } from '@lingui/macro'
 
 import { tryParseAmount } from '../../../state/swap/hooks'
+import { useLingui } from '@lingui/react'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -43,6 +42,7 @@ export default function InputGroup({
     assetSymbol?: string
     assetDecimals?: number
 }): JSX.Element {
+    const { i18n } = useLingui()
     const history = useHistory()
     const { account, chainId } = useActiveWeb3React()
     const [pendingTx, setPendingTx] = useState(false)
@@ -115,8 +115,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                {t`Wallet Balance`}: {formattedNum(fixedFormatting(balance.value, balance.decimals))}{' '}
-                                {type}
+                                {i18n._(t`Wallet Balance`)}:{' '}
+                                {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -136,7 +136,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-blue border-0"
                                 >
-                                    {t`MAX`}
+                                    {i18n._(t`MAX`)}
                                 </Button>
                             )}
                         </div>
@@ -159,7 +159,7 @@ export default function InputGroup({
                                     setPendingTx(false)
                                 }}
                             >
-                                {t`Stake`}
+                                {i18n._(t`Stake`)}
                             </Button>
                         )}
                     </div>
@@ -167,7 +167,8 @@ export default function InputGroup({
                     <div className="text-center col-span-2 md:col-span-1">
                         {account && (
                             <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                                {t`Your Staked`}: {formattedNum(fixedFormatting(staked.value, staked.decimals))} {type}
+                                {i18n._(t`Your Staked`)}: {formattedNum(fixedFormatting(staked.value, staked.decimals))}{' '}
+                                {type}
                             </div>
                         )}
                         <div className="flex items-center relative w-full mb-4">
@@ -187,7 +188,7 @@ export default function InputGroup({
                                     }}
                                     className="absolute right-4 focus:ring focus:ring-pink border-0"
                                 >
-                                    {t`MAX`}
+                                    {i18n._(t`MAX`)}
                                 </Button>
                             )}
                         </div>
@@ -205,7 +206,7 @@ export default function InputGroup({
                                 setPendingTx(false)
                             }}
                         >
-                            {t`Unstake`}
+                            {i18n._(t`Unstake`)}
                         </Button>
                     </div>
                 </div>
@@ -228,7 +229,7 @@ export default function InputGroup({
                                     )
                                 }
                             >
-                                {t`Add Liquidity`}
+                                {i18n._(t`Add Liquidity`)}
                             </Button>
                             <Button
                                 color="default"
@@ -236,7 +237,7 @@ export default function InputGroup({
                                     history.push(`/remove/${isWETH(token0Address)}/${isWETH(token1Address)}`)
                                 }
                             >
-                                {t`Remove Liquidity`}
+                                {i18n._(t`Remove Liquidity`)}
                             </Button>
                         </>
                     )}
@@ -246,13 +247,13 @@ export default function InputGroup({
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                {t`Lend`} {assetSymbol}
+                                {i18n._(t`Lend`)} {assetSymbol}
                             </Button>
                             <Button
                                 color="default"
                                 onClick={() => history.push(`/bento/kashi/lend/${isWETH(pairAddress)}`)}
                             >
-                                {t`Withdraw`} {assetSymbol}
+                                {i18n._(t`Withdraw`)} {assetSymbol}
                             </Button>
                         </>
                     )}

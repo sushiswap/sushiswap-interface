@@ -12,6 +12,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ExternalLink, HideSmall, TYPE } from '../../theme'
 import { Helmet } from 'react-helmet'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -69,7 +70,7 @@ const ResponsiveExternalLink = styled(ExternalLink)`
 
 const StyledPositionCard = styled(LightCard)`
   /* border: 1px solid ${({ theme }) => theme.text4}; */
-  border: none
+  border: none;
   background: ${({ theme }) => transparentize(0.6, theme.bg1)};
   /* background: ${({ theme }) =>
       `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, theme.bg3)} 0%, ${theme.bg3} 100%) `}; */
@@ -78,13 +79,14 @@ const StyledPositionCard = styled(LightCard)`
 `
 
 export default function Pool() {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
     const { account } = useActiveWeb3React()
 
     return (
         <>
             <Helmet>
-                <title>{t`Tools`} | Sushi</title>
+                <title>{i18n._(t`Tools`)} | Sushi</title>
             </Helmet>
             <PageWrapper>
                 <SwapPoolTabs active={'pool'} />
@@ -93,12 +95,14 @@ export default function Pool() {
                         <AutoColumn gap="md">
                             <RowBetween>
                                 <TYPE.white fontWeight={600} color={theme.text1}>
-                                    {t`Helpful Sushi Tools`}
+                                    {i18n._(t`Helpful Sushi Tools`)}
                                 </TYPE.white>
                             </RowBetween>
                             <RowBetween>
                                 <TYPE.white fontSize={14} color={theme.text2}>
-                                    {t`Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned.`}
+                                    {i18n._(
+                                        t`Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned.`
+                                    )}
                                 </TYPE.white>
                             </RowBetween>
                         </AutoColumn>
@@ -112,19 +116,19 @@ export default function Pool() {
                                 <TYPE.mediumHeader
                                     style={{ marginTop: '0.5rem', justifySelf: 'flex-start', paddingLeft: '0.75rem' }}
                                 >
-                                    {t`Tools`}
+                                    {i18n._(t`Tools`)}
                                 </TYPE.mediumHeader>
                             </HideSmall>
                             <ButtonRow>
                                 <ResponsiveExternalLink href={''}>
                                     <ButtonSecondary padding="6px 8px" borderRadius="20px">
-                                        {t`Request Tool`}
+                                        {i18n._(t`Request Tool`)}
                                     </ButtonSecondary>
                                 </ResponsiveExternalLink>
                                 <ResponsiveExternalLink href={''}>
                                     <ButtonPrimaryNormal padding="6px 8px" borderRadius="10px">
                                         <Text fontWeight={500} fontSize={16}>
-                                            {t`Submit Tool`}
+                                            {i18n._(t`Submit Tool`)}
                                         </Text>
                                     </ButtonPrimaryNormal>
                                 </ResponsiveExternalLink>
@@ -144,7 +148,7 @@ export default function Pool() {
                                     <RowFixed>
                                         {/* <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} /> */}
                                         <Text fontWeight={500} fontSize={14}>
-                                            {t`One click SUSHI → xSUSHI → aXSUSHI`}
+                                            {i18n._(t`One click SUSHI → xSUSHI → aXSUSHI`)}
                                         </Text>
                                     </RowFixed>
                                     <RowFixed>
@@ -155,7 +159,7 @@ export default function Pool() {
                                             as={Link}
                                             to={`/saave`}
                                         >
-                                            {t`Manage`}
+                                            {i18n._(t`Manage`)}
                                         </ButtonEmpty>
                                     </RowFixed>
                                 </FixedHeightRow>

@@ -6,18 +6,17 @@ import { unwrappedToken } from 'utils/wrappedCurrency'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTotalSupply } from 'data/TotalSupply'
 import DoubleCurrencyLogo from 'components/DoubleLogo'
-import { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components'
 import { Sliders } from 'react-feather'
 
 import { BIG_INT_ZERO } from '../../constants'
 import { currencyId } from '../../utils/currencyId'
-
-import styled from 'styled-components'
 import { Text } from 'rebass'
 import { AutoColumn } from '../../components/Column'
-import { AutoRow, RowBetween, RowFixed } from '../../components/Row'
+import { RowBetween, RowFixed } from '../../components/Row'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { ButtonEmpty, ButtonPrimary, ButtonPrimaryNormal } from '../../components/ButtonLegacy'
+import { ButtonPrimaryNormal } from '../../components/ButtonLegacy'
+
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
 `

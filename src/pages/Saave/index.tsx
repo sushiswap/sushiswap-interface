@@ -11,6 +11,7 @@ import SaaveHeader from './SaaveHeader'
 import SushiInputPanel from './SushiInputPanel'
 import { Helmet } from 'react-helmet'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 420px;
@@ -38,6 +39,7 @@ const VoteCard = styled(DataCard)`
 `
 
 export default function Saave() {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
     const darkMode = useDarkModeManager()
 
@@ -53,12 +55,14 @@ export default function Saave() {
                         <AutoColumn gap="md">
                             <RowBetween>
                                 <TYPE.white fontWeight={600} color={theme.text1}>
-                                    {t`SAAVE: Stack your yields in one transaction`}
+                                    {i18n._(t`SAAVE: Stack your yields in one transaction`)}
                                 </TYPE.white>
                             </RowBetween>
                             <RowBetween>
                                 <TYPE.white fontSize={14} color={theme.text2}>
-                                    {t`Stake your SUSHI into xSUSHI for ~5% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click.`}
+                                    {i18n._(
+                                        t`Stake your SUSHI into xSUSHI for ~5% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click.`
+                                    )}
                                 </TYPE.white>
                             </RowBetween>
                             <ExternalLink
@@ -67,7 +71,7 @@ export default function Saave() {
                                 href="https://app.ens.domains/name/saave.eth"
                             >
                                 <TYPE.white fontSize={14} color={theme.text1}>
-                                    {t`Keys Burned: 2022.03.04 at 22:05`}
+                                    {i18n._(t`Keys Burned: 2022.03.04 at 22:05`)}
                                 </TYPE.white>
                             </ExternalLink>
                             <ExternalLink
@@ -76,12 +80,14 @@ export default function Saave() {
                                 href="https://etherscan.io/address/0x364762c00b32c4b448f39efaa9cefc67a25603ff#code"
                             >
                                 <TYPE.white fontSize={14} color={theme.text1}>
-                                    {t`Read the contract`}
+                                    {i18n._(t`Read the contract`)}
                                 </TYPE.white>
                             </ExternalLink>
                             <RowBetween>
                                 <TYPE.white fontSize={14} color={theme.text2}>
-                                    {t`To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon.`}
+                                    {i18n._(
+                                        t`To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon.`
+                                    )}
                                 </TYPE.white>
                             </RowBetween>
                         </AutoColumn>

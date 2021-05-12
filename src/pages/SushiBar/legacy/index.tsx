@@ -6,8 +6,10 @@ import XSushiWithdrawlPanel from './XSushiWithdrawlPanel'
 import { Helmet } from 'react-helmet'
 import { ArrowUpRight } from 'react-feather'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function SushiBar() {
+    const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
     return (
         <>
@@ -20,7 +22,9 @@ export default function SushiBar() {
             </Helmet>
             <div className="flex flex-col max-w-lg w-full mx-auto">
                 <Paper className="bg-dark-800 p-4 space-y-4 mb-4">
-                    <div className="text-lg font-bold text-high-emphesis mb-2">{t`SushiBar: Make SUSHI work for you`}</div>
+                    <div className="text-lg font-bold text-high-emphesis mb-2">
+                        {i18n._(t`SushiBar: Make SUSHI work for you`)}
+                    </div>
                     <div className="text-sm text-primary">
                         <p className="mb-4">
                             {t`Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.
@@ -38,7 +42,7 @@ export default function SushiBar() {
                             rel="noreferrer"
                             href="https://analytics.sushi.com/bar"
                         >
-                            {t`View SushiBar Stats`} <ArrowUpRight size="16" />
+                            {i18n._(t`View SushiBar Stats`)} <ArrowUpRight size="16" />
                         </a>
                         {account && (
                             <a
@@ -47,7 +51,7 @@ export default function SushiBar() {
                                 rel="noreferrer"
                                 href={'http://analytics.sushi.com/users/' + account}
                             >
-                                {t`View your SushiBar Portfolio`} <ArrowUpRight size="16" />
+                                {i18n._(t`View your SushiBar Portfolio`)} <ArrowUpRight size="16" />
                             </a>
                         )}
                     </div>
@@ -59,7 +63,7 @@ export default function SushiBar() {
                         disableCurrencySelect={true}
                         customBalanceText={'Available to deposit: '}
                         id="stake-liquidity-token"
-                        buttonText={t`Deposit`}
+                        buttonText={i18n._(t`Deposit`)}
                         cornerRadiusBottomNone={true}
                     />
                     <XSushiWithdrawlPanel
@@ -67,7 +71,7 @@ export default function SushiBar() {
                         disableCurrencySelect={true}
                         customBalanceText={'Available to withdraw: '}
                         id="withdraw-liquidity-token"
-                        buttonText={t`Withdraw`}
+                        buttonText={i18n._(t`Withdraw`)}
                         cornerRadiusTopNone={true}
                     />
                 </Paper>

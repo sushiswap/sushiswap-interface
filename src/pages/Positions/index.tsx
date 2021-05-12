@@ -4,12 +4,13 @@ import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
 import { getExplorerLink, shortenAddress } from '../../utils'
 import LiquidityPositions from './LiquidityPositions'
-import { ChevronLeft, User, Copy, ExternalLink } from 'react-feather'
-import { Button, Dots } from 'components'
+import { ExternalLink, User } from 'react-feather'
+import { Dots } from 'components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useETHBalances } from 'state/wallet/hooks'
 import { Currency } from '@sushiswap/sdk'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const mock = {
     transactions: [
@@ -21,6 +22,7 @@ const mock = {
 }
 
 export default function Positions() {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
     const { account, chainId } = useActiveWeb3React()
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
@@ -28,7 +30,7 @@ export default function Positions() {
     return (
         <>
             <Helmet>
-                <title>{t`Positions`} | Sushi</title>
+                <title>{i18n._(t`Positions`)} | Sushi</title>
             </Helmet>
 
             {/* <div className="w-full max-w-2xl">
@@ -58,7 +60,7 @@ export default function Positions() {
                                                 {Currency.getNativeCurrencySymbol(chainId)}
                                             </div>
                                         ) : (
-                                            <Dots>{t`Loading`}</Dots>
+                                            <Dots>{i18n._(t`Loading`)}</Dots>
                                         )}
                                     </>
                                 )}
@@ -77,7 +79,7 @@ export default function Positions() {
                                 <>
                                     <ExternalLink strokeWidth={0.5} size={14} color={theme.white} />
                                     <a href={getExplorerLink(chainId, account, 'address')}>
-                                        <span style={{ marginLeft: '4px' }}>{t`View on explorer`}</span>
+                                        <span style={{ marginLeft: '4px' }}>{i18n._(t`View on explorer`)}</span>
                                     </a>
                                 </>
                             )}
@@ -92,10 +94,10 @@ export default function Positions() {
                         to={'/pool'}
                         className={`w-3/6 p-3 text-center rounded-lg text-primary text-bold bg-dark-900 `}
                     >
-                        {t`Liquidity Positions`}
+                        {i18n._(t`Liquidity Positions`)}
                     </Link>
                     <Link to={'/transactions'} className={`w-3/6 p-3 text-center rounded-lg text-secondary`}>
-                        {t`Transaction History`}
+                        {i18n._(t`Transaction History`)}
                     </Link>
                 </div>
                 <LiquidityPositions />

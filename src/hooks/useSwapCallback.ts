@@ -10,6 +10,7 @@ import { useActiveWeb3React } from './useActiveWeb3React'
 import useENS from './useENS'
 import useTransactionDeadline from './useTransactionDeadline'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export enum SwapCallbackState {
     INVALID,
@@ -92,6 +93,8 @@ export function useSwapCallback(
     allowedSlippage: number = INITIAL_ALLOWED_SLIPPAGE, // in bips
     recipientAddressOrName: string | null // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
 ): { state: SwapCallbackState; callback: null | (() => Promise<string>); error: string | null } {
+    const { i18n } = useLingui()
+
     const { account, chainId, library } = useActiveWeb3React()
 
     const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName)
@@ -155,10 +158,14 @@ export function useSwapCallback(
                                         switch (callError.reason) {
                                             case 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT':
                                             case 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT':
-                                                errorMessage = t`This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.`
+                                                errorMessage = i18n._(
+                                                    t`This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.`
+                                                )
                                                 break
                                             default:
-                                                errorMessage = t`The transaction cannot succeed due to error: ${callError.reason}. This is probably an issue with one of the tokens you are swapping.`
+                                                errorMessage = i18n._(
+                                                    t`The transaction cannot succeed due to error: ${callError.reason}. This is probably an issue with one of the tokens you are swapping.`
+                                                )
                                         }
                                         return { call, error: new Error(errorMessage) }
                                     })
