@@ -1,4 +1,3 @@
-import { Paper } from 'components'
 import { BentoBalance, useBentoBalances } from 'state/bentobox/hooks'
 import { Card, CardHeader, Layout, Search } from '../../../kashi/components'
 import React, { useState } from 'react'
@@ -8,6 +7,7 @@ import AsyncTokenIcon from '../../../kashi/components/AsyncTokenIcon'
 import BentoBoxImage from 'assets/kashi/bento-illustration.png'
 import Deposit from './Deposit'
 import { Helmet } from 'react-helmet'
+import { Paper } from 'components'
 import Withdraw from './Withdraw'
 import { ZERO } from 'kashi/functions/math'
 import { formattedNum } from '../../../utils'
@@ -54,16 +54,6 @@ export default function BentoBalances(): JSX.Element {
                             <div className="flex flex-col md:flex-row items-center justify-between w-full">
                                 <div className="flex items-baseline">
                                     <div className="text-3xl text-high-emphesis mr-4">{i18n._(t`BentoBox`)}</div>
-                                    <div>
-                                        {formattedNum(
-                                            balances
-                                                ?.reduce((previousValue, currentValue) => {
-                                                    return previousValue.add(currentValue.bento.usdValue)
-                                                }, ZERO)
-                                                .toFixed(getCurrency(chainId).decimals),
-                                            true
-                                        )}
-                                    </div>
                                 </div>
                                 <div className="flex justify-end w-full py-4 md:py-0">
                                     <Search search={search} term={term} />

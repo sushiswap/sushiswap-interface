@@ -1,8 +1,13 @@
+import { Link, NavLink, useLocation } from 'react-router-dom'
+
 import { ReactComponent as BentoBoxLogo } from 'assets/kashi/bento-symbol.svg'
 import KashiLogo from 'assets/kashi/logo.png'
 import React from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Zero } from '@ethersproject/constants'
 import { formattedNum } from 'utils'
+import { getCurrency } from 'kashi'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useBentoBalances } from 'state/bentobox/hooks'
 
 interface LayoutProps {
     left?: JSX.Element
@@ -14,10 +19,11 @@ interface LayoutProps {
 export default function Layout({
     left = undefined,
     children = undefined,
-    right = undefined,
-    netWorth = ''
+    right = undefined
 }: LayoutProps): JSX.Element {
     const location = useLocation()
+    const balances = useBentoBalances()
+    const { chainId } = useActiveWeb3React()
     return (
         <div className="container mx-auto px-0 sm:px-4">
             <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -81,14 +87,17 @@ export default function Layout({
                             >
                                 <BentoBoxLogo className="fill-current h-auto w-6 mr-2" />
                                 <div className="whitespace-nowrap text-base">BentoBox</div>
-                            </NavLink>
-                            {netWorth && (
-                                <div
-                                    className={`hidden md:block border-transparent px-6 border-b-2 justify-end items-center font-medium text-high-emphesis`}
-                                >
-                                    <div className="whitespace-nowrap text-base">{formattedNum(netWorth, true)}</div>
+                                <div className="whitespace-nowrap text-base ml-2">
+                                    {formattedNum(
+                                        balances
+                                            ?.reduce((previousValue, currentValue) => {
+                                                return previousValue.add(currentValue.bento.usdValue)
+                                            }, Zero)
+                                            .toFixed(getCurrency(chainId).decimals),
+                                        true
+                                    )}
                                 </div>
-                            )}
+                            </NavLink>
                         </div>
                     </nav>
                 </div>
