@@ -1,5 +1,4 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { CloseIcon } from '../../theme'
 import { ChainId, JSBI } from '@sushiswap/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import { formatUnits, parseUnits } from '@ethersproject/units'
@@ -10,6 +9,7 @@ import Badge from 'kashi/components/Badge'
 import { Button } from '../../components'
 import { ButtonConfirmed } from '../../components/ButtonLegacy'
 import { ChevronRight } from 'react-feather'
+import { CloseIcon } from '../../theme'
 import { Dots } from '../../components/swap/styleds'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { EmptyState } from '../../components/EmptyState'
@@ -20,8 +20,8 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import Typography from 'components/Typography'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useSushiRollContract } from 'hooks/useContract'
 import { useLingui } from '@lingui/react'
+import { useSushiRollContract } from 'hooks/useContract'
 
 const ZERO = JSBI.BigInt(0)
 

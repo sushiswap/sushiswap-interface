@@ -1,14 +1,10 @@
 import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
-import {
-    useDashboardContract,
-    useDashboard2Contract,
-    useQuickSwapFactoryContract,
-    useBoringHelperContract
-} from 'hooks/useContract'
+import { useBoringHelperContract, useDashboardContract, useQuickSwapFactoryContract } from 'hooks/useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+
 import LPToken from '../types/LPToken'
 import { getAddress } from '@ethersproject/address'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 
 export interface LPTokensState {
     updateLPTokens: () => Promise<void>
@@ -152,7 +148,7 @@ const useLPTokensState = () => {
                     await dashboardContract?.getTokenInfo(
                         Array.from(
                             new Set(
-                                userLP.reduce(
+                                userLP?.reduce(
                                     (a: any, b: any) =>
                                         a.push(
                                             b.pool_token.contract_address,
@@ -169,9 +165,7 @@ const useLPTokensState = () => {
                     return acc
                 }, {})
 
-                console.log({ tokenDetails })
-
-                const lpTokens = userLP.map((pair: any, index: number) => {
+                const lpTokens = userLP?.map((pair: any, index: number) => {
                     const token = new Token(
                         chainId as ChainId,
                         getAddress(pair.pool_token.contract_address),

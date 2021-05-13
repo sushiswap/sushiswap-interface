@@ -11,7 +11,7 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
             <div className="w-full">
                 <Listbox
                     as="div"
-                    className="space-y-1"
+                    className="space-y-1 cursor-pointer"
                     value={selectedToken}
                     onChange={setSelectedToken}
                     disabled={disabled}
@@ -23,7 +23,7 @@ export default function ListBox({ label, tokens, selectedToken, setSelectedToken
                             </Listbox.Label>
                             <div className="relative">
                                 <span className="inline-block w-full rounded-md shadow-sm">
-                                    <Listbox.Button className="cursor-default relative w-full rounded-md border bg-input border-none p-3 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                    <Listbox.Button className="cursor-pointer relative w-full rounded-md border bg-input border-none p-3 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         <span className="truncate flex items-center">
                                             <AsyncTokenIcon
                                                 address={selectedToken.address}

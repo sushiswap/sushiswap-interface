@@ -44,7 +44,7 @@ const CreatePair = () => {
         let multiply = ethers.constants.AddressZero
         let divide = ethers.constants.AddressZero
         const multiplyMatches = Object.values(mapping).filter(
-            m => m.from == asset.address && m.to == collateral.address
+            m => m.from === asset.address && m.to === collateral.address
         )
         const oracleData = ''
         let decimals = 0
@@ -54,17 +54,17 @@ const CreatePair = () => {
             decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
         } else {
             const divideMatches = Object.values(mapping).filter(
-                m => m.from == collateral.address && m.to == asset.address
+                m => m.from === collateral.address && m.to === asset.address
             )
             if (divideMatches.length) {
                 const match = divideMatches[0]
                 divide = match.address!
                 decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals
             } else {
-                const mapFrom = Object.values(mapping).filter(m => m.from == asset.address)
-                const mapTo = Object.values(mapping).filter(m => m.from == collateral.address)
+                const mapFrom = Object.values(mapping).filter(m => m.from === asset.address)
+                const mapTo = Object.values(mapping).filter(m => m.from === collateral.address)
                 const match = mapFrom
-                    .map(mfrom => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to == mto.to) }))
+                    .map(mfrom => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to === mto.to) }))
                     .filter(path => path.mto.length)
                 if (match.length) {
                     multiply = match[0].mfrom.address!
