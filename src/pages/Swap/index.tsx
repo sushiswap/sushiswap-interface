@@ -2,6 +2,7 @@ import { CurrencyAmount, JSBI, Token, Trade, ChainId } from '@sushiswap/sdk'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowDown } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
@@ -352,19 +353,23 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">
-                                            300M+ TVL on Polygon! Optimized routing enabled
-                                        </div>
-                                        <div className="text-purple text-sm">Enjoy the lowest slippage on Polygon</div>
+                                        <div className="text-white">New Yield Farms! CRV, LINK, USDT, USDC</div>
+                                        <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
-                                    <a
+                                    <Link
+                                        to="/yield"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
+                                    >
+                                        Visit Yield
+                                    </Link>
+                                    {/* <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
                                         target="_blank"
                                         rel="noreferrer noopener"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
                                     >
                                         Read Tutorial
-                                    </a>
+                                    </a> */}
                                 </div>
                             </DarkCard>
                         </div>
