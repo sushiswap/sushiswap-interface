@@ -23,7 +23,7 @@ const getTokenLogoURL = (address: string, chainId: any) => {
             address
         )}/logo.png`
     }
-    console.log('getTokenLogoURL:', chainId, imageURL)
+    //console.log('getTokenLogoURL:', chainId, imageURL)
     return imageURL
 }
 

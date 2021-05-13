@@ -46,11 +46,10 @@ const useFarms = () => {
         const averageBlockTime = results[2]
         const sushiPrice = results[3]
         const kashiPairs = results[4].filter(result => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
-
         //console.log('kashiPairs:', kashiPairs)
 
         const pairs = pairsQuery?.data.pairs
-        const KASHI_PAIRS = _.range(190, 230, 1) // kashiPair pids 189-229
+        const KASHI_PAIRS = _.concat(_.range(190, 230, 1), _.range(245, 250, 1)) // kashiPair pids 190-229, 245-249
         //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
 
         const farms = pools
@@ -92,7 +91,7 @@ const useFarms = () => {
                         (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                     )
                     const blocksPerHour = 3600 / averageBlockTime
-                    const balance = Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1
+                    const balance = Number(pool.balance / 1e18)
                     const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
                     const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
                     const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
@@ -103,6 +102,21 @@ const useFarms = () => {
                     const roiPerDay = roiPerHour * 24
                     const roiPerMonth = roiPerDay * 30
                     const roiPerYear = roiPerMonth * 12
+
+                    // // Logging:
+                    // const tempSymbol = pair.token0.symbol + '-' + pair.token1.symbol
+                    // if (tempSymbol === 'WBTC-ibBTC' || tempSymbol === 'BTC2x-FLI-WBTC' || tempSymbol === 'BASK-WETH') {
+                    //     console.log(pair.token0.symbol + '-' + pair.token1.symbol, {
+                    //         totalSupply: totalSupply,
+                    //         reserveUSD: reserveUSD,
+                    //         balance: balance,
+                    //         poolBalance: pool.balance,
+                    //         roiPerBlock: roiPerBlock,
+                    //         rewardPerBlock: rewardPerBlock,
+                    //         sushiPrice: sushiPrice,
+                    //         balanceUSD: balanceUSD
+                    //     })
+                    // }
 
                     return {
                         ...pool,
