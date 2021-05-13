@@ -1,6 +1,6 @@
+import { DocumentNode } from 'graphql/language/ast'
 import gql from 'graphql-tag'
 //import { FACTORY_ADDRESS, BUNDLE_ID } from '../constants'
-
 const FACTORY_ADDRESS = '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac'
 const BUNDLE_ID = '1'
 
@@ -187,7 +187,7 @@ export const liquidityPositionSubsetQuery = gql`
     }
 `
 
-export const SUSHI_PAIRS = (ids, masterChefAddress) => {
+export const SUSHI_PAIRS = (ids: string[], masterChefAddress: string): DocumentNode => {
     const queryString = `query pools {
     pairs(where: {id_in: ${JSON.stringify(ids)}}) {
         id
@@ -319,7 +319,7 @@ export const GET_BLOCK = gql`
     }
 `
 
-export const GET_BLOCKS = timestamps => {
+export const GET_BLOCKS = (timestamps: string[]): DocumentNode => {
     let queryString = 'query blocks {'
     queryString += timestamps.map(timestamp => {
         return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp +
@@ -331,7 +331,7 @@ export const GET_BLOCKS = timestamps => {
     return gql(queryString)
 }
 
-export const POSITIONS_BY_BLOCK = (account, blocks) => {
+export const POSITIONS_BY_BLOCK = (account: string, blocks: { number: string; timestamp: string }[]): DocumentNode => {
     let queryString = 'query blocks {'
     queryString += blocks.map(
         block => `
@@ -349,7 +349,10 @@ export const POSITIONS_BY_BLOCK = (account, blocks) => {
     return gql(queryString)
 }
 
-export const PRICES_BY_BLOCK = (tokenAddress, blocks) => {
+export const PRICES_BY_BLOCK = (
+    tokenAddress: string,
+    blocks: { number: string; timestamp: string }[]
+): DocumentNode => {
     let queryString = 'query blocks {'
     queryString += blocks.map(
         block => `
@@ -385,7 +388,10 @@ export const TOP_LPS_PER_PAIRS = gql`
     }
 `
 
-export const HOURLY_PAIR_RATES = (pairAddress, blocks) => {
+export const HOURLY_PAIR_RATES = (
+    pairAddress: string,
+    blocks: { number: string; timestamp: string }[]
+): DocumentNode => {
     let queryString = 'query blocks {'
     queryString += blocks.map(
         block => `
@@ -400,7 +406,7 @@ export const HOURLY_PAIR_RATES = (pairAddress, blocks) => {
     return gql(queryString)
 }
 
-export const SHARE_VALUE = (pairAddress, blocks) => {
+export const SHARE_VALUE = (pairAddress: string, blocks: { number: string; timestamp: string }[]): DocumentNode => {
     let queryString = 'query blocks {'
     queryString += blocks.map(
         block => `
@@ -431,7 +437,7 @@ export const SHARE_VALUE = (pairAddress, blocks) => {
     return gql(queryString)
 }
 
-export const ETH_PRICE = block => {
+export const ETH_PRICE = (block: string) => {
     const queryString = block
         ? `
     query bundles {
@@ -451,7 +457,7 @@ export const ETH_PRICE = block => {
     return gql(queryString)
 }
 
-export const USER = (block, account) => {
+export const USER = (block: string, account: string): DocumentNode => {
     const queryString = `
     query users {
       user(id: "${account}", block: {number: ${block}}) {
@@ -664,7 +670,7 @@ export const PAIR_DAY_DATA = gql`
     }
 `
 
-export const PAIR_DAY_DATA_BULK = (pairs, startTimestamp) => {
+export const PAIR_DAY_DATA_BULK = (pairs: string[], startTimestamp: string): DocumentNode => {
     let pairsString = `[`
     pairs.map(pair => {
         return (pairsString += `"${pair}"`)
@@ -701,7 +707,7 @@ export const GLOBAL_CHART = gql`
     }
 `
 
-export const GLOBAL_DATA = block => {
+export const GLOBAL_DATA = (block: string): DocumentNode => {
     const queryString = ` query uniswapFactories {
       uniswapFactories(
        ${block ? `block: { number: ${block}}` : ``} 
@@ -926,7 +932,7 @@ export const PAIRS_CURRENT = gql`
     }
 `
 
-export const PAIR_DATA = (pairAddress, block) => {
+export const PAIR_DATA = (pairAddress: string, block: string): DocumentNode => {
     const queryString = `
     ${PairFields}
     query pairs {
@@ -946,7 +952,7 @@ export const PAIRS_BULK = gql`
     }
 `
 
-export const PAIRS_HISTORICAL_BULK = (block, pairs) => {
+export const PAIRS_HISTORICAL_BULK = (block: string, pairs: string[]): DocumentNode => {
     let pairsString = `[`
     pairs.map(pair => {
         return (pairsString += `"${pair}"`)
@@ -1016,7 +1022,7 @@ export const TOKENS_CURRENT = gql`
     }
 `
 
-export const TOKENS_DYNAMIC = block => {
+export const TOKENS_DYNAMIC = (block: string): DocumentNode => {
     const queryString = `
     ${TokenFields}
     query tokens {
@@ -1028,7 +1034,7 @@ export const TOKENS_DYNAMIC = block => {
     return gql(queryString)
 }
 
-export const TOKEN_DATA = (tokenAddress, block) => {
+export const TOKEN_DATA = (tokenAddress: string, block: string): DocumentNode => {
     const queryString = `
     ${TokenFields}
     query tokens {
