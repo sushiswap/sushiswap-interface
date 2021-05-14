@@ -1,5 +1,7 @@
-import { Contract } from '@ethersproject/contracts'
-import SUSHIROLL_ABI from '@sushiswap/core/abi/SushiRoll.json'
+import {
+    ARGENT_WALLET_DETECTOR_ABI,
+    ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
+} from '../constants/abis/argent-wallet-detector'
 import {
     BAR_ADDRESS,
     ChainId,
@@ -11,54 +13,56 @@ import {
     TIMELOCK_ADDRESS,
     WETH
 } from '@sushiswap/sdk'
-import { abi as UNI_ABI } from '@uniswap/governance/build/Uni.json'
-import { abi as STAKING_REWARDS_ABI } from '@uniswap/liquidity-staker/build/StakingRewards.json'
-import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
-import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
-import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
-import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
 import {
     BENTOBOX_ADDRESS,
+    BORING_HELPER_ADDRESS,
     CHAINLINK_ORACLE_ADDRESS,
     KASHI_ADDRESS,
-    SUSHISWAP_SWAPPER_ADDRESS,
     SUSHISWAP_MULTISWAPPER_ADDRESS,
-    BORING_HELPER_ADDRESS
+    SUSHISWAP_SWAPPER_ADDRESS,
+    SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
+    SUSHISWAP_TWAP_1_ORACLE_ADDRESS
 } from 'kashi'
-import { useMemo } from 'react'
 import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
-import {
-    ARGENT_WALLET_DETECTOR_ABI,
-    ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
-} from '../constants/abis/argent-wallet-detector'
-import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
-import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
-import ENS_ABI from '../constants/abis/ens-registrar.json'
-import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
-import ERC20_ABI from '../constants/abis/erc20.json'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
-import WETH_ABI from '../constants/abis/weth.json'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
+import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
+
 import BAR_ABI from '../constants/abis/bar.json'
+import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
+import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
-import DASHBOARD_ABI from '../constants/abis/dashboard.json'
+import { Contract } from '@ethersproject/contracts'
 import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
+import DASHBOARD_ABI from '../constants/abis/dashboard.json'
+import ENS_ABI from '../constants/abis/ens-registrar.json'
+import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
+import ERC20_ABI from '../constants/abis/erc20.json'
+import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
 import FACTORY_ABI from '../constants/abis/factory.json'
+import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
+import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
 import MINICHEFV2_ABI from '../constants/abis/miniChefV2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
-import SUSHI_ABI from '../constants/abis/sushi.json'
-import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
-import TIMELOCK_ABI from '../constants/abis/timelock.json'
+import { abi as STAKING_REWARDS_ABI } from '@uniswap/liquidity-staker/build/StakingRewards.json'
+import SUSHIROLL_ABI from '@sushiswap/core/abi/SushiRoll.json'
 import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
-import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
+import SUSHISWAP_TWAP_ORACLE_ABI from '../constants/abis/sushiswap-slp-oracle.json'
+import SUSHI_ABI from '../constants/abis/sushi.json'
+import TIMELOCK_ABI from '../constants/abis/timelock.json'
+import { abi as UNI_ABI } from '@uniswap/governance/build/Uni.json'
+import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
+import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
+import WETH_ABI from '../constants/abis/weth.json'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './useActiveWeb3React'
+import { useMemo } from 'react'
 
 // returns null on errors
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
@@ -429,6 +433,14 @@ export function useDashboard2Contract(): Contract | null {
 export function useSushiSwapMultiSwapper(): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId], SUSHISWAP_MULTISWAPPER_ABI)
+}
+
+export function useSushiSwapTWAP0Oracle(): Contract | null {
+    return useContract(SUSHISWAP_TWAP_0_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
+}
+
+export function useSushiSwapTWAP1Oracle(): Contract | null {
+    return useContract(SUSHISWAP_TWAP_1_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
 }
 
 export function useQuickSwapFactoryContract(): Contract | null {

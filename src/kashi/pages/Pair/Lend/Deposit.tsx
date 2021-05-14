@@ -1,17 +1,18 @@
-import React, { useContext, useState } from 'react'
-import { Button } from 'components'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { WETH } from '@sushiswap/sdk'
-import { e10, ZERO } from 'kashi/functions/math'
 import { Direction, TransactionReview } from 'kashi/entities/TransactionReview'
-import TransactionReviewView from 'kashi/components/TransactionReview'
-import { KashiCooker } from 'kashi/entities/KashiCooker'
-import { Warnings } from 'kashi/entities'
-import { formattedNum } from 'utils'
-import { KashiContext } from 'kashi/context'
-import SmartNumberInput from 'kashi/components/SmartNumberInput'
-import WarningsView from 'kashi/components/Warnings'
 import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
+import React, { useContext, useState } from 'react'
+import { ZERO, e10 } from 'kashi/functions/math'
+
+import { Button } from 'components'
+import { KashiContext } from 'kashi/context'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
+import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import TransactionReviewView from 'kashi/components/TransactionReview'
+import { WETH } from '@sushiswap/sdk'
+import { Warnings } from 'kashi/entities'
+import WarningsView from 'kashi/components/Warnings'
+import { formattedNum } from 'utils'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useCurrency } from 'hooks/Tokens'
 
 export default function LendDepositAction({ pair }: any): JSX.Element {
@@ -40,6 +41,8 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     const transactionReview = new TransactionReview()
 
+    console.log('lend deposit pair', { pair })
+
     if (value && !warnings.broken) {
         const amount = value.toBigNumber(pair.asset.decimals)
         const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
@@ -61,7 +64,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         if (pair.currentExchangeRate.isZero()) {
-            cooker.updateExchangeRate(false, ZERO, ZERO)
+            // cooker.updateExchangeRate(false, ZERO, ZERO)
         }
         cooker.addAsset(value.toBigNumber(pair.asset.decimals), useBento)
         return `Deposit ${pair.asset.symbol}`

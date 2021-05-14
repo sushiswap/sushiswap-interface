@@ -1,4 +1,9 @@
-import { CHAINLINK_MAPPING, CHAINLINK_ORACLE_ADDRESS } from 'kashi/constants'
+import {
+    CHAINLINK_MAPPING,
+    CHAINLINK_ORACLE_ADDRESS,
+    SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
+    SUSHISWAP_TWAP_1_ORACLE_ADDRESS
+} from 'kashi/constants'
 
 import { ChainId } from '@sushiswap/sdk'
 import { e10 } from 'kashi/functions/math'
@@ -36,6 +41,16 @@ export class Oracle implements IOracle {
     }
 }
 
+export class SushiSwapTWAPOracle extends Oracle {
+    constructor(pair: any, chainId: ChainId, tokens: any) {
+        super(pair, chainId, tokens)
+        this.name = 'SushiSwap'
+    }
+    get valid(): boolean {
+        return true
+    }
+}
+
 export class ChainlinkOracle extends Oracle {
     private _valid = false
 
@@ -45,7 +60,7 @@ export class ChainlinkOracle extends Oracle {
         this._valid = this._validate()
     }
 
-    public get valid(): boolean {
+    get valid(): boolean {
         return this._valid
     }
 
@@ -118,6 +133,8 @@ function lowerEqual(value1: string, value2: string) {
 export function getOracle(pair: any, chainId: ChainId, tokens: any): IOracle {
     if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
         return new ChainlinkOracle(pair, chainId, tokens)
+    } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS || pair.oracle === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
+        return new SushiSwapTWAPOracle(pair, chainId, tokens)
     } else {
         return new Oracle(pair, chainId, tokens)
     }
