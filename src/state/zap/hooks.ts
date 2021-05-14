@@ -227,8 +227,6 @@ export function useDerivedZapInfo(
         error = 'Insufficient ' + currency?.getSymbol(chainId) + ' balance'
     }
 
-    console.log({ currency0, currency1 }, 'FROM HOOKS')
-
     return {
         typedValue,
         currency: currencyData,
