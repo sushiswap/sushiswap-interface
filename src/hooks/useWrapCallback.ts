@@ -1,10 +1,13 @@
 import { Currency, ETHER, WETH, currencyEquals } from '@sushiswap/sdk'
-import { useMemo } from 'react'
+
+import { t } from '@lingui/macro'
 import { tryParseAmount } from '../state/swap/hooks'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useActiveWeb3React } from './useActiveWeb3React'
+import { useCurrencyBalance } from '../state/wallet/hooks'
+import { useMemo } from 'react'
+import { useTransactionAdder } from '../state/transactions/hooks'
 import { useWETHContract } from './useContract'
+import { useLingui } from '@lingui/react'
 
 export enum WrapType {
     NOT_APPLICABLE,
@@ -24,6 +27,7 @@ export default function useWrapCallback(
     outputCurrency: Currency | undefined,
     typedValue: string | undefined
 ): { wrapType: WrapType; execute?: undefined | (() => Promise<void>); inputError?: string } {
+    const { i18n } = useLingui()
     const { chainId, account } = useActiveWeb3React()
     const wethContract = useWETHContract()
     const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
@@ -58,7 +62,7 @@ export default function useWrapCallback(
                         : undefined,
                 inputError: sufficientBalance
                     ? undefined
-                    : `Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`
+                    : i18n._(t`Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`)
             }
         } else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
             return {
@@ -69,7 +73,7 @@ export default function useWrapCallback(
                               try {
                                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
                                   addTransaction(txReceipt, {
-                                      summary: `Unwrap ${inputAmount.toSignificant(
+                                      summary: t`Unwrap ${inputAmount.toSignificant(
                                           6
                                       )} W${Currency.getNativeCurrencySymbol(
                                           chainId
@@ -80,7 +84,7 @@ export default function useWrapCallback(
                               }
                           }
                         : undefined,
-                inputError: sufficientBalance ? undefined : 'Insufficient WETH balance'
+                inputError: sufficientBalance ? undefined : i18n._(t`Insufficient WETH balance`)
             }
         } else {
             return NOT_APPLICABLE

@@ -23,6 +23,8 @@ import RemoveLiquidity from './pages/RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './pages/RemoveLiquidity/redirects'
 import Saave from './pages/Saave'
 import SushiBar from './pages/SushiBar'
+import SushiBarTransactions from './pages/SushiBar/SushiBarTransactions'
+import SushiBarTips from './pages/SushiBar/Tips'
 import Trade from './pages/Trade'
 import Swap from './pages/Swap'
 import {
@@ -36,6 +38,8 @@ import Vesting from './pages/Vesting'
 import AddSingleSideLiquidity from './pages/AddSingleSideLiquidity'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
+import Positions from './pages/Positions'
+import Transactions from './pages/Transactions'
 
 function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -73,20 +77,24 @@ function Routes(): JSX.Element {
 
             {/* SushiBar Staking */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/sushibar" component={SushiBar} />}
+            {chainId === ChainId.MAINNET && (
+                <Route exact strict path="/sushibar/transactions" component={SushiBarTransactions} />
+            )}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/sushibar/tips" component={SushiBarTips} />}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
 
             {/* Pages */}
-            {/* {chainId === ChainId.MAINNET && <Route exact strict path="/trade" component={Trade} />} */}
+            <Route exact strict path="/tradingview" component={Trade} />
             <Route exact strict path="/trade" component={Swap} />
-
-            <Route exact strict path="/sushi-bar" component={SushiBar} />
             <Route exact strict path="/swap" component={Swap} />
             <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
             <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
             <Route exact strict path="/find" component={PoolFinder} />
             <Route exact strict path="/pool" component={Pool} />
+            <Route exact strict path="/transactions" component={Transactions} />
             <Route exact strict path="/create" component={RedirectToAddLiquidity} />
             <Route exact path="/add" component={AddLiquidity} />
             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />

@@ -1,14 +1,16 @@
+import { exchange, masterchef } from 'apollo/client'
+import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
+import { useCallback, useEffect, useState } from 'react'
+
 import { BigNumber } from '@ethersproject/bignumber'
+import Fraction from '../entities/Fraction'
+import { POOL_DENY } from '../constants'
+import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
+import orderBy from 'lodash/orderBy'
+import range from 'lodash/range'
 import sushiData from '@sushiswap/sushi-data'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBoringHelperContract } from 'hooks/useContract'
-import _ from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
-import { exchange, masterchef } from 'apollo/client'
-import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
-import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
-import { POOL_DENY } from '../constants'
-import Fraction from '../entities/Fraction'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {
@@ -50,7 +52,7 @@ const useFarms = () => {
         //console.log('kashiPairs:', kashiPairs)
 
         const pairs = pairsQuery?.data.pairs
-        const KASHI_PAIRS = _.range(190, 230, 1) // kashiPair pids 189-229
+        const KASHI_PAIRS = range(190, 230, 1) // kashiPair pids 189-229
         //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
 
         const farms = pools
@@ -91,7 +93,7 @@ const useFarms = () => {
                     const liquidityPosition = liquidityPositions.find(
                         (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                     )
-                    const blocksPerHour = 3600 / averageBlockTime
+                    const blocksPerHour = 3600 / Number(averageBlockTime)
                     const balance = Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1
                     const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
                     const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
@@ -127,7 +129,7 @@ const useFarms = () => {
             })
 
         //console.log('farms:', farms)
-        const sorted = _.orderBy(farms, ['pid'], ['desc'])
+        const sorted = orderBy(farms, ['pid'], ['desc'])
 
         const pids = sorted.map(pool => {
             return pool.pid

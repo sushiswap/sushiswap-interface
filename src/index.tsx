@@ -2,7 +2,6 @@ import './styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
 import './bootstrap'
-import './i18n'
 
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import { KashiProvider } from 'kashi'
@@ -23,6 +22,7 @@ import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
 import ThemeProvider, { ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
+import LanguageProvider from 'language'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -70,14 +70,16 @@ ReactDOM.render(
                 <Blocklist>
                     <Provider store={store}>
                         <Updaters />
-                        <ThemeProvider>
-                            <ThemedGlobalStyle />
-                            <KashiProvider>
-                                <Router>
-                                    <App />
-                                </Router>
-                            </KashiProvider>
-                        </ThemeProvider>
+                        <LanguageProvider>
+                            <ThemeProvider>
+                                <ThemedGlobalStyle />
+                                <KashiProvider>
+                                    <Router>
+                                        <App />
+                                    </Router>
+                                </KashiProvider>
+                            </ThemeProvider>
+                        </LanguageProvider>
                     </Provider>
                 </Blocklist>
             </Web3ProviderNetwork>

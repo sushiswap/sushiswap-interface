@@ -178,7 +178,7 @@ export default function Repay({ pair }: RepayProps) {
     } else if (repayValueSet) {
         actionName = 'Repay'
     } else if (swap) {
-        actionName = 'Automic repay'
+        actionName = 'Automatic repay'
     }
 
     // const actionDisabled = false

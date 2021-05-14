@@ -1,13 +1,13 @@
-import { Web3Provider } from '@ethersproject/providers'
 import { ChainId } from '@sushiswap/sdk'
+import { FortmaticConnector } from './Fortmatic'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { LatticeConnector } from '@web3-react/lattice-connector'
+import { NetworkConnector } from './NetworkConnector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
-import { FortmaticConnector } from './Fortmatic'
-import { NetworkConnector } from './NetworkConnector'
+import { Web3Provider } from '@ethersproject/providers'
 // import { BscConnector } from '@binance-chain/bsc-connector'
 
 const RPC = {
@@ -18,9 +18,9 @@ const RPC = {
     [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
     [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
     [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
-    // [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
-    [ChainId.MATIC]:
-        'https://apis.ankr.com/e22bfa5f5a124b9aa1f911b742f6adfe/c06bb163c3c2a10a4028959f4d82836d/polygon/full/main',
+    [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
+    // [ChainId.MATIC]:
+    //     'https://apis.ankr.com/e22bfa5f5a124b9aa1f911b742f6adfe/c06bb163c3c2a10a4028959f4d82836d/polygon/full/main',
     [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
     [ChainId.XDAI]: 'https://rpc.xdaichain.com',
     [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
@@ -31,7 +31,9 @@ const RPC = {
     [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
     [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com',
     [ChainId.HARMONY]: 'https://explorer.harmony.one',
-    [ChainId.HARMONY_TESTNET]: 'https://explorer.pops.one'
+    [ChainId.HARMONY_TESTNET]: 'https://explorer.pops.one',
+    [ChainId.OKEX]: 'https://exchainrpc.okex.org',
+    [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org'
 }
 
 export const network = new NetworkConnector({
@@ -64,7 +66,9 @@ export const injected = new InjectedConnector({
         128, // heco
         256, // heco testnet
         1666600000, // harmony
-        1666700000 // harmony testnet
+        1666700000, // harmony testnet
+        66, // okex testnet
+        65 // okex testnet
     ]
 })
 

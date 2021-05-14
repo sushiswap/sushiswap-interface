@@ -21,6 +21,8 @@ import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hook
 import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 import { TYPE } from '../../theme'
 import { Helmet } from 'react-helmet'
+import { t, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const Dots = styled.span`
     &::after {
@@ -70,6 +72,7 @@ const VoteCard = styled(DataCard)`
 `
 
 export default function ClaimModal() {
+    const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
 
     const isOpen = useModalOpen(ApplicationModal.SELF_CLAIM)
@@ -152,7 +155,7 @@ export default function ClaimModal() {
         <>
             {' '}
             <Helmet>
-                <title>Vesting | Sushi</title>
+                <title>{i18n._(t`Vesting`)} | Sushi</title>
             </Helmet>
             <PageWrapper>
                 <>
@@ -167,43 +170,45 @@ export default function ClaimModal() {
                                 <CardSection gap="sm">
                                     <RowBetween>
                                         <TYPE.white fontWeight={500} color={theme.text1}>
-                                            Community Approval
+                                            {i18n._(t`Community Approval`)}
                                         </TYPE.white>
                                     </RowBetween>
                                     <div
                                         className="text-sm text-gray-400 pt-2"
                                         style={{ maxWidth: '300px', minHeight: '150px' }}
                                     >
-                                        Vesting is executed within the guidelines selected by the community in{' '}
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                            href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
-                                        >
-                                            SIMP3
-                                        </a>
-                                        .
-                                        <br />
-                                        <br />
-                                        Please refer to the{' '}
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                            href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794"
-                                        >
-                                            forum discussion
-                                        </a>{' '}
-                                        for deliberations on additional points.
-                                        <br />
-                                        <br />
-                                        Additional records and weekly merkle updates can be found on{' '}
-                                        <a
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                            href="https://github.com/sushiswap/sushi-vesting"
-                                        >
-                                            Github
-                                        </a>
+                                        <Trans>
+                                            Vesting is executed within the guidelines selected by the community in{' '}
+                                            <a
+                                                target="_blank"
+                                                rel="noreferrer noopener"
+                                                href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
+                                            >
+                                                SIMP3
+                                            </a>
+                                            .
+                                            <br />
+                                            <br />
+                                            Please refer to the{' '}
+                                            <a
+                                                target="_blank"
+                                                rel="noreferrer noopener"
+                                                href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794"
+                                            >
+                                                forum discussion
+                                            </a>{' '}
+                                            for deliberations on additional points.
+                                            <br />
+                                            <br />
+                                            Additional records and weekly merkle updates can be found on{' '}
+                                            <a
+                                                target="_blank"
+                                                rel="noreferrer noopener"
+                                                href="https://github.com/sushiswap/sushi-vesting"
+                                            >
+                                                Github
+                                            </a>
+                                        </Trans>
                                     </div>
                                 </CardSection>
                             </VoteCard>
@@ -213,7 +218,7 @@ export default function ClaimModal() {
                                 <CardSection gap="sm">
                                     <RowBetween>
                                         <TYPE.white fontWeight={500} color={theme.text1}>
-                                            Your Claimable SUSHI this Week
+                                            {i18n._(t`Your Claimable SUSHI this Week`)}
                                         </TYPE.white>
                                         <QuestionHelper text="Your Vested SUSHI will be released each week for the next 6 months. The amount released each week is determined by your historical farming rewards. You do not need to harvest each week as unclaimed amounts from each week will continue to accrue onto the next." />
                                     </RowBetween>
@@ -225,14 +230,16 @@ export default function ClaimModal() {
                                         {account ? (
                                             <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
                                                 {totalLocked ? (
-                                                    `Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
+                                                    i18n._(
+                                                        t`Historical Total Locked: ${formattedNum(totalLocked)} SUSHI`
+                                                    )
                                                 ) : (
-                                                    <Dots>Historical Total Locked: Fetching Total</Dots>
+                                                    <Dots>{i18n._(t`Historical Total Locked: Fetching Total`)}</Dots>
                                                 )}
                                             </TYPE.white>
                                         ) : (
                                             <TYPE.white fontWeight={700} fontSize={14} color={theme.text3}>
-                                                Historical Total Locked: Connect Wallet
+                                                {i18n._(t`Historical Total Locked: Connect Wallet`)}
                                             </TYPE.white>
                                         )}
                                     </div>
@@ -252,9 +259,9 @@ export default function ClaimModal() {
                                         onClick={onClaim}
                                     >
                                         {pendingTreasurySignature ? (
-                                            <Dots>Pending Treasury Transfer</Dots>
+                                            <Dots>{i18n._(t`Pending Treasury Transfer`)}</Dots>
                                         ) : (
-                                            <> {claimConfirmed ? 'Claimed' : 'Claim SUSHI'}</>
+                                            <> {claimConfirmed ? i18n._(t`Claimed`) : i18n._(t`Claim SUSHI`)}</>
                                         )}
 
                                         {attempting && <Loader stroke="white" style={{ marginLeft: '10px' }} />}
@@ -265,7 +272,7 @@ export default function ClaimModal() {
                                 <CardSection gap="md">
                                     <RowBetween style={{ marginBottom: '5px' }}>
                                         <TYPE.white fontWeight={500} color={theme.text1}>
-                                            Things you can do with your SUSHI
+                                            {i18n._(t`Things you can do with your SUSHI`)}
                                         </TYPE.white>
                                     </RowBetween>
                                     <LightCard
@@ -277,12 +284,14 @@ export default function ClaimModal() {
                                             <RowBetween>
                                                 <AutoRow>
                                                     <AutoRow marginBottom="2px">
-                                                        <TYPE.body fontWeight={500}>Stake SUSHI for xSUSHI</TYPE.body>
+                                                        <TYPE.body fontWeight={500}>
+                                                            {i18n._(t`Stake SUSHI for xSUSHI`)}
+                                                        </TYPE.body>
                                                     </AutoRow>
                                                     <AutoRow>
                                                         <TYPE.darkGray fontSize=".75rem">
-                                                            Gain governance rights with xSUSHI and earn 5% APR (0.05% of
-                                                            all swaps from all chains)
+                                                            {t`Gain governance rights with xSUSHI and earn 5% APR (0.05% of
+                                                            all swaps from all chains)`}
                                                         </TYPE.darkGray>
                                                     </AutoRow>
                                                 </AutoRow>
@@ -299,12 +308,14 @@ export default function ClaimModal() {
                                             <RowBetween>
                                                 <AutoRow>
                                                     <AutoRow marginBottom="2px">
-                                                        <TYPE.body fontWeight={500}>Stack Yields with SAAVE</TYPE.body>
+                                                        <TYPE.body fontWeight={500}>
+                                                            {i18n._(t`Stack Yields with SAAVE`)}
+                                                        </TYPE.body>
                                                     </AutoRow>
                                                     <AutoRow>
                                                         <TYPE.darkGray fontSize=".75rem">
-                                                            Stake into xSUSHI add collateral as axSUSHI on Aave all in
-                                                            one click
+                                                            {t`Stake into xSUSHI add collateral as axSUSHI on Aave all in
+                                                            one click`}
                                                         </TYPE.darkGray>
                                                     </AutoRow>
                                                 </AutoRow>
@@ -318,13 +329,13 @@ export default function ClaimModal() {
                                                 <AutoRow>
                                                     <AutoRow marginBottom="2px">
                                                         <TYPE.body fontWeight={500}>
-                                                            Deposit SUSHI into BentoBox
+                                                            {i18n._(t`Deposit SUSHI into BentoBox`)}
                                                         </TYPE.body>
                                                     </AutoRow>
                                                     <AutoRow>
                                                         <TYPE.darkGray fontSize=".75rem">
-                                                            (COMING SOON) Accrue automatic yield through flash loans and
-                                                            SUSHI strategies
+                                                            {t`(COMING SOON) Accrue automatic yield through flash loans and
+                                                            SUSHI strategies`}
                                                         </TYPE.darkGray>
                                                     </AutoRow>
                                                 </AutoRow>

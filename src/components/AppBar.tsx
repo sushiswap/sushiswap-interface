@@ -1,13 +1,11 @@
 import { ChainId, Currency } from '@sushiswap/sdk'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import Logo from '../assets/images/logo.png'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useETHBalances } from '../state/wallet/hooks'
 import { ReactComponent as Burger } from '../assets/images/burger.svg'
 import { ReactComponent as X } from '../assets/images/x.svg'
-import Sushi from '../assets/kashi/tokens/sushi-square.jpg'
-import xSushi from '../assets/kashi/tokens/xsushi-square.jpg'
 import Web3Network from './Web3Network'
 import Web3Status from './Web3Status'
 import MoreMenu from './Menu'
@@ -15,19 +13,32 @@ import { ExternalLink, NavLink } from './Link'
 import { Disclosure } from '@headlessui/react'
 import { ANALYTICS_URL } from '../constants'
 import QuestionHelper from './QuestionHelper'
+import { t } from '@lingui/macro'
+import LanguageSwitch from './LanguageSwitch'
+import { useLingui } from '@lingui/react'
 
 function AppBar(): JSX.Element {
+    const { i18n } = useLingui()
     const { account, chainId, library } = useActiveWeb3React()
-    const { t } = useTranslation()
+    const { pathname } = useLocation()
+
+    const [navClassList, setNavClassList] = useState(
+        'w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur'
+    )
 
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
+    useEffect(() => {
+        if (pathname === '/trade') {
+            setNavClassList('w-screen bg-transparent z-10 backdrop-filter backdrop-blur')
+        } else {
+            setNavClassList('w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur')
+        }
+    }, [pathname])
+
     return (
         <header className="flex flex-row flex-nowrap justify-between w-screen">
-            <Disclosure
-                as="nav"
-                className="w-screen bg-transparent gradiant-border-bottom z-10 backdrop-filter backdrop-blur"
-            >
+            <Disclosure as="nav" className={navClassList}>
                 {({ open }) => (
                     <>
                         <div className="px-4 py-1.5">
@@ -39,7 +50,7 @@ function AppBar(): JSX.Element {
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
                                             <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                                {t('swap')}
+                                                {i18n._(t`Swap`)}
                                             </NavLink>
                                             <NavLink
                                                 id={`pool-nav-link`}
@@ -52,11 +63,16 @@ function AppBar(): JSX.Element {
                                                     pathname.startsWith('/find')
                                                 }
                                             >
-                                                {t('pool')}
+                                                {i18n._(t`Pool`)}
                                             </NavLink>
                                             {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                                    Yield
+                                                    {i18n._(t`Yield`)}
+                                                </NavLink>
+                                            )}
+                                            {chainId === ChainId.MAINNET && (
+                                                <NavLink id={`sushibar-nav-link`} to={'/sushibar'}>
+                                                    {i18n._(t`SushiBar`)}
                                                 </NavLink>
                                             )}
                                             {chainId &&
@@ -64,36 +80,22 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                                        Lend
+                                                        {i18n._(t`Lend`)}
                                                     </NavLink>
                                                 )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`stake-nav-link`} to={'/sushi-bar'}>
-                                                    SushiBar
-                                                </NavLink>
-                                            )}
                                             {chainId &&
                                                 [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        BentoBox
+                                                        {i18n._(t`BentoBox`)}
                                                     </NavLink>
                                                 )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                                    Vesting
+                                                    {i18n._(t`Vesting`)}
                                                 </NavLink>
                                             )}
-                                            {/* {chainId &&
-                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
-                                                    chainId
-                                                ) && (
-                                                    <NavLink id={`bento-nav-link`} to={'/bento/kashi/lend'}>
-                                                        Lend
-                                                    </NavLink>
-                                                )} */}
-
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
@@ -106,7 +108,7 @@ function AppBar(): JSX.Element {
                                                         id={`analytics-nav-link`}
                                                         href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                                     >
-                                                        Analytics
+                                                        {i18n._(t`Analytics`)}
                                                     </ExternalLink>
                                                 )}
                                         </div>
@@ -120,7 +122,9 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <QuestionHelper text={t('Add xSushi to your Metamask wallet')}>
+                                                    <QuestionHelper
+                                                        text={i18n._(t`Add xSushi to your Metamask wallet`)}
+                                                    >
                                                         <div
                                                             className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
                                                             onClick={() => {
@@ -160,7 +164,7 @@ function AppBar(): JSX.Element {
                                                             }}
                                                         >
                                                             <img
-                                                                src={xSushi}
+                                                                src={`${process.env.PUBLIC_URL}/images/tokens/xsushi-square.jpg`}
                                                                 alt="Switch Network"
                                                                 style={{
                                                                     minWidth: 36,
@@ -180,7 +184,7 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <QuestionHelper text={t('Add Sushi to your Metamask wallet')}>
+                                                    <QuestionHelper text={i18n._(t`Add Sushi to your Metamask wallet`)}>
                                                         <div
                                                             className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
                                                             onClick={() => {
@@ -234,7 +238,7 @@ function AppBar(): JSX.Element {
                                                             }}
                                                         >
                                                             <img
-                                                                src={Sushi}
+                                                                src={`${process.env.PUBLIC_URL}/images/tokens/sushi-square.jpg`}
                                                                 alt="Switch Network"
                                                                 style={{
                                                                     minWidth: 36,
@@ -257,7 +261,7 @@ function AppBar(): JSX.Element {
                                                     rel="noopener noreferrer"
                                                 >
                                                     <div className="grid grid-flow-col auto-cols-max items-center rounded-lg bg-dark-1000 text-sm text-secondary py-2 px-3 pointer-events-auto">
-                                                        <div className="text-primary">Bridge Assets</div>
+                                                        <div className="text-primary">{i18n._(t`Bridge Assets`)}</div>
                                                     </div>
                                                 </a>
                                             </div>
@@ -279,13 +283,14 @@ function AppBar(): JSX.Element {
                                             )}
                                             <Web3Status />
                                         </div>
+                                        <LanguageSwitch />
                                         <MoreMenu />
                                     </div>
                                 </div>
                                 <div className="-mr-2 flex sm:hidden">
                                     {/* Mobile menu button */}
                                     <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
-                                        <span className="sr-only">Open main menu</span>
+                                        <span className="sr-only">{i18n._(t`Open main menu`)}</span>
                                         {open ? (
                                             <X title="Close" className="block h-6 w-6" aria-hidden="true" />
                                         ) : (
@@ -307,7 +312,7 @@ function AppBar(): JSX.Element {
                             </a> */}
 
                                 <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                    {t('swap')}
+                                    {i18n._(t`Swap`)}
                                 </NavLink>
                                 <NavLink
                                     id={`pool-nav-link`}
@@ -320,34 +325,34 @@ function AppBar(): JSX.Element {
                                         pathname.startsWith('/find')
                                     }
                                 >
-                                    {t('pool')}
+                                    {i18n._(t`Pool`)}
                                 </NavLink>
 
-                                {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
+                                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                        Yield
+                                        {i18n._(t`Yield`)}
                                     </NavLink>
                                 )}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                            Kashi Lending
+                                            {i18n._(t`Kashi Lending`)}
                                         </NavLink>
                                     )}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                            BentoBox
+                                            {i18n._(t`BentoBox`)}
                                         </NavLink>
                                     )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/sushibar'}>
-                                        SushiBar
+                                        {i18n._(t`SushiBar`)}
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                        Vesting
+                                        {i18n._(t`Vesting`)}
                                     </NavLink>
                                 )}
                                 {chainId &&
@@ -362,7 +367,7 @@ function AppBar(): JSX.Element {
                                             id={`analytics-nav-link`}
                                             href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                         >
-                                            Analytics
+                                            {i18n._(t`Analytics`)}
                                         </ExternalLink>
                                     )}
                             </div>

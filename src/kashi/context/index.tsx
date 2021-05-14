@@ -5,7 +5,6 @@ import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
 import { useBoringHelperContract, useBentoBoxContract } from 'hooks/useContract'
-import _ from 'lodash'
 import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
 import { rpcToObj } from 'kashi/functions/utils'
 import { toAmount, toShare } from 'kashi/functions/bentobox'
@@ -189,9 +188,22 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 console.log({ logPairs })
 
                 // Filter all pairs by supported oracles and verify the oracle setup
+
+                const invalidOracles: any = []
+
                 const allPairAddresses = logPairs
-                    .filter((pair: any) => getOracle(pair, chain, tokens).valid)
+                    .filter((pair: any) => {
+                        const oracle = getOracle(pair, chain, tokens)
+                        if (!oracle.valid) {
+                            // console.log(pair, oracle.valid, oracle.error)
+                            invalidOracles.push({ pair, error: oracle.error })
+                        }
+                        return oracle.valid
+                    })
                     .map((pair: any) => pair.address)
+                // 0x8ae30fDE41eEAF250C5774093fa5693A80bEdEAD
+
+                console.log('invalidOracles', invalidOracles)
 
                 // Get full info on all the verified pairs
                 const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
@@ -221,8 +233,15 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                 // For any tokens that are not on the defaultTokenList, retrieve name, symbol, decimals, etc.
                 if (missingTokens.length) {
+                    console.log('missing tokens length', missingTokens.length)
                     // TODO
                 }
+                console.log('PAIRS', pairs)
+
+                // console.log(
+                //     'ANKR?',
+                //     pairs.find((t: any) => t.asset.address === '0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4')
+                // )
 
                 // Calculate the USD price for each token
                 Object.values(pairTokens).forEach((token: any) => {

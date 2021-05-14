@@ -1,20 +1,23 @@
-import DepositGraphic from 'assets/kashi/deposit-graphic.png'
-import { ethers } from 'ethers'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { useBentoBoxContract } from 'hooks/useContract'
 import {
-    ChainlinkToken,
     CHAINLINK_MAPPING,
     CHAINLINK_ORACLE_ADDRESS,
     CHAINLINK_TOKENS,
+    ChainlinkToken,
     KASHI_ADDRESS
 } from 'kashi/constants'
-import { e10 } from 'kashi/functions/math'
+import { Card, CardHeader, Layout } from 'kashi/components'
 import React, { useEffect, useState } from 'react'
-import { useTransactionAdder } from 'state/transactions/hooks'
+
 import { Button } from 'components'
-import { Card, Layout, CardHeader, ListBox } from 'kashi/components'
+import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { Helmet } from 'react-helmet'
+import OracleListBox from './OracleListBox'
+import TokenListBox from './TokenListBox'
+import { e10 } from 'kashi/functions/math'
+import { ethers } from 'ethers'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBentoBoxContract } from 'hooks/useContract'
+import { useTransactionAdder } from 'state/transactions/hooks'
 
 const CreatePair = () => {
     const { chainId } = useActiveWeb3React()
@@ -41,7 +44,7 @@ const CreatePair = () => {
         let multiply = ethers.constants.AddressZero
         let divide = ethers.constants.AddressZero
         const multiplyMatches = Object.values(mapping).filter(
-            m => m.from == asset.address && m.to == collateral.address
+            m => m.from === asset.address && m.to === collateral.address
         )
         const oracleData = ''
         let decimals = 0
@@ -51,17 +54,17 @@ const CreatePair = () => {
             decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
         } else {
             const divideMatches = Object.values(mapping).filter(
-                m => m.from == collateral.address && m.to == asset.address
+                m => m.from === collateral.address && m.to === asset.address
             )
             if (divideMatches.length) {
                 const match = divideMatches[0]
                 divide = match.address!
                 decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals
             } else {
-                const mapFrom = Object.values(mapping).filter(m => m.from == asset.address)
-                const mapTo = Object.values(mapping).filter(m => m.from == collateral.address)
+                const mapFrom = Object.values(mapping).filter(m => m.from === asset.address)
+                const mapTo = Object.values(mapping).filter(m => m.from === collateral.address)
                 const match = mapFrom
-                    .map(mfrom => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to == mto.to) }))
+                    .map(mfrom => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to === mto.to) }))
                     .filter(path => path.mto.length)
                 if (match.length) {
                     multiply = match[0].mfrom.address!
@@ -141,19 +144,24 @@ const CreatePair = () => {
                         Currently only Chainlink oracles are available. Support for more oracles, such as SushiSwap
                         on-chain time weighted average pricing (TWAP) oracles will be added later.
                     </p>
-                    <ListBox
+
+                    <OracleListBox />
+
+                    <TokenListBox
                         label={'Asset to Borrow (SHORT)'}
                         tokens={assetTokens}
                         selectedToken={selectedAsset}
                         setSelectedToken={setSelectedAsset}
                     />
-                    <ListBox
+
+                    <TokenListBox
                         label={'Collateral (LONG)'}
                         tokens={collateralTokens}
                         selectedToken={selectedCollateral}
                         setSelectedToken={setSelectedCollateral}
                         disabled={selectedAsset === empty}
                     />
+
                     <Button
                         color="gradient"
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"

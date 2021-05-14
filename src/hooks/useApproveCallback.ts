@@ -3,14 +3,12 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { CurrencyAmount, ETHER, TokenAmount, Trade } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useTokenAllowance } from '../data/Allowances'
-import { getTradeVersion, useV1TradeExchangeAddress } from '../data/V1'
 import { Field } from '../state/swap/actions'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin, getRouterAddress } from '../utils'
 import { computeSlippageAdjustedAmounts } from '../utils/prices'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useTokenContract } from './useContract'
-import { Version } from './useToggledVersion'
 
 export enum ApprovalState {
     UNKNOWN,
@@ -29,7 +27,7 @@ export function useApproveCallback(
     const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
     const pendingApproval = useHasPendingApproval(token?.address, spender)
 
-    // console.log({ token, currentAllowance, pendingApproval })
+    console.log({ token, currentAllowance, amountToApprove, pendingApproval })
 
     // check the current approval status
     const approvalState: ApprovalState = useMemo(() => {
@@ -106,8 +104,6 @@ export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) 
         () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
         [trade, allowedSlippage]
     )
-    const tradeIsV1 = getTradeVersion(trade) === Version.v1
-    const v1ExchangeAddress = useV1TradeExchangeAddress(trade)
     const { chainId } = useActiveWeb3React()
-    return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : getRouterAddress(chainId))
+    return useApproveCallback(amountToApprove, getRouterAddress(chainId))
 }

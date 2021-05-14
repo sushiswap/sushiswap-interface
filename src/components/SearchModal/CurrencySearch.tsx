@@ -6,24 +6,23 @@ import useToggle from 'hooks/useToggle'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Edit } from 'react-feather'
 import ReactGA from 'react-ga'
-import { useTranslation } from 'react-i18next'
+import { t } from '@lingui/macro'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
-import { Text } from 'rebass'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens, useFoundOnInactiveList, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
-import { ButtonText, CloseIcon, IconWrapper, TYPE } from '../../theme'
+import { ButtonText, IconWrapper, TYPE } from '../../theme'
 import { isAddress } from '../../utils'
 import Column from '../Column'
-import Row, { RowBetween, RowFixed } from '../Row'
+import Row, { RowFixed } from '../Row'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
 import { filterTokens, useSortedTokensByQuery } from './filtering'
 import ImportRow from './ImportRow'
 import { useTokenComparator } from './sorting'
-import { PaddedColumn, SearchInput, Separator } from './styleds'
 import ModalHeader from '../ModalHeader'
+import { useLingui } from '@lingui/react'
 
 const ContentWrapper = styled(Column)`
     width: 100%;
@@ -54,7 +53,8 @@ export function CurrencySearch({
     showImportView,
     setImportToken
 }: CurrencySearchProps) {
-    const { t } = useTranslation()
+    const { i18n } = useLingui()
+
     const { chainId } = useActiveWeb3React()
     const theme = useTheme()
 
@@ -156,7 +156,7 @@ export function CurrencySearch({
                 <input
                     type="text"
                     id="token-search-input"
-                    placeholder={t('tokenSearchPlaceholder')}
+                    placeholder={i18n._(t`Search name or paste address`)}
                     autoComplete="off"
                     value={searchQuery}
                     ref={inputRef as RefObject<HTMLInputElement>}
@@ -207,7 +207,7 @@ export function CurrencySearch({
             ) : (
                 <Column style={{ padding: '20px', height: '100%' }}>
                     <TYPE.main color={theme.text3} textAlign="center" mb="20px">
-                        No results found.
+                        {i18n._(t`No results found`)}
                     </TYPE.main>
                 </Column>
             )}
@@ -218,7 +218,7 @@ export function CurrencySearch({
                             <IconWrapper size="16px" marginRight="6px">
                                 <Edit />
                             </IconWrapper>
-                            <TYPE.main color={theme.blue1}>Manage</TYPE.main>
+                            <TYPE.main color={theme.blue1}>{i18n._(t`Manage`)}</TYPE.main>
                         </RowFixed>
                     </ButtonText>
                 </Row>

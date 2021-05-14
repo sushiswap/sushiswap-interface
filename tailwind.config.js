@@ -18,12 +18,14 @@ module.exports = {
                 tl: 'to top left'
             },
             colors: {
-                'blue-pink': ['#27B0E6', '#FA52A0']
+                'blue-pink': ['#27B0E6', '#FA52A0'],
+                'pink-red-light-brown': ['#FE5A75', '#FEC464']
             },
             background: {
                 'dark-1000': '#0D0415',
                 'dark-900': '#161522',
-                'dark-800': '#202231'
+                'dark-800': '#202231',
+                'dark-pink-red': '#4e3034'
             },
             border: {
                 // defaults to these values (optional)
@@ -40,9 +42,16 @@ module.exports = {
             purple: '#A755DD',
             green: '#7CFF6B',
 
+            'pink-red': '#FE5A75',
+            'light-brown': '#FEC464',
+            'light-yellow': '#FFD166',
+            'cyan-blue': '#0993EC',
+            pink: '#F338C3',
+
             'dark-pink': '#221825',
             'dark-blue': '#0F182A',
             'dark-1000': '#0D0415',
+            'dark-950': '#0d0d1f',
             'dark-900': '#161522',
             'dark-850': '#1d1e2c',
             'dark-800': '#202231',
@@ -195,6 +204,9 @@ module.exports = {
                     '33%': { content: '".."' },
                     '66%': { content: '"..."' }
                 }
+            },
+            minHeight: {
+                cardContent: '230px'
             }
         }
     },

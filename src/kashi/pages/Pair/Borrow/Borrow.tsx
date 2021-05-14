@@ -139,6 +139,16 @@ export default function Borrow({ pair }: BorrowProps) {
             true
         )
 
+    console.log('Oracle Discrepancy', {
+        name: pair.asset.symbol + '-' + pair.collateral.symbol,
+        borrowValueSet: borrowValueSet,
+        displayUpdateOracle: displayUpdateOracle,
+        currentExchangeRate: pair.currentExchangeRate.toFixed(pair.asset.decimals),
+        oracleExchangeRate: pair.oracleExchangeRate.toFixed(pair.asset.decimals),
+        diff:
+            pair.currentExchangeRate.toFixed(pair.asset.decimals) / pair.oracleExchangeRate.toFixed(pair.asset.decimals)
+    })
+
     const transactionReview = new TransactionReview()
     if ((collateralValue || borrowValue) && !collateralWarnings.broken && (!borrowWarnings.broken || !borrowValue)) {
         if (collateralValueSet) {
@@ -208,7 +218,19 @@ export default function Borrow({ pair }: BorrowProps) {
         let summary = ''
 
         if (borrowValueSet) {
-            if (displayUpdateOracle) {
+            if (
+                displayUpdateOracle
+                // ||
+                // pair.currentExchangeRate.toFixed(pair.asset.decimals) /
+                //     pair.oracleExchangeRate.toFixed(pair.asset.decimals) >
+                //     1.05
+            ) {
+                console.log(
+                    displayUpdateOracle,
+                    pair.currentExchangeRate.toFixed(pair.asset.decimals) /
+                        pair.oracleExchangeRate.toFixed(pair.asset.decimals) >
+                        1.05
+                )
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
 
@@ -303,6 +325,8 @@ export default function Borrow({ pair }: BorrowProps) {
                 .toFixed(pair.collateral.decimals),
             borrow: multipliedBorrow.toFixed(pair.asset.decimals)
         })
+
+        console.log('multipliedBorrow:', multipliedBorrow)
 
         setBorrowValue(multipliedBorrow.toFixed(pair.asset.decimals))
     }
@@ -405,7 +429,7 @@ export default function Borrow({ pair }: BorrowProps) {
             {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
 
             {(collateralValueSet ||
-                (borrowValueSet && pair.userCollateralValue.isZero()) ||
+                (borrowValueSet && !pair.userCollateralAmount.value.isZero()) ||
                 (swap && (priceImpactSeverity < 3 || isExpertMode))) && (
                 <TransactionReviewView transactionReview={transactionReview} />
             )}

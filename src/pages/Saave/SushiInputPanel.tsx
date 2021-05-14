@@ -1,7 +1,7 @@
 import { Pair } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { t } from '@lingui/macro'
 import styled from 'styled-components'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { Input as NumericalInput } from '../../components/NumericalInput'
@@ -11,6 +11,7 @@ import useTheme from '../../hooks/useTheme'
 import useSaave from '../../hooks/useSaave'
 import { TYPE } from '../../theme'
 import { formatFromBalance, formatToBalance } from '../../utils'
+import { useLingui } from '@lingui/react'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -137,7 +138,7 @@ export default function CurrencyInputPanel({
     cornerRadiusBottomNone,
     cornerRadiusTopNone
 }: CurrencyInputPanelProps) {
-    const { t } = useTranslation()
+    const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
@@ -207,7 +208,7 @@ export default function CurrencyInputPanel({
                                         fontSize={14}
                                         style={{ display: 'inline', cursor: 'pointer' }}
                                     >
-                                        SUSHI Balance: {sushiBalance}
+                                        {i18n._(t`SUSHI Balance: ${sushiBalance}`)}
                                     </TYPE.body>
                                 )}
                             </RowBetween>
@@ -227,14 +228,14 @@ export default function CurrencyInputPanel({
                                     }}
                                 />
                                 {account && label !== 'To' && (
-                                    <StyledBalanceMax onClick={handleMaxDeposit}>MAX</StyledBalanceMax>
+                                    <StyledBalanceMax onClick={handleMaxDeposit}>{i18n._(t`MAX`)}</StyledBalanceMax>
                                 )}
                             </>
                         )}
                         {!allowance || Number(allowance) === 0 ? (
                             <ButtonSelect onClick={handleApprove}>
                                 <Aligner>
-                                    <StyledButtonName>Approve</StyledButtonName>
+                                    <StyledButtonName>{i18n._(t`Approve`)}</StyledButtonName>
                                 </Aligner>
                             </ButtonSelect>
                         ) : (

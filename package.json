@@ -21,13 +21,18 @@
         "@fullhuman/postcss-purgecss": "^4.0.3",
         "@headlessui/react": "^1.0.0",
         "@hot-loader/react-dom": "^17.0.1",
+        "@lingui/cli": "^3.8.10",
+        "@lingui/detect-locale": "^3.8.10",
+        "@lingui/loader": "^3.8.10",
+        "@lingui/macro": "^3.8.10",
+        "@lingui/react": "^3.8.10",
         "@popperjs/core": "^2.4.4",
         "@reach/dialog": "^0.10.3",
         "@reach/portal": "^0.10.3",
         "@reduxjs/toolkit": "^1.3.5",
         "@sushiswap/core": "2.0.0-canary.0",
-        "@sushiswap/default-token-list": "^6.0.1",
-        "@sushiswap/sdk": "5.0.0-canary.6",
+        "@sushiswap/default-token-list": "^6.7.0",
+        "@sushiswap/sdk": "5.0.0-canary.7",
         "@sushiswap/sushi-data": "^2.0.0-canary.2",
         "@tailwindcss/aspect-ratio": "^0.2.0",
         "@tailwindcss/forms": "^0.2.1",
@@ -92,10 +97,6 @@
         "ethers": "^5.0.7",
         "fuse.js": "^6.4.6",
         "husky": "^6.0.0",
-        "i18next": "^19.9.1",
-        "i18next-browser-languagedetector": "^3.0.1",
-        "i18next-http-backend": "^1.2.1",
-        "i18next-xhr-backend": "^2.0.1",
         "jazzicon": "^1.5.0",
         "lint-staged": "^10.0.0",
         "lodash": "^4.17.20",
@@ -121,7 +122,6 @@
         "react-ga": "^2.5.7",
         "react-helmet": "^6.1.0",
         "react-hot-loader": "^4.13.0",
-        "react-i18next": "^11.8.9",
         "react-markdown": "^4.3.1",
         "react-popper": "^2.2.3",
         "react-redux": "^7.2.0",
@@ -150,6 +150,8 @@
     },
     "scripts": {
         "analyze": "source-map-explorer 'build/static/js/*.js' --only-mapped --html analysis/index.html",
+        "prebuild": "lingui compile",
+        "prestart": "lingui compile",
         "start": "cross-env PORT=3000 react-app-rewired start",
         "dev": "cross-env PORT=3001 react-app-rewired start",
         "build": "cross-env CI= GENERATE_SOURCEMAP=false react-app-rewired build",
@@ -157,7 +159,8 @@
         "eject": "react-app-rewired eject",
         "test": "react-app-rewired test --env=jsdom",
         "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "lingui": "lingui extract && lingui compile"
     },
     "browserslist": {
         "production": [
@@ -171,5 +174,8 @@
             "last 1 safari version"
         ]
     },
-    "license": "GPL-3.0-or-later"
+    "license": "GPL-3.0-or-later",
+    "dependencies": {
+        "@lufycz/sushi-data": "^2.0.0-canary-21"
+    }
 }
