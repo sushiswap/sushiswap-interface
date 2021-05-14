@@ -145,7 +145,7 @@ const CreatePair = () => {
                         on-chain time weighted average pricing (TWAP) oracles will be added later.
                     </p>
 
-                    <OracleListBox />
+                    {/* <OracleListBox /> */}
 
                     <TokenListBox
                         label={'Asset to Borrow (SHORT)'}
