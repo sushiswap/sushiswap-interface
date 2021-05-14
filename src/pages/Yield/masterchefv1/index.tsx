@@ -163,7 +163,7 @@ const TokenBalance = ({ farm }: any) => {
                         </div>
                         <div className="flex justify-end items-center">
                             <div className="text-right font-semibold text-xl">
-                                {formattedPercent(farm.roiPerYear * 100)}{' '}
+                                {farm.roiPerYear > 10000 ? '10000%+' : formattedPercent(farm.roiPerYear * 100)}
                             </div>
                         </div>
                     </div>
@@ -207,7 +207,7 @@ const TokenBalance = ({ farm }: any) => {
                         </div>
                         <div className="flex justify-end items-center">
                             <div className="text-right font-semibold text-xl">
-                                {formattedPercent(farm.roiPerYear * 100)}{' '}
+                                {farm.roiPerYear > 10000 ? '10000%+' : formattedPercent(farm.roiPerYear * 100)}
                             </div>
                         </div>
                     </div>

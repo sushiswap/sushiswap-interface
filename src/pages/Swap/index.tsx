@@ -28,6 +28,7 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { Field } from '../../state/swap/actions'
 import { Helmet } from 'react-helmet'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { Link } from 'react-router-dom'
 import Loader from '../../components/Loader'
 import Lottie from 'lottie-react'
 import PolygonLogo from '../../assets/images/matic-logo.png'
@@ -41,14 +42,15 @@ import TokenWarningModal from '../../components/TokenWarningModal'
 import TradePrice from '../../components/swap/TradePrice'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
+import { isTradeBetter } from 'utils/trades'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
-import { useSwapCallback } from '../../hooks/useSwapCallback'
 import { useLingui } from '@lingui/react'
+import { useSwapCallback } from '../../hooks/useSwapCallback'
 
 export default function Swap() {
     const { i18n } = useLingui()
@@ -332,21 +334,23 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">
-                                            {i18n._(t`300M+ TVL on Polygon! Optimized routing enabled`)}
-                                        </div>
-                                        <div className="text-purple text-sm">
-                                            {i18n._(t`Enjoy the lowest slippage on Polygon`)}
-                                        </div>
+                                        <div className="text-white">New Yield Farms! CRV, LINK, USDT, USDC</div>
+                                        <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
-                                    <a
+                                    <Link
+                                        to="/yield"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
+                                    >
+                                        Visit Yield
+                                    </Link>
+                                    {/* <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
                                         target="_blank"
                                         rel="noreferrer noopener"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
                                     >
-                                        {i18n._(t`Read Tutorial`)}
-                                    </a>
+                                        Read Tutorial
+                                    </a> */}
                                 </div>
                             </DarkCard>
                         </div>

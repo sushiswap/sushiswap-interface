@@ -16,6 +16,7 @@ import {
 import { POOL_DENY } from '../../constants'
 import Fraction from '../../entities/Fraction'
 import { resetIdCounter } from 'react-tabs'
+import { apys } from '@lufycz/sushi-data/dist/sushi/queries/masterchef'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {
@@ -87,7 +88,7 @@ const useFarms = () => {
                     !POOL_DENY.includes(pool?.id) &&
                     pairs.find((pair: any) => pair?.id === pool?.pair) &&
                     Number(pool.miniChef.totalAllocPoint) > 0 &&
-                    !['4', '7', '8', '9'].includes(pool?.id) // manual filter for now
+                    !['4'].includes(pool?.id) // manual filter for now
                 )
             })
             .map((pool: any) => {
@@ -122,14 +123,22 @@ const useFarms = () => {
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
                 //const oneYearFees = 0.05
-                const oneDayVolume = pair.volumeUSD - pair24Ago.volumeUSD
+                const oneDayVolume = pair.volumeUSD ? pair.volumeUSD - pair24Ago?.volumeUSD : 10000
                 const oneYearFees = (oneDayVolume * 0.003 * 365) / pair.reserveUSD
-                const oneMonthFees = oneYearFees / 12
+                const oneMonthFees = oneYearFees ? oneYearFees / 12 : 0.05
+                const rewardAPR = roiPerMonth * 12
+                //const roiPerYear = rewardAPR
                 //where (1 + r/n )** n – 1
-                const roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 120) ** 120 - 1 // compounding 3 days APY
+                let roiPerYear
+                if (rewardAPR < 0.35) {
+                    roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 120) ** 120 - 1 // compounding 3 days APY
+                } else {
+                    roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 24) ** 24 - 1 // compounding 2 weeks APY
+                }
                 //const roiPerYear = (1 + ((roiPerDay + feeFactorAnnualized / 365) * 365) / 365) ** 365 - 1 // compounding daily APY
                 //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)
+                //console.log(pair.token0.symbol + '-' + pair.token1.symbol, roiPerYear)
 
                 return {
                     ...pool,
