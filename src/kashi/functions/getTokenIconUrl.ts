@@ -174,7 +174,9 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174').toLowerCase()]: 'USDC-square',
         [String('0xc2132D05D31c914a87C6611C10748AEb04B58e8F').toLowerCase()]: 'USDT-square',
         [String('0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6').toLowerCase()]: 'BTC-square', // WBTC
-        [String('0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a').toLowerCase()]: 'SUSHI-square' // SUSHI
+        [String('0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a').toLowerCase()]: 'SUSHI-square', // SUSHI
+        [String('0x172370d5Cd63279eFa6d502DAB29171933a610AF').toLowerCase()]: 'CRV-square',
+        [String('0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39').toLowerCase()]: 'LINK-square'
     },
     [ChainId.HECO]: {
         [String('0x202b4936fE1a82A4965220860aE46d7d3939Bb25').toLowerCase()]: 'AAVE-square',
