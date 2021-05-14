@@ -18,6 +18,8 @@ import { StyledInternalLink, TYPE } from '../../theme'
 import { currencyId } from '../../utils/currencyId'
 import { Dots } from '../Pool/styleds'
 import { Helmet } from 'react-helmet'
+import { t, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 enum Fields {
     TOKEN0 = 0,
@@ -25,6 +27,7 @@ enum Fields {
 }
 
 export default function PoolFinder() {
+    const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
 
     const [showSearch, setShowSearch] = useState<boolean>(false)
@@ -71,7 +74,9 @@ export default function PoolFinder() {
     const prerequisiteMessage = (
         <LightCard padding="45px 10px">
             <Text textAlign="center">
-                {!account ? 'Connect to a wallet to find pools' : 'Select a token to find your liquidity.'}
+                {!account
+                    ? i18n._(t`Connect to a wallet to find pools`)
+                    : i18n._(t`Select a token to find your liquidity`)}
             </Text>
         </LightCard>
     )
@@ -79,7 +84,7 @@ export default function PoolFinder() {
     return (
         <>
             <Helmet>
-                <title>Find Pool | Sushi</title>
+                <title>{i18n._(t`Find Pool`)} | Sushi</title>
             </Helmet>
             <div className="relative w-full max-w-lg rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <FindPoolTabs />
@@ -87,8 +92,10 @@ export default function PoolFinder() {
                     <BlueCard>
                         <AutoColumn gap="10px">
                             <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
-                                interface.
+                                <Trans>
+                                    <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
+                                    interface
+                                </Trans>
                             </TYPE.link>
                         </AutoColumn>
                     </BlueCard>
@@ -107,7 +114,7 @@ export default function PoolFinder() {
                             </Row>
                         ) : (
                             <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                Select a Token
+                                {i18n._(t`Select a token`)}
                             </Text>
                         )}
                     </ButtonDropdownLight>
@@ -131,7 +138,7 @@ export default function PoolFinder() {
                             </Row>
                         ) : (
                             <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                Select a Token
+                                {i18n._(t`Select a token`)}
                             </Text>
                         )}
                     </ButtonDropdownLight>
@@ -146,10 +153,10 @@ export default function PoolFinder() {
                             }}
                         >
                             <Text textAlign="center" fontWeight={500}>
-                                Pool Found!
+                                {i18n._(t`Pool Found!`)}
                             </Text>
                             <StyledInternalLink to={`/pool`}>
-                                <Text textAlign="center">Manage this pool.</Text>
+                                <Text textAlign="center">{i18n._(t`Manage this pool`)}</Text>
                             </StyledInternalLink>
                         </ColumnCenter>
                     )}
@@ -161,11 +168,13 @@ export default function PoolFinder() {
                             ) : (
                                 <LightCard padding="45px 10px">
                                     <AutoColumn gap="sm" justify="center">
-                                        <Text textAlign="center">You don’t have liquidity in this pool yet.</Text>
+                                        <Text textAlign="center">
+                                            {i18n._(t`You don’t have liquidity in this pool yet`)}
+                                        </Text>
                                         <StyledInternalLink
                                             to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}
                                         >
-                                            <Text textAlign="center">Add liquidity.</Text>
+                                            <Text textAlign="center">{i18n._(t`Add liquidity`)}</Text>
                                         </StyledInternalLink>
                                     </AutoColumn>
                                 </LightCard>
@@ -173,9 +182,9 @@ export default function PoolFinder() {
                         ) : validPairNoLiquidity ? (
                             <LightCard padding="45px 10px">
                                 <AutoColumn gap="sm" justify="center">
-                                    <Text textAlign="center">No pool found.</Text>
+                                    <Text textAlign="center">{i18n._(t`No pool found`)}</Text>
                                     <StyledInternalLink to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                                        Create pool.
+                                        {i18n._(t`Create pool`)}
                                     </StyledInternalLink>
                                 </AutoColumn>
                             </LightCard>
@@ -183,7 +192,7 @@ export default function PoolFinder() {
                             <LightCard padding="45px 10px">
                                 <AutoColumn gap="sm" justify="center">
                                     <Text textAlign="center" fontWeight={500}>
-                                        Invalid pair.
+                                        {i18n._(t`Invalid pair`)}
                                     </Text>
                                 </AutoColumn>
                             </LightCard>
@@ -191,7 +200,7 @@ export default function PoolFinder() {
                             <LightCard padding="45px 10px">
                                 <AutoColumn gap="sm" justify="center">
                                     <Text textAlign="center">
-                                        Loading
+                                        {i18n._(t`Loading`)}
                                         <Dots />
                                     </Text>
                                 </AutoColumn>

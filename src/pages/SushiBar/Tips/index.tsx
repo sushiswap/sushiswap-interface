@@ -1,17 +1,16 @@
 import React, { useCallback, useContext } from 'react'
 import { Helmet } from 'react-helmet'
 import { ChevronLeft } from 'react-feather'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { Button } from 'components'
 import { ThemeContext } from 'styled-components'
-import { useHistory } from 'react-router-dom'
 
 import BentoSquare from '../../../assets/images/bento-square.png'
-import AaveSquare from '../../../assets/images/aave-square.png'
-import Vote from '../../../assets/images/vote.png'
 //import BaoSquare from '../../../assets/images/bao-square.png'
+import AaveSquare from '../../../assets/images/aave-square.png'
 import CreamSquare from '../../../assets/images/aave-square.png'
+import Vote from '../../../assets/images/vote.png'
 
 interface Tip {
     title: string

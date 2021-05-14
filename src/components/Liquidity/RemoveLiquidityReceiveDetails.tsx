@@ -61,7 +61,8 @@ export default function RemoveLiquidityReceiveDetails({
                         </RowBetween>
                     </AutoColumn>
                 </div>
-                <RowBetween className="space-x-6">
+                {/* <RowBetween className="space-x-6"> */}
+                <div className="flex flex-col space-y-3 md:flex-row md:space-x-6 md:space-y-0">
                     <div className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
                         <CurrencyLogo currency={currencyA} size="46px" style={{ marginRight: '12px' }} />
                         <AutoColumn>
@@ -76,7 +77,8 @@ export default function RemoveLiquidityReceiveDetails({
                             <div className="text-sm">{currencyB?.getSymbol(chainId)}</div>
                         </AutoColumn>
                     </div>
-                </RowBetween>
+                </div>
+                {/* </RowBetween> */}
             </div>
         </div>
     )

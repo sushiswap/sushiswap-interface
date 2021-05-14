@@ -9,6 +9,8 @@ import { Input as NumericalInput } from 'components/NumericalInput'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { formattedNum } from 'utils'
 import { Dots } from '../../Pool/styleds'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function Deposit({
     tokenAddress,
@@ -17,6 +19,7 @@ export default function Deposit({
     tokenAddress: string
     tokenSymbol: string
 }): JSX.Element {
+    const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
 
     const { deposit } = useBentoBox()
@@ -44,7 +47,7 @@ export default function Deposit({
         <>
             {account && (
                 <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
-                    Wallet Balance: {formattedNum(balance.value.toFixed(balance.decimals))}
+                    {i18n._(t`Wallet Balance`)}: {formattedNum(balance.value.toFixed(balance.decimals))}
                 </div>
             )}
             <div className="flex items-center relative w-full mb-4">
@@ -65,14 +68,18 @@ export default function Deposit({
                         }}
                         className="absolute right-4 focus:ring focus:ring-blue"
                     >
-                        MAX
+                        {i18n._(t`MAX`)}
                     </Button>
                 )}
             </div>
 
             {showApprove && (
                 <Button color="blue" disabled={approvalState === ApprovalState.PENDING} onClick={approve}>
-                    {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
+                    {approvalState === ApprovalState.PENDING ? (
+                        <Dots>{i18n._(t`Approving`)} </Dots>
+                    ) : (
+                        i18n._(t`Approve`)
+                    )}
                 </Button>
             )}
             {!showApprove && (
@@ -85,7 +92,7 @@ export default function Deposit({
                         setPendingTx(false)
                     }}
                 >
-                    Deposit
+                    {i18n._(t`Deposit`)}
                 </Button>
             )}
         </>

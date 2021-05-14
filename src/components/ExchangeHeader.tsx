@@ -6,8 +6,11 @@ import profileAnimationData from '../assets/animation/wallet.json'
 
 import Lottie from 'lottie-react'
 import Gas from './Gas'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function SwapHeader({ input = undefined, output = undefined }: any): JSX.Element {
+    const { i18n } = useLingui()
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
     return (
@@ -23,7 +26,7 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
                         }`
                     }}
                 >
-                    Swap
+                    {i18n._(t`Swap`)}
                 </NavLink>
                 {/* <NavLink
                     className="py-2 px-4 rounded-md text-center text-secondary hover:text-high-emphesis text-xs font-medium"
@@ -49,7 +52,7 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
                         )
                     }}
                 >
-                    Liquidity
+                    {i18n._(t`Liquidity`)}
                 </NavLink>
             </div>
             <div className="flex items-center rounded md:border-2 md:border-dark-800 md:p-2">

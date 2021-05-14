@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import ErrorTriangle from '../../assets/images/error-triangle.svg'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { ethers } from 'ethers'
 import { BAR_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useWalletModalToggle } from '../../state/application/hooks'
@@ -12,8 +11,10 @@ import { formatFromBalance, formatToBalance } from '../../utils'
 import useSushiBar from '../../hooks/useSushiBar'
 import TransactionFailedModal from './TransactionFailedModal'
 import { Button, Dots } from '../../components'
+import { t } from '@lingui/macro'
 
 import sushiData from '@sushiswap/sushi-data'
+import { useLingui } from '@lingui/react'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -53,6 +54,7 @@ interface StakeCardProps {
 }
 
 export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProps) {
+    const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
 
     const { allowance, enter, leave } = useSushiBar()
@@ -158,7 +160,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         }}
                     >
                         <div className={activeTab === 0 ? activeTabStyle : inactiveTabStyle}>
-                            <p>Stake SUSHI</p>
+                            <p>{i18n._(t`Stake SUSHI`)}</p>
                         </div>
                     </div>
                     <div
@@ -169,14 +171,14 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         }}
                     >
                         <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
-                            <p>Unstake</p>
+                            <p>{i18n._(t`Unstake`)}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex justify-between items-center w-full mt-6">
                     <p className="text-large md:text-h5 font-bold text-high-emphesis">
-                        {activeTab === 0 ? 'Stake SUSHI' : 'Unstake'}
+                        {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
                     </p>
                     <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-caption md:font-normal">
                         {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
@@ -210,7 +212,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         </div>
                         <div className="flex items-center text-secondary text-caption2 md:text-caption">
                             <div className={input ? 'hidden md:flex md:items-center' : 'flex items-center'}>
-                                <p>Balance:&nbsp;</p>
+                                <p>{i18n._(t`Balance`)}:&nbsp;</p>
                                 <p className="text-caption font-bold">{formattedBalance}</p>
                             </div>
                             <button
@@ -224,7 +226,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                                 `}
                                 onClick={handleClickMax}
                             >
-                                MAX
+                                {i18n._(t`MAX`)}
                             </button>
                         </div>
                     </div>
@@ -236,7 +238,11 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         disabled={approvalState === ApprovalState.PENDING}
                         onClick={approve}
                     >
-                        {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
+                        {approvalState === ApprovalState.PENDING ? (
+                            <Dots>{i18n._(t`Approving`)} </Dots>
+                        ) : (
+                            i18n._(t`Approve`)
+                        )}
                     </Button>
                 ) : (
                     <button
@@ -252,14 +258,14 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         onClick={handleClickButton}
                     >
                         {!walletConnected
-                            ? 'Connect Wallet'
+                            ? i18n._(t`Connect Wallet`)
                             : !input
-                            ? 'Enter Amount'
+                            ? i18n._(t`Enter Amount`)
                             : insufficientFunds
-                            ? 'Insufficient Balance'
+                            ? i18n._(t`Insufficient Balance`)
                             : activeTab === 0
-                            ? 'Confirm Staking'
-                            : 'Confirm Withdrawal'}
+                            ? i18n._(t`Confirm Staking`)
+                            : i18n._(t`Confirm Withdrawal`)}
                     </button>
                 )}
             </div>

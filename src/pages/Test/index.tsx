@@ -1,13 +1,5 @@
-import React, { useMemo } from 'react'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useTrackedTokenPairs } from '../../state/user/hooks'
-import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
-import { Helmet } from 'react-helmet'
-import { usePairs } from 'data/Reserves'
+import React from 'react'
 // import { PancakeV1Pair, PancakeV2Pair } from '@sushiswap/sdk'
-import Position from './Position'
-import { Dots } from 'kashi'
-import { NavLink } from 'components'
 
 export default function Test() {
     return <div></div>

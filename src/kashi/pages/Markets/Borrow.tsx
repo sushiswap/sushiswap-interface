@@ -1,19 +1,22 @@
-import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { useFuse, useSortableData } from 'hooks'
-import { getCurrency } from 'kashi/constants'
-import React from 'react'
-import { ChevronDown, ChevronUp } from 'react-feather'
-import { Link } from 'react-router-dom'
-import { getTokenIcon, ZERO } from '../../functions'
+import { Card, GradientDot, Layout, MarketHeader } from '../../components'
+import { Trans, t } from '@lingui/macro'
 import { formattedNum, formattedPercent } from '../../../utils'
-import { useKashiPairs } from '../../context'
-import { Card, MarketHeader, Layout, GradientDot } from '../../components'
-import useSearchAndSort from 'hooks/useSearchAndSort'
-import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
+
+import AsyncTokenIcon from '../../components/AsyncTokenIcon'
+import BorrowGraphic from 'assets/kashi/borrow-graphic.png'
 import Helmet from 'react-helmet'
+import { Link } from 'react-router-dom'
+import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
+import React from 'react'
+import { ZERO } from '../../functions'
+import { getCurrency } from 'kashi/constants'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useKashiPairs } from '../../context'
+import useSearchAndSort from 'hooks/useSearchAndSort'
+import { useLingui } from '@lingui/react'
 
 export default function BorrowMarkets(): JSX.Element {
+    const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const fullPairs = useKashiPairs()
 
@@ -38,15 +41,15 @@ export default function BorrowMarkets(): JSX.Element {
                 <Card
                     className="h-full bg-dark-900"
                     backgroundImage={BorrowGraphic}
-                    title={'Borrow assets and leverage up'}
-                    description={
-                        'Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest.'
-                    }
+                    title={i18n._(t`Borrow assets and leverage up`)}
+                    description={i18n._(
+                        t`Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest.`
+                    )}
                 />
             }
         >
             <Helmet>
-                <title>Borrow | Sushi</title>
+                <title>{i18n._(t`Borrow`)} | Sushi</title>
             </Helmet>
             <Card className="h-full bg-dark-900" header={<MarketHeader type="Borrow" lists={[pairs, positions]} />}>
                 {positions.items && positions.items.length > 0 && (
@@ -58,7 +61,9 @@ export default function BorrowMarkets(): JSX.Element {
                                     sort={positions}
                                     sortKey="search"
                                 >
-                                    <span className="hidden md:inline-block">Your</span> Positions
+                                    <Trans>
+                                        <span className="hidden md:inline-block">Your</span> Positions
+                                    </Trans>
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
                                     className="justify-end"
@@ -66,7 +71,7 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="currentUserBorrowAmount.usdValue"
                                     direction="descending"
                                 >
-                                    Borrowed
+                                    {i18n._(t`Borrowed`)}
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
                                     className="hidden md:flex justify-end"
@@ -74,7 +79,7 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="userCollateralAmount.usdValue"
                                     direction="descending"
                                 >
-                                    Collateral
+                                    {i18n._(t`Collateral`)}
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
                                     className="hidden lg:flex justify-end"
@@ -82,7 +87,9 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="health.value"
                                     direction="descending"
                                 >
-                                    Limit <span className="hidden md:inline-block">Used</span>
+                                    <Trans>
+                                        Limit <span className="hidden md:inline-block">Used</span>
+                                    </Trans>
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
                                     className="justify-end"
@@ -90,7 +97,7 @@ export default function BorrowMarkets(): JSX.Element {
                                     sortKey="interestPerYear.value"
                                     direction="descending"
                                 >
-                                    APR
+                                    {i18n._(t`APR`)}
                                 </ListHeaderWithSort>
                             </div>
                             <div className="flex-col space-y-2">
@@ -103,15 +110,15 @@ export default function BorrowMarkets(): JSX.Element {
                                             >
                                                 <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                                                     <div className="hidden space-x-2 md:flex">
-                                                        <img
-                                                            src={getTokenIcon(pair.asset.address, chainId)}
+                                                        <AsyncTokenIcon
+                                                            address={pair.asset.address}
+                                                            chainId={chainId}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                            alt=""
                                                         />
-                                                        <img
-                                                            src={getTokenIcon(pair.collateral.address, chainId)}
+                                                        <AsyncTokenIcon
+                                                            address={pair.collateral.address}
+                                                            chainId={chainId}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                            alt=""
                                                         />
                                                     </div>
                                                     <div className="sm:block md:col-span-1 lg:col-span-2">
@@ -158,16 +165,16 @@ export default function BorrowMarkets(): JSX.Element {
 
                 <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
                     <ListHeaderWithSort sort={pairs} sortKey="search">
-                        Markets
+                        {i18n._(t`Markets`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="asset.symbol">
-                        Borrow
+                        {i18n._(t`Borrow`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="collateral.symbol">
-                        Collateral
+                        {i18n._(t`Collateral`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort className="hidden lg:flex" sort={pairs} sortKey="oracle.name">
-                        Oracle
+                        {i18n._(t`Oracle`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort
                         className="justify-end"
@@ -175,7 +182,7 @@ export default function BorrowMarkets(): JSX.Element {
                         sortKey="currentBorrowAmount.usdValue"
                         direction="descending"
                     >
-                        Borrowed
+                        {i18n._(t`Borrowed`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort
                         className="justify-end"
@@ -183,7 +190,7 @@ export default function BorrowMarkets(): JSX.Element {
                         sortKey="totalAssetAmount.usdValue"
                         direction="descending"
                     >
-                        Available
+                        {i18n._(t`Available`)}
                     </ListHeaderWithSort>
                     <ListHeaderWithSort
                         className="justify-end"
@@ -191,7 +198,7 @@ export default function BorrowMarkets(): JSX.Element {
                         sortKey="currentInterestPerYear.value"
                         direction="descending"
                     >
-                        APR
+                        {i18n._(t`APR`)}
                     </ListHeaderWithSort>
                 </div>
                 <div className="flex-col space-y-2">
@@ -206,15 +213,15 @@ export default function BorrowMarkets(): JSX.Element {
                                         <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-pink">
                                             <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                                 <div className="hidden space-x-2 md:flex">
-                                                    <img
-                                                        src={getTokenIcon(pair.asset.address, chainId)}
+                                                    <AsyncTokenIcon
+                                                        address={pair.asset.address}
+                                                        chainId={chainId}
                                                         className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                        alt=""
                                                     />
-                                                    <img
-                                                        src={getTokenIcon(pair.collateral.address, chainId)}
+                                                    <AsyncTokenIcon
+                                                        address={pair.collateral.address}
+                                                        chainId={chainId}
                                                         className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
-                                                        alt=""
                                                     />
                                                 </div>
                                                 <div className="sm:items-end md:hidden">

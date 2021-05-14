@@ -1,29 +1,34 @@
+import { ArrowUpRight, CheckCircle } from 'react-feather'
 import React, { useContext } from 'react'
+
 import { Currency } from '@sushiswap/sdk'
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import { ThemeContext } from 'styled-components'
-import { CheckCircle, ArrowUpRight } from 'react-feather'
-import { LinkStyledButton } from '../../theme'
 import { Dots } from '../../components'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { getExplorerLink } from '../../utils'
+import DoubleCurrencyLogo from 'components/DoubleLogo'
+import { LinkStyledButton } from '../../theme'
 import { NETWORK_LABEL } from '../../constants/networks'
+import { ThemeContext } from 'styled-components'
+import { getExplorerLink } from '../../utils'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 // type Props = {
 //     transactions: string[]
 // }
 
 export default function TransactionHistory({ transactions }: any) {
+    const { i18n } = useLingui()
+
     const theme = useContext(ThemeContext)
     const { account, chainId } = useActiveWeb3React()
     return (
         <>
             <div className="flex justify-between mb-6 flex-col sm:flex-row items-start">
                 <div className="text-xl font-medium text-white">
-                    Your Transaction History {chainId && `on ${NETWORK_LABEL[chainId]}`}
+                    {i18n._(t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`)}
                 </div>
                 {/* <LinkStyledButton>
-                    <span className="text-sm">Clear History</span>
+                    <span className="text-sm">{i18n._(t`Clear History`)}</span>
                 </LinkStyledButton> */}
             </div>
             <div>

@@ -3,7 +3,8 @@ import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button
 import { Currency, ETHER, TokenAmount, WETH, currencyEquals } from '@sushiswap/sdk'
 import { Dots, Wrapper } from '../Pool/styleds'
 import React, { useCallback, useContext, useState } from 'react'
-import Row, { RowBetween, RowFlat } from '../../components/Row'
+import Row, { AutoRow, RowBetween, RowFlat } from '../../components/Row'
+import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
@@ -12,7 +13,6 @@ import { useIsExpertMode, useUserSlippageTolerance } from '../../state/user/hook
 import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/AdvancedLiquidityDetailsDropdown'
 import Alert from '../../components/Alert'
 import { AutoColumn } from '../../components/Column'
-import { AutoRow } from '../../components/Row'
 import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
 import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
@@ -41,6 +41,7 @@ import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
+import { useLingui } from '@lingui/react'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../state/application/hooks'
@@ -52,6 +53,7 @@ export default function AddLiquidity({
     },
     history
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
+    const { i18n } = useLingui()
     const { account, chainId, library } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
 
@@ -251,14 +253,13 @@ export default function AddLiquidity({
                 </RowFlat>
                 <Row>
                     <Text fontSize="24px">
-                        {currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
-                            '/' +
-                            currencies[Field.CURRENCY_B]?.getSymbol(chainId) +
-                            ' Pool Tokens'}
+                        {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
+                        {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
+                        <Trans>Pool Tokens</Trans>
                     </Text>
                 </Row>
                 <TYPE.italic fontSize={14} className="text-gray-500" textAlign="left" padding={'20px 0 20px 0'}>
-                    {`Output is estimated. If the price changes by more than ${allowedSlippage /
+                    {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </TYPE.italic>
             </AutoColumn>
@@ -278,7 +279,7 @@ export default function AddLiquidity({
         )
     }
 
-    const pendingText = `Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[
+    const pendingText = t`Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[
         Field.CURRENCY_A
     ]?.getSymbol(chainId)} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[
         Field.CURRENCY_B
@@ -327,14 +328,14 @@ export default function AddLiquidity({
     return (
         <>
             <Helmet>
-                <title>Add Liquidity | Sushi</title>
+                <title>{i18n._(t`Add Liquidity`)} | Sushi</title>
             </Helmet>
             <div className="w-full max-w-2xl mb-5 px-4">
                 <NavLink
                     className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     to={'/pool'}
                 >
-                    View Your Liquidity Positions &gt;
+                    {i18n._(t`View Your Liquidity Positions`)} &gt;
                 </NavLink>
                 {/* <button
                     style={{
@@ -359,7 +360,7 @@ export default function AddLiquidity({
                         hash={txHash}
                         content={() => (
                             <ConfirmationModalContent
-                                title={noLiquidity ? 'You are creating a pool' : 'You will receive'}
+                                title={noLiquidity ? i18n._(t`You are creating a pool`) : i18n._(t`You will receive`)}
                                 onDismiss={handleDismissConfirmation}
                                 topContent={modalHeader}
                                 bottomContent={modalBottom}
@@ -371,7 +372,9 @@ export default function AddLiquidity({
                         {noLiquidity ||
                             (isCreate ? (
                                 <Alert
-                                    message="When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review."
+                                    message={i18n._(
+                                        t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
+                                    )}
                                     type="information"
                                 />
                             ) : (
@@ -379,11 +382,11 @@ export default function AddLiquidity({
                                     <Alert
                                         showIcon={false}
                                         message={
-                                            <>
+                                            <Trans>
                                                 <b>Tip:</b> When you add liquidity, you will receive pool tokens
                                                 representing your position. These tokens automatically earn fees
                                                 proportional to your share of the pool, and can be redeemed at any time.
-                                            </>
+                                            </Trans>
                                         }
                                         type="information"
                                     />
@@ -453,10 +456,10 @@ export default function AddLiquidity({
 
                         {addIsUnsupported ? (
                             <ButtonPrimary disabled={true}>
-                                <TYPE.main mb="4px">Unsupported Asset</TYPE.main>
+                                <TYPE.main mb="4px">{i18n._(t`Unsupported Asset`)}</TYPE.main>
                             </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
                         ) : (
                             <AutoColumn gap={'md'}>
                                 {(approvalA === ApprovalState.NOT_APPROVED ||
@@ -473,10 +476,16 @@ export default function AddLiquidity({
                                                 >
                                                     {approvalA === ApprovalState.PENDING ? (
                                                         <Dots>
-                                                            Approving {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}
+                                                            {t`Approving ${currencies[Field.CURRENCY_A]?.getSymbol(
+                                                                chainId
+                                                            )}`}
                                                         </Dots>
                                                     ) : (
-                                                        'Approve ' + currencies[Field.CURRENCY_A]?.getSymbol(chainId)
+                                                        i18n._(
+                                                            t`Approve ${currencies[Field.CURRENCY_A]?.getSymbol(
+                                                                chainId
+                                                            )}`
+                                                        )
                                                     )}
                                                 </ButtonPrimary>
                                             )}
@@ -488,10 +497,16 @@ export default function AddLiquidity({
                                                 >
                                                     {approvalB === ApprovalState.PENDING ? (
                                                         <Dots>
-                                                            Approving {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
+                                                            {t`Approving ${currencies[Field.CURRENCY_B]?.getSymbol(
+                                                                chainId
+                                                            )}`}
                                                         </Dots>
                                                     ) : (
-                                                        'Approve ' + currencies[Field.CURRENCY_B]?.getSymbol(chainId)
+                                                        i18n._(
+                                                            t`Approve ${currencies[Field.CURRENCY_B]?.getSymbol(
+                                                                chainId
+                                                            )}`
+                                                        )
                                                     )}
                                                 </ButtonPrimary>
                                             )}
@@ -513,7 +528,7 @@ export default function AddLiquidity({
                                     }
                                 >
                                     <Text fontSize={20} fontWeight={500}>
-                                        {error ?? 'Confirm Adding Liquidity'}
+                                        {error ?? i18n._(t`Confirm Adding Liquidity`)}
                                     </Text>
                                 </ButtonError>
                             </AutoColumn>

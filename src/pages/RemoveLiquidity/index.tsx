@@ -1,50 +1,53 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { splitSignature } from '@ethersproject/bytes'
-import { Contract } from '@ethersproject/contracts'
-import { TransactionResponse } from '@ethersproject/providers'
-import { ChainId, Currency, currencyEquals, ETHER, Percent, WETH } from '@sushiswap/sdk'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
-import { ArrowDown, Plus } from 'react-feather'
-import ReactGA from 'react-ga'
-import { RouteComponentProps } from 'react-router'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
-import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import { BlueCard } from '../../components/CardLegacy'
-import { AutoColumn } from '../../components/Column'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import PercentInputPanel from '../../components/PercentInputPanel'
-import { MinimalPositionCard } from '../../components/PositionCard'
-import Row, { AutoRow, RowBetween, RowFixed } from '../../components/Row'
-import { Dots } from '../../components/swap/styleds'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { usePairContract } from '../../hooks/useContract'
-import useIsArgentWallet from '../../hooks/useIsArgentWallet'
-import useTransactionDeadline from '../../hooks/useTransactionDeadline'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { useDerivedMintInfo } from '../../state/mint/hooks'
-import { Field } from '../../state/burn/actions'
-import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../state/burn/hooks'
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useUserSlippageTolerance } from '../../state/user/hooks'
-import { TYPE } from '../../theme'
+import { ArrowDown, Plus } from 'react-feather'
+import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
+import { ChainId, Currency, ETHER, Percent, WETH, currencyEquals } from '@sushiswap/sdk'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
+import Row, { AutoRow, RowBetween, RowFixed } from '../../components/Row'
+import { Trans, t } from '@lingui/macro'
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount, getRouterAddress, getRouterContract } from '../../utils'
-import { currencyId } from '../../utils/currencyId'
-import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler'
-import { wrappedCurrency } from '../../utils/wrappedCurrency'
-import { Wrapper } from '../Pool/styleds'
-import { Helmet } from 'react-helmet'
-import Header from '../../components/ExchangeHeader'
-import { NavLink } from '../../components/Link'
+import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../state/burn/hooks'
+
 import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/AdvancedLiquidityDetailsDropdown'
+import { Alert } from '../../components'
+import { AutoColumn } from '../../components/Column'
+import { BigNumber } from '@ethersproject/bignumber'
+import { BlueCard } from '../../components/CardLegacy'
+import { Contract } from '@ethersproject/contracts'
+import CurrencyLogo from '../../components/CurrencyLogo'
+import { Dots } from '../../components/swap/styleds'
+import DoubleCurrencyLogo from '../../components/DoubleLogo'
+import { Field } from '../../state/burn/actions'
+import Header from '../../components/ExchangeHeader'
+import { Helmet } from 'react-helmet'
 import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
+import { MinimalPositionCard } from '../../components/PositionCard'
+import { NavLink } from '../../components/Link'
+import PercentInputPanel from '../../components/PercentInputPanel'
+import ReactGA from 'react-ga'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
-import { Alert } from '../../components'
+import { RouteComponentProps } from 'react-router'
+import { TYPE } from '../../theme'
+import { Text } from 'rebass'
+import { ThemeContext } from 'styled-components'
+import { TransactionResponse } from '@ethersproject/providers'
+import { Wrapper } from '../Pool/styleds'
+import { currencyId } from '../../utils/currencyId'
+import { splitSignature } from '@ethersproject/bytes'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useCurrency } from '../../hooks/Tokens'
+import useDebouncedChangeHandler from '../../utils/useDebouncedChangeHandler'
+import { useDerivedMintInfo } from '../../state/mint/hooks'
+import useIsArgentWallet from '../../hooks/useIsArgentWallet'
+import { useLingui } from '@lingui/react'
+import { usePairContract } from '../../hooks/useContract'
+import { useTransactionAdder } from '../../state/transactions/hooks'
+import useTransactionDeadline from '../../hooks/useTransactionDeadline'
+import { useUserSlippageTolerance } from '../../state/user/hooks'
+import { useWalletModalToggle } from '../../state/application/hooks'
+import { wrappedCurrency } from '../../utils/wrappedCurrency'
 
 export default function RemoveLiquidity({
     history,
@@ -52,6 +55,7 @@ export default function RemoveLiquidity({
         params: { currencyIdA, currencyIdB }
     }
 }: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
+    const { i18n } = useLingui()
     const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined]
     const { account, chainId, library } = useActiveWeb3React()
     const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
@@ -390,7 +394,7 @@ export default function RemoveLiquidity({
                 </RowBetween>
 
                 <TYPE.italic fontSize={14} className="text-gray-500" textAlign="left" padding={'20px 0 20px 0'}>
-                    {`Output is estimated. If the price changes by more than ${allowedSlippage /
+                    {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </TYPE.italic>
             </AutoColumn>
@@ -402,7 +406,7 @@ export default function RemoveLiquidity({
             <>
                 <RowBetween>
                     <Text color={theme.text2} fontWeight={500} fontSize={16}>
-                        {'SUSHI ' + currencyA?.getSymbol(chainId) + '/' + currencyB?.getSymbol(chainId)} Burned
+                        {i18n._(t`SUSHI ${currencyA?.getSymbol(chainId)}/${currencyB?.getSymbol(chainId)} Burned`)}
                     </Text>
                     <RowFixed>
                         <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} margin={true} />
@@ -415,7 +419,7 @@ export default function RemoveLiquidity({
                     <>
                         <RowBetween>
                             <Text color={theme.text2} fontWeight={500} fontSize={16}>
-                                Price
+                                {i18n._(t`Price`)}
                             </Text>
                             <Text fontWeight={500} fontSize={16} color={theme.text1}>
                                 1 {currencyA?.getSymbol(chainId)} ={' '}
@@ -436,14 +440,14 @@ export default function RemoveLiquidity({
                     onClick={onRemove}
                 >
                     <Text fontWeight={500} fontSize={20}>
-                        Confirm
+                        {i18n._(t`Confirm`)}
                     </Text>
                 </ButtonPrimary>
             </>
         )
     }
 
-    const pendingText = `Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
+    const pendingText = t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
         chainId
     )} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.getSymbol(chainId)}`
 
@@ -500,7 +504,7 @@ export default function RemoveLiquidity({
     return (
         <>
             <Helmet>
-                <title>Remove Liquidity | Sushi</title>
+                <title>{i18n._(t`Remove Liquidity`)} | Sushi</title>
             </Helmet>
 
             <div className="w-full max-w-2xl mb-5 px-4">
@@ -508,7 +512,7 @@ export default function RemoveLiquidity({
                     className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
                     to={'/pool'}
                 >
-                    View Your Liquidity Positions &gt;
+                    {i18n._(t`View Your Liquidity Positions >`)}
                 </NavLink>
                 {/* <button
                     style={{
@@ -533,7 +537,7 @@ export default function RemoveLiquidity({
                         hash={txHash ? txHash : ''}
                         content={() => (
                             <ConfirmationModalContent
-                                title={'You will receive'}
+                                title={i18n._(t`You will receive`)}
                                 onDismiss={handleDismissConfirmation}
                                 topContent={modalHeader}
                                 bottomContent={modalBottom}
@@ -546,14 +550,15 @@ export default function RemoveLiquidity({
                             showIcon={false}
                             message={
                                 <>
-                                    <b>Tip:</b> Removing pool tokens converts your position back into underlying tokens
-                                    at the current rate, proportional to your share of the pool. Accrued fees are
-                                    included in the amounts you receive.
+                                    <Trans>
+                                        <b>Tip:</b> Removing pool tokens converts your position back into underlying
+                                        tokens at the current rate, proportional to your share of the pool. Accrued fees
+                                        are included in the amounts you receive.
+                                    </Trans>
                                 </>
                             }
                             type="information"
                         />
-
                         <LiquidityHeader input={currencyA} output={currencyB} />
                         <PercentInputPanel
                             value={formattedAmounts[Field.LIQUIDITY_PERCENT]}
@@ -583,9 +588,9 @@ export default function RemoveLiquidity({
                         )}
                         <div style={{ position: 'relative' }}>
                             {!account ? (
-                                <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                                <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
                             ) : (
-                                <RowBetween>
+                                <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:justify-between">
                                     <ButtonConfirmed
                                         onClick={onAttemptToApprove}
                                         confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
@@ -595,11 +600,11 @@ export default function RemoveLiquidity({
                                         fontSize={16}
                                     >
                                         {approval === ApprovalState.PENDING ? (
-                                            <Dots>Approving</Dots>
+                                            <Dots>{i18n._(t`Approving`)}</Dots>
                                         ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
-                                            'Approved'
+                                            i18n._(t`Approved`)
                                         ) : (
-                                            'Approve'
+                                            i18n._(t`Approve`)
                                         )}
                                     </ButtonConfirmed>
                                     <ButtonError
@@ -616,10 +621,10 @@ export default function RemoveLiquidity({
                                         }
                                     >
                                         <Text fontSize={16} fontWeight={500}>
-                                            {error || 'Confirm Withdrawal'}
+                                            {error || i18n._(t`Confirm Withdrawal`)}
                                         </Text>
                                     </ButtonError>
-                                </RowBetween>
+                                </div>
                             )}
                         </div>
                     </AutoColumn>

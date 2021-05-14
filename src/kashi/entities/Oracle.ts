@@ -1,7 +1,8 @@
-import { ChainId } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
 import { CHAINLINK_MAPPING, CHAINLINK_ORACLE_ADDRESS } from 'kashi/constants'
+
+import { ChainId } from '@sushiswap/sdk'
 import { e10 } from 'kashi/functions/math'
+import { ethers } from 'ethers'
 
 export interface IOracle {
     address: string
@@ -30,7 +31,7 @@ export class Oracle implements IOracle {
         this._tokens = tokens
     }
 
-    public get valid() {
+    get valid(): boolean {
         return false
     }
 }
@@ -44,7 +45,7 @@ export class ChainlinkOracle extends Oracle {
         this._valid = this._validate()
     }
 
-    public get valid() {
+    public get valid(): boolean {
         return this._valid
     }
 
@@ -57,7 +58,7 @@ export class ChainlinkOracle extends Oracle {
         let decimals = 54
         let from = ''
         let to = ''
-        if (params[0] != ethers.constants.AddressZero) {
+        if (params[0] !== ethers.constants.AddressZero) {
             if (!mapping![params[0]]) {
                 this.error = 'One of the Chainlink oracles used is not configured in this UI.'
                 return false
@@ -67,7 +68,7 @@ export class ChainlinkOracle extends Oracle {
                 to = mapping![params[0]].to
             }
         }
-        if (params[1] != ethers.constants.AddressZero) {
+        if (params[1] !== ethers.constants.AddressZero) {
             if (!mapping![params[1]]) {
                 this.error = 'One of the Chainlink oracles used is not configured in this UI.'
                 return false
@@ -76,7 +77,7 @@ export class ChainlinkOracle extends Oracle {
                 if (!to) {
                     from = mapping![params[1]].to
                     to = mapping![params[1]].from
-                } else if (to == mapping![params[1]].to) {
+                } else if (to === mapping![params[1]].to) {
                     to = mapping![params[1]].from
                 } else {
                     this.error =
@@ -86,8 +87,8 @@ export class ChainlinkOracle extends Oracle {
             }
         }
         if (
-            from == this._pair.assetAddress &&
-            to == this._pair.collateralAddress &&
+            from === this._pair.assetAddress &&
+            to === this._pair.collateralAddress &&
             this._tokens[this._pair.collateralAddress] &&
             this._tokens[this._pair.assetAddress]
         ) {
@@ -114,7 +115,7 @@ function lowerEqual(value1: string, value2: string) {
     return value1.toLowerCase() === value2.toLowerCase()
 }
 
-export function getOracle(pair: any, chainId: ChainId, tokens: any) {
+export function getOracle(pair: any, chainId: ChainId, tokens: any): IOracle {
     if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
         return new ChainlinkOracle(pair, chainId, tokens)
     } else {

@@ -1,15 +1,15 @@
 import { darken } from 'polished'
 import React from 'react'
 import { ArrowLeft } from 'react-feather'
-import { useTranslation } from 'react-i18next'
+import { t } from '@lingui/macro'
 import { useDispatch } from 'react-redux'
 import { Link as HistoryLink, NavLink } from 'react-router-dom'
 import { AppDispatch } from 'state'
 import { resetMintState } from 'state/mint/actions'
 import styled from 'styled-components'
 import { RowBetween } from '../Row'
-// import QuestionHelper from '../QuestionHelper'
 import Settings from '../Settings'
+import { useLingui } from '@lingui/react'
 
 const Tabs = styled.div`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -55,28 +55,32 @@ const StyledArrowLeft = styled(ArrowLeft)`
     color: ${({ theme }) => theme.text1};
 `
 
+// This seems to be legacy code, should we remove this? Notice the display: 'none'
 export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
-    const { t } = useTranslation()
+    const { i18n } = useLingui()
+
     return (
         <Tabs style={{ marginBottom: '20px', display: 'none' }}>
             <StyledNavLink id={`swap-nav-link`} to={'/swap'} isActive={() => active === 'swap'}>
-                {t('swap')}
+                {i18n._(t`Swap`)}
             </StyledNavLink>
             <StyledNavLink id={`pool-nav-link`} to={'/pool'} isActive={() => active === 'pool'}>
-                {t('pool')}
+                {i18n._(t`Pool`)}
             </StyledNavLink>
         </Tabs>
     )
 }
 
 export function FindPoolTabs() {
+    const { i18n } = useLingui()
+
     return (
         <Tabs>
             <RowBetween style={{ padding: '1rem 1rem 0 1rem' }}>
                 <HistoryLink to="/pool">
                     <StyledArrowLeft />
                 </HistoryLink>
-                <ActiveText>Import Pool</ActiveText>
+                <ActiveText>{i18n._(t`Import Pool`)}</ActiveText>
                 <Settings />
             </RowBetween>
         </Tabs>
@@ -84,6 +88,8 @@ export function FindPoolTabs() {
 }
 
 export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating: boolean }) {
+    const { i18n } = useLingui()
+
     // reset states on back
     const dispatch = useDispatch<AppDispatch>()
 
@@ -98,7 +104,13 @@ export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating:
                 >
                     <StyledArrowLeft />
                 </HistoryLink>
-                <ActiveText>{creating ? 'Create a pair' : adding ? 'Add Liquidity' : 'Remove Liquidity'}</ActiveText>
+                <ActiveText>
+                    {creating
+                        ? i18n._(t`Create a pair`)
+                        : adding
+                        ? i18n._(t`Add Liquidity`)
+                        : i18n._(t`Remove Liquidity`)}
+                </ActiveText>
                 <Settings />
             </RowBetween>
         </Tabs>

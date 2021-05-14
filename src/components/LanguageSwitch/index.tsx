@@ -1,22 +1,29 @@
 import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
 import React, { memo, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import ChFlag from '../../assets/images/ch-flag.png'
 import DeFlag from '../../assets/images/de-flag.png'
 import EnFlag from '../../assets/images/en-flag.png'
 import EsFlag from '../../assets/images/es-flag.png'
 import ItFlag from '../../assets/images/it-flag.png'
-import IwFlag from '../../assets/images/iw-flag.png'
+import HeFlag from '../../assets/images/he-flag.png'
 import RoFlag from '../../assets/images/ro-flag.png'
 import RuFlag from '../../assets/images/ru-flag.png'
 import ViFlag from '../../assets/images/vi-flag.png'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
+import { useLanguageData } from '../../language/hooks'
 
 const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+    border: 2px solid rgb(23, 21, 34);
+    border-radius: 10px;
     font-size: 1.25rem;
+    height: 40px;
+
+    &:hover {
+        border-color: rgb(33, 34, 49);
+    }
 `
 
 const ExtendedMenuFlyout = styled(MenuFlyout)`
@@ -47,6 +54,7 @@ const MenuItem = styled.span`
 `
 
 const MenuItemFlag = styled.img`
+    display: inline;
     margin-right: 0.625rem;
     width: 20px;
     height: 20px;
@@ -71,12 +79,12 @@ const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: stri
         flag: DeFlag,
         language: 'German'
     },
-    'it-IT': {
+    it: {
         flag: ItFlag,
         language: 'Italian'
     },
-    iw: {
-        flag: IwFlag,
+    he: {
+        flag: HeFlag,
         language: 'Hebrew'
     },
     ru: {
@@ -101,7 +109,7 @@ const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: stri
         language: 'Chinese',
         dialect: '繁'
     },
-    'es-US': {
+    es: {
         flag: EsFlag,
         language: 'Spanish'
     },
@@ -117,17 +125,11 @@ function LanguageSwitch() {
     const open = useModalOpen(ApplicationModal.LANGUAGE)
     const toggle = useToggleModal(ApplicationModal.LANGUAGE)
     useOnClickOutside(node, open ? toggle : undefined)
-    const { i18n } = useTranslation()
+    const { language, setLanguage } = useLanguageData()
 
-    const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng).then(() => {
-            toggle()
-        })
-    }
-
-    let language = i18n.language
-    if (!LANGUAGES.hasOwnProperty(language)) {
-        language = 'en'
+    const onClick = (key: string) => {
+        setLanguage(key)
+        toggle()
     }
 
     return (
@@ -138,7 +140,7 @@ function LanguageSwitch() {
             {open && (
                 <ExtendedMenuFlyout>
                     {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
-                        <MenuItem onClick={() => changeLanguage(key)} key={key}>
+                        <MenuItem onClick={() => onClick(key)} key={key}>
                             <MenuItemFlag src={flag} alt={language} />
                             {language}{' '}
                             {dialect && (

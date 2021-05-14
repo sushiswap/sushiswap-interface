@@ -5,7 +5,7 @@ import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHou
 import { ChainId } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 
-export async function getOneDayBlock(chainId?: any) {
+export async function getOneDayBlock(chainId: ChainId = 1): Promise<{ number: number }> {
     const date = startOfMinute(subDays(Date.now(), 1))
     const start = Math.floor(Number(date) / 1000)
     const end = Math.floor(Number(date) / 1000) + 600
@@ -40,7 +40,7 @@ export async function getOneDayBlock(chainId?: any) {
     return { number: Number(blocksData?.data?.blocks[0].number) }
 }
 
-export async function getAverageBlockTime(chainId?: any) {
+export async function getAverageBlockTime(chainId: ChainId = 1): Promise<{ timestamp: null; difference: number }> {
     // Course timestamps used to make better use of the cache (startOfHour + startOfMinuite + startOfSecond)
     const now = startOfSecond(startOfMinute(startOfHour(Date.now())))
     const start = getUnixTime(subHours(now, 6))
