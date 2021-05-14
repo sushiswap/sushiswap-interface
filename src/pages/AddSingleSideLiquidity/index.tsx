@@ -1,7 +1,7 @@
 import { Currency, ETHER, ChainId, JSBI, Percent, ROUTER_ADDRESS, WETH, Trade } from '@sushiswap/sdk'
 import React, { useCallback, useState, useEffect } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
-import styled, { ThemeContext } from 'styled-components'
+import styled, { ThemeContext, keyframes } from 'styled-components'
 import { transparentize } from 'polished'
 import { Text } from 'rebass'
 import { ArrowLeft } from 'react-feather'
@@ -69,6 +69,30 @@ const StyledArrowLeft = styled(ArrowLeft)`
 const PoolTokenRow = styled.span`
     display: flex;
     margin: 10px 0;
+`
+
+const defaultHighlightColor = '#2b2f3e'
+const defaultBaseColor = '#21262b'
+
+const skeletonKeyframes = keyframes`
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+`
+
+const Skeleton = styled.span`
+    background-color: ${defaultBaseColor};
+    background-image: linear-gradient(90deg, ${defaultBaseColor}, ${defaultHighlightColor}, ${defaultBaseColor});
+    background-size: 200px 100%;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    animation: ${skeletonKeyframes} 2s infinite;
+    display: inline-block;
+    line-height: 1;
+    width: 100%;
 `
 
 const CardHeader = () => {
@@ -206,6 +230,8 @@ const AddSingleSideLiquidity = ({
 
     const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2)
 
+    console.log({ currency0, currency1 })
+
     return (
         <>
             {!poolAddress ? (
@@ -231,27 +257,37 @@ const AddSingleSideLiquidity = ({
                         <PoolAllocationWrapper>
                             <RowBetween style={{ marginBottom: '12px' }}>
                                 <TYPE.darkGray fontSize="14px">To</TYPE.darkGray>
-                                <DoubleCurrencyLogo
-                                    currency0={currency0 ?? undefined}
-                                    currency1={currency1 ?? undefined}
-                                    margin={false}
-                                    size={20}
-                                />
+                                {currency0 && currency1 ? (
+                                    <DoubleCurrencyLogo
+                                        currency0={currency0 ?? undefined}
+                                        currency1={currency1 ?? undefined}
+                                        margin={false}
+                                        size={20}
+                                    />
+                                ) : (
+                                    <Skeleton style={{ width: '60px', height: '20px' }} />
+                                )}
                             </RowBetween>
                             <RowBetween>
                                 <TYPE.subHeader fontWeight={500} fontSize="22px">
                                     {liquidityMinted?.toSignificant(6) || '0'}
                                 </TYPE.subHeader>
                                 <div className="inline-flex">
-                                    <TYPE.subHeader fontWeight={500} fontSize="22px">
-                                        {currency0 && currency1 && `${currency0?.symbol}${' '}`}
-                                    </TYPE.subHeader>
-                                    <TYPE.darkGray fontWeight={500} fontSize="22px" className="mx-1">
-                                        /
-                                    </TYPE.darkGray>
-                                    <TYPE.subHeader fontWeight={500} fontSize="22px">
-                                        {`${' '}${currency1?.symbol}`}
-                                    </TYPE.subHeader>
+                                    {currency0 && currency1 ? (
+                                        <>
+                                            <TYPE.subHeader fontWeight={500} fontSize="22px">
+                                                {`${currency0?.symbol}${' '}`}
+                                            </TYPE.subHeader>
+                                            <TYPE.darkGray fontWeight={500} fontSize="22px" className="mx-1">
+                                                /
+                                            </TYPE.darkGray>
+                                            <TYPE.subHeader fontWeight={500} fontSize="22px">
+                                                {`${' '}${currency1?.symbol}`}
+                                            </TYPE.subHeader>
+                                        </>
+                                    ) : (
+                                        <Skeleton style={{ width: '120px', height: '26px' }} />
+                                    )}
                                 </div>
                             </RowBetween>
                         </PoolAllocationWrapper>

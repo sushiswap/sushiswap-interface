@@ -27,7 +27,7 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 import usePool from 'hooks/queries/usePool'
 import { useCurrency } from 'hooks/Tokens'
-import { useUserSlippageTolerance } from 'state/user/hooks'
+import { useUserSingleHopOnly, useUserSlippageTolerance } from 'state/user/hooks'
 import { basisPointsToPercent } from 'utils'
 import { getZapperAddress } from 'constants/addresses'
 import useTransactionDeadline from 'hooks/useTransactionDeadline'
@@ -92,6 +92,7 @@ export function useDerivedZapInfo(
 
     // Pool Data
     const { reserves, token0, token1, ratio } = usePool(pairAddress)
+    console.log({ token0, token1 }, 'USE POOL CALLED')
     const currency0 = useCurrency(token0)
     const currency1 = useCurrency(token1)
 
@@ -165,6 +166,8 @@ export function useDerivedZapInfo(
 
     // get custom tx deadline
     const deadline = useTransactionDeadline()
+    // get multihop enabled
+    const [singleHopOnly] = useUserSingleHopOnly()
 
     // TYPES OF TRADES VIA SWAP DATA
     // SWAP EXACT TOKENS FOR TOKENS (when any non ether input)
@@ -213,6 +216,10 @@ export function useDerivedZapInfo(
         error = 'Connect Wallet'
     }
 
+    if (singleHopOnly && !isTradingCurrency0 && !isTradingCurrency1) {
+        error = 'Please enable Multihops'
+    }
+
     if (!parsedAmount) {
         error = error ?? 'Enter an amount'
     }
@@ -220,6 +227,8 @@ export function useDerivedZapInfo(
     if (parsedAmount && currencyBalance?.lessThan(parsedAmount)) {
         error = 'Insufficient ' + currency?.getSymbol(chainId) + ' balance'
     }
+
+    console.log({ currency0, currency1 }, 'FROM HOOKS')
 
     return {
         typedValue,
