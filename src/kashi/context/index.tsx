@@ -1,20 +1,21 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, Currency, WETH } from '@sushiswap/sdk'
+import { KASHI_ADDRESS, getCurrency } from '../constants'
+import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
+import { ZERO, e10, maximum, minimum } from 'kashi/functions/math'
+import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
+import { takeFee, toElastic } from '../functions'
+import { toAmount, toShare } from 'kashi/functions/bentobox'
+import { useBentoBoxContract, useBoringHelperContract } from 'hooks/useContract'
+
+import { BigNumber } from '@ethersproject/bignumber'
+import { Fraction } from '../../entities'
 import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
+import { getOracle } from '../entities'
+import { rpcToObj } from 'kashi/functions/utils'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
-import { useBoringHelperContract, useBentoBoxContract } from 'hooks/useContract'
-import { e10, maximum, minimum, ZERO } from 'kashi/functions/math'
-import { rpcToObj } from 'kashi/functions/utils'
-import { toAmount, toShare } from 'kashi/functions/bentobox'
-import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue } from 'kashi/functions/kashi'
-import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { useBlockNumber } from 'state/application/hooks'
-import { Fraction } from '../../entities'
-import { getCurrency, KASHI_ADDRESS } from '../constants'
-import { getOracle } from '../entities'
-import { takeFee, toElastic } from '../functions'
 
 enum ActionType {
     UPDATE = 'UPDATE',
@@ -194,6 +195,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 const allPairAddresses = logPairs
                     .filter((pair: any) => {
                         const oracle = getOracle(pair, chain, tokens)
+
+                        if (pair.address.toLowerCase() === '0x8318b81d39048bbdfd2c054114a67804932862e8'.toLowerCase()) {
+                            console.log('THE PAIR', { pair, oracle })
+                        }
+
                         if (!oracle.valid) {
                             // console.log(pair, oracle.valid, oracle.error)
                             invalidOracles.push({ pair, error: oracle.error })
@@ -201,7 +207,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                         return oracle.valid
                     })
                     .map((pair: any) => pair.address)
-                // 0x8ae30fDE41eEAF250C5774093fa5693A80bEdEAD
 
                 console.log('invalidOracles', invalidOracles)
 
