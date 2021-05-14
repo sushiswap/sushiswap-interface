@@ -230,8 +230,6 @@ const AddSingleSideLiquidity = ({
 
     const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2)
 
-    console.log({ currency0, currency1 })
-
     return (
         <>
             {!poolAddress ? (

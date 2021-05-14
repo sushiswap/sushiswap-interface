@@ -92,7 +92,6 @@ export function useDerivedZapInfo(
 
     // Pool Data
     const { reserves, token0, token1, ratio } = usePool(pairAddress)
-    console.log({ token0, token1 }, 'USE POOL CALLED')
     const currency0 = useCurrency(token0)
     const currency1 = useCurrency(token1)
 
