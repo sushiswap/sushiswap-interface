@@ -54,7 +54,7 @@ const useMaker = () => {
             if (amount?.value) {
                 try {
                     const tx = await meowshiContract?.meowshi(amount?.value)
-                    return addTransaction(tx, { summary: 'Sushi -> xSUSHI -> NYAN' })
+                    return addTransaction(tx, { summary: 'SUSHI -> xSUSHI -> NYAN' })
                 } catch (e) {
                     return e
                 }
