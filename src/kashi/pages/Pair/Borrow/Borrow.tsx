@@ -1,29 +1,30 @@
-import React, { useContext, useState } from 'react'
-import { WETH } from '@sushiswap/sdk'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Alert, Button, Checkbox, Dots } from 'components'
-import Badge from 'components/Badge'
-import TransactionReviewView from 'kashi/components/TransactionReview'
-import { KashiCooker } from 'kashi/entities/KashiCooker'
-import { Warning, Warnings } from 'kashi/entities/Warnings'
-import { SUSHISWAP_MULTISWAPPER_ADDRESS } from 'kashi/constants'
-import { KashiContext } from 'kashi/context'
-import WarningsView from 'kashi/components/Warnings'
-import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
-import { useTradeExactIn } from 'hooks/Trades'
-import { useCurrency } from 'hooks/Tokens'
-import { tryParseAmount } from 'state/swap/hooks'
-import { TransactionReview } from 'kashi/entities'
-import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
-import { Field } from 'state/swap/actions'
-import TradeReview from 'kashi/components/TradeReview'
-import { defaultAbiCoder } from '@ethersproject/abi'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { BigNumber, ethers } from 'ethers'
-import { toShare, ZERO, e10, minimum, maximum } from 'kashi/functions'
-import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
-import SmartNumberInput from 'kashi/components/SmartNumberInput'
 import { ExchangeRateCheckBox, SwapCheckbox } from 'kashi/components/Checkbox'
+import { KashiApproveButton, TokenApproveButton } from 'kashi/components/Button'
+import React, { useContext, useState } from 'react'
+import { Warning, Warnings } from 'kashi/entities/Warnings'
+import { ZERO, e10, maximum, minimum, toShare } from 'kashi/functions'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
+import { useExpertModeManager, useUserSlippageTolerance } from 'state/user/hooks'
+
+import Badge from 'components/Badge'
+import { Field } from 'state/swap/actions'
+import { KashiContext } from 'kashi/context'
+import { KashiCooker } from 'kashi/entities/KashiCooker'
+import { SUSHISWAP_MULTISWAPPER_ADDRESS } from 'kashi/constants'
+import SmartNumberInput from 'kashi/components/SmartNumberInput'
+import TradeReview from 'kashi/components/TradeReview'
+import { TransactionReview } from 'kashi/entities'
+import TransactionReviewView from 'kashi/components/TransactionReview'
+import { WETH } from '@sushiswap/sdk'
+import WarningsView from 'kashi/components/Warnings'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { tryParseAmount } from 'state/swap/hooks'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useCurrency } from 'hooks/Tokens'
+import { useTradeExactIn } from 'hooks/Trades'
 
 interface BorrowProps {
     pair: any
@@ -213,18 +214,14 @@ export default function Borrow({ pair }: BorrowProps) {
         (swap && priceImpactSeverity > 3 && !isExpertMode) ||
         (pair.userCollateralAmount.value.isZero() && !collateralValueSet)
 
+    console.log('borrow pair', { pair })
+
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
 
         if (borrowValueSet) {
-            if (
-                displayUpdateOracle
-                // ||
-                // pair.currentExchangeRate.toFixed(pair.asset.decimals) /
-                //     pair.oracleExchangeRate.toFixed(pair.asset.decimals) >
-                //     1.05
-            ) {
+            if (displayUpdateOracle) {
                 console.log(
                     displayUpdateOracle,
                     pair.currentExchangeRate.toFixed(pair.asset.decimals) /

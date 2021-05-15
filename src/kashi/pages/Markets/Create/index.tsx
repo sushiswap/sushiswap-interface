@@ -3,10 +3,12 @@ import {
     CHAINLINK_ORACLE_ADDRESS,
     CHAINLINK_TOKENS,
     ChainlinkToken,
-    KASHI_ADDRESS
+    KASHI_ADDRESS,
+    SUSHISWAP_TWAP_0_ORACLE_ADDRESS
 } from 'kashi/constants'
-import { Card, CardHeader, Layout } from 'kashi/components'
-import { ChainId, Pair, Token } from '@sushiswap/sdk'
+import { Card, CardHeader, Layout, WarningsView } from 'kashi/components'
+import { ChainId, JSBI, Pair, Token } from '@sushiswap/sdk'
+import { PairState, usePair } from 'data/Reserves'
 import React, { useEffect, useState } from 'react'
 import {
     useBentoBoxContract,
@@ -21,10 +23,12 @@ import { Helmet } from 'react-helmet'
 import OracleListBox from './OracleListBox'
 import { SUSHISWAP_TWAP_1_ORACLE_ADDRESS } from 'kashi/constants'
 import TokenListBox from './TokenListBox'
+import { Warnings } from 'kashi/entities'
 import { e10 } from 'kashi/functions/math'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
+import { useTotalSupply } from 'data/TotalSupply'
 import { useTransactionAdder } from 'state/transactions/hooks'
 
 enum OracleId {
@@ -57,15 +61,23 @@ const CreatePair = () => {
     const [selectedAsset, setSelectedAsset] = useState<any>(undefined)
     const [selectedCollateral, setSelectedCollateral] = useState<any>(undefined)
 
-    const pair = usePairContract(
-        selectedAsset && selectedCollateral ? Pair.getAddress(selectedAsset, selectedCollateral) : undefined
-    )
+    const [pairState, pair] = usePair(selectedAsset, selectedCollateral)
+    const totalSupply = useTotalSupply(pair?.liquidityToken)
+    const noLiquidity: boolean =
+        pairState === PairState.NOT_EXISTS || Boolean(totalSupply && JSBI.equal(totalSupply.raw, JSBI.BigInt(0)))
 
     const addTransaction = useTransactionAdder()
 
     const tokens = useAllTokens()
 
     const chainlinkTokens = chainId && CHAINLINK_TOKENS[chainId]
+
+    // TODO: Low liquidity warning
+    const createWarnings = new Warnings().add(
+        selectedOracle?.id === OracleId.SUSHISWAP && noLiquidity,
+        'There is no SushiSwap pair or the pair has no liquidity!',
+        true
+    )
 
     // const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
     // const empty = { symbol: '', name: 'Select a token', address: '0', decimals: 0 }
@@ -85,17 +97,15 @@ const CreatePair = () => {
     const getOracleData = async (asset: any, collateral: any) => {
         console.log({ selectedOracle })
 
+        const oracleData = ''
+
         if (selectedOracle && selectedOracle.id === OracleId.SUSHISWAP) {
-            const token0 = await pair?.token0()
-            const token1 = await pair?.token1()
-
-            console.log({ token0, token1 }, selectedAsset?.address === token0, selectedAsset?.address === token1)
-
-            if (sushiSwapTWAP0OracleContract && selectedAsset?.address === token0) {
-                return sushiSwapTWAP0OracleContract.getDataParameter(pair?.address)
-            } else if (sushiSwapTWAP1OracleContract && selectedAsset?.address === token1) {
-                return sushiSwapTWAP1OracleContract.getDataParameter(pair?.address)
+            if (sushiSwapTWAP0OracleContract && selectedAsset?.address === pair?.token0.address) {
+                return sushiSwapTWAP0OracleContract.getDataParameter(pair?.liquidityToken.address)
+            } else if (sushiSwapTWAP1OracleContract && selectedAsset?.address === pair?.token1.address) {
+                return sushiSwapTWAP1OracleContract.getDataParameter(pair?.liquidityToken.address)
             }
+            return oracleData
         }
 
         const mapping = CHAINLINK_MAPPING[chainId || 1] || {}
@@ -108,7 +118,7 @@ const CreatePair = () => {
         const multiplyMatches = Object.values(mapping).filter(
             m => m.from === asset.address && m.to === collateral.address
         )
-        const oracleData = ''
+
         let decimals = 0
         if (multiplyMatches.length) {
             const match = multiplyMatches[0]
@@ -155,6 +165,8 @@ const CreatePair = () => {
 
             console.log({ selectedOracle, selectedAsset, selectedCollateral })
 
+            if (!selectedAsset || !selectedCollateral || !selectedOracle) return
+
             const oracleData = await getOracleData(selectedAsset, selectedCollateral)
 
             console.log({ oracleData })
@@ -164,17 +176,27 @@ const CreatePair = () => {
                 return
             }
 
-            // console.log([selectedCollateral.address, selectedAsset.address, CHAINLINK_ORACLE_ADDRESS, oracleData])
+            let oracleAddress
+
+            if (selectedOracle && selectedOracle.id === OracleId.CHAINLINK) {
+                oracleAddress = CHAINLINK_ORACLE_ADDRESS
+            } else if (selectedOracle && selectedOracle.id === OracleId.SUSHISWAP) {
+                if (selectedAsset?.address === pair?.token0.address) {
+                    oracleAddress = SUSHISWAP_TWAP_0_ORACLE_ADDRESS
+                } else if (selectedAsset?.address === pair?.token1.address) {
+                    oracleAddress = SUSHISWAP_TWAP_1_ORACLE_ADDRESS
+                }
+            }
 
             const kashiData = ethers.utils.defaultAbiCoder.encode(
                 ['address', 'address', 'address', 'bytes'],
-                [selectedCollateral.address, selectedAsset.address, SUSHISWAP_TWAP_1_ORACLE_ADDRESS, oracleData]
+                [selectedCollateral.address, selectedAsset.address, oracleAddress, oracleData]
             )
 
             console.log(kashiData)
 
             addTransaction(await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true), {
-                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`
+                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} ${selectedOracle.name}`
             })
 
             setSelectedAsset(undefined)
@@ -184,7 +206,20 @@ const CreatePair = () => {
         }
     }
 
-    console.log({ tokens })
+    function oracleFilter(oracle: Oracle) {
+        if (oracle.id === OracleId.CHAINLINK) {
+            return (
+                chainlinkTokens?.some(t => t.address === selectedAsset.address) &&
+                chainlinkTokens?.some(t => t.address === selectedCollateral.address)
+            )
+        }
+
+        if (oracle.id === OracleId.SUSHISWAP && !noLiquidity) {
+            return true
+        }
+
+        return false
+    }
 
     return (
         <Layout
@@ -230,22 +265,22 @@ const CreatePair = () => {
                         <OracleListBox
                             selectedOracle={selectedOracle}
                             setSelectedOracle={setSelectedOracle}
-                            oracles={oracles.filter(oracle =>
-                                oracle.id === 1
-                                    ? !(
-                                          chainlinkTokens?.some(t => t.address === selectedAsset) &&
-                                          chainlinkTokens?.some(t => t.address === selectedCollateral)
-                                      )
-                                    : true
-                            )}
+                            oracles={oracles.filter(oracleFilter)}
                         />
                     )}
+
+                    <WarningsView warnings={createWarnings} />
 
                     <Button
                         color="gradient"
                         className="w-full rounded text-base text-high-emphesis px-4 py-3"
                         onClick={() => handleCreate()}
-                        // disabled={!selectedCollateral || !selectedAsset || selectedCollateral === selectedAsset}
+                        disabled={
+                            !selectedCollateral ||
+                            !selectedAsset ||
+                            selectedCollateral === selectedAsset ||
+                            (selectedOracle?.id === OracleId.SUSHISWAP && noLiquidity)
+                        }
                     >
                         Create Market
                     </Button>

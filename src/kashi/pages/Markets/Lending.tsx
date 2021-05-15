@@ -2,7 +2,7 @@ import { Card, Layout, MarketHeader } from '../../components'
 import { Trans, t } from '@lingui/macro'
 import { formattedNum, formattedPercent } from '../../../utils'
 
-import AsyncTokenIcon from '../../components/AsyncTokenIcon'
+import AsyncIcon from '../../components/AsyncIcon'
 import DepositGraphic from 'assets/kashi/deposit-graphic.png'
 import { Link } from 'react-router-dom'
 import ListHeaderWithSort from 'kashi/components/ListHeaderWithSort'
@@ -12,8 +12,8 @@ import { ZERO } from '../../functions'
 import { getCurrency } from 'kashi/constants'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useKashiPairs } from '../../context'
-import useSearchAndSort from 'hooks/useSearchAndSort'
 import { useLingui } from '@lingui/react'
+import useSearchAndSort from 'hooks/useSearchAndSort'
 
 export default function LendingMarkets(): JSX.Element | null {
     const { i18n } = useLingui()
@@ -106,14 +106,12 @@ export default function LendingMarkets(): JSX.Element | null {
                                                 <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm rounded bg-dark-800 hover:bg-dark-blue">
                                                     <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                                         <div className="hidden space-x-2 md:flex">
-                                                            <AsyncTokenIcon
-                                                                address={pair.asset.address}
-                                                                chainId={chainId}
+                                                            <AsyncIcon
+                                                                src={pair.asset.tokenInfo.logoURI}
                                                                 className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                                             />
-                                                            <AsyncTokenIcon
-                                                                address={pair.collateral.address}
-                                                                chainId={chainId}
+                                                            <AsyncIcon
+                                                                src={pair.collateral.tokenInfo.logoURI}
                                                                 className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                                             />
                                                         </div>
@@ -213,14 +211,12 @@ export default function LendingMarkets(): JSX.Element | null {
                                             <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm rounded bg-dark-800 hover:bg-dark-blue">
                                                 <div className="flex flex-col sm:flex-row items-start sm:items-center">
                                                     <div className="hidden space-x-2 md:flex">
-                                                        <AsyncTokenIcon
-                                                            address={pair.asset.address}
-                                                            chainId={chainId}
+                                                        <AsyncIcon
+                                                            src={pair.asset.tokenInfo.logoURI}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                                         />
-                                                        <AsyncTokenIcon
-                                                            address={pair.collateral.address}
-                                                            chainId={chainId}
+                                                        <AsyncIcon
+                                                            src={pair.collateral.tokenInfo.logoURI}
                                                             className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
                                                         />
                                                     </div>

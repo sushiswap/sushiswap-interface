@@ -26,7 +26,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const info = useContext(KashiContext).state.info
 
     // Calculated
-    const assetNative = WETH[chainId || 1].address == pair.asset.address
+    const assetNative = WETH[chainId || 1].address === pair.asset.address
     const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
     const max = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
