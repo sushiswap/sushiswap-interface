@@ -61,7 +61,7 @@ export default function Nyan() {
                             <RowBetween>
                                 <TYPE.white fontSize={14} color={theme.text2}>
                                     {i18n._(
-                                        t`Meowshi loves fresh fish. Meowshi NYANs and NYANs for more and more SUSHI from SushiBar and BentoBox. Chefs are happy to provide.`
+                                        t`Meowshi loves fresh fish. Meowshi NYANs for double helpings of SUSHI from SushiBar and BentoBox. Chefs are happy to provide.`
                                     )}
                                 </TYPE.white>
                             </RowBetween>
