@@ -135,7 +135,7 @@ function LanguageSwitch() {
     return (
         <StyledMenu ref={node}>
             <ExtendedStyledMenuButton onClick={toggle}>
-                <MenuButtonFlag src={LANGUAGES[language].flag} alt={LANGUAGES[language].language} />
+                <MenuButtonFlag src={LANGUAGES[language]?.flag} alt={LANGUAGES[language]?.language} />
             </ExtendedStyledMenuButton>
             {open && (
                 <ExtendedMenuFlyout>
