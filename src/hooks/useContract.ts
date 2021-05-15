@@ -51,6 +51,7 @@ import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
 import MINICHEFV2_ABI from '../constants/abis/miniChefV2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
+import MEOWSHI_ABI from '../constants/abis/meowshi.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
@@ -230,6 +231,9 @@ export function useChainlinkOracle(): Contract | null {
 }
 
 // experimental:
+export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract('0xEb8B45EB9084D05b25B045Ff8fE4d18fb1248B38', MEOWSHI_ABI, withSignerIfPossible)
+}
 export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
     return useContract('0x364762C00b32c4b448f39efaA9CeFC67a25603ff', SAAVE_ABI, withSignerIfPossible)
 }
