@@ -21,6 +21,7 @@ import Pool from './pages/Pool'
 import PoolFinder from './pages/PoolFinder'
 import RemoveLiquidity from './pages/RemoveLiquidity'
 import { RedirectOldRemoveLiquidityPathStructure } from './pages/RemoveLiquidity/redirects'
+import Meowshi from './pages/Meowshi'
 import Saave from './pages/Saave'
 import SushiBar from './pages/SushiBar'
 import SushiBarTransactions from './pages/SushiBar/SushiBarTransactions'
@@ -83,6 +84,7 @@ function Routes(): JSX.Element {
             {chainId === ChainId.MAINNET && <Route exact strict path="/stake" component={SushiBar} />}
             {/* Tools */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/tools" component={Tools} />}
+            {chainId === ChainId.MAINNET && <Route exact strict path="/meowshi" component={Meowshi} />}
             {chainId === ChainId.MAINNET && <Route exact strict path="/saave" component={Saave} />}
 
             {/* Pages */}
