@@ -49,11 +49,11 @@ const useMaker = () => {
     }, [addTransaction, meowshiContract?.address, sushiContract])
 
     // Meowshi Sushi - xSUSHI - NYAN
-    const meowshi = useCallback(
+    const nyanSushi = useCallback(
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await meowshiContract?.meowshi(amount?.value)
+                    const tx = await meowshiContract?.nyanSushi(account, amount?.value)
                     return addTransaction(tx, { summary: 'SUSHI -> xSUSHI -> NYAN' })
                 } catch (e) {
                     return e
@@ -63,7 +63,7 @@ const useMaker = () => {
         [addTransaction, meowshiContract]
     )
 
-    return { allowance, approve, meowshi }
+    return { allowance, approve, nyanSushi }
 }
 
 export default useMaker
