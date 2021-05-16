@@ -142,7 +142,7 @@ export default function CurrencyInputPanel({
     const { account } = useActiveWeb3React()
     const theme = useTheme()
 
-    const { allowance, approve, meowshi } = useMeowshi()
+    const { allowance, approve, nyanSushi } = useMeowshi()
 
     const sushiBalanceBigInt = useTokenBalance('0x6b3595068778dd592e39a122f4f5a5cf09c90fe2')
     const sushiBalance = formatFromBalance(sushiBalanceBigInt?.value, sushiBalanceBigInt?.decimals)
@@ -250,9 +250,9 @@ export default function CurrencyInputPanel({
                                 onClick={async () => {
                                     setPendingTx(true)
                                     if (maxSelected) {
-                                        await meowshi(maxDepositAmountInput)
+                                        await nyanSushi(maxDepositAmountInput)
                                     } else {
-                                        await meowshi(formatToBalance(depositValue, decimals))
+                                        await nyanSushi(formatToBalance(depositValue, decimals))
                                     }
                                     setPendingTx(false)
                                 }}

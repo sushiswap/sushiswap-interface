@@ -55,13 +55,13 @@ export default function Nyan() {
                         <AutoColumn gap="md">
                             <RowBetween>
                                 <TYPE.white fontWeight={600} color={theme.text1}>
-                                    {i18n._(t`NYAN: Stack your SUSHI with SushiBar & BentoBox`)}
+                                    {i18n._(t`Stack 🍣 in SushiBar + 🍱 with NYAN tokens 🐈`)}
                                 </TYPE.white>
                             </RowBetween>
                             <RowBetween>
                                 <TYPE.white fontSize={14} color={theme.text2}>
                                     {i18n._(
-                                        t`Meowshi loves fresh fish. Meowshi NYANs for double helpings of SUSHI from SushiBar and BentoBox. Chefs are happy to provide.`
+                                        t`Meowshi NYANs for more SUSHI and gets tokens for extra servings 👨‍🍳 1 xSUSHI Bento Share = 10,000 NYAN`
                                     )}
                                 </TYPE.white>
                             </RowBetween>

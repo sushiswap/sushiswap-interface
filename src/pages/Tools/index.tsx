@@ -170,7 +170,7 @@ export default function Pool() {
                                 <FixedHeightRow>
                                     <RowFixed>
                                         <Text fontWeight={500} fontSize={16}>
-                                            NYAN
+                                            MEOWSHI
                                         </Text>
                                     </RowFixed>
                                 </FixedHeightRow>
@@ -178,7 +178,7 @@ export default function Pool() {
                                     <RowFixed>
                                         {/* <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} /> */}
                                         <Text fontWeight={500} fontSize={14}>
-                                            {i18n._(t`Mint NYAN tokens representing xSUSHI BentoBox Shares`)}
+                                            {i18n._(t`One click SUSHI → xSUSHI → NYAN 😸 🍱`)}
                                         </Text>
                                     </RowFixed>
                                     <RowFixed>
