@@ -165,6 +165,36 @@ export default function Pool() {
                                 </FixedHeightRow>
                             </AutoColumn>
                         </StyledPositionCard>
+                        <StyledPositionCard>
+                            <AutoColumn gap="12px">
+                                <FixedHeightRow>
+                                    <RowFixed>
+                                        <Text fontWeight={500} fontSize={16}>
+                                            NYAN
+                                        </Text>
+                                    </RowFixed>
+                                </FixedHeightRow>
+                                <FixedHeightRow>
+                                    <RowFixed>
+                                        {/* <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} /> */}
+                                        <Text fontWeight={500} fontSize={14}>
+                                            {i18n._(t`Mint NYAN tokens representing xSUSHI BentoBox Shares`)}
+                                        </Text>
+                                    </RowFixed>
+                                    <RowFixed>
+                                        <ButtonEmpty
+                                            padding="6px 8px"
+                                            borderRadius="20px"
+                                            width="fit-content"
+                                            as={Link}
+                                            to={`/meowshi`}
+                                        >
+                                            {i18n._(t`Manage`)}
+                                        </ButtonEmpty>
+                                    </RowFixed>
+                                </FixedHeightRow>
+                            </AutoColumn>
+                        </StyledPositionCard>
                     </AutoColumn>
                 </AutoColumn>
             </PageWrapper>
