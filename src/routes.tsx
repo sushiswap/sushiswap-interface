@@ -35,6 +35,7 @@ import {
 } from './pages/Swap/redirects'
 import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
+import AddSingleSideLiquidity from './pages/AddSingleSideLiquidity'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
 import Positions from './pages/Positions'
@@ -103,6 +104,9 @@ function Routes(): JSX.Element {
             <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
             <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+            <Route exact strict path="/zap" component={AddSingleSideLiquidity} />
+            <Route exact strict path="/zap/:poolAddress" component={AddSingleSideLiquidity} />
+            <Route exact strict path="/zap/:poolAddress/:currencyId" component={AddSingleSideLiquidity} />
 
             {/* Redirects for app routes */}
             <Route
