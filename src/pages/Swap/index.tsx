@@ -334,9 +334,10 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">New Yield Farms! CRV, LINK, USDT, USDC</div>
+                                        <div className="text-white">New Yield Farms! renDOGE, SNX, USDC, DAI</div>
                                         <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
+                                    <div className=""></div>
                                     <Link
                                         to="/yield"
                                         className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
