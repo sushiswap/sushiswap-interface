@@ -22,6 +22,9 @@ import { useLingui } from '@lingui/react'
 import CurrencySelectPanel from '../../components/CurrencySelectPanel'
 import { Plus } from 'react-feather'
 
+import CurrencySelectPanel from '../../components/CurrencySelectPanel'
+import { Plus } from 'react-feather'
+
 enum Fields {
     TOKEN0 = 0,
     TOKEN1 = 1
