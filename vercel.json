@@ -28,7 +28,6 @@
         }
     ],
     "redirects": [
-        { "source": "/stake", "destination": "/sushibar", "permanent": true },
         { "source": "/migrate/v2", "destination": "/migrate", "permanent": true }
     ],
     "regions": ["all"]

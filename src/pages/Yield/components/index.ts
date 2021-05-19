@@ -1,7 +1,0 @@
-export { BackButton, default as Button } from './Button'
-export { default as Card } from './Card'
-export { BorrowCardHeader, default as CardHeader, LendCardHeader } from './CardHeader'
-export { default as Paper } from './Paper'
-export { default as Search } from './Search'
-export { default as DoubleLogo } from './DoubleLogo'
-export { default as TokenLogo } from './TokenLogo'
