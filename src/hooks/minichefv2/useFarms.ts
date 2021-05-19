@@ -88,7 +88,7 @@ const useFarms = () => {
                     !POOL_DENY.includes(pool?.id) &&
                     pairs.find((pair: any) => pair?.id === pool?.pair) &&
                     Number(pool.miniChef.totalAllocPoint) > 0 &&
-                    !['4', '10', '11', '12'].includes(pool?.id) // manual filter for now
+                    !['4'].includes(pool?.id) // manual filter for now
                 )
             })
             .map((pool: any) => {
