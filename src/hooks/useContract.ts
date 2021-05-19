@@ -56,6 +56,7 @@ import SUSHI_ABI from '../constants/abis/sushi.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
+import { FAUCET_ABI, FAUCET_ADDRESS } from '../constants/abis/faucet'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './useActiveWeb3React'
@@ -533,4 +534,8 @@ export function useQuickSwapFactoryContract(): Contract | null {
         ],
         false
     )
+}
+
+export function useFaucetContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract(FAUCET_ADDRESS, FAUCET_ABI, withSignerIfPossible)
 }
