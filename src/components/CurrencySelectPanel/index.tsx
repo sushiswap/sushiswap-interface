@@ -1,5 +1,4 @@
 import { Currency } from '@sushiswap/sdk'
-import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
