@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import LendMarkets from './pages/Markets/Lending'
 import BorrowMarkets from './pages/Markets/Borrow'
 import CreateMarkets from './pages/Markets/Create'
