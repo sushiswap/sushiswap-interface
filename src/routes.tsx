@@ -39,6 +39,7 @@ import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
 import Positions from './pages/Positions'
 import Transactions from './pages/Transactions'
+import OnsenAma from './pages/Onsen/Ama'
 
 function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -103,6 +104,7 @@ function Routes(): JSX.Element {
             <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
             <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+            <Route exact strict path="/onsen/ama" component={OnsenAma} />
 
             {/* Redirects for app routes */}
             <Route
