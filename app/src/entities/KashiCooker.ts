@@ -2,7 +2,7 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { ChainId, WETH } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
 import { ZERO, e10, maximum, minimum } from '../functions/math'
-import { getProviderOrSigner, getSigner } from '../utils'
+import { getProviderOrSigner, getSigner } from '../functions/contract'
 
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import { KashiPermit } from '../hooks/useKashiApproveCallback'

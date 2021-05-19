@@ -305,7 +305,7 @@ export default function Swap() {
                 tokens={importTokensNotInDefault}
                 onConfirm={handleConfirmTokenWarning}
             />
-            <div id="swap-page" className="bg-dark-900 shadow-swap-blue-glow w-full max-w-2xl rounded p-4">
+            <div id="swap-page" className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-swap-blue-glow">
                 <SwapHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
                 <ConfirmSwapModal
                     isOpen={showConfirm}
@@ -321,14 +321,14 @@ export default function Swap() {
                     onDismiss={handleConfirmDismiss}
                 />
                 {chainId && chainId === ChainId.MATIC && (
-                    <div className="hidden md:block pb-4 space-y-2">
+                    <div className="hidden pb-4 space-y-2 md:block">
                         <DarkCard>
-                            <div className="flex justify-between items-center">
+                            <div className="flex items-center justify-between">
                                 <div>
                                     <div className="text-white">
                                         {i18n._(t`300M+ TVL on Polygon! Optimized routing enabled`)}
                                     </div>
-                                    <div className="text-purple text-sm">
+                                    <div className="text-sm text-purple">
                                         {i18n._(t`Enjoy the lowest slippage on Polygon`)}
                                     </div>
                                 </div>
@@ -336,7 +336,7 @@ export default function Swap() {
                                     href="https://ayokiroll.medium.com/cf7e932f3a8"
                                     target="_blank"
                                     rel="noreferrer noopener"
-                                    className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
+                                    className="inline-flex items-center px-3 py-2 border-2 rounded-sm border-purple text-purple"
                                 >
                                     {i18n._(t`Read Tutorial`)}
                                 </a>
@@ -363,14 +363,14 @@ export default function Swap() {
                     <AutoColumn justify="space-between">
                         <AutoRow justify={isExpertMode ? 'space-between' : 'flex-start'} style={{ padding: '0 1rem' }}>
                             <button
-                                className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10"
+                                className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px"
                                 onClick={() => {
                                     setApprovalSubmitted(false) // reset 2 step UI for approvals
                                     onSwitchTokens()
                                 }}
                             >
                                 <div
-                                    className="bg-dark-800 hover:bg-dark-700 rounded-full p-3"
+                                    className="p-3 rounded-full bg-dark-800 hover:bg-dark-700"
                                     onMouseEnter={() => setAnimateSwapArrows(true)}
                                     onMouseLeave={() => setAnimateSwapArrows(false)}
                                 >
@@ -380,7 +380,7 @@ export default function Swap() {
                                         loop={false}
                                         style={{ width: 32, height: 32 }}
 
-                                        // className="text-secondary fill-current"
+                                        // className="fill-current text-secondary"
                                     />
                                 </div>
                             </button>
@@ -453,13 +453,13 @@ export default function Swap() {
                                 {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
                                     <RowBetween align="center">
                                         <div
-                                            className="cursor-pointer font-semibold text-sm text-secondary"
+                                            className="text-sm font-semibold cursor-pointer text-secondary"
                                             onClick={toggleSettings}
                                         >
                                             {i18n._(t`Slippage Tolerance`)}
                                         </div>
                                         <div
-                                            className="cursor-pointer font-semibold text-sm text-secondary"
+                                            className="text-sm font-semibold cursor-pointer text-secondary"
                                             onClick={toggleSettings}
                                         >
                                             {allowedSlippage / 100}%
@@ -580,21 +580,21 @@ export default function Swap() {
                     {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
                 </BottomGrouping>
                 {!trade && chainId && chainId === ChainId.MAINNET && (
-                    <div className="hidden sm:block w-full cursor-pointer pt-4" onClick={() => toggleNetworkModal()}>
+                    <div className="hidden w-full pt-4 cursor-pointer sm:block" onClick={() => toggleNetworkModal()}>
                         <DarkCard>
-                            <div className="flex justify-between items-center overflow-hidden">
+                            <div className="flex items-center justify-between overflow-hidden">
                                 <Image
                                     src="/polygon-logo.png"
                                     width="32px"
                                     height="32px"
-                                    className="w-24 h-24 absolute top-2"
+                                    className="absolute w-24 h-24 top-2"
                                     alt=""
                                 />
                                 <div className="pl-32">
                                     <div className="text-high-emphesis">
                                         {i18n._(t`Check out Sushi on Polygon (Matic)`)}
                                     </div>
-                                    <div className="text-high-emphesis text-sm">
+                                    <div className="text-sm text-high-emphesis">
                                         {i18n._(t`Click here to switch to Polygon using Metamask`)}
                                     </div>
                                 </div>

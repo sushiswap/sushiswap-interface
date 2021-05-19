@@ -24,7 +24,7 @@ function Checkbox({
         <input
             type="checkbox"
             onChange={event => set(event.target.checked)}
-            className={`appearance-none h-5 w-5 rounded-sm bg-input border-transparent disabled:bg-dark-1000 disabled:border-dark-800 ${COLOR[color]} ${className}`}
+            className={`appearance-none h-5 w-5 rounded-sm bg-dark-700 border-transparent disabled:bg-dark-1000 disabled:border-dark-800 ${COLOR[color]} ${className}`}
             {...rest}
         />
     )

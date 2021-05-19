@@ -1,9 +1,7 @@
-import { Currency, NATIVE, Token } from '@sushiswap/sdk'
 import { contenthashToUri, uriToHttp } from './convert'
 
 import Ajv from 'ajv'
 import { DEFAULT_LIST_OF_LISTS } from '../constants/token-lists'
-import { TokenAddressMap } from '../state/lists/hooks'
 import { TokenList } from '@uniswap/token-lists'
 import { Version } from '@uniswap/token-lists'
 import { parseENSAddress } from './ens'

@@ -129,7 +129,7 @@ function CurrencyRow({
                 <Text title={currency.getName(chainId)} fontWeight={500}>
                     {currency.getSymbol(chainId)}
                 </Text>
-                <div ml="0px" fontSize={'12px'} fontWeight={300}>
+                <div className="text-sm font-thin">
                     {currency.getName(chainId)} {!isOnSelectedList && customAdded && '• Added by user'}
                 </div>
             </Column>
@@ -166,7 +166,7 @@ export default function CurrencyList({
 }) {
     console.log('currencyList', { currencies })
     const itemData: (Currency | undefined)[] = useMemo(() => {
-        let formatted: (Currency | undefined)[] = showETH ? [Currency.NATIVE, ...currencies] : currencies
+        let formatted: (Currency | undefined)[] = showETH ? [NATIVE, ...currencies] : currencies
         if (breakIndex !== undefined) {
             formatted = [...formatted.slice(0, breakIndex), undefined, ...formatted.slice(breakIndex, formatted.length)]
         }

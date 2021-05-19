@@ -1,12 +1,17 @@
-import React, { FC } from 'react'
+import styled from 'styled-components/macro'
 
-import styled from 'styled-components'
+//import React, { FC } from 'react'
+// export const Column: FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
+//     <div className="flex flex-col justify-start" {...rest}>
+//         {children}
+//     </div>
+// )
 
-export const Column: FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
-    <div className="flex flex-col justify-start" {...rest}>
-        {children}
-    </div>
-)
+const Column = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+`
 
 export const ColumnCenter = styled(Column)`
     width: 100%;

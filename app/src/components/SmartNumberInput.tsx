@@ -72,15 +72,15 @@ export default function SmartNumberInput({
                         </Button>
                     </span>
                 </div>
-                <div className="text-base text-secondary text-right" style={{ display: 'inline', cursor: 'pointer' }}>
+                <div className="text-base text-right text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
                     {maxTitle} {formattedNum(max.toFixed(token.decimals))}
                 </div>
             </div>
 
-            <div className="flex items-center relative w-full mb-4">
+            <div className="relative flex items-center w-full mb-4">
                 <NumericalInput
                     className={
-                        'w-full p-3 bg-input rounded disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring focus:ring-' +
+                        'w-full p-3 bg-dark-700 rounded disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring focus:ring-' +
                         color
                     }
                     value={value}

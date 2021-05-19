@@ -14,7 +14,7 @@ export default function ExchangeHeader({ input = undefined, output = undefined }
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
     return (
-        <div className="flex justify-between space-x-3 mb-4">
+        <div className="flex justify-between mb-4 space-x-3">
             <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
                 <NavLink
                     activeClassName="font-bold text-high-emphesis md:bg-dark-900 md:border-gradient"
@@ -22,12 +22,12 @@ export default function ExchangeHeader({ input = undefined, output = undefined }
                         output && output.address ? `&outputCurrency=${output.address}` : ''
                     }`}
                 >
-                    <a className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium">
+                    <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
                         {i18n._(t`Swap`)}
                     </a>
                 </NavLink>
                 {/* <NavLink activeClassName="bg-dark-900 text-high-emphesis" to="/limit-order">
-                    <a className="py-2 px-4 rounded-md text-center text-secondary hover:text-high-emphesis text-xs font-medium">
+                    <a className="px-4 py-2 text-xs font-medium text-center rounded-md text-secondary hover:text-high-emphesis">
                         {i18n._(t`Limit Order`)}
                     </a>
                 </NavLink> */}
@@ -37,7 +37,7 @@ export default function ExchangeHeader({ input = undefined, output = undefined }
                         output && output.address ? `/${output.address}` : ''
                     }`}
                 >
-                    <a className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium">
+                    <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
                         {i18n._(t`Pool`)}
                     </a>
                 </NavLink>
@@ -59,7 +59,7 @@ export default function ExchangeHeader({ input = undefined, output = undefined }
                     {/* <button
                         onMouseEnter={() => setAnimateSettings(true)}
                         onMouseLeave={() => setAnimateSettings(false)}
-                        className="flex items-center justify-center bg-dark-800 hover:bg-dark-700 rounded-sm h-full w-full p-1 md:px-2"
+                        className="flex items-center justify-center w-full h-full p-1 rounded-sm bg-dark-800 hover:bg-dark-700 md:px-2"
                     >
                         <Lottie
                             animationData={settingsAnimationData}
@@ -72,7 +72,7 @@ export default function ExchangeHeader({ input = undefined, output = undefined }
                     {/* <button
                         onMouseEnter={() => setAnimateWallet(true)}
                         onMouseLeave={() => setAnimateWallet(false)}
-                        className="hidden md:flex items-center justify-center bg-dark-800 hover:bg-dark-700 rounded-sm h-full w-full px-2"
+                        className="items-center justify-center hidden w-full h-full px-2 rounded-sm md:flex bg-dark-800 hover:bg-dark-700"
                     >
                         <Lottie
                             animationData={profileAnimationData}
@@ -81,7 +81,7 @@ export default function ExchangeHeader({ input = undefined, output = undefined }
                             style={{ width: 24, height: 24 }}
                         />
                     </button> */}
-                    <div className="bg-dark-800 hover:bg-dark-700 rounded-sm h-full w-full p-1 md:px-2">
+                    <div className="w-full h-full p-1 rounded-sm bg-dark-800 hover:bg-dark-700 md:px-2">
                         <Settings />
                     </div>
                 </div>

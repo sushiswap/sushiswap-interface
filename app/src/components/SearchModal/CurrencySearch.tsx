@@ -27,9 +27,11 @@ import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
 
 const ContentWrapper = styled(Column)`
+    height: 100%;
     width: 100%;
     flex: 1 1;
     position: relative;
+    overflow-y: hidden;
 `
 
 interface CurrencySearchProps {
@@ -55,6 +57,8 @@ export function CurrencySearch({
     showImportView,
     setImportToken
 }: CurrencySearchProps) {
+    console.log('CURRENCY SEARCH')
+
     const { i18n } = useLingui()
 
     const { chainId } = useActiveWeb3React()
@@ -189,7 +193,7 @@ export function CurrencySearch({
                     <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
                 </Column>
             ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
-                <div style={{ flex: '1' }}>
+                <div className="flex-1 h-full">
                     <AutoSizer disableWidth>
                         {({ height }) => (
                             <CurrencyList
@@ -215,7 +219,7 @@ export function CurrencySearch({
                 </div>
             ) : (
                 <Column style={{ padding: '20px', height: '100%' }}>
-                    <div className="text-center mb-8">{i18n._(t`No results found`)}</div>
+                    <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
                 </Column>
             )}
             <div className="mt-3">

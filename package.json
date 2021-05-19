@@ -6,8 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "yarn workspace app dev",
-    "extract": "yarn workspace app lingui extract",
-    "compile": "yarn workspace app lingui compile",
+    "lingui": "yarn workspace app lingui extract && yarn workspace app lingui compile",
     "build": "yarn workspace @sushiswap/sdk build && yarn workspace app build"
   },
   "workspaces": [
