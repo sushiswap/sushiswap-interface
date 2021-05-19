@@ -85,28 +85,100 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     return (
         <>
             {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-purple rounded p-4 bg-opacity-20 w-full mt-4 whitespace-nowrap">
-                    <div className="flex justify-between">
-                        <div className="text-high-emphesis">{i18n._(t`Your Pool Tokens`)}</div>
-                        <div className="text-primary font-bold">
-                            {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                <div className="rounded bg-dark-800 p-5">
+                    <AutoColumn gap={'md'}>
+                        <Text fontWeight={400} fontSize={18}>Your Position</Text>
+                        <div className="flex flex-col md:flex-row md:justify-between">
+                            <div className="flex items-center">
+                                <DoubleCurrencyLogo
+                                    currency0={pair.token0}
+                                    currency1={pair.token1} 
+                                    size={42}
+                                />
+                                <Text fontWeight={500} fontSize={24} className={'ml-3'}>
+                                    {shortenString(`${pair.token0.getSymbol(chainId)}/${pair.token1.getSymbol(chainId)}`, 8)}
+                                </Text>
+                            </div>
+                            <div className="flex items-center mt-3 md:mt-0">
+                                <Text fontSize={16} fontWeight={400}>
+                                    {
+                                        userPoolBalance ? formatBalance() : '-'
+                                    }
+                                </Text>
+                                <Text fontSize={16} fontWeight={400} color={'#7F7F7F'}>
+                                    &nbsp;
+                                    {i18n._(t`Pool Tokens`)}
+                                </Text>
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex justify-between">
-                        <div className="text-high-emphesis">{i18n._(t`Pooled ${currency0.getSymbol(chainId)}`)}</div>
-                        <div className="text-primary font-bold">{token0Deposited?.toSignificant(6)}</div>
-                    </div>
-                    <div className="flex justify-between">
-                        <div className="text-high-emphesis">{i18n._(t`Your Pool Share`)}</div>
-                        <div className="text-primary font-bold">
-                            {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
+                        <div className="flex flex-col rounded bg-dark-900 space-y-1 p-3 w-full mt-3 text-high-emphesis">
+                            <RowBetween>
+                                <Text fontSize={14} fontWeight={400}>
+                                    {i18n._(t`Your pool share`)}
+                                </Text>
+                                <Text fontSize={14} fontWeight={700}>
+                                    {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
+                                </Text>
+                            </RowBetween>
+                            <RowBetween>
+                                <Text fontSize={14} fontWeight={400}>
+                                    Supplied {currency0.getSymbol(chainId)}:
+                                </Text>
+                                {token0Deposited ? (
+                                    <RowFixed>
+                                        <Text fontSize={16} fontWeight={400}>
+                                            {token0Deposited?.toSignificant(6)}
+                                        </Text>
+                                        <Text fontSize={14} fontWeight={700} marginLeft={'3px'} className={'text-secondary'}>
+                                            {currency0.getSymbol(chainId)}
+                                        </Text>
+                                    </RowFixed>
+                                ) : (
+                                    '-'
+                                )}
+                            </RowBetween>
+                            <RowBetween>
+                                <Text fontSize={14} fontWeight={400}>
+                                    Supplied {currency1.getSymbol(chainId)}:
+                                </Text>
+                                {token1Deposited ? (
+                                    <RowFixed>
+                                        <Text fontSize={16} fontWeight={400}>
+                                            {token1Deposited?.toSignificant(6)}
+                                        </Text>
+                                        <Text fontSize={14} fontWeight={700} marginLeft={'3px'} className={'text-secondary'}>
+                                            {currency1.getSymbol(chainId)}
+                                        </Text>
+                                    </RowFixed>
+                                ) : (
+                                    '-'
+                                )}
+                            </RowBetween>
                         </div>
-                    </div>
-                    <div className="flex justify-between">
-                        <div className="text-high-emphesis">{i18n._(t`Pooled ${currency1.getSymbol(chainId)}`)}</div>
-                        <div className="text-primary font-bold">{token1Deposited?.toSignificant(6)}</div>
-                    </div>
+                    </AutoColumn>
                 </div>
+                // <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-purple rounded p-4 bg-opacity-20 w-full mt-4 whitespace-nowrap">
+                //     <div className="flex justify-between">
+                //         <div className="text-high-emphesis">{i18n._(t`Your Pool Tokens`)}</div>
+                //         <div className="text-primary font-bold">
+                //             {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
+                //         </div>
+                //     </div>
+                //     <div className="flex justify-between">
+                //         <div className="text-high-emphesis">{i18n._(t`Pooled ${currency0.getSymbol(chainId)}`)}</div>
+                //         <div className="text-primary font-bold">{token0Deposited?.toSignificant(6)}</div>
+                //     </div>
+                //     <div className="flex justify-between">
+                //         <div className="text-high-emphesis">{i18n._(t`Your Pool Share`)}</div>
+                //         <div className="text-primary font-bold">
+                //             {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
+                //         </div>
+                //     </div>
+                //     <div className="flex justify-between">
+                //         <div className="text-high-emphesis">{i18n._(t`Pooled ${currency1.getSymbol(chainId)}`)}</div>
+                //         <div className="text-primary font-bold">{token1Deposited?.toSignificant(6)}</div>
+                //     </div>
+                // </div>
             ) : (
                 <div className="bg-purple rounded p-4 bg-opacity-20 w-full mt-4">
                     <p>

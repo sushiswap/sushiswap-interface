@@ -97,39 +97,16 @@ export default function PoolFinder() {
             <div className="relative w-full max-w-lg rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <FindPoolTabs />
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
-                    <BlueCard>
-                        <AutoColumn gap="10px">
-                            <TYPE.link fontWeight={400} color={'primaryText1'}>
-                                <Trans>
-                                    <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
-                                    interface
-                                </Trans>
-                            </TYPE.link>
-                        </AutoColumn>
-                    </BlueCard>
-                    <ButtonDropdownLight
-                        onClick={() => {
-                            setShowSearch(true)
-                            setActiveField(Fields.TOKEN0)
-                        }}
-                    >
-                        {currency0 ? (
-                            <Row>
-                                <CurrencyLogo currency={currency0} />
-                                <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                    {currency0.getSymbol(chainId)}
-                                </Text>
-                            </Row>
-                        ) : (
-                            <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                {i18n._(t`Select a token`)}
-                            </Text>
-                        )}
-                    </ButtonDropdownLight>
-
-                    <ColumnCenter>
-                        <Plus size="16" color="#888D9B" />
-                    </ColumnCenter>
+                    <Alert
+                        showIcon={false}
+                        message={
+                            <Trans>
+                                <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
+                                interface
+                            </Trans>
+                        }
+                        type="information"
+                    />
 
                     <AutoColumn gap={'md'}>
                         <CurrencySelectPanel
@@ -144,19 +121,21 @@ export default function PoolFinder() {
                                 justify={'flex-start'}
                                 style={{ padding: '0 1rem' }}
                     >
-                        {currency1 ? (
-                            <Row>
-                                <CurrencyLogo currency={currency1} />
-                                <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                    {currency1.getSymbol(chainId)}
-                                </Text>
-                            </Row>
-                        ) : (
-                            <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                {i18n._(t`Select a token`)}
-                            </Text>
-                        )}
-                    </ButtonDropdownLight>
+                                <button className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10">
+                                    <div className="bg-dark-800 hover:bg-dark-700 rounded-full p-3">
+                                        <Plus size="32" color={theme.text2} />
+                                    </div>
+                                </button>
+                            </AutoRow>
+                        </AutoColumn>
+                        <CurrencySelectPanel
+                            currency={currency1}
+                            onClick={() => setActiveField(Fields.TOKEN1)}
+                            onCurrencySelect={handleCurrencySelect}
+                            otherCurrency={currency0}
+                            id="pool-currency-output"
+                        />
+                    </AutoColumn>
 
                     {hasPosition && (
                         <AutoRow

@@ -1,7 +1,6 @@
 import { Currency } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -9,6 +8,8 @@ import CurrencyLogo from '../CurrencyLogo'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import selectCoinAnimation from '../../assets/animation/select-coin.json'
 import Lottie from 'lottie-react'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
     align-items: center;
@@ -50,7 +51,7 @@ export default function CurrencySelectPanel({
     id,
     showCommonBases,
 }: CurrencySelectPanelProps) {
-    const { t } = useTranslation()
+    const { i18n } = useLingui()
 
     const [modalOpen, setModalOpen] = useState(false)
     const { chainId } = useActiveWeb3React()
@@ -100,7 +101,7 @@ export default function CurrencySelectPanel({
                                                 )
                                             : currency?.getSymbol(chainId)) || (
                                             <div className="bg-cyan-blue hover:bg-opacity-90 border border-low-emphesis rounded-full px-2 py-1 text-high-emphasis text-xs font-medium mt-1 whitespace-nowrap ">
-                                                {t('selectToken')}
+                                                {i18n._(t`Select a token`)}
                                             </div>
                                         )}
                                     </div>
