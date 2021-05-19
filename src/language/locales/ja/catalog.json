@@ -5,7 +5,7 @@
     "+ Create a new market": "",
     "- Remove send": "",
     "300M+ TVL on Polygon! Optimized routing enabled": "",
-    "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive you rewards at any time.": "",
+    "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive your rewards at any time.": "",
     "<0>Tip:</0> Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.": "",
     "<0>Tip:</0> Use this tool to find pairs that don't automatically appear in the interface": "<0>ヒント：</0>このツールを使って、インターフェイスに自動で表示されないペアを見つけることができます。",
     "<0>Tip:</0> When you add liquidity, you will receive pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.": "<0>ヒント：</0>流動性を追加すると、あなたのポジションを表すプールトークンが発行されます。これらのトークンは、プールのあなたのシェアに比例して自動的に手数料を獲得し、いつでも換金することができます。",

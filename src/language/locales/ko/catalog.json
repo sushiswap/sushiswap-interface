@@ -5,7 +5,7 @@
     "+ Create a new market": "",
     "- Remove send": "",
     "300M+ TVL on Polygon! Optimized routing enabled": "",
-    "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive you rewards at any time.": "",
+    "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive your rewards at any time.": "",
     "<0>Tip:</0> Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.": "<0>팁:</0> 풀 토큰을 제거하면 포지션 기저 토큰은 현재 시세와 풀 내 유저의 지분에 따라 환산됩니다. 축적된 수수료 또한 유저가 돌려받는 금액에 포함됩니다.",
     "<0>Tip:</0> Use this tool to find pairs that don't automatically appear in the interface": "<0>팁:</0> 인터페이스에 자동으로 표기되지 않는 거래쌍을 찾을 때 해당 툴을 사용하세요.",
     "<0>Tip:</0> When you add liquidity, you will receive pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.": "<0>팁:</0> 유동성 추가시 여러분의 풀 내 포지션을 나타내는 풀 토큰을 받게 됩니다. 이 토큰은 풀에서 차지하는 여러분의 지분율에 따라 자동으로 수수료 수익을 생성하며 이는 언제든지 출금될 수 있습니다.",
