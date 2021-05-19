@@ -1,13 +1,8 @@
 import { ChainId } from '@sushiswap/sdk'
 import React from 'react'
-import { Redirect, Route, RouteComponentProps, useLocation, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import Connect from './kashi/pages/Connect'
-import BorrowMarkets from './kashi/pages/Markets/Borrow'
-import CreateMarkets from './kashi/pages/Markets/Create'
-import LendMarkets from './kashi/pages/Markets/Lending'
-import BorrowPair from './kashi/pages/Pair/Borrow'
-import LendPair from './kashi/pages/Pair/Lend'
 import AddLiquidity from './pages/AddLiquidity'
 import {
     RedirectDuplicateTokenIds,
@@ -37,8 +32,10 @@ import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
-import Positions from './pages/Positions'
 import Transactions from './pages/Transactions'
+import PublicRoute from 'components/PublicRoute'
+import WalletRoute from 'components/WalletRoute'
+import Kashi from 'kashi/routes'
 
 function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -50,17 +47,7 @@ function Routes(): JSX.Element {
             <WalletRoute exact strict path="/bento/balances" component={BentoBalances} />
 
             {/* Kashi */}
-            <Route
-                exact
-                strict
-                path="/bento/kashi"
-                render={props => <Redirect to="/bento/kashi/borrow" {...props} />}
-            />
-            <WalletRoute exact strict path="/bento/kashi/lend" component={LendMarkets} />
-            <WalletRoute exact strict path="/bento/kashi/borrow" component={BorrowMarkets} />
-            <WalletRoute exact strict path="/bento/kashi/create" component={CreateMarkets} />
-            <WalletRoute exact strict path="/bento/kashi/lend/:pairAddress" component={LendPair} />
-            <WalletRoute exact strict path="/bento/kashi/borrow/:pairAddress" component={BorrowPair} />
+            <Route strict path="/bento/kashi" component={Kashi} />
 
             {chainId === ChainId.MAINNET && (
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
@@ -136,59 +123,3 @@ function Routes(): JSX.Element {
 }
 
 export default Routes
-
-// A wrapper for <Route> that redirects to the Connect Wallet
-// screen if you're not yet authenticated.
-export const PublicRoute = ({ component: Component, children, ...rest }: any) => {
-    const { account } = useActiveWeb3React()
-    const location = useLocation<any>()
-    return (
-        <>
-            <Route
-                {...rest}
-                render={(props: RouteComponentProps) =>
-                    account ? (
-                        <Redirect
-                            to={{
-                                pathname: location.state ? location.state.from.pathname : '/'
-                            }}
-                        />
-                    ) : Component ? (
-                        <Component {...props} />
-                    ) : (
-                        children
-                    )
-                }
-            />
-        </>
-    )
-}
-
-// A wrapper for <Route> that redirects to the Connect Wallet
-// screen if you're not yet authenticated.
-export const WalletRoute = ({ component: Component, children, ...rest }: any) => {
-    const { account } = useActiveWeb3React()
-    return (
-        <>
-            <Route
-                {...rest}
-                render={({ location, props, match }: any) => {
-                    return account ? (
-                        Component ? (
-                            <Component {...props} {...rest} match={match} />
-                        ) : (
-                            children
-                        )
-                    ) : (
-                        <Redirect
-                            to={{
-                                pathname: '/connect',
-                                state: { from: location }
-                            }}
-                        />
-                    )
-                }}
-            />
-        </>
-    )
-}
