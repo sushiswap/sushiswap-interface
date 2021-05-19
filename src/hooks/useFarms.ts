@@ -52,7 +52,7 @@ const useFarms = () => {
         //console.log('kashiPairs:', kashiPairs)
 
         const pairs = pairsQuery?.data.pairs
-        const KASHI_PAIRS = concat(range(190, 230, 1), range(245, 250, 1)) // kashiPair pids 190-229, 245-249
+        const KASHI_PAIRS = concat(range(190, 230, 1), range(245, 250, 1), range(264, 268, 1)) // kashiPair pids 190-229, 245-249
         //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
 
         const farms = pools
