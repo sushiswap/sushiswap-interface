@@ -1,27 +1,29 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 
+// module.exports = {
+//     mode: "jit",
+//     purge: ["./src/**/*.{js,jsx,ts,tsx}"],
+//     darkMode: false, // or 'media' or 'class'
+//     theme: {
+//         extend: {},
+//     },
+//     variants: {
+//         extend: {},
+//     },
+//     plugins: [],
+// };
+
 module.exports = {
     // important: '#__next',
     purge: [
-        './components/**/*.{js,ts,jsx,tsx}',
-        './layouts/**/*.{js,ts,jsx,tsx}',
-        './pages/**/*.{js,ts,jsx,tsx}',
-        './theme/**/*.{js,ts,jsx,tsx}'
+        './src/**/*.{js,ts,jsx,tsx}'
     ],
-    darkMode: false, // or 'media' or 'class'
+    darkMode: false,
     theme: {
         linearBorderGradients: {
             directions: {
-                // defaults to these values
-                t: 'to top',
-                tr: 'to top right',
                 r: 'to right',
-                br: 'to bottom right',
-                b: 'to bottom',
-                bl: 'to bottom left',
-                l: 'to left',
-                tl: 'to top left'
             },
             colors: {
                 'blue-pink': ['#27B0E6', '#FA52A0'],
@@ -41,19 +43,15 @@ module.exports = {
             }
         },
         colors: {
-            ...defaultTheme.colors,
             red: '#FF3838',
             blue: '#27B0E6',
             pink: '#FA52A0',
             purple: '#A755DD',
             green: '#7CFF6B',
-
             'pink-red': '#FE5A75',
             'light-brown': '#FEC464',
             'light-yellow': '#FFD166',
             'cyan-blue': '#0993EC',
-            pink: '#F338C3',
-
             'dark-pink': '#221825',
             'dark-blue': '#0F182A',
             'dark-1000': '#0D0415',
@@ -64,18 +62,10 @@ module.exports = {
             'dark-700': '#2E3348',
             'dark-600': '#1C2D49',
             'dark-500': '#223D5E',
-
-            // TODO: bad... these are causing issues with text colors
-            // 'high-emphesis': '#E3E3E3',
+            'low-emphesis': '#575757',
             primary: '#BFBFBF',
             secondary: '#7F7F7F',
-            'low-emphesis': '#575757'
-        },
-        screens: {
-            sm: '480px',
-            md: '768px',
-            lg: '976px',
-            xl: '1440px'
+            'high-emphesis': '#E3E3E3'
         },
         fontSize: {
             ...defaultTheme.fontSize,
@@ -167,24 +157,12 @@ module.exports = {
                 sm: '0.313rem',
                 DEFAULT: '0.625rem'
             },
-            textColor: {
-                ...defaultTheme.textColor,
-                'low-emphesis': '#575757',
-                primary: '#BFBFBF',
-                secondary: '#7F7F7F',
-                'high-emphesis': '#E3E3E3'
-            },
-            backgroundColor: {
-                ...defaultTheme.backgroundColor,
-                input: '#2E3348'
-            },
             boxShadow: {
                 ...defaultTheme.boxShadow,
                 'pink-glow': '0px 57px 90px -47px rgba(250, 82, 160, 0.15)',
                 'blue-glow': '0px 57px 90px -47px rgba(39, 176, 230, 0.17)',
                 'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
                 'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)',
-
                 'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)',
                 'liquidity-purple-glow': '0px 50px 250px -47px rgba(123, 97, 255, 0.23);'
             },
@@ -196,20 +174,6 @@ module.exports = {
                 ...defaultTheme.padding,
                 px: '1px',
                 '3px': '3px'
-            },
-            outline: {
-                ...defaultTheme.outline,
-                'low-emphesis': '#575757'
-            },
-            animation: {
-                ellipsis: ' ellipsis 1.25s infinite'
-            },
-            keyframes: {
-                ellipsis: {
-                    '0%': { content: '"."' },
-                    '33%': { content: '".."' },
-                    '66%': { content: '"..."' }
-                }
             },
             minHeight: {
                 empty: '128px',
