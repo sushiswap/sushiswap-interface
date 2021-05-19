@@ -13,7 +13,7 @@ const Kashi = () => {
         <KashiProvider>
             <>
                 <WalletRoute exact path="/bento/kashi/lend" component={LendMarkets} />
-                <Route exact path="/bento/kashi/borrow" component={BorrowMarkets} />
+                <WalletRoute exact path="/bento/kashi/borrow" component={BorrowMarkets} />
                 <WalletRoute exact path="/bento/kashi/create" component={CreateMarkets} />
                 <WalletRoute exact path="/bento/kashi/lend/:pairAddress" component={LendPair} />
                 <WalletRoute exact path="/bento/kashi/borrow/:pairAddress" component={BorrowPair} />
