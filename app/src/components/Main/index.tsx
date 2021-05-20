@@ -1,5 +1,5 @@
 const Main = ({ children }) => (
-    <main className="flex flex-col flex-1 items-center justify-start w-screen h-full py-4 sm:py-8 md:py-12 px-4">
+    <main className="flex flex-col items-center justify-start flex-grow w-screen h-full px-4 py-4 sm:py-8 md:py-12">
         {children}
     </main>
 )
