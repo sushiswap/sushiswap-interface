@@ -108,11 +108,11 @@ export default function Pool() {
                 <div className="flex justify-between">
                     <div className="flex">
                         <div className="p-1.5 bg-dark-800 rounded">
-                            <User strokeWidth={1} size={34} className="text-white" />
+                            <User strokeWidth={1} size={34} className="text-primary" />
                         </div>
                         <div className="ml-3">
-                            <div className="font-semibold text-gray-300">{account && shortenAddress(account)}</div>
-                            <div className="text-sm text-gray-500">
+                            <div className="font-bold text-high-emphesis">{account && shortenAddress(account)}</div>
+                            <div className="text-sm text-primary">
                                 {account && chainId && (
                                     <>
                                         {userEthBalance ? (

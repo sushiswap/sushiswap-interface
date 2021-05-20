@@ -230,7 +230,7 @@ export default function CurrencyInputPanel({
                                 </Button>
                             )}
                             <NumericalInput
-                                className="token-amount-input"
+                                id="token-amount-input"
                                 value={value}
                                 onUserInput={val => {
                                     onUserInput(val)
