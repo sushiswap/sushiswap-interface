@@ -362,16 +362,18 @@ export default function Remove() {
 
     function modalHeader() {
         return (
-            <AutoColumn gap={'md'} style={{ marginTop: '20px' }}>
-                <RowBetween align="flex-end">
-                    <Text className="text-2xl font-medium">{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</Text>
+            <div>
+                <div className="justify-between items-end">
+                    <Text className="text-xl font-bold text-high-emphesis">
+                        {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
+                    </Text>
                     <RowFixed gap="4px">
                         <CurrencyLogo currency={currencyA} size={'24px'} />
                         <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
                             {currencyA?.getSymbol(chainId)}
                         </Text>
                     </RowFixed>
-                </RowBetween>
+                </div>
                 <RowFixed>
                     <Plus size="16" />
                 </RowFixed>
@@ -389,7 +391,7 @@ export default function Remove() {
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </div>
-            </AutoColumn>
+            </div>
         )
     }
 

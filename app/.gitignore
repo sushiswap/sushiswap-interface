@@ -19,3 +19,5 @@ public/workbox*.js
 public/workbox*.js.map
 
 .env
+
+locale/**/*.js

@@ -68,18 +68,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
                 <link rel="manifest" href="/manifest.json" />
                 <link
-                    href="/icons/favicon-16x16.png"
+                    href="/images/favicon-16x16.png"
                     rel="icon"
                     type="image/png"
                     sizes="16x16"
                 />
                 <link
-                    href="/icons/favicon-32x32.png"
+                    href="/images/favicon-32x32.png"
                     rel="icon"
                     type="image/png"
                     sizes="32x32"
                 />
-                <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+                <link rel="apple-touch-icon" href="/apple-icon-192x192.png"></link>
                 <meta name="theme-color" content="#F338C3" />
             </Head>
             <Web3ReactProvider getLibrary={getLibrary}>

@@ -13,6 +13,7 @@ import { RowBetween } from '../Row'
 import { Text } from 'rebass'
 import { getExplorerLink } from '../../functions/explorer'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { XCircle } from 'react-feather'
 
 const Wrapper = styled.div`
     width: 100%;
@@ -109,16 +110,14 @@ export function ConfirmationModalContent({
     bottomContent: () => React.ReactNode
 }) {
     return (
-        <Wrapper>
-            <Section>
-                <RowBetween>
-                    <Text className="text-lg font-medium">{title}</Text>
-                    <CloseIcon onClick={onDismiss} />
-                </RowBetween>
-                {topContent()}
-            </Section>
-            <BottomSection gap="12px">{bottomContent()}</BottomSection>
-        </Wrapper>
+        <div className="w-full">
+            <div className="flex justify-between mb-3">
+                <div className="text-xl font-bold text-high-emphesis">{title}</div>
+                <XCircle size={18} onClick={onDismiss} />
+            </div>
+            {topContent()}
+            {bottomContent()}
+        </div>
     )
 }
 

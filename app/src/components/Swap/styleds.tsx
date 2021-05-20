@@ -1,18 +1,12 @@
 import styled, { css } from 'styled-components'
 
 import { AlertTriangle } from 'react-feather'
-import { AutoColumn } from '../Column'
 import React from 'react'
 import { Text } from 'rebass'
-import { transparentize } from 'polished'
 
 export const Wrapper = styled.div`
     position: relative;
     padding: 1rem;
-`
-
-export const WrapperNoPadding = styled.div`
-    position: relative;
 `
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
@@ -76,12 +70,6 @@ export const StyledBalanceMaxMini = styled.button`
     }
 `
 
-export const TruncatedText = styled(Text)`
-    text-overflow: ellipsis;
-    width: 220px;
-    overflow: hidden;
-`
-
 // styles
 export const Dots = styled.span`
     &::after {
@@ -104,55 +92,11 @@ export const Dots = styled.span`
     }
 `
 
-const SwapCallbackErrorInner = styled.div`
-    // background-color: ${({ theme }) => transparentize(0.9, theme.red1)};
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    font-size: 0.825rem;
-    width: 100%;
-    padding: 3rem 1.25rem 1rem 1rem;
-    margin-top: -2rem;
-    // color: ${({ theme }) => theme.red1};
-    z-index: -1;
-    p {
-        padding: 0;
-        margin: 0;
-        font-weight: 500;
-    }
-`
-
-const SwapCallbackErrorInnerAlertTriangle = styled.div`
-    background-color: ${({ theme }) => transparentize(0.9, theme.red1)};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    // border-radius: ${({ theme }) => theme.borderRadius};
-    min-width: 48px;
-    height: 48px;
-`
-
 export function SwapCallbackError({ error }: { error: string }) {
     return (
-        <SwapCallbackErrorInner>
-            <SwapCallbackErrorInnerAlertTriangle>
-                <AlertTriangle size={24} />
-            </SwapCallbackErrorInnerAlertTriangle>
-            <p>{error}</p>
-        </SwapCallbackErrorInner>
+        <div className="flex items-center pt-6 text-red justify-center">
+            <AlertTriangle size={16} />
+            <div className="ml-4 text-sm">{error}</div>
+        </div>
     )
 }
-
-export const SwapShowAcceptChanges = styled(AutoColumn)`
-    background-color: ${({ theme }) => transparentize(0.9, theme.primary1)};
-    // color: ${({ theme }) => theme.primary1};
-    padding: 0.5rem;
-    // border-radius: ${({ theme }) => theme.borderRadius};
-    margin-top: 8px;
-`
-export const Separator = styled.div`
-    width: 100%;
-    height: 1px;
-    // background-color: ${({ theme }) => theme.bg2};
-`
