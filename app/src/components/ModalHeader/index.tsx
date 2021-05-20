@@ -1,24 +1,28 @@
+import { ChevronLeftIcon } from '@heroicons/react/outline'
 import React from 'react'
 import Typography from '../Typography'
 
 function ModalHeader({
     title = undefined,
-    onClose,
+    onClose = undefined,
     className = '',
+    onBack = undefined
 }: {
     title?: string
     className?: string
-    onClose: () => void
+    onClose?: () => void
+    onBack?: () => void
 }): JSX.Element {
     return (
-        <div className={`relative mb-2 ${className}`}>
+        <div className={`flex items-center justify-between py-2 mb-4 ${className}`}>
+            {onBack && <ChevronLeftIcon onClick={onBack} width={24} height={24} className="cursor-pointer" />}
             {title && (
-                <Typography component="h2" variant="h5" className="mt-2.5 font-bold">
+                <Typography component="h2" variant="h5" className="font-bold">
                     {title}
                 </Typography>
             )}
             <div
-                className="absolute top-0 right-0 w-5 h-5 rounded-full border-2 text-primary hover:text-high-emphesis border-primary  flex items-center justify-center cursor-pointer"
+                className="flex items-center justify-center w-5 h-5 -mt-2 border-2 rounded-full cursor-pointer text-primary hover:text-high-emphesis border-primary"
                 onClick={onClose}
             >
                 <svg width="8px" height="8px" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">

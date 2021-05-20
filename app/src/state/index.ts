@@ -28,7 +28,8 @@ const store = configureStore({
         ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),
         ...(typeof localStorage !== 'undefined' ? [save({ states: PERSISTED_KEYS })] : [])
     ],
-    preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {}
+    preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {},
+    devTools: process.env.NODE_ENV === 'development'
 })
 
 store.dispatch(updateVersion())
