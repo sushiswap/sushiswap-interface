@@ -170,7 +170,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
 
 function Web3StatusInner() {
     const { i18n } = useLingui()
-    const { account, connector, error } = useWeb3React()
+    const { account, connector, error, deactivate } = useWeb3React()
 
     const { ENSName } = useENSName(account ?? undefined)
 

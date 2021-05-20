@@ -18,6 +18,10 @@ import AccountDetails from '../AccountDetails'
 import Modal from '../Modal'
 import Option from './Option'
 import PendingView from './PendingView'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
+import Button from '../Button'
+import { ButtonError } from '../ButtonLegacy'
 
 const CloseIcon = styled.div`
     position: absolute;
@@ -125,7 +129,9 @@ export default function WalletModal({
     ENSName?: string
 }) {
     // important that these are destructed from the account-specific web3-react context
-    const { active, account, connector, activate, error } = useWeb3React()
+    const { active, account, connector, activate, error, deactivate } = useWeb3React()
+
+    const { i18n } = useLingui()
 
     const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
 
@@ -248,7 +254,7 @@ export default function WalletModal({
                                 id={`connect-${key}`}
                                 key={key}
                                 color={'#E8831D'}
-                                header={'Install Metamask'}
+                                header={i18n._(t`Install Metamask`)}
                                 subheader={null}
                                 link={'https://metamask.io/'}
                                 icon={MetamaskIcon}
@@ -299,15 +305,21 @@ export default function WalletModal({
                     <CloseIcon onClick={toggleWalletModal}>
                         <CloseColor />
                     </CloseIcon>
-                    <HeaderRow>
-                        {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}
+                    <HeaderRow style={{ paddingLeft: 0, paddingRight: 0 }}>
+                        {error instanceof UnsupportedChainIdError
+                            ? i18n._(t`Wrong Network`)
+                            : i18n._(t`Error connecting`)}
                     </HeaderRow>
                     <ContentWrapper>
                         {error instanceof UnsupportedChainIdError ? (
-                            <h5>Please connect to the appropriate Ethereum network.</h5>
+                            <h5>{i18n._(t`Please connect to the appropriate Ethereum network.`)}</h5>
                         ) : (
-                            'Error connecting. Try refreshing the page.'
+                            i18n._(t`Error connecting. Try refreshing the page.`)
                         )}
+                        <div style={{ marginTop: '1rem' }} />
+                        <ButtonError error={true} size="small" onClick={deactivate}>
+                            {i18n._(t`Disconnect`)}
+                        </ButtonError>
                     </ContentWrapper>
                 </UpperSection>
             )
@@ -336,12 +348,12 @@ export default function WalletModal({
                                 setWalletView(WALLET_VIEWS.ACCOUNT)
                             }}
                         >
-                            Back
+                            {i18n._(t`Back`)}
                         </HoverText>
                     </HeaderRow>
                 ) : (
                     <HeaderRow>
-                        <HoverText>Connect to a wallet</HoverText>
+                        <HoverText>{i18n._(t`Connect to a wallet`)}</HoverText>
                     </HeaderRow>
                 )}
                 <ContentWrapper>
@@ -357,8 +369,10 @@ export default function WalletModal({
                     )}
                     {walletView !== WALLET_VIEWS.PENDING && (
                         <Blurb>
-                            <span>New to Ethereum? &nbsp;</span>{' '}
-                            <ExternalLink href="https://ethereum.org/wallets/">Learn more about wallets</ExternalLink>
+                            <span>{i18n._(t`New to Ethereum?`)} &nbsp;</span>{' '}
+                            <ExternalLink href="https://ethereum.org/wallets/">
+                                {i18n._(t`Learn more about wallets`)}
+                            </ExternalLink>
                         </Blurb>
                     )}
                 </ContentWrapper>

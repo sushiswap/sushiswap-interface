@@ -56,8 +56,10 @@ import SUSHI_ABI from '../constants/abis/sushi.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
+import ZAPPER_ABI from '../constants/abis/zapper.json'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
+import { getZapperAddress } from 'constants/addresses'
 import { useActiveWeb3React } from './useActiveWeb3React'
 
 // returns null on errors
@@ -192,7 +194,7 @@ export function useFactoryContract(): Contract | null {
 
 export function useRouterContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, false)
+    return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
@@ -429,6 +431,12 @@ export function useDashboard2Contract(): Contract | null {
 export function useSushiSwapMultiSwapper(): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId], SUSHISWAP_MULTISWAPPER_ABI)
+}
+
+export function useZapperContract(withSignerIfPossible?: boolean): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    const address = getZapperAddress(chainId)
+    return useContract(address, ZAPPER_ABI, withSignerIfPossible)
 }
 
 export function useQuickSwapFactoryContract(): Contract | null {

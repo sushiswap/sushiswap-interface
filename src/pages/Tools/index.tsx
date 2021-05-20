@@ -108,7 +108,6 @@ export default function Pool() {
                         </AutoColumn>
                     </CardSection>
                 </VoteCard>
-
                 <AutoColumn gap="md" justify="center">
                     <AutoColumn gap="md" style={{ width: '100%' }}>
                         <TitleRow style={{ marginTop: '1rem', marginBottom: '1rem' }} padding={'0'}>
@@ -160,6 +159,35 @@ export default function Pool() {
                                             to={`/saave`}
                                         >
                                             {i18n._(t`Manage`)}
+                                        </ButtonEmpty>
+                                    </RowFixed>
+                                </FixedHeightRow>
+                            </AutoColumn>
+                        </StyledPositionCard>
+                        <StyledPositionCard>
+                            <AutoColumn gap="12px">
+                                <FixedHeightRow>
+                                    <RowFixed>
+                                        <Text fontWeight={500} fontSize={16}>
+                                            LP ZAP
+                                        </Text>
+                                    </RowFixed>
+                                </FixedHeightRow>
+                                <FixedHeightRow>
+                                    <RowFixed>
+                                        <Text fontWeight={500} fontSize={14}>
+                                            Zap into an LP position for any pool using any asset
+                                        </Text>
+                                    </RowFixed>
+                                    <RowFixed>
+                                        <ButtonEmpty
+                                            padding="6px 8px"
+                                            borderRadius="20px"
+                                            width="fit-content"
+                                            as={Link}
+                                            to={`/zap`}
+                                        >
+                                            Manage
                                         </ButtonEmpty>
                                     </RowFixed>
                                 </FixedHeightRow>
