@@ -121,15 +121,12 @@ export default function SwapModalFooter({
 
             <AutoRow>
                 <ButtonError
+                    id="confirm-swap-or-send"
                     onClick={onConfirm}
                     disabled={disabledConfirm}
                     error={severity > 2}
-                    style={{ margin: '10px 0 0 0' }}
-                    id="confirm-swap-or-send"
                 >
-                    <Text fontSize={20} fontWeight={500}>
-                        {severity > 2 ? i18n._(t`Swap Anyway`) : i18n._(t`Confirm Swap`)}
-                    </Text>
+                    {severity > 2 ? i18n._(t`Swap Anyway`) : i18n._(t`Confirm Swap`)}
                 </ButtonError>
 
                 {swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}

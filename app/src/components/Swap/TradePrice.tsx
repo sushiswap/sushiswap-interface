@@ -1,10 +1,7 @@
-import React, { useContext } from 'react'
-
 import { Price } from '@sushiswap/sdk'
+import React from 'react'
 import { Repeat } from 'react-feather'
 import { StyledBalanceMaxMini } from './styleds'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 interface TradePriceProps {
@@ -15,7 +12,6 @@ interface TradePriceProps {
 
 export default function TradePrice({ price, showInverted, setShowInverted }: TradePriceProps) {
     const { chainId } = useActiveWeb3React()
-    const theme = useContext(ThemeContext)
 
     const formattedPrice = showInverted ? price?.toSignificant(6) : price?.invert()?.toSignificant(6)
 
@@ -25,11 +21,7 @@ export default function TradePrice({ price, showInverted, setShowInverted }: Tra
         : `${price?.baseCurrency?.getSymbol(chainId)} per ${price?.quoteCurrency?.getSymbol(chainId)}`
 
     return (
-        <Text
-            fontWeight={500}
-            fontSize={14}
-            style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}
-        >
+        <div className="flex items-center justify-center font-medium">
             {show ? (
                 <>
                     {formattedPrice ?? '-'} {label}
@@ -40,6 +32,6 @@ export default function TradePrice({ price, showInverted, setShowInverted }: Tra
             ) : (
                 '-'
             )}
-        </Text>
+        </div>
     )
 }

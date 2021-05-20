@@ -8,6 +8,7 @@ const SIZE = {
 
 const FILLED = {
     default: 'bg-transparent',
+    red: 'bg-red bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     gray: 'bg-dark-700 bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
@@ -16,6 +17,7 @@ const FILLED = {
 
 const OUTLINED = {
     default: 'bg-transparent',
+    red: 'bg-red bg-opacity-20 outline-red rounded text-xs text-red hover:bg-opacity-40',
     blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue hover:bg-opacity-40',
     pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40',
     gray: 'bg-dark-700 bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40',
