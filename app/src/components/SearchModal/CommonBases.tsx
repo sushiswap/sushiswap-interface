@@ -9,21 +9,21 @@ import { SUGGESTED_BASES } from '../../constants'
 import { Text } from 'rebass'
 import styled from 'styled-components'
 
-const BaseWrapper = styled.div<{ disable?: boolean }>`
-    border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.bg3)};
-    border-radius: 10px;
-    display: flex;
-    padding: 6px;
+// const BaseWrapper = styled.div<{ disable?: boolean }>`
+//     border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.bg3)};
+//     border-radius: 10px;
+//     display: flex;
+//     padding: 6px;
 
-    align-items: center;
-    :hover {
-        cursor: ${({ disable }) => !disable && 'pointer'};
-        background-color: ${({ theme, disable }) => !disable && theme.bg2};
-    }
+//     align-items: center;
+//     :hover {
+//         cursor: ${({ disable }) => !disable && 'pointer'};
+//         background-color: ${({ theme, disable }) => !disable && theme.bg2};
+//     }
 
-    background-color: ${({ theme, disable }) => disable && theme.bg3};
-    opacity: ${({ disable }) => disable && '0.4'};
-`
+//     background-color: ${({ theme, disable }) => disable && theme.bg3};
+//     opacity: ${({ disable }) => disable && '0.4'};
+// `
 
 export default function CommonBases({
     chainId,
@@ -43,32 +43,36 @@ export default function CommonBases({
                 <QuestionHelper text="These tokens are commonly paired with other tokens." />
             </AutoRow>
             <AutoRow gap="4px">
-                <BaseWrapper
+                <button
+                    type="button"
                     onClick={() => {
                         if (!selectedCurrency || !currencyEquals(selectedCurrency, NATIVE)) {
                             onSelect(NATIVE)
                         }
                     }}
-                    disable={selectedCurrency === NATIVE}
+                    className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700"
+                    disabled={selectedCurrency === NATIVE}
                 >
                     <CurrencyLogo currency={NATIVE} style={{ marginRight: 8 }} />
                     <Text fontWeight={500} fontSize={16}>
                         {Currency.getNativeCurrencySymbol(chainId)}
                     </Text>
-                </BaseWrapper>
+                </button>
                 {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
                     const selected = selectedCurrency instanceof Token && selectedCurrency.address === token.address
                     return (
-                        <BaseWrapper
+                        <button
+                            type="button"
                             onClick={() => !selected && onSelect(token)}
-                            disable={selected}
+                            disabled={selected}
                             key={token.address}
+                            className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700"
                         >
                             <CurrencyLogo currency={token} style={{ marginRight: 8 }} />
                             <Text fontWeight={500} fontSize={16}>
                                 {token.getSymbol(chainId)}
                             </Text>
-                        </BaseWrapper>
+                        </button>
                     )
                 })}
             </AutoRow>

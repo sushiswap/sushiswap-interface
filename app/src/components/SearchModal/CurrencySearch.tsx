@@ -5,6 +5,7 @@ import { filterTokens, useSortedTokensByQuery } from './filtering'
 import { useAllTokens, useFoundOnInactiveList, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 
 import AutoSizer from 'react-virtualized-auto-sizer'
+import Button from '../Button'
 import ButtonText from '../ButtonText'
 import Column from '../Column'
 import CommonBases from './CommonBases'
@@ -175,7 +176,7 @@ export function CurrencySearch({
                     ref={inputRef as RefObject<HTMLInputElement>}
                     onChange={handleInput}
                     onKeyDown={handleEnter}
-                    className="w-full bg-transparent border-1 border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary  font-bold text-caption px-6 py-3.5"
+                    className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5"
                 />
             </div>
             {showCommonBases && (
@@ -223,16 +224,9 @@ export function CurrencySearch({
                 </Column>
             )}
             <div className="mt-3">
-                <Row justify="center">
-                    <ButtonText onClick={showManageView} className="list-token-manage-button">
-                        <RowFixed>
-                            <IconWrapper size="16px" marginRight="6px">
-                                <Edit />
-                            </IconWrapper>
-                            <div>{i18n._(t`Manage`)}</div>
-                        </RowFixed>
-                    </ButtonText>
-                </Row>
+                <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+                    {i18n._(t`Manage`)}
+                </Button>
             </div>
         </ContentWrapper>
     )
