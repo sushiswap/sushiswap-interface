@@ -13,6 +13,7 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import ExternalLink from '../ExternalLink'
 import Link from 'next/link'
 import { Text } from 'rebass'
+import { classNames } from '../../functions'
 import { currencyId } from '../../functions/currency'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
@@ -147,7 +148,10 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
 
     return (
         <div
-            className="p-4 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+            className={classNames(
+                'p-4 rounded cursor-pointer',
+                !showMore ? 'bg-dark-800 hover:bg-dark-700' : 'bg-dark-700'
+            )}
             onClick={() => setShowMore(!showMore)}
         >
             <AutoColumn gap="12px">
