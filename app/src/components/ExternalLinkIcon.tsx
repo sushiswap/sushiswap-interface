@@ -8,7 +8,7 @@ export const LinkIcon = styled(ExternalLink)`
     height: 16px;
     width: 18px;
     margin-left: 10px;
-    stroke: ${({ theme }) => theme.blue1};
+    // stroke: ${({ theme }) => theme.blue1};
 `
 
 const LinkIconWrapper = styled.a`

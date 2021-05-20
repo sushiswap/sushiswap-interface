@@ -7,7 +7,7 @@ import {
     useExpertModeManager,
     useUserSingleHopOnly,
     useUserSlippageTolerance,
-    useUserTransactionTTL,
+    useUserTransactionTTL
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
@@ -109,14 +109,12 @@ export default function SettingsTab() {
                 <ModalContentWrapper>
                     <AutoColumn gap="lg">
                         <RowBetween style={{ padding: '0 2rem' }}>
-                            <Text fontWeight={500} fontSize={20}>
-                                {i18n._(t`Are you sure?`)}
-                            </Text>
+                            <Text className="font-medium text-lg">{i18n._(t`Are you sure?`)}</Text>
                             <StyledCloseIcon onClick={() => setShowConfirmation(false)} />
                         </RowBetween>
                         <Break />
                         <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
-                            <Text fontWeight={500} fontSize={20}>
+                            <Text className="font-medium text-lg">
                                 {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
                             </Text>
@@ -172,9 +170,7 @@ export default function SettingsTab() {
                         </div>
                         <RowBetween>
                             <RowFixed>
-                                <div fontWeight={400} fontSize={14} color={theme.text2}>
-                                    {i18n._(t`Toggle Expert Mode`)}
-                                </div>
+                                <div className="text-sm">{i18n._(t`Toggle Expert Mode`)}</div>
                                 <QuestionHelper
                                     text={i18n._(
                                         t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`
@@ -199,9 +195,7 @@ export default function SettingsTab() {
                         </RowBetween>
                         <RowBetween>
                             <RowFixed>
-                                <div fontWeight={400} fontSize={14} color={theme.text2}>
-                                    {i18n._(t`Disable Multihops`)}
-                                </div>
+                                <div className="text-sm">{i18n._(t`Disable Multihops`)}</div>
                                 <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
                             </RowFixed>
                             <Toggle

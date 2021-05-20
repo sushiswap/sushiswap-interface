@@ -8,7 +8,7 @@ import Layout from '../components/Layout'
 import Link from 'next/link'
 import React from 'react'
 import TransactionList from '../components/TransactionList'
-import { getExplorerLink } from '../functions/exporer'
+import { getExplorerLink } from '../functions/explorer'
 import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
@@ -42,8 +42,8 @@ function Transactions() {
             </Head>
 
             {/* <div className="w-full max-w-2xl">
-                <Button size="small" className="flex items-center">
-                    <ChevronLeft strokeWidth={2} size={18} color={theme.white} />
+                <Button size="small" className="flex items-center text-white">
+                    <ChevronLeft strokeWidth={2} size={18} color="currentColor" />
                     <span className="ml-1">Go Back</span>
                 </Button>
                 <div className="px-4 mb-5">
@@ -51,7 +51,7 @@ function Transactions() {
                 </div>
             </div> */}
 
-            <div className="bg-dark-900 w-full max-w-2xl rounded mb-3 p-4">
+            <div className="w-full max-w-2xl p-4 mb-3 rounded bg-dark-900">
                 <div className="flex justify-between">
                     <div className="flex">
                         <div className="p-1.5 bg-dark-800 rounded">
@@ -76,7 +76,7 @@ function Transactions() {
                         </div>
                     </div>
 
-                    <div className="text-sm text-primary font-semibold">
+                    <div className="text-sm font-semibold text-primary">
                         {/* <div className="flex items-center">
                             <Copy strokeWidth={0.5} size={14} className="text-white"/>
                             <div className="ml-1">Copy Address</div>
@@ -94,7 +94,7 @@ function Transactions() {
                 </div>
             </div>
 
-            <div className="bg-dark-900 w-full max-w-2xl rounded p-4">
+            <div className="w-full max-w-2xl p-4 rounded bg-dark-900">
                 <div className="w-auto flex justify-between items-center rounded bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto mt-3 mb-6">
                     <Link href="/pool">
                         <a className="w-3/6 p-3 text-center rounded-lg text-secondary">

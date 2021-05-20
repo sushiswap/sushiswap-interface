@@ -15,7 +15,7 @@ const IconWrapper = styled.div<{
     margin-right: ${({ marginRight }) => marginRight ?? 0};
     margin-left: ${({ marginLeft }) => marginLeft ?? 0};
     & > * {
-        stroke: ${({ theme, stroke }) => stroke ?? theme.blue1};
+        // stroke: ${({ theme, stroke }) => stroke ?? theme.blue1};
     }
 `
 

@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux'
 import { useLingui } from '@lingui/react'
 
 const Tabs = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap}
+    // ${({ theme }) => theme.flexRowNoWrap}
     align-items: center;
     border-radius: 3rem;
     justify-content: space-evenly;
@@ -23,9 +23,9 @@ const Tabs = styled.div`
 const activeClassName = 'ACTIVE'
 
 const StyledNavLink = styled(NavLink).attrs({
-    activeClassName,
+    activeClassName
 })`
-    ${({ theme }) => theme.flexRowNoWrap}
+    // ${({ theme }) => theme.flexRowNoWrap}
     align-items: center;
     justify-content: center;
     height: 3rem;
@@ -33,18 +33,18 @@ const StyledNavLink = styled(NavLink).attrs({
     outline: none;
     cursor: pointer;
     text-decoration: none;
-    color: ${({ theme }) => theme.text3};
+    // color: ${({ theme }) => theme.text3};
     font-size: 20px;
 
     &.${activeClassName} {
-        border-radius: ${({ theme }) => theme.borderRadius};
+        // border-radius: ${({ theme }) => theme.borderRadius};
         font-weight: 500;
-        color: ${({ theme }) => theme.text1};
+        // color: ${({ theme }) => theme.text1};
     }
 
     :hover,
     :focus {
-        color: ${({ theme }) => darken(0.1, theme.text1)};
+        // color: ${({ theme }) => darken(0.1, theme.text1)};
     }
 `
 

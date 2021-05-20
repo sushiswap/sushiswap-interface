@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import ExternalLink from './ExternalLink'
-import { getExplorerLink } from '../functions/exporer'
+import { getExplorerLink } from '../functions/explorer'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../state/application/hooks'
 
@@ -27,8 +27,11 @@ export default function Polling() {
     )
 
     return (
-        <ExternalLink href={chainId && blockNumber ? getExplorerLink(chainId, blockNumber.toString(), 'block') : ''}>
-            <div className={`flex items-center space-x-2 ${!isMounted ? 'text-high-emphesis' : 'text-low-emphesis'}`}>
+        <ExternalLink
+            href={chainId && blockNumber ? getExplorerLink(chainId, blockNumber.toString(), 'block') : ''}
+            className={`${!isMounted ? 'text-high-emphesis' : 'text-low-emphesis'}`}
+        >
+            <div className={`flex items-center space-x-2`}>
                 <div>{blockNumber}</div>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

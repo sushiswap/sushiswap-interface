@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/sdk'
-import { getExplorerLink } from './exporer'
+import { getExplorerLink } from './explorer'
 
 describe('utils', () => {
     describe('#getExplorerLink', () => {

@@ -1,7 +1,8 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Token, TokenAmount } from '@sushiswap/sdk'
-import { useTokenContract } from '../hooks/useContract'
+
+import { BigNumber } from '@ethersproject/bignumber'
 import { useSingleCallResult } from '../state/multicall/hooks'
+import { useTokenContract } from '../hooks/useContract'
 
 // returns undefined if input token is undefined, or fails to get token contract,
 // or contract total supply cannot be fetched

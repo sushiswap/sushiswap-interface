@@ -13,7 +13,8 @@ import { ExternalLinkIcon } from '../ExternalLinkIcon'
 import ImportRow from './ImportRow'
 import { Token } from '@sushiswap/sdk'
 import TrashIcon from '../TrashIcon'
-import { getExplorerLink } from '../../functions/exporer'
+import { classNames } from '../../functions'
+import { getExplorerLink } from '../../functions/explorer'
 import { isAddress } from '../../functions/validate'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -83,9 +84,7 @@ function ManageTokens({
                     <RowFixed>
                         <CurrencyLogo currency={token} size={'20px'} />
                         <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
-                            <div ml={'10px'} fontWeight={600}>
-                                {token.symbol}
-                            </div>
+                            <div className="ml-2.5 font-semibold">{token.symbol}</div>
                         </ExternalLink>
                     </RowFixed>
                     <RowFixed>
@@ -112,9 +111,11 @@ function ManageTokens({
                             onChange={handleInput}
                         />
                     </Row>
-                    {searchQuery !== '' && !isAddressSearch && <div error={true}>Enter valid token address</div>}
+                    {searchQuery !== '' && !isAddressSearch && (
+                        <div className="text-red">Enter valid token address</div>
+                    )}
                     {searchToken && (
-                        <Card backgroundColor={theme.bg2} padding="10px 0">
+                        <Card padding="10px 0">
                             <ImportRow
                                 token={searchToken}
                                 showImportView={() => setModalView(CurrencyModalView.importToken)}

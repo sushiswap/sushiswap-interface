@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { formattedNum, formattedPercent } from '../../utils'
 
-import DoubleLogo from '../DoubleLogo'
+import DoubleLogo from './DoubleLogo'
 import { ONSEN_VIEWS } from '../../constants/onsen'
 import QuestionHelper from '../QuestionHelper'
 import React from 'react'
@@ -29,9 +29,9 @@ export default function OnsenTable({ farms, onsenView }: any) {
 
     function Percent(props: { number: number }) {
         if (props.number > 0) {
-            return <div className="text-green font-normal">+{formattedPercent(props.number)}</div>
+            return <div className="font-normal text-green">+{formattedPercent(props.number)}</div>
         } else {
-            return <div className="text-red font-normal">{formattedPercent(props.number)}</div>
+            return <div className="font-normal text-red">{formattedPercent(props.number)}</div>
         }
     }
 
@@ -73,8 +73,8 @@ export default function OnsenTable({ farms, onsenView }: any) {
     }
 
     return (
-        <div className="overflow-auto py-8 mb-12">
-            <GridDiv className="gap-2 text-body font-bold pb-2 min-w-full">
+        <div className="py-8 mb-12 overflow-auto">
+            <GridDiv className="min-w-full gap-2 pb-2 font-bold text-body">
                 <div onClick={() => requestSort('symbol')} className="flex items-center cursor-pointer">
                     <div>Pool</div>
                     {sortConfig?.key === 'symbol' ? (

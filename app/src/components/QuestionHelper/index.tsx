@@ -9,14 +9,14 @@ const QuestionWrapper = styled.div<{ noPadding?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: ${props => (props.noPadding ? '0' : '0.2rem')};
+    // padding: ${props => (props.noPadding ? '0' : '0.2rem')};
     border: none;
     background: none;
     outline: none;
     cursor: default;
     border-radius: 36px;
     // background-color: ${({ theme }) => theme.bg2};
-    color: ${({ theme }) => theme.text2};
+    // color: ${({ theme }) => theme.text2};
 
     :hover,
     :focus {

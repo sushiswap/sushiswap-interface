@@ -4,7 +4,7 @@ import ExternalLink from '../ExternalLink'
 import Loader from '../Loader'
 import React from 'react'
 import { RowFixed } from '../Row'
-import { getExplorerLink } from '../../functions/exporer'
+import { getExplorerLink } from '../../functions/explorer'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTransactions } from '../../state/transactions/hooks'
@@ -25,15 +25,15 @@ const TransactionState = styled(ExternalLink)<{ pending: boolean; success?: bool
     justify-content: space-between;
     align-items: center;
     text-decoration: none !important;
-    border-radius: ${({ theme }) => theme.borderRadius};
+    // border-radius: ${({ theme }) => theme.borderRadius};
     padding: 0.25rem 0rem;
     font-weight: 500;
     font-size: 0.825rem;
-    color: ${({ theme }) => theme.primary1};
+    // color: ${({ theme }) => theme.primary1};
 `
 
 const IconWrapper = styled.div<{ pending: boolean; success?: boolean }>`
-    color: ${({ pending, success, theme }) => (pending ? theme.primary1 : success ? theme.green1 : theme.red1)};
+    // color: ${({ pending, success, theme }) => (pending ? theme.primary1 : success ? theme.green1 : theme.red1)};
 `
 
 export default function Transaction({ hash }: { hash: string }): any {

@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 export const FilterWrapper = styled(RowFixed)`
     padding: 8px;
-    background-color: ${({ theme }) => theme.bg2};
-    color: ${({ theme }) => theme.text1};
+    // background-color: ${({ theme }) => theme.bg2};
+    // color: ${({ theme }) => theme.text1};
     border-radius: 8px;
     user-select: none;
     & > * {
@@ -19,7 +19,7 @@ export const FilterWrapper = styled(RowFixed)`
 
 export default function SortButton({
     toggleSortOrder,
-    ascending,
+    ascending
 }: {
     toggleSortOrder: () => void
     ascending: boolean

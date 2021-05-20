@@ -103,14 +103,10 @@ export default function PoolFinder() {
                         {currency0 ? (
                             <Row>
                                 <CurrencyLogo currency={currency0} />
-                                <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                    {currency0.getSymbol(chainId)}
-                                </Text>
+                                <Text className="ml-3 text-lg font-bold">{currency0.getSymbol(chainId)}</Text>
                             </Row>
                         ) : (
-                            <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                {i18n._(t`Select a token`)}
-                            </Text>
+                            <Text className="ml-3 text-lg font-bold">{i18n._(t`Select a token`)}</Text>
                         )}
                     </ButtonDropdownLight>
 
@@ -127,14 +123,10 @@ export default function PoolFinder() {
                         {currency1 ? (
                             <Row>
                                 <CurrencyLogo currency={currency1} />
-                                <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                    {currency1.getSymbol(chainId)}
-                                </Text>
+                                <Text className="ml-3 text-lg font-bold">{currency1.getSymbol(chainId)}</Text>
                             </Row>
                         ) : (
-                            <Text fontWeight={500} fontSize={20} marginLeft={'12px'}>
-                                {i18n._(t`Select a token`)}
-                            </Text>
+                            <Text className="ml-3 text-lg font-bold">{i18n._(t`Select a token`)}</Text>
                         )}
                     </ButtonDropdownLight>
 
@@ -147,7 +139,7 @@ export default function PoolFinder() {
                                 borderRadius: '12px'
                             }}
                         >
-                            <div className="text-center font-semibold">{i18n._(t`Pool Found!`)}</div>
+                            <div className="font-semibold text-center">{i18n._(t`Pool Found!`)}</div>
                             <Link href={`/pool`}>
                                 <a className="text-center">{i18n._(t`Manage this pool`)}</a>
                             </Link>

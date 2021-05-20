@@ -1,16 +1,17 @@
+import { useCallback, useEffect, useState } from 'react'
+import { useContract, useMasterChefContract } from '../hooks/useContract'
+
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from 'ethers'
-import { useCallback, useEffect, useState } from 'react'
 import ERC20_ABI from '../constants/abis/erc20.json'
+import { getAddress } from '@ethersproject/address'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
-import { useContract, useMasterChefContract } from '../hooks/useContract'
-import { isAddress } from '../utils'
 
 const useAllowance = (lpAddress: string) => {
     const [allowance, setAllowance] = useState(BigNumber.from(0))
     const { account } = useActiveWeb3React()
     const masterChefContract = useMasterChefContract()
-    const lpAddressChecksum = isAddress(lpAddress)
+    const lpAddressChecksum = getAddress(lpAddress)
     const lpContract = useContract(lpAddressChecksum ? lpAddressChecksum : undefined, ERC20_ABI, false)
 
     const getAllowance = async (

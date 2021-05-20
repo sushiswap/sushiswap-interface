@@ -26,7 +26,7 @@ function CurrencySearchModal({
     onCurrencySelect,
     selectedCurrency,
     otherSelectedCurrency,
-    showCommonBases = false,
+    showCommonBases = false
 }: CurrencySearchModalProps) {
     const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
     const lastOpen = useLast(isOpen)

@@ -6,15 +6,16 @@ import { useModalOpen, useWalletModalToggle } from '../../state/application/hook
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import AccountDetails from '../AccountDetails'
 import { ApplicationModal } from '../../state/application/actions'
-import { ReactComponent as Close } from '../../assets/images/x.svg'
-import { ExternalLink } from '../../theme'
-import MetamaskIcon from '../../assets/images/metamask.png'
+import ExternalLink from '../../components/ExternalLink'
+// import MetamaskIcon from '../../assets/images/metamask.png'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 import Option from './Option'
 import PendingView from './PendingView'
 import ReactGA from 'react-ga'
 import { SUPPORTED_WALLETS } from '../../constants'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+// import { ReactComponent as Close } from '../../assets/images/x.svg'
+import { XIcon } from '@heroicons/react/outline'
 import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import usePrevious from '../../hooks/usePrevious'
@@ -29,25 +30,19 @@ const CloseIcon = styled.div`
     }
 `
 
-const CloseColor = styled(Close)`
-    path {
-        stroke: ${({ theme }) => theme.text4};
-    }
-`
-
 const Wrapper = styled.div`
-    ${({ theme }) => theme.flexColumnNoWrap}
+    // ${({ theme }) => theme.flexColumnNoWrap}
     margin: 0;
     padding: 0;
     width: 100%;
 `
 
 const HeaderRow = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap};
+    // ${({ theme }) => theme.flexRowNoWrap};
     padding: 1rem 1rem;
     font-weight: 500;
-    color: ${props => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
-    ${({ theme }) => theme.mediaWidth.upToMedium`
+    // color: ${props => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
+    // ${({ theme }) => theme.mediaWidth.upToMedium`
     padding: 1rem;
   `};
 `
@@ -58,7 +53,7 @@ const ContentWrapper = styled.div`
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 
-    ${({ theme }) => theme.mediaWidth.upToMedium`padding: 1rem`};
+    // ${({ theme }) => theme.mediaWidth.upToMedium`padding: 1rem`};
 `
 
 const UpperSection = styled.div`
@@ -82,12 +77,12 @@ const UpperSection = styled.div`
 `
 
 const Blurb = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap}
+    // ${({ theme }) => theme.flexRowNoWrap}
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 2rem;
-    ${({ theme }) => theme.mediaWidth.upToMedium`
+    // ${({ theme }) => theme.mediaWidth.upToMedium`
     margin: 1rem;
     font-size: 12px;
   `};
@@ -96,7 +91,7 @@ const Blurb = styled.div`
 const OptionGrid = styled.div`
     display: grid;
     grid-gap: 10px;
-    ${({ theme }) => theme.mediaWidth.upToMedium`
+    // ${({ theme }) => theme.mediaWidth.upToMedium`
     grid-template-columns: 1fr;
     grid-gap: 10px;
   `};
@@ -250,7 +245,7 @@ export default function WalletStandalone({
                                 header={'Install Metamask'}
                                 subheader={null}
                                 link={'https://metamask.io/'}
-                                icon={MetamaskIcon}
+                                icon="/metamask.png"
                             />
                         )
                     } else {
@@ -296,7 +291,7 @@ export default function WalletStandalone({
             return (
                 <UpperSection>
                     <CloseIcon onClick={toggleWalletModal}>
-                        <CloseColor />
+                        <XIcon />
                     </CloseIcon>
                     <HeaderRow>
                         {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}

@@ -10,7 +10,9 @@ import { useSingleCallResult } from '../state/multicall/hooks'
  * Does a reverse lookup for an address to find its ENS name.
  * Note this is not the same as looking up an ENS name to find an address.
  */
-export default function useENSName(address?: string): {
+export default function useENSName(
+    address?: string
+): {
     ENSName: string | null
     loading: boolean
 } {
@@ -37,6 +39,6 @@ export default function useENSName(address?: string): {
     const changed = debouncedAddress !== address
     return {
         ENSName: changed ? null : name.result?.[0] ?? null,
-        loading: changed || resolverAddress.loading || name.loading,
+        loading: changed || resolverAddress.loading || name.loading
     }
 }

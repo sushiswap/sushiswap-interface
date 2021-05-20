@@ -49,19 +49,21 @@ export default function SwapModalHeader({
                     <TruncatedText
                         fontSize={24}
                         fontWeight={500}
-                        color={showAcceptChanges && trade.tradeType === TradeType.EXACT_OUTPUT ? theme.primary1 : ''}
+                        className={
+                            showAcceptChanges && trade.tradeType === TradeType.EXACT_OUTPUT ? 'text-primary' : ''
+                        }
                     >
                         {trade.inputAmount.toSignificant(6)}
                     </TruncatedText>
                 </RowFixed>
                 <RowFixed gap={'0px'}>
-                    <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
+                    <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
                         {trade.inputAmount.currency.getSymbol(chainId)}
                     </Text>
                 </RowFixed>
             </RowBetween>
             <RowFixed>
-                <ArrowDown size="16" color={theme.text2} style={{ marginLeft: '4px', minWidth: '16px' }} />
+                <ArrowDown size={16} style={{ marginLeft: '4px', minWidth: '16px' }} />
             </RowFixed>
             <RowBetween align="flex-end">
                 <RowFixed gap={'0px'}>
@@ -73,11 +75,11 @@ export default function SwapModalHeader({
                     <TruncatedText
                         fontSize={24}
                         fontWeight={500}
-                        color={
+                        className={
                             priceImpactSeverity > 2
-                                ? theme.red1
+                                ? 'text-red'
                                 : showAcceptChanges && trade.tradeType === TradeType.EXACT_INPUT
-                                ? theme.primary1
+                                ? 'text-primary'
                                 : ''
                         }
                     >
@@ -85,7 +87,7 @@ export default function SwapModalHeader({
                     </TruncatedText>
                 </RowFixed>
                 <RowFixed gap={'0px'}>
-                    <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
+                    <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
                         {trade.outputAmount.currency.getSymbol(chainId)}
                     </Text>
                 </RowFixed>
@@ -95,7 +97,7 @@ export default function SwapModalHeader({
                     <RowBetween>
                         <RowFixed>
                             <AlertTriangle size={20} style={{ marginRight: '8px', minWidth: 24 }} />
-                            <div color={theme.primary1}> {i18n._(t`Price Updated`)}</div>
+                            <div className="text-blue"> {i18n._(t`Price Updated`)}</div>
                         </RowFixed>
                         <ButtonPrimary
                             style={{
@@ -113,7 +115,7 @@ export default function SwapModalHeader({
             ) : null}
             <AutoColumn justify="flex-start" gap="sm" style={{ padding: '12px 0 0 0px' }}>
                 {trade.tradeType === TradeType.EXACT_INPUT ? (
-                    <div textAlign="left" style={{ width: '100%' }}>
+                    <div style={{ width: '100%' }}>
                         <Trans>
                             Output is estimated. You will receive at least{' '}
                             <b>
@@ -124,7 +126,7 @@ export default function SwapModalHeader({
                         </Trans>
                     </div>
                 ) : (
-                    <div textAlign="left" style={{ width: '100%' }}>
+                    <div style={{ width: '100%' }}>
                         <Trans>
                             Input is estimated. You will sell at most{' '}
                             <b>

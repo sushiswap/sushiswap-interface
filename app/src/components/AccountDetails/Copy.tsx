@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import useCopyClipboard from '../../hooks/useCopyClipboard'
 
 const CopyIcon = styled(LinkStyledButton)`
-    color: ${({ theme }) => theme.text3};
+    // color: ${({ theme }) => theme.text3};
     flex-shrink: 0;
     display: flex;
     text-decoration: none;
@@ -15,13 +15,13 @@ const CopyIcon = styled(LinkStyledButton)`
     :active,
     :focus {
         text-decoration: none;
-        color: ${({ theme }) => theme.text2};
+        // color: ${({ theme }) => theme.text2};
     }
 `
 const TransactionStatusText = styled.span`
     margin-left: 0.25rem;
     font-size: 0.825rem;
-    ${({ theme }) => theme.flexRowNoWrap};
+    // ${({ theme }) => theme.flexRowNoWrap};
     align-items: center;
 `
 

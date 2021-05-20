@@ -1,5 +1,5 @@
 import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
-import { useBoringHelperContract, useDashboardContract, useQuickSwapFactoryContract } from 'hooks/useContract'
+import { useBoringHelperContract, useDashboardContract, useQuickSwapFactoryContract } from '../hooks/useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import LPToken from '../types/LPToken'

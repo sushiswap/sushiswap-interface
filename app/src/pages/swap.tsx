@@ -440,9 +440,7 @@ export default function Swap() {
                             <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
                                 {Boolean(trade) && (
                                     <RowBetween align="center">
-                                        <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                            {i18n._(t`Price`)}
-                                        </Text>
+                                        <Text className="text-sm font-medium">{i18n._(t`Price`)}</Text>
                                         <TradePrice
                                             price={trade?.executionPrice}
                                             showInverted={showInverted}
@@ -533,7 +531,7 @@ export default function Swap() {
                                 }
                                 error={isValid && priceImpactSeverity > 2}
                             >
-                                <Text fontSize={16} fontWeight={500}>
+                                <Text className="font-medium">
                                     {priceImpactSeverity > 3 && !isExpertMode
                                         ? i18n._(t`Price Impact High`)
                                         : priceImpactSeverity > 2

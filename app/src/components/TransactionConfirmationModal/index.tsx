@@ -11,7 +11,7 @@ import ExternalLink from '../ExternalLink'
 import Modal from '../Modal'
 import { RowBetween } from '../Row'
 import { Text } from 'rebass'
-import { getExplorerLink } from '../../functions/exporer'
+import { getExplorerLink } from '../../functions/explorer'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 const Wrapper = styled.div`
@@ -43,9 +43,7 @@ function ConfirmationPendingContent({ onDismiss, pendingText }: { onDismiss: () 
                     <CustomLightSpinner src="/blue-loader.svg" alt="loader" size={'90px'} />
                 </ConfirmedIcon>
                 <AutoColumn gap="12px" justify={'center'}>
-                    <Text fontWeight={500} fontSize={20}>
-                        Waiting For Confirmation
-                    </Text>
+                    <Text className="text-lg font-medium">Waiting For Confirmation</Text>
                     <AutoColumn gap="12px" justify={'center'}>
                         <Text fontWeight={600} fontSize={14} color="" textAlign="center">
                             {pendingText}
@@ -79,23 +77,19 @@ function TransactionSubmittedContent({
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
                 <ConfirmedIcon>
-                    <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.primary1} />
+                    <ArrowUpCircle strokeWidth={0.5} size={90} className="text-blue" />
                 </ConfirmedIcon>
                 <AutoColumn gap="12px" justify={'center'}>
-                    <Text fontWeight={500} fontSize={20}>
-                        Transaction Submitted
-                    </Text>
+                    <Text className="text-lg font-medium">Transaction Submitted</Text>
                     {chainId && hash && (
                         <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
-                            <Text fontWeight={500} fontSize={14} color={theme.primary1}>
+                            <Text fontWeight={500} fontSize={14} className="text-blue">
                                 View on explorer
                             </Text>
                         </ExternalLink>
                     )}
                     <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
-                        <Text fontWeight={500} fontSize={20}>
-                            Close
-                        </Text>
+                        <Text className="text-lg font-medium">Close</Text>
                     </ButtonPrimary>
                 </AutoColumn>
             </Section>
@@ -118,9 +112,7 @@ export function ConfirmationModalContent({
         <Wrapper>
             <Section>
                 <RowBetween>
-                    <Text fontWeight={500} fontSize={20}>
-                        {title}
-                    </Text>
+                    <Text className="text-lg font-medium">{title}</Text>
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
                 {topContent()}
@@ -136,17 +128,15 @@ export function TransactionErrorContent({ message, onDismiss }: { message: strin
         <Wrapper>
             <Section>
                 <RowBetween>
-                    <Text fontWeight={500} fontSize={20}>
-                        Error
-                    </Text>
+                    <Text className="text-lg font-medium">Error</Text>
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
                 <AutoColumn style={{ marginTop: 20, padding: '2rem 0' }} gap="24px" justify="center">
-                    <AlertTriangle color={theme.red1} style={{ strokeWidth: 1.5 }} size={64} />
+                    <AlertTriangle className="text-red" style={{ strokeWidth: 1.5 }} size={64} />
                     <Text
                         fontWeight={500}
                         fontSize={16}
-                        color={theme.red1}
+                        className="text-red"
                         style={{ textAlign: 'center', width: '85%' }}
                     >
                         {message}

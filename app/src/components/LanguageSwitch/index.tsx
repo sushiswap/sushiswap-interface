@@ -46,9 +46,9 @@ const MenuItem = styled.span`
     padding: 0.5rem 0.5rem;
     font-weight: 500;
     border-radius: 10px;
-    color: ${({ theme }) => theme.text2};
+    // color: ${({ theme }) => theme.text2};
     :hover {
-        color: ${({ theme }) => theme.text1};
+        // color: ${({ theme }) => theme.text1};
         cursor: pointer;
         text-decoration: none;
     }

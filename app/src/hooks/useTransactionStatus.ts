@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
 import { isTransactionRecent, useAllTransactions } from '../state/transactions/hooks'
+import { useEffect, useMemo, useState } from 'react'
+
 import { TransactionDetails } from '../state/transactions/reducer'
 
 // we want the latest one to come first, so return negative if a is after b

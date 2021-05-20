@@ -1,13 +1,13 @@
 import { AutoColumn, ColumnCenter } from '../Column'
-import { CloseIcon, CustomLightSpinner } from '../../theme'
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 
 import { ArrowUpCircle } from 'react-feather'
-import Circle from '../../assets/images/blue-loader.svg'
+import CloseIcon from '../CloseIcon'
+import { CustomLightSpinner } from '../Spinner'
 import ExternalLink from '../ExternalLink'
 import { RowBetween } from '../Row'
-import { getExplorerLink } from '../../functions/exporer'
+import { getExplorerLink } from '../../functions/explorer'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 const ConfirmOrLoadingWrapper = styled.div`
@@ -27,7 +27,7 @@ export function LoadingView({ children, onDismiss }: { children: any; onDismiss:
                 <CloseIcon onClick={onDismiss} />
             </RowBetween>
             <ConfirmedIcon>
-                <CustomLightSpinner src={Circle} alt="loader" size={'90px'} />
+                <CustomLightSpinner src="/blue-loader.svg" alt="loader" size={'90px'} />
             </ConfirmedIcon>
             <AutoColumn gap="100px" justify={'center'}>
                 {children}
@@ -56,7 +56,7 @@ export function SubmittedView({
                 <CloseIcon onClick={onDismiss} />
             </RowBetween>
             <ConfirmedIcon>
-                <ArrowUpCircle strokeWidth={0.5} size={90} color={theme.primary1} />
+                <ArrowUpCircle strokeWidth={0.5} size={90} color="currentColor" />
             </ConfirmedIcon>
             <AutoColumn gap="100px" justify={'center'}>
                 {children}

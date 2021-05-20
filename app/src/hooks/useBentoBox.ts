@@ -1,11 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { WETH } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
-import { useCallback } from 'react'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBentoBoxContract } from './useContract'
+import { useCallback } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { isAddress } from '../utils'
 
 function useBentoBox() {
     const { account, chainId } = useActiveWeb3React()
@@ -15,9 +14,9 @@ function useBentoBox() {
 
     const deposit = useCallback(
         async (tokenAddress: string, value: BigNumber) => {
-            const tokenAddressChecksum = isAddress(tokenAddress)
             if (value && chainId) {
                 try {
+                    const tokenAddressChecksum = ethers.utils.getAddress(tokenAddress)
                     if (tokenAddressChecksum === WETH[chainId].address) {
                         const tx = await bentoBoxContract?.deposit(
                             ethers.constants.AddressZero,
@@ -44,14 +43,18 @@ function useBentoBox() {
     const withdraw = useCallback(
         // todo: this should be updated with BigNumber as opposed to string
         async (tokenAddress: string, value: BigNumber) => {
-            let tokenAddressChecksum = isAddress(tokenAddress)
             if (value && chainId) {
                 try {
-                    tokenAddressChecksum =
+                    const tokenAddressChecksum = ethers.utils.getAddress(tokenAddress)
+                    const tx = await bentoBoxContract?.withdraw(
                         tokenAddressChecksum === WETH[chainId].address
                             ? '0x0000000000000000000000000000000000000000'
-                            : tokenAddressChecksum
-                    const tx = await bentoBoxContract?.withdraw(tokenAddressChecksum, account, account, value, 0)
+                            : tokenAddressChecksum,
+                        account,
+                        account,
+                        value,
+                        0
+                    )
                     return addTransaction(tx, { summary: 'Withdraw from Bentobox' })
                 } catch (e) {
                     console.log('bentobox withdraw error:', e)

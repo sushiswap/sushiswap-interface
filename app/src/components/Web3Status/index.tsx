@@ -20,7 +20,7 @@ import { useLingui } from '@lingui/react'
 import { useWalletModalToggle } from '../../state/application/hooks'
 
 const IconWrapper = styled.div<{ size?: number }>`
-    ${({ theme }) => theme.flexColumnNoWrap};
+    // ${({ theme }) => theme.flexColumnNoWrap};
     align-items: center;
     justify-content: center;
     & > * {
@@ -30,11 +30,11 @@ const IconWrapper = styled.div<{ size?: number }>`
 `
 
 const Web3StatusGeneric = styled(ButtonSecondary)`
-    ${({ theme }) => theme.flexRowNoWrap}
+    // ${({ theme }) => theme.flexRowNoWrap}
     width: 100%;
     align-items: center;
     padding: 0.5rem;
-    border-radius: ${({ theme }) => theme.borderRadius};
+    // border-radius: ${({ theme }) => theme.borderRadius};
     cursor: pointer;
     user-select: none;
     :focus {
@@ -44,7 +44,7 @@ const Web3StatusGeneric = styled(ButtonSecondary)`
 const Web3StatusError = styled(Web3StatusGeneric)`
     background-color: ${({ theme }) => theme.red1};
     border: 1px solid ${({ theme }) => theme.red1};
-    color: ${({ theme }) => theme.white};
+    // color: ${({ theme }) => theme.white};
     font-weight: 500;
     :hover,
     :focus {
@@ -55,21 +55,21 @@ const Web3StatusError = styled(Web3StatusGeneric)`
 const Web3StatusConnect = styled(Web3StatusGeneric)<{ faded?: boolean }>`
     background-color: ${({ theme }) => theme.primary4};
     border: none;
-    color: ${({ theme }) => theme.primaryText1};
+    // color: ${({ theme }) => theme.primaryText1};
     font-weight: 500;
 
     :hover,
     :focus {
         // border: 1px solid ${({ theme }) => darken(0.05, theme.primary4)};
-        color: ${({ theme }) => theme.primaryText1};
+        // color: ${({ theme }) => theme.primaryText1};
     }
 
     ${({ faded }) =>
         faded &&
         css`
-            background-color: ${({ theme }) => theme.primary5};
-            border: 1px solid ${({ theme }) => theme.primary5};
-            color: ${({ theme }) => theme.primaryText1};
+            // background-color: ${({ theme }) => theme.primary5};
+            // border: 1px solid ${({ theme }) => theme.primary5};
+            // color: ${({ theme }) => theme.primaryText1};
 
             :hover,
             :focus {
@@ -80,9 +80,9 @@ const Web3StatusConnect = styled(Web3StatusGeneric)<{ faded?: boolean }>`
 `
 
 const Web3StatusConnected = styled(Web3StatusGeneric)<{ pending?: boolean }>`
-    background-color: ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg2)};
-    border: 1px solid ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg3)};
-    color: ${({ pending, theme }) => (pending ? theme.white : theme.text1)};
+    // background-color: ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg2)};
+    // border: 1px solid ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg3)};
+    // color: ${({ pending, theme }) => (pending ? theme.white : theme.text1)};
     font-weight: 500;
     :hover,
     :focus {
@@ -187,11 +187,11 @@ function Web3StatusInner() {
         return (
             <div
                 id="web3-status-connected"
-                className="flex items-center rounded-lg bg-dark-1000 text-sm text-secondary py-2 px-3"
+                className="flex items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-secondary"
                 onClick={toggleWalletModal}
             >
                 {hasPendingTransactions ? (
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                         <div className="pr-2">
                             {pending?.length} {i18n._(t`Pending`)}
                         </div>{' '}

@@ -49,13 +49,9 @@ export default function SwapModalFooter({
         <>
             <AutoColumn gap="0px">
                 <RowBetween align="center">
-                    <Text fontWeight={400} fontSize={14} color={theme.text2}>
-                        {i18n._(t`Price`)}
-                    </Text>
+                    <Text className="text-sm">{i18n._(t`Price`)}</Text>
                     <Text
-                        fontWeight={500}
-                        fontSize={14}
-                        color={theme.text1}
+                        className="text-sm font-medium"
                         style={{
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -73,7 +69,7 @@ export default function SwapModalFooter({
 
                 <RowBetween>
                     <RowFixed>
-                        <div fontSize={14} fontWeight={400} color={theme.text2}>
+                        <div className="text-sm">
                             {trade.tradeType === TradeType.EXACT_INPUT
                                 ? i18n._(t`Minimum received`)
                                 : i18n._(t`Maximum sold`)}
@@ -85,12 +81,12 @@ export default function SwapModalFooter({
                         />
                     </RowFixed>
                     <RowFixed>
-                        <div fontSize={14}>
+                        <div className="text-sm">
                             {trade.tradeType === TradeType.EXACT_INPUT
                                 ? slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4) ?? '-'
                                 : slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4) ?? '-'}
                         </div>
-                        <div fontSize={14} marginLeft={'4px'}>
+                        <div className="ml-1 text-sm">
                             {trade.tradeType === TradeType.EXACT_INPUT
                                 ? trade.outputAmount.currency.getSymbol(chainId)
                                 : trade.inputAmount.currency.getSymbol(chainId)}
@@ -99,9 +95,7 @@ export default function SwapModalFooter({
                 </RowBetween>
                 <RowBetween>
                     <RowFixed>
-                        <div color={theme.text2} fontSize={14} fontWeight={400}>
-                            {i18n._(t`Price Impact`)}
-                        </div>
+                        <div className="text-sm">{i18n._(t`Price Impact`)}</div>
                         <QuestionHelper
                             text={i18n._(t`The difference between the market price and your price due to trade size.`)}
                         />
@@ -110,16 +104,14 @@ export default function SwapModalFooter({
                 </RowBetween>
                 <RowBetween>
                     <RowFixed>
-                        <div fontSize={14} fontWeight={400} color={theme.text2}>
-                            {i18n._(t`Liquidity Provider Fee`)}
-                        </div>
+                        <div className="text-sm">{i18n._(t`Liquidity Provider Fee`)}</div>
                         <QuestionHelper
                             text={i18n._(
                                 t`A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive.`
                             )}
                         />
                     </RowFixed>
-                    <div fontSize={14}>
+                    <div className="text-sm">
                         {realizedLPFee
                             ? realizedLPFee?.toSignificant(6) + ' ' + trade.inputAmount.currency.getSymbol(chainId)
                             : '-'}

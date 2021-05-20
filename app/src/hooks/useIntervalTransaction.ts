@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+
 import useTransactionStatus from '../hooks/useTransactionStatus'
 
 export default function useInterval(callback: () => void, delay: null | number, leading = true) {

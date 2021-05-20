@@ -17,7 +17,7 @@ export const StyledMenuButton = styled.button`
         outline: none;
     }
     > * {
-        stroke: ${({ theme }) => theme.text1};
+        // stroke: ${({ theme }) => theme.text1};
     }
 `
 

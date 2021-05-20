@@ -35,14 +35,14 @@ const CloseIcon = styled.div`
 // `
 
 const Wrapper = styled.div`
-    ${({ theme }) => theme.flexColumnNoWrap}
+    // ${({ theme }) => theme.flexColumnNoWrap}
     margin: 0;
     padding: 0;
     width: 100%;
 `
 
 const HeaderRow = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap};
+    // ${({ theme }) => theme.flexRowNoWrap};
     padding: 1rem 1rem;
     font-weight: 500;
     color: ${props => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
@@ -81,7 +81,7 @@ const UpperSection = styled.div`
 `
 
 const Blurb = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap}
+    // ${({ theme }) => theme.flexRowNoWrap}
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;

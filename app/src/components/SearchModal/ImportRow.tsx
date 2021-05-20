@@ -28,7 +28,7 @@ const CheckIcon = styled(CheckCircle)`
     height: 16px;
     width: 16px;
     margin-right: 6px;
-    stroke: ${({ theme }) => theme.green1};
+    // stroke: ${({ theme }) => theme.green1};
 `
 
 const NameOverflow = styled.div`
@@ -45,7 +45,7 @@ export default function ImportRow({
     style,
     dim,
     showImportView,
-    setImportToken,
+    setImportToken
 }: {
     token: Token
     style?: CSSProperties
@@ -70,16 +70,14 @@ export default function ImportRow({
             <CurrencyLogo currency={token} size={'24px'} style={{ opacity: dim ? '0.6' : '1' }} />
             <AutoColumn gap="4px" style={{ opacity: dim ? '0.6' : '1' }}>
                 <AutoRow>
-                    <div fontWeight={500}>{token.symbol}</div>
-                    <div ml="8px" fontWeight={300}>
+                    <div className="font-semibold">{token.symbol}</div>
+                    <div className="ml-2 font-light">
                         <NameOverflow title={token.name}>{token.name}</NameOverflow>
                     </div>
                 </AutoRow>
                 {list && list.logoURI && (
                     <RowFixed>
-                        <div mr="4px" color={theme.text3}>
-                            via {list.name}
-                        </div>
+                        <div className="mr-1">via {list.name}</div>
                         <ListLogo logoURI={list.logoURI} size="12px" />
                     </RowFixed>
                 )}
@@ -100,7 +98,7 @@ export default function ImportRow({
             ) : (
                 <RowFixed style={{ minWidth: 'fit-content' }}>
                     <CheckIcon />
-                    <div color={theme.green1}>Active</div>
+                    <div className="text-green">Active</div>
                 </RowFixed>
             )}
         </TokenSection>

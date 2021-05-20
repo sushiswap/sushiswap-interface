@@ -1,5 +1,6 @@
 import { PaddedColumn, Separator } from './styleds'
 import React, { useState } from 'react'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 
 import { ArrowLeft } from 'react-feather'
 import CloseIcon from '../CloseIcon'
@@ -16,32 +17,9 @@ import { useLingui } from '@lingui/react'
 
 const Wrapper = styled.div`
     width: 100%;
+    height: 100%;
     position: relative;
     padding-bottom: 80px;
-`
-
-const ToggleWrapper = styled(RowBetween)`
-    background-color: ${({ theme }) => theme.bg3};
-    border-radius: ${({ theme }) => theme.borderRadius};
-    padding: 6px;
-`
-
-const ToggleOption = styled.div<{ active?: boolean }>`
-    width: 48%;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: ${({ theme }) => theme.borderRadius};
-    font-weight: 600;
-    background-color: ${({ theme, active }) => (active ? theme.bg1 : theme.bg3)};
-    color: ${({ theme, active }) => (active ? theme.text1 : theme.text2)};
-    user-select: none;
-
-    :hover {
-        cursor: pointer;
-        opacity: 0.7;
-    }
 `
 
 function Manage({
@@ -59,36 +37,41 @@ function Manage({
 }) {
     const { i18n } = useLingui()
 
-    // toggle between tokens and lists
-    const [showLists, setShowLists] = useState(true)
+    const [tabIndex, setTabIndex] = useState(0)
 
     return (
         <Wrapper>
             <PaddedColumn>
                 <RowBetween>
                     <ArrowLeft style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.search)} />
-                    <Text fontWeight={500} fontSize={20}>
-                        {i18n._(t`Manage`)}
-                    </Text>
+                    <Text className="font-medium text-lg">{i18n._(t`Manage`)}</Text>
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
             </PaddedColumn>
             <Separator />
-            <PaddedColumn style={{ paddingBottom: 0 }}>
-                <ToggleWrapper>
-                    <ToggleOption onClick={() => setShowLists(!showLists)} active={showLists}>
+
+            <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
+                <TabList className="flex p-1 rounded bg-dark-800">
+                    <Tab
+                        className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+                        selectedClassName="bg-dark-900 text-high-emphesis"
+                    >
                         {i18n._(t`Lists`)}
-                    </ToggleOption>
-                    <ToggleOption onClick={() => setShowLists(!showLists)} active={!showLists}>
+                    </Tab>
+                    <Tab
+                        className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+                        selectedClassName="bg-dark-900 text-high-emphesis"
+                    >
                         {i18n._(t`Tokens`)}
-                    </ToggleOption>
-                </ToggleWrapper>
-            </PaddedColumn>
-            {showLists ? (
-                <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
-            ) : (
-                <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
-            )}
+                    </Tab>
+                </TabList>
+                <TabPanel>
+                    <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
+                </TabPanel>
+                <TabPanel>
+                    <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
+                </TabPanel>
+            </Tabs>
         </Wrapper>
     )
 }

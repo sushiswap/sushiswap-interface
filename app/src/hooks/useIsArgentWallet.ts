@@ -1,4 +1,5 @@
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
+
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useArgentWalletDetectorContract } from './useContract'
 

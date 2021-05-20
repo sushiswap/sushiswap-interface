@@ -76,30 +76,30 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
     return (
         <>
             {userPoolBalance && JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-purple rounded p-4 bg-opacity-20 w-full mt-4 whitespace-nowrap">
+                <div className="grid w-full grid-cols-1 gap-4 p-4 mt-4 rounded md:grid-cols-2 bg-purple bg-opacity-20 whitespace-nowrap">
                     <div className="flex justify-between">
                         <div className="text-high-emphesis">{i18n._(t`Your Pool Tokens`)}</div>
-                        <div className="text-primary font-bold">
+                        <div className="font-bold text-primary">
                             {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
                         </div>
                     </div>
                     <div className="flex justify-between">
                         <div className="text-high-emphesis">{i18n._(t`Pooled ${currency0.getSymbol(chainId)}`)}</div>
-                        <div className="text-primary font-bold">{token0Deposited?.toSignificant(6)}</div>
+                        <div className="font-bold text-primary">{token0Deposited?.toSignificant(6)}</div>
                     </div>
                     <div className="flex justify-between">
                         <div className="text-high-emphesis">{i18n._(t`Your Pool Share`)}</div>
-                        <div className="text-primary font-bold">
+                        <div className="font-bold text-primary">
                             {poolTokenPercentage ? poolTokenPercentage.toFixed(6) + '%' : '-'}
                         </div>
                     </div>
                     <div className="flex justify-between">
                         <div className="text-high-emphesis">{i18n._(t`Pooled ${currency1.getSymbol(chainId)}`)}</div>
-                        <div className="text-primary font-bold">{token1Deposited?.toSignificant(6)}</div>
+                        <div className="font-bold text-primary">{token1Deposited?.toSignificant(6)}</div>
                     </div>
                 </div>
             ) : (
-                <div className="bg-purple rounded p-4 bg-opacity-20 w-full mt-4">
+                <div className="w-full p-4 mt-4 rounded bg-purple bg-opacity-20">
                     <p>
                         <span role="img" aria-label="wizard-icon">
                             ⭐️
@@ -154,7 +154,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                 <FixedHeightRow>
                     <AutoRow gap="8px">
                         <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={20} />
-                        <Text fontWeight={500} fontSize={20}>
+                        <Text className="font-medium text-lg">
                             {!currency0 || !currency1 ? (
                                 <Dots>{i18n._(t`Loading`)}</Dots>
                             ) : (
@@ -187,34 +187,26 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                 {showMore && (
                     <AutoColumn gap="8px">
                         <FixedHeightRow>
-                            <Text fontSize={16} fontWeight={500}>
-                                {i18n._(t`Your total pool tokens`)}:
-                            </Text>
-                            <Text fontSize={16} fontWeight={500}>
+                            <Text className="font-medium">{i18n._(t`Your total pool tokens`)}:</Text>
+                            <Text className="font-medium">
                                 {userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}
                             </Text>
                         </FixedHeightRow>
                         {stakedBalance && (
                             <FixedHeightRow>
-                                <Text fontSize={16} fontWeight={500}>
-                                    {i18n._(t`Pool tokens in rewards pool`)}:
-                                </Text>
-                                <Text fontSize={16} fontWeight={500}>
-                                    {stakedBalance.toSignificant(4)}
-                                </Text>
+                                <Text className="font-medium">{i18n._(t`Pool tokens in rewards pool`)}:</Text>
+                                <Text className="font-medium">{stakedBalance.toSignificant(4)}</Text>
                             </FixedHeightRow>
                         )}
                         <FixedHeightRow>
                             <RowFixed>
-                                <Text fontSize={16} fontWeight={500}>
+                                <Text className="font-medium">
                                     {i18n._(t`Pooled ${currency0?.getSymbol(chainId)}`)}:
                                 </Text>
                             </RowFixed>
                             {token0Deposited ? (
                                 <RowFixed>
-                                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
-                                        {token0Deposited?.toSignificant(6)}
-                                    </Text>
+                                    <Text className="font-medium ml-1.5">{token0Deposited?.toSignificant(6)}</Text>
                                     <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={currency0} />
                                 </RowFixed>
                             ) : (
@@ -224,15 +216,13 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
 
                         <FixedHeightRow>
                             <RowFixed>
-                                <Text fontSize={16} fontWeight={500}>
+                                <Text className="font-medium">
                                     {i18n._(t`Pooled ${currency1?.getSymbol(chainId)}`)}:
                                 </Text>
                             </RowFixed>
                             {token1Deposited ? (
                                 <RowFixed>
-                                    <Text fontSize={16} fontWeight={500} marginLeft={'6px'}>
-                                        {token1Deposited?.toSignificant(6)}
-                                    </Text>
+                                    <Text className="font-medium ml-1.5">{token1Deposited?.toSignificant(6)}</Text>
                                     <CurrencyLogo size="20px" style={{ marginLeft: '8px' }} currency={currency1} />
                                 </RowFixed>
                             ) : (
@@ -241,10 +231,8 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                         </FixedHeightRow>
 
                         <FixedHeightRow>
-                            <Text fontSize={16} fontWeight={500}>
-                                {i18n._(t`Your pool share`)}:
-                            </Text>
-                            <Text fontSize={16} fontWeight={500}>
+                            <Text className="font-medium">{i18n._(t`Your pool share`)}:</Text>
+                            <Text className="font-medium">
                                 {poolTokenPercentage
                                     ? (poolTokenPercentage.toFixed(2) === '0.00'
                                           ? '<0.01'

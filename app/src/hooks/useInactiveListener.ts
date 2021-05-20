@@ -1,6 +1,6 @@
+import { injected } from '../connectors'
 import { useEffect } from 'react'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
-import { injected } from '../connectors'
 
 /**
  * Use for network and injected - logs user in

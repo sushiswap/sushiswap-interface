@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Wrapper = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
     border-radius: 10px;
     border: none;
-    background: ${({ theme }) => theme.bg1};
+    // background: ${({ theme }) => theme.bg1};
     display: flex;
     width: fit-content;
     cursor: pointer;
@@ -17,7 +17,7 @@ const ToggleElement = styled.span<{ isActive?: boolean; bgColor?: string }>`
     border-radius: 50%;
     height: 24px;
     width: 24px;
-    background-color: ${({ isActive, bgColor, theme }) => (isActive ? bgColor : theme.bg4)};
+    // background-color: ${({ isActive, bgColor, theme }) => (isActive ? bgColor : theme.bg4)};
     :hover {
         opacity: 0.8;
     }

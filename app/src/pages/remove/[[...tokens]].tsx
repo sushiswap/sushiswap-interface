@@ -364,12 +364,10 @@ export default function Remove() {
         return (
             <AutoColumn gap={'md'} style={{ marginTop: '20px' }}>
                 <RowBetween align="flex-end">
-                    <Text fontSize={24} fontWeight={500}>
-                        {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
-                    </Text>
+                    <Text className="text-2xl font-medium">{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</Text>
                     <RowFixed gap="4px">
                         <CurrencyLogo currency={currencyA} size={'24px'} />
-                        <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
+                        <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
                             {currencyA?.getSymbol(chainId)}
                         </Text>
                     </RowFixed>
@@ -378,18 +376,16 @@ export default function Remove() {
                     <Plus size="16" />
                 </RowFixed>
                 <RowBetween align="flex-end">
-                    <Text fontSize={24} fontWeight={500}>
-                        {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
-                    </Text>
+                    <Text className="text-2xl font-medium">{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</Text>
                     <RowFixed gap="4px">
                         <CurrencyLogo currency={currencyB} size={'24px'} />
-                        <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
+                        <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
                             {currencyB?.getSymbol(chainId)}
                         </Text>
                     </RowFixed>
                 </RowBetween>
 
-                <div className="text-sm italic text-gray-500 py-5">
+                <div className="py-5 text-sm italic text-gray-500">
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </div>
@@ -414,17 +410,17 @@ export default function Remove() {
                 {pair && (
                     <>
                         <RowBetween>
-                            <Text color={theme.text2} fontWeight={500} fontSize={16}>
+                            <Text fontWeight={500} fontSize={16}>
                                 {i18n._(t`Price`)}
                             </Text>
-                            <Text fontWeight={500} fontSize={16} color={theme.text1}>
+                            <Text fontWeight={500} fontSize={16}>
                                 1 {currencyA?.getSymbol(chainId)} ={' '}
                                 {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {currencyB?.getSymbol(chainId)}
                             </Text>
                         </RowBetween>
                         <RowBetween>
                             <div />
-                            <Text fontWeight={500} fontSize={16} color={theme.text1}>
+                            <Text fontWeight={500} fontSize={16}>
                                 1 {currencyB?.getSymbol(chainId)} ={' '}
                                 {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {currencyA?.getSymbol(chainId)}
                             </Text>
@@ -435,9 +431,7 @@ export default function Remove() {
                     disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)}
                     onClick={onRemove}
                 >
-                    <Text fontWeight={500} fontSize={20}>
-                        {i18n._(t`Confirm`)}
-                    </Text>
+                    <Text className="font-medium text-lg">{i18n._(t`Confirm`)}</Text>
                 </ButtonPrimary>
             </>
         )
@@ -502,9 +496,9 @@ export default function Remove() {
                 <title>Remove Liquidity | Sushi</title>
                 <meta name="description" content="Remove liquidity from the SushiSwap AMM" />
             </Head>
-            <div className="w-full max-w-2xl mb-5 px-4">
+            <div className="w-full max-w-2xl px-4 mb-5">
                 {/* <NavLink href="/pool">
-                    <a className="text-center text-secondary hover:text-high-emphesis text-base font-medium">
+                    <a className="text-base font-medium text-center text-secondary hover:text-high-emphesis">
                         {i18n._(t`View Your Liquidity Positions >`)}
                     </a>
                 </NavLink> */}
@@ -521,7 +515,7 @@ export default function Remove() {
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
             </div>
-            <div className="bg-dark-900 w-full max-w-2xl rounded shadow-liquidity-purple-glow p-4">
+            <div className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <Header input={currencyA} output={currencyB} />
                 <div>
                     <TransactionConfirmationModal
@@ -561,9 +555,9 @@ export default function Remove() {
                         />
                         <AutoColumn justify="space-between">
                             <AutoRow justify={'flex-start'} style={{ padding: '0 1rem' }}>
-                                <button className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10">
-                                    <div className="bg-dark-800 hover:bg-dark-700 rounded-full p-3">
-                                        <ArrowDown size="32" color={theme.text2} />
+                                <button className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px">
+                                    <div className="p-3 rounded-full bg-dark-800 hover:bg-dark-700">
+                                        <ArrowDown size={32} />
                                     </div>
                                 </button>
                             </AutoRow>
@@ -614,9 +608,7 @@ export default function Remove() {
                                             !!parsedAmounts[Field.CURRENCY_B]
                                         }
                                     >
-                                        <Text fontSize={16} fontWeight={500}>
-                                            {error || i18n._(t`Confirm Withdrawal`)}
-                                        </Text>
+                                        <Text className="font-medium">{error || i18n._(t`Confirm Withdrawal`)}</Text>
                                     </ButtonError>
                                 </div>
                             )}
@@ -625,14 +617,14 @@ export default function Remove() {
                 </div>
             </div>
 
-            {/* <div className="w-full max-w-2xl flex flex-col mt-4">
+            {/* <div className="flex flex-col w-full max-w-2xl mt-4">
                 <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue && parseInt(typedValue))} />
             </div> */}
             {pair ? (
                 // <AutoColumn style={{ minWidth: '20rem', width: '100%', maxWidth: '400px', marginTop: '1rem' }}>
                 //     <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
                 // </AutoColumn>
-                <div className="w-full max-w-2xl flex flex-col">
+                <div className="flex flex-col w-full max-w-2xl">
                     <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
                 </div>
             ) : null}

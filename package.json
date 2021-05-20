@@ -7,7 +7,9 @@
   "scripts": {
     "dev": "yarn workspace app dev",
     "lingui": "yarn workspace app lingui extract && yarn workspace app lingui compile",
-    "build": "yarn workspace @sushiswap/sdk build && yarn workspace app build"
+    "build": "yarn build:sdk && yarn build:app",
+    "build:app": "yarn workspace app build",
+    "build:sdk": "yarn workspace @sushiswap/sdk build"
   },
   "workspaces": [
     "app",

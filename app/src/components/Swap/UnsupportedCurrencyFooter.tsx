@@ -1,14 +1,15 @@
 import { AutoRow, RowBetween } from '../Row'
 import Card, { OutlineCard } from '../CardLegacy'
-import { CloseIcon, ExternalLink } from '../../theme'
 import { Currency, Token } from '@sushiswap/sdk'
 import React, { useState } from 'react'
 
 import { AutoColumn } from '../Column'
 import { ButtonEmpty } from '../ButtonLegacy'
+import CloseIcon from '../CloseIcon'
 import CurrencyLogo from '../CurrencyLogo'
+import ExternalLink from '../ExternalLink'
 import Modal from '../Modal'
-import { getExplorerLink } from '../../functions/exporer'
+import { getExplorerLink } from '../../functions/explorer'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useUnsupportedTokens } from '../../hooks/Tokens'
@@ -22,8 +23,8 @@ const DetailsFooter = styled.div<{ show: boolean }>`
     //max-width: 400px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    color: ${({ theme }) => theme.text2};
-    background-color: ${({ theme }) => theme.advancedBG};
+    // color: ${({ theme }) => theme.text2};
+    // background-color: ${({ theme }) => theme.advancedBG};
     z-index: -1;
 
     transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};
@@ -76,7 +77,7 @@ export default function UnsupportedCurrencyFooter({
                                         <AutoColumn gap="10px">
                                             <AutoRow gap="5px" align="center">
                                                 <CurrencyLogo currency={token} size={'24px'} />
-                                                <div fontWeight={500}>{token.symbol}</div>
+                                                <div className="font-medium">{token.symbol}</div>
                                             </AutoRow>
                                             {chainId && (
                                                 <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
@@ -89,7 +90,7 @@ export default function UnsupportedCurrencyFooter({
                             )
                         })}
                         <AutoColumn gap="lg">
-                            <div fontWeight={500}>
+                            <div className="font-medium">
                                 Some assets are not available through this interface because they may not work well with
                                 our smart contract or we are unable to allow trading for legal reasons.
                             </div>

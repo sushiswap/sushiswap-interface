@@ -1,12 +1,14 @@
-import { TransactionResponse } from '@ethersproject/providers'
 import { ChainId, JSBI, TokenAmount } from '@sushiswap/sdk'
+import { MERKLE_ROOT, SUSHI } from './../../constants/index'
+import { getAddress, isAddress } from '@ethersproject/address'
 import { useEffect, useState } from 'react'
+
+import { TransactionResponse } from '@ethersproject/providers'
+import { calculateGasMargin } from '../../functions/trade'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useMerkleDistributorContract } from '../../hooks/useContract'
-import { calculateGasMargin, isAddress } from '../../utils'
 import { useSingleCallResult } from '../multicall/hooks'
 import { useTransactionAdder } from '../transactions/hooks'
-import { MERKLE_ROOT, SUSHI } from './../../constants/index'
 
 interface UserClaimData {
     index: number
@@ -19,21 +21,19 @@ interface UserClaimData {
     }
 }
 
-const CLAIM_PROMISES: { [key: string]: Promise<UserClaimData | null> } = {}
+const CLAIM_PROMISES: { [key: string]: Promise<any | UserClaimData | null> } = {}
 
 // returns the claim for the given address, or null if not valid
-function fetchClaim(account: string, chainId: ChainId): Promise<UserClaimData | null> {
-    const formatted = isAddress(account)
-    if (!formatted) return Promise.reject(new Error('Invalid address'))
+function fetchClaim(account: string, chainId: ChainId): Promise<any | UserClaimData | null> {
+    if (!isAddress(account)) return Promise.reject(new Error('Invalid address'))
     const key = `${chainId}:${account}`
     //console.log('CLAIM_PROMISE:', CLAIM_PROMISES[key], key)
-
     return (CLAIM_PROMISES[key] =
         CLAIM_PROMISES[key] ??
         fetch(MERKLE_ROOT)
             .then(response => response.json())
             .then(data => {
-                const claim: typeof data.claims[0] | undefined = data.claims[account] ?? undefined
+                const claim: typeof data.claims[0] | undefined = data.claims[getAddress(account)] ?? undefined
                 if (!claim) return null
 
                 //console.log('claim:', claim)
@@ -43,9 +43,7 @@ function fetchClaim(account: string, chainId: ChainId): Promise<UserClaimData | 
                     proof: claim.proof
                 }
             })
-            .catch(error => {
-                console.log(error)
-            }))
+            .catch(error => console.error('Failed to get claim data', error)))
 }
 
 // parse distributorContract blob and detect if user has claim data

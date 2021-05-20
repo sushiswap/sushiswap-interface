@@ -1,11 +1,11 @@
 import { AlertCircle, CheckCircle } from 'react-feather'
-import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
 
 import { AutoColumn } from '../Column'
 import { AutoRow } from '../Row'
-import { ExternalLink } from '../../theme/components'
-import { getExplorerLink } from '../../utils'
+import ExternalLink from '../../components/ExternalLink'
+import React from 'react'
+import { getExplorerLink } from '../../functions/explorer'
+import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 const RowNoFlex = styled(AutoRow)`
@@ -15,7 +15,7 @@ const RowNoFlex = styled(AutoRow)`
 export default function TransactionPopup({
     hash,
     success,
-    summary,
+    summary
 }: {
     hash: string
     success?: boolean
@@ -23,19 +23,17 @@ export default function TransactionPopup({
 }) {
     const { chainId } = useActiveWeb3React()
 
-    const theme = useContext(ThemeContext)
-
     return (
         <RowNoFlex>
             <div style={{ paddingRight: 16 }}>
                 {success ? (
-                    <CheckCircle color={theme.green1} size={24} />
+                    <CheckCircle className="text-2xl text-green" />
                 ) : (
-                    <AlertCircle color={theme.red1} size={24} />
+                    <AlertCircle className="text-2xl text-red" />
                 )}
             </div>
             <AutoColumn gap="8px">
-                <div fontWeight={500}>{summary ?? 'Hash: ' + hash.slice(0, 8) + '...' + hash.slice(58, 65)}</div>
+                <div className="font-medium">{summary ?? 'Hash: ' + hash.slice(0, 8) + '...' + hash.slice(58, 65)}</div>
                 {chainId && (
                     <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>View on explorer</ExternalLink>
                 )}

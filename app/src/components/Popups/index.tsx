@@ -1,9 +1,9 @@
+import { AutoColumn } from '../Column'
+import PopupItem from './PopupItem'
 import React from 'react'
 import styled from 'styled-components'
 import { useActivePopups } from '../../state/application/hooks'
 import { useURLWarningVisible } from '../../state/user/hooks'
-import { AutoColumn } from '../Column'
-import PopupItem from './PopupItem'
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
     position: relative;
@@ -13,7 +13,7 @@ const MobilePopupWrapper = styled.div<{ height: string | number }>`
     margin-bottom: ${({ height }) => (height ? '20px' : 0)}};
 
     display: none;
-    ${({ theme }) => theme.mediaWidth.upToSmall`
+    // ${({ theme }) => theme.mediaWidth.upToSmall`
     display: block;
   `};
 `
@@ -38,7 +38,7 @@ const FixedPopupColumn = styled(AutoColumn)<{ extraPadding: boolean }>`
     width: 100%;
     z-index: 3;
 
-    ${({ theme }) => theme.mediaWidth.upToSmall`
+    // ${({ theme }) => theme.mediaWidth.upToSmall`
     display: none;
   `};
 `

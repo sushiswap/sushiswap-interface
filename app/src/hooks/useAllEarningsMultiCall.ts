@@ -1,4 +1,4 @@
-import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../state/multicall/hooks'
 
 import { BigNumber } from 'ethers'
 import { useActiveWeb3React } from './useActiveWeb3React'

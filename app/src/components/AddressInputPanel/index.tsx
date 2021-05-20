@@ -2,17 +2,17 @@ import React, { useCallback, useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 
 import { AutoColumn } from '../Column'
-import { ExternalLink } from '../../theme'
+import ExternalLink from '../ExternalLink'
 import { RowBetween } from '../Row'
-import { getExplorerLink } from '../../utils'
+import { getExplorerLink } from '../../functions/explorer'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useENS from '../../hooks/useENS'
 
 const InputPanel = styled.div`
-    ${({ theme }) => theme.flexColumnNoWrap}
+    // ${({ theme }) => theme.flexColumnNoWrap}
     position: relative;
     border-radius: 1.25rem;
-    background-color: ${({ theme }) => theme.bg1};
+    // background-color: ${({ theme }) => theme.bg1};
     z-index: 1;
     width: 100%;
 `
@@ -22,10 +22,10 @@ const ContainerRow = styled.div<{ error: boolean }>`
     justify-content: center;
     align-items: center;
     border-radius: 1.25rem;
-    border: 1px solid ${({ error, theme }) => (error ? theme.red1 : theme.bg2)};
+    // border: 1px solid ${({ error, theme }) => (error ? theme.red1 : theme.bg2)};
     transition: border-color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')},
         color 500ms ${({ error }) => (error ? 'step-end' : 'step-start')};
-    background-color: ${({ theme }) => theme.bg1};
+    // background-color: ${({ theme }) => theme.bg1};
 `
 
 const InputContainer = styled.div`
@@ -39,15 +39,15 @@ const Input = styled.input<{ error?: boolean }>`
     border: none;
     flex: 1 1 auto;
     width: 0;
-    background-color: ${({ theme }) => theme.bg1};
+    // background-color: ${({ theme }) => theme.bg1};
     transition: color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')};
-    color: ${({ error, theme }) => (error ? theme.red1 : theme.primary1)};
+    // color: ${({ error, theme }) => (error ? theme.red1 : theme.primary1)};
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: 500;
     width: 100%;
     ::placeholder {
-        color: ${({ theme }) => theme.text4};
+        // color: ${({ theme }) => theme.text4};
     }
     padding: 0px;
     -webkit-appearance: textfield;
@@ -62,14 +62,14 @@ const Input = styled.input<{ error?: boolean }>`
     }
 
     ::placeholder {
-        color: ${({ theme }) => theme.text4};
+        // color: ${({ theme }) => theme.text4};
     }
 `
 
 export default function AddressInputPanel({
     id,
     value,
-    onChange,
+    onChange
 }: {
     id?: string
     // the typed string value
@@ -83,7 +83,7 @@ export default function AddressInputPanel({
     const { address, loading, name } = useENS(value)
 
     const handleInput = useCallback(
-        (event) => {
+        event => {
             const input = event.target.value
             const withoutSpaces = input.replace(/\s+/g, '')
             onChange(withoutSpaces)
@@ -99,9 +99,7 @@ export default function AddressInputPanel({
                 <InputContainer>
                     <AutoColumn gap="md">
                         <RowBetween>
-                            <div color={theme.text2} fontWeight={500} fontSize={14}>
-                                Recipient
-                            </div>
+                            <div className="text-sm font-medium">Recipient</div>
                             {address && chainId && (
                                 <ExternalLink
                                     href={getExplorerLink(chainId, name ?? address, 'address')}

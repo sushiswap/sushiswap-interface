@@ -10,18 +10,17 @@ const Footer = () => {
     const { chainId } = useActiveWeb3React()
     const { i18n } = useLingui()
     return (
-        <footer className="w-screen text-center flex items-center justify-between p-4 mx-auto text-low-emphesis">
-            <div>{i18n._(t`Powered by SUSHI`)}</div>
+        <footer className="flex items-center justify-between w-screen p-4 mx-auto text-center text-low-emphesis">
             {chainId && chainId === ChainId.MATIC && (
                 <ExternalLink
                     id={`polygon-bridge-link`}
                     href="https://wallet.matic.network/bridge/"
                     className="text-low-emphesis"
                 >
-                    {i18n._(t`Mainnet <=> Matic Bridge`)}
+                    {i18n._(t`Matic Bridge`)}
                 </ExternalLink>
             )}
-            {/* {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.XDAI, ChainId.FANTOM, ChainId.MATIC].includes(chainId) && (
+            {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.XDAI, ChainId.FANTOM, ChainId.MATIC].includes(chainId) && (
                 <ExternalLink
                     id={`analytics-nav-link`}
                     href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
@@ -29,7 +28,7 @@ const Footer = () => {
                 >
                     {i18n._(t`Analytics`)}
                 </ExternalLink>
-            )} */}
+            )}
             <Polling />
         </footer>
     )

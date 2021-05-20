@@ -253,7 +253,7 @@ export default function Add() {
                         <Trans>Pool Tokens</Trans>
                     </Text>
                 </Row>
-                <div className="italic text-gray-500 py-5 text-sm">
+                <div className="py-5 text-sm italic text-gray-500">
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </div>
@@ -329,9 +329,9 @@ export default function Add() {
                     content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
                 />
             </Head>
-            <div className="w-full max-w-2xl mb-5 px-4">
+            <div className="w-full max-w-2xl px-4 mb-5">
                 <NavLink
-                    className="text-center text-secondary hover:text-high-emphesis text-base font-medium"
+                    className="text-base font-medium text-center text-secondary hover:text-high-emphesis"
                     href={'/pool'}
                 >
                     <a>{i18n._(t`View Your Liquidity Positions`)} &gt;</a>
@@ -349,7 +349,7 @@ export default function Add() {
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
             </div>
-            <div className="bg-dark-900 w-full max-w-2xl rounded z-10 shadow-liquidity-purple-glow p-4">
+            <div className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <div>
                     <TransactionConfirmationModal
@@ -416,9 +416,9 @@ export default function Add() {
                                 justify={expertMode ? 'space-between' : 'flex-start'}
                                 style={{ padding: '0 1rem' }}
                             >
-                                <button className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10">
-                                    <div className="bg-dark-800 hover:bg-dark-700 rounded-full p-3">
-                                        <Plus size="32" color={theme.text2} />
+                                <button className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px">
+                                    <div className="p-3 rounded-full bg-dark-800 hover:bg-dark-700">
+                                        <Plus size="32" />
                                     </div>
                                 </button>
                             </AutoRow>
@@ -533,7 +533,7 @@ export default function Add() {
                     </AutoColumn>
                 </div>
             </div>
-            <div className="w-full max-w-2xl z-0">
+            <div className="z-0 w-full max-w-2xl">
                 {!addIsUnsupported ? (
                     pair && !noLiquidity && pairState !== PairState.INVALID ? (
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />

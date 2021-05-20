@@ -6954,6 +6954,13 @@ eth-lib@^0.1.26:
     ws "^3.0.0"
     xhr-request-promise "^0.1.2"
 
+eth-permit@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/eth-permit/-/eth-permit-0.1.9.tgz#670b62483c58bddeceb49d7b62741bbebfa73df8"
+  integrity sha512-jkvmvz8/YnNMWE5/S12L+DkVL0NEgL9jaFxDJWgpx+Ozfx5gGQGsgS5gkVROKmGuixtgKm3jebtykzt1FE/LVA==
+  dependencies:
+    utf8 "^3.0.0"
+
 eth-query@^2.0.2, eth-query@^2.1.0, eth-query@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/eth-query/-/eth-query-2.1.2.tgz#d6741d9000106b51510c72db92d6365456a6da5e"
@@ -12629,7 +12636,7 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.5.1:
+qs@^6.10.1, qs@^6.5.1:
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
   integrity sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg==

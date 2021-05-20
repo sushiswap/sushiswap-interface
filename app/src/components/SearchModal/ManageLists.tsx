@@ -50,8 +50,8 @@ const PopoverContainer = styled.div<{ show: boolean }>`
     border: 1px solid ${({ theme }) => theme.bg3};
     box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
         0px 24px 32px rgba(0, 0, 0, 0.01);
-    color: ${({ theme }) => theme.text2};
-    border-radius: ${({ theme }) => theme.borderRadius};
+    // color: ${({ theme }) => theme.text2};
+    // border-radius: ${({ theme }) => theme.borderRadius};
     padding: 1rem;
     display: grid;
     grid-template-rows: 1fr;
@@ -182,8 +182,13 @@ const ListRow = memo(function ListRow({ listUrl }: { listUrl: string }) {
                         {list.tokens.length} tokens
                     </StyledListUrlText>
                     <StyledMenu ref={node as any}>
-                        <ButtonEmpty onClick={toggle} ref={setReferenceElement} padding="0">
-                            <Settings stroke={isActive ? theme.bg1 : theme.text1} size={12} />
+                        <ButtonEmpty
+                            onClick={toggle}
+                            ref={setReferenceElement}
+                            padding="0"
+                            className={isActive ? 'text-primary' : 'text-secondary'}
+                        >
+                            <Settings stroke="currentColor" size={12} />
                         </ButtonEmpty>
                         {open && (
                             <PopoverContainer
@@ -240,8 +245,6 @@ function ManageLists({
     setImportList: (list: TokenList) => void
     setListUrl: (url: string) => void
 }) {
-    const theme = useTheme()
-
     const [listUrlInput, setListUrlInput] = useState<string>('')
 
     const lists = useAllLists()
@@ -345,28 +348,28 @@ function ManageLists({
                     />
                 </Row>
                 {addError ? (
-                    <div title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
+                    <div title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} className="text-red">
                         {addError}
                     </div>
                 ) : null}
             </PaddedColumn>
             {tempList && (
                 <PaddedColumn style={{ paddingTop: 0 }}>
-                    <Card backgroundColor={theme.bg2} padding="12px 20px">
+                    <Card>
                         <RowBetween>
                             <RowFixed>
                                 {tempList.logoURI && <ListLogo logoURI={tempList.logoURI} size="40px" />}
                                 <AutoColumn gap="4px" style={{ marginLeft: '20px' }}>
-                                    <div fontWeight={600}>{tempList.name}</div>
-                                    <div fontSize={'12px'}>{tempList.tokens.length} tokens</div>
+                                    <div className="font-semibold">{tempList.name}</div>
+                                    <div className="text-xs">{tempList.tokens.length} tokens</div>
                                 </AutoColumn>
                             </RowFixed>
                             {isImported ? (
                                 <RowFixed>
-                                    <IconWrapper stroke={theme.text2} size="16px" marginRight={'10px'}>
+                                    <IconWrapper size="16px" marginRight={'10px'}>
                                         <CheckCircle />
                                     </IconWrapper>
-                                    <div color={theme.text2}>Loaded</div>
+                                    <div>Loaded</div>
                                 </RowFixed>
                             ) : (
                                 <ButtonPrimary

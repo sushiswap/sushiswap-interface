@@ -88,44 +88,36 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             <SectionBreak />
             <PaddedColumn gap="md">
                 <AutoColumn gap="md">
-                    <Card backgroundColor={theme.bg2} padding="12px 20px">
+                    <Card padding="12px 20px">
                         <RowBetween>
                             <RowFixed>
                                 {list.logoURI && <ListLogo logoURI={list.logoURI} size="40px" />}
                                 <AutoColumn gap="sm" style={{ marginLeft: '20px' }}>
                                     <RowFixed>
-                                        <div fontWeight={600} mr="6px">
-                                            {list.name}
-                                        </div>
+                                        <div className="mr-1.5 font-semibold">{list.name}</div>
                                         <TextDot />
-                                        <div fontSize={'16px'} ml="6px">
-                                            {list.tokens.length} tokens
-                                        </div>
+                                        <div className="ml-1.5">{list.tokens.length} tokens</div>
                                     </RowFixed>
                                     <ExternalLink href={`https://tokenlists.org/token-list?url=${listURL}`}>
-                                        <div fontSize={'12px'} color={theme.blue1}>
-                                            {listURL}
-                                        </div>
+                                        <div className="font-sm text-blue">{listURL}</div>
                                     </ExternalLink>
                                 </AutoColumn>
                             </RowFixed>
                         </RowBetween>
                     </Card>
-                    <Card style={{ backgroundColor: transparentize(0.8, theme.red1) }}>
+                    <Card>
                         <AutoColumn justify="center" style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
-                            <AlertTriangle stroke={theme.red1} size={32} />
-                            <div fontWeight={500} fontSize={20} color={theme.red1}>
-                                Import at your own risk{' '}
-                            </div>
+                            <AlertTriangle className="text-red" stroke="currentColor" size={32} />
+                            <div className="text-lg font-medium text-red">Import at your own risk </div>
                         </AutoColumn>
 
                         <AutoColumn style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
-                            <div fontWeight={500} color={theme.red1}>
+                            <div className="font-semibold text-red">
                                 By adding this list you are implicitly trusting that the data is correct. Anyone can
                                 create a list, including creating fake versions of existing lists and lists that claim
                                 to represent projects that do not have one.
                             </div>
-                            <div fontWeight={600} color={theme.red1}>
+                            <div className="font-semibold text-red">
                                 If you purchase a token from this list, you may not be able to sell it back.
                             </div>
                         </AutoColumn>
@@ -140,9 +132,7 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
                                 checked={confirmed}
                                 onChange={() => setConfirmed(!confirmed)}
                             />
-                            <div ml="10px" fontSize="16px" color={theme.red1} fontWeight={500}>
-                                I understand
-                            </div>
+                            <div className="text-red ml-2.5 font-medium">I understand</div>
                         </AutoRow>
                     </Card>
 
@@ -156,7 +146,11 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
                         Import
                     </ButtonPrimary>
                     {addError ? (
-                        <div title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
+                        <div
+                            title={addError}
+                            style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
+                            className="text-red"
+                        >
                             {addError}
                         </div>
                     ) : null}

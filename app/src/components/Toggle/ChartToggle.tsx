@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Wrapper = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
     border-radius: 10px;
     border: none;
-    background: ${({ theme }) => theme.bg1};
+    // background: ${({ theme }) => theme.bg1};
     display: flex;
     width: fit-content;
     cursor: pointer;
@@ -23,7 +23,7 @@ const ToggleElement = styled.span<{ isActive?: boolean; bgColor?: string }>`
     }
 `
 
-const StatusText = styled(div)<{ isActive?: boolean }>`
+const StatusText = styled.div<{ isActive?: boolean }>`
     margin: 0 10px;
     width: 24px;
     color: ${({ theme, isActive }) => (isActive ? theme.text1 : theme.text3)};

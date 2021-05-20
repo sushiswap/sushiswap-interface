@@ -12,7 +12,8 @@ import CurrencyLogo from '../CurrencyLogo'
 import ExternalLink from '../ExternalLink'
 import ListLogo from '../ListLogo'
 import { SectionBreak } from '../Swap/styleds'
-import { getExplorerLink } from '../../functions/exporer'
+import { classNames } from '../../functions'
+import { getExplorerLink } from '../../functions/explorer'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -27,7 +28,7 @@ const Wrapper = styled.div`
 `
 
 const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
-    background-color: ${({ theme, highWarning }) =>
+    // background-color: ${({ theme, highWarning }) =>
         highWarning ? transparentize(0.8, theme.red1) : transparentize(0.8, theme.yellow2)};
     width: fit-content;
 `
@@ -35,7 +36,7 @@ const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
 const AddressText = styled.div`
     font-size: 12px;
     color: blue;
-    ${({ theme }) => theme.mediaWidth.upToSmall`
+    // ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 10px;
 `}
 `
@@ -78,18 +79,12 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                 {tokens.map(token => {
                     const list = chainId && inactiveTokenList?.[chainId]?.[token.address]?.list
                     return (
-                        <Card
-                            backgroundColor={theme.bg2}
-                            key={'import' + token.address}
-                            className=".token-warning-container"
-                        >
+                        <Card key={'import' + token.address} className=".token-warning-container">
                             <AutoColumn gap="10px">
                                 <AutoRow align="center">
                                     <CurrencyLogo currency={token} size={'24px'} />
-                                    <div ml="8px" mr="8px" fontWeight={500}>
-                                        {token.symbol}
-                                    </div>
-                                    <div fontWeight={300}>{token.name}</div>
+                                    <div className="mx-2 font-medium">{token.symbol}</div>
+                                    <div className="font-light">{token.name}</div>
                                 </AutoRow>
                                 {chainId && (
                                     <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
@@ -99,17 +94,13 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                                 {list !== undefined ? (
                                     <RowFixed>
                                         {list.logoURI && <ListLogo logoURI={list.logoURI} size="12px" />}
-                                        <div ml="6px" color={theme.text3}>
-                                            via {list.name}
-                                        </div>
+                                        <div className="ml-1">via {list.name}</div>
                                     </RowFixed>
                                 ) : (
                                     <WarningWrapper borderRadius="4px" padding="4px" highWarning={true}>
                                         <RowFixed>
-                                            <AlertTriangle stroke={theme.red1} size="10px" />
-                                            <div color={theme.red1} ml="4px" fontSize="10px" fontWeight={500}>
-                                                Unknown Source
-                                            </div>
+                                            <AlertTriangle className="stroke-current text-red" size="10px" />
+                                            <div className="ml-1 text-xs font-semibold text-red">Unknown Source</div>
                                         </RowFixed>
                                     </WarningWrapper>
                                 )}
@@ -118,26 +109,23 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                     )
                 })}
 
-                <Card
-                    style={{
-                        backgroundColor: fromLists
-                            ? transparentize(0.8, theme.yellow2)
-                            : transparentize(0.8, theme.red1)
-                    }}
-                >
+                <Card className={classNames(fromLists ? 'bg-yellow' : 'bg-red', 'bg-opacity-80')}>
                     <AutoColumn justify="center" style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
-                        <AlertTriangle stroke={fromLists ? theme.yellow2 : theme.red1} size={32} />
-                        <div fontWeight={600} fontSize={20} color={fromLists ? theme.yellow2 : theme.red1}>
+                        <AlertTriangle
+                            className={classNames(fromLists ? 'text-yellow' : 'text-red', 'stroke-current')}
+                            size={32}
+                        />
+                        <div className={classNames(fromLists ? 'text-yellow' : 'text-red', 'font-semibold text-xl')}>
                             Trade at your own risk!
                         </div>
                     </AutoColumn>
 
                     <AutoColumn style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
-                        <div fontWeight={400} color={fromLists ? theme.yellow2 : theme.red1}>
+                        <div className={fromLists ? 'text-yellow' : 'text-red'}>
                             Anyone can create a token, including creating fake versions of existing tokens that claim to
                             represent projects.
                         </div>
-                        <div fontWeight={600} color={fromLists ? theme.yellow2 : theme.red1}>
+                        <div className={classNames(fromLists ? 'text-yellow' : 'text-red', 'font-medium')}>
                             If you purchase this token, you may not be able to sell it back.
                         </div>
                     </AutoColumn>
@@ -149,7 +137,7 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                             checked={confirmed}
                             onChange={() => setConfirmed(!confirmed)}
                         />
-                        <div ml="10px" fontSize="16px" color={fromLists ? theme.yellow2 : theme.red1} fontWeight={500}>
+                        <div className={classNames(fromLists ? 'text-yellow' : 'text-red', 'font-medium ml-2.5')}>
                             I understand
                         </div>
                     </AutoRow>
