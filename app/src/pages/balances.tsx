@@ -1,3 +1,4 @@
+import Back from '../components/Back'
 import Head from 'next/head'
 import Layout from '../components/Layout'
 
@@ -8,6 +9,7 @@ export default function Balances() {
                 <title>Balances | Sushi</title>
                 <meta name="description" content="" />
             </Head>
+            <Back />
         </Layout>
     )
 }

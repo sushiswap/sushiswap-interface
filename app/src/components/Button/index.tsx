@@ -3,7 +3,7 @@ import React from 'react'
 const SIZE = {
     default: 'px-4 py-3',
     small: 'px-2 py-1',
-    large: 'px-4 py-3'
+    large: 'px-6 py-4'
 }
 
 const FILLED = {

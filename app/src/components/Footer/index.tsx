@@ -13,15 +13,6 @@ const Footer = () => {
         // <footer className="absolute bottom-0 flex items-center justify-between w-screen h-20 p-4 mx-auto text-center text-low-emphesis">
         <footer className="flex-shrink-0">
             <div className="flex items-center justify-between w-screen px-4">
-                {chainId && chainId === ChainId.MATIC && (
-                    <ExternalLink
-                        id={`polygon-bridge-link`}
-                        href="https://wallet.matic.network/bridge/"
-                        className="text-low-emphesis"
-                    >
-                        {i18n._(t`Matic Bridge`)}
-                    </ExternalLink>
-                )}
                 {chainId &&
                     [ChainId.MAINNET, ChainId.BSC, ChainId.XDAI, ChainId.FANTOM, ChainId.MATIC].includes(chainId) && (
                         <ExternalLink
@@ -48,6 +39,15 @@ const Footer = () => {
                             </div>
                         </ExternalLink>
                     )}
+                {chainId && chainId === ChainId.MATIC && (
+                    <ExternalLink
+                        id={`polygon-bridge-link`}
+                        href="https://wallet.matic.network/bridge/"
+                        className="text-low-emphesis"
+                    >
+                        {i18n._(t`Matic Bridge`)}
+                    </ExternalLink>
+                )}
                 <Polling />
             </div>
         </footer>

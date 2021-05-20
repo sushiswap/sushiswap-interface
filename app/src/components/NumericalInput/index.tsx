@@ -8,7 +8,7 @@ export const Input = React.memo(function InnerInput({
     value,
     onUserInput,
     placeholder,
-    className = 'p-0 bg-transparent',
+    className = 'w-0 p-0 bg-transparent',
     ...rest
 }: {
     value: string | number
@@ -45,7 +45,7 @@ export const Input = React.memo(function InnerInput({
             maxLength={79}
             spellCheck="false"
             className={classNames(
-                'w-0 relative font-bold outline-none border-none flex-auto text-2xl overflow-hidden overflow-ellipsis placeholder-low-emphesis',
+                'relative font-bold outline-none border-none flex-auto text-2xl overflow-hidden overflow-ellipsis placeholder-low-emphesis',
                 className
             )}
         />

@@ -1,10 +1,9 @@
 import { AutoRow, RowBetween, RowFixed } from '../Row'
 import { ButtonEmpty, ButtonPrimary, ButtonPrimaryNormal } from '../ButtonLegacy'
 import Card, { LightCard } from '../CardLegacy'
-import { ChevronDown, ChevronUp } from 'react-feather'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { JSBI, Pair, Percent, TokenAmount } from '@sushiswap/sdk'
 import React, { useState } from 'react'
-import { darken, transparentize } from 'polished'
 
 import { AutoColumn } from '../Column'
 import { BIG_INT_ZERO } from '../../constants'
@@ -146,15 +145,16 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               ]
             : [undefined, undefined]
 
-    const backgroundColor = useColor(pair?.token0)
-
     return (
-        <StyledPositionCard border={border} bgColor={backgroundColor}>
+        <div
+            className="p-4 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+            onClick={() => setShowMore(!showMore)}
+        >
             <AutoColumn gap="12px">
                 <FixedHeightRow>
                     <AutoRow gap="8px">
                         <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={20} />
-                        <Text className="font-medium text-lg">
+                        <Text className="text-lg font-medium">
                             {!currency0 || !currency1 ? (
                                 <Dots>{i18n._(t`Loading`)}</Dots>
                             ) : (
@@ -163,21 +163,16 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                         </Text>
                     </AutoRow>
                     <RowFixed gap="8px">
-                        <ButtonEmpty
-                            padding="6px 8px"
-                            borderRadius="20px"
-                            width="fit-content"
-                            onClick={() => setShowMore(!showMore)}
-                        >
+                        <ButtonEmpty padding="6px 8px" borderRadius="20px" width="fit-content">
                             {showMore ? (
                                 <>
                                     {i18n._(t`Manage`)}
-                                    <ChevronUp size="20" style={{ marginLeft: '10px' }} />
+                                    <ChevronUpIcon className="w-8 h-8 ml-2.5" />
                                 </>
                             ) : (
                                 <>
                                     {i18n._(t`Manage`)}
-                                    <ChevronDown size="20" style={{ marginLeft: '10px' }} />
+                                    <ChevronDownIcon className="w-8 h-8 ml-2.5" />
                                 </>
                             )}
                         </ButtonEmpty>
@@ -284,6 +279,6 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
                     </AutoColumn>
                 )}
             </AutoColumn>
-        </StyledPositionCard>
+        </div>
     )
 }
