@@ -49,11 +49,20 @@ const useFarms = () => {
         const averageBlockTime = results[2]
         const sushiPrice = results[3]
         const kashiPairs = results[4].filter(result => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
-        //console.log('kashiPairs:', kashiPairs)
 
         const pairs = pairsQuery?.data.pairs
-        const KASHI_PAIRS = concat(range(190, 230, 1), range(245, 250, 1)) // kashiPair pids 190-229, 245-249
-        //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
+        const KASHI_PAIRS = pools
+            .filter((pool: any) => {
+                const hasPair = kashiPairs.find((kashiPair: any) => kashiPair?.id === pool?.pair)
+                console.log('pool.pair:', pool.pair, pool.id, hasPair)
+
+                return hasPair
+            })
+            .map((pool: any) => {
+                return Number(pool.id)
+            })
+        //const KASHI_PAIRS = concat(range(190, 230, 1), range(245, 250, 1), range(264, 268, 1)) // kashiPair pids 190-229, 245-249
+        //console.log('kashiPairs:', KASHI_PAIRS.length, kashiPairs.length, kashiPairs, KASHI_PAIRS)
 
         const farms = pools
             .filter((pool: any) => {

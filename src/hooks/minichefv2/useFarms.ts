@@ -129,12 +129,13 @@ const useFarms = () => {
                 const rewardAPR = roiPerMonth * 12
                 //const roiPerYear = rewardAPR
                 //where (1 + r/n )** n – 1
-                let roiPerYear
-                if (rewardAPR < 0.35) {
-                    roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 120) ** 120 - 1 // compounding 3 days APY
-                } else {
-                    roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 24) ** 24 - 1 // compounding 2 weeks APY
-                }
+                const roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 120) ** 120 - 1
+                // let roiPerYear
+                // if (rewardAPR < 0.35) {
+                //     roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 120) ** 120 - 1 // compounding 3 days APY
+                // } else {
+                //     roiPerYear = (1 + ((roiPerMonth + oneMonthFees) * 12) / 24) ** 24 - 1 // compounding 2 weeks APY
+                // }
                 //const roiPerYear = (1 + ((roiPerDay + feeFactorAnnualized / 365) * 365) / 365) ** 365 - 1 // compounding daily APY
                 //const roiPerYear = roiPerMonth * 12
                 //console.log('pool:', pool.slpBalance)

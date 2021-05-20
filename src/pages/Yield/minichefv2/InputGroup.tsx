@@ -103,7 +103,7 @@ export default function InputGroup({
                                         </Link>{' '}
                                         Once you have SLP you can stake it into this yield farm to start earning
                                         rewards. Unstake anytime and then you can convert your SLP back to base tokens
-                                        by clicking Remove Liquidity. Click Harvest to receive you rewards at any time.
+                                        by clicking Remove Liquidity. Click Harvest to receive your rewards at any time.
                                     </Trans>
                                 </p>
                             </div>
