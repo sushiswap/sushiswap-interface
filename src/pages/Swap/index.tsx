@@ -51,7 +51,7 @@ import useENSAddress from '../../hooks/useENSAddress'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useLingui } from '@lingui/react'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
-import MisoBanner from '../../assets/images/miso-banner.png'
+import MisoBanner from '../../assets/images/miso-banner.jpg'
 import MisoLogo from '../../assets/images/miso-logo.png'
 
 export default function Swap() {
