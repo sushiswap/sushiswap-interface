@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { CustomLightSpinner } from './Spinner'
 
-const AsyncTokenIcon = ({ src, className }: { src: any; className?: string }): JSX.Element => {
+const AsyncIcon = ({ src, className }: { src?: string; className?: string }): JSX.Element => {
     const [loadedSrc, setLoadedSrc] = useState<string>()
 
-    src = src || `${process.env.PUBLIC_URL}/images/tokens/unknown.png`
+    src = src || `/images/tokens/unknown.png`
 
     // Address gets changed after chainId so only run this on address change
     // to avoid missing token icon error on chainId change
@@ -35,4 +35,4 @@ const AsyncTokenIcon = ({ src, className }: { src: any; className?: string }): J
     )
 }
 
-export default AsyncTokenIcon
+export default AsyncIcon

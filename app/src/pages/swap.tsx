@@ -37,7 +37,7 @@ import UnsupportedCurrencyFooter from '../components/Swap/UnsupportedCurrencyFoo
 import confirmPriceImpactWithoutFee from '../components/Swap/confirmPriceImpactWithoutFee'
 import { maxAmountSpend } from '../functions/currency'
 import styles from '../styles/Swap.module.css'
-import swapArrowsAnimationData from '../assets/animation/swap-arrows.json'
+import swapArrowsAnimationData from '../animation/swap-arrows.json'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import useENSAddress from '../hooks/useENSAddress'

@@ -88,10 +88,10 @@ export default function Layout({
                                     </NavLink>
                                 </div>
                                 <div className="flex pr-2 sm:pr-4">
-                                    <NavLink href="/bento/balances">
+                                    <NavLink href="/balances">
                                         <a
                                             className={`px-2 sm:px-4 flex justify-end items-center font-medium ${
-                                                router.pathname === '/bento/balances'
+                                                router.pathname === '/balances'
                                                     ? 'text-high-emphesis'
                                                     : 'text-secondary hover:text-primary'
                                             }`}
