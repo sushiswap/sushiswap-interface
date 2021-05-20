@@ -564,19 +564,6 @@ export default function Create() {
 
                     <WarningsList warnings={createWarnings} />
 
-                    {selectedOracle && selectedOracle.id === OracleId.SUSHISWAP && (
-                        <div className="space-y-3">
-                            <div>SushiSwap Pair Address: {pair?.liquidityToken.address}</div>
-                            <div>Total Supply: {totalSupply?.toExact()}</div>
-                            <div>
-                                {pair?.token0.getSymbol(chainId)}: {pair?.reserve0.toExact()}
-                            </div>
-                            <div>
-                                {pair?.token1.getSymbol(chainId)}: {pair?.reserve1.toExact()}
-                            </div>
-                        </div>
-                    )}
-
                     <Button
                         color="gradient"
                         className="w-full px-4 py-3 text-base rounded text-high-emphesis"
