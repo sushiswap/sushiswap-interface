@@ -23,13 +23,14 @@ module.exports = {
                 'dark-pink-red': '#4e3034'
             },
             border: {
-                // defaults to these values (optional)
                 '1': '1px',
                 '2': '2px',
+                '3': '3px',
                 '4': '4px'
             }
         },
         colors: {
+            ...defaultTheme.colors,
             red: '#FF3838',
             blue: '#27B0E6',
             pink: '#FA52A0',
@@ -126,11 +127,9 @@ module.exports = {
         },
         extend: {
             lineHeight: {
-                ...defaultTheme.lineHeight,
                 '48px': '48px'
             },
             backgroundImage: theme => ({
-                ...defaultTheme.backgroundImage,
                 'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
                 'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')"
             }),
@@ -162,6 +161,9 @@ module.exports = {
                 px: '1px',
                 '3px': '3px'
             },
+            outline: {
+                ...defaultTheme.outline
+            },
             minHeight: {
                 empty: '128px',
                 cardContent: '230px'
@@ -183,9 +185,9 @@ module.exports = {
     },
     plugins: [
         //   require('@tailwindcss/typography'),
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/line-clamp'),
-        require('@tailwindcss/aspect-ratio'),
+        // require('@tailwindcss/forms'),
+        // require('@tailwindcss/line-clamp'),
+        // require('@tailwindcss/aspect-ratio'),
         require('tailwindcss-border-gradient-radius'),
         plugin(function({ addUtilities }) {
             addUtilities({
