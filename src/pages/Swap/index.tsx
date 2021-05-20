@@ -45,12 +45,14 @@ import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpa
 import { isTradeBetter } from 'utils/trades'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
-import { t } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useLingui } from '@lingui/react'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
+import MisoBanner from '../../assets/images/miso-banner.png'
+import MisoLogo from '../../assets/images/miso-logo.png'
 
 export default function Swap() {
     const { i18n } = useLingui()
@@ -603,26 +605,48 @@ export default function Swap() {
                         )}
                         {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
                     </BottomGrouping>
-                    {!trade && chainId && chainId === ChainId.MAINNET && (
-                        <div
-                            className="hidden sm:block w-full cursor-pointer pt-4"
-                            onClick={() => toggleNetworkModal()}
-                        >
-                            <DarkCard>
-                                <div className="flex justify-between items-center overflow-hidden">
-                                    <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
-                                    <div className="pl-32">
-                                        <div className="text-high-emphesis">
-                                            {i18n._(t`Check out Sushi on Polygon (Matic)`)}
-                                        </div>
-                                        <div className="text-high-emphesis text-sm">
-                                            {i18n._(t`Click here to switch to Polygon using Metamask`)}
-                                        </div>
-                                    </div>
-                                </div>
-                            </DarkCard>
+                    {/*{!trade && chainId && chainId === ChainId.MAINNET && (*/}
+                    {/*    <div*/}
+                    {/*        className="hidden sm:block w-full cursor-pointer pt-4"*/}
+                    {/*        onClick={() => toggleNetworkModal()}*/}
+                    {/*    >*/}
+                    {/*        <DarkCard>*/}
+                    {/*            <div className="flex justify-between items-center overflow-hidden">*/}
+                    {/*                <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />*/}
+                    {/*                <div className="pl-32">*/}
+                    {/*                    <div className="text-high-emphesis">*/}
+                    {/*                        {i18n._(t`Check out Sushi on Polygon (Matic)`)}*/}
+                    {/*                    </div>*/}
+                    {/*                    <div className="text-high-emphesis text-sm">*/}
+                    {/*                        {i18n._(t`Click here to switch to Polygon using Metamask`)}*/}
+                    {/*                    </div>*/}
+                    {/*                </div>*/}
+                    {/*            </div>*/}
+                    {/*        </DarkCard>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
+                    <a
+                        href="https://miso.sushi.com"
+                        className="hidden sm:block w-full cursor-pointer mt-4 py-6 rounded"
+                        style={{
+                            backgroundImage: `url(${MisoBanner})`,
+                            backgroundPosition: 'center',
+                            backgroundSize: 'cover',
+                            backgroundRepeat: 'no-repeat'
+                        }}
+                    >
+                        <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                            <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
+                                <Trans>
+                                    Pour a hot bowl of MISO, the new <span className="font-bold">token launchpad</span>{' '}
+                                    from SUSHI
+                                </Trans>
+                            </span>
+                            <div style={{ maxWidth: 195 }}>
+                                <img src={MisoLogo} style={{ maxWidth: '100%' }} />
+                            </div>
                         </div>
-                    )}
+                    </a>
                 </Wrapper>
             </div>
             {!swapIsUnsupported ? (
