@@ -119,9 +119,11 @@ export default function Migrate() {
                 <meta name="description" content="Migrate your liquidity to SushiSwap." />
             </Head>
 
-            <div>
-                {loading && <Dots>Searching for liquidity</Dots>}
-                {!loading && noLiquidityFound && <div>No liquidity found</div>}
+            <div className="flex items-center h-full">
+                <div className="text-h5">
+                    {loading && <Dots>Searching for liquidity</Dots>}
+                    {!loading && noLiquidityFound && <div>No liquidity found</div>}
+                </div>
                 {/* <div>
                     <div className="text-2xl">Pancake V1 pairs</div>
                     {allV1PairsWithLiquidity.map((pair, i) => (

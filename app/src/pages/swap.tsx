@@ -360,7 +360,7 @@ export default function Swap() {
                         otherCurrency={currencies[Field.OUTPUT]}
                         id="swap-currency-input"
                     />
-                    <AutoColumn justify="space-between" className="py-2">
+                    <AutoColumn justify="space-between" className="py-2.5">
                         <AutoRow justify={isExpertMode ? 'space-between' : 'flex-start'} style={{ padding: '0 1rem' }}>
                             <button
                                 className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px"
@@ -440,7 +440,7 @@ export default function Swap() {
                             <div className="px-5 mt-4 space-y-2">
                                 {Boolean(trade) && (
                                     <RowBetween align="center">
-                                        <Text className="text-sm font-medium">{i18n._(t`Price`)}</Text>
+                                        <Text className="text-sm font-medium">{i18n._(t`Exchange Rate`)}</Text>
                                         <TradePrice
                                             price={trade?.executionPrice}
                                             showInverted={showInverted}
