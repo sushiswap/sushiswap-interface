@@ -18,13 +18,6 @@ export const formatToBalance = (value: string | undefined, decimals = 18) => {
     return { value: BigNumber.from(0), decimals: decimals }
 }
 
-export function isWETH(value: any): string {
-    if (value.toLowerCase() === '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2') {
-        return 'ETH'
-    }
-    return value
-}
-
 export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
     const formatted = ethers.utils.formatUnits(value, decimals)
     if (maxFraction > 0) {

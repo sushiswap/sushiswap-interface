@@ -34,7 +34,7 @@ export default function Pair() {
                     backgroundImage="/deposit-graphic.png"
                     title={i18n._(t`Lend assets for interest from borrowers.`)}
                     description={i18n._(
-                        t`Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want.`
+                        t`Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers.`
                     )}
                 />
             }
@@ -125,29 +125,29 @@ export default function Pair() {
                 header={
                     <LendCardHeader>
                         <div className="flex items-center">
-                            <div className="flex items-center space-x-2 mr-4">
+                            <div className="flex items-center mr-4 space-x-2">
                                 {pair && (
                                     <>
                                         <AsyncIcon
                                             src={pair?.asset.tokenInfo.logoURI}
-                                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                            className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
                                         />
                                         <AsyncIcon
                                             src={pair?.collateral.tokenInfo.logoURI}
-                                            className="block w-10 h-10 sm:w-12 sm:h-12 rounded-lg"
+                                            className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
                                         />
                                     </>
                                 )}
                             </div>
-                            <div className="flex justify-between items-center">
+                            <div className="flex items-center justify-between">
                                 <div>
                                     <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.symbol}</div>
                                     <div className="flex items-center">
-                                        <div className="text-sm text-secondary mr-1">Collateral:</div>
-                                        <div className="text-sm text-high-emphesis mr-2">
+                                        <div className="mr-1 text-sm text-secondary">Collateral:</div>
+                                        <div className="mr-2 text-sm text-high-emphesis">
                                             {pair && pair.collateral.symbol}
                                         </div>
-                                        <div className="text-sm text-secondary mr-1">Oracle:</div>
+                                        <div className="mr-1 text-sm text-secondary">Oracle:</div>
                                         <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
                                     </div>
                                 </div>
@@ -158,36 +158,36 @@ export default function Pair() {
             >
                 <div className="flex justify-between mb-8">
                     <div>
-                        <div className="text-secondary text-lg">Lent</div>
-                        <div className="text-blue text-2xl">
+                        <div className="text-lg text-secondary">Lent</div>
+                        <div className="text-2xl text-blue">
                             {formattedNum(pair.currentUserAssetAmount.string)} {pair.asset.symbol}
                         </div>
-                        <div className="text-high-emphesis text-lg">
+                        <div className="text-lg text-high-emphesis">
                             {formattedNum(pair.currentUserAssetAmount.usd, true)}
                         </div>
                     </div>
                     <div>
-                        <div className="text-secondary text-lg">Borrowed</div>
-                        <div className="text-high-emphesis text-2xl">{formattedPercent(pair.utilization.string)}</div>
+                        <div className="text-lg text-secondary">Borrowed</div>
+                        <div className="text-2xl text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
                     </div>
                     <div className="text-right">
                         <div>
-                            <div className="text-secondary text-lg">Supply APR</div>
-                            <div className="text-high-emphesis text-2xl">{formattedPercent(pair.supplyAPR.string)}</div>
+                            <div className="text-lg text-secondary">Supply APR</div>
+                            <div className="text-2xl text-high-emphesis">{formattedPercent(pair.supplyAPR.string)}</div>
                         </div>
                     </div>
                 </div>
 
                 <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
-                    <TabList className="flex rounded bg-dark-800 p-1">
+                    <TabList className="flex p-1 rounded bg-dark-800">
                         <Tab
-                            className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+                            className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
                             selectedClassName="bg-dark-900 text-high-emphesis"
                         >
                             Deposit {pair.asset.symbol}
                         </Tab>
                         <Tab
-                            className="flex flex-1 justify-center items-center rounded text-lg text-secondary hover:text-primary cursor-pointer focus:outline-none select-none px-3 py-4"
+                            className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
                             selectedClassName="bg-dark-900 text-high-emphesis"
                         >
                             Withdraw {pair.asset.symbol}
