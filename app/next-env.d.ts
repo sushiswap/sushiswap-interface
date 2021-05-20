@@ -4,14 +4,29 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { Fraction } from '../entities/Fraction'
 
-interface Window {
-    ethereum?: {
-        isMetaMask?: true
-        on?: (...args: any[]) => void
-        removeListener?: (...args: any[]) => void
-        autoRefreshOnNetworkChange?: boolean
+declare module 'fortmatic'
+
+declare module '@ethersproject/bignumber' {
+    interface BigNumber {
+        muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
+        toFixed(decimals: BigNumberish): string
+        toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
     }
-    web3?: {}
+}
+
+declare global {
+    interface String {
+        toBigNumber(decimals: number): BigNumber
+    }
+    interface Window {
+        ethereum?: {
+            isMetaMask?: true
+            on?: (...args: any[]) => void
+            removeListener?: (...args: any[]) => void
+            autoRefreshOnNetworkChange?: boolean
+        }
+        web3?: Record<string, unknown>
+    }
 }
 
 declare module 'content-hash' {
@@ -28,39 +43,4 @@ declare module 'react-tradingview-widget'
 
 declare module 'jazzicon' {
     export default function(diameter: number, seed: number): HTMLElement
-}
-
-declare module 'fortmatic'
-
-declare module '@ethersproject/bignumber' {
-    interface BigNumber {
-        muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
-        toFixed(decimals: BigNumberish): string
-        toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
-    }
-}
-
-declare global {
-    interface String {
-        toBigNumber(decimals: number): BigNumber
-    }
-}
-
-import type { NextComponentType, NextPageContext, NextLayoutComponentType } from 'next';
-import type { AppProps } from 'next/app';
-
-declare module 'next' {
-  type NextLayoutComponentType<P = {}> = NextComponentType<NextPageContext, any, P> & {
-    getLayout?: (page: ReactNode) => ReactNode;
-  };
-
-  type NextLayoutPage<P = {}, IP = P> = NextComponentType<NextPageContext, IP, P> & {
-    getLayout: (page: ReactNode) => ReactNode;
-  };
-}
-
-declare module 'next/app' {
-  type AppLayoutProps<P = {}> = AppProps & {
-    Component: NextLayoutComponentType;
-  };
 }
