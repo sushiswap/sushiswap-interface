@@ -37,6 +37,7 @@ import Transactions from './pages/Transactions'
 import PublicRoute from 'components/PublicRoute'
 import WalletRoute from 'components/WalletRoute'
 import Kashi from 'kashi/routes'
+import Miso from 'miso/routes'
 
 function Routes(): JSX.Element {
     const { chainId } = useActiveWeb3React()
@@ -49,6 +50,9 @@ function Routes(): JSX.Element {
 
             {/* Kashi */}
             <Route strict path="/bento/kashi" component={Kashi} />
+
+            {/* Miso */}
+            <Route strict path="/miso" component={Miso} />
 
             {chainId === ChainId.MAINNET && (
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />

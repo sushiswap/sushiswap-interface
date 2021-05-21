@@ -47,7 +47,7 @@ function AppBar(): JSX.Element {
                                     <div className="flex-shrink-0">
                                         <img src={Logo} alt="Sushi" className="h-10 w-auto" />
                                     </div>
-                                    <div className="hidden sm:block sm:ml-4">
+                                    <div className="hidden md:block md:ml-4">
                                         <div className="flex space-x-2">
                                             <NavLink id={`swap-nav-link`} to={'/swap'}>
                                                 {i18n._(t`Swap`)}
@@ -111,11 +111,24 @@ function AppBar(): JSX.Element {
                                                         {i18n._(t`Analytics`)}
                                                     </ExternalLink>
                                                 )}
+                                            {chainId &&
+                                                [
+                                                    ChainId.MAINNET,
+                                                    ChainId.GÖRLI,
+                                                    ChainId.ROPSTEN,
+                                                    ChainId.RINKEBY,
+                                                    ChainId.KOVAN,
+                                                    ChainId.BSC_TESTNET
+                                                ].includes(chainId) && (
+                                                    <NavLink id={`miso-nav-link`} to={'/miso'}>
+                                                        {i18n._(t`Miso`)}
+                                                    </NavLink>
+                                                )}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="flex flex-row items-center justify-center w-full lg:w-auto p-4 fixed left-0 bottom-0 bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
+                                <div className="flex flex-row items-center justify-center w-full xl:w-auto p-4 fixed left-0 bottom-0 bg-dark-1000 xl:relative xl:p-0 xl:bg-transparent">
                                     <div className="flex items-center justify-between sm:justify-end space-x-2 w-full">
                                         {chainId &&
                                             [ChainId.MAINNET].includes(chainId) &&
@@ -287,7 +300,7 @@ function AppBar(): JSX.Element {
                                         <MoreMenu />
                                     </div>
                                 </div>
-                                <div className="-mr-2 flex sm:hidden">
+                                <div className="-mr-2 flex md:hidden">
                                     {/* Mobile menu button */}
                                     <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
                                         <span className="sr-only">{i18n._(t`Open main menu`)}</span>
