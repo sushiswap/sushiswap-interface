@@ -1,8 +1,9 @@
 import { useFuse, useSortableData } from 'hooks'
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import styled from 'styled-components'
-import useFarms from 'hooks/useFarms'
+import useFarmsWithAddress from 'hooks/useFarmsWithAddress'
 import { RowBetween } from '../../../components/Row'
 import { formattedNum, formattedPercent } from '../../../utils'
 import { Card, CardHeader, DoubleLogo, Paper, Search } from '../components'
@@ -17,8 +18,9 @@ export const FixedHeightRow = styled(RowBetween)`
 `
 
 export default function Yield(): JSX.Element {
+    const { address } = useParams()
     const { i18n } = useLingui()
-    const query = useFarms()
+    const query = useFarmsWithAddress(address)
     const farms = query?.farms
     const userFarms = query?.userFarms
 
@@ -35,10 +37,11 @@ export default function Yield(): JSX.Element {
     return (
         <>
             <Helmet>
-                <title>{i18n._(t`Yield`)} | Sushi</title>
+                <title>{i18n._(t`Yield Debugger`)} | Sushi</title>
                 <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
             </Helmet>
             <div className="container max-w-2xl mx-auto">
+                <div className="text-gray-600 px-6 py-4">Debugging (view only): {address}</div>
                 <Card
                     className="h-full bg-dark-900"
                     header={
@@ -167,7 +170,7 @@ const TokenBalance = ({ farm }: any) => {
                             </div>
                         </div>
                     </div>
-                    {expand && (
+                    {/* {expand && (
                         <InputGroup
                             pid={farm.pid}
                             pairAddress={farm.pairAddress}
@@ -176,7 +179,7 @@ const TokenBalance = ({ farm }: any) => {
                             token1Address={farm.liquidityPair.token1.id}
                             type={'LP'}
                         />
-                    )}
+                    )} */}
                 </Paper>
             )}
             {farm.type === 'KMP' && (
@@ -211,7 +214,7 @@ const TokenBalance = ({ farm }: any) => {
                             </div>
                         </div>
                     </div>
-                    {expand && (
+                    {/* {expand && (
                         <InputGroup
                             pid={farm.pid}
                             pairAddress={farm.pairAddress}
@@ -222,7 +225,7 @@ const TokenBalance = ({ farm }: any) => {
                             assetSymbol={farm.liquidityPair.asset.symbol}
                             assetDecimals={farm.liquidityPair.asset.decimals}
                         />
-                    )}
+                    )} */}
                 </Paper>
             )}
         </>
@@ -267,7 +270,7 @@ const UserBalance = ({ farm }: any) => {
                             </div>
                         </div>
                     </div>
-                    {expand && (
+                    {/* {expand && (
                         <InputGroup
                             pid={farm.pid}
                             pairAddress={farm.pairAddress}
@@ -276,7 +279,7 @@ const UserBalance = ({ farm }: any) => {
                             token1Address={farm.liquidityPair.token1.id}
                             type={'LP'}
                         />
-                    )}
+                    )} */}
                 </Paper>
             )}
             {farm.type === 'KMP' && (
@@ -312,7 +315,7 @@ const UserBalance = ({ farm }: any) => {
                             </div>
                         </div>
                     </div>
-                    {expand && (
+                    {/* {expand && (
                         <InputGroup
                             pid={farm.pid}
                             pairAddress={farm.pairAddress}
@@ -323,7 +326,7 @@ const UserBalance = ({ farm }: any) => {
                             assetSymbol={farm.liquidityPair.asset.symbol}
                             assetDecimals={farm.liquidityPair.asset.decimals}
                         />
-                    )}
+                    )} */}
                 </Paper>
             )}
         </>
