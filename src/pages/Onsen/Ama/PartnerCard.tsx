@@ -1,6 +1,7 @@
 import React from 'react'
 
 interface PartnerCardProps {
+    className?: string
     coverImgSrc: string
     profileImgSrc: string
     symbol: string
@@ -8,10 +9,17 @@ interface PartnerCardProps {
     date: string
 }
 
-export default function PartnerCard({ coverImgSrc, profileImgSrc, symbol, name, date }: PartnerCardProps) {
+export default function PartnerCard({
+    className = '',
+    coverImgSrc,
+    profileImgSrc,
+    symbol,
+    name,
+    date
+}: PartnerCardProps) {
     return (
-        <div className="h-60 w-60">
-            <img className="h-3/6 rounded-t" src={coverImgSrc} alt="cover image" />
+        <div className={`h-60 w-60 ${className}`}>
+            <img className="h-3/6 w-full rounded-t" src={coverImgSrc} alt="cover image" />
             <div className="relative w-full h-0">
                 <img className="absolute right-0 -top-6 mr-7 h-12 w-12" src={profileImgSrc} alt="profile image" />
             </div>
