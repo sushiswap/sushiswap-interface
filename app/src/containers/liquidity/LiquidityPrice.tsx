@@ -1,6 +1,7 @@
-import React from 'react'
 import { Currency, Price } from '@sushiswap/sdk'
+
 import { AutoRow } from '../../components/Row'
+import React from 'react'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 export default function LiquidityPrice({
@@ -14,11 +15,11 @@ export default function LiquidityPrice({
 }): JSX.Element {
     const { chainId } = useActiveWeb3React()
     return (
-        <div className="rounded-b-md md:bg-dark-800 p-1" style={{ marginTop: '-20px' }}>
+        <div className="p-1 rounded-b-md md:bg-dark-800" style={{ marginTop: '-20px' }}>
             <AutoRow
                 justify={'space-between'}
                 style={{ padding: '0 1rem' }}
-                className="rounded-b-md md:bg-dark-900 text-secondary py-1"
+                className="py-1 rounded-b-md md:bg-dark-900 text-secondary"
             >
                 <div>Current Rate</div>
                 <div>

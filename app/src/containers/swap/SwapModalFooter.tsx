@@ -1,4 +1,4 @@
-import { AutoRow, RowBetween, RowFixed } from '../Row'
+import { AutoRow, RowBetween, RowFixed } from '../../components/Row'
 import React, { useContext, useMemo, useState } from 'react'
 import { StyledBalanceMaxMini, SwapCallbackError } from './styleds'
 import { Trade, TradeType } from '@sushiswap/sdk'
@@ -9,11 +9,11 @@ import {
     warningSeverity
 } from '../../functions/prices'
 
-import { AutoColumn } from '../Column'
-import { ButtonError } from '../ButtonLegacy'
+import { AutoColumn } from '../../components/Column'
+import { ButtonError } from '../../components/ButtonLegacy'
 import { Field } from '../../state/swap/actions'
 import FormattedPriceImpact from './FormattedPriceImpact'
-import QuestionHelper from '../QuestionHelper'
+import QuestionHelper from '../../components/QuestionHelper'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'

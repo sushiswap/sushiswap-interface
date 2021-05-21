@@ -17,15 +17,16 @@ import { usePairs } from '../hooks/usePairs'
 
 function Position({ pair }: { pair: Pair }) {
     const { account, chainId } = useActiveWeb3React()
+
     const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
 
-    console.log('Position...')
+    console.log('Position...', { userDefaultPoolBalance })
 
     return userDefaultPoolBalance ? (
         <div>
             Pair: {pair.liquidityToken.address}
             <br />
-            Balance: {userDefaultPoolBalance.toSignificant(4)}
+            Balance: {userDefaultPoolBalance.toFixed(18)}
         </div>
     ) : null
 }
@@ -33,7 +34,7 @@ function Position({ pair }: { pair: Pair }) {
 export default function Migrate() {
     const { account, chainId } = useActiveWeb3React()
 
-    const { i18n } = useLingui()
+    // const { i18n } = useLingui()
 
     // fetch the user's balances of all tracked LP tokens
     const trackedTokenPairs = useTrackedTokenPairs()
@@ -73,7 +74,6 @@ export default function Migrate() {
         .filter((pairV1): pairV1 is PancakeV1Pair => Boolean(pairV1))
 
     // V2...
-
     const tokenPairsWithLiquidityTokensV2 = useMemo(
         () => trackedTokenPairs.map(tokens => ({ liquidityToken: toPancakeV2LiquidityToken(tokens), tokens })),
         [trackedTokenPairs]
@@ -112,6 +112,12 @@ export default function Migrate() {
 
     const noLiquidityFound = !allV1PairsWithLiquidity.length && !allV2PairsWithLiquidity.length
 
+    console.log({ allV1PairsWithLiquidity, allV2PairsWithLiquidity })
+
+    const userDefaultPoolBalance = useTokenBalance(account ?? undefined, allV2PairsWithLiquidity?.[0]?.liquidityToken)
+
+    console.log({ userDefaultPoolBalance })
+
     return (
         <Layout>
             <Head>
@@ -124,21 +130,26 @@ export default function Migrate() {
                     {loading && <Dots>Searching for liquidity</Dots>}
                     {!loading && noLiquidityFound && <div>No liquidity found</div>}
                 </div>
-                {/* <div>
-                    <div className="text-2xl">Pancake V1 pairs</div>
-                    {allV1PairsWithLiquidity.map((pair, i) => (
-                        <Position key={i} pair={pair} />
-                    ))}
-                    {isLoadingV1 && <Dots />}
-                </div>
 
-                <div>
-                    <div className="text-2xl">Pancake V2 pairs</div>
-                    {allV2PairsWithLiquidity.map((pair, i) => (
-                        <Position key={i} pair={pair} />
-                    ))}
-                    {isLoadingV2 && <Dots />}
-                </div> */}
+                {/* {allV1PairsWithLiquidity.length > 0 && (
+                    <div>
+                        <div className="w-full text-2xl">Pancake V1 pairs</div>
+                        {allV1PairsWithLiquidity.map((pair, i) => (
+                            <Position key={i} pair={pair} />
+                        ))}
+                        {isLoadingV1 && <Dots />}
+                    </div>
+                )}
+
+                {allV2PairsWithLiquidity.length > 0 && (
+                    <div>
+                        <div className="w-full text-2xl">Pancake V2 pairs</div>
+                        {allV2PairsWithLiquidity.map((pair, i) => (
+                            <Position key={i} pair={pair} />
+                        ))}
+                        {isLoadingV2 && <Dots />}
+                    </div>
+                )} */}
             </div>
         </Layout>
     )

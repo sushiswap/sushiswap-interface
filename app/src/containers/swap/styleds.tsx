@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 import { AlertTriangle } from 'react-feather'
-import { AutoColumn } from '../Column'
+import { AutoColumn } from '../../components/Column'
 import React from 'react'
 import { Text } from 'rebass'
 import { transparentize } from 'polished'

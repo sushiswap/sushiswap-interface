@@ -1,6 +1,7 @@
+import { RowBetween, RowFixed } from '../../components/Row'
+
+import { AutoColumn } from '../../components/Column'
 import React from 'react'
-import { AutoColumn } from '../Column'
-import { RowBetween, RowFixed } from '../Row'
 
 function TradeSummary() {
     return (

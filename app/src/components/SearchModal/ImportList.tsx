@@ -13,7 +13,6 @@ import CurrencyModalView from './CurrencyModalView'
 import ExternalLink from '../ExternalLink'
 import ListLogo from '../ListLogo'
 import ReactGA from 'react-ga'
-import { SectionBreak } from '../Swap/styleds'
 import { TokenList } from '@uniswap/token-lists'
 import styled from 'styled-components'
 import { transparentize } from 'polished'
@@ -85,7 +84,6 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
             </PaddedColumn>
-            <SectionBreak />
             <PaddedColumn gap="md">
                 <AutoColumn gap="md">
                     <Card padding="12px 20px">

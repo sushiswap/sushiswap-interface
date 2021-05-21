@@ -339,12 +339,12 @@ function ManageLists({
     }, [listUrlInput, setImportList, setListUrl, setModalView, tempList])
 
     return (
-        <div className="relative flex-1 w-full h-full mt-4 space-y-4 overflow-y-hidden">
+        <div className="relative flex-1 w-full h-full space-y-4 overflow-y-hidden">
             <input
                 id="list-add-input"
                 type="text"
                 placeholder="https:// or ipfs:// or ENS name"
-                className="w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
+                className="mt-4 w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
                 value={listUrlInput}
                 onChange={handleInput}
                 title="List URI"

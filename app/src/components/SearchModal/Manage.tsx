@@ -59,26 +59,26 @@ function Manage({
                 forceRenderTabPanel
                 selectedIndex={tabIndex}
                 onSelect={(index: number) => setTabIndex(index)}
-                className="h-full"
+                className="flex flex-col flex-grow"
             >
-                <TabList className="flex p-1 rounded bg-dark-800">
+                <TabList className="flex flex-shrink-0 p-1 rounded bg-dark-800">
                     <Tab
-                        className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+                        className="flex items-center justify-center flex-1 px-1 py-2 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
                         selectedClassName="bg-dark-900 text-high-emphesis"
                     >
                         {i18n._(t`Lists`)}
                     </Tab>
                     <Tab
-                        className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+                        className="flex items-center justify-center flex-1 px-1 py-2 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
                         selectedClassName="bg-dark-900 text-high-emphesis"
                     >
                         {i18n._(t`Tokens`)}
                     </Tab>
                 </TabList>
-                <TabPanel style={{ height: '100%' }}>
+                <TabPanel style={{ flexGrow: 1 }}>
                     <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
                 </TabPanel>
-                <TabPanel style={{ height: '100%' }}>
+                <TabPanel style={{ flexGrow: 1 }}>
                     <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
                 </TabPanel>
             </Tabs>

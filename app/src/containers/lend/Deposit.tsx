@@ -1,9 +1,9 @@
 import { Direction, TransactionReview } from '../../entities/TransactionReview'
-import { KashiApproveButton, TokenApproveButton } from '../KashiButton'
+import { KashiApproveButton, TokenApproveButton } from '../../components/KashiButton'
 import React, { useContext, useState } from 'react'
 import { ZERO, e10 } from '../../functions/math'
 
-import Button from '../Button'
+import Button from '../../components/Button'
 import { KashiContext } from '../../context'
 import KashiCooker from '../../entities/KashiCooker'
 import SmartNumberInput from '../../components/SmartNumberInput'
