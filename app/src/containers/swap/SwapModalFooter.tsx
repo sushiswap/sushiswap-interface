@@ -11,7 +11,7 @@ import {
 import { ButtonError } from '../ButtonLegacy'
 import { Field } from '../../state/swap/actions'
 import FormattedPriceImpact from './FormattedPriceImpact'
-import QuestionHelper from '../QuestionHelper'
+import QuestionHelper from '../../components/QuestionHelper'
 import { Repeat } from 'react-feather'
 import { Text } from 'rebass'
 import { t } from '@lingui/macro'

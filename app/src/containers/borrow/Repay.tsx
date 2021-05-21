@@ -1,5 +1,5 @@
-import { ExchangeRateCheckBox, SwapCheckbox } from '../KashiCheckbox'
-import { KashiApproveButton, TokenApproveButton } from '../KashiButton'
+import { ExchangeRateCheckBox, SwapCheckbox } from '../../components/KashiCheckbox'
+import { KashiApproveButton, TokenApproveButton } from '../../components/KashiButton'
 import React, { useContext, useState } from 'react'
 import { SUSHISWAP_MULTISWAPPER_ADDRESS, SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS } from '../../constants/kashi'
 import { Warning, Warnings } from '../../entities/Warnings'
@@ -10,16 +10,16 @@ import { useExpertModeManager, useUserSlippageTolerance } from '../../state/user
 import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 
 import { BigNumber } from '@ethersproject/bignumber'
-import Button from '../Button'
+import Button from '../../components/Button'
 import { Field } from '../../state/swap/actions'
 import { KashiContext } from '../../context'
 import { KashiCooker } from '../../entities'
-import SmartNumberInput from '../SmartNumberInput'
-import TradeReview from '../TradeReview'
+import SmartNumberInput from '../../components/SmartNumberInput'
+import TradeReview from '../../components/TradeReview'
 import { TransactionReview } from '../../entities/TransactionReview'
-import TransactionReviewView from '../TransactionReview'
+import TransactionReviewView from '../../components/TransactionReview'
 import { WETH } from '@sushiswap/sdk'
-import WarningsView from '../WarningsList'
+import WarningsView from '../../components/WarningsList'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { ethers } from 'ethers'
 import { tryParseAmount } from '../../state/swap/hooks'
@@ -294,7 +294,7 @@ export default function Repay({ pair }: RepayProps) {
 
     return (
         <>
-            <div className="text-3xl text-high-emphesis mt-6 mb-4">Repay {pair.asset.symbol}</div>
+            <div className="mt-6 mb-4 text-3xl text-high-emphesis">Repay {pair.asset.symbol}</div>
 
             <SmartNumberInput
                 color="pink"

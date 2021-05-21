@@ -1,5 +1,8 @@
 import { AlertTriangle, ArrowDown } from 'react-feather'
 import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
+import { RowBetween, RowFixed } from '../../components/Row'
+import { SwapShowAcceptChanges, TruncatedText } from './styleds'
 import { Trade, TradeType } from '@sushiswap/sdk'
 import { Trans, t } from '@lingui/macro'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'

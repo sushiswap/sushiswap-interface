@@ -9,6 +9,7 @@ import { acceptListUpdate, disableList, enableList, removeList } from '../../sta
 import { useActiveListUrls, useAllLists, useIsListActive } from '../../state/lists/hooks'
 import { useDispatch, useSelector } from 'react-redux'
 
+import AutoSizer from 'react-virtualized-auto-sizer'
 import Card from '../Card'
 import CurrencyModalView from './CurrencyModalView'
 import ExternalLink from '../ExternalLink'
@@ -162,7 +163,13 @@ const ListRow = memo(function ListRow({ listUrl }: { listUrl: string }) {
     if (!list) return null
 
     return (
-        <RowWrapper active={isActive} bgColor={listColor} key={listUrl} id={listUrlRowHTMLId(listUrl)}>
+        <RowWrapper
+            id={listUrlRowHTMLId(listUrl)}
+            active={isActive}
+            bgColor={listColor}
+            key={listUrl}
+            className={`${isActive ? 'text-high-emphesis' : 'text-primary bg-dark-700'}`}
+        >
             {list.logoURI ? (
                 <ListLogo
                     size="40px"
@@ -173,7 +180,7 @@ const ListRow = memo(function ListRow({ listUrl }: { listUrl: string }) {
             ) : (
                 <div style={{ width: '24px', height: '24px', marginRight: '1rem' }} />
             )}
-            <Column>
+            <Column style={{ flex: '1' }}>
                 <Row>
                     <StyledTitleText active={isActive}>{list.name}</StyledTitleText>
                 </Row>
@@ -182,13 +189,8 @@ const ListRow = memo(function ListRow({ listUrl }: { listUrl: string }) {
                         {list.tokens.length} tokens
                     </StyledListUrlText>
                     <StyledMenu ref={node as any}>
-                        <ButtonEmpty
-                            onClick={toggle}
-                            ref={setReferenceElement}
-                            padding="0"
-                            className={isActive ? 'text-primary' : 'text-secondary'}
-                        >
-                            <Settings stroke="currentColor" size={12} />
+                        <ButtonEmpty onClick={toggle} ref={setReferenceElement} padding="0">
+                            <Settings size={12} className="ml-1 stroke-current" />
                         </ButtonEmpty>
                         {open && (
                             <PopoverContainer
@@ -230,9 +232,10 @@ const ListRow = memo(function ListRow({ listUrl }: { listUrl: string }) {
 })
 
 const ListContainer = styled.div`
-    padding: 1rem;
+    // padding: 1rem;
     height: 100%;
-    overflow: auto;
+    overflow-y: auto;
+
     padding-bottom: 80px;
 `
 
@@ -336,23 +339,23 @@ function ManageLists({
     }, [listUrlInput, setImportList, setListUrl, setModalView, tempList])
 
     return (
-        <Wrapper>
-            <PaddedColumn gap="14px">
-                <Row>
-                    <SearchInput
-                        type="text"
-                        id="list-add-input"
-                        placeholder="https:// or ipfs:// or ENS name"
-                        value={listUrlInput}
-                        onChange={handleInput}
-                    />
-                </Row>
-                {addError ? (
-                    <div title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} className="text-red">
-                        {addError}
-                    </div>
-                ) : null}
-            </PaddedColumn>
+        <div className="relative flex-1 w-full h-full space-y-4 overflow-y-hidden">
+            <input
+                id="list-add-input"
+                type="text"
+                placeholder="https:// or ipfs:// or ENS name"
+                className="mt-4 w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
+                value={listUrlInput}
+                onChange={handleInput}
+                title="List URI"
+                autoComplete="off"
+                autoCorrect="off"
+            />
+            {addError ? (
+                <div title={addError} className="overflow-hidden text-red text-ellipsis">
+                    {addError}
+                </div>
+            ) : null}
             {tempList && (
                 <PaddedColumn style={{ paddingTop: 0 }}>
                     <Card>
@@ -385,15 +388,20 @@ function ManageLists({
                     </Card>
                 </PaddedColumn>
             )}
-            <Separator />
             <ListContainer>
-                <AutoColumn gap="md">
-                    {sortedLists.map(listUrl => (
-                        <ListRow key={listUrl} listUrl={listUrl} />
-                    ))}
-                </AutoColumn>
+                <div className="h-full">
+                    <AutoSizer disableWidth>
+                        {({ height }) => (
+                            <div style={{ height }} className="space-y-4">
+                                {sortedLists.map(listUrl => (
+                                    <ListRow key={listUrl} listUrl={listUrl} />
+                                ))}
+                            </div>
+                        )}
+                    </AutoSizer>
+                </div>
             </ListContainer>
-        </Wrapper>
+        </div>
     )
 }
 

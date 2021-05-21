@@ -19,11 +19,11 @@ const RuFlag = '/images/flags/ru-flag.png'
 const ViFlag = '/images/flags/vi-flag.png'
 
 const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+    display: flex;
+    align-items: center;
     border: 2px solid rgb(23, 21, 34);
     border-radius: 10px;
     font-size: 1.25rem;
-    height: 40px;
-
     &:hover {
         border-color: rgb(33, 34, 49);
     }
@@ -65,7 +65,7 @@ const MenuItemFlag = styled(Image)`
     vertical-align: middle;
 `
 
-const MenuButtonFlag = styled.img`
+const MenuButtonFlag = styled(Image)`
     width: 22px;
     height: 22px;
     vertical-align: middle;
@@ -139,13 +139,13 @@ function LanguageSwitch() {
     return (
         <StyledMenu ref={node}>
             <ExtendedStyledMenuButton onClick={toggle}>
-                <MenuButtonFlag src={LANGUAGES[language].flag} alt={LANGUAGES[language].language} />
+                <Image src={LANGUAGES[language].flag} alt={LANGUAGES[language].language} width={22} height={22} />
             </ExtendedStyledMenuButton>
             {open && (
                 <ExtendedMenuFlyout>
                     {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
                         <MenuItem onClick={() => onClick(key)} key={key}>
-                            <MenuItemFlag src={flag} width={24} height={24} alt={language} />
+                            <MenuItemFlag src={flag} width={20} height={20} alt={language} />
                             <span className="ml-4">{language}</span>
                             {dialect && (
                                 <sup>

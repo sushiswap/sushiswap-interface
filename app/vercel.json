@@ -29,6 +29,5 @@
     ],
     "redirects": [
         { "source": "/migrate/v2", "destination": "/migrate", "permanent": true }
-    ],
-    "regions": ["all"]
+    ]
 }

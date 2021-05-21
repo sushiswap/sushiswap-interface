@@ -1,28 +1,28 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { BigNumber, ethers } from 'ethers'
-import { ExchangeRateCheckBox, SwapCheckbox } from '../KashiCheckbox'
-import { KashiApproveButton, TokenApproveButton } from '../KashiButton'
+import { ExchangeRateCheckBox, SwapCheckbox } from '../../components/KashiCheckbox'
+import { KashiApproveButton, TokenApproveButton } from '../../components/KashiButton'
 import React, { useContext, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'
 import { useExpertModeManager, useUserSlippageTolerance } from '../../state/user/hooks'
 
-import Alert from '../Alert'
-import Badge from '../Badge'
-import Button from '../Button'
-import Checkbox from '../Checkbox'
-import Dots from '../Dots'
+import Alert from '../../components/Alert'
+import Badge from '../../components/Badge'
+import Button from '../../components/Button'
+import Checkbox from '../../components/Checkbox'
+import Dots from '../../components/Dots'
 import { Field } from '../../state/swap/actions'
 import { KashiContext } from '../../context'
 import KashiCooker from '../../entities/KashiCooker'
 import { SUSHISWAP_MULTISWAPPER_ADDRESS } from '../../constants/kashi'
-import SmartNumberInput from '../SmartNumberInput'
-import TradeReview from '../TradeReview'
+import SmartNumberInput from '../../components/SmartNumberInput'
+import TradeReview from '../../components/TradeReview'
 import { TransactionReview } from '../../entities/TransactionReview'
-import TransactionReviewView from '../TransactionReview'
+import TransactionReviewView from '../../components/TransactionReview'
 import { WETH } from '@sushiswap/sdk'
-import WarningsView from '../WarningsList'
+import WarningsView from '../../components/WarningsList'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { toShare } from '../../functions/bentobox'
 import { tryParseAmount } from '../../state/swap/hooks'
@@ -334,7 +334,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
     return (
         <>
-            <div className="text-3xl text-high-emphesis mt-6 mb-4">Borrow {pair.asset.symbol}</div>
+            <div className="mt-6 mb-4 text-3xl text-high-emphesis">Borrow {pair.asset.symbol}</div>
 
             <SmartNumberInput
                 color="pink"
@@ -411,9 +411,9 @@ export default function Borrow({ pair }: BorrowProps) {
                                     min="0"
                                     max="2"
                                     step="0.01"
-                                    className="slider w-full"
+                                    className="w-full slider"
                                 />
-                                <div className="w-full flex justify-between text-center px-2">
+                                <div className="flex justify-between w-full px-2 text-center">
                                     <div className="font-semibold">1x</div>
                                     <div className="font-semibold">2x</div>
                                     <div className="font-semibold">3x</div>

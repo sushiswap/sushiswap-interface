@@ -27,7 +27,9 @@ export default function Tools() {
                 <meta name="description" content="SushiSwap tools..." />
             </Head>
             <div className="w-screen max-w-xl space-y-4">
-                <Typography variant="h1">Tools</Typography>
+                <Typography variant="h1" component="h1">
+                    Tools
+                </Typography>
                 <ul className="space-y-4 divide-y-0">
                     {tools.map(tool => (
                         <li key={tool.id} className="relative w-full p-4 rounded bg-dark-900 hover:bg-dark-800">

@@ -30,9 +30,9 @@ export default function RemoveLiquidityReceiveDetails({
     const { chainId } = useActiveWeb3React()
     if (!chainId || !currencyA || !currencyB) throw new Error('missing dependencies')
     return (
-        <div id={id} className="rounded bg-dark-800 p-5">
-            <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row justify-between">
-                <div className="w-full sm:w-2/5 text-white" style={{ margin: 'auto 0px' }}>
+        <div id={id} className="p-5 rounded bg-dark-800">
+            <div className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row">
+                <div className="w-full text-white sm:w-2/5" style={{ margin: 'auto 0px' }}>
                     <AutoColumn>
                         <div>You Will Receive:</div>
                         <RowBetween className="text-sm">
@@ -64,14 +64,14 @@ export default function RemoveLiquidityReceiveDetails({
                 </div>
                 {/* <RowBetween className="space-x-6"> */}
                 <div className="flex flex-col space-y-3 md:flex-row md:space-x-6 md:space-y-0">
-                    <div className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
+                    <div className="flex flex-row items-center w-full p-3 rounded bg-dark-900">
                         <CurrencyLogo currency={currencyA} size="46px" style={{ marginRight: '12px' }} />
                         <AutoColumn>
                             <div className="text-white">{amountA}</div>
                             <div className="text-sm">{currencyA?.getSymbol(chainId)}</div>
                         </AutoColumn>
                     </div>
-                    <div className="flex flex-row items-center rounded bg-dark-900 w-full p-3">
+                    <div className="flex flex-row items-center w-full p-3 rounded bg-dark-900">
                         <CurrencyLogo currency={currencyB} size="46px" style={{ marginRight: '12px' }} />
                         <AutoColumn>
                             <div className="text-white">{amountB}</div>

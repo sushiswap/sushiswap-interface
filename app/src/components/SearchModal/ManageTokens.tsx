@@ -28,18 +28,6 @@ const Wrapper = styled.div`
     padding-bottom: 60px;
 `
 
-const Footer = styled.div`
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    border-radius: 10px;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-    border-top: 1px solid ${({ theme }) => theme.bg3};
-    padding: 20px;
-    text-align: center;
-`
-
 function ManageTokens({
     setModalView,
     setImportToken
@@ -97,53 +85,44 @@ function ManageTokens({
     }, [userAddedTokens, chainId, removeToken])
 
     return (
-        <Wrapper>
-            <Column style={{ width: '100%', flex: '1 1' }}>
-                <PaddedColumn gap="14px">
-                    <Row>
-                        <SearchInput
-                            type="text"
-                            id="token-search-input"
-                            placeholder={'0x0000'}
-                            value={searchQuery}
-                            autoComplete="off"
-                            ref={inputRef as RefObject<HTMLInputElement>}
-                            onChange={handleInput}
-                        />
-                    </Row>
-                    {searchQuery !== '' && !isAddressSearch && (
-                        <div className="text-red">Enter valid token address</div>
+        <div className="relative flex-1 w-full h-full mt-4 space-y-4 overflow-y-hidden">
+            <div className="space-y-3">
+                <input
+                    id="token-search-input"
+                    type="text"
+                    placeholder={'0x0000'}
+                    className="w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
+                    value={searchQuery}
+                    autoComplete="off"
+                    onChange={handleInput}
+                    ref={inputRef as RefObject<HTMLInputElement>}
+                    autoCorrect="off"
+                />
+                {searchQuery !== '' && !isAddressSearch && <div className="text-red">Enter valid token address</div>}
+                {searchToken && (
+                    <ImportRow
+                        token={searchToken}
+                        showImportView={() => setModalView(CurrencyModalView.importToken)}
+                        setImportToken={setImportToken}
+                        style={{ height: 'fit-content' }}
+                    />
+                )}
+                <div className="flex justify-between">
+                    <div className="font-semibold">
+                        {userAddedTokens?.length} Custom {userAddedTokens.length === 1 ? 'Token' : 'Tokens'}
+                    </div>
+                    {userAddedTokens.length > 0 && (
+                        <ButtonText onClick={handleRemoveAll}>
+                            <div>Clear all</div>
+                        </ButtonText>
                     )}
-                    {searchToken && (
-                        <Card padding="10px 0">
-                            <ImportRow
-                                token={searchToken}
-                                showImportView={() => setModalView(CurrencyModalView.importToken)}
-                                setImportToken={setImportToken}
-                                style={{ height: 'fit-content' }}
-                            />
-                        </Card>
-                    )}
-                </PaddedColumn>
-                <Separator />
-                <PaddedColumn gap="lg">
-                    <RowBetween>
-                        <div className="font-semibold">
-                            {userAddedTokens?.length} Custom {userAddedTokens.length === 1 ? 'Token' : 'Tokens'}
-                        </div>
-                        {userAddedTokens.length > 0 && (
-                            <ButtonText onClick={handleRemoveAll}>
-                                <div>Clear all</div>
-                            </ButtonText>
-                        )}
-                    </RowBetween>
-                    {tokenList}
-                </PaddedColumn>
-            </Column>
-            <Footer>
-                <div>Tip: Custom tokens are stored locally in your browser</div>
-            </Footer>
-        </Wrapper>
+                </div>
+                {tokenList}
+            </div>
+            <div className="absolute bottom-0 p-3 text-caption2">
+                Tip: Custom tokens are stored locally in your browser
+            </div>
+        </div>
     )
 }
 
