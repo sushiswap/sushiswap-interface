@@ -12,7 +12,7 @@ const Footer = () => {
     return (
         // <footer className="absolute bottom-0 flex items-center justify-between w-screen h-20 p-4 mx-auto text-center text-low-emphesis">
         <footer className="flex-shrink-0">
-            <div className="flex items-center justify-between w-screen px-4">
+            <div className="flex items-center justify-between w-screen h-20 px-4">
                 {chainId &&
                     [ChainId.MAINNET, ChainId.BSC, ChainId.XDAI, ChainId.FANTOM, ChainId.MATIC].includes(chainId) && (
                         <ExternalLink

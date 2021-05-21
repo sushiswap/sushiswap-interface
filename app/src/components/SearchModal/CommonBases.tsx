@@ -50,7 +50,7 @@ export default function CommonBases({
                             onSelect(NATIVE)
                         }
                     }}
-                    className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700"
+                    className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
                     disabled={selectedCurrency === NATIVE}
                 >
                     <CurrencyLogo currency={NATIVE} style={{ marginRight: 8 }} />
@@ -66,7 +66,7 @@ export default function CommonBases({
                             onClick={() => !selected && onSelect(token)}
                             disabled={selected}
                             key={token.address}
-                            className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700"
+                            className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
                         >
                             <CurrencyLogo currency={token} style={{ marginRight: 8 }} />
                             <Text fontWeight={500} fontSize={16}>

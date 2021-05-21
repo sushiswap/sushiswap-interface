@@ -15,8 +15,8 @@ export default memo(function SwapRoute({ trade }: { trade: Trade }) {
                 const currency = unwrappedToken(token)
                 return (
                     <Fragment key={i}>
-                        <div className="flex flex-end space-x-2">
-                            <div className="text-sm font-bold  text-high-emphesis">{currency.getSymbol(chainId)}</div>
+                        <div className="flex space-x-2 flex-end">
+                            <div className="text-sm font-bold text-high-emphesis">{currency.getSymbol(chainId)}</div>
                         </div>
                         {isLastItem ? null : <ChevronRight size={12} />}
                     </Fragment>

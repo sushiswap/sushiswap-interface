@@ -52,7 +52,7 @@ export default function Lend() {
                 {positions.items && positions.items.length > 0 && (
                     <div className="pb-4">
                         <div>
-                            <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm text-secondary">
+                            <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm md:grid-cols-6 lg:grid-cols-7 text-secondary">
                                 <ListHeaderWithSort sort={positions} sortKey="search">
                                     <Trans>
                                         <span className="hidden md:inline-block">Your</span> Positions
@@ -102,16 +102,16 @@ export default function Lend() {
                                         <div key={pair.address}>
                                             <Link href={'/lend/' + pair.address}>
                                                 <a className="block text-high-emphesis">
-                                                    <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm rounded bg-dark-800 hover:bg-dark-blue">
-                                                        <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                                    <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
+                                                        <div className="flex flex-col items-start sm:flex-row sm:items-center">
                                                             <div className="hidden space-x-2 md:flex">
                                                                 <AsyncIcon
                                                                     src={pair.asset.tokenInfo.logoURI}
-                                                                    className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                                    className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                                 />
                                                                 <AsyncIcon
                                                                     src={pair.collateral.tokenInfo.logoURI}
-                                                                    className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                                    className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                                 />
                                                             </div>
                                                             <div className="sm:items-end md:hidden">
@@ -119,12 +119,12 @@ export default function Lend() {
                                                                     <strong>{pair.asset.symbol}</strong> /{' '}
                                                                     {pair.collateral.symbol}
                                                                 </div>
-                                                                <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
+                                                                <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
                                                                     {pair.oracle.name}
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="text-white hidden md:block">
+                                                        <div className="hidden text-white md:block">
                                                             <strong>{pair.asset.symbol}</strong>
                                                         </div>
                                                         <div className="hidden md:block">{pair.collateral.symbol}</div>
@@ -137,7 +137,7 @@ export default function Lend() {
                                                                 )}{' '}
                                                                 {pair.asset.symbol}
                                                             </div>
-                                                            <div className="text-secondary text-sm">
+                                                            <div className="text-sm text-secondary">
                                                                 {formattedNum(pair.currentUserAssetAmount.usd, true)}
                                                             </div>
                                                         </div>
@@ -161,7 +161,7 @@ export default function Lend() {
                     </div>
                 )}
                 <div>
-                    <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm text-secondary">
+                    <div className="grid grid-flow-col grid-cols-3 gap-4 px-4 pb-4 text-sm sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 text-secondary">
                         <ListHeaderWithSort sort={pairs} sortKey="search">
                             {i18n._(t`Markets`)}
                         </ListHeaderWithSort>
@@ -186,7 +186,7 @@ export default function Lend() {
                             {i18n._(t`APR`)}
                         </ListHeaderWithSort>
                         <ListHeaderWithSort
-                            className="hidden sm:flex justify-end"
+                            className="justify-end hidden sm:flex"
                             sort={pairs}
                             sortKey="utilization.value"
                             direction="descending"
@@ -209,16 +209,16 @@ export default function Lend() {
                                     <div key={pair.address}>
                                         <Link href={'/lend/' + String(pair.address).toLowerCase()}>
                                             <a className="block text-high-emphesis">
-                                                <div className="grid gap-4 grid-flow-col grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm rounded bg-dark-800 hover:bg-dark-blue">
-                                                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                                <div className="grid items-center grid-flow-col grid-cols-3 gap-4 px-4 py-4 text-sm rounded sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
+                                                    <div className="flex flex-col items-start sm:flex-row sm:items-center">
                                                         <div className="hidden space-x-2 md:flex">
                                                             <AsyncIcon
                                                                 src={pair.asset.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                             <AsyncIcon
                                                                 src={pair.collateral.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                         </div>
                                                         <div className="sm:items-end md:hidden">
@@ -228,22 +228,22 @@ export default function Lend() {
                                                                 </div>
                                                                 <div>{pair.collateral.symbol}</div>
                                                             </div>
-                                                            <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
+                                                            <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
                                                                 {pair.oracle.name}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="text-left hidden md:block">
+                                                    <div className="hidden text-left md:block">
                                                         <strong>{pair.asset.symbol}</strong>
                                                     </div>
-                                                    <div className="text-left hidden md:block">
+                                                    <div className="hidden text-left md:block">
                                                         {pair.collateral.symbol}
                                                     </div>
-                                                    <div className="text-left hidden lg:block">{pair.oracle.name}</div>
+                                                    <div className="hidden text-left lg:block">{pair.oracle.name}</div>
                                                     <div className="text-center sm:text-right">
                                                         {formattedPercent(pair.currentSupplyAPR.string)}
                                                     </div>
-                                                    <div className="text-right hidden sm:block">
+                                                    <div className="hidden text-right sm:block">
                                                         {formattedPercent(pair.utilization.string)}
                                                     </div>
                                                     <div className="text-right">
@@ -262,11 +262,6 @@ export default function Lend() {
                                 )
                             })}
                     </div>
-                </div>
-                <div className="w-full py-6 text-center">
-                    <Link href="/kashi/create">
-                        <a className="text-lg">{i18n._(t`+ Create a new market`)}</a>
-                    </Link>
                 </div>
             </Card>
         </KashiLayout>

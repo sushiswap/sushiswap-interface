@@ -37,7 +37,7 @@ import UnsupportedCurrencyFooter from '../components/Swap/UnsupportedCurrencyFoo
 import confirmPriceImpactWithoutFee from '../components/Swap/confirmPriceImpactWithoutFee'
 import { maxAmountSpend } from '../functions/currency'
 import styles from '../styles/Swap.module.css'
-import swapArrowsAnimationData from '../assets/animation/swap-arrows.json'
+import swapArrowsAnimationData from '../animation/swap-arrows.json'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import useENSAddress from '../hooks/useENSAddress'
@@ -344,7 +344,7 @@ export default function Swap() {
                         </DarkCard>
                     </div>
                 )}
-                <AutoColumn gap={'md'}>
+                <div>
                     <CurrencyInputPanel
                         label={
                             independentField === Field.OUTPUT && !showWrap && trade
@@ -360,7 +360,7 @@ export default function Swap() {
                         otherCurrency={currencies[Field.OUTPUT]}
                         id="swap-currency-input"
                     />
-                    <AutoColumn justify="space-between">
+                    <AutoColumn justify="space-between" className="py-2.5">
                         <AutoRow justify={isExpertMode ? 'space-between' : 'flex-start'} style={{ padding: '0 1rem' }}>
                             <button
                                 className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px"
@@ -436,11 +436,11 @@ export default function Swap() {
                     ) : null}
 
                     {showWrap ? null : (
-                        <Card padding={showWrap ? '.25rem 1rem 0 1rem' : '0px'} borderRadius={'20px'}>
-                            <AutoColumn gap="8px" style={{ padding: '0 16px' }}>
+                        <div style={{ padding: showWrap ? '.25rem 1rem 0 1rem' : '0px' }}>
+                            <div className="px-5 mt-4 space-y-2">
                                 {Boolean(trade) && (
                                     <RowBetween align="center">
-                                        <Text className="text-sm font-medium">{i18n._(t`Price`)}</Text>
+                                        <Text className="text-sm font-medium">{i18n._(t`Exchange Rate`)}</Text>
                                         <TradePrice
                                             price={trade?.executionPrice}
                                             showInverted={showInverted}
@@ -464,10 +464,10 @@ export default function Swap() {
                                         </div>
                                     </RowBetween>
                                 )}
-                            </AutoColumn>
-                        </Card>
+                            </div>
+                        </div>
                     )}
-                </AutoColumn>
+                </div>
                 <BottomGrouping>
                     {swapIsUnsupported ? (
                         <ButtonPrimary disabled={true}>
@@ -578,7 +578,7 @@ export default function Swap() {
                     {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
                 </BottomGrouping>
                 {!trade && chainId && chainId === ChainId.MAINNET && (
-                    <div className="hidden w-full pt-4 cursor-pointer sm:block" onClick={() => toggleNetworkModal()}>
+                    <div className="hidden w-full mt-4 cursor-pointer sm:block" onClick={() => toggleNetworkModal()}>
                         <DarkCard>
                             <div className="flex items-center justify-between overflow-hidden">
                                 <Image

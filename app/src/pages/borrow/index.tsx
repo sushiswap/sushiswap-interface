@@ -58,7 +58,7 @@ export default function Borrow() {
                 {positions.items && positions.items.length > 0 && (
                     <div className="pb-4">
                         <div>
-                            <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm text-secondary">
+                            <div className="grid grid-cols-4 gap-4 px-4 pb-4 text-sm md:grid-cols-6 lg:grid-cols-7 text-secondary">
                                 <ListHeaderWithSort
                                     className="col-span-1 md:col-span-2 lg:col-span-3"
                                     sort={positions}
@@ -77,7 +77,7 @@ export default function Borrow() {
                                     {i18n._(t`Borrowed`)}
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
-                                    className="hidden md:flex justify-end"
+                                    className="justify-end hidden md:flex"
                                     sort={positions}
                                     sortKey="userCollateralAmount.usdValue"
                                     direction="descending"
@@ -85,7 +85,7 @@ export default function Borrow() {
                                     {i18n._(t`Collateral`)}
                                 </ListHeaderWithSort>
                                 <ListHeaderWithSort
-                                    className="hidden lg:flex justify-end"
+                                    className="justify-end hidden lg:flex"
                                     sort={positions}
                                     sortKey="health.value"
                                     direction="descending"
@@ -109,15 +109,15 @@ export default function Borrow() {
                                         <div key={pair.address}>
                                             <Link href={'/bento/kashi/borrow/' + pair.address}>
                                                 <a className="block text-high-emphesis">
-                                                    <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center  text-sm  rounded bg-dark-800 hover:bg-dark-pink">
+                                                    <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                                                         <div className="hidden space-x-2 md:flex">
                                                             <AsyncIcon
                                                                 src={pair.asset.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                             <AsyncIcon
                                                                 src={pair.collateral.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                         </div>
                                                         <div className="sm:block md:col-span-1 lg:col-span-2">
@@ -135,20 +135,20 @@ export default function Borrow() {
                                                                 )}{' '}
                                                                 {pair.asset.symbol}
                                                             </div>
-                                                            <div className="text-secondary text-sm">
+                                                            <div className="text-sm text-secondary">
                                                                 {formattedNum(pair.currentUserBorrowAmount.usd, true)}
                                                             </div>
                                                         </div>
-                                                        <div className="hidden md:block text-right">
+                                                        <div className="hidden text-right md:block">
                                                             <div>
                                                                 {formattedNum(pair.userCollateralAmount.string, false)}{' '}
                                                                 {pair.collateral.symbol}
                                                             </div>
-                                                            <div className="text-secondary text-sm">
+                                                            <div className="text-sm text-secondary">
                                                                 {formattedNum(pair.userCollateralAmount.usd, true)}
                                                             </div>
                                                         </div>
-                                                        <div className="flex justify-end items-center">
+                                                        <div className="flex items-center justify-end">
                                                             {formattedPercent(pair.health.string)}
                                                             <GradientDot percent={pair.health.string} />
                                                         </div>
@@ -166,7 +166,7 @@ export default function Borrow() {
                     </div>
                 )}
 
-                <div className="grid gap-4 grid-flow-col grid-cols-4 md:grid-cols-6 lg:grid-cols-7 pb-4 px-4 text-sm  text-secondary">
+                <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm md:grid-cols-6 lg:grid-cols-7 text-secondary">
                     <ListHeaderWithSort sort={pairs} sortKey="search">
                         {i18n._(t`Markets`)}
                     </ListHeaderWithSort>
@@ -211,16 +211,16 @@ export default function Borrow() {
                                 <div key={pair.address}>
                                     <Link href={'/borrow/' + String(pair.address).toLowerCase()}>
                                         <a className="block text-high-emphesis">
-                                            <div className="grid gap-4 grid-cols-4 md:grid-cols-6 lg:grid-cols-7 py-4 px-4 items-center align-center text-sm  rounded bg-dark-800 hover:bg-dark-pink">
-                                                <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                                            <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
+                                                <div className="flex flex-col items-start sm:flex-row sm:items-center">
                                                     <div className="hidden space-x-2 md:flex">
                                                         <AsyncIcon
                                                             src={pair.asset.tokenInfo.logoURI}
-                                                            className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                            className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                         />
                                                         <AsyncIcon
                                                             src={pair.collateral.tokenInfo.logoURI}
-                                                            className="block w-5 h-5 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded-lg"
+                                                            className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                         />
                                                     </div>
                                                     <div className="sm:items-end md:hidden">
@@ -228,12 +228,12 @@ export default function Borrow() {
                                                             <div className="font-semibold">{pair.asset.symbol} / </div>
                                                             <div>{pair.collateral.symbol}</div>
                                                         </div>
-                                                        <div className="mt-0 text-left text-white-500 text-xs block lg:hidden">
+                                                        <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
                                                             {pair.oracle.name}
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="text-white hidden md:block">
+                                                <div className="hidden text-white md:block">
                                                     <strong>{pair.asset.symbol}</strong>
                                                 </div>
                                                 <div className="hidden md:block">{pair.collateral.symbol}</div>

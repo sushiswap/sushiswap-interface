@@ -10,5 +10,8 @@ module.exports = withPWA({
   },
   future: {
     webpack5: true
-  }
+  },
+  images: {
+    domains: ['raw.githubusercontent.com'],
+  },
 })

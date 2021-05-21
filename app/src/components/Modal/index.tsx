@@ -63,20 +63,21 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
         display: flex;
         border-radius: 10px;
 
-        // ${({ theme }) => theme.mediaWidth.upToMedium`
-        //     width: 65vw;
-        //     margin: 0;
-        // `}
-        /* ${({ theme, mobile }) => theme.mediaWidth.upToSmall`
+        @media (min-width: 640px) {
+            width: 65vw;
+            margin: 0;
+        }
+
+        @media (min-width: 768px) {
             width: 85vw;
-            ${mobile &&
+            ${({ mobile }) =>
+                mobile &&
                 css`
                     width: 100vw;
                     border-radius: 10px;
                     border-bottom-left-radius: 0;
                     border-bottom-right-radius: 0;
                 `}
-        `} */
     }
 `
 

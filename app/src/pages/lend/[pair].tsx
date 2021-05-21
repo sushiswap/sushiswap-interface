@@ -6,25 +6,37 @@ import { formattedNum, formattedPercent } from '../../utils'
 import AsyncIcon from '../../components/AsyncIcon'
 import Card from '../../components/Card'
 import Deposit from '../../components/Lend/Deposit'
+import Dots from '../../components/Dots'
 import GradientDot from '../../components/GradientDot'
 import Head from 'next/head'
 import KashiLayout from '../../layouts/KashiLayout'
 import { LendCardHeader } from '../../components/CardHeader'
 import QuestionHelper from '../../components/QuestionHelper'
 import Withdraw from '../../components/Lend/Withdraw'
+import { shortenAddress } from '../../functions'
 import { t } from '@lingui/macro'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import { usePair } from '../../hooks/usePairs'
 import { useRouter } from 'next/router'
+import { useToken } from '../../hooks/Tokens'
+import { useUSDCPrice } from '../../hooks'
 
 export default function Pair() {
     const router = useRouter()
     const { i18n } = useLingui()
+    const { chainId } = useActiveWeb3React()
     const [tabIndex, setTabIndex] = useState(0)
     const info = useContext(KashiContext).state.info
     const pair = useKashiPair(router.query.pair as string)
-
+    const asset = useToken(pair?.asset.address)
+    const collateral = useToken(pair?.collateral.address)
+    const [pairState, liquidityPair] = usePair(asset, collateral)
+    const assetPrice = useUSDCPrice(asset)
+    const collateralPrice = useUSDCPrice(collateral)
     if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
+
+    console.log({ assetPrice, collateralPrice }, collateralPrice?.toFixed(6))
 
     return (
         <KashiLayout
@@ -112,6 +124,50 @@ export default function Pair() {
                                 />
                             </div>
                         </div>
+
+                        {pair && pair.oracle.name === 'SushiSwap' && (
+                            <>
+                                <div className="flex justify-between pt-3">
+                                    <div className="text-xl text-high-emphesis">{i18n._(t`SLP`)}</div>
+                                </div>
+                                {liquidityPair ? (
+                                    <>
+                                        <div className="flex justify-between">
+                                            <div className="text-lg text-secondary">
+                                                {liquidityPair?.token0.getSymbol(chainId)}
+                                            </div>
+                                            <div className="text-lg text-high-emphesis">
+                                                {liquidityPair?.reserve0.toSignificant(4)}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-between">
+                                            <div className="text-lg text-secondary">
+                                                {liquidityPair?.token1.getSymbol(chainId)}
+                                            </div>
+                                            <div className="text-lg text-high-emphesis">
+                                                {liquidityPair?.reserve1.toSignificant(4)}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-between">
+                                            <div className="text-lg text-secondary">TVL</div>
+                                            <div className="text-lg text-high-emphesis">
+                                                {formattedNum(
+                                                    liquidityPair?.reserve1
+                                                        .multiply(assetPrice?.raw)
+                                                        .add(liquidityPair?.reserve1.multiply(collateralPrice?.raw))
+                                                        .toSignificant(4),
+                                                    true
+                                                )}
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <Dots className="text-lg text-secondary">Loading</Dots>
+                                )}
+                            </>
+                        )}
                     </div>
                 </Card>
             }

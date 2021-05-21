@@ -2,6 +2,7 @@ import { ButtonProps, Button as RebassButton } from 'rebass/styled-components'
 import { darken, lighten } from 'polished'
 import styled, { keyframes } from 'styled-components'
 
+import Button from '../Button'
 import { ChevronDown } from 'react-feather'
 import React from 'react'
 import { RowBetween } from '../Row'
@@ -348,9 +349,9 @@ export function ButtonConfirmed({
 
 export function ButtonError({ error, ...rest }: { error?: boolean } & ButtonProps) {
     if (error) {
-        return <ButtonErrorStyle {...rest} />
+        return <Button color="red" size="large" {...rest} />
     } else {
-        return <ButtonPrimary {...rest} />
+        return <Button color={rest.disabled ? 'gray' : 'gradient'} size="large" {...rest} />
     }
 }
 
