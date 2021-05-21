@@ -3,7 +3,7 @@ import { ArrowDown, Plus } from 'react-feather'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import { ChainId, Currency, NATIVE, Percent, WETH, currencyEquals } from '@sushiswap/sdk'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
-import Row, { AutoRow, RowBetween, RowFixed } from '../../components/Row'
+import { AutoRow } from '../../components/Row'
 import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
@@ -11,14 +11,11 @@ import { currencyId, wrappedCurrency } from '../../functions/currency'
 import { getRouterAddress, getRouterContract } from '../../functions/contract'
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../state/burn/hooks'
 
-import AdvancedLiquidityDetailsDropdown from '../../components/Liquidity/AdvancedLiquidityDetailsDropdown'
 import Alert from '../../components/Alert'
 import { AutoColumn } from '../../components/Column'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import CurrencyLogo from '../../components/CurrencyLogo'
 import Dots from '../../components/Dots'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Field } from '../../state/burn/actions'
 import Head from 'next/head'
 import Header from '../../components/ExchangeHeader'
@@ -26,7 +23,6 @@ import Layout from '../../components/Layout'
 import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../components/PositionCard'
-import NavLink from '../../components/NavLink'
 import PercentInputPanel from '../../components/PercentInputPanel'
 import ReactGA from 'react-ga'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
@@ -46,6 +42,7 @@ import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useUserSlippageTolerance } from '../../state/user/hooks'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import TokenIcon from '../../components/TokenIcon'
 
 export default function Remove() {
     const { i18n } = useLingui()
@@ -362,32 +359,35 @@ export default function Remove() {
 
     function modalHeader() {
         return (
-            <div>
-                <div className="justify-between items-end">
-                    <Text className="text-xl font-bold text-high-emphesis">
-                        {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
-                    </Text>
-                    <RowFixed gap="4px">
-                        <CurrencyLogo currency={currencyA} size={'24px'} />
-                        <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
+            <div className="grid gap-4 pt-3 pb-4">
+                <div className="grid gap-2">
+                    <div className="flex justify-between items-center">
+                        <div className="gap-3 flex items-center">
+                            <TokenIcon token={tokenA} />
+                            <div className="text-2xl font-bold text-high-emphesis">
+                                {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
+                            </div>
+                        </div>
+                        <div className="text-2xl text-high-emphesis font-medium ml-3">
                             {currencyA?.getSymbol(chainId)}
-                        </Text>
-                    </RowFixed>
-                </div>
-                <RowFixed>
-                    <Plus size="16" />
-                </RowFixed>
-                <RowBetween align="flex-end">
-                    <Text className="text-2xl font-medium">{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</Text>
-                    <RowFixed gap="4px">
-                        <CurrencyLogo currency={currencyB} size={'24px'} />
-                        <Text className="text-2xl font-medium" style={{ marginLeft: '10px' }}>
+                        </div>
+                    </div>
+                    <div className="ml-3 mr-3 min-w-[24px]">
+                        <Plus size={24} />
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <div className="gap-3 flex items-center">
+                            <TokenIcon token={tokenB} />
+                            <div className="text-2xl font-bold text-high-emphesis">
+                                {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
+                            </div>
+                        </div>
+                        <div className="text-2xl text-high-emphesis font-medium ml-3">
                             {currencyB?.getSymbol(chainId)}
-                        </Text>
-                    </RowFixed>
-                </RowBetween>
-
-                <div className="py-5 text-sm italic text-gray-500">
+                        </div>
+                    </div>
+                </div>
+                <div className="justify-start text-secondary text-sm">
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /
                         100}% your transaction will revert.`}
                 </div>
@@ -397,51 +397,54 @@ export default function Remove() {
 
     function modalBottom() {
         return (
-            <>
-                <RowBetween>
-                    <Text fontWeight={500} fontSize={16}>
-                        {i18n._(t`SUSHI ${currencyA?.getSymbol(chainId)}/${currencyB?.getSymbol(chainId)} Burned`)}
-                    </Text>
-                    <RowFixed>
-                        <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} margin={true} />
-                        <Text fontWeight={500} fontSize={16}>
-                            {parsedAmounts[Field.LIQUIDITY]?.toSignificant(6)}
-                        </Text>
-                    </RowFixed>
-                </RowBetween>
+            <div className="bg-dark-800 -m-6 mt-0 p-6">
                 {pair && (
                     <>
-                        <RowBetween>
-                            <Text fontWeight={500} fontSize={16}>
-                                {i18n._(t`Price`)}
-                            </Text>
-                            <Text fontWeight={500} fontSize={16}>
-                                1 {currencyA?.getSymbol(chainId)} ={' '}
-                                {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {currencyB?.getSymbol(chainId)}
-                            </Text>
-                        </RowBetween>
-                        <RowBetween>
-                            <div />
-                            <Text fontWeight={500} fontSize={16}>
-                                1 {currencyB?.getSymbol(chainId)} ={' '}
-                                {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {currencyA?.getSymbol(chainId)}
-                            </Text>
-                        </RowBetween>
+                        <div className="grid gap-1">
+                            <div className="flex justify-between items-center">
+                                <div className="text-sm text-high-emphesis">{i18n._(t`Rates`)}</div>
+                                <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
+                                    {`1 ${currencyA?.getSymbol(chainId)} = ${
+                                        tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'
+                                    } ${currencyB?.getSymbol(chainId)}`}
+                                </div>
+                            </div>
+                            <div className="flex justify-end items-center">
+                                <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
+                                    {`1 ${currencyB?.getSymbol(chainId)} = ${
+                                        tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'
+                                    } ${currencyA?.getSymbol(chainId)}`}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-gray-700 my-6 h-px" />
                     </>
                 )}
+                <div className="grid gap-1 pb-6">
+                    <div className="flex justify-between items-center">
+                        <div className="text-sm text-secondary">
+                            {i18n._(t`${currencyA?.getSymbol(chainId)}/${currencyB?.getSymbol(chainId)} Burned`)}
+                        </div>
+                        <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphasis">
+                            {parsedAmounts[Field.LIQUIDITY]?.toSignificant(6)}
+                        </div>
+                    </div>
+                </div>
                 <ButtonPrimary
                     disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)}
                     onClick={onRemove}
                 >
-                    <Text className="font-medium text-lg">{i18n._(t`Confirm`)}</Text>
+                    <div className="font-medium text-lg">{i18n._(t`Confirm`)}</div>
                 </ButtonPrimary>
-            </>
+            </div>
         )
     }
 
-    const pendingText = t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
-        chainId
-    )} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.getSymbol(chainId)}`
+    const pendingText = i18n._(
+        t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.getSymbol(
+            chainId
+        )} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.getSymbol(chainId)}`
+    )
 
     const liquidityPercentChangeCallback = useCallback(
         (value: number) => {

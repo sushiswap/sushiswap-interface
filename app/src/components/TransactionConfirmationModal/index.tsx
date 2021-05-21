@@ -1,7 +1,7 @@
 import { AlertTriangle, ArrowUpCircle } from 'react-feather'
 import { AutoColumn, ColumnCenter } from '../Column'
-import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
+import React  from 'react'
+import styled  from 'styled-components'
 
 import { ButtonPrimary } from '../ButtonLegacy'
 import { ChainId } from '@sushiswap/sdk'
@@ -14,6 +14,8 @@ import { Text } from 'rebass'
 import { getExplorerLink } from '../../functions/explorer'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { XCircle } from 'react-feather'
+import { useLingui } from "@lingui/react";
+import { t } from '@lingui/macro';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -33,29 +35,24 @@ const ConfirmedIcon = styled(ColumnCenter)`
 `
 
 function ConfirmationPendingContent({ onDismiss, pendingText }: { onDismiss: () => void; pendingText: string }) {
+    const { i18n } = useLingui();
+
     return (
-        <Wrapper>
-            <Section>
-                <RowBetween>
-                    <div />
-                    <CloseIcon onClick={onDismiss} />
-                </RowBetween>
+        <div className="w-full">
+            <div className="grid grid-auto-rows">
+                <div className="flex justify-end">
+                    <XCircle onClick={onDismiss} />
+                </div>
                 <ConfirmedIcon>
                     <CustomLightSpinner src="/blue-loader.svg" alt="loader" size={'90px'} />
                 </ConfirmedIcon>
-                <AutoColumn gap="12px" justify={'center'}>
-                    <Text className="text-lg font-medium">Waiting For Confirmation</Text>
-                    <AutoColumn gap="12px" justify={'center'}>
-                        <Text fontWeight={600} fontSize={14} color="" textAlign="center">
-                            {pendingText}
-                        </Text>
-                    </AutoColumn>
-                    <Text fontSize={12} color="#565A69" textAlign="center">
-                        Confirm this transaction in your wallet
-                    </Text>
-                </AutoColumn>
-            </Section>
-        </Wrapper>
+                <div className="grid gap-3 flex justify-center">
+                    <span className="text-center text-xl font-bold">{i18n._(t`Waiting For Confirmation`)}</span>
+                    <span className="text-center text font-bold">{pendingText}</span>
+                    <span className="text-center text-secondary text-sm font-bold">{i18n._(t`Confirm this transaction in your wallet`)}</span>
+                </div>
+            </div>
+        </div>
     )
 }
 
@@ -68,7 +65,7 @@ function TransactionSubmittedContent({
     hash: string | undefined
     chainId: ChainId
 }) {
-    const theme = useContext(ThemeContext)
+    const { i18n } = useLingui()
 
     return (
         <Wrapper>
@@ -81,16 +78,16 @@ function TransactionSubmittedContent({
                     <ArrowUpCircle strokeWidth={0.5} size={90} className="text-blue" />
                 </ConfirmedIcon>
                 <AutoColumn gap="12px" justify={'center'}>
-                    <Text className="text-lg font-medium">Transaction Submitted</Text>
+                    <Text className="text-lg font-medium">{i18n._(t`Transaction Submitted`)}</Text>
                     {chainId && hash && (
                         <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
                             <Text fontWeight={500} fontSize={14} className="text-blue">
-                                View on explorer
+                                {i18n._(t`View on explorer`)}
                             </Text>
                         </ExternalLink>
                     )}
                     <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
-                        <Text className="text-lg font-medium">Close</Text>
+                        <Text className="text-lg font-medium">{i18n._(t`Close`)}</Text>
                     </ButtonPrimary>
                 </AutoColumn>
             </Section>
@@ -122,12 +119,12 @@ export function ConfirmationModalContent({
 }
 
 export function TransactionErrorContent({ message, onDismiss }: { message: string; onDismiss: () => void }) {
-    const theme = useContext(ThemeContext)
+    const { i18n } = useLingui();
     return (
         <Wrapper>
             <Section>
                 <RowBetween>
-                    <Text className="text-lg font-medium">Error</Text>
+                    <Text className="text-lg font-medium">{i18n._(t`Error`)}</Text>
                     <CloseIcon onClick={onDismiss} />
                 </RowBetween>
                 <AutoColumn style={{ marginTop: 20, padding: '2rem 0' }} gap="24px" justify="center">
@@ -143,7 +140,7 @@ export function TransactionErrorContent({ message, onDismiss }: { message: strin
                 </AutoColumn>
             </Section>
             <BottomSection gap="12px">
-                <ButtonPrimary onClick={onDismiss}>Dismiss</ButtonPrimary>
+                <ButtonPrimary onClick={onDismiss}>{i18n._(t`Dismiss`)}</ButtonPrimary>
             </BottomSection>
         </Wrapper>
     )

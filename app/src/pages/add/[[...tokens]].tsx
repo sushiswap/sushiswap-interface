@@ -1,8 +1,8 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import { Currency, NATIVE, TokenAmount, WETH, currencyEquals } from '@sushiswap/sdk'
-import React, { useCallback, useContext, useState } from 'react'
-import Row, { AutoRow, RowBetween, RowFlat } from '../../components/Row'
+import React, { useCallback, useMemo, useState } from 'react'
+import { AutoRow, RowBetween } from '../../components/Row'
 import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
@@ -18,12 +18,10 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ConfirmAddModalBottom } from '../../components/Liquidity/ConfirmAddModalBottom'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import Dots from '../../components/Dots'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Field } from '../../state/mint/actions'
 import Head from 'next/head'
 import Header from '../../components/ExchangeHeader'
 import Layout from '../../components/Layout'
-import { LightCard } from '../../components/CardLegacy'
 import LiquidityHeader from '../../components/Liquidity/LiquidityHeader'
 import LiquidityPrice from '../../components/Liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../components/PositionCard'
@@ -32,7 +30,6 @@ import { PairState } from '../../hooks/usePairs'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
 import { TransactionResponse } from '@ethersproject/providers'
 import UnsupportedCurrencyFooter from '../../components/Swap/UnsupportedCurrencyFooter'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -43,17 +40,21 @@ import { useRouter } from 'next/router'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import TokenIcon from '../../components/TokenIcon'
 
 export default function Add() {
     const { i18n } = useLingui()
     const { account, chainId, library } = useActiveWeb3React()
     const router = useRouter()
-    const theme = useContext(ThemeContext)
     const tokens = router.query.tokens
     const [currencyIdA, currencyIdB] = tokens as string[]
-    console.log({ currencyIdA, currencyIdB })
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)
+    const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
+        currencyA,
+        currencyB,
+        chainId
+    ])
 
     const oneCurrencyIsWETH = Boolean(
         chainId &&
@@ -225,11 +226,10 @@ export default function Add() {
                             '/' +
                             currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
                     </div>
-                    <DoubleCurrencyLogo
-                        currency0={currencies[Field.CURRENCY_A]}
-                        currency1={currencies[Field.CURRENCY_B]}
-                        size={30}
-                    />
+                    <div className="grid gap-2 grid-flow-col">
+                        <TokenIcon token={tokenA} />
+                        <TokenIcon token={tokenB} />
+                    </div>
                 </div>
             </div>
         ) : (
@@ -238,18 +238,15 @@ export default function Add() {
                     <div className="text-[2.275rem] font-bold text-high-emphesis">
                         {liquidityMinted?.toSignificant(6)}
                     </div>
-                    <DoubleCurrencyLogo
-                        currency0={currencies[Field.CURRENCY_A]}
-                        currency1={currencies[Field.CURRENCY_B]}
-                        size={30}
-                    />
-                </div>
-                <div>
-                    <div className="text-2xl font-medium text-high-emphesis">
-                        {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
-                        {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
-                        &nbsp;<Trans>Pool Tokens</Trans>
+                    <div className="grid gap-2 grid-flow-col">
+                        <TokenIcon token={tokenA} />
+                        <TokenIcon token={tokenB} />
                     </div>
+                </div>
+                <div className="text-2xl font-medium text-high-emphesis">
+                    {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
+                    {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
+                    &nbsp;<Trans>Pool Tokens</Trans>
                 </div>
                 <div className="text-sm text-secondary pt-3">
                     {t`Output is estimated. If the price changes by more than ${allowedSlippage /

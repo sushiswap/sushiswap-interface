@@ -4,12 +4,11 @@ import { Trade, TradeType } from '@sushiswap/sdk'
 import { Trans, t } from '@lingui/macro'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'
 
-import { ButtonPrimary } from '../ButtonLegacy'
-import CurrencyLogo from '../CurrencyLogo'
 import { Field } from '../../state/swap/actions'
-import { isAddress, shortenAddress } from '../../functions'
+import { isAddress, shortenAddress, wrappedCurrency } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import TokenIcon from '../TokenIcon'
 
 export default function SwapModalHeader({
     trade,
@@ -32,17 +31,20 @@ export default function SwapModalHeader({
     ])
     const { priceImpactWithoutFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade])
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
+    const [tokenA, tokenB] = useMemo(
+        () => [
+            wrappedCurrency(trade.inputAmount.currency, chainId),
+            wrappedCurrency(trade.outputAmount.currency, chainId)
+        ],
+        [trade.inputAmount.currency, trade.outputAmount.currency, chainId]
+    )
 
     return (
         <div className="grid gap-4 pt-3 pb-4">
             <div className="grid gap-2">
-                <div className="flex justify-between items-end">
-                    <div className="flex items-center">
-                        <CurrencyLogo
-                            currency={trade.inputAmount.currency}
-                            size={'24px'}
-                            style={{ marginRight: '12px' }}
-                        />
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <TokenIcon token={tokenA} />
                         <div className="overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl text-high-emphesis">
                             {trade.inputAmount.toSignificant(6)}
                         </div>
@@ -51,16 +53,12 @@ export default function SwapModalHeader({
                         {trade.inputAmount.currency.getSymbol(chainId)}
                     </div>
                 </div>
-                <div className="mr-3 min-w-[24px]">
+                <div className="ml-3 mr-3 min-w-[24px]">
                     <ArrowDown size={24} />
                 </div>
-                <div className="flex justify-between items-end">
-                    <div className="flex items-center">
-                        <CurrencyLogo
-                            currency={trade.outputAmount.currency}
-                            size={'24px'}
-                            style={{ marginRight: '12px' }}
-                        />
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <TokenIcon token={tokenB} />
                         <div
                             className={`overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl ${
                                 priceImpactSeverity > 2 ? 'text-red' : 'text-high-emphesis'

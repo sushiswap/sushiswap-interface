@@ -75,9 +75,9 @@ export function ConfirmAddModalBottom({
             </div>
 
             <ButtonPrimary onClick={onAdd}>
-                <Text className="font-medium text-lg">
+                <div className="font-medium text-lg">
                     {noLiquidity ? i18n._(t`Create Pool & Supply`) : i18n._(t`Confirm Supply`)}
-                </Text>
+                </div>
             </ButtonPrimary>
         </div>
     )
