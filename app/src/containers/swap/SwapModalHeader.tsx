@@ -1,17 +1,14 @@
 import { AlertTriangle, ArrowDown } from 'react-feather'
 import React, { useMemo } from 'react'
-import React, { useContext, useMemo } from 'react'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { SwapShowAcceptChanges, TruncatedText } from './styleds'
 import { Trade, TradeType } from '@sushiswap/sdk'
-import { Trans, t } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'
 
 import { Field } from '../../state/swap/actions'
 import { isAddress, shortenAddress, wrappedCurrency } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import TokenIcon from '../TokenIcon'
+import TokenIcon from '../../components/TokenIcon'
 
 export default function SwapModalHeader({
     trade,
