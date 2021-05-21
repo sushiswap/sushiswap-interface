@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import PartnerCard from './PartnerCard'
 import AmaSignImg from 'assets/images/onsen-ama-sign.png'
 import DefiDollarCoverImg from 'assets/images/cover-defi-dollar.png'
@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom'
 import { ThemeContext } from 'styled-components'
 import { ExternalLink } from 'components/Link'
 import { Helmet } from 'react-helmet'
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 const BackButton = () => {
@@ -24,7 +24,7 @@ const BackButton = () => {
     const { i18n } = useLingui()
 
     return (
-        <Button size="small" className="flex items-center pl-0" onClick={() => history.goBack()}>
+        <Button size="small" className="flex items-center pl-0 -ml-1" onClick={() => history.goBack()}>
             <ChevronLeft strokeWidth={2} size={18} color={theme.white} />
             <span className="ml-1 text-high-emphesis">{i18n._(t`Go Back`)}</span>
         </Button>
@@ -46,16 +46,13 @@ export default function Ama() {
             <Helmet>
                 <title>Onsen | Sushi</title>
             </Helmet>
-            <div className="flex flex-col items-center w-full">
-                <div className="flex justify-center w-full md:h-80 p-2 bg-onsen-ama bg-cover">
-                    <div className="flex flex-col justify-start mt-0 md:mt-10 mb-6 w-full max-w-5xl">
-                        <div className="self-start hidden md:block">
+            <div className="flex flex-col items-center w-full -mt-4 sm:-mt-8 md:-mt-10">
+                <div className="flex justify-center w-screen md:h-80 px-4 py-4 sm:py-8 md:py-10 bg-onsen-ama bg-cover">
+                    <div className="flex flex-col justify-start w-full max-w-5xl">
+                        <div className="self-start">
                             <BackButton />
                         </div>
-                        <div className="self-center w-full max-w-lg px-2">
-                            <div className="block md:hidden w-full mb-1">
-                                <BackButton />
-                            </div>
+                        <div className="self-center w-full px-4 pt-1 pb-5 max-w-lg">
                             <img src={AmaSignImg} />
                             <p className="text-center text-caption2 md:text-body text-high-emphesis">
                                 {i18n._(t`Watch interviews with Onsen projects to learn more about their features, benefits, and plans
@@ -65,7 +62,7 @@ export default function Ama() {
                     </div>
                 </div>
 
-                <div className="w-full max-w-5xl mb-24 md:mb-0">
+                <div className="w-full max-w-5xl mb-16 md:mb-0">
                     <div className="flex justify-center items-center flex-nowrap w-full h-14 mt-10 bg-purple bg-opacity-20 rounded text-xs whitespace-nowrap font-bold text-high-emphesis">
                         <p className="hidden lg:block">{i18n._(t`Want to tune in live?`)}</p>
                         <ExternalLink className="-mx-2" href="https://twitter.com/sushiswap">
@@ -75,12 +72,12 @@ export default function Ama() {
                             {i18n._(t`for the latest updates on Onsen project AMAs, and listen in live in the Onsen AMA voice channel
                             in our`)}
                         </p>
-                        <p className="block lg:hidden">&nbsp;{i18n._(t`and join our`)}&nbsp;</p>
+                        <p className="block lg:hidden">&nbsp;{i18n._(t`and`)}&nbsp;</p>
                         <ExternalLink className="-mx-2 hidden lg:block" href="https://discord.gg/NVPXN4e">
                             <p className="text-cyan-blue hover:underline">{i18n._(t`discord community.`)}</p>
                         </ExternalLink>
                         <ExternalLink className="-mx-2 block lg:hidden" href="https://discord.gg/NVPXN4e">
-                            <p className="text-cyan-blue hover:underline">{i18n._(t`discord.`)}</p>
+                            <p className="text-cyan-blue hover:underline">{i18n._(t`join our discord.`)}</p>
                         </ExternalLink>
                     </div>
 
