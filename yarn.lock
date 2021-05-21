@@ -2988,10 +2988,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
-"@sushiswap/default-token-list@^6.19.0":
-  version "6.19.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.19.0.tgz#68c2235bb759a75a560da3b8235d8d644fb88321"
-  integrity sha512-eXP0uqqg+OAucnDzHY2LvVJuAVaeTBXXMmD5Ht4GBrJQBO1YYUnHgyERet+vKUAp53PXWdQhUupTStc6dpmG2A==
+"@sushiswap/default-token-list@^6.20.0":
+  version "6.20.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.20.0.tgz#b2a73872dd5aac6fdfe5eeef84ccdcb578d4632c"
+  integrity sha512-xU6SoqAC+H7VL647dahd07ypmRqFVr1Obne9oDbL6SBQ5wvPIYp7jSb4GEN8PheMmTTfZTqSrhZY6dlgtppCfA==
 
 "@sushiswap/sdk@5.0.0-canary.7":
   version "5.0.0-canary.7"
@@ -3006,10 +3006,10 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@sushiswap/sushi-data@^2.0.0-canary.2":
-  version "2.0.0-canary.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-2.0.0-canary.2.tgz#9130989960087e2b77a38fb496a817485ff096b1"
-  integrity sha512-cX0I9YzNqgvtWysUK+9+qgk0z/3UC7lE1IvKwgdLSZYsTCvNyBN9y1lO+LviWlxe4pUVlUriTbJ8G0u2tDp+AA==
+"@sushiswap/sushi-data@1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.26.tgz#6f9d68f0193d7bb3839262fe47dcd095478ee3e1"
+  integrity sha512-zGAL3un1K8J+mc4GyMhjOdJHYsnuwh7WiP4zlgvGyz1FJbFvnkv6NaKqh1bLAVCJDTZRFBZCzty7qp+6kX+nJw==
   dependencies:
     bluebird "^3.7.2"
     commander "6.1.0"
@@ -10478,9 +10478,9 @@ graph-results-pager@LufyCZ/graph-results-pager#types:
   dependencies:
     node-fetch "2.6.1"
 
-"graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
+"graph-results-pager@git+https://github.com/LufyCZ/graph-results-pager.git":
   version "1.0.3"
-  resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
+  resolved "git+https://github.com/LufyCZ/graph-results-pager.git#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 
