@@ -25,18 +25,14 @@ export default function InfoCard() {
         <div className="flex flex-col max-w-xl w-full mb-2 mt-auto">
             <div className="flex max-w-lg">
                 <div className="text-body font-bold md:text-h5 text-high-emphesis self-end mb-3 md:mb-7">
-                    {i18n._(t`Maximize yield by staking SUSHI for xSUSHI`)}
+                    {i18n._(t`Stack SUSHI with NYAN 🐈`)}
                 </div>
                 {/* <div className="pl-6 pr-3 mb-1 min-w-max self-start md:hidden">
                     <img src={XSushiSignSmall} alt="xsushi sign" />
                 </div> */}
             </div>
             <div className="text-gray-500 text-sm leading-5 md:text-caption max-w-lg mb-2 md:mb-4 pr-3 md:pr-0">
-                {t`For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
-                xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
-                Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
-                SUSHI and any additional from fees.`}
+                {t`Meowshi is a cat-friendly SushiBar in BentoBox where chefs serve up extra SUSHI for NYAN.`}
             </div>
             {/* <div className="flex">
                 <div className="mr-14 md:mr-9">
