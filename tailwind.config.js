@@ -206,7 +206,8 @@ module.exports = {
                 }
             },
             minHeight: {
-                cardContent: '230px'
+                cardContent: '230px',
+                fitContent: 'fit-content'
             }
         }
     },
