@@ -3,15 +3,16 @@ import styled from 'styled-components'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import ErrorTriangle from '../../assets/images/error-triangle.svg'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BAR_ADDRESS, Token, TokenAmount } from '@sushiswap/sdk'
+import { Token, TokenAmount } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { BalanceProps } from '../../hooks/useTokenBalance'
 import { formatFromBalance, formatToBalance } from '../../utils'
-import useSushiBar from '../../hooks/useSushiBar'
+import useMeowshi from '../../hooks/useMeowshi'
 import TransactionFailedModal from './TransactionFailedModal'
 import { Button, Dots } from '../../components'
 import { t } from '@lingui/macro'
+import { SUSHI, XSUSHI, NYAN } from '../../constants'
 
 import sushiData from '@sushiswap/sushi-data'
 import { useLingui } from '@lingui/react'
@@ -49,26 +50,15 @@ const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
 const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
 
 interface StakeCardProps {
-    sushiBalance: BalanceProps
     xSushiBalance: BalanceProps
+    nyanBalance: BalanceProps
 }
 
-export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProps) {
+export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps) {
     const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
 
-    const { allowance, enter, leave } = useSushiBar()
-
-    const [exchangeRate, setExchangeRate] = useState<any>()
-    useEffect(() => {
-        const fetchData = async () => {
-            const results = await Promise.all([sushiData.bar.info()])
-            setExchangeRate(results[0].ratio)
-        }
-        fetchData()
-    }, [])
-
-    const xSushiPerSushi = parseFloat(exchangeRate)
+    const { allowance, nyan, unNyan } = useMeowshi()
 
     const walletConnected = !!account
     const toggleWalletModal = useWalletModalToggle()
@@ -76,7 +66,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
     const [activeTab, setActiveTab] = useState(0)
     const [modalOpen, setModalOpen] = useState(false)
 
-    const balance: BalanceProps = activeTab === 0 ? sushiBalance : xSushiBalance
+    const balance: BalanceProps = activeTab === 0 ? xSushiBalance : nyanBalance
     const formattedBalance = formatFromBalance(balance.value)
 
     const [input, setInput] = useState<string>('')
@@ -93,7 +83,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
         setUsingBalance(true)
     }
 
-    const insufficientFunds = (activeTab === 0 ? sushiBalance : xSushiBalance).value.lt(parsedInput.value)
+    const insufficientFunds = (activeTab === 0 ? xSushiBalance : nyanBalance).value.lt(parsedInput.value)
     const inputError = insufficientFunds
 
     const [pendingTx, setPendingTx] = useState(false)
@@ -117,14 +107,14 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         return
                     }
                 }
-                const success = await sendTx(() => enter(parsedInput))
+                const success = await sendTx(() => nyan(parsedInput))
                 if (!success) {
                     setPendingTx(false)
                     //setModalOpen(true)
                     return
                 }
             } else if (activeTab === 1) {
-                const success = await sendTx(() => leave(parsedInput))
+                const success = await sendTx(() => unNyan(parsedInput))
                 if (!success) {
                     setPendingTx(false)
                     //setModalOpen(true)
@@ -139,10 +129,10 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
 
     const [approvalState, approve] = useApproveCallback(
         new TokenAmount(
-            new Token(1, '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2', 18, 'SUSHI', ''),
+            new Token(1, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', ''),
             parsedInput.value.toString()
         ),
-        BAR_ADDRESS[1]
+        '0xEb8B45EB9084D05b25B045Ff8fE4d18fb1248B38'
     )
 
     console.log('approvalState:', approvalState, parsedInput.value.toString())
@@ -160,7 +150,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         }}
                     >
                         <div className={activeTab === 0 ? activeTabStyle : inactiveTabStyle}>
-                            <p>{i18n._(t`Stake SUSHI`)}</p>
+                            <p>{i18n._(t`NYAN xSUSHI`)}</p>
                         </div>
                     </div>
                     <div
@@ -171,20 +161,10 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                         }}
                     >
                         <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
-                            <p>{i18n._(t`Unstake`)}</p>
+                            <p>{i18n._(t`UNNYAN xSUSHI`)}</p>
                         </div>
                     </div>
                 </div>
-
-                <div className="flex justify-between items-center w-full mt-6">
-                    <p className="text-large md:text-h5 font-bold text-high-emphesis">
-                        {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
-                    </p>
-                    <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-caption md:font-normal">
-                        {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
-                    </div>
-                </div>
-
                 <StyledNumericalInput
                     value={input}
                     onUserInput={handleInput}
@@ -207,7 +187,7 @@ export default function StakeCard({ sushiBalance, xSushiBalance }: StakeCardProp
                                     input ? 'text-high-emphesis' : 'text-secondary'
                                 }`}
                             >
-                                {`${input ? input : '0'} ${activeTab === 0 ? '' : 'x'}SUSHI`}
+                                {`${input ? input : '0'} ${activeTab === 0 ? 'xSUSHI' : 'NYAN'}`}
                             </p>
                         </div>
                         <div className="flex items-center text-secondary text-caption2 md:text-caption">
