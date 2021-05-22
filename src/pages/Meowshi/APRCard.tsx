@@ -25,7 +25,7 @@ export default function APRCard() {
             <div className="flex flex-col">
                 <div className="flex flex-nowrap justify-center items-center mb-4 md:mb-2">
                     <p className="whitespace-nowrap text-caption2 md:text-lg md:leading-5 font-bold text-high-emphesis">
-                        {i18n._(t`Staking APR`)}{' '}
+                        {i18n._(t`Meowshi APR`)}{' '}
                     </p>
                     {/* <img className="cursor-pointer ml-3" src={MoreInfoSymbol} alt={'more info'} /> */}
                 </div>
