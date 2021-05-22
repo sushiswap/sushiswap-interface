@@ -26,7 +26,7 @@ export default function XSushi() {
             <Helmet>
                 <title>xSUSHI | Sushi</title>
             </Helmet>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full min-h-fitContent">
                 <div className="flex mb-6 justify-center">
                     <InfoCard />
                     <div className="hidden md:flex justify-center align-center w-72 ml-6">
