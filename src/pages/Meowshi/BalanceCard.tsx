@@ -1,5 +1,6 @@
 import { BalanceProps } from '../../hooks/useTokenBalance'
 import React from 'react'
+import MeowshiImage from '../../assets/images/meowshi.png'
 import SushiImage from '../../assets/images/sushi.png'
 import XSushiImage from '../../assets/images/xsushi.png'
 import { formatFromBalance } from '../../utils'
@@ -9,12 +10,14 @@ import { useLingui } from '@lingui/react'
 
 interface BalanceCardProps {
     sushiEarnings?: number
+    nyanBalance: BalanceProps
     xSushiBalance: BalanceProps
     sushiBalance: BalanceProps
     weightedApr?: number
 }
 
 export default function BalanceCard({
+    nyanBalance,
     xSushiBalance,
     sushiBalance,
     sushiEarnings = 0,
@@ -23,11 +26,28 @@ export default function BalanceCard({
     const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
     return (
+      <div className="flex flex-col w-full bg-dark-900 rounded px-4 md:px-8 pt-6 pb-5 md:pt-7 md:pb-9">
+          <div className="flex flex-wrap">
+              <div className="flex flex-col flex-grow md:mb-14">
+                  <p className="mb-3 text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">
+                      {i18n._(t`NYAN Balance`)}
+                  </p>
+                  <div className="flex items-center">
+                      <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={MeowshiImage} alt="meowshi" />
+                      <div className="flex flex-col justify-center">
+                          <p className="text-caption2 md:text-lg font-bold text-high-emphesis">
+                              {formatFromBalance(nyanBalance.value)}
+                          </p>
+                          <p className="text-caption2 md:text-caption text-primary">NYAN</p>
+                      </div>
+                  </div>
+              </div>
+
         <div className="flex flex-col w-full bg-dark-900 rounded px-4 md:px-8 pt-6 pb-5 md:pt-7 md:pb-9">
             <div className="flex flex-wrap">
                 <div className="flex flex-col flex-grow md:mb-14">
                     <p className="mb-3 text-lg font-bold md:text-h5 md:font-medium text-high-emphesis">
-                        {i18n._(t`Balance`)}
+                        {i18n._(t`xSUSHI Balance`)}
                     </p>
                     <div className="flex items-center">
                         <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={XSushiImage} alt="sushi" />
@@ -88,5 +108,6 @@ export default function BalanceCard({
                 </div>
             </div>
         </div>
+      </div></div>
     )
 }
