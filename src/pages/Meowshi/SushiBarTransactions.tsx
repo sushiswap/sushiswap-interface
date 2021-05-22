@@ -4,7 +4,7 @@ import BalanceCard from './BalanceCard'
 import { Button } from '../../components'
 import { ChevronLeft } from 'react-feather'
 import { ChainId } from '@sushiswap/sdk'
-import { SUSHI, XSUSHI } from '../../constants'
+import { SUSHI, XSUSHI, NYAN } from '../../constants'
 import useTokenBalance from '../../hooks/useTokenBalance'
 import { useHistory } from 'react-router-dom'
 import TransactionsPanel from './TransactionsPanel'
@@ -19,6 +19,7 @@ export default function SushiBarTransactions() {
 
     const sushiBalance = useTokenBalance(SUSHI[ChainId.MAINNET]?.address ?? '')
     const xSushiBalance = useTokenBalance(XSUSHI?.address ?? '')
+    const nyanBalance = useTokenBalance(NYAN?.address ?? '')
 
     const history = useHistory()
 
@@ -34,7 +35,7 @@ export default function SushiBarTransactions() {
                     </div>
 
                     <div className="md:hidden w-full max-w-xl mb-10">
-                        <BalanceCard sushiBalance={sushiBalance} xSushiBalance={xSushiBalance} />
+                        <BalanceCard nyanBalance={nyanBalance} sushiBalance={sushiBalance} xSushiBalance={xSushiBalance} />
                     </div>
 
                     <div className="text-h5 mb-5 md:mb-3 text-high-emphesis">Your History</div>
@@ -43,7 +44,7 @@ export default function SushiBarTransactions() {
             </div>
             <div className="flex flex-nowrap justify-center flex-row-reverse w-full">
                 <div className="hidden md:block h-full w-72 mb-10 ml-6 mt-16">
-                    <BalanceCard sushiBalance={sushiBalance} xSushiBalance={xSushiBalance} />
+                    <BalanceCard nyanBalance={nyanBalance} sushiBalance={sushiBalance} xSushiBalance={xSushiBalance} />
                 </div>
 
                 <div className="flex flex-1 max-w-screen-md flex-col mb-20 md:mb-0">
@@ -59,7 +60,7 @@ export default function SushiBarTransactions() {
                             <p className="text-high-emphesis font-bold">{`${mock.avgBalStaked} SUSHI`}</p>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
     )
