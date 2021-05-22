@@ -67,8 +67,7 @@ export const MERKLE_ROOT =
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-03/merkle-10959148-11094829.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-04/merkle-10959148-11140426.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-05/merkle-10959148-11185970.json'
-    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-06/merkle-10959148-11231587.json'
-    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-07/merkle-10959148-11277295.json'
+    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-06/merkle-10959148-11231587.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
@@ -214,6 +213,8 @@ export const XSUSHI_CALL = new Token(
 
 export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
 
+export const NYAN = new Token(ChainId.MAINNET, '0xEb8B45EB9084D05b25B045Ff8fE4d18fb1248B38', 18, 'NYAN', 'Meowshi')
+
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
@@ -232,7 +233,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
     },
     [ChainId.MATIC]: {
-        [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE]
+      [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE]
     }
 }
 
