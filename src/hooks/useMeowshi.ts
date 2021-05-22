@@ -1,27 +1,26 @@
-import { Fraction } from '../entities'
 import { ethers } from 'ethers'
 import { useCallback, useEffect, useState } from 'react'
-import useActiveWeb3React from '../hooks/useActiveWeb3React'
-import { useMeowshiContract, useSushiContract } from '../hooks/useContract'
+import Fraction from '../entities/Fraction'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useMeowshiContract, useSushiBarContract, useSushiContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { BalanceProps } from './useTokenBalance'
 
 const { BigNumber } = ethers
 
-const useMaker = () => {
+const useMeowshi = () => {
     const { account } = useActiveWeb3React()
-
     const addTransaction = useTransactionAdder()
     const sushiContract = useSushiContract(true) // withSigner
+    const barContract = useSushiBarContract(true) // withSigner
     const meowshiContract = useMeowshiContract(true) // withSigner
 
-    // Allowance
     const [allowance, setAllowance] = useState('0')
+
     const fetchAllowance = useCallback(async () => {
         if (account) {
             try {
-                const allowance = await sushiContract?.allowance(account, meowshiContract?.address)
-                console.log('allowance', allowance)
+                const allowance = await barContract?.allowance(account, meowshiContract?.address)
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
             } catch (error) {
@@ -29,32 +28,32 @@ const useMaker = () => {
                 throw error
             }
         }
-    }, [account, meowshiContract?.address, sushiContract])
+    }, [account, meowshiContract, barContract])
+
     useEffect(() => {
-        if (account && meowshiContract && sushiContract) {
+        if (account && meowshiContract && barContract) {
             fetchAllowance()
         }
         const refreshInterval = setInterval(fetchAllowance, 10000)
         return () => clearInterval(refreshInterval)
-    }, [account, fetchAllowance, meowshiContract, sushiContract])
+    }, [account, meowshiContract, fetchAllowance, barContract])
 
-    // Approve
     const approve = useCallback(async () => {
         try {
-            const tx = await sushiContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
+            const tx = await barContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
             return addTransaction(tx, { summary: 'Approve' })
         } catch (e) {
             return e
         }
-    }, [addTransaction, meowshiContract?.address, sushiContract])
+    }, [addTransaction, meowshiContract, barContract])
 
-    // Meowshi Sushi - xSUSHI - NYAN
-    const nyanSushi = useCallback(
+    const nyan = useCallback(
+        // todo: this should be updated with BigNumber as opposed to string
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await meowshiContract?.nyanSushi(account, amount?.value)
-                    return addTransaction(tx, { summary: 'SUSHI -> xSUSHI -> NYAN' })
+                    const tx = await meowshiContract?.nyan(account, amount?.value)
+                    return addTransaction(tx, { summary: 'Enter Meowshi' })
                 } catch (e) {
                     return e
                 }
@@ -63,7 +62,22 @@ const useMaker = () => {
         [addTransaction, meowshiContract]
     )
 
-    return { allowance, approve, nyanSushi }
+    const unNyan = useCallback(
+        // todo: this should be updated with BigNumber as opposed to string
+        async (amount: BalanceProps | undefined) => {
+            if (amount?.value) {
+                try {
+                    const tx = await meowshiContract?.unNyan(account, amount?.value)
+                    return addTransaction(tx, { summary: 'Leave Meowshi' })
+                } catch (e) {
+                    return e
+                }
+            }
+        },
+        [addTransaction, meowshiContract]
+    )
+
+    return { allowance, approve, nyan, unNyan }
 }
 
-export default useMaker
+export default useMeowshi
