@@ -174,6 +174,7 @@ export default function Stake() {
                 sushiData.exchange.dayData(),
                 sushiData.sushi.priceUSD()
             ])
+            console.log(results[1])
             const apr =
                 (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) * 365) / (results[0].ratio * results[2])
 

@@ -16,6 +16,12 @@ const tools = [
         name: 'SAAVE',
         description: '...',
         href: '/tools/saave'
+    },
+    {
+        id: 3,
+        name: "LP ZAP",
+        description: "Zap into an LP position for any pool using any asset",
+        href: '/zap'
     }
 ]
 

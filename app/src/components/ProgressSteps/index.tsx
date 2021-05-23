@@ -34,16 +34,17 @@ const Connector = styled.div<{ prevConfirmed?: boolean; disabled?: boolean }>`
     width: 100%;
     height: 2px;
     background-color: ;
-    background: linear-gradient(
-        90deg,
-        ${({ theme, prevConfirmed, disabled }) =>
-                disabled ? theme.bg4 : transparentize(0.5, prevConfirmed ? theme.green1 : theme.primary1)}
-            0%,
-        ${({ theme, prevConfirmed, disabled }) => (disabled ? theme.bg4 : prevConfirmed ? theme.primary1 : theme.bg4)}
-            80%
-    );
     opacity: 0.6;
 `
+
+// background: linear-gradient(
+    //     90deg,
+    //     ${({ theme, prevConfirmed, disabled }) =>
+    //             disabled ? theme.bg4 : transparentize(0.5, prevConfirmed ? theme.green1 : theme.primary1)}
+    //         0%,
+    //     ${({ theme, prevConfirmed, disabled }) => (disabled ? theme.bg4 : prevConfirmed ? theme.primary1 : theme.bg4)}
+    //         80%
+    // );
 
 interface ProgressCirclesProps {
     steps: boolean[]

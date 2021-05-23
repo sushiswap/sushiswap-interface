@@ -2089,6 +2089,19 @@
     "@babel/runtime" "^7.11.2"
     "@lingui/core" "^3.8.10"
 
+"@lufycz/sushi-data@^2.0.0-canary-25":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@lufycz/sushi-data/-/sushi-data-2.0.0-canary-25.tgz#13615d864a59fc4ad26da2ac96b6751be74cf97c"
+  integrity sha512-+aBy6JaPeash4xynpYWIZuFJiBNeI7XR9EIemniHpmU2rCbgF4VceKZBDfju22UstnPzhYYnIAnSBHxvP1ajsA==
+  dependencies:
+    date-fns "^2.17.0"
+    graph-results-pager LufyCZ/graph-results-pager#types
+    graphql "14.5.8"
+    graphql-request "^3.4.0"
+    isomorphic-ws "^4.0.1"
+    subscriptions-transport-ws "0.9.16"
+    ws "^7.4.4"
+
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
@@ -2455,9 +2468,9 @@
   integrity sha512-hT9XjJp4LH8NB4IAjzNCXllPxytvnpfW+qjwQtUgHPOJDFdWbe7OeBDB6jb+GmmLN7c3hRJbsXIpNXoaPPz+1Q==
 
 "@sushiswap/sushi-data@^1.0.24":
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.24.tgz#b2eaccf6d81266a7a86aa39fe68dbd20a6cf9571"
-  integrity sha512-zeoNIFZs4uTO4bz/W1369fULOK3NDPy6cEjmvTymM0zoaOK3E11kkqoMhunkOlez51qaDnL/29cfKWdvZatatg==
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sushi-data/-/sushi-data-1.0.26.tgz#6f9d68f0193d7bb3839262fe47dcd095478ee3e1"
+  integrity sha512-zGAL3un1K8J+mc4GyMhjOdJHYsnuwh7WiP4zlgvGyz1FJbFvnkv6NaKqh1bLAVCJDTZRFBZCzty7qp+6kX+nJw==
   dependencies:
     bluebird "^3.7.2"
     commander "6.1.0"
@@ -8279,9 +8292,15 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
   integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
-"graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
+graph-results-pager@LufyCZ/graph-results-pager#types:
   version "1.0.3"
-  resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
+  resolved "https://codeload.github.com/LufyCZ/graph-results-pager/tar.gz/d8667ea547e338b09026acef3e5b25da3e7208b7"
+  dependencies:
+    node-fetch "2.6.1"
+
+"graph-results-pager@git+https://github.com/LufyCZ/graph-results-pager.git":
+  version "1.0.3"
+  resolved "git+https://github.com/LufyCZ/graph-results-pager.git#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 
@@ -16359,6 +16378,11 @@ ws@^5.1.1, ws@^5.2.0:
   integrity sha512-jaHFD6PFv6UgoIVda6qZllptQsMlDEJkTQcybzzXDYM1XO9Y8em691FGMPmM46WGyLU4z9KMgQN+qrux/nhlHA==
   dependencies:
     async-limiter "~1.0.0"
+
+ws@^7.4.4:
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz#a484dd851e9beb6fdb420027e3885e8ce48986c1"
+  integrity sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
 
 xhr-request-promise@^0.1.2:
   version "0.1.3"

@@ -6,6 +6,7 @@ import burn from './burn/reducer'
 import lists from './lists/reducer'
 import mint from './mint/reducer'
 import multicall from './multicall/reducer'
+import zap from './zap/reducer'
 import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import { updateVersion } from './global/actions'
@@ -22,7 +23,8 @@ const store = configureStore({
         mint,
         burn,
         multicall,
-        lists
+        lists,
+        zap
     },
     middleware: [
         ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),

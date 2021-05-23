@@ -27,6 +27,7 @@ import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
+import ZAPPER_ABI from '../constants/abis/zapper.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
@@ -60,6 +61,7 @@ import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.
 import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 import WETH_ABI from '../constants/abis/weth.json'
 import { getContract } from '../functions/contract'
+import { getZapperAddress } from '../constants/addresses'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 
@@ -186,7 +188,7 @@ export function useFactoryContract(): Contract | null {
 
 export function useRouterContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, false)
+    return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
@@ -451,6 +453,12 @@ export function useSushiSwapTWAP0Oracle(): Contract | null {
 
 export function useSushiSwapTWAP1Oracle(): Contract | null {
     return useContract(SUSHISWAP_TWAP_1_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
+}
+
+export function useZapperContract(withSignerIfPossible?: boolean): Contract | null {
+    const { chainId } = useActiveWeb3React()
+    const address = getZapperAddress(chainId)
+    return useContract(address, ZAPPER_ABI, withSignerIfPossible)
 }
 
 export function useQuickSwapFactoryContract(): Contract | null {

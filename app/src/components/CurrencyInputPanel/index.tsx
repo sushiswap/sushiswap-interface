@@ -86,6 +86,7 @@ export default function CurrencyInputPanel({
     cornerRadiusTopNone,
     containerBackground
 }: CurrencyInputPanelProps) {
+    console.log(currency)
     const { i18n } = useLingui()
     const [modalOpen, setModalOpen] = useState(false)
     const { account, chainId } = useActiveWeb3React()
