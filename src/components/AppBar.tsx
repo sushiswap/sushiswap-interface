@@ -10,7 +10,7 @@ import Web3Network from './Web3Network'
 import Web3Status from './Web3Status'
 import MoreMenu from './Menu'
 import { ExternalLink, NavLink } from './Link'
-import { Disclosure } from '@headlessui/react'
+import { Popover } from '@headlessui/react'
 import { ANALYTICS_URL } from '../constants'
 import QuestionHelper from './QuestionHelper'
 import { t } from '@lingui/macro'
@@ -38,7 +38,7 @@ function AppBar(): JSX.Element {
 
     return (
         <header className="flex flex-row flex-nowrap justify-between w-screen">
-            <Disclosure as="nav" className={navClassList}>
+            <Popover as="nav" className={navClassList}>
                 {({ open }) => (
                     <>
                         <div className="px-4 py-1.5">
@@ -289,19 +289,19 @@ function AppBar(): JSX.Element {
                                 </div>
                                 <div className="-mr-2 flex sm:hidden">
                                     {/* Mobile menu button */}
-                                    <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
+                                    <Popover.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
                                         <span className="sr-only">{i18n._(t`Open main menu`)}</span>
                                         {open ? (
                                             <X title="Close" className="block h-6 w-6" aria-hidden="true" />
                                         ) : (
                                             <Burger title="Burger" className="block h-6 w-6" aria-hidden="true" />
                                         )}
-                                    </Disclosure.Button>
+                                    </Popover.Button>
                                 </div>
                             </div>
                         </div>
 
-                        <Disclosure.Panel className="sm:hidden">
+                        <Popover.Panel className="sm:hidden">
                             <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
                                 {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
                                 {/* <a
@@ -312,7 +312,7 @@ function AppBar(): JSX.Element {
                             </a> */}
 
                                 <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                    {i18n._(t`Swap`)}
+                                    <Popover.Button className="w-full text-left">{i18n._(t`Swap`)}</Popover.Button>
                                 </NavLink>
                                 <NavLink
                                     id={`pool-nav-link`}
@@ -325,34 +325,34 @@ function AppBar(): JSX.Element {
                                         pathname.startsWith('/find')
                                     }
                                 >
-                                    {i18n._(t`Pool`)}
+                                    <Popover.Button className="w-full text-left">{i18n._(t`Pool`)}</Popover.Button>
                                 </NavLink>
 
                                 {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                        {i18n._(t`Yield`)}
+                                        <Popover.Button className="w-full text-left">{i18n._(t`Yield`)}</Popover.Button>
                                     </NavLink>
                                 )}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                            {i18n._(t`Kashi Lending`)}
+                                            <Popover.Button className="w-full text-left">{i18n._(t`Kashi Lending`)}</Popover.Button>
                                         </NavLink>
                                     )}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                            {i18n._(t`BentoBox`)}
+                                            <Popover.Button className="w-full text-left">{i18n._(t`BentoBox`)}</Popover.Button>
                                         </NavLink>
                                     )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/sushibar'}>
-                                        {i18n._(t`SushiBar`)}
+                                        <Popover.Button className="w-full text-left">{i18n._(t`SushiBar`)}</Popover.Button>
                                     </NavLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                        {i18n._(t`Vesting`)}
+                                        <Popover.Button className="w-full text-left">{i18n._(t`Vesting`)}</Popover.Button>
                                     </NavLink>
                                 )}
                                 {chainId &&
@@ -367,14 +367,14 @@ function AppBar(): JSX.Element {
                                             id={`analytics-nav-link`}
                                             href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                         >
-                                            {i18n._(t`Analytics`)}
+                                            <Popover.Button className="w-full text-left">{i18n._(t`Analytics`)}</Popover.Button>
                                         </ExternalLink>
                                     )}
                             </div>
-                        </Disclosure.Panel>
+                        </Popover.Panel>
                     </>
                 )}
-            </Disclosure>
+            </Popover>
         </header>
     )
 }
