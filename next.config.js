@@ -15,11 +15,12 @@ module.exports = withPWA({
     domains: ['raw.githubusercontent.com', 'ftmscan.com'],
   },
   reactStrictMode: true,
-  async rewrites() {
+  async redirects() {
     return [
       {
         source: '/',
         destination: '/swap',
+        permanent: true,
       },
     ]
   },
