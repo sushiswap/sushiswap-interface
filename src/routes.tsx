@@ -30,6 +30,7 @@ import {
 } from './pages/Swap/redirects'
 import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
+import Token from 'pages/Token'
 import AddSingleSideLiquidity from './pages/AddSingleSideLiquidity'
 import MasterChefV1 from './pages/Yield/masterchefv1'
 import MiniChefV2 from './pages/Yield/minichefv2'
@@ -83,6 +84,7 @@ function Routes(): JSX.Element {
             <Route exact strict path="/pool" component={Pool} />
             <Route exact strict path="/transactions" component={Transactions} />
             <Route exact strict path="/create" component={RedirectToAddLiquidity} />
+            <Route exact strict path="/tokenmock" component={Token} />
             <Route exact path="/add" component={AddLiquidity} />
             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
             <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
