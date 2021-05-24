@@ -9,6 +9,8 @@ import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -59,6 +61,7 @@ export function useDerivedMintInfo(
     poolTokenPercentage?: Percent
     error?: string
 } {
+    const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
 
     const { independentField, typedValue, otherTypedValue } = useMintState()
@@ -175,25 +178,25 @@ export function useDerivedMintInfo(
 
     let error: string | undefined
     if (!account) {
-        error = 'Connect Wallet'
+        error = i18n._(t`Connect Wallet`)
     }
 
     if (pairState === PairState.INVALID) {
-        error = error ?? 'Invalid pair'
+        error = error ?? i18n._(t`Invalid pair`)
     }
 
     if (!parsedAmounts[Field.CURRENCY_A] || !parsedAmounts[Field.CURRENCY_B]) {
-        error = error ?? 'Enter an amount'
+        error = error ?? i18n._(t`Enter an amount`)
     }
 
     const { [Field.CURRENCY_A]: currencyAAmount, [Field.CURRENCY_B]: currencyBAmount } = parsedAmounts
 
     if (currencyAAmount && currencyBalances?.[Field.CURRENCY_A]?.lessThan(currencyAAmount)) {
-        error = 'Insufficient ' + currencies[Field.CURRENCY_A]?.getSymbol(chainId) + ' balance'
+        error = i18n._(t`Insufficient ${currencies[Field.CURRENCY_A]?.getSymbol(chainId)} balance`)
     }
 
     if (currencyBAmount && currencyBalances?.[Field.CURRENCY_B]?.lessThan(currencyBAmount)) {
-        error = 'Insufficient ' + currencies[Field.CURRENCY_B]?.getSymbol(chainId) + ' balance'
+        error = i18n._(t`Insufficient ${currencies[Field.CURRENCY_B]?.getSymbol(chainId)} balance`)
     }
 
     return {

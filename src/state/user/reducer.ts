@@ -1,13 +1,11 @@
-import { createReducer } from '@reduxjs/toolkit'
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
-import { updateVersion } from '../global/actions'
 import {
+    SerializedPair,
+    SerializedToken,
     addSerializedPair,
     addSerializedToken,
     removeSerializedPair,
     removeSerializedToken,
-    SerializedPair,
-    SerializedToken,
     toggleURLWarning,
     updateMatchesDarkMode,
     updateUserDarkMode,
@@ -16,6 +14,9 @@ import {
     updateUserSingleHopOnly,
     updateUserSlippageTolerance
 } from './actions'
+
+import { createReducer } from '@reduxjs/toolkit'
+import { updateVersion } from '../global/actions'
 
 const currentTimestamp = () => new Date().getTime()
 

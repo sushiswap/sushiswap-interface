@@ -82,6 +82,7 @@ interface ModalProps {
     initialFocusRef?: React.RefObject<any>
     children?: React.ReactNode
     padding?: number
+    noPadding?: boolean
 }
 
 export default function Modal({
@@ -91,7 +92,8 @@ export default function Modal({
     maxHeight = 90,
     initialFocusRef,
     children,
-    padding = 5
+    padding = 5,
+    noPadding = false
 }: ModalProps) {
     const fadeTransition = useTransition(isOpen, null, {
         config: { duration: 200 },
@@ -139,7 +141,9 @@ export default function Modal({
                             >
                                 <div className="bg-gradient-to-r from-blue to-pink w-full rounded p-px">
                                     <div
-                                        className={`flex flex-col h-full w-full bg-dark-900 rounded p-6 overflow-y-auto`}
+                                        className={`flex flex-col h-full w-full bg-dark-900 rounded overflow-y-auto ${
+                                            noPadding ? 'p-0' : 'p-6'
+                                        }`}
                                     >
                                         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
                                         {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}

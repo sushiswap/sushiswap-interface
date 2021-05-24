@@ -1,40 +1,14 @@
-import { CurrencyAmount, JSBI, Token, Trade, ChainId } from '@sushiswap/sdk'
-import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
-import { useIsTransactionUnsupported } from 'hooks/Trades'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { ArrowDown } from 'react-feather'
-import ReactGA from 'react-ga'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
-import { isTradeBetter } from 'utils/trades'
-import AddressInputPanel from '../../components/AddressInputPanel'
-import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import Card, { GreyCard } from '../../components/CardLegacy'
-import Column, { AutoColumn } from '../../components/Column'
-import CurrencyInputPanel from '../../components/CurrencyInputPanel'
-import Loader from '../../components/Loader'
-import { SwapPoolTabs } from '../../components/NavigationTabs'
-import ProgressSteps from '../../components/ProgressSteps'
-import { AutoRow, RowBetween } from '../../components/Row'
-import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
-import BetterTradeLink, { DefaultVersionLink } from '../../components/swap/BetterTradeLink'
-import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
-import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
-import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
-import SwapHeader from '../../components/ExchangeHeader'
-import TradePrice from '../../components/swap/TradePrice'
-import TokenWarningModal from '../../components/TokenWarningModal'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
-import { getTradeVersion } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
-import useENSAddress from '../../hooks/useENSAddress'
-import { useSwapCallback } from '../../hooks/useSwapCallback'
-import useToggledVersion, { DEFAULT_VERSION, Version } from '../../hooks/useToggledVersion'
-import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
-import { useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
-import { Field } from '../../state/swap/actions'
+import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from '../../components/swap/styleds'
+import { AutoRow, RowBetween } from '../../components/Row'
+import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
+import Card, { DarkCard, GreyCard } from '../../components/CardLegacy'
+import { ChainId, CurrencyAmount, JSBI, Token, Trade } from '@sushiswap/sdk'
+import Column, { AutoColumn } from '../../components/Column'
+import { LinkStyledButton, TYPE } from '../../theme'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
+import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import {
     useDefaultsFromURLSearch,
     useDerivedSwapInfo,
@@ -42,20 +16,46 @@ import {
     useSwapState
 } from '../../state/swap/hooks'
 import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } from '../../state/user/hooks'
-import { LinkStyledButton, TYPE } from '../../theme'
-import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
+import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
+import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
+
+import AddressInputPanel from '../../components/AddressInputPanel'
+import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
+import { ArrowDown } from 'react-feather'
 import { ClickableText } from '../Pool/styleds'
-import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
-import Lottie from 'lottie-react'
+import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
+import CurrencyInputPanel from '../../components/CurrencyInputPanel'
+import { Field } from '../../state/swap/actions'
 import { Helmet } from 'react-helmet'
-import { DarkCard, DarkBlueCard } from '../../components/CardLegacy'
-
-import { useNetworkModalToggle } from '../../state/application/hooks'
-
+import { INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { Link } from 'react-router-dom'
+import Loader from '../../components/Loader'
+import Lottie from 'lottie-react'
 import PolygonLogo from '../../assets/images/matic-logo.png'
+import ProgressSteps from '../../components/ProgressSteps'
+import ReactGA from 'react-ga'
+import SwapHeader from '../../components/ExchangeHeader'
+import { SwapPoolTabs } from '../../components/NavigationTabs'
+import { Text } from 'rebass'
+import { ThemeContext } from 'styled-components'
+import TokenWarningModal from '../../components/TokenWarningModal'
+import TradePrice from '../../components/swap/TradePrice'
+import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
+import confirmPriceImpactWithoutFee from '../../components/swap/confirmPriceImpactWithoutFee'
+import { isTradeBetter } from 'utils/trades'
+import { maxAmountSpend } from '../../utils/maxAmountSpend'
+import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
+import { t, Trans } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import useENSAddress from '../../hooks/useENSAddress'
+import { useIsTransactionUnsupported } from 'hooks/Trades'
+import { useLingui } from '@lingui/react'
+import { useSwapCallback } from '../../hooks/useSwapCallback'
+import MisoBanner from '../../assets/images/miso-banner.jpg'
+import MisoLogo from '../../assets/images/miso-logo.png'
 
 export default function Swap() {
+    const { i18n } = useLingui()
     const toggleNetworkModal = useNetworkModalToggle()
 
     const loadedUrlParams = useDefaultsFromURLSearch()
@@ -97,14 +97,7 @@ export default function Swap() {
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
-    const {
-        v1Trade,
-        v2Trade,
-        currencyBalances,
-        parsedAmount,
-        currencies,
-        inputError: swapInputError
-    } = useDerivedSwapInfo()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
     const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
         currencies[Field.INPUT],
         currencies[Field.OUTPUT],
@@ -112,16 +105,8 @@ export default function Swap() {
     )
     const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
     const { address: recipientAddress } = useENSAddress(recipient)
-    const toggledVersion = useToggledVersion()
-    const tradesByVersion = {
-        [Version.v1]: v1Trade,
-        [Version.v2]: v2Trade
-    }
-    const trade = showWrap ? undefined : tradesByVersion[toggledVersion]
-    const defaultTrade = showWrap ? undefined : tradesByVersion[DEFAULT_VERSION]
 
-    const betterTradeLinkV2: Version | undefined =
-        toggledVersion === Version.v1 && isTradeBetter(v1Trade, v2Trade) ? Version.v2 : undefined
+    const trade = showWrap ? undefined : v2Trade
 
     const parsedAmounts = showWrap
         ? {
@@ -237,8 +222,7 @@ export default function Swap() {
                             : 'Swap w/ Send',
                     label: [
                         trade?.inputAmount?.currency?.getSymbol(chainId),
-                        trade?.outputAmount?.currency?.getSymbol(chainId),
-                        getTradeVersion(trade)
+                        trade?.outputAmount?.currency?.getSymbol(chainId)
                     ].join('/')
                 })
 
@@ -319,7 +303,7 @@ export default function Swap() {
     return (
         <>
             <Helmet>
-                <title>Swap | Sushi</title>
+                <title>{i18n._(t`Swap`)} | Sushi</title>
                 <meta
                     name="description"
                     content="Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
@@ -347,32 +331,39 @@ export default function Swap() {
                         swapErrorMessage={swapErrorMessage}
                         onDismiss={handleConfirmDismiss}
                     />
-                    {/* {chainId && chainId === ChainId.MATIC && (
-                        <div className="hidden md:block pb-4">
+                    {chainId && chainId === ChainId.MATIC && (
+                        <div className="hidden md:block pb-4 space-y-2">
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-high-emphesis">Welcome to Sushi on Polygon (Matic)</div>
-                                        <div className="text-high-emphesis text-sm">New network, new features</div>
+                                        <div className="text-white">New Yield Farms! renDOGE, SNX, USDC, DAI</div>
+                                        <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
-                                    <a
+                                    <div className=""></div>
+                                    <Link
+                                        to="/yield"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
+                                    >
+                                        Visit Yield
+                                    </Link>
+                                    {/* <a
                                         href="https://ayokiroll.medium.com/cf7e932f3a8"
                                         target="_blank"
                                         rel="noreferrer noopener"
-                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-high-emphesis text-high-emphesis"
+                                        className="inline-flex items-center rounded-sm px-3 py-2 border-2 border-purple text-purple"
                                     >
                                         Read Tutorial
-                                    </a>
+                                    </a> */}
                                 </div>
                             </DarkCard>
                         </div>
-                    )} */}
+                    )}
                     <AutoColumn gap={'md'}>
                         <CurrencyInputPanel
                             label={
                                 independentField === Field.OUTPUT && !showWrap && trade
-                                    ? 'Swap From (est.):'
-                                    : 'Swap From:'
+                                    ? i18n._(t`Swap From (est.):`)
+                                    : i18n._(t`Swap From:`)
                             }
                             value={formattedAmounts[Field.INPUT]}
                             showMaxButton={!atMaxAmountInput}
@@ -436,7 +427,9 @@ export default function Swap() {
                             value={formattedAmounts[Field.OUTPUT]}
                             onUserInput={handleTypeOutput}
                             label={
-                                independentField === Field.INPUT && !showWrap && trade ? 'Swap To (est.):' : 'Swap To:'
+                                independentField === Field.INPUT && !showWrap && trade
+                                    ? i18n._(t`Swap To (est.):`)
+                                    : i18n._(t`Swap To:`)
                             }
                             showMaxButton={false}
                             currency={currencies[Field.OUTPUT]}
@@ -455,7 +448,7 @@ export default function Swap() {
                                         id="remove-recipient-button"
                                         onClick={() => onChangeRecipient(null)}
                                     >
-                                        - Remove send
+                                        - {i18n._(t`Remove send`)}
                                     </LinkStyledButton>
                                 </AutoRow>
                                 <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
@@ -468,7 +461,7 @@ export default function Swap() {
                                     {Boolean(trade) && (
                                         <RowBetween align="center">
                                             <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                                Price
+                                                {i18n._(t`Price`)}
                                             </Text>
                                             <TradePrice
                                                 price={trade?.executionPrice}
@@ -485,7 +478,7 @@ export default function Swap() {
                                                 color={theme.text2}
                                                 onClick={toggleSettings}
                                             >
-                                                Slippage Tolerance
+                                                {i18n._(t`Slippage Tolerance`)}
                                             </ClickableText>
                                             <ClickableText
                                                 fontWeight={500}
@@ -504,23 +497,25 @@ export default function Swap() {
                     <BottomGrouping>
                         {swapIsUnsupported ? (
                             <ButtonPrimary disabled={true}>
-                                <TYPE.main mb="4px">Unsupported Asset</TYPE.main>
+                                <TYPE.main mb="4px">{i18n._(t`Unsupported Asset`)}</TYPE.main>
                             </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>Connect Wallet</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
                         ) : showWrap ? (
                             <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                                 {wrapInputError ??
                                     (wrapType === WrapType.WRAP
-                                        ? 'Wrap'
+                                        ? i18n._(t`Wrap`)
                                         : wrapType === WrapType.UNWRAP
-                                        ? 'Unwrap'
+                                        ? i18n._(t`Unwrap`)
                                         : null)}
                             </ButtonPrimary>
                         ) : noRoute && userHasSpecifiedInputOutput ? (
                             <GreyCard style={{ textAlign: 'center' }}>
-                                <TYPE.main mb="4px">Insufficient liquidity for this trade.</TYPE.main>
-                                {singleHopOnly && <TYPE.main mb="4px">Try enabling multi-hop trades.</TYPE.main>}
+                                <TYPE.main mb="4px">{i18n._(t`Insufficient liquidity for this trade`)}</TYPE.main>
+                                {singleHopOnly && (
+                                    <TYPE.main mb="4px">{i18n._(t`Try enabling multi-hop trades`)}</TYPE.main>
+                                )}
                             </GreyCard>
                         ) : showApproveFlow ? (
                             <RowBetween>
@@ -536,9 +531,9 @@ export default function Swap() {
                                             Approving <Loader stroke="white" />
                                         </AutoRow>
                                     ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                                        'Approved'
+                                        i18n._(t`Approved`)
                                     ) : (
-                                        'Approve ' + currencies[Field.INPUT]?.getSymbol(chainId)
+                                        i18n._(t`Approve ${currencies[Field.INPUT]?.getSymbol(chainId)}`)
                                     )}
                                 </ButtonConfirmed>
                                 <ButtonError
@@ -566,8 +561,10 @@ export default function Swap() {
                                 >
                                     <Text fontSize={16} fontWeight={500}>
                                         {priceImpactSeverity > 3 && !isExpertMode
-                                            ? `Price Impact High`
-                                            : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                            ? i18n._(t`Price Impact High`)
+                                            : priceImpactSeverity > 2
+                                            ? i18n._(t`Swap Anyway`)
+                                            : i18n._(t`Swap`)}
                                     </Text>
                                 </ButtonError>
                             </RowBetween>
@@ -594,8 +591,10 @@ export default function Swap() {
                                     {swapInputError
                                         ? swapInputError
                                         : priceImpactSeverity > 3 && !isExpertMode
-                                        ? `Price Impact Too High`
-                                        : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                                        ? i18n._(t`Price Impact Too High`)
+                                        : priceImpactSeverity > 2
+                                        ? i18n._(t`Swap Anyway`)
+                                        : i18n._(t`Swap`)}
                                 </Text>
                             </ButtonError>
                         )}
@@ -605,30 +604,49 @@ export default function Swap() {
                             </Column>
                         )}
                         {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-                        {betterTradeLinkV2 && !swapIsUnsupported && toggledVersion === Version.v1 ? (
-                            <BetterTradeLink version={betterTradeLinkV2} />
-                        ) : toggledVersion !== DEFAULT_VERSION && defaultTrade ? (
-                            <DefaultVersionLink />
-                        ) : null}
                     </BottomGrouping>
-                    {!trade && chainId && chainId === ChainId.MAINNET && (
-                        <div
-                            className="hidden sm:block w-full cursor-pointer pt-4 w-full"
-                            onClick={() => toggleNetworkModal()}
-                        >
-                            <DarkCard>
-                                <div className="flex justify-between items-center overflow-hidden">
-                                    <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />
-                                    <div className="pl-32">
-                                        <div className="text-high-emphesis">Check out Sushi on Polygon (Matic)</div>
-                                        <div className="text-high-emphesis text-sm">
-                                            Click here to switch to Polygon using Metamask
-                                        </div>
-                                    </div>
-                                </div>
-                            </DarkCard>
+                    {/*{!trade && chainId && chainId === ChainId.MAINNET && (*/}
+                    {/*    <div*/}
+                    {/*        className="hidden sm:block w-full cursor-pointer pt-4"*/}
+                    {/*        onClick={() => toggleNetworkModal()}*/}
+                    {/*    >*/}
+                    {/*        <DarkCard>*/}
+                    {/*            <div className="flex justify-between items-center overflow-hidden">*/}
+                    {/*                <img src={PolygonLogo} className="w-24 h-24 absolute top-2" alt="" />*/}
+                    {/*                <div className="pl-32">*/}
+                    {/*                    <div className="text-high-emphesis">*/}
+                    {/*                        {i18n._(t`Check out Sushi on Polygon (Matic)`)}*/}
+                    {/*                    </div>*/}
+                    {/*                    <div className="text-high-emphesis text-sm">*/}
+                    {/*                        {i18n._(t`Click here to switch to Polygon using Metamask`)}*/}
+                    {/*                    </div>*/}
+                    {/*                </div>*/}
+                    {/*            </div>*/}
+                    {/*        </DarkCard>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
+                    <a
+                        href="https://miso.sushi.com"
+                        className="hidden sm:block w-full cursor-pointer mt-4 py-6 rounded"
+                        style={{
+                            backgroundImage: `url(${MisoBanner})`,
+                            backgroundPosition: 'center',
+                            backgroundSize: 'cover',
+                            backgroundRepeat: 'no-repeat'
+                        }}
+                    >
+                        <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                            <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
+                                <Trans>
+                                    Pour a hot bowl of MISO, the new <span className="font-bold">token launchpad</span>{' '}
+                                    from SUSHI
+                                </Trans>
+                            </span>
+                            <div style={{ maxWidth: 195 }}>
+                                <img src={MisoLogo} style={{ maxWidth: '100%' }} />
+                            </div>
                         </div>
-                    )}
+                    </a>
                 </Wrapper>
             </div>
             {!swapIsUnsupported ? (

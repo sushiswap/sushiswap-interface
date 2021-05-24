@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react'
-import { Route, Switch, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { AppBar, Polling, Popups } from '../components'
 import Web3ReactManager from '../components/Web3ReactManager'
 import ReactGA from 'react-ga'
@@ -16,13 +16,19 @@ function App(): JSX.Element {
 
     const dispatch = useDispatch<AppDispatch>()
 
-    const [wrapperClassList, setWrapperClassList] = useState("flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20")
+    const [wrapperClassList, setWrapperClassList] = useState(
+        'flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20'
+    )
 
     useEffect(() => {
-        if(pathname === '/trade') {
-            setWrapperClassList("flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0")
+        if (pathname === '/trade') {
+            setWrapperClassList(
+                'flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0'
+            )
         } else {
-            setWrapperClassList("flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20")
+            setWrapperClassList(
+                'flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20'
+            )
         }
     }, [pathname])
 
@@ -60,10 +66,7 @@ function App(): JSX.Element {
         <Suspense fallback={null}>
             <div className="flex flex-col items-start overflow-x-hidden h-screen">
                 <AppBar />
-                <div
-                    ref={bodyRef}
-                    className={wrapperClassList}
-                >
+                <div ref={bodyRef} className={wrapperClassList}>
                     <Popups />
                     <Polling />
                     <Web3ReactManager>

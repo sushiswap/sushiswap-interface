@@ -1,7 +1,11 @@
 import React from 'react'
 import { Search as SearchIcon } from 'react-feather'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export default function Search({ term, search }: any) {
+    const { i18n } = useLingui()
+
     return (
         <div className="relative w-full sm:max-w-xl md:max-w-sm flex-end">
             <input
@@ -9,7 +13,7 @@ export default function Search({ term, search }: any) {
                 onChange={e => search(e.target.value)}
                 style={{ background: '#161522' }}
                 value={term}
-                placeholder="Search by name, symbol, address"
+                placeholder={i18n._(t`Search by name, symbol, address`)}
             />
             <div className="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
                 <SearchIcon size={16} />

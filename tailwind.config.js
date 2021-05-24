@@ -204,6 +204,10 @@ module.exports = {
                     '33%': { content: '".."' },
                     '66%': { content: '"..."' }
                 }
+            },
+            minHeight: {
+                cardContent: '230px',
+                fitContent: 'fit-content'
             }
         }
     },

@@ -1,14 +1,17 @@
+import { exchange, masterchef } from 'apollo/client'
+import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
+import { useCallback, useEffect, useState } from 'react'
+
 import { BigNumber } from '@ethersproject/bignumber'
+import Fraction from '../entities/Fraction'
+import { POOL_DENY } from '../constants'
+import concat from 'lodash/concat'
+import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
+import orderBy from 'lodash/orderBy'
+import range from 'lodash/range'
 import sushiData from '@sushiswap/sushi-data'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useBoringHelperContract } from 'hooks/useContract'
-import _ from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
-import { exchange, masterchef } from 'apollo/client'
-import { getAverageBlockTime } from 'apollo/getAverageBlockTime'
-import { liquidityPositionSubsetQuery, pairSubsetQuery, poolsQuery } from 'apollo/queries'
-import { POOL_DENY } from '../constants'
-import Fraction from '../entities/Fraction'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
 const useFarms = () => {
@@ -47,11 +50,19 @@ const useFarms = () => {
         const sushiPrice = results[3]
         const kashiPairs = results[4].filter(result => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
 
-        //console.log('kashiPairs:', kashiPairs)
-
         const pairs = pairsQuery?.data.pairs
-        const KASHI_PAIRS = _.range(190, 230, 1) // kashiPair pids 189-229
-        //console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
+        const KASHI_PAIRS = pools
+            .filter((pool: any) => {
+                const hasPair = kashiPairs.find((kashiPair: any) => kashiPair?.id === pool?.pair)
+                console.log('pool.pair:', pool.pair, pool.id, hasPair)
+
+                return hasPair
+            })
+            .map((pool: any) => {
+                return Number(pool.id)
+            })
+        //const KASHI_PAIRS = concat(range(190, 230, 1), range(245, 250, 1), range(264, 268, 1)) // kashiPair pids 190-229, 245-249
+        //console.log('kashiPairs:', KASHI_PAIRS.length, kashiPairs.length, kashiPairs, KASHI_PAIRS)
 
         const farms = pools
             .filter((pool: any) => {
@@ -91,8 +102,8 @@ const useFarms = () => {
                     const liquidityPosition = liquidityPositions.find(
                         (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
                     )
-                    const blocksPerHour = 3600 / averageBlockTime
-                    const balance = Number(pool.balance / 1e18) > 0 ? Number(pool.balance / 1e18) : 0.1
+                    const blocksPerHour = 3600 / Number(averageBlockTime)
+                    const balance = Number(pool.balance / 1e18)
                     const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
                     const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
                     const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
@@ -103,6 +114,21 @@ const useFarms = () => {
                     const roiPerDay = roiPerHour * 24
                     const roiPerMonth = roiPerDay * 30
                     const roiPerYear = roiPerMonth * 12
+
+                    // // Logging:
+                    // const tempSymbol = pair.token0.symbol + '-' + pair.token1.symbol
+                    // if (tempSymbol === 'WBTC-ibBTC' || tempSymbol === 'BTC2x-FLI-WBTC' || tempSymbol === 'BASK-WETH') {
+                    //     console.log(pair.token0.symbol + '-' + pair.token1.symbol, {
+                    //         totalSupply: totalSupply,
+                    //         reserveUSD: reserveUSD,
+                    //         balance: balance,
+                    //         poolBalance: pool.balance,
+                    //         roiPerBlock: roiPerBlock,
+                    //         rewardPerBlock: rewardPerBlock,
+                    //         sushiPrice: sushiPrice,
+                    //         balanceUSD: balanceUSD
+                    //     })
+                    // }
 
                     return {
                         ...pool,
@@ -127,7 +153,7 @@ const useFarms = () => {
             })
 
         //console.log('farms:', farms)
-        const sorted = _.orderBy(farms, ['pid'], ['desc'])
+        const sorted = orderBy(farms, ['pid'], ['desc'])
 
         const pids = sorted.map(pool => {
             return pool.pid

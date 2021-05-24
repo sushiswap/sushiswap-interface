@@ -1,5 +1,5 @@
 export * from './bentobox'
-export { default as getTokenIcon } from './getTokenIcon'
+export { default as getTokenIconUrl } from './getTokenIconUrl'
 export * from './kashi'
 export * from './math'
 export * from './rebase'

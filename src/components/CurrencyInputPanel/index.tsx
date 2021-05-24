@@ -1,23 +1,22 @@
 import { Currency, Pair, ChainId } from '@sushiswap/sdk'
 import { darken } from 'polished'
 import React, { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useTheme from '../../hooks/useTheme'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { TYPE } from '../../theme'
 import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import { Input as NumericalInput } from '../NumericalInput'
-import { RowBetween } from '../Row'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import Button from '../Button'
 import selectCoinAnimation from '../../assets/animation/select-coin.json'
 import Lottie from 'lottie-react'
 import { useUSDCPrice } from '../../hooks'
 import { formattedNum } from '../../utils'
+import { useLingui } from '@lingui/react'
 
 const InputRow = styled.div<{ selected: boolean }>`
     ${({ theme }) => theme.flexRowNoWrap}
@@ -147,8 +146,7 @@ export default function CurrencyInputPanel({
     cornerRadiusTopNone,
     containerBackground
 }: CurrencyInputPanelProps) {
-    const { t } = useTranslation()
-
+    const { i18n } = useLingui()
     const [modalOpen, setModalOpen] = useState(false)
     const { account, chainId } = useActiveWeb3React()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
@@ -215,7 +213,7 @@ export default function CurrencyInputPanel({
                                     margin={true}
                                 />
                             ) : currency ? (
-                                <div className="flex-1">
+                                <div className="flex">
                                     <CurrencyLogo currency={currency} size={'54px'} />
                                 </div>
                             ) : (
@@ -230,7 +228,7 @@ export default function CurrencyInputPanel({
                                     {pair?.token0.symbol}:{pair?.token1.symbol}
                                 </StyledTokenName>
                             ) : (
-                                <div className="flex flex-1 flex-col items-start justify-center mx-3.5">
+                                <div className="flex flex-1 flex-col items-start justify-center w-full text-left mx-3.5 overflow-x-hidden">
                                     {label && (
                                         <div className="text-xs text-secondary font-medium whitespace-nowrap">
                                             {label}
@@ -241,7 +239,7 @@ export default function CurrencyInputPanel({
                                             className="token-symbol-container"
                                             active={Boolean(currency && currency.symbol)}
                                         > */}
-                                        <div className="text-lg md:text-2xl font-bold">
+                                        <div className="text-lg md:text-2xl font-bold whitespace-nowrap">
                                             {(currency && currency.symbol && currency.symbol.length > 20
                                                 ? currency.symbol.slice(0, 4) +
                                                   '...' +
@@ -251,7 +249,7 @@ export default function CurrencyInputPanel({
                                                   )
                                                 : currency?.getSymbol(chainId)) || (
                                                 <div className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full px-2 py-1 text-secondary text-xs font-medium mt-1 whitespace-nowrap ">
-                                                    {t('selectToken')}
+                                                    {i18n._(t`Select a token`)}
                                                 </div>
                                             )}
                                         </div>
@@ -286,7 +284,7 @@ export default function CurrencyInputPanel({
                                     size="small"
                                     className="bg-transparent hover:bg-primary border border-low-emphesis rounded-full text-secondary text-xs font-medium whitespace-nowrap"
                                 >
-                                    Max
+                                    {i18n._(t`Max`)}
                                 </Button>
                             )}
                             <NumericalInput

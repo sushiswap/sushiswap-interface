@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Input as PercentInput } from '../PercentInput'
+import { RowBetween } from '../Row'
 
 const FancyButton = styled.button`
     color: ${({ theme }) => theme.text1};
@@ -18,6 +19,18 @@ const FancyButton = styled.button`
     }
     :focus {
         border: 1px solid ${({ theme }) => theme.primary1};
+    }
+    @media (max-width: 500px) and (min-width: 480px) {
+        min-width: 2rem;
+        font-size: 0.8rem;
+    }
+    @media (max-width: 530px) and (min-width: 500px) {
+        min-width: 2.5rem;
+        font-size: 0.9rem;
+    }
+    @media (max-width: 570px) and (min-width: 530px) {
+        min-width: 3rem;
+        font-size: 1rem;
     }
 `
 
@@ -43,41 +56,44 @@ export default function PercentInputPanel({ value, onUserInput, id }: PercentInp
                 <div className="w-full sm:w-2/5 text-white" style={{ margin: 'auto 0px' }}>
                     Amount to Remove
                 </div>
-                <div className="flex items-center rounded bg-dark-900 font-bold text-xl space-x-3 p-3 w-full sm:w-3/5">
-                    <Option
-                        onClick={() => {
-                            onUserInput("25")
-                        }}
-                        active={+value === 25}
-                    >
-                        25%
-                    </Option>
-                    <Option
-                        onClick={() => {
-                            onUserInput("50")
-                        }}
-                        active={+value === 50}
-                    >
-                        50%
-                    </Option>
-                    <Option
-                        onClick={() => {
-                            onUserInput("75")
-                        }}
-                        active={+value === 75}
-                    >
-                        75%
-                    </Option>
-
-                    <PercentInput
-                        className="token-amount-input"
-                        value={value}
-                        onUserInput={val => {
-                            onUserInput(val)
-                        }}
-                        align="right"
-                    />
-                    <div className="font-bold text-xl pl-2">%</div>
+                <div className="flex flex-col space-y-3 bg-dark-900 items-center rounded p-3 w-full sm:w-3/5 sm:flex-row-reverse sm:justify-between sm:space-y-0">
+                    <div className="flex flex-row items-center font-bold text-xl w-20 sm:w-full">
+                        <PercentInput
+                            className="token-amount-input"
+                            value={value}
+                            onUserInput={val => {
+                                onUserInput(val)
+                            }}
+                            align="right"
+                        />
+                        <div className="font-bold text-xl pl-2">%</div>
+                    </div>
+                    <div className="flex flex-row">
+                        <Option
+                            onClick={() => {
+                                onUserInput("25")
+                            }}
+                            active={+value === 25}
+                        >
+                            25%
+                        </Option>
+                        <Option
+                            onClick={() => {
+                                onUserInput("50")
+                            }}
+                            active={+value === 50}
+                        >
+                            50%
+                        </Option>
+                        <Option
+                            onClick={() => {
+                                onUserInput("75")
+                            }}
+                            active={+value === 75}
+                        >
+                            75%
+                        </Option>
+                    </div>
                 </div>
             </div>
         </div>
