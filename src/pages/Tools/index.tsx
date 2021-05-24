@@ -178,7 +178,7 @@ export default function Pool() {
                                     <RowFixed>
                                         {/* <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} /> */}
                                         <Text fontWeight={500} fontSize={14}>
-                                            {i18n._(t`One click SUSHI → xSUSHI → NYAN 😸 🍱`)}
+                                            {i18n._(t`Enter Meowshi 🐈 🍱`)}
                                         </Text>
                                     </RowFixed>
                                     <RowFixed>
