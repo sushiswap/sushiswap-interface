@@ -1,11 +1,11 @@
 # Oracles
 
-Currently there is two types of oracles which the sushi app supports, Chainlink & SushiSwap TWAP
+Currently there is two types of oracles which the sushi interface supports, Chainlink & SushiSwap TWAP
 
 ## Chainlink
 
+- Requires a mapping entry added (src/constants/chainlink/mapping.ts)
 - Requires one exchange rate update to start
-- Requires a mapping entry (src/constants/chainlink/mapping.ts)
 
 ## SushiSwap TWAP
 

@@ -1,2 +1,21 @@
-node_modules
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+/node_modules
+
+.DS_Store
+.env
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.vscode/
 .vercel
+.next
+
+public/sw.js
+public/sw.js.map
+public/workbox*.js
+public/workbox*.js.map
+
+.env
