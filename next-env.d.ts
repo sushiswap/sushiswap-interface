@@ -2,7 +2,7 @@
 /// <reference types="next/types/global" />
 
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { Fraction } from '../entities/Fraction'
+import Fraction from './src/entities/Fraction'
 
 declare module 'fortmatic'
 
@@ -39,8 +39,8 @@ declare module 'multihashes' {
     declare function toB58String(hash: Uint8Array): string
 }
 
-declare module 'react-tradingview-widget'
-
 declare module 'jazzicon' {
-    export default function(diameter: number, seed: number): HTMLElement
+    export default function (diameter: number, seed: number): HTMLElement
 }
+
+declare module 'react-tradingview-widget'
