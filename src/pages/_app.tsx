@@ -81,12 +81,12 @@ function MyApp({ Component, pageProps }: AppProps) {
                         <GlobalStyle />
                         <ThemeProvider theme={{}}>
                             <Provider store={store}>
-                                <KashiDataProvider>
-                                    <Updaters />
-                                    <Web3ReactManager>
+                                <Updaters />
+                                <Web3ReactManager>
+                                    <KashiDataProvider>
                                         <Component {...pageProps} />
-                                    </Web3ReactManager>
-                                </KashiDataProvider>
+                                    </KashiDataProvider>
+                                </Web3ReactManager>
                             </Provider>
                         </ThemeProvider>
                     </LanguageProvider>

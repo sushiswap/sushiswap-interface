@@ -58,13 +58,6 @@ const PoolBreakDownWrapper = styled.div`
   border-radius: 0 0 0.625rem 0.625rem;
 `
 
-const Tabs = styled.div`
-    ${({ theme }) => theme.flexRowNoWrap}
-    align-items: center;
-    border-radius: 3rem;
-    justify-content: space-evenly;
-`
-
 const StyledArrowLeft = styled(ArrowLeft)`
     color: ${({ theme }) => theme.text1};
 `

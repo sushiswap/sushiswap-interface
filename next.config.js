@@ -12,7 +12,7 @@ module.exports = withPWA({
     webpack5: true
   },
   images: {
-    domains: ['raw.githubusercontent.com'],
+    domains: ['raw.githubusercontent.com', 'ftmscan.com'],
   },
   reactStrictMode: true,
   async rewrites() {

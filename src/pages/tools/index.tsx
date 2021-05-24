@@ -9,20 +9,20 @@ const tools = [
         id: 1,
         name: 'MEOWSHI',
         description: 'Redonominate xSUSHI into MEOWSHI',
-        href: '/tools/meowshi'
+        href: '/tools/meowshi',
     },
     {
         id: 2,
         name: 'SAAVE',
         description: '...',
-        href: '/tools/saave'
+        href: '/tools/saave',
     },
     {
         id: 3,
-        name: "LP ZAP",
-        description: "Zap into an LP position for any pool using any asset",
-        href: '/zap'
-    }
+        name: 'LP ZAP',
+        description: 'Zap into an LP position for any pool using any asset',
+        href: '/zap',
+    },
 ]
 
 export default function Tools() {
@@ -37,7 +37,7 @@ export default function Tools() {
                     Tools
                 </Typography>
                 <ul className="space-y-4 divide-y-0">
-                    {tools.map(tool => (
+                    {tools.map((tool) => (
                         <li key={tool.id} className="relative w-full p-4 rounded bg-dark-900 hover:bg-dark-800">
                             <div className="flex justify-between space-x-4">
                                 <div className="flex-1 min-w-0">
