@@ -40,20 +40,23 @@ export default function AuctionDetail({
             }
             const price = clearingPrice(info)
             const curPrice = toPrecision(toDecimals(price), 3)
-
             setCurrentPrice(curPrice)
             const tokensCommitted = parseFloat(info.commitmentsTotal) / parseFloat(curPrice)
             setTotalTokensCommitted(toPrecision(tokensCommitted, 3))
         }
     }
     useEffect(() => {
-        setCommitmentsTotal(toPrecision(state.commitments.commitmentsTotal, 3))
         if (type === 'dutch') {
             updateDutchData()
         }
-    }, [state.commitments.commitmentsTotal, type, marketInfo])
+    }, [commitmentsTotal, type, marketInfo])
     useEffect(() => {
-        if (marketInfo?.commitmentsTotal) setCommitmentsTotal(marketInfo?.commitmentsTotal)
+        setCommitmentsTotal(toPrecision(toDecimals(state.commitments.commitmentsTotal), 3))
+    }, [state.commitments.commitmentsTotal])
+    useEffect(() => {
+        if (marketInfo?.commitmentsTotal) {
+            setCommitmentsTotal(marketInfo?.commitmentsTotal)
+        }
     }, [marketInfo?.commitmentsTotal])
 
     return (
@@ -85,7 +88,7 @@ export default function AuctionDetail({
                 <LiveStatus
                     marketInfo={marketInfo}
                     tokenInfo={tokenInfo}
-                    totalCommitments={toPrecision(toDecimals(commitmentsTotal), 3)}
+                    totalCommitments={commitmentsTotal}
                     totalTokensCommitted={totalTokensCommitted}
                 />
             </AuctinDetailContainer>

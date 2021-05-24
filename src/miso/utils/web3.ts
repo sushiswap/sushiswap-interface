@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 
-export const toDecimals = (value?: BigNumber | string, decimals = 18) => {
+export const toDecimals = (value?: BigNumber | string | number, decimals = 18) => {
     if (!value) return '0'
     return (parseFloat(value.toString()) / 10 ** decimals).toFixed()
 }
