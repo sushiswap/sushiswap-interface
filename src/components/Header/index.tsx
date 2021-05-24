@@ -38,14 +38,6 @@ function AppBar(): JSX.Element {
                                     <Image src="/logo.png" alt="Sushi" width="32px" height="32px" />
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
-                                            <Link href={'/'}>
-                                                <a
-                                                    id={`home-nav-link`}
-                                                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                                                >
-                                                    {i18n._(t`Home`)}
-                                                </a>
-                                            </Link>
                                             <Link href={'/swap'}>
                                                 <a
                                                     id={`swap-nav-link`}
