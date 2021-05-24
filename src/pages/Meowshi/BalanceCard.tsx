@@ -38,7 +38,7 @@ export default function BalanceCard({
                           <ExternalLink
                                    style={{ color: `${darkMode ? 'white' : 'black'}`, textDecoration: 'underline' }}
                                    target="_blank"
-                                   href="https://etherscan.io/address/0xEb8B45EB9084D05b25B045Ff8fE4d18fb1248B38#code"
+                                   href="https://etherscan.io/address/0x4FA5116809B8428934D148c2975F366E8920F24b#code"
                                >
                                    <TYPE.white fontSize={14} color={theme.text1}>
                                        {i18n._(t`Read the contract`)}
