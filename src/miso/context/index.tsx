@@ -1,8 +1,11 @@
-import React, { createContext, useReducer } from 'react'
+import React, { createContext, useCallback, useContext, useReducer } from 'react'
+
+import { Commitment } from '../entities'
 
 enum ActionType {
-    UPDATE = 'UPDATE',
-    SYNC = 'SYNC'
+    SET_COMMITMENTS = 'SET_COMMITMENTS',
+    ADD_COMMITMENT = 'ADD_COMMITMENT',
+    RESET_COMMITMENT = 'RESET_COMMITMENT'
 }
 
 interface Reducer {
@@ -11,11 +14,19 @@ interface Reducer {
 }
 
 interface State {
-    info: any
+    commitments: {
+        commitments: Commitment[]
+        totalParticipants: number
+        commitmentsTotal: number
+    }
 }
 
 const initialState: State = {
-    info: null
+    commitments: {
+        commitments: [],
+        totalParticipants: 0,
+        commitmentsTotal: 0
+    }
 }
 
 export interface MisoContextProps {
@@ -31,20 +42,51 @@ export const MisoContext = createContext<{
     dispatch: () => null
 })
 
+const onlyUnique = (value: any, index: any, self: any) => {
+    return self.indexOf(value) === index
+}
+
 const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
     switch (action.type) {
-        case ActionType.SYNC:
-            return {
-                ...state
+        case ActionType.SET_COMMITMENTS: {
+            const { commitments } = action.payload
+            const newState: State = { ...state }
+            newState.commitments.commitments = commitments
+            const uniqueAddresses = commitments.map((commit: Commitment) => commit.address).filter(onlyUnique)
+
+            const commitmentsTotal = commitments.reduce(
+                (prev: number, cur: Commitment) => prev + parseFloat(cur.amount),
+                0
+            )
+            newState.commitments.commitmentsTotal = commitmentsTotal
+            newState.commitments.totalParticipants = uniqueAddresses.length
+            return newState
+        }
+        case ActionType.ADD_COMMITMENT: {
+            const { commitment } = action.payload
+            const newState: State = { ...state }
+            const commitmentExists = newState.commitments.commitments.some(
+                (commit: Commitment) => commit.txHash === commitment.txHash
+            )
+            if (commitmentExists) return false
+            const addressExists = newState.commitments.commitments.some(
+                (commit: Commitment) => commit.address === commitment.address
+            )
+            if (!addressExists) {
+                const totalParticipants = newState.commitments.totalParticipants
+                newState.commitments.totalParticipants = totalParticipants + 1
             }
-        case ActionType.UPDATE:
-            const { info } = action.payload
+            newState.commitments.commitmentsTotal += parseFloat(commitment.amount)
+            return newState
+        }
+        case ActionType.RESET_COMMITMENT: {
             return {
-                ...state,
-                info
+                ...initialState
             }
-        default:
+        }
+        default: {
             return state
+        }
     }
 }
 
