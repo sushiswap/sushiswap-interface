@@ -1,50 +1,48 @@
-import { Currency, ChainId, JSBI, Percent, ROUTER_ADDRESS, WETH, Trade } from '@sushiswap/sdk'
-import React, { useCallback, useState, useEffect } from 'react'
-import Link from 'next/link'
-import Router from 'next/router'
-import styled, { ThemeContext, keyframes } from 'styled-components'
-import { transparentize } from 'polished'
-import { Text } from 'rebass'
-import { ArrowLeft } from 'react-feather'
-import { useDispatch } from 'react-redux'
-
+import { ApprovalState, useApproveCallback } from '../hooks/useApproveCallback'
+import { AutoRow, RowBetween, RowFixed } from '../components/Row'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
-import { RowBetween, AutoRow, RowFixed } from '../components/Row'
 import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../components/ButtonLegacy'
+import { ChainId, Currency, JSBI, Percent, ROUTER_ADDRESS, Trade, WETH } from '@sushiswap/sdk'
 import Column, { AutoColumn } from '../components/Column'
-import CurrencyLogo from '../components/CurrencyLogo'
-import DoubleCurrencyLogo from '../components/DoubleLogo'
-import CurrencyInputPanel from '../components/CurrencyInputPanel'
-import Settings from '../components/Settings'
-import PoolList from '../components/PoolList'
-import Loader from '../components/Loader'
-import ProgressSteps from '../components/ProgressSteps'
-import Layout from '../components/Layout'
-
-import { AppDispatch } from '../state'
-import { useCurrency } from '../hooks/Tokens'
-import usePool from '../hooks/usePool'
+import React, { useCallback, useEffect, useState } from 'react'
+import { computeTradePriceBreakdown, warningSeverity } from '../functions/prices'
+import styled, { ThemeContext, keyframes } from 'styled-components'
 import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../state/zap/hooks'
 
+import Alert from '../components/Alert'
+import { AppDispatch } from '../state'
+import { ArrowLeft } from 'react-feather'
+import CurrencyInputPanel from '../components/CurrencyInputPanel'
+import CurrencyLogo from '../components/CurrencyLogo'
+import DoubleCurrencyLogo from '../components/DoubleLogo'
+import FormattedPriceImpact from '../containers/swap/FormattedPriceImpact'
+import Head from 'next/head'
+import Layout from '../components/Layout'
+import Link from 'next/link'
+import Loader from '../components/Loader'
+import PoolList from '../components/PoolList'
+import ProgressSteps from '../components/ProgressSteps'
+import QuestionHelper from '../components/QuestionHelper'
+import Router from 'next/router'
+import Settings from '../components/Settings'
+import SwapRoute from '../containers/swap/SwapRoute'
+import { Text } from 'rebass'
 import { currencyId as getCurrencyId } from '../functions/currency/currencyId'
+import { getZapperAddress } from '../constants/addresses'
 import { maxAmountSpend } from '../functions/currency/maxAmountSpend'
-import { useRouterContract } from '../hooks/useContract'
+import { resetZapState } from '../state/zap/actions'
+import { t } from '@lingui/macro'
+import { transparentize } from 'polished'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useCurrency } from '../hooks/Tokens'
+import { useDefaultsFromURLSearch } from '../state/zap/hooks'
+import { useDispatch } from 'react-redux'
+import { useLingui } from '@lingui/react'
+import usePool from '../hooks/usePool'
+import { useRouterContract } from '../hooks/useContract'
+import { useUserSlippageTolerance } from '../state/user/hooks'
 import { useWalletModalToggle } from '../state/application/hooks'
 import useZapper from '../hooks/useZapper'
-import { ApprovalState, useApproveCallback } from '../hooks/useApproveCallback'
-import { computeTradePriceBreakdown, warningSeverity } from '../functions/prices'
-import { resetZapState } from '../state/zap/actions'
-import { useUserSlippageTolerance } from '../state/user/hooks'
-import { getZapperAddress } from '../constants/addresses'
-import Alert from '../components/Alert'
-import QuestionHelper from '../components/QuestionHelper'
-import SwapRoute from '../containers/swap/SwapRoute'
-import FormattedPriceImpact from '../containers/swap/FormattedPriceImpact'
-import { useDefaultsFromURLSearch } from '../state/zap/hooks'
-import Head from 'next/head'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 
 const PoolAllocationWrapper = styled.div`
     margin-top: 1rem;
@@ -108,13 +106,15 @@ const CardHeader = () => {
             <RowBetween style={{ padding: '1rem 0rem 1rem' }}>
                 <Link href="/zap">
                     <div>
-                        <a onClick={(e) => {dispatch(resetZapState())}}/>
+                        <a
+                            onClick={(e) => {
+                                dispatch(resetZapState())
+                            }}
+                        />
                         <StyledArrowLeft />
                     </div>
                 </Link>
-                <div style={{ fontWeight: 500, fontSize: "22px", marginBottom: '20px' }}>
-                    Zap Liquidity
-                </div>
+                <div style={{ fontWeight: 500, fontSize: '22px', marginBottom: '20px' }}>Zap Liquidity</div>
                 <Settings />
             </RowBetween>
             <RowBetween style={{ padding: '0rem 0rem 1rem' }}>
@@ -135,16 +135,13 @@ const CardHeader = () => {
 }
 
 export default function Zap() {
-    const { i18n } = useLingui();
+    const { i18n } = useLingui()
 
     const { account, chainId } = useActiveWeb3React()
 
     const loadedUrlParams = useDefaultsFromURLSearch()
 
-    const [poolAddress, currencyId] = [
-        loadedUrlParams?.poolAddress,
-        loadedUrlParams?.currencyId
-    ]
+    const [poolAddress, currencyId] = [loadedUrlParams?.poolAddress, loadedUrlParams?.currencyId]
 
     const currency = useCurrency(currencyId)
 
@@ -164,7 +161,7 @@ export default function Zap() {
         currencyOneOutput,
         currencyZeroOutput,
         isTradingUnderlying,
-        encodeSwapData
+        encodeSwapData,
     } = useDerivedZapInfo(currency ?? undefined, poolAddress)
     const { zapIn } = useZapper(currency ?? undefined)
     const dispatch = useDispatch<AppDispatch>()
@@ -232,7 +229,7 @@ export default function Zap() {
             swapData
         ).then(
             () => dispatch(resetZapState()),
-            err => console.log(err, 'zap error')
+            (err) => console.log(err, 'zap error')
         )
     }, [currency, poolAddress, chainId, parsedAmount, minTokensReceived])
 
@@ -250,7 +247,7 @@ export default function Zap() {
             {!poolAddress ? (
                 <PoolList />
             ) : (
-                <div className="bg-dark-900 shadow-swap-blue-glow w-full max-w-xl rounded p-4">
+                <div className="w-full max-w-xl p-4 rounded bg-dark-900 shadow-swap-blue-glow">
                     <CardHeader />
                     <AutoColumn>
                         <CurrencyInputPanel
@@ -269,7 +266,7 @@ export default function Zap() {
                         />
                         <PoolAllocationWrapper>
                             <RowBetween style={{ marginBottom: '12px' }}>
-                                <div style={{ fontSize: "14px" }}>To</div>
+                                <div style={{ fontSize: '14px' }}>To</div>
                                 {currency0 && currency1 ? (
                                     <DoubleCurrencyLogo
                                         currency0={currency0 ?? undefined}
@@ -282,19 +279,19 @@ export default function Zap() {
                                 )}
                             </RowBetween>
                             <RowBetween>
-                                <div style={{ fontWeight: 500, fontSize: "22px"  }}>
+                                <div style={{ fontWeight: 500, fontSize: '22px' }}>
                                     {liquidityMinted?.toSignificant(6) || '0'}
                                 </div>
                                 <div className="inline-flex">
                                     {currency0 && currency1 ? (
                                         <>
-                                            <div style={{ fontWeight: 500, fontSize: "22px" }}>
+                                            <div style={{ fontWeight: 500, fontSize: '22px' }}>
                                                 {`${currency0?.symbol}${' '}`}
                                             </div>
-                                            <div style={{ fontWeight: 500, fontSize: "22px"}} className="mx-1">
+                                            <div style={{ fontWeight: 500, fontSize: '22px' }} className="mx-1">
                                                 /
                                             </div>
-                                            <div style={{ fontWeight: 500, fontSize: "22px"}}>
+                                            <div style={{ fontWeight: 500, fontSize: '22px' }}>
                                                 {`${' '}${currency1?.symbol}`}
                                             </div>
                                         </>
@@ -307,14 +304,14 @@ export default function Zap() {
                         <PoolBreakDownWrapper>
                             <RowBetween>
                                 <div>
-                                    <div style={{ fontSize: "14px" }}>Est. Pool Allocation</div>
+                                    <div style={{ fontSize: '14px' }}>Est. Pool Allocation</div>
                                     <PoolTokenRow>
                                         <CurrencyLogo
                                             size="22px"
                                             currency={currency0 ?? undefined}
                                             style={{ marginRight: '6px' }}
                                         />
-                                        <div style={{ fontSize: "14px" }}>
+                                        <div style={{ fontSize: '14px' }}>
                                             {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
                                         </div>
                                     </PoolTokenRow>
@@ -324,7 +321,7 @@ export default function Zap() {
                                             currency={currency1 ?? undefined}
                                             style={{ marginRight: '6px' }}
                                         />
-                                        <div style={{ fontSize: "14px" }}>
+                                        <div style={{ fontSize: '14px' }}>
                                             {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
                                         </div>
                                     </PoolTokenRow>
@@ -332,20 +329,20 @@ export default function Zap() {
                                 <div style={{ height: '91px' }}>
                                     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <QuestionHelper text="Your share of the total liquidity pool" />
-                                        <div style={{ textAlign: "right", fontSize: "14px", marginLeft: "0.25rem" }}>
+                                        <div style={{ textAlign: 'right', fontSize: '14px', marginLeft: '0.25rem' }}>
                                             Pool Share
                                         </div>
                                     </span>
-                                    <div style={{ marginBottom: "8px", textAlign: "right", fontSize: "14px" }}>
+                                    <div style={{ marginBottom: '8px', textAlign: 'right', fontSize: '14px' }}>
                                         {poolTokenPercentage?.toSignificant(6) || '0'}%
                                     </div>
                                     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <QuestionHelper text="The difference between the market price and the estimated price due to trade size." />
-                                        <div style={{ fontSize: "14px", textAlign: "right", marginLeft: "0.25rem" }}>
+                                        <div style={{ fontSize: '14px', textAlign: 'right', marginLeft: '0.25rem' }}>
                                             Price Impact
                                         </div>
                                     </span>
-                                    <div style={{ textAlign: "right", fontSize: "14px" }}>
+                                    <div style={{ textAlign: 'right', fontSize: '14px' }}>
                                         {/* bestTrade?.priceImpact */}
                                         <FormattedPriceImpact priceImpact={bestTrade?.priceImpact} />
                                     </div>
@@ -354,7 +351,7 @@ export default function Zap() {
                             {showRoute && (
                                 <RowBetween style={{ padding: '16px 0 0 0' }}>
                                     <span style={{ display: 'flex', alignItems: 'center' }}>
-                                        <div className="text-secondary text-sm">Route</div>
+                                        <div className="text-sm text-secondary">Route</div>
                                         <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
                                     </span>
                                     {bestTrade && <SwapRoute trade={bestTrade} />}

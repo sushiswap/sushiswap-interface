@@ -1,10 +1,10 @@
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../functions/prices'
 
 import { Field } from '../state/swap/actions'
-import FormattedPriceImpact from './Swap/FormattedPriceImpact'
+import FormattedPriceImpact from '../containers/swap/FormattedPriceImpact'
 import QuestionHelper from './QuestionHelper'
 import React from 'react'
-import SwapRoute from './Swap/SwapRoute'
+import SwapRoute from '../containers/swap/SwapRoute'
 import { Trade } from '@sushiswap/sdk'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
@@ -82,7 +82,7 @@ function TradeReview({ trade, allowedSlippage }: { trade: Trade | undefined; all
                     )}
                 </div>
             ) : (
-                <div className="text-lg text-secondary mb-4">{i18n._(t`No liquidity found to do swap`)}</div>
+                <div className="mb-4 text-lg text-secondary">{i18n._(t`No liquidity found to do swap`)}</div>
             )}
         </>
     )

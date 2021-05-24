@@ -6,9 +6,8 @@ import {
     toPancakeV2LiquidityToken,
     toQuickSwapLiquidityToken,
     toSteakHouseLiquidityToken,
-    useTrackedTokenPairs
+    useTrackedTokenPairs,
 } from '../state/user/hooks'
-import { useMigrationPairs, usePairs } from '../hooks/usePairs'
 import { useTokenBalance, useTokenBalancesWithLoadingIndicator } from '../state/wallet/hooks'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -20,10 +19,10 @@ import { getCreate2Address } from '@ethersproject/address'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import { usePairs } from '../hooks/usePairs'
 
 // TODO: A simple proof, this will be expanded to allow for the easy plugin of other compatible exchanges.
 // WIP, please do not remove
-
 function Position({ pair }: { pair: Pair }) {
     const { account, chainId } = useActiveWeb3React()
 
@@ -41,7 +40,7 @@ function Position({ pair }: { pair: Pair }) {
 }
 
 const SOURCES = {
-    [ChainId.MATIC]: []
+    [ChainId.MATIC]: [],
 }
 
 export default function Migrate() {
@@ -125,41 +124,41 @@ export default function Migrate() {
 
     // QuickSwap
 
-    const funcs = [toQuickSwapLiquidityToken, toSteakHouseLiquidityToken]
+    // const funcs = [toQuickSwapLiquidityToken, toSteakHouseLiquidityToken]
 
-    const tokenPairsWithLiquidityTokens = useMemo(
-        () => trackedTokenPairs.map(tokens => ({ liquidityToken: toSteakHouseLiquidityToken(tokens), tokens })),
-        [trackedTokenPairs, funcs]
-    )
+    // const tokenPairsWithLiquidityTokens = useMemo(
+    //     () => trackedTokenPairs.map(tokens => ({ liquidityToken: toSteakHouseLiquidityToken(tokens), tokens })),
+    //     [trackedTokenPairs, funcs]
+    // )
 
-    const liquidityTokens = useMemo(() => tokenPairsWithLiquidityTokens.map(tpwlt => tpwlt.liquidityToken), [
-        tokenPairsWithLiquidityTokens
-    ])
+    // const liquidityTokens = useMemo(() => tokenPairsWithLiquidityTokens.map(tpwlt => tpwlt.liquidityToken), [
+    //     tokenPairsWithLiquidityTokens
+    // ])
 
-    const [pairBalances, fetchingPairBalances] = useTokenBalancesWithLoadingIndicator(
-        account ?? undefined,
-        liquidityTokens
-    )
+    // const [pairBalances, fetchingPairBalances] = useTokenBalancesWithLoadingIndicator(
+    //     account ?? undefined,
+    //     liquidityTokens
+    // )
 
-    const liquidityTokensWithBalances = useMemo(
-        () =>
-            tokenPairsWithLiquidityTokens.filter(({ liquidityToken }) =>
-                pairBalances[liquidityToken.address]?.greaterThan('0')
-            ),
-        [tokenPairsWithLiquidityTokens, pairBalances]
-    )
+    // const liquidityTokensWithBalances = useMemo(
+    //     () =>
+    //         tokenPairsWithLiquidityTokens.filter(({ liquidityToken }) =>
+    //             pairBalances[liquidityToken.address]?.greaterThan('0')
+    //         ),
+    //     [tokenPairsWithLiquidityTokens, pairBalances]
+    // )
 
-    const pairs = useMigrationPairs(
-        liquidityTokensWithBalances.map(({ tokens }) => tokens),
-        SteakPair
-    )
+    // const pairs = useMigrationPairs(
+    //     liquidityTokensWithBalances.map(({ tokens }) => tokens),
+    //     SteakPair
+    // )
 
-    const isLoading =
-        fetchingPairBalances || pairs?.length < liquidityTokensWithBalances.length || pairs?.some(pairV1 => !pairV1)
+    // const isLoading =
+    //     fetchingPairBalances || pairs?.length < liquidityTokensWithBalances.length || pairs?.some(pairV1 => !pairV1)
 
-    const allPairsWithLiquidity = pairs.map(([, pair]) => pair).filter((pair): pair is Pair => Boolean(pair))
+    // const allPairsWithLiquidity = pairs.map(([, pair]) => pair).filter((pair): pair is Pair => Boolean(pair))
 
-    console.log({ allPairsWithLiquidity })
+    // console.log({ allPairsWithLiquidity })
 
     // const userDefaultPoolBalance = useTokenBalance(account ?? undefined, allV1PairsWithLiquidity?.[0]?.liquidityToken)
 
@@ -176,7 +175,7 @@ export default function Migrate() {
                     {!loading && noLiquidityFound && <div>No liquidity found</div>}
                 </div> */}
 
-                {allPairsWithLiquidity.length > 0 && (
+                {/* {allPairsWithLiquidity.length > 0 && (
                     <div>
                         <div className="w-full text-2xl">Pancake V1 pairs</div>
                         {allPairsWithLiquidity.map((pair, i) => (
@@ -184,7 +183,7 @@ export default function Migrate() {
                         ))}
                         {isLoading && <Dots />}
                     </div>
-                )}
+                )} */}
 
                 {/* {allV2PairsWithLiquidity.length > 0 && (
                     <div>

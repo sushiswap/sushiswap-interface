@@ -12,7 +12,6 @@ import CurrencyLogo from '../CurrencyLogo'
 import ExternalLink from '../ExternalLink'
 import ListLogo from '../ListLogo'
 import ModalHeader from '../ModalHeader'
-import { SectionBreak } from '../Swap/styleds'
 import { classNames } from '../../functions'
 import { getExplorerLink } from '../../functions/explorer'
 import styled from 'styled-components'
@@ -74,7 +73,7 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                 onClose={onDismiss}
                 title={`Import ${tokens.length > 1 ? 'Tokens' : 'Token'}`}
             />
-            {tokens.map(token => {
+            {tokens.map((token) => {
                 const list = chainId && inactiveTokenList?.[chainId]?.[token.address]?.list
                 return (
                     <Card key={'import' + token.address} className=".token-warning-container">
@@ -146,7 +145,7 @@ export function ImportToken({ tokens, onBack, onDismiss, handleCurrencySelect }:
                 borderRadius="20px"
                 padding="10px 1rem"
                 onClick={() => {
-                    tokens.map(token => addToken(token))
+                    tokens.map((token) => addToken(token))
                     handleCurrencySelect && handleCurrencySelect(tokens[0])
                 }}
                 className=".token-dismiss-button"
