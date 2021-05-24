@@ -213,7 +213,7 @@ export const XSUSHI_CALL = new Token(
 
 export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
 
-export const NYAN = new Token(ChainId.MAINNET, '0xEb8B45EB9084D05b25B045Ff8fE4d18fb1248B38', 18, 'NYAN', 'Meowshi')
+export const NYAN = new Token(ChainId.MAINNET, '0x4FA5116809B8428934D148c2975F366E8920F24b', 18, 'NYAN', 'Meowshi')
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
