@@ -22,7 +22,6 @@ const useMaker = () => {
         if (account) {
             try {
                 const allowance = await sushiContract?.allowance(account, saaveContract?.address)
-                console.log('allowance', allowance)
                 const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
                 setAllowance(formatted)
             } catch (error) {

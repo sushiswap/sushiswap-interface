@@ -23,16 +23,14 @@ function Transactions() {
 
     const { data, error }: SWRResponse<any, Error> = useSWR(
         `https://api.covalenthq.com/v1/${chainId}/address/${account}/stacks/sushiswap/acts/?&key=ckey_cba3674f2ce5450f9d5dd290589&swaps=true&quote-currency=usd`,
-        url =>
+        (url) =>
             fetch(url)
-                .then(r => r.json())
-                .then(j => j.data)
+                .then((r) => r.json())
+                .then((j) => j.data)
     )
 
     if (error) return <div>{i18n._(t`failed to load`)}</div>
     if (!data) return <div>{i18n._(t`loading...`)}</div>
-
-    console.log(data)
 
     return (
         <Layout>

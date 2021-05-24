@@ -36,8 +36,6 @@ export default function Pair() {
     const collateralPrice = useUSDCPrice(collateral)
     if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
 
-    console.log({ assetPrice, collateralPrice }, collateralPrice?.toFixed(6))
-
     return (
         <KashiLayout
             left={

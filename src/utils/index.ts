@@ -4,7 +4,6 @@ import { ethers } from 'ethers'
 import { formatK } from '../functions/format'
 
 // NOTE: Try not to add anything to thie file or folder, it's almost entirely refactored out.
-
 export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
     if (value) {
         return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
@@ -37,7 +36,7 @@ export const parseBalance = (value: string, decimals = 18) => {
 const priceFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2
+    minimumFractionDigits: 2,
 })
 
 export function formattedPercent(percentString: any) {

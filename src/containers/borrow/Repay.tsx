@@ -193,7 +193,7 @@ export default function Repay({ pair }: RepayProps) {
             displayRepayValue.toBigNumber(pair.asset.decimals).lte(0) &&
             displayRemoveValue.toBigNumber(pair.collateral.decimals).lte(0) &&
             (!pinRemoveMax || pair.userCollateralShare.isZero())) ||
-        warnings.some(warning => warning.breaking)
+        warnings.some((warning) => warning.breaking)
 
     function resetRepayState() {
         setPinRepayMax(false)
@@ -202,16 +202,12 @@ export default function Repay({ pair }: RepayProps) {
         setRepayAssetValue('')
     }
 
-    console.log('useBentoRemove', useBentoRemove)
-
     // Handlers
     async function onExecute(cooker: KashiCooker) {
         let summary = ''
 
         if (swap && trade) {
             const share = toShare(pair.collateral, pair.userCollateralAmount.value)
-
-            console.log({ share, userCollateralShare: pair.userCollateralShare })
 
             cooker.removeCollateral(pair.userCollateralShare, true)
             cooker.bentoTransferCollateral(
@@ -220,7 +216,7 @@ export default function Repay({ pair }: RepayProps) {
             )
             cooker.repayShare(pair.userBorrowPart)
 
-            const path = trade.route.path.map(token => token.address) || []
+            const path = trade.route.path.map((token) => token.address) || []
 
             console.log('debug', [
                 pair.collateral.address,
@@ -229,7 +225,7 @@ export default function Repay({ pair }: RepayProps) {
                 path.length > 2 ? path[1] : ethers.constants.AddressZero,
                 path.length > 3 ? path[2] : ethers.constants.AddressZero,
                 account,
-                pair.userCollateralShare
+                pair.userCollateralShare,
             ])
 
             const data = defaultAbiCoder.encode(
@@ -241,11 +237,9 @@ export default function Repay({ pair }: RepayProps) {
                     path.length > 2 ? path[1] : ethers.constants.AddressZero,
                     path.length > 3 ? path[2] : ethers.constants.AddressZero,
                     account,
-                    pair.userCollateralShare
+                    pair.userCollateralShare,
                 ]
             )
-
-            console.log('encoded', data)
 
             cooker.action(
                 SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],

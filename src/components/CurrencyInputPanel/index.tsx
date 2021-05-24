@@ -84,14 +84,12 @@ export default function CurrencyInputPanel({
     customBalanceText,
     cornerRadiusBottomNone,
     cornerRadiusTopNone,
-    containerBackground
+    containerBackground,
 }: CurrencyInputPanelProps) {
-    console.log(currency)
     const { i18n } = useLingui()
     const [modalOpen, setModalOpen] = useState(false)
     const { account, chainId } = useActiveWeb3React()
     const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-    const theme = useTheme()
 
     const handleDismissSearch = useCallback(() => {
         setModalOpen(false)
@@ -233,7 +231,7 @@ export default function CurrencyInputPanel({
                             <NumericalInput
                                 id="token-amount-input"
                                 value={value}
-                                onUserInput={val => {
+                                onUserInput={(val) => {
                                     onUserInput(val)
                                 }}
                             />

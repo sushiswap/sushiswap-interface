@@ -32,7 +32,7 @@ function useBentoBox() {
                         return addTransaction(tx, { summary: 'Deposit to Bentobox' })
                     }
                 } catch (e) {
-                    console.log('bentobox deposit error:', e)
+                    console.error('bentobox deposit error:', e)
                     return e
                 }
             }
@@ -57,7 +57,7 @@ function useBentoBox() {
                     )
                     return addTransaction(tx, { summary: 'Withdraw from Bentobox' })
                 } catch (e) {
-                    console.log('bentobox withdraw error:', e)
+                    console.error('bentobox withdraw error:', e)
                     return e
                 }
             }

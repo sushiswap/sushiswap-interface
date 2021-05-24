@@ -53,8 +53,6 @@ export default function Borrow({ pair }: BorrowProps) {
     // Calculated
     const assetNative = WETH[chainId || 1].address === pair.collateral.address
 
-    console.log({ assetNative: assetNative })
-
     const collateralBalance = useBentoCollateral
         ? pair.collateral.bentoBalance
         : assetNative
@@ -151,7 +149,8 @@ export default function Borrow({ pair }: BorrowProps) {
         currentExchangeRate: pair.currentExchangeRate.toFixed(pair.asset.decimals),
         oracleExchangeRate: pair.oracleExchangeRate.toFixed(pair.asset.decimals),
         diff:
-            pair.currentExchangeRate.toFixed(pair.asset.decimals) / pair.oracleExchangeRate.toFixed(pair.asset.decimals)
+            pair.currentExchangeRate.toFixed(pair.asset.decimals) /
+            pair.oracleExchangeRate.toFixed(pair.asset.decimals),
     })
 
     const transactionReview = new TransactionReview()
@@ -218,20 +217,12 @@ export default function Borrow({ pair }: BorrowProps) {
         (swap && priceImpactSeverity > 3 && !isExpertMode) ||
         (pair.userCollateralAmount.value.isZero() && !collateralValueSet)
 
-    console.log('borrow pair', { pair })
-
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         let summary = ''
 
         if (borrowValueSet) {
             if (displayUpdateOracle) {
-                console.log(
-                    displayUpdateOracle,
-                    pair.currentExchangeRate.toFixed(pair.asset.decimals) /
-                        pair.oracleExchangeRate.toFixed(pair.asset.decimals) >
-                        1.05
-                )
                 cooker.updateExchangeRate(true, ZERO, ZERO)
             }
 
@@ -246,7 +237,7 @@ export default function Borrow({ pair }: BorrowProps) {
             )
         }
         if (borrowValueSet && trade) {
-            const path = trade.route.path.map(token => token.address) || []
+            const path = trade.route.path.map((token) => token.address) || []
             if (path.length > 4) {
                 throw 'Path too long'
             }
@@ -259,7 +250,7 @@ export default function Borrow({ pair }: BorrowProps) {
                 path.length > 3 ? path[2] : ethers.constants.AddressZero,
                 account,
                 toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals)),
-                borrowValue.toBigNumber(pair.asset.decimals)
+                borrowValue.toBigNumber(pair.asset.decimals),
             ])
 
             const data = defaultAbiCoder.encode(
@@ -271,7 +262,7 @@ export default function Borrow({ pair }: BorrowProps) {
                     path.length > 2 ? path[1] : ethers.constants.AddressZero,
                     path.length > 3 ? path[2] : ethers.constants.AddressZero,
                     account,
-                    toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals))
+                    toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals)),
                 ]
             )
 
@@ -314,20 +305,20 @@ export default function Borrow({ pair }: BorrowProps) {
 
         const multipliedBorrow = multipliedCollateral.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
 
-        console.log({
-            original: swapCollateral.toFixed(pair.collateral.decimals),
-            multiplied: swapCollateral
-                .add(
-                    swapCollateral.muldiv(
-                        multiplier.toBigNumber(pair.collateral.decimals),
-                        '1'.toBigNumber(pair.collateral.decimals)
-                    )
-                )
-                .toFixed(pair.collateral.decimals),
-            borrow: multipliedBorrow.toFixed(pair.asset.decimals)
-        })
+        // console.log({
+        //     original: swapCollateral.toFixed(pair.collateral.decimals),
+        //     multiplied: swapCollateral
+        //         .add(
+        //             swapCollateral.muldiv(
+        //                 multiplier.toBigNumber(pair.collateral.decimals),
+        //                 '1'.toBigNumber(pair.collateral.decimals)
+        //             )
+        //         )
+        //         .toFixed(pair.collateral.decimals),
+        //     borrow: multipliedBorrow.toFixed(pair.asset.decimals),
+        // })
 
-        console.log('multipliedBorrow:', multipliedBorrow)
+        // console.log('multipliedBorrow:', multipliedBorrow)
 
         setBorrowValue(multipliedBorrow.toFixed(pair.asset.decimals))
     }

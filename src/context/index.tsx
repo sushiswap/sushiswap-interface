@@ -20,7 +20,7 @@ import { useBlockNumber } from '../state/application/hooks'
 
 enum ActionType {
     UPDATE = 'UPDATE',
-    SYNC = 'SYNC'
+    SYNC = 'SYNC',
 }
 
 interface Reducer {
@@ -63,9 +63,9 @@ const initialState: State = {
         btcRate: ZERO,
         pendingSushi: ZERO,
         blockTimeStamp: ZERO,
-        masterContractApproved: []
+        masterContractApproved: [],
     },
-    pairs: []
+    pairs: [],
 }
 
 export interface KashiContextProps {
@@ -83,21 +83,21 @@ export const KashiContext = createContext<{
     dispatch: React.Dispatch<any>
 }>({
     state: initialState,
-    dispatch: () => null
+    dispatch: () => null,
 })
 
 const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
     switch (action.type) {
         case ActionType.SYNC:
             return {
-                ...state
+                ...state,
             }
         case ActionType.UPDATE:
             const { info, pairs } = action.payload
             return {
                 ...state,
                 info,
-                pairs
+                pairs,
             }
         default:
             return state
@@ -113,21 +113,21 @@ async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
         success = true
     }
     if (!success) {
-        logs = ((await bentobox.clones({
-            masterAddress,
-            chainId
-        })) as any).map((clone: any) => {
+        logs = (
+            (await bentobox.clones({
+                masterAddress,
+                chainId,
+            })) as any
+        ).map((clone: any) => {
             return {
                 args: {
                     masterContract: masterAddress,
                     cloneAddress: clone.address,
-                    data: clone.data
-                }
+                    data: clone.data,
+                },
             }
         })
     }
-
-    console.log({ kashiLogs: logs })
 
     return logs.map((log: any) => {
         const deployParams = ethers.utils.defaultAbiCoder.decode(
@@ -140,7 +140,7 @@ async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
             collateralAddress: deployParams[0],
             assetAddress: deployParams[1],
             oracle: deployParams[2],
-            oracleData: deployParams[3]
+            oracleData: deployParams[3],
         }
     })
 }
@@ -170,7 +170,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const tokens = useAllTokens()
 
     const updatePairs = useCallback(
-        async function() {
+        async function () {
             if (
                 !account ||
                 !chainId ||
@@ -182,14 +182,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 console.log('READY TO RUMBLE')
                 const info = rpcToObj(
                     await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [
-                        KASHI_ADDRESS[chainId]
+                        KASHI_ADDRESS[chainId],
                     ])
                 )
 
                 // Get the deployed pairs from the logs and decode
                 const logPairs = await GetPairs(bentoBoxContract, chainId || 1)
-
-                console.log({ logPairs })
 
                 // Filter all pairs by supported oracles and verify the oracle setup
 
@@ -244,7 +242,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     console.log('missing tokens length', missingTokens.length)
                     // TODO
                 }
-                console.log('PAIRS', pairs)
 
                 // console.log(
                 //     'ANKR?',
@@ -394,7 +391,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                     stored: pair.userCollateralAmount.value.muldiv(
                                         e10(16).mul('75'),
                                         pair.currentExchangeRate
-                                    )
+                                    ),
                                 }
                                 pair.maxBorrowable.minimum = minimum(
                                     pair.maxBorrowable.oracle,
@@ -423,31 +420,31 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                                 pair.interestPerYear = {
                                     value: pair.interestPerYear,
-                                    string: pair.interestPerYear.toFixed(16)
+                                    string: pair.interestPerYear.toFixed(16),
                                 }
 
                                 pair.supplyAPR = {
                                     value: pair.supplyAPR,
-                                    string: Fraction.from(pair.supplyAPR, e10(16)).toString()
+                                    string: Fraction.from(pair.supplyAPR, e10(16)).toString(),
                                 }
                                 pair.currentSupplyAPR = {
                                     value: pair.currentSupplyAPR,
-                                    string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString()
+                                    string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString(),
                                 }
                                 pair.currentInterestPerYear = {
                                     value: pair.currentInterestPerYear,
                                     string: Fraction.from(
                                         pair.currentInterestPerYear,
                                         BigNumber.from(10).pow(16)
-                                    ).toString()
+                                    ).toString(),
                                 }
                                 pair.utilization = {
                                     value: pair.utilization,
-                                    string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString()
+                                    string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString(),
                                 }
                                 pair.health = {
                                     value: pair.health,
-                                    string: Fraction.from(pair.health, e10(16))
+                                    string: Fraction.from(pair.health, e10(16)),
                                 }
                                 pair.maxBorrowable = {
                                     oracle: easyAmount(pair.maxBorrowable.oracle, pair.asset),
@@ -455,13 +452,13 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                     stored: easyAmount(pair.maxBorrowable.stored, pair.asset),
                                     minimum: easyAmount(pair.maxBorrowable.minimum, pair.asset),
                                     safe: easyAmount(pair.maxBorrowable.safe, pair.asset),
-                                    possible: easyAmount(pair.maxBorrowable.possible, pair.asset)
+                                    possible: easyAmount(pair.maxBorrowable.possible, pair.asset),
                                 }
                                 pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
 
                                 return pair
-                            })
-                    }
+                            }),
+                    },
                 })
             }
         },
@@ -478,7 +475,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         <KashiContext.Provider
             value={{
                 state,
-                dispatch
+                dispatch,
             }}
         >
             {children}

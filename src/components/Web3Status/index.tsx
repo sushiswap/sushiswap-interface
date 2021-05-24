@@ -166,7 +166,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
 
 function Web3StatusInner() {
     const { i18n } = useLingui()
-    const { account, connector, error } = useWeb3React()
+    const { account, connector, error, deactivate } = useWeb3React()
 
     const { ENSName } = useENSName(account ?? undefined)
 
@@ -177,7 +177,7 @@ function Web3StatusInner() {
         return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
     }, [allTransactions])
 
-    const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
+    const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
 
     const hasPendingTransactions = !!pending.length
 
@@ -236,8 +236,8 @@ export default function Web3Status() {
         return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
     }, [allTransactions])
 
-    const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
-    const confirmed = sortedRecentTransactions.filter(tx => tx.receipt).map(tx => tx.hash)
+    const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+    const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash)
 
     if (!contextNetwork.active && !active) {
         return null

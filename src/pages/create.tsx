@@ -3,7 +3,7 @@ import {
     CHAINLINK_ORACLE_ADDRESS,
     KASHI_ADDRESS,
     SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-    SUSHISWAP_TWAP_1_ORACLE_ADDRESS
+    SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
 import { ChainId, JSBI, Pair, Token } from '@sushiswap/sdk'
 import { Listbox, Transition } from '@headlessui/react'
@@ -16,7 +16,7 @@ import {
     useBentoBoxContract,
     usePairContract,
     useSushiSwapTWAP0Oracle,
-    useSushiSwapTWAP1Oracle
+    useSushiSwapTWAP1Oracle,
 } from '../hooks/useContract'
 
 import AsyncIcon from '../components/AsyncIcon'
@@ -44,7 +44,7 @@ export type ChainlinkToken = {
 enum OracleId {
     CHAINLINK = 1,
     SUSHISWAP = 2,
-    PEGGED = 3
+    PEGGED = 3,
 }
 
 interface Oracle {
@@ -56,12 +56,12 @@ interface Oracle {
 const oracles = [
     { id: OracleId.CHAINLINK, name: 'Chainlink', unavailable: false },
     { id: OracleId.SUSHISWAP, name: 'SushiSwap', unavailable: false },
-    { id: OracleId.PEGGED, name: 'Pegged', unavailable: true }
+    { id: OracleId.PEGGED, name: 'Pegged', unavailable: true },
 ]
 
 const ORACLE_IMAGE: { [key: number]: string } = {
     1: `/images/oracles/chainlink.jpg`,
-    2: `/images/oracles/sushiswap.jpg`
+    2: `/images/oracles/sushiswap.jpg`,
 }
 
 export default function Create() {
@@ -120,8 +120,6 @@ export default function Create() {
     }, [selectedAsset])
 
     const getOracleData = async (asset: any, collateral: any) => {
-        console.log({ selectedOracle })
-
         const oracleData = ''
 
         if (selectedOracle && selectedOracle.id === OracleId.SUSHISWAP) {
@@ -141,7 +139,7 @@ export default function Create() {
         let multiply = ethers.constants.AddressZero
         let divide = ethers.constants.AddressZero
         const multiplyMatches = Object.values(mapping).filter(
-            m => m.from === asset.address && m.to === collateral.address
+            (m) => m.from === asset.address && m.to === collateral.address
         )
 
         let decimals = 0
@@ -151,18 +149,18 @@ export default function Create() {
             decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
         } else {
             const divideMatches = Object.values(mapping).filter(
-                m => m.from === collateral.address && m.to === asset.address
+                (m) => m.from === collateral.address && m.to === asset.address
             )
             if (divideMatches.length) {
                 const match = divideMatches[0]
                 divide = match.address!
                 decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals
             } else {
-                const mapFrom = Object.values(mapping).filter(m => m.from === asset.address)
-                const mapTo = Object.values(mapping).filter(m => m.from === collateral.address)
+                const mapFrom = Object.values(mapping).filter((m) => m.from === asset.address)
+                const mapTo = Object.values(mapping).filter((m) => m.from === collateral.address)
                 const match = mapFrom
-                    .map(mfrom => ({ mfrom: mfrom, mto: mapTo.filter(mto => mfrom.to === mto.to) }))
-                    .filter(path => path.mto.length)
+                    .map((mfrom) => ({ mfrom: mfrom, mto: mapTo.filter((mto) => mfrom.to === mto.to) }))
+                    .filter((path) => path.mto.length)
                 if (match.length) {
                     multiply = match[0].mfrom.address!
                     divide = match[0].mto[0].address!
@@ -186,15 +184,9 @@ export default function Create() {
 
     const handleCreate = async () => {
         try {
-            console.log('handleCreate')
-
-            console.log({ selectedOracle, selectedAsset, selectedCollateral })
-
             if (!selectedAsset || !selectedCollateral || !selectedOracle) return
 
             const oracleData = await getOracleData(selectedAsset, selectedCollateral)
-
-            console.log({ oracleData })
 
             if (!oracleData) {
                 console.log('No path')
@@ -218,24 +210,22 @@ export default function Create() {
                 [selectedCollateral.address, selectedAsset.address, oracleAddress, oracleData]
             )
 
-            console.log(kashiData)
-
             addTransaction(await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true), {
-                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} ${selectedOracle.name}`
+                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} ${selectedOracle.name}`,
             })
 
             setSelectedAsset(undefined)
             setSelectedCollateral(undefined)
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
     }
 
     function oracleFilter(oracle: Oracle) {
         if (oracle.id === OracleId.CHAINLINK) {
             return (
-                chainlinkTokens?.some(t => t.address === selectedAsset.address) &&
-                chainlinkTokens?.some(t => t.address === selectedCollateral.address)
+                chainlinkTokens?.some((t) => t.address === selectedAsset.address) &&
+                chainlinkTokens?.some((t) => t.address === selectedCollateral.address)
             )
         }
 

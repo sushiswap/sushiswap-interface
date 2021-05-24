@@ -21,13 +21,12 @@ interface LayoutProps {
 export default function Layout({
     left = undefined,
     children = undefined,
-    right = undefined
+    right = undefined,
 }: LayoutProps): JSX.Element {
     const router = useRouter()
     // TODO: Fix, causing infinite loop
     // const balances = useBentoBalances()
     const { chainId } = useActiveWeb3React()
-    console.log('render kashi layout?')
     return (
         <div className="z-0 flex flex-col items-start w-screen h-full overflow-x-hidden overflow-y-auto">
             <Header />

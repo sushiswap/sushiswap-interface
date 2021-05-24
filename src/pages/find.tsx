@@ -27,7 +27,7 @@ import { useTokenBalance } from '../state/wallet/hooks'
 
 enum Fields {
     TOKEN0 = 0,
-    TOKEN1 = 1
+    TOKEN1 = 1,
 }
 
 export default function PoolFinder() {
@@ -136,7 +136,7 @@ export default function PoolFinder() {
                                 justifyItems: 'center',
                                 backgroundColor: '',
                                 padding: '12px 0px',
-                                borderRadius: '12px'
+                                borderRadius: '12px',
                             }}
                         >
                             <div className="font-semibold text-center">{i18n._(t`Pool Found!`)}</div>

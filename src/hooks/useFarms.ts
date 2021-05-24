@@ -18,12 +18,12 @@ const useFarms = () => {
     const fetchAllFarms = useCallback(async () => {
         const results = await Promise.all([
             sushiData.masterchef.pools(),
-            sushiData.exchange_v1.userPositions({user_address: "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd"}),
+            sushiData.exchange_v1.userPositions({ user_address: '0xc2edad668740f1aa35e4d8f227fb8e17dca888cd' }),
             sushiData.utils.getAverageBlockTime(), // results[2]
             sushiData.sushi.priceUSD(), // results[3]
             sushiData.bentobox.kashiStakedInfo(), //results[4]
             sushiData.exchange.pairs(), //results[5]
-            sushiData.masterchef.info() //results[6]
+            sushiData.masterchef.info(), //results[6]
         ])
 
         const pools = results[0]
@@ -36,8 +36,8 @@ const useFarms = () => {
         const liquidityPositions = results[1]
         const averageBlockTime = results[2]
         const sushiPrice = results[3]
-        const kashiPairs = results[4].filter(result => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
-        const pairsQuery = results[5].filter(pair => pairAddresses.includes(pair.id))
+        const kashiPairs = results[4].filter((result) => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
+        const pairsQuery = results[5].filter((pair) => pairAddresses.includes(pair.id))
         const masterchefQuery = results[6]
 
         //console.log('kashiPairs:', kashiPairs)
@@ -69,15 +69,15 @@ const useFarms = () => {
                             collateral: {
                                 id: pair?.collateral,
                                 symbol: pair?.collateralSymbol,
-                                decimals: pair?.collateralDecimals
+                                decimals: pair?.collateralDecimals,
                             },
-                            asset: { id: pair?.asset, symbol: pair?.assetSymbol, decimals: pair?.assetDecimals }
+                            asset: { id: pair?.asset, symbol: pair?.assetSymbol, decimals: pair?.assetDecimals },
                         },
                         roiPerYear: pair?.roiPerYear,
                         totalAssetStaked: pair?.totalAssetStaked
                             ? pair?.totalAssetStaked / Math.pow(10, pair?.assetDecimals)
                             : 0,
-                        tvl: pair?.balanceUSD ? pair?.balanceUSD : 0
+                        tvl: pair?.balanceUSD ? pair?.balanceUSD : 0,
                     }
                 } else {
                     const pair = pairs.find((pair) => pair.id === pool.pair)
@@ -114,7 +114,7 @@ const useFarms = () => {
                         rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
                         tvl: liquidityPosition?.liquidityTokenBalance
                             ? (pair.reserveUSD / pair.totalSupply) * liquidityPosition.liquidityTokenBalance
-                            : 0.1
+                            : 0.1,
                     }
                 }
             })
@@ -122,7 +122,7 @@ const useFarms = () => {
         //console.log('farms:', farms)
         const sorted = orderBy(farms, ['pid'], ['desc'])
 
-        const pids = sorted.map(pool => {
+        const pids = sorted.map((pool) => {
             return pool.pid
         })
 
@@ -139,7 +139,6 @@ const useFarms = () => {
                     const pid = farm.pid.toNumber()
                     const farmDetails: any = sorted.find((pair: any) => pair.pid === pid)
 
-                    console.log('farmDetails:', farmDetails)
                     let deposited
                     let depositedUSD
                     if (farmDetails && farmDetails.type === 'KMP') {
@@ -165,7 +164,7 @@ const useFarms = () => {
                         type: farmDetails.type, // KMP or SLP
                         depositedLP: deposited,
                         depositedUSD: depositedUSD,
-                        pendingSushi: pending
+                        pendingSushi: pending,
                     }
                 })
             setFarms({ farms: sorted, userFarms: userFarms })

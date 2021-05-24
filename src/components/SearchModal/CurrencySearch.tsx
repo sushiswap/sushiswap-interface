@@ -56,10 +56,8 @@ export function CurrencySearch({
     isOpen,
     showManageView,
     showImportView,
-    setImportToken
+    setImportToken,
 }: CurrencySearchProps) {
-    console.log('CURRENCY SEARCH')
-
     const { i18n } = useLingui()
 
     const { chainId } = useActiveWeb3React()
@@ -84,7 +82,7 @@ export function CurrencySearch({
             ReactGA.event({
                 category: 'Currency Select',
                 action: 'Search by address',
-                label: isAddressSearch
+                label: isAddressSearch,
             })
         }
     }, [isAddressSearch])
@@ -121,7 +119,7 @@ export function CurrencySearch({
 
     // manage focus on modal show
     const inputRef = useRef<HTMLInputElement>()
-    const handleInput = useCallback(event => {
+    const handleInput = useCallback((event) => {
         const input = event.target.value
         const checksummedInput = isAddress(input)
         setSearchQuery(checksummedInput || input)
@@ -155,13 +153,6 @@ export function CurrencySearch({
     // if no results on main list, show option to expand into inactive
     const inactiveTokens = useFoundOnInactiveList(debouncedQuery)
     const filteredInactiveTokens: Token[] = useSortedTokensByQuery(inactiveTokens, debouncedQuery)
-
-    console.log({
-        inactiveTokens,
-        filteredSortedTokens,
-        a: searchToken && !searchTokenIsAdded,
-        b: filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0
-    })
 
     return (
         <ContentWrapper>

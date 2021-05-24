@@ -66,7 +66,7 @@ const useSushiBar = () => {
                 const tx = await barContract?.leave(ethers.utils.parseUnits(amount))
                 return addTransaction(tx, { summary: 'Leave SushiBar' })
             } catch (e) {
-                console.log('leave_error:', e)
+                console.error(e)
                 return e
             }
         },

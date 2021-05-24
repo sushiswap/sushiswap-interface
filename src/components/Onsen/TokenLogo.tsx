@@ -23,7 +23,6 @@ const getTokenLogoURL = (address: string, chainId: any) => {
             address
         )}/logo.png`
     }
-    //console.log('getTokenLogoURL:', chainId, imageURL)
     return imageURL
 }
 
@@ -94,7 +93,7 @@ export default function TokenLogo({ address, header = false, size, ...rest }: an
                 alt={''}
                 src={path}
                 size={size}
-                onError={event => {
+                onError={(event) => {
                     //   BAD_IMAGES[address] = true
                     setError(true)
                     event.preventDefault()

@@ -41,8 +41,6 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     const transactionReview = new TransactionReview()
 
-    console.log('lend deposit pair', { pair })
-
     if (value && !warnings.broken) {
         const amount = value.toBigNumber(pair.asset.decimals)
         const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
@@ -72,7 +70,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     return (
         <>
-            <div className="text-3xl text-high-emphesis mt-6">Deposit {pair.asset.symbol}</div>
+            <div className="mt-6 text-3xl text-high-emphesis">Deposit {pair.asset.symbol}</div>
 
             <SmartNumberInput
                 color="blue"

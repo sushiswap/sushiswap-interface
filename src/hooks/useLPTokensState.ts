@@ -37,7 +37,7 @@ const useLPTokensState = () => {
                 for (let i = 0; i < length; i += LP_TOKENS_LIMIT) pages.push(i)
                 const pairs = (
                     await Promise.all(
-                        pages.map(page =>
+                        pages.map((page) =>
                             boringHelperContract?.getPairs(
                                 '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32', // Factory address
                                 page,
@@ -47,9 +47,9 @@ const useLPTokensState = () => {
                     )
                 )
                     .flat()
-                    .filter(pair => pair.token0 !== '0x1f6c3E047f529f82f743a7378A212a3d62fAA390')
+                    .filter((pair) => pair.token0 !== '0x1f6c3E047f529f82f743a7378A212a3d62fAA390')
 
-                const pairAddresses = pairs.map(pair => pair[0])
+                const pairAddresses = pairs.map((pair) => pair[0])
                 const pollPairs = await boringHelperContract?.pollPairs(account, pairAddresses)
                 const tokenAddresses = Array.from(
                     new Set(pairs.reduce((a: any, b: any) => a.push(b.token, b.token0, b.token1) && a, []))
@@ -88,7 +88,13 @@ const useLPTokensState = () => {
                             tokenA.symbol,
                             tokenA.name
                         ),
-                        tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name)
+                        tokenB: new Token(
+                            chainId as ChainId,
+                            tokenB.token,
+                            tokenB.decimals,
+                            tokenB.symbol,
+                            tokenB.name
+                        ),
                     } as LPToken
                 })
 
@@ -100,7 +106,7 @@ const useLPTokensState = () => {
                     [ChainId.MAINNET]: [
                         `https://api.covalenthq.com/v1/${ChainId.MAINNET}/address/${String(
                             account
-                        ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
+                        ).toLowerCase()}/stacks/uniswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`,
                     ],
                     [ChainId.BSC]: [
                         `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
@@ -108,8 +114,8 @@ const useLPTokensState = () => {
                         ).toLowerCase()}/stacks/pancakeswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`,
                         `https://api.covalenthq.com/v1/${ChainId.BSC}/address/${String(
                             account
-                        ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
-                    ]
+                        ).toLowerCase()}/stacks/pancakeswap_v2/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`,
+                    ],
                 }
 
                 const responses: any = await Promise.all(requests[chainId].map((request: any) => fetch(request)))
@@ -122,7 +128,7 @@ const useLPTokensState = () => {
                         ?.filter((balance: any) => balance.pool_token.balance !== '0')
                         .map((balance: any) => ({
                             ...balance,
-                            version: 'v2'
+                            version: 'v2',
                         }))
                 } else if (chainId === ChainId.BSC) {
                     const { data: dataV1 } = await responses[0].json()
@@ -133,14 +139,14 @@ const useLPTokensState = () => {
                             ?.filter((balance: any) => balance.pool_token.balance !== '0')
                             .map((balance: any) => ({
                                 ...balance,
-                                version: 'v1'
+                                version: 'v1',
                             })),
                         ...dataV2?.['pancakeswap']?.balances
                             ?.filter((balance: any) => balance.pool_token.balance !== '0')
                             .map((balance: any) => ({
                                 ...balance,
-                                version: 'v2'
-                            }))
+                                version: 'v2',
+                            })),
                     ]
                 }
 
@@ -176,8 +182,6 @@ const useLPTokensState = () => {
                     const tokenA = tokenDetails[getAddress(pair.token_0.contract_address)]
                     const tokenB = tokenDetails[getAddress(pair.token_1.contract_address)]
 
-                    console.log({ tokenA, tokenB })
-
                     return {
                         address: getAddress(pair.pool_token.contract_address),
                         decimals: token.decimals,
@@ -199,7 +203,7 @@ const useLPTokensState = () => {
                             tokenB.symbol,
                             tokenB.name
                         ),
-                        version: pair.version
+                        version: pair.version,
                     } as LPToken
                 })
                 if (lpTokens) {
@@ -213,13 +217,6 @@ const useLPTokensState = () => {
     }, [chainId, account, boringHelperContract, dashboardContract, quickSwapFactoryContract])
 
     useEffect(() => {
-        console.log('Use effect...', {
-            chainId,
-            account,
-            boringHelperContract,
-            updatingLPTokensCurrent: !updatingLPTokens.current
-        })
-
         if (chainId && account && boringHelperContract && !updatingLPTokens.current) {
             updateLPTokens()
         }
@@ -233,7 +230,7 @@ const useLPTokensState = () => {
         selectedLPTokenAllowed,
         setSelectedLPTokenAllowed,
         loading,
-        updatingLPTokens: updatingLPTokens.current
+        updatingLPTokens: updatingLPTokens.current,
     }
 }
 

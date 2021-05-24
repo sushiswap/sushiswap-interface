@@ -6,6 +6,8 @@ import { useModalOpen, useWalletModalToggle } from '../../state/application/hook
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import AccountDetails from '../AccountDetails'
 import { ApplicationModal } from '../../state/application/actions'
+import { ButtonError } from '../ButtonLegacy'
+import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import Modal from '../Modal'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
@@ -16,6 +18,8 @@ import { SUPPORTED_WALLETS } from '../../constants'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import usePrevious from '../../hooks/usePrevious'
 
 const CloseIcon = styled.div`
@@ -45,7 +49,7 @@ const HeaderRow = styled.div`
     // ${({ theme }) => theme.flexRowNoWrap};
     padding: 1rem 1rem;
     font-weight: 500;
-    color: ${props => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
+    color: ${(props) => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
     // ${({ theme }) => theme.mediaWidth.upToMedium`
     padding: 1rem;
   `};
@@ -111,20 +115,22 @@ const WALLET_VIEWS = {
     OPTIONS: 'options',
     OPTIONS_SECONDARY: 'options_secondary',
     ACCOUNT: 'account',
-    PENDING: 'pending'
+    PENDING: 'pending',
 }
 
 export default function WalletModal({
     pendingTransactions,
     confirmedTransactions,
-    ENSName
+    ENSName,
 }: {
     pendingTransactions: string[] // hashes of pending
     confirmedTransactions: string[] // hashes of confirmed
     ENSName?: string
 }) {
     // important that these are destructed from the account-specific web3-react context
-    const { active, account, connector, activate, error } = useWeb3React()
+    const { active, account, connector, activate, error, deactivate } = useWeb3React()
+
+    const { i18n } = useLingui()
 
     const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
 
@@ -167,7 +173,7 @@ export default function WalletModal({
 
     const tryActivation = async (connector: AbstractConnector | undefined) => {
         let name = ''
-        Object.keys(SUPPORTED_WALLETS).map(key => {
+        Object.keys(SUPPORTED_WALLETS).map((key) => {
             if (connector === SUPPORTED_WALLETS[key].connector) {
                 return (name = SUPPORTED_WALLETS[key].name)
             }
@@ -177,7 +183,7 @@ export default function WalletModal({
         ReactGA.event({
             category: 'Wallet',
             action: 'Change Wallet',
-            label: name
+            label: name,
         })
         setPendingWallet(connector) // set wallet for pending view
         setWalletView(WALLET_VIEWS.PENDING)
@@ -188,7 +194,7 @@ export default function WalletModal({
         }
 
         connector &&
-            activate(connector, undefined, true).catch(error => {
+            activate(connector, undefined, true).catch((error) => {
                 if (error instanceof UnsupportedChainIdError) {
                     activate(connector) // a little janky...can't use setError because the connector isn't set
                 } else {
@@ -207,7 +213,7 @@ export default function WalletModal({
     // get wallets user can switch too, depending on device/browser
     function getOptions() {
         const isMetamask = window.ethereum && window.ethereum.isMetaMask
-        return Object.keys(SUPPORTED_WALLETS).map(key => {
+        return Object.keys(SUPPORTED_WALLETS).map((key) => {
             const option = SUPPORTED_WALLETS[key]
 
             // check for mobile options
@@ -298,15 +304,21 @@ export default function WalletModal({
                     <CloseIcon onClick={toggleWalletModal}>
                         <Image src="/x.svg" width="16px" height="16px" />;
                     </CloseIcon>
-                    <HeaderRow>
-                        {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}
+                    <HeaderRow style={{ paddingLeft: 0, paddingRight: 0 }}>
+                        {error instanceof UnsupportedChainIdError
+                            ? i18n._(t`Wrong Network`)
+                            : i18n._(t`Error connecting`)}
                     </HeaderRow>
                     <ContentWrapper>
                         {error instanceof UnsupportedChainIdError ? (
-                            <h5>Please connect to the appropriate Ethereum network.</h5>
+                            <h5>{i18n._(t`Please connect to the appropriate Ethereum network.`)}</h5>
                         ) : (
-                            'Error connecting. Try refreshing the page.'
+                            i18n._(t`Error connecting. Try refreshing the page.`)
                         )}
+                        <div style={{ marginTop: '1rem' }} />
+                        <ButtonError error={true} size="small" onClick={deactivate}>
+                            {i18n._(t`Disconnect`)}
+                        </ButtonError>
                     </ContentWrapper>
                 </UpperSection>
             )
@@ -335,12 +347,12 @@ export default function WalletModal({
                                 setWalletView(WALLET_VIEWS.ACCOUNT)
                             }}
                         >
-                            Back
+                            {i18n._(t`Back`)}
                         </HoverText>
                     </HeaderRow>
                 ) : (
                     <HeaderRow>
-                        <HoverText>Connect to a wallet</HoverText>
+                        <HoverText>{i18n._(t`Connect to a wallet`)}</HoverText>
                     </HeaderRow>
                 )}
                 <ContentWrapper>
@@ -356,10 +368,10 @@ export default function WalletModal({
                     )}
                     {walletView !== WALLET_VIEWS.PENDING && (
                         <Blurb>
-                            <span>New to Ethereum? &nbsp;</span>{' '}
-                            <a href="https://ethereum.org/wallets/" target="_blank" rel="noopener noreferrer">
-                                Learn more about wallets
-                            </a>
+                            <span>{i18n._(t`New to Ethereum?`)} &nbsp;</span>{' '}
+                            <ExternalLink href="https://ethereum.org/wallets/">
+                                {i18n._(t`Learn more about wallets`)}
+                            </ExternalLink>
                         </Blurb>
                     )}
                 </ContentWrapper>

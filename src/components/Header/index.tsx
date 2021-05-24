@@ -25,7 +25,6 @@ function AppBar(): JSX.Element {
 
     const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
-    console.log({ account, chainId, userEthBalance })
     return (
         //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
         <header className="flex-shrink-0">
@@ -147,9 +146,8 @@ function AppBar(): JSX.Element {
                                                                             '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
                                                                         symbol: 'XSUSHI',
                                                                         decimals: 18,
-                                                                        image:
-                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
-                                                                    }
+                                                                        image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
+                                                                    },
                                                                 }
 
                                                                 if (
@@ -160,9 +158,9 @@ function AppBar(): JSX.Element {
                                                                     library.provider
                                                                         .request({
                                                                             method: 'wallet_watchAsset',
-                                                                            params
+                                                                            params,
                                                                         })
-                                                                        .then(success => {
+                                                                        .then((success) => {
                                                                             if (success) {
                                                                                 console.log(
                                                                                     'Successfully added XSUSHI to MetaMask'
@@ -217,9 +215,8 @@ function AppBar(): JSX.Element {
                                                                         address: address,
                                                                         symbol: 'SUSHI',
                                                                         decimals: 18,
-                                                                        image:
-                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
-                                                                    }
+                                                                        image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
+                                                                    },
                                                                 }
 
                                                                 if (
@@ -230,9 +227,9 @@ function AppBar(): JSX.Element {
                                                                     library.provider
                                                                         .request({
                                                                             method: 'wallet_watchAsset',
-                                                                            params
+                                                                            params,
                                                                         })
-                                                                        .then(success => {
+                                                                        .then((success) => {
                                                                             if (success) {
                                                                                 console.log(
                                                                                     'Successfully added SUSHI to MetaMask'
@@ -373,7 +370,7 @@ function AppBar(): JSX.Element {
                                         ChainId.BSC,
                                         ChainId.XDAI,
                                         ChainId.FANTOM,
-                                        ChainId.MATIC
+                                        ChainId.MATIC,
                                     ].includes(chainId) && (
                                         <ExternalLink
                                             id={`analytics-nav-link`}

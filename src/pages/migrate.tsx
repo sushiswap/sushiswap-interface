@@ -28,8 +28,6 @@ function Position({ pair }: { pair: Pair }) {
 
     const userDefaultPoolBalance = useTokenBalance(account ?? undefined, pair.liquidityToken)
 
-    console.log('Position...', { userDefaultPoolBalance })
-
     return userDefaultPoolBalance ? (
         <div>
             Pair({pair.liquidityToken.name}): {pair.liquidityToken.address}

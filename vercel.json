@@ -28,6 +28,7 @@
         }
     ],
     "redirects": [
+        { "source": "/", "destination": "/swap", "permanent": true },
         { "source": "/migrate/v2", "destination": "/migrate", "permanent": true }
     ]
 }

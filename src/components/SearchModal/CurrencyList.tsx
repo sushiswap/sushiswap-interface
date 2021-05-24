@@ -100,7 +100,7 @@ function CurrencyRow({
     onSelect,
     isSelected,
     otherSelected,
-    style
+    style,
 }: {
     currency: Currency
     onSelect: () => void
@@ -152,7 +152,7 @@ export default function CurrencyList({
     showETH,
     showImportView,
     setImportToken,
-    breakIndex
+    breakIndex,
 }: {
     height: number
     currencies: Currency[]
@@ -165,7 +165,6 @@ export default function CurrencyList({
     setImportToken: (token: Token) => void
     breakIndex: number | undefined
 }) {
-    console.log('currencyList', { currencies })
     const itemData: (Currency | undefined)[] = useMemo(() => {
         let formatted: (Currency | undefined)[] = showETH ? [NATIVE, ...currencies] : currencies
         if (breakIndex !== undefined) {
@@ -237,7 +236,7 @@ export default function CurrencyList({
             selectedCurrency,
             setImportToken,
             showImportView,
-            breakIndex
+            breakIndex,
         ]
     )
 

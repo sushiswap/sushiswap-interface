@@ -27,7 +27,7 @@ export default function Lend() {
         { keys: ['search'], threshold: 0.1 },
         { key: 'currentSupplyAPR.value', direction: 'descending' }
     )
-    console.log({ fullPairs })
+
     return (
         <KashiLayout
             left={
@@ -204,7 +204,7 @@ export default function Lend() {
                     </div>
                     <div className="flex-col space-y-2">
                         {pairs.items &&
-                            pairs.items.map(pair => {
+                            pairs.items.map((pair) => {
                                 return (
                                     <div key={pair.address}>
                                         <Link href={'/lend/' + String(pair.address).toLowerCase()}>

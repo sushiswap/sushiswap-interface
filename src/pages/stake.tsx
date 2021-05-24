@@ -57,7 +57,7 @@ const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
 const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
 
-const fetcher = query => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
+const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
 
 export default function Stake() {
     const { i18n } = useLingui()
@@ -110,7 +110,6 @@ export default function Stake() {
         }
     }
     const handleClickMax = () => {
-        console.log('MAX', parsedAmount)
         // setInput(parsedAmount ? parsedAmount.toSignificant(balance.token.decimals).substring(0, INPUT_CHAR_LIMIT) : '')
         setInput(parsedAmount?.toExact() ?? '')
         setUsingBalance(true)
@@ -163,8 +162,6 @@ export default function Stake() {
 
     const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.MAINNET])
 
-    console.log('approvalState:', approvalState, parsedAmount?.raw?.toString())
-
     const [apr, setApr] = useState<any>()
 
     useEffect(() => {
@@ -172,9 +169,8 @@ export default function Stake() {
             const results = await Promise.all([
                 sushiData.bar.info(),
                 sushiData.exchange.dayData(),
-                sushiData.sushi.priceUSD()
+                sushiData.sushi.priceUSD(),
             ])
-            console.log(results[1])
             const apr =
                 (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) * 365) / (results[0].ratio * results[2])
 
@@ -182,8 +178,6 @@ export default function Stake() {
         }
         fetchData()
     }, [])
-
-    console.log({ sushiBalance, xSushiBalance })
 
     return (
         <Layout>

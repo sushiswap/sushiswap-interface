@@ -30,18 +30,18 @@ const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
                     amount,
                     ethers.constants.Zero,
                     ethers.constants.Zero,
-                    deadline
+                    deadline,
                 ]
 
                 const gasLimit = await sushiRoll.estimateGas.migrate(...args)
                 const tx = sushiRoll.migrate(...args, {
-                    gasLimit: gasLimit.mul(120).div(100)
+                    gasLimit: gasLimit.mul(120).div(100),
                 })
 
                 ReactGA.event({
                     category: 'Migrate',
                     action: `${from}->Sushiswap`,
-                    label: 'migrate'
+                    label: 'migrate',
                 })
 
                 return tx
@@ -71,20 +71,18 @@ const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
                     deadline,
                     permit.v,
                     permit.r,
-                    permit.s
+                    permit.s,
                 ]
-
-                console.log('migrate with permit', args)
 
                 const gasLimit = await sushiRoll.estimateGas.migrateWithPermit(...args)
                 const tx = await sushiRoll.migrateWithPermit(...args, {
-                    gasLimit: gasLimit.mul(120).div(100)
+                    gasLimit: gasLimit.mul(120).div(100),
                 })
 
                 ReactGA.event({
                     category: 'Migrate',
                     action: `${from}->Sushiswap`,
-                    label: 'migrateWithPermit'
+                    label: 'migrateWithPermit',
                 })
 
                 return tx
@@ -95,7 +93,7 @@ const useSushiRoll = (version: 'v1' | 'v2' = 'v2') => {
 
     return {
         migrate,
-        migrateWithPermit
+        migrateWithPermit,
     }
 }
 

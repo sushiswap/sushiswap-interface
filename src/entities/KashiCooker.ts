@@ -25,7 +25,7 @@ export async function signMasterContractApproval(
         user,
         masterContract,
         approved,
-        nonce
+        nonce,
     }
 
     const typedData = {
@@ -35,16 +35,16 @@ export async function signMasterContractApproval(
                 { name: 'user', type: 'address' },
                 { name: 'masterContract', type: 'address' },
                 { name: 'approved', type: 'bool' },
-                { name: 'nonce', type: 'uint256' }
-            ]
+                { name: 'nonce', type: 'uint256' },
+            ],
         },
         primaryType: 'SetMasterContractApproval',
         domain: {
             name: 'BentoBox V1',
             chainId: chainId,
-            verifyingContract: bentoBoxContract?.address
+            verifyingContract: bentoBoxContract?.address,
         },
-        message: message
+        message: message,
     }
     const signer = getSigner(library, user)
     return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
@@ -72,7 +72,7 @@ enum Action {
     BENTO_SETAPPROVAL = 24,
 
     // Any external call (except to BentoBox)
-    CALL = 30
+    CALL = 30,
 }
 
 export default class KashiCooker {
@@ -277,7 +277,6 @@ export default class KashiCooker {
     }
 
     borrow(amount: BigNumber, toBento: boolean, toAddress = ''): KashiCooker {
-        console.log('Borrow', { amount, toBento, toAddress })
         this.add(
             Action.BORROW,
             defaultAbiCoder.encode(['int256', 'address'], [amount, toAddress && toBento ? toAddress : this.account])
@@ -293,7 +292,7 @@ export default class KashiCooker {
                         useNative ? ethers.constants.AddressZero : this.pair.asset.address,
                         toAddress || this.account,
                         amount,
-                        0
+                        0,
                     ]
                 )
             )
@@ -332,9 +331,7 @@ export default class KashiCooker {
                 ),
                 // TODO: Put some warning in the UI or not allow repaying ETH directly from wallet, because this can't be pre-calculated
                 useNative
-                    ? toShare(this.pair.asset, toElastic(this.pair.totalBorrow, part, true))
-                          .mul(1001)
-                          .div(1000)
+                    ? toShare(this.pair.asset, toElastic(this.pair.totalBorrow, part, true)).mul(1001).div(1000)
                     : ZERO
             )
         }
@@ -363,11 +360,9 @@ export default class KashiCooker {
     async cook() {
         if (!this.library) {
             return {
-                success: false
+                success: false,
             }
         }
-
-        console.log('pair address', this.pair.address)
 
         const kashiPairCloneContract = new Contract(
             this.pair.address,
@@ -376,23 +371,17 @@ export default class KashiCooker {
         )
 
         try {
-            console.log(
-                'cook data',
-                { actions: this.actions, values: this.values, data: this.datas }
-                // this.values.reduce((a, b) => a.add(b), ZERO)
-            )
-
             return {
                 success: true,
                 tx: await kashiPairCloneContract.cook(this.actions, this.values, this.datas, {
-                    value: this.values.reduce((a, b) => a.add(b), ZERO)
-                })
+                    value: this.values.reduce((a, b) => a.add(b), ZERO),
+                }),
             }
         } catch (error) {
             console.error('KashiCooker Error: ', error)
             return {
                 success: false,
-                error: error
+                error: error,
             }
         }
     }

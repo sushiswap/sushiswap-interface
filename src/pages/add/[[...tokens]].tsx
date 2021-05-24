@@ -51,7 +51,7 @@ export default function Add() {
     const theme = useContext(ThemeContext)
     const tokens = router.query.tokens
     const [currencyIdA, currencyIdB] = tokens as string[]
-    console.log({ currencyIdA, currencyIdB })
+
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)
 
@@ -78,7 +78,7 @@ export default function Add() {
         noLiquidity,
         liquidityMinted,
         poolTokenPercentage,
-        error
+        error,
     } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
 
     const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
@@ -97,7 +97,7 @@ export default function Add() {
     // get formatted amounts
     const formattedAmounts = {
         [independentField]: typedValue,
-        [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
+        [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
     }
 
     // get the max amounts user can add
@@ -105,7 +105,7 @@ export default function Add() {
         (accumulator, field) => {
             return {
                 ...accumulator,
-                [field]: maxAmountSpend(currencyBalances[field])
+                [field]: maxAmountSpend(currencyBalances[field]),
             }
         },
         {}
@@ -115,7 +115,7 @@ export default function Add() {
         (accumulator, field) => {
             return {
                 ...accumulator,
-                [field]: maxAmounts[field]?.equalTo(parsedAmounts[field] ?? '0')
+                [field]: maxAmounts[field]?.equalTo(parsedAmounts[field] ?? '0'),
             }
         },
         {}
@@ -138,7 +138,7 @@ export default function Add() {
 
         const amountsMin = {
             [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
-            [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0]
+            [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0],
         }
 
         let estimate,
@@ -155,7 +155,7 @@ export default function Add() {
                 amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
                 amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
                 account,
-                deadline.toHexString()
+                deadline.toHexString(),
             ]
             value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString())
         } else {
@@ -169,18 +169,18 @@ export default function Add() {
                 amountsMin[Field.CURRENCY_A].toString(),
                 amountsMin[Field.CURRENCY_B].toString(),
                 account,
-                deadline.toHexString()
+                deadline.toHexString(),
             ]
             value = null
         }
 
         setAttemptingTxn(true)
         await estimate(...args, value ? { value } : {})
-            .then(estimatedGasLimit =>
+            .then((estimatedGasLimit) =>
                 method(...args, {
                     ...(value ? { value } : {}),
-                    gasLimit: calculateGasMargin(estimatedGasLimit)
-                }).then(response => {
+                    gasLimit: calculateGasMargin(estimatedGasLimit),
+                }).then((response) => {
                     setAttemptingTxn(false)
 
                     addTransaction(response, {
@@ -192,7 +192,7 @@ export default function Add() {
                             ' and ' +
                             parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
                             ' ' +
-                            currencies[Field.CURRENCY_B]?.getSymbol(chainId)
+                            currencies[Field.CURRENCY_B]?.getSymbol(chainId),
                     })
 
                     setTxHash(response.hash)
@@ -202,12 +202,12 @@ export default function Add() {
                         action: 'Add',
                         label: [
                             currencies[Field.CURRENCY_A]?.getSymbol(chainId),
-                            currencies[Field.CURRENCY_B]?.getSymbol(chainId)
-                        ].join('/')
+                            currencies[Field.CURRENCY_B]?.getSymbol(chainId),
+                        ].join('/'),
                     })
                 })
             )
-            .catch(error => {
+            .catch((error) => {
                 setAttemptingTxn(false)
                 // we only care if the error is something _other_ than the user rejected the tx
                 if (error?.code !== 4001) {
@@ -254,8 +254,9 @@ export default function Add() {
                     </Text>
                 </Row>
                 <div className="py-5 text-sm italic text-gray-500">
-                    {t`Output is estimated. If the price changes by more than ${allowedSlippage /
-                        100}% your transaction will revert.`}
+                    {t`Output is estimated. If the price changes by more than ${
+                        allowedSlippage / 100
+                    }% your transaction will revert.`}
                 </div>
             </AutoColumn>
         )
