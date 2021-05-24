@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { DuplicateIcon } from '@heroicons/react/outline'
@@ -105,15 +105,15 @@ const SocialIcon = styled.a`
 `
 
 interface AboutCardProps {
-    auctionID: string
+    auctionId: string
     user?: any
     status?: any
     info?: any
     price?: string | number
-    type: 'dutch' | 'batch' | 'crowdsale'
+    type?: string
 }
 
-export default function AboutCard({ auctionID, user, status, info, price, type }: AboutCardProps) {
+export default function AboutCard({ auctionId, user, status, info, price }: AboutCardProps) {
     const [isCopied, setCopied] = useCopyClipboard()
 
     const icons: any = {
@@ -127,11 +127,49 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
         twitter: faTwitter,
         docs: faBook
     }
-    const auctionIcons = {
+    const auctionIcons: any = {
         dutch: DutchIcon,
         batch: BatchIcon,
         crowdsale: CrowdSaleIcon
     }
+
+    const SECONDS = 1000
+    const MINUTES = SECONDS * 60
+    const HOURS = MINUTES * 60
+    const DAYS = HOURS * 24
+
+    const [displayDays, setDisplayDays] = useState<string | number>()
+    const [displayHours, setDisplayHours] = useState<string | number>()
+    const [displayMinutes, setDisplayMinutes] = useState<string | number>()
+    const [displaySeconds, setDisplaySeconds] = useState<string | number>()
+
+    // Show CountDown
+    useEffect(() => {
+        if (status.auction === 'finished') return
+        const timer = setInterval(() => {
+            const now = new Date().getTime()
+            const countDownDate = new Date(status.date).getTime()
+            const distance = countDownDate - now
+            if (distance < 0) {
+                clearInterval(timer)
+                return
+            }
+
+            const days = Math.floor(distance / DAYS)
+            const hours = Math.floor((distance % DAYS) / HOURS)
+            const minutes = Math.floor((distance % HOURS) / MINUTES)
+            const seconds = Math.floor((distance % MINUTES) / SECONDS)
+
+            // Update display days, hours, minutes and seconds
+            setDisplaySeconds(seconds < 10 ? '0' + seconds : seconds)
+            setDisplayMinutes(minutes < 10 ? '0' + minutes : minutes)
+            setDisplayHours(hours < 10 ? '0' + hours : hours)
+            setDisplayDays(days < 10 ? '0' + days : days)
+        }, 1000)
+        return () => {
+            clearInterval(timer)
+        }
+    }, [status.date])
 
     return (
         <CardContainer className="bg-dark-900 rounded px-5 py-3">
@@ -144,16 +182,7 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                         <div className="flex items-center">
                             <h4 className="card-title font-bold capitalize text-xl text-white mb-1">{info.title}</h4>
                             {status.auction !== 'upcoming' && status.auction !== 'finished' && (
-                                <span
-                                    className="
-                      text-sm
-                      font-bold
-                      capitalize text-white
-                      flex
-                      items-center
-                      pl-2
-                    "
-                                >
+                                <span className="text-sm font-bold capitalize text-white flex items-center pl-2">
                                     <StatusIndicator className="rounded-full mr-2" status={status}></StatusIndicator>
                                     {status.auction}
                                 </span>
@@ -161,22 +190,13 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                         </div>
                         <p className="font-bold uppercase text-sm">
                             Token Price:
-                            <span className="text-white mx-1">74900</span>
+                            <span className="text-white mx-1">{price}</span>
                             {info.tokenPair}
                         </p>
                     </div>
                     <div>
                         {(status.auction === 'upcoming' || status.auction === 'finished') && (
-                            <span
-                                className="
-                    text-sm
-                    font-bold
-                    capitalize text-white
-                    flex
-                    items-center
-                    pl-2
-                  "
-                            >
+                            <span className="text-sm font-bold capitalize text-white flex items-center pl-2">
                                 <StatusIndicator className="rounded-full mr-2" status={status}></StatusIndicator>
                                 {status.auction}
                             </span>
@@ -188,22 +208,22 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                         <div className="bg-primary rounded-md">
                             <div className="flex justify-around text-white">
                                 <div className="flex flex-col items-center uppercase">
-                                    <span className="text-sm font-bold">{11}</span>
+                                    <span className="text-sm font-bold">{displayDays}</span>
                                     <span className="abbr">days</span>
                                 </div>
                                 &nbsp;:&nbsp;
                                 <div className="flex flex-col items-center uppercase">
-                                    <span className="text-sm font-bold">{22}</span>
+                                    <span className="text-sm font-bold">{displayHours}</span>
                                     <span className="abbr">hrs</span>
                                 </div>
                                 &nbsp;:&nbsp;
                                 <div className="flex flex-col items-center uppercase">
-                                    <span className="text-sm font-bold">{13}</span>
+                                    <span className="text-sm font-bold">{displayMinutes}</span>
                                     <span className="abbr">min</span>
                                 </div>
                                 &nbsp;:&nbsp;
                                 <div className="flex flex-col items-center uppercase">
-                                    <span className="text-sm font-bold">{54}</span>
+                                    <span className="text-sm font-bold">{displaySeconds}</span>
                                     <span className="abbr">Sec</span>
                                 </div>
                             </div>
@@ -216,7 +236,7 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                 <div className="pt-3 mt-1 pr-5">
                     <h5 className="text-xs font-bold uppercase mb-0">CONTRACT:</h5>
                     <div className="flex items-center">
-                        <p className="font-bold text-white uppercase mb-0">{truncate(auctionID, 6)}</p>
+                        <p className="font-bold text-white uppercase mb-0">{truncate(auctionId, 6)}</p>
                         <CopyBox className="flex items-center ml-2">
                             <div className="copy-box_icon">
                                 <DuplicateIcon
@@ -224,7 +244,7 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                                     height="20"
                                     width="20"
                                     color="#F46E41"
-                                    onClick={() => setCopied(auctionID)}
+                                    onClick={() => setCopied(auctionId)}
                                 />
                             </div>
                             <span className="font-bold text-white text-sm pl-1">copy</span>
@@ -242,7 +262,7 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                         <u>{'https://sake.sushi.com/'}</u>
                     </a>
                 </div>
-                {Object.keys(info.icons.social).length && (
+                {Object.keys(info.icons.social).length > 0 && (
                     <div className="pt-3">
                         <div className="flex justify-between flex-wrap">
                             <div className="flex flex-col mb-3">
@@ -276,9 +296,14 @@ export default function AboutCard({ auctionID, user, status, info, price, type }
                     <h5 className="text-xs font-bold uppercase mb-4">Auction Type:</h5>
                     <div className="flex items-center">
                         <span className="mr-3">
-                            <img src={auctionIcons[type]} width={45} height={45} className="mr-2 cursor-pointer" />
+                            <img
+                                src={status.type && auctionIcons[status.type]}
+                                width={45}
+                                height={45}
+                                className="mr-2 cursor-pointer"
+                            />
                         </span>
-                        <span className="capitalize font-bold text-white">{type}</span>
+                        <span className="capitalize font-bold text-white">{status.type}</span>
                     </div>
                 </div>
             </div>

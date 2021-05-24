@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import styled from 'styled-components'
@@ -6,15 +6,55 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 import { AboutCard, LiveStatus } from '../../components'
+import { MisoContext } from '../../context'
+import { useAuctionTemplateId, useAuctionData, useAuctionDocuments } from '../../hooks'
+import { toPrecision, toDecimals, to18Decimals, clearingPrice } from '../../utils'
 
 const AuctinDetailContainer = styled.div``
 
 export default function AuctionDetail({
     match: {
-        params: { auctionID }
+        params: { auctionId }
     }
-}: RouteComponentProps<{ auctionID: string }>) {
+}: RouteComponentProps<{ auctionId: string }>) {
     const { i18n } = useLingui()
+    const { state } = useContext(MisoContext)
+
+    const marketTemplateId = useAuctionTemplateId(auctionId)
+    const [type, tokenInfo, marketInfo, auctionSuccessful, date, auction] = useAuctionData(auctionId, marketTemplateId)
+    const [website, icon, description, socialIcons] = useAuctionDocuments(auctionId)
+    const [commitmentsTotal, setCommitmentsTotal] = useState<string>()
+    const [totalTokensCommitted, setTotalTokensCommitted] = useState<string>()
+    const [currentPrice, setCurrentPrice] = useState<string>()
+
+    const updateDutchData = () => {
+        if (marketInfo) {
+            const info = {
+                currentTimestamp: Date.now() / 1000,
+                startTime: marketInfo.startTime,
+                endTime: marketInfo.endTime,
+                startPrice: to18Decimals(marketInfo.startPrice),
+                minimumPrice: to18Decimals(marketInfo.minimumPrice),
+                totalTokens: to18Decimals(marketInfo.totalTokens),
+                commitmentsTotal: to18Decimals(commitmentsTotal)
+            }
+            const price = clearingPrice(info)
+            const curPrice = toPrecision(toDecimals(price), 3)
+
+            setCurrentPrice(curPrice)
+            const tokensCommitted = parseFloat(info.commitmentsTotal) / parseFloat(curPrice)
+            setTotalTokensCommitted(toPrecision(tokensCommitted, 3))
+        }
+    }
+    useEffect(() => {
+        setCommitmentsTotal(toPrecision(state.commitments.commitmentsTotal, 3))
+        if (type === 'dutch') {
+            updateDutchData()
+        }
+    }, [state.commitments.commitmentsTotal, type, marketInfo])
+    useEffect(() => {
+        if (marketInfo?.commitmentsTotal) setCommitmentsTotal(marketInfo?.commitmentsTotal)
+    }, [marketInfo?.commitmentsTotal])
 
     return (
         <>
@@ -23,36 +63,30 @@ export default function AuctionDetail({
             </Helmet>
             <AuctinDetailContainer className="grid grid-cols-1 lg:grid-cols-2 gap-7 w-full">
                 <AboutCard
-                    auctionID={auctionID}
+                    auctionId={auctionId}
                     info={{
-                        icon: null,
-                        title: 'Sake (SAK3)',
-                        tokenPair: 'SUSHI/SAK3',
-                        website: 'https://sake.sushi.com',
+                        icon: icon,
+                        title: `${tokenInfo?.name} (${tokenInfo?.symbol})`,
+                        tokenPair: `${marketInfo?.paymentCurrency?.symbol}/${tokenInfo?.symbol}`,
+                        website: website,
                         icons: {
-                            social: {
-                                twitter: 'https://twitter.com/0xSAKE',
-                                discord: 'https://discord.gg/MYFm8nn4QB'
-                            }
+                            social: socialIcons
                         },
-                        description:
-                            'SAKE is the worlds first tokenized sake and the debut product of MISO launchpad. Only 888 bottles of SAKE will ever be produced, with ownership of a SAKE bottle dictated by the SAK3 token.'
+                        description: description
                     }}
                     status={{
-                        auction: 'live'
+                        auction: auction,
+                        date: date,
+                        type: type,
+                        auctionSuccessful: auctionSuccessful
                     }}
-                    type="dutch"
+                    price={currentPrice}
                 />
                 <LiveStatus
-                    marketInfo={{
-                        totalTokens: 200,
-                        paymentCurrency: {
-                            symbol: 'SUSHI'
-                        }
-                    }}
-                    tokenInfo={{
-                        symbol: 'SAK3'
-                    }}
+                    marketInfo={marketInfo}
+                    tokenInfo={tokenInfo}
+                    totalCommitments={toPrecision(toDecimals(commitmentsTotal), 3)}
+                    totalTokensCommitted={totalTokensCommitted}
                 />
             </AuctinDetailContainer>
         </>

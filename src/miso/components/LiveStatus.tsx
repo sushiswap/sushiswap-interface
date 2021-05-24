@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { textCheck } from '../utils'
+import { MisoContext } from '../context'
+import { textCheck, to18Decimals, toPrecision, divNumbers, subNumbers } from '../utils'
 
 const CardContainer = styled.div``
 const BaseDivider = styled.div`
@@ -15,73 +16,56 @@ interface LiveStatusProps {
     status?: any
     tokenInfo?: any
     marketInfo?: any
+    totalCommitments?: any
+    totalTokensCommitted?: any
     userInfo?: any
 }
 
-export default function LiveStatus({ status, tokenInfo, marketInfo, userInfo }: LiveStatusProps) {
+export default function LiveStatus({
+    status,
+    tokenInfo,
+    marketInfo,
+    totalCommitments,
+    totalTokensCommitted,
+    userInfo
+}: LiveStatusProps) {
+    const { state } = useContext(MisoContext)
+
+    const maxTokenAmount = () => {
+        return toPrecision(Math.max(0, subNumbers(to18Decimals(marketInfo?.totalTokens), totalTokensCommitted)), 3)
+    }
+    const percentRemaining = () => {
+        return parseFloat(toPrecision(divNumbers(maxTokenAmount(), to18Decimals(marketInfo?.totalTokens)) * 100, 4))
+    }
+
     return (
         <CardContainer className="bg-dark-900 rounded px-5 py-3">
-            <div
-                className="
-          flex
-          sm:flex-row flex-col
-          justify-between
-          mt-2
-          project-status_text
-        "
-            >
+            <div className="flex sm:flex-row flex-col justify-between mt-2 project-status_text">
                 <div className="flex flex-col">
-                    <span
-                        className="
-              text-xs
-              mb-1
-              uppercase
-              font-bold
-              text-center sm:text-left
-            "
-                    >
-                        Amount For Sale:
-                    </span>
+                    <span className="text-xs mb-1 uppercase font-bold text-center sm:text-left">Amount For Sale:</span>
                     <div className="flex justify-content-center justify-content-sm-start">
                         <p className="text-base text-white font-bold text-capitalize live">
-                            {marketInfo.totalTokens} &nbsp;
-                            <span className="text-sm">{textCheck(tokenInfo.symbol)}</span>
+                            {marketInfo?.totalTokens} &nbsp;
+                            <span className="text-sm">{textCheck(tokenInfo?.symbol)}</span>
                         </p>
                     </div>
                 </div>
                 <div className="flex flex-col">
                     <span className="text-xs mb-1 text-center uppercase font-bold">amount raised:</span>
                     <p className="text-base text-white font-bold text-center">
-                        {2680} &nbsp;
-                        {textCheck(marketInfo.paymentCurrency.symbol)}
+                        {totalCommitments} &nbsp;
+                        {textCheck(marketInfo?.paymentCurrency?.symbol)}
                     </p>
                 </div>
                 <div className="flex flex-col">
-                    <span
-                        className="
-              text-xs
-              mb-1
-              text-center uppercase
-              font-bold
-              text-center
-            "
-                    >
-                        Remaining:
-                    </span>
-                    <p className="text-base text-white font-bold text-center">{100} &nbsp; %</p>
+                    <span className="text-xs mb-1 text-center uppercase font-bold text-center">Remaining:</span>
+                    <p className="text-base text-white font-bold text-center">{percentRemaining()} &nbsp; %</p>
                 </div>
                 <div className="flex flex-col">
-                    <span
-                        className="
-              text-xs
-              mb-1
-              sm:text-right text-center uppercase
-              font-bold
-            "
-                    >
-                        Participants:
-                    </span>
-                    <p className="text-base text-white font-bold sm:text-right text-center">20</p>
+                    <span className=" text-xs mb-1 sm:text-right text-center uppercase font-bold">Participants:</span>
+                    <p className="text-base text-white font-bold sm:text-right text-center">
+                        {state.commitments.totalParticipants}
+                    </p>
                 </div>
             </div>
             <BaseDivider className="mt-2 py-2" />
