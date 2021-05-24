@@ -62,12 +62,12 @@ const useMeowshi = () => {
         [addTransaction, meowshiContract]
     )
 
-    const unNyan = useCallback(
+    const unyan = useCallback(
         // todo: this should be updated with BigNumber as opposed to string
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await meowshiContract?.unNyan(account, amount?.value)
+                    const tx = await meowshiContract?.unyan(account, amount?.value)
                     return addTransaction(tx, { summary: 'Leave Meowshi' })
                 } catch (e) {
                     return e
@@ -77,7 +77,7 @@ const useMeowshi = () => {
         [addTransaction, meowshiContract]
     )
 
-    return { allowance, approve, nyan, unNyan }
+    return { allowance, approve, nyan, unyan }
 }
 
 export default useMeowshi
