@@ -58,7 +58,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
     const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
 
-    const { allowance, nyan, unNyan } = useMeowshi()
+    const { allowance, nyan, unyan } = useMeowshi()
 
     const walletConnected = !!account
     const toggleWalletModal = useWalletModalToggle()
@@ -114,7 +114,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
                     return
                 }
             } else if (activeTab === 1) {
-                const success = await sendTx(() => unNyan(parsedInput))
+                const success = await sendTx(() => unyan(parsedInput))
                 if (!success) {
                     setPendingTx(false)
                     //setModalOpen(true)
@@ -161,7 +161,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
                         }}
                     >
                         <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
-                            <p>{i18n._(t`UNNYAN xSUSHI`)}</p>
+                            <p>{i18n._(t`UNYAN xSUSHI`)}</p>
                         </div>
                     </div>
                 </div>
