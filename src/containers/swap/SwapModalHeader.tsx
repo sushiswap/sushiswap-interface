@@ -2,7 +2,7 @@ import { AlertTriangle, ArrowDown } from 'react-feather'
 import React, { useMemo } from 'react'
 import { Trade, TradeType } from '@sushiswap/sdk'
 import { t, Trans } from '@lingui/macro'
-import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from "../../functions"
 
 import { Field } from '../../state/swap/actions'
 import { isAddress, shortenAddress } from '../../functions'
