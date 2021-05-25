@@ -84,7 +84,6 @@ function Routes(): JSX.Element {
             <Route exact strict path="/pool" component={Pool} />
             <Route exact strict path="/transactions" component={Transactions} />
             <Route exact strict path="/create" component={RedirectToAddLiquidity} />
-            <Route exact strict path="/tokenmock" component={Token} />
             <Route exact path="/add" component={AddLiquidity} />
             <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
             <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
@@ -96,18 +95,9 @@ function Routes(): JSX.Element {
             <Route exact strict path="/zap" component={AddSingleSideLiquidity} />
             <Route exact strict path="/zap/:poolAddress" component={AddSingleSideLiquidity} />
             <Route exact strict path="/zap/:poolAddress/:currencyId" component={AddSingleSideLiquidity} />
+            <Route exact strict path="/token/:tokenId" component={Token} />
 
             {/* Redirects for app routes */}
-            <Route
-                exact
-                strict
-                path="/token/:address"
-                render={({
-                    match: {
-                        params: { address }
-                    }
-                }) => <Redirect to={`/swap/${address}`} />}
-            />
             <Route
                 exact
                 strict
