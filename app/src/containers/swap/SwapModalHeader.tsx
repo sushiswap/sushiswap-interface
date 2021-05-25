@@ -5,10 +5,10 @@ import { t, Trans } from '@lingui/macro'
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'
 
 import { Field } from '../../state/swap/actions'
-import { isAddress, shortenAddress, wrappedCurrency } from '../../functions'
+import { isAddress, shortenAddress } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import TokenIcon from '../../components/TokenIcon'
+import CurrencyLogo from '../../components/CurrencyLogo'
 
 export default function SwapModalHeader({
     trade,
@@ -31,20 +31,13 @@ export default function SwapModalHeader({
     ])
     const { priceImpactWithoutFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade])
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
-    const [tokenA, tokenB] = useMemo(
-        () => [
-            wrappedCurrency(trade.inputAmount.currency, chainId),
-            wrappedCurrency(trade.outputAmount.currency, chainId)
-        ],
-        [trade.inputAmount.currency, trade.outputAmount.currency, chainId]
-    )
 
     return (
         <div className="grid gap-4 pt-3 pb-4">
             <div className="grid gap-2">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <TokenIcon token={tokenA} />
+                        <CurrencyLogo currency={trade.inputAmount.currency} squared size={48} />
                         <div className="overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl text-high-emphesis">
                             {trade.inputAmount.toSignificant(6)}
                         </div>
@@ -58,7 +51,7 @@ export default function SwapModalHeader({
                 </div>
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <TokenIcon token={tokenB} />
+                        <CurrencyLogo currency={trade.outputAmount.currency} squared size={48} />
                         <div
                             className={`overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl ${
                                 priceImpactSeverity > 2 ? 'text-red' : 'text-high-emphesis'

@@ -39,10 +39,10 @@ import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useUserSlippageTolerance } from '../../state/user/hooks'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import TokenIcon from '../../components/TokenIcon'
 import LiquidityHeader from '../../containers/liquidity/LiquidityHeader'
 import RemoveLiquidityReceiveDetails from '../../containers/liquidity/RemoveLiquidityReceiveDetails'
 import LiquidityPrice from '../../containers/liquidity/LiquidityPrice'
+import CurrencyLogo from '../../components/CurrencyLogo'
 
 export default function Remove() {
     const { i18n } = useLingui()
@@ -363,7 +363,7 @@ export default function Remove() {
                 <div className="grid gap-2">
                     <div className="flex justify-between items-center">
                         <div className="gap-3 flex items-center">
-                            <TokenIcon token={tokenA} />
+                            <CurrencyLogo currency={currencyA} squared size={48} />
                             <div className="text-2xl font-bold text-high-emphesis">
                                 {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
                             </div>
@@ -377,7 +377,7 @@ export default function Remove() {
                     </div>
                     <div className="flex justify-between items-center">
                         <div className="gap-3 flex items-center">
-                            <TokenIcon token={tokenB} />
+                            <CurrencyLogo currency={currencyB} squared size={48} />
                             <div className="text-2xl font-bold text-high-emphesis">
                                 {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
                             </div>

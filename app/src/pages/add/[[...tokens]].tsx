@@ -40,7 +40,7 @@ import { useRouter } from 'next/router'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import TokenIcon from '../../components/TokenIcon'
+import CurrencyLogo from '../../components/CurrencyLogo'
 
 export default function Add() {
     const { i18n } = useLingui()
@@ -50,11 +50,6 @@ export default function Add() {
     const [currencyIdA, currencyIdB] = tokens as string[]
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)
-    const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
-        currencyA,
-        currencyB,
-        chainId
-    ])
 
     const oneCurrencyIsWETH = Boolean(
         chainId &&
@@ -227,8 +222,8 @@ export default function Add() {
                             currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
                     </div>
                     <div className="grid gap-2 grid-flow-col">
-                        <TokenIcon token={tokenA} />
-                        <TokenIcon token={tokenB} />
+                        <CurrencyLogo currency={currencyA} squared size={48} />
+                        <CurrencyLogo currency={currencyB} squared size={48} />
                     </div>
                 </div>
             </div>
@@ -239,8 +234,8 @@ export default function Add() {
                         {liquidityMinted?.toSignificant(6)}
                     </div>
                     <div className="grid gap-2 grid-flow-col">
-                        <TokenIcon token={tokenA} />
-                        <TokenIcon token={tokenB} />
+                        <CurrencyLogo currency={currencyA} squared size={48} />
+                        <CurrencyLogo currency={currencyB} squared size={48} />
                     </div>
                 </div>
                 <div className="text-2xl font-medium text-high-emphesis">

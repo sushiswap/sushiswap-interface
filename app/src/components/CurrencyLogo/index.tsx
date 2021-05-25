@@ -1,12 +1,12 @@
 import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
-import React, { useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 
 import Logo from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
-import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useHttpLocations from '../../hooks/useHttpLocations'
+import Image from 'next/image'
 
 const AvalancheLogo = '/images/native-tokens/avax.png'
 const BinanceCoinLogo = '/images/native-tokens/bnb.png'
@@ -33,22 +33,6 @@ const getTokenLogoURL = (address: string, chainId: any) => {
     return imageURL
 }
 
-const StyledNativeCurrencyLogo = styled.img<{ size: string }>`
-    width: ${({ size }) => size};
-    height: ${({ size }) => size};
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-    border-radius: 10px;
-`
-
-const StyledLogo = styled(Logo)<{ size: string }>`
-    width: ${({ size }) => size};
-    height: ${({ size }) => size};
-    // border-radius: ${({ size }) => size};
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.075);
-    border-radius: 50%;
-    // background-color: ${({ theme }) => theme.white};
-`
-
 const logo: { readonly [chainId in ChainId]?: string } = {
     [ChainId.MAINNET]: EthereumLogo,
     [ChainId.FANTOM]: FantomLogo,
@@ -69,19 +53,19 @@ const logo: { readonly [chainId in ChainId]?: string } = {
     [ChainId.OKEX_TESTNET]: OKExLogo
 }
 
-export default function CurrencyLogo({
-    currency,
-    size = '24px',
-    style
-}: {
+interface CurrencyLogoProps {
     currency?: Currency
-    size?: string
+    size?: string | number
     style?: React.CSSProperties
-}) {
+    className?: string
+    squared?: boolean
+}
+
+const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, className = '', squared }) => {
     const { chainId } = useActiveWeb3React()
     const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
 
-    const srcs: string[] = useMemo(() => {
+    const srcs = useMemo<string[]>(() => {
         if (currency === NATIVE) return []
 
         if (currency instanceof Token) {
@@ -95,8 +79,26 @@ export default function CurrencyLogo({
     }, [chainId, currency, uriLocations])
 
     if (currency === NATIVE && chainId) {
-        return <StyledNativeCurrencyLogo src={logo[chainId]} size={size} style={style} />
+        return (
+            <Image
+                width={size}
+                height={size}
+                src={logo[chainId] || `/images/tokens/unknown.png`}
+                className={`${squared ? 'rounded' : 'rounded-full'} ${className}`}
+            />
+        )
     }
 
-    return <StyledLogo size={size} srcs={srcs} alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`} style={style} />
+    return (
+        <Logo
+            width={size}
+            height={size}
+            className={`${squared ? 'rounded' : 'rounded-full'} ${className}`}
+            style={style}
+            srcs={srcs}
+            alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`}
+        />
+    )
 }
+
+export default CurrencyLogo
