@@ -17,7 +17,12 @@ export default function Token() {
             <Helmet>
                 <title>Token | Sushi</title>
             </Helmet>
-            <div className="flex justify-between w-full max-w-2xl rounded mb-2 p-4">
+
+            <div className="w-full max-w-2xl mb-5">
+                Tokens - <span className="text-high-emphesis">SUSHI</span>
+            </div>
+
+            <div className="flex justify-between w-full max-w-2xl rounded mb-6">
                 <div className="flex items-center">
                     <span className="text-body font-bold md:text-h5 text-high-emphesis">SUSHI</span>
                     <span className="ml-2">(SUSHI)</span>
@@ -27,7 +32,10 @@ export default function Token() {
                     <div className="ml-2">+13.8%</div>
                 </div>
             </div>
-            <div className="flex w-full max-w-2xl mb-3 p-4">
+
+            <div className="bg-dark-900 w-full max-w-2xl rounded mb-5">Chart</div>
+
+            <div className="flex w-full max-w-2xl mb-5">
                 <div className="flex flex-col bg-dark-900 rounded p-4">
                     <div className="text-sm">Liquidity (24H)</div>
                     <div className="text-body text-high-emphesis">$222,275,124.89</div>
@@ -44,7 +52,14 @@ export default function Token() {
                     <div className="text-sm">-24.94%</div>
                 </div>
             </div>
-            <div className="bg-dark-900 w-full max-w-2xl rounded mb-3 p-4">Token</div>
+
+            <div className="bg-dark-900 w-full max-w-2xl rounded mb-5">Swap</div>
+
+            <div className="bg-dark-900 w-full max-w-2xl rounded mb-5">About</div>
+
+            <div className="bg-dark-900 w-full max-w-2xl rounded mb-5">Top Moving Pairs</div>
+
+            <div className="bg-dark-900 w-full max-w-2xl rounded mb-5">Top Farms</div>
         </>
     )
 }
