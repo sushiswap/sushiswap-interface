@@ -11,14 +11,14 @@ export const to18Decimals = (value?: string | number | BigNumber) => {
 }
 
 export const toPrecision = (value: string | number | BigNumber, precision: number) => {
-    return parseFloat(parseFloat(value.toString()).toPrecision(3)).toString()
+    return parseFloat(parseFloat(value.toString()).toPrecision(precision)).toString()
 }
 
 export const divNumbers = (a: any, b: any) => {
     if (!a || !b) return 0
-    return parseFloat((parseFloat(a) / parseFloat(b)).toFixed())
+    return parseFloat((parseFloat(a) / parseFloat(b)).toFixed(5))
 }
 
 export const subNumbers = (a: any, b: any) => {
-    return parseFloat((parseFloat(a) - parseFloat(b)).toFixed())
+    return parseFloat((parseFloat(a) - parseFloat(b)).toFixed(5))
 }

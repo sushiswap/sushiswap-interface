@@ -35,7 +35,7 @@ const subscribeToNewCommitments = (auctionContract: Contract, dispatch: any, auc
             address: auctionId,
             topics: [TOPIC_ADDED_COMMITMENT]
         },
-        (error, result) => {
+        (result, error) => {
             if (!error) {
                 const decodedData = ethers.utils.defaultAbiCoder.decode(['address', 'uint256'], result.data)
                 addCommitment(dispatch, {

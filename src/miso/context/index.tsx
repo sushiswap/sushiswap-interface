@@ -77,6 +77,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
                 newState.commitments.totalParticipants = totalParticipants + 1
             }
             newState.commitments.commitmentsTotal += parseFloat(commitment.amount)
+            newState.commitments.commitments.push(commitment)
             return newState
         }
         case ActionType.RESET_COMMITMENT: {

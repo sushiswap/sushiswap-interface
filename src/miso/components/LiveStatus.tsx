@@ -32,10 +32,10 @@ export default function LiveStatus({
     const { state } = useContext(MisoContext)
 
     const maxTokenAmount = () => {
-        return toPrecision(Math.max(0, subNumbers(to18Decimals(marketInfo?.totalTokens), totalTokensCommitted)), 3)
+        return toPrecision(Math.max(0, subNumbers(to18Decimals(marketInfo?.totalTokens), totalTokensCommitted)), 5)
     }
     const percentRemaining = () => {
-        return parseFloat(toPrecision(divNumbers(maxTokenAmount(), to18Decimals(marketInfo?.totalTokens)) * 100, 4))
+        return parseFloat(toPrecision(divNumbers(maxTokenAmount(), to18Decimals(marketInfo?.totalTokens)) * 100, 5))
     }
 
     return (
