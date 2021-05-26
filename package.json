@@ -98,6 +98,7 @@
         "fuse.js": "^6.4.6",
         "husky": "^6.0.0",
         "jazzicon": "^1.5.0",
+        "lightweight-charts": "^3.3.0",
         "lint-staged": "^10.0.0",
         "lodash": "^4.17.20",
         "lodash.flatmap": "^4.5.0",
