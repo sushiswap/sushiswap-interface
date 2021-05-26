@@ -68,7 +68,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
             const commitmentExists = newState.commitments.commitments.some(
                 (commit: Commitment) => commit.txHash === commitment.txHash
             )
-            if (commitmentExists) return false
+            if (commitmentExists) return newState
             const addressExists = newState.commitments.commitments.some(
                 (commit: Commitment) => commit.address === commitment.address
             )

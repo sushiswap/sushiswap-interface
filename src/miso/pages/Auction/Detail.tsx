@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
-import { AboutCard, LiveStatus } from '../../components'
+import { AboutCard } from '../../components'
+import { LiveStatus } from '../../containers'
 import { MisoContext } from '../../context'
 import { useAuctionTemplateId, useAuctionData, useAuctionDocuments } from '../../hooks'
 import { toPrecision, toDecimals, to18Decimals, clearingPrice } from '../../utils'
@@ -90,6 +91,13 @@ export default function AuctionDetail({
                     tokenInfo={tokenInfo}
                     totalCommitments={commitmentsTotal}
                     totalTokensCommitted={totalTokensCommitted}
+                    status={{
+                        auction: auction,
+                        date: date,
+                        type: type,
+                        auctionSuccessful: auctionSuccessful
+                    }}
+                    price={currentPrice}
                 />
             </AuctinDetailContainer>
         </>

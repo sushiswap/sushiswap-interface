@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { MisoContext } from '../context'
 import { textCheck, to18Decimals, toPrecision, divNumbers, subNumbers } from '../utils'
 
+import { DutchProgress } from './Progress'
+
 const CardContainer = styled.div``
 const BaseDivider = styled.div`
     width: 100%;
@@ -19,6 +21,7 @@ interface LiveStatusProps {
     totalCommitments?: any
     totalTokensCommitted?: any
     userInfo?: any
+    price?: any
 }
 
 export default function LiveStatus({
@@ -27,7 +30,8 @@ export default function LiveStatus({
     marketInfo,
     totalCommitments,
     totalTokensCommitted,
-    userInfo
+    userInfo,
+    price
 }: LiveStatusProps) {
     const { state } = useContext(MisoContext)
 
@@ -36,6 +40,22 @@ export default function LiveStatus({
     }
     const percentRemaining = () => {
         return parseFloat(toPrecision(divNumbers(maxTokenAmount(), to18Decimals(marketInfo?.totalTokens)) * 100, 5))
+    }
+
+    const dutchProgress = () => {
+        try {
+            const startPrice = marketInfo?.startPrice
+            const minimumPrice = marketInfo?.minimumPrice
+            const currentPrice = price
+
+            const d1 = startPrice - minimumPrice
+            const d2 = Math.max(0, currentPrice - minimumPrice)
+            const progress = 100 - (100 * d2) / d1
+
+            return progress
+        } catch (e) {
+            return 0
+        }
     }
 
     return (
@@ -69,6 +89,15 @@ export default function LiveStatus({
                 </div>
             </div>
             <BaseDivider className="mt-2 py-2" />
+            {status.type === 'dutch' && (
+                <DutchProgress
+                    finalize={true}
+                    progress={dutchProgress()}
+                    userInfo={userInfo}
+                    marketInfo={marketInfo}
+                    price={price}
+                />
+            )}
         </CardContainer>
     )
 }
