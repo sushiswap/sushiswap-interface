@@ -652,7 +652,7 @@ export default function Swap() {
                                 <div className="font-semibold">
                                     <Trans>Final Day of Auction</Trans>
                                 </div>
-                                <div className="text-sm">
+                                <div className="text-xs">
                                     <Trans>
                                         Place your bid for the world’s first tokenized Sake now on MISO before they’re
                                         gone
