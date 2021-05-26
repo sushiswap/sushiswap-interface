@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
 import { createChart } from 'lightweight-charts'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import { ChevronRight, ExternalLink } from 'react-feather'
 import { mockData } from './chartMockData'
 
 export default function Token() {
@@ -48,19 +49,16 @@ export default function Token() {
                 }
             }
         })
-
         const areaSeries = chart.addAreaSeries({
             topColor: 'rgba(38, 198, 218, 0.56)',
             bottomColor: 'rgba(38, 198, 218, 0.04)',
             lineColor: 'rgba(38, 198, 218, 1)',
             lineWidth: 2
         })
-
         const lineSeries = chart.addLineSeries({
             color: '#7d48b9',
             lineWidth: 2
         })
-
         lineSeries.setData(mockData)
     }, [])
 
@@ -70,22 +68,24 @@ export default function Token() {
                 <title>Token | Sushi</title>
             </Helmet>
 
-            <div className="w-full max-w-2xl mb-5">
-                Tokens - <span className="text-high-emphesis">SUSHI</span>
+            <div className="flex items-center w-full max-w-2xl mb-5">
+                <div className="text-purple mr-1">Tokens</div>
+                <ChevronRight size="16" />
+                <div className="text-high-emphesis ml-1">SUSHI</div>
             </div>
 
             <div className="flex justify-between w-full max-w-2xl rounded mb-6">
                 <div className="flex items-center">
-                    <span className="text-body font-bold md:text-h5 text-high-emphesis">SUSHI</span>
+                    <span className="text-body font-bold md:text-h1 text-high-emphesis">SUSHI</span>
                     <span className="ml-2">(SUSHI)</span>
                 </div>
                 <div className="flex items-center">
-                    <div className="text-body font-bold md:text-h5 text-high-emphesis">$17.01</div>
-                    <div className="ml-2">+13.8%</div>
+                    <div className="text-body font-bold md:text-h1 text-high-emphesis">$17.01</div>
+                    <div className="ml-4 text-green">+13.8%</div>
                 </div>
             </div>
 
-            <div ref={chartRef} className="w-full max-w-2xl rounded mb-2" />
+            <div ref={chartRef} className="w-full max-w-2xl rounded" />
 
             <div className="flex justify-end w-full max-w-2xl mb-6">
                 <button className="p-3">24H</button>
@@ -98,27 +98,30 @@ export default function Token() {
             <div className="grid grid-cols-3 gap-6 w-full max-w-2xl mb-6">
                 <div className="flex flex-col bg-dark-900 rounded p-6">
                     <div className="text-sm">Liquidity (24H)</div>
-                    <div className="text-body text-high-emphesis">$222,275,124.89</div>
-                    <div className="text-sm">+2.34%</div>
+                    <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
+                    <div className="text-sm text-green">+2.34%</div>
                 </div>
                 <div className="flex flex-col bg-dark-900 rounded p-6">
                     <div className="text-sm">Volume (24H)</div>
-                    <div className="text-body text-high-emphesis">$14,682,757.45</div>
-                    <div className="text-sm">-24.94%</div>
+                    <div className="md:text-h5 text-high-emphesis">$14,682,757.45</div>
+                    <div className="text-sm text-red">-24.94%</div>
                 </div>
                 <div className="flex flex-col bg-dark-900 rounded p-6">
                     <div className="text-sm">Fees (24H)</div>
-                    <div className="text-body text-high-emphesis">$44,048.27</div>
-                    <div className="text-sm">-24.94%</div>
+                    <div className="md:text-h5 text-high-emphesis">$44,048.27</div>
+                    <div className="text-sm text-red">-24.94%</div>
                 </div>
             </div>
 
-            <div className="bg-dark-900 w-full max-w-2xl rounded mb-5">Swap</div>
+            <div className="bg-dark-900 w-full max-w-2xl rounded mb-8">Swap</div>
 
-            <div className="w-full max-w-2xl rounded mb-6 py-4">
+            <div className="w-full max-w-2xl rounded py-4 mb-8">
                 <div className="flex justify-between pb-6">
-                    <div className="text-body font-bold md:text-h5 text-high-emphesis">About SUSHI</div>
-                    <div>View Contract</div>
+                    <div className="font-bold text-h4 text-high-emphesis">About SUSHI</div>
+                    <button className="flex items-center">
+                        <div className="mr-1">View Contract</div>
+                        <ExternalLink size="16" />
+                    </button>
                 </div>
                 <div className="text-high-emphesis">
                     SUSHI is the native liquidity incentive and governance token associated with the SushiSwap protocol,
@@ -128,22 +131,22 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="w-full max-w-2xl mb-6">
-                <div className="text-body font-bold md:text-h5 text-high-emphesis pb-6">Top Moving Pairs</div>
+            <div className="w-full max-w-2xl mb-8">
+                <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
                 <div className="grid grid-cols-4 gap-6">
-                    <div className="bg-dark-900 p-4 rounded">ETH</div>
-                    <div className="bg-dark-900 p-4 rounded">USDT</div>
-                    <div className="bg-dark-900 p-4 rounded">UNI</div>
-                    <div className="bg-dark-900 p-4 rounded">LINK</div>
-                    <div className="bg-dark-900 p-4 rounded">WBTC</div>
-                    <div className="bg-dark-900 p-4 rounded">AAVE</div>
-                    <div className="bg-dark-900 p-4 rounded">COMP</div>
-                    <div className="bg-dark-900 p-4 rounded">MKR</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">ETH</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">USDT</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">UNI</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">LINK</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">WBTC</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">AAVE</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">COMP</div>
+                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">MKR</div>
                 </div>
             </div>
 
-            <div className="w-full max-w-2xl mb-6">
-                <div className="text-body font-bold md:text-h5 text-high-emphesis pb-6">Top Farms</div>
+            <div className="w-full max-w-2xl mb-8">
+                <div className="font-bold text-h4 text-high-emphesis pb-4">Top Farms</div>
                 <div className="grid grid-cols-3 gap-6 px-4 py-2">
                     <div>Token Pair</div>
                     <div>ROI (1Y)</div>
