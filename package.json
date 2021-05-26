@@ -50,6 +50,7 @@
     "fuse.js": "^6.4.6",
     "jazzicon": "^1.5.0",
     "lodash": "^4.17.21",
+    "lightweight-charts": "^3.3.0",
     "lottie-react": "^2.1.0",
     "next": "10.2.3",
     "next-pwa": "^5.2.21",
