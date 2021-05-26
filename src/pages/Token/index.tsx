@@ -1,16 +1,68 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
-
+import { createChart } from 'lightweight-charts'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-
 import { useLingui } from '@lingui/react'
+import { mockData } from './chartMockData'
 
 export default function Token() {
     const { i18n } = useLingui()
 
     const theme = useContext(ThemeContext)
     const { account, chainId } = useActiveWeb3React()
+
+    const chartRef = React.useRef() as any
+
+    useEffect(() => {
+        const chart = createChart(chartRef.current, {
+            width: 672,
+            height: 300,
+            layout: {
+                textColor: '#d1d4dc',
+                backgroundColor: 'transparent'
+            },
+            rightPriceScale: {
+                visible: false
+            },
+            leftPriceScale: {
+                visible: false
+            },
+            timeScale: {
+                visible: false
+            },
+            crosshair: {
+                horzLine: {
+                    visible: false,
+                },
+                vertLine: {
+                    visible: false,
+                },
+            },
+            grid: {
+                vertLines: {
+                    color: 'rgba(42, 46, 57, 0)'
+                },
+                horzLines: {
+                    color: 'rgba(42, 46, 57, 0)'
+                }
+            }
+        })
+
+        const areaSeries = chart.addAreaSeries({
+            topColor: 'rgba(38, 198, 218, 0.56)',
+            bottomColor: 'rgba(38, 198, 218, 0.04)',
+            lineColor: 'rgba(38, 198, 218, 1)',
+            lineWidth: 2
+        })
+
+        const lineSeries = chart.addLineSeries({
+            color: '#7d48b9',
+            lineWidth: 2,
+          });
+
+        lineSeries.setData(mockData)
+    }, [])
 
     return (
         <>
@@ -33,7 +85,7 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="bg-dark-900 w-full max-w-2xl rounded mb-6">Chart</div>
+            <div ref={chartRef} className="w-full max-w-2xl rounded mb-6" />
 
             <div className="grid grid-cols-3 gap-6 w-full max-w-2xl mb-6">
                 <div className="flex flex-col bg-dark-900 rounded p-6">
