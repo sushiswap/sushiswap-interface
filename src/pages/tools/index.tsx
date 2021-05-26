@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import Head from 'next/head'
-import Layout from '../../components/Layout'
+import Layout from '../../layouts/DefaultLayout'
 import Link from 'next/link'
 import Typography from '../../components/Typography'
 

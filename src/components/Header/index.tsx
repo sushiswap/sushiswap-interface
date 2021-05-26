@@ -27,8 +27,8 @@ function AppBar(): JSX.Element {
 
     return (
         //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
-        <header className="flex-shrink-0">
-            <Disclosure as="nav" className="z-10 w-screen bg-transparent gradiant-border-bottom">
+        <header className="flex-shrink-0 w-full">
+            <Disclosure as="nav" className="z-10 w-full bg-transparent gradiant-border-bottom">
                 {({ open }) => (
                     <>
                         <div className="px-4 py-4">

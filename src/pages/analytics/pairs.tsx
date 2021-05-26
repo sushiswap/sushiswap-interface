@@ -1,7 +1,7 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 
 import Head from 'next/head'
-import Layout from '../../components/Layout'
+import Layout from '../../layouts/DefaultLayout'
 import NavLink from '../../components/NavLink'
 import Search from '../../components/Search'
 import Typography from '../../components/Typography'

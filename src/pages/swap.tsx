@@ -22,7 +22,7 @@ import { Field } from '../state/swap/actions'
 import Head from 'next/head'
 import { INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import Image from 'next/image'
-import Layout from '../components/Layout'
+import Layout from '../layouts/DefaultLayout'
 import LinkStyledButton from '../components/LinkStyledButton'
 import Loader from '../components/Loader'
 import Lottie from 'lottie-react'
@@ -54,7 +54,7 @@ export default function Swap() {
     // token warning stuff
     const [loadedInputCurrency, loadedOutputCurrency] = [
         useCurrency(loadedUrlParams?.inputCurrencyId),
-        useCurrency(loadedUrlParams?.outputCurrencyId)
+        useCurrency(loadedUrlParams?.outputCurrencyId),
     ]
     const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
     const urlLoadedTokens: Token[] = useMemo(
@@ -89,11 +89,11 @@ export default function Swap() {
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
     const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
-    const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
-        currencies[Field.INPUT],
-        currencies[Field.OUTPUT],
-        typedValue
-    )
+    const {
+        wrapType,
+        execute: onWrap,
+        inputError: wrapInputError,
+    } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
     const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
     const { address: recipientAddress } = useENSAddress(recipient)
 
@@ -102,11 +102,11 @@ export default function Swap() {
     const parsedAmounts = showWrap
         ? {
               [Field.INPUT]: parsedAmount,
-              [Field.OUTPUT]: parsedAmount
+              [Field.OUTPUT]: parsedAmount,
           }
         : {
               [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-              [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
+              [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount,
           }
 
     const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
@@ -138,14 +138,14 @@ export default function Swap() {
         tradeToConfirm: undefined,
         attemptingTxn: false,
         swapErrorMessage: undefined,
-        txHash: undefined
+        txHash: undefined,
     })
 
     const formattedAmounts = {
         [independentField]: typedValue,
         [dependentField]: showWrap
             ? parsedAmounts[independentField]?.toExact() ?? ''
-            : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
+            : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
     }
 
     const route = trade?.route
@@ -191,16 +191,16 @@ export default function Swap() {
             tradeToConfirm,
             showConfirm,
             swapErrorMessage: undefined,
-            txHash: undefined
+            txHash: undefined,
         })
         swapCallback()
-            .then(hash => {
+            .then((hash) => {
                 setSwapState({
                     attemptingTxn: false,
                     tradeToConfirm,
                     showConfirm,
                     swapErrorMessage: undefined,
-                    txHash: hash
+                    txHash: hash,
                 })
 
                 ReactGA.event({
@@ -213,22 +213,22 @@ export default function Swap() {
                             : 'Swap w/ Send',
                     label: [
                         trade?.inputAmount?.currency?.getSymbol(chainId),
-                        trade?.outputAmount?.currency?.getSymbol(chainId)
-                    ].join('/')
+                        trade?.outputAmount?.currency?.getSymbol(chainId),
+                    ].join('/'),
                 })
 
                 ReactGA.event({
                     category: 'Routing',
-                    action: singleHopOnly ? 'Swap with multihop disabled' : 'Swap with multihop enabled'
+                    action: singleHopOnly ? 'Swap with multihop disabled' : 'Swap with multihop enabled',
                 })
             })
-            .catch(error => {
+            .catch((error) => {
                 setSwapState({
                     attemptingTxn: false,
                     tradeToConfirm,
                     showConfirm,
                     swapErrorMessage: error.message,
-                    txHash: undefined
+                    txHash: undefined,
                 })
             })
     }, [
@@ -241,7 +241,7 @@ export default function Swap() {
         account,
         trade,
         chainId,
-        singleHopOnly
+        singleHopOnly,
     ])
 
     // errors
@@ -272,7 +272,7 @@ export default function Swap() {
     }, [attemptingTxn, showConfirm, swapErrorMessage, trade, txHash])
 
     const handleInputSelect = useCallback(
-        inputCurrency => {
+        (inputCurrency) => {
             setApprovalSubmitted(false) // reset 2 step UI for approvals
             onCurrencySelection(Field.INPUT, inputCurrency)
         },
@@ -283,9 +283,10 @@ export default function Swap() {
         maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
     }, [maxAmountInput, onUserInput])
 
-    const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
-        onCurrencySelection
-    ])
+    const handleOutputSelect = useCallback(
+        (outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency),
+        [onCurrencySelection]
+    )
 
     const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
@@ -518,7 +519,7 @@ export default function Swap() {
                                             attemptingTxn: false,
                                             swapErrorMessage: undefined,
                                             showConfirm: true,
-                                            txHash: undefined
+                                            txHash: undefined,
                                         })
                                     }
                                 }}
@@ -551,7 +552,7 @@ export default function Swap() {
                                         attemptingTxn: false,
                                         swapErrorMessage: undefined,
                                         showConfirm: true,
-                                        txHash: undefined
+                                        txHash: undefined,
                                     })
                                 }
                             }}

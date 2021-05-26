@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Layout from '../components/Layout'
+import Layout from '../layouts/DefaultLayout'
 import React from 'react'
 
 export default function Migrate() {

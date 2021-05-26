@@ -52,10 +52,19 @@ function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter()
 
     // TODO: Refactor KashiProvider to /state/kashi to align with rest of app currently
-    const KashiDataProvider =
-        router.asPath.includes('/lend') || router.asPath.includes('/borrow') || router.asPath.includes('/create')
-            ? KashiProvider
-            : NOOP
+
+    const isKashi = ['/lend', '/borrow', '/create'].some((path) => router.asPath.includes(path))
+
+    // const Layout = isKashi
+    //     ? ({ children }) => (
+    //           <KashiProvider>
+    //               <KashiLayout>{children}</KashiLayout>
+    //           </KashiProvider>
+    //       )
+    //     : ({ children }) => <DefaultLayout>{children}</DefaultLayout>
+
+    const KashiDataProvider = isKashi ? KashiProvider : NOOP
+
     return (
         <>
             <Head>

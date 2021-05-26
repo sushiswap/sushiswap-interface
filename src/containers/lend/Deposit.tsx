@@ -31,7 +31,9 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     const max = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
 
-    const warnings = new Warnings().add(
+    const warnings = new Warnings()
+
+    warnings.add(
         balance?.lt(value.toBigNumber(pair.asset.decimals)),
         `Please make sure your ${
             useBento ? 'BentoBox' : 'wallet'
@@ -48,7 +50,10 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         transactionReview.addUSD('Balance USD', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
         const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.add(amount))
         transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
-        if (pair.currentExchangeRate.isZero()) {
+        if (
+            (pair.isTWAP && pair.oracleLP.blockTimestampLast + 300 < Date.now() / 1000) ||
+            pair.currentExchangeRate.isZero()
+        ) {
             transactionReview.add(
                 'Exchange Rate',
                 formattedNum(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
@@ -62,7 +67,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     // Handlers
     async function onExecute(cooker: KashiCooker): Promise<string> {
         if (pair.currentExchangeRate.isZero()) {
-            // cooker.updateExchangeRate(false, ZERO, ZERO)
+            cooker.updateExchangeRate(false, ZERO, ZERO)
         }
         cooker.addAsset(value.toBigNumber(pair.asset.decimals), useBento)
         return `Deposit ${pair.asset.symbol}`
@@ -87,6 +92,7 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
             />
 
             <WarningsList warnings={warnings} />
+
             <TransactionReviewList transactionReview={transactionReview} />
 
             <KashiApproveButton

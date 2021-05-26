@@ -31,6 +31,7 @@ import { e10 } from '../functions/math'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useAllTokens } from '../hooks/Tokens'
+import { useRouter } from 'next/router'
 import { useTotalSupply } from '../hooks/useTotalSupply'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
@@ -94,11 +95,15 @@ export default function Create() {
 
     const tokens = useAllTokens()
 
+    const router = useRouter()
+
     const chainlinkTokens = chainId && CHAINLINK_TOKENS[chainId]
 
     // TODO: Low liquidity warning
-    const createWarnings = new Warnings().add(
-        pairState === PairState.NOT_EXISTS,
+    const warnings = new Warnings()
+
+    warnings.add(
+        selectedOracle?.id === OracleId.SUSHISWAP && pairState === PairState.NOT_EXISTS,
         'SushiSwap pair does not exist!',
         true,
         new Warning(selectedOracle?.id === OracleId.SUSHISWAP && noLiquidity, 'SushiSwap pair has no liquidity!', true)
@@ -119,7 +124,7 @@ export default function Create() {
         }
     }, [selectedAsset])
 
-    const getOracleData = async (asset: any, collateral: any) => {
+    const getOracleData = async (asset: Token, collateral: Token) => {
         const oracleData = ''
 
         if (selectedOracle && selectedOracle.id === OracleId.SUSHISWAP) {
@@ -132,6 +137,7 @@ export default function Create() {
         }
 
         const mapping = CHAINLINK_MAPPING[chainId || 1] || {}
+
         for (const address in mapping) {
             mapping[address].address = address
         }
@@ -216,6 +222,8 @@ export default function Create() {
 
             setSelectedAsset(undefined)
             setSelectedCollateral(undefined)
+
+            router.push('/lend')
         } catch (e) {
             console.error(e)
         }
@@ -229,9 +237,13 @@ export default function Create() {
             )
         }
 
-        if (oracle.id === OracleId.SUSHISWAP && !noLiquidity) {
+        if (oracle.id === OracleId.SUSHISWAP) {
             return true
         }
+
+        // if (oracle.id === OracleId.SUSHISWAP && !noLiquidity && pairState === PairState.EXISTS) {
+        //     return true
+        // }
 
         return false
     }
@@ -278,6 +290,7 @@ export default function Create() {
                                         <Listbox.Button className="relative w-full p-3 text-left transition duration-150 ease-in-out border border-none rounded-md cursor-pointer bg-dark-700 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
                                             <span className="flex items-center space-x-3 truncate">
                                                 <Image
+                                                    loader={(resolverProps) => resolverProps.src}
                                                     src={
                                                         selectedAsset?.tokenInfo?.logoURI ||
                                                         '/images/tokens/unknown.png'
@@ -334,6 +347,7 @@ export default function Create() {
                                                         >
                                                             <span className="flex items-center space-x-3 truncate">
                                                                 <Image
+                                                                    loader={(resolverProps) => resolverProps.src}
                                                                     src={
                                                                         token?.tokenInfo?.logoURI ||
                                                                         '/images/tokens/unknown.png'
@@ -378,6 +392,7 @@ export default function Create() {
                                         <Listbox.Button className="relative w-full p-3 text-left transition duration-150 ease-in-out border border-none rounded-md cursor-pointer bg-dark-700 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
                                             <span className="flex items-center space-x-3 truncate">
                                                 <Image
+                                                    loader={(resolverProps) => resolverProps.src}
                                                     src={
                                                         selectedCollateral?.tokenInfo?.logoURI ||
                                                         '/images/tokens/unknown.png'
@@ -434,6 +449,7 @@ export default function Create() {
                                                         >
                                                             <span className="flex items-center space-x-3 truncate">
                                                                 <Image
+                                                                    loader={(resolverProps) => resolverProps.src}
                                                                     src={
                                                                         token?.tokenInfo?.logoURI ||
                                                                         '/images/tokens/unknown.png'
@@ -515,7 +531,7 @@ export default function Create() {
                                                 static
                                                 className="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:border-none focus:outline-none sm:text-sm sm:leading-5"
                                             >
-                                                {oracles.map((oracle: any) => (
+                                                {oracles.filter(oracleFilter).map((oracle: Oracle) => (
                                                     <Listbox.Option
                                                         key={oracle.id}
                                                         value={oracle}
@@ -552,7 +568,7 @@ export default function Create() {
                         </Listbox>
                     )}
 
-                    <WarningsList warnings={createWarnings} />
+                    <WarningsList warnings={warnings} />
 
                     <Button
                         color="gradient"
@@ -562,7 +578,7 @@ export default function Create() {
                             !selectedCollateral ||
                             !selectedAsset ||
                             selectedCollateral === selectedAsset ||
-                            (selectedOracle?.id === OracleId.SUSHISWAP && noLiquidity)
+                            warnings.some((warning) => warning.breaking)
                         }
                     >
                         Create Market

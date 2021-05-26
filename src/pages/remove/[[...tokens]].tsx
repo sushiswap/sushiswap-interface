@@ -22,7 +22,7 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Field } from '../../state/burn/actions'
 import Head from 'next/head'
 import Header from '../../components/ExchangeHeader'
-import Layout from '../../components/Layout'
+import Layout from '../../layouts/DefaultLayout'
 import LiquidityHeader from '../../containers/liquidity/LiquidityHeader'
 import LiquidityPrice from '../../containers/liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../components/PositionCard'
@@ -54,11 +54,10 @@ export default function Remove() {
     const [currencyIdA, currencyIdB] = tokens as string[]
     const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined]
     const { account, chainId, library } = useActiveWeb3React()
-    const [tokenA, tokenB] = useMemo(() => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)], [
-        currencyA,
-        currencyB,
-        chainId
-    ])
+    const [tokenA, tokenB] = useMemo(
+        () => [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)],
+        [currencyA, currencyB, chainId]
+    )
 
     // toggle wallet when disconnected
     const toggleWalletModal = useWalletModalToggle()
@@ -96,7 +95,9 @@ export default function Remove() {
                 ? typedValue
                 : parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',
         [Field.CURRENCY_B]:
-            independentField === Field.CURRENCY_B ? typedValue : parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? ''
+            independentField === Field.CURRENCY_B
+                ? typedValue
+                : parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? '',
     }
 
     const atMaxAmount = parsedAmounts[Field.LIQUIDITY_PERCENT]?.equalTo(new Percent('1'))
@@ -105,9 +106,8 @@ export default function Remove() {
     const pairContract: Contract | null = usePairContract(pair?.liquidityToken?.address)
 
     // allowance handling
-    const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(
-        null
-    )
+    const [signatureData, setSignatureData] =
+        useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
     const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], getRouterAddress(chainId))
 
     const isArgentWallet = useIsArgentWallet()
@@ -129,50 +129,50 @@ export default function Remove() {
                 { name: 'name', type: 'string' },
                 { name: 'version', type: 'string' },
                 { name: 'chainId', type: 'uint256' },
-                { name: 'verifyingContract', type: 'address' }
+                { name: 'verifyingContract', type: 'address' },
             ]
             const domain = {
                 name: 'SushiSwap LP Token',
                 version: '1',
                 chainId: chainId,
-                verifyingContract: pair.liquidityToken.address
+                verifyingContract: pair.liquidityToken.address,
             }
             const Permit = [
                 { name: 'owner', type: 'address' },
                 { name: 'spender', type: 'address' },
                 { name: 'value', type: 'uint256' },
                 { name: 'nonce', type: 'uint256' },
-                { name: 'deadline', type: 'uint256' }
+                { name: 'deadline', type: 'uint256' },
             ]
             const message = {
                 owner: account,
                 spender: getRouterAddress(chainId),
                 value: liquidityAmount.raw.toString(),
                 nonce: nonce.toHexString(),
-                deadline: deadline.toNumber()
+                deadline: deadline.toNumber(),
             }
             const data = JSON.stringify({
                 types: {
                     EIP712Domain,
-                    Permit
+                    Permit,
                 },
                 domain,
                 primaryType: 'Permit',
-                message
+                message,
             })
 
             library
                 .send('eth_signTypedData_v4', [account, data])
                 .then(splitSignature)
-                .then(signature => {
+                .then((signature) => {
                     setSignatureData({
                         v: signature.v,
                         r: signature.r,
                         s: signature.s,
-                        deadline: deadline.toNumber()
+                        deadline: deadline.toNumber(),
                     })
                 })
-                .catch(error => {
+                .catch((error) => {
                     // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
                     if (error?.code !== 4001) {
                         approveCallback()
@@ -196,15 +196,18 @@ export default function Remove() {
         (typedValue: string): void => onUserInput(Field.LIQUIDITY_PERCENT, typedValue),
         [onUserInput]
     )
-    const onLiquidityInput = useCallback((typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue), [
-        onUserInput
-    ])
-    const onCurrencyAInput = useCallback((typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue), [
-        onUserInput
-    ])
-    const onCurrencyBInput = useCallback((typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue), [
-        onUserInput
-    ])
+    const onLiquidityInput = useCallback(
+        (typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue),
+        [onUserInput]
+    )
+    const onCurrencyAInput = useCallback(
+        (typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue),
+        [onUserInput]
+    )
+    const onCurrencyBInput = useCallback(
+        (typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue),
+        [onUserInput]
+    )
 
     // tx sending
     const addTransaction = useTransactionAdder()
@@ -218,7 +221,7 @@ export default function Remove() {
 
         const amountsMin = {
             [Field.CURRENCY_A]: calculateSlippageAmount(currencyAmountA, allowedSlippage)[0],
-            [Field.CURRENCY_B]: calculateSlippageAmount(currencyAmountB, allowedSlippage)[0]
+            [Field.CURRENCY_B]: calculateSlippageAmount(currencyAmountB, allowedSlippage)[0],
         }
 
         if (!currencyA || !currencyB) throw new Error('missing tokens')
@@ -242,7 +245,7 @@ export default function Remove() {
                     amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
                     amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
                     account,
-                    deadline.toHexString()
+                    deadline.toHexString(),
                 ]
             }
             // removeLiquidity
@@ -255,7 +258,7 @@ export default function Remove() {
                     amountsMin[Field.CURRENCY_A].toString(),
                     amountsMin[Field.CURRENCY_B].toString(),
                     account,
-                    deadline.toHexString()
+                    deadline.toHexString(),
                 ]
             }
         }
@@ -265,7 +268,7 @@ export default function Remove() {
             if (oneCurrencyIsETH) {
                 methodNames = [
                     'removeLiquidityETHWithPermit',
-                    'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens'
+                    'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens',
                 ]
                 args = [
                     currencyBIsETH ? tokenA.address : tokenB.address,
@@ -277,7 +280,7 @@ export default function Remove() {
                     false,
                     signatureData.v,
                     signatureData.r,
-                    signatureData.s
+                    signatureData.s,
                 ]
             }
             // removeLiquidityETHWithPermit
@@ -294,7 +297,7 @@ export default function Remove() {
                     false,
                     signatureData.v,
                     signatureData.r,
-                    signatureData.s
+                    signatureData.s,
                 ]
             }
         } else {
@@ -302,17 +305,17 @@ export default function Remove() {
         }
 
         const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
-            methodNames.map(methodName =>
+            methodNames.map((methodName) =>
                 router.estimateGas[methodName](...args)
                     .then(calculateGasMargin)
-                    .catch(error => {
+                    .catch((error) => {
                         console.error(`estimateGas failed`, methodName, args, error)
                         return undefined
                     })
             )
         )
 
-        const indexOfSuccessfulEstimation = safeGasEstimates.findIndex(safeGasEstimate =>
+        const indexOfSuccessfulEstimation = safeGasEstimates.findIndex((safeGasEstimate) =>
             BigNumber.isBigNumber(safeGasEstimate)
         )
 
@@ -325,7 +328,7 @@ export default function Remove() {
 
             setAttemptingTxn(true)
             await router[methodName](...args, {
-                gasLimit: safeGasEstimate
+                gasLimit: safeGasEstimate,
             })
                 .then((response: TransactionResponse) => {
                     setAttemptingTxn(false)
@@ -339,7 +342,7 @@ export default function Remove() {
                             ' and ' +
                             parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
                             ' ' +
-                            currencyB?.getSymbol(chainId)
+                            currencyB?.getSymbol(chainId),
                     })
 
                     setTxHash(response.hash)
@@ -347,7 +350,7 @@ export default function Remove() {
                     ReactGA.event({
                         category: 'Liquidity',
                         action: 'Remove',
-                        label: [currencyA?.getSymbol(chainId), currencyB?.getSymbol(chainId)].join('/')
+                        label: [currencyA?.getSymbol(chainId), currencyB?.getSymbol(chainId)].join('/'),
                     })
                 })
                 .catch((error: Error) => {
@@ -384,8 +387,9 @@ export default function Remove() {
                 </RowBetween>
 
                 <div className="py-5 text-sm italic text-gray-500">
-                    {t`Output is estimated. If the price changes by more than ${allowedSlippage /
-                        100}% your transaction will revert.`}
+                    {t`Output is estimated. If the price changes by more than ${
+                        allowedSlippage / 100
+                    }% your transaction will revert.`}
                 </div>
             </AutoColumn>
         )

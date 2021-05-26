@@ -28,7 +28,7 @@ export default function Layout({
     // const balances = useBentoBalances()
     const { chainId } = useActiveWeb3React()
     return (
-        <div className="z-0 flex flex-col items-start w-screen h-full overflow-x-hidden overflow-y-auto">
+        <div className="z-0 flex flex-col items-start w-full h-full overflow-x-hidden overflow-y-auto">
             <Header />
             <Main>
                 <div className="container px-0 mx-auto sm:px-4">

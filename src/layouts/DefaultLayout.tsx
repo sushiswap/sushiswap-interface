@@ -1,7 +1,7 @@
-import Banner from '../Banner'
-import Footer from '../Footer'
-import Header from '../Header'
-import Main from '../Main'
+import Banner from '../components/Banner'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
+import Main from '../components/Main'
 
 const Layout = ({ children }) => {
     return (

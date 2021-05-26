@@ -28,6 +28,8 @@ export default function Lend() {
         { key: 'currentSupplyAPR.value', direction: 'descending' }
     )
 
+    console.log({ fullPairs })
+
     return (
         <KashiLayout
             left={
@@ -107,11 +109,11 @@ export default function Lend() {
                                                             <div className="hidden space-x-2 md:flex">
                                                                 <AsyncIcon
                                                                     src={pair.asset.tokenInfo.logoURI}
-                                                                    className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                    className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                                 />
                                                                 <AsyncIcon
                                                                     src={pair.collateral.tokenInfo.logoURI}
-                                                                    className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                    className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                                 />
                                                             </div>
                                                             <div className="sm:items-end md:hidden">
@@ -214,11 +216,11 @@ export default function Lend() {
                                                         <div className="hidden space-x-2 md:flex">
                                                             <AsyncIcon
                                                                 src={pair.asset.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                             <AsyncIcon
                                                                 src={pair.collateral.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                         </div>
                                                         <div className="sm:items-end md:hidden">

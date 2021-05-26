@@ -206,7 +206,7 @@ export default function Borrow() {
                 </div>
                 <div className="flex-col space-y-2">
                     {pairs.items &&
-                        pairs.items.map(pair => {
+                        pairs.items.map((pair) => {
                             return (
                                 <div key={pair.address}>
                                     <Link href={'/borrow/' + String(pair.address).toLowerCase()}>
@@ -216,11 +216,11 @@ export default function Borrow() {
                                                     <div className="hidden space-x-2 md:flex">
                                                         <AsyncIcon
                                                             src={pair.asset.tokenInfo.logoURI}
-                                                            className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                            className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                         />
                                                         <AsyncIcon
                                                             src={pair.collateral.tokenInfo.logoURI}
-                                                            className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                            className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                         />
                                                     </div>
                                                     <div className="sm:items-end md:hidden">

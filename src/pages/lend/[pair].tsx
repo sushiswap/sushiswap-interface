@@ -2,9 +2,12 @@ import { KashiContext, useKashiPair } from '../../context'
 import React, { useContext, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formattedNum, formattedPercent } from '../../utils'
+import { useKashiPairCloneContract, useSushiSwapTWAP0Oracle, useSushiSwapTWAP1Oracle } from '../../hooks/useContract'
 
 import AsyncIcon from '../../components/AsyncIcon'
+import Button from '../../components/Button'
 import Card from '../../components/Card'
+import Countdown from 'react-countdown'
 import Deposit from '../../containers/lend/Deposit'
 import Dots from '../../components/Dots'
 import GradientDot from '../../components/GradientDot'
@@ -19,6 +22,7 @@ import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { usePair } from '../../hooks/usePairs'
 import { useRouter } from 'next/router'
+import { useSingleCallResult } from '../../state/multicall/hooks'
 import { useToken } from '../../hooks/Tokens'
 import { useUSDCPrice } from '../../hooks'
 
@@ -29,12 +33,32 @@ export default function Pair() {
     const [tabIndex, setTabIndex] = useState(0)
     const info = useContext(KashiContext).state.info
     const pair = useKashiPair(router.query.pair as string)
+    const pairCloneContract = useKashiPairCloneContract(router.query.pair as string)
     const asset = useToken(pair?.asset.address)
     const collateral = useToken(pair?.collateral.address)
     const [pairState, liquidityPair] = usePair(asset, collateral)
     const assetPrice = useUSDCPrice(asset)
     const collateralPrice = useUSDCPrice(collateral)
-    if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
+
+    if (!pair) {
+        if (info && info.blockTimeStamp.isZero()) {
+            return null
+        }
+        return router.push('/lend')
+    }
+
+    const oracleNeedsInitilising = pair && pair.isTWAP && pair.oracleLP.priceAverage.isZero()
+
+    const oracleNeedsInitialUpdate = oracleNeedsInitilising && pair.oracleLP.blockTimestampLast === 0
+
+    const oracleInitilising = oracleNeedsInitilising && pair.oracleLP.blockTimestampLast + 300 > Date.now() / 1000
+
+    const oracleInitilised =
+        (pair &&
+            pair.isTWAP &&
+            pair.oracleLP.blockTimestampLast !== 0 &&
+            pair.oracleLP.blockTimestampLast + 300 < Date.now() / 1000) ||
+        !pair.isTWAP
 
     return (
         <KashiLayout
@@ -108,6 +132,53 @@ export default function Pair() {
                                 </div>
                             </div>
                         )}
+
+                        <div className="flex justify-between pt-3">
+                            <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
+                        </div>
+
+                        <div className="flex justify-between">
+                            <div className="text-lg text-secondary">Name</div>
+                            <div className="text-lg text-high-emphesis">{pair.oracle.name}</div>
+                        </div>
+
+                        {pair.oracle.name === 'SushiSwap' && liquidityPair ? (
+                            <>
+                                <div className="flex justify-between">
+                                    <div className="text-lg text-secondary">
+                                        {liquidityPair?.token0.getSymbol(chainId)}
+                                    </div>
+                                    <div className="text-lg text-high-emphesis">
+                                        {formattedNum(liquidityPair?.reserve0.toSignificant(4))}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between">
+                                    <div className="text-lg text-secondary">
+                                        {liquidityPair?.token1.getSymbol(chainId)}
+                                    </div>
+                                    <div className="text-lg text-high-emphesis">
+                                        {formattedNum(liquidityPair?.reserve1.toSignificant(4))}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between">
+                                    <div className="text-lg text-secondary">TVL</div>
+                                    <div className="text-lg text-high-emphesis">
+                                        {formattedNum(
+                                            liquidityPair?.reserve1
+                                                ?.multiply(assetPrice?.raw)
+                                                .add(liquidityPair?.reserve1?.multiply(collateralPrice?.raw))
+                                                .toSignificant(4),
+                                            true
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <Dots className="text-lg text-secondary">Loading</Dots>
+                        )}
+
                         <div className="flex justify-between pt-3">
                             <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
                         </div>
@@ -122,50 +193,6 @@ export default function Pair() {
                                 />
                             </div>
                         </div>
-
-                        {pair && pair.oracle.name === 'SushiSwap' && (
-                            <>
-                                <div className="flex justify-between pt-3">
-                                    <div className="text-xl text-high-emphesis">{i18n._(t`SLP`)}</div>
-                                </div>
-                                {liquidityPair ? (
-                                    <>
-                                        <div className="flex justify-between">
-                                            <div className="text-lg text-secondary">
-                                                {liquidityPair?.token0.getSymbol(chainId)}
-                                            </div>
-                                            <div className="text-lg text-high-emphesis">
-                                                {liquidityPair?.reserve0.toSignificant(4)}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex justify-between">
-                                            <div className="text-lg text-secondary">
-                                                {liquidityPair?.token1.getSymbol(chainId)}
-                                            </div>
-                                            <div className="text-lg text-high-emphesis">
-                                                {liquidityPair?.reserve1.toSignificant(4)}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex justify-between">
-                                            <div className="text-lg text-secondary">TVL</div>
-                                            <div className="text-lg text-high-emphesis">
-                                                {formattedNum(
-                                                    liquidityPair?.reserve1
-                                                        .multiply(assetPrice?.raw)
-                                                        .add(liquidityPair?.reserve1.multiply(collateralPrice?.raw))
-                                                        .toSignificant(4),
-                                                    true
-                                                )}
-                                            </div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <Dots className="text-lg text-secondary">Loading</Dots>
-                                )}
-                            </>
-                        )}
                     </div>
                 </Card>
             }
@@ -184,11 +211,11 @@ export default function Pair() {
                                     <>
                                         <AsyncIcon
                                             src={pair?.asset.tokenInfo.logoURI}
-                                            className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                                            className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
                                         />
                                         <AsyncIcon
                                             src={pair?.collateral.tokenInfo.logoURI}
-                                            className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                                            className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
                                         />
                                     </>
                                 )}
@@ -232,28 +259,64 @@ export default function Pair() {
                     </div>
                 </div>
 
-                <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
-                    <TabList className="flex p-1 rounded bg-dark-800">
-                        <Tab
-                            className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-                            selectedClassName="bg-dark-900 text-high-emphesis"
+                {oracleInitilising && (
+                    <div className="flex flex-col space-y-2 text-center text-primary">
+                        <Dots>Oracle is initialising</Dots>
+                        <div className="text-caption text-secondary">This can take upto 5 minuites</div>
+                        <Countdown
+                            date={pair.oracleLP.blockTimestampLast * 1000 + 300000}
+                            // intervalDelay={0}
+                            // renderer={(props) => (
+                            //     <div>
+                            //         {props.minutes}:{props.seconds}
+                            //     </div>
+                            // )}
+                        />
+                    </div>
+                )}
+
+                {oracleNeedsInitialUpdate && (
+                    <Button
+                        size="large"
+                        color="gradient"
+                        onClick={() => {
+                            pairCloneContract.updateExchangeRate()
+                        }}
+                    >
+                        Update Exchange Rate
+                    </Button>
+                )}
+
+                {oracleInitilised && (
+                    <>
+                        <Tabs
+                            forceRenderTabPanel
+                            selectedIndex={tabIndex}
+                            onSelect={(index: number) => setTabIndex(index)}
                         >
-                            Deposit {pair.asset.symbol}
-                        </Tab>
-                        <Tab
-                            className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-                            selectedClassName="bg-dark-900 text-high-emphesis"
-                        >
-                            Withdraw {pair.asset.symbol}
-                        </Tab>
-                    </TabList>
-                    <TabPanel>
-                        <Deposit pair={pair} />
-                    </TabPanel>
-                    <TabPanel>
-                        <Withdraw pair={pair} />
-                    </TabPanel>
-                </Tabs>
+                            <TabList className="flex p-1 rounded bg-dark-800">
+                                <Tab
+                                    className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+                                    selectedClassName="bg-dark-900 text-high-emphesis"
+                                >
+                                    Deposit {pair.asset.symbol}
+                                </Tab>
+                                <Tab
+                                    className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+                                    selectedClassName="bg-dark-900 text-high-emphesis"
+                                >
+                                    Withdraw {pair.asset.symbol}
+                                </Tab>
+                            </TabList>
+                            <TabPanel>
+                                <Deposit pair={pair} />
+                            </TabPanel>
+                            <TabPanel>
+                                <Withdraw pair={pair} />
+                            </TabPanel>
+                        </Tabs>
+                    </>
+                )}
             </Card>
         </KashiLayout>
     )

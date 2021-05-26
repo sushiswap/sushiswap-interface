@@ -302,7 +302,7 @@ export default function WalletModal({
             return (
                 <UpperSection>
                     <CloseIcon onClick={toggleWalletModal}>
-                        <Image src="/x.svg" width="16px" height="16px" />;
+                        <Image src="/x.svg" width="16px" height="16px" />
                     </CloseIcon>
                     <HeaderRow style={{ paddingLeft: 0, paddingRight: 0 }}>
                         {error instanceof UnsupportedChainIdError
@@ -337,7 +337,7 @@ export default function WalletModal({
         return (
             <UpperSection>
                 <CloseIcon onClick={toggleWalletModal}>
-                    <Image src="/x.svg" width="16px" height="16px" />;
+                    <Image src="/x.svg" width="16px" height="16px" />
                 </CloseIcon>
                 {walletView !== WALLET_VIEWS.ACCOUNT ? (
                     <HeaderRow color="blue">

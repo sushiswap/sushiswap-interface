@@ -1,11 +1,11 @@
 import {
     CHAINLINK_ORACLE_ADDRESS,
     SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-    SUSHISWAP_TWAP_1_ORACLE_ADDRESS
+    SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
+import { ChainId, Token } from '@sushiswap/sdk'
 
 import { CHAINLINK_MAPPING } from '../constants/chainlink'
-import { ChainId } from '@sushiswap/sdk'
 import { e10 } from '../functions/math'
 import { ethers } from 'ethers'
 
@@ -26,14 +26,14 @@ export default class Oracle implements IOracle {
     public error = ''
     protected _chainId = ChainId.MAINNET
     protected _pair: any
-    protected _tokens: any
+    protected tokens: Token[]
 
-    constructor(pair: any, chainId: ChainId, tokens: any) {
+    constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
         this.address = pair.oracle
         this.data = pair.oracleData
         this._pair = pair
         this._chainId = chainId
-        this._tokens = tokens
+        this.tokens = tokens
     }
 
     get valid(): boolean {
@@ -41,8 +41,18 @@ export default class Oracle implements IOracle {
     }
 }
 
-export class SushiSwapTWAPOracle extends Oracle {
-    constructor(pair: any, chainId: ChainId, tokens: any) {
+export class SushiSwapTWAP0Oracle extends Oracle {
+    constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
+        super(pair, chainId, tokens)
+        this.name = 'SushiSwap'
+    }
+    get valid(): boolean {
+        return true
+    }
+}
+
+export class SushiSwapTWAP1Oracle extends Oracle {
+    constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
         super(pair, chainId, tokens)
         this.name = 'SushiSwap'
     }
@@ -54,7 +64,7 @@ export class SushiSwapTWAPOracle extends Oracle {
 export class ChainlinkOracle extends Oracle {
     private _valid = false
 
-    constructor(pair: any, chainId: ChainId, tokens: any) {
+    constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
         super(pair, chainId, tokens)
         this.name = 'Chainlink'
         this._valid = this._validate()
@@ -104,13 +114,11 @@ export class ChainlinkOracle extends Oracle {
         if (
             from === this._pair.assetAddress &&
             to === this._pair.collateralAddress &&
-            this._tokens[this._pair.collateralAddress] &&
-            this._tokens[this._pair.assetAddress]
+            this.tokens[this._pair.collateralAddress] &&
+            this.tokens[this._pair.assetAddress]
         ) {
             const needed =
-                this._tokens[this._pair.collateralAddress].decimals +
-                18 -
-                this._tokens[this._pair.assetAddress].decimals
+                this.tokens[this._pair.collateralAddress].decimals + 18 - this.tokens[this._pair.assetAddress].decimals
             const divider = e10(decimals - needed)
             if (!divider.eq(params[2])) {
                 this.error =
@@ -133,8 +141,10 @@ function lowerEqual(value1: string, value2: string) {
 export function getOracle(pair: any, chainId: ChainId, tokens: any): IOracle {
     if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
         return new ChainlinkOracle(pair, chainId, tokens)
-    } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS || pair.oracle === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
-        return new SushiSwapTWAPOracle(pair, chainId, tokens)
+    } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
+        return new SushiSwapTWAP0Oracle(pair, chainId, tokens)
+    } else if (pair.oracle === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
+        return new SushiSwapTWAP1Oracle(pair, chainId, tokens)
     } else {
         return new Oracle(pair, chainId, tokens)
     }
