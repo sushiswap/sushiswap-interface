@@ -33,11 +33,11 @@ export default function Token() {
             },
             crosshair: {
                 horzLine: {
-                    visible: false,
+                    visible: false
                 },
                 vertLine: {
-                    visible: false,
-                },
+                    visible: false
+                }
             },
             grid: {
                 vertLines: {
@@ -58,8 +58,8 @@ export default function Token() {
 
         const lineSeries = chart.addLineSeries({
             color: '#7d48b9',
-            lineWidth: 2,
-          });
+            lineWidth: 2
+        })
 
         lineSeries.setData(mockData)
     }, [])
@@ -85,7 +85,15 @@ export default function Token() {
                 </div>
             </div>
 
-            <div ref={chartRef} className="w-full max-w-2xl rounded mb-6" />
+            <div ref={chartRef} className="w-full max-w-2xl rounded mb-2" />
+
+            <div className="flex justify-end w-full max-w-2xl mb-6">
+                <button className="p-3">24H</button>
+                <button className="p-3">1W</button>
+                <button className="p-3">1M</button>
+                <button className="p-3">1Y</button>
+                <button className="p-3 text-high-emphesis">ALL</button>
+            </div>
 
             <div className="grid grid-cols-3 gap-6 w-full max-w-2xl mb-6">
                 <div className="flex flex-col bg-dark-900 rounded p-6">
