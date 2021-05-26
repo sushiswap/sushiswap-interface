@@ -36,13 +36,13 @@ const ProgressStatus_StartPrice = styled.span`
   margin-top: -6px;
   margin-left: 4px;
   @media screen and (max-width: 500px) {
-    margin-top: -2px;
-    span {
-      &:first-child {
-        font-size: 10px !important;
-      }
-      font-size: 12px !important;
+  margin-top: -2px;
+  span {
+    &:first-child {
+    font-size: 10px !important;
     }
+    font-size: 12px !important;
+  }
   }
 }`
 const ProgressStatus_ReservePrice = styled.span`
@@ -231,7 +231,7 @@ export default function DutchProgress({ finalize, userInfo, marketInfo, progress
       if ($route.name.includes('auctions-address')) {
         return progress - 2.1
       }
-    } else*/
+    } else */
         }
         if (progress > 99) {
             return progress - 3.2
@@ -240,7 +240,7 @@ export default function DutchProgress({ finalize, userInfo, marketInfo, progress
         return progress - 1
     }
     return (
-        <ProgressStatus className={`flex my-5 ${finalize ? 'border-light' : ''}`}>
+        <ProgressStatus className={`flex my-10 ${finalize ? 'border-light' : ''}`}>
             <div
                 className="flex w-full relative"
                 style={{
@@ -295,17 +295,17 @@ export default function DutchProgress({ finalize, userInfo, marketInfo, progress
                         >
                             <ProgressStatus_Current
                                 className={`flex flex-col absolute
-                      ${progress > 75 ? 'left-top' : 'right-top'}
-                      ${progress < 28 ? 'bottom-right' : ''}
-                    `}
+                  ${progress > 75 ? 'left-top' : 'right-top'}
+                  ${progress < 28 ? 'bottom-right' : ''}
+                `}
                             >
                                 {progress <= 75 && <span className="line bg-light" />}
 
                                 <span
                                     className={`flex flex-col absolute
-                        ${progress > 75 ? 'mr-2' : 'ml-2'}
-                        ${progress > 28 ? 'text-top' : 'text-bottom'}
-                      `}
+                    ${progress > 75 ? 'mr-2' : 'ml-2'}
+                    ${progress > 28 ? 'text-top' : 'text-bottom'}
+                  `}
                                 >
                                     <MouseoverTooltip
                                         text="This is the current auction price. The auction ends successfully when the token price (total commitments/tokens) reaches this price"
