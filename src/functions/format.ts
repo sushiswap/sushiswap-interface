@@ -2,7 +2,7 @@
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Numeral from 'numeral'
-import ethers from 'ethers'
+import { ethers } from 'ethers'
 import { getAddress } from '@ethersproject/address'
 
 export const formatK = (value: string) => {
