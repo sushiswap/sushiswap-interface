@@ -1,27 +1,25 @@
-import { AutoColumn, ColumnCenter } from '../components/Column'
 import { Currency, JSBI, NATIVE, TokenAmount } from '@sushiswap/sdk'
-import React, { useCallback, useEffect, useState } from 'react'
+import { PairState, usePair } from '../hooks/usePairs'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import { Trans, t } from '@lingui/macro'
 
 import Alert from '../components/Alert'
-import { ButtonDropdownLight } from '../components/ButtonLegacy'
-import CurrencyLogo from '../components/CurrencyLogo'
-import CurrencySearchModal from '../components/SearchModal/CurrencySearchModal'
+import { AutoColumn } from '../components/Column'
+import { AutoRow } from '../components/Row'
+import CurrencySelectPanel from '../components/CurrencySelectPanel'
+import { DefaultLayout } from '../layouts'
 import Dots from '../components/Dots'
 import { FindPoolTabs } from '../components/NavigationTabs'
 import Head from 'next/head'
-import Layout from '../layouts/DefaultLayout'
 import { LightCard } from '../components/CardLegacy'
 import Link from 'next/link'
 import { MinimalPositionCard } from '../components/PositionCard'
-import { PairState } from '../hooks/usePairs'
 import { Plus } from 'react-feather'
-import Row from '../components/Row'
 import { Text } from 'rebass'
+import { ThemeContext } from 'styled-components'
 import { currencyId } from '../functions/currency'
-import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import { usePair } from '../hooks/usePair'
 import { usePairAdder } from '../state/user/hooks'
 import { useTokenBalance } from '../state/wallet/hooks'
 
@@ -32,7 +30,8 @@ enum Fields {
 
 export default function PoolFinder() {
     const { i18n } = useLingui()
-    const { account, chainId } = useActiveWeb3React()
+    const { account } = useActiveWeb3React()
+    const theme = useContext(ThemeContext)
 
     const [showSearch, setShowSearch] = useState<boolean>(false)
     const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
@@ -60,90 +59,98 @@ export default function PoolFinder() {
     const position: TokenAmount | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken)
     const hasPosition = Boolean(position && JSBI.greaterThan(position.raw, JSBI.BigInt(0)))
 
+    const switchTokens = useCallback(() => {
+        setCurrency0(currency1)
+        setCurrency1(currency0)
+    }, [currency0, currency1])
+
     const handleCurrencySelect = useCallback(
         (currency: Currency) => {
             if (activeField === Fields.TOKEN0) {
-                setCurrency0(currency)
+                if (currency === currency1) switchTokens()
+                else setCurrency0(currency)
             } else {
-                setCurrency1(currency)
+                if (currency === currency0) switchTokens()
+                else setCurrency1(currency)
             }
         },
         [activeField]
     )
 
-    const handleSearchDismiss = useCallback(() => {
-        setShowSearch(false)
-    }, [setShowSearch])
-
-    const prerequisiteMessage = !account
-        ? i18n._(t`Connect to a wallet to find pools`)
-        : i18n._(t`Select a token to find your liquidity`)
+    const prerequisiteMessage = (
+        <LightCard padding="45px 10px">
+            <Text textAlign="center">
+                {!account
+                    ? i18n._(t`Connect to a wallet to find pools`)
+                    : i18n._(t`Select a token to find your liquidity`)}
+            </Text>
+        </LightCard>
+    )
 
     return (
-        <Layout>
+        <DefaultLayout>
             <Head>
                 <title>{i18n._(t`Find Pool`)} | Sushi</title>
                 <meta name="description" content="Find pool" />
             </Head>
             <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity-purple-glow">
                 <FindPoolTabs />
-                {/* <ExchangeHeader /> */}
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
                     <Alert
+                        showIcon={false}
+                        message={
+                            <Trans>
+                                <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
+                                interface
+                            </Trans>
+                        }
                         type="information"
-                        message={i18n._(t`Tip: Use this tool to find pairs that don't automatically appear in the
-                            interface`)}
-                    ></Alert>
-                    <ButtonDropdownLight
-                        onClick={() => {
-                            setShowSearch(true)
-                            setActiveField(Fields.TOKEN0)
-                        }}
-                    >
-                        {currency0 ? (
-                            <Row>
-                                <CurrencyLogo currency={currency0} />
-                                <Text className="ml-3 text-lg font-bold">{currency0.getSymbol(chainId)}</Text>
-                            </Row>
-                        ) : (
-                            <Text className="ml-3 text-lg font-bold">{i18n._(t`Select a token`)}</Text>
-                        )}
-                    </ButtonDropdownLight>
+                    />
 
-                    <ColumnCenter>
-                        <Plus size="16" color="#888D9B" />
-                    </ColumnCenter>
-
-                    <ButtonDropdownLight
-                        onClick={() => {
-                            setShowSearch(true)
-                            setActiveField(Fields.TOKEN1)
-                        }}
-                    >
-                        {currency1 ? (
-                            <Row>
-                                <CurrencyLogo currency={currency1} />
-                                <Text className="ml-3 text-lg font-bold">{currency1.getSymbol(chainId)}</Text>
-                            </Row>
-                        ) : (
-                            <Text className="ml-3 text-lg font-bold">{i18n._(t`Select a token`)}</Text>
-                        )}
-                    </ButtonDropdownLight>
+                    <AutoColumn gap={'md'}>
+                        <CurrencySelectPanel
+                            currency={currency0}
+                            onClick={() => setActiveField(Fields.TOKEN0)}
+                            onCurrencySelect={handleCurrencySelect}
+                            otherCurrency={currency1}
+                            id="pool-currency-input"
+                        />
+                        <AutoColumn justify="space-between">
+                            <AutoRow justify={'flex-start'} style={{ padding: '0 1rem' }}>
+                                <button className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px">
+                                    <div className="p-3 rounded-full bg-dark-800 hover:bg-dark-700">
+                                        <Plus size="32" color={theme.text2} />
+                                    </div>
+                                </button>
+                            </AutoRow>
+                        </AutoColumn>
+                        <CurrencySelectPanel
+                            currency={currency1}
+                            onClick={() => setActiveField(Fields.TOKEN1)}
+                            onCurrencySelect={handleCurrencySelect}
+                            otherCurrency={currency0}
+                            id="pool-currency-output"
+                        />
+                    </AutoColumn>
 
                     {hasPosition && (
-                        <ColumnCenter
+                        <AutoRow
                             style={{
                                 justifyItems: 'center',
                                 backgroundColor: '',
                                 padding: '12px 0px',
                                 borderRadius: '12px',
                             }}
+                            justify={'center'}
+                            gap={'0 3px'}
                         >
-                            <div className="font-semibold text-center">{i18n._(t`Pool Found!`)}</div>
+                            <Text textAlign="center" fontWeight={500}>
+                                {i18n._(t`Pool Found!`)}
+                            </Text>
                             <Link href={`/pool`}>
                                 <a className="text-center">{i18n._(t`Manage this pool`)}</a>
                             </Link>
-                        </ColumnCenter>
+                        </AutoRow>
                     )}
 
                     {currency0 && currency1 ? (
@@ -153,11 +160,13 @@ export default function PoolFinder() {
                             ) : (
                                 <LightCard padding="45px 10px">
                                     <AutoColumn gap="sm" justify="center">
-                                        <div className="text-center">
+                                        <Text textAlign="center">
                                             {i18n._(t`You don’t have liquidity in this pool yet`)}
-                                        </div>
+                                        </Text>
                                         <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                                            <a className="text-center">{i18n._(t`Add liquidity`)}</a>
+                                            <a className="text-center text-blue text-opacity-80 hover:text-opacity-100">
+                                                {i18n._(t`Add liquidity`)}
+                                            </a>
                                         </Link>
                                     </AutoColumn>
                                 </LightCard>
@@ -165,9 +174,9 @@ export default function PoolFinder() {
                         ) : validPairNoLiquidity ? (
                             <LightCard padding="45px 10px">
                                 <AutoColumn gap="sm" justify="center">
-                                    <div className="text-center">{i18n._(t`No pool found`)}</div>
+                                    <Text textAlign="center">{i18n._(t`No pool found`)}</Text>
                                     <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                                        <a>{i18n._(t`Create pool`)}</a>
+                                        <a className="text-center">{i18n._(t`Create pool`)}</a>
                                     </Link>
                                 </AutoColumn>
                             </LightCard>
@@ -193,15 +202,7 @@ export default function PoolFinder() {
                         prerequisiteMessage
                     )}
                 </AutoColumn>
-
-                <CurrencySearchModal
-                    isOpen={showSearch}
-                    onCurrencySelect={handleCurrencySelect}
-                    onDismiss={handleSearchDismiss}
-                    showCommonBases
-                    selectedCurrency={(activeField === Fields.TOKEN0 ? currency1 : currency0) ?? undefined}
-                />
             </div>
-        </Layout>
+        </DefaultLayout>
     )
 }

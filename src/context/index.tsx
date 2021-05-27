@@ -223,23 +223,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                 const invalidOracles: any = []
 
-                const oracleLiquidityPairs = {}
-
-                for (const pair of logPairs.filter((pair) => isTWAP(pair.oracle))) {
-                    const oracleContract = twapContracts[indexOfTWAP(pair.oracle)]
-
-                    const asset = tokens[pair.assetAddress]
-                    const collateral = tokens[pair.collateralAddress]
-                    const oraclePair = await oracleContract.pairs(Pair.getAddress(asset, collateral))
-
-                    // console.log({
-                    //     priceAverage: oraclePair.priceAverage,
-                    //     blockTimestampLast: oraclePair.blockTimestampLast,
-                    // })
-
-                    oracleLiquidityPairs[pair.address] = oraclePair
-                }
-
                 const allPairAddresses = logPairs
                     .filter((pair: any) => {
                         const oracle = getOracle(pair, chain, tokens)
@@ -300,9 +283,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                         pairs: pairs
                             .filter((pair: any) => pair.asset !== pair.collateral)
                             .map((pair: any, i: number) => {
-                                pair.isTWAP = isTWAP(pair.oracle)
-                                pair.oracleLP = oracleLiquidityPairs[pair.address]
-
                                 pair.elapsedSeconds = BigNumber.from(Date.now())
                                     .div('1000')
                                     .sub(pair.accrueInfo.lastAccrued)

@@ -1,20 +1,21 @@
 import React, { useCallback, useState } from 'react'
-import styled from 'styled-components'
 import Popover, { PopoverProps } from '../Popover'
-
-const TooltipContainer = styled.div`
-    width: 228px;
-    padding: 0.6rem 1rem;
-    line-height: 150%;
-    font-weight: 400;
-`
 
 interface TooltipProps extends Omit<PopoverProps, 'content'> {
     text: string
 }
 
 export default function Tooltip({ text, ...rest }: TooltipProps) {
-    return <Popover content={<TooltipContainer>{text}</TooltipContainer>} {...rest} />
+    return (
+        <Popover
+            content={
+                <div className="w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">
+                    {text}
+                </div>
+            }
+            {...rest}
+        />
+    )
 }
 
 export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show'>) {

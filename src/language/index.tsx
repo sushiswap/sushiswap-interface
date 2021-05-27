@@ -6,7 +6,7 @@ import { I18nProvider } from '@lingui/react'
 import { i18n } from '@lingui/core'
 
 // This array should equal the array set in .linguirc
-export const locales = ['de', 'en', 'es-AR', 'es', 'it', 'he', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja']
+export const locales = ['de', 'en', 'es-AR', 'es', 'it', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja']
 export const defaultLocale = 'en'
 
 // Don't load plurals
@@ -25,7 +25,7 @@ const getInitialLocale = () => {
  * many ways how to load messages — from REST API, from file, from cache, etc.
  */
 export async function activate(locale: string) {
-    const { messages } = await import(`./locales/${locale}/catalog.js`)
+    const { messages } = await import(`../../locale/${locale}/catalog.js`)
     i18n.load(locale, messages)
     i18n.activate(locale)
 }

@@ -22,7 +22,7 @@ export default function Balances() {
     const options = { keys: ['symbol', 'name'], threshold: 0.1 }
     const { result, search, term } = useFuse({
         data: balances && balances.length > 0 ? balances : [],
-        options
+        options,
     })
     const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
     // Sorting Setup

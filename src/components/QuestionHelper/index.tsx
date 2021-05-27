@@ -5,25 +5,6 @@ import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicon
 import Tooltip from '../Tooltip'
 import styled from 'styled-components'
 
-const QuestionWrapper = styled.div<{ noPadding?: boolean }>`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // padding: ${props => (props.noPadding ? '0' : '0.2rem')};
-    border: none;
-    background: none;
-    outline: none;
-    cursor: default;
-    border-radius: 36px;
-    // background-color: ${({ theme }) => theme.bg2};
-    // color: ${({ theme }) => theme.text2};
-
-    :hover,
-    :focus {
-        opacity: 0.7;
-    }
-`
-
 const LightQuestionWrapper = styled.div`
     display: flex;
     align-items: center;
@@ -54,32 +35,42 @@ const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
     if (children) {
         return (
             <Tooltip text={text} show={show}>
-                <QuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close} noPadding>
+                <div
+                    className="flex items-center justify-center outline-none"
+                    onClick={open}
+                    onMouseEnter={open}
+                    onMouseLeave={close}
+                >
                     {children}
-                </QuestionWrapper>
+                </div>
             </Tooltip>
         )
     }
 
     return (
-        <span style={{ marginLeft: 4 }}>
+        <span className="ml-1">
             <Tooltip text={text} show={show}>
-                <QuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
+                <div
+                    className="flex items-center justify-center outline-none cursor-help hover:text-primary"
+                    onClick={open}
+                    onMouseEnter={open}
+                    onMouseLeave={close}
+                >
                     <SolidQuestionMarkCircleIcon width={16} height={16} />
-                </QuestionWrapper>
+                </div>
             </Tooltip>
         </span>
     )
 }
 
-export const LightQuestionHelper = ({ text }: { text: string }) => {
+export const LightQuestionHelper: FC<{ text: string }> = ({ text }) => {
     const [show, setShow] = useState<boolean>(false)
 
     const open = useCallback(() => setShow(true), [setShow])
     const close = useCallback(() => setShow(false), [setShow])
 
     return (
-        <span style={{ marginLeft: 4 }}>
+        <span className="ml-1">
             <Tooltip text={text} show={show}>
                 <LightQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
                     <OutlineQuestionMarkCircleIcon>?</OutlineQuestionMarkCircleIcon>

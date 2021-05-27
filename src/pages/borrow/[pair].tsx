@@ -41,8 +41,8 @@ export default function Pair() {
 
     const addTransaction = useTransactionAdder()
     const onUpdateExchangeRate = useCallback(async () => {
-        const result = await new KashiCooker(pair, account, library, chainId).updateExchangeRate().cook()
-
+        const cooker = new KashiCooker(pair, account, library, chainId)
+        const result = await cooker.updateExchangeRate().cook()
         addTransaction(result.tx, { summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate` })
     }, [pair])
 
