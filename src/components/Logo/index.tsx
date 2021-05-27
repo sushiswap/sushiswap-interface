@@ -27,7 +27,6 @@ const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
                     if (src) BAD_SRCS[src] = true
                     refresh((i) => i + 1)
                 }}
-                layout="fill"
                 {...rest}
             />
         )

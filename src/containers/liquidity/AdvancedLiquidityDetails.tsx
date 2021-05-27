@@ -61,3 +61,5 @@ export function AdvancedLiquidityDetails() {
         </AutoColumn>
     )
 }
+
+export default AdvancedLiquidityDetails

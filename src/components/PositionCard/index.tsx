@@ -35,7 +35,7 @@ export const HoverCard = styled(Card)`
 const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
   /* border: 1px solid ${({ theme }) => theme.text4}; */
   border: none
-  background: ${({ theme }) => transparentize(0.6, theme.bg1)};
+//   background: ${({ theme }) => transparentize(0.6, theme.bg1)};
   /* background: ${({ theme, bgColor }) =>
       `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(0.8, bgColor)} 0%, ${theme.bg3} 100%) `}; */
   position: relative;

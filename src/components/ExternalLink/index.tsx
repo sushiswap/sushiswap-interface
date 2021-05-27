@@ -33,6 +33,7 @@ function ExternalLink({
             target={target}
             rel={rel}
             href={href}
+            onClick={handleClick}
             className={`text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3 whitespace-nowrap ${className}`}
             {...rest}
         >
