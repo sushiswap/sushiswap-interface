@@ -166,18 +166,25 @@ class Tokens extends Array {
     }
 }
 
-function isTWAP(address: string) {
-    return address === SUSHISWAP_TWAP_0_ORACLE_ADDRESS || address === SUSHISWAP_TWAP_1_ORACLE_ADDRESS
-}
-
-function indexOfTWAP(address: string) {
-    if (address === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
-        return 0
-    } else if (address === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
-        return 1
+export function rpcToObj(rpc_obj: any, obj?: any) {
+    if (rpc_obj instanceof BigNumber) {
+        return rpc_obj
     }
-
-    throw new Error('Not a TWAP')
+    if (!obj) {
+        obj = {}
+    }
+    if (typeof rpc_obj == 'object') {
+        if (Object.keys(rpc_obj).length && isNaN(Number(Object.keys(rpc_obj)[Object.keys(rpc_obj).length - 1]))) {
+            for (const i in rpc_obj) {
+                if (isNaN(Number(i))) {
+                    obj[i] = rpcToObj(rpc_obj[i])
+                }
+            }
+            return obj
+        }
+        return rpc_obj.map((item: any) => rpcToObj(item))
+    }
+    return rpc_obj
 }
 
 export function KashiProvider({ children }: { children: JSX.Element }) {
