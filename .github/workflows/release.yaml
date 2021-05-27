@@ -98,12 +98,12 @@ jobs:
             The preferred URLs below are safe to use to access this specific release.
 
             Preferred URLs:
-            - https://crustwebsites.net/ipfs/${{ steps.upload.outputs.hash }}/
             - https://${{ steps.convert_cidv0.outputs.cidv1 }}.ipfs.dweb.link/
             - https://${{ steps.convert_cidv0.outputs.cidv1 }}.ipfs.cf-ipfs.com/
             - [ipfs://${{ steps.upload.outputs.hash }}/](ipfs://${{ steps.upload.outputs.hash }}/)
 
             Other IPFS gateways:
+            - https://crustwebsites.net/ipfs/${{ steps.upload.outputs.hash }}/
             - https://cloudflare-ipfs.com/ipfs/${{ steps.upload.outputs.hash }}/
             - https://ipfs.infura.io/ipfs/${{ steps.upload.outputs.hash }}/
             - https://ipfs.io/ipfs/${{ steps.upload.outputs.hash }}/
