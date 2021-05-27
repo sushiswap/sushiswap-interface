@@ -7,13 +7,12 @@ import LanguageProvider, { activate } from '../language'
 
 import type { AppProps } from 'next/app'
 import ApplicationUpdater from '../state/application/updater'
-import { GlobalStyle } from '../theme'
 import Head from 'next/head'
 import { KashiProvider } from '../context'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
 import { Provider } from 'react-redux'
-import { ThemeProvider } from 'styled-components'
+import ReactGA from 'react-ga'
 import TransactionUpdater from '../state/transactions/updater'
 import UserUpdater from '../state/user/updater'
 import Web3ReactManager from '../components/Web3ReactManager'
@@ -51,8 +50,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, [])
     const router = useRouter()
 
-    // TODO: Refactor KashiProvider to /state/kashi to align with rest of app currently
+    const { pathname, query } = router
 
+    useEffect(() => {
+        ReactGA.pageview(`${pathname}${query}`)
+    }, [pathname, query])
+
+    // TODO: Refactor KashiProvider to /state/kashi to align with rest of app currently
     const isKashi = ['/lend', '/borrow', '/create', '/balances'].some((path) => router.asPath.includes(path))
 
     // const Layout = isKashi
@@ -87,17 +91,14 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Web3ReactProvider getLibrary={getLibrary}>
                 <Web3ProviderNetwork getLibrary={getLibrary}>
                     <LanguageProvider>
-                        <GlobalStyle />
-                        <ThemeProvider theme={{}}>
-                            <Provider store={store}>
-                                <Updaters />
-                                <Web3ReactManager>
-                                    <KashiDataProvider>
-                                        <Component {...pageProps} />
-                                    </KashiDataProvider>
-                                </Web3ReactManager>
-                            </Provider>
-                        </ThemeProvider>
+                        <Provider store={store}>
+                            <Updaters />
+                            <Web3ReactManager>
+                                <KashiDataProvider>
+                                    <Component {...pageProps} />
+                                </KashiDataProvider>
+                            </Web3ReactManager>
+                        </Provider>
                     </LanguageProvider>
                 </Web3ProviderNetwork>
             </Web3ReactProvider>
