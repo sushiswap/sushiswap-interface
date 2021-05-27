@@ -232,7 +232,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
         [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
-        [LIFT.address]: [LIFTBTC, WETH[ChainId.MAINNET]],
+        [LIFT.address]: [LFTBTC, WETH[ChainId.MAINNET]],
     },
     [ChainId.MATIC]: {
         [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE]
