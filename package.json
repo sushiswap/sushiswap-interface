@@ -155,6 +155,7 @@
         "start": "cross-env PORT=3000 react-app-rewired start",
         "dev": "cross-env PORT=3001 react-app-rewired start",
         "build": "cross-env CI= GENERATE_SOURCEMAP=false react-app-rewired build",
+        "build:ipfs": "cross-env CI= GENERATE_SOURCEMAP=false PUBLIC_URL=./ react-app-rewired build",
         "build:sourcemap": "GENERATE_SOURCEMAP=true react-app-rewired build",
         "eject": "react-app-rewired eject",
         "test": "react-app-rewired test --env=jsdom",
