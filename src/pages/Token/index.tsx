@@ -118,7 +118,7 @@ export default function Token() {
                 <div className="flex items-center">
                     <img className="w-15 mr-3" src={SushiImage} alt="SUSHI" />
                     <span className="text-body font-bold md:text-h1 text-high-emphesis">SUSHI</span>
-                    <span className="ml-2">(SUSHI)</span>
+                    <span className="ml-2 md:text-h4">(SUSHI)</span>
                 </div>
                 <div className="flex items-center">
                     <div className="text-body font-bold md:text-h1 text-high-emphesis">$17.01</div>
@@ -136,7 +136,7 @@ export default function Token() {
                 <button className="p-3 text-high-emphesis">ALL</button>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 w-full max-w-2xl mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-2xl mb-6">
                 <div className="flex flex-col bg-dark-900 rounded p-6">
                     <div className="text-sm">Liquidity (24H)</div>
                     <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
@@ -154,11 +154,11 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-5 gap-4 w-full max-w-2xl mb-8">
-                <div className="col-span-2 bg-dark-900 rounded">1</div>
-                <div className="col-span-2 bg-dark-900 rounded">
+            <div className="grid grid-cols-9 gap-4 w-full max-w-2xl mb-8">
+                <div className="flex col-span-7">
+                    <div className="w-6/12 bg-dark-900 rounded">1</div>
                     <button
-                        className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10"
+                        className="bg-dark-900 rounded-full p-3px -ml-5 -mr-5 z-10"
                         onClick={() => {
                             setApprovalSubmitted(false) // reset 2 step UI for approvals
                             onSwitchTokens()
@@ -174,12 +174,13 @@ export default function Token() {
                                 autoplay={animateSwapArrows}
                                 loop={false}
                                 style={{ width: 32, height: 32 }}
-                                // className="text-secondary fill-current"
+                                className="transform rotate-90"
                             />
                         </div>
                     </button>
+                    <div className="w-6/12 bg-dark-900 rounded">2</div>
                 </div>
-                <button className="col-span-1 bg-dark-900 rounded flex items-center justify-center">Swap</button>
+                <button className="col-span-2 bg-dark-700 rounded flex items-center justify-center">Swap</button>
             </div>
 
             <div className="w-full max-w-2xl rounded py-4 mb-8">
@@ -200,7 +201,7 @@ export default function Token() {
 
             <div className="w-full max-w-2xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
-                <div className="grid grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
                         <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
                         <div className="text-caption2 md:text-caption text-primary">SUSHI</div>
