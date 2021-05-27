@@ -1,10 +1,10 @@
 import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown } from '../functions/prices'
 
 import { Field } from '../state/swap/actions'
-import FormattedPriceImpact from '../containers/swap/FormattedPriceImpact'
+import FormattedPriceImpact from '../features/swap/FormattedPriceImpact'
 import QuestionHelper from './QuestionHelper'
 import React from 'react'
-import SwapRoute from '../containers/swap/SwapRoute'
+import SwapRoute from '../features/swap/SwapRoute'
 import { Trade } from '@sushiswap/sdk'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
