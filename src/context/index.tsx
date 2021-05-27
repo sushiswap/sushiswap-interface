@@ -1,11 +1,4 @@
-import {
-    ChainId,
-    Currency,
-    Pair,
-    SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-    SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-    WETH,
-} from '@sushiswap/sdk'
+import { ChainId, Currency, WETH } from '@sushiswap/sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../functions/math'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue, takeFee } from '../functions/kashi'
@@ -24,7 +17,6 @@ import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
 import { getCurrency } from '../functions/currency'
 import { getOracle } from '../entities/Oracle'
-import { rpcToObj } from '../utils'
 import { toElastic } from '../functions/rebase'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useAllTokens } from '../hooks/Tokens'
