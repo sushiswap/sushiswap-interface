@@ -2,6 +2,7 @@
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Numeral from 'numeral'
+import ethers from 'ethers'
 import { getAddress } from '@ethersproject/address'
 
 export const formatK = (value: string) => {
@@ -100,4 +101,15 @@ export const formatNumber = (number: any, usd = false) => {
 
 export function escapeRegExp(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
+
+export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
+    const formatted = ethers.utils.formatUnits(value, decimals)
+    if (maxFraction > 0) {
+        const split = formatted.split('.')
+        if (split.length > 1) {
+            return split[0] + '.' + split[1].substr(0, maxFraction)
+        }
+    }
+    return formatted
 }
