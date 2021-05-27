@@ -256,7 +256,7 @@
   "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.": "Questa transazione non andrà a buon fine a causa del movimento del prezzo o della commissione sul trasferimento. Prova ad aumentare la tolleranza allo slippage.",
   "To": "A",
   "To (estimated)": "A (stimato)",
-  "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon.": "Per prelevare in SUSHI, visita Aave e rimuovi axSUSHI come collaterale, quindi visita SushiBar per togliere dallo staking. Un processo completo sarà presto disponibile.",
+  "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be available soon.": "Per prelevare in SUSHI, visita Aave e rimuovi axSUSHI come collaterale, quindi visita SushiBar per togliere dallo staking. Un processo completo sarà presto disponibile.",
   "Toggle Expert Mode": "Attiva modalità esperto",
   "Token": "Token",
   "Tokens": "Token",

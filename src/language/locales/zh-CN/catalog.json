@@ -256,7 +256,7 @@
   "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.": "交易未成功，可能因为价格变动，也可能转账中产生的费用。请提高您可接受的滑点。",
   "To": "到",
   "To (estimated)": "至(估计)",
-  "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon.": "撤回到SUSHI，去Aave把axSUSHI从质押品中移除，然后前往SushiBar解除质押。全流程即将在本网站启用。",
+  "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be available soon.": "撤回到SUSHI，去Aave把axSUSHI从质押品中移除，然后前往SushiBar解除质押。全流程即将在本网站启用。",
   "Toggle Expert Mode": "切换专家模式",
   "Token": "代币",
   "Tokens": "代币",

@@ -256,7 +256,7 @@
   "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.": "",
   "To": "交換先",
   "To (estimated)": "",
-  "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon.": "",
+  "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be available soon.": "",
   "Toggle Expert Mode": "エキスパート モードへの切り替え",
   "Token": "",
   "Tokens": "",
