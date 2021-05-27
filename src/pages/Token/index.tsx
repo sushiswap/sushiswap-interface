@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import { Helmet } from 'react-helmet'
 import { ThemeContext } from 'styled-components'
 import { createChart } from 'lightweight-charts'
@@ -6,6 +7,12 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { ChevronRight, ExternalLink } from 'react-feather'
 import { mockData } from './chartMockData'
+import { Field } from '../../state/swap/actions'
+import Lottie from 'lottie-react'
+import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
+import { useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
+import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
+import { useUserSlippageTolerance } from 'state/user/hooks'
 
 export default function Token() {
     const { i18n } = useLingui()
@@ -14,6 +21,38 @@ export default function Token() {
     const { account, chainId } = useActiveWeb3React()
 
     const chartRef = React.useRef() as any
+    const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
+
+    const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
+
+    // swap state
+    const { independentField, typedValue, recipient } = useSwapState()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
+    const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
+        currencies[Field.INPUT],
+        currencies[Field.OUTPUT],
+        typedValue
+    )
+
+    const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
+
+    const trade = showWrap ? undefined : v2Trade
+
+    // get custom setting values for user
+    const [allowedSlippage] = useUserSlippageTolerance()
+
+    // check whether the user has approved the router on the input token
+    const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage)
+
+    // check if user has gone through approval process, used to show two step buttons, reset on token change
+    const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
+
+    // mark when a user has submitted an approval, reset onTokenSelection for input field
+    useEffect(() => {
+        if (approval === ApprovalState.PENDING) {
+            setApprovalSubmitted(true)
+        }
+    }, [approval, approvalSubmitted])
 
     useEffect(() => {
         const chart = createChart(chartRef.current, {
@@ -113,7 +152,35 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="bg-dark-900 w-full max-w-2xl rounded mb-8">Swap</div>
+            <div className="grid grid-cols-5 gap-4 w-full max-w-2xl mb-8">
+                <div className="col-span-2 bg-dark-900 rounded">1</div>
+                <div className="col-span-2 bg-dark-900 rounded">
+                    <button
+                        className="bg-dark-900 rounded-full p-3px -mt-6 -mb-6 z-10"
+                        onClick={() => {
+                            setApprovalSubmitted(false) // reset 2 step UI for approvals
+                            onSwitchTokens()
+                        }}
+                    >
+                        <div
+                            className="bg-dark-800 hover:bg-dark-700 rounded-full p-3"
+                            onMouseEnter={() => setAnimateSwapArrows(true)}
+                            onMouseLeave={() => setAnimateSwapArrows(false)}
+                        >
+                            <Lottie
+                                animationData={swapArrowsAnimationData}
+                                autoplay={animateSwapArrows}
+                                loop={false}
+                                style={{ width: 32, height: 32 }}
+                                // className="text-secondary fill-current"
+                            />
+                        </div>
+                    </button>
+                </div>
+                <button className="col-span-1 bg-dark-900 rounded flex items-center justify-center">
+                    Swap
+                </button>
+            </div>
 
             <div className="w-full max-w-2xl rounded py-4 mb-8">
                 <div className="flex justify-between pb-6">
