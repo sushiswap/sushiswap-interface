@@ -4,7 +4,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import Button from './Button'
 import { Input as NumericalInput } from './NumericalInput'
 import React from 'react'
-import { formattedNum } from '../utils'
+import { formatNumber } from '../functions/format'
 
 type SmartNumberInputProps = {
     color: 'blue' | 'pink'
@@ -43,7 +43,7 @@ export default function SmartNumberInput({
     setPinMax,
     showMax = false,
     disabled = false,
-    switchDisabled = false
+    switchDisabled = false,
 }: SmartNumberInputProps) {
     return (
         <>
@@ -73,7 +73,7 @@ export default function SmartNumberInput({
                     </span>
                 </div>
                 <div className="text-base text-right text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
-                    {maxTitle} {formattedNum(max.toFixed(token.decimals))}
+                    {maxTitle} {formatNumber(max.toFixed(token.decimals))}
                 </div>
             </div>
 

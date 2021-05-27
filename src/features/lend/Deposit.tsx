@@ -11,7 +11,7 @@ import TransactionReviewList from '../../components/TransactionReview'
 import { WETH } from '@sushiswap/sdk'
 import { Warnings } from '../../entities/Warnings'
 import WarningsList from '../../components/WarningsList'
-import { formattedNum } from '../../utils'
+import { formatNumber } from '../../functions/format'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 
@@ -53,8 +53,8 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
         if (pair.currentExchangeRate.isZero()) {
             transactionReview.add(
                 'Exchange Rate',
-                formattedNum(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
-                formattedNum(pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+                formatNumber(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+                formatNumber(pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
                 Direction.UP
             )
         }

@@ -13,7 +13,7 @@ import TransactionReviewView from '../../components/TransactionReview'
 import { Warnings } from '../../entities/Warnings'
 import WarningsView from '../../components/WarningsList'
 import { easyAmount } from '../../functions/kashi'
-import { formattedNum } from '../../utils'
+import { formatNumber } from '../../functions/format'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useKashiApprovalPending } from '../../state/application/hooks'
 
@@ -73,7 +73,7 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
     return (
         <>
-            <div className="text-3xl text-high-emphesis mt-6">Withdraw {pair.asset.symbol}</div>
+            <div className="mt-6 text-3xl text-high-emphesis">Withdraw {pair.asset.symbol}</div>
 
             <SmartNumberInput
                 color="blue"

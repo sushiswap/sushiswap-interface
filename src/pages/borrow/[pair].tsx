@@ -2,7 +2,7 @@ import { Borrow, Repay } from '../../features/borrow'
 import { KashiContext, useKashiPair } from '../../context'
 import React, { useCallback, useContext, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
-import { formattedNum, formattedPercent } from '../../utils'
+import { formatNumber, formatPercent } from '../../functions/format'
 
 import AsyncIcon from '../../components/AsyncIcon'
 import { BorrowCardHeader } from '../../components/CardHeader'
@@ -69,7 +69,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Available`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
+                                    {formatNumber(pair.totalAssetAmount.string)} {pair.asset.symbol}
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedPercent(pair.utilization.string)}
+                                    {formatPercent(pair.utilization.string)}
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedPercent(pair.currentSupplyAPR.string)}
+                                    {formatPercent(pair.currentSupplyAPR.string)}
                                 </div>
                             </div>
                         </div>
@@ -93,7 +93,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Borrow APR`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedPercent(pair.currentInterestPerYear.string)}
+                                    {formatPercent(pair.currentInterestPerYear.string)}
                                 </div>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ export default function Pair() {
                                         <div className="flex justify-between">
                                             <div className="text-lg text-secondary">TVL</div>
                                             <div className="text-lg text-high-emphesis">
-                                                {formattedNum(
+                                                {formatNumber(
                                                     liquidityPair?.reserve1
                                                         .multiply(assetPrice?.raw)
                                                         .add(liquidityPair?.reserve1.multiply(collateralPrice?.raw))
@@ -211,19 +211,19 @@ export default function Pair() {
                     <div>
                         <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
                         <div className="text-2xl text-blue">
-                            {formattedNum(pair.userCollateralAmount.string)} {pair.collateral.symbol}
+                            {formatNumber(pair.userCollateralAmount.string)} {pair.collateral.symbol}
                         </div>
                         <div className="text-lg text-high-emphesis">
-                            {formattedNum(pair.userCollateralAmount.usd, true)}
+                            {formatNumber(pair.userCollateralAmount.usd, true)}
                         </div>
                     </div>
                     <div>
                         <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
                         <div className="text-2xl text-pink">
-                            {formattedNum(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
+                            {formatNumber(pair.currentUserBorrowAmount.string)} {pair.asset.symbol}
                         </div>
                         <div className="flex items-center text-lg text-high-emphesis">
-                            {formattedPercent(pair.health.string)}
+                            {formatPercent(pair.health.string)}
                             <GradientDot percent={pair.health.string}></GradientDot>
                         </div>
                     </div>
@@ -231,7 +231,7 @@ export default function Pair() {
                         <div>
                             <div className="text-lg text-secondary">{i18n._(t`APR`)}</div>
                             <div className="text-2xl text-high-emphesis">
-                                {formattedPercent(pair.interestPerYear.string)}
+                                {formatPercent(pair.interestPerYear.string)}
                             </div>
                         </div>
                     </div>

@@ -16,7 +16,7 @@ import Layout from '../layouts/KashiLayout'
 import { Input as NumericalInput } from '../components/NumericalInput'
 import Paper from '../components/Paper'
 import Search from '../components/Search'
-import { formattedNum } from '../utils'
+import { formatNumber } from '../functions/format'
 import { t } from '@lingui/macro'
 import useActiveWeb3React from '../hooks/useActiveWeb3React'
 import useBentoBox from '../hooks/useBentoBox'
@@ -99,14 +99,14 @@ const TokenBalance = ({ balance }: { balance: any }) => {
                 </div>
                 <div className="flex items-center justify-end">
                     <div>
-                        <div className="text-right">{formattedNum(balance.wallet.string)} </div>
-                        <div className="text-right text-secondary">{formattedNum(balance.wallet.usd, true)}</div>
+                        <div className="text-right">{formatNumber(balance.wallet.string)} </div>
+                        <div className="text-right text-secondary">{formatNumber(balance.wallet.usd, true)}</div>
                     </div>
                 </div>
                 <div className="flex items-center justify-end">
                     <div>
-                        <div className="text-right">{formattedNum(balance.bento.string)} </div>
-                        <div className="text-right text-secondary">{formattedNum(balance.bento.usd, true)}</div>
+                        <div className="text-right">{formatNumber(balance.bento.string)} </div>
+                        <div className="text-right text-secondary">{formatNumber(balance.bento.usd, true)}</div>
                     </div>
                 </div>
             </div>
@@ -153,7 +153,7 @@ export function Deposit({ tokenAddress, tokenSymbol }: { tokenAddress: string; t
         <>
             {account && (
                 <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                    {i18n._(t`Wallet Balance`)}: {formattedNum(balance.value.toFixed(balance.decimals))}
+                    {i18n._(t`Wallet Balance`)}: {formatNumber(balance.value.toFixed(balance.decimals))}
                 </div>
             )}
             <div className="relative flex items-center w-full mb-4">
@@ -221,7 +221,7 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
         <>
             {account && (
                 <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                    {i18n._(t`Bento Balance: ${formattedNum(balance ? balance.value.toFixed(balance.decimals) : 0)}`)}
+                    {i18n._(t`Bento Balance: ${formatNumber(balance ? balance.value.toFixed(balance.decimals) : 0)}`)}
                 </div>
             )}
             <div className="relative flex items-center w-full mb-4">
