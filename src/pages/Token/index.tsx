@@ -13,6 +13,7 @@ import swapArrowsAnimationData from '../../assets/animation/swap-arrows.json'
 import { useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { useUserSlippageTolerance } from 'state/user/hooks'
+import SushiImage from '../../assets/images/sushi.png'
 
 export default function Token() {
     const { i18n } = useLingui()
@@ -108,13 +109,14 @@ export default function Token() {
             </Helmet>
 
             <div className="flex items-center w-full max-w-2xl mb-5">
-                <div className="text-purple mr-1">Tokens</div>
+                <div className="font-bold text-purple mr-1">Tokens</div>
                 <ChevronRight size="16" />
                 <div className="text-high-emphesis ml-1">SUSHI</div>
             </div>
 
-            <div className="flex justify-between w-full max-w-2xl rounded mb-6">
+            <div className="flex justify-between w-full max-w-2xl rounded mb-4">
                 <div className="flex items-center">
+                    <img className="w-15 mr-3" src={SushiImage} alt="SUSHI" />
                     <span className="text-body font-bold md:text-h1 text-high-emphesis">SUSHI</span>
                     <span className="ml-2">(SUSHI)</span>
                 </div>
@@ -177,9 +179,7 @@ export default function Token() {
                         </div>
                     </button>
                 </div>
-                <button className="col-span-1 bg-dark-900 rounded flex items-center justify-center">
-                    Swap
-                </button>
+                <button className="col-span-1 bg-dark-900 rounded flex items-center justify-center">Swap</button>
             </div>
 
             <div className="w-full max-w-2xl rounded py-4 mb-8">
@@ -201,14 +201,38 @@ export default function Token() {
             <div className="w-full max-w-2xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
                 <div className="grid grid-cols-4 gap-6">
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">ETH</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">USDT</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">UNI</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">LINK</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">WBTC</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">AAVE</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">COMP</div>
-                    <div className="bg-dark-900 p-4 rounded text-high-emphesis">MKR</div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
+                        <div className="text-caption2 md:text-caption text-primary">SUSHI</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="USDT" />
+                        <div className="text-caption2 md:text-caption text-primary">USDT</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="UNI" />
+                        <div className="text-caption2 md:text-caption text-primary">UNI</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="LINK" />
+                        <div className="text-caption2 md:text-caption text-primary">LINK</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="WBTC" />
+                        <div className="text-caption2 md:text-caption text-primary">WBTC</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="AAVE" />
+                        <div className="text-caption2 md:text-caption text-primary">AAVE</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="COMP" />
+                        <div className="text-caption2 md:text-caption text-primary">COMP</div>
+                    </div>
+                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                        <img className="w-10 mr-2" src={SushiImage} alt="MKR" />
+                        <div className="text-caption2 md:text-caption text-primary">MKR</div>
+                    </div>
                 </div>
             </div>
 
