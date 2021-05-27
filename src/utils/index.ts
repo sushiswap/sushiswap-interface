@@ -1,21 +1,6 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { Fraction } from '../entities'
 import { ethers } from 'ethers'
-import { formatK } from '../functions/format'
 
 // NOTE: Try not to add anything to thie file or folder, it's almost entirely refactored out.
-export const formatFromBalance = (value: BigNumber | undefined, decimals = 18): string => {
-    if (value) {
-        return Fraction.from(BigNumber.from(value), BigNumber.from(10).pow(decimals)).toString()
-    }
-    return ''
-}
-export const formatToBalance = (value: string | undefined, decimals = 18) => {
-    if (value) {
-        return { value: ethers.utils.parseUnits(Number(value).toFixed(decimals), decimals), decimals: decimals }
-    }
-    return { value: BigNumber.from(0), decimals: decimals }
-}
 
 export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
     const formatted = ethers.utils.formatUnits(value, decimals)

@@ -99,8 +99,6 @@ export default function Stake() {
 
     const formattedBalance = balance?.toSignificant(4)
 
-    // const parsedInput: BalanceProps = usingBalance ? balance : formatToBalance(input !== '.' ? input : '')
-
     const parsedAmount = usingBalance ? balance : tryParseAmount(input, balance?.token)
 
     const handleInput = (v: string) => {
