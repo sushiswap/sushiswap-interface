@@ -32,10 +32,6 @@ export const parseBalance = (value: string, decimals = 18) => {
     return ethers.utils.parseUnits(value || '0', decimals)
 }
 
-export function escapeRegExp(string: string): string {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
-}
-
 export function rpcToObj(rpc_obj: any, obj?: any) {
     if (rpc_obj instanceof BigNumber) {
         return rpc_obj

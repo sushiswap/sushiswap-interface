@@ -97,3 +97,7 @@ export const formatNumber = (number: any, usd = false) => {
 
     return parseFloat(String(num)).toPrecision(4)
 }
+
+export function escapeRegExp(string: string): string {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
