@@ -21,7 +21,8 @@ const CopyIcon = styled(LinkStyledButton)`
 const TransactionStatusText = styled.span`
     margin-left: 0.25rem;
     font-size: 0.825rem;
-    // ${({ theme }) => theme.flexRowNoWrap};
+    display: flex;
+    flex-wrap: nowrap;
     align-items: center;
 `
 

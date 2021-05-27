@@ -79,7 +79,7 @@ export default function AccountDetails({
     pendingTransactions,
     confirmedTransactions,
     ENSName,
-    openOptions
+    openOptions,
 }: AccountDetailsProps): any {
     const { chainId, account, connector } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
@@ -90,11 +90,11 @@ export default function AccountDetails({
         const isMetaMask = !!(ethereum && ethereum.isMetaMask)
         const name = Object.keys(SUPPORTED_WALLETS)
             .filter(
-                k =>
+                (k) =>
                     SUPPORTED_WALLETS[k].connector === connector &&
                     (connector !== injected || isMetaMask === (k === 'METAMASK'))
             )
-            .map(k => SUPPORTED_WALLETS[k].name)[0]
+            .map((k) => SUPPORTED_WALLETS[k].name)[0]
         return <WalletName>Connected with {name}</WalletName>
     }
 
@@ -223,7 +223,7 @@ export default function AccountDetails({
                                 <div className="flex items-center space-x-3">
                                     {account && (
                                         <Copy toCopy={account}>
-                                            <span style={{ marginLeft: '4px' }}>Copy Address</span>
+                                            <span className="ml-1">Copy Address</span>
                                         </Copy>
                                     )}
                                     {chainId && account && (
@@ -233,7 +233,7 @@ export default function AccountDetails({
                                             href={getExplorerLink(chainId, account, 'address')}
                                         >
                                             <LinkIcon size={16} />
-                                            <span style={{ marginLeft: '4px' }}>View on explorer</span>
+                                            <span className="ml-1">View on explorer</span>
                                         </AddressLink>
                                     )}
                                 </div>
