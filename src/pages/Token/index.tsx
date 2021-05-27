@@ -5,7 +5,7 @@ import { ThemeContext } from 'styled-components'
 import { createChart } from 'lightweight-charts'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import { ChevronRight, ExternalLink } from 'react-feather'
+import { ChevronRight, ChevronDown, ExternalLink, Sliders } from 'react-feather'
 import { mockData } from './chartMockData'
 import { Field } from '../../state/swap/actions'
 import Lottie from 'lottie-react'
@@ -14,6 +14,8 @@ import { useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/s
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { useUserSlippageTolerance } from 'state/user/hooks'
 import SushiImage from '../../assets/images/sushi.png'
+import EthereumImage from '../../assets/images/ethereum-logo.png'
+import NumericalInput from 'components/NumericalInput'
 
 export default function Token() {
     const { i18n } = useLingui()
@@ -57,7 +59,7 @@ export default function Token() {
 
     useEffect(() => {
         const chart = createChart(chartRef.current, {
-            width: 672,
+            width: 768,
             height: 300,
             layout: {
                 textColor: '#d1d4dc',
@@ -108,13 +110,13 @@ export default function Token() {
                 <title>Token | Sushi</title>
             </Helmet>
 
-            <div className="flex items-center w-full max-w-2xl mb-5">
+            <div className="flex items-center w-full max-w-3xl mb-5">
                 <div className="font-bold text-purple mr-1">Tokens</div>
                 <ChevronRight size="16" />
                 <div className="text-high-emphesis ml-1">SUSHI</div>
             </div>
 
-            <div className="flex justify-between w-full max-w-2xl rounded mb-4">
+            <div className="flex justify-between w-full max-w-3xl rounded mb-4">
                 <div className="flex items-center">
                     <img className="w-15 mr-3" src={SushiImage} alt="SUSHI" />
                     <span className="text-body font-bold md:text-h1 text-high-emphesis">SUSHI</span>
@@ -126,9 +128,9 @@ export default function Token() {
                 </div>
             </div>
 
-            <div ref={chartRef} className="w-full max-w-2xl rounded" />
+            <div ref={chartRef} className="w-full max-w-3xl rounded" />
 
-            <div className="flex justify-end w-full max-w-2xl mb-6">
+            <div className="flex justify-end w-full max-w-3xl mb-6">
                 <button className="p-3">24H</button>
                 <button className="p-3">1W</button>
                 <button className="p-3">1M</button>
@@ -136,7 +138,7 @@ export default function Token() {
                 <button className="p-3 text-high-emphesis">ALL</button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-2xl mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mb-12">
                 <div className="flex flex-col bg-dark-900 rounded p-6">
                     <div className="text-sm">Liquidity (24H)</div>
                     <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
@@ -154,9 +156,20 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-9 gap-4 w-full max-w-2xl mb-8">
+            <div className="grid grid-cols-9 gap-4 w-full max-w-3xl mb-12">
                 <div className="flex col-span-7">
-                    <div className="w-6/12 bg-dark-900 rounded">1</div>
+                    <div className="w-6/12 mr-2 bg-dark-900 rounded">
+                        <div className="flex items-center rounded bg-dark-900 space-x-3 p-4 w-full sm:w-3/5">
+                            <img className="w-10" src={SushiImage} alt="SUSHI" />
+                            <NumericalInput
+                                className="token-amount-input"
+                                value={''}
+                                onUserInput={val => {
+                                    // onUserInput(val)
+                                }}
+                            />
+                        </div>
+                    </div>
                     <button
                         className="bg-dark-900 rounded-full p-3px -ml-5 -mr-5 z-10"
                         onClick={() => {
@@ -178,12 +191,26 @@ export default function Token() {
                             />
                         </div>
                     </button>
-                    <div className="w-6/12 bg-dark-900 rounded">2</div>
+                    <div className="w-6/12 ml-2 bg-dark-900 rounded">
+                        <div className="flex items-center rounded bg-dark-900 space-x-3 p-4 w-full sm:w-3/5">
+                            <button className="flex items-center">
+                                <img className="w-10 mr-2" src={EthereumImage} alt="ETHEREUM" />
+                                <ChevronDown size="24" className="text-high-emphesis" />
+                            </button>
+                            <NumericalInput
+                                className="token-amount-input"
+                                value={''}
+                                onUserInput={val => {
+                                    // onUserInput(val)
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <button className="col-span-2 bg-dark-700 rounded flex items-center justify-center">Swap</button>
             </div>
 
-            <div className="w-full max-w-2xl rounded py-4 mb-8">
+            <div className="w-full max-w-3xl rounded py-4 mb-8">
                 <div className="flex justify-between pb-6">
                     <div className="font-bold text-h4 text-high-emphesis">About SUSHI</div>
                     <button className="flex items-center">
@@ -199,7 +226,7 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="w-full max-w-2xl mb-8">
+            <div className="w-full max-w-3xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
@@ -237,19 +264,25 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="w-full max-w-2xl mb-8">
+            <div className="w-full max-w-3xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-4">Top Farms</div>
-                <div className="grid grid-cols-3 gap-6 px-4 py-2">
+                <div className="font-bold grid grid-cols-3 gap-6 px-4 py-2">
                     <div>Token Pair</div>
                     <div>ROI (1Y)</div>
                     <div>Rewards</div>
                 </div>
                 <div className="grid grid-cols-3 gap-6 bg-dark-900 rounded p-4">
-                    <div>SUSHI-WETH</div>
-                    <div>40.32%</div>
-                    <div className="flex justify-between">
-                        <div>ICON1</div>
-                        <div>ICON2</div>
+                    <div className="flex items-center">
+                        <img className="w-10 mr-1" src={SushiImage} alt="SUSHI" />
+                        <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
+                        <div className="ml-2 font-bold text-high-emphesis">SUSHI-WETH</div>
+                    </div>
+                    <div className="flex items-center font-bold text-high-emphesis">40.32%</div>
+                    <div className="flex items-center justify-between">
+                        <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
+                        <div className="bg-dark-800 rounded-full p-2">
+                            <Sliders size="20" />
+                        </div>
                     </div>
                 </div>
             </div>
