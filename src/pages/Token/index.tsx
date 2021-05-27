@@ -16,6 +16,7 @@ import { useUserSlippageTolerance } from 'state/user/hooks'
 import SushiImage from '../../assets/images/sushi.png'
 import EthereumImage from '../../assets/images/ethereum-logo.png'
 import NumericalInput from 'components/NumericalInput'
+import { Button } from 'components'
 
 export default function Token() {
     const { i18n } = useLingui()
@@ -138,7 +139,7 @@ export default function Token() {
                 <button className="p-3 text-high-emphesis">ALL</button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mb-12">
+            <div className="grid grid-cols-3 gap-6 w-full max-w-3xl mb-12">
                 <div className="flex flex-col bg-dark-900 rounded p-6">
                     <div className="text-sm">Liquidity (24H)</div>
                     <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
@@ -156,7 +157,11 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-9 gap-4 w-full max-w-3xl mb-12">
+            <Button size="large" color="gradient" className="md:hidden">
+                Swap
+            </Button>
+
+            <div className="hidden md:grid grid-cols-9 gap-4 w-full max-w-3xl mb-12">
                 <div className="flex col-span-7">
                     <div className="w-6/12 mr-2 bg-dark-900 rounded">
                         <div className="flex items-center rounded bg-dark-900 space-x-3 p-4 w-full sm:w-3/5">
@@ -228,7 +233,7 @@ export default function Token() {
 
             <div className="w-full max-w-3xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-4 gap-6">
                     <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
                         <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
                         <div className="text-caption2 md:text-caption text-primary">SUSHI</div>
