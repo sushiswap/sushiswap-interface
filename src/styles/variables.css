@@ -2,6 +2,11 @@
     --primary: #0D0415;
     --text-primary: #BFBFBF;
     --font-sans: "DM Sans", -apple-system, system-ui, BlinkMacSystemFont, 'Helvetica Neue', 'Helvetica', sans-serif;
+    --green: #7CFF6B;
+    --red: #FF3838;
+    --pink: #F338C3;
+    --purple: #A755DD;
+    --blue: #0993EC;
 }
 
 /* :root {
