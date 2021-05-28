@@ -758,36 +758,6 @@ export default function Swap() {
                         <SwapCallbackError error={swapErrorMessage} />
                     ) : null}
                 </BottomGrouping>
-                {!trade && chainId && chainId === ChainId.MAINNET && (
-                    <div
-                        className="hidden w-full mt-4 cursor-pointer sm:block"
-                        onClick={() => toggleNetworkModal()}
-                    >
-                        <DarkCard>
-                            <div className="flex items-center justify-between overflow-hidden">
-                                <Image
-                                    src="/polygon-logo.png"
-                                    width="32px"
-                                    height="32px"
-                                    className="absolute w-24 h-24 top-2"
-                                    alt=""
-                                />
-                                <div className="pl-32">
-                                    <div className="text-high-emphesis">
-                                        {i18n._(
-                                            t`Check out Sushi on Polygon (Matic)`
-                                        )}
-                                    </div>
-                                    <div className="text-sm text-high-emphesis">
-                                        {i18n._(
-                                            t`Click here to switch to Polygon using Metamask`
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </DarkCard>
-                    </div>
-                )}
             </div>
             {!swapIsUnsupported ? (
                 <AdvancedSwapDetailsDropdown trade={trade} />

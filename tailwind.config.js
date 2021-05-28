@@ -1,6 +1,18 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 
+const toHsla =
+    (colorValue) =>
+    ({ opacityVariable, opacityValue }) => {
+        if (opacityValue !== undefined) {
+            return `hsla(var(${colorValue}), ${opacityValue})`
+        }
+        if (opacityVariable !== undefined) {
+            return `hsla(var(${colorValue}), var(${opacityVariable}, 1))`
+        }
+        return `hsl(var(${colorValue}))`
+    }
+
 module.exports = {
     // important: '#__next',
     // darkMode: true,
@@ -35,7 +47,16 @@ module.exports = {
         extend: {
             colors: {
                 pink: 'var(--pink)',
-                purple: 'var( --purple)',
+                // We have to do this for any css variable color or else opacity will not work
+                purple: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--purple), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--purple), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--purple))`
+                },
                 blue: 'var(--blue)',
                 green: 'var(--green)',
                 red: 'var(--red)',

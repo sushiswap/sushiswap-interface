@@ -1,7 +1,7 @@
 import { ChainId } from '@sushiswap/sdk'
 import { request } from 'graphql-request'
 
-const EXCHANGE = {
+export const EXCHANGE = {
     [ChainId.MAINNET]: 'sushiswap/exchange',
     [ChainId.XDAI]: 'xdai-exchange',
     [ChainId.MATIC]: 'matic-exchange',
@@ -20,7 +20,7 @@ const BAR = {
 export const bar = (query, chainId = ChainId.MAINNET) =>
     request(`https://api.thegraph.com/subgraphs/name/${BAR[chainId]}`, query)
 
-const BENTOBOX = {
+export const BENTOBOX = {
     [ChainId.MAINNET]: 'sushiswap/bentobox',
     [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
     [ChainId.MATIC]: 'sushiswap/matic-bentobox',
