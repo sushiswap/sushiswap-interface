@@ -23,20 +23,21 @@ export default function Status() {
                     const words = item.name.split('-')
                     return (
                         <div className="p-4 rounded bg-dark-900 text-primary">
-                            <div className="text-h5">
-                                {words.map(
-                                    (word, i) =>
-                                        `${capitalize(word)}${
-                                            words.length === i ? '' : ' '
-                                        }`
-                                )}
-                            </div>
-                            <div className="text-secondary">
+                            <Typography variant="h5">
+                                {words.map((word) => `${capitalize(word)} `)}
+                            </Typography>
+                            <Typography
+                                variant="caption"
+                                className="text-secondary"
+                            >
                                 Chain Id: {item['chain_id']}
-                            </div>
-                            <div className="text-secondary">
+                            </Typography>
+                            <Typography
+                                variant="caption"
+                                className="text-secondary"
+                            >
                                 Block Height: {item['synced_block_height']}
-                            </div>
+                            </Typography>
                         </div>
                     )
                 })}
