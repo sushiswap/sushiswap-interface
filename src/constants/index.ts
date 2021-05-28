@@ -245,7 +245,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     },
     [ChainId.MATIC]: {
         [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
-        [MATIC.FRAX.address]: [MATIC.FXS]
+        [MATIC.FXS.address]: [MATIC.FRAX]
     }
 }
 
