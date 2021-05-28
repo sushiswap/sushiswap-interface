@@ -22,3 +22,5 @@ public/workbox*.js.map
 /locale/**/*.js
 
 .env
+
+/build

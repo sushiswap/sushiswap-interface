@@ -28,7 +28,7 @@ import { useETHBalances } from '../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 import { usePairs } from '../hooks/usePairs'
 import { useRouter } from 'next/router'
-import { useStakingInfo } from '../state/stake/hooks.ts.bk'
+import { useStakingInfo } from '../state/stake/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../state/wallet/hooks'
 
 const migrateFrom: { [chainId in ChainId]?: string } = {
