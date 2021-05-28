@@ -2,10 +2,11 @@ import Head from 'next/head'
 import Layout from '../layouts/DefaultLayout'
 import Typography from '../components/Typography'
 import capitalize from 'lodash/capitalize'
+import { getChainsStatus } from '../fetchers/covalent'
 import { useChainsStatus } from '../services/covalent/hooks'
 
-export default function Status() {
-    const res = useChainsStatus()
+export default function Status({ initialData }) {
+    const res = useChainsStatus({ initialData })
     const { data } = res.data
     return (
         <Layout>
@@ -45,4 +46,10 @@ export default function Status() {
             {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         </Layout>
     )
+}
+
+export async function getStaticProps() {
+    // `getStaticProps` is invoked on the server-side,
+    // so this `fetcher` function will be executed on the server-side.
+    return { props: { initialData: await getChainsStatus() } }
 }

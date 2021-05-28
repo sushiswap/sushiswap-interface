@@ -89,3 +89,10 @@ export const getChainsStatus = () =>
     )
 
 // TODO: CLASS B
+export const getSushiSwapLiquidityTransactions = (
+    chainId = ChainId.MAINNET,
+    address
+) =>
+    fetch(
+        `https://api.covalenthq.com/v1/${chainId}/address/${address}/stacks/sushiswap/acts/`
+    ).then((res) => res.json())
