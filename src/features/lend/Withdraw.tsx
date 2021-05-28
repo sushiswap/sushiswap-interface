@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { e10, minimum } from '../../functions/math'
-import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
+import useKashiApproveCallback, {
+    BentoApprovalState,
+} from '../../hooks/useKashiApproveCallback'
 
 import Button from '../../components/Button'
 import { KASHI_ADDRESS } from '../../constants/kashi'
@@ -22,23 +24,38 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     const pendingApprovalMessage = useKashiApprovalPending()
 
     // State
-    const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
+    const [useBento, setUseBento] = useState<boolean>(
+        pair.asset.bentoBalance.gt(0)
+    )
     const [value, setValue] = useState('')
     const [pinMax, setPinMax] = useState(false)
 
-    const [kashiApprovalState, approveKashiFallback, kashiPermit, onApprove, onCook] = useKashiApproveCallback()
+    const [
+        kashiApprovalState,
+        approveKashiFallback,
+        kashiPermit,
+        onApprove,
+        onCook,
+    ] = useKashiApproveCallback()
 
     // Calculated
-    const max = minimum(pair.maxAssetAvailable, pair.currentUserAssetAmount.value)
+    const max = minimum(
+        pair.maxAssetAvailable,
+        pair.currentUserAssetAmount.value
+    )
     const displayValue = pinMax ? max.toFixed(pair.asset.decimals) : value
 
     const fraction = pinMax
         ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
-        : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
+        : value
+              .toBigNumber(pair.asset.decimals)
+              .mulDiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
 
     const warnings = new Warnings()
         .add(
-            pair.currentUserAssetAmount.value.lt(value.toBigNumber(pair.asset.decimals)),
+            pair.currentUserAssetAmount.value.lt(
+                value.toBigNumber(pair.asset.decimals)
+            ),
             `Please make sure your ${
                 useBento ? 'BentoBox' : 'wallet'
             } balance is sufficient to withdraw and then try again.`,
@@ -54,18 +71,40 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
     if (displayValue && !warnings.broken) {
         const amount = displayValue.toBigNumber(pair.asset.decimals)
         const newUserAssetAmount = pair.currentUserAssetAmount.value.sub(amount)
-        transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
-        transactionReview.addUSD('Balance USD', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+        transactionReview.addTokenAmount(
+            'Balance',
+            pair.currentUserAssetAmount.value,
+            newUserAssetAmount,
+            pair.asset
+        )
+        transactionReview.addUSD(
+            'Balance USD',
+            pair.currentUserAssetAmount.value,
+            newUserAssetAmount,
+            pair.asset
+        )
 
-        const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.sub(amount))
-        transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
+        const newUtilization = e10(18).mulDiv(
+            pair.currentBorrowAmount.value,
+            pair.currentAllAssets.value.sub(amount)
+        )
+        transactionReview.addPercentage(
+            'Borrowed',
+            pair.utilization.value,
+            newUtilization
+        )
     }
 
     // Handlers
     async function onExecute(cooker: KashiCooker) {
         const fraction = pinMax
             ? minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
-            : value.toBigNumber(pair.asset.decimals).muldiv(pair.currentTotalAsset.base, pair.currentAllAssets.value)
+            : value
+                  .toBigNumber(pair.asset.decimals)
+                  .mulDiv(
+                      pair.currentTotalAsset.base,
+                      pair.currentAllAssets.value
+                  )
 
         cooker.removeAsset(fraction, useBento)
         return `Withdraw ${pair.asset.symbol}`
@@ -73,7 +112,9 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
 
     return (
         <>
-            <div className="mt-6 text-3xl text-high-emphesis">Withdraw {pair.asset.symbol}</div>
+            <div className="mt-6 text-3xl text-high-emphesis">
+                Withdraw {pair.asset.symbol}
+            </div>
 
             <SmartNumberInput
                 color="blue"
@@ -91,14 +132,20 @@ export default function LendWithdrawAction({ pair }: any): JSX.Element {
             />
 
             <WarningsView warnings={warnings} />
-            <TransactionReviewView transactionReview={transactionReview}></TransactionReviewView>
+            <TransactionReviewView
+                transactionReview={transactionReview}
+            ></TransactionReviewView>
 
             <KashiApproveButton
                 color="blue"
                 content={(onCook: any) => (
                     <Button
                         onClick={() => onCook(pair, onExecute)}
-                        disabled={displayValue.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
+                        disabled={
+                            displayValue
+                                .toBigNumber(pair.asset.decimals)
+                                .lte(0) || warnings.broken
+                        }
                     >
                         Withdraw
                     </Button>
