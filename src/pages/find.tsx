@@ -101,7 +101,7 @@ export default function PoolFinder() {
                 <title>{i18n._(t`Find Pool`)} | Sushi</title>
                 <meta name="description" content="Find pool" />
             </Head>
-            <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity-purple-glow">
+            <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity">
                 <FindPoolTabs />
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
                     <Alert
