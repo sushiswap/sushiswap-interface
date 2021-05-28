@@ -3,6 +3,11 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
     // important: '#__next',
+    // darkMode: true,
+    future: {
+        purgeLayersByDefault: true,
+        applyComplexClasses: true,
+    },
     purge: [
         './src/**/*.{js,ts,jsx,tsx}'
     ],
