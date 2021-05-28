@@ -68,7 +68,8 @@ export const MERKLE_ROOT =
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-04/merkle-10959148-11140426.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-05/merkle-10959148-11185970.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-06/merkle-10959148-11231587.json'
-    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-07/merkle-10959148-11277295.json'
+    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-07/merkle-10959148-11277295.json'
+    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-08/merkle-10959148-11322822.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
@@ -214,7 +215,13 @@ export const XSUSHI_CALL = new Token(
 
 export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
 export const LIFT = new Token(ChainId.MAINNET, '0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6', 18, 'LIFT', 'LiftKitchen')
-export const LFBTC = new Token(ChainId.MAINNET, '0xafcE9B78D409bF74980CACF610AFB851BF02F257', 18, 'LFBTC', 'LiftKitchen BTC')
+export const LFBTC = new Token(
+    ChainId.MAINNET,
+    '0xafcE9B78D409bF74980CACF610AFB851BF02F257',
+    18,
+    'LFBTC',
+    'LiftKitchen BTC'
+)
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -232,7 +239,7 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
         [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
-        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]],
+        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]]
     },
     [ChainId.MATIC]: {
         [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE]
