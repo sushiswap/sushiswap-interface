@@ -1,4 +1,4 @@
-import { isAddress } from './validate'
+import { isAddress } from '../../src/functions/validate'
 
 describe('#isAddress', () => {
     it('returns false if not', () => {
@@ -19,9 +19,13 @@ describe('#isAddress', () => {
     })
 
     it('succeeds even without prefix', () => {
-        expect(isAddress('f164fc0ec4e93095b804a4795bbe1e041497b92a')).toBe('0xf164fC0Ec4E93095b804a4795bBe1e041497b92a')
+        expect(isAddress('f164fc0ec4e93095b804a4795bbe1e041497b92a')).toBe(
+            '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a'
+        )
     })
     it('fails if too long', () => {
-        expect(isAddress('f164fc0ec4e93095b804a4795bbe1e041497b92a0')).toBe(false)
+        expect(isAddress('f164fc0ec4e93095b804a4795bbe1e041497b92a0')).toBe(
+            false
+        )
     })
 })
