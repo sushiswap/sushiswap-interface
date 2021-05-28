@@ -1,18 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 
-const toHsla =
-    (colorValue) =>
-    ({ opacityVariable, opacityValue }) => {
-        if (opacityValue !== undefined) {
-            return `hsla(var(${colorValue}), ${opacityValue})`
-        }
-        if (opacityVariable !== undefined) {
-            return `hsla(var(${colorValue}), var(${opacityVariable}, 1))`
-        }
-        return `hsl(var(${colorValue}))`
-    }
-
 module.exports = {
     // important: '#__next',
     // darkMode: true,
