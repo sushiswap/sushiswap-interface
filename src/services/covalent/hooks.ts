@@ -19,6 +19,7 @@ import {
 
 import useSWR from 'swr'
 
+// CLASS A
 export function useTokenBalances({ initialData, chainId, address }) {
     const res = useSWR(
         `https://api.covalenthq.com/v1/${chainId}/address/${address}/balances_v2/`,
@@ -48,7 +49,7 @@ export function useTransfers({ initialData, chainId, address }) {
 
 export function useBlock({ initialData, chainId, blockHeight }) {
     const res = useSWR(
-        `https://api.covalenthq.com/v1/${chainId}/block_v2/${blockHeight}/transfers_v2/`,
+        `https://api.covalenthq.com/v1/${chainId}/block_v2/${blockHeight}/`,
         () => getBlock(chainId, blockHeight),
         { initialData }
     )
@@ -162,3 +163,5 @@ export function useChainsStatus({ initialData }) {
     )
     return res
 }
+
+// TODO: CLASS B
