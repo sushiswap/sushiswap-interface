@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 
-import { Box } from 'rebass/styled-components'
 import { classNames } from '../../functions'
 import styled from 'styled-components'
 
