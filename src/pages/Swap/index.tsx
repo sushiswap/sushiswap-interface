@@ -629,7 +629,9 @@ export default function Swap() {
                     {/*    </div>*/}
                     {/*)}*/}
                     <a
-                        href="https://miso.sushi.com/auctions/0x5cFEb913fe8aE7e5E63E5930F044f36Ba4B882aB"
+                        href={
+                            'https://app.sushi.com/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0xe9f84de264e91529af07fa2c746e934397810334'
+                        }
                         className="hidden sm:block w-full cursor-pointer mt-4 py-1 rounded"
                         style={{
                             backgroundImage: `url(${SakeBanner})`,
@@ -650,13 +652,10 @@ export default function Swap() {
                                 style={{ lineHeight: 1.3, maxWidth: 250 }}
                             >
                                 <div className="font-semibold">
-                                    <Trans>Final Day of Auction</Trans>
+                                    <Trans>Missed the Auction?</Trans>
                                 </div>
                                 <div className="text-xs">
-                                    <Trans>
-                                        Place your bid for the world’s first tokenized Sake now on MISO before they’re
-                                        gone
-                                    </Trans>
+                                    <Trans>Swap for SAK3 token on SUSHI now. Click here to swap.</Trans>
                                 </div>
                             </div>
                         </div>
