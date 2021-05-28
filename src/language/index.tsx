@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 
+import getConfig from 'next/config'
 import { I18nProvider } from '@lingui/react'
 import { i18n } from '@lingui/core'
 import { useRouter } from "next/router";
-
-// This array should equal the array set in .linguirc
-export const locales = ['de', 'en', 'es-AR', 'es', 'it', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja']
-export const defaultLocale = 'en'
+const { publicRuntimeConfig } = getConfig()
+const { locales } = publicRuntimeConfig
 
 // Don't load plurals
 locales.map(locale => i18n.loadLocaleData(locale, { plurals: () => null }))

@@ -1,5 +1,7 @@
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
+const linguiConfig = require('./lingui.config.js')
+const { locales, sourceLocale } = linguiConfig
 
 module.exports = withPWA({
   pwa: {
@@ -24,7 +26,10 @@ module.exports = withPWA({
     ]
   },
   i18n: {
-    locales: ['de', 'en', 'es-AR', 'es', 'it', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja', 'fr'],
-    defaultLocale: 'en',
+    locales,
+    defaultLocale: sourceLocale,
+  },
+  publicRuntimeConfig: {
+    locales
   }
 })

@@ -1,5 +1,5 @@
 import { StyledMenu } from '../StyledMenu'
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo, useRef } from "react";
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
@@ -7,62 +7,68 @@ import Image from 'next/image'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { useRouter } from "next/router";
 import Link from 'next/link';
-
-const ChFlag = '/images/flags/ch-flag.png'
-const DeFlag = '/images/flags/de-flag.png'
-const EnFlag = '/images/flags/en-flag.png'
-const EsFlag = '/images/flags/es-flag.png'
-const ItFlag = '/images/flags/it-flag.png'
-const RoFlag = '/images/flags/ro-flag.png'
-const RuFlag = '/images/flags/ru-flag.png'
-const ViFlag = '/images/flags/vi-flag.png'
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const { locales } = publicRuntimeConfig
 
 // Use https://onlineunicodetools.com/convert-unicode-to-image to convert
-// Unicode flags to png as Windows does not support Unicode flags
+// Unicode flags (https://emojipedia.org/flags/) to png as Windows does not support Unicode flags
 // Use 24px as unicode characters font size
 const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: string } } = {
     en: {
-        flag: EnFlag,
+        flag:  '/images/flags/en-flag.png',
         language: 'English'
     },
     de: {
-        flag: DeFlag,
+        flag: '/images/flags/de-flag.png',
         language: 'German'
     },
     it: {
-        flag: ItFlag,
+        flag: '/images/flags/it-flag.png',
         language: 'Italian'
     },
     ru: {
-        flag: RuFlag,
+        flag: '/images/flags/ru-flag.png',
         language: 'Russian'
     },
     ro: {
-        flag: RoFlag,
+        flag: '/images/flags/ro-flag.png',
         language: 'Romanian'
     },
     vi: {
-        flag: ViFlag,
+        flag: '/images/flags/vi-flag.png',
         language: 'Vietnamese'
     },
     'zh-CN': {
-        flag: ChFlag,
+        flag: '/images/flags/ch-flag.png',
         language: 'Chinese',
         dialect: '简'
     },
     'zh-TW': {
-        flag: ChFlag,
+        flag: '/images/flags/ch-flag.png',
         language: 'Chinese',
         dialect: '繁'
     },
     es: {
-        flag: EsFlag,
+        flag: '/images/flags/es-flag.png',
         language: 'Spanish'
     },
     'es-AR': {
-        flag: EsFlag,
+        flag: '/images/flags/es-flag.png',
         language: 'Spanish',
         dialect: 'AR'
+    },
+    ko: {
+        flag: '/images/flags/ko-flag.png',
+        language: 'Korean',
+    },
+    ja: {
+        flag: '/images/flags/ja-flag.png',
+        language: 'Japanese'
+    },
+    fr: {
+        flag: '/images/flags/fr-flag.png',
+        language: 'French'
     }
 }
 
@@ -80,10 +86,14 @@ function LanguageSwitch() {
             </div>
             {open && (
                 <div className="min-w-[10rem] max-h-[232px] md:max-h-[unset] absolute flex flex-col z-50 bg-dark-850 shadow-sm rounded md:top-[3rem] right-0 md:overflow-hidden overflow-scroll top-[-15.5rem]">
-                    {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
-                        <Link href={pathname} locale={key} key={key}>
-                            <div className="cursor-pointer flex items-center px-3 py-1.5 hover:bg-dark-800 hover:text-high-emphesis font-bold" onClick={toggle}>
-                                <Image className="inline mr-1 w-3 h-3 align-middle" src={flag} width={20} height={20} alt={language} />
+                    {locales.map(key => {
+                        const { flag, language, dialect } = LANGUAGES[key]
+                        return (<Link href={pathname} locale={key} key={key}>
+                            <div
+                              className="cursor-pointer flex items-center px-3 py-1.5 hover:bg-dark-800 hover:text-high-emphesis font-bold"
+                              onClick={toggle}>
+                                <Image className="inline mr-1 w-3 h-3 align-middle" src={flag} width={20} height={20}
+                                       alt={language} />
                                 <span className="ml-4">{language}</span>
                                 {dialect && (
                                   <sup>
@@ -91,8 +101,8 @@ function LanguageSwitch() {
                                   </sup>
                                 )}
                             </div>
-                        </Link>
-                    ))}
+                        </Link>)
+                    })}
                 </div>
             )}
         </StyledMenu>
