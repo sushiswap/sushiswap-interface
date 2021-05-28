@@ -155,7 +155,7 @@ export function useChains({ initialData }) {
     return res
 }
 
-export function useChainsStatus({ initialData }) {
+export function useChainsStatus({ initialData } = { initialData: undefined }) {
     const res = useSWR(
         `https://api.covalenthq.com/v1/chains/status/`,
         () => getChainsStatus(),
