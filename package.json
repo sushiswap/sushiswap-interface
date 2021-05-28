@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "analyze": "BUNDLE_ANALYZE=both yarn build",
     "dev": "next dev",
     "inspect": "NODE_OPTIONS=\"--inspect\" next dev",
     "build": "next build",
     "start": "next start",
     "lingui": "lingui extract && lingui compile",
-    "circular": "madge --circular src --extensions ts,tsx,js,jsx"
+    "circular": "madge --circular src --extensions ts,tsx,js,jsx",
+    "unused": "next-unused"
+  },
+  "engines": {
+    "node": "14.x"
   },
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
@@ -74,20 +79,35 @@
   "devDependencies": {
     "@fontsource/dm-sans": "^4.3.0",
     "@lingui/cli": "^3.8.10",
+    "@next/bundle-analyzer": "^10.2.3",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.3.2",
     "@tailwindcss/jit": "^0.1.18",
     "@tailwindcss/line-clamp": "^0.2.0",
+    "@types/node": "^15.6.1",
     "@types/react": "^17.0.5",
-    "autoprefixer": "^10.2.5",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "babel-plugin-macros": "^3.0.1",
     "babel-plugin-styled-components": "^1.12.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
     "madge": "^4.0.2",
+    "next-unused": "^0.0.6",
     "postcss": "^8.2.15",
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^2.1.2",
     "tailwindcss-border-gradient-radius": "^2.0.0",
     "typescript": "^4.2.4"
+  },
+  "next-unused": {
+    "debug": true,
+    "include": [
+      "src/components",
+      "src/pages"
+    ],
+    "exclude": [],
+    "entrypoints": [
+      "src/pages"
+    ]
   }
 }
