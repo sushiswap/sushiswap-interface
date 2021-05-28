@@ -11,6 +11,7 @@
     "circular": "madge --circular src --extensions ts,tsx,js,jsx"
   },
   "dependencies": {
+    "@binance-chain/bsc-connector": "^1.0.0",
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@lingui/core": "^3.8.10",
