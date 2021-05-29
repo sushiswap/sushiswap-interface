@@ -8,7 +8,7 @@ import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 import { ParsedQs } from 'qs'
 import { SwapState } from './reducer'
 import { computeSlippageAdjustedAmounts } from '../../functions/prices'
-import { isAddress } from '../../functions/validate'
+import { isAddress, isZero } from '../../functions/validate'
 import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -17,7 +17,10 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import useENS from '../../hooks/useENS'
 import { useLingui } from '@lingui/react'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
-import { useUserSlippageTolerance } from '../user/hooks'
+import { useUserSlippageTolerance, useUserArcherGasPrice, useUserArcherETHTip, useUserArcherGasEstimate, useUserArcherTipManualOverride } from '../user/hooks'
+import { useSwapCallArguments, EstimatedSwapCall, SuccessfulCall } from '../../hooks/useSwapCallback'
+import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -107,7 +110,7 @@ function involvesAddress(trade: Trade, checksummedAddress: string): boolean {
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(): {
+export function useDerivedSwapInfo(doArcher = false): {
     currencies: { [field in Field]?: Currency }
     currencyBalances: { [field in Field]?: CurrencyAmount }
     parsedAmount: CurrencyAmount | undefined
@@ -193,6 +196,85 @@ export function useDerivedSwapInfo(): {
     if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
         inputError = i18n._(t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`)
     }
+
+    const swapCalls = useSwapCallArguments(v2Trade as Trade, allowedSlippage, to, doArcher)
+
+    const [, setUserETHTip] = useUserArcherETHTip()
+    const [userGasEstimate, setUserGasEstimate] = useUserArcherGasEstimate()
+    const [userGasPrice] = useUserArcherGasPrice()
+    const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
+
+    useEffect(() => {
+        if (doArcher) {
+            setUserTipManualOverride(false)
+            setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
+            setUserGasEstimate(DEFAULT_ARCHER_GAS_ESTIMATE.toString())
+        }
+    }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
+
+    useEffect(() => {
+        if (doArcher && !userTipManualOverride) {
+            setUserETHTip(JSBI.multiply(JSBI.BigInt(userGasEstimate), JSBI.BigInt(userGasPrice)).toString())
+        }
+    }, [doArcher, userGasEstimate, userGasPrice, userTipManualOverride, setUserETHTip])
+
+    useEffect(() => {
+        async function estimateGas() {
+            const estimatedCalls: EstimatedSwapCall[] = await Promise.all(
+                swapCalls.map(call => {
+                    const {
+                        parameters: { methodName, args, value },
+                        contract
+                    } = call
+                    const options = !value || isZero(value) ? {} : { value }
+
+                    return contract.estimateGas[methodName](...args, options)
+                        .then(gasEstimate => {
+                            return {
+                                call,
+                                gasEstimate
+                            }
+                        })
+                        .catch(gasError => {
+                            console.debug('Gas estimate failed, trying eth_call to extract error', call)
+
+                            return contract.callStatic[methodName](...args, options)
+                                .then(result => {
+                                    console.debug('Unexpected successful call after failed estimate gas', call, gasError, result)
+                                    return { call, error: new Error('Unexpected issue with estimating the gas. Please try again.') }
+                                })
+                                .catch(callError => {
+                                    console.debug('Call threw error', call, callError)
+                                    let errorMessage: string
+                                    switch (callError.reason) {
+                                        case 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT':
+                                        case 'UniswapV2Router: EXCESSIVE_INPUT_AMOUNT':
+                                            errorMessage =
+                                                'This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.'
+                                            break
+                                        default:
+                                            errorMessage = `The transaction cannot succeed due to error: ${callError.reason}. This is probably an issue with one of the tokens you are swapping.`
+                                    }
+                                    return { call, error: new Error(errorMessage) }
+                                })
+                        })
+                })
+            )
+
+            // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
+            const successfulEstimation = estimatedCalls.find(
+                (el, ix, list): el is SuccessfulCall =>
+                    'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
+            )
+
+            if (successfulEstimation) {
+                setUserGasEstimate(successfulEstimation.gasEstimate.toString())
+            }
+        }
+        if (doArcher && v2Trade && swapCalls && !userTipManualOverride) {
+            estimateGas()
+        }
+    }, [doArcher, v2Trade, swapCalls, userTipManualOverride, setUserGasEstimate])
 
     return {
         currencies,

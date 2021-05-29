@@ -2,6 +2,7 @@ import { ChainId, JSBI, Percent, Token, WETH } from '@sushiswap/sdk'
 import { fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import { BigNumber } from 'ethers'
 
 export const POOL_DENY = ['14', '29', '45', '30']
 
@@ -47,6 +48,19 @@ export const SUSHI: ChainTokenMap = {
     [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
     [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
     [ChainId.FANTOM]: new Token(ChainId.FANTOM, '0xae75A438b2E0cB8Bb01Ec1E1e376De11D44477CC', 18, 'SUSHI', 'SushiToken')
+}
+
+export const ARCHER_ROUTER_ADDRESS: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: '0x87535b160E251167FB7abE239d2467d1127219E4',
+    [ChainId.RINKEBY]: '0x21323080D91dD77c420be7775Bf5C33d21Dcc8Fc'
+}
+
+export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction'
+}
+
+export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
+    [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas'
 }
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
@@ -362,6 +376,21 @@ export const NetworkContextName = 'NETWORK'
 export const INITIAL_ALLOWED_SLIPPAGE = 50
 // 20 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 20
+
+// default archer gas estimate, 250k wei
+export const DEFAULT_ARCHER_GAS_ESTIMATE: BigNumber = BigNumber.from(250000)
+// default gas prices to use if all other sources unavailable
+export const DEFAULT_ARCHER_GAS_PRICES: BigNumber[] = [
+  BigNumber.from(60000000000),
+  BigNumber.from(70000000000),
+  BigNumber.from(100000000000),
+  BigNumber.from(140000000000),
+  BigNumber.from(300000000000),
+  BigNumber.from(800000000000),
+  BigNumber.from(2000000000000)
+]
+// default miner tip, equal to median gas price * default gas estimate
+export const DEFAULT_ARCHER_ETH_TIP: JSBI = JSBI.BigInt(DEFAULT_ARCHER_GAS_ESTIMATE.mul(DEFAULT_ARCHER_GAS_PRICES[4]).toString())
 
 // used for rewards deadlines
 export const BIG_INT_SECONDS_IN_WEEK = JSBI.BigInt(60 * 60 * 24 * 7)

@@ -11,6 +11,8 @@
     "circular": "madge --circular src --extensions ts,tsx,js,jsx"
   },
   "dependencies": {
+    "@ethereumjs/common": "^2.3.0",
+    "@ethereumjs/tx": "^3.2.0",
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@lingui/core": "^3.8.10",
@@ -52,6 +54,7 @@
     "numeral": "^2.0.6",
     "polished": "^4.1.2",
     "qs": "^6.10.1",
+    "rc-slider": "^9.7.2",
     "react": "17.0.2",
     "react-device-detect": "^1.17.0",
     "react-dom": "17.0.2",

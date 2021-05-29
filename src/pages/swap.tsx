@@ -9,7 +9,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import { computeTradePriceBreakdown, warningSeverity } from '../functions/prices'
 import { useAllTokens, useCurrency } from '../hooks/Tokens'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from '../state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } from '../state/user/hooks'
+import { useExpertModeManager, useUserArcherETHTip, useUserArcherGasPrice, useUserArcherUseRelay, useUserSingleHopOnly, useUserSlippageTolerance, useUserTransactionTTL } from '../state/user/hooks'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../state/application/hooks'
 import useWrapCallback, { WrapType } from '../hooks/useWrapCallback'
 
@@ -20,7 +20,7 @@ import ConfirmSwapModal from '../features/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../components/CurrencyInputPanel'
 import { Field } from '../state/swap/actions'
 import Head from 'next/head'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../constants'
+import { ARCHER_RELAY_URI, ARCHER_ROUTER_ADDRESS, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import Image from 'next/image'
 import Layout from '../layouts/DefaultLayout'
 import LinkStyledButton from '../components/LinkStyledButton'
@@ -44,6 +44,8 @@ import useENSAddress from '../hooks/useENSAddress'
 import { useIsTransactionUnsupported } from '../hooks/Trades'
 import { useLingui } from '@lingui/react'
 import { useSwapCallback } from '../hooks/useSwapCallback'
+import { getRouterAddress } from '../functions'
+import MinerTip from '../components/MinerTip'
 
 export default function Swap() {
     const { i18n } = useLingui()
@@ -85,10 +87,18 @@ export default function Swap() {
 
     // get custom setting values for user
     const [allowedSlippage] = useUserSlippageTolerance()
+    const [ttl] = useUserTransactionTTL()
+    const [useArcher] = useUserArcherUseRelay()
+    const [archerETHTip] = useUserArcherETHTip()
+    const [archerGasPrice] = useUserArcherGasPrice()
+
+    // archer
+    const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
+    const doArcher = archerRelay !== undefined && useArcher
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
-    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo(doArcher)
     const {
         wrapType,
         execute: onWrap,
@@ -157,7 +167,9 @@ export default function Swap() {
     const noRoute = !route
 
     // check whether the user has approved the router on the input token
-    const [approval, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage)
+    const [approval, approveCallback] = useApproveCallbackFromTrade(
+        (doArcher ? ARCHER_ROUTER_ADDRESS[chainId ?? 1] : getRouterAddress(chainId)),
+        trade, allowedSlippage)
 
     // check if user has gone through approval process, used to show two step buttons, reset on token change
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
@@ -169,11 +181,12 @@ export default function Swap() {
         }
     }, [approval, approvalSubmitted])
 
-    const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
+    const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT], doArcher ? archerETHTip : undefined)
     const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
 
     // the callback to execute the swap
-    const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient)
+    const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient,
+        doArcher ? ttl : undefined)
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
@@ -287,6 +300,12 @@ export default function Swap() {
         (outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency),
         [onCurrencySelection]
     )
+
+    useEffect(() => {
+        if(doArcher && parsedAmounts[Field.INPUT] && maxAmountInput && parsedAmounts[Field.INPUT]?.greaterThan(maxAmountInput)) {
+          handleMaxInput();
+        }
+      }, [handleMaxInput, parsedAmounts, maxAmountInput, doArcher]);
 
     const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
@@ -464,6 +483,12 @@ export default function Swap() {
                                             {allowedSlippage / 100}%
                                         </div>
                                     </RowBetween>
+                                )}
+                                
+                            </div>
+                            <div className="px-5 mt-1">
+                                {doArcher && userHasSpecifiedInputOutput && (
+                                    <MinerTip />
                                 )}
                             </div>
                         </div>

@@ -6,13 +6,18 @@ import { AppDispatch, AppState } from '../index'
 import { addTransaction } from './actions'
 import { TransactionDetails } from './reducer'
 
+export interface TransactionResponseLight {
+    hash: string
+}
+
 // helper that can take a ethers library transaction response and add it to the list of transactions
 export function useTransactionAdder(): (
-    response: TransactionResponse,
+    response: TransactionResponseLight,
     customData?: {
         summary?: string
         approval?: { tokenAddress: string; spender: string }
         claim?: { recipient: string }
+        archer?: { rawTransaction: string, deadline: number, nonce: number, ethTip: string }
     }
 ) => void {
     const { chainId, account } = useActiveWeb3React()
@@ -20,15 +25,17 @@ export function useTransactionAdder(): (
 
     return useCallback(
         (
-            response: TransactionResponse,
+            response: TransactionResponseLight,
             {
                 summary,
                 approval,
-                claim
+                claim,
+                archer
             }: {
                 summary?: string
                 claim?: { recipient: string }
                 approval?: { tokenAddress: string; spender: string }
+                archer?: { rawTransaction: string, deadline: number, nonce: number, ethTip: string }
             } = {}
         ) => {
             if (!account) return
@@ -38,7 +45,7 @@ export function useTransactionAdder(): (
             if (!hash) {
                 throw Error('No transaction hash found.')
             }
-            dispatch(addTransaction({ hash, from: account, chainId, approval, summary, claim }))
+            dispatch(addTransaction({ hash, from: account, chainId, approval, summary, claim, archer }))
         },
         [dispatch, chainId, account]
     )

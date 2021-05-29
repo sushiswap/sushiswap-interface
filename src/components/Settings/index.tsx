@@ -7,7 +7,8 @@ import {
     useExpertModeManager,
     useUserSingleHopOnly,
     useUserSlippageTolerance,
-    useUserTransactionTTL
+    useUserTransactionTTL,
+    useUserArcherUseRelay
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
@@ -101,6 +102,8 @@ export default function SettingsTab() {
     // show confirmation view before turning on
     const [showConfirmation, setShowConfirmation] = useState(false)
 
+    const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
+
     useOnClickOutside(node, open ? toggle : undefined)
 
     return (
@@ -164,6 +167,8 @@ export default function SettingsTab() {
                             setRawSlippage={setUserslippageTolerance}
                             deadline={ttl}
                             setDeadline={setTtl}
+                            useArcher={userUseArcher}
+                            setUseArcher={setUserUseArcher}
                         />
                         <div className="text-base font-semibold text-high-emphesis">
                             {i18n._(t`Interface Settings`)}

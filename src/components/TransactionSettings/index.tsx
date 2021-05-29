@@ -7,6 +7,9 @@ import QuestionHelper from '../QuestionHelper'
 import { darken } from 'polished'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useActiveWeb3React } from '../../hooks'
+import { ChainId } from '@sushiswap/sdk'
+import Toggle from '../Toggle'
 
 enum SlippageError {
     InvalidInput = 'InvalidInput',
@@ -91,11 +94,14 @@ export interface SlippageTabsProps {
     setRawSlippage: (rawSlippage: number) => void
     deadline: number
     setDeadline: (deadline: number) => void
+    useArcher: boolean
+    setUseArcher: (useArcher: boolean) => void
 }
 
-export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline }: SlippageTabsProps) {
+export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, useArcher, setUseArcher }: SlippageTabsProps) {
     const { i18n } = useLingui()
     const theme = useContext(ThemeContext)
+    const { chainId } = useActiveWeb3React()
 
     const inputRef = useRef<HTMLInputElement>()
 
@@ -253,6 +259,21 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
                     <div style={{ paddingLeft: '8px' }}>{i18n._(t`minutes`)}</div>
                 </RowFixed>
             </AutoColumn>
+
+            {chainId === ChainId.MAINNET && (
+            <AutoColumn gap="sm">
+                <RowBetween>
+                    <RowFixed>
+                        <div>{i18n._(t`MEV Shield by Archer DAO`)}</div>
+                        <QuestionHelper text={i18n._(t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`)} />
+                    </RowFixed>
+                        <Toggle
+                            id="toggle-use-archer"
+                            isActive={useArcher}
+                            toggle={() => setUseArcher(!useArcher)} />
+                </RowBetween>
+            </AutoColumn>
+            )}
         </AutoColumn>
     )
 }

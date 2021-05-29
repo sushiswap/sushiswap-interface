@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ToggleElement = styled.span<{ isActive?: boolean; isOnSwitch?: boolean }>`
+export const ToggleElement = styled.span<{ isActive?: boolean; isOnSwitch?: boolean }>`
     padding: 0.25rem 0.5rem;
     border-radius: 14px;
     // background: ${({ theme, isActive, isOnSwitch }) =>
@@ -28,8 +28,8 @@ const ToggleElement = styled.span<{ isActive?: boolean; isOnSwitch?: boolean }>`
     }
 `
 
-const StyledToggle = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
-    // border-radius: ${({ theme }) => theme.borderRadius};
+export const StyledToggle = styled.button<{ isActive?: boolean; activeElement?: boolean }>`
+    border-radius: 8px;
     border: none;
     // background: ${({ theme }) => theme.bg3};
     display: flex;
