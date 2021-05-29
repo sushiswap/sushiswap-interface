@@ -1,4 +1,3 @@
-  
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 
@@ -12,7 +11,7 @@ module.exports = withPWA({
     webpack5: true
   },
   images: {
-    domains: ['raw.githubusercontent.com', 'ftmscan.com'],
+    domains: ['raw.githubusercontent.com', 'ftmscan.com', 'cloudflare-ipfs.com'],
   },
   reactStrictMode: true,
   async redirects() {

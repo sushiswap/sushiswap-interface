@@ -1,7 +1,7 @@
 import { Currency } from '@sushiswap/sdk'
+import CurrencyLogo from '../CurrencyLogo'
 import React from 'react'
 import styled from 'styled-components'
-import CurrencyLogo from '../CurrencyLogo'
 
 const Wrapper = styled.div<{ margin: boolean; sizeraw: number }>`
     position: relative;
@@ -29,7 +29,7 @@ export default function DoubleCurrencyLogo({
     currency0,
     currency1,
     size = 16,
-    margin = false
+    margin = false,
 }: DoubleCurrencyLogoProps) {
     return (
         <Wrapper sizeraw={size} margin={margin}>

@@ -1,5 +1,5 @@
 import { Trans, t } from '@lingui/macro'
-import { formattedNum, formattedPercent } from '../../utils'
+import { formatNumber, formatPercent } from '../../functions/format'
 
 import AsyncIcon from '../../components/AsyncIcon'
 import Card from '../../components/Card'
@@ -129,31 +129,31 @@ export default function Borrow() {
                                                         </div>
                                                         <div className="text-right">
                                                             <div>
-                                                                {formattedNum(
+                                                                {formatNumber(
                                                                     pair.currentUserBorrowAmount.string,
                                                                     false
                                                                 )}{' '}
                                                                 {pair.asset.symbol}
                                                             </div>
                                                             <div className="text-sm text-secondary">
-                                                                {formattedNum(pair.currentUserBorrowAmount.usd, true)}
+                                                                {formatNumber(pair.currentUserBorrowAmount.usd, true)}
                                                             </div>
                                                         </div>
                                                         <div className="hidden text-right md:block">
                                                             <div>
-                                                                {formattedNum(pair.userCollateralAmount.string, false)}{' '}
+                                                                {formatNumber(pair.userCollateralAmount.string, false)}{' '}
                                                                 {pair.collateral.symbol}
                                                             </div>
                                                             <div className="text-sm text-secondary">
-                                                                {formattedNum(pair.userCollateralAmount.usd, true)}
+                                                                {formatNumber(pair.userCollateralAmount.usd, true)}
                                                             </div>
                                                         </div>
                                                         <div className="flex items-center justify-end">
-                                                            {formattedPercent(pair.health.string)}
+                                                            {formatPercent(pair.health.string)}
                                                             <GradientDot percent={pair.health.string} />
                                                         </div>
                                                         <div className="text-right">
-                                                            {formattedPercent(pair.interestPerYear.string)}
+                                                            {formatPercent(pair.interestPerYear.string)}
                                                         </div>
                                                     </div>
                                                 </a>
@@ -206,7 +206,7 @@ export default function Borrow() {
                 </div>
                 <div className="flex-col space-y-2">
                     {pairs.items &&
-                        pairs.items.map(pair => {
+                        pairs.items.map((pair) => {
                             return (
                                 <div key={pair.address}>
                                     <Link href={'/borrow/' + String(pair.address).toLowerCase()}>
@@ -216,11 +216,11 @@ export default function Borrow() {
                                                     <div className="hidden space-x-2 md:flex">
                                                         <AsyncIcon
                                                             src={pair.asset.tokenInfo.logoURI}
-                                                            className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                            className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                         />
                                                         <AsyncIcon
                                                             src={pair.collateral.tokenInfo.logoURI}
-                                                            className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                            className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                         />
                                                     </div>
                                                     <div className="sm:items-end md:hidden">
@@ -241,40 +241,40 @@ export default function Borrow() {
                                                 <div className="text-left md:text-right">
                                                     <div className="md:hidden">
                                                         <div className="flex flex-col">
-                                                            <div>{formattedNum(pair.currentBorrowAmount.string)}</div>
+                                                            <div>{formatNumber(pair.currentBorrowAmount.string)}</div>
                                                             <div>{pair.asset.symbol}</div>
                                                         </div>
                                                         <div className="text-secondary">
-                                                            {formattedNum(pair.currentBorrowAmount.usd, true)}
+                                                            {formatNumber(pair.currentBorrowAmount.usd, true)}
                                                         </div>
                                                     </div>
                                                     <div className="hidden md:block">
-                                                        {formattedNum(pair.currentBorrowAmount.string)}{' '}
+                                                        {formatNumber(pair.currentBorrowAmount.string)}{' '}
                                                         {pair.asset.symbol}
                                                         <div className="text-secondary">
-                                                            {formattedNum(pair.currentBorrowAmount.usd, true)}
+                                                            {formatNumber(pair.currentBorrowAmount.usd, true)}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
                                                     <div className="md:hidden">
                                                         <div className="flex flex-col">
-                                                            <div>{formattedNum(pair.totalAssetAmount.string)}</div>
+                                                            <div>{formatNumber(pair.totalAssetAmount.string)}</div>
                                                             <div>{pair.asset.symbol}</div>
                                                         </div>
                                                         <div className="text-secondary">
-                                                            {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                            {formatNumber(pair.totalAssetAmount.usd, true)}
                                                         </div>
                                                     </div>
                                                     <div className="hidden md:block">
-                                                        {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
+                                                        {formatNumber(pair.totalAssetAmount.string)} {pair.asset.symbol}
                                                         <div className="text-secondary">
-                                                            {formattedNum(pair.totalAssetAmount.usd, true)}
+                                                            {formatNumber(pair.totalAssetAmount.usd, true)}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    {formattedPercent(pair.currentInterestPerYear.string)}
+                                                    {formatPercent(pair.currentInterestPerYear.string)}
                                                 </div>
                                             </div>
                                         </a>

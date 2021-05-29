@@ -9,7 +9,7 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import Lottie from 'lottie-react'
 import { Input as NumericalInput } from '../NumericalInput'
 import { darken } from 'polished'
-import { formattedNum } from '../../utils'
+import { formatNumber } from '../functions/format'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
@@ -96,7 +96,7 @@ export default function CurrencyInputPanel({
     }, [setModalOpen])
 
     const currencyUSDC = useUSDCPrice(currency ? currency : undefined)?.toFixed(18)
-    const valueUSDC = formattedNum(Number(value) * Number(currencyUSDC))
+    const valueUSDC = formatNumber(Number(value) * Number(currencyUSDC))
 
     return (
         <div id={id} className="p-5 rounded bg-dark-800">

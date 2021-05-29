@@ -10,12 +10,14 @@ import { ButtonError } from '../ButtonLegacy'
 import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import Modal from '../Modal'
+import ModalHeader from '../ModalHeader'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 import Option from './Option'
 import PendingView from './PendingView'
 import ReactGA from 'react-ga'
 import { SUPPORTED_WALLETS } from '../../constants'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+import { XIcon } from '@heroicons/react/outline'
 import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
@@ -24,44 +26,16 @@ import usePrevious from '../../hooks/usePrevious'
 
 const CloseIcon = styled.div`
     position: absolute;
-    right: 1rem;
-    top: 14px;
+    right: 0;
+    top: 0;
     &:hover {
         cursor: pointer;
         opacity: 0.6;
     }
 `
 
-// const CloseColor = styled(Close)`
-//     path {
-//         stroke: ${({ theme }) => theme.text4};
-//     }
-// `
-
-const Wrapper = styled.div`
-    // ${({ theme }) => theme.flexColumnNoWrap}
-    margin: 0;
-    padding: 0;
-    width: 100%;
-`
-
 const HeaderRow = styled.div`
-    // ${({ theme }) => theme.flexRowNoWrap};
-    padding: 1rem 1rem;
-    font-weight: 500;
-    color: ${(props) => (props.color === 'blue' ? ({ theme }) => theme.primary1 : 'inherit')};
-    // ${({ theme }) => theme.mediaWidth.upToMedium`
-    padding: 1rem;
-  `};
-`
-
-const ContentWrapper = styled.div`
-    // background-color: ${({ theme }) => theme.bg2};
-    // padding: 2rem;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-
-    // ${({ theme }) => theme.mediaWidth.upToMedium`padding: 1rem`};
+    margin-bottom: 1rem;
 `
 
 const UpperSection = styled.div`
@@ -84,21 +58,10 @@ const UpperSection = styled.div`
     }
 `
 
-const Blurb = styled.div`
-    // ${({ theme }) => theme.flexRowNoWrap}
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-    // ${({ theme }) => theme.mediaWidth.upToMedium`
-    //     margin: 1rem;
-    //     font-size: 12px;
-    //   `};
-`
-
 const OptionGrid = styled.div`
     display: grid;
     grid-gap: 10px;
+    grid-template-columns: 1fr;
     // ${({ theme }) => theme.mediaWidth.upToMedium`
     grid-template-columns: 1fr;
     grid-gap: 10px;
@@ -302,14 +265,14 @@ export default function WalletModal({
             return (
                 <UpperSection>
                     <CloseIcon onClick={toggleWalletModal}>
-                        <Image src="/x.svg" width="16px" height="16px" />;
+                        <XIcon width="24px" height="24px" />
                     </CloseIcon>
                     <HeaderRow style={{ paddingLeft: 0, paddingRight: 0 }}>
                         {error instanceof UnsupportedChainIdError
                             ? i18n._(t`Wrong Network`)
                             : i18n._(t`Error connecting`)}
                     </HeaderRow>
-                    <ContentWrapper>
+                    <div>
                         {error instanceof UnsupportedChainIdError ? (
                             <h5>{i18n._(t`Please connect to the appropriate Ethereum network.`)}</h5>
                         ) : (
@@ -319,7 +282,7 @@ export default function WalletModal({
                         <ButtonError error={true} size="small" onClick={deactivate}>
                             {i18n._(t`Disconnect`)}
                         </ButtonError>
-                    </ContentWrapper>
+                    </div>
                 </UpperSection>
             )
         }
@@ -335,12 +298,10 @@ export default function WalletModal({
             )
         }
         return (
-            <UpperSection>
-                <CloseIcon onClick={toggleWalletModal}>
-                    <Image src="/x.svg" width="16px" height="16px" />;
-                </CloseIcon>
+            <>
+                <ModalHeader title="Select a Wallet" onClose={toggleWalletModal} />
                 {walletView !== WALLET_VIEWS.ACCOUNT ? (
-                    <HeaderRow color="blue">
+                    <HeaderRow>
                         <HoverText
                             onClick={() => {
                                 setPendingError(false)
@@ -355,7 +316,7 @@ export default function WalletModal({
                         <HoverText>{i18n._(t`Connect to a wallet`)}</HoverText>
                     </HeaderRow>
                 )}
-                <ContentWrapper>
+                <div>
                     {walletView === WALLET_VIEWS.PENDING ? (
                         <PendingView
                             connector={pendingWallet}
@@ -364,24 +325,24 @@ export default function WalletModal({
                             tryActivation={tryActivation}
                         />
                     ) : (
-                        <OptionGrid>{getOptions()}</OptionGrid>
+                        <div className="flex flex-col space-y-5 overflow-y-auto">{getOptions()}</div>
                     )}
                     {walletView !== WALLET_VIEWS.PENDING && (
-                        <Blurb>
-                            <span>{i18n._(t`New to Ethereum?`)} &nbsp;</span>{' '}
+                        <div className="flex flex-col mt-8 text-center">
+                            <div>{i18n._(t`New to Ethereum?`)}</div>
                             <ExternalLink href="https://ethereum.org/wallets/">
                                 {i18n._(t`Learn more about wallets`)}
                             </ExternalLink>
-                        </Blurb>
+                        </div>
                     )}
-                </ContentWrapper>
-            </UpperSection>
+                </div>
+            </>
         )
     }
 
     return (
         <Modal isOpen={walletModalOpen} onDismiss={toggleWalletModal} minHeight={false} maxHeight={90}>
-            <Wrapper>{getModalContent()}</Wrapper>
+            {getModalContent()}
         </Modal>
     )
 }

@@ -1,24 +1,24 @@
-import React, { useContext, useState } from 'react'
-import Router from 'next/router'
 import { ChevronDown, ChevronUp } from 'react-feather'
-import styled, { ThemeContext } from 'styled-components'
-import { Text } from 'rebass'
-import Head from 'next/head'
-
-import { useFuse, useSortableData } from '../../hooks'
-import useFarms from '../../hooks/useFarms'
-import Dots from '../../components/Dots'
-import Paper from '../../components/Paper'
-import { formattedNum, formattedPercent } from '../../utils'
+import React, { useContext, useState } from 'react'
 import { RowBetween, RowFixed } from '../../components/Row'
-import Button from '../../components/Button'
+import { formatNumber, formatPercent } from '../../functions/format'
+import styled, { ThemeContext } from 'styled-components'
+import { useFuse, useSortableData } from '../../hooks'
+
 import { AutoColumn } from '../../components/Column'
+import Button from '../../components/Button'
 import Card from '../../components/Card'
 import CardHeader from '../../components/CardHeader'
-import Search from '../../components/Search'
-import DoubleLogo from '../../components/DoubleLogo'
+import Dots from '../../components/Dots'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
+import DoubleLogo from '../../components/DoubleLogo'
+import Head from 'next/head'
+import Paper from '../../components/Paper'
+import Router from 'next/router'
+import Search from '../../components/Search'
+import { Text } from 'rebass'
 import { useCurrency } from '../../hooks/Tokens'
+import useFarms from '../../hooks/useFarms'
 
 const PageWrapper = styled(AutoColumn)`
     max-width: 640px;
@@ -35,7 +35,7 @@ const TokenBalance = ({ farm }: any) => {
             {farm.type === 'SLP' && (
                 <Paper className="bg-dark-800">
                     <div
-                        className="grid grid-cols-3 py-4 px-4 cursor-pointer select-none rounded text-sm"
+                        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none"
                         onClick={() => Router.push(`zap?poolAddress=${farm.pairAddress}&currencyId=ETH`)}
                     >
                         <div className="flex items-center">
@@ -51,17 +51,17 @@ const TokenBalance = ({ farm }: any) => {
                                 {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
                             </div>
                         </div>
-                        <div className="flex justify-end items-center">
+                        <div className="flex items-center justify-end">
                             <div>
-                                <div className="text-right">{formattedNum(farm.tvl, true)} </div>
-                                <div className="text-secondary text-right">
-                                    {formattedNum(farm.slpBalance / 1e18, false)} SLP
+                                <div className="text-right">{formatNumber(farm.tvl, true)} </div>
+                                <div className="text-right text-secondary">
+                                    {formatNumber(farm.slpBalance / 1e18, false)} SLP
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-end items-center">
-                            <div className="text-right font-semibold text-xl">
-                                {formattedPercent(farm.roiPerYear * 100)}{' '}
+                        <div className="flex items-center justify-end">
+                            <div className="text-xl font-semibold text-right">
+                                {formatPercent(farm.roiPerYear * 100)}{' '}
                             </div>
                         </div>
                     </div>
@@ -80,13 +80,13 @@ const PoolList = () => {
     const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
     const { result, search, term } = useFuse({
         data: farms && farms.length > 0 ? farms : [],
-        options
+        options,
     })
     const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
     // Sorting Setup
     const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults, {
         key: 'tvl',
-        direction: 'descending'
+        direction: 'descending',
     })
 
     return (
@@ -95,15 +95,15 @@ const PoolList = () => {
                 <title>Zap | Sushi</title>
                 <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
             </Head>
-            <div className="container max-w-2xl mx-auto px-0 sm:px-4">
+            <div className="container max-w-2xl px-0 mx-auto sm:px-4">
                 <Card
-                    className="h-full bg-dark-900 rounded"
+                    className="h-full rounded bg-dark-900"
                     header={
-                        <CardHeader className="flex justify-between items-center bg-dark-800">
-                            <div className="flex w-full justify-between flex-col items-center">
-                                <div className="hidden md:flex items-center">
+                        <CardHeader className="flex items-center justify-between bg-dark-800">
+                            <div className="flex flex-col items-center justify-between w-full">
+                                <div className="items-center hidden md:flex">
                                     {/* <BackButton defaultRoute="/pool" /> */}
-                                    <div className="text-lg mr-2 mb-2 whitespace-nowrap">Select a Pool to Zap Into</div>
+                                    <div className="mb-2 mr-2 text-lg whitespace-nowrap">Select a Pool to Zap Into</div>
                                 </div>
                                 <Search search={search} term={term} />
                             </div>
@@ -111,7 +111,7 @@ const PoolList = () => {
                     }
                 >
                     {/* All Farms */}
-                    <div className="grid grid-cols-3 pb-4 px-4 text-sm  text-secondary">
+                    <div className="grid grid-cols-3 px-4 pb-4 text-sm text-secondary">
                         <div
                             className="flex items-center cursor-pointer hover:text-secondary"
                             onClick={() => requestSort('symbol')}
@@ -122,7 +122,7 @@ const PoolList = () => {
                                 ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
                                     (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                         </div>
-                        <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('tvl')}>
+                        <div className="cursor-pointer hover:text-secondary" onClick={() => requestSort('tvl')}>
                             <div className="flex items-center justify-end">
                                 <div>TVL</div>
                                 {sortConfig &&
@@ -131,7 +131,7 @@ const PoolList = () => {
                                         (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
                             </div>
                         </div>
-                        <div className="hover:text-secondary cursor-pointer" onClick={() => requestSort('roiPerYear')}>
+                        <div className="cursor-pointer hover:text-secondary" onClick={() => requestSort('roiPerYear')}>
                             <div className="flex items-center justify-end">
                                 <div>APR</div>
                                 {sortConfig &&
@@ -149,9 +149,9 @@ const PoolList = () => {
                         ) : (
                             <>
                                 {term ? (
-                                    <div className="w-full text-center py-6">No Results.</div>
+                                    <div className="w-full py-6 text-center">No Results.</div>
                                 ) : (
-                                    <div className="w-full text-center py-6">
+                                    <div className="w-full py-6 text-center">
                                         <Dots>Fetching Pools</Dots>
                                     </div>
                                 )}

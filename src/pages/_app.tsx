@@ -1,5 +1,5 @@
 import '../bootstrap'
-import '../styles/globals.css'
+import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
 
@@ -7,13 +7,12 @@ import LanguageProvider, { activate } from '../language'
 
 import type { AppProps } from 'next/app'
 import ApplicationUpdater from '../state/application/updater'
-import { GlobalStyle } from '../theme'
 import Head from 'next/head'
 import { KashiProvider } from '../context'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
 import { Provider } from 'react-redux'
-import { ThemeProvider } from 'styled-components'
+import ReactGA from 'react-ga'
 import TransactionUpdater from '../state/transactions/updater'
 import UserUpdater from '../state/user/updater'
 import Web3ReactManager from '../components/Web3ReactManager'
@@ -51,11 +50,25 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, [])
     const router = useRouter()
 
+    const { pathname, query } = router
+
+    useEffect(() => {
+        ReactGA.pageview(`${pathname}${query}`)
+    }, [pathname, query])
+
     // TODO: Refactor KashiProvider to /state/kashi to align with rest of app currently
-    const KashiDataProvider =
-        router.asPath.includes('/lend') || router.asPath.includes('/borrow') || router.asPath.includes('/create')
-            ? KashiProvider
-            : NOOP
+    const isKashi = ['/lend', '/borrow', '/create', '/balances'].some((path) => router.asPath.includes(path))
+
+    // const Layout = isKashi
+    //     ? ({ children }) => (
+    //           <KashiProvider>
+    //               <KashiLayout>{children}</KashiLayout>
+    //           </KashiProvider>
+    //       )
+    //     : ({ children }) => <DefaultLayout>{children}</DefaultLayout>
+
+    const KashiDataProvider = isKashi ? KashiProvider : NOOP
+
     return (
         <>
             <Head>
@@ -70,25 +83,22 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <title>Sushi</title>
 
                 <link rel="manifest" href="/manifest.json" />
-                <link href="/icons/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
-                <link href="/icons/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
-                <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+                <link href="/images/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
+                <link href="/images/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
+                <link rel="apple-touch-icon" href="/apple-icon-192x192.png"></link>
                 <meta name="theme-color" content="#F338C3" />
             </Head>
             <Web3ReactProvider getLibrary={getLibrary}>
                 <Web3ProviderNetwork getLibrary={getLibrary}>
                     <LanguageProvider>
-                        <GlobalStyle />
-                        <ThemeProvider theme={{}}>
-                            <Provider store={store}>
-                                <Updaters />
-                                <Web3ReactManager>
-                                    <KashiDataProvider>
-                                        <Component {...pageProps} />
-                                    </KashiDataProvider>
-                                </Web3ReactManager>
-                            </Provider>
-                        </ThemeProvider>
+                        <Provider store={store}>
+                            <Updaters />
+                            <Web3ReactManager>
+                                <KashiDataProvider>
+                                    <Component {...pageProps} />
+                                </KashiDataProvider>
+                            </Web3ReactManager>
+                        </Provider>
                     </LanguageProvider>
                 </Web3ProviderNetwork>
             </Web3ReactProvider>

@@ -1,6 +1,6 @@
+import { classNames, escapeRegExp } from '../../functions'
+
 import React from 'react'
-import { classNames } from '../../functions'
-import { escapeRegExp } from '../../utils'
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
@@ -8,7 +8,7 @@ export const Input = React.memo(function InnerInput({
     value,
     onUserInput,
     placeholder,
-    className = 'w-0 p-0 bg-transparent',
+    className = 'w-0 p-0 text-2xl bg-transparent',
     ...rest
 }: {
     value: string | number
@@ -27,7 +27,7 @@ export const Input = React.memo(function InnerInput({
         <input
             {...rest}
             value={value}
-            onChange={event => {
+            onChange={(event) => {
                 // replace commas with periods, because uniswap exclusively uses period as the decimal separator
                 enforcer(event.target.value.replace(/,/g, '.'))
             }}
@@ -45,7 +45,7 @@ export const Input = React.memo(function InnerInput({
             maxLength={79}
             spellCheck="false"
             className={classNames(
-                'relative font-bold outline-none border-none flex-auto text-2xl overflow-hidden overflow-ellipsis placeholder-low-emphesis',
+                'relative font-bold outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis',
                 className
             )}
         />

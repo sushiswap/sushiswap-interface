@@ -1,39 +1,26 @@
+import { Deposit, Withdraw } from '../../features/lend'
 import { KashiContext, useKashiPair } from '../../context'
 import React, { useContext, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
-import { formattedNum, formattedPercent } from '../../utils'
+import { formatNumber, formatPercent } from '../../functions/format'
 
 import AsyncIcon from '../../components/AsyncIcon'
 import Card from '../../components/Card'
-import Deposit from '../../containers/lend/Deposit'
-import Dots from '../../components/Dots'
-import GradientDot from '../../components/GradientDot'
 import Head from 'next/head'
 import KashiLayout from '../../layouts/KashiLayout'
 import { LendCardHeader } from '../../components/CardHeader'
 import QuestionHelper from '../../components/QuestionHelper'
-import Withdraw from '../../containers/lend/Withdraw'
-import { shortenAddress } from '../../functions'
 import { t } from '@lingui/macro'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import { usePair } from '../../hooks/usePairs'
 import { useRouter } from 'next/router'
-import { useToken } from '../../hooks/Tokens'
-import { useUSDCPrice } from '../../hooks'
 
 export default function Pair() {
     const router = useRouter()
     const { i18n } = useLingui()
-    const { chainId } = useActiveWeb3React()
     const [tabIndex, setTabIndex] = useState(0)
     const info = useContext(KashiContext).state.info
     const pair = useKashiPair(router.query.pair as string)
-    const asset = useToken(pair?.asset.address)
-    const collateral = useToken(pair?.collateral.address)
-    const [pairState, liquidityPair] = usePair(asset, collateral)
-    const assetPrice = useUSDCPrice(asset)
-    const collateralPrice = useUSDCPrice(collateral)
+
     if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
 
     return (
@@ -57,20 +44,20 @@ export default function Pair() {
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">{i18n._(t`Total`)}</div>
                             <div className="text-lg text-high-emphesis">
-                                {formattedNum(pair.currentAllAssets.string)} {pair.asset.symbol}
+                                {formatNumber(pair.currentAllAssets.string)} {pair.asset.symbol}
                             </div>
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">{i18n._(t`Available`)}</div>
                             <div className="text-lg text-high-emphesis">
-                                {formattedNum(pair.totalAssetAmount.string)} {pair.asset.symbol}
+                                {formatNumber(pair.totalAssetAmount.string)} {pair.asset.symbol}
                             </div>
                         </div>
                         <div className="flex justify-between">
                             <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedPercent(pair.utilization.string)}
+                                    {formatPercent(pair.utilization.string)}
                                 </div>
                             </div>
                         </div>
@@ -78,7 +65,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedPercent(pair.currentSupplyAPR.string)}
+                                    {formatPercent(pair.currentSupplyAPR.string)}
                                 </div>
                             </div>
                         </div>
@@ -86,7 +73,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Borrow APR`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedPercent(pair.currentInterestPerYear.string)}
+                                    {formatPercent(pair.currentInterestPerYear.string)}
                                 </div>
                             </div>
                         </div>
@@ -94,7 +81,7 @@ export default function Pair() {
                             <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
                             <div className="flex items-center">
                                 <div className="text-lg text-high-emphesis">
-                                    {formattedNum(pair.totalCollateralAmount.string)} {pair.collateral.symbol}
+                                    {formatNumber(pair.totalCollateralAmount.string)} {pair.collateral.symbol}
                                 </div>
                             </div>
                         </div>
@@ -103,11 +90,21 @@ export default function Pair() {
                                 <div className="text-lg text-secondary">{i18n._(t`Health`)}</div>
                                 <div className="flex items-center">
                                     <div className="text-lg text-high-emphesis">
-                                        {formattedPercent(pair.marketHealth.toFixed(16))}
+                                        {formatPercent(pair.marketHealth.toFixed(16))}
                                     </div>
                                 </div>
                             </div>
                         )}
+
+                        <div className="flex justify-between pt-3">
+                            <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
+                        </div>
+
+                        <div className="flex justify-between">
+                            <div className="text-lg text-secondary">Name</div>
+                            <div className="text-lg text-high-emphesis">{pair.oracle.name}</div>
+                        </div>
+
                         <div className="flex justify-between pt-3">
                             <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
                         </div>
@@ -122,50 +119,6 @@ export default function Pair() {
                                 />
                             </div>
                         </div>
-
-                        {pair && pair.oracle.name === 'SushiSwap' && (
-                            <>
-                                <div className="flex justify-between pt-3">
-                                    <div className="text-xl text-high-emphesis">{i18n._(t`SLP`)}</div>
-                                </div>
-                                {liquidityPair ? (
-                                    <>
-                                        <div className="flex justify-between">
-                                            <div className="text-lg text-secondary">
-                                                {liquidityPair?.token0.getSymbol(chainId)}
-                                            </div>
-                                            <div className="text-lg text-high-emphesis">
-                                                {liquidityPair?.reserve0.toSignificant(4)}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex justify-between">
-                                            <div className="text-lg text-secondary">
-                                                {liquidityPair?.token1.getSymbol(chainId)}
-                                            </div>
-                                            <div className="text-lg text-high-emphesis">
-                                                {liquidityPair?.reserve1.toSignificant(4)}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex justify-between">
-                                            <div className="text-lg text-secondary">TVL</div>
-                                            <div className="text-lg text-high-emphesis">
-                                                {formattedNum(
-                                                    liquidityPair?.reserve1
-                                                        .multiply(assetPrice?.raw)
-                                                        .add(liquidityPair?.reserve1.multiply(collateralPrice?.raw))
-                                                        .toSignificant(4),
-                                                    true
-                                                )}
-                                            </div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <Dots className="text-lg text-secondary">Loading</Dots>
-                                )}
-                            </>
-                        )}
                     </div>
                 </Card>
             }
@@ -184,11 +137,11 @@ export default function Pair() {
                                     <>
                                         <AsyncIcon
                                             src={pair?.asset.tokenInfo.logoURI}
-                                            className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                                            className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
                                         />
                                         <AsyncIcon
                                             src={pair?.collateral.tokenInfo.logoURI}
-                                            className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                                            className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
                                         />
                                     </>
                                 )}
@@ -214,20 +167,20 @@ export default function Pair() {
                     <div>
                         <div className="text-lg text-secondary">Lent</div>
                         <div className="text-2xl text-blue">
-                            {formattedNum(pair.currentUserAssetAmount.string)} {pair.asset.symbol}
+                            {formatNumber(pair.currentUserAssetAmount.string)} {pair.asset.symbol}
                         </div>
                         <div className="text-lg text-high-emphesis">
-                            {formattedNum(pair.currentUserAssetAmount.usd, true)}
+                            {formatNumber(pair.currentUserAssetAmount.usd, true)}
                         </div>
                     </div>
                     <div>
                         <div className="text-lg text-secondary">Borrowed</div>
-                        <div className="text-2xl text-high-emphesis">{formattedPercent(pair.utilization.string)}</div>
+                        <div className="text-2xl text-high-emphesis">{formatPercent(pair.utilization.string)}</div>
                     </div>
                     <div className="text-right">
                         <div>
                             <div className="text-lg text-secondary">Supply APR</div>
-                            <div className="text-2xl text-high-emphesis">{formattedPercent(pair.supplyAPR.string)}</div>
+                            <div className="text-2xl text-high-emphesis">{formatPercent(pair.supplyAPR.string)}</div>
                         </div>
                     </div>
                 </div>

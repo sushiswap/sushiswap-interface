@@ -1,4 +1,4 @@
-import { X } from 'react-feather'
+import { X } from "react-feather";
 import styled from 'styled-components'
 
 const CloseIcon = styled(X)`

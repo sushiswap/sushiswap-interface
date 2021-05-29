@@ -166,7 +166,9 @@ module.exports = {
             },
             minHeight: {
                 empty: '128px',
-                cardContent: '230px'
+                cardContent: '230px',
+                cardContent: '230px',
+                fitContent: 'fit-content'
             }
         }
     },

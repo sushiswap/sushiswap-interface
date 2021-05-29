@@ -3,7 +3,12 @@ import React, { createContext, useCallback, useContext, useEffect, useReducer } 
 import { ZERO, e10, maximum, minimum } from '../functions/math'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue, takeFee } from '../functions/kashi'
 import { toAmount, toShare } from '../functions/bentobox'
-import { useBentoBoxContract, useBoringHelperContract } from '../hooks/useContract'
+import {
+    useBentoBoxContract,
+    useBoringHelperContract,
+    useSushiSwapTWAP0Oracle,
+    useSushiSwapTWAP1Oracle,
+} from '../hooks/useContract'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../entities/Fraction'
@@ -12,7 +17,6 @@ import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
 import { getCurrency } from '../functions/currency'
 import { getOracle } from '../entities/Oracle'
-import { rpcToObj } from '../utils'
 import { toElastic } from '../functions/rebase'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useAllTokens } from '../hooks/Tokens'
@@ -104,7 +108,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
     }
 }
 
-async function GetPairs(bentoBoxContract: any, chainId: ChainId) {
+async function getPairs(bentoBoxContract: any, chainId: ChainId) {
     let logs = []
     let success = false
     const masterAddress = KASHI_ADDRESS[chainId]
@@ -154,6 +158,27 @@ class Tokens extends Array {
     }
 }
 
+export function rpcToObj(rpc_obj: any, obj?: any) {
+    if (rpc_obj instanceof BigNumber) {
+        return rpc_obj
+    }
+    if (!obj) {
+        obj = {}
+    }
+    if (typeof rpc_obj == 'object') {
+        if (Object.keys(rpc_obj).length && isNaN(Number(Object.keys(rpc_obj)[Object.keys(rpc_obj).length - 1]))) {
+            for (const i in rpc_obj) {
+                if (isNaN(Number(i))) {
+                    obj[i] = rpcToObj(rpc_obj[i])
+                }
+            }
+            return obj
+        }
+        return rpc_obj.map((item: any) => rpcToObj(item))
+    }
+    return rpc_obj
+}
+
 export function KashiProvider({ children }: { children: JSX.Element }) {
     const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
     const blockNumber = useBlockNumber()
@@ -166,8 +191,12 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     const boringHelperContract = useBoringHelperContract()
     const bentoBoxContract = useBentoBoxContract()
 
-    // Default token list fine for now, might want to more to the broader collection later.
     const tokens = useAllTokens()
+
+    const twap0 = useSushiSwapTWAP0Oracle()
+    const twap1 = useSushiSwapTWAP1Oracle()
+
+    const twapContracts = [twap0, twap1]
 
     const updatePairs = useCallback(
         async function () {
@@ -179,7 +208,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 return
             }
             if (boringHelperContract && bentoBoxContract) {
-                console.log('READY TO RUMBLE')
+                // console.log('READY TO RUMBLE')
                 const info = rpcToObj(
                     await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [
                         KASHI_ADDRESS[chainId],
@@ -187,7 +216,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 )
 
                 // Get the deployed pairs from the logs and decode
-                const logPairs = await GetPairs(bentoBoxContract, chainId || 1)
+                const logPairs = await getPairs(bentoBoxContract, chainId || 1)
 
                 // Filter all pairs by supported oracles and verify the oracle setup
 
@@ -196,11 +225,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 const allPairAddresses = logPairs
                     .filter((pair: any) => {
                         const oracle = getOracle(pair, chain, tokens)
-
-                        if (pair.address.toLowerCase() === '0x8318b81d39048bbdfd2c054114a67804932862e8'.toLowerCase()) {
-                            console.log('THE PAIR', { pair, oracle })
-                        }
-
                         if (!oracle.valid) {
                             // console.log(pair, oracle.valid, oracle.error)
                             invalidOracles.push({ pair, error: oracle.error })
@@ -216,6 +240,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
                 // Get a list of all tokens in the pairs
                 const pairTokens = new Tokens()
+
                 pairTokens.add(curreny)
                 pairs.forEach((pair: any, i: number) => {
                     pair.address = allPairAddresses[i]
@@ -228,6 +253,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                 const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
 
                 const missingTokens: any[] = []
+
                 balances.forEach((balance: any, i: number) => {
                     if (tokens[balance.token]) {
                         Object.assign(pairTokens[balance.token], tokens[balance.token])
@@ -242,11 +268,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                     console.log('missing tokens length', missingTokens.length)
                     // TODO
                 }
-
-                // console.log(
-                //     'ANKR?',
-                //     pairs.find((t: any) => t.asset.address === '0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4')
-                // )
 
                 // Calculate the USD price for each token
                 Object.values(pairTokens).forEach((token: any) => {
@@ -398,9 +419,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                     pair.maxBorrowable.spot,
                                     pair.maxBorrowable.stored
                                 )
+
                                 pair.maxBorrowable.safe = pair.maxBorrowable.minimum
                                     .muldiv('95', '100')
                                     .sub(pair.currentUserBorrowAmount.value)
+
                                 pair.maxBorrowable.possible = minimum(pair.maxBorrowable.safe, pair.maxAssetAvailable)
 
                                 pair.safeMaxRemovable = ZERO
@@ -414,6 +437,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                     pair.currentUserAssetAmount.value.sub(pair.currentUserBorrowAmount.value),
                                     pair.asset
                                 ).add(getUSDValue(pair.userCollateralAmount.value, pair.collateral))
+
                                 pair.search = pair.asset.symbol + '/' + pair.collateral.symbol
 
                                 pair.oracle = getOracle(pair, chain, tokens)
@@ -454,6 +478,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
                                     safe: easyAmount(pair.maxBorrowable.safe, pair.asset),
                                     possible: easyAmount(pair.maxBorrowable.possible, pair.asset),
                                 }
+
                                 pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
 
                                 return pair

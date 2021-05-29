@@ -6,7 +6,7 @@ import Main from '../components/Main'
 import NavLink from '../components/NavLink'
 import React from 'react'
 import { Zero } from '@ethersproject/constants'
-import { formattedNum } from '../utils'
+import { formatNumber } from '../../functions/format'
 import { getCurrency } from '../functions/currency'
 import useActiveWeb3React from '../hooks/useActiveWeb3React'
 import { useBentoBalances } from '../state/bentobox/hooks'
@@ -28,7 +28,7 @@ export default function Layout({
     // const balances = useBentoBalances()
     const { chainId } = useActiveWeb3React()
     return (
-        <div className="z-0 flex flex-col items-start w-screen h-full overflow-x-hidden overflow-y-auto">
+        <div className="z-0 flex flex-col items-start w-full h-full overflow-x-hidden overflow-y-auto">
             <Header />
             <Main>
                 <div className="container px-0 mx-auto sm:px-4">
@@ -108,7 +108,7 @@ export default function Layout({
                                             </svg>
                                             <div className="text-base whitespace-nowrap">BentoBox</div>
                                             {/* <div className="ml-2 text-base whitespace-nowrap">
-                                                {formattedNum(
+                                                {formatNumber(
                                                     balances
                                                         ?.reduce((previousValue, currentValue) => {
                                                             return previousValue.add(currentValue.bento.usdValue)

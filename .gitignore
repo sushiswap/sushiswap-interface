@@ -10,6 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 
 .vscode/
+.idea/
 .vercel
 .next
 
@@ -17,5 +18,7 @@ public/sw.js
 public/sw.js.map
 public/workbox*.js
 public/workbox*.js.map
+
+locale/**/*.js
 
 .env

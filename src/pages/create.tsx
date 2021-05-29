@@ -1,37 +1,21 @@
 import { CHAINLINK_MAPPING, CHAINLINK_TOKENS } from '../constants/chainlink'
-import {
-    CHAINLINK_ORACLE_ADDRESS,
-    KASHI_ADDRESS,
-    SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-    SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-} from '../constants/kashi'
-import { ChainId, JSBI, Pair, Token } from '@sushiswap/sdk'
+import { CHAINLINK_ORACLE_ADDRESS, KASHI_ADDRESS } from '../constants/kashi'
 import { Listbox, Transition } from '@headlessui/react'
-import { PairState, usePair } from '../hooks/usePairs'
 import React, { useEffect, useState } from 'react'
-// import OracleListBox from './OracleListBox'
-// import TokenListBox from './TokenListBox'
-import { Warning, Warnings } from '../entities/Warnings'
-import {
-    useBentoBoxContract,
-    usePairContract,
-    useSushiSwapTWAP0Oracle,
-    useSushiSwapTWAP1Oracle,
-} from '../hooks/useContract'
 
-import AsyncIcon from '../components/AsyncIcon'
 import Button from '../components/Button'
 import Card from '../components/Card'
 import CardHeader from '../components/CardHeader'
 import Head from 'next/head'
 import Image from 'next/image'
 import Layout from '../layouts/KashiLayout'
-import WarningsList from '../components/WarningsList'
+import { Token } from '@sushiswap/sdk'
 import { e10 } from '../functions/math'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useAllTokens } from '../hooks/Tokens'
-import { useTotalSupply } from '../hooks/useTotalSupply'
+import { useBentoBoxContract } from '../hooks/useContract'
+import { useRouter } from 'next/router'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 export type ChainlinkToken = {
@@ -41,68 +25,20 @@ export type ChainlinkToken = {
     decimals: number
 }
 
-enum OracleId {
-    CHAINLINK = 1,
-    SUSHISWAP = 2,
-    PEGGED = 3,
-}
-
-interface Oracle {
-    id: number
-    name: string
-    unavailable: boolean
-}
-
-const oracles = [
-    { id: OracleId.CHAINLINK, name: 'Chainlink', unavailable: false },
-    { id: OracleId.SUSHISWAP, name: 'SushiSwap', unavailable: false },
-    { id: OracleId.PEGGED, name: 'Pegged', unavailable: true },
-]
-
-const ORACLE_IMAGE: { [key: number]: string } = {
-    1: `/images/oracles/chainlink.jpg`,
-    2: `/images/oracles/sushiswap.jpg`,
-}
-
 export default function Create() {
     const { chainId } = useActiveWeb3React()
     const bentoBoxContract = useBentoBoxContract()
 
-    const sushiSwapTWAP0OracleContract = useSushiSwapTWAP0Oracle()
-    const sushiSwapTWAP1OracleContract = useSushiSwapTWAP1Oracle()
-
-    const [selectedOracle, setSelectedOracle] = useState<Oracle | undefined>(undefined)
-
     const [selectedAsset, setSelectedAsset] = useState<any>(undefined)
     const [selectedCollateral, setSelectedCollateral] = useState<any>(undefined)
-
-    const [pairState, pair] = usePair(selectedAsset, selectedCollateral)
-    const totalSupply = useTotalSupply(pair?.liquidityToken)
-    const noLiquidity: boolean =
-        pairState === PairState.NOT_EXISTS || Boolean(totalSupply && JSBI.equal(totalSupply.raw, JSBI.BigInt(0)))
-
-    const validPairNoLiquidity: boolean =
-        pairState === PairState.NOT_EXISTS ||
-        Boolean(
-            pairState === PairState.EXISTS &&
-                pair &&
-                JSBI.equal(pair.reserve0.raw, JSBI.BigInt(0)) &&
-                JSBI.equal(pair.reserve1.raw, JSBI.BigInt(0))
-        )
 
     const addTransaction = useTransactionAdder()
 
     const tokens = useAllTokens()
 
-    const chainlinkTokens = chainId && CHAINLINK_TOKENS[chainId]
+    const router = useRouter()
 
-    // TODO: Low liquidity warning
-    const createWarnings = new Warnings().add(
-        pairState === PairState.NOT_EXISTS,
-        'SushiSwap pair does not exist!',
-        true,
-        new Warning(selectedOracle?.id === OracleId.SUSHISWAP && noLiquidity, 'SushiSwap pair has no liquidity!', true)
-    )
+    const chainlinkTokens = chainId && CHAINLINK_TOKENS[chainId]
 
     // const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
     // const empty = { symbol: '', name: 'Select a token', address: '0', decimals: 0 }
@@ -119,19 +55,11 @@ export default function Create() {
         }
     }, [selectedAsset])
 
-    const getOracleData = async (asset: any, collateral: any) => {
+    const getOracleData = async (asset: Token, collateral: Token) => {
         const oracleData = ''
 
-        if (selectedOracle && selectedOracle.id === OracleId.SUSHISWAP) {
-            if (sushiSwapTWAP0OracleContract && selectedAsset?.address === pair?.token0.address) {
-                return sushiSwapTWAP0OracleContract.getDataParameter(pair?.liquidityToken.address)
-            } else if (sushiSwapTWAP1OracleContract && selectedAsset?.address === pair?.token1.address) {
-                return sushiSwapTWAP1OracleContract.getDataParameter(pair?.liquidityToken.address)
-            }
-            return oracleData
-        }
-
         const mapping = CHAINLINK_MAPPING[chainId || 1] || {}
+
         for (const address in mapping) {
             mapping[address].address = address
         }
@@ -184,7 +112,7 @@ export default function Create() {
 
     const handleCreate = async () => {
         try {
-            if (!selectedAsset || !selectedCollateral || !selectedOracle) return
+            if (!selectedAsset || !selectedCollateral) return
 
             const oracleData = await getOracleData(selectedAsset, selectedCollateral)
 
@@ -193,17 +121,7 @@ export default function Create() {
                 return
             }
 
-            let oracleAddress
-
-            if (selectedOracle && selectedOracle.id === OracleId.CHAINLINK) {
-                oracleAddress = CHAINLINK_ORACLE_ADDRESS
-            } else if (selectedOracle && selectedOracle.id === OracleId.SUSHISWAP) {
-                if (selectedAsset?.address === pair?.token0.address) {
-                    oracleAddress = SUSHISWAP_TWAP_0_ORACLE_ADDRESS
-                } else if (selectedAsset?.address === pair?.token1.address) {
-                    oracleAddress = SUSHISWAP_TWAP_1_ORACLE_ADDRESS
-                }
-            }
+            let oracleAddress = CHAINLINK_ORACLE_ADDRESS
 
             const kashiData = ethers.utils.defaultAbiCoder.encode(
                 ['address', 'address', 'address', 'bytes'],
@@ -211,30 +129,18 @@ export default function Create() {
             )
 
             addTransaction(await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true), {
-                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} ${selectedOracle.name}`,
+                summary: `Add Kashi market ${selectedAsset.symbol}/${selectedCollateral.symbol} Chainlink`,
             })
 
             setSelectedAsset(undefined)
             setSelectedCollateral(undefined)
+
+            router.push('/lend')
         } catch (e) {
             console.error(e)
         }
     }
 
-    function oracleFilter(oracle: Oracle) {
-        if (oracle.id === OracleId.CHAINLINK) {
-            return (
-                chainlinkTokens?.some((t) => t.address === selectedAsset.address) &&
-                chainlinkTokens?.some((t) => t.address === selectedCollateral.address)
-            )
-        }
-
-        if (oracle.id === OracleId.SUSHISWAP && !noLiquidity) {
-            return true
-        }
-
-        return false
-    }
     return (
         <Layout
             left={
@@ -278,6 +184,7 @@ export default function Create() {
                                         <Listbox.Button className="relative w-full p-3 text-left transition duration-150 ease-in-out border border-none rounded-md cursor-pointer bg-dark-700 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
                                             <span className="flex items-center space-x-3 truncate">
                                                 <Image
+                                                    loader={(resolverProps) => resolverProps.src}
                                                     src={
                                                         selectedAsset?.tokenInfo?.logoURI ||
                                                         '/images/tokens/unknown.png'
@@ -334,6 +241,7 @@ export default function Create() {
                                                         >
                                                             <span className="flex items-center space-x-3 truncate">
                                                                 <Image
+                                                                    loader={(resolverProps) => resolverProps.src}
                                                                     src={
                                                                         token?.tokenInfo?.logoURI ||
                                                                         '/images/tokens/unknown.png'
@@ -378,6 +286,7 @@ export default function Create() {
                                         <Listbox.Button className="relative w-full p-3 text-left transition duration-150 ease-in-out border border-none rounded-md cursor-pointer bg-dark-700 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
                                             <span className="flex items-center space-x-3 truncate">
                                                 <Image
+                                                    loader={(resolverProps) => resolverProps.src}
                                                     src={
                                                         selectedCollateral?.tokenInfo?.logoURI ||
                                                         '/images/tokens/unknown.png'
@@ -434,6 +343,7 @@ export default function Create() {
                                                         >
                                                             <span className="flex items-center space-x-3 truncate">
                                                                 <Image
+                                                                    loader={(resolverProps) => resolverProps.src}
                                                                     src={
                                                                         token?.tokenInfo?.logoURI ||
                                                                         '/images/tokens/unknown.png'
@@ -462,108 +372,11 @@ export default function Create() {
                         )}
                     </Listbox>
 
-                    {chainId && selectedAsset && selectedCollateral && (
-                        <Listbox as="div" className="space-y-1" value={selectedOracle} onChange={setSelectedOracle}>
-                            {({ open }) => (
-                                <>
-                                    <Listbox.Label className="block pb-2 text-base font-medium leading-5 text-gray-700">
-                                        Oracle
-                                    </Listbox.Label>
-                                    <div className="relative">
-                                        <span className="inline-block w-full rounded-md shadow-sm">
-                                            <Listbox.Button className="relative w-full p-3 text-left transition duration-150 ease-in-out border border-none rounded-md cursor-pointer bg-dark-700 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
-                                                <span className="flex items-center space-x-3 truncate">
-                                                    <Image
-                                                        src={
-                                                            ORACLE_IMAGE[selectedOracle?.id] ||
-                                                            '/images/tokens/unknown.png'
-                                                        }
-                                                        className="rounded-sm"
-                                                        width={40}
-                                                        height={40}
-                                                    />
-                                                    <span className="text-lg">
-                                                        {selectedOracle && selectedOracle.name}&nbsp;
-                                                    </span>
-                                                </span>
-                                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                                    <svg
-                                                        className="w-5 h-5 text-secondary"
-                                                        viewBox="0 0 20 20"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                    >
-                                                        <path
-                                                            d="M7 7l3-3 3 3m0 6l-3 3-3-3"
-                                                            strokeWidth="1.5"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </Listbox.Button>
-                                        </span>
-
-                                        <Transition
-                                            show={open}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
-                                            className="absolute z-10 w-full mt-1 rounded-md shadow-lg bg-dark-700"
-                                        >
-                                            <Listbox.Options
-                                                static
-                                                className="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:border-none focus:outline-none sm:text-sm sm:leading-5"
-                                            >
-                                                {oracles.map((oracle: any) => (
-                                                    <Listbox.Option
-                                                        key={oracle.id}
-                                                        value={oracle}
-                                                        disabled={oracle.unavailable}
-                                                    >
-                                                        {({ selected, active }) => (
-                                                            <div
-                                                                className={`
-                                                        ${active || selected ? 'bg-dark-blue' : ''}
-                                                        ${oracle.unavailable ? 'cursor-not-allowed' : 'cursor-pointer'}
-                                                        relative p-3`}
-                                                            >
-                                                                <span className="flex items-center space-x-3 truncate">
-                                                                    <Image
-                                                                        src={
-                                                                            ORACLE_IMAGE[oracle?.id] ||
-                                                                            '/images/tokens/unknown.png'
-                                                                        }
-                                                                        className="rounded-sm"
-                                                                        width={40}
-                                                                        height={40}
-                                                                    />
-                                                                    <span className="text-lg">{oracle.name}&nbsp;</span>
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </Listbox.Option>
-                                                ))}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </div>
-                                </>
-                            )}
-                        </Listbox>
-                    )}
-
-                    <WarningsList warnings={createWarnings} />
-
                     <Button
                         color="gradient"
                         className="w-full px-4 py-3 text-base rounded text-high-emphesis"
                         onClick={() => handleCreate()}
-                        disabled={
-                            !selectedCollateral ||
-                            !selectedAsset ||
-                            selectedCollateral === selectedAsset ||
-                            (selectedOracle?.id === OracleId.SUSHISWAP && noLiquidity)
-                        }
+                        disabled={!selectedCollateral || !selectedAsset || selectedCollateral === selectedAsset}
                     >
                         Create Market
                     </Button>

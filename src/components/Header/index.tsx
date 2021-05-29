@@ -2,12 +2,12 @@ import { ChainId, Currency } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
 
 import { ANALYTICS_URL } from '../../constants'
-import { Disclosure } from '@headlessui/react'
 import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import LanguageSwitch from '../LanguageSwitch'
 import Link from 'next/link'
 import More from './More'
+import { Popover } from '@headlessui/react'
 import QuestionHelper from '../QuestionHelper'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
@@ -27,8 +27,8 @@ function AppBar(): JSX.Element {
 
     return (
         //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
-        <header className="flex-shrink-0">
-            <Disclosure as="nav" className="z-10 w-screen bg-transparent gradiant-border-bottom">
+        <header className="flex-shrink-0 w-full">
+            <Popover as="nav" className="z-10 w-full bg-transparent gradiant-border-bottom">
                 {({ open }) => (
                     <>
                         <div className="px-4 py-4">
@@ -137,7 +137,7 @@ function AppBar(): JSX.Element {
                                                         text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}
                                                     >
                                                         <div
-                                                            className="hidden rounded-md cursor-pointer sm:inline-block bg-dark-900 hover:bg-dark-800"
+                                                            className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
                                                             onClick={() => {
                                                                 const params: any = {
                                                                     type: 'ERC20',
@@ -176,10 +176,11 @@ function AppBar(): JSX.Element {
                                                         >
                                                             <Image
                                                                 src="/images/tokens/xsushi-square.jpg"
-                                                                alt="Switch Network"
-                                                                width="36px"
-                                                                height="36px"
-                                                                className="object-contain rounded-md"
+                                                                alt="xSUSHI"
+                                                                width="38px"
+                                                                height="38px"
+                                                                objectFit="contain"
+                                                                className="rounded-md"
                                                             />
                                                         </div>
                                                     </QuestionHelper>
@@ -193,7 +194,7 @@ function AppBar(): JSX.Element {
                                                 <>
                                                     <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>
                                                         <div
-                                                            className="hidden rounded-md cursor-pointer sm:inline-block bg-dark-900 hover:bg-dark-800"
+                                                            className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"
                                                             onClick={() => {
                                                                 let address: string | undefined
                                                                 switch (chainId) {
@@ -246,10 +247,11 @@ function AppBar(): JSX.Element {
                                                         >
                                                             <Image
                                                                 src="/images/tokens/sushi-square.jpg"
-                                                                alt="Switch Network"
-                                                                width="36px"
-                                                                height="36px"
-                                                                className="object-contain rounded-md"
+                                                                alt="SUSHI"
+                                                                width="38px"
+                                                                height="38px"
+                                                                objectFit="contain"
+                                                                className="rounded-md"
                                                             />
                                                         </div>
                                                     </QuestionHelper>
@@ -279,27 +281,48 @@ function AppBar(): JSX.Element {
                                 </div>
                                 <div className="flex -mr-2 sm:hidden">
                                     {/* Mobile menu button */}
-                                    <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
+                                    <Popover.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
                                         <span className="sr-only">{i18n._(t`Open main menu`)}</span>
-                                        {/* {open ? (
-                      <X
-                        title="Close"
-                        className="block w-6 h-6"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <Burger
-                        title="Burger"
-                        className="block w-6 h-6"
-                        aria-hidden="true"
-                      />
-                    )} */}
-                                    </Disclosure.Button>
+                                        {open ? (
+                                            <svg
+                                                className="block w-6 h-6"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            </svg>
+                                        ) : (
+                                            // <X title="Close" className="block w-6 h-6" aria-hidden="true" />
+                                            <svg
+                                                className="block w-6 h-6"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth={2}
+                                                    d="M4 6h16M4 12h16M4 18h16"
+                                                />
+                                            </svg>
+                                            // <Burger title="Burger" className="block w-6 h-6" aria-hidden="true" />
+                                        )}
+                                    </Popover.Button>
                                 </div>
                             </div>
                         </div>
 
-                        <Disclosure.Panel className="sm:hidden">
+                        <Popover.Panel className="sm:hidden">
                             <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
                                 <Link href={'/swap'}>
                                     <a
@@ -383,10 +406,10 @@ function AppBar(): JSX.Element {
                                         </ExternalLink>
                                     )}
                             </div>
-                        </Disclosure.Panel>
+                        </Popover.Panel>
                     </>
                 )}
-            </Disclosure>
+            </Popover>
         </header>
     )
 }

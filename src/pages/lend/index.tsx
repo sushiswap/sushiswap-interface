@@ -1,5 +1,5 @@
 import { Trans, t } from '@lingui/macro'
-import { formattedNum, formattedPercent } from '../../utils'
+import { formatNumber, formatPercent } from '../../functions/format'
 
 import AsyncIcon from '../../components/AsyncIcon'
 import Card from '../../components/Card'
@@ -27,6 +27,8 @@ export default function Lend() {
         { keys: ['search'], threshold: 0.1 },
         { key: 'currentSupplyAPR.value', direction: 'descending' }
     )
+
+    console.log({ fullPairs })
 
     return (
         <KashiLayout
@@ -107,11 +109,11 @@ export default function Lend() {
                                                             <div className="hidden space-x-2 md:flex">
                                                                 <AsyncIcon
                                                                     src={pair.asset.tokenInfo.logoURI}
-                                                                    className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                    className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                                 />
                                                                 <AsyncIcon
                                                                     src={pair.collateral.tokenInfo.logoURI}
-                                                                    className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                    className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                                 />
                                                             </div>
                                                             <div className="sm:items-end md:hidden">
@@ -131,24 +133,24 @@ export default function Lend() {
                                                         <div className="hidden lg:block">{pair.oracle.name}</div>
                                                         <div className="text-right">
                                                             <div>
-                                                                {formattedNum(
+                                                                {formatNumber(
                                                                     pair.currentUserAssetAmount.string,
                                                                     false
                                                                 )}{' '}
                                                                 {pair.asset.symbol}
                                                             </div>
                                                             <div className="text-sm text-secondary">
-                                                                {formattedNum(pair.currentUserAssetAmount.usd, true)}
+                                                                {formatNumber(pair.currentUserAssetAmount.usd, true)}
                                                             </div>
                                                         </div>
                                                         <div className="text-right">
-                                                            <div>{formattedPercent(pair.utilization.string)}</div>
+                                                            <div>{formatPercent(pair.utilization.string)}</div>
                                                             <div className="text-secondary">
-                                                                {formattedNum(pair.currentUserLentAmount.usd, true)}
+                                                                {formatNumber(pair.currentUserLentAmount.usd, true)}
                                                             </div>
                                                         </div>
                                                         <div className="text-right">
-                                                            {formattedPercent(pair.supplyAPR.string)}
+                                                            {formatPercent(pair.supplyAPR.string)}
                                                         </div>
                                                     </div>
                                                 </a>
@@ -214,11 +216,11 @@ export default function Lend() {
                                                         <div className="hidden space-x-2 md:flex">
                                                             <AsyncIcon
                                                                 src={pair.asset.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                             <AsyncIcon
                                                                 src={pair.collateral.tokenInfo.logoURI}
-                                                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
                                                         </div>
                                                         <div className="sm:items-end md:hidden">
@@ -241,18 +243,18 @@ export default function Lend() {
                                                     </div>
                                                     <div className="hidden text-left lg:block">{pair.oracle.name}</div>
                                                     <div className="text-center sm:text-right">
-                                                        {formattedPercent(pair.currentSupplyAPR.string)}
+                                                        {formatPercent(pair.currentSupplyAPR.string)}
                                                     </div>
                                                     <div className="hidden text-right sm:block">
-                                                        {formattedPercent(pair.utilization.string)}
+                                                        {formatPercent(pair.utilization.string)}
                                                     </div>
                                                     <div className="text-right">
                                                         <div>
-                                                            {formattedNum(pair.currentAllAssets.string)}{' '}
+                                                            {formatNumber(pair.currentAllAssets.string)}{' '}
                                                             {pair.asset.symbol}
                                                         </div>
                                                         <div className="text-secondary">
-                                                            {formattedNum(pair.currentAllAssets.usd, true)}
+                                                            {formatNumber(pair.currentAllAssets.usd, true)}
                                                         </div>
                                                     </div>
                                                 </div>

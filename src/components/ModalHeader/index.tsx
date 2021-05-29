@@ -7,7 +7,7 @@ function ModalHeader({
     title = undefined,
     onClose = undefined,
     className = '',
-    onBack = undefined
+    onBack = undefined,
 }: {
     title?: string
     className?: string

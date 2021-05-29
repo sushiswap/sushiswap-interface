@@ -1,8 +1,8 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { AutoRow, RowBetween } from '../../components/Row'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
 import { Currency, NATIVE, TokenAmount, WETH, currencyEquals } from '@sushiswap/sdk'
-import React, { useCallback, useContext, useState } from 'react'
-import Row, { AutoRow, RowBetween, RowFlat } from '../../components/Row'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
@@ -11,30 +11,28 @@ import { getRouterAddress, getRouterContract } from '../../functions/contract'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 import { useIsExpertMode, useUserSlippageTolerance } from '../../state/user/hooks'
 
-import AdvancedLiquidityDetailsDropdown from '../../containers/liquidity/AdvancedLiquidityDetailsDropdown'
+import AdvancedLiquidityDetailsDropdown from '../../features/liquidity/AdvancedLiquidityDetailsDropdown'
 import Alert from '../../components/Alert'
 import { AutoColumn } from '../../components/Column'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ConfirmAddModalBottom } from '../../containers/liquidity/ConfirmAddModalBottom'
+import { ConfirmAddModalBottom } from '../../features/liquidity/ConfirmAddModalBottom'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
+import CurrencyLogo from '../../components/CurrencyLogo'
 import Dots from '../../components/Dots'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import { Field } from '../../state/mint/actions'
 import Head from 'next/head'
 import Header from '../../components/ExchangeHeader'
-import Layout from '../../components/Layout'
-import { LightCard } from '../../components/CardLegacy'
-import LiquidityHeader from '../../containers/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../containers/liquidity/LiquidityPrice'
+import Layout from '../../layouts/DefaultLayout'
+import LiquidityHeader from '../../features/liquidity/LiquidityHeader'
+import LiquidityPrice from '../../features/liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../components/PositionCard'
 import NavLink from '../../components/NavLink'
 import { PairState } from '../../hooks/usePairs'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
 import { TransactionResponse } from '@ethersproject/providers'
-import UnsupportedCurrencyFooter from '../../containers/swap/UnsupportedCurrencyFooter'
+import UnsupportedCurrencyFooter from '../../features/swap/UnsupportedCurrencyFooter'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useIsTransactionUnsupported } from '../../hooks/Trades'
@@ -48,7 +46,6 @@ export default function Add() {
     const { i18n } = useLingui()
     const { account, chainId, library } = useActiveWeb3React()
     const router = useRouter()
-    const theme = useContext(ThemeContext)
     const tokens = router.query.tokens
     const [currencyIdA, currencyIdB] = tokens as string[]
 
@@ -218,47 +215,41 @@ export default function Add() {
 
     const modalHeader = () => {
         return noLiquidity ? (
-            <AutoColumn gap="20px">
-                <LightCard mt="20px" borderRadius="20px">
-                    <RowFlat>
-                        <Text fontSize="48px" fontWeight={500} lineHeight="42px" marginRight={10}>
-                            {currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
-                                '/' +
-                                currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
-                        </Text>
-                        <DoubleCurrencyLogo
-                            currency0={currencies[Field.CURRENCY_A]}
-                            currency1={currencies[Field.CURRENCY_B]}
-                            size={30}
-                        />
-                    </RowFlat>
-                </LightCard>
-            </AutoColumn>
+            <div className="pb-4">
+                <div className="flex items-center justify-start gap-3">
+                    <div className="text-2xl font-bold text-high-emphesis">
+                        {currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
+                            '/' +
+                            currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
+                    </div>
+                    <div className="grid grid-flow-col gap-2">
+                        <CurrencyLogo currency={currencyA} squared size={48} />
+                        <CurrencyLogo currency={currencyB} squared size={48} />
+                    </div>
+                </div>
+            </div>
         ) : (
-            <AutoColumn gap="20px">
-                <RowFlat style={{ marginTop: '20px' }}>
-                    <Text fontSize="48px" fontWeight={500} lineHeight="42px" marginRight={10}>
+            <div className="pb-4">
+                <div className="flex items-center justify-start gap-3">
+                    <div className="text-[2.275rem] font-bold text-high-emphesis">
                         {liquidityMinted?.toSignificant(6)}
-                    </Text>
-                    <DoubleCurrencyLogo
-                        currency0={currencies[Field.CURRENCY_A]}
-                        currency1={currencies[Field.CURRENCY_B]}
-                        size={30}
-                    />
-                </RowFlat>
-                <Row>
-                    <Text fontSize="24px">
-                        {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
-                        {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
-                        <Trans>Pool Tokens</Trans>
-                    </Text>
-                </Row>
-                <div className="py-5 text-sm italic text-gray-500">
+                    </div>
+                    <div className="grid grid-flow-col gap-2">
+                        <CurrencyLogo currency={currencyA} squared size={48} />
+                        <CurrencyLogo currency={currencyB} squared size={48} />
+                    </div>
+                </div>
+                <div className="text-2xl font-medium text-high-emphesis">
+                    {currencies[Field.CURRENCY_A]?.getSymbol(chainId)}/
+                    {currencies[Field.CURRENCY_B]?.getSymbol(chainId)}
+                    &nbsp;<Trans>Pool Tokens</Trans>
+                </div>
+                <div className="pt-3 text-sm text-secondary">
                     {t`Output is estimated. If the price changes by more than ${
                         allowedSlippage / 100
                     }% your transaction will revert.`}
                 </div>
-            </AutoColumn>
+            </div>
         )
     }
 
