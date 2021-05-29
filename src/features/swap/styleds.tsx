@@ -136,7 +136,7 @@ export const StyledSlider = styled(Slider)`
     }
 
     .rc-slider-handle:hover {
-        border-color: #4caf52;
+        border-color: #fa52a0;
     }
 
     .rc-slider-handle-click-focused:focus {
