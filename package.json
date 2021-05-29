@@ -106,10 +106,7 @@
   "next-unused": {
     "debug": true,
     "include": [
-      "src/components",
-      "src/layouts",
-      "src/features",
-      "src/pages"
+      "src"
     ],
     "exclude": [],
     "entrypoints": [

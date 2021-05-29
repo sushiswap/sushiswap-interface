@@ -1,5 +1,5 @@
 import { MenuFlyout, StyledMenu, StyledMenuButton } from '../StyledMenu'
-import React, { useContext, useRef, useState } from 'react'
+import React, { Fragment, useContext, useRef, useState } from 'react'
 import { RowBetween, RowFixed } from '../Row'
 import { Settings, X } from 'react-feather'
 import styled, { ThemeContext } from 'styled-components'
@@ -7,18 +7,25 @@ import {
     useExpertModeManager,
     useUserSingleHopOnly,
     useUserSlippageTolerance,
-    useUserTransactionTTL
+    useUserTransactionTTL,
 } from '../../state/user/hooks'
-import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
+import {
+    useModalOpen,
+    useToggleSettingsMenu,
+} from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
 import { AutoColumn } from '../Column'
 import { ButtonError } from '../ButtonLegacy'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import Modal from '../Modal'
+import ModalHeader from '../ModalHeader'
 import QuestionHelper from '../QuestionHelper'
 import { Text } from 'rebass'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
+import Typography from '../Typography'
+import { classNames } from '../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
@@ -90,7 +97,8 @@ export default function SettingsTab() {
     const toggle = useToggleSettingsMenu()
 
     const theme = useContext(ThemeContext)
-    const [userSlippageTolerance, setUserslippageTolerance] = useUserSlippageTolerance()
+    const [userSlippageTolerance, setUserslippageTolerance] =
+        useUserSlippageTolerance()
 
     const [ttl, setTtl] = useUserTransactionTTL()
 
@@ -105,29 +113,37 @@ export default function SettingsTab() {
 
     return (
         <StyledMenu ref={node}>
-            <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)} maxHeight={100}>
+            <Modal
+                isOpen={showConfirmation}
+                onDismiss={() => setShowConfirmation(false)}
+                maxHeight={100}
+            >
+                <ModalHeader
+                    title={i18n._(t`Are you sure?`)}
+                    onClose={() => setShowConfirmation(false)}
+                />
                 <ModalContentWrapper>
                     <AutoColumn gap="lg">
-                        <RowBetween style={{ padding: '0 2rem' }}>
-                            <Text className="font-medium text-lg">{i18n._(t`Are you sure?`)}</Text>
-                            <StyledCloseIcon onClick={() => setShowConfirmation(false)} />
-                        </RowBetween>
                         <Break />
                         <AutoColumn gap="lg" style={{ padding: '0 2rem' }}>
-                            <Text className="font-medium text-lg">
+                            <Typography>
                                 {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
-                            </Text>
-                            <Text fontWeight={600} fontSize={20}>
-                                {i18n._(t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`)}
-                            </Text>
+                            </Typography>
+                            <Typography>
+                                {i18n._(
+                                    t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`
+                                )}
+                            </Typography>
                             <ButtonError
                                 error={true}
                                 padding={'12px'}
                                 onClick={() => {
                                     if (
                                         window.prompt(
-                                            i18n._(t`Please type the word "confirm" to enable expert mode.`)
+                                            i18n._(
+                                                t`Please type the word "confirm" to enable expert mode.`
+                                            )
                                         ) === 'confirm'
                                     ) {
                                         toggleExpertMode()
@@ -135,7 +151,11 @@ export default function SettingsTab() {
                                     }
                                 }}
                             >
-                                <Text fontSize={20} fontWeight={500} id="confirm-expert-mode">
+                                <Text
+                                    fontSize={20}
+                                    fontWeight={500}
+                                    id="confirm-expert-mode"
+                                >
                                     {i18n._(t`Turn On Expert Mode`)}
                                 </Text>
                             </ButtonError>
@@ -155,22 +175,33 @@ export default function SettingsTab() {
             </StyledMenuButton>
             {open && (
                 <ExtendedMenuFlyout>
-                    <AutoColumn gap="md" style={{ padding: '1rem' }}>
-                        <div className="text-base font-semibold text-high-emphesis">
+                    <div className="p-8 space-y-4">
+                        <Typography variant="h5" className="text-high-emphesis">
                             {i18n._(t`Transaction Settings`)}
-                        </div>
+                        </Typography>
+
                         <TransactionSettings
                             rawSlippage={userSlippageTolerance}
                             setRawSlippage={setUserslippageTolerance}
                             deadline={ttl}
                             setDeadline={setTtl}
                         />
-                        <div className="text-base font-semibold text-high-emphesis">
+
+                        <Typography
+                            variant="body"
+                            className="text-high-emphesis"
+                        >
                             {i18n._(t`Interface Settings`)}
-                        </div>
+                        </Typography>
+
                         <RowBetween>
                             <RowFixed>
-                                <div className="text-sm">{i18n._(t`Toggle Expert Mode`)}</div>
+                                <Typography
+                                    variant="caption2"
+                                    className="text-high-emphesis"
+                                >
+                                    {i18n._(t`Toggle Expert Mode`)}
+                                </Typography>
                                 <QuestionHelper
                                     text={i18n._(
                                         t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`
@@ -195,16 +226,29 @@ export default function SettingsTab() {
                         </RowBetween>
                         <RowBetween>
                             <RowFixed>
-                                <div className="text-sm">{i18n._(t`Disable Multihops`)}</div>
-                                <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
+                                <Typography
+                                    variant="caption2"
+                                    className="text-high-emphesis"
+                                >
+                                    {i18n._(t`Disable Multihops`)}
+                                </Typography>
+                                <QuestionHelper
+                                    text={i18n._(
+                                        t`Restricts swaps to direct pairs only.`
+                                    )}
+                                />
                             </RowFixed>
                             <Toggle
                                 id="toggle-disable-multihop-button"
                                 isActive={singleHopOnly}
-                                toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
+                                toggle={() =>
+                                    singleHopOnly
+                                        ? setSingleHopOnly(false)
+                                        : setSingleHopOnly(true)
+                                }
                             />
                         </RowBetween>
-                    </AutoColumn>
+                    </div>
                 </ExtendedMenuFlyout>
             )}
         </StyledMenu>

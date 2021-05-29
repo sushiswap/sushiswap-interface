@@ -34,7 +34,6 @@ module.exports = {
         },
         extend: {
             colors: {
-                pink: 'var(--pink)',
                 // We have to do this for any css variable color or else opacity will not work
                 purple: ({ opacityVariable, opacityValue }) => {
                     if (opacityValue !== undefined) {
@@ -45,9 +44,45 @@ module.exports = {
                     }
                     return `rgb(var(--purple))`
                 },
-                blue: 'var(--blue)',
-                green: 'var(--green)',
-                red: 'var(--red)',
+                blue: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--blue), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--blue), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--blue))`
+                },
+
+                pink: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--pink), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--pink), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--pink))`
+                },
+
+                green: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--green), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--green), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--green))`
+                },
+
+                red: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--red), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--red), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--red))`
+                },
 
                 'pink-red': '#FE5A75',
                 'light-brown': '#FEC464',
