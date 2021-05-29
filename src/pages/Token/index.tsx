@@ -139,21 +139,25 @@ export default function Token() {
                 <button className="p-3 text-high-emphesis">ALL</button>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 w-full max-w-3xl mb-12">
-                <div className="flex flex-col bg-dark-900 rounded p-6">
-                    <div className="text-sm">Liquidity (24H)</div>
-                    <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
-                    <div className="text-sm text-green">+2.34%</div>
-                </div>
-                <div className="flex flex-col bg-dark-900 rounded p-6">
-                    <div className="text-sm">Volume (24H)</div>
-                    <div className="md:text-h5 text-high-emphesis">$14,682,757.45</div>
-                    <div className="text-sm text-red">-24.94%</div>
-                </div>
-                <div className="flex flex-col bg-dark-900 rounded p-6">
-                    <div className="text-sm">Fees (24H)</div>
-                    <div className="md:text-h5 text-high-emphesis">$44,048.27</div>
-                    <div className="text-sm text-red">-24.94%</div>
+            <div className="w-full max-w-3xl min-w-3xl mb-8">
+                <div className="overflow-x-scroll hide-scroll-bar">
+                    <div className="grid grid-cols-3 gap-6 min-w-max">
+                        <div className="flex flex-col bg-dark-900 rounded p-6">
+                            <div className="text-sm">Liquidity (24H)</div>
+                            <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
+                            <div className="text-sm text-green">+2.34%</div>
+                        </div>
+                        <div className="flex flex-col bg-dark-900 rounded p-6">
+                            <div className="text-sm">Volume (24H)</div>
+                            <div className="md:text-h5 text-high-emphesis">$14,682,757.45</div>
+                            <div className="text-sm text-red">-24.94%</div>
+                        </div>
+                        <div className="flex flex-col bg-dark-900 rounded p-6">
+                            <div className="text-sm">Fees (24H)</div>
+                            <div className="md:text-h5 text-high-emphesis">$44,048.27</div>
+                            <div className="text-sm text-red">-24.94%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -231,40 +235,42 @@ export default function Token() {
                 </div>
             </div>
 
-            <div className="w-full max-w-3xl mb-8">
+            <div className="w-full max-w-3xl min-w-3xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
-                <div className="grid grid-cols-4 gap-6">
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
-                        <div className="text-caption2 md:text-caption text-primary">SUSHI</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="USDT" />
-                        <div className="text-caption2 md:text-caption text-primary">USDT</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="UNI" />
-                        <div className="text-caption2 md:text-caption text-primary">UNI</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="LINK" />
-                        <div className="text-caption2 md:text-caption text-primary">LINK</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="WBTC" />
-                        <div className="text-caption2 md:text-caption text-primary">WBTC</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="AAVE" />
-                        <div className="text-caption2 md:text-caption text-primary">AAVE</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="COMP" />
-                        <div className="text-caption2 md:text-caption text-primary">COMP</div>
-                    </div>
-                    <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                        <img className="w-10 mr-2" src={SushiImage} alt="MKR" />
-                        <div className="text-caption2 md:text-caption text-primary">MKR</div>
+                <div className="overflow-x-scroll hide-scroll-bar">
+                    <div className="grid grid-cols-4 gap-6 min-w-max">
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
+                            <div className="text-caption2 md:text-caption text-primary">SUSHI</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="USDT" />
+                            <div className="text-caption2 md:text-caption text-primary">USDT</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="UNI" />
+                            <div className="text-caption2 md:text-caption text-primary">UNI</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="LINK" />
+                            <div className="text-caption2 md:text-caption text-primary">LINK</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="WBTC" />
+                            <div className="text-caption2 md:text-caption text-primary">WBTC</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="AAVE" />
+                            <div className="text-caption2 md:text-caption text-primary">AAVE</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="COMP" />
+                            <div className="text-caption2 md:text-caption text-primary">COMP</div>
+                        </div>
+                        <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
+                            <img className="w-10 mr-2" src={SushiImage} alt="MKR" />
+                            <div className="text-caption2 md:text-caption text-primary">MKR</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -278,8 +284,8 @@ export default function Token() {
                 </div>
                 <div className="grid grid-cols-3 gap-6 bg-dark-900 rounded p-4">
                     <div className="flex items-center">
-                        <img className="w-10 mr-1" src={SushiImage} alt="SUSHI" />
-                        <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
+                        <img className="hidden md:block w-10 mr-1" src={SushiImage} alt="SUSHI" />
+                        <img className="hidden md:block w-10 mr-2" src={SushiImage} alt="SUSHI" />
                         <div className="ml-2 font-bold text-high-emphesis">SUSHI-WETH</div>
                     </div>
                     <div className="flex items-center font-bold text-high-emphesis">40.32%</div>
