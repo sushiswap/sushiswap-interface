@@ -1,21 +1,21 @@
 import { AlertTriangle, ArrowDown } from 'react-feather'
 import React, { useMemo } from 'react'
 import { Trade, TradeType } from '@sushiswap/sdk'
-import { t, Trans } from '@lingui/macro'
-import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from "../../functions"
-
-import { Field } from '../../state/swap/actions'
+import { Trans, t } from '@lingui/macro'
+import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions'
 import { isAddress, shortenAddress } from '../../functions'
+
+import CurrencyLogo from '../../components/CurrencyLogo'
+import { Field } from '../../state/swap/actions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import CurrencyLogo from '../../components/CurrencyLogo'
 
 export default function SwapModalHeader({
     trade,
     allowedSlippage,
     recipient,
     showAcceptChanges,
-    onAcceptChanges
+    onAcceptChanges,
 }: {
     trade: Trade
     allowedSlippage: number
@@ -25,31 +25,31 @@ export default function SwapModalHeader({
 }) {
     const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
-    const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
-        trade,
-        allowedSlippage
-    ])
+    const slippageAdjustedAmounts = useMemo(
+        () => computeSlippageAdjustedAmounts(trade, allowedSlippage),
+        [trade, allowedSlippage]
+    )
     const { priceImpactWithoutFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade])
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
     return (
         <div className="grid gap-4 pt-3 pb-4">
             <div className="grid gap-2">
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <CurrencyLogo currency={trade.inputAmount.currency} squared size={48} />
                         <div className="overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl text-high-emphesis">
                             {trade.inputAmount.toSignificant(6)}
                         </div>
                     </div>
-                    <div className="text-2xl text-high-emphesis font-medium ml-3">
+                    <div className="ml-3 text-2xl font-medium text-high-emphesis">
                         {trade.inputAmount.currency.getSymbol(chainId)}
                     </div>
                 </div>
                 <div className="ml-3 mr-3 min-w-[24px]">
                     <ArrowDown size={24} />
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <CurrencyLogo currency={trade.outputAmount.currency} squared size={48} />
                         <div
@@ -60,26 +60,26 @@ export default function SwapModalHeader({
                             {trade.inputAmount.toSignificant(6)}
                         </div>
                     </div>
-                    <div className="text-2xl text-high-emphesis font-medium ml-3">
+                    <div className="ml-3 text-2xl font-medium text-high-emphesis">
                         {trade.outputAmount.currency.getSymbol(chainId)}
                     </div>
                 </div>
             </div>
 
             {showAcceptChanges ? (
-                <div className="flex justify-between items-center border border-gray-800 rounded p-2 px-3">
-                    <div className="flex justify-start items-center text-high-emphesis uppercase font-bold text-sm">
+                <div className="flex items-center justify-between p-2 px-3 border border-gray-800 rounded">
+                    <div className="flex items-center justify-start text-sm font-bold uppercase text-high-emphesis">
                         <div className="mr-3 min-w-[24px]">
                             <AlertTriangle size={24} />
                         </div>
                         <span>{i18n._(t`Price Updated`)}</span>
                     </div>
-                    <span className="text-blue cursor-pointer text-sm" onClick={onAcceptChanges}>
+                    <span className="text-sm cursor-pointer text-blue" onClick={onAcceptChanges}>
                         {i18n._(t`Accept`)}
                     </span>
                 </div>
             ) : null}
-            <div className="justify-start text-secondary text-sm">
+            <div className="justify-start text-sm text-secondary">
                 {trade.tradeType === TradeType.EXACT_INPUT ? (
                     <Trans>
                         Output is estimated. You will receive at least{' '}

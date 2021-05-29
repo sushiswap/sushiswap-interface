@@ -1,29 +1,69 @@
 import React, { FC } from 'react'
 
-import { Box } from 'rebass/styled-components'
+import { classNames } from '../../functions'
 import styled from 'styled-components'
 
-const Row = styled(Box)<{
+// const Row = styled(Box)<{
+//     width?: string
+//     align?: string
+//     justify?: string
+//     padding?: string
+//     border?: string
+//     borderRadius?: string
+// }>`
+//     width: ${({ width }) => width ?? '100%'};
+//     display: flex;
+//     padding: 0;
+//     align-items: ${({ align }) => align ?? 'center'};
+//     justify-content: ${({ justify }) => justify ?? 'flex-start'};
+//     padding: ${({ padding }) => padding};
+//     border: ${({ border }) => border};
+//     border-radius: ${({ borderRadius }) => borderRadius};
+// `
+
+interface RowProps {
     width?: string
     align?: string
     justify?: string
     padding?: string
     border?: string
     borderRadius?: string
-}>`
-    width: ${({ width }) => width ?? '100%'};
-    display: flex;
-    padding: 0;
-    align-items: ${({ align }) => align ?? 'center'};
-    justify-content: ${({ justify }) => justify ?? 'flex-start'};
-    padding: ${({ padding }) => padding};
-    border: ${({ border }) => border};
-    border-radius: ${({ borderRadius }) => borderRadius};
-`
+}
+
+export const Row: FC<React.HTMLAttributes<HTMLDivElement> & RowProps> = ({
+    children,
+    className,
+    width,
+    align,
+    justify,
+    padding,
+    border,
+    borderRadius,
+    ...rest
+}) => (
+    <div
+        className={classNames('flex p-0', className)}
+        style={{
+            width,
+            alignItems: align,
+            justifyContent: justify,
+            padding,
+            border,
+            borderRadius,
+        }}
+        {...rest}
+    >
+        {children}
+    </div>
+)
 
 export const RowBetween = styled(Row)`
     justify-content: space-between;
 `
+
+// export const RowBetween = styled(Row)`
+//     justify-content: space-between;
+// `
 
 export const RowFlat = styled.div`
     display: flex;

@@ -2,7 +2,7 @@
 
 ## Pages
 
-If you introduce a new page, keep that page heavy, do as much as physically possible within that page and try not to extract anything prematurely.
+Pages should be heavy, at least initially, try not to extract anything prematurely.
 
 ## Components
 
@@ -10,4 +10,4 @@ Components should be generic and reusable.
 
 ## Features
 
-...
+Features should be unique and specific.

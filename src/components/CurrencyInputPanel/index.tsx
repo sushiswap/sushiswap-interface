@@ -9,14 +9,13 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import Lottie from 'lottie-react'
 import { Input as NumericalInput } from '../NumericalInput'
 import { darken } from 'polished'
-import { formatNumber } from "../../functions"
+import { formatNumber } from '../../functions'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
-import useTheme from '../../hooks/useTheme'
 import { useUSDCPrice } from '../../hooks'
 
 const CurrencySelect = styled.button<{ selected: boolean }>`

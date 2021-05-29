@@ -1,12 +1,28 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import {
+    ApprovalState,
+    useApproveCallback,
+} from '../../hooks/useApproveCallback'
 import { BigNumber, ethers } from 'ethers'
-import { ExchangeRateCheckBox, SwapCheckbox } from '../../components/KashiCheckbox'
-import { KashiApproveButton, TokenApproveButton } from '../../components/KashiButton'
+import {
+    ExchangeRateCheckBox,
+    SwapCheckbox,
+} from '../../components/KashiCheckbox'
+import {
+    KashiApproveButton,
+    TokenApproveButton,
+} from '../../components/KashiButton'
 import React, { useContext, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
-import { computeSlippageAdjustedAmounts, computeTradePriceBreakdown, warningSeverity } from '../../functions/prices'
-import { useExpertModeManager, useUserSlippageTolerance } from '../../state/user/hooks'
+import {
+    computeSlippageAdjustedAmounts,
+    computeTradePriceBreakdown,
+    warningSeverity,
+} from '../../functions/prices'
+import {
+    useExpertModeManager,
+    useUserSlippageTolerance,
+} from '../../state/user/hooks'
 
 import Alert from '../../components/Alert'
 import Badge from '../../components/Badge'
@@ -39,7 +55,9 @@ export default function Borrow({ pair }: BorrowProps) {
     const info = useContext(KashiContext).state.info
 
     // State
-    const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
+    const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(
+        pair.collateral.bentoBalance.gt(0)
+    )
     const [useBentoBorrow, setUseBentoBorrow] = useState<boolean>(true)
     const [collateralValue, setCollateralValue] = useState('')
     const [borrowValue, setBorrowValue] = useState('')
@@ -59,12 +77,15 @@ export default function Borrow({ pair }: BorrowProps) {
         ? info?.ethBalance
         : pair.collateral.balance
 
-    const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
+    const displayUpdateOracle = pair.currentExchangeRate.gt(0)
+        ? updateOracle
+        : true
 
     // Swap
     const [allowedSlippage] = useUserSlippageTolerance() // 10 = 0.1%
     const parsedAmount = tryParseAmount(borrowValue, assetToken)
-    const foundTrade = useTradeExactIn(parsedAmount, collateralToken) || undefined
+    const foundTrade =
+        useTradeExactIn(parsedAmount, collateralToken) || undefined
     const extraCollateral = swap
         ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)
               [Field.OUTPUT]?.toFixed(pair.collateral.decimals)
@@ -78,23 +99,47 @@ export default function Borrow({ pair }: BorrowProps) {
         .add(extraCollateral)
 
     // Calculate max borrow
-    const nextMaxBorrowableOracle = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.oracleExchangeRate)
-    const nextMaxBorrowableSpot = nextUserCollateralValue.muldiv(e10(16).mul('75'), pair.spotExchangeRate)
-    const nextMaxBorrowableStored = nextUserCollateralValue.muldiv(
+    const nextMaxBorrowableOracle = nextUserCollateralValue.mulDiv(
+        e10(16).mul('75'),
+        pair.oracleExchangeRate
+    )
+    const nextMaxBorrowableSpot = nextUserCollateralValue.mulDiv(
+        e10(16).mul('75'),
+        pair.spotExchangeRate
+    )
+    const nextMaxBorrowableStored = nextUserCollateralValue.mulDiv(
         e10(16).mul('75'),
         displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate
     )
-    const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
-    const nextMaxBorrowSafe = nextMaxBorrowMinimum.muldiv('95', '100').sub(pair.currentUserBorrowAmount.value)
-    const nextMaxBorrowPossible = maximum(minimum(nextMaxBorrowSafe, pair.maxAssetAvailable), ZERO)
+    const nextMaxBorrowMinimum = minimum(
+        nextMaxBorrowableOracle,
+        nextMaxBorrowableSpot,
+        nextMaxBorrowableStored
+    )
+    const nextMaxBorrowSafe = nextMaxBorrowMinimum
+        .mulDiv('95', '100')
+        .sub(pair.currentUserBorrowAmount.value)
+    const nextMaxBorrowPossible = maximum(
+        minimum(nextMaxBorrowSafe, pair.maxAssetAvailable),
+        ZERO
+    )
 
     const maxBorrow = nextMaxBorrowPossible.toFixed(pair.asset.decimals)
 
-    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(borrowValue.toBigNumber(pair.asset.decimals))
-    const nextHealth = nextBorrowValue.muldiv('1000000000000000000', nextMaxBorrowMinimum)
+    const nextBorrowValue = pair.currentUserBorrowAmount.value.add(
+        borrowValue.toBigNumber(pair.asset.decimals)
+    )
+    const nextHealth = nextBorrowValue.mulDiv(
+        '1000000000000000000',
+        nextMaxBorrowMinimum
+    )
 
-    const collateralValueSet = !collateralValue.toBigNumber(pair.collateral.decimals).isZero()
-    const borrowValueSet = !borrowValue.toBigNumber(pair.asset.decimals).isZero()
+    const collateralValueSet = !collateralValue
+        .toBigNumber(pair.collateral.decimals)
+        .isZero()
+    const borrowValueSet = !borrowValue
+        .toBigNumber(pair.asset.decimals)
+        .isZero()
 
     const trade = swap && borrowValueSet ? foundTrade : undefined
 
@@ -107,7 +152,9 @@ export default function Borrow({ pair }: BorrowProps) {
     const borrowAmount = borrowValue.toBigNumber(pair.asset.decimals)
 
     const collateralWarnings = new Warnings().add(
-        collateralBalance?.lt(collateralValue.toBigNumber(pair.collateral.decimals)),
+        collateralBalance?.lt(
+            collateralValue.toBigNumber(pair.collateral.decimals)
+        ),
         `Please make sure your ${
             useBentoCollateral ? 'BentoBox' : 'wallet'
         } balance is sufficient to deposit and then try again.`,
@@ -125,11 +172,16 @@ export default function Borrow({ pair }: BorrowProps) {
                 true,
                 new Warning(
                     borrowValue.length > 0 &&
-                        borrowAmount.gt(nextMaxBorrowMinimum.sub(pair.currentUserBorrowAmount.value)),
+                        borrowAmount.gt(
+                            nextMaxBorrowMinimum.sub(
+                                pair.currentUserBorrowAmount.value
+                            )
+                        ),
                     "You don't have enough collateral to borrow this amount.",
                     true,
                     new Warning(
-                        borrowValue.length > 0 && borrowAmount.gt(nextMaxBorrowSafe),
+                        borrowValue.length > 0 &&
+                            borrowAmount.gt(nextMaxBorrowSafe),
                         'You will surpass your borrow limit and assets will be at a high risk of liquidation.',
                         false
                     )
@@ -137,7 +189,10 @@ export default function Borrow({ pair }: BorrowProps) {
             )
         )
         .add(
-            borrowValue.length > 0 && pair.maxAssetAvailable.lt(borrowValue.toBigNumber(pair.asset.decimals)),
+            borrowValue.length > 0 &&
+                pair.maxAssetAvailable.lt(
+                    borrowValue.toBigNumber(pair.asset.decimals)
+                ),
             'Not enough liquidity in this pair.',
             true
         )
@@ -146,15 +201,23 @@ export default function Borrow({ pair }: BorrowProps) {
         name: pair.asset.symbol + '-' + pair.collateral.symbol,
         borrowValueSet: borrowValueSet,
         displayUpdateOracle: displayUpdateOracle,
-        currentExchangeRate: pair.currentExchangeRate.toFixed(pair.asset.decimals),
-        oracleExchangeRate: pair.oracleExchangeRate.toFixed(pair.asset.decimals),
+        currentExchangeRate: pair.currentExchangeRate.toFixed(
+            pair.asset.decimals
+        ),
+        oracleExchangeRate: pair.oracleExchangeRate.toFixed(
+            pair.asset.decimals
+        ),
         diff:
             pair.currentExchangeRate.toFixed(pair.asset.decimals) /
             pair.oracleExchangeRate.toFixed(pair.asset.decimals),
     })
 
     const transactionReview = new TransactionReview()
-    if ((collateralValue || borrowValue) && !collateralWarnings.broken && (!borrowWarnings.broken || !borrowValue)) {
+    if (
+        (collateralValue || borrowValue) &&
+        !collateralWarnings.broken &&
+        (!borrowWarnings.broken || !borrowValue)
+    ) {
         if (collateralValueSet) {
             transactionReview.addTokenAmount(
                 'Collateral',
@@ -176,10 +239,20 @@ export default function Borrow({ pair }: BorrowProps) {
                 nextBorrowValue,
                 pair.asset
             )
-            transactionReview.addUSD('Borrowed USD', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
+            transactionReview.addUSD(
+                'Borrowed USD',
+                pair.currentUserBorrowAmount.value,
+                nextBorrowValue,
+                pair.asset
+            )
         }
         if (displayUpdateOracle) {
-            transactionReview.addRate('Exchange Rate', pair.currentExchangeRate, pair.oracleExchangeRate, pair)
+            transactionReview.addRate(
+                'Exchange Rate',
+                pair.currentExchangeRate,
+                pair.oracleExchangeRate,
+                pair
+            )
         }
         transactionReview.addTokenAmount(
             'Borrow Limit',
@@ -187,15 +260,25 @@ export default function Borrow({ pair }: BorrowProps) {
             nextMaxBorrowSafe.sub(borrowValue.toBigNumber(pair.asset.decimals)),
             pair.asset
         )
-        transactionReview.addPercentage('Limit Used', pair.health.value, nextHealth)
-        transactionReview.addPercentage('Borrow APR', pair.interestPerYear.value, pair.currentInterestPerYear.value)
+        transactionReview.addPercentage(
+            'Limit Used',
+            pair.health.value,
+            nextHealth
+        )
+        transactionReview.addPercentage(
+            'Borrow APR',
+            pair.interestPerYear.value,
+            pair.currentInterestPerYear.value
+        )
     }
 
     let actionName = 'Nothing to do'
 
     if (collateralValueSet) {
         if (borrowValueSet) {
-            actionName = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
+            actionName = trade
+                ? 'Borrow, swap and add collateral'
+                : 'Add collateral and borrow'
         } else {
             actionName = 'Add collateral'
         }
@@ -227,7 +310,9 @@ export default function Borrow({ pair }: BorrowProps) {
             }
 
             if (swap && !useBentoCollateral) {
-                cooker.bentoDepositCollateral(collateralValue.toBigNumber(pair.collateral.decimals))
+                cooker.bentoDepositCollateral(
+                    collateralValue.toBigNumber(pair.collateral.decimals)
+                )
             }
 
             cooker.borrow(
@@ -249,12 +334,23 @@ export default function Borrow({ pair }: BorrowProps) {
                 path.length > 2 ? path[1] : ethers.constants.AddressZero,
                 path.length > 3 ? path[2] : ethers.constants.AddressZero,
                 account,
-                toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals)),
+                toShare(
+                    pair.collateral,
+                    collateralValue.toBigNumber(pair.collateral.decimals)
+                ),
                 borrowValue.toBigNumber(pair.asset.decimals),
             ])
 
             const data = defaultAbiCoder.encode(
-                ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
+                [
+                    'address',
+                    'address',
+                    'uint256',
+                    'address',
+                    'address',
+                    'address',
+                    'uint256',
+                ],
                 [
                     pair.asset.address,
                     pair.collateral.address,
@@ -262,14 +358,20 @@ export default function Borrow({ pair }: BorrowProps) {
                     path.length > 2 ? path[1] : ethers.constants.AddressZero,
                     path.length > 3 ? path[2] : ethers.constants.AddressZero,
                     account,
-                    toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.decimals)),
+                    toShare(
+                        pair.collateral,
+                        collateralValue.toBigNumber(pair.collateral.decimals)
+                    ),
                 ]
             )
 
             cooker.action(
                 SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1],
                 ZERO,
-                ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
+                ethers.utils.hexConcat([
+                    ethers.utils.hexlify('0x3087d742'),
+                    data,
+                ]),
                 false,
                 true,
                 1
@@ -277,14 +379,18 @@ export default function Borrow({ pair }: BorrowProps) {
         }
         if (collateralValueSet) {
             cooker.addCollateral(
-                swap ? BigNumber.from(-1) : collateralValue.toBigNumber(pair.collateral.decimals),
+                swap
+                    ? BigNumber.from(-1)
+                    : collateralValue.toBigNumber(pair.collateral.decimals),
                 useBentoCollateral || swap
             )
         }
 
         if (collateralValueSet) {
             if (borrowValueSet) {
-                summary = trade ? 'Borrow, swap and add collateral' : 'Add collateral and borrow'
+                summary = trade
+                    ? 'Borrow, swap and add collateral'
+                    : 'Add collateral and borrow'
             } else {
                 summary = 'Add collateral'
             }
@@ -297,19 +403,22 @@ export default function Borrow({ pair }: BorrowProps) {
 
     function onMultiply(multiplier: string) {
         const multipliedCollateral = swapCollateral.add(
-            swapCollateral.muldiv(
+            swapCollateral.mulDiv(
                 multiplier.toBigNumber(pair.collateral.decimals),
                 '1'.toBigNumber(pair.collateral.decimals)
             )
         )
 
-        const multipliedBorrow = multipliedCollateral.muldiv(e10(16).mul('75'), pair.currentExchangeRate)
+        const multipliedBorrow = multipliedCollateral.mulDiv(
+            e10(16).mul('75'),
+            pair.currentExchangeRate
+        )
 
         // console.log({
         //     original: swapCollateral.toFixed(pair.collateral.decimals),
         //     multiplied: swapCollateral
         //         .add(
-        //             swapCollateral.muldiv(
+        //             swapCollateral.mulDiv(
         //                 multiplier.toBigNumber(pair.collateral.decimals),
         //                 '1'.toBigNumber(pair.collateral.decimals)
         //             )
@@ -325,7 +434,9 @@ export default function Borrow({ pair }: BorrowProps) {
 
     return (
         <>
-            <div className="mt-6 mb-4 text-3xl text-high-emphesis">Borrow {pair.asset.symbol}</div>
+            <div className="mt-6 mb-4 text-3xl text-high-emphesis">
+                Borrow {pair.asset.symbol}
+            </div>
 
             <SmartNumberInput
                 color="pink"
@@ -377,7 +488,16 @@ export default function Borrow({ pair }: BorrowProps) {
             {collateralValueSet && (
                 <>
                     <div className="mb-4">
-                        {['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2.0'].map((multipler, i) => (
+                        {[
+                            '0.25',
+                            '0.5',
+                            '0.75',
+                            '1',
+                            '1.25',
+                            '1.5',
+                            '1.75',
+                            '2.0',
+                        ].map((multipler, i) => (
                             <Button
                                 variant="outlined"
                                 size="small"
@@ -418,7 +538,9 @@ export default function Borrow({ pair }: BorrowProps) {
 
             <WarningsView warnings={borrowWarnings}></WarningsView>
 
-            {swap && trade && <TradeReview trade={trade} allowedSlippage={allowedSlippage} />}
+            {swap && trade && (
+                <TradeReview trade={trade} allowedSlippage={allowedSlippage} />
+            )}
 
             {(collateralValueSet ||
                 (borrowValueSet && !pair.userCollateralAmount.value.isZero()) ||
@@ -429,8 +551,15 @@ export default function Borrow({ pair }: BorrowProps) {
             <KashiApproveButton
                 color="pink"
                 content={(onCook: any) => (
-                    <TokenApproveButton value={collateralValue} token={collateralToken} needed={!useBentoCollateral}>
-                        <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
+                    <TokenApproveButton
+                        value={collateralValue}
+                        token={collateralToken}
+                        needed={!useBentoCollateral}
+                    >
+                        <Button
+                            onClick={() => onCook(pair, onExecute)}
+                            disabled={actionDisabled}
+                        >
                             {actionName}
                         </Button>
                     </TokenApproveButton>

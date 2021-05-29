@@ -1,9 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
 
 export function toAmount(token: any, shares: BigNumber): BigNumber {
-    return shares.muldiv(token.bentoAmount, token.bentoShare)
+    return shares.mulDiv(token.bentoAmount, token.bentoShare)
 }
 
 export function toShare(token: any, amount: BigNumber): BigNumber {
-    return amount.muldiv(token.bentoShare, token.bentoAmount)
+    return amount.mulDiv(token.bentoShare, token.bentoAmount)
 }

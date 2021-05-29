@@ -23,7 +23,10 @@ import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
+const Web3ProviderNetwork = dynamic(
+    () => import('../components/Web3ProviderNetwork'),
+    { ssr: false }
+)
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
     window.ethereum.autoRefreshOnNetworkChange = false
@@ -57,7 +60,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, [pathname, query])
 
     // TODO: Refactor KashiProvider to /state/kashi to align with rest of app currently
-    const isKashi = ['/lend', '/borrow', '/create', '/balances'].some((path) => router.asPath.includes(path))
+    const isKashi = ['/lend', '/borrow', '/create', '/balances'].some((path) =>
+        router.asPath.includes(path)
+    )
 
     // const Layout = isKashi
     //     ? ({ children }) => (
@@ -78,15 +83,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                     name="viewport"
                     content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
                 />
-                <meta name="description" content="Description" />
-                <meta name="keywords" content="Keywords" />
-                <title>Sushi</title>
-
-                <link rel="manifest" href="/manifest.json" />
-                <link href="/images/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
-                <link href="/images/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
-                <link rel="apple-touch-icon" href="/apple-icon-192x192.png"></link>
-                <meta name="theme-color" content="#F338C3" />
             </Head>
             <Web3ReactProvider getLibrary={getLibrary}>
                 <Web3ProviderNetwork getLibrary={getLibrary}>
