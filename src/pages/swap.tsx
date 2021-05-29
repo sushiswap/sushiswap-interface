@@ -77,6 +77,7 @@ import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
 import TokenWarningModal from '../components/TokenWarningModal'
 import TradePrice from '../features/swap/TradePrice'
+import Typography from '../components/Typography'
 import UnsupportedCurrencyFooter from '../features/swap/UnsupportedCurrencyFooter'
 import confirmPriceImpactWithoutFee from '../features/swap/confirmPriceImpactWithoutFee'
 import { getRouterAddress } from '../functions'
@@ -630,18 +631,21 @@ export default function Swap() {
                                 {allowedSlippage !==
                                     INITIAL_ALLOWED_SLIPPAGE && (
                                     <RowBetween align="center">
-                                        <div
-                                            className="text-sm font-semibold cursor-pointer text-secondary"
+                                        <Typography
+                                            variant="caption2"
+                                            className="text-secondary"
                                             onClick={toggleSettings}
                                         >
                                             {i18n._(t`Slippage Tolerance`)}
-                                        </div>
-                                        <div
-                                            className="text-sm font-semibold cursor-pointer text-secondary"
+                                        </Typography>
+
+                                        <Typography
+                                            variant="caption2"
+                                            className="text-secondary"
                                             onClick={toggleSettings}
                                         >
                                             {allowedSlippage / 100}%
-                                        </div>
+                                        </Typography>
                                     </RowBetween>
                                 )}
                             </div>
