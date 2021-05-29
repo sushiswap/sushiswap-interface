@@ -20,6 +20,7 @@ public/workbox*.js
 public/workbox*.js.map
 
 /locale/**/*.js
+/locale/**/*.json
 
 .env
 
