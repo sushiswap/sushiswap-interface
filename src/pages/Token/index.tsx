@@ -140,7 +140,7 @@ export default function Token() {
             </div>
 
             <div className="w-full max-w-3xl min-w-3xl mb-8">
-                <div className="overflow-x-scroll hide-scroll-bar">
+                <div className="overflow-x-scroll hide-scroll-bar md:overflow-hidden">
                     <div className="grid grid-cols-3 gap-6 min-w-max">
                         <div className="flex flex-col bg-dark-900 rounded p-6">
                             <div className="text-sm">Liquidity (24H)</div>
@@ -237,7 +237,7 @@ export default function Token() {
 
             <div className="w-full max-w-3xl min-w-3xl mb-8">
                 <div className="font-bold text-h4 text-high-emphesis pb-6">Top Moving Pairs</div>
-                <div className="overflow-x-scroll hide-scroll-bar">
+                <div className="overflow-x-scroll hide-scroll-bar md:overflow-hidden">
                     <div className="grid grid-cols-4 gap-6 min-w-max">
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
                             <img className="w-10 mr-2" src={SushiImage} alt="SUSHI" />
