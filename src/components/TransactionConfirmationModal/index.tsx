@@ -16,9 +16,10 @@ import { t } from '@lingui/macro'
 interface ConfirmationPendingContentProps {
     onDismiss: () => void
     pendingText: string
+    pendingText2: string
 }
 
-export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
+export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText, pendingText2 }) => {
     const { i18n } = useLingui()
     return (
         <div>
@@ -31,6 +32,7 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = (
             <div className="flex flex-col gap-3 justify-center items-center">
                 <div className="text-xl font-bold text-high-emphesis">{i18n._(t`Waiting for Confirmation`)}</div>
                 <div className="font-bold">{pendingText}</div>
+                <div className="font-bold">{pendingText2}</div>
                 <div className="text-sm text-secondary font-bold">
                     {i18n._(t`Confirm this transaction in your wallet`)}
                 </div>
@@ -132,6 +134,7 @@ interface ConfirmationModalProps {
     content: () => React.ReactNode
     attemptingTxn: boolean
     pendingText: string
+    pendingText2?: string
 }
 
 const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -140,6 +143,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
     attemptingTxn,
     hash,
     pendingText,
+    pendingText2,
     content
 }) => {
     const { chainId } = useActiveWeb3React()
@@ -150,7 +154,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
     return (
         <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90}>
             {attemptingTxn ? (
-                <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} />
+                <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} pendingText2={pendingText2} />
             ) : hash ? (
                 <TransactionSubmittedContent chainId={chainId} hash={hash} onDismiss={onDismiss} />
             ) : (

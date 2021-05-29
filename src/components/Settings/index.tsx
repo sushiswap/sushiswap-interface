@@ -5,6 +5,7 @@ import { Settings, X } from 'react-feather'
 import styled, { ThemeContext } from 'styled-components'
 import {
     useExpertModeManager,
+    useUserArcherUseRelay,
     useUserSingleHopOnly,
     useUserSlippageTolerance,
     useUserTransactionTTL,
@@ -109,6 +110,8 @@ export default function SettingsTab() {
     // show confirmation view before turning on
     const [showConfirmation, setShowConfirmation] = useState(false)
 
+    const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
+
     useOnClickOutside(node, open ? toggle : undefined)
 
     return (
@@ -185,6 +188,8 @@ export default function SettingsTab() {
                             setRawSlippage={setUserslippageTolerance}
                             deadline={ttl}
                             setDeadline={setTtl}
+                            useArcher={userUseArcher}
+                            setUseArcher={setUserUseArcher}
                         />
 
                         <Typography

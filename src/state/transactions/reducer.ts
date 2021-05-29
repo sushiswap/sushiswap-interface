@@ -3,7 +3,7 @@ import {
     addTransaction,
     checkedTransaction,
     clearAllTransactions,
-    finalizeTransaction
+    finalizeTransaction,
 } from './actions'
 
 import { createReducer } from '@reduxjs/toolkit'
@@ -20,6 +20,12 @@ export interface TransactionDetails {
     addedTime: number
     confirmedTime?: number
     from: string
+    archer?: {
+        deadline: number
+        rawTransaction: string
+        nonce: number
+        ethTip: string
+    }
 }
 
 export interface TransactionState {
@@ -30,37 +36,73 @@ export interface TransactionState {
 
 export const initialState: TransactionState = {}
 
-export default createReducer(initialState, builder =>
+export default createReducer(initialState, (builder) =>
     builder
-        .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, approval, summary, claim } }) => {
-            if (transactions[chainId]?.[hash]) {
-                throw Error('Attempted to add existing transaction.')
+        .addCase(
+            addTransaction,
+            (
+                transactions,
+                {
+                    payload: {
+                        chainId,
+                        from,
+                        hash,
+                        approval,
+                        summary,
+                        claim,
+                        archer,
+                    },
+                }
+            ) => {
+                if (transactions[chainId]?.[hash]) {
+                    throw Error('Attempted to add existing transaction.')
+                }
+                const txs = transactions[chainId] ?? {}
+                txs[hash] = {
+                    hash,
+                    approval,
+                    summary,
+                    claim,
+                    from,
+                    addedTime: now(),
+                    archer,
+                }
+                transactions[chainId] = txs
             }
-            const txs = transactions[chainId] ?? {}
-            txs[hash] = { hash, approval, summary, claim, from, addedTime: now() }
-            transactions[chainId] = txs
-        })
-        .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
-            if (!transactions[chainId]) return
-            transactions[chainId] = {}
-        })
-        .addCase(checkedTransaction, (transactions, { payload: { chainId, hash, blockNumber } }) => {
-            const tx = transactions[chainId]?.[hash]
-            if (!tx) {
-                return
+        )
+        .addCase(
+            clearAllTransactions,
+            (transactions, { payload: { chainId } }) => {
+                if (!transactions[chainId]) return
+                transactions[chainId] = {}
             }
-            if (!tx.lastCheckedBlockNumber) {
-                tx.lastCheckedBlockNumber = blockNumber
-            } else {
-                tx.lastCheckedBlockNumber = Math.max(blockNumber, tx.lastCheckedBlockNumber)
+        )
+        .addCase(
+            checkedTransaction,
+            (transactions, { payload: { chainId, hash, blockNumber } }) => {
+                const tx = transactions[chainId]?.[hash]
+                if (!tx) {
+                    return
+                }
+                if (!tx.lastCheckedBlockNumber) {
+                    tx.lastCheckedBlockNumber = blockNumber
+                } else {
+                    tx.lastCheckedBlockNumber = Math.max(
+                        blockNumber,
+                        tx.lastCheckedBlockNumber
+                    )
+                }
             }
-        })
-        .addCase(finalizeTransaction, (transactions, { payload: { hash, chainId, receipt } }) => {
-            const tx = transactions[chainId]?.[hash]
-            if (!tx) {
-                return
+        )
+        .addCase(
+            finalizeTransaction,
+            (transactions, { payload: { hash, chainId, receipt } }) => {
+                const tx = transactions[chainId]?.[hash]
+                if (!tx) {
+                    return
+                }
+                tx.receipt = receipt
+                tx.confirmedTime = now()
             }
-            tx.receipt = receipt
-            tx.confirmedTime = now()
-        })
+        )
 )

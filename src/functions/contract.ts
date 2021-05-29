@@ -7,6 +7,8 @@ import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { isAddress } from '../functions/validate'
+import { ARCHER_ROUTER_ADDRESS } from '../constants'
+import ArcherSwapRouterABI from '../constants/abis/ArcherSwapRouter.json'
 
 // account is not optional
 export function getSigner(library: Web3Provider, account: string): JsonRpcSigner {
@@ -37,4 +39,8 @@ export function getRouterAddress(chainId?: ChainId) {
 // account is optional
 export function getRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
     return getContract(getRouterAddress(chainId), IUniswapV2Router02ABI, library, account)
+}
+
+export function getArcherRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
+    return getContract(ARCHER_ROUTER_ADDRESS[chainId as ChainId] ?? '', ArcherSwapRouterABI, library, account)
 }

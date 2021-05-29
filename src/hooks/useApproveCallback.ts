@@ -1,7 +1,10 @@
 import { CurrencyAmount, NATIVE, TokenAmount, Trade } from '@sushiswap/sdk'
 import { calculateGasMargin, getRouterAddress } from '../functions'
 import { useCallback, useMemo } from 'react'
-import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
+import {
+    useHasPendingApproval,
+    useTransactionAdder,
+} from '../state/transactions/hooks'
 
 import { Field } from '../state/swap/actions'
 import { MaxUint256 } from '@ethersproject/constants'
@@ -24,8 +27,15 @@ export function useApproveCallback(
     spender?: string
 ): [ApprovalState, () => Promise<void>] {
     const { account, chainId } = useActiveWeb3React()
-    const token = amountToApprove instanceof TokenAmount ? amountToApprove.token : undefined
-    const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
+    const token =
+        amountToApprove instanceof TokenAmount
+            ? amountToApprove.token
+            : undefined
+    const currentAllowance = useTokenAllowance(
+        token,
+        account ?? undefined,
+        spender
+    )
     const pendingApproval = useHasPendingApproval(token?.address, spender)
 
     // check the current approval status
@@ -72,19 +82,30 @@ export function useApproveCallback(
         }
 
         let useExact = false
-        const estimatedGas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
-            // general fallback for tokens who restrict approval amounts
-            useExact = true
-            return tokenContract.estimateGas.approve(spender, amountToApprove.raw.toString())
-        })
+        const estimatedGas = await tokenContract.estimateGas
+            .approve(spender, MaxUint256)
+            .catch(() => {
+                // general fallback for tokens who restrict approval amounts
+                useExact = true
+                return tokenContract.estimateGas.approve(
+                    spender,
+                    amountToApprove.raw.toString()
+                )
+            })
 
         return tokenContract
-            .approve(spender, useExact ? amountToApprove.raw.toString() : MaxUint256, {
-                gasLimit: calculateGasMargin(estimatedGas),
-            })
+            .approve(
+                spender,
+                useExact ? amountToApprove.raw.toString() : MaxUint256,
+                {
+                    gasLimit: calculateGasMargin(estimatedGas),
+                }
+            )
             .then((response: TransactionResponse) => {
                 addTransaction(response, {
-                    summary: 'Approve ' + amountToApprove.currency.getSymbol(chainId),
+                    summary:
+                        'Approve ' +
+                        amountToApprove.currency.getSymbol(chainId),
                     approval: { tokenAddress: token.address, spender: spender },
                 })
             })
@@ -92,17 +113,34 @@ export function useApproveCallback(
                 console.debug('Failed to approve token', error)
                 throw error
             })
-    }, [approvalState, token, tokenContract, amountToApprove, spender, addTransaction, chainId])
+    }, [
+        approvalState,
+        token,
+        tokenContract,
+        amountToApprove,
+        spender,
+        addTransaction,
+        chainId,
+    ])
 
     return [approvalState, approve]
 }
 
 // wraps useApproveCallback in the context of a swap
-export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) {
+export function useApproveCallbackFromTrade(
+    routerAddress?: string,
+    trade?: Trade,
+    allowedSlippage = 0
+) {
     const amountToApprove = useMemo(
-        () => (trade ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[Field.INPUT] : undefined),
+        () =>
+            trade
+                ? computeSlippageAdjustedAmounts(trade, allowedSlippage)[
+                      Field.INPUT
+                  ]
+                : undefined,
         [trade, allowedSlippage]
     )
     const { chainId } = useActiveWeb3React()
-    return useApproveCallback(amountToApprove, getRouterAddress(chainId))
+    return useApproveCallback(amountToApprove, routerAddress)
 }

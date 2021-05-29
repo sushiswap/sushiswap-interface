@@ -1,4 +1,9 @@
 import {
+    ARCHER_RELAY_URI,
+    ARCHER_ROUTER_ADDRESS,
+    INITIAL_ALLOWED_SLIPPAGE,
+} from '../constants'
+import {
     ApprovalState,
     useApproveCallbackFromTrade,
 } from '../hooks/useApproveCallback'
@@ -38,8 +43,12 @@ import {
 } from '../state/swap/hooks'
 import {
     useExpertModeManager,
+    useUserArcherETHTip,
+    useUserArcherGasPrice,
+    useUserArcherUseRelay,
     useUserSingleHopOnly,
     useUserSlippageTolerance,
+    useUserTransactionTTL,
 } from '../state/user/hooks'
 import {
     useNetworkModalToggle,
@@ -55,12 +64,12 @@ import ConfirmSwapModal from '../features/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../components/CurrencyInputPanel'
 import { Field } from '../state/swap/actions'
 import Head from 'next/head'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../constants'
 import Image from 'next/image'
 import Layout from '../layouts/DefaultLayout'
 import LinkStyledButton from '../components/LinkStyledButton'
 import Loader from '../components/Loader'
 import Lottie from 'lottie-react'
+import MinerTip from '../components/MinerTip'
 import ProgressSteps from '../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../components/ExchangeHeader'
@@ -70,6 +79,7 @@ import TokenWarningModal from '../components/TokenWarningModal'
 import TradePrice from '../features/swap/TradePrice'
 import UnsupportedCurrencyFooter from '../features/swap/UnsupportedCurrencyFooter'
 import confirmPriceImpactWithoutFee from '../features/swap/confirmPriceImpactWithoutFee'
+import { getRouterAddress } from '../functions'
 import { maxAmountSpend } from '../functions/currency'
 import styles from '../styles/Swap.module.css'
 import swapArrowsAnimationData from '../animation/swap-arrows.json'
@@ -124,6 +134,14 @@ export default function Swap() {
 
     // get custom setting values for user
     const [allowedSlippage] = useUserSlippageTolerance()
+    const [ttl] = useUserTransactionTTL()
+    const [useArcher] = useUserArcherUseRelay()
+    const [archerETHTip] = useUserArcherETHTip()
+    const [archerGasPrice] = useUserArcherGasPrice()
+
+    // archer
+    const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
+    const doArcher = archerRelay !== undefined && useArcher
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
@@ -133,7 +151,7 @@ export default function Swap() {
         parsedAmount,
         currencies,
         inputError: swapInputError,
-    } = useDerivedSwapInfo()
+    } = useDerivedSwapInfo(doArcher)
     const {
         wrapType,
         execute: onWrap,
@@ -228,6 +246,9 @@ export default function Swap() {
 
     // check whether the user has approved the router on the input token
     const [approval, approveCallback] = useApproveCallbackFromTrade(
+        doArcher
+            ? ARCHER_ROUTER_ADDRESS[chainId ?? 1]
+            : getRouterAddress(chainId),
         trade,
         allowedSlippage
     )
@@ -243,7 +264,8 @@ export default function Swap() {
     }, [approval, approvalSubmitted])
 
     const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(
-        currencyBalances[Field.INPUT]
+        currencyBalances[Field.INPUT],
+        doArcher ? archerETHTip : undefined
     )
     const atMaxAmountInput = Boolean(
         maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
@@ -251,7 +273,12 @@ export default function Swap() {
 
     // the callback to execute the swap
     const { callback: swapCallback, error: swapCallbackError } =
-        useSwapCallback(trade, allowedSlippage, recipient)
+        useSwapCallback(
+            trade,
+            allowedSlippage,
+            recipient,
+            doArcher ? ttl : undefined
+        )
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
@@ -383,6 +410,17 @@ export default function Swap() {
         [onCurrencySelection]
     )
 
+    useEffect(() => {
+        if (
+            doArcher &&
+            parsedAmounts[Field.INPUT] &&
+            maxAmountInput &&
+            parsedAmounts[Field.INPUT]?.greaterThan(maxAmountInput)
+        ) {
+            handleMaxInput()
+        }
+    }, [handleMaxInput, parsedAmounts, maxAmountInput, doArcher])
+
     const swapIsUnsupported = useIsTransactionUnsupported(
         currencies?.INPUT,
         currencies?.OUTPUT
@@ -426,6 +464,7 @@ export default function Swap() {
                     onConfirm={handleSwap}
                     swapErrorMessage={swapErrorMessage}
                     onDismiss={handleConfirmDismiss}
+                    archerETHTip={doArcher ? archerETHTip : undefined}
                 />
                 {chainId && chainId === ChainId.MATIC && (
                     <div className="hidden pb-4 space-y-2 md:block">
@@ -611,6 +650,11 @@ export default function Swap() {
                                     </RowBetween>
                                 )}
                             </div>
+                            <div className="px-5 mt-1">
+                                {doArcher && userHasSpecifiedInputOutput && (
+                                    <MinerTip />
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
@@ -656,7 +700,7 @@ export default function Swap() {
                                     approval !== ApprovalState.NOT_APPROVED ||
                                     approvalSubmitted
                                 }
-                                width="48%"
+                                width="100%"
                                 altDisabledStyle={
                                     approval === ApprovalState.PENDING
                                 } // show solid button while waiting
@@ -677,37 +721,41 @@ export default function Swap() {
                                     )
                                 )}
                             </ButtonConfirmed>
-                            <ButtonError
-                                onClick={() => {
-                                    if (isExpertMode) {
-                                        handleSwap()
-                                    } else {
-                                        setSwapState({
-                                            tradeToConfirm: trade,
-                                            attemptingTxn: false,
-                                            swapErrorMessage: undefined,
-                                            showConfirm: true,
-                                            txHash: undefined,
-                                        })
+                            {approval === ApprovalState.APPROVED && (
+                                <ButtonError
+                                    onClick={() => {
+                                        if (isExpertMode) {
+                                            handleSwap()
+                                        } else {
+                                            setSwapState({
+                                                tradeToConfirm: trade,
+                                                attemptingTxn: false,
+                                                swapErrorMessage: undefined,
+                                                showConfirm: true,
+                                                txHash: undefined,
+                                            })
+                                        }
+                                    }}
+                                    width="100%"
+                                    id="swap-button"
+                                    disabled={
+                                        !isValid ||
+                                        approval !== ApprovalState.APPROVED ||
+                                        (priceImpactSeverity > 3 &&
+                                            !isExpertMode)
                                     }
-                                }}
-                                width="48%"
-                                id="swap-button"
-                                disabled={
-                                    !isValid ||
-                                    approval !== ApprovalState.APPROVED ||
-                                    (priceImpactSeverity > 3 && !isExpertMode)
-                                }
-                                error={isValid && priceImpactSeverity > 2}
-                            >
-                                <Text className="font-medium">
-                                    {priceImpactSeverity > 3 && !isExpertMode
-                                        ? i18n._(t`Price Impact High`)
-                                        : priceImpactSeverity > 2
-                                        ? i18n._(t`Swap Anyway`)
-                                        : i18n._(t`Swap`)}
-                                </Text>
-                            </ButtonError>
+                                    error={isValid && priceImpactSeverity > 2}
+                                >
+                                    <Text className="font-medium">
+                                        {priceImpactSeverity > 3 &&
+                                        !isExpertMode
+                                            ? i18n._(t`Price Impact High`)
+                                            : priceImpactSeverity > 2
+                                            ? i18n._(t`Swap Anyway`)
+                                            : i18n._(t`Swap`)}
+                                    </Text>
+                                </ButtonError>
+                            )}
                         </RowBetween>
                     ) : (
                         <ButtonError

@@ -177,7 +177,15 @@ function Web3StatusInner() {
         return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
     }, [allTransactions])
 
-    const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+    const pending = sortedRecentTransactions.filter(tx => {
+        if (tx.receipt) {
+            return false
+        } else if (tx.archer && (tx.archer.deadline * 1000) - Date.now() < 0) {
+            return false
+        } else {
+            return true
+        }
+    }).map(tx => tx.hash)
 
     const hasPendingTransactions = !!pending.length
 

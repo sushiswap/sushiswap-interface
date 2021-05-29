@@ -14,11 +14,10 @@
     "prepare": "husky install",
     "pre-commit": "lint-staged"
   },
-  "engines": {
-    "node": "14.x"
-  },
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
+    "@ethereumjs/common": "^2.3.0",
+    "@ethereumjs/tx": "^3.2.0",
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@lingui/core": "^3.8.10",
@@ -61,6 +60,7 @@
     "numeral": "^2.0.6",
     "polished": "^4.1.2",
     "qs": "^6.10.1",
+    "rc-slider": "^9.7.2",
     "react": "17.0.2",
     "react-device-detect": "^1.17.0",
     "react-dom": "17.0.2",
@@ -82,6 +82,7 @@
   "devDependencies": {
     "@fontsource/dm-sans": "^4.3.0",
     "@lingui/cli": "^3.8.10",
+    "@mertasan/tailwindcss-variables": "^1.2.1",
     "@next/bundle-analyzer": "^10.2.3",
     "@tailwindcss/aspect-ratio": "^0.2.0",
     "@tailwindcss/forms": "^0.3.2",
