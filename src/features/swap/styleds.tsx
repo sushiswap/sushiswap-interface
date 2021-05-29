@@ -113,7 +113,7 @@ export function SwapCallbackError({ error }: { error: string }) {
 
 export const StyledSlider = styled(Slider)`
     margin: 0.8rem auto 2rem auto;
-    width: 90% !important;
+    width: 95% !important;
 
     .rc-slider-mark-text-active {
         color: #e3e3e3;

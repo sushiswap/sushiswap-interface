@@ -15,8 +15,8 @@ export default function LiquidityPrice({
 }): JSX.Element {
     const { chainId } = useActiveWeb3React()
     return (
-        <div className="w-full p-1 -mt-5 rounded-b-md bg-dark-800">
-            <div className="flex justify-between w-full px-4 py-1 rounded-b-md bg-dark-900 text-secondary">
+        <div className="p-1 -mt-5 rounded-b-md bg-dark-800">
+            <div className="flex justify-between w-full px-5 py-1 rounded-b-md md:bg-dark-900 text-secondary">
                 <Typography variant="caption2" className="text-secondary">
                     Exchange Rate
                 </Typography>

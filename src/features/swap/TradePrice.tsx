@@ -32,12 +32,12 @@ export default function TradePrice({
           )} per ${price?.quoteCurrency?.getSymbol(chainId)}`
 
     return (
-        <div className="flex items-center justify-center w-full p-1 -mt-2 rounded-b-md bg-dark-800">
+        <div className="p-1 -mt-2 rounded-b-md bg-dark-800">
             {show ? (
-                <div className="flex justify-between w-full px-4 py-1 rounded-b-md bg-dark-900 text-secondary">
+                <div className="flex justify-between w-full px-5 py-1 rounded-b-md bg-dark-900 text-secondary">
                     <Typography
                         variant="caption2"
-                        className="flex justify-between w-full text-secondary"
+                        className="flex justify-between text-secondary"
                     >
                         {i18n._(t`Exchange Rate`)}
                     </Typography>
