@@ -51,7 +51,7 @@ const Input = styled.input`
         -webkit-appearance: none;
     }
     color: ${({ color }) => (color === 'red' ? '#FF3838' : '#BFBFBF')};
-    text-align: right;
+    text-align: left;
     ::placeholder {
         color: ${({ value }) =>
             value !== '' ? 'transparent' : 'currentColor'};
@@ -175,7 +175,7 @@ export default function SlippageTabs({
                         )}
                     />
                 </RowFixed>
-                <RowBetween>
+                <div className="flex items-center">
                     <Option
                         onClick={() => {
                             setSlippageInput('')
@@ -208,8 +208,8 @@ export default function SlippageTabs({
                         warning={!slippageInputIsValid}
                         tabIndex={-1}
                     >
-                        <RowBetween className="items-center">
-                            {!!slippageInput &&
+                        <div className="flex items-center">
+                            {/* {!!slippageInput &&
                             (slippageError === SlippageError.RiskyLow ||
                                 slippageError === SlippageError.RiskyHigh) ? (
                                 <SlippageEmojiContainer>
@@ -217,7 +217,7 @@ export default function SlippageTabs({
                                         ⚠️
                                     </span>
                                 </SlippageEmojiContainer>
-                            ) : null}
+                            ) : null} */}
                             {/* https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451 */}
                             <Input
                                 ref={inputRef as any}
@@ -238,10 +238,10 @@ export default function SlippageTabs({
                                     borderRadius: 0,
                                 }}
                             />
-                            %
-                        </RowBetween>
+                            <div>%</div>
+                        </div>
                     </OptionCustom>
-                </RowBetween>
+                </div>
                 {!!slippageError && (
                     <RowBetween
                         style={{

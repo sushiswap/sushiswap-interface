@@ -3,7 +3,7 @@ import React from 'react'
 const SIZE = {
     default: 'px-4 py-3',
     small: 'px-2 py-1',
-    large: 'px-6 py-4'
+    large: 'px-6 py-4',
 }
 
 const FILLED = {
@@ -12,7 +12,8 @@ const FILLED = {
     blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     gray: 'bg-dark-700 bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
-    gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100'
+    gradient:
+        'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100',
 }
 
 const OUTLINED = {
@@ -21,15 +22,21 @@ const OUTLINED = {
     blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue hover:bg-opacity-40',
     pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40',
     gray: 'bg-dark-700 bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40',
-    gradient: 'bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100'
+    gradient: 'bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100',
 }
 
 const VARIANT = {
     outlined: OUTLINED,
-    filled: FILLED
+    filled: FILLED,
 }
 
-export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default'
+export type ButtonColor =
+    | 'blue'
+    | 'pink'
+    | 'gradient'
+    | 'gray'
+    | 'default'
+    | 'red'
 
 export type ButtonSize = 'small' | 'large' | 'default'
 
