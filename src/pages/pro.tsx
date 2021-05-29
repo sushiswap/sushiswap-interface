@@ -13,6 +13,10 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import SwapContainer from '../containers/swap/SwapContainer'
 import QuantStats from '../containers/pro/QuantStats'
+import PriceHeaderStats from '../containers/pro/PriceHeaderStats'
+import Header from '../components/Header'
+import Main from '../components/Main'
+import Footer from '../components/Footer'
 
 const Pro: FC = () => {
     const { i18n } = useLingui()
@@ -46,31 +50,38 @@ const Pro: FC = () => {
     }, [chainId])
 
     return (
-        <Layout>
+        <>
+            <Header />
             <Head>
                 <title>SushiPro | Sushi</title>
                 <meta name="description" content="Pro" />
             </Head>
-            <div className="grid grid-flow-col grid-rows-12 xl:container gap-4">
-                <div className="row-span-3 gap-4">
-                    <div>
-                        <SwapContainer />
-                    </div>
-                    <div>
-                        <QuantStats />
-                    </div>
+            <div className="grid">
+                <div className="col-span-12">
+                    <PriceHeaderStats />
                 </div>
-                <div style={{ minHeight: 600 }} className="col-span-8 border-gray-800 rounded pr-2 py-1 bg-dark-900">
-                    <TVChartContainer />
+                <div className="col-span-12">
+                    <SwapContainer />
                 </div>
-                <div style={{ minHeight: 500, maxHeight: 500 }} className="col-span-8 bg-dark-900 rounded">
-                    <TabCard
-                        titles={[i18n._(t`All Swaps`), i18n._(t`User Swaps`)]}
-                        components={[<SwapHistory />, <UserSwapHistory />]}
-                    />
-                </div>
+                {/*<div className="row-span-3 gap-4">*/}
+                {/*    <div>*/}
+                {/*    </div>*/}
+                {/*    <div>*/}
+                {/*        <QuantStats />*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className="col-span-8 border-gray-800 rounded pr-2 py-1 bg-dark-900 min-h-[600px]">*/}
+                {/*    <TVChartContainer />*/}
+                {/*</div>*/}
+                {/*<div className="col-span-8 bg-dark-900 rounded">*/}
+                {/*    <TabCard*/}
+                {/*        titles={[i18n._(t`All Swaps`), i18n._(t`User Swaps`)]}*/}
+                {/*        components={[<SwapHistory />, <UserSwapHistory />]}*/}
+                {/*    />*/}
+                {/*</div>*/}
             </div>
-        </Layout>
+            <Footer />
+        </>
     )
 }
 

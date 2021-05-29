@@ -74,8 +74,6 @@ const QuantStats = () => {
     return (
         <div className="bg-dark-900 rounded p-4 grid gap-2">
             <div className="h1 text-high-emphesis font-bold pb-2">{i18n._(t`Vested SUSHI statistics`)}</div>
-            <div className="font-bold text-sm">{i18n._(t`Percentage of vested SUSHI claimed until now`)}</div>
-            <ProgressBar percentage={(totalClaimed / totalClaimable) * 100} />
             <Stat label={i18n._(t`Unique users`)} value={formattedNum(userCount)} />
             <Stat label={i18n._(t`SUSHI claimed until now`)} value={formattedNum(totalClaimed)} />
             <Stat label={i18n._(t`SUSHI claimable until now`)} value={formattedNum(totalClaimable)} />
@@ -83,6 +81,8 @@ const QuantStats = () => {
                 label={i18n._(t`Total SUSHI claimable`)}
                 value={formattedNum(MAX_SUSHI_CLAIMABLE_PER_WEEK.reduce((a, b) => a + b, 0))}
             />
+            <div className="font-bold text-sm">{i18n._(t`Percentage of vested SUSHI claimed until now`)}</div>
+            <ProgressBar percentage={(totalClaimed / totalClaimable) * 100} />
         </div>
     )
 }

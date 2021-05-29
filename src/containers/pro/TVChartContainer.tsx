@@ -1,50 +1,45 @@
-import React, { FC, useState } from 'react'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { PairState } from '../../hooks/usePairs'
-import { useDerivedSwapInfo } from '../../state/swap/hooks'
-import { usePair } from '../../hooks/usePair'
-import loadingCircle from '../../animation/loading-circle.json'
-import Lottie from 'lottie-react'
+import { FC, useState } from 'react'
+import withPair from '../../hoc/withPair'
+import { Pair } from '@sushiswap/sdk'
+import ToggleButtonGroup from '../../components/Toggle/ToggleButtonGroup'
+import ToggleButton from '../../components/Toggle/ToggleButton'
 
-const TVChartContainer: FC = () => {
-    const { currencies } = useDerivedSwapInfo()
-    const [pairState, pair] = usePair(currencies.INPUT, currencies.OUTPUT)
-    const { i18n } = useLingui()
-    const [loading, setLoading] = useState(false)
+interface TVChartContainerProps {
+    pair: Pair
+}
 
-    if (pairState === PairState.LOADING || loading)
-        return (
-            <div className="h-full flex justify-center items-center">
-                <div className="w-10 h-10">
-                    <Lottie animationData={loadingCircle} autoplay loop />
-                </div>
-            </div>
-        )
-
-    if (pairState === PairState.NOT_EXISTS)
-        return (
-            <div className="h-full flex justify-center items-center">
-                <div className="text-secondary text-sm">{i18n._(t`Pair does not exist`)}</div>
-            </div>
-        )
-
-    if (pairState === PairState.INVALID)
-        return (
-            <div className="h-full flex justify-center items-center">
-                <div className="text-secondary text-sm">{i18n._(t`Please select a token`)}</div>
-            </div>
-        )
-
-    // TODO URL
+const TVChartContainer: FC<TVChartContainerProps> = ({ pair }) => {
+    const [active, setActive] = useState(pair?.token1.symbol === 'WETH' ? 0 : 1)
+    const handleClick = (e, index) => setActive(index)
     return (
-        <iframe
-            src={`http://localhost:5000?symbol=${pair?.token0.symbol}${pair?.token1.symbol}_USD`}
-            width="100%"
-            height="100%"
-            onLoad={() => setLoading(false)}
-        />
+        <div className="flex flex-col h-full">
+            <div className="p-3">
+                <ToggleButtonGroup active={active}>
+                    <ToggleButton onClick={handleClick}>
+                        <div className="flex gap-1">
+                            <span className="text-high-emphesis">{pair?.token0.symbol}</span>
+                            <span className="text-secondary">/</span>
+                            <span className="text-high-emphesis">USD</span>
+                        </div>
+                    </ToggleButton>
+                    <ToggleButton onClick={handleClick}>
+                        {pair?.token0.symbol}/{pair?.token1.symbol}
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </div>
+            <div className="h-full">
+                <iframe
+                    src={`http://localhost:5000?symbol=${
+                        active === 0
+                            ? `${pair?.token0.symbol}${pair?.token1.symbol}_USD`
+                            : `${pair?.token0.symbol}${pair?.token1.symbol}`
+                    }`}
+                    width="100%"
+                    height="100%"
+                />
+            </div>
+        </div>
     )
 }
 
-export default TVChartContainer
+export default withPair(TVChartContainer)
