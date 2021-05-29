@@ -10,7 +10,7 @@ export interface ToggleButtonProps {
 const ToggleButton: FC<ToggleButtonProps> = ({ className, active, onClick, index, children }) => {
     return (
         <span
-            className={`flex items-center justify-center rounded px-3 py-1.5 cursor-pointer hover:text-primary ${
+            className={`text-xs flex items-center justify-center rounded-sm px-3 py-1.5 cursor-pointer hover:text-primary ${
                 active ? 'text-primary' : 'text-secondary'
             } ${active ? 'bg-dark-900' : 'bg-dark-1000'} ${className} `}
             onClick={(e) => onClick(e, index)}

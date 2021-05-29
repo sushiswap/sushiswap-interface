@@ -1,87 +1,50 @@
 import Head from 'next/head'
-import useActiveWeb3React from '../hooks/useActiveWeb3React'
-import SwapHistory from '../containers/pro/SwapHistory'
-import { Field, selectCurrency } from '../state/swap/actions'
-import TabCard from '../components/TabCard'
-import { FC, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import UserSwapHistory from '../containers/pro/UserSwapHistory'
-import TVChartContainer from '../containers/pro/TVChartContainer'
-import { ChainId } from '@sushiswap/sdk'
-import Layout from '../components/Layout'
+import { FC } from 'react'
 import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import SwapContainer from '../containers/swap/SwapContainer'
-import QuantStats from '../containers/pro/QuantStats'
-import PriceHeaderStats from '../containers/pro/PriceHeaderStats'
+import SwapContainer from '../features/swap/SwapContainer'
+import PriceHeaderStats from '../features/pro/PriceHeaderStats'
 import Header from '../components/Header'
-import Main from '../components/Main'
 import Footer from '../components/Footer'
+import ProProvider from '../context/Pro'
+import TVChartContainer from '../features/pro/TVChartContainer'
+import TabCard from '../components/TabCard'
+import SwapHistory from '../features/pro/SwapHistory'
+import QuantStats from '../features/pro/QuantStats'
+import { t } from '@lingui/macro'
+import UserSwapHistory from '../features/pro/UserSwapHistory'
 
 const Pro: FC = () => {
     const { i18n } = useLingui()
-    const { chainId } = useActiveWeb3React()
-    const dispatch = useDispatch()
-    let address = ''
-    switch (chainId) {
-        case ChainId.MAINNET:
-        case ChainId.GÖRLI:
-        case ChainId.KOVAN:
-        case ChainId.ROPSTEN:
-        case ChainId.RINKEBY:
-        default:
-            address = '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
-            break
-        case ChainId.BSC:
-            address = '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
-            break
-        case ChainId.MATIC:
-            address = '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
-            break
-    }
-
-    useEffect(() => {
-        dispatch(
-            selectCurrency({
-                field: Field.OUTPUT,
-                currencyId: address,
-            })
-        )
-    }, [chainId])
 
     return (
-        <>
+        <ProProvider>
             <Header />
             <Head>
                 <title>SushiPro | Sushi</title>
                 <meta name="description" content="Pro" />
             </Head>
-            <div className="grid">
-                <div className="col-span-12">
+            <div className="grid grid-cols-12 bg-[rgba(255,255,255,0.04)] divide-x divide-y h-[calc(100vh-80px)]">
+                <div className="col-span-12 border-dark-800">
                     <PriceHeaderStats />
                 </div>
-                <div className="col-span-12">
+                <div className="col-span-3 border-dark-800">
                     <SwapContainer />
                 </div>
-                {/*<div className="row-span-3 gap-4">*/}
-                {/*    <div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <QuantStats />*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-                {/*<div className="col-span-8 border-gray-800 rounded pr-2 py-1 bg-dark-900 min-h-[600px]">*/}
-                {/*    <TVChartContainer />*/}
-                {/*</div>*/}
-                {/*<div className="col-span-8 bg-dark-900 rounded">*/}
-                {/*    <TabCard*/}
-                {/*        titles={[i18n._(t`All Swaps`), i18n._(t`User Swaps`)]}*/}
-                {/*        components={[<SwapHistory />, <UserSwapHistory />]}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                <div className="col-span-9 border-dark-800">
+                    <TVChartContainer />
+                </div>
+                <div className="col-span-3 border-dark-800">
+                    <QuantStats />
+                </div>
+                <div className="col-span-9 border-dark-800">
+                    <TabCard
+                        titles={[i18n._(t`All Swaps`), i18n._(t`User Swaps`)]}
+                        components={[<SwapHistory />, <UserSwapHistory />]}
+                    />
+                </div>
             </div>
             <Footer />
-        </>
+        </ProProvider>
     )
 }
 

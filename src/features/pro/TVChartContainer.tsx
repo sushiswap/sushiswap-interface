@@ -13,17 +13,21 @@ const TVChartContainer: FC<TVChartContainerProps> = ({ pair }) => {
     const handleClick = (e, index) => setActive(index)
     return (
         <div className="flex flex-col h-full">
-            <div className="p-3">
+            <div className="p-3 border-b border-dark-800">
                 <ToggleButtonGroup active={active}>
                     <ToggleButton onClick={handleClick}>
-                        <div className="flex gap-1">
+                        <div className="flex gap-0.5 text-xs">
                             <span className="text-high-emphesis">{pair?.token0.symbol}</span>
-                            <span className="text-secondary">/</span>
+                            <span className="text-secondary">-</span>
                             <span className="text-high-emphesis">USD</span>
                         </div>
                     </ToggleButton>
                     <ToggleButton onClick={handleClick}>
-                        {pair?.token0.symbol}/{pair?.token1.symbol}
+                        <div className="flex gap-0.5 text-xs">
+                            <span className="text-high-emphesis">{pair?.token0.symbol}</span>
+                            <span className="text-secondary">-</span>
+                            <span className="text-high-emphesis">{pair?.token1.symbol}</span>
+                        </div>
                     </ToggleButton>
                 </ToggleButtonGroup>
             </div>

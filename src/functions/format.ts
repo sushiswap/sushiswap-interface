@@ -28,7 +28,7 @@ export function shortenString(string: string, length: number): string {
 }
 
 // using a currency library here in case we want to add more in future
-const priceFormatter = new Intl.NumberFormat('en-US', {
+export const priceFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,

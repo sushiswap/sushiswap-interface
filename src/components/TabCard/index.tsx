@@ -34,8 +34,8 @@ const TabCard: FC<TabCardProps> = ({ titles, components, footer }) => {
     }
 
     return (
-        <>
-            <div className="rounded-t px-2 py-2 pt-2 sm:px-4 sm:py-3 sm:pt-4 flex justify-between items-center h-[60px] sm:h-[72px]">
+        <div className="">
+            <div className="flex justify-between items-center h-[60px] sm:h-[56px] border-b border-dark-800 px-3">
                 <div className="flex w-full justify-between">
                     <ToggleButtonGroup active={value}>
                         {titles.map((el) => (
@@ -46,7 +46,7 @@ const TabCard: FC<TabCardProps> = ({ titles, components, footer }) => {
                     </ToggleButtonGroup>
                 </div>
             </div>
-            <div className="px-2 pt-4 pb-0 sm:p-4 sm:pb-0 h-[calc(100%-60px)] sm:h-[calc(100%-72px)] overflow-x-scroll">
+            <div className="px-2 pt-4 pb-0 sm:p-4 sm:pb-0 h-[calc(100%-60px)] sm:h-[calc(100%-56px)] overflow-x-scroll">
                 {components.map((component, index) => (
                     <TabPanel value={value} index={index} key={index}>
                         {component}
@@ -54,7 +54,7 @@ const TabCard: FC<TabCardProps> = ({ titles, components, footer }) => {
                 ))}
             </div>
             {footer && <>{footer}</>}
-        </>
+        </div>
     )
 }
 

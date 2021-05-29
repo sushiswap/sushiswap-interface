@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import { vesting } from '../../fetchers/graph'
 import { FC, useEffect, useMemo, useState } from 'react'
-import { formattedNum, formattedPercent } from '../../utils'
+import { formatNumber, formatPercent } from '../../functions/format'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 
@@ -42,7 +42,7 @@ const ProgressBar: FC<{ percentage: number }> = ({ percentage }) => {
                 />
             </div>
             <div className="text-center font-bold text-xs" style={{ width: `${percentage}%` }}>
-                {formattedPercent(percentage)}
+                {formatPercent(percentage)}
             </div>
         </div>
     )
@@ -72,14 +72,14 @@ const QuantStats = () => {
     }, [data])
 
     return (
-        <div className="bg-dark-900 rounded p-4 grid gap-2">
+        <div className="p-4 grid gap-2">
             <div className="h1 text-high-emphesis font-bold pb-2">{i18n._(t`Vested SUSHI statistics`)}</div>
-            <Stat label={i18n._(t`Unique users`)} value={formattedNum(userCount)} />
-            <Stat label={i18n._(t`SUSHI claimed until now`)} value={formattedNum(totalClaimed)} />
-            <Stat label={i18n._(t`SUSHI claimable until now`)} value={formattedNum(totalClaimable)} />
+            <Stat label={i18n._(t`Unique users`)} value={formatNumber(userCount)} />
+            <Stat label={i18n._(t`SUSHI claimed until now`)} value={formatNumber(totalClaimed)} />
+            <Stat label={i18n._(t`SUSHI claimable until now`)} value={formatNumber(totalClaimable)} />
             <Stat
                 label={i18n._(t`Total SUSHI claimable`)}
-                value={formattedNum(MAX_SUSHI_CLAIMABLE_PER_WEEK.reduce((a, b) => a + b, 0))}
+                value={formatNumber(MAX_SUSHI_CLAIMABLE_PER_WEEK.reduce((a, b) => a + b, 0))}
             />
             <div className="font-bold text-sm">{i18n._(t`Percentage of vested SUSHI claimed until now`)}</div>
             <ProgressBar percentage={(totalClaimed / totalClaimable) * 100} />

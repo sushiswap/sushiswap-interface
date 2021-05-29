@@ -46,18 +46,24 @@ export const SUSHI: ChainTokenMap = {
     ),
     [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
     [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
-    [ChainId.FANTOM]: new Token(ChainId.FANTOM, '0xae75A438b2E0cB8Bb01Ec1E1e376De11D44477CC', 18, 'SUSHI', 'SushiToken')
+    [ChainId.FANTOM]: new Token(
+        ChainId.FANTOM,
+        '0xae75A438b2E0cB8Bb01Ec1E1e376De11D44477CC',
+        18,
+        'SUSHI',
+        'SushiToken'
+    ),
 }
 
 export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
     // [UNI_ADDRESS]: 'UNI',
-    [TIMELOCK_ADDRESS]: 'Timelock'
+    [TIMELOCK_ADDRESS]: 'Timelock',
 }
 
 // TODO: specify merkle distributor for mainnet
 export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
     [ChainId.MAINNET]: '0xcBE6B83e77cdc011Cc18F6f0Df8444E5783ed982',
-    [ChainId.ROPSTEN]: '0x84d1f7202e0e7dac211617017ca72a2cb5e2b955'
+    [ChainId.ROPSTEN]: '0x84d1f7202e0e7dac211617017ca72a2cb5e2b955',
 }
 
 // TODO: update weekly with new constant
@@ -69,7 +75,7 @@ export const MERKLE_ROOT =
     'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-05/merkle-10959148-11185970.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
-const WRAPPED_NATIVE_ONLY: ChainTokenList = {
+export const WRAPPED_NATIVE_ONLY: ChainTokenList = {
     [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
     [ChainId.ROPSTEN]: [WETH[ChainId.ROPSTEN]],
     [ChainId.RINKEBY]: [WETH[ChainId.RINKEBY]],
@@ -91,7 +97,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
     [ChainId.HARMONY]: [WETH[ChainId.HARMONY]],
     [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]],
     [ChainId.OKEX]: [WETH[ChainId.OKEX]],
-    [ChainId.OKEX_TESTNET]: [WETH[ChainId.OKEX_TESTNET]]
+    [ChainId.OKEX_TESTNET]: [WETH[ChainId.OKEX_TESTNET]],
 }
 
 // Default Ethereum chain tokens
@@ -109,14 +115,14 @@ export const BSC: { [key: string]: Token } = {
     USD: new Token(ChainId.BSC, '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', 18, 'BUSD', 'Binance USD'),
     USDC: new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'USDC', 'USD Coin'),
     USDT: new Token(ChainId.BSC, '0x55d398326f99059fF775485246999027B3197955', 18, 'USDT', 'Tether USD'),
-    BTCB: new Token(ChainId.BSC, '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', 18, 'BTCB', 'Bitcoin')
+    BTCB: new Token(ChainId.BSC, '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', 18, 'BTCB', 'Bitcoin'),
 }
 
 export const FANTOM: { [key: string]: Token } = {
     USDC: new Token(ChainId.FANTOM, '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', 6, 'USDC', 'USD Coin'),
     WBTC: new Token(ChainId.FANTOM, '0x321162Cd933E2Be498Cd2267a90534A804051b11', 8, 'WBTC', 'Wrapped Bitcoin'),
     DAI: new Token(ChainId.FANTOM, '0x8D11eC38a3EB5E956B052f67Da8Bdc9bef8Abf3E', 18, 'DAI', 'Dai Stablecoin'),
-    WETH: new Token(ChainId.FANTOM, '0x74b23882a30290451A17c44f4F05243b6b58C76d', 18, 'WETH', 'Wrapped Ether')
+    WETH: new Token(ChainId.FANTOM, '0x74b23882a30290451A17c44f4F05243b6b58C76d', 18, 'WETH', 'Wrapped Ether'),
 }
 
 export const MATIC: { [key: string]: Token } = {
@@ -124,7 +130,7 @@ export const MATIC: { [key: string]: Token } = {
     WBTC: new Token(ChainId.MATIC, '0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6', 8, 'WBTC', 'Wrapped Bitcoin'),
     DAI: new Token(ChainId.MATIC, '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063', 18, 'DAI', 'Dai Stablecoin'),
     WETH: new Token(ChainId.MATIC, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'WETH', 'Wrapped Ether'),
-    USDT: new Token(ChainId.MATIC, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'USDT', 'Tether USD')
+    USDT: new Token(ChainId.MATIC, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'USDT', 'Tether USD'),
 }
 
 // used to construct intermediary pairs for trading
@@ -133,7 +139,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, RUNE, NFTX, STETH],
     [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
     [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
-    [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB]
+    [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
 }
 
 export const CREAM = new Token(ChainId.MAINNET, '0x2ba592F78dB6436527729929AAf6c908497cB200', 18, 'CREAM', 'Cream')
@@ -226,8 +232,8 @@ export const CUSTOM_BASES: {
         [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-        [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
-    }
+        [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
+    },
 }
 
 // used for display in the default list when adding liquidity
@@ -236,7 +242,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
     [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC],
     [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
     [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
-    [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB]
+    [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -245,7 +251,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC],
     [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
     [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
-    [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB]
+    [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
 }
 
 export const PINNED_PAIRS: {
@@ -255,11 +261,11 @@ export const PINNED_PAIRS: {
         [SUSHI[ChainId.MAINNET] as Token, WETH[ChainId.MAINNET]],
         [
             new Token(ChainId.MAINNET, '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643', 8, 'cDAI', 'Compound Dai'),
-            new Token(ChainId.MAINNET, '0x39AA39c021dfbaE8faC545936693aC917d5E7563', 8, 'cUSDC', 'Compound USD Coin')
+            new Token(ChainId.MAINNET, '0x39AA39c021dfbaE8faC545936693aC917d5E7563', 8, 'cUSDC', 'Compound USD Coin'),
         ],
         [USDC, USDT],
-        [DAI, USDT]
-    ]
+        [DAI, USDT],
+    ],
 }
 
 export interface WalletInfo {
@@ -282,7 +288,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         description: 'Injected web3 provider.',
         href: null,
         color: '#010101',
-        primary: true
+        primary: true,
     },
     METAMASK: {
         connector: injected,
@@ -290,7 +296,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         iconName: 'metamask.png',
         description: 'Easy-to-use browser extension.',
         href: null,
-        color: '#E8831D'
+        color: '#E8831D',
     },
     WALLET_CONNECT: {
         connector: walletconnect,
@@ -299,7 +305,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
         href: null,
         color: '#4196FC',
-        mobile: true
+        mobile: true,
     },
     LATTICE: {
         connector: lattice,
@@ -308,7 +314,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         description: 'Connect to GridPlus Wallet.',
         href: null,
         color: '#40a9ff',
-        mobile: true
+        mobile: true,
     },
     WALLET_LINK: {
         connector: walletlink,
@@ -316,7 +322,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         iconName: 'coinbase.svg',
         description: 'Use Coinbase Wallet app on mobile device',
         href: null,
-        color: '#315CF5'
+        color: '#315CF5',
     },
     COINBASE_LINK: {
         name: 'Open in Coinbase Wallet',
@@ -325,7 +331,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         href: 'https://go.cb-w.com',
         color: '#315CF5',
         mobile: true,
-        mobileOnly: true
+        mobileOnly: true,
     },
     FORTMATIC: {
         connector: fortmatic,
@@ -334,7 +340,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         description: 'Login using Fortmatic hosted wallet',
         href: null,
         color: '#6748FF',
-        mobile: true
+        mobile: true,
     },
     Portis: {
         connector: portis,
@@ -343,7 +349,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         description: 'Login using Portis hosted wallet',
         href: null,
         color: '#4A6C9B',
-        mobile: true
+        mobile: true,
     },
     Torus: {
         connector: torus,
@@ -352,8 +358,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         description: 'Login using Torus hosted wallet',
         href: null,
         color: '#315CF5',
-        mobile: true
-    }
+        mobile: true,
+    },
 }
 
 export const NetworkContextName = 'NETWORK'
@@ -392,13 +398,13 @@ export const BLOCKED_ADDRESSES: string[] = [
     '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
     '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
     '0x901bb9583b24D97e995513C6778dc6888AB6870e',
-    '0xA7e5d5A720f06526557c513402f2e6B5fA20b008'
+    '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
 ]
 
 // BentoBox Swappers
 export const BASE_SWAPPER: { [chainId in ChainId]?: string } = {
     [ChainId.MAINNET]: '0x0',
-    [ChainId.ROPSTEN]: '0xe4E2540D421e56b0B786d40c5F5268891288c6fb'
+    [ChainId.ROPSTEN]: '0xe4E2540D421e56b0B786d40c5F5268891288c6fb',
 }
 
 // Boring Helper
@@ -409,5 +415,5 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
     [ChainId.MATIC]: 'https://analytics-polygon.sushi.com',
     [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
     [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
-    [ChainId.XDAI]: 'https://analytics-xdai.sushi.com'
+    [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
 }

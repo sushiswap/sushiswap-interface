@@ -1,12 +1,12 @@
-import React, { FC, useMemo, useRef } from 'react'
-import { formattedNum } from '../../utils'
+import React, { FC } from 'react'
+import { formatNumber, priceFormatter } from '../../functions'
 import { ArrowRight } from 'react-feather'
-import { OrderDirection, UserHistoryMessage, UserHistoryResponse } from '../../entities/ProSwapMessages'
-import useSWR from 'swr'
+import { OrderDirection } from '../../entities/ProSwapMessages'
 import withAccount from '../../hoc/withAccount'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NETWORK_LABEL } from '../../constants/networks'
+import { useUserSwapHistory } from '../../context/Pro/hooks'
 
 interface ListHeaderProps {
     className?: string
@@ -26,11 +26,7 @@ interface UserSwapHistoryProps {
 
 const UserSwapHistory: FC<UserSwapHistoryProps> = ({ account }) => {
     const { i18n } = useLingui()
-    const { data } = useSWR<UserHistoryResponse, Error>(
-        `https://api.sushipro.io/?api_key=EatSushiIsGood&act=user_transactions&chainID=1&address=${account.toLowerCase()}`
-    )
-    const userSwapHistory = useRef<UserHistoryMessage[]>()
-    userSwapHistory.current = useMemo(() => (data ? data.results : []), [data])
+    const userSwapHistory = useUserSwapHistory()
 
     return (
         <div className="w-full flex flex-col divide-y h-full">
@@ -45,7 +41,7 @@ const UserSwapHistory: FC<UserSwapHistoryProps> = ({ account }) => {
             </div>
             <div className="overflow-y-scroll border-dark-850">
                 <div className="flex flex-col-reverse justify-end pb-2 divide-y">
-                    {userSwapHistory.current.map(
+                    {userSwapHistory.map(
                         (
                             {
                                 tokenBase,
@@ -59,7 +55,7 @@ const UserSwapHistory: FC<UserSwapHistoryProps> = ({ account }) => {
                                 priceBase,
                                 txHash,
                                 pairName,
-                                volumeUSD
+                                volumeUSD,
                             },
                             index
                         ) => {
@@ -71,7 +67,7 @@ const UserSwapHistory: FC<UserSwapHistoryProps> = ({ account }) => {
                                         <div className="text-secondary">{pairName}</div>
                                         <div className="col-span-2 font-mono text-high-emphesis flex gap-2 items-center">
                                             <span className="flex items-baseline gap-2">
-                                                {formattedNum(amountBase)}{' '}
+                                                {formatNumber(amountBase)}{' '}
                                                 <span className="font-bold text-secondary text-[.625rem]">
                                                     {tokenBase}
                                                 </span>
@@ -80,14 +76,14 @@ const UserSwapHistory: FC<UserSwapHistoryProps> = ({ account }) => {
                                                 <ArrowRight width={14} />
                                             </span>{' '}
                                             <span className="flex items-baseline gap-2">
-                                                {formattedNum(amountQuote)}{' '}
+                                                {formatNumber(amountQuote)}{' '}
                                                 <span className="font-bold text-secondary text-[.625rem]">
                                                     {tokenQuote}
                                                 </span>
                                             </span>{' '}
                                         </div>
                                         <div className="font-mono text-high-emphesis">
-                                            {formattedNum(+volumeUSD / +amountBase, true)}
+                                            {formatNumber(+volumeUSD / +amountBase, true)}
                                         </div>
                                         <div className="text-right font-mono text-sm text-secondary">
                                             {new Date(timestamp * 1000).toLocaleString()}
