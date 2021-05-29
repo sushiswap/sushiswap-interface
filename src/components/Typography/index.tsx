@@ -51,7 +51,7 @@ function Typography({
         {
             className: classNames(
                 VARIANTS[variant],
-                onClick ? 'cursor-pointer' : '',
+                onClick ? 'cursor-pointer select-none' : '',
                 className
             ),
             onClick,
