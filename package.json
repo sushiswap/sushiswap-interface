@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "analyze": "ANALYZE=true yarn build && serve .next -n",
-    "dev": "next dev",
+    "dev": "lingui compile && next dev",
     "inspect": "NODE_OPTIONS=\"--inspect\" next dev",
     "build": "next build",
     "start": "next start",
