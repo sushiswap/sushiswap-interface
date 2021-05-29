@@ -115,16 +115,16 @@ export const StyledSlider = styled(Slider)`
     margin: 0.8rem auto 2rem auto;
     width: 95% !important;
 
+    .rc-slider-mark-text {
+        color: #575757;
+    }
+
     .rc-slider-mark-text-active {
-        color: #e3e3e3;
+        color: #7f7f7f;
     }
 
     .rc-slider-rail {
         background-color: #202231;
-    }
-
-    .rc-slider-mark-text {
-        color: #bfbfbf;
     }
 
     .rc-slider-track {

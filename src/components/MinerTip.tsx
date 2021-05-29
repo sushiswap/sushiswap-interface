@@ -54,6 +54,7 @@ const getMarksFromTips = (tips: Record<string, string>) => {
                                 ? 'translateX(-50%)'
                                 : 'none',
                     },
+                    className: 'text-secondary',
                 },
             }),
             {}
