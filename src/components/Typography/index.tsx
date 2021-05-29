@@ -33,6 +33,7 @@ export interface TypographyProps {
     component?: keyof React.ReactHTML
     className?: string
     children?: React.ReactNode
+    clickable?: boolean
 }
 
 function Typography({
@@ -40,11 +41,22 @@ function Typography({
     weight = 400,
     component = 'div',
     className = 'text-primary',
+    clickable = false,
     children = [],
-}: TypographyProps): JSX.Element {
+    onClick = undefined,
+    ...rest
+}: React.HTMLAttributes<React.ReactHTML> & TypographyProps): JSX.Element {
     return React.createElement(
         component,
-        { className: classNames(VARIANTS[variant], className) },
+        {
+            className: classNames(
+                VARIANTS[variant],
+                onClick ? 'cursor-pointer' : '',
+                className
+            ),
+            onClick,
+            ...rest,
+        },
         children
     )
 }

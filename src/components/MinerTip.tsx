@@ -1,4 +1,3 @@
-import { ClickableText, StyledSlider } from '../features/swap/styleds'
 import {
     useUserArcherETHTip,
     useUserArcherGasPrice,
@@ -9,7 +8,8 @@ import {
 import { CurrencyAmount } from '@sushiswap/sdk'
 import React from 'react'
 import { RowBetween } from './Row'
-import { ThemeContext } from 'styled-components'
+import { StyledSlider } from '../features/swap/styleds'
+import Typography from './Typography'
 import useArcherMinerTips from '../hooks/useArcherMinerTips'
 import { useToggleSettingsMenu } from '../state/application/hooks'
 
@@ -61,13 +61,6 @@ const getMarksFromTips = (tips: Record<string, string>) => {
 }
 
 export default function MinerTip() {
-    const theme = React.useContext(ThemeContext)
-    const textStyleProps = {
-        fontWeight: 500,
-        fontSize: 14,
-        // color: theme.text2,
-    }
-
     const toggleSettings = useToggleSettingsMenu()
     const [userTipManualOverride] = useUserArcherTipManualOverride()
     const [userETHTip] = useUserArcherETHTip()
@@ -111,12 +104,20 @@ export default function MinerTip() {
     return (
         <>
             <RowBetween align="center">
-                <ClickableText {...textStyleProps} onClick={toggleSettings}>
+                <Typography
+                    variant="caption2"
+                    className="text-secondary"
+                    onClick={toggleSettings}
+                >
                     Miner Tip
-                </ClickableText>
-                <ClickableText {...textStyleProps} onClick={toggleSettings}>
+                </Typography>
+                <Typography
+                    variant="caption2"
+                    className="text-secondary"
+                    onClick={toggleSettings}
+                >
                     {CurrencyAmount.ether(userETHTip).toFixed(3)} ETH
-                </ClickableText>
+                </Typography>
             </RowBetween>
             {!userTipManualOverride && (
                 <StyledSlider

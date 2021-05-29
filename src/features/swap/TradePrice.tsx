@@ -35,16 +35,14 @@ export default function TradePrice({
         <div className="p-1 -mt-2 rounded-b-md bg-dark-800">
             {show ? (
                 <div className="flex justify-between w-full px-5 py-1 rounded-b-md bg-dark-900 text-secondary">
-                    <Typography
-                        variant="caption2"
-                        className="flex justify-between text-secondary"
-                    >
+                    <Typography variant="caption2" className="text-secondary">
                         {i18n._(t`Exchange Rate`)}
                     </Typography>
                     <div className="flex items-center space-x-4">
                         <Typography
                             variant="caption2"
                             className="text-secondary"
+                            onClick={() => setShowInverted(!showInverted)}
                         >
                             {formattedPrice ?? '-'} {label}
                         </Typography>
