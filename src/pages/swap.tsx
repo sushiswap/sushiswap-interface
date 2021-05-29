@@ -448,6 +448,7 @@ export default function Swap() {
                     onConfirm={handleSwap}
                     swapErrorMessage={swapErrorMessage}
                     onDismiss={handleConfirmDismiss}
+                    archerETHTip={doArcher ? archerETHTip : undefined}
                 />
                 {chainId && chainId === ChainId.MATIC && (
                     <div className="hidden pb-4 space-y-2 md:block">
