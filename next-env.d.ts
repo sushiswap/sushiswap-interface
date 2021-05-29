@@ -8,7 +8,7 @@ declare module 'fortmatic'
 
 declare module '@ethersproject/bignumber' {
     interface BigNumber {
-        muldiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
+        mulDiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
         toFixed(decimals: BigNumberish): string
         toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
     }
@@ -35,7 +35,12 @@ declare module 'content-hash' {
 }
 
 declare module 'multihashes' {
-    declare function decode(buff: Uint8Array): { code: number; name: string; length: number; digest: Uint8Array }
+    declare function decode(buff: Uint8Array): {
+        code: number
+        name: string
+        length: number
+        digest: Uint8Array
+    }
     declare function toB58String(hash: Uint8Array): string
 }
 

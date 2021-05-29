@@ -1,5 +1,8 @@
 import { Direction, TransactionReview } from '../../entities/TransactionReview'
-import { KashiApproveButton, TokenApproveButton } from '../../components/KashiButton'
+import {
+    KashiApproveButton,
+    TokenApproveButton,
+} from '../../components/KashiButton'
 import React, { useContext, useState } from 'react'
 import { ZERO, e10 } from '../../functions/math'
 
@@ -20,16 +23,26 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     const assetToken = useCurrency(pair.asset.address) || undefined
 
     // State
-    const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
+    const [useBento, setUseBento] = useState<boolean>(
+        pair.asset.bentoBalance.gt(0)
+    )
     const [value, setValue] = useState('')
 
     const info = useContext(KashiContext).state.info
 
     // Calculated
     const assetNative = WETH[chainId || 1].address === pair.asset.address
-    const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
+    const balance = useBento
+        ? pair.asset.bentoBalance
+        : assetNative
+        ? info?.ethBalance
+        : pair.asset.balance
 
-    const max = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
+    const max = useBento
+        ? pair.asset.bentoBalance
+        : assetNative
+        ? info?.ethBalance
+        : pair.asset.balance
 
     const warnings = new Warnings()
 
@@ -46,19 +59,48 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
     if (value && !warnings.broken) {
         const amount = value.toBigNumber(pair.asset.decimals)
         const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
-        transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
-        transactionReview.addUSD('Balance USD', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
-        const newUtilization = e10(18).muldiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.add(amount))
-        transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
+        transactionReview.addTokenAmount(
+            'Balance',
+            pair.currentUserAssetAmount.value,
+            newUserAssetAmount,
+            pair.asset
+        )
+        transactionReview.addUSD(
+            'Balance USD',
+            pair.currentUserAssetAmount.value,
+            newUserAssetAmount,
+            pair.asset
+        )
+        const newUtilization = e10(18).mulDiv(
+            pair.currentBorrowAmount.value,
+            pair.currentAllAssets.value.add(amount)
+        )
+        transactionReview.addPercentage(
+            'Borrowed',
+            pair.utilization.value,
+            newUtilization
+        )
         if (pair.currentExchangeRate.isZero()) {
             transactionReview.add(
                 'Exchange Rate',
-                formatNumber(pair.currentExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
-                formatNumber(pair.oracleExchangeRate.toFixed(18 + pair.collateral.decimals - pair.asset.decimals)),
+                formatNumber(
+                    pair.currentExchangeRate.toFixed(
+                        18 + pair.collateral.decimals - pair.asset.decimals
+                    )
+                ),
+                formatNumber(
+                    pair.oracleExchangeRate.toFixed(
+                        18 + pair.collateral.decimals - pair.asset.decimals
+                    )
+                ),
                 Direction.UP
             )
         }
-        transactionReview.addPercentage('Supply APR', pair.supplyAPR.value, pair.currentSupplyAPR.value)
+        transactionReview.addPercentage(
+            'Supply APR',
+            pair.supplyAPR.value,
+            pair.currentSupplyAPR.value
+        )
     }
 
     // Handlers
@@ -72,7 +114,9 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
 
     return (
         <>
-            <div className="mt-6 text-3xl text-high-emphesis">Deposit {pair.asset.symbol}</div>
+            <div className="mt-6 text-3xl text-high-emphesis">
+                Deposit {pair.asset.symbol}
+            </div>
 
             <SmartNumberInput
                 color="blue"
@@ -94,10 +138,17 @@ export default function LendDepositAction({ pair }: any): JSX.Element {
             <KashiApproveButton
                 color="blue"
                 content={(onCook: any) => (
-                    <TokenApproveButton value={value} token={assetToken} needed={!useBento}>
+                    <TokenApproveButton
+                        value={value}
+                        token={assetToken}
+                        needed={!useBento}
+                    >
                         <Button
                             onClick={() => onCook(pair, onExecute)}
-                            disabled={value.toBigNumber(pair.asset.decimals).lte(0) || warnings.broken}
+                            disabled={
+                                value.toBigNumber(pair.asset.decimals).lte(0) ||
+                                warnings.broken
+                            }
                         >
                             Deposit
                         </Button>

@@ -35,15 +35,23 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
             if (state.selectedLPToken.address === AddressZero) {
                 // Subtract 0.01 ETH for gas fee
                 const fee = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
-                balance = JSBI.greaterThan(balance, fee) ? JSBI.subtract(balance, fee) : ZERO
+                balance = JSBI.greaterThan(balance, fee)
+                    ? JSBI.subtract(balance, fee)
+                    : ZERO
             }
 
-            state.setAmount(formatUnits(balance.toString(), state.selectedLPToken.decimals))
+            state.setAmount(
+                formatUnits(balance.toString(), state.selectedLPToken.decimals)
+            )
         }
     }, [state])
 
     useEffect(() => {
-        if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken) {
+        if (
+            !state.mode ||
+            state.lpTokens.length === 0 ||
+            !state.selectedLPToken
+        ) {
             state.setAmount('')
         }
     }, [state])
@@ -60,7 +68,9 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
                 </Typography>
                 <div className="p-3 text-center rounded cursor-not-allowed bg-dark-800">
                     <Typography variant="body" className="text-secondary">
-                        {state.mode && state.lpTokens.length === 0 ? 'No LP tokens found' : 'Select an LP Token'}
+                        {state.mode && state.lpTokens.length === 0
+                            ? 'No LP tokens found'
+                            : 'Select an LP Token'}
                     </Typography>
                 </div>
             </>
@@ -101,7 +111,13 @@ interface PositionCardProps {
     exchange: string | undefined
 }
 
-const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: PositionCardProps) => {
+const LPTokenSelect = ({
+    lpToken,
+    onToggle,
+    isSelected,
+    updating,
+    exchange,
+}: PositionCardProps) => {
     return (
         <div
             key={lpToken.address}
@@ -109,14 +125,24 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
             onClick={() => onToggle(lpToken)}
         >
             <div className="flex items-center space-x-3">
-                <DoubleCurrencyLogo currency0={lpToken.tokenA} currency1={lpToken.tokenB} size={20} />
+                <DoubleCurrencyLogo
+                    currency0={lpToken.tokenA}
+                    currency1={lpToken.tokenB}
+                    size={20}
+                />
                 <Typography
                     variant="body"
                     className="text-primary"
                 >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-                {lpToken.version && <Badge color="pink">{lpToken.version}</Badge>}
+                {lpToken.version && (
+                    <Badge color="pink">{lpToken.version}</Badge>
+                )}
             </div>
-            {isSelected ? <XIcon width={16} height={16} /> : <ChevronDownIcon width={16} height={16} />}
+            {isSelected ? (
+                <XIcon width={16} height={16} />
+            ) : (
+                <ChevronDownIcon width={16} height={16} />
+            )}
         </div>
     )
 }
@@ -131,12 +157,16 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
         {
             key: 'permit',
             text: i18n._(t`Non-hardware Wallet`),
-            description: i18n._(t`Migration is done in one-click using your signature (permit)`),
+            description: i18n._(
+                t`Migration is done in one-click using your signature (permit)`
+            ),
         },
         {
             key: 'approve',
             text: i18n._(t`Hardware Wallet`),
-            description: i18n._(t`You need to first approve LP tokens and then migrate it`),
+            description: i18n._(
+                t`You need to first approve LP tokens and then migrate it`
+            ),
         },
     ]
 
@@ -152,10 +182,15 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
                         >
                             <div>
                                 <div>
-                                    <Typography variant="caption">{text}</Typography>
+                                    <Typography variant="caption">
+                                        {text}
+                                    </Typography>
                                 </div>
                                 <div>
-                                    <Typography variant="caption2" className="text-secondary">
+                                    <Typography
+                                        variant="caption2"
+                                        className="text-secondary"
+                                    >
                                         {description}
                                     </Typography>
                                 </div>
@@ -173,12 +208,20 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
     )
 }
 
-const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
+const MigrateButtons = ({
+    state,
+    exchange,
+}: {
+    state: MigrateState
+    exchange: string | undefined
+}) => {
     const { i18n } = useLingui()
 
     const [error, setError] = useState<MetamaskError>({})
     const sushiRollContract = useSushiRollContract(
-        state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
+        state.selectedLPToken?.version
+            ? state.selectedLPToken?.version
+            : undefined
     )
     console.log(
         'sushiRollContract address',
@@ -187,21 +230,36 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
         state.selectedLPToken?.version
     )
 
-    const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
-    const noLiquidityTokens = !!state.selectedLPToken?.balance && state.selectedLPToken?.balance.equalTo(ZERO)
+    const [approval, approve] = useApproveCallback(
+        state.selectedLPToken?.balance,
+        sushiRollContract?.address
+    )
+    const noLiquidityTokens =
+        !!state.selectedLPToken?.balance &&
+        state.selectedLPToken?.balance.equalTo(ZERO)
     const isButtonDisabled = !state.amount
 
     useEffect(() => {
         setError({})
     }, [state.selectedLPToken])
 
-    if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken || !state.amount) {
+    if (
+        !state.mode ||
+        state.lpTokens.length === 0 ||
+        !state.selectedLPToken ||
+        !state.amount
+    ) {
         return <ButtonConfirmed disabled={true}>Migrate</ButtonConfirmed>
     }
 
     const insufficientAmount = JSBI.lessThan(
         state.selectedLPToken.balance.raw,
-        JSBI.BigInt(parseUnits(state.amount || '0', state.selectedLPToken.decimals).toString())
+        JSBI.BigInt(
+            parseUnits(
+                state.amount || '0',
+                state.selectedLPToken.decimals
+            ).toString()
+        )
     )
 
     const onPress = async () => {
@@ -217,7 +275,9 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     return (
         <div className="space-y-4">
             {insufficientAmount ? (
-                <div className="text-sm text-primary">{i18n._(t`Insufficient Balance`)}</div>
+                <div className="text-sm text-primary">
+                    {i18n._(t`Insufficient Balance`)}
+                </div>
             ) : state.loading ? (
                 <Dots>{i18n._(t`Loading`)}</Dots>
             ) : (
@@ -225,15 +285,22 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                     <div className="flex justify-between">
                         <div className="text-sm text-secondary">
                             {i18n._(t`Balance`)}:{' '}
-                            <span className="text-primary">{state.selectedLPToken.balance.toSignificant(4)}</span>
+                            <span className="text-primary">
+                                {state.selectedLPToken.balance.toSignificant(4)}
+                            </span>
                         </div>
                     </div>
                     {state.mode === 'approve' && (
                         <ButtonConfirmed
                             onClick={approve}
                             confirmed={approval === ApprovalState.APPROVED}
-                            disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
-                            altDisabledStyle={approval === ApprovalState.PENDING}
+                            disabled={
+                                approval !== ApprovalState.NOT_APPROVED ||
+                                isButtonDisabled
+                            }
+                            altDisabledStyle={
+                                approval === ApprovalState.PENDING
+                            }
                         >
                             {approval === ApprovalState.PENDING ? (
                                 <Dots>{i18n._(t`Approving`)}</Dots>
@@ -244,18 +311,30 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
                             )}
                         </ButtonConfirmed>
                     )}
-                    {((state.mode === 'approve' && approval === ApprovalState.APPROVED) || state.mode === 'permit') && (
+                    {((state.mode === 'approve' &&
+                        approval === ApprovalState.APPROVED) ||
+                        state.mode === 'permit') && (
                         <ButtonConfirmed
-                            disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
+                            disabled={
+                                noLiquidityTokens ||
+                                state.isMigrationPending ||
+                                isButtonDisabled
+                            }
                             onClick={onPress}
                         >
-                            {state.isMigrationPending ? <Dots>{i18n._(t`Migrating`)}</Dots> : i18n._(t`Migrate`)}
+                            {state.isMigrationPending ? (
+                                <Dots>{i18n._(t`Migrating`)}</Dots>
+                            ) : (
+                                i18n._(t`Migrate`)
+                            )}
                         </ButtonConfirmed>
                     )}
                 </>
             )}
             {error.message && error.code !== 4001 && (
-                <div className="font-medium text-center text-red">{error.message}</div>
+                <div className="font-medium text-center text-red">
+                    {error.message}
+                </div>
             )}
             <div className="text-sm text-center text-low-emphesis">
                 {i18n._(
@@ -266,11 +345,19 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     )
 }
 
-const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exchange: undefined | string }) => {
+const ExchangeLiquidityPairs = ({
+    state,
+    exchange,
+}: {
+    state: MigrateState
+    exchange: undefined | string
+}) => {
     const { i18n } = useLingui()
 
     function onToggle(lpToken: LPToken) {
-        state.setSelectedLPToken(state.selectedLPToken !== lpToken ? lpToken : undefined)
+        state.setSelectedLPToken(
+            state.selectedLPToken !== lpToken ? lpToken : undefined
+        )
         state.setAmount('')
     }
 
@@ -285,7 +372,10 @@ const ExchangeLiquidityPairs = ({ state, exchange }: { state: MigrateState; exch
     return (
         <>
             {state.lpTokens.reduce<JSX.Element[]>((acc, lpToken) => {
-                if (lpToken.balance && JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))) {
+                if (
+                    lpToken.balance &&
+                    JSBI.greaterThan(lpToken.balance.raw, JSBI.BigInt(0))
+                ) {
                     acc.push(
                         <LPTokenSelect
                             lpToken={lpToken}
@@ -321,41 +411,70 @@ export default function Migrate() {
         <Layout>
             <Head>
                 <title>Migrate | Sushi</title>
-                <meta name="description" content="Migrate your liquidity to SushiSwap." />
+                <meta
+                    name="description"
+                    content="Migrate your liquidity to SushiSwap."
+                />
             </Head>
 
-            <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
+            <div className="mb-8 text-2xl text-center">
+                {i18n._(t`Migrate ${exchange} Liquidity`)}
+            </div>
 
-            <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap-blue-glow">
+            <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
                 {/* <div className="flex items-center justify-between p-3">
         <BackArrow to="/pool" />
         <div>Select your wallet</div>
         <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
     </div> */}
                 {!account ? (
-                    <Typography variant="body" className="p-4 text-center text-primary">
+                    <Typography
+                        variant="body"
+                        className="p-4 text-center text-primary"
+                    >
                         {i18n._(t`Connect to a wallet to view your liquidity`)}
                     </Typography>
                 ) : state.loading ? (
-                    <Typography variant="body" className="p-4 text-center text-primary">
-                        <Dots>{i18n._(t`Loading your ${exchange} liquidity positions`)}</Dots>
+                    <Typography
+                        variant="body"
+                        className="p-4 text-center text-primary"
+                    >
+                        <Dots>
+                            {i18n._(
+                                t`Loading your ${exchange} liquidity positions`
+                            )}
+                        </Dots>
                     </Typography>
                 ) : (
                     <>
-                        {!state.loading && <Typography variant="body">{i18n._(t`Your Wallet`)}</Typography>}
+                        {!state.loading && (
+                            <Typography variant="body">
+                                {i18n._(t`Your Wallet`)}
+                            </Typography>
+                        )}
                         <MigrateModeSelect state={state} />
                         {!state.loading && state.lpTokens.length > 0 && (
                             <div>
-                                <Typography variant="body">{i18n._(t`Your Liquidity`)}</Typography>
-                                <Typography variant="caption" className="text-secondary">
+                                <Typography variant="body">
+                                    {i18n._(t`Your Liquidity`)}
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    className="text-secondary"
+                                >
                                     {t`Click on a pool below, input the amount you wish to migrate or select max, and click
                         migrate`}
                                 </Typography>
                             </div>
                         )}
-                        <ExchangeLiquidityPairs state={state} exchange={exchange} />
+                        <ExchangeLiquidityPairs
+                            state={state}
+                            exchange={exchange}
+                        />
                         <AmountInput state={state} />
-                        {state.selectedLPToken && <MigrateButtons state={state} exchange={exchange} />}
+                        {state.selectedLPToken && (
+                            <MigrateButtons state={state} exchange={exchange} />
+                        )}
                     </>
                 )}
             </div>

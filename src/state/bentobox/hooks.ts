@@ -1,5 +1,9 @@
 import { Currency, Token, WETH } from '@sushiswap/sdk'
-import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
+import {
+    useBentoBoxContract,
+    useBoringHelperContract,
+    useContract,
+} from '../../hooks/useContract'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
@@ -49,41 +53,65 @@ export function useBentoBalances(): BentoBalance[] {
                 const fullToken = {
                     ...token,
                     ...call.result[0][i],
-                    usd: e10(token.decimals).muldiv(info?.ethRate || Zero, call.result[0][i].rate),
+                    usd: e10(token.decimals).mulDiv(
+                        info?.ethRate || Zero,
+                        call.result[0][i].rate
+                    ),
                 }
                 return {
                     address: token.address,
                     name: token.name,
-                    symbol: token.address === weth ? Currency.getNativeCurrencySymbol(chainId) : token.symbol,
+                    symbol:
+                        token.address === weth
+                            ? Currency.getNativeCurrencySymbol(chainId)
+                            : token.symbol,
                     decimals: token.decimals,
                     tokenInfo: token.tokenInfo,
-                    balance: token.address === weth ? info?.ethBalance : call.result[0][i].balance,
+                    balance:
+                        token.address === weth
+                            ? info?.ethBalance
+                            : call.result[0][i].balance,
                     bentoBalance: call.result[0][i].bentoBalance,
                     wallet: easyAmount(
-                        token.address === weth ? info?.ethBalance : call.result[0][i].balance,
+                        token.address === weth
+                            ? info?.ethBalance
+                            : call.result[0][i].balance,
                         fullToken
                     ),
-                    bento: easyAmount(toAmount(fullToken, call.result[0][i].bentoBalance), fullToken),
+                    bento: easyAmount(
+                        toAmount(fullToken, call.result[0][i].bentoBalance),
+                        fullToken
+                    ),
                 }
             })
-            .filter((token) => token.balance.gt('0') || token.bentoBalance.gt('0'))
+            .filter(
+                (token) => token.balance.gt('0') || token.bentoBalance.gt('0')
+            )
     }, [call])
 }
 
-export function useBentoBalance(tokenAddress: string): { value: BigNumber; decimals: number } {
+export function useBentoBalance(tokenAddress: string): {
+    value: BigNumber
+    decimals: number
+} {
     const { account } = useActiveWeb3React()
 
     const boringHelperContract = useBoringHelperContract()
     const bentoBoxContract = useBentoBoxContract()
     const tokenAddressChecksum = getAddress(tokenAddress)
-    const tokenContract = useContract(tokenAddressChecksum ? tokenAddressChecksum : undefined, ERC20_ABI)
+    const tokenContract = useContract(
+        tokenAddressChecksum ? tokenAddressChecksum : undefined,
+        ERC20_ABI
+    )
 
     const currentTransactionStatus = useTransactionStatus()
 
     const [balance, setBalance] = useState<any>()
 
     const fetchBentoBalance = useCallback(async () => {
-        const balances = await boringHelperContract?.getBalances(account, [tokenAddressChecksum])
+        const balances = await boringHelperContract?.getBalances(account, [
+            tokenAddressChecksum,
+        ])
         const decimals = await tokenContract?.decimals()
 
         const amount = BigNumber.from(balances[0].bentoShare).isZero()
@@ -99,19 +127,38 @@ export function useBentoBalance(tokenAddress: string): { value: BigNumber; decim
     }, [account, tokenAddressChecksum, tokenContract, boringHelperContract])
 
     useEffect(() => {
-        if (account && bentoBoxContract && boringHelperContract && tokenContract) {
+        if (
+            account &&
+            bentoBoxContract &&
+            boringHelperContract &&
+            tokenContract
+        ) {
             fetchBentoBalance()
         }
-    }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract])
+    }, [
+        account,
+        bentoBoxContract,
+        currentTransactionStatus,
+        fetchBentoBalance,
+        tokenContract,
+        boringHelperContract,
+    ])
 
     return balance
 }
 
-export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {
+export function useBentoMasterContractAllowed(
+    masterContract?: string,
+    user?: string
+): boolean | undefined {
     const contract = useBentoBoxContract()
 
     const inputs = useMemo(() => [masterContract, user], [masterContract, user])
-    const allowed = useSingleCallResult(contract, 'masterContractApproved', inputs).result
+    const allowed = useSingleCallResult(
+        contract,
+        'masterContractApproved',
+        inputs
+    ).result
 
     return useMemo(() => (allowed ? allowed[0] : undefined), [allowed])
 }
