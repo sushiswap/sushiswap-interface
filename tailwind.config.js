@@ -84,6 +84,8 @@ module.exports = {
                     return `rgb(var(--red))`
                 },
 
+                yellow: '#FFD166',
+
                 'pink-red': '#FE5A75',
                 'light-brown': '#FEC464',
                 'light-yellow': '#FFD166',

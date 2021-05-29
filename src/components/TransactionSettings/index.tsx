@@ -7,6 +7,7 @@ import { ChainId } from '@sushiswap/sdk'
 import QuestionHelper from '../QuestionHelper'
 import Toggle from '../Toggle'
 import Typography from '../Typography'
+import { classNames } from '../../functions'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
@@ -244,22 +245,21 @@ export default function SlippageTabs({
                     </OptionCustom>
                 </div>
                 {!!slippageError && (
-                    <RowBetween
-                        style={{
-                            fontSize: '14px',
-                            paddingTop: '7px',
-                            color:
-                                slippageError === SlippageError.InvalidInput
-                                    ? 'red'
-                                    : '#F3841E',
-                        }}
+                    <Typography
+                        className={classNames(
+                            slippageError === SlippageError.InvalidInput
+                                ? 'text-red'
+                                : 'text-yellow',
+                            'font-medium'
+                        )}
+                        variant="caption2"
                     >
                         {slippageError === SlippageError.InvalidInput
                             ? i18n._(t`Enter a valid slippage percentage`)
                             : slippageError === SlippageError.RiskyLow
                             ? i18n._(t`Your transaction may fail`)
                             : i18n._(t`Your transaction may be frontrun`)}
-                    </RowBetween>
+                    </Typography>
                 )}
             </AutoColumn>
 
