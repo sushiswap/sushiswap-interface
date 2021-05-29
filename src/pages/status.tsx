@@ -49,7 +49,5 @@ export default function Status({ initialData }) {
 }
 
 export async function getStaticProps() {
-    // `getStaticProps` is invoked on the server-side,
-    // so this `fetcher` function will be executed on the server-side.
     return { props: { initialData: await getChainsStatus() } }
 }
