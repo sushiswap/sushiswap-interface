@@ -100,6 +100,7 @@ export default function SwapModalFooter({
                             : '-'}
                     </div>
                 </div>
+                {archerETHTip && (
                 <div className="flex justify-between items-center">
                     <div className="text-sm text-secondary">
                         <div className="text-sm">{i18n._(t`Miner Tip`)}</div>
@@ -108,6 +109,7 @@ export default function SwapModalFooter({
                         {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
                     </div>
                 </div>
+                )}
             </div>
 
             <ButtonError onClick={onConfirm} disabled={disabledConfirm} error={severity > 2} id="confirm-swap-or-send">

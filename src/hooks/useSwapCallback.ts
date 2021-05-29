@@ -276,7 +276,7 @@ export function useSwapCallback(
                             method: 'POST',
                             body,
                             headers: {
-                                'Authorization': process.env.REACT_APP_ARCHER_API_KEY ?? '',
+                                'Authorization': process.env.NEXT_PUBLIC_ARCHER_API_KEY ?? '',
                                 'Content-Type': 'application/json',
                             }
                         })
