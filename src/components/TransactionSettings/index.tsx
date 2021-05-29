@@ -66,6 +66,7 @@ const OptionCustom = styled(FancyButton)<{
     position: relative;
     padding: 0 0.75rem;
     flex: 1;
+    min-width: 82px;
     background: #202231;
     input {
         width: 100%;
