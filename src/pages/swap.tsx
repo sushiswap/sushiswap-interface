@@ -586,6 +586,13 @@ export default function Swap() {
                         otherCurrency={currencies[Field.INPUT]}
                         id="swap-currency-output"
                     />
+                    {Boolean(trade) && (
+                        <TradePrice
+                            price={trade?.executionPrice}
+                            showInverted={showInverted}
+                            setShowInverted={setShowInverted}
+                        />
+                    )}
 
                     {recipient !== null && !showWrap ? (
                         <>
@@ -620,18 +627,6 @@ export default function Swap() {
                             }}
                         >
                             <div className="px-5 mt-4 space-y-2">
-                                {Boolean(trade) && (
-                                    <RowBetween align="center">
-                                        <Text className="text-sm font-medium">
-                                            {i18n._(t`Exchange Rate`)}
-                                        </Text>
-                                        <TradePrice
-                                            price={trade?.executionPrice}
-                                            showInverted={showInverted}
-                                            setShowInverted={setShowInverted}
-                                        />
-                                    </RowBetween>
-                                )}
                                 {allowedSlippage !==
                                     INITIAL_ALLOWED_SLIPPAGE && (
                                     <RowBetween align="center">
