@@ -3,10 +3,10 @@ import { request } from 'graphql-request'
 
 export const EXCHANGE = {
     [ChainId.MAINNET]: 'sushiswap/exchange',
-    [ChainId.XDAI]: 'xdai-exchange',
-    [ChainId.MATIC]: 'matic-exchange',
-    [ChainId.FANTOM]: 'fantom-exchange',
-    [ChainId.BSC]: 'bsc-exchange',
+    [ChainId.XDAI]: 'sushiswap/xdai-exchange',
+    [ChainId.MATIC]: 'sushiswap/matic-exchange',
+    [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
+    [ChainId.BSC]: 'sushiswap/bsc-exchange',
 }
 export const exchange = (query, chainId = ChainId.MAINNET) =>
     request(
