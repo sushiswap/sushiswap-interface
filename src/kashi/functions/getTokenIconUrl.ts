@@ -178,7 +178,11 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0x172370d5Cd63279eFa6d502DAB29171933a610AF').toLowerCase()]: 'CRV-square',
         [String('0x53E0bca35eC356BD5ddDFebbD1Fc0fD03FaBad39').toLowerCase()]: 'LINK-square',
         [String('0x50B728D8D964fd00C2d0AAD81718b71311feF68a').toLowerCase()]: 'SNX-square',
-        [String('0x7C4A54f5d20b4023D6746F1f765f4DFe7C39a7e6').toLowerCase()]: 'RENDOGE-square'
+        [String('0x7C4A54f5d20b4023D6746F1f765f4DFe7C39a7e6').toLowerCase()]: 'RENDOGE-square',
+        [String('0xD0660cD418a64a1d44E9214ad8e459324D8157f1').toLowerCase()]: 'WOOFY-square',
+        [String('0x5fe2B58c013d7601147DcdD68C143A77499f5531').toLowerCase()]: 'GRT-square',
+        [String('0x104592a158490a9228070E0A8e5343B499e125D0').toLowerCase()]: 'FRAX-square',
+        [String('0x3e121107f6f22da4911079845a470757af4e1a1b').toLowerCase()]: 'FXS-square'
     },
     [ChainId.HECO]: {
         [String('0x202b4936fE1a82A4965220860aE46d7d3939Bb25').toLowerCase()]: 'AAVE-square',
