@@ -21,7 +21,11 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  overflow: auto!important;
+  /* 
+    Transak sets html overflow to scroll when modal is closed, lets 
+    ensure that it always reamins as the defualt which is visible.
+  */
+  overflow: visible !important;
 }
 
 html,
