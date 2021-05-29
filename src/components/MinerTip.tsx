@@ -48,6 +48,12 @@ const getMarksFromTips = (tips: Record<string, string>) => {
                     label: getMarkLabel(index, length),
                     price,
                     slippage: getMarkSlippage(index),
+                    style: {
+                        transform:
+                            index !== 0 && index !== length
+                                ? 'translateX(-50%)'
+                                : 'none',
+                    },
                 },
             }),
             {}
@@ -72,7 +78,7 @@ export default function MinerTip() {
 
     const marks: Record<
         number,
-        { label: string; price: string; slippage: number }
+        { label: string; price: string; slippage: number; style: object }
     > = React.useMemo(() => getMarksFromTips(tips), [tips])
 
     const handleChange = React.useCallback(
