@@ -27,7 +27,7 @@ export default function Buy() {
 
         const transak = new transakSDK({
             apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY, // Your API Key
-            environment: 'STAGING', // STAGING/PRODUCTION
+            environment: process.env.NEXT_PUBLIC_TRANSAK_ENVIRONMENT, // STAGING/PRODUCTION
             walletAddress: account,
             fiatCurrency: '', // INR/GBP
             // email: '', // Your customer's email address
