@@ -16,7 +16,7 @@ import { useToggleSettingsMenu } from '../state/application/hooks'
 const getMarkLabel = (index: number, length: number): string => {
     switch (index) {
         case 0:
-            return 'Cheap'
+            return 'Slow'
         case length - 1:
             return 'Fast'
         case Math.floor(length / 2):
@@ -50,7 +50,7 @@ const getMarksFromTips = (tips: Record<string, string>) => {
                     slippage: getMarkSlippage(index),
                     style: {
                         transform:
-                            index !== 0 && index !== length
+                            index !== 0 || index !== length - 1
                                 ? 'translateX(-50%)'
                                 : 'none',
                     },
