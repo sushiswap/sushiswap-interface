@@ -1,5 +1,6 @@
 import NextImage from 'next/image'
 
+// Cloudflare Loader
 const normalize = (src) => {
     return src[0] === '/' ? src.slice(1) : src
 }
@@ -16,3 +17,5 @@ const loader = ({ src, width, quality }) => {
 const Image = (props) => {
     return <NextImage loader={loader} {...props} />
 }
+
+export default Image

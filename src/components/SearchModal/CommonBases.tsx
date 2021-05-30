@@ -7,6 +7,7 @@ import QuestionHelper from '../QuestionHelper'
 import React from 'react'
 import { SUGGESTED_BASES } from '../../constants'
 import { Text } from 'rebass'
+import Typography from '../Typography'
 import styled from 'styled-components'
 
 // const BaseWrapper = styled.div<{ disable?: boolean }>`
@@ -42,7 +43,7 @@ export default function CommonBases({
                 </Text>
                 <QuestionHelper text="These tokens are commonly paired with other tokens." />
             </AutoRow>
-            <AutoRow gap="4px">
+            <AutoRow gap="4px" justify="start">
                 <button
                     type="button"
                     onClick={() => {
@@ -56,18 +57,17 @@ export default function CommonBases({
                             onSelect(Currency.getNativeCurrency(chainId))
                         }
                     }}
-                    className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+                    className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
                     disabled={
                         selectedCurrency === Currency.getNativeCurrency(chainId)
                     }
                 >
                     <CurrencyLogo
                         currency={Currency.getNativeCurrency(chainId)}
-                        style={{ marginRight: 8 }}
                     />
-                    <Text fontWeight={500} fontSize={16}>
+                    <Typography variant="caption2" className="font-semibold">
                         {Currency.getNativeCurrencySymbol(chainId)}
-                    </Text>
+                    </Typography>
                 </button>
                 {(chainId ? SUGGESTED_BASES[chainId] : []).map(
                     (token: Token) => {
@@ -80,15 +80,15 @@ export default function CommonBases({
                                 onClick={() => !selected && onSelect(token)}
                                 disabled={selected}
                                 key={token.address}
-                                className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+                                className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
                             >
-                                <CurrencyLogo
-                                    currency={token}
-                                    style={{ marginRight: 8 }}
-                                />
-                                <Text fontWeight={500} fontSize={16}>
+                                <CurrencyLogo currency={token} />
+                                <Typography
+                                    variant="caption2"
+                                    className="font-semibold"
+                                >
                                     {token.getSymbol(chainId)}
-                                </Text>
+                                </Typography>
                             </button>
                         )
                     }
