@@ -149,7 +149,9 @@ function CurrencyRow({
             disabled={isSelected}
             selected={otherSelected}
         >
-            <CurrencyLogo currency={currency} size={'24px'} />
+            <div className="flex items-center">
+                <CurrencyLogo currency={currency} size={32} />
+            </div>
             <Column>
                 <Text title={currency.getName(chainId)} fontWeight={500}>
                     {currency.getSymbol(chainId)}
@@ -160,13 +162,13 @@ function CurrencyRow({
                 </div>
             </Column>
             <TokenTags currency={currency} />
-            <RowFixed style={{ justifySelf: 'flex-end' }}>
+            <div className="flex items-start justify-end">
                 {balance ? (
                     <Balance balance={balance} />
                 ) : account ? (
                     <Loader />
                 ) : null}
-            </RowFixed>
+            </div>
         </MenuItem>
     )
 }

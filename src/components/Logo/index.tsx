@@ -18,7 +18,9 @@ const normalize = (src) => {
 }
 
 const loader = ({ src }) => {
-    return `http://res.cloudinary.com/dnz2bkszg/image/fetch/${normalize(src)}`
+    return `http://res.cloudinary.com/dnz2bkszg/image/fetch/f_auto/${normalize(
+        src
+    )}`
 }
 
 /**
