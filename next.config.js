@@ -18,29 +18,27 @@ module.exports = withBundleAnalyzer(
             webpack5: true,
         },
         images: {
-            domains: [
-                'raw.githubusercontent.com',
-                'ftmscan.com',
-                'cloudflare-ipfs.com',
-            ],
+            domains: ['assets.sushi.com', 'res.cloudinary.com'],
+            // loader: 'cloudinary',
+            // path: 'http://res.cloudinary.com/dnz2bkszg/image/fetch/',
         },
         reactStrictMode: true,
-        async redirects() {
-            return [
-                {
-                    source: '/',
-                    destination: '/swap',
-                    permanent: true,
-                },
-            ]
+        // async redirects() {
+        //     return [
+        //         {
+        //             source: '/',
+        //             destination: '/swap',
+        //             permanent: true,
+        //         },
+        //     ]
+        // },
+        i18n: {
+            locales,
+            defaultLocale: sourceLocale,
         },
-      i18n: {
-        locales,
-        defaultLocale: sourceLocale,
-      },
-      publicRuntimeConfig: {
-        locales
-      }
+        publicRuntimeConfig: {
+            locales,
+        },
     })
 )
 

@@ -66,7 +66,7 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
     size = '24px',
     style,
     className = '',
-    squared,
+    squared = true,
 }) => {
     const { chainId } = useActiveWeb3React()
     const uriLocations = useHttpLocations(
@@ -74,6 +74,7 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
     )
 
     const srcs = useMemo<string[]>(() => {
+        if (!chainId) return []
         if (currency === Currency.getNativeCurrency(chainId)) return []
 
         if (currency instanceof Token) {
@@ -89,7 +90,7 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
         return []
     }, [chainId, currency, uriLocations])
 
-    if (currency === Currency.getNativeCurrency(chainId) && chainId) {
+    if (currency === Currency.getNativeCurrency(chainId)) {
         return (
             <Image
                 width={size}
@@ -101,6 +102,8 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
             />
         )
     }
+
+    console.log({ currency })
 
     return (
         <Logo

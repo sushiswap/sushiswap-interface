@@ -5,7 +5,7 @@
   "scripts": {
     "analyze": "ANALYZE=true yarn build && serve .next -n",
     "dev": "lingui compile && next dev",
-    "inspect": "NODE_OPTIONS=\"--inspect\" next dev",
+    "inspect": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "lingui": "lingui extract && lingui compile",

@@ -6,10 +6,19 @@ import { ImageProps } from 'rebass'
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {}
 
-export interface LogoProps extends Pick<ImageProps, 'style' | 'alt' | 'className'> {
+export interface LogoProps
+    extends Pick<ImageProps, 'style' | 'alt' | 'className'> {
     srcs: string[]
     width: string | number
     height: string | number
+}
+
+const normalize = (src) => {
+    return src[0] === '/' ? src.slice(1) : src
+}
+
+const loader = ({ src }) => {
+    return `http://res.cloudinary.com/dnz2bkszg/image/fetch/${normalize(src)}`
 }
 
 /**
@@ -23,6 +32,7 @@ const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
         return (
             <Image
                 src={src}
+                loader={loader}
                 onError={() => {
                     if (src) BAD_SRCS[src] = true
                     refresh((i) => i + 1)
