@@ -123,6 +123,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
     [ChainId.XDAI]: [WETH[ChainId.XDAI]],
     [ChainId.BSC]: [WETH[ChainId.BSC]],
     [ChainId.BSC_TESTNET]: [WETH[ChainId.BSC_TESTNET]],
+    [ChainId.ARBITRUM]: [WETH[ChainId.ARBITRUM]],
     [ChainId.ARBITRUM_TESTNET]: [WETH[ChainId.ARBITRUM_TESTNET]],
     [ChainId.MOONBEAM_TESTNET]: [WETH[ChainId.MOONBEAM_TESTNET]],
     [ChainId.AVALANCHE]: [WETH[ChainId.AVALANCHE]],
@@ -336,6 +337,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         BSC.USDT,
         BSC.BTCB,
     ],
+    [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM]],
 }
 
 export const CREAM = new Token(
@@ -525,6 +527,7 @@ export const SUGGESTED_BASES: ChainTokenList = {
         BSC.USDT,
         BSC.BTCB,
     ],
+    [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM]],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -560,6 +563,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
         BSC.USDT,
         BSC.BTCB,
     ],
+    [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM]],
 }
 
 export const PINNED_PAIRS: {
@@ -771,4 +775,5 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
     [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
     [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
     [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
+    [ChainId.ARBITRUM]: undefined,
 }

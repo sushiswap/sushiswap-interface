@@ -51,6 +51,8 @@ const logo: { readonly [chainId in ChainId]?: string } = {
     [ChainId.HARMONY_TESTNET]: HarmonyLogo,
     [ChainId.OKEX]: OKExLogo,
     [ChainId.OKEX_TESTNET]: OKExLogo,
+    [ChainId.ARBITRUM]: EthereumLogo,
+    [ChainId.ARBITRUM_TESTNET]: EthereumLogo,
 }
 
 interface CurrencyLogoProps {
