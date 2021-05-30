@@ -470,9 +470,12 @@ export function useSwapCallback(
                                         ? ethers.utils.hexlify(fullTx.type)
                                         : undefined,
                             }
-                            const tx = TransactionFactory.fromTxData(txParams, {
-                                common,
-                            })
+                            const tx: any = TransactionFactory.fromTxData(
+                                txParams,
+                                {
+                                    common,
+                                }
+                            )
                             const unsignedTx = tx.getMessageToSign()
 
                             if (!(contract.signer instanceof JsonRpcSigner)) {

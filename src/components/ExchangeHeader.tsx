@@ -4,9 +4,11 @@ import Gas from './Gas'
 import Lottie from 'lottie-react'
 import NavLink from './NavLink'
 import Settings from './Settings'
+import { currencyId } from '../functions'
 import profileAnimationData from '../animation/wallet.json'
 import settingsAnimationData from '../animation/settings-slider.json'
 import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../hooks'
 import { useLingui } from '@lingui/react'
 
 export default function ExchangeHeader({
@@ -14,18 +16,22 @@ export default function ExchangeHeader({
     output = undefined,
 }: any): JSX.Element {
     const { i18n } = useLingui()
+    const { chainId } = useActiveWeb3React()
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
+    console.log({ input, output })
     return (
         <div className="flex justify-between mb-4 space-x-3">
             <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
                 <NavLink
                     activeClassName="font-bold text-high-emphesis md:bg-dark-900 md:border-gradient"
-                    href={`/swap?inputCurrency=${
-                        input && input.address ? input.address : 'ETH'
+                    href={`/swap${
+                        input
+                            ? `?inputCurrency=${currencyId(input, chainId)}`
+                            : ''
                     }${
                         output && output.address
-                            ? `&outputCurrency=${output.address}`
+                            ? `&outputCurrency=${currencyId(output, chainId)}`
                             : ''
                     }`}
                 >
@@ -40,9 +46,9 @@ export default function ExchangeHeader({
                 </NavLink> */}
                 <NavLink
                     activeClassName="text-high-emphesis font-bold md:bg-dark-900 md:border-gradient"
-                    href={`/add/${
-                        input && input.address ? input.address : 'ETH'
-                    }${output && output.address ? `/${output.address}` : ''}`}
+                    href={`/add/${input ? currencyId(input, chainId) : ''}${
+                        output ? `/${currencyId(output, chainId)}` : ''
+                    }`}
                 >
                     <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
                         {i18n._(t`Pool`)}

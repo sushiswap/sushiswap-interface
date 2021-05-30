@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, Token } from '@sushiswap/sdk'
 import React, { FC, useMemo } from 'react'
 
 import Image from 'next/image'
@@ -61,16 +61,27 @@ interface CurrencyLogoProps {
     squared?: boolean
 }
 
-const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, className = '', squared }) => {
+const CurrencyLogo: FC<CurrencyLogoProps> = ({
+    currency,
+    size = '24px',
+    style,
+    className = '',
+    squared,
+}) => {
     const { chainId } = useActiveWeb3React()
-    const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
+    const uriLocations = useHttpLocations(
+        currency instanceof WrappedTokenInfo ? currency.logoURI : undefined
+    )
 
     const srcs = useMemo<string[]>(() => {
-        if (currency === NATIVE) return []
+        if (currency === Currency.getNativeCurrency(chainId)) return []
 
         if (currency instanceof Token) {
             if (currency instanceof WrappedTokenInfo) {
-                return [...uriLocations, getTokenLogoURL(currency.address, chainId)]
+                return [
+                    ...uriLocations,
+                    getTokenLogoURL(currency.address, chainId),
+                ]
             }
 
             return [getTokenLogoURL(currency.address, chainId)]
@@ -78,13 +89,15 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, c
         return []
     }, [chainId, currency, uriLocations])
 
-    if (currency === NATIVE && chainId) {
+    if (currency === Currency.getNativeCurrency(chainId) && chainId) {
         return (
             <Image
                 width={size}
                 height={size}
                 src={logo[chainId] || `/images/tokens/unknown.png`}
-                className={`${squared ? 'rounded' : 'rounded-full'} ${className} `}
+                className={`${
+                    squared ? 'rounded' : 'rounded-full'
+                } ${className} `}
             />
         )
     }

@@ -297,7 +297,9 @@ export default function Zap() {
                             onMax={() => {
                                 onFieldInput(
                                     maxAmountSpend(
-                                        currencyBalance
+                                        currencyBalance,
+                                        undefined,
+                                        chainId
                                     )?.toExact() ?? ''
                                 )
                             }}

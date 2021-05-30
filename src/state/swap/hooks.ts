@@ -1,9 +1,9 @@
 import { AppDispatch, AppState } from '../index'
 import {
+    ChainId,
     Currency,
     CurrencyAmount,
     JSBI,
-    NATIVE,
     Token,
     TokenAmount,
     Trade,
@@ -59,6 +59,7 @@ export function useSwapActionHandlers(): {
     onUserInput: (field: Field, typedValue: string) => void
     onChangeRecipient: (recipient: string | null) => void
 } {
+    const { chainId } = useActiveWeb3React()
     const dispatch = useDispatch<AppDispatch>()
     const onCurrencySelection = useCallback(
         (field: Field, currency: Currency) => {
@@ -68,8 +69,8 @@ export function useSwapActionHandlers(): {
                     currencyId:
                         currency instanceof Token
                             ? currency.address
-                            : currency === NATIVE
-                            ? 'ETH'
+                            : currency === Currency.getNativeCurrency(chainId)
+                            ? Currency.getNativeCurrencySymbol(chainId)
                             : '',
                 })
             )
@@ -389,14 +390,18 @@ export function useDerivedSwapInfo(doArcher = false): {
     }
 }
 
-function parseCurrencyFromURLParameter(urlParam: any): string {
+function parseCurrencyFromURLParameter(
+    urlParam: any,
+    chainId = ChainId.MAINNET
+): string {
     if (typeof urlParam === 'string') {
         const valid = isAddress(urlParam)
+        const nativeSymbol = Currency.getNativeCurrencySymbol(chainId)
         if (valid) return valid
-        if (urlParam.toUpperCase() === 'ETH') return 'ETH'
-        if (valid === false) return 'ETH'
+        if (urlParam.toUpperCase() === nativeSymbol) return nativeSymbol
+        if (valid === false) return nativeSymbol
     }
-    return 'ETH' ?? ''
+    return Currency.getNativeCurrencySymbol(chainId) ?? ''
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {
@@ -423,9 +428,18 @@ function validatedRecipient(recipient: any): string | null {
     return null
 }
 
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
-    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+export function queryParametersToSwapState(
+    parsedQs: ParsedQs,
+    chainId = ChainId.MAINNET
+): SwapState {
+    let inputCurrency = parseCurrencyFromURLParameter(
+        parsedQs.inputCurrency,
+        chainId
+    )
+    let outputCurrency = parseCurrencyFromURLParameter(
+        parsedQs.outputCurrency,
+        chainId
+    )
     if (inputCurrency === outputCurrency) {
         if (typeof parsedQs.outputCurrency === 'string') {
             inputCurrency = ''
@@ -454,26 +468,31 @@ export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
 // updates the swap state to use the defaults for a given network
 export function useDefaultsFromURLSearch():
     | {
-          inputCurrencyId: string | undefined
-          outputCurrencyId: string | undefined
+          inputCurrencyId?: string
+          outputCurrencyId?: string
+          chainId?: ChainId
       }
     | undefined {
     const { chainId } = useActiveWeb3React()
     const dispatch = useDispatch<AppDispatch>()
     const parsedQs = useParsedQueryString()
-    // const parsedQs = {}
+
     const [result, setResult] =
         useState<
             | {
-                  inputCurrencyId: string | undefined
-                  outputCurrencyId: string | undefined
+                  inputCurrencyId?: string
+                  outputCurrencyId?: string
+                  chainId?: ChainId
               }
             | undefined
         >()
 
     useEffect(() => {
         if (!chainId) return
-        const parsed = queryParametersToSwapState(parsedQs)
+
+        // TODO: Prompt for chain switch is result.chainId !== chainId
+
+        const parsed = queryParametersToSwapState(parsedQs, chainId)
 
         dispatch(
             replaceSwapState({

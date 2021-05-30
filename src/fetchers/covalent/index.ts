@@ -84,9 +84,9 @@ export const getChains = () =>
     fetch(`https://api.covalenthq.com/v1/chains/`).then((res) => res.json())
 
 export const getChainsStatus = () =>
-    fetch(`https://api.covalenthq.com/v1/chains/status/`).then((res) =>
-        res.json()
-    )
+    fetch(
+        `https://api.covalenthq.com/v1/chains/status/?key=ckey_cba3674f2ce5450f9d5dd290589`
+    ).then((res) => res.json())
 
 // TODO: CLASS B
 export const getSushiSwapLiquidityTransactions = (

@@ -1,6 +1,6 @@
 // CONVENTION isFoo -> boolean
 
-import { Currency, NATIVE, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, Token } from '@sushiswap/sdk'
 
 import { BigNumber } from 'ethers'
 import { TokenAddressMap } from '../state/lists/hooks'
@@ -28,7 +28,14 @@ export function isAddress(value: any): string | false {
     }
 }
 
-export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean {
-    if (currency === NATIVE) return true
-    return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
+export function isTokenOnList(
+    defaultTokens: TokenAddressMap,
+    currency?: Currency,
+    chainId = ChainId.MAINNET
+): boolean {
+    if (currency === Currency.getNativeCurrency(chainId)) return true
+    return Boolean(
+        currency instanceof Token &&
+            defaultTokens[currency.chainId]?.[currency.address]
+    )
 }

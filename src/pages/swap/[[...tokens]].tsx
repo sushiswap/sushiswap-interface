@@ -2,27 +2,27 @@ import {
     ARCHER_RELAY_URI,
     ARCHER_ROUTER_ADDRESS,
     INITIAL_ALLOWED_SLIPPAGE,
-} from '../constants'
+} from '../../constants'
 import {
     ApprovalState,
     useApproveCallbackFromTrade,
-} from '../hooks/useApproveCallback'
+} from '../../hooks/useApproveCallback'
 import {
     ArrowWrapper,
     BottomGrouping,
     SwapCallbackError,
     Wrapper,
-} from '../features/swap/styleds'
-import { AutoRow, RowBetween } from '../components/Row'
+} from '../../features/swap/styleds'
+import { AutoRow, RowBetween } from '../../components/Row'
 import {
     ButtonConfirmed,
     ButtonError,
     ButtonLight,
     ButtonPrimary,
-} from '../components/ButtonLegacy'
-import Card, { DarkCard, GreyCard } from '../components/CardLegacy'
+} from '../../components/ButtonLegacy'
+import Card, { DarkCard, GreyCard } from '../../components/CardLegacy'
 import { ChainId, CurrencyAmount, JSBI, Token, Trade } from '@sushiswap/sdk'
-import Column, { AutoColumn } from '../components/Column'
+import Column, { AutoColumn } from '../../components/Column'
 import React, {
     useCallback,
     useContext,
@@ -33,14 +33,14 @@ import React, {
 import {
     computeTradePriceBreakdown,
     warningSeverity,
-} from '../functions/prices'
-import { useAllTokens, useCurrency } from '../hooks/Tokens'
+} from '../../functions/prices'
+import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import {
     useDefaultsFromURLSearch,
     useDerivedSwapInfo,
     useSwapActionHandlers,
     useSwapState,
-} from '../state/swap/hooks'
+} from '../../state/swap/hooks'
 import {
     useExpertModeManager,
     useUserArcherETHTip,
@@ -49,51 +49,60 @@ import {
     useUserSingleHopOnly,
     useUserSlippageTolerance,
     useUserTransactionTTL,
-} from '../state/user/hooks'
+} from '../../state/user/hooks'
 import {
     useNetworkModalToggle,
     useToggleSettingsMenu,
     useWalletModalToggle,
-} from '../state/application/hooks'
-import useWrapCallback, { WrapType } from '../hooks/useWrapCallback'
+} from '../../state/application/hooks'
+import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
 
-import AddressInputPanel from '../components/AddressInputPanel'
-import AdvancedSwapDetailsDropdown from '../features/swap/AdvancedSwapDetailsDropdown'
+import AddressInputPanel from '../../components/AddressInputPanel'
+import AdvancedSwapDetailsDropdown from '../../features/swap/AdvancedSwapDetailsDropdown'
 import { ArrowDown } from 'react-feather'
-import ConfirmSwapModal from '../features/swap/ConfirmSwapModal'
-import CurrencyInputPanel from '../components/CurrencyInputPanel'
-import { Field } from '../state/swap/actions'
+import ConfirmSwapModal from '../../features/swap/ConfirmSwapModal'
+import CurrencyInputPanel from '../../components/CurrencyInputPanel'
+import { Field } from '../../state/swap/actions'
 import Head from 'next/head'
 import Image from 'next/image'
-import Layout from '../layouts/DefaultLayout'
-import LinkStyledButton from '../components/LinkStyledButton'
-import Loader from '../components/Loader'
+import Layout from '../../layouts/DefaultLayout'
+import LinkStyledButton from '../../components/LinkStyledButton'
+import Loader from '../../components/Loader'
 import Lottie from 'lottie-react'
-import MinerTip from '../components/MinerTip'
-import ProgressSteps from '../components/ProgressSteps'
+import MinerTip from '../../components/MinerTip'
+import ProgressSteps from '../../components/ProgressSteps'
 import ReactGA from 'react-ga'
-import SwapHeader from '../components/ExchangeHeader'
+import SwapHeader from '../../components/ExchangeHeader'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components'
-import TokenWarningModal from '../components/TokenWarningModal'
-import TradePrice from '../features/swap/TradePrice'
-import Typography from '../components/Typography'
-import UnsupportedCurrencyFooter from '../features/swap/UnsupportedCurrencyFooter'
-import confirmPriceImpactWithoutFee from '../features/swap/confirmPriceImpactWithoutFee'
-import { getRouterAddress } from '../functions'
-import { maxAmountSpend } from '../functions/currency'
+import TokenWarningModal from '../../components/TokenWarningModal'
+import TradePrice from '../../features/swap/TradePrice'
+import Typography from '../../components/Typography'
+import UnsupportedCurrencyFooter from '../../features/swap/UnsupportedCurrencyFooter'
+import confirmPriceImpactWithoutFee from '../../features/swap/confirmPriceImpactWithoutFee'
+import { getRouterAddress } from '../../functions'
+import { maxAmountSpend } from '../../functions/currency'
 import styles from '../styles/Swap.module.css'
-import swapArrowsAnimationData from '../animation/swap-arrows.json'
+import swapArrowsAnimationData from '../../animation/swap-arrows.json'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
-import useENSAddress from '../hooks/useENSAddress'
-import { useIsTransactionUnsupported } from '../hooks/Trades'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import useENSAddress from '../../hooks/useENSAddress'
+import { useIsTransactionUnsupported } from '../../hooks/Trades'
 import { useLingui } from '@lingui/react'
-import { useSwapCallback } from '../hooks/useSwapCallback'
+import { useRouter } from 'next/router'
+import { useSwapCallback } from '../../hooks/useSwapCallback'
 
 export default function Swap() {
     const { i18n } = useLingui()
+    const { account, chainId } = useActiveWeb3React()
     const toggleNetworkModal = useNetworkModalToggle()
+
+    // TODO: Use?
+    // const router = useRouter()
+    // const tokens = router.query.tokens
+    // const [currencyIdA, currencyIdB] = tokens as string[]
+    // const currencyA = useCurrency(currencyIdA)
+    // const currencyB = useCurrency(currencyIdB)
 
     const loadedUrlParams = useDefaultsFromURLSearch()
 
@@ -122,9 +131,6 @@ export default function Swap() {
         urlLoadedTokens.filter((token: Token) => {
             return !Boolean(token.address in defaultTokens)
         })
-
-    const { account, chainId } = useActiveWeb3React()
-    const theme = useContext(ThemeContext)
 
     // toggle wallet when disconnected
     const toggleWalletModal = useWalletModalToggle()
@@ -266,7 +272,8 @@ export default function Swap() {
 
     const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(
         currencyBalances[Field.INPUT],
-        doArcher ? archerETHTip : undefined
+        doArcher ? archerETHTip : undefined,
+        chainId
     )
     const atMaxAmountInput = Boolean(
         maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)

@@ -8,13 +8,7 @@ import {
     ButtonLight,
     ButtonPrimary,
 } from '../../components/ButtonLegacy'
-import {
-    Currency,
-    NATIVE,
-    TokenAmount,
-    WETH,
-    currencyEquals,
-} from '@sushiswap/sdk'
+import { Currency, TokenAmount, WETH, currencyEquals } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, {
@@ -78,6 +72,8 @@ export default function Add() {
     const tokens = router.query.tokens
     const [currencyIdA, currencyIdB] = tokens as string[]
 
+    console.log({ currencyIdA, currencyIdB })
+
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)
 
@@ -135,7 +131,11 @@ export default function Add() {
     ].reduce((accumulator, field) => {
         return {
             ...accumulator,
-            [field]: maxAmountSpend(currencyBalances[field]),
+            [field]: maxAmountSpend(
+                currencyBalances[field],
+                undefined,
+                chainId
+            ),
         }
     }, {})
 
@@ -194,8 +194,12 @@ export default function Add() {
             method: (...args: any) => Promise<TransactionResponse>,
             args: Array<string | string[] | number>,
             value: BigNumber | null
-        if (currencyA === NATIVE || currencyB === NATIVE) {
-            const tokenBIsETH = currencyB === NATIVE
+        if (
+            currencyA === Currency.getNativeCurrency(chainId) ||
+            currencyB === Currency.getNativeCurrency(chainId)
+        ) {
+            const tokenBIsETH =
+                currencyB === Currency.getNativeCurrency(chainId)
             estimate = router.estimateGas.addLiquidityETH
             method = router.addLiquidityETH
             args = [
@@ -335,7 +339,7 @@ export default function Add() {
 
     const handleCurrencyASelect = useCallback(
         (currencyA: Currency) => {
-            const newCurrencyIdA = currencyId(currencyA)
+            const newCurrencyIdA = currencyId(currencyA, chainId)
             if (newCurrencyIdA === currencyIdB) {
                 router.push(`/add/${currencyIdB}/${currencyIdA}`)
             } else {
@@ -346,7 +350,7 @@ export default function Add() {
     )
     const handleCurrencyBSelect = useCallback(
         (currencyB: Currency) => {
-            const newCurrencyIdB = currencyId(currencyB)
+            const newCurrencyIdB = currencyId(currencyB, chainId)
             if (currencyIdA === newCurrencyIdB) {
                 if (currencyIdB) {
                     router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
@@ -356,7 +360,9 @@ export default function Add() {
             } else {
                 router.push(
                     `/add/${
-                        currencyIdA ? currencyIdA : 'ETH'
+                        currencyIdA
+                            ? currencyIdA
+                            : Currency.getNativeCurrencySymbol(chainId)
                     }/${newCurrencyIdB}`
                 )
             }

@@ -12,7 +12,6 @@ import {
 import {
     ChainId,
     Currency,
-    NATIVE,
     Percent,
     WETH,
     currencyEquals,
@@ -288,8 +287,9 @@ export default function Remove() {
         const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
         if (!liquidityAmount) throw new Error('missing liquidity amount')
 
-        const currencyBIsETH = currencyB === NATIVE
-        const oneCurrencyIsETH = currencyA === NATIVE || currencyBIsETH
+        const currencyBIsETH = currencyB === Currency.getNativeCurrency(chainId)
+        const oneCurrencyIsETH =
+            currencyA === Currency.getNativeCurrency(chainId) || currencyBIsETH
 
         if (!tokenA || !tokenB) throw new Error('could not wrap')
 
@@ -578,7 +578,9 @@ export default function Remove() {
         [onUserInput]
     )
 
-    const oneCurrencyIsETH = currencyA === NATIVE || currencyB === NATIVE
+    const oneCurrencyIsETH =
+        currencyA === Currency.getNativeCurrency(chainId) ||
+        currencyB === Currency.getNativeCurrency(chainId)
     const oneCurrencyIsWETH = Boolean(
         chainId &&
             ((currencyA && currencyEquals(WETH[chainId], currencyA)) ||
@@ -587,20 +589,28 @@ export default function Remove() {
 
     const handleSelectCurrencyA = useCallback(
         (currency: Currency) => {
-            if (currencyIdB && currencyId(currency) === currencyIdB) {
-                router.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
+            if (currencyIdB && currencyId(currency, chainId) === currencyIdB) {
+                router.push(
+                    `/remove/${currencyId(currency, chainId)}/${currencyIdA}`
+                )
             } else {
-                router.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
+                router.push(
+                    `/remove/${currencyId(currency, chainId)}/${currencyIdB}`
+                )
             }
         },
         [currencyIdA, currencyIdB, router]
     )
     const handleSelectCurrencyB = useCallback(
         (currency: Currency) => {
-            if (currencyIdA && currencyId(currency) === currencyIdA) {
-                router.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
+            if (currencyIdA && currencyId(currency, chainId) === currencyIdA) {
+                router.push(
+                    `/remove/${currencyIdB}/${currencyId(currency, chainId)}`
+                )
             } else {
-                router.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
+                router.push(
+                    `/remove/${currencyIdA}/${currencyId(currency, chainId)}`
+                )
             }
         },
         [currencyIdA, currencyIdB, router]

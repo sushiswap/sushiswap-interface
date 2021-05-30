@@ -1,4 +1,4 @@
-import { Currency, JSBI, NATIVE, TokenAmount } from '@sushiswap/sdk'
+import { Currency, JSBI, TokenAmount } from '@sushiswap/sdk'
 import { PairState, usePair } from '../hooks/usePairs'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Trans, t } from '@lingui/macro'
@@ -30,13 +30,15 @@ enum Fields {
 
 export default function PoolFinder() {
     const { i18n } = useLingui()
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
 
     const [showSearch, setShowSearch] = useState<boolean>(false)
     const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
-    const [currency0, setCurrency0] = useState<Currency | null>(NATIVE)
+    const [currency0, setCurrency0] = useState<Currency | null>(
+        Currency.getNativeCurrency(chainId)
+    )
     const [currency1, setCurrency1] = useState<Currency | null>(null)
 
     const [pairState, pair] = usePair(
@@ -183,8 +185,12 @@ export default function PoolFinder() {
                                         </Text>
                                         <Link
                                             href={`/add/${currencyId(
-                                                currency0
-                                            )}/${currencyId(currency1)}`}
+                                                currency0,
+                                                chainId
+                                            )}/${currencyId(
+                                                currency1,
+                                                chainId
+                                            )}`}
                                         >
                                             <a className="text-center text-blue text-opacity-80 hover:text-opacity-100">
                                                 {i18n._(t`Add liquidity`)}
@@ -201,8 +207,9 @@ export default function PoolFinder() {
                                     </Text>
                                     <Link
                                         href={`/add/${currencyId(
-                                            currency0
-                                        )}/${currencyId(currency1)}`}
+                                            currency0,
+                                            chainId
+                                        )}/${currencyId(currency1, chainId)}`}
                                     >
                                         <a className="text-center">
                                             {i18n._(t`Create pool`)}

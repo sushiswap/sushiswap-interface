@@ -452,8 +452,9 @@ export default function FullPositionCard({
                                         borderRadius="8px"
                                         as={Link}
                                         to={`/add/${currencyId(
-                                            currency0
-                                        )}/${currencyId(currency1)}`}
+                                            currency0,
+                                            chainId
+                                        )}/${currencyId(currency1, chainId)}`}
                                         width="48%"
                                     >
                                         {i18n._(t`Add`)}
@@ -464,8 +465,9 @@ export default function FullPositionCard({
                                         as={Link}
                                         width="48%"
                                         to={`/remove/${currencyId(
-                                            currency0
-                                        )}/${currencyId(currency1)}`}
+                                            currency0,
+                                            chainId
+                                        )}/${currencyId(currency1, chainId)}`}
                                     >
                                         {i18n._(t`Remove`)}
                                     </ButtonPrimaryNormal>
@@ -481,8 +483,9 @@ export default function FullPositionCard({
                                     borderRadius="8px"
                                     as={Link}
                                     to={`/uni/${currencyId(
-                                        currency0
-                                    )}/${currencyId(currency1)}`}
+                                        currency0,
+                                        chainId
+                                    )}/${currencyId(currency1, chainId)}`}
                                     width="100%"
                                 >
                                     {i18n._(

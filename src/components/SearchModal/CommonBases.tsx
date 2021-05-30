@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token, currencyEquals } from '@sushiswap/sdk'
+import { ChainId, Currency, Token, currencyEquals } from '@sushiswap/sdk'
 
 import { AutoColumn } from '../Column'
 import { AutoRow } from '../Row'
@@ -28,7 +28,7 @@ import styled from 'styled-components'
 export default function CommonBases({
     chainId,
     onSelect,
-    selectedCurrency
+    selectedCurrency,
 }: {
     chainId?: ChainId
     selectedCurrency?: Currency | null
@@ -46,35 +46,53 @@ export default function CommonBases({
                 <button
                     type="button"
                     onClick={() => {
-                        if (!selectedCurrency || !currencyEquals(selectedCurrency, NATIVE)) {
-                            onSelect(NATIVE)
+                        if (
+                            !selectedCurrency ||
+                            !currencyEquals(
+                                selectedCurrency,
+                                Currency.getNativeCurrency(chainId)
+                            )
+                        ) {
+                            onSelect(Currency.getNativeCurrency(chainId))
                         }
                     }}
                     className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
-                    disabled={selectedCurrency === NATIVE}
+                    disabled={
+                        selectedCurrency === Currency.getNativeCurrency(chainId)
+                    }
                 >
-                    <CurrencyLogo currency={NATIVE} style={{ marginRight: 8 }} />
+                    <CurrencyLogo
+                        currency={Currency.getNativeCurrency(chainId)}
+                        style={{ marginRight: 8 }}
+                    />
                     <Text fontWeight={500} fontSize={16}>
                         {Currency.getNativeCurrencySymbol(chainId)}
                     </Text>
                 </button>
-                {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
-                    const selected = selectedCurrency instanceof Token && selectedCurrency.address === token.address
-                    return (
-                        <button
-                            type="button"
-                            onClick={() => !selected && onSelect(token)}
-                            disabled={selected}
-                            key={token.address}
-                            className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
-                        >
-                            <CurrencyLogo currency={token} style={{ marginRight: 8 }} />
-                            <Text fontWeight={500} fontSize={16}>
-                                {token.getSymbol(chainId)}
-                            </Text>
-                        </button>
-                    )
-                })}
+                {(chainId ? SUGGESTED_BASES[chainId] : []).map(
+                    (token: Token) => {
+                        const selected =
+                            selectedCurrency instanceof Token &&
+                            selectedCurrency.address === token.address
+                        return (
+                            <button
+                                type="button"
+                                onClick={() => !selected && onSelect(token)}
+                                disabled={selected}
+                                key={token.address}
+                                className="flex items-center p-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+                            >
+                                <CurrencyLogo
+                                    currency={token}
+                                    style={{ marginRight: 8 }}
+                                />
+                                <Text fontWeight={500} fontSize={16}>
+                                    {token.getSymbol(chainId)}
+                                </Text>
+                            </button>
+                        )
+                    }
+                )}
             </AutoRow>
         </AutoColumn>
     )

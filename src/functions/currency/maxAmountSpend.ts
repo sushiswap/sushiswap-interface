@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, NATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI } from '@sushiswap/sdk'
 import { DEFAULT_ARCHER_ETH_TIP, MIN_ETH } from '../../constants'
 
 /**
@@ -7,10 +7,11 @@ import { DEFAULT_ARCHER_ETH_TIP, MIN_ETH } from '../../constants'
  */
 export function maxAmountSpend(
     currencyAmount?: CurrencyAmount,
-    userETHTip?: string
+    userETHTip?: string,
+    chainId = ChainId.MAINNET
 ): CurrencyAmount | undefined {
     if (!currencyAmount) return undefined
-    if (currencyAmount.currency === NATIVE) {
+    if (currencyAmount.currency === Currency.getNativeCurrency(chainId)) {
         if (userETHTip === undefined) {
             if (JSBI.greaterThan(currencyAmount.raw, MIN_ETH)) {
                 return CurrencyAmount.ether(

@@ -1,4 +1,4 @@
-import { CurrencyAmount, NATIVE, TokenAmount, Trade } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, TokenAmount, Trade } from '@sushiswap/sdk'
 import { calculateGasMargin, getRouterAddress } from '../functions'
 import { useCallback, useMemo } from 'react'
 import {
@@ -41,7 +41,8 @@ export function useApproveCallback(
     // check the current approval status
     const approvalState: ApprovalState = useMemo(() => {
         if (!amountToApprove || !spender) return ApprovalState.UNKNOWN
-        if (amountToApprove.currency === NATIVE) return ApprovalState.APPROVED
+        if (amountToApprove.currency === Currency.getNativeCurrency(chainId))
+            return ApprovalState.APPROVED
         // we might not have enough data to know whether or not we need to approve
         if (!currentAllowance) return ApprovalState.UNKNOWN
         // amountToApprove will be defined if currentAllowance is

@@ -289,7 +289,13 @@ export default function Pool() {
                         id="add-pool-button"
                         color="gradient"
                         size="large"
-                        onClick={() => router.push('/add/ETH')}
+                        onClick={() =>
+                            router.push(
+                                `/add/${Currency.getNativeCurrencySymbol(
+                                    chainId
+                                )}`
+                            )
+                        }
                     >
                         {i18n._(t`Add Liquidity`)}
                     </Button>
@@ -297,7 +303,13 @@ export default function Pool() {
                         id="create-pool-button"
                         color="gray"
                         size="large"
-                        onClick={() => router.push('/create/ETH')}
+                        onClick={() =>
+                            router.push(
+                                `/create/${Currency.getNativeCurrencySymbol(
+                                    chainId
+                                )}`
+                            )
+                        }
                     >
                         {i18n._(t`Create a pair`)}
                     </Button>
