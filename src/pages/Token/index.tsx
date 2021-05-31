@@ -92,14 +92,8 @@ export default function Token() {
                 }
             }
         })
-        const areaSeries = chart.addAreaSeries({
-            topColor: 'rgba(38, 198, 218, 0.56)',
-            bottomColor: 'rgba(38, 198, 218, 0.04)',
-            lineColor: 'rgba(38, 198, 218, 1)',
-            lineWidth: 2
-        })
         const lineSeries = chart.addLineSeries({
-            color: '#7d48b9',
+            color: '#27B0E6',
             lineWidth: 2
         })
         lineSeries.setData(mockData)
@@ -143,18 +137,18 @@ export default function Token() {
                 <div className="overflow-x-scroll hide-scroll-bar md:overflow-hidden">
                     <div className="grid grid-cols-3 gap-6 min-w-max">
                         <div className="flex flex-col bg-dark-900 rounded p-6">
-                            <div className="text-sm">Liquidity (24H)</div>
-                            <div className="md:text-h5 text-high-emphesis">$222,275,124.89</div>
+                            <div className="text-sm text-gray-500 mb-1">Liquidity (24H)</div>
+                            <div className="md:text-h5 text-high-emphesis mb-1">$222,275,124.89</div>
                             <div className="text-sm text-green">+2.34%</div>
                         </div>
                         <div className="flex flex-col bg-dark-900 rounded p-6">
-                            <div className="text-sm">Volume (24H)</div>
-                            <div className="md:text-h5 text-high-emphesis">$14,682,757.45</div>
+                            <div className="text-sm text-gray-500 mb-1">Volume (24H)</div>
+                            <div className="md:text-h5 text-high-emphesis mb-1">$14,682,757.45</div>
                             <div className="text-sm text-red">-24.94%</div>
                         </div>
                         <div className="flex flex-col bg-dark-900 rounded p-6">
-                            <div className="text-sm">Fees (24H)</div>
-                            <div className="md:text-h5 text-high-emphesis">$44,048.27</div>
+                            <div className="text-sm text-gray-500 mb-1">Fees (24H)</div>
+                            <div className="md:text-h5 text-high-emphesis mb-1">$44,048.27</div>
                             <div className="text-sm text-red">-24.94%</div>
                         </div>
                     </div>
@@ -165,7 +159,16 @@ export default function Token() {
                 Swap
             </Button>
 
-            <div className="hidden md:grid grid-cols-9 gap-4 w-full max-w-3xl mb-12">
+            <div className="hidden md:grid grid-cols-10 gap-5 w-full max-w-3xl mb-1">
+                <div className="flex col-span-4 p-2">
+                    Swap: <span className="ml-1 text-high-emphesis font-bold">SUSHI</span>
+                </div>
+                <div className="flex col-span-6 p-2">
+                    For: <span className="ml-1 text-high-emphesis font-bold">ETH</span>
+                </div>
+            </div>
+
+            <div className="hidden md:grid grid-cols-9 gap-4 w-full max-w-3xl mb-1">
                 <div className="flex col-span-7">
                     <div className="w-6/12 mr-2 bg-dark-900 rounded">
                         <div className="flex items-center rounded bg-dark-900 space-x-3 p-4 w-full sm:w-3/5">
@@ -217,6 +220,15 @@ export default function Token() {
                     </div>
                 </div>
                 <button className="col-span-2 bg-dark-700 rounded flex items-center justify-center">Swap</button>
+            </div>
+
+            <div className="hidden md:grid grid-cols-10 gap-5 w-full max-w-3xl mb-12">
+                <div className="flex col-span-4 p-2">
+                    <span className="text-gray-500 mr-1">Balance:</span> 451.2345 SUSHI
+                </div>
+                <div className="flex col-span-6 p-2">
+                    <span className="text-gray-500 mr-1">Balance:</span> 0.872 ETH
+                </div>
             </div>
 
             <div className="w-full max-w-3xl rounded py-4 mb-8">
