@@ -13,7 +13,7 @@ import Position from './Position'
 import { t } from '@lingui/macro'
 
 import { AutoColumn } from '../../components/Column'
-import { Text } from 'rebass'
+
 import { useLingui } from '@lingui/react'
 
 const migrateFrom: { [chainId in ChainId]?: string } = {

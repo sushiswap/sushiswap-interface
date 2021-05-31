@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, Fraction, Percent } from '@sushiswap/sdk'
 import React from 'react'
-import { Text } from 'rebass'
+
 import { ButtonPrimary } from '../../components/ButtonLegacy'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { RowBetween, RowFixed } from '../../components/Row'

@@ -11,7 +11,7 @@ import { Sliders } from 'react-feather'
 
 import { BIG_INT_ZERO } from '../../constants'
 import { currencyId } from '../../utils/currencyId'
-import { Text } from 'rebass'
+
 import { AutoColumn } from '../../components/Column'
 import { RowBetween, RowFixed } from '../../components/Row'
 import CurrencyLogo from '../../components/CurrencyLogo'

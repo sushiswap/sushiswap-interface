@@ -1,7 +1,7 @@
 import { transparentize } from 'polished'
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { Text } from 'rebass'
+
 import styled, { ThemeContext } from 'styled-components'
 import { ButtonEmpty, ButtonPrimaryNormal, ButtonSecondary } from '../../components/ButtonLegacy'
 import { LightCard } from '../../components/CardLegacy'

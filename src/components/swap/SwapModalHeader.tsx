@@ -1,7 +1,7 @@
 import { Trade, TradeType } from '@sushiswap/sdk'
 import React, { useContext, useMemo } from 'react'
 import { AlertTriangle, ArrowDown } from 'react-feather'
-import { Text } from 'rebass'
+
 import { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { Field } from '../../state/swap/actions'

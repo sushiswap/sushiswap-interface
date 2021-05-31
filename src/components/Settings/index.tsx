@@ -1,7 +1,7 @@
 import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
 import React, { useContext, useRef, useState } from 'react'
 import { Settings, X } from 'react-feather'
-import { Text } from 'rebass'
+
 import styled, { ThemeContext } from 'styled-components'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'

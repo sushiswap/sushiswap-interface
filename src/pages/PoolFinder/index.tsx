@@ -1,7 +1,7 @@
 import { Currency, ETHER, JSBI, TokenAmount } from '@sushiswap/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
-import { Text } from 'rebass'
+
 import { ButtonDropdownLight } from '../../components/ButtonLegacy'
 import { BlueCard, LightCard } from '../../components/CardLegacy'
 import { AutoColumn, ColumnCenter } from '../../components/Column'

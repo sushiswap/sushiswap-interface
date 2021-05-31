@@ -32,7 +32,7 @@ import { PoolPriceBar } from './PoolPriceBar'
 import ReactGA from 'react-ga'
 import { RouteComponentProps } from 'react-router-dom'
 import { TYPE } from '../../theme'
-import { Text } from 'rebass'
+
 import { ThemeContext } from 'styled-components'
 import { TransactionResponse } from '@ethersproject/providers'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'

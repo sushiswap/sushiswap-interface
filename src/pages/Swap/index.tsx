@@ -36,7 +36,7 @@ import ProgressSteps from '../../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../../components/ExchangeHeader'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
-import { Text } from 'rebass'
+
 import { ThemeContext } from 'styled-components'
 import TokenWarningModal from '../../components/TokenWarningModal'
 import TradePrice from '../../components/swap/TradePrice'

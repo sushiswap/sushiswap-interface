@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardProps, Text } from 'rebass'
+import { CardProps} from 'rebass'
 import { Box } from 'rebass/styled-components'
 import styled, { keyframes } from 'styled-components'
 

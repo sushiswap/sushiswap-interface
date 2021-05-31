@@ -2,7 +2,7 @@ import { ChainId, JSBI, Pair } from '@sushiswap/sdk'
 import { transparentize } from 'polished'
 import React, { useContext, useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { Text } from 'rebass'
+
 import styled, { ThemeContext } from 'styled-components'
 import { ButtonPrimaryNormal, ButtonSecondary } from '../../components/ButtonLegacy'
 import Card from '../../components/Card'

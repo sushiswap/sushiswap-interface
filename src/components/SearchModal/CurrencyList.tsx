@@ -4,7 +4,7 @@ import QuestionHelper from 'components/QuestionHelper'
 import useTheme from 'hooks/useTheme'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
-import { Text } from 'rebass'
+
 import styled from 'styled-components'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import TokenListLogo from '../../assets/svg/tokenlist.svg'

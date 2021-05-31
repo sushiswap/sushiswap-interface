@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { Text, TextProps } from 'rebass'
 import styled, {
     DefaultTheme,
     ThemeProvider as StyledComponentsThemeProvider,

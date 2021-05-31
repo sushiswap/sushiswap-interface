@@ -30,7 +30,7 @@ import ReactGA from 'react-ga'
 import RemoveLiquidityReceiveDetails from '../../components/Liquidity/RemoveLiquidityReceiveDetails'
 import { RouteComponentProps } from 'react-router'
 import { TYPE } from '../../theme'
-import { Text } from 'rebass'
+
 import { ThemeContext } from 'styled-components'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Wrapper } from '../Pool/styleds'
