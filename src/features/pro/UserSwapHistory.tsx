@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
-import { formatNumber, priceFormatter } from '../../functions'
+import { formatNumber } from '../../functions'
 import { ArrowRight } from 'react-feather'
-import { OrderDirection } from '../../entities/ProSwapMessages'
 import withAccount from '../../hoc/withAccount'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NETWORK_LABEL } from '../../constants/networks'
 import { useUserSwapHistory } from '../../context/Pro/hooks'
+import { OrderDirection } from "../../context/Pro/types";
 
 interface ListHeaderProps {
     className?: string

@@ -1,10 +1,14 @@
 import useSWR, { SWRResponse } from 'swr'
 
-import React from 'react'
+import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
-function Gas() {
+interface GasProps {
+    className?: string
+}
+
+const Gas: FC<GasProps> = ({ className = '' }) => {
     const { i18n } = useLingui()
     const { data, error }: SWRResponse<{ average: number }, Error> = useSWR(
         'https://ethgasstation.info/api/ethgasAPI.json?',
@@ -14,7 +18,7 @@ function Gas() {
     if (error) return <div>{i18n._(t`failed to load`)}</div>
     if (!data) return <div>{i18n._(t`loading...`)}</div>
 
-    return <div>{data.average / 10}</div>
+    return <div className={className}>{data.average / 10}</div>
 }
 
 export default Gas

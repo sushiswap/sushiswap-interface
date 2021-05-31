@@ -1,16 +1,10 @@
-import { State } from './types'
+import { State, SwapMessage, SwapMessageResponse, UserHistoryMessage, UserHistoryResponse } from './types'
 import React, { createContext, FC, useMemo, useEffect, useRef, useCallback } from 'react'
 import withPair from '../../hoc/withPair'
 import { Pair } from '@sushiswap/sdk'
 import withAccount from '../../hoc/withAccount'
 import useWebSocket from 'react-use-websocket'
 import useSWR from 'swr'
-import {
-    SwapMessage,
-    SwapMessageResponse,
-    UserHistoryMessage,
-    UserHistoryResponse,
-} from '../../entities/ProSwapMessages'
 
 export const initialState: State = {
     userHistory: [],

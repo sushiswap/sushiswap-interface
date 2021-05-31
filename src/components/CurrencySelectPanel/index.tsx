@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import { ChevronDown } from 'react-feather'
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
     align-items: center;
@@ -31,6 +32,11 @@ const StyledDropDown = styled(ChevronDownIcon)<{ selected: boolean }>`
     }
 `
 
+export enum CurrencySelectPanelVariant {
+    default,
+    minimal,
+}
+
 interface CurrencySelectPanelProps {
     onClick?: () => void
     onCurrencySelect?: (currency: Currency) => void
@@ -39,6 +45,7 @@ interface CurrencySelectPanelProps {
     otherCurrency?: Currency | null
     id: string
     showCommonBases?: boolean
+    variant?: CurrencySelectPanelVariant
 }
 
 export default function CurrencySelectPanel({
@@ -49,6 +56,7 @@ export default function CurrencySelectPanel({
     otherCurrency,
     id,
     showCommonBases,
+    variant,
 }: CurrencySelectPanelProps) {
     const { i18n } = useLingui()
 
@@ -58,6 +66,32 @@ export default function CurrencySelectPanel({
     const handleDismissSearch = useCallback(() => {
         setModalOpen(false)
     }, [setModalOpen])
+
+    if (variant === CurrencySelectPanelVariant.minimal) {
+        return (
+            <div
+                id={id}
+                onClick={() => {
+                    if (!disableCurrencySelect) setModalOpen(true)
+                }}
+                className="cursor-pointer flex items-center text-high-emphesis gap-2 rounded-full bg-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.08)] px-1.5 py-0.5"
+            >
+                <CurrencyLogo currency={currency} size={24} />
+                <span className="font-bold text-lg">{currency.symbol}</span>
+                <ChevronDown size={24} />
+                {!disableCurrencySelect && onCurrencySelect && (
+                    <CurrencySearchModal
+                        isOpen={modalOpen}
+                        onDismiss={handleDismissSearch}
+                        onCurrencySelect={onCurrencySelect}
+                        selectedCurrency={currency}
+                        otherSelectedCurrency={otherCurrency}
+                        showCommonBases={showCommonBases}
+                    />
+                )}
+            </div>
+        )
+    }
 
     return (
         <div id={id} className="p-5 rounded bg-dark-800">

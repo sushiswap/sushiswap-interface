@@ -3,10 +3,10 @@ import { t } from '@lingui/macro'
 import { formatNumber, priceFormatter } from '../../functions'
 import { NETWORK_LABEL } from '../../constants/networks'
 import { useLingui } from '@lingui/react'
-import { OrderDirection } from '../../entities/ProSwapMessages'
 import withPair from '../../hoc/withPair'
 import { Pair } from '@sushiswap/sdk'
 import { useSwapHistory } from '../../context/Pro/hooks'
+import { OrderDirection } from "../../context/Pro/types";
 
 interface ListHeaderProps {
     className?: string
