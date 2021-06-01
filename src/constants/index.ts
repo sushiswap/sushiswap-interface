@@ -215,6 +215,14 @@ export const XSUSHI_CALL = new Token(
     'XSUSHI 25 Call [31 May 2021]'
 )
 
+export const XSUSHI_JUNE_CALL = new Token(
+    ChainId.MAINNET,
+    '0xe379a60a8fc7c9dd161887ffadf3054790576c8d',
+    18,
+    'XSUc25-0621',
+    'XSUSHI 25 Call [30 June 2021]'
+)
+
 export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
 export const LIFT = new Token(ChainId.MAINNET, '0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6', 18, 'LIFT', 'LiftKitchen')
 export const LFBTC = new Token(
@@ -241,7 +249,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
         [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
-        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]]
+        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]],
+        [XSUSHI_JUNE_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
     },
     [ChainId.MATIC]: {
         [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
