@@ -207,14 +207,6 @@ export const PLAY = new Token(
     'Metaverse NFT Index'
 )
 
-export const XSUSHI_CALL = new Token(
-    ChainId.MAINNET,
-    '0xada279f9301C01A4eF914127a6C2a493Ad733924',
-    18,
-    'XSUc25-0531',
-    'XSUSHI 25 Call [31 May 2021]'
-)
-
 export const XSUSHI_JUNE_CALL = new Token(
     ChainId.MAINNET,
     '0xe379a60a8fc7c9dd161887ffadf3054790576c8d',
@@ -248,7 +240,6 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-        [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
         [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]],
         [XSUSHI_JUNE_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
     },
