@@ -1,6 +1,35 @@
 import { ChainId } from '@sushiswap/sdk'
 import { request } from 'graphql-request'
 
+export const CHEF_V2 = {
+    [ChainId.MAINNET]: 'sushiswap/master-chefv2',
+    [ChainId.MATIC]: 'sushiswap/matic-minichef',
+}
+
+export const chefV2 = (query, chainId = ChainId.MAINNET) =>
+    request(
+        `https://api.thegraph.com/subgraphs/name/${CHEF_V2[chainId]}`,
+        query
+    )
+
+export const CHEF = {
+    [ChainId.MAINNET]: 'sushiswap/master-chef',
+}
+
+export const chef = (query, chainId = ChainId.MAINNET) =>
+    request(`https://api.thegraph.com/subgraphs/name/${CHEF[chainId]}`, query)
+
+export const BLOCKS = {
+    [ChainId.MAINNET]: 'blocklytics/ethereum-blocks',
+    [ChainId.XDAI]: 'matthewlilley/xdai-blocks',
+    [ChainId.MATIC]: 'matthewlilley/polygon-blocks',
+    [ChainId.FANTOM]: 'matthewlilley/fantom-blocks',
+    [ChainId.BSC]: 'matthewlilley/bsc-blocks',
+}
+
+export const blocks = (query, chainId = ChainId.MAINNET) =>
+    request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, query)
+
 export const EXCHANGE = {
     [ChainId.MAINNET]: 'sushiswap/exchange',
     [ChainId.XDAI]: 'sushiswap/xdai-exchange',

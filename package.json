@@ -15,6 +15,7 @@
     "pre-commit": "lint-staged"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.19",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@ethereumjs/common": "^2.3.0",
     "@ethereumjs/tx": "^3.2.0",
@@ -29,7 +30,7 @@
     "@reach/dialog": "^0.15.0",
     "@reduxjs/toolkit": "^1.5.1",
     "@sushiswap/core": "^2.0.0-canary.0",
-    "@sushiswap/default-token-list": "^6.14.0",
+    "@sushiswap/default-token-list": "^6.29.0",
     "@sushiswap/sdk": "^5.0.0-canary.12",
     "@sushiswap/sushi-data": "^1.0.24",
     "@transak/transak-sdk": "^1.0.28",

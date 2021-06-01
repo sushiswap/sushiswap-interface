@@ -46,7 +46,6 @@ class MiniRpcProvider implements AsyncSendable {
     constructor(chainId: number, url: string, batchWaitTimeMs?: number) {
         this.chainId = chainId
         this.url = url
-        console.log({ chainId, url })
         const parsed = new URL(url)
         this.host = parsed.host
         this.path = parsed.pathname

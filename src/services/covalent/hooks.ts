@@ -29,7 +29,7 @@ export function useTokenBalances({ initialData, chainId, address }) {
     return res
 }
 
-export function usePorfolio({ initialData, chainId, address }) {
+export function usePortfolio({ initialData, chainId, address }) {
     const res = useSWR(
         `https://api.covalenthq.com/v1/${chainId}/address/${address}/portfolio_v2/`,
         () => getPortfolio(chainId, address),

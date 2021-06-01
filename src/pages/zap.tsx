@@ -279,7 +279,7 @@ export default function Zap() {
     return (
         <Layout>
             <Head>
-                <title>{i18n._(t`SushiSwap`)} | Sushi</title>
+                <title>{i18n._(t`Zap`)} | Sushi</title>
                 <meta
                     name="description"
                     content="SushiSwap allows for swapping of ERC20 compatible tokens across multiple networks"
