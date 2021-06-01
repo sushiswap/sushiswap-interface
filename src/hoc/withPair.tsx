@@ -7,8 +7,12 @@ import loadingCircle from '../animation/loading-circle.json'
 import { t } from '@lingui/macro'
 import React from 'react'
 import useActiveWeb3React from '../hooks/useActiveWeb3React'
-import { WETH, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
+import { WETH, SUSHI_ADDRESS, Token, Pair } from '@sushiswap/sdk'
 import { SUSHI } from '../constants'
+
+export interface WithPairProps {
+    pair: Pair
+}
 
 const withPair =
     (Component) =>

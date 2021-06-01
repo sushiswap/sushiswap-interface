@@ -1,8 +1,8 @@
 import { State, SwapMessage, SwapMessageResponse, UserHistoryMessage, UserHistoryResponse } from './types'
 import React, { createContext, FC, useMemo, useEffect, useRef, useCallback } from 'react'
-import withPair from '../../hoc/withPair'
+import withPair, { WithPairProps } from '../../hoc/withPair'
 import { Pair } from '@sushiswap/sdk'
-import withAccount from '../../hoc/withAccount'
+import withAccount, { WithAccountProps } from '../../hoc/withAccount'
 import useWebSocket from 'react-use-websocket'
 import useSWR from 'swr'
 
@@ -13,8 +13,7 @@ export const initialState: State = {
 
 export const ProContext = createContext<[State, {}]>([initialState, {}])
 
-interface ProviderProps {
-    pair: Pair
+interface ProviderProps extends WithPairProps, WithAccountProps {
     account: string
 }
 

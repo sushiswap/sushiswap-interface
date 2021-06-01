@@ -1,17 +1,13 @@
-import React, { FC, useMemo, useState } from 'react'
-import { Currency, Pair } from '@sushiswap/sdk'
-import withPair from '../../hoc/withPair'
+import React, { FC, useMemo } from 'react'
 import { useSwapHistory } from '../../context/Pro/hooks'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { priceFormatter } from '../../functions'
 import { OrderDirection, SwapMessage } from '../../context/Pro/types'
 
-interface PriceHeaderStatsProps {
-    pair: Pair
-}
+interface PriceHeaderStatsProps {}
 
-const PriceHeaderStats: FC<PriceHeaderStatsProps> = ({ pair }) => {
+const PriceHeaderStats: FC<PriceHeaderStatsProps> = () => {
     const { i18n } = useLingui()
     const swapHistory = useSwapHistory()
     const lastSwap = useMemo<SwapMessage | null>(
@@ -20,7 +16,7 @@ const PriceHeaderStats: FC<PriceHeaderStatsProps> = ({ pair }) => {
     )
 
     return (
-        <div className="flex h-[64px] px-4 border-dark-800 gap-12 text-sm items-center">
+        <div className="flex h-full px-4 gap-12 text-sm items-center">
             <div className="flex gap-1 items-baseline">
                 <span
                     className={`text-high-emphesis font-bold flex items-baseline font-mono ${
@@ -47,4 +43,4 @@ const PriceHeaderStats: FC<PriceHeaderStatsProps> = ({ pair }) => {
     )
 }
 
-export default withPair(PriceHeaderStats)
+export default PriceHeaderStats

@@ -1,8 +1,6 @@
 import React, { FC, useState } from 'react'
 import { useLingui } from '@lingui/react'
-import { Pair } from '@sushiswap/sdk'
 import { OrderType } from '../../../context/Pro/types'
-import withPair from '../../../hoc/withPair'
 import ToggleButtonGroup from '../../../components/Toggle/ToggleButtonGroup'
 import ToggleButton from '../../../components/Toggle/ToggleButton'
 import Button from '../../../components/Button'
@@ -10,11 +8,9 @@ import { t } from '@lingui/macro'
 import Gas from '../../../components/Gas'
 import Settings from '../../../components/Settings'
 
-interface OrderFormProps {
-    pair: Pair
-}
+interface OrderFormProps {}
 
-const OrderForm: FC<OrderFormProps> = ({ pair }) => {
+const OrderForm: FC<OrderFormProps> = () => {
     const { i18n } = useLingui()
     const [orderType, setOrderType] = useState<OrderType>(OrderType.MARKET)
 
@@ -86,4 +82,4 @@ const OrderForm: FC<OrderFormProps> = ({ pair }) => {
     )
 }
 
-export default withPair(OrderForm)
+export default OrderForm

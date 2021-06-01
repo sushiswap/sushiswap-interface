@@ -1,12 +1,9 @@
 import { FC, useState } from 'react'
-import withPair from '../../hoc/withPair'
-import { Pair } from '@sushiswap/sdk'
+import withPair, { WithPairProps } from '../../hoc/withPair'
 import ToggleButtonGroup from '../../components/Toggle/ToggleButtonGroup'
 import ToggleButton from '../../components/Toggle/ToggleButton'
 
-interface TVChartContainerProps {
-    pair: Pair
-}
+interface TVChartContainerProps extends WithPairProps {}
 
 const TVChartContainer: FC<TVChartContainerProps> = ({ pair }) => {
     const [active, setActive] = useState(pair?.token1.symbol === 'WETH' ? 0 : 1)
@@ -15,14 +12,14 @@ const TVChartContainer: FC<TVChartContainerProps> = ({ pair }) => {
         <div className="flex flex-col h-full">
             <div className="p-3 border-b border-dark-800">
                 <ToggleButtonGroup active={active}>
-                    <ToggleButton onClick={handleClick}>
+                    <ToggleButton value={0} onClick={handleClick}>
                         <div className="flex gap-0.5 text-xs">
                             <span className="text-high-emphesis">{pair?.token0.symbol}</span>
                             <span className="text-secondary">-</span>
                             <span className="text-high-emphesis">USD</span>
                         </div>
                     </ToggleButton>
-                    <ToggleButton onClick={handleClick}>
+                    <ToggleButton value={1} onClick={handleClick}>
                         <div className="flex gap-0.5 text-xs">
                             <span className="text-high-emphesis">{pair?.token0.symbol}</span>
                             <span className="text-secondary">-</span>

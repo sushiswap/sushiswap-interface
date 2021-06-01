@@ -2,7 +2,7 @@ import React, { FC, ReactElement } from 'react'
 import { ToggleButtonProps } from './ToggleButton'
 
 interface ToggleButtonGroupProps {
-    active: string
+    active: any
     children: ReactElement<ToggleButtonProps>[]
     className?: string
 }

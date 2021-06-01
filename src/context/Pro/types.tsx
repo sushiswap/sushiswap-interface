@@ -2,12 +2,12 @@ import { ChainId } from '@sushiswap/sdk'
 
 export enum OrderDirection {
     BUY = 'BUY',
-    SELL = 'SELL'
+    SELL = 'SELL',
 }
 
 export enum OrderType {
     LIMIT = 'LIMIT',
-    MARKET = 'MARKET'
+    MARKET = 'MARKET',
 }
 
 export interface SwapMessageResponse {
@@ -39,7 +39,9 @@ export interface UserHistoryResponse {
 export interface UserHistoryMessage {
     side: OrderDirection
     tokenBase: string
+    tokenBaseAddress: string
     tokenQuote: string
+    tokenQuoteAddress: string
     pairName: string
     amountBase: string
     amountQuote: string

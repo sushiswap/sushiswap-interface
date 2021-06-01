@@ -35,18 +35,18 @@ const TabCard: FC<TabCardProps> = ({ titles, components, footer }) => {
 
     return (
         <div className="">
-            <div className="flex justify-between items-center h-[60px] sm:h-[56px] border-b border-dark-800 px-3">
+            <div className="flex justify-between items-center h-[60px] sm:h-[56px] border-b border-dark-800">
                 <div className="flex w-full justify-between">
                     <ToggleButtonGroup active={value}>
-                        {titles.map((el) => (
-                            <ToggleButton key={el} onClick={handleChange}>
+                        {titles.map((el, index) => (
+                            <ToggleButton value={index} key={el} onClick={handleChange}>
                                 {el}
                             </ToggleButton>
                         ))}
                     </ToggleButtonGroup>
                 </div>
             </div>
-            <div className="px-2 pt-4 pb-0 sm:p-4 sm:pb-0 h-[calc(100%-60px)] sm:h-[calc(100%-56px)] overflow-x-scroll">
+            <div className="h-[calc(100%-60px)] sm:h-[calc(100%-56px)] overflow-x-scroll">
                 {components.map((component, index) => (
                     <TabPanel value={value} index={index} key={index}>
                         {component}

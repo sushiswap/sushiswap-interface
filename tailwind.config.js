@@ -6,6 +6,9 @@ module.exports = {
     purge: ['./src/**/*.{js,ts,jsx,tsx}'],
     darkMode: false,
     theme: {
+        borderColor: (theme) => ({
+            ...theme('colors'),
+        }),
         linearBorderGradients: {
             directions: {
                 r: 'to right',
@@ -175,7 +178,7 @@ module.exports = {
         extend: {
             backgroundColor: ['checked', 'disabled'],
             backgroundImage: ['hover', 'focus'],
-            borderColor: ['checked', 'disabled'],
+            borderColor: ['checked', 'disabled', 'active'],
             cursor: ['disabled'],
             opacity: ['hover', 'disabled'],
             placeholderColor: ['hover', 'active'],
