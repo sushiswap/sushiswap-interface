@@ -9,9 +9,7 @@ interface ToggleButtonGroupProps {
 
 export const ToggleButtonGroup: FC<ToggleButtonGroupProps> = ({ className = '', children, active }) => {
     return (
-        <div
-            className={`inline-flex items-center rounded-md bg-dark-900 p-px font-black whitespace-nowrap grid grid-flow-col ${className}`}
-        >
+        <div className={`inline-flex items-center font-black whitespace-nowrap grid grid-flow-col h-full ${className}`}>
             {React.Children.map(children, (child) =>
                 React.cloneElement(child, { active: child.props.value === active })
             )}

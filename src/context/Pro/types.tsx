@@ -19,13 +19,17 @@ export interface SwapMessageResponse {
 }
 
 export interface SwapMessage {
-    chainId: ChainId
     amountBase: number
+    amountQuote: number
+    chainId: ChainId
+    maker: string
+    price: number
+    priceBase: number
     side: OrderDirection
     timestamp: number
-    price: number
+    to: string
     txHash: string
-    priceBase: number
+    volumeUSD: string
 }
 
 export interface UserHistoryResponse {

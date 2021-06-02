@@ -10,6 +10,7 @@ import QuantStats from '../features/pro/QuantStats'
 import UserSwapHistory from '../features/pro/UserSwapHistory'
 import OrderForm from '../features/pro/OrderForm'
 import MarketSelect from '../features/pro/MarketSelect'
+import TabCard from '../components/TabCard'
 
 const Pro: FC = () => {
     return (
@@ -34,7 +35,10 @@ const Pro: FC = () => {
                             <OrderForm />
                         </div>
                         <div className="flex flex-col w-[324px] border-r border-gray-800">
-                            <SwapHistory />
+                            <TabCard
+                                titles={['Trades', 'Order Book']}
+                                components={[<SwapHistory />, <SwapHistory />]}
+                            />
                         </div>
                         <div className="flex flex-col min-w-[calc(100%-648px)] max-w-[calc(100%-648px)]">
                             <div className="min-h-[600px] border-b border-gray-800">

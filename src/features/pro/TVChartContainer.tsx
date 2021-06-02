@@ -9,8 +9,8 @@ const TVChartContainer: FC<TVChartContainerProps> = ({ pair }) => {
     const [active, setActive] = useState(pair?.token1.symbol === 'WETH' ? 0 : 1)
     const handleClick = (e, index) => setActive(index)
     return (
-        <div className="flex flex-col h-full">
-            <div className="p-3 border-b border-dark-800">
+        <div className="h-full">
+            <div className="border-b border-dark-800 h-10">
                 <ToggleButtonGroup active={active}>
                     <ToggleButton value={0} onClick={handleClick}>
                         <div className="flex gap-0.5 text-xs">
