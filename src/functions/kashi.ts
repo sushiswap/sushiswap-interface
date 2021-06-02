@@ -9,13 +9,17 @@ import {
     MINIMUM_TARGET_UTILIZATION,
     PROTOCOL_FEE,
     PROTOCOL_FEE_DIVISOR,
-    STARTING_INTEREST_PER_YEAR
+    STARTING_INTEREST_PER_YEAR,
 } from '../constants/kashi'
 import { ZERO, e10 } from './math'
 
 import { getCurrency } from './currency/getCurrency'
 
-export function accrue(pair: any, amount: BigNumber, includePrincipal = false): BigNumber {
+export function accrue(
+    pair: any,
+    amount: BigNumber,
+    includePrincipal = false
+): BigNumber {
     return amount
         .mul(pair.accrueInfo.interestPerSecond)
         .mul(pair.elapsedSeconds)
@@ -23,9 +27,7 @@ export function accrue(pair: any, amount: BigNumber, includePrincipal = false): 
         .add(includePrincipal ? amount : ZERO)
 }
 
-export function accrueTotalAssetWithFee(
-    pair: any
-): {
+export function accrueTotalAssetWithFee(pair: any): {
     elastic: BigNumber
     base: BigNumber
 } {
@@ -34,10 +36,13 @@ export function accrueTotalAssetWithFee(
         .mul(pair.elapsedSeconds.add('3600')) // Project an hour into the future
         .div(e10(18))
     const feeAmount = extraAmount.mul(PROTOCOL_FEE).div(PROTOCOL_FEE_DIVISOR) // % of interest paid goes to fee
-    const feeFraction = feeAmount.muldiv(pair.totalAsset.base, pair.currentAllAssets.value)
+    const feeFraction = feeAmount.mulDiv(
+        pair.totalAsset.base,
+        pair.currentAllAssets.value
+    )
     return {
         elastic: pair.totalAsset.elastic,
-        base: pair.totalAsset.base.add(feeFraction)
+        base: pair.totalAsset.base.add(feeFraction),
     }
 }
 
@@ -51,11 +56,12 @@ export function interestAccrue(pair: any, interest: BigNumber): BigNumber {
 
     let currentInterest = interest
     if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-        const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).muldiv(
-            FACTOR_PRECISION,
-            MINIMUM_TARGET_UTILIZATION
+        const underFactor = MINIMUM_TARGET_UTILIZATION.sub(
+            pair.utilization
+        ).mulDiv(FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
+        const scale = INTEREST_ELASTICITY.add(
+            underFactor.mul(underFactor).mul(pair.elapsedSeconds)
         )
-        const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
         currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
 
         if (currentInterest.lt(MINIMUM_INTEREST_PER_YEAR)) {
@@ -65,7 +71,9 @@ export function interestAccrue(pair: any, interest: BigNumber): BigNumber {
         const overFactor = pair.utilization
             .sub(MAXIMUM_TARGET_UTILIZATION)
             .mul(FACTOR_PRECISION.div(FULL_UTILIZATION_MINUS_MAX))
-        const scale = INTEREST_ELASTICITY.add(overFactor.mul(overFactor).mul(pair.elapsedSeconds))
+        const scale = INTEREST_ELASTICITY.add(
+            overFactor.mul(overFactor).mul(pair.elapsedSeconds)
+        )
         currentInterest = currentInterest.mul(scale).div(INTEREST_ELASTICITY)
         if (currentInterest.gt(MAXIMUM_INTEREST_PER_YEAR)) {
             currentInterest = MAXIMUM_INTEREST_PER_YEAR // 1000% APR maximum
@@ -75,9 +83,7 @@ export function interestAccrue(pair: any, interest: BigNumber): BigNumber {
 }
 
 export function getUSDValue(amount: BigNumberish, token: any): BigNumber {
-    return BigNumber.from(amount)
-        .mul(token.usd)
-        .div(e10(token.decimals))
+    return BigNumber.from(amount).mul(token.usd).div(e10(token.decimals))
 }
 
 export function getUSDString(amount: BigNumberish, token: any): string {
@@ -95,7 +101,7 @@ export function easyAmount(
         value: amount,
         string: amount.toFixed(token.decimals),
         usdValue: getUSDValue(amount, token),
-        usd: getUSDString(amount, token)
+        usd: getUSDString(amount, token),
     }
 }
 

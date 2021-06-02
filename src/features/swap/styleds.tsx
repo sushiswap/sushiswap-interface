@@ -1,12 +1,22 @@
+import 'rc-slider/assets/index.css'
+
 import styled, { css } from 'styled-components'
 
 import { AlertTriangle } from 'react-feather'
 import React from 'react'
+import Slider from 'rc-slider'
 import { Text } from 'rebass'
 
 export const Wrapper = styled.div`
     position: relative;
     padding: 1rem;
+`
+
+export const ClickableText = styled(Text)`
+    :hover {
+        cursor: pointer;
+    }
+    // color: ${({ theme }) => theme.primary1};
 `
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
@@ -94,9 +104,46 @@ export const Dots = styled.span`
 
 export function SwapCallbackError({ error }: { error: string }) {
     return (
-        <div className="flex items-center pt-6 text-red justify-center">
+        <div className="flex items-center justify-center pt-6 text-red">
             <AlertTriangle size={16} />
             <div className="ml-4 text-sm">{error}</div>
         </div>
     )
 }
+
+export const StyledSlider = styled(Slider)`
+    margin: 0.8rem auto 2rem auto;
+    width: 95% !important;
+
+    .rc-slider-mark-text {
+        color: #575757;
+    }
+
+    .rc-slider-mark-text-active {
+        color: #7f7f7f;
+    }
+
+    .rc-slider-rail {
+        background-color: #202231;
+    }
+
+    .rc-slider-track {
+        background: linear-gradient(to right, #27b0e6, #fa52a0);
+    }
+
+    .rc-slider-handle {
+        border-color: #fa52a0;
+    }
+
+    .rc-slider-handle:hover {
+        border-color: #fa52a0;
+    }
+
+    .rc-slider-handle-click-focused:focus {
+        border-color: #fa52a0;
+    }
+
+    .rc-slider-dot-active {
+        border-color: #fa52a0;
+    }
+`

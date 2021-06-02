@@ -3,6 +3,11 @@ const plugin = require('tailwindcss/plugin')
 
 module.exports = {
     // important: '#__next',
+    // darkMode: true,
+    future: {
+        purgeLayersByDefault: true,
+        applyComplexClasses: true,
+    },
     purge: ['./src/**/*.{js,ts,jsx,tsx}'],
     darkMode: false,
     theme: {
@@ -30,140 +35,176 @@ module.exports = {
                 4: '4px',
             },
         },
-        colors: {
-            ...defaultTheme.colors,
-            red: '#FF3838',
-            blue: '#27B0E6',
-            pink: '#FA52A0',
-            purple: '#A755DD',
-            green: '#7CFF6B',
-            'pink-red': '#FE5A75',
-            'light-brown': '#FEC464',
-            'light-yellow': '#FFD166',
-            'cyan-blue': '#0993EC',
-            'dark-pink': '#221825',
-            'dark-blue': '#0F182A',
-            'dark-1000': '#0D0415',
-            'dark-950': '#0d0d1f',
-            'dark-900': '#161522',
-            'dark-850': '#1d1e2c',
-            'dark-800': '#202231',
-            'dark-700': '#2E3348',
-            'dark-600': '#1C2D49',
-            'dark-500': '#223D5E',
-            'low-emphesis': '#575757',
-            primary: '#BFBFBF',
-            secondary: '#7F7F7F',
-            'high-emphesis': '#E3E3E3',
-        },
-        fontSize: {
-            ...defaultTheme.fontSize,
-            hero: [
-                '48px',
-                {
-                    letterSpacing: '-0.02em;',
-                    lineHeight: '96px',
-                    fontWeight: 700,
-                },
-            ],
-            h1: [
-                '36px',
-                {
-                    letterSpacing: '-0.02em;',
-                    lineHeight: '36px',
-                    fontWeight: 700,
-                },
-            ],
-            h2: [
-                '30px',
-                {
-                    letterSpacing: '-0.01em;',
-                    lineHeight: '36px',
-                    fontWeight: 700,
-                },
-            ],
-            h3: [
-                '28px',
-                {
-                    letterSpacing: '-0.01em;',
-                    lineHeight: '30px',
-                    fontWeight: 700,
-                },
-            ],
-            h4: [
-                '24px',
-                {
-                    letterSpacing: '-0.01em;',
-                    lineHeight: '28px',
-                    fontWeight: 700,
-                },
-            ],
-            h5: [
-                '24px',
-                {
-                    letterSpacing: '-0.01em;',
-                    lineHeight: '28px',
-                    fontWeight: 500,
-                },
-            ],
-            body: [
-                '18px',
-                {
-                    letterSpacing: '-0.01em;',
-                    lineHeight: '26px',
-                },
-            ],
-            caption: [
-                '16px',
-                {
-                    lineHeight: '24px',
-                },
-            ],
-            caption2: [
-                '14px',
-                {
-                    lineHeight: '20px',
-                },
-            ],
-        },
         extend: {
+            colors: {
+                // We have to do this for any css variable color or else opacity will not work
+                purple: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--purple), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--purple), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--purple))`
+                },
+                blue: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--blue), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--blue), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--blue))`
+                },
+
+                pink: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--pink), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--pink), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--pink))`
+                },
+
+                green: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--green), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--green), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--green))`
+                },
+
+                red: ({ opacityVariable, opacityValue }) => {
+                    if (opacityValue !== undefined) {
+                        return `rgba(var(--red), ${opacityValue})`
+                    }
+                    if (opacityVariable !== undefined) {
+                        return `rgba(var(--red), var(${opacityVariable}, 1))`
+                    }
+                    return `rgb(var(--red))`
+                },
+
+                yellow: '#FFD166',
+
+                'pink-red': '#FE5A75',
+                'light-brown': '#FEC464',
+                'light-yellow': '#FFD166',
+                'cyan-blue': '#0993EC',
+                'dark-pink': '#221825',
+                'dark-blue': '#0F182A',
+                'dark-1000': '#0D0415',
+                'dark-950': '#0d0d1f',
+                'dark-900': '#161522',
+                'dark-850': '#1d1e2c',
+                'dark-800': '#202231',
+                'dark-700': '#2E3348',
+                'dark-600': '#1C2D49',
+                'dark-500': '#223D5E',
+                'low-emphesis': '#575757',
+                primary: '#BFBFBF',
+                secondary: '#7F7F7F',
+                'high-emphesis': '#E3E3E3',
+            },
             lineHeight: {
                 '48px': '48px',
             },
-            backgroundImage: (theme) => ({
-                'bentobox-hero': "url('/src/assets/kashi/bentobox-hero.jpg')",
-                'bentobox-logo': "url('/src/assets/kashi/bentobox-logo.png')",
-            }),
             fontFamily: {
                 sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
             },
+            fontSize: {
+                hero: [
+                    '48px',
+                    {
+                        letterSpacing: '-0.02em;',
+                        lineHeight: '96px',
+                        fontWeight: 700,
+                    },
+                ],
+                h1: [
+                    '36px',
+                    {
+                        letterSpacing: '-0.02em;',
+                        lineHeight: '36px',
+                        fontWeight: 700,
+                    },
+                ],
+                h2: [
+                    '30px',
+                    {
+                        letterSpacing: '-0.01em;',
+                        lineHeight: '36px',
+                        fontWeight: 700,
+                    },
+                ],
+                h3: [
+                    '28px',
+                    {
+                        letterSpacing: '-0.01em;',
+                        lineHeight: '30px',
+                        fontWeight: 700,
+                    },
+                ],
+                h4: [
+                    '24px',
+                    {
+                        letterSpacing: '-0.01em;',
+                        lineHeight: '28px',
+                        fontWeight: 700,
+                    },
+                ],
+                h5: [
+                    '24px',
+                    {
+                        letterSpacing: '-0.01em;',
+                        lineHeight: '28px',
+                        fontWeight: 500,
+                    },
+                ],
+                body: [
+                    '18px',
+                    {
+                        letterSpacing: '-0.01em;',
+                        lineHeight: '26px',
+                    },
+                ],
+                caption: [
+                    '16px',
+                    {
+                        lineHeight: '24px',
+                    },
+                ],
+                caption2: [
+                    '14px',
+                    {
+                        lineHeight: '20px',
+                    },
+                ],
+            },
             borderRadius: {
-                ...defaultTheme.borderRadius,
                 none: '0',
                 px: '1px',
                 sm: '0.313rem',
                 DEFAULT: '0.625rem',
             },
             boxShadow: {
-                ...defaultTheme.boxShadow,
+                swap: '0px 50px 250px -47px rgba(39, 176, 230, 0.29)',
+                liquidity: '0px 50px 250px -47px rgba(123, 97, 255, 0.23)',
                 'pink-glow': '0px 57px 90px -47px rgba(250, 82, 160, 0.15)',
                 'blue-glow': '0px 57px 90px -47px rgba(39, 176, 230, 0.17)',
-                'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
-                'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)',
-                'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)',
-                'liquidity-purple-glow': '0px 50px 250px -47px rgba(123, 97, 255, 0.23);',
+                'pink-glow-hovered':
+                    '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
+                'blue-glow-hovered':
+                    '0px 57px 90px -47px rgba(39, 176, 230, 0.34)',
             },
             ringWidth: {
-                ...defaultTheme.ringWidth,
                 DEFAULT: '1px',
             },
             padding: {
-                ...defaultTheme.padding,
                 px: '1px',
                 '3px': '3px',
-            },
-            outline: {
-                ...defaultTheme.outline,
             },
             minHeight: {
                 empty: '128px',

@@ -4,7 +4,16 @@ import { classNames } from '../../functions'
 
 export type TypographyWeight = 400 | 700
 
-export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'body' | 'caption' | 'caption2'
+export type TypographyVariant =
+    | 'hero'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'body'
+    | 'caption'
+    | 'caption2'
 
 const VARIANTS = {
     hero: 'text-hero',
@@ -15,7 +24,7 @@ const VARIANTS = {
     h5: 'text-h5',
     body: 'text-body',
     caption: 'text-caption',
-    caption2: 'text-caption-2',
+    caption2: 'text-caption2',
 }
 
 export interface TypographyProps {
@@ -24,6 +33,7 @@ export interface TypographyProps {
     component?: keyof React.ReactHTML
     className?: string
     children?: React.ReactNode
+    clickable?: boolean
 }
 
 function Typography({
@@ -31,9 +41,24 @@ function Typography({
     weight = 400,
     component = 'div',
     className = 'text-primary',
+    clickable = false,
     children = [],
-}: TypographyProps): JSX.Element {
-    return React.createElement(component, { className: classNames(VARIANTS[variant], className) }, children)
+    onClick = undefined,
+    ...rest
+}: React.HTMLAttributes<React.ReactHTML> & TypographyProps): JSX.Element {
+    return React.createElement(
+        component,
+        {
+            className: classNames(
+                VARIANTS[variant],
+                onClick ? 'cursor-pointer select-none' : '',
+                className
+            ),
+            onClick,
+            ...rest,
+        },
+        children
+    )
 }
 
 export default Typography

@@ -14,7 +14,8 @@ const FILLED = {
     blue: 'bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     pink: 'bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
     gray: 'bg-dark-700 bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100',
-    gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100',
+    gradient:
+        'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100',
 }
 
 const OUTLINED = {
@@ -32,7 +33,14 @@ const VARIANT = {
     filled: FILLED,
 }
 
-export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default' | 'green' | 'red'
+export type ButtonColor =
+    | 'blue'
+    | 'pink'
+    | 'gradient'
+    | 'gray'
+    | 'default'
+    | 'red'
+    | 'green'
 
 export type ButtonSize = 'tiny' | 'small' | 'large' | 'default'
 

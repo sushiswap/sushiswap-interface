@@ -1,4 +1,4 @@
-import { Currency, JSBI, NATIVE, TokenAmount } from '@sushiswap/sdk'
+import { Currency, JSBI, TokenAmount } from '@sushiswap/sdk'
 import { PairState, usePair } from '../hooks/usePairs'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Trans, t } from '@lingui/macro'
@@ -30,16 +30,21 @@ enum Fields {
 
 export default function PoolFinder() {
     const { i18n } = useLingui()
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const theme = useContext(ThemeContext)
 
     const [showSearch, setShowSearch] = useState<boolean>(false)
     const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
-    const [currency0, setCurrency0] = useState<Currency | null>(NATIVE)
+    const [currency0, setCurrency0] = useState<Currency | null>(
+        Currency.getNativeCurrency(chainId)
+    )
     const [currency1, setCurrency1] = useState<Currency | null>(null)
 
-    const [pairState, pair] = usePair(currency0 ?? undefined, currency1 ?? undefined)
+    const [pairState, pair] = usePair(
+        currency0 ?? undefined,
+        currency1 ?? undefined
+    )
     const addPair = usePairAdder()
     useEffect(() => {
         if (pair) {
@@ -56,8 +61,13 @@ export default function PoolFinder() {
                 JSBI.equal(pair.reserve1.raw, JSBI.BigInt(0))
         )
 
-    const position: TokenAmount | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken)
-    const hasPosition = Boolean(position && JSBI.greaterThan(position.raw, JSBI.BigInt(0)))
+    const position: TokenAmount | undefined = useTokenBalance(
+        account ?? undefined,
+        pair?.liquidityToken
+    )
+    const hasPosition = Boolean(
+        position && JSBI.greaterThan(position.raw, JSBI.BigInt(0))
+    )
 
     const switchTokens = useCallback(() => {
         setCurrency0(currency1)
@@ -93,15 +103,15 @@ export default function PoolFinder() {
                 <title>{i18n._(t`Find Pool`)} | Sushi</title>
                 <meta name="description" content="Find pool" />
             </Head>
-            <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity-purple-glow">
+            <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity">
                 <FindPoolTabs />
                 <AutoColumn style={{ padding: '1rem' }} gap="md">
                     <Alert
                         showIcon={false}
                         message={
                             <Trans>
-                                <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the
-                                interface
+                                <b>Tip:</b> Use this tool to find pairs that
+                                don&apos;t automatically appear in the interface
                             </Trans>
                         }
                         type="information"
@@ -116,10 +126,13 @@ export default function PoolFinder() {
                             id="pool-currency-input"
                         />
                         <AutoColumn justify="space-between">
-                            <AutoRow justify={'flex-start'} style={{ padding: '0 1rem' }}>
+                            <AutoRow
+                                justify={'flex-start'}
+                                style={{ padding: '0 1rem' }}
+                            >
                                 <button className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px">
                                     <div className="p-3 rounded-full bg-dark-800 hover:bg-dark-700">
-                                        <Plus size="32" color={theme.text2} />
+                                        <Plus size="32" />
                                     </div>
                                 </button>
                             </AutoRow>
@@ -148,7 +161,9 @@ export default function PoolFinder() {
                                 {i18n._(t`Pool Found!`)}
                             </Text>
                             <Link href={`/pool`}>
-                                <a className="text-center">{i18n._(t`Manage this pool`)}</a>
+                                <a className="text-center">
+                                    {i18n._(t`Manage this pool`)}
+                                </a>
                             </Link>
                         </AutoRow>
                     )}
@@ -156,14 +171,27 @@ export default function PoolFinder() {
                     {currency0 && currency1 ? (
                         pairState === PairState.EXISTS ? (
                             hasPosition && pair ? (
-                                <MinimalPositionCard pair={pair} border="1px solid #CED0D9" />
+                                <MinimalPositionCard
+                                    pair={pair}
+                                    border="1px solid #CED0D9"
+                                />
                             ) : (
                                 <LightCard padding="45px 10px">
                                     <AutoColumn gap="sm" justify="center">
                                         <Text textAlign="center">
-                                            {i18n._(t`You don’t have liquidity in this pool yet`)}
+                                            {i18n._(
+                                                t`You don’t have liquidity in this pool yet`
+                                            )}
                                         </Text>
-                                        <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
+                                        <Link
+                                            href={`/add/${currencyId(
+                                                currency0,
+                                                chainId
+                                            )}/${currencyId(
+                                                currency1,
+                                                chainId
+                                            )}`}
+                                        >
                                             <a className="text-center text-blue text-opacity-80 hover:text-opacity-100">
                                                 {i18n._(t`Add liquidity`)}
                                             </a>
@@ -174,9 +202,18 @@ export default function PoolFinder() {
                         ) : validPairNoLiquidity ? (
                             <LightCard padding="45px 10px">
                                 <AutoColumn gap="sm" justify="center">
-                                    <Text textAlign="center">{i18n._(t`No pool found`)}</Text>
-                                    <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
-                                        <a className="text-center">{i18n._(t`Create pool`)}</a>
+                                    <Text textAlign="center">
+                                        {i18n._(t`No pool found`)}
+                                    </Text>
+                                    <Link
+                                        href={`/add/${currencyId(
+                                            currency0,
+                                            chainId
+                                        )}/${currencyId(currency1, chainId)}`}
+                                    >
+                                        <a className="text-center">
+                                            {i18n._(t`Create pool`)}
+                                        </a>
                                     </Link>
                                 </AutoColumn>
                             </LightCard>

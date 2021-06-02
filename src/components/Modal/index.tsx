@@ -22,24 +22,26 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
         align-items: center;
         justify-content: center;
 
-        // background-color: ${({ theme }) => theme.modalBG};
+        background-color: rgba(0, 0, 0, 0.425);
     }
 `
 
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
-    <AnimatedDialogContent {...rest} />
-)).attrs({
+const StyledDialogContent = styled(
+    ({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
+        <AnimatedDialogContent {...rest} />
+    )
+).attrs({
     'aria-label': 'dialog',
 })`
     overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
 
     &[data-reach-dialog-content] {
         margin: 0 0 2rem 0;
-        // background-color: ${({ theme }) => theme.bg1};
-        // box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.shadow1)};
+        background-color: #000;
+        box-shadow: 0 4px 8px 0 ${() => transparentize(0.95, '#000')};
         padding: 0px;
         width: 50vw;
         overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
@@ -108,13 +110,19 @@ export default function Modal({
         leave: { opacity: 0 },
     })
 
-    const [{ y }, set] = useSpring(() => ({ y: 0, config: { mass: 1, tension: 210, friction: 20 } }))
+    const [{ y }, set] = useSpring(() => ({
+        y: 0,
+        config: { mass: 1, tension: 210, friction: 20 },
+    }))
     const bind = useGesture({
         onDrag: (state) => {
             set({
                 y: state.down ? state.movement[1] : 0,
             })
-            if (state.movement[1] > 300 || (state.velocity > 3 && state.direction[1] > 0)) {
+            if (
+                state.movement[1] > 300 ||
+                (state.velocity > 3 && state.direction[1] > 0)
+            ) {
                 onDismiss()
             }
         },
@@ -136,7 +144,12 @@ export default function Modal({
                                     ? {
                                           ...bind(),
                                           style: {
-                                              transform: y.interpolate((y) => `translateY(${y > 0 ? y : 0}px)`),
+                                              transform: y.interpolate(
+                                                  (y) =>
+                                                      `translateY(${
+                                                          y > 0 ? y : 0
+                                                      }px)`
+                                              ),
                                           },
                                       }
                                     : {})}
@@ -150,7 +163,9 @@ export default function Modal({
                                         className={`flex flex-col h-full w-full bg-dark-900 rounded p-6 overflow-y-auto`}
                                     >
                                         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-                                        {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+                                        {!initialFocusRef && isMobile ? (
+                                            <div tabIndex={1} />
+                                        ) : null}
                                         {children}
                                     </div>
                                 </div>

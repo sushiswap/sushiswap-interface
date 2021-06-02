@@ -1,160 +1,109 @@
-import { MenuFlyout, StyledMenu, StyledMenuButton } from '../StyledMenu'
-import React, { memo, useRef } from 'react'
+import { StyledMenu } from '../StyledMenu'
+import React, { memo, useRef } from "react";
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
 import Image from 'next/image'
-import styled from 'styled-components'
-import { useLanguageData } from '../../language/hooks'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-
-const ChFlag = '/images/flags/ch-flag.png'
-const DeFlag = '/images/flags/de-flag.png'
-const EnFlag = '/images/flags/en-flag.png'
-const EsFlag = '/images/flags/es-flag.png'
-const ItFlag = '/images/flags/it-flag.png'
-const HeFlag = '/images/flags/he-flag.png'
-const RoFlag = '/images/flags/ro-flag.png'
-const RuFlag = '/images/flags/ru-flag.png'
-const ViFlag = '/images/flags/vi-flag.png'
-
-const ExtendedStyledMenuButton = styled(StyledMenuButton)`
-    display: flex;
-    align-items: center;
-    border: 2px solid rgb(23, 21, 34);
-    border-radius: 10px;
-    font-size: 1.25rem;
-    &:hover {
-        border-color: rgb(33, 34, 49);
-    }
-`
-
-const ExtendedMenuFlyout = styled(MenuFlyout)`
-    min-width: 10rem;
-    // ${({ theme }) => theme.mediaWidth.upToMedium`
-    max-height: 232px;
-    overflow: auto;
-    min-width: 11rem;
-    top: -16.5rem;
-  `};
-`
-
-const MenuItem = styled.span`
-    display: flex;
-    align-items: center;
-    flex: 1;
-    padding: 0.5rem 0.5rem;
-    font-weight: 500;
-    border-radius: 10px;
-    // color: ${({ theme }) => theme.text2};
-    :hover {
-        // color: ${({ theme }) => theme.text1};
-        cursor: pointer;
-        text-decoration: none;
-    }
-    > svg {
-        margin-right: 8px;
-    }
-`
-
-const MenuItemFlag = styled(Image)`
-    display: inline;
-    margin-right: 0.625rem;
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-`
-
-const MenuButtonFlag = styled(Image)`
-    width: 22px;
-    height: 22px;
-    vertical-align: middle;
-`
+import { useRouter } from "next/router";
+import Link from 'next/link';
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig()
+const { locales } = publicRuntimeConfig
 
 // Use https://onlineunicodetools.com/convert-unicode-to-image to convert
-// Unicode flags to png as Windows does not support Unicode flags
+// Unicode flags (https://emojipedia.org/flags/) to png as Windows does not support Unicode flags
 // Use 24px as unicode characters font size
 const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: string } } = {
     en: {
-        flag: EnFlag,
+        flag:  '/images/flags/en-flag.png',
         language: 'English'
     },
     de: {
-        flag: DeFlag,
+        flag: '/images/flags/de-flag.png',
         language: 'German'
     },
     it: {
-        flag: ItFlag,
+        flag: '/images/flags/it-flag.png',
         language: 'Italian'
     },
-    he: {
-        flag: HeFlag,
-        language: 'Hebrew'
-    },
     ru: {
-        flag: RuFlag,
+        flag: '/images/flags/ru-flag.png',
         language: 'Russian'
     },
     ro: {
-        flag: RoFlag,
+        flag: '/images/flags/ro-flag.png',
         language: 'Romanian'
     },
     vi: {
-        flag: ViFlag,
+        flag: '/images/flags/vi-flag.png',
         language: 'Vietnamese'
     },
     'zh-CN': {
-        flag: ChFlag,
+        flag: '/images/flags/ch-flag.png',
         language: 'Chinese',
         dialect: '简'
     },
     'zh-TW': {
-        flag: ChFlag,
+        flag: '/images/flags/ch-flag.png',
         language: 'Chinese',
         dialect: '繁'
     },
     es: {
-        flag: EsFlag,
+        flag: '/images/flags/es-flag.png',
         language: 'Spanish'
     },
     'es-AR': {
-        flag: EsFlag,
+        flag: '/images/flags/es-flag.png',
         language: 'Spanish',
         dialect: 'AR'
+    },
+    ko: {
+        flag: '/images/flags/ko-flag.png',
+        language: 'Korean',
+    },
+    ja: {
+        flag: '/images/flags/ja-flag.png',
+        language: 'Japanese'
+    },
+    fr: {
+        flag: '/images/flags/fr-flag.png',
+        language: 'French'
     }
 }
 
 function LanguageSwitch() {
+    const { locale, pathname } = useRouter();
     const node = useRef<HTMLDivElement>(null)
     const open = useModalOpen(ApplicationModal.LANGUAGE)
     const toggle = useToggleModal(ApplicationModal.LANGUAGE)
     useOnClickOutside(node, open ? toggle : undefined)
-    const { language, setLanguage } = useLanguageData()
-
-    const onClick = (key: string) => {
-        setLanguage(key)
-        toggle()
-    }
 
     return (
         <StyledMenu ref={node}>
-            <ExtendedStyledMenuButton onClick={toggle}>
-                <Image src={LANGUAGES[language].flag} alt={LANGUAGES[language].language} width={22} height={22} />
-            </ExtendedStyledMenuButton>
+            <div className="cursor-pointer flex items-center justify-center border-2 rounded border-dark-850 hover:border-dark-700 h-[40px] w-[40px]" onClick={toggle}>
+                <Image src={LANGUAGES[locale].flag} alt={LANGUAGES[locale].language} width={22} height={22} />
+            </div>
             {open && (
-                <ExtendedMenuFlyout>
-                    {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
-                        <MenuItem onClick={() => onClick(key)} key={key}>
-                            <MenuItemFlag src={flag} width={20} height={20} alt={language} />
-                            <span className="ml-4">{language}</span>
-                            {dialect && (
-                                <sup>
-                                    <small>{dialect}</small>
-                                </sup>
-                            )}
-                        </MenuItem>
-                    ))}
-                </ExtendedMenuFlyout>
+                <div className="min-w-[10rem] max-h-[232px] md:max-h-[unset] absolute flex flex-col z-50 bg-dark-850 shadow-sm rounded md:top-[3rem] right-0 md:overflow-hidden overflow-scroll top-[-15.5rem]">
+                    {locales.map(key => {
+                        const { flag, language, dialect } = LANGUAGES[key]
+                        return (<Link href={pathname} locale={key} key={key}>
+                            <div
+                              className="cursor-pointer flex items-center px-3 py-1.5 hover:bg-dark-800 hover:text-high-emphesis font-bold"
+                              onClick={toggle}>
+                                <Image className="inline mr-1 w-3 h-3 align-middle" src={flag} width={20} height={20}
+                                       alt={language} />
+                                <span className="ml-4">{language}</span>
+                                {dialect && (
+                                  <sup>
+                                      <small>{dialect}</small>
+                                  </sup>
+                                )}
+                            </div>
+                        </Link>)
+                    })}
+                </div>
             )}
         </StyledMenu>
     )

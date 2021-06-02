@@ -1,8 +1,15 @@
-import { Currency, NATIVE, Token, currencyEquals } from '@sushiswap/sdk'
+import { Currency, Token, currencyEquals } from '@sushiswap/sdk'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { TokenAddressMap, useDefaultTokenList, useUnsupportedTokenList } from './../state/lists/hooks'
+import {
+    TokenAddressMap,
+    useDefaultTokenList,
+    useUnsupportedTokenList,
+} from './../state/lists/hooks'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
-import { useCombinedActiveList, useCombinedInactiveList } from '../state/lists/hooks'
+import {
+    useCombinedActiveList,
+    useCombinedInactiveList,
+} from '../state/lists/hooks'
 
 import { arrayify } from 'ethers/lib/utils'
 import { filterTokens } from '../components/SearchModal/filtering'
@@ -13,7 +20,10 @@ import { useMemo } from 'react'
 import { useUserAddedTokens } from '../state/user/hooks'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
-function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean): { [address: string]: Token } {
+function useTokensFromMap(
+    tokenMap: TokenAddressMap,
+    includeUserAdded: boolean
+): { [address: string]: Token } {
     const { chainId } = useActiveWeb3React()
     const userAddedTokens = useUserAddedTokens()
 
@@ -21,13 +31,12 @@ function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean):
         if (!chainId) return {}
 
         // reduce to just tokens
-        const mapWithoutUrls = Object.keys(tokenMap[chainId]).reduce<{ [address: string]: Token }>(
-            (newMap, address) => {
-                newMap[address] = tokenMap[chainId][address].token
-                return newMap
-            },
-            {}
-        )
+        const mapWithoutUrls = Object.keys(tokenMap[chainId]).reduce<{
+            [address: string]: Token
+        }>((newMap, address) => {
+            newMap[address] = tokenMap[chainId][address].token
+            return newMap
+        }, {})
 
         if (includeUserAdded) {
             return (
@@ -67,12 +76,15 @@ export function useAllInactiveTokens(): { [address: string]: Token } {
     // filter out any token that are on active list
     const activeTokensAddresses = Object.keys(useAllTokens())
     const filteredInactive = activeTokensAddresses
-        ? Object.keys(inactiveTokens).reduce<{ [address: string]: Token }>((newMap, address) => {
-              if (!activeTokensAddresses.includes(address)) {
-                  newMap[address] = inactiveTokens[address]
-              }
-              return newMap
-          }, {})
+        ? Object.keys(inactiveTokens).reduce<{ [address: string]: Token }>(
+              (newMap, address) => {
+                  if (!activeTokensAddresses.includes(address)) {
+                      newMap[address] = inactiveTokens[address]
+                  }
+                  return newMap
+              },
+              {}
+          )
         : inactiveTokens
 
     return filteredInactive
@@ -94,7 +106,9 @@ export function useIsTokenActive(token: Token | undefined | null): boolean {
 }
 
 // used to detect extra search results
-export function useFoundOnInactiveList(searchQuery: string): Token[] | undefined {
+export function useFoundOnInactiveList(
+    searchQuery: string
+): Token[] | undefined {
     const { chainId } = useActiveWeb3React()
     const inactiveTokens = useAllInactiveTokens()
 
@@ -102,27 +116,36 @@ export function useFoundOnInactiveList(searchQuery: string): Token[] | undefined
         if (!chainId || searchQuery === '') {
             return undefined
         } else {
-            const tokens = filterTokens(Object.values(inactiveTokens), searchQuery)
+            const tokens = filterTokens(
+                Object.values(inactiveTokens),
+                searchQuery
+            )
             return tokens
         }
     }, [chainId, inactiveTokens, searchQuery])
 }
 
 // Check if currency is included in custom list from user storage
-export function useIsUserAddedToken(currency: Currency | undefined | null): boolean {
+export function useIsUserAddedToken(
+    currency: Currency | undefined | null
+): boolean {
     const userAddedTokens = useUserAddedTokens()
 
     if (!currency) {
         return false
     }
 
-    return !!userAddedTokens.find(token => currencyEquals(currency, token))
+    return !!userAddedTokens.find((token) => currencyEquals(currency, token))
 }
 
 // parse a name or symbol from a token response
 const BYTES32_REGEX = /^0x[a-fA-F0-9]{64}$/
 
-function parseStringOrBytes32(str: string | undefined, bytes32: string | undefined, defaultValue: string): string {
+function parseStringOrBytes32(
+    str: string | undefined,
+    bytes32: string | undefined,
+    defaultValue: string
+): string {
     return str && str.length > 0
         ? str
         : // need to check for proper bytes string and valid terminator
@@ -141,24 +164,42 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
     const address = isAddress(tokenAddress)
 
     const tokenContract = useTokenContract(address ? address : undefined, false)
-    const tokenContractBytes32 = useBytes32TokenContract(address ? address : undefined, false)
+    const tokenContractBytes32 = useBytes32TokenContract(
+        address ? address : undefined,
+        false
+    )
     const token: Token | undefined = address ? tokens[address] : undefined
 
-    const tokenName = useSingleCallResult(token ? undefined : tokenContract, 'name', undefined, NEVER_RELOAD)
+    const tokenName = useSingleCallResult(
+        token ? undefined : tokenContract,
+        'name',
+        undefined,
+        NEVER_RELOAD
+    )
     const tokenNameBytes32 = useSingleCallResult(
         token ? undefined : tokenContractBytes32,
         'name',
         undefined,
         NEVER_RELOAD
     )
-    const symbol = useSingleCallResult(token ? undefined : tokenContract, 'symbol', undefined, NEVER_RELOAD)
+    const symbol = useSingleCallResult(
+        token ? undefined : tokenContract,
+        'symbol',
+        undefined,
+        NEVER_RELOAD
+    )
     const symbolBytes32 = useSingleCallResult(
         token ? undefined : tokenContractBytes32,
         'symbol',
         undefined,
         NEVER_RELOAD
     )
-    const decimals = useSingleCallResult(token ? undefined : tokenContract, 'decimals', undefined, NEVER_RELOAD)
+    const decimals = useSingleCallResult(
+        token ? undefined : tokenContract,
+        'decimals',
+        undefined,
+        NEVER_RELOAD
+    )
 
     return useMemo(() => {
         if (token) return token
@@ -169,8 +210,16 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
                 chainId,
                 address,
                 decimals.result[0],
-                parseStringOrBytes32(symbol.result?.[0], symbolBytes32.result?.[0], 'UNKNOWN'),
-                parseStringOrBytes32(tokenName.result?.[0], tokenNameBytes32.result?.[0], 'Unknown Token')
+                parseStringOrBytes32(
+                    symbol.result?.[0],
+                    symbolBytes32.result?.[0],
+                    'UNKNOWN'
+                ),
+                parseStringOrBytes32(
+                    tokenName.result?.[0],
+                    tokenNameBytes32.result?.[0],
+                    'Unknown Token'
+                )
             )
         }
         return undefined
@@ -185,12 +234,16 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
         token,
         tokenName.loading,
         tokenName.result,
-        tokenNameBytes32.result
+        tokenNameBytes32.result,
     ])
 }
 
-export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
-    const isETH = currencyId?.toUpperCase() === 'ETH'
+export function useCurrency(
+    currencyId: string | undefined
+): Currency | null | undefined {
+    const { chainId } = useActiveWeb3React()
+    const isETH =
+        currencyId?.toUpperCase() === Currency.getNativeCurrencySymbol(chainId)
     const token = useToken(isETH ? undefined : currencyId)
-    return isETH ? NATIVE : token
+    return isETH ? Currency.getNativeCurrency(chainId) : token
 }

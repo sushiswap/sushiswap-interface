@@ -1,15 +1,38 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import {
+    ApprovalState,
+    useApproveCallback,
+} from '../../hooks/useApproveCallback'
 import { AutoRow, RowBetween } from '../../components/Row'
-import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/ButtonLegacy'
-import { Currency, NATIVE, TokenAmount, WETH, currencyEquals } from '@sushiswap/sdk'
+import {
+    ButtonError,
+    ButtonLight,
+    ButtonPrimary,
+} from '../../components/ButtonLegacy'
+import { Currency, TokenAmount, WETH, currencyEquals } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Trans, t } from '@lingui/macro'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
-import { calculateGasMargin, calculateSlippageAmount } from '../../functions/trade'
-import { currencyId, maxAmountSpend, wrappedCurrency } from '../../functions/currency'
+import TransactionConfirmationModal, {
+    ConfirmationModalContent,
+} from '../../components/TransactionConfirmationModal'
+import {
+    calculateGasMargin,
+    calculateSlippageAmount,
+} from '../../functions/trade'
+import {
+    currencyId,
+    maxAmountSpend,
+    wrappedCurrency,
+} from '../../functions/currency'
 import { getRouterAddress, getRouterContract } from '../../functions/contract'
-import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
-import { useIsExpertMode, useUserSlippageTolerance } from '../../state/user/hooks'
+import {
+    useDerivedMintInfo,
+    useMintActionHandlers,
+    useMintState,
+} from '../../state/mint/hooks'
+import {
+    useIsExpertMode,
+    useUserSlippageTolerance,
+} from '../../state/user/hooks'
 
 import AdvancedLiquidityDetailsDropdown from '../../features/liquidity/AdvancedLiquidityDetailsDropdown'
 import Alert from '../../components/Alert'
@@ -48,6 +71,8 @@ export default function Add() {
     const router = useRouter()
     const tokens = router.query.tokens
     const [currencyIdA, currencyIdB] = tokens as string[]
+
+    console.log({ currencyIdA, currencyIdB })
 
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)
@@ -94,33 +119,45 @@ export default function Add() {
     // get formatted amounts
     const formattedAmounts = {
         [independentField]: typedValue,
-        [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+        [dependentField]: noLiquidity
+            ? otherTypedValue
+            : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
     }
 
     // get the max amounts user can add
-    const maxAmounts: { [field in Field]?: TokenAmount } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
-        (accumulator, field) => {
-            return {
-                ...accumulator,
-                [field]: maxAmountSpend(currencyBalances[field]),
-            }
-        },
-        {}
-    )
+    const maxAmounts: { [field in Field]?: TokenAmount } = [
+        Field.CURRENCY_A,
+        Field.CURRENCY_B,
+    ].reduce((accumulator, field) => {
+        return {
+            ...accumulator,
+            [field]: maxAmountSpend(
+                currencyBalances[field],
+                undefined,
+                chainId
+            ),
+        }
+    }, {})
 
-    const atMaxAmounts: { [field in Field]?: TokenAmount } = [Field.CURRENCY_A, Field.CURRENCY_B].reduce(
-        (accumulator, field) => {
-            return {
-                ...accumulator,
-                [field]: maxAmounts[field]?.equalTo(parsedAmounts[field] ?? '0'),
-            }
-        },
-        {}
-    )
+    const atMaxAmounts: { [field in Field]?: TokenAmount } = [
+        Field.CURRENCY_A,
+        Field.CURRENCY_B,
+    ].reduce((accumulator, field) => {
+        return {
+            ...accumulator,
+            [field]: maxAmounts[field]?.equalTo(parsedAmounts[field] ?? '0'),
+        }
+    }, {})
 
     // check whether the user has approved the router on the tokens
-    const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], getRouterAddress(chainId))
-    const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], getRouterAddress(chainId))
+    const [approvalA, approveACallback] = useApproveCallback(
+        parsedAmounts[Field.CURRENCY_A],
+        getRouterAddress(chainId)
+    )
+    const [approvalB, approveBCallback] = useApproveCallback(
+        parsedAmounts[Field.CURRENCY_B],
+        getRouterAddress(chainId)
+    )
 
     const addTransaction = useTransactionAdder()
 
@@ -128,33 +165,59 @@ export default function Add() {
         if (!chainId || !library || !account) return
         const router = getRouterContract(chainId, library, account)
 
-        const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
-        if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB || !deadline) {
+        const {
+            [Field.CURRENCY_A]: parsedAmountA,
+            [Field.CURRENCY_B]: parsedAmountB,
+        } = parsedAmounts
+        if (
+            !parsedAmountA ||
+            !parsedAmountB ||
+            !currencyA ||
+            !currencyB ||
+            !deadline
+        ) {
             return
         }
 
         const amountsMin = {
-            [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
-            [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0],
+            [Field.CURRENCY_A]: calculateSlippageAmount(
+                parsedAmountA,
+                noLiquidity ? 0 : allowedSlippage
+            )[0],
+            [Field.CURRENCY_B]: calculateSlippageAmount(
+                parsedAmountB,
+                noLiquidity ? 0 : allowedSlippage
+            )[0],
         }
 
         let estimate,
             method: (...args: any) => Promise<TransactionResponse>,
             args: Array<string | string[] | number>,
             value: BigNumber | null
-        if (currencyA === NATIVE || currencyB === NATIVE) {
-            const tokenBIsETH = currencyB === NATIVE
+        if (
+            currencyA === Currency.getNativeCurrency(chainId) ||
+            currencyB === Currency.getNativeCurrency(chainId)
+        ) {
+            const tokenBIsETH =
+                currencyB === Currency.getNativeCurrency(chainId)
             estimate = router.estimateGas.addLiquidityETH
             method = router.addLiquidityETH
             args = [
-                wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)?.address ?? '', // token
+                wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)
+                    ?.address ?? '', // token
                 (tokenBIsETH ? parsedAmountA : parsedAmountB).raw.toString(), // token desired
-                amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
-                amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
+                amountsMin[
+                    tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B
+                ].toString(), // token min
+                amountsMin[
+                    tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A
+                ].toString(), // eth min
                 account,
                 deadline.toHexString(),
             ]
-            value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString())
+            value = BigNumber.from(
+                (tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString()
+            )
         } else {
             estimate = router.estimateGas.addLiquidity
             method = router.addLiquidity
@@ -266,15 +329,17 @@ export default function Add() {
         )
     }
 
-    const pendingText = t`Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencies[
+    const pendingText = t`Supplying ${parsedAmounts[
         Field.CURRENCY_A
-    ]?.getSymbol(chainId)} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[
+    ]?.toSignificant(6)} ${currencies[Field.CURRENCY_A]?.getSymbol(
+        chainId
+    )} and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[
         Field.CURRENCY_B
     ]?.getSymbol(chainId)}`
 
     const handleCurrencyASelect = useCallback(
         (currencyA: Currency) => {
-            const newCurrencyIdA = currencyId(currencyA)
+            const newCurrencyIdA = currencyId(currencyA, chainId)
             if (newCurrencyIdA === currencyIdB) {
                 router.push(`/add/${currencyIdB}/${currencyIdA}`)
             } else {
@@ -285,7 +350,7 @@ export default function Add() {
     )
     const handleCurrencyBSelect = useCallback(
         (currencyB: Currency) => {
-            const newCurrencyIdB = currencyId(currencyB)
+            const newCurrencyIdB = currencyId(currencyB, chainId)
             if (currencyIdA === newCurrencyIdB) {
                 if (currencyIdB) {
                     router.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
@@ -293,7 +358,13 @@ export default function Add() {
                     router.push(`/add/${newCurrencyIdB}`)
                 }
             } else {
-                router.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
+                router.push(
+                    `/add/${
+                        currencyIdA
+                            ? currencyIdA
+                            : Currency.getNativeCurrencySymbol(chainId)
+                    }/${newCurrencyIdB}`
+                )
             }
         },
         [currencyIdA, router, currencyIdB]
@@ -310,7 +381,10 @@ export default function Add() {
 
     const isCreate = router.pathname.includes('/create')
 
-    const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
+    const addIsUnsupported = useIsTransactionUnsupported(
+        currencies?.CURRENCY_A,
+        currencies?.CURRENCY_B
+    )
 
     return (
         <Layout>
@@ -341,8 +415,11 @@ export default function Add() {
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
             </div>
-            <div className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity-purple-glow">
-                <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
+            <div className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity">
+                <Header
+                    input={currencies[Field.CURRENCY_A]}
+                    output={currencies[Field.CURRENCY_B]}
+                />
                 <div>
                     <TransactionConfirmationModal
                         isOpen={showConfirm}
@@ -351,7 +428,11 @@ export default function Add() {
                         hash={txHash}
                         content={() => (
                             <ConfirmationModalContent
-                                title={noLiquidity ? i18n._(t`You are creating a pool`) : i18n._(t`You will receive`)}
+                                title={
+                                    noLiquidity
+                                        ? i18n._(t`You are creating a pool`)
+                                        : i18n._(t`You will receive`)
+                                }
                                 onDismiss={handleDismissConfirmation}
                                 topContent={modalHeader}
                                 bottomContent={modalBottom}
@@ -374,19 +455,30 @@ export default function Add() {
                                         showIcon={false}
                                         message={
                                             <Trans>
-                                                <b>Tip:</b> When you add liquidity, you will receive pool tokens
-                                                representing your position. These tokens automatically earn fees
-                                                proportional to your share of the pool, and can be redeemed at any time.
+                                                <b>Tip:</b> When you add
+                                                liquidity, you will receive pool
+                                                tokens representing your
+                                                position. These tokens
+                                                automatically earn fees
+                                                proportional to your share of
+                                                the pool, and can be redeemed at
+                                                any time.
                                             </Trans>
                                         }
                                         type="information"
                                     />
-                                    {pair && !noLiquidity && pairState !== PairState.INVALID && (
-                                        <LiquidityHeader
-                                            input={currencies[Field.CURRENCY_A]}
-                                            output={currencies[Field.CURRENCY_B]}
-                                        />
-                                    )}
+                                    {pair &&
+                                        !noLiquidity &&
+                                        pairState !== PairState.INVALID && (
+                                            <LiquidityHeader
+                                                input={
+                                                    currencies[Field.CURRENCY_A]
+                                                }
+                                                output={
+                                                    currencies[Field.CURRENCY_B]
+                                                }
+                                            />
+                                        )}
                                 </>
                             ))}
 
@@ -394,7 +486,10 @@ export default function Add() {
                             value={formattedAmounts[Field.CURRENCY_A]}
                             onUserInput={onFieldAInput}
                             onMax={() => {
-                                onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
+                                onFieldAInput(
+                                    maxAmounts[Field.CURRENCY_A]?.toExact() ??
+                                        ''
+                                )
                             }}
                             onCurrencySelect={handleCurrencyASelect}
                             showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
@@ -405,7 +500,9 @@ export default function Add() {
 
                         <AutoColumn justify="space-between">
                             <AutoRow
-                                justify={expertMode ? 'space-between' : 'flex-start'}
+                                justify={
+                                    expertMode ? 'space-between' : 'flex-start'
+                                }
                                 style={{ padding: '0 1rem' }}
                             >
                                 <button className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px">
@@ -420,7 +517,10 @@ export default function Add() {
                             onUserInput={onFieldBInput}
                             onCurrencySelect={handleCurrencyBSelect}
                             onMax={() => {
-                                onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')
+                                onFieldBInput(
+                                    maxAmounts[Field.CURRENCY_B]?.toExact() ??
+                                        ''
+                                )
                             }}
                             showMaxButton={!atMaxAmounts[Field.CURRENCY_B]}
                             currency={currencies[Field.CURRENCY_B]}
@@ -446,9 +546,13 @@ export default function Add() {
                             )}
 
                         {addIsUnsupported ? (
-                            <ButtonPrimary disabled={true}>{i18n._(t`Unsupported Asset`)}</ButtonPrimary>
+                            <ButtonPrimary disabled={true}>
+                                {i18n._(t`Unsupported Asset`)}
+                            </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>
+                                {i18n._(t`Connect Wallet`)}
+                            </ButtonLight>
                         ) : (
                             <AutoColumn gap={'md'}>
                                 {(approvalA === ApprovalState.NOT_APPROVED ||
@@ -457,42 +561,70 @@ export default function Add() {
                                     approvalB === ApprovalState.PENDING) &&
                                     isValid && (
                                         <RowBetween>
-                                            {approvalA !== ApprovalState.APPROVED && (
+                                            {approvalA !==
+                                                ApprovalState.APPROVED && (
                                                 <ButtonPrimary
                                                     onClick={approveACallback}
-                                                    disabled={approvalA === ApprovalState.PENDING}
-                                                    width={approvalB !== ApprovalState.APPROVED ? '48%' : '100%'}
+                                                    disabled={
+                                                        approvalA ===
+                                                        ApprovalState.PENDING
+                                                    }
+                                                    width={
+                                                        approvalB !==
+                                                        ApprovalState.APPROVED
+                                                            ? '48%'
+                                                            : '100%'
+                                                    }
                                                 >
-                                                    {approvalA === ApprovalState.PENDING ? (
+                                                    {approvalA ===
+                                                    ApprovalState.PENDING ? (
                                                         <Dots>
-                                                            {t`Approving ${currencies[Field.CURRENCY_A]?.getSymbol(
+                                                            {t`Approving ${currencies[
+                                                                Field.CURRENCY_A
+                                                            ]?.getSymbol(
                                                                 chainId
                                                             )}`}
                                                         </Dots>
                                                     ) : (
                                                         i18n._(
-                                                            t`Approve ${currencies[Field.CURRENCY_A]?.getSymbol(
+                                                            t`Approve ${currencies[
+                                                                Field.CURRENCY_A
+                                                            ]?.getSymbol(
                                                                 chainId
                                                             )}`
                                                         )
                                                     )}
                                                 </ButtonPrimary>
                                             )}
-                                            {approvalB !== ApprovalState.APPROVED && (
+                                            {approvalB !==
+                                                ApprovalState.APPROVED && (
                                                 <ButtonPrimary
                                                     onClick={approveBCallback}
-                                                    disabled={approvalB === ApprovalState.PENDING}
-                                                    width={approvalA !== ApprovalState.APPROVED ? '48%' : '100%'}
+                                                    disabled={
+                                                        approvalB ===
+                                                        ApprovalState.PENDING
+                                                    }
+                                                    width={
+                                                        approvalA !==
+                                                        ApprovalState.APPROVED
+                                                            ? '48%'
+                                                            : '100%'
+                                                    }
                                                 >
-                                                    {approvalB === ApprovalState.PENDING ? (
+                                                    {approvalB ===
+                                                    ApprovalState.PENDING ? (
                                                         <Dots>
-                                                            {t`Approving ${currencies[Field.CURRENCY_B]?.getSymbol(
+                                                            {t`Approving ${currencies[
+                                                                Field.CURRENCY_B
+                                                            ]?.getSymbol(
                                                                 chainId
                                                             )}`}
                                                         </Dots>
                                                     ) : (
                                                         i18n._(
-                                                            t`Approve ${currencies[Field.CURRENCY_B]?.getSymbol(
+                                                            t`Approve ${currencies[
+                                                                Field.CURRENCY_B
+                                                            ]?.getSymbol(
                                                                 chainId
                                                             )}`
                                                         )
@@ -503,7 +635,9 @@ export default function Add() {
                                     )}
                                 <ButtonError
                                     onClick={() => {
-                                        expertMode ? onAdd() : setShowConfirm(true)
+                                        expertMode
+                                            ? onAdd()
+                                            : setShowConfirm(true)
                                     }}
                                     disabled={
                                         !isValid ||
@@ -517,7 +651,8 @@ export default function Add() {
                                     }
                                 >
                                     <Text fontSize={20} fontWeight={500}>
-                                        {error ?? i18n._(t`Confirm Adding Liquidity`)}
+                                        {error ??
+                                            i18n._(t`Confirm Adding Liquidity`)}
                                     </Text>
                                 </ButtonError>
                             </AutoColumn>
@@ -528,14 +663,22 @@ export default function Add() {
             <div className="z-0 w-full max-w-2xl">
                 {!addIsUnsupported ? (
                     pair && !noLiquidity && pairState !== PairState.INVALID ? (
-                        <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
+                        <MinimalPositionCard
+                            showUnwrapped={oneCurrencyIsWETH}
+                            pair={pair}
+                        />
                     ) : (
-                        <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue)} />
+                        <AdvancedLiquidityDetailsDropdown
+                            show={Boolean(typedValue)}
+                        />
                     )
                 ) : (
                     <UnsupportedCurrencyFooter
                         show={addIsUnsupported}
-                        currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]}
+                        currencies={[
+                            currencies.CURRENCY_A,
+                            currencies.CURRENCY_B,
+                        ]}
                     />
                 )}
             </div>

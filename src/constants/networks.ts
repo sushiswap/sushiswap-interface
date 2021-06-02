@@ -30,6 +30,7 @@ export const NETWORK_ICON = {
     [ChainId.MATIC]: Polygon,
     [ChainId.MATIC_TESTNET]: Matic,
     [ChainId.XDAI]: xDai,
+    [ChainId.ARBITRUM]: Arbitrum,
     [ChainId.ARBITRUM_TESTNET]: Arbitrum,
     [ChainId.MOONBEAM_TESTNET]: Moonbeam,
     [ChainId.AVALANCHE]: Avalanche,
@@ -39,7 +40,7 @@ export const NETWORK_ICON = {
     [ChainId.HARMONY]: Harmony,
     [ChainId.HARMONY_TESTNET]: Harmony,
     [ChainId.OKEX]: OKEx,
-    [ChainId.OKEX_TESTNET]: OKEx
+    [ChainId.OKEX_TESTNET]: OKEx,
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -53,6 +54,8 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
     [ChainId.MATIC]: 'Polygon (Matic)',
     [ChainId.MATIC_TESTNET]: 'Matic Testnet',
     [ChainId.XDAI]: 'xDai',
+    [ChainId.ARBITRUM]: 'Arbitrum',
+    [ChainId.ARBITRUM_TESTNET]: 'Arbitrum Testnet',
     [ChainId.BSC]: 'BSC',
     [ChainId.BSC_TESTNET]: 'BSC Testnet',
     [ChainId.MOONBEAM_TESTNET]: 'Moonbase',
@@ -63,5 +66,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
     [ChainId.HARMONY]: 'Harmony',
     [ChainId.HARMONY_TESTNET]: 'Harmony Testnet',
     [ChainId.OKEX]: 'OKEx',
-    [ChainId.OKEX_TESTNET]: 'OKEx'
+    [ChainId.OKEX_TESTNET]: 'OKEx',
 }

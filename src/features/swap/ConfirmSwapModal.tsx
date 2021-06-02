@@ -1,8 +1,8 @@
+import { CurrencyAmount, Trade, currencyEquals } from '@sushiswap/sdk'
 import React, { useCallback, useMemo } from 'react'
-import { Trade, currencyEquals } from '@sushiswap/sdk'
 import TransactionConfirmationModal, {
     ConfirmationModalContent,
-    TransactionErrorContent
+    TransactionErrorContent,
 } from '../../components/TransactionConfirmationModal'
 
 import SwapModalFooter from './SwapModalFooter'
@@ -17,9 +17,15 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 function tradeMeaningfullyDiffers(tradeA: Trade, tradeB: Trade): boolean {
     return (
         tradeA.tradeType !== tradeB.tradeType ||
-        !currencyEquals(tradeA.inputAmount.currency, tradeB.inputAmount.currency) ||
+        !currencyEquals(
+            tradeA.inputAmount.currency,
+            tradeB.inputAmount.currency
+        ) ||
         !tradeA.inputAmount.equalTo(tradeB.inputAmount) ||
-        !currencyEquals(tradeA.outputAmount.currency, tradeB.outputAmount.currency) ||
+        !currencyEquals(
+            tradeA.outputAmount.currency,
+            tradeB.outputAmount.currency
+        ) ||
         !tradeA.outputAmount.equalTo(tradeB.outputAmount)
     )
 }
@@ -35,7 +41,8 @@ export default function ConfirmSwapModal({
     swapErrorMessage,
     isOpen,
     attemptingTxn,
-    txHash
+    txHash,
+    archerETHTip,
 }: {
     isOpen: boolean
     trade: Trade | undefined
@@ -44,6 +51,7 @@ export default function ConfirmSwapModal({
     txHash: string | undefined
     recipient: string | null
     allowedSlippage: number
+    archerETHTip?: string
     onAcceptChanges: () => void
     onConfirm: () => void
     swapErrorMessage: string | undefined
@@ -52,7 +60,12 @@ export default function ConfirmSwapModal({
     const { chainId } = useActiveWeb3React()
 
     const showAcceptChanges = useMemo(
-        () => Boolean(trade && originalTrade && tradeMeaningfullyDiffers(trade, originalTrade)),
+        () =>
+            Boolean(
+                trade &&
+                    originalTrade &&
+                    tradeMeaningfullyDiffers(trade, originalTrade)
+            ),
         [originalTrade, trade]
     )
 
@@ -76,19 +89,40 @@ export default function ConfirmSwapModal({
                 disabledConfirm={showAcceptChanges}
                 swapErrorMessage={swapErrorMessage}
                 allowedSlippage={allowedSlippage}
+                archerETHTip={archerETHTip}
             />
         ) : null
-    }, [allowedSlippage, onConfirm, showAcceptChanges, swapErrorMessage, trade])
+    }, [
+        allowedSlippage,
+        onConfirm,
+        showAcceptChanges,
+        swapErrorMessage,
+        trade,
+        archerETHTip,
+    ])
 
     // text to show while loading
-    const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(6)} ${trade?.inputAmount?.currency?.getSymbol(
+    const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(
+        6
+    )} ${trade?.inputAmount?.currency?.getSymbol(
         chainId
-    )} for ${trade?.outputAmount?.toSignificant(6)} ${trade?.outputAmount?.currency?.getSymbol(chainId)}`
+    )} for ${trade?.outputAmount?.toSignificant(
+        6
+    )} ${trade?.outputAmount?.currency?.getSymbol(chainId)}`
+
+    const pendingText2 = archerETHTip
+        ? `Plus ${CurrencyAmount.ether(archerETHTip).toSignificant(
+              6
+          )} ETH Miner Tip`
+        : undefined
 
     const confirmationContent = useCallback(
         () =>
             swapErrorMessage ? (
-                <TransactionErrorContent onDismiss={onDismiss} message={swapErrorMessage} />
+                <TransactionErrorContent
+                    onDismiss={onDismiss}
+                    message={swapErrorMessage}
+                />
             ) : (
                 <ConfirmationModalContent
                     title="Confirm Swap"
@@ -108,6 +142,7 @@ export default function ConfirmSwapModal({
             hash={txHash}
             content={confirmationContent}
             pendingText={pendingText}
+            pendingText2={pendingText2}
         />
     )
 }

@@ -24,7 +24,7 @@ const TYPE = {
         color: 'bg-yellow-400 bg-opacity-25 text-high-emphesis',
         icon: (
             <svg
-                className="h-5 w-5 text-yellow-400"
+                className="w-5 h-5 text-yellow-400"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -42,7 +42,7 @@ const TYPE = {
         color: 'bg-red bg-opacity-25 text-high-emphesis',
         icon: (
             <svg
-                className="h-5 w-5 text-red"
+                className="w-5 h-5 text-red"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -77,8 +77,10 @@ export default function Alert({
     }
     const { color, icon } = TYPE[type]
     return (
-        <div className={`${className} block w-full rounded text-sm p-4 ${color}`}>
-            {title && <div className="text-2xl font-medium mb-1">{title}</div>}
+        <div
+            className={`${className} block w-full rounded text-sm p-4 ${color}`}
+        >
+            {title && <div className="mb-1 text-2xl font-medium">{title}</div>}
             <div className="flex items-center">
                 {showIcon && <div className="flex-shrink-0">{icon}</div>}
                 <div className={!showIcon ? 'ml-0' : 'ml-3'}>

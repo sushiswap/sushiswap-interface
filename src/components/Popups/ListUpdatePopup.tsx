@@ -23,7 +23,7 @@ export default function ListUpdatePopup({
     listUrl,
     oldList,
     newList,
-    auto
+    auto,
 }: {
     popKey: string
     listUrl: string
@@ -32,7 +32,10 @@ export default function ListUpdatePopup({
     auto: boolean
 }) {
     const removePopup = useRemovePopup()
-    const removeThisPopup = useCallback(() => removePopup(popKey), [popKey, removePopup])
+    const removeThisPopup = useCallback(
+        () => removePopup(popKey),
+        [popKey, removePopup]
+    )
     const dispatch = useDispatch<AppDispatch>()
 
     const handleAcceptUpdate = useCallback(() => {
@@ -40,19 +43,24 @@ export default function ListUpdatePopup({
         ReactGA.event({
             category: 'Lists',
             action: 'Update List from Popup',
-            label: listUrl
+            label: listUrl,
         })
         dispatch(acceptListUpdate(listUrl))
         removeThisPopup()
     }, [auto, dispatch, listUrl, removeThisPopup])
 
-    const { added: tokensAdded, changed: tokensChanged, removed: tokensRemoved } = useMemo(() => {
+    const {
+        added: tokensAdded,
+        changed: tokensChanged,
+        removed: tokensRemoved,
+    } = useMemo(() => {
         return diffTokenLists(oldList.tokens, newList.tokens)
     }, [newList.tokens, oldList.tokens])
     const numTokensChanged = useMemo(
         () =>
             Object.keys(tokensChanged).reduce(
-                (memo, chainId: any) => memo + Object.keys(tokensChanged[chainId]).length,
+                (memo, chainId: any) =>
+                    memo + Object.keys(tokensChanged[chainId]).length,
                 0
             ),
         [tokensChanged]
@@ -63,23 +71,32 @@ export default function ListUpdatePopup({
             <AutoColumn style={{ flex: '1' }} gap="8px">
                 {auto ? (
                     <div className="font-medium">
-                        The token list &quot;{oldList.name}&quot; has been updated to{' '}
+                        The token list &quot;{oldList.name}&quot; has been
+                        updated to{' '}
                         <strong>{listVersionLabel(newList.version)}</strong>.
                     </div>
                 ) : (
                     <>
                         <div>
                             <Text>
-                                An update is available for the token list &quot;{oldList.name}&quot; (
-                                {listVersionLabel(oldList.version)} to {listVersionLabel(newList.version)}).
+                                An update is available for the token list &quot;
+                                {oldList.name}&quot; (
+                                {listVersionLabel(oldList.version)} to{' '}
+                                {listVersionLabel(newList.version)}).
                             </Text>
                             <ChangesList>
                                 {tokensAdded.length > 0 ? (
                                     <li>
                                         {tokensAdded.map((token, i) => (
-                                            <React.Fragment key={`${token.chainId}-${token.address}`}>
-                                                <strong title={token.address}>{token.symbol}</strong>
-                                                {i === tokensAdded.length - 1 ? null : ', '}
+                                            <React.Fragment
+                                                key={`${token.chainId}-${token.address}`}
+                                            >
+                                                <strong title={token.address}>
+                                                    {token.symbol}
+                                                </strong>
+                                                {i === tokensAdded.length - 1
+                                                    ? null
+                                                    : ', '}
                                             </React.Fragment>
                                         ))}{' '}
                                         added
@@ -88,23 +105,35 @@ export default function ListUpdatePopup({
                                 {tokensRemoved.length > 0 ? (
                                     <li>
                                         {tokensRemoved.map((token, i) => (
-                                            <React.Fragment key={`${token.chainId}-${token.address}`}>
-                                                <strong title={token.address}>{token.symbol}</strong>
-                                                {i === tokensRemoved.length - 1 ? null : ', '}
+                                            <React.Fragment
+                                                key={`${token.chainId}-${token.address}`}
+                                            >
+                                                <strong title={token.address}>
+                                                    {token.symbol}
+                                                </strong>
+                                                {i === tokensRemoved.length - 1
+                                                    ? null
+                                                    : ', '}
                                             </React.Fragment>
                                         ))}{' '}
                                         removed
                                     </li>
                                 ) : null}
-                                {numTokensChanged > 0 ? <li>{numTokensChanged} tokens updated</li> : null}
+                                {numTokensChanged > 0 ? (
+                                    <li>{numTokensChanged} tokens updated</li>
+                                ) : null}
                             </ChangesList>
                         </div>
                         <AutoRow>
                             <div style={{ flexGrow: 1, marginRight: 12 }}>
-                                <ButtonSecondary onClick={handleAcceptUpdate}>Accept update</ButtonSecondary>
+                                <ButtonSecondary onClick={handleAcceptUpdate}>
+                                    Accept update
+                                </ButtonSecondary>
                             </div>
                             <div style={{ flexGrow: 1 }}>
-                                <ButtonSecondary onClick={removeThisPopup}>Dismiss</ButtonSecondary>
+                                <ButtonSecondary onClick={removeThisPopup}>
+                                    Dismiss
+                                </ButtonSecondary>
                             </div>
                         </AutoRow>
                     </>

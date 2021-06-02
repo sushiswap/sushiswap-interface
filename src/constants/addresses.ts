@@ -1,5 +1,6 @@
 import { ChainId } from '@sushiswap/sdk'
 
+// TODO: Should be a simple mapping ZAPPER_ADDRESS[chainId]
 export const getZapperAddress = (chainId: ChainId | undefined) => {
     let address: string | undefined
     if (chainId) {

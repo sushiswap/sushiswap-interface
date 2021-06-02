@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { StyledBalanceMaxMini, SwapCallbackError } from './styleds'
-import { Trade, TradeType } from '@sushiswap/sdk'
+import { CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
 import {
     computeSlippageAdjustedAmounts,
     computeTradePriceBreakdown,
@@ -23,13 +23,15 @@ export default function SwapModalFooter({
     onConfirm,
     allowedSlippage,
     swapErrorMessage,
-    disabledConfirm
+    disabledConfirm,
+    archerETHTip
 }: {
     trade: Trade
     allowedSlippage: number
     onConfirm: () => void
     swapErrorMessage: string | undefined
     disabledConfirm: boolean
+    archerETHTip?: string
 }) {
     const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
@@ -98,6 +100,16 @@ export default function SwapModalFooter({
                             : '-'}
                     </div>
                 </div>
+                {archerETHTip && (
+                <div className="flex justify-between items-center">
+                    <div className="text-sm text-secondary">
+                        <div className="text-sm">{i18n._(t`Miner Tip`)}</div>
+                    </div>
+                    <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
+                        {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
+                    </div>
+                </div>
+                )}
             </div>
 
             <ButtonError onClick={onConfirm} disabled={disabledConfirm} error={severity > 2} id="confirm-swap-or-send">

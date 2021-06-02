@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, Token } from '@sushiswap/sdk'
 import React, { FC, useMemo } from 'react'
 
 import Image from 'next/image'
@@ -51,6 +51,8 @@ const logo: { readonly [chainId in ChainId]?: string } = {
     [ChainId.HARMONY_TESTNET]: HarmonyLogo,
     [ChainId.OKEX]: OKExLogo,
     [ChainId.OKEX_TESTNET]: OKExLogo,
+    [ChainId.ARBITRUM]: EthereumLogo,
+    [ChainId.ARBITRUM_TESTNET]: EthereumLogo,
 }
 
 interface CurrencyLogoProps {
@@ -61,16 +63,28 @@ interface CurrencyLogoProps {
     squared?: boolean
 }
 
-const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, className = '', squared }) => {
+const CurrencyLogo: FC<CurrencyLogoProps> = ({
+    currency,
+    size = '24px',
+    style,
+    className = '',
+    squared = true,
+}) => {
     const { chainId } = useActiveWeb3React()
-    const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
+    const uriLocations = useHttpLocations(
+        currency instanceof WrappedTokenInfo ? currency.logoURI : undefined
+    )
 
     const srcs = useMemo<string[]>(() => {
-        if (currency === NATIVE) return []
+        if (!chainId) return []
+        if (currency === Currency.getNativeCurrency(chainId)) return []
 
         if (currency instanceof Token) {
             if (currency instanceof WrappedTokenInfo) {
-                return [...uriLocations, getTokenLogoURL(currency.address, chainId)]
+                return [
+                    ...uriLocations,
+                    getTokenLogoURL(currency.address, chainId),
+                ]
             }
 
             return [getTokenLogoURL(currency.address, chainId)]
@@ -78,23 +92,27 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, c
         return []
     }, [chainId, currency, uriLocations])
 
-    if (currency === NATIVE && chainId) {
+    if (currency === Currency.getNativeCurrency(chainId)) {
         return (
             <Image
                 width={size}
                 height={size}
                 src={logo[chainId] || `/images/tokens/unknown.png`}
-                className={`${squared ? 'rounded' : 'rounded-full'} ${className} `}
+                // className={`${
+                //     squared ? 'rounded' : 'rounded-full'
+                // } ${className} `}
             />
         )
     }
+
+    console.log({ currency })
 
     return (
         <Logo
             width={size}
             height={size}
             className={`${squared ? 'rounded' : 'rounded-full'} ${className}`}
-            style={style}
+            // style={style}
             srcs={srcs}
             alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`}
         />

@@ -1,8 +1,21 @@
-import { Currency, NATIVE, Token } from '@sushiswap/sdk'
-import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Currency, Token } from '@sushiswap/sdk'
+import React, {
+    KeyboardEvent,
+    RefObject,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 import Row, { RowFixed } from '../Row'
 import { filterTokens, useSortedTokensByQuery } from './filtering'
-import { useAllTokens, useFoundOnInactiveList, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
+import {
+    useAllTokens,
+    useFoundOnInactiveList,
+    useIsUserAddedToken,
+    useToken,
+} from '../../hooks/Tokens'
 
 import AutoSizer from 'react-virtualized-auto-sizer'
 import Button from '../Button'
@@ -102,7 +115,10 @@ export function CurrencySearch({
         return filteredTokens.sort(tokenComparator)
     }, [filteredTokens, tokenComparator])
 
-    const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
+    const filteredSortedTokens = useSortedTokensByQuery(
+        sortedTokens,
+        debouncedQuery
+    )
 
     const handleCurrencySelect = useCallback(
         (currency: Currency) => {
@@ -131,10 +147,11 @@ export function CurrencySearch({
             if (e.key === 'Enter') {
                 const s = debouncedQuery.toLowerCase().trim()
                 if (s === 'eth') {
-                    handleCurrencySelect(NATIVE)
+                    handleCurrencySelect(Currency.getNativeCurrency(chainId))
                 } else if (filteredSortedTokens.length > 0) {
                     if (
-                        filteredSortedTokens[0].symbol?.toLowerCase() === debouncedQuery.trim().toLowerCase() ||
+                        filteredSortedTokens[0].symbol?.toLowerCase() ===
+                            debouncedQuery.trim().toLowerCase() ||
                         filteredSortedTokens.length === 1
                     ) {
                         handleCurrencySelect(filteredSortedTokens[0])
@@ -152,7 +169,10 @@ export function CurrencySearch({
 
     // if no results on main list, show option to expand into inactive
     const inactiveTokens = useFoundOnInactiveList(debouncedQuery)
-    const filteredInactiveTokens: Token[] = useSortedTokensByQuery(inactiveTokens, debouncedQuery)
+    const filteredInactiveTokens: Token[] = useSortedTokensByQuery(
+        inactiveTokens,
+        debouncedQuery
+    )
 
     return (
         <ContentWrapper>
@@ -182,9 +202,14 @@ export function CurrencySearch({
 
             {searchToken && !searchTokenIsAdded ? (
                 <Column style={{ padding: '20px 0', height: '100%' }}>
-                    <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
+                    <ImportRow
+                        token={searchToken}
+                        showImportView={showImportView}
+                        setImportToken={setImportToken}
+                    />
                 </Column>
-            ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
+            ) : filteredSortedTokens?.length > 0 ||
+              filteredInactiveTokens?.length > 0 ? (
                 <div className="flex-1 h-full">
                     <AutoSizer disableWidth>
                         {({ height }) => (
@@ -193,11 +218,15 @@ export function CurrencySearch({
                                 showETH={showETH}
                                 currencies={
                                     filteredInactiveTokens
-                                        ? filteredSortedTokens.concat(filteredInactiveTokens)
+                                        ? filteredSortedTokens.concat(
+                                              filteredInactiveTokens
+                                          )
                                         : filteredSortedTokens
                                 }
                                 breakIndex={
-                                    inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined
+                                    inactiveTokens && filteredSortedTokens
+                                        ? filteredSortedTokens.length
+                                        : undefined
                                 }
                                 onCurrencySelect={handleCurrencySelect}
                                 otherCurrency={otherSelectedCurrency}
@@ -211,11 +240,17 @@ export function CurrencySearch({
                 </div>
             ) : (
                 <Column style={{ padding: '20px', height: '100%' }}>
-                    <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
+                    <div className="mb-8 text-center">
+                        {i18n._(t`No results found`)}
+                    </div>
                 </Column>
             )}
             <div className="mt-3">
-                <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+                <Button
+                    id="list-token-manage-button"
+                    onClick={showManageView}
+                    color="gray"
+                >
                     {i18n._(t`Manage`)}
                 </Button>
             </div>
