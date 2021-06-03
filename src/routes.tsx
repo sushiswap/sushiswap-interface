@@ -35,9 +35,10 @@ import {
 } from './pages/Swap/redirects'
 import Tools from './pages/Tools'
 import Vesting from './pages/Vesting'
-import MasterChefV1 from './pages/Yield/masterchefv1'
-import MasterChefV1Debug from './pages/Yield/masterchefv1/debug'
-import MiniChefV2 from './pages/Yield/minichefv2'
+import Yield from './pages/Yield'
+//import MasterChefV1 from './pages/Yield/masterchefv1'
+//import MasterChefV1Debug from './pages/Yield/masterchefv1/debug'
+//import MiniChefV2 from './pages/Yield/minichefv2'
 import Positions from './pages/Positions'
 import Transactions from './pages/Transactions'
 
@@ -66,11 +67,11 @@ function Routes(): JSX.Element {
             {chainId === ChainId.MAINNET && (
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
             )}
-            {chainId === ChainId.MAINNET && <Route exact strict path="/yield" component={MasterChefV1} />}
-            {chainId === ChainId.MAINNET && (
+            {chainId === ChainId.MAINNET && <Route exact strict path="/yield" component={Yield} />}
+            {chainId === ChainId.MATIC && <Route exact strict path="/yield" component={Yield} />}
+            {/* {chainId === ChainId.MAINNET && (
                 <Route exact strict path="/yield/debug/:address" component={MasterChefV1Debug} />
-            )}
-            {chainId === ChainId.MATIC && <Route exact strict path="/yield" component={MiniChefV2} />}
+            )} */}
             {chainId === ChainId.MAINNET && <Route exact strict path="/vesting" component={Vesting} />}
 
             {/* Migrate */}

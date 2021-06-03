@@ -1,22 +1,22 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Token, WETH } from '@sushiswap/sdk'
-import { Input as NumericalInput } from '../../../components/NumericalInput'
-import { Fraction } from '../../../entities'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
+import { Input as NumericalInput } from '../../../../components/NumericalInput'
+import { Fraction } from '../../../../entities'
+import { useActiveWeb3React } from '../../../../hooks/useActiveWeb3React'
+import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import useMiniChefV2 from '../../../hooks/minichefv2/useMiniChefV2'
-import usePendingSushi from '../../../hooks/minichefv2/usePendingSushi'
-import usePendingReward from '../../../hooks/minichefv2/usePendingReward'
-import useStakedBalance from '../../../hooks/minichefv2/useStakedBalance'
-import useTokenBalance from '../../../hooks/useTokenBalance'
-import { formattedNum, isAddress, isAddressString, isWETH } from '../../../utils'
-import { Dots } from '../../Pool/styleds'
-import { Button } from '../components'
+import useMasterChefV2 from '../../hooks/masterchefv2/useMasterChefV2'
+import usePendingSushi from '../../hooks/masterchefv2/usePendingSushi'
+import usePendingReward from '../../hooks/masterchefv2/usePendingReward'
+import useStakedBalance from '../../hooks/masterchefv2/useStakedBalance'
+import useTokenBalance from '../../../../hooks/useTokenBalance'
+import { formattedNum, isAddress, isAddressString, isWETH } from '../../../../utils'
+import { Dots } from '../../../Pool/styleds'
+import { Button } from '../../components'
 import { t, Trans } from '@lingui/macro'
 
-import { tryParseAmount } from '../../../state/swap/hooks'
+import { tryParseAmount } from '../../../../state/swap/hooks'
 import { useLingui } from '@lingui/react'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
@@ -63,11 +63,11 @@ export default function InputGroup({
 
     const [approvalState, approve] = useApproveCallback(
         tryParseAmount(depositValue, new Token(chainId || 1, pairAddressChecksum, balance.decimals, pairSymbol, '')),
-        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F' //miniChef on Matic
+        '0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d' //masterchefv2 on mainnet
     )
     //console.log('Approval:', approvalState, ApprovalState.NOT_APPROVED)
 
-    const { deposit, withdraw, harvest } = useMiniChefV2()
+    const { deposit, withdraw, harvest } = useMasterChefV2()
 
     //console.log('depositValue:', depositValue)
 
@@ -85,7 +85,7 @@ export default function InputGroup({
                             }}
                         >
                             <Trans>
-                                Harvest {formattedNum(pending)} SUSHI & {formattedNum(reward)} MATIC
+                                Harvest {formattedNum(pending)} SUSHI & {formattedNum(reward)} ALCX
                             </Trans>
                         </Button>
                     </div>
