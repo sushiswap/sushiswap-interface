@@ -1,6 +1,4 @@
-import { ChevronDown, ChevronUp } from 'react-feather'
-import React, { useState } from 'react'
-import { formatNumber, formatPercent } from '../functions/format'
+import React, { useEffect, useState } from 'react'
 import { useFuse, useSortableData } from '../hooks'
 import {
     useMasterChefContract,
@@ -9,47 +7,134 @@ import {
 
 import Card from '../components/Card'
 import CardHeader from '../components/CardHeader'
-import { ChainId } from '@sushiswap/sdk'
 import Dots from '../components/Dots'
+import FarmList from '../features/farm/FarmList'
 import Head from 'next/head'
 import Header from '../features/farm/Header'
-import KashiLending from '../features/farm/KashiLending'
 import Layout from '../layouts/DefaultLayout'
-import LiquidityPosition from '../features/farm/LiquidityPosition'
-import Loading from '../features/farm/Loading'
-import Menu from '../features/farm/Menu'
-import { RowBetween } from '../components/Row'
+import Menu from '../features/farm/FarmMenu'
 import Search from '../components/Search'
+import concat from 'lodash/concat'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useMasterChefFarms from '../features/farm/useFarms'
-import useRewarder from '../hooks/useRewarder'
+import useMasterChefV2Farms from '../features/farm/masterchefv2/hooks/useFarms'
+import useMiniChefFarms from '../features/farm/minichef/hooks/useFarms'
+import useStakedPending from '../features/farm/useStakedPending'
 
-export default function Farm() {
+export default function Yield(): JSX.Element {
     const { i18n } = useLingui()
-
     const [section, setSection] =
         useState<'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'>('all')
 
-    // MasterChef v1
-    const masterchefContract = useMasterChefContract()
-    const masterchefv1Positions = useRewarder(masterchefContract)
+    // Get Farms
     const masterchefv1 = useMasterChefFarms()
+    const masterchefv2 = useMasterChefV2Farms()
+    const minichef = useMiniChefFarms()
 
-    // MasterChef v2
+    console.log('masterchefv2:', masterchefv2)
 
-    // MiniChef for multichain
+    // Get Contracts
+    const masterchefContract = useMasterChefContract()
     const minichefContract = useMiniChefV2Contract()
-    const minichefPositions = useRewarder(minichefContract)
-    // const minichef = useMiniChefFarms()
+
+    // Get Portfolios
+    const [portfolio, setPortfolio] = useState([])
+    const masterchefv1Positions = useStakedPending(masterchefContract)
+    const minichefPositions = useStakedPending(minichefContract)
+
+    const farms = concat(
+        masterchefv2 ? masterchefv2 : [],
+        masterchefv1 ? masterchefv1 : [],
+        minichef ? minichef : []
+    )
 
     console.log(
-        'positions:',
         minichefPositions[0].filter((p) => !p?.result?.[0].isZero()),
         masterchefv1Positions[0].filter((p) => !p?.result?.[0].isZero())
     )
 
-    const farms = masterchefv1
+    useEffect(() => {
+        // determine masterchefv1 positions
+        let masterchefv1Portfolio
+        if (masterchefv1) {
+            const masterchefv1WithPids = masterchefv1Positions?.[0].map(
+                (position, index) => {
+                    return {
+                        pid: index,
+                        pending_bn: position?.result?.[0],
+                        staked_bn:
+                            masterchefv1Positions?.[1][index].result?.amount,
+                    }
+                }
+            )
+            const masterchefv1Filtered = masterchefv1WithPids.filter(
+                (position) => {
+                    return (
+                        position?.pending_bn?.gt(0) ||
+                        position?.staked_bn?.gt(0)
+                    )
+                }
+            )
+            // fetch any relevant details through pid
+            const masterchefv1PositionsWithDetails = masterchefv1Filtered.map(
+                (position) => {
+                    const pair = masterchefv1?.find(
+                        (pair: any) => pair.pid === position.pid
+                    )
+                    return {
+                        ...pair,
+                        ...position,
+                    }
+                }
+            )
+            masterchefv1Portfolio = masterchefv1PositionsWithDetails
+        }
+
+        let minichefPortfolio
+        if (minichef) {
+            // determine minichef positions
+            const minichefWithPids = minichefPositions?.[0].map(
+                (position, index) => {
+                    return {
+                        pid: index,
+                        pending: position?.result?.[0],
+                        staked: minichefPositions?.[1][index].result?.amount,
+                    }
+                }
+            )
+            const minichefFiltered = minichefWithPids.filter(
+                (position: any) => {
+                    return position?.pending?.gt(0) || position?.staked?.gt(0)
+                }
+            )
+            // fetch any relevant details through pid
+            const minichefPositionsWithDetails = minichefFiltered.map(
+                (position) => {
+                    const pair = minichef?.find(
+                        (pair: any) => pair.pid === position.pid
+                    )
+                    return {
+                        ...pair,
+                        ...position,
+                    }
+                }
+            )
+            minichefPortfolio = minichefPositionsWithDetails
+        }
+
+        console.log({ minichefPortfolio, masterchefv1Portfolio })
+
+        setPortfolio(
+            concat(minichefPortfolio, masterchefv1Portfolio)[0]
+                ? concat(minichefPortfolio, masterchefv1Portfolio)
+                : []
+        )
+
+        // setPortfolio(
+        //     concat(minichefPortfolio || [], masterchefv1Portfolio || [])
+        // )
+    }, [masterchefv1, masterchefv1Positions, minichef, minichefPositions])
 
     //Search Setup
     const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
@@ -65,36 +150,39 @@ export default function Farm() {
     const { items, requestSort, sortConfig } =
         useSortableData(flattenSearchResults)
 
+    console.log({ portfolio })
+
     return (
         <Layout>
             <Head>
                 <title>Farm | Sushi</title>
-                <meta
-                    name="description"
-                    content="Farm SUSHI with Liquidity Mining Pools and the Sushi Bar."
-                />
+                <meta name="description" content="Farm SUSHI" />
             </Head>
-
-            <div className="container grid grid-cols-12 gap-4">
+            <div className="container grid h-full grid-cols-4 gap-4 mx-auto">
                 <div
-                    className="sticky top-0 col-span-3 space-y-2 "
+                    className="sticky top-0 hidden lg:block md:col-span-1"
                     style={{ maxHeight: '40rem' }}
                 >
                     <Menu section={section} setSection={setSection} />
                 </div>
-
-                <div className="col-span-9">
+                <div className="col-span-4 lg:col-span-3">
                     <Card
-                        className="w-full h-full bg-dark-900"
+                        className="h-full bg-dark-900"
                         header={
-                            <CardHeader className="flex items-center justify-between bg-dark-800">
+                            <CardHeader className="flex flex-col items-center bg-dark-800">
                                 <div className="flex justify-between w-full">
                                     <div className="items-center hidden md:flex">
                                         <div className="mr-2 text-lg whitespace-nowrap">
-                                            {i18n._(t`Yield Instruments`)}
+                                            {i18n._(t`Yield Farms`)}
                                         </div>
                                     </div>
                                     <Search search={search} term={term} />
+                                </div>
+                                <div className="container block pt-6 lg:hidden">
+                                    <Menu
+                                        section={section}
+                                        setSection={setSection}
+                                    />
                                 </div>
                             </CardHeader>
                         }
@@ -103,108 +191,96 @@ export default function Farm() {
                             sortConfig={sortConfig}
                             requestSort={requestSort}
                         />
-                        {section && section === 'slp' && (
-                            <div className="flex-col space-y-2">
-                                {items && items.length > 0 ? (
-                                    items.map((farm: any, i: number) => {
-                                        if (farm.type === 'SLP') {
-                                            return (
-                                                <LiquidityPosition
-                                                    key={farm.address + '_' + i}
-                                                    farm={farm}
-                                                />
-                                            )
-                                        } else {
-                                            return null
-                                        }
-                                    })
+                        {section && section === 'portfolio' && (
+                            <>
+                                {portfolio && portfolio.length > 0 ? (
+                                    <FarmList farms={portfolio} />
+                                ) : term ? (
+                                    <div className="w-full py-6 text-center">
+                                        No Results.
+                                    </div>
                                 ) : (
-                                    <>
-                                        {term ? (
-                                            <div className="w-full py-6 text-center">
-                                                No Results.
-                                            </div>
-                                        ) : (
-                                            <div className="w-full py-6 text-center">
-                                                <Dots>
-                                                    Fetching Instruments
-                                                </Dots>
-                                            </div>
-                                        )}
-                                    </>
+                                    <div className="w-full py-6 text-center">
+                                        <Dots>Fetching Portfolio</Dots>
+                                    </div>
                                 )}
-                            </div>
+                            </>
+                        )}
+
+                        {section && section === 'all' && (
+                            <>
+                                {items && items.length > 0 ? (
+                                    <FarmList farms={items} />
+                                ) : term ? (
+                                    <div className="w-full py-6 text-center">
+                                        No Results.
+                                    </div>
+                                ) : (
+                                    <div className="w-full py-6 text-center">
+                                        <Dots>Fetching Farms</Dots>
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        {section && section === 'slp' && (
+                            <>
+                                {items && items.length > 0 ? (
+                                    <FarmList
+                                        farms={items.filter(
+                                            (farm) => farm.type === 'SLP'
+                                        )}
+                                    />
+                                ) : term ? (
+                                    <div className="w-full py-6 text-center">
+                                        No Results.
+                                    </div>
+                                ) : (
+                                    <div className="w-full py-6 text-center">
+                                        <Dots>Fetching Farms</Dots>
+                                    </div>
+                                )}
+                            </>
                         )}
                         {section && section === 'kmp' && (
-                            <div className="flex-col space-y-2">
+                            <>
                                 {items && items.length > 0 ? (
-                                    items.map((farm: any, i: number) => {
-                                        if (farm.type === 'KMP') {
-                                            return (
-                                                <KashiLending
-                                                    key={farm.address + '_' + i}
-                                                    farm={farm}
-                                                />
-                                            )
-                                        } else {
-                                            return null
-                                        }
-                                    })
-                                ) : (
-                                    <>
-                                        {term ? (
-                                            <div className="w-full py-6 text-center">
-                                                No Results.
-                                            </div>
-                                        ) : (
-                                            <div className="w-full py-6 text-center">
-                                                <Dots>
-                                                    Fetching Instruments
-                                                </Dots>
-                                            </div>
+                                    <FarmList
+                                        farms={items.filter(
+                                            (farm) => farm.type === 'KMP'
                                         )}
-                                    </>
+                                    />
+                                ) : term ? (
+                                    <div className="w-full py-6 text-center">
+                                        No Results.
+                                    </div>
+                                ) : (
+                                    <div className="w-full py-6 text-center">
+                                        <Dots>Fetching Farms</Dots>
+                                    </div>
                                 )}
-                            </div>
+                            </>
                         )}
-                        {section && section === 'all' && (
-                            <div className="flex-col space-y-2">
+                        {section && section === 'mcv2' && (
+                            <>
                                 {items && items.length > 0 ? (
-                                    items.map((farm: any, i: number) => {
-                                        if (farm.type === 'KMP') {
-                                            return (
-                                                <KashiLending
-                                                    key={farm.address + '_' + i}
-                                                    farm={farm}
-                                                />
-                                            )
-                                        } else if (farm.type === 'SLP') {
-                                            return (
-                                                <LiquidityPosition
-                                                    key={farm.address + '_' + i}
-                                                    farm={farm}
-                                                />
-                                            )
-                                        } else {
-                                            return null
-                                        }
-                                    })
-                                ) : (
-                                    <>
-                                        {term ? (
-                                            <div className="w-full py-6 text-center">
-                                                No Results.
-                                            </div>
-                                        ) : (
-                                            <div className="w-full py-6 text-center">
-                                                <Dots>
-                                                    Fetching Instruments
-                                                </Dots>
-                                            </div>
+                                    <FarmList
+                                        farms={items.filter(
+                                            (farm) =>
+                                                farm.type === 'SLP' &&
+                                                farm.contract === 'masterchefv2'
                                         )}
-                                    </>
+                                    />
+                                ) : term ? (
+                                    <div className="w-full py-6 text-center">
+                                        No Results.
+                                    </div>
+                                ) : (
+                                    <div className="w-full py-6 text-center">
+                                        <Dots>Fetching Farms</Dots>
+                                    </div>
                                 )}
-                            </div>
+                            </>
                         )}
                     </Card>
                 </div>

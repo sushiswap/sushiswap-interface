@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react'
 
 import { HelpCircle } from 'react-feather'
-import Image from 'next/image'
+// import Image from 'next/image'
+import Image from '../Image'
 import { ImageProps } from 'rebass'
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {}

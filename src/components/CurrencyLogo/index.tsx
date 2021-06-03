@@ -97,10 +97,10 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
             <Image
                 width={size}
                 height={size}
+                className={`${
+                    squared ? 'rounded' : 'rounded-full'
+                } ${className}`}
                 src={logo[chainId] || `/images/tokens/unknown.png`}
-                // className={`${
-                //     squared ? 'rounded' : 'rounded-full'
-                // } ${className} `}
             />
         )
     }
@@ -112,7 +112,7 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
             width={size}
             height={size}
             className={`${squared ? 'rounded' : 'rounded-full'} ${className}`}
-            // style={style}
+            style={style}
             srcs={srcs}
             alt={`${currency?.getSymbol(chainId) ?? 'token'} logo`}
         />

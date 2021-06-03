@@ -9,6 +9,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
 import Dots from '../../components/Dots'
 import { Fraction } from '../../entities'
+import Link from 'next/link'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { formatNumber } from '../../functions/format'
 import { getAddress } from '@ethersproject/address'
@@ -63,7 +64,6 @@ export default function InputGroup({
     const token0 = useCurrency(token0Address)
     const token1 = useCurrency(token1Address)
 
-    //const { deposit } = useBentoBox()
     const balance = useTokenBalance(address)
     const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
@@ -92,7 +92,7 @@ export default function InputGroup({
                     {type === 'LP' && (
                         <>
                             <Button
-                                color="default"
+                                color="gray"
                                 // onClick={() =>
                                 //     // router.push(
                                 //     //     `/add/${isWETH(token0Address)}/${isWETH(
@@ -104,7 +104,7 @@ export default function InputGroup({
                                 {i18n._(t`Add Liquidity`)}
                             </Button>
                             <Button
-                                color="default"
+                                color="gray"
                                 // onClick={() =>
                                 //     // router.push(
                                 //     //     `/remove/${isWETH(
@@ -119,22 +119,12 @@ export default function InputGroup({
                     )}
                     {type === 'KMP' && assetSymbol && (
                         <>
-                            <Button
-                                color="default"
-                                onClick={() =>
-                                    router.push(`/bento/kashi/lend/${address}`)
-                                }
-                            >
+                            <Link href={`/lend/${address}`}>
                                 {i18n._(t`Lend ${assetSymbol}`)}
-                            </Button>
-                            <Button
-                                color="default"
-                                onClick={() =>
-                                    router.push(`/bento/kashi/lend/${address}`)
-                                }
-                            >
-                                {i18n._(t`Withdraw ${assetSymbol}`)}
-                            </Button>
+                            </Link>
+                            <Link href={`/lend/${address}`}>
+                                {i18n._(t`Collect ${assetSymbol}`)}
+                            </Link>
                         </>
                     )}
                 </div>
@@ -156,7 +146,7 @@ export default function InputGroup({
                         )}
                         <div className="relative flex items-center w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 pr-20 rounded bg-input focus:ring focus:ring-blue"
+                                className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-blue"
                                 value={depositValue}
                                 onUserInput={(value) => {
                                     setDepositValue(value)
@@ -166,6 +156,7 @@ export default function InputGroup({
                                 <Button
                                     variant="outlined"
                                     color="blue"
+                                    size="small"
                                     onClick={() => {
                                         setDepositValue(
                                             fixedFormatting(
@@ -241,7 +232,7 @@ export default function InputGroup({
                         )}
                         <div className="relative flex items-center w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 pr-20 rounded bg-input focus:ring focus:ring-pink"
+                                className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
                                 value={withdrawValue}
                                 onUserInput={(value) => {
                                     setWithdrawValue(value)
@@ -251,6 +242,7 @@ export default function InputGroup({
                                 <Button
                                     variant="outlined"
                                     color="pink"
+                                    size="small"
                                     onClick={() => {
                                         setWithdrawValue(
                                             fixedFormatting(
@@ -297,7 +289,7 @@ export default function InputGroup({
                 {pending && Number(pending) > 0 && (
                     <div className="px-4 ">
                         <Button
-                            color="default"
+                            color="gray"
                             onClick={async () => {
                                 setPendingTx(true)
                                 await harvest(pid, pairSymbol)
@@ -308,6 +300,14 @@ export default function InputGroup({
                         </Button>
                     </div>
                 )}
+
+                {/* <Link href={`/lend/${address}`}>
+                    <a className="text-center">
+                        {i18n._(
+                            t`View ${token0.symbol}/${token1.symbol} ${type} Pair`
+                        )}
+                    </a>
+                </Link> */}
             </div>
         </>
     )
