@@ -19,7 +19,6 @@ export default function ExchangeHeader({
     const { chainId } = useActiveWeb3React()
     const [animateSettings, setAnimateSettings] = useState(false)
     const [animateWallet, setAnimateWallet] = useState(false)
-    console.log({ input, output })
     return (
         <div className="flex justify-between mb-4 space-x-3">
             <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">

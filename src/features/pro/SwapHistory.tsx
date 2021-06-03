@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { t } from '@lingui/macro'
-import { formatNumber, priceFormatter } from '../../functions'
+import { amountFormatter, priceFormatter } from '../../functions'
 import { useLingui } from '@lingui/react'
 import withPair, { WithPairProps } from '../../hoc/withPair'
-import { useSwapHistory } from '../../context/Pro/hooks'
+import { usePro } from '../../context/Pro/hooks'
 import { OrderDirection } from '../../context/Pro/types'
 
 interface ListHeaderProps {
@@ -12,7 +12,9 @@ interface ListHeaderProps {
 
 const ListHeader: FC<ListHeaderProps> = ({ children, className = '' }) => {
     return (
-        <div className={`flex items-center cursor-pointer hover:text-primary text-sm ${className}`}>
+        <div
+            className={`flex items-center cursor-pointer hover:text-primary text-sm ${className}`}
+        >
             <div>{children}</div>
         </div>
     )
@@ -22,42 +24,66 @@ interface SwapHistoryProps extends WithPairProps {}
 
 const SwapHistory: FC<SwapHistoryProps> = ({ pair }) => {
     const { i18n } = useLingui()
-    const swapHistory = useSwapHistory()
+    const [{ swapHistory }] = usePro()
 
     return (
         <div className="overflow-hidden h-full">
-            <div className="grid grid-flow-col grid-cols-12 items-center text-secondary gap-2 bg-dark-1000 h-10 px-4 border-b border-dark-850">
-                <ListHeader className="col-span-3">
+            <div className="grid grid-flow-col grid-cols-12 items-center text-secondary gap-2 h-8 px-4 border-b border-dark-850">
+                <ListHeader className="col-span-4 justify-end">
                     {i18n._(t`Size`)}{' '}
-                    <span className="font-bold text-secondary text-[.625rem] bg-dark-900 rounded px-1 py-0.5">
+                    <span className="font-bold text-secondary text-[.625rem] bg-dark-800 rounded px-1 py-0.5">
                         {pair?.token0.symbol}
                     </span>
                 </ListHeader>
-                <ListHeader className="col-span-3">
+                <ListHeader className="col-span-4 justify-end">
                     {i18n._(t`Price`)}{' '}
-                    <span className="font-bold text-secondary text-[.625rem] bg-dark-900 rounded px-1 py-0.5">USD</span>
+                    <span className="font-bold text-secondary text-[.625rem] bg-dark-800 rounded px-1 py-0.5">
+                        USD
+                    </span>
                 </ListHeader>
-                <ListHeader className="justify-end col-span-6">{i18n._(t`Time`)}</ListHeader>
+                <ListHeader className="col-span-4 justify-end">
+                    {i18n._(t`Time`)}
+                </ListHeader>
             </div>
             <div className="h-[calc(100%-2.5rem)] overflow-auto">
                 <div className="flex flex-col px-4 py-1">
-                    {swapHistory.map(({ chainId, amountBase, side, timestamp, price, txHash }, index) => {
-                        const buy = side === OrderDirection.BUY
-                        return (
-                            <div
-                                key={`${txHash}-${index}`}
-                                className="grid grid-flow-col grid-cols-12 text-xs gap-2 items-center h-[20px] font-mono"
-                            >
-                                <div className={`col-span-3 ${buy ? 'text-green' : 'text-red'}`}>
-                                    {formatNumber(amountBase)}
+                    {swapHistory.map(
+                        (
+                            {
+                                chainId,
+                                amountBase,
+                                side,
+                                timestamp,
+                                price,
+                                txHash,
+                            },
+                            index
+                        ) => {
+                            const buy = side === OrderDirection.BUY
+                            return (
+                                <div
+                                    key={`${txHash}-${index}`}
+                                    className="grid grid-flow-col grid-cols-12 text-xs gap-2 items-center h-[20px] font-mono"
+                                >
+                                    <div
+                                        className={`text-right col-span-4 ${
+                                            buy ? 'text-green' : 'text-red'
+                                        }`}
+                                    >
+                                        {amountFormatter.format(amountBase)}
+                                    </div>
+                                    <div className="col-span-4 font-mono text-right">
+                                        {priceFormatter.format(price)}
+                                    </div>
+                                    <div className="col-span-4 text-right text-secondary font-mono whitespace-nowrap">
+                                        {new Date(
+                                            timestamp * 1000
+                                        ).toLocaleTimeString()}
+                                    </div>
                                 </div>
-                                <div className="col-span-3 font-mono">{priceFormatter.format(price)}</div>
-                                <div className="col-span-6 text-right text-secondary font-mono whitespace-nowrap">
-                                    {new Date(timestamp * 1000).toLocaleString()}
-                                </div>
-                            </div>
-                        )
-                    })}
+                            )
+                        }
+                    )}
                 </div>
             </div>
         </div>

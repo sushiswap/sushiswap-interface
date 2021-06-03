@@ -72,8 +72,6 @@ export default function Add() {
     const tokens = router.query.tokens
     const [currencyIdA, currencyIdB] = tokens as string[]
 
-    console.log({ currencyIdA, currencyIdB })
-
     const currencyA = useCurrency(currencyIdA)
     const currencyB = useCurrency(currencyIdB)
 

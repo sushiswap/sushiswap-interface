@@ -161,8 +161,6 @@ export default function SlippageTabs({
         } catch {}
     }
 
-    console.log({ rawSlippage })
-
     return (
         <AutoColumn gap="md">
             <AutoColumn gap="sm">

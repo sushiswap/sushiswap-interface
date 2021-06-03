@@ -10,6 +10,30 @@ export enum OrderType {
     MARKET = 'MARKET',
 }
 
+export interface PairData {
+    current: {
+        id: string
+        reserveUSD: string
+        txCount: string
+        untrackedVolumeUSD: string
+        volumeUSD: string
+    }
+    oneDay: {
+        id: string
+        reserveUSD: string
+        txCount: string
+        untrackedVolumeUSD: string
+        volumeUSD: string
+    }
+    twoDay: {
+        id: string
+        reserveUSD: string
+        txCount: string
+        untrackedVolumeUSD: string
+        volumeUSD: string
+    }
+}
+
 export interface SwapMessageResponse {
     action: string
     start_time: string
@@ -78,10 +102,20 @@ export enum ActionType {
 }
 
 export interface State {
-    userHistory: UserHistoryMessage[]
+    lastSwap: SwapMessage | null
+    userSwapHistory: UserHistoryMessage[]
     swapHistory: SwapMessage[]
+    oneDayBlock: number
+    twoDayBlock: number
+    pairData: PairData | null
 }
 
 export type Action =
-    | GlobalDataReducerAction<ActionType.PUSH_SWAP_MESSAGE, PushSwapMessagePayload>
-    | GlobalDataReducerAction<ActionType.PUSH_HISTORY_MESSAGE, PushHistoryMessagePayload>
+    | GlobalDataReducerAction<
+          ActionType.PUSH_SWAP_MESSAGE,
+          PushSwapMessagePayload
+      >
+    | GlobalDataReducerAction<
+          ActionType.PUSH_HISTORY_MESSAGE,
+          PushHistoryMessagePayload
+      >

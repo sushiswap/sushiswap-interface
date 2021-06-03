@@ -28,7 +28,7 @@ export const getBlockHeights = (
     endDate
 ) =>
     fetch(
-        `https://api.covalenthq.com/v1/${chainId}/block_v2/${startDate}/${endDate}/`
+        `https://api.covalenthq.com/v1/${chainId}/block_v2/${startDate}/${endDate}/?key=ckey_cba3674f2ce5450f9d5dd290589`
     ).then((res) => res.json())
 
 export const getLogs = (chainId = ChainId.MAINNET, address) =>
@@ -94,5 +94,10 @@ export const getSushiSwapLiquidityTransactions = (
     address
 ) =>
     fetch(
-        `https://api.covalenthq.com/v1/${chainId}/address/${address}/stacks/sushiswap/acts/`
+        `https://api.covalenthq.com/v1/${chainId}/address/${address}/stacks/sushiswap/acts/?key=ckey_cba3674f2ce5450f9d5dd290589`
+    ).then((res) => res.json())
+
+export const getSushiSwapBalances = (chainId = ChainId.MAINNET, address) =>
+    fetch(
+        `https://api.covalenthq.com/v1/${chainId}/address/${address}/stacks/sushiswap/balances/?key=ckey_cba3674f2ce5450f9d5dd290589`
     ).then((res) => res.json())

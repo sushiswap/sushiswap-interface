@@ -8,7 +8,7 @@ import {
     TokenAmount,
     Trade,
     WETH,
-    ROUTER_ADDRESS
+    ROUTER_ADDRESS,
 } from '@sushiswap/sdk'
 import { useCallback, useMemo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,14 +19,20 @@ import { useTotalSupply } from '../../hooks/useTotalSupply'
 import ROUTER_ABI_SLIM from '../../constants/abis/router-slim.json'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useTradeExactIn } from '../../hooks/Trades'
-import { wrappedCurrency, wrappedCurrencyAmount } from '../../functions/currency/wrappedCurrency'
+import {
+    wrappedCurrency,
+    wrappedCurrencyAmount,
+} from '../../functions/currency/wrappedCurrency'
 import { AppDispatch, AppState } from '../index'
 import { tryParseAmount } from '../swap/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 import usePool from '../../hooks/usePool'
 import { useCurrency } from '../../hooks/Tokens'
-import { useUserSingleHopOnly, useUserSlippageTolerance } from '../../state/user/hooks'
+import {
+    useUserSingleHopOnly,
+    useUserSlippageTolerance,
+} from '../../state/user/hooks'
 import { basisPointsToPercent } from '../../functions'
 import { getZapperAddress } from '../../constants/addresses'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
@@ -36,25 +42,29 @@ import useParsedQueryString from '../../hooks/useParsedQueryString'
 const ZERO = JSBI.BigInt(0)
 
 export function useZapState(): AppState['zap'] {
-    return useSelector<AppState, AppState['zap']>(state => state.zap)
+    return useSelector<AppState, AppState['zap']>((state) => state.zap)
 }
 
-export function useZapActionHandlers(
-    noLiquidity: boolean | undefined
-): {
+export function useZapActionHandlers(noLiquidity: boolean | undefined): {
     onFieldInput: (typedValue: string) => void
 } {
     const dispatch = useDispatch<AppDispatch>()
 
     const onFieldInput = useCallback(
         (typedValue: string) => {
-            dispatch(typeInput({ field: Field.CURRENCY, typedValue, noLiquidity: noLiquidity === true }))
+            dispatch(
+                typeInput({
+                    field: Field.CURRENCY,
+                    typedValue,
+                    noLiquidity: noLiquidity === true,
+                })
+            )
         },
         [dispatch, noLiquidity]
     )
 
     return {
-        onFieldInput
+        onFieldInput,
     }
 }
 
@@ -96,11 +106,15 @@ export function useDerivedZapInfo(
     const currency1 = useCurrency(token1)
 
     // pair
-    const [pairState, pair] = usePair(currency0 ?? undefined, currency1 ?? undefined)
+    const [pairState, pair] = usePair(
+        currency0 ?? undefined,
+        currency1 ?? undefined
+    )
     const totalSupply = useTotalSupply(pair?.liquidityToken)
 
     const noLiquidity: boolean =
-        pairState === PairState.NOT_EXISTS || Boolean(totalSupply && JSBI.equal(totalSupply.raw, ZERO))
+        pairState === PairState.NOT_EXISTS ||
+        Boolean(totalSupply && JSBI.equal(totalSupply.raw, ZERO))
 
     // balance
     const balances = useCurrencyBalances(account ?? undefined, [currency])
@@ -114,13 +128,21 @@ export function useDerivedZapInfo(
     // Two trades if providing neither
     const isTradingCurrency0 =
         currency?.symbol === currency0?.symbol ||
-        (currency0?.symbol === WETH[chainId || 1].symbol && currency === Currency.ETHER)
+        (currency0?.symbol === WETH[chainId || 1].symbol &&
+            currency === Currency.ETHER)
     const isTradingCurrency1 =
         currency?.symbol === currency1?.symbol ||
-        (currency1?.symbol === WETH[chainId || 1].symbol && currency === Currency.ETHER)
+        (currency1?.symbol === WETH[chainId || 1].symbol &&
+            currency === Currency.ETHER)
 
-    const currencyZeroTrade = useTradeExactIn(tradeAmount, currency0 ?? undefined)
-    const currencyOneTrade = useTradeExactIn(tradeAmount, currency1 ?? undefined)
+    const currencyZeroTrade = useTradeExactIn(
+        tradeAmount,
+        currency0 ?? undefined
+    )
+    const currencyOneTrade = useTradeExactIn(
+        tradeAmount,
+        currency1 ?? undefined
+    )
     let currencyZeroOutput = currencyZeroTrade?.outputAmount
     let currencyOneOutput = currencyOneTrade?.outputAmount
     const bestTradeExactIn = useTradeExactIn(
@@ -143,10 +165,14 @@ export function useDerivedZapInfo(
     const liquidityMinted = useMemo(() => {
         const [tokenAmountA, tokenAmountB] = [
             wrappedCurrencyAmount(currencyZeroOutput, chainId),
-            wrappedCurrencyAmount(currencyOneOutput, chainId)
+            wrappedCurrencyAmount(currencyOneOutput, chainId),
         ]
         if (pair && totalSupply && tokenAmountA && tokenAmountB) {
-            return pair.getLiquidityMinted(totalSupply, tokenAmountA, tokenAmountB)
+            return pair.getLiquidityMinted(
+                totalSupply,
+                tokenAmountA,
+                tokenAmountB
+            )
         } else {
             return undefined
         }
@@ -154,7 +180,10 @@ export function useDerivedZapInfo(
 
     const poolTokenPercentage = useMemo(() => {
         if (liquidityMinted && totalSupply) {
-            return new Percent(liquidityMinted.raw, totalSupply.add(liquidityMinted).raw)
+            return new Percent(
+                liquidityMinted.raw,
+                totalSupply.add(liquidityMinted).raw
+            )
         } else {
             return undefined
         }
@@ -178,7 +207,11 @@ export function useDerivedZapInfo(
     const zapperAddress = getZapperAddress(chainId)
 
     const encodeSwapData = () => {
-        if (!!currencyZeroTrade && !!currencyOneTrade && parsedAmount !== undefined) {
+        if (
+            !!currencyZeroTrade &&
+            !!currencyOneTrade &&
+            parsedAmount !== undefined
+        ) {
             if (
                 currency === Currency.ETHER &&
                 currency?.symbol !== currency0?.symbol &&
@@ -186,9 +219,9 @@ export function useDerivedZapInfo(
             ) {
                 return routerIface.encodeFunctionData('swapExactETHForTokens', [
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
-                    currencyZeroTrade?.route.path.map(t => t.address),
+                    currencyZeroTrade?.route.path.map((t) => t.address),
                     zapperAddress,
-                    deadline
+                    deadline,
                 ])
             }
 
@@ -197,13 +230,16 @@ export function useDerivedZapInfo(
                 currency?.symbol !== currency0?.symbol &&
                 currency?.symbol !== currency1?.symbol
             ) {
-                return routerIface.encodeFunctionData('swapExactTokensForTokens', [
-                    parsedAmount?.raw.toString(),
-                    currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
-                    currencyZeroTrade?.route.path.map(t => t.address),
-                    zapperAddress,
-                    deadline
-                ])
+                return routerIface.encodeFunctionData(
+                    'swapExactTokensForTokens',
+                    [
+                        parsedAmount?.raw.toString(),
+                        currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
+                        currencyZeroTrade?.route.path.map((t) => t.address),
+                        zapperAddress,
+                        deadline,
+                    ]
+                )
             }
         }
 
@@ -247,7 +283,7 @@ export function useDerivedZapInfo(
         currencyOneOutput,
         encodeSwapData,
         isTradingUnderlying,
-        bestTrade: bestTradeExactIn ?? undefined
+        bestTrade: bestTradeExactIn ?? undefined,
     }
 }
 
@@ -259,19 +295,21 @@ export function useDefaultsFromURLSearch():
     const dispatch = useDispatch<AppDispatch>()
     const parsedQs = useParsedQueryString()
     // const parsedQs = {}
-    const [result, setResult] = useState<
-        { poolAddress: string | undefined; currencyId: string | undefined } | undefined
-    >()
-
-    console.log(result)
-    console.log(parsedQs)
+    const [result, setResult] =
+        useState<
+            | {
+                  poolAddress: string | undefined
+                  currencyId: string | undefined
+              }
+            | undefined
+        >()
 
     useEffect(() => {
         if (!chainId) return
 
         setResult({
             poolAddress: parsedQs.poolAddress,
-            currencyId: parsedQs.currencyId
+            currencyId: parsedQs.currencyId,
         })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

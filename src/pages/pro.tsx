@@ -10,9 +10,35 @@ import QuantStats from '../features/pro/QuantStats'
 import UserSwapHistory from '../features/pro/UserSwapHistory'
 import OrderForm from '../features/pro/OrderForm'
 import MarketSelect from '../features/pro/MarketSelect'
-import TabCard from '../components/TabCard'
+import { Responsive, WidthProvider } from 'react-grid-layout'
+import Tabs from '../components/Tabs'
+import Balances from '../features/pro/Balances'
+
+const ResponsiveGridLayout = WidthProvider(Responsive)
+
+const Card: FC<{ title?: string }> = ({ children, title }) => {
+    return (
+        <div className="bg-dark-900 rounded-sm overflow-hidden h-full">
+            {title && (
+                <div className="flex text-sm font-bold text-secondary h-10 bg-dark-800 items-center px-4">
+                    {title}
+                </div>
+            )}
+            {children}
+        </div>
+    )
+}
 
 const Pro: FC = () => {
+    const layouts = {
+        lg: [
+            { i: 'OrderForm', x: 0, y: 0, w: 4, h: 10 },
+            { i: 'QuantStats', x: 0, y: 20, w: 4, h: 10 },
+            { i: 'SwapHistory', x: 4, y: 20, w: 4, h: 20 },
+            { i: 'TVChart', x: 8, y: 0, w: 16, h: 14 },
+            { i: 'Positions', x: 8, y: 20, w: 16, h: 6 },
+        ],
+    }
     return (
         <ProProvider>
             <Header />
@@ -20,38 +46,65 @@ const Pro: FC = () => {
                 <title>SushiPro | Sushi</title>
                 <meta name="description" content="Pro" />
             </Head>
-            <div className="flex flex-col max-h-[calc(100vh-80px)] min-h-[calc(100vh-80px)] bg-[rgba(255,255,255,0.04)] fixed left-0 right-0">
-                <div className="flex flex-col relative w-full h-full">
-                    <div className="flex flex-row min-h-[48px] max-h-[48px] border-b border-gray-800">
-                        <div className="flex flex-col w-[324px] border-r border-gray-800">
-                            <MarketSelect />
-                        </div>
-                        <div className="flex flex-col border-gray-800">
-                            <PriceHeaderStats />
-                        </div>
+            <div className="flex flex-col w-full gap-2">
+                <div className="flex flex-row w-full p-4 pb-0">
+                    <div className="flex flex-col min-w-[324px] justify-center">
+                        <MarketSelect />
                     </div>
-                    <div className="flex flex-row relative h-[calc(100vh-128px)] w-full">
-                        <div className="flex flex-col w-[324px] h-full border-r border-gray-800">
-                            <OrderForm />
-                        </div>
-                        <div className="flex flex-col w-[324px] border-r border-gray-800">
-                            <TabCard
-                                titles={['Trades', 'Order Book']}
-                                components={[<SwapHistory />, <SwapHistory />]}
-                            />
-                        </div>
-                        <div className="flex flex-col min-w-[calc(100%-648px)] max-w-[calc(100%-648px)]">
-                            <div className="min-h-[600px] border-b border-gray-800">
-                                <TVChartContainer />
-                            </div>
-                            <UserSwapHistory />
-                        </div>
-                    </div>
-                    <div className="col-span-2 border-dark-800">
-                        <QuantStats />
+                    <div className="flex flex-col justify-center">
+                        <PriceHeaderStats />
                     </div>
                 </div>
+                <div className="flex flex-row w-full relative">
+                    <ResponsiveGridLayout
+                        style={{ width: '100%' }}
+                        breakpoints={{
+                            lg: 1200,
+                            md: 996,
+                            sm: 768,
+                            xs: 480,
+                            xxs: 0,
+                        }}
+                        cols={{ lg: 24, md: 10, sm: 6, xs: 4, xxs: 2 }}
+                        className="layout"
+                        layouts={layouts}
+                        rowHeight={30}
+                    >
+                        <div key="OrderForm">
+                            <Card>
+                                <OrderForm />
+                            </Card>
+                        </div>
+                        <div key="QuantStats">
+                            <Card>
+                                <QuantStats />
+                            </Card>
+                        </div>
+                        <div key="SwapHistory">
+                            <Card title="Recent Trades">
+                                <SwapHistory />
+                            </Card>
+                        </div>
+                        <div key="Positions">
+                            <Card>
+                                <Tabs
+                                    titles={['Balances', 'Transaction History']}
+                                    components={[
+                                        <Balances />,
+                                        <UserSwapHistory />,
+                                    ]}
+                                />
+                            </Card>
+                        </div>
+                        <div key="TVChart">
+                            <Card>
+                                <TVChartContainer />
+                            </Card>
+                        </div>
+                    </ResponsiveGridLayout>
+                </div>
             </div>
+
             <Footer />
         </ProProvider>
     )

@@ -23,7 +23,6 @@ export default function Buy() {
         if (!(chainId in DEFAULT_NETWORK)) {
             return
         }
-        console.log({ chainId })
 
         const transak = new transakSDK({
             apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY, // Your API Key

@@ -10,14 +10,18 @@ import {
     getNftTokenIds,
     getNftTransactions,
     getPortfolio,
+    getSushiSwapBalances,
+    getSushiSwapLiquidityTransactions,
     getTokenBalances,
     getTokenHolders,
     getTokenMetadata,
     getTransaction,
     getTransfers,
 } from '../../fetchers/covalent'
+import { startOfMinute, subDays } from 'date-fns'
 
 import useSWR from 'swr'
+import { useMemo } from 'react'
 
 // CLASS A
 export function useTokenBalances({ initialData, chainId, address }) {
@@ -57,12 +61,49 @@ export function useBlock({ initialData, chainId, blockHeight }) {
 }
 
 export function useBlockHeights({ initialData, chainId, startDate, endDate }) {
-    const res = useSWR(
-        `https://api.covalenthq.com/v1/${chainId}/block_v2/${startDate}/${endDate}/`,
-        () => getBlockHeights(chainId, startDate, endDate),
-        { initialData }
+    return useSWR([chainId, startDate, endDate], getBlockHeights, {
+        initialData,
+    })
+}
+
+export function useOneDayBlock({ chainId }) {
+    const date = startOfMinute(subDays(Date.now(), 1))
+    const inputData = useMemo(
+        () => ({
+            initialData: {
+                data: { items: [{ height: 0 }] },
+            },
+            chainId,
+            startDate: new Date(Math.floor(+date / 1000) * 1000).toISOString(),
+            endDate: new Date(
+                (Math.floor(+date / 1000) + 600) * 1000
+            ).toISOString(),
+        }),
+        [chainId, date]
     )
-    return res
+
+    const { data } = useBlockHeights(inputData)
+    return data.data.items[0].height
+}
+
+export function useTwoDayBlock({ chainId }) {
+    const date = startOfMinute(subDays(Date.now(), 2))
+    const inputData = useMemo(
+        () => ({
+            initialData: {
+                data: { items: [{ height: 0 }] },
+            },
+            chainId,
+            startDate: new Date(Math.floor(+date / 1000) * 1000).toISOString(),
+            endDate: new Date(
+                (Math.floor(+date / 1000) + 600) * 1000
+            ).toISOString(),
+        }),
+        [chainId, date]
+    )
+
+    const { data } = useBlockHeights(inputData)
+    return data.data.items[0].height
 }
 
 export function useLogs({ initialData, chainId, address }) {
@@ -165,3 +206,17 @@ export function useChainsStatus({ initialData }) {
 }
 
 // TODO: CLASS B
+export function useSushiSwapLiquidityTransaction({
+    initialData = {},
+    chainId,
+    address,
+}) {
+    return useSWR([chainId, address], getSushiSwapLiquidityTransactions, {
+        initialData,
+    })
+}
+
+export function useSushiSwapBalances({ initialData = {}, chainId, address }) {
+    console.log('hi')
+    return useSWR([chainId, address], getSushiSwapBalances, { initialData })
+}

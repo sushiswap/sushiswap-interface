@@ -1,14 +1,25 @@
-import { State, SwapMessage, SwapMessageResponse, UserHistoryMessage, UserHistoryResponse } from './types'
-import React, { createContext, FC, useMemo, useEffect, useRef, useCallback } from 'react'
+import { State } from './types'
+import React, { createContext, FC, useMemo, useEffect } from 'react'
 import withPair, { WithPairProps } from '../../hoc/withPair'
-import { Pair } from '@sushiswap/sdk'
 import withAccount, { WithAccountProps } from '../../hoc/withAccount'
 import useWebSocket from 'react-use-websocket'
-import useSWR from 'swr'
+import {
+    useOneDayBlock,
+    useSushiSwapBalances,
+    useSushiSwapLiquidityTransaction,
+    useTwoDayBlock,
+} from '../../services/covalent/hooks'
+import { useActiveWeb3React } from '../../hooks'
+import { usePairData, useSwapHistory, useUserSwapHistory } from './hooks'
+import { parseWebsocketMessage } from './utils'
 
 export const initialState: State = {
-    userHistory: [],
+    pairData: null,
+    lastSwap: null,
+    userSwapHistory: [],
     swapHistory: [],
+    oneDayBlock: 0,
+    twoDayBlock: 0,
 }
 
 export const ProContext = createContext<[State, {}]>([initialState, {}])
@@ -18,64 +29,68 @@ interface ProviderProps extends WithPairProps, WithAccountProps {
 }
 
 const Provider: FC<ProviderProps> = ({ children, pair, account }) => {
-    const { sendMessage, lastMessage } = useWebSocket('wss://ws-eu.pusher.com/app/068f5f33d82a69845215')
-
-    // Get history swaps
-    const { data: swapHistoryData } = useSWR<SwapMessageResponse, Error>(
-        `https://api.sushipro.io/?api_key=EatSushiIsGood&act=last_transactions&chainID=1&pair=${pair.liquidityToken.address.toLowerCase()}`
+    const { chainId } = useActiveWeb3React()
+    const { sendMessage, lastMessage } = useWebSocket(
+        'wss://ws-eu.pusher.com/app/068f5f33d82a69845215'
     )
 
-    // Get user swaps
-    const { data: userHistoryData } = useSWR<UserHistoryResponse, Error>(
-        `https://api.sushipro.io/?api_key=EatSushiIsGood&act=user_transactions&chainID=1&address=${account.toLowerCase()}`
-    )
+    const oneDayBlock = useOneDayBlock({ chainId })
+    const twoDayBlock = useTwoDayBlock({ chainId })
+    const swapHistory = useSwapHistory({ pair, chainId })
+    const userSwapHistory = useUserSwapHistory({ account, chainId })
+    const pairData = usePairData({ pair, chainId, oneDayBlock, twoDayBlock })
+    const { data: userLiquidityData } = useSushiSwapLiquidityTransaction({
+        chainId,
+        address: account,
+    })
 
-    const userHistory = useRef<UserHistoryMessage[]>()
-    userHistory.current = useMemo(() => (userHistoryData ? userHistoryData.results : []), [userHistoryData])
+    const { data: userBalanceData } = useSushiSwapBalances({
+        chainId,
+        address: account,
+    })
 
-    const swapHistory = useRef<SwapMessage[]>(swapHistoryData?.results || [])
-    swapHistory.current = useMemo(() => (swapHistoryData ? swapHistoryData.results : []), [swapHistoryData])
+    console.log(userLiquidityData, userBalanceData)
 
-    const parseMessage = useCallback(
-        async (message: MessageEvent) => {
-            try {
-                const msg = JSON.parse(message.data)
-                if ('data' in msg) {
-                    const parsedData = JSON.parse(msg.data)
-                    if (parsedData && parsedData.result && parsedData.result.status === 'ok') {
-                        const { chainId, pair: parsedPair } = parsedData.result.data
-                        if (parsedPair.toLowerCase() === pair.liquidityToken.address.toLowerCase())
-                            swapHistory.current.push(
-                                ...parsedData.result.data.swaps.map(
-                                    ({ amountBase, side, timestamp, price, txHash }: SwapMessage) => ({
-                                        chainId,
-                                        amountBase,
-                                        side,
-                                        timestamp,
-                                        price,
-                                        txHash,
-                                    })
-                                )
-                            )
-                    }
-                }
-            } catch (e) {}
-        },
-        [pair]
-    )
-
+    // TODO Should be per pair in backend to reduce rerenders
     useEffect(() => {
-        sendMessage(JSON.stringify({ event: 'pusher:subscribe', data: { auth: '', channel: 'live_transactions' } }))
+        sendMessage(
+            JSON.stringify({
+                event: 'pusher:subscribe',
+                data: { auth: '', channel: 'live_transactions' },
+            })
+        )
     }, [])
 
     useEffect(() => {
         if (!lastMessage) return
 
-        parseMessage(lastMessage)
-    }, [lastMessage, parseMessage])
+        parseWebsocketMessage(pair, swapHistory, lastMessage)
+    }, [pair, lastMessage, swapHistory])
 
     return (
-        <ProContext.Provider value={[{ swapHistory: swapHistory.current, userHistory: userHistory.current }, {}]}>
+        <ProContext.Provider
+            value={useMemo(
+                () => [
+                    {
+                        pairData,
+                        lastSwap:
+                            swapHistory.length > 0 ? swapHistory[0] : null,
+                        swapHistory,
+                        userSwapHistory,
+                        oneDayBlock,
+                        twoDayBlock,
+                    },
+                    {},
+                ],
+                [
+                    swapHistory,
+                    userSwapHistory,
+                    oneDayBlock,
+                    twoDayBlock,
+                    pairData,
+                ]
+            )}
+        >
             {children}
         </ProContext.Provider>
     )

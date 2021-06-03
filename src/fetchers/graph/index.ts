@@ -8,10 +8,11 @@ export const EXCHANGE = {
     [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
     [ChainId.BSC]: 'sushiswap/bsc-exchange',
 }
-export const exchange = (query, chainId = ChainId.MAINNET) =>
+export const exchange = (chainId = ChainId.MAINNET, query, variables) =>
     request(
         `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-        query
+        query,
+        variables
     )
 
 const BAR = {
@@ -31,6 +32,13 @@ export const bentobox = (query, chainId = ChainId.MAINNET) =>
     request(
         `https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`,
         query
+    )
+
+export const vesting = (query, variables) =>
+    request(
+        `https://api.thegraph.com/subgraphs/name/sushiswap/vesting`,
+        query,
+        variables
     )
 
 export const status = (subgraphName) =>

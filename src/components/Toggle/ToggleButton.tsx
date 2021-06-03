@@ -7,12 +7,18 @@ export interface ToggleButtonProps {
     value: any
 }
 
-const ToggleButton: FC<ToggleButtonProps> = ({ className, active, onClick, children, value }) => {
+const ToggleButton: FC<ToggleButtonProps> = ({
+    className,
+    active,
+    onClick,
+    children,
+    value,
+}) => {
     return (
         <span
-            className={`text-xs flex items-center justify-center px-3 h-full cursor-pointer hover:text-primary border-r border-dark-800 -mb-px ${
+            className={`text-sm font-bold flex items-center justify-center px-3 h-full cursor-pointer hover:text-primary ${
                 active ? 'text-primary' : 'text-secondary'
-            } ${active ? 'bg-dark-1000' : 'bg-dark-9000'} ${className} `}
+            } ${className} `}
             onClick={(e) => onClick(e, value)}
         >
             {children}

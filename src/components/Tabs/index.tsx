@@ -8,38 +8,54 @@ interface TabPanelProps {
     unmount?: boolean
 }
 
-export const TabPanel: FC<TabPanelProps> = ({ value, index, unmount = false, children }) => {
+export const TabPanel: FC<TabPanelProps> = ({
+    value,
+    index,
+    unmount = false,
+    children,
+}) => {
     if (unmount) {
-        return value === index ? <div role="tabpanel h-full">{children}</div> : <div role="tabpanel h-full" />
+        return value === index ? (
+            <div role="tabpanel h-full">{children}</div>
+        ) : (
+            <div role="tabpanel h-full" />
+        )
     }
 
     return (
-        <div role="tabpanel" className={`h-full ${value !== index ? 'hidden' : ''}`}>
+        <div
+            role="tabpanel"
+            className={`h-full ${value !== index ? 'hidden' : ''}`}
+        >
             {children}
         </div>
     )
 }
 
-interface TabCardProps {
+interface TabsProps {
     titles: string[]
     components: JSX.Element[]
     header?: JSX.Element
     footer?: JSX.Element
 }
 
-const TabCard: FC<TabCardProps> = ({ titles, components, footer }) => {
+const Tabs: FC<TabsProps> = ({ titles, components, footer }) => {
     const [value, setValue] = useState(0)
     const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setValue(newValue)
     }
 
     return (
-        <div className="">
-            <div className="flex justify-between items-center h-10 border-b border-dark-800">
+        <>
+            <div className="flex justify-between items-center h-10 bg-dark-800">
                 <div className="flex w-full justify-between h-full">
                     <ToggleButtonGroup active={value}>
                         {titles.map((el, index) => (
-                            <ToggleButton value={index} key={el} onClick={handleChange}>
+                            <ToggleButton
+                                value={index}
+                                key={el}
+                                onClick={handleChange}
+                            >
                                 {el}
                             </ToggleButton>
                         ))}
@@ -54,8 +70,8 @@ const TabCard: FC<TabCardProps> = ({ titles, components, footer }) => {
                 ))}
             </div>
             {footer && <>{footer}</>}
-        </div>
+        </>
     )
 }
 
-export default TabCard
+export default Tabs
