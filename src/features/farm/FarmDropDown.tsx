@@ -4,6 +4,7 @@ import {
 } from '../../hooks/useApproveCallback'
 import { MASTERCHEF_ADDRESS, Token } from '@sushiswap/sdk'
 import React, { useState } from 'react'
+import { Trans, t } from '@lingui/macro'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
@@ -13,13 +14,14 @@ import Link from 'next/link'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { formatNumber } from '../../functions/format'
 import { getAddress } from '@ethersproject/address'
-import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../state/swap/hooks'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
 import useMasterChef from '../../hooks/useMasterChef'
+import useMasterChefV2 from './useMasterChefV2'
 import { usePair } from '../../hooks/usePair'
+import usePendingReward from './usePendingReward'
 import usePendingSushi from '../../hooks/usePendingSushi'
 import { useRouter } from 'next/router'
 import useStakedBalance from '../../hooks/useStakedBalance'
@@ -43,6 +45,7 @@ export default function InputGroup({
     type,
     assetSymbol,
     assetDecimals = 18,
+    v2 = false,
 }: {
     pairAddress: string
     pid: number
@@ -52,6 +55,7 @@ export default function InputGroup({
     type?: string
     assetSymbol?: string
     assetDecimals?: number
+    v2: boolean
 }): JSX.Element {
     const { i18n } = useLingui()
     const router = useRouter()
@@ -67,28 +71,75 @@ export default function InputGroup({
     const balance = useTokenBalance(address)
     const staked = useStakedBalance(pid, assetDecimals) // kMP depends on decimals of asset, SLP is always 18
     const pending = usePendingSushi(pid)
-
-    const lpToken = new Token(
-        chainId || 1,
-        address,
-        balance.decimals,
-        pairSymbol,
-        ''
-    )
+    const reward = usePendingReward(pid)
 
     //console.log('pending:', pending, pid)
 
     const [approvalState, approve] = useApproveCallback(
-        tryParseAmount(depositValue, lpToken),
-        MASTERCHEF_ADDRESS[1]
+        tryParseAmount(
+            depositValue,
+            new Token(chainId || 1, address, balance.decimals, pairSymbol, '')
+        ),
+        v2
+            ? MASTERCHEF_ADDRESS[1]
+            : '0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d' // v2
     )
 
-    const { deposit, withdraw, harvest } = useMasterChef()
+    const masterChef = useMasterChef()
+    const masterChefV2 = useMasterChefV2()
 
     return (
         <>
             <div className="flex flex-col py-6 space-y-4">
-                <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
+                {pending && Number(pending) > 0 && (
+                    <div className="px-4 ">
+                        <Button
+                            color="default"
+                            onClick={async () => {
+                                setPendingTx(true)
+                                await (!v2
+                                    ? masterChef.harvest(pid, pairSymbol)
+                                    : masterChefV2.harvest(pid, pairSymbol))
+                                setPendingTx(false)
+                            }}
+                        >
+                            <Trans>
+                                Harvest {formatNumber(pending)} SUSHI &{' '}
+                                {formatNumber(reward)} ALCX
+                            </Trans>
+                        </Button>
+                    </div>
+                )}
+                <div className="px-4">
+                    <div className="block w-full p-4 text-sm rounded bg-purple bg-opacity-20 text-high-emphesis">
+                        <div className="flex items-center">
+                            <div className="ml-3">
+                                <p>
+                                    <Trans>
+                                        <b>Tip:</b> In order to start earning
+                                        rewards, you will need to first acquire
+                                        some SLP by adding liquidity to the
+                                        specified pair or{' '}
+                                        <Link href="/migrate">
+                                            <a className="underline text-blue">
+                                                migrating existing liquidity.
+                                            </a>
+                                        </Link>{' '}
+                                        Once you have SLP you can stake it into
+                                        this yield farm to start earning
+                                        rewards. Unstake anytime and then you
+                                        can convert your SLP back to base tokens
+                                        by clicking Remove Liquidity. Click
+                                        Harvest to receive your rewards at any
+                                        time.
+                                    </Trans>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
                     {type === 'LP' && (
                         <>
                             <Button
@@ -127,7 +178,7 @@ export default function InputGroup({
                             </Link>
                         </>
                     )}
-                </div>
+                </div> */}
 
                 <div className="grid grid-cols-2 gap-4 px-4">
                     {/* Deposit */}
@@ -203,12 +254,19 @@ export default function InputGroup({
                                 }
                                 onClick={async () => {
                                     setPendingTx(true)
-                                    await deposit(
-                                        pid,
-                                        depositValue,
-                                        pairSymbol,
-                                        balance.decimals
-                                    )
+                                    await (!v2
+                                        ? masterChef.deposit(
+                                              pid,
+                                              depositValue,
+                                              pairSymbol,
+                                              balance.decimals
+                                          )
+                                        : masterChefV2.deposit(
+                                              pid,
+                                              depositValue,
+                                              pairSymbol,
+                                              balance.decimals
+                                          ))
                                     setPendingTx(false)
                                 }}
                             >
@@ -273,12 +331,20 @@ export default function InputGroup({
                             }
                             onClick={async () => {
                                 setPendingTx(true)
-                                await withdraw(
-                                    pid,
-                                    withdrawValue,
-                                    pairSymbol,
-                                    balance.decimals
-                                )
+                                await (!v2
+                                    ? masterChef.withdraw(
+                                          pid,
+                                          withdrawValue,
+                                          pairSymbol,
+                                          balance.decimals
+                                      )
+                                    : masterChefV2.withdraw(
+                                          pid,
+                                          withdrawValue,
+                                          pairSymbol,
+                                          balance.decimals
+                                      ))
+
                                 setPendingTx(false)
                             }}
                         >
@@ -286,7 +352,7 @@ export default function InputGroup({
                         </Button>
                     </div>
                 </div>
-                {pending && Number(pending) > 0 && (
+                {/* {pending && Number(pending) > 0 && (
                     <div className="px-4 ">
                         <Button
                             color="gray"
@@ -299,7 +365,7 @@ export default function InputGroup({
                             {i18n._(t`Harvest ${formatNumber(pending)} SUSHI`)}
                         </Button>
                     </div>
-                )}
+                )} */}
 
                 {/* <Link href={`/lend/${address}`}>
                     <a className="text-center">

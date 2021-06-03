@@ -14,9 +14,8 @@ const FarmListItem = ({ farm, kmp }) => {
     const [expand, setExpand] = useState<boolean>(false)
     const currency0 = useCurrency(farm?.liquidityPair?.token0?.id)
     const currency1 = useCurrency(farm?.liquidityPair?.token1?.id)
-    console.log({ farm, currency0, currency1 })
     return (
-        <Paper className="bg-dark-800">
+        <Paper className="bg-dark-800" key={farm.id}>
             <div
                 className="grid grid-cols-4 px-4 py-2 rounded rounded-b-none cursor-pointer select-none bg-dark-850 md:grid-cols-4"
                 onClick={() => setExpand(!expand)}
@@ -28,15 +27,15 @@ const FarmListItem = ({ farm, kmp }) => {
                     {farm?.type}
                 </div>
                 <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
-                    {farm?.rewards?.map((reward) => reward.token).join(' ')}
+                    {farm?.rewards?.map((reward) => reward.token).join(' & ')}
                 </div>
                 <div className="text-sm text-right text-gray-500 sm:text-base">
                     {formatNumber(farm?.tvl, true)}
                 </div>
                 <div className="text-sm font-semibold text-right sm:text-base">
-                    {farm.roiPerYear > 100
+                    {farm?.roiPerYear > 100
                         ? '10000%+'
-                        : formatPercent(farm.roiPerYear * 100)}
+                        : formatPercent(farm?.roiPerYear * 100)}
                 </div>
             </div>
             <div
@@ -57,14 +56,20 @@ const FarmListItem = ({ farm, kmp }) => {
                             </div> */}
                 </div>
                 <div className="flex-row items-center justify-start hidden ml-4 space-x-2 md:col-span-1 md:flex">
-                    <div>
-                        <Image
-                            src="/images/tokens/sushi-square.jpg"
-                            width="40px"
-                            height="40px"
-                            className="w-10 h-10 rounded"
-                            alt="SUSHI"
-                        />
+                    <div className="flex flex-col space-y-2 md:col-span-3">
+                        <div className="flex flex-row items-center mr-4 space-x-2">
+                            {farm?.rewards?.map((reward) => (
+                                <div>
+                                    <Image
+                                        src={reward.icon}
+                                        width="40px"
+                                        height="40px"
+                                        className="w-10 h-10 rounded"
+                                        alt={reward.token}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="flex flex-col pl-2 space-y-1">
@@ -90,9 +95,9 @@ const FarmListItem = ({ farm, kmp }) => {
                 <div className="flex items-center justify-end md:col-span-1">
                     <div>
                         <div className="text-base font-semibold text-right text-gray-500 sm:text-lg">
-                            {farm.roiPerYear > 100
+                            {farm?.roiPerYear > 100
                                 ? '10000%+'
-                                : formatPercent(farm.roiPerYear * 100)}
+                                : formatPercent(farm?.roiPerYear * 100)}
                             {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
                         </div>
                         <div className="text-xs text-right text-gray-500">

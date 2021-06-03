@@ -12,7 +12,7 @@ const Menu = ({ section, setSection }) => {
                     return setSection('portfolio')
                 }}
             >
-                Your Farms
+                Your Yield Farms
             </div>
             <div
                 className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${

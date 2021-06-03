@@ -1,56 +1,67 @@
 import { ethers } from 'ethers'
-import { useMasterChefContract } from 'hooks/useContract'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCallback } from 'react'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
+import { useMiniChefV2Contract } from '../../hooks/useContract'
+import { useTransactionAdder } from '../../state/transactions/hooks'
 
-const useMasterChef = () => {
+const useMiniChefV2 = () => {
     const addTransaction = useTransactionAdder()
-    const masterChefContract = useMasterChefContract() // withSigner
+    const miniChefV2Contract = useMiniChefV2Contract() // withSigner
+    const { account } = useActiveWeb3React()
 
     // Deposit
     const deposit = useCallback(
         async (pid: number, amount: string, name: string, decimals = 18) => {
             // KMP decimals depend on asset, SLP is always 18
-            // console.log('depositing...', pid, amount)
+            console.log('depositing...', pid, amount)
             try {
-                const tx = await masterChefContract?.deposit(pid, ethers.utils.parseUnits(amount, decimals))
+                const tx = await miniChefV2Contract?.deposit(
+                    pid,
+                    ethers.utils.parseUnits(amount, decimals),
+                    account
+                )
                 return addTransaction(tx, { summary: `Deposit ${name}` })
             } catch (e) {
                 console.error(e)
                 return e
             }
         },
-        [addTransaction, masterChefContract]
+        [account, addTransaction, miniChefV2Contract]
     )
 
     // Withdraw
     const withdraw = useCallback(
         async (pid: number, amount: string, name: string, decimals = 18) => {
             try {
-                const tx = await masterChefContract?.withdraw(pid, ethers.utils.parseUnits(amount, decimals))
+                const tx = await miniChefV2Contract?.withdraw(
+                    pid,
+                    ethers.utils.parseUnits(amount, decimals),
+                    account
+                )
                 return addTransaction(tx, { summary: `Withdraw ${name}` })
             } catch (e) {
                 console.error(e)
                 return e
             }
         },
-        [addTransaction, masterChefContract]
+        [account, addTransaction, miniChefV2Contract]
     )
 
     const harvest = useCallback(
         async (pid: number, name: string) => {
             try {
-                const tx = await masterChefContract?.deposit(pid, '0')
+                console.log('help:', pid, account)
+                const tx = await miniChefV2Contract?.harvest(pid, account)
                 return addTransaction(tx, { summary: `Harvest ${name}` })
             } catch (e) {
                 console.error(e)
                 return e
             }
         },
-        [addTransaction, masterChefContract]
+        [account, addTransaction, miniChefV2Contract]
     )
 
     return { deposit, withdraw, harvest }
 }
 
-export default useMasterChef
+export default useMiniChefV2

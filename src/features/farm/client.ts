@@ -14,6 +14,19 @@ export const masterchef = new ApolloClient({
     cache: new InMemoryCache(),
 })
 
+export const masterchefv2 = new ApolloClient({
+    link: createHttpLink({
+        uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/master-chefv2',
+    }),
+    cache: new InMemoryCache(),
+    defaultOptions: {
+        query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all',
+        },
+    },
+})
+
 export const minichefv2_matic = new ApolloClient({
     link: createHttpLink({
         uri: 'https://api.thegraph.com/subgraphs/name/sushiswap/matic-minichef',

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useFuse, useSortableData } from '../hooks'
 import {
     useMasterChefContract,
+    useMasterChefV2Contract,
     useMiniChefV2Contract,
 } from '../hooks/useContract'
 
@@ -9,17 +10,15 @@ import Card from '../components/Card'
 import CardHeader from '../components/CardHeader'
 import Dots from '../components/Dots'
 import FarmList from '../features/farm/FarmList'
+import FarmListHeader from '../features/farm/FarmListHeader'
 import Head from 'next/head'
-import Header from '../features/farm/Header'
 import Layout from '../layouts/DefaultLayout'
 import Menu from '../features/farm/FarmMenu'
 import Search from '../components/Search'
 import concat from 'lodash/concat'
 import { t } from '@lingui/macro'
+import useFarms from '../features/farm/useFarms'
 import { useLingui } from '@lingui/react'
-import useMasterChefFarms from '../features/farm/useFarms'
-import useMasterChefV2Farms from '../features/farm/masterchefv2/hooks/useFarms'
-import useMiniChefFarms from '../features/farm/minichef/hooks/useFarms'
 import useStakedPending from '../features/farm/useStakedPending'
 
 export default function Yield(): JSX.Element {
@@ -27,37 +26,23 @@ export default function Yield(): JSX.Element {
     const [section, setSection] =
         useState<'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'>('all')
 
-    // Get Farms
-    const masterchefv1 = useMasterChefFarms()
-    const masterchefv2 = useMasterChefV2Farms()
-    const minichef = useMiniChefFarms()
-
-    console.log('masterchefv2:', masterchefv2)
+    const farms = useFarms()
 
     // Get Contracts
     const masterchefContract = useMasterChefContract()
+    const masterchefV2Contract = useMasterChefV2Contract()
     const minichefContract = useMiniChefV2Contract()
 
     // Get Portfolios
     const [portfolio, setPortfolio] = useState([])
     const masterchefv1Positions = useStakedPending(masterchefContract)
+    const masterchefv2Positions = useStakedPending(masterchefV2Contract)
     const minichefPositions = useStakedPending(minichefContract)
-
-    const farms = concat(
-        masterchefv2 ? masterchefv2 : [],
-        masterchefv1 ? masterchefv1 : [],
-        minichef ? minichef : []
-    )
-
-    console.log(
-        minichefPositions[0].filter((p) => !p?.result?.[0].isZero()),
-        masterchefv1Positions[0].filter((p) => !p?.result?.[0].isZero())
-    )
 
     useEffect(() => {
         // determine masterchefv1 positions
         let masterchefv1Portfolio
-        if (masterchefv1) {
+        if (farms) {
             const masterchefv1WithPids = masterchefv1Positions?.[0].map(
                 (position, index) => {
                     return {
@@ -79,7 +64,7 @@ export default function Yield(): JSX.Element {
             // fetch any relevant details through pid
             const masterchefv1PositionsWithDetails = masterchefv1Filtered.map(
                 (position) => {
-                    const pair = masterchefv1?.find(
+                    const pair = farms?.find(
                         (pair: any) => pair.pid === position.pid
                     )
                     return {
@@ -91,8 +76,43 @@ export default function Yield(): JSX.Element {
             masterchefv1Portfolio = masterchefv1PositionsWithDetails
         }
 
+        let masterchefv2Portfolio
+        if (farms) {
+            const masterchefv2WithPids = masterchefv2Positions?.[0].map(
+                (position, index) => {
+                    return {
+                        pid: index,
+                        pending_bn: position?.result?.[0],
+                        staked_bn:
+                            masterchefv2Positions?.[1][index].result?.amount,
+                    }
+                }
+            )
+            const masterchefv2Filtered = masterchefv2WithPids.filter(
+                (position) => {
+                    return (
+                        position?.pending_bn?.gt(0) ||
+                        position?.staked_bn?.gt(0)
+                    )
+                }
+            )
+            // fetch any relevant details through pid
+            const masterchefv2PositionsWithDetails = masterchefv2Filtered.map(
+                (position) => {
+                    const pair = farms?.find(
+                        (pair: any) => pair.pid === position.pid
+                    )
+                    return {
+                        ...pair,
+                        ...position,
+                    }
+                }
+            )
+            masterchefv2Portfolio = masterchefv2PositionsWithDetails
+        }
+
         let minichefPortfolio
-        if (minichef) {
+        if (farms) {
             // determine minichef positions
             const minichefWithPids = minichefPositions?.[0].map(
                 (position, index) => {
@@ -111,7 +131,7 @@ export default function Yield(): JSX.Element {
             // fetch any relevant details through pid
             const minichefPositionsWithDetails = minichefFiltered.map(
                 (position) => {
-                    const pair = minichef?.find(
+                    const pair = farms?.find(
                         (pair: any) => pair.pid === position.pid
                     )
                     return {
@@ -126,31 +146,23 @@ export default function Yield(): JSX.Element {
         console.log({ minichefPortfolio, masterchefv1Portfolio })
 
         setPortfolio(
-            concat(minichefPortfolio, masterchefv1Portfolio)[0]
-                ? concat(minichefPortfolio, masterchefv1Portfolio)
-                : []
+            concat(
+                minichefPortfolio || [],
+                masterchefv1Portfolio || [],
+                masterchefv2Portfolio || []
+            )
         )
-
-        // setPortfolio(
-        //     concat(minichefPortfolio || [], masterchefv1Portfolio || [])
-        // )
-    }, [masterchefv1, masterchefv1Positions, minichef, minichefPositions])
+    }, [farms, masterchefv1Positions, minichefPositions])
 
     //Search Setup
     const options = { keys: ['symbol', 'name', 'pairAddress'], threshold: 0.4 }
+
     const { result, search, term } = useFuse({
         data: farms && farms.length > 0 ? farms : [],
         options,
     })
-    const flattenSearchResults = result.map((a: { item: any }) =>
-        a.item ? a.item : a
-    )
 
-    // Sorting Setup
-    const { items, requestSort, sortConfig } =
-        useSortableData(flattenSearchResults)
-
-    console.log({ portfolio })
+    const filtered = result.map((a: { item: any }) => (a?.item ? a.item : a))
 
     return (
         <Layout>
@@ -187,100 +199,37 @@ export default function Yield(): JSX.Element {
                             </CardHeader>
                         }
                     >
-                        <Header
-                            sortConfig={sortConfig}
-                            requestSort={requestSort}
-                        />
                         {section && section === 'portfolio' && (
-                            <>
-                                {portfolio && portfolio.length > 0 ? (
-                                    <FarmList farms={portfolio} />
-                                ) : term ? (
-                                    <div className="w-full py-6 text-center">
-                                        No Results.
-                                    </div>
-                                ) : (
-                                    <div className="w-full py-6 text-center">
-                                        <Dots>Fetching Portfolio</Dots>
-                                    </div>
-                                )}
-                            </>
+                            <FarmList farms={portfolio} term={term} />
                         )}
-
                         {section && section === 'all' && (
-                            <>
-                                {items && items.length > 0 ? (
-                                    <FarmList farms={items} />
-                                ) : term ? (
-                                    <div className="w-full py-6 text-center">
-                                        No Results.
-                                    </div>
-                                ) : (
-                                    <div className="w-full py-6 text-center">
-                                        <Dots>Fetching Farms</Dots>
-                                    </div>
-                                )}
-                            </>
+                            <FarmList farms={filtered} term={term} />
                         )}
-
                         {section && section === 'slp' && (
-                            <>
-                                {items && items.length > 0 ? (
-                                    <FarmList
-                                        farms={items.filter(
-                                            (farm) => farm.type === 'SLP'
-                                        )}
-                                    />
-                                ) : term ? (
-                                    <div className="w-full py-6 text-center">
-                                        No Results.
-                                    </div>
-                                ) : (
-                                    <div className="w-full py-6 text-center">
-                                        <Dots>Fetching Farms</Dots>
-                                    </div>
+                            <FarmList
+                                farms={filtered.filter(
+                                    (farm) => farm.type === 'SLP'
                                 )}
-                            </>
+                                term={term}
+                            />
                         )}
                         {section && section === 'kmp' && (
-                            <>
-                                {items && items.length > 0 ? (
-                                    <FarmList
-                                        farms={items.filter(
-                                            (farm) => farm.type === 'KMP'
-                                        )}
-                                    />
-                                ) : term ? (
-                                    <div className="w-full py-6 text-center">
-                                        No Results.
-                                    </div>
-                                ) : (
-                                    <div className="w-full py-6 text-center">
-                                        <Dots>Fetching Farms</Dots>
-                                    </div>
+                            <FarmList
+                                farms={filtered.filter(
+                                    (farm) => farm.type === 'KMP'
                                 )}
-                            </>
+                                term={term}
+                            />
                         )}
                         {section && section === 'mcv2' && (
-                            <>
-                                {items && items.length > 0 ? (
-                                    <FarmList
-                                        farms={items.filter(
-                                            (farm) =>
-                                                farm.type === 'SLP' &&
-                                                farm.contract === 'masterchefv2'
-                                        )}
-                                    />
-                                ) : term ? (
-                                    <div className="w-full py-6 text-center">
-                                        No Results.
-                                    </div>
-                                ) : (
-                                    <div className="w-full py-6 text-center">
-                                        <Dots>Fetching Farms</Dots>
-                                    </div>
+                            <FarmList
+                                farms={filtered.filter(
+                                    (farm) =>
+                                        farm.type === 'SLP' &&
+                                        farm.contract === 'masterchefv2'
                                 )}
-                            </>
+                                term={term}
+                            />
                         )}
                     </Card>
                 </div>

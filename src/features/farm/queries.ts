@@ -4,6 +4,21 @@ import gql from 'graphql-tag'
 const FACTORY_ADDRESS = '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac'
 const BUNDLE_ID = '1'
 
+export const masterchefv2PoolsQuery = gql`
+    {
+        pools {
+            id
+            pair
+            allocPoint
+            slpBalance
+            rewarder
+            masterChef {
+                totalAllocPoint
+            }
+        }
+    }
+`
+
 export const tokenFieldsQuery = gql`
     fragment tokenFields on Token {
         id
