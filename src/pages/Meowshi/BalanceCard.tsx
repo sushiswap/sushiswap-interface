@@ -11,14 +11,14 @@ import { ExternalLink, TYPE } from '../../theme'
 
 interface BalanceCardProps {
     sushiEarnings?: number
-    nyanBalance: BalanceProps
+    meowBalance: BalanceProps
     xSushiBalance: BalanceProps
     sushiBalance: BalanceProps
     weightedApr?: number
 }
 
 export default function BalanceCard({
-    nyanBalance
+    meowBalance
 }: BalanceCardProps) {
     const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
@@ -32,13 +32,13 @@ export default function BalanceCard({
                       <img className="w-10 md:w-16 -ml-1 mr-1 md:mr-2 -mb-1.5" src={MeowshiImage} alt="meowshi" />
                       <div className="flex flex-col justify-center">
                           <p className="text-caption2 md:text-lg font-bold text-high-emphesis">
-                              {formatFromBalance(nyanBalance.value)}
+                              {formatFromBalance(meowBalance.value)}
                           </p>
-                          <p className="text-caption2 md:text-caption text-primary">NYAN</p>
+                          <p className="text-caption2 md:text-caption text-primary">MEOW</p>
                           <ExternalLink
                                    style={{ color: `${darkMode ? 'white' : 'black'}`, textDecoration: 'underline' }}
                                    target="_blank"
-                                   href="https://etherscan.io/address/0x4FA5116809B8428934D148c2975F366E8920F24b#code"
+                                   href="https://etherscan.io/address/0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D#code"
                                >
                                    <TYPE.white fontSize={14} color={theme.text1}>
                                        {i18n._(t`Read the contract`)}
