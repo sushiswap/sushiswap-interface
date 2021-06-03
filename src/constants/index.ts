@@ -67,7 +67,9 @@ export const MERKLE_ROOT =
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-03/merkle-10959148-11094829.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-04/merkle-10959148-11140426.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-05/merkle-10959148-11185970.json'
-    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-06/merkle-10959148-11231587.json'
+    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-06/merkle-10959148-11231587.json'
+    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-07/merkle-10959148-11277295.json'
+    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-08/merkle-10959148-11322822.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
@@ -128,7 +130,9 @@ export const MATIC: { [key: string]: Token } = {
     USDT: new Token(ChainId.MATIC, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'USDT', 'Tether USD'),
     TEL: new Token(ChainId.MATIC, '0xdF7837DE1F2Fa4631D716CF2502f8b230F1dcc32', 2, 'TEL', 'Telcoin'),
     SUSHI: new Token(ChainId.MATIC, '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a', 18, 'SUSHI', 'SushiToken'),
-    AAVE: new Token(ChainId.MATIC, '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', 18, 'AAVE', 'Aave')
+    AAVE: new Token(ChainId.MATIC, '0xD6DF932A45C0f255f85145f286eA0b292B21C90B', 18, 'AAVE', 'Aave'),
+    FRAX: new Token(ChainId.MATIC, '0x104592a158490a9228070E0A8e5343B499e125D0', 18, 'FRAX', 'Frax'),
+    FXS: new Token(ChainId.MATIC, '0x3e121107F6F22DA4911079845a470757aF4e1A1b', 18, 'FXS', 'Frax Share')
 }
 
 // used to construct intermediary pairs for trading
@@ -212,8 +216,14 @@ export const XSUSHI_CALL = new Token(
 )
 
 export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
-
-export const NYAN = new Token(ChainId.MAINNET, '0x4FA5116809B8428934D148c2975F366E8920F24b', 18, 'NYAN', 'Meowshi')
+export const LIFT = new Token(ChainId.MAINNET, '0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6', 18, 'LIFT', 'LiftKitchen')
+export const LFBTC = new Token(
+    ChainId.MAINNET,
+    '0xafcE9B78D409bF74980CACF610AFB851BF02F257',
+    18,
+    'LFBTC',
+    'LiftKitchen BTC'
+)
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -230,10 +240,12 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-        [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]]
+        [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
+        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]]
     },
     [ChainId.MATIC]: {
-      [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE]
+        [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
+        [MATIC.FXS.address]: [MATIC.FRAX]
     }
 }
 
