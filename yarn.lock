@@ -2988,10 +2988,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
-"@sushiswap/default-token-list@^6.20.0":
-  version "6.20.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.20.0.tgz#b2a73872dd5aac6fdfe5eeef84ccdcb578d4632c"
-  integrity sha512-xU6SoqAC+H7VL647dahd07ypmRqFVr1Obne9oDbL6SBQ5wvPIYp7jSb4GEN8PheMmTTfZTqSrhZY6dlgtppCfA==
+"@sushiswap/default-token-list@^6.25.0":
+  version "6.25.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.25.0.tgz#f0bf3f40c62508e0114ecdbe88469124e8673344"
+  integrity sha512-KAyXqhyO3AIMHsK8a8IvtG0EQfv5AOzBZRu4sojERUDaFNxLR5BIfo8uT4quvSEep1V/2+Tehq0vxEginiJt7A==
 
 "@sushiswap/sdk@5.0.0-canary.7":
   version "5.0.0-canary.7"
@@ -10478,9 +10478,9 @@ graph-results-pager@LufyCZ/graph-results-pager#types:
   dependencies:
     node-fetch "2.6.1"
 
-"graph-results-pager@git+https://github.com/LufyCZ/graph-results-pager.git":
+"graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
   version "1.0.3"
-  resolved "git+https://github.com/LufyCZ/graph-results-pager.git#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
+  resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 
