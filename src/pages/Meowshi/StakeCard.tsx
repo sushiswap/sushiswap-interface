@@ -187,7 +187,7 @@ export default function StakeCard({ xSushiBalance, meowBalance }: StakeCardProps
                                     input ? 'text-high-emphesis' : 'text-secondary'
                                 }`}
                             >
-                                {`${input ? input : '0'} ${activeTab === 0 ? 'xSUSHI' : 'NYAN'}`}
+                                {`${input ? input : '0'} ${activeTab === 0 ? 'xSUSHI' : 'MEOW'}`}
                             </p>
                         </div>
                         <div className="flex items-center text-secondary text-caption2 md:text-caption">
