@@ -28,7 +28,8 @@ export const FixedHeightRow = styled(RowBetween)`
 export default function Yield(): JSX.Element {
     const { i18n } = useLingui()
     const [section, setSection] = useState<'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'>('all')
-    const { account, chainId } = useActiveWeb3React()
+    // const { account, chainId } = useActiveWeb3React()
+    const account = '0x4bb4c1B0745ef7B4642fEECcd0740deC417ca0a0'
 
     // Get Farms
     const masterchefv1 = useMasterChefFarms()
