@@ -141,6 +141,7 @@
         "source-map-explorer": "^2.5.2",
         "start-server-and-test": "^1.11.0",
         "styled-components": "^4.2.0",
+        "supports-color": "^9.0.1",
         "swr": "^0.5.5",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat",
         "tailwindcss-border-gradient-radius": "^2.0.0",
