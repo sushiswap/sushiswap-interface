@@ -1,23 +1,23 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { Token, WETH } from '@sushiswap/sdk'
-import { Input as NumericalInput } from '../../../../components/NumericalInput'
-import { Fraction } from '../../../../entities'
-import { useActiveWeb3React } from '../../../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
-import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Token, WETH } from '@sushiswap/sdk'
+import { Trans, t } from '@lingui/macro'
+import { formattedNum, isAddress, isAddressString, isWETH } from '../../../../utils'
+
+import { BigNumber } from '@ethersproject/bignumber'
+import { Button } from '../../components'
+import { Dots } from '../../../Pool/styleds'
+import { Fraction } from '../../../../entities'
+import { Input as NumericalInput } from '../../../../components/NumericalInput'
+import { tryParseAmount } from '../../../../state/swap/hooks'
+import { useActiveWeb3React } from '../../../../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 import useMasterChefV2 from '../../hooks/masterchefv2/useMasterChefV2'
-import usePendingSushi from '../../hooks/masterchefv2/usePendingSushi'
 import usePendingReward from '../../hooks/masterchefv2/usePendingReward'
+import usePendingSushi from '../../hooks/masterchefv2/usePendingSushi'
 import useStakedBalance from '../../hooks/masterchefv2/useStakedBalance'
 import useTokenBalance from '../../../../hooks/useTokenBalance'
-import { formattedNum, isAddress, isAddressString, isWETH } from '../../../../utils'
-import { Dots } from '../../../Pool/styleds'
-import { Button } from '../../components'
-import { t, Trans } from '@lingui/macro'
-
-import { tryParseAmount } from '../../../../state/swap/hooks'
-import { useLingui } from '@lingui/react'
 
 const fixedFormatting = (value: BigNumber, decimals?: number) => {
     return Fraction.from(value, BigNumber.from(10).pow(BigNumber.from(decimals))).toString(decimals)
@@ -45,6 +45,7 @@ export default function InputGroup({
     const { i18n } = useLingui()
     const history = useHistory()
     const { account, chainId } = useActiveWeb3React()
+
     const [pendingTx, setPendingTx] = useState(false)
     const [depositValue, setDepositValue] = useState('')
     const [withdrawValue, setWithdrawValue] = useState('')
@@ -69,13 +70,15 @@ export default function InputGroup({
 
     const { deposit, withdraw, harvest } = useMasterChefV2()
 
+    console.log({ pending, reward })
+
     //console.log('depositValue:', depositValue)
 
     return (
         <>
-            <div className="flex flex-col space-y-4 py-6">
+            <div className="flex flex-col py-6 space-y-4">
                 {pending && Number(pending) > 0 && (
-                    <div className=" px-4">
+                    <div className="px-4 ">
                         <Button
                             color="default"
                             onClick={async () => {
@@ -91,7 +94,7 @@ export default function InputGroup({
                     </div>
                 )}
                 <div className="px-4">
-                    <div className="bg-purple bg-opacity-20 text-high-emphesis block w-full rounded text-sm p-4">
+                    <div className="block w-full p-4 text-sm rounded bg-purple bg-opacity-20 text-high-emphesis">
                         <div className="flex items-center">
                             <div className="ml-3">
                                 <p>
@@ -110,18 +113,18 @@ export default function InputGroup({
                         </div>
                     </div>
                 </div>
-                <div className="grid gap-4 grid-cols-2 px-4">
+                <div className="grid grid-cols-2 gap-4 px-4">
                     {/* Deposit */}
-                    <div className="text-center col-span-2 md:col-span-1">
+                    <div className="col-span-2 text-center md:col-span-1">
                         {account && (
-                            <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
+                            <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
                                 {i18n._(t`Wallet Balance`)}:{' '}
                                 {formattedNum(fixedFormatting(balance.value, balance.decimals))} {type}
                             </div>
                         )}
-                        <div className="flex items-center relative w-full mb-4">
+                        <div className="relative flex items-center w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 bg-input rounded focus:ring focus:ring-blue pr-20"
+                                className="w-full p-3 pr-20 rounded bg-input focus:ring focus:ring-blue"
                                 value={depositValue}
                                 onUserInput={value => {
                                     setDepositValue(value)
@@ -134,7 +137,7 @@ export default function InputGroup({
                                     onClick={() => {
                                         setDepositValue(fixedFormatting(balance.value, balance.decimals))
                                     }}
-                                    className="absolute right-4 focus:ring focus:ring-blue border-0"
+                                    className="absolute border-0 right-4 focus:ring focus:ring-blue"
                                 >
                                     {i18n._(t`MAX`)}
                                 </Button>
@@ -164,16 +167,16 @@ export default function InputGroup({
                         )}
                     </div>
                     {/* Withdraw */}
-                    <div className="text-center col-span-2 md:col-span-1">
+                    <div className="col-span-2 text-center md:col-span-1">
                         {account && (
-                            <div className="text-sm text-secondary cursor-pointer text-right mb-2 pr-4">
+                            <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
                                 {i18n._(t`Your Staked`)}: {formattedNum(fixedFormatting(staked.value, staked.decimals))}{' '}
                                 {type}
                             </div>
                         )}
-                        <div className="flex items-center relative w-full mb-4">
+                        <div className="relative flex items-center w-full mb-4">
                             <NumericalInput
-                                className="w-full p-3 bg-input rounded focus:ring focus:ring-pink pr-20"
+                                className="w-full p-3 pr-20 rounded bg-input focus:ring focus:ring-pink"
                                 value={withdrawValue}
                                 onUserInput={value => {
                                     setWithdrawValue(value)
@@ -186,7 +189,7 @@ export default function InputGroup({
                                     onClick={() => {
                                         setWithdrawValue(fixedFormatting(staked.value, staked.decimals))
                                     }}
-                                    className="absolute right-4 focus:ring focus:ring-pink border-0"
+                                    className="absolute border-0 right-4 focus:ring focus:ring-pink"
                                 >
                                     {i18n._(t`MAX`)}
                                 </Button>
@@ -210,7 +213,7 @@ export default function InputGroup({
                         </Button>
                     </div>
                 </div>
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 px-4">
+                <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
                     {type === 'SLP' && (
                         <>
                             <Button

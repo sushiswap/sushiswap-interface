@@ -1,8 +1,7 @@
 import { ethers } from 'ethers'
-import { useMasterChefV2Contract } from 'hooks/useContract'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-
+import { useActiveWeb3React } from '../../../../hooks/useActiveWeb3React'
 import { useCallback } from 'react'
+import { useMasterChefV2Contract } from '../../../../hooks/useContract'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 
 const useMasterChefV2 = () => {

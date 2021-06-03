@@ -1,11 +1,12 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { useMasterChefV2Contract } from 'hooks/useContract'
 import { useCallback, useEffect, useState } from 'react'
-import { useBlockNumber } from 'state/application/hooks'
-import { getContract } from '../../../../utils'
+
 import ALCX_REWARDER_ABI from '../../../../constants/abis/alcx-rewarder.json'
+import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../../../entities/Fraction'
+import { getContract } from '../../../../utils'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBlockNumber } from 'state/application/hooks'
+import { useMasterChefV2Contract } from 'hooks/useContract'
 
 const usePending = (pid: number) => {
     const [balance, setBalance] = useState<string>('0')
