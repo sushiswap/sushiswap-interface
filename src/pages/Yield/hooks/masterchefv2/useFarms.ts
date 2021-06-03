@@ -73,9 +73,9 @@ const useFarms = () => {
         })
         const liquidityPositions = results[1]?.data.liquidityPositions
         const sushiPrice = results[2]
-
         const pairs = pairsQuery?.data.pairs
-        const alcxPrice = results[3].data.token.derivedETH * results[4]
+        const ethPrice = results[4]
+        const alcxPrice = results[3].data.token.derivedETH * ethPrice
         const averageBlockTime = results[5]
 
         const farms = pools
