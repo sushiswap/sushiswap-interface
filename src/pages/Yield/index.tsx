@@ -1,27 +1,25 @@
-import { useFuse, useSortableData } from 'hooks'
-import React, { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'react-feather'
-import styled from 'styled-components'
-import { RowBetween } from '../../components/Row'
-import { formattedNum, formattedPercent } from '../../utils'
 import { Card, CardHeader, Search } from './components'
-import { SimpleDots as Dots } from 'kashi/components'
-import { Helmet } from 'react-helmet'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { ChevronDown, ChevronUp } from 'react-feather'
+import { Header, KashiLending, LiquidityPosition } from './components/Farms'
+import React, { useEffect, useState } from 'react'
+import { formattedNum, formattedPercent } from '../../utils'
+import { useFuse, useSortableData } from 'hooks'
+import { useMasterChefContract, useMiniChefV2Contract } from '../../hooks/useContract'
 
 import { ChainId } from '@sushiswap/sdk'
+import { SimpleDots as Dots } from 'kashi/components'
+import { Helmet } from 'react-helmet'
+import Menu from './Menu'
+import { RowBetween } from '../../components/Row'
+import _ from 'lodash'
+import styled from 'styled-components'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-
-import useStakedPending from './hooks/portfolio/useStakedPending'
-import { Header, LiquidityPosition, KashiLending } from './components/Farms'
+import { useLingui } from '@lingui/react'
 import useMasterChefFarms from './hooks/masterchefv1/useFarms'
 import useMasterChefV2Farms from './hooks/masterchefv2/useFarms'
 import useMiniChefFarms from './hooks/minichef/useFarms'
-import { useMasterChefContract, useMiniChefV2Contract } from '../../hooks/useContract'
-
-import _ from 'lodash'
-import Menu from './Menu'
+import useStakedPending from './hooks/portfolio/useStakedPending'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -30,7 +28,8 @@ export const FixedHeightRow = styled(RowBetween)`
 export default function Yield(): JSX.Element {
     const { i18n } = useLingui()
     const [section, setSection] = useState<'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'>('all')
-    const { account, chainId } = useActiveWeb3React()
+    // const { account, chainId } = useActiveWeb3React()
+    const account = '0x4bb4c1B0745ef7B4642fEECcd0740deC417ca0a0'
 
     // Get Farms
     const masterchefv1 = useMasterChefFarms()
@@ -130,8 +129,8 @@ export default function Yield(): JSX.Element {
                 <title>{i18n._(t`Yield`)} | Sushi</title>
                 <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
             </Helmet>
-            <div className="container mx-auto grid grid-cols-4 gap-4">
-                <div className="hidden lg:block sticky top-0 md:col-span-1" style={{ maxHeight: '40rem' }}>
+            <div className="container grid grid-cols-4 gap-4 mx-auto">
+                <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
                     <Menu section={section} setSection={setSection} />
                 </div>
                 <div className="col-span-4 lg:col-span-3">
@@ -139,13 +138,13 @@ export default function Yield(): JSX.Element {
                         className="h-full bg-dark-900"
                         header={
                             <CardHeader className="flex flex-col items-center bg-dark-800">
-                                <div className="flex w-full justify-between">
-                                    <div className="hidden md:flex items-center">
-                                        <div className="text-lg mr-2 whitespace-nowrap">{i18n._(t`Yield Farms`)}</div>
+                                <div className="flex justify-between w-full">
+                                    <div className="items-center hidden md:flex">
+                                        <div className="mr-2 text-lg whitespace-nowrap">{i18n._(t`Yield Farms`)}</div>
                                     </div>
                                     <Search search={search} term={term} />
                                 </div>
-                                <div className="block lg:hidden pt-6 container">
+                                <div className="container block pt-6 lg:hidden">
                                     <Menu section={section} setSection={setSection} />
                                 </div>
                             </CardHeader>
@@ -176,9 +175,9 @@ export default function Yield(): JSX.Element {
                                             ) : (
                                                 <>
                                                     {term ? (
-                                                        <div className="w-full text-center py-6">No Results.</div>
+                                                        <div className="w-full py-6 text-center">No Results.</div>
                                                     ) : (
-                                                        <div className="w-full text-center py-6">
+                                                        <div className="w-full py-6 text-center">
                                                             <Dots>Fetching Portfolio</Dots>
                                                         </div>
                                                     )}
@@ -187,7 +186,7 @@ export default function Yield(): JSX.Element {
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="w-full text-center py-6">Connect Wallet.</div>
+                                    <div className="w-full py-6 text-center">Connect Wallet.</div>
                                 )}
                             </>
                         )}
@@ -208,9 +207,9 @@ export default function Yield(): JSX.Element {
                                     ) : (
                                         <>
                                             {term ? (
-                                                <div className="w-full text-center py-6">No Results.</div>
+                                                <div className="w-full py-6 text-center">No Results.</div>
                                             ) : (
-                                                <div className="w-full text-center py-6">
+                                                <div className="w-full py-6 text-center">
                                                     <Dots>Fetching Farms</Dots>
                                                 </div>
                                             )}
@@ -234,9 +233,9 @@ export default function Yield(): JSX.Element {
                                     ) : (
                                         <>
                                             {term ? (
-                                                <div className="w-full text-center py-6">No Results.</div>
+                                                <div className="w-full py-6 text-center">No Results.</div>
                                             ) : (
-                                                <div className="w-full text-center py-6">
+                                                <div className="w-full py-6 text-center">
                                                     <Dots>Fetching Farms</Dots>
                                                 </div>
                                             )}
@@ -260,9 +259,9 @@ export default function Yield(): JSX.Element {
                                     ) : (
                                         <>
                                             {term ? (
-                                                <div className="w-full text-center py-6">No Results.</div>
+                                                <div className="w-full py-6 text-center">No Results.</div>
                                             ) : (
-                                                <div className="w-full text-center py-6">
+                                                <div className="w-full py-6 text-center">
                                                     <Dots>Fetching Farms</Dots>
                                                 </div>
                                             )}
@@ -286,9 +285,9 @@ export default function Yield(): JSX.Element {
                                     ) : (
                                         <>
                                             {term ? (
-                                                <div className="w-full text-center py-6">No Results.</div>
+                                                <div className="w-full py-6 text-center">No Results.</div>
                                             ) : (
-                                                <div className="w-full text-center py-6">
+                                                <div className="w-full py-6 text-center">
                                                     <Dots>Fetching Farms</Dots>
                                                 </div>
                                             )}
