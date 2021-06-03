@@ -47,12 +47,12 @@ const useMeowshi = () => {
         }
     }, [addTransaction, meowshiContract, barContract])
 
-    const nyan = useCallback(
+    const meow = useCallback(
         // todo: this should be updated with BigNumber as opposed to string
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await meowshiContract?.nyan(account, amount?.value)
+                    const tx = await meowshiContract?.meow(account, amount?.value)
                     return addTransaction(tx, { summary: 'Enter Meowshi' })
                 } catch (e) {
                     return e
@@ -62,12 +62,12 @@ const useMeowshi = () => {
         [addTransaction, meowshiContract]
     )
 
-    const unyan = useCallback(
+    const unmeow = useCallback(
         // todo: this should be updated with BigNumber as opposed to string
         async (amount: BalanceProps | undefined) => {
             if (amount?.value) {
                 try {
-                    const tx = await meowshiContract?.unyan(account, amount?.value)
+                    const tx = await meowshiContract?.unmeow(account, amount?.value)
                     return addTransaction(tx, { summary: 'Leave Meowshi' })
                 } catch (e) {
                     return e
@@ -77,7 +77,7 @@ const useMeowshi = () => {
         [addTransaction, meowshiContract]
     )
 
-    return { allowance, approve, nyan, unyan }
+    return { allowance, approve, meow, unmeow }
 }
 
 export default useMeowshi

@@ -25,14 +25,14 @@ export default function InfoCard() {
         <div className="flex flex-col max-w-xl w-full mb-2 mt-auto">
             <div className="flex max-w-lg">
                 <div className="text-body font-bold md:text-h5 text-high-emphesis self-end mb-3 md:mb-7">
-                    {i18n._(t`Stack SUSHI with NYAN 🐈`)}
+                    {i18n._(t`Stack MEOW SUSHI 🐈`)}
                 </div>
                 {/* <div className="pl-6 pr-3 mb-1 min-w-max self-start md:hidden">
                     <img src={XSushiSignSmall} alt="xsushi sign" />
                 </div> */}
             </div>
             <div className="text-gray-500 text-sm leading-5 md:text-caption max-w-lg mb-2 md:mb-4 pr-3 md:pr-0">
-                {t`Meowshi is a cat-friendly SushiBar in BentoBox where chefs serve up extra SUSHI for NYAN.`}
+                {t`Meowshi is a cat-friendly SushiBar in BentoBox where chefs serve up extra SUSHI for MEOWs.`}
             </div>
             {/* <div className="flex">
                 <div className="mr-14 md:mr-9">

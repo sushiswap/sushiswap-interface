@@ -233,7 +233,7 @@ export function useChainlinkOracle(): Contract | null {
 
 // experimental:
 export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | null {
-    return useContract('0x4FA5116809B8428934D148c2975F366E8920F24b', MEOWSHI_ABI, withSignerIfPossible)
+    return useContract('0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D', MEOWSHI_ABI, withSignerIfPossible)
 }
 export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
     return useContract('0x364762C00b32c4b448f39efaA9CeFC67a25603ff', SAAVE_ABI, withSignerIfPossible)

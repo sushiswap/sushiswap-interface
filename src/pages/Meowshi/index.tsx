@@ -8,7 +8,7 @@ import APRCard from './APRCard'
 import StakeCard from './StakeCard'
 import BalanceCard from './BalanceCard'
 import { ChainId } from '@sushiswap/sdk'
-import { SUSHI, XSUSHI, NYAN } from '../../constants'
+import { SUSHI, XSUSHI, MEOW } from '../../constants'
 import useTokenBalance from '../../hooks/useTokenBalance'
 
 const mockData = {
@@ -16,17 +16,17 @@ const mockData = {
     weightedApr: 15.34
 }
 
-export default function MeowshiNyan() {
+export default function Meowshi() {
     const { account, chainId } = useActiveWeb3React()
 
     const sushiBalance = useTokenBalance(SUSHI[ChainId.MAINNET]?.address ?? '')
     const xSushiBalance = useTokenBalance(XSUSHI?.address ?? '')
-    const nyanBalance = useTokenBalance(NYAN?.address ?? '')
+    const meowBalance = useTokenBalance(MEOW?.address ?? '')
 
     return (
         <>
             <Helmet>
-                <title>NYAN 🐈</title>
+                <title>MEOW 🐈</title>
             </Helmet>
             <div className="flex flex-col w-full">
                 <div className="flex mb-6 justify-center">
@@ -44,13 +44,13 @@ export default function MeowshiNyan() {
                             <APRCard />
                         </div>
                         <div>
-                            <StakeCard xSushiBalance={xSushiBalance} nyanBalance={nyanBalance} />
+                            <StakeCard xSushiBalance={xSushiBalance} meowBalance={meowBalance} />
                         </div>
                     </div>
                     <div className="hidden md:block w-72 ml-6">
                         <BalanceCard
                             sushiEarnings={mockData.sushiEarnings}
-                            nyanBalance={nyanBalance}
+                            meowBalance={meowBalance}
                             xSushiBalance={xSushiBalance}
                             sushiBalance={sushiBalance}
                             weightedApr={mockData.weightedApr}
@@ -61,7 +61,7 @@ export default function MeowshiNyan() {
                     <div className="md:hidden flex justify-center w-full max-w-xl mt-6 mb-20">
                         <BalanceCard
                             sushiEarnings={mockData.sushiEarnings}
-                            nyanBalance={nyanBalance}
+                            meowBalance={meowBalance}
                             xSushiBalance={xSushiBalance}
                             sushiBalance={sushiBalance}
                             weightedApr={mockData.weightedApr}

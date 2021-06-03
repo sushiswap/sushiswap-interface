@@ -51,8 +51,11 @@ import useENSAddress from '../../hooks/useENSAddress'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useLingui } from '@lingui/react'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
-import MisoBanner from '../../assets/images/miso-banner.jpg'
-import MisoLogo from '../../assets/images/miso-logo.png'
+//import MisoBanner from '../../assets/images/miso-banner.jpg'
+import SakeBanner from '../../assets/images/sake-banner.jpg'
+import SakeLogo from '../../assets/images/sake-square.png'
+import SakeBottle from '../../assets/images/sake-half.png'
+//import MisoLogo from '../../assets/images/miso-logo.png'
 
 export default function Swap() {
     const { i18n } = useLingui()
@@ -336,7 +339,7 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">New Yield Farms! renDOGE, SNX, USDC, DAI</div>
+                                        <div className="text-white">New Yield Farms! WOOFY, GRT, FRAX, FXS </div>
                                         <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
                                     <div className=""></div>
@@ -626,16 +629,37 @@ export default function Swap() {
                     {/*    </div>*/}
                     {/*)}*/}
                     <a
-                        href="https://miso.sushi.com"
-                        className="hidden sm:block w-full cursor-pointer mt-4 py-6 rounded"
+                        href={
+                            'https://app.sushi.com/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0xe9f84de264e91529af07fa2c746e934397810334'
+                        }
+                        className="hidden sm:block w-full cursor-pointer mt-4 py-1 rounded"
                         style={{
-                            backgroundImage: `url(${MisoBanner})`,
+                            backgroundImage: `url(${SakeBanner})`,
                             backgroundPosition: 'center',
                             backgroundSize: 'cover',
                             backgroundRepeat: 'no-repeat'
                         }}
                     >
                         <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                            <div style={{ maxWidth: 134 }}>
+                                <img src={SakeLogo} style={{ maxWidth: '100%' }} />
+                            </div>
+                            <div style={{ maxWidth: 80 }}>
+                                <img src={SakeBottle} style={{ maxWidth: '100%' }} />
+                            </div>
+                            <div
+                                className="text-black font-normal flex flex-col space-y-2"
+                                style={{ lineHeight: 1.3, maxWidth: 250 }}
+                            >
+                                <div className="font-semibold">
+                                    <Trans>Missed the Auction?</Trans>
+                                </div>
+                                <div className="text-xs">
+                                    <Trans>Swap for SAK3 token on SUSHI now. Click here to swap.</Trans>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <div className="justify-between flex pl-5 pr-8 items-center gap-6">
                             <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
                                 <Trans>
                                     Pour a hot bowl of MISO, the new <span className="font-bold">token launchpad</span>{' '}
@@ -645,7 +669,7 @@ export default function Swap() {
                             <div style={{ maxWidth: 195 }}>
                                 <img src={MisoLogo} style={{ maxWidth: '100%' }} />
                             </div>
-                        </div>
+                        </div> */}
                     </a>
                 </Wrapper>
             </div>
