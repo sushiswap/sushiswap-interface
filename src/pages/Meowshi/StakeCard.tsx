@@ -12,7 +12,7 @@ import useMeowshi from '../../hooks/useMeowshi'
 import TransactionFailedModal from './TransactionFailedModal'
 import { Button, Dots } from '../../components'
 import { t } from '@lingui/macro'
-import { SUSHI, XSUSHI, NYAN } from '../../constants'
+import { SUSHI, XSUSHI, MEOW } from '../../constants'
 
 import sushiData from '@sushiswap/sushi-data'
 import { useLingui } from '@lingui/react'
@@ -51,14 +51,14 @@ const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue
 
 interface StakeCardProps {
     xSushiBalance: BalanceProps
-    nyanBalance: BalanceProps
+    meowBalance: BalanceProps
 }
 
-export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps) {
+export default function StakeCard({ xSushiBalance, meowBalance }: StakeCardProps) {
     const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
 
-    const { allowance, nyan, unyan } = useMeowshi()
+    const { allowance, meow, unmeow } = useMeowshi()
 
     const walletConnected = !!account
     const toggleWalletModal = useWalletModalToggle()
@@ -66,7 +66,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
     const [activeTab, setActiveTab] = useState(0)
     const [modalOpen, setModalOpen] = useState(false)
 
-    const balance: BalanceProps = activeTab === 0 ? xSushiBalance : nyanBalance
+    const balance: BalanceProps = activeTab === 0 ? xSushiBalance : meowBalance
     const formattedBalance = formatFromBalance(balance.value)
 
     const [input, setInput] = useState<string>('')
@@ -83,7 +83,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
         setUsingBalance(true)
     }
 
-    const insufficientFunds = (activeTab === 0 ? xSushiBalance : nyanBalance).value.lt(parsedInput.value)
+    const insufficientFunds = (activeTab === 0 ? xSushiBalance : meowBalance).value.lt(parsedInput.value)
     const inputError = insufficientFunds
 
     const [pendingTx, setPendingTx] = useState(false)
@@ -107,14 +107,14 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
                         return
                     }
                 }
-                const success = await sendTx(() => nyan(parsedInput))
+                const success = await sendTx(() => meow(parsedInput))
                 if (!success) {
                     setPendingTx(false)
                     //setModalOpen(true)
                     return
                 }
             } else if (activeTab === 1) {
-                const success = await sendTx(() => unyan(parsedInput))
+                const success = await sendTx(() => unmeow(parsedInput))
                 if (!success) {
                     setPendingTx(false)
                     //setModalOpen(true)
@@ -132,7 +132,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
             new Token(1, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', ''),
             parsedInput.value.toString()
         ),
-        '0x4FA5116809B8428934D148c2975F366E8920F24b'
+        '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D'
     )
 
     console.log('approvalState:', approvalState, parsedInput.value.toString())
@@ -150,7 +150,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
                         }}
                     >
                         <div className={activeTab === 0 ? activeTabStyle : inactiveTabStyle}>
-                            <p>{i18n._(t`NYAN xSUSHI`)}</p>
+                            <p>{i18n._(t`MEOW xSUSHI`)}</p>
                         </div>
                     </div>
                     <div
@@ -161,7 +161,7 @@ export default function StakeCard({ xSushiBalance, nyanBalance }: StakeCardProps
                         }}
                     >
                         <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
-                            <p>{i18n._(t`UNYAN xSUSHI`)}</p>
+                            <p>{i18n._(t`UNMEOW xSUSHI`)}</p>
                         </div>
                     </div>
                 </div>
