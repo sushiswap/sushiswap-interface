@@ -53,7 +53,7 @@ export default function ImportRow({
     showImportView: () => void
     setImportToken: (token: Token) => void
 }) {
-    // gloabls
+    // globals
     const { chainId } = useActiveWeb3React()
     const theme = useTheme()
 
