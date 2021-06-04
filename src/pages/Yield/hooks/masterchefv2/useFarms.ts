@@ -99,10 +99,13 @@ const useFarms = () => {
                 const balanceUSD = (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD)
 
                 const sushiPerBlock = 18.6
+
                 const rewardPerBlock = (pool.allocPoint / 26480) * 20
+                const secondaryRewardPerBlock = 220316772748387000 / 1e18
 
                 const blocksPerHour = 3600 / Number(averageBlockTime)
-                const roiPerBlock = (rewardPerBlock * sushiPrice * 2) / balanceUSD // TODO: include alcx pricing
+                const roiPerBlock =
+                    (rewardPerBlock * sushiPrice) / balanceUSD + (secondaryRewardPerBlock * alcxPrice) / balanceUSD // TODO: include alcx pricing
                 const roiPerHour = roiPerBlock * blocksPerHour
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
@@ -110,7 +113,6 @@ const useFarms = () => {
 
                 const rewardPerDay = rewardPerBlock * blocksPerHour * 24
 
-                const secondaryRewardPerBlock = 220316772748387000 / 1e18
                 const secondaryRewardPerDay = secondaryRewardPerBlock * blocksPerHour * 24
 
                 return {
