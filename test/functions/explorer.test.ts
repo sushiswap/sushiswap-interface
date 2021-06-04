@@ -31,5 +31,10 @@ describe('utils', () => {
                 'https://rinkeby.etherscan.io/address/abc'
             )
         })
+        it('arbitrum', () => {
+            expect(getExplorerLink(ChainId.ARBITRUM, 'abc', 'address')).toEqual(
+                'https://mainnet-arb-explorer.netlify.app/address/abc'
+            )
+        })
     })
 })
