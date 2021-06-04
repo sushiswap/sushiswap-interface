@@ -51,8 +51,15 @@ const useMasterChefV2 = () => {
     const harvest = useCallback(
         async (pid: number, name: string) => {
             try {
-                //console.log('help:', pid, account)
-                const tx = await masterChefV2Contract?.harvest(pid, account)
+                console.log('harvest:', pid, account)
+                console.log({ masterChefV2Contract })
+                const tx = await masterChefV2Contract?.batch(
+                    [
+                        masterChefV2Contract.interface.encodeFunctionData('harvestFromMasterChef'),
+                        masterChefV2Contract.interface.encodeFunctionData('harvest', [pid, account])
+                    ],
+                    true
+                )
                 return addTransaction(tx, { summary: `Harvest ${name}` })
             } catch (e) {
                 console.error(e)
