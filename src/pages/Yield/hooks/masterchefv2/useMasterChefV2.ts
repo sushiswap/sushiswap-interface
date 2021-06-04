@@ -1,12 +1,15 @@
+import { useMasterChefV2Contract, useSushiContract } from '../../../../hooks/useContract'
+
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from '../../../../hooks/useActiveWeb3React'
 import { useCallback } from 'react'
-import { useMasterChefV2Contract } from '../../../../hooks/useContract'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 
 const useMasterChefV2 = () => {
     const addTransaction = useTransactionAdder()
-    const masterChefV2Contract = useMasterChefV2Contract() // withSigner
+    const sushiTokenContract = useSushiContract()
+    const masterChefV2Contract = useMasterChefV2Contract()
+
     const { account } = useActiveWeb3React()
 
     // Deposit
@@ -53,13 +56,20 @@ const useMasterChefV2 = () => {
             try {
                 console.log('harvest:', pid, account)
                 console.log({ masterChefV2Contract })
-                const tx = await masterChefV2Contract?.batch(
-                    [
-                        masterChefV2Contract.interface.encodeFunctionData('harvestFromMasterChef'),
-                        masterChefV2Contract.interface.encodeFunctionData('harvest', [pid, account])
-                    ],
-                    true
-                )
+
+                const pendingSushi = await masterChefV2Contract?.pendingSushi(pid, account)
+                const balanceOf = await sushiTokenContract?.balanceOf(masterChefV2Contract?.address)
+
+                const tx = pendingSushi.gt(balanceOf)
+                    ? await masterChefV2Contract?.batch(
+                          [
+                              masterChefV2Contract.interface.encodeFunctionData('harvestFromMasterChef'),
+                              masterChefV2Contract.interface.encodeFunctionData('harvest', [pid, account])
+                          ],
+                          true
+                      )
+                    : await masterChefV2Contract?.harvest(pid, account)
+
                 return addTransaction(tx, { summary: `Harvest ${name}` })
             } catch (e) {
                 console.error(e)
