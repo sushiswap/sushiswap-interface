@@ -1,19 +1,21 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import sushiData from '@sushiswap/sushi-data'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
-import { useBoringHelperContract } from 'hooks/useContract'
-import orderBy from 'lodash/orderBy'
-import { useCallback, useEffect, useState } from 'react'
 import { exchange, masterchefv2 } from 'apollo/client'
 import { getAverageBlockTime, getOneDayBlock } from 'apollo/getAverageBlockTime'
 import {
-    tokenQuery,
     liquidityPositionSubsetQuery,
+    masterchefv2PoolsQuery,
     pairSubsetQuery,
     pairTimeTravelQuery,
-    masterchefv2PoolsQuery
+    tokenQuery
 } from 'apollo/queries'
+import { useCallback, useEffect, useState } from 'react'
+
+import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
+import orderBy from 'lodash/orderBy'
+import sushiData from '@sushiswap/sushi-data'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBoringHelperContract } from 'hooks/useContract'
+
 //import Fraction from '../../../entities/Fraction'
 //import { resetIdCounter } from 'react-tabs'
 //import { apys } from '@lufycz/sushi-data/dist/sushi/queries/masterchef'
@@ -71,10 +73,10 @@ const useFarms = () => {
         })
         const liquidityPositions = results[1]?.data.liquidityPositions
         const sushiPrice = results[2]
-
         const pairs = pairsQuery?.data.pairs
-        const alcxPrice = results[3].data.token.derivedETH * results[4]
-        const averageBlockTime = results[3]
+        const ethPrice = results[4]
+        const alcxPrice = results[3].data.token.derivedETH * ethPrice
+        const averageBlockTime = results[5]
 
         const farms = pools
             .filter((pool: any) => {
@@ -97,10 +99,13 @@ const useFarms = () => {
                 const balanceUSD = (balance / Number(pair.totalSupply)) * Number(pair.reserveUSD)
 
                 const sushiPerBlock = 18.6
-                const rewardPerBlock = ((pool.allocPoint / 26480) * 20) / 1e18
+
+                const rewardPerBlock = (pool.allocPoint / 26480) * sushiPerBlock
+                const secondaryRewardPerBlock = 0 / 1e18
 
                 const blocksPerHour = 3600 / Number(averageBlockTime)
-                const roiPerBlock = (rewardPerBlock * sushiPrice * 2) / balanceUSD // TODO: include alcx pricing
+                const roiPerBlock =
+                    (rewardPerBlock * sushiPrice) / balanceUSD + (secondaryRewardPerBlock * alcxPrice) / balanceUSD // TODO: include alcx pricing
                 const roiPerHour = roiPerBlock * blocksPerHour
                 const roiPerDay = roiPerHour * 24
                 const roiPerMonth = roiPerDay * 30
@@ -108,7 +113,6 @@ const useFarms = () => {
 
                 const rewardPerDay = rewardPerBlock * blocksPerHour * 24
 
-                const secondaryRewardPerBlock = 220316772748387000 / 1e18
                 const secondaryRewardPerDay = secondaryRewardPerBlock * blocksPerHour * 24
 
                 return {
