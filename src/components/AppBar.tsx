@@ -93,6 +93,11 @@ function AppBar(): JSX.Element {
                                                     </NavLink>
                                                 )}
                                             {chainId === ChainId.MAINNET && (
+                                                <ExternalLink id={`stake-nav-link`} href={'https://miso.sushi.com'}>
+                                                    {i18n._(t`Miso`)}
+                                                </ExternalLink>
+                                            )}
+                                            {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`vesting-nav-link`} to={'/vesting'}>
                                                     {i18n._(t`Vesting`)}
                                                 </NavLink>
@@ -118,6 +123,65 @@ function AppBar(): JSX.Element {
 
                                 <div className="flex flex-row items-center justify-center w-full lg:w-auto p-4 fixed left-0 bottom-0 bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                                     <div className="flex items-center justify-between sm:justify-end space-x-2 w-full">
+                                        {chainId &&
+                                            [ChainId.MAINNET].includes(chainId) &&
+                                            library &&
+                                            library.provider.isMetaMask && (
+                                                <>
+                                                    <QuestionHelper text={i18n._(t`Add SAK3 to your Metamask wallet`)}>
+                                                        <div
+                                                            className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer border border-gray-400"
+                                                            onClick={() => {
+                                                                const params: any = {
+                                                                    type: 'ERC20',
+                                                                    options: {
+                                                                        address:
+                                                                            '0xe9F84dE264E91529aF07Fa2C746e934397810334',
+                                                                        symbol: 'SAK3',
+                                                                        decimals: 18,
+                                                                        image:
+                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0xe9F84dE264E91529aF07Fa2C746e934397810334/logo.png'
+                                                                    }
+                                                                }
+
+                                                                if (
+                                                                    library &&
+                                                                    library.provider.isMetaMask &&
+                                                                    library.provider.request
+                                                                ) {
+                                                                    library.provider
+                                                                        .request({
+                                                                            method: 'wallet_watchAsset',
+                                                                            params
+                                                                        })
+                                                                        .then(success => {
+                                                                            if (success) {
+                                                                                console.log(
+                                                                                    'Successfully added SAK3 to MetaMask'
+                                                                                )
+                                                                            } else {
+                                                                                throw new Error('Something went wrong.')
+                                                                            }
+                                                                        })
+                                                                        .catch(console.error)
+                                                                }
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={`https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0xe9F84dE264E91529aF07Fa2C746e934397810334/logo.png`}
+                                                                alt="Switch Network"
+                                                                style={{
+                                                                    minWidth: 36,
+                                                                    minHeight: 36,
+                                                                    maxWidth: 36,
+                                                                    maxHeight: 36
+                                                                }}
+                                                                className="rounded-md object-contain"
+                                                            />
+                                                        </div>
+                                                    </QuestionHelper>
+                                                </>
+                                            )}
                                         {chainId &&
                                             [ChainId.MAINNET].includes(chainId) &&
                                             library &&
@@ -286,17 +350,11 @@ function AppBar(): JSX.Element {
                                         </div>
                                         <LanguageSwitch />
 
-                                        {
-                                            chainId && [
-                                                ChainId.GÖRLI,
-                                                ChainId.KOVAN,
-                                                ChainId.RINKEBY,
-                                                ChainId.ROPSTEN
-                                            ].includes(chainId) && (
-                                                <Web3Faucet />
-                                            )
-                                        }
-                                        
+                                        {chainId &&
+                                            [ChainId.GÖRLI, ChainId.KOVAN, ChainId.RINKEBY, ChainId.ROPSTEN].includes(
+                                                chainId
+                                            ) && <Web3Faucet />}
+
                                         <MoreMenu />
                                     </div>
                                 </div>
@@ -362,6 +420,11 @@ function AppBar(): JSX.Element {
                                     <NavLink id={`stake-nav-link`} to={'/sushibar'}>
                                         {i18n._(t`SushiBar`)}
                                     </NavLink>
+                                )}
+                                {chainId === ChainId.MAINNET && (
+                                    <ExternalLink id={`stake-nav-link`} href={'https://miso.sushi.com'}>
+                                        {i18n._(t`Miso`)}
+                                    </ExternalLink>
                                 )}
                                 {chainId === ChainId.MAINNET && (
                                     <NavLink id={`vesting-nav-link`} to={'/vesting'}>
