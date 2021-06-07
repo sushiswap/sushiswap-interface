@@ -1,7 +1,7 @@
 {
     catalogs: [
         {
-            path: '<rootDir>/src/language/locales/{locale}/catalog',
+            path: '<rootDir>/src/assets/locale/{locale}',
             include: ['<rootDir>/src'],
             exclude: ['**/node_modules/**', '**/build/**']
         }
@@ -10,7 +10,7 @@
     extractBabelOptions: {},
     fallbackLocales: {},
     format: 'minimal',
-    locales: ['de', 'en', 'es-AR', 'es', 'it', 'he', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja', 'fr'],
+    locales: ['de', 'en', 'es-AR', 'es', 'it', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja', 'fr', 'pt-BR', 'hi'],
     orderBy: 'messageId',
     pseudoLocale: '',
     rootDir: '.',

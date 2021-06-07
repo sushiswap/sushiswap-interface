@@ -10,6 +10,9 @@ import HeFlag from '../../assets/images/he-flag.png'
 import RoFlag from '../../assets/images/ro-flag.png'
 import RuFlag from '../../assets/images/ru-flag.png'
 import ViFlag from '../../assets/images/vi-flag.png'
+import FrFlag from '../../assets/images/fr-flag.png'
+import BrFlag from '../../assets/images/br-flag.png'
+import HiFlag from '../../assets/images/hi-flag.png'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
@@ -27,7 +30,7 @@ const ExtendedStyledMenuButton = styled(StyledMenuButton)`
 `
 
 const ExtendedMenuFlyout = styled(MenuFlyout)`
-    min-width: 10rem;
+    min-width: 11rem;
     ${({ theme }) => theme.mediaWidth.upToMedium`
     max-height: 232px;
     overflow: auto;
@@ -83,10 +86,6 @@ const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: stri
         flag: ItFlag,
         language: 'Italian'
     },
-    he: {
-        flag: HeFlag,
-        language: 'Hebrew'
-    },
     ru: {
         flag: RuFlag,
         language: 'Russian'
@@ -117,6 +116,19 @@ const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: stri
         flag: EsFlag,
         language: 'Spanish',
         dialect: 'AR'
+    },
+    fr: {
+        flag: FrFlag,
+        language: 'French'
+    },
+    'pt-BR': {
+        flag: BrFlag,
+        language: 'Portuguese',
+        dialect: 'BR'
+    },
+    hi: {
+        flag: HiFlag,
+        language: 'Hindi'
     }
 }
 
