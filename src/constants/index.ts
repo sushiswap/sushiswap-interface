@@ -225,6 +225,8 @@ export const LFBTC = new Token(
     'LFBTC',
     'LiftKitchen BTC'
 )
+export const CVXCRV = new Token(ChainId.MAINNET, '0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7', 18, 'cvxCRV', 'cvxCRV')
+export const CRV = new Token(ChainId.MAINNET, '0xD533a949740bb3306d119CC777fa900bA034cd52', 18, 'CRV', 'Curve')
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -242,7 +244,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
         [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
-        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]]
+        [LIFT.address]: [LFBTC, WETH[ChainId.MAINNET]],
+        [CVXCRV.address]: [CRV, WETH[ChainId.MAINNET]]
     },
     [ChainId.MATIC]: {
         [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
