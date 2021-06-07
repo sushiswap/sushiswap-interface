@@ -101,7 +101,7 @@ const useFarms = () => {
                 const sushiPerBlock = 18.6
 
                 const rewardPerBlock = (pool.allocPoint / 26480) * sushiPerBlock
-                const secondaryRewardPerBlock = 0 / 1e18
+                const secondaryRewardPerBlock = 437861008791398000 / 1e18
 
                 const blocksPerHour = 3600 / Number(averageBlockTime)
                 const roiPerBlock =
