@@ -7,7 +7,7 @@ export function useOneDayBlock(swrConfig = undefined) {
     const { chainId } = useActiveWeb3React()
 
     const res = useSWR(
-        ['oneDayBlock', chainId],
+        chainId ? ['oneDayBlock', chainId] : null,
         (_, chainId) => getOneDayBlock(chainId),
         swrConfig
     )
@@ -19,7 +19,7 @@ export function useAverageBlockTime(swrConfig = undefined) {
     const { chainId } = useActiveWeb3React()
 
     const res = useSWR(
-        ['averageBlockTime', chainId],
+        chainId ? ['averageBlockTime', chainId] : null,
         (_, chainId) => getAverageBlockTime(chainId),
         swrConfig
     )
