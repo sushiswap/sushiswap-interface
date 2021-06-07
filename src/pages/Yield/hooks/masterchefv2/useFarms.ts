@@ -82,7 +82,7 @@ const useFarms = () => {
             .filter((pool: any) => {
                 //console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))
                 //console.log(pool.id, Number(pool.miniChef.totalAllocPoint) > 0)
-                return pairs.find((pair: any) => pair?.id === pool?.pair)
+                return pairs.find((pair: any) => pair?.id === pool?.pair) && ['0'].includes(pool?.id)
                 // && Number(pool.miniChef.totalAllocPoint) > 0
                 // &&!['4'].includes(pool?.id) // manual filter for now
             })
