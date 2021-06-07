@@ -9,6 +9,7 @@ import { ChainId } from '@sushiswap/sdk'
 import Modal from '../Modal'
 import ModalHeader from '../ModalHeader'
 import React from 'react'
+import cookie from 'cookie-cutter'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
 const PARAMS: {
@@ -197,6 +198,7 @@ export default function NetworkModal(): JSX.Element | null {
                             onClick={() => {
                                 toggleNetworkModal()
                                 const params = PARAMS[key]
+                                cookie.set('chainId', key)
                                 library?.send('wallet_addEthereumChain', [
                                     params,
                                     account,

@@ -17,17 +17,14 @@ export function useStaked(contract: Contract | null | undefined) {
         undefined,
         NEVER_RELOAD
     )
-    const args = useMemo(
-        () =>
-            [
-                ...Array(
-                    !numberOfPools.loading
-                        ? numberOfPools?.result?.[0].toNumber()
-                        : 0
-                ).keys(),
-            ].map((pid) => [String(pid), String(account)]),
-        [numberOfPools, account]
-    )
+    const args = useMemo(() => {
+        if (!account || numberOfPools.loading) {
+            return []
+        }
+        return [...Array(numberOfPools?.result?.[0].toNumber()).keys()].map(
+            (pid) => [String(pid), String(account)]
+        )
+    }, [numberOfPools, account])
 
     const pendingSushi = useSingleContractMultipleData(
         contract,

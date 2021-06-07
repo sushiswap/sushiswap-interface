@@ -1,13 +1,13 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
-import { useFuse, useSortableData } from '../../hooks'
 
 import Dots from '../../components/Dots'
 import FarmListItem from './FarmListItem'
 import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import useSortableData from '../../hooks/useSortableData'
 
-const FarmList = ({ farms, kmp = false, term = undefined }) => {
+const FarmList = ({ farms, term = undefined }) => {
     const { items, requestSort, sortConfig } = useSortableData(farms)
 
     const { i18n } = useLingui()
@@ -71,7 +71,12 @@ const FarmList = ({ farms, kmp = false, term = undefined }) => {
                 {items && items.length ? (
                     items.map((farm) => {
                         // console.log({ farm })
-                        return <FarmListItem farm={farm} kmp={kmp} />
+                        return (
+                            <FarmListItem
+                                key={`${farm.chefId}_${farm.id}`}
+                                farm={farm}
+                            />
+                        )
                     })
                 ) : term ? (
                     <div className="w-full py-6 text-center">No Results.</div>

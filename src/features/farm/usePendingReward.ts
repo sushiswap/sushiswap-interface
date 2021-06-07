@@ -2,13 +2,14 @@ import { useCallback, useEffect, useState } from 'react'
 
 import ALCX_REWARDER_ABI from '../../constants/abis/alcx-rewarder.json'
 import { BigNumber } from '@ethersproject/bignumber'
+import { ChefId } from './enum'
 import Fraction from '../../entities/Fraction'
 import { getContract } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../../state/application/hooks'
 import { useMasterChefV2Contract } from '../../hooks/useContract'
 
-const usePending = (pid: number) => {
+const usePending = (pid: number, chefId) => {
     const [balance, setBalance] = useState<string>('0')
     const { account, library } = useActiveWeb3React()
 
@@ -34,7 +35,13 @@ const usePending = (pid: number) => {
     }, [masterChefV2Contract, library, pid, account])
 
     useEffect(() => {
-        if (account && masterChefV2Contract && String(pid) && library) {
+        if (
+            account &&
+            masterChefV2Contract &&
+            String(pid) &&
+            library &&
+            chefId === ChefId.MASTERCHEF_V2
+        ) {
             // pid = 0 is evaluated as false
             fetchPending()
         }

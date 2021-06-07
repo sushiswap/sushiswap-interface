@@ -1,29 +1,106 @@
+import {
+    ApprovalState,
+    useApproveCallback,
+} from '../../hooks/useApproveCallback'
+import { ChainId, MASTERCHEF_ADDRESS, Token } from '@sushiswap/sdk'
 import React, { useState } from 'react'
-import { formatNumber, formatPercent } from '../../functions'
+import { Trans, t } from '@lingui/macro'
+import { currencyId, formatNumber, formatPercent } from '../../functions'
 
+import Button from '../../components/Button'
+import { ChefId } from './enum'
+import Dots from '../../components/Dots'
 import DoubleLogo from '../../components/DoubleLogo'
-import FarmDropDown from './FarmDropDown'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Input as NumericalInput } from '../../components/NumericalInput'
 import Paper from '../../components/Paper'
-import { t } from '@lingui/macro'
+import { getAddress } from '@ethersproject/address'
+import { tryParseAmount } from '../../state/swap/hooks'
+import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
+import useMasterChef from './useMasterChef'
+import { usePair } from '../../hooks/usePairs'
+import usePendingReward from './usePendingReward'
+import usePendingSushi from '../../hooks/usePendingSushi'
+import useStakedBalance from '../../hooks/useStakedBalance'
+import useTokenBalance from '../../hooks/useTokenBalance'
 
-const FarmListItem = ({ farm, kmp }) => {
+const FarmListItem = ({ farm }) => {
     const { i18n } = useLingui()
     const [expand, setExpand] = useState<boolean>(false)
-    const currency0 = useCurrency(farm?.liquidityPair?.token0?.id)
-    const currency1 = useCurrency(farm?.liquidityPair?.token1?.id)
+    const { account, chainId } = useActiveWeb3React()
+    const [pendingTx, setPendingTx] = useState(false)
+    const [depositValue, setDepositValue] = useState('')
+    const [withdrawValue, setWithdrawValue] = useState('')
+
+    // console.log(farm)
+
+    const token0 = useCurrency(farm.pair.token0.id)
+    const token1 = useCurrency(farm.pair.token1.id)
+
+    const address = getAddress(farm.pair.id)
+
+    // TODO: KashiPair? Refactor usePair to return both a SwapPair & LendingPair in same format
+    const [pairState, pair] = usePair(token0, token1)
+
+    // const balance = useTokenBalance(address)
+    // const staked = useStakedBalance(farm.pid, farm.pair.token1.decimals) // kMP depends on decimals of asset, SLP is always 18
+    // const pending = usePendingSushi(farm.pid)
+    // const reward = usePendingReward(farm.pid, farm.chefId)
+
+    //console.log('pending:', pending, pid)
+
+    const APPROVAL_ADDRESSES = {
+        [ChefId.MASTERCHEF]: MASTERCHEF_ADDRESS[ChainId.MAINNET],
+        [ChefId.MASTERCHEF_V2]: '0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d',
+        [ChefId.MINICHEF]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
+    }
+    // console.log({
+    //     chainId: chainId || 1,
+    //     address,
+    //     farm,
+    //     decimals: farm.pair.decimals,
+    //     symbol: farm.pair.symbol,
+    //     name: farm.pair.name,
+    // })
+
+    const liquidityToken = new Token(
+        chainId,
+        address,
+        18,
+        farm.pair.symbol,
+        farm.pair.name
+        // farm.symbol,
+        // farm.name
+    )
+
+    const [approvalState, approve] = useApproveCallback(
+        tryParseAmount(depositValue, liquidityToken),
+        APPROVAL_ADDRESSES[farm.chefId]
+    )
+
+    // const NOOP = (...args) => {}
+
+    // const deposit = NOOP
+    // const withdraw = NOOP
+    // const harvest = NOOP
+
+    // const { deposit, withdraw, harvest } = useMasterChef(farm.chefId)
+
+    // console.log({ farm })
+
     return (
         <Paper className="bg-dark-800" key={farm.id}>
             <div
-                className="grid grid-cols-4 px-4 py-2 rounded rounded-b-none cursor-pointer select-none bg-dark-850 md:grid-cols-4"
+                className="grid grid-cols-3 px-4 py-2 rounded rounded-b-none cursor-pointer select-none md:grid-cols-4 bg-dark-850"
                 onClick={() => setExpand(!expand)}
             >
                 <div className="text-sm font-semibold sm:text-base">
-                    {farm?.liquidityPair?.token0?.symbol +
+                    {farm?.pair?.token0?.symbol +
                         '-' +
-                        farm?.liquidityPair?.token1?.symbol}{' '}
+                        farm?.pair?.token1?.symbol}{' '}
                     {farm?.type}
                 </div>
                 <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
@@ -45,21 +122,24 @@ const FarmListItem = ({ farm, kmp }) => {
                 <div className="flex items-center col-span-1">
                     <div className="mr-4">
                         <DoubleLogo
-                            currency0={currency0}
-                            currency1={currency1}
+                            currency0={token0}
+                            currency1={token1}
                             size={40}
                             margin={true}
                         />
                     </div>
-                    {/* <div className="hidden sm:block">
-                                {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
-                            </div> */}
+                    <div className="hidden sm:block">
+                        {farm &&
+                            farm.pair.token0.symbol +
+                                '-' +
+                                farm.pair.token1.symbol}
+                    </div>
                 </div>
                 <div className="flex-row items-center justify-start hidden ml-4 space-x-2 md:col-span-1 md:flex">
                     <div className="flex flex-col space-y-2 md:col-span-3">
                         <div className="flex flex-row items-center mr-4 space-x-2">
                             {farm?.rewards?.map((reward) => (
-                                <div>
+                                <div className="flex items-center">
                                     <Image
                                         src={reward.icon}
                                         width="40px"
@@ -85,7 +165,7 @@ const FarmListItem = ({ farm, kmp }) => {
                     <div>
                         {/* <div className="text-right">{formattedNum(farm.tvl, true)} </div> */}
                         <div className="text-sm font-semibold text-right text-gray-500 sm:text-sm">
-                            {formatNumber(farm.slpBalance, false)} {farm.type}
+                            {formatNumber(farm.balance, false)} {farm.type}
                         </div>
                         <div className="text-xs text-right text-gray-500">
                             Market Staked
@@ -107,17 +187,245 @@ const FarmListItem = ({ farm, kmp }) => {
                     </div>
                 </div>
             </div>
+            <pre>{JSON.stringify(farm, null, 2)}</pre>
             {expand && (
-                <FarmDropDown
-                    pid={farm.pid}
-                    type={farm.type}
-                    pairAddress={farm.pairAddress}
-                    pairSymbol={farm.symbol}
-                    token0Address={farm.liquidityPair.token0.id}
-                    token1Address={farm.liquidityPair.token1.id}
-                    assetSymbol={farm.liquidityPair.token0.symbol}
-                    assetDecimals={farm.liquidityPair.token1.decimals}
-                />
+                <>
+                    <div className="flex flex-col py-6 space-y-4">
+                        <div className="grid grid-cols-2 gap-4 px-4">
+                            {/* Deposit */}
+                            <div className="col-span-2 text-center md:col-span-1">
+                                {account && (
+                                    <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
+                                        {i18n._(t`Wallet Balance`)}:{' '}
+                                        {formatNumber(
+                                            balance.value.toFixed(
+                                                balance.decimals
+                                            )
+                                        )}{' '}
+                                        {farm.type}
+                                    </div>
+                                )}
+                                <div className="relative flex items-center w-full mb-4">
+                                    <NumericalInput
+                                        className="w-full p-3 pr-20 rounded bg-dark-700 bg-input focus:ring focus:ring-blue"
+                                        value={depositValue}
+                                        onUserInput={(value) => {
+                                            setDepositValue(value)
+                                        }}
+                                    />
+                                    {account && (
+                                        <Button
+                                            variant="outlined"
+                                            color="blue"
+                                            size="small"
+                                            onClick={() => {
+                                                setDepositValue(
+                                                    balance.value.toFixed(
+                                                        balance.decimals
+                                                    )
+                                                )
+                                            }}
+                                            className="absolute border-0 right-4 focus:ring focus:ring-blue"
+                                        >
+                                            {i18n._(t`MAX`)}
+                                        </Button>
+                                    )}
+                                </div>
+                                {approvalState === ApprovalState.NOT_APPROVED ||
+                                approvalState === ApprovalState.PENDING ? (
+                                    <Button
+                                        color="blue"
+                                        disabled={
+                                            approvalState ===
+                                            ApprovalState.PENDING
+                                        }
+                                        onClick={approve}
+                                    >
+                                        {approvalState ===
+                                        ApprovalState.PENDING ? (
+                                            <Dots>Approving </Dots>
+                                        ) : (
+                                            'Approve'
+                                        )}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        color="blue"
+                                        disabled={
+                                            pendingTx ||
+                                            !balance ||
+                                            Number(depositValue) === 0 ||
+                                            Number(depositValue) >
+                                                Number(
+                                                    balance.value.toFixed(
+                                                        balance.decimals
+                                                    )
+                                                )
+                                        }
+                                        onClick={async () => {
+                                            setPendingTx(true)
+                                            await deposit(
+                                                farm.pid,
+                                                depositValue,
+                                                farm.symbol,
+                                                balance.decimals
+                                            )
+                                            setPendingTx(false)
+                                        }}
+                                    >
+                                        {i18n._(t`Stake`)}
+                                    </Button>
+                                )}
+                            </div>
+                            {/* Withdraw */}
+                            <div className="col-span-2 text-center md:col-span-1">
+                                {account && (
+                                    <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
+                                        {i18n._(t`Your Staked`)}:{' '}
+                                        {formatNumber(
+                                            staked.value.toFixed(
+                                                staked.decimals
+                                            )
+                                        )}{' '}
+                                        {farm.type}
+                                    </div>
+                                )}
+                                <div className="relative flex items-center w-full mb-4">
+                                    <NumericalInput
+                                        className="w-full p-3 pr-20 rounded bg-dark-700 bg-input focus:ring focus:ring-pink"
+                                        value={withdrawValue}
+                                        onUserInput={(value) => {
+                                            setWithdrawValue(value)
+                                        }}
+                                    />
+                                    {account && (
+                                        <Button
+                                            variant="outlined"
+                                            color="pink"
+                                            size="small"
+                                            onClick={() => {
+                                                setWithdrawValue(
+                                                    staked.value.toFixed(
+                                                        staked.decimals
+                                                    )
+                                                )
+                                            }}
+                                            className="absolute border-0 right-4 focus:ring focus:ring-pink"
+                                        >
+                                            {i18n._(t`MAX`)}
+                                        </Button>
+                                    )}
+                                </div>
+                                <Button
+                                    color="pink"
+                                    className="border-0"
+                                    disabled={
+                                        pendingTx ||
+                                        Number(withdrawValue) === 0 ||
+                                        Number(withdrawValue) >
+                                            Number(
+                                                staked.value.toFixed(
+                                                    staked.decimals
+                                                )
+                                            )
+                                    }
+                                    onClick={async () => {
+                                        setPendingTx(true)
+                                        await withdraw(
+                                            farm.pid,
+                                            withdrawValue,
+                                            farm.symbol,
+                                            balance.decimals
+                                        )
+                                        setPendingTx(false)
+                                    }}
+                                >
+                                    {i18n._(t`Unstake`)}
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
+                            {farm.type === 'SLP' && (
+                                <>
+                                    <div className="text-caption2">
+                                        Before depositing liquidity into this
+                                        reward pool you'll need to{' '}
+                                        <Link
+                                            href={`/add/${currencyId(
+                                                token0
+                                            )}/${currencyId(token1)}`}
+                                        >
+                                            <a className="underline text-blue">
+                                                add liquidity
+                                            </a>
+                                        </Link>{' '}
+                                        of {token0.symbol} & {token1.symbol} to
+                                        gain liquidity tokens.
+                                    </div>
+
+                                    <div className="text-caption2">
+                                        After withdrawing liquidity from this
+                                        reward pool you can{' '}
+                                        <Link
+                                            href={`/remove/${currencyId(
+                                                token0
+                                            )}/${currencyId(token1)}`}
+                                        >
+                                            <a className="underline text-blue">
+                                                remove liquidity
+                                            </a>
+                                        </Link>{' '}
+                                        to regain your underlying{' '}
+                                        {token0.symbol} & {token1.symbol}.
+                                    </div>
+                                </>
+                            )}
+                            {farm.type === 'KMP' && token1.symbol && (
+                                <>
+                                    <div className="text-caption2">
+                                        Before depositing into this reward pool
+                                        you'll need to{' '}
+                                        <Link href={`/lend/${farm.pair.id}`}>
+                                            <a className="underline text-blue">
+                                                lend
+                                            </a>
+                                        </Link>{' '}
+                                        to gain liquidity tokens to deposit.
+                                    </div>
+
+                                    <div className="text-caption2">
+                                        After withdrawing liquidity tokens from
+                                        this reward pool you can{' '}
+                                        <Link href={`/lend/${farm.pair.id}`}>
+                                            <a className="underline text-blue">
+                                                collect
+                                            </a>
+                                        </Link>{' '}
+                                        to regain your underlying{' '}
+                                        {token1.symbol}.
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        {pending && Number(pending) > 0 && (
+                            <div className="px-4 ">
+                                <Button
+                                    color="gradient"
+                                    onClick={async () => {
+                                        setPendingTx(true)
+                                        await harvest(farm.pid, farm.symbol)
+                                        setPendingTx(false)
+                                    }}
+                                >
+                                    <Trans>
+                                        Harvest {formatNumber(pending)} SUSHI
+                                        {/* &{' '}{formatNumber(reward)} ALCX */}
+                                    </Trans>
+                                </Button>
+                            </div>
+                        )}
+                    </div>
+                </>
             )}
         </Paper>
     )

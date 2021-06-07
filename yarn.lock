@@ -1876,7 +1876,7 @@
     "@lingui/conf" "^3.9.0"
     mkdirp "^1.0.4"
 
-"@lingui/cli@^3.8.10", "@lingui/cli@^3.9.0":
+"@lingui/cli@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@lingui/cli/-/cli-3.9.0.tgz#c2253ea0ce882272988279dc370a788ea0a4ad0f"
   integrity sha512-4msr6Nrz/VYd5x5evD6J2rBoQTye2cAFHcObXRzJWmgcE76/lJ9Sn9TTpm6hszMdz+0zojJqaoaVNDuBEO4kNA==
@@ -1925,7 +1925,7 @@
     jest-validate "^26.5.2"
     lodash.get "^4.4.2"
 
-"@lingui/core@^3.8.10", "@lingui/core@^3.9.0":
+"@lingui/core@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@lingui/core/-/core-3.9.0.tgz#83a403d0594a4f2b74604441074f32f487242c61"
   integrity sha512-tbOBqou4fPzHB5aivir1fuikFoMYFcvpWk68Pysg34KN0xagPtyj0Dnz3clmq6Vnuf4SaK4LJdXwNUPWXpah7A==
@@ -1934,12 +1934,12 @@
     make-plural "^6.2.2"
     messageformat-parser "^4.1.3"
 
-"@lingui/detect-locale@^3.8.10":
+"@lingui/detect-locale@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@lingui/detect-locale/-/detect-locale-3.9.0.tgz#3f0769db4d5655cb6d36ba4877153a180b6466f8"
   integrity sha512-PUn1LyW2WRIB1NSYBBx1Lf4rz27dPEgPs8EWHklCr1dPxYcW4pMFIHVzcBqLA4j7KtcYexFY7gCLZQDZkOm5VQ==
 
-"@lingui/loader@^3.8.10":
+"@lingui/loader@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@lingui/loader/-/loader-3.9.0.tgz#e508e00bafa40fce301cdc48b50faa8c1a0160b1"
   integrity sha512-IczFzbIE4Y4++QcXLUorIduhlJpezsx9f5A+g2UGa9/NJykVuG8YUb0xZuxsMm05wWXLHYXvg1FZWu+uUi7hUg==
@@ -1950,7 +1950,7 @@
     loader-utils "^2.0.0"
     ramda "^0.27.1"
 
-"@lingui/macro@^3.8.10":
+"@lingui/macro@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@lingui/macro/-/macro-3.9.0.tgz#881a634c82e399abc782ce8652d0f02c482c282d"
   integrity sha512-3KwlBpeuEsXWnwoFxk3Pj8tFy8ERUxktlXLnjo6NqTEXP4iA98Hl+frwpY9/xCw2VWy+mpXWInpa7wHkcsMr/w==
@@ -1959,7 +1959,7 @@
     "@lingui/conf" "^3.9.0"
     ramda "^0.27.1"
 
-"@lingui/react@^3.8.10":
+"@lingui/react@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@lingui/react/-/react-3.9.0.tgz#0284ca0e9708fa5d6298ef7e61b4be62705f8c8c"
   integrity sha512-VG+sQyttrIouhBq0h6aTtzxKO3kKWRjJPiBnaFs3gVNcmodIpzdTA9YqbFusu3+Q/+w6LYP9HuSv5eMM5jQ5Cw==
@@ -5041,6 +5041,11 @@ convert-source-map@1.7.0, convert-source-map@^1.5.0, convert-source-map@^1.5.1, 
   integrity sha512-4FJkXzKXEDB1snCFZlLP4gpC3JILicCpGbzG9f9G7tGqGCzETQ2hWPrcinA9oU4wtf2biUaEH5065UnMeR33oA==
   dependencies:
     safe-buffer "~5.1.1"
+
+cookie-cutter@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/cookie-cutter/-/cookie-cutter-0.2.0.tgz#5988f598b68c060a00ec8524ad6e6aa193e72244"
+  integrity sha1-WYj1mLaMBgoA7IUkrW5qoZPnIkQ=
 
 cookie-signature@1.0.6:
   version "1.0.6"

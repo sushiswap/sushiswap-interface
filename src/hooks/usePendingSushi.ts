@@ -15,7 +15,10 @@ const usePending = (pid: number) => {
 
     const fetchPending = useCallback(async () => {
         const pending = await masterChefContract?.pendingSushi(pid, account)
-        const formatted = Fraction.from(BigNumber.from(pending), BigNumber.from(10).pow(18)).toString()
+        const formatted = Fraction.from(
+            BigNumber.from(pending),
+            BigNumber.from(10).pow(18)
+        ).toString()
         setBalance(formatted)
     }, [account, masterChefContract, pid])
 
