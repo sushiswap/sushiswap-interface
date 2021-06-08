@@ -24,7 +24,6 @@ import {
     SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
 import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
-import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
@@ -52,13 +51,11 @@ import MINICHEF_V2_ABI from '../constants/abis/minichef-v2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
-import { abi as STAKING_REWARDS_ABI } from '@uniswap/liquidity-staker/build/StakingRewards.json'
 import SUSHIROLL_ABI from '@sushiswap/core/abi/SushiRoll.json'
 import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
 import SUSHISWAP_TWAP_ORACLE_ABI from '../constants/abis/sushiswap-slp-oracle.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
-import { abi as UNI_ABI } from '@uniswap/governance/build/Uni.json'
 import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.json'
 import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 import WETH_ABI from '../constants/abis/weth.json'
@@ -90,10 +87,6 @@ export function useContract(
             return null
         }
     }, [address, ABI, library, withSignerIfPossible, account])
-}
-
-export function useV2MigratorContract(): Contract | null {
-    return useContract(MIGRATOR_ADDRESS, MIGRATOR_ABI, true)
 }
 
 export function useTokenContract(
@@ -179,17 +172,6 @@ export function useUniContract(): Contract | null {
         chainId ? SUSHI[chainId]?.address : undefined,
         UNI_ABI,
         true
-    )
-}
-
-export function useStakingContract(
-    stakingAddress?: string,
-    withSignerIfPossible?: boolean
-): Contract | null {
-    return useContract(
-        stakingAddress,
-        STAKING_REWARDS_ABI,
-        withSignerIfPossible
     )
 }
 
