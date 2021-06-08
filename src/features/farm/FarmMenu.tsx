@@ -15,7 +15,7 @@ const Menu = ({ section, setSection }) => {
                     return setSection('portfolio')
                 }}
             >
-                Your Yield Farms
+                Your Farms
             </div>
             <div
                 className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${
@@ -25,7 +25,7 @@ const Menu = ({ section, setSection }) => {
                     return setSection('all')
                 }}
             >
-                All Yield Farms
+                All Farms
             </div>
             {chainId === ChainId.MAINNET && (
                 <>
@@ -37,7 +37,7 @@ const Menu = ({ section, setSection }) => {
                             return setSection('kmp')
                         }}
                     >
-                        Lending Yield Farms
+                        Kashi Farms
                     </div>
                     <div
                         className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${
@@ -47,7 +47,7 @@ const Menu = ({ section, setSection }) => {
                             return setSection('slp')
                         }}
                     >
-                        Liquidity Yield Farms
+                        SushiSwap Farms
                     </div>
                     <div
                         className={`cursor-pointer bg-dark-900 rounded flex justify-between items-center px-4 py-6 border border-transparent ${
@@ -57,7 +57,7 @@ const Menu = ({ section, setSection }) => {
                             return setSection('mcv2')
                         }}
                     >
-                        Double Yield Farms
+                        Dual Reward Farms
                         <Badge color="blue">New</Badge>
                     </div>
                 </>

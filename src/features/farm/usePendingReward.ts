@@ -1,56 +1,83 @@
+import {
+    useAlcxRewarderContract,
+    useComplexRewarderContract,
+} from '../../hooks/useContract'
 import { useCallback, useEffect, useState } from 'react'
 
-import ALCX_REWARDER_ABI from '../../constants/abis/alcx-rewarder.json'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChefId } from './enum'
+import { ChainId } from '@sushiswap/sdk'
+import { Chef } from './enum'
 import Fraction from '../../entities/Fraction'
 import { getContract } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../../state/application/hooks'
-import { useMasterChefV2Contract } from '../../hooks/useContract'
 
-const usePending = (pid: number, chefId) => {
+const REWARDERS = {
+    [ChainId.MAINNET]: 'some',
+    [ChainId.MATIC]: 'some',
+}
+
+// const useRewarderContract = (farm) => {
+//     const { chainId } = useActiveWeb3React()
+//     const aclxRewarder = useAlcxRewarderContract()
+//     const useComplexRewarderContract = useComplexRewarderContract()
+//     // const rewarderContract = await getContract(
+//     //     rewarderAddress ? rewarderAddress : undefined,
+//     //     ALCX_REWARDER_ABI,
+//     //     library!,
+//     //     undefined
+//     // )
+// }
+
+const usePending = (farm) => {
     const [balance, setBalance] = useState<string>('0')
-    const { account, library } = useActiveWeb3React()
 
-    const masterChefV2Contract = useMasterChefV2Contract()
+    const { chainId, account, library } = useActiveWeb3React()
     const currentBlockNumber = useBlockNumber()
 
-    const fetchPending = useCallback(async () => {
-        const rewarderAddress = await masterChefV2Contract?.rewarder('0')
-        const rewarderContract = await getContract(
-            rewarderAddress ? rewarderAddress : undefined,
-            ALCX_REWARDER_ABI,
-            library!,
-            undefined
-        )
-        const pending = await rewarderContract?.pendingTokens(pid, account, '0')
-        // todo: do not assume [0] or that rewardToken has 18 decimals
-        const formatted = Fraction.from(
-            BigNumber.from(pending?.rewardAmounts[0]),
-            BigNumber.from(10).pow(18)
-        ).toString(18)
-        //console.log('pending:', pending)
-        setBalance(formatted)
-    }, [masterChefV2Contract, library, pid, account])
+    const aclxRewarder = useAlcxRewarderContract()
+
+    const complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
+
+    const contract = {
+        [ChainId.MAINNET]: aclxRewarder,
+        [ChainId.MATIC]: complexRewarder,
+    }
 
     useEffect(() => {
+        async function fetchPendingReward() {
+            try {
+                const pending = await contract[chainId]?.pendingTokens(
+                    farm.id,
+                    account,
+                    '0'
+                )
+                // todo: do not assume [0] or that rewardToken has 18 decimals
+                const formatted = Fraction.from(
+                    BigNumber.from(pending?.rewardAmounts[0]),
+                    BigNumber.from(10).pow(18)
+                ).toString(18)
+                setBalance(formatted)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        // id = 0 is evaluated as false
         if (
             account &&
-            masterChefV2Contract &&
-            String(pid) &&
+            aclxRewarder &&
+            farm &&
             library &&
-            chefId === ChefId.MASTERCHEF_V2
+            (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF)
         ) {
-            // pid = 0 is evaluated as false
-            fetchPending()
+            fetchPendingReward()
         }
     }, [
         account,
         currentBlockNumber,
-        fetchPending,
-        masterChefV2Contract,
-        pid,
+        aclxRewarder,
+        complexRewarder,
+        farm,
         library,
     ])
 
