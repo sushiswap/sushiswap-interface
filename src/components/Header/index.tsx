@@ -32,7 +32,7 @@ function AppBar(): JSX.Element {
         <header className="flex-shrink-0 w-full">
             <Popover
                 as="nav"
-                className="z-10 w-full bg-transparent gradiant-border-bottom"
+                className="z-10 w-full bg-transparent header-border-b"
             >
                 {({ open }) => (
                     <>
