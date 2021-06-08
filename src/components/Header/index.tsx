@@ -82,7 +82,7 @@ function AppBar(): JSX.Element {
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
-                                                    ChainId.MATIC
+                                                    ChainId.MATIC,
                                                 ].includes(chainId) && (
                                                     <Link href={'/farm'}>
                                                         <a
@@ -98,7 +98,7 @@ function AppBar(): JSX.Element {
                                                     ChainId.MAINNET,
                                                     ChainId.KOVAN,
                                                     ChainId.BSC,
-                                                    ChainId.MATIC
+                                                    ChainId.MATIC,
                                                 ].includes(chainId) && (
                                                     <>
                                                         <Link href={'/lend'}>
@@ -131,16 +131,7 @@ function AppBar(): JSX.Element {
                                                         </Link> */}
                                                     </>
                                                 )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <Link href={'/vesting'}>
-                                                    <a
-                                                        id={`vesting-nav-link`}
-                                                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                                                    >
-                                                        {i18n._(t`Vesting`)}
-                                                    </a>
-                                                </Link>
-                                            )}
+
                                             {chainId === ChainId.MAINNET && (
                                                 <Link href={'/stake'}>
                                                     <a
@@ -172,19 +163,18 @@ function AppBar(): JSX.Element {
                                                         <div
                                                             className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
                                                             onClick={() => {
-                                                                const params: any = {
-                                                                    type:
-                                                                        'ERC20',
-                                                                    options: {
-                                                                        address:
-                                                                            '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
-                                                                        symbol:
-                                                                            'XSUSHI',
-                                                                        decimals: 18,
-                                                                        image:
-                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png'
+                                                                const params: any =
+                                                                    {
+                                                                        type: 'ERC20',
+                                                                        options:
+                                                                            {
+                                                                                address:
+                                                                                    '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                                                                symbol: 'XSUSHI',
+                                                                                decimals: 18,
+                                                                                image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
+                                                                            },
                                                                     }
-                                                                }
 
                                                                 if (
                                                                     library &&
@@ -198,13 +188,14 @@ function AppBar(): JSX.Element {
                                                                     library.provider
                                                                         .request(
                                                                             {
-                                                                                method:
-                                                                                    'wallet_watchAsset',
-                                                                                params
+                                                                                method: 'wallet_watchAsset',
+                                                                                params,
                                                                             }
                                                                         )
                                                                         .then(
-                                                                            success => {
+                                                                            (
+                                                                                success
+                                                                            ) => {
                                                                                 if (
                                                                                     success
                                                                                 ) {
@@ -241,7 +232,7 @@ function AppBar(): JSX.Element {
                                             [
                                                 ChainId.MAINNET,
                                                 ChainId.BSC,
-                                                ChainId.MATIC
+                                                ChainId.MATIC,
                                             ].includes(chainId) &&
                                             library &&
                                             library.provider.isMetaMask && (
@@ -273,18 +264,18 @@ function AppBar(): JSX.Element {
                                                                             '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
                                                                         break
                                                                 }
-                                                                const params: any = {
-                                                                    type:
-                                                                        'ERC20',
-                                                                    options: {
-                                                                        address: address,
-                                                                        symbol:
-                                                                            'SUSHI',
-                                                                        decimals: 18,
-                                                                        image:
-                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                                                const params: any =
+                                                                    {
+                                                                        type: 'ERC20',
+                                                                        options:
+                                                                            {
+                                                                                address:
+                                                                                    address,
+                                                                                symbol: 'SUSHI',
+                                                                                decimals: 18,
+                                                                                image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
+                                                                            },
                                                                     }
-                                                                }
 
                                                                 if (
                                                                     library &&
@@ -298,13 +289,14 @@ function AppBar(): JSX.Element {
                                                                     library.provider
                                                                         .request(
                                                                             {
-                                                                                method:
-                                                                                    'wallet_watchAsset',
-                                                                                params
+                                                                                method: 'wallet_watchAsset',
+                                                                                params,
                                                                             }
                                                                         )
                                                                         .then(
-                                                                            success => {
+                                                                            (
+                                                                                success
+                                                                            ) => {
                                                                                 if (
                                                                                     success
                                                                                 ) {
@@ -448,7 +440,7 @@ function AppBar(): JSX.Element {
                                         ChainId.MAINNET,
                                         ChainId.KOVAN,
                                         ChainId.BSC,
-                                        ChainId.MATIC
+                                        ChainId.MATIC,
                                     ].includes(chainId) && (
                                         <Link href={'/lend'}>
                                             <a id={`kashi-nav-link`}>
@@ -461,7 +453,7 @@ function AppBar(): JSX.Element {
                                         ChainId.MAINNET,
                                         ChainId.KOVAN,
                                         ChainId.BSC,
-                                        ChainId.MATIC
+                                        ChainId.MATIC,
                                     ].includes(chainId) && (
                                         <Link href={'/bentobox'}>
                                             <a
@@ -498,7 +490,7 @@ function AppBar(): JSX.Element {
                                         ChainId.BSC,
                                         ChainId.XDAI,
                                         ChainId.FANTOM,
-                                        ChainId.MATIC
+                                        ChainId.MATIC,
                                     ].includes(chainId) && (
                                         <ExternalLink
                                             id={`analytics-nav-link`}

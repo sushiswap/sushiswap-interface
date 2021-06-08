@@ -1,4 +1,4 @@
-const normalize = src => {
+const normalize = (src) => {
     return src[0] === '/' ? src.slice(1) : src
 }
 
