@@ -27,14 +27,14 @@ export default function Status({ initialData }) {
                 <Tabs
                     selectedIndex={tabIndex}
                     onSelect={(index) => setTabIndex(index)}
-                    selectedTabClassName="border-b-2 border-blue"
+                    selectedTabClassName="bg-none"
                 >
-                    <TabList className="flex -mb-px">
+                    <TabList className="flex">
                         <Tab
                             className={classNames(
                                 tabIndex !== 0 &&
-                                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                                'w-1/4 py-4 px-2 text-center border-b-2 font-medium text-sm cursor-pointer'
+                                    'text-gray-500 hover:text-gray-700',
+                                'py-4 px-4 text-center font-medium text-sm cursor-pointer'
                             )}
                         >
                             Covalent
@@ -42,8 +42,8 @@ export default function Status({ initialData }) {
                         <Tab
                             className={classNames(
                                 tabIndex !== 1 &&
-                                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                                'w-1/4 py-4 px-2 text-center border-b-2 font-medium text-sm cursor-pointer'
+                                    'text-gray-500 hover:text-gray-700',
+                                'py-4 px-4 text-center font-medium text-sm cursor-pointer'
                             )}
                         >
                             Subgraph
@@ -79,7 +79,11 @@ export default function Status({ initialData }) {
                         </div>
                     </TabPanel>
                     <TabPanel>
-                        <Dots>Coming Soon</Dots>
+                        <div className="grid items-start justify-start grid-cols-3 gap-4 mx-auto ">
+                            <div className="p-4 text-primary">
+                                <Dots>Coming Soon</Dots>
+                            </div>
+                        </div>
                     </TabPanel>
                 </Tabs>
             </div>
