@@ -1,3 +1,4 @@
+import { Chef, PairType } from './enum'
 import {
     NEVER_RELOAD,
     useSingleCallResult,
@@ -10,7 +11,6 @@ import {
 } from '../../hooks'
 
 import { ChainId } from '@sushiswap/sdk'
-import { Chef } from './enum'
 import { Contract } from '@ethersproject/contracts'
 import { Zero } from '@ethersproject/constants'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -50,6 +50,35 @@ export function useChefContracts(chefs: Chef[]) {
         [masterChefContract, masterChefV2Contract, miniChefContract]
     )
     return chefs.map((chef) => contracts[chef])
+}
+
+export function useUserInfo(farm) {
+    const { account } = useActiveWeb3React()
+
+    const contract = useChefContract(farm.chef)
+
+    const args = useMemo(() => {
+        if (!account || !farm) {
+            return
+        }
+        return [String(farm.id), String(account)]
+    }, [farm, account])
+
+    const result = useSingleCallResult(
+        args ? contract : null,
+        'userInfo',
+        args
+    )?.result
+
+    return useMemo(
+        () =>
+            result?.[0]?.toFixed(
+                farm?.pair?.type === PairType.LENDING
+                    ? farm.pair.token0.decimals
+                    : 18
+            ),
+        [result]
+    )
 }
 
 export function usePendingSushi(farm) {
