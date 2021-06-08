@@ -1,19 +1,33 @@
 module.exports = {
     catalogs: [
         {
-            path: '<rootDir>/locale/{locale}/catalog',
+            path: '<rootDir>/src/language/locales/{locale}/catalog',
             include: ['<rootDir>/src'],
-            exclude: ['**/node_modules/**']
-        }
+            exclude: ['**/node_modules/**', '**/.next/**'],
+        },
     ],
     compileNamespace: 'cjs',
     extractBabelOptions: {},
     fallbackLocales: {},
     format: 'minimal',
     sourceLocale: 'en',
-    locales: ['de', 'en', 'es-AR', 'es', 'it', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja', 'fr'],
+    locales: [
+        'de',
+        'en',
+        'es-AR',
+        'es',
+        'it',
+        'ro',
+        'ru',
+        'vi',
+        'zh-CN',
+        'zh-TW',
+        'ko',
+        'ja',
+        'fr',
+    ],
     orderBy: 'messageId',
     pseudoLocale: '',
     rootDir: '.',
-    runtimeConfigModule: ['@lingui/core', 'i18n']
+    runtimeConfigModule: ['@lingui/core', 'i18n'],
 }

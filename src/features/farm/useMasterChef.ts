@@ -1,105 +1,105 @@
-import {
-    useActiveWeb3React,
-    useMasterChefContract,
-    useMasterChefV2Contract,
-    useMiniChefV2Contract,
-    useSushiContract,
-} from '../../hooks'
+import { useActiveWeb3React, useSushiContract } from '../../hooks'
 
-import { ChefId } from './enum'
-import ethers from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Chef } from './enum'
+import { Zero } from '@ethersproject/constants'
+import { parseUnits } from '@ethersproject/units'
 import { useCallback } from 'react'
-import { useTransactionAdder } from '../../state/transactions/hooks'
+import { useChefContract } from './hooks'
 
-export default function useMasterChef(chefId: ChefId) {
+export default function useMasterChef(chef: Chef) {
     const { account } = useActiveWeb3React()
-    const addTransaction = useTransactionAdder()
-    const sushiTokenContract = useSushiContract()
-    const masterChefContract = useMasterChefContract()
-    const masterChefV2Contract = useMasterChefV2Contract()
-    const miniChefContract = useMiniChefV2Contract()
 
-    const contracts = {
-        [ChefId.MASTERCHEF]: masterChefContract,
-        [ChefId.MASTERCHEF_V2]: masterChefV2Contract,
-        [ChefId.MINICHEF]: miniChefContract,
-    }
+    const sushi = useSushiContract()
 
-    const contract = contracts[chefId]
+    const contract = useChefContract(chef)
 
     // Deposit
     const deposit = useCallback(
-        async (pid: number, amount: string, name: string, decimals = 18) => {
-            // KMP decimals depend on asset, SLP is always 18
+        async (pid: number, amount: BigNumber) => {
             try {
-                const tx = await contract?.deposit(
-                    pid,
-                    ethers.utils.parseUnits(amount, decimals),
-                    account
-                )
-                return addTransaction(tx, { summary: `Deposit ${name}` })
+                let tx
+
+                if (chef === Chef.MASTERCHEF) {
+                    tx = await contract?.deposit(pid, amount)
+                } else {
+                    tx = await contract?.deposit(pid, amount, account)
+                }
+
+                return tx
             } catch (e) {
                 console.error(e)
                 return e
             }
         },
-        [account, addTransaction, contract]
+        [account, contract]
     )
 
     // Withdraw
     const withdraw = useCallback(
-        async (pid: number, amount: string, name: string, decimals = 18) => {
+        async (pid: number, amount: BigNumber) => {
+            // console.log('withdraw', {
+            //     pid,
+            //     amount,
+            // })
             try {
-                const tx = await contract?.withdraw(
-                    pid,
-                    ethers.utils.parseUnits(amount, decimals),
-                    account
-                )
-                return addTransaction(tx, { summary: `Withdraw ${name}` })
+                let tx
+
+                if (chef === Chef.MASTERCHEF) {
+                    tx = await contract?.withdraw(pid, amount)
+                } else {
+                    tx = await contract?.withdraw(pid, amount, account)
+                }
+
+                return tx
             } catch (e) {
                 console.error(e)
                 return e
             }
         },
-        [account, addTransaction, contract]
+        [account, contract]
     )
 
     const harvest = useCallback(
-        async (pid: number, name: string) => {
+        async (pid: number) => {
             try {
-                console.log('harvest:', pid, account)
-                console.log({ masterChefV2Contract })
+                console.log('harvest', { contract, account, pid })
 
                 const pendingSushi = await contract?.pendingSushi(pid, account)
 
-                const balanceOf = await sushiTokenContract?.balanceOf(
-                    masterChefV2Contract?.address
-                )
+                const balanceOf = await sushi?.balanceOf(contract?.address)
 
-                const tx =
-                    chefId === ChefId.MASTERCHEF_V2 &&
+                let tx
+
+                if (chef === Chef.MASTERCHEF) {
+                    tx = await contract?.deposit(pid, Zero)
+                } else if (
+                    chef === Chef.MASTERCHEF_V2 &&
                     pendingSushi.gt(balanceOf)
-                        ? await contract?.batch(
-                              [
-                                  contract?.interface?.encodeFunctionData(
-                                      'harvestFromMasterChef'
-                                  ),
-                                  contract?.interface?.encodeFunctionData(
-                                      'harvest',
-                                      [pid, account]
-                                  ),
-                              ],
-                              true
-                          )
-                        : await contract?.harvest(pid, account)
+                ) {
+                    tx = await contract?.batch(
+                        [
+                            contract?.interface?.encodeFunctionData(
+                                'harvestFromMasterChef'
+                            ),
+                            contract?.interface?.encodeFunctionData('harvest', [
+                                pid,
+                                account,
+                            ]),
+                        ],
+                        true
+                    )
+                } else if (chef === Chef.MINICHEF) {
+                    tx = await contract?.harvest(pid, account)
+                }
 
-                return addTransaction(tx, { summary: `Harvest ${name}` })
+                return tx
             } catch (e) {
                 console.error(e)
                 return e
             }
         },
-        [account, addTransaction, contract, sushiTokenContract]
+        [account, contract, sushi]
     )
 
     return { deposit, withdraw, harvest }

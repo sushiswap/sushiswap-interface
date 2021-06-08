@@ -1,14 +1,15 @@
 import { FC, useEffect, useState } from 'react'
 
-import getConfig from 'next/config'
 import { I18nProvider } from '@lingui/react'
+import getConfig from 'next/config'
 import { i18n } from '@lingui/core'
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router'
+
 const { publicRuntimeConfig } = getConfig()
 const { locales } = publicRuntimeConfig
 
 // Don't load plurals
-locales.map(locale => i18n.loadLocaleData(locale, { plurals: () => null }))
+locales.map((locale) => i18n.loadLocaleData(locale, { plurals: () => null }))
 
 /**
  * Load messages for requested locale and activate it.
@@ -16,7 +17,7 @@ locales.map(locale => i18n.loadLocaleData(locale, { plurals: () => null }))
  * many ways how to load messages — from REST API, from file, from cache, etc.
  */
 export async function activate(locale: string) {
-    const { messages } = await import(`../../locale/${locale}/catalog.js`)
+    const { messages } = await import(`./locales/${locale}/catalog.js`)
     i18n.load(locale, messages)
     i18n.activate(locale)
 }
@@ -26,14 +27,15 @@ const LanguageProvider: FC = ({ children }) => {
     const [init, setInit] = useState(true)
 
     useEffect(() => {
-        (async () => {
+        async function initilise() {
             await activate(locale)
             setInit(false)
-        })()
+        }
+        initilise()
     }, [])
 
     useEffect(() => {
-        (async () => await activate(locale))()
+        activate(locale)
     }, [locale])
 
     if (init) return <></>

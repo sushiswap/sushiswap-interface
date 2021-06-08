@@ -9,7 +9,7 @@ export function useLendingPairSubset(
 ) {
     const { chainId } = useActiveWeb3React()
 
-    const shouldFetch = chainId && pairAddresses
+    const shouldFetch = chainId && pairAddresses && pairAddresses.length
 
     const res = useSWR(
         shouldFetch ? ['lendingPairSubset', chainId, pairAddresses] : null,

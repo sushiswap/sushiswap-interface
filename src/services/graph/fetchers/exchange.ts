@@ -30,7 +30,7 @@ export const getPairs = async (
     query = pairsQuery,
     variables = undefined
 ) => {
-    console.log('getPairs')
+    // console.log('getPairs')
     const { pairs } = await request(
         `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
         query,
@@ -52,7 +52,7 @@ export const getPairSubset = async (
 }
 
 export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
-    console.log('getTokenSubset')
+    // console.log('getTokenSubset')
     const { tokens } = await request(
         `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
         tokenSubsetQuery,
@@ -62,7 +62,7 @@ export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
 }
 
 export const getTokens = async (chainId = ChainId.MAINNET, variables) => {
-    console.log('getTokens')
+    // console.log('getTokens')
     const { tokens } = await request(
         `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
         tokensQuery,
@@ -72,7 +72,7 @@ export const getTokens = async (chainId = ChainId.MAINNET, variables) => {
 }
 
 export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
-    console.log('getTokenPrice')
+    // console.log('getTokenPrice')
     const { tokens } = await request(
         `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
         tokensQuery,
@@ -86,7 +86,7 @@ export const getTokenPrice = async (
     query,
     variables
 ) => {
-    console.log('getTokenPrice')
+    // console.log('getTokenPrice')
     const { token } = await request(
         `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
         query,
@@ -96,13 +96,13 @@ export const getTokenPrice = async (
 }
 
 export const getEthPrice = async () => {
-    console.log('getEthPrice')
+    // console.log('getEthPrice')
     const data = await getBundle()
     return data?.bundles?.[0]?.ethPrice
 }
 
 export const getSushiPrice = async () => {
-    console.log('getSushiPrice')
+    // console.log('getSushiPrice')
     const ethPrice = await getEthPrice()
     const sushiPrice = await getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
         id: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
@@ -122,9 +122,12 @@ export const getBundle = async (
 
 export const getLiquidityPositionSubset = async (
     chainId = ChainId.MAINNET,
-    query = liquidityPositionSubsetQuery,
     user
 ) => {
-    const { liquidityPositions } = await exchange(chainId, query, { user })
+    const { liquidityPositions } = await exchange(
+        chainId,
+        liquidityPositionSubsetQuery,
+        { user }
+    )
     return liquidityPositions
 }

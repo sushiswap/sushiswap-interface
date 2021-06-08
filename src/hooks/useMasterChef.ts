@@ -13,7 +13,10 @@ const useMasterChef = () => {
             // KMP decimals depend on asset, SLP is always 18
             // console.log('depositing...', pid, amount)
             try {
-                const tx = await masterChefContract?.deposit(pid, ethers.utils.parseUnits(amount, decimals))
+                const tx = await masterChefContract?.deposit(
+                    pid,
+                    ethers.utils.parseUnits(amount, decimals)
+                )
                 return addTransaction(tx, { summary: `Deposit ${name}` })
             } catch (e) {
                 console.error(e)
@@ -27,7 +30,10 @@ const useMasterChef = () => {
     const withdraw = useCallback(
         async (pid: number, amount: string, name: string, decimals = 18) => {
             try {
-                const tx = await masterChefContract?.withdraw(pid, ethers.utils.parseUnits(amount, decimals))
+                const tx = await masterChefContract?.withdraw(
+                    pid,
+                    ethers.utils.parseUnits(amount, decimals)
+                )
                 return addTransaction(tx, { summary: `Withdraw ${name}` })
             } catch (e) {
                 console.error(e)
