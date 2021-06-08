@@ -12,7 +12,11 @@ const useAllowance = (lpAddress: string) => {
     const { account } = useActiveWeb3React()
     const masterChefContract = useMasterChefContract()
     const lpAddressChecksum = getAddress(lpAddress)
-    const lpContract = useContract(lpAddressChecksum ? lpAddressChecksum : undefined, ERC20_ABI, false)
+    const lpContract = useContract(
+        lpAddressChecksum ? lpAddressChecksum : undefined,
+        ERC20_ABI,
+        false
+    )
 
     const getAllowance = async (
         contract: Contract | null,
@@ -27,7 +31,11 @@ const useAllowance = (lpAddress: string) => {
     }
 
     const fetchAllowance = useCallback(async () => {
-        const allowance = await getAllowance(lpContract, account, masterChefContract?.address)
+        const allowance = await getAllowance(
+            lpContract,
+            account,
+            masterChefContract?.address
+        )
         setAllowance(BigNumber.from(allowance))
     }, [account, lpContract, masterChefContract?.address])
 

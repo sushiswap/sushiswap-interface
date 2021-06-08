@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
+import { PairType } from '../features/farm/enum'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../state/application/hooks'
 import { useMasterChefContract } from '../hooks/useContract'
@@ -10,32 +11,54 @@ export interface BalanceProps {
     decimals: number
 }
 
-const useStakedBalance = (pid: number, decimals = 18) => {
-    // SLP is usually 18, KMP is 6
-    const [balance, setBalance] = useState<BalanceProps>({ value: BigNumber.from(0), decimals: 18 })
+const useStakedBalance = (farm) => {
+    const decimals =
+        farm?.pair?.type === PairType.LENDING ? farm.pair.token0.decimals : 18
+    const [balance, setBalance] = useState<BalanceProps>({
+        value: BigNumber.from(0),
+        decimals,
+    })
 
     const { account } = useActiveWeb3React()
     const currentBlockNumber = useBlockNumber()
     const masterChefContract = useMasterChefContract()
 
-    const fetchBalance = useCallback(async () => {
-        const getStaked = async (pid: number, owner: string | null | undefined): Promise<BalanceProps> => {
-            try {
-                const { amount } = await masterChefContract?.userInfo(pid, owner)
-                return { value: BigNumber.from(amount), decimals: decimals }
-            } catch (e) {
-                return { value: BigNumber.from(0), decimals: decimals }
-            }
-        }
-        const balance = await getStaked(pid, account)
-        setBalance(balance)
-    }, [account, decimals, masterChefContract, pid])
+    const fetchBalance = useCallback(async () => {}, [
+        account,
+        masterChefContract,
+        farm,
+    ])
 
     useEffect(() => {
-        if (account && masterChefContract) {
-            fetchBalance()
+        const fetchBalance = async (
+            pid: number,
+            account: string | null | undefined
+        ) => {
+            try {
+                const { amount } = await masterChefContract?.userInfo(
+                    pid,
+                    account
+                )
+                setBalance({
+                    value: BigNumber.from(amount),
+                    decimals: decimals,
+                })
+            } catch (error) {
+                console.error(error)
+                setBalance({ value: BigNumber.from(0), decimals: decimals })
+            }
         }
-    }, [account, setBalance, currentBlockNumber, fetchBalance, masterChefContract])
+
+        if (farm && account && masterChefContract) {
+            fetchBalance(farm.id, account)
+        }
+    }, [
+        account,
+        setBalance,
+        currentBlockNumber,
+        fetchBalance,
+        masterChefContract,
+    ])
 
     return balance
 }

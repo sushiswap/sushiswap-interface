@@ -29,8 +29,6 @@ export default function Lend() {
         { key: 'currentSupplyAPR.value', direction: 'descending' }
     )
 
-    console.log({ fullPairs })
-
     return (
         <KashiLayout
             left={

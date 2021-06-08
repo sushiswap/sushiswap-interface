@@ -10,10 +10,20 @@ const useApprove = (lpAddress: string) => {
     const addTransaction = useTransactionAdder()
     const masterChefContract = useMasterChefContract()
     const lpAddressChecksum = getAddress(lpAddress)
-    const lpContract = useContract(lpAddressChecksum ? lpAddressChecksum : undefined, ERC20_ABI, true) // withSigner = true
+    const lpContract = useContract(
+        lpAddressChecksum ? lpAddressChecksum : undefined,
+        ERC20_ABI,
+        true
+    ) // withSigner = true
 
-    const approve = async (lpContract: Contract | null, masterChefContract: Contract | null) => {
-        return lpContract?.approve(masterChefContract?.address, ethers.constants.MaxUint256.toString())
+    const approve = async (
+        lpContract: Contract | null,
+        masterChefContract: Contract | null
+    ) => {
+        return lpContract?.approve(
+            masterChefContract?.address,
+            ethers.constants.MaxUint256.toString()
+        )
     }
 
     const handleApprove = useCallback(async () => {

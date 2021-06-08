@@ -197,20 +197,20 @@ export default function Borrow({ pair }: BorrowProps) {
             true
         )
 
-    console.log('Oracle Discrepancy', {
-        name: pair.asset.symbol + '-' + pair.collateral.symbol,
-        borrowValueSet: borrowValueSet,
-        displayUpdateOracle: displayUpdateOracle,
-        currentExchangeRate: pair.currentExchangeRate.toFixed(
-            pair.asset.decimals
-        ),
-        oracleExchangeRate: pair.oracleExchangeRate.toFixed(
-            pair.asset.decimals
-        ),
-        diff:
-            pair.currentExchangeRate.toFixed(pair.asset.decimals) /
-            pair.oracleExchangeRate.toFixed(pair.asset.decimals),
-    })
+    // console.log('Oracle Discrepancy', {
+    //     name: pair.asset.symbol + '-' + pair.collateral.symbol,
+    //     borrowValueSet: borrowValueSet,
+    //     displayUpdateOracle: displayUpdateOracle,
+    //     currentExchangeRate: pair.currentExchangeRate.toFixed(
+    //         pair.asset.decimals
+    //     ),
+    //     oracleExchangeRate: pair.oracleExchangeRate.toFixed(
+    //         pair.asset.decimals
+    //     ),
+    //     diff:
+    //         pair.currentExchangeRate.toFixed(pair.asset.decimals) /
+    //         pair.oracleExchangeRate.toFixed(pair.asset.decimals),
+    // })
 
     const transactionReview = new TransactionReview()
     if (

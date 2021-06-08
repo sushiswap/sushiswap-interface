@@ -31,7 +31,7 @@ export default function Test() {
 
     const res6 = usePairs()
 
-    console.log({ res1, res2, res3, res4, res5, res6 })
+    // console.log({ res1, res2, res3, res4, res5, res6 })
     // const farms = useFarms()
     // console.log({ farms })
 
