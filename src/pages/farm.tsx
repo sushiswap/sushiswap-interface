@@ -102,8 +102,6 @@ export default function Farm(): JSX.Element {
 
         // TODO: Deal with inconsistencies between properties on subgraph
 
-        console.log({ pool })
-
         pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
         pool.balance = pool?.balance || pool?.slpBalance
 
@@ -336,7 +334,7 @@ export default function Farm(): JSX.Element {
                     <Card
                         className="h-full bg-dark-900"
                         header={
-                            <CardHeader className="flex items-center bg-dark-800">
+                            <CardHeader className="flex flex-col items-center bg-dark-800">
                                 <div className="w-full">
                                     <Search search={search} term={term} />
                                 </div>
