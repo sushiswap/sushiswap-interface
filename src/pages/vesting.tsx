@@ -1,30 +1,30 @@
-import Head from 'next/head'
-import Layout from '../layouts/DefaultLayout'
-
-import { BigNumber } from '@ethersproject/bignumber'
-import { TokenAmount } from '@sushiswap/sdk'
-import Loader from '../components/Loader'
-import QuestionHelper from '../components/QuestionHelper'
-import { isAddress } from 'ethers/lib/utils'
 import React, { useEffect, useState } from 'react'
-import { ChevronRight } from 'react-feather'
-import { formatNumber } from '../functions'
-import Fraction from '../entities/Fraction'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
-import { ApplicationModal } from '../state/application/actions'
+import { Trans, t } from '@lingui/macro'
+import { useClaimCallback, useUserUnclaimedAmount } from '../state/claim/hooks'
 import {
     useModalOpen,
-    useToggleSelfClaimModal
+    useToggleSelfClaimModal,
 } from '../state/application/hooks'
-import { useClaimCallback, useUserUnclaimedAmount } from '../state/claim/hooks'
-import { useUserHasSubmittedClaim } from '../state/transactions/hooks'
-import { t, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { cloudinaryLoader } from '../functions/cloudinary'
-import Dots from '../components/Dots'
+
+import { ApplicationModal } from '../state/application/actions'
+import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../components/Button'
+import { ChevronRight } from 'react-feather'
+import Dots from '../components/Dots'
+import Fraction from '../entities/Fraction'
+import Head from 'next/head'
+import Image from 'next/image'
+import Layout from '../layouts/DefaultLayout'
+import Link from 'next/link'
+import Loader from '../components/Loader'
+import QuestionHelper from '../components/QuestionHelper'
+import { TokenAmount } from '@sushiswap/sdk'
+import { cloudinaryLoader } from '../functions/cloudinary'
+import { formatNumber } from '../functions'
+import { isAddress } from 'ethers/lib/utils'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
+import { useUserHasSubmittedClaim } from '../state/transactions/hooks'
 
 export default function Vesting() {
     const { i18n } = useLingui()
@@ -42,9 +42,8 @@ export default function Vesting() {
 
     // monitor the status of the claim from contracts and txns
     const { claimCallback } = useClaimCallback(account)
-    const unclaimedAmount: TokenAmount | undefined = useUserUnclaimedAmount(
-        account
-    )
+    const unclaimedAmount: TokenAmount | undefined =
+        useUserUnclaimedAmount(account)
     //console.log('unclaimedAmount:', unclaimedAmount)
     const { claimSubmitted } = useUserHasSubmittedClaim(account ?? undefined)
     //const claimConfirmed = Boolean(claimTxn?.receipt)
@@ -54,7 +53,7 @@ export default function Vesting() {
         setAttempting(true)
         claimCallback()
             // reset modal and log error
-            .catch(error => {
+            .catch((error) => {
                 setAttempting(false)
                 console.log(error)
             })
@@ -77,8 +76,8 @@ export default function Vesting() {
                 fetch(
                     'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/amounts-10959148-12171394.json'
                 )
-                    .then(response => response.json())
-                    .then(data => {
+                    .then((response) => response.json())
+                    .then((data) => {
                         //console.log('vesting:', data)
                         const userLockedAmount = data[account.toLowerCase()]
                             ? data[account.toLowerCase()]
@@ -90,7 +89,7 @@ export default function Vesting() {
                         setTotalLocked(userLocked)
                         //console.log('userLocked:', userLocked)
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error)
                     })
             }
@@ -102,18 +101,18 @@ export default function Vesting() {
     // remove once treasury signature passed
     const pendingTreasurySignature = false
 
-    let VaultImage = ''
+    let vault = ''
     if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) > 0) {
-        VaultImage =
+        vault =
             'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png'
     } else if (
         !pendingTreasurySignature &&
         Number(unclaimedAmount?.toFixed(8)) <= 0
     ) {
-        VaultImage =
+        vault =
             'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-off.png'
     } else if (pendingTreasurySignature) {
-        VaultImage =
+        vault =
             'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-closed.png'
     }
 
@@ -124,24 +123,25 @@ export default function Vesting() {
                     <title>Vesting | Sushi</title>
                     <meta name="description" content="SushiSwap vesting..." />
                 </Head>
-                <div className="max-w-[900px] w-full m-auto">
+                <div className="w-full max-w-[900px] m-auto">
                     <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">
-                        <div className="space-y-10 hidden md:block">
+                        <div className="hidden space-y-10 md:block">
                             <Image
-                                src={cloudinaryLoader({ src: VaultImage })}
+                                src={vault}
+                                loader={cloudinaryLoader}
                                 width={340}
                                 height={300}
                                 alt=""
                             />
-                            <div className="bg-dark-900 rounded w-full relative overflow-hidden p-4">
+                            <div className="relative w-full p-4 overflow-hidden rounded bg-dark-900">
                                 <div className="font-bold text-white">
                                     {i18n._(t`Community Approval`)}
                                 </div>
                                 <div
-                                    className="text-sm text-gray-400 pt-2 font-bold"
+                                    className="pt-2 text-sm font-bold text-gray-400"
                                     style={{
                                         maxWidth: '300px',
-                                        minHeight: '150px'
+                                        minHeight: '150px',
                                     }}
                                 >
                                     <Trans>
@@ -182,7 +182,7 @@ export default function Vesting() {
                             </div>
                         </div>
                         <div className="flex flex-col gap-3 max-w-[400px]">
-                            <div className="bg-dark-900 rounded w-full relative overflow-hidden">
+                            <div className="relative w-full overflow-hidden rounded bg-dark-900">
                                 <div className="flex flex-col gap-3 p-4">
                                     <div className="flex flex-row justify-between">
                                         <div className="font-bold text-white">
@@ -193,7 +193,7 @@ export default function Vesting() {
                                         <QuestionHelper text="Your Vested SUSHI will be released each week for the next 6 months. The amount released each week is determined by your historical farming rewards. You do not need to harvest each week as unclaimed amounts from each week will continue to accrue onto the next." />
                                     </div>
                                     {/* <div style={{ display: 'flex', alignItems: 'baseline' }}> */}
-                                    <div className="flex items-baseline flex-col">
+                                    <div className="flex flex-col items-baseline">
                                         <div className="font-bold text-white text-[36px]">
                                             {unclaimedAmount?.toFixed(
                                                 4,
@@ -201,7 +201,7 @@ export default function Vesting() {
                                             )}
                                         </div>
                                         {account ? (
-                                            <div className="text-secondary text-sm">
+                                            <div className="text-sm text-secondary">
                                                 {totalLocked ? (
                                                     i18n._(
                                                         t`Historical Total Locked: ${formatNumber(
@@ -217,7 +217,7 @@ export default function Vesting() {
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="text-secondary text-sm">
+                                            <div className="text-sm text-secondary">
                                                 {i18n._(
                                                     t`Historical Total Locked: Connect Wallet`
                                                 )}
@@ -257,32 +257,32 @@ export default function Vesting() {
 
                                         {attempting && (
                                             <Loader
-                                              stroke="white"
-                                              style={{
-                                                  marginLeft: '10px'
-                                              }}
+                                                stroke="white"
+                                                style={{
+                                                    marginLeft: '10px',
+                                                }}
                                             />
                                         )}
                                     </Button>
                                 </div>
                             </div>
-                            <div className="bg-dark-900 rounded w-full relative overflow-hidden">
+                            <div className="relative w-full overflow-hidden rounded bg-dark-900">
                                 <div className="flex flex-col gap-3 p-4">
                                     <div className="font-bold text-white">
                                         {i18n._(
                                             t`Things you can do with your SUSHI`
                                         )}
                                     </div>
-                                    <div className="bg-dark-800 p-4 rounded">
+                                    <div className="p-4 rounded bg-dark-800">
                                         <Link href={`/stake`}>
-                                            <div className="flex gap-3 justify-between items-center">
+                                            <div className="flex items-center justify-between gap-3">
                                                 <div className="flex flex-col gap-1">
                                                     <div className="font-bold text-white">
                                                         {i18n._(
                                                             t`Stake SUSHI for xSUSHI`
                                                         )}
                                                     </div>
-                                                    <div className="text-secondary text-sm">
+                                                    <div className="text-sm text-secondary">
                                                         {t`Gain governance rights with xSUSHI and earn 5% APR (0.05% of
                                                             all swaps from all chains)`}
                                                     </div>
@@ -293,16 +293,16 @@ export default function Vesting() {
                                             </div>
                                         </Link>
                                     </div>
-                                    <div className="bg-dark-800 p-4 rounded">
+                                    <div className="p-4 rounded bg-dark-800">
                                         <Link href={`/saave`}>
-                                            <div className="flex gap-3 justify-between items-center">
+                                            <div className="flex items-center justify-between gap-3">
                                                 <div className="flex flex-col gap-1">
                                                     <div className="font-bold text-white">
                                                         {i18n._(
                                                             t`Stack Yields with SAAVE`
                                                         )}
                                                     </div>
-                                                    <div className="text-secondary text-sm">
+                                                    <div className="text-sm text-secondary">
                                                         {t`Stake into xSUSHI add collateral as axSUSHI on Aave all in
                                                             one click`}
                                                     </div>
@@ -313,14 +313,14 @@ export default function Vesting() {
                                             </div>
                                         </Link>
                                     </div>
-                                    <div className="bg-dark-800 p-4 rounded">
+                                    <div className="p-4 rounded bg-dark-800">
                                         <div className="flex flex-col gap-1">
                                             <div className="font-bold text-white">
                                                 {i18n._(
                                                     t`Deposit SUSHI into BentoBox`
                                                 )}
                                             </div>
-                                            <div className="text-secondary text-sm">
+                                            <div className="text-sm text-secondary">
                                                 {t`(COMING SOON) Accrue automatic yield through flash loans and
                                                             SUSHI strategies`}
                                             </div>
