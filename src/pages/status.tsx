@@ -81,7 +81,9 @@ export default function Status({ initialData }) {
                     <TabPanel>
                         <div className="grid items-start justify-start grid-cols-3 gap-4 mx-auto ">
                             <div className="p-4 text-primary">
-                                <Dots>Coming Soon</Dots>
+                                <Typography variant="h5">
+                                    <Dots>Under Construction</Dots>
+                                </Typography>
                             </div>
                         </div>
                     </TabPanel>
