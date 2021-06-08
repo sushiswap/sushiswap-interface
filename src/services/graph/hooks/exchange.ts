@@ -6,8 +6,10 @@ import {
 } from '../queries'
 import {
     exchange,
+    getAlcxPrice,
     getBundle,
     getLiquidityPositionSubset,
+    getMaticPrice,
     getSushiPrice,
 } from '../fetchers'
 import { getEthPrice, getPairSubset, getPairs } from '../fetchers'
@@ -28,6 +30,26 @@ export function useExchange(
 
 export function useEthPrice(swrConfig: SWRConfiguration = undefined) {
     const res = useSWR('ethPrice', () => getEthPrice(), swrConfig)
+    return res
+}
+
+export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
+    const { chainId } = useActiveWeb3React()
+    const res = useSWR(
+        chainId && chainId === ChainId.MAINNET ? 'aclxPrice' : null,
+        () => getAlcxPrice(),
+        swrConfig
+    )
+    return res
+}
+
+export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
+    const { chainId } = useActiveWeb3React()
+    const res = useSWR(
+        chainId && chainId === ChainId.MATIC ? 'maticPrice' : null,
+        () => getMaticPrice(),
+        swrConfig
+    )
     return res
 }
 

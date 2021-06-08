@@ -101,6 +101,24 @@ export const getEthPrice = async () => {
     return data?.bundles?.[0]?.ethPrice
 }
 
+export const getMaticPrice = async () => {
+    // console.log('getMaticPrice')
+    const ethPrice = await getEthPrice()
+    const maticPrice = await getTokenPrice(ChainId.MATIC, tokenPriceQuery, {
+        id: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    })
+    return ethPrice * maticPrice
+}
+
+export const getAlcxPrice = async () => {
+    // console.log('getAlcxPrice')
+    const ethPrice = await getEthPrice()
+    const alcxPrice = await getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+        id: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+    })
+    return ethPrice * alcxPrice
+}
+
 export const getSushiPrice = async () => {
     // console.log('getSushiPrice')
     const ethPrice = await getEthPrice()

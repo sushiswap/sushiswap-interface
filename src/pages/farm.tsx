@@ -2,12 +2,14 @@ import { Chef, PairType } from '../features/farm/enum'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import {
+    useAlcxPrice,
     useAverageBlockTime,
     useEthPrice,
     useExchange,
     useLiquidityPositionSubset,
     useMasterChefV1Farms,
     useMasterChefV2Farms,
+    useMaticPrice,
     useMiniChefFarms,
     useOneDayBlock,
     usePairSubset,
@@ -42,9 +44,12 @@ export default function Farm(): JSX.Element {
 
     const { data: averageBlockTime } = useAverageBlockTime()
 
-    const { data: oneDayBlock } = useOneDayBlock()
+    // const { data: oneDayBlock } = useOneDayBlock()
+
     const { data: sushiPrice } = useSushiPrice()
     const { data: ethPrice } = useEthPrice()
+    const { data: maticPrice } = useMaticPrice()
+    const { data: alcxPrice } = useAlcxPrice()
 
     const { data: masterChefV1Farms } = useMasterChefV1Farms()
 
@@ -61,13 +66,6 @@ export default function Farm(): JSX.Element {
         [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
     )
 
-    // console.log({
-    //     masterChefV1Farms,
-    //     masterChefV2Farms,
-    //     miniChefFarms,
-    //     pairAddresses,
-    // })
-
     const { data: swapPairs } = usePairSubset(pairAddresses)
 
     const { data: lendingPairs } = useLendingPairSubset(pairAddresses)
@@ -81,19 +79,6 @@ export default function Farm(): JSX.Element {
     const masterChefV2Positions = usePositions(masterchefV2Contract)
     const miniChefPositions = usePositions(minichefContract)
 
-    // const { data: masterChefV1LiquidityPositions } = useLiquidityPositionSubset(
-    //     '0xc2edad668740f1aa35e4d8f227fb8e17dca888cd' // masterchefv1 address
-    // )
-
-    // const { data: masterChefV2LiquidityPositions } = useLiquidityPositionSubset(
-    //     '0xef0881ec094552b2e128cf945ef17a6752b4ec5d' // masterchefv2 address
-    // )
-
-    // const liquidityPositions = [
-    //     ...masterChefV1LiquidityPositions,
-    //     ...masterChefV2LiquidityPositions,
-    // ]
-
     const blocksPerDay = 86400 / Number(averageBlockTime)
 
     function filter(pool) {
@@ -104,12 +89,6 @@ export default function Farm(): JSX.Element {
         return (
             pool.allocPoint !== '0' &&
             pool.accSushiPerShare !== '0' &&
-            // [
-            //     ...masterChefV1LiquidityPositions,
-            //     ...masterChefV2LiquidityPositions,
-            // ].map(
-            //     (liquidityPosition) => liquidityPosition.pair.id === pool.pair
-            // ) &&
             (swapPairs.find((pair) => pair.id === pool.pair) ||
                 lendingPairs.find((pair) => pair.id === pool.pair))
         )
@@ -122,6 +101,9 @@ export default function Farm(): JSX.Element {
         // How can we include this?
 
         // TODO: Deal with inconsistencies between properties on subgraph
+
+        console.log({ pool })
+
         pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
         pool.balance = pool?.balance || pool?.slpBalance
 
@@ -132,15 +114,75 @@ export default function Farm(): JSX.Element {
 
         const pair = swapPair || lendingPair
 
-        // console.log({ pair })
-
-        // const liquidityPosition = [
-        //     ...masterChefV1LiquidityPositions,
-        //     ...masterChefV2LiquidityPositions,
-        //     ...miniChefLiquidityPositions,
-        // ]?.find((liquidityPosition) => liquidityPosition.pair.id === pair.id)
-
         const blocksPerHour = 3600 / averageBlockTime
+
+        // override for mcv2...
+        if (pool?.rewarder === '0x7519c93fc5073e15d89131fd38118d73a72370f8') {
+            pool.owner.totalAllocPoint = 26480
+        }
+
+        // Temporary solution
+        function getRewards() {
+            const sushiPerBlock =
+                pool?.owner?.sushiPerBlock / 1e18 ||
+                (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
+                18.6
+
+            const rewardPerBlock =
+                (pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock
+
+            const defaultReward = {
+                token: 'SUSHI',
+                icon: '/images/tokens/sushi-square.jpg',
+                rewardPerBlock,
+                rewardPerDay: rewardPerBlock * blocksPerDay,
+                rewardPrice: sushiPrice,
+            }
+            const defaultRewards = [defaultReward]
+            if (chef === Chef.MASTERCHEF_V2) {
+                const rewardPerBlock = 0.437861008791398
+                return [
+                    ...defaultRewards,
+                    {
+                        token: 'ALCX',
+                        icon: '/images/tokens/alcx-square.jpg',
+                        rewardPerBlock,
+                        rewardPerDay: rewardPerBlock * blocksPerDay,
+                        rewardPrice: alcxPrice,
+                    },
+                ]
+            } else if (chef === Chef.MINICHEF) {
+                const sushiPerSecond =
+                    ((pool.allocPoint / 1000) * pool.miniChef.sushiPerSecond) /
+                    1e18
+                const sushiPerBlock = sushiPerSecond * averageBlockTime
+                const sushiPerDay = sushiPerBlock * blocksPerDay
+
+                const maticPerSecond =
+                    ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) /
+                    1e18
+                const maticPerBlock = maticPerSecond * averageBlockTime
+                const maticPerDay = maticPerBlock * blocksPerDay
+
+                return [
+                    {
+                        ...defaultReward,
+                        rewardPerBlock: sushiPerBlock,
+                        rewardPerDay: sushiPerDay,
+                    },
+                    {
+                        token: 'MATIC',
+                        icon: '/images/tokens/polygon-square.jpg',
+                        rewardPerBlock: maticPerBlock,
+                        rewardPerDay: maticPerDay,
+                        rewardPrice: maticPrice,
+                    },
+                ]
+            }
+            return defaultRewards
+        }
+
+        const rewards = getRewards()
 
         const balance = swapPair
             ? Number(pool.balance / 1e18)
@@ -151,21 +193,13 @@ export default function Farm(): JSX.Element {
               Number(swapPair.reserveUSD)
             : balance * lendingPair.token0.derivedETH * ethPrice
 
-        // override for mcv2...
-        if (pool?.rewarder === '0x7519c93fc5073e15d89131fd38118d73a72370f8') {
-            pool.owner.totalAllocPoint = 100
-        }
-
-        const sushiPerBlock =
-            pool?.owner?.sushiPerBlock ||
-            pool?.owner?.sushiPerSecond * averageBlockTime ||
-            18.6
-
-        const rewardPerBlock =
-            ((pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock) /
-            1e18
-
-        const roiPerBlock = (rewardPerBlock * sushiPrice) / tvl
+        const roiPerBlock =
+            rewards.reduce((previousValue, currentValue) => {
+                return (
+                    previousValue +
+                    currentValue.rewardPerBlock * currentValue.rewardPrice
+                )
+            }, 0) / tvl
 
         const roiPerHour = roiPerBlock * blocksPerHour
 
@@ -175,43 +209,6 @@ export default function Farm(): JSX.Element {
 
         const roiPerYear = roiPerMonth * 12
 
-        // Temporary solution
-        function rewards() {
-            const defaultRewards = [
-                {
-                    token: 'SUSHI',
-                    icon: '/images/tokens/sushi-square.jpg',
-                    rewardPerDay: rewardPerBlock * blocksPerDay,
-                },
-            ]
-            if (chef === Chef.MASTERCHEF_V2) {
-                return [
-                    ...defaultRewards,
-                    {
-                        token: 'ALCX',
-                        icon: '/images/tokens/alcx-square.jpg',
-                        rewardPerDay:
-                            ((pool.allocPoint / pool.owner.totalAllocPoint) *
-                                pool.rewarder.rewardPerSecond) /
-                            1e18,
-                    },
-                ]
-            } else if (chef === Chef.MINICHEF) {
-                return [
-                    ...defaultRewards,
-                    {
-                        token: 'MATIC',
-                        icon: '/images/tokens/polygon-square.jpg',
-                        rewardPerDay:
-                            ((pool.allocPoint / pool.owner.totalAllocPoint) *
-                                pool.rewarder.rewardPerSecond) /
-                            1e18,
-                    },
-                ]
-            }
-            return defaultRewards
-        }
-
         return {
             ...pool,
             chef,
@@ -220,14 +217,12 @@ export default function Farm(): JSX.Element {
                 type,
             },
             balance,
-            rewardPerBlock,
             roiPerBlock,
             roiPerHour,
             roiPerDay,
             roiPerMonth,
             roiPerYear,
-            rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
-            rewards: rewards(),
+            rewards,
             tvl,
         }
     }
