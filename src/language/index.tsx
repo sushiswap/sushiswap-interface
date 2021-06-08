@@ -4,15 +4,10 @@ import { I18nProvider } from '@lingui/react'
 import { i18n } from '@lingui/core'
 import { Helmet } from 'react-helmet'
 import { detect, fromStorage, fromNavigator } from '@lingui/detect-locale'
-import defaultLanguage from '../assets/locale/en.json'
 
 // This array should equal the array set in .linguirc
-export const locales = ['de', 'en', 'es-AR', 'es', 'it', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja', 'pt-BR', 'hi']
+export const locales = ['de', 'en', 'es-AR', 'es', 'it', 'he', 'ro', 'ru', 'vi', 'zh-CN', 'zh-TW', 'ko', 'ja']
 export const defaultLocale = 'en'
-
-// Activate default language
-i18n.load(defaultLocale, defaultLanguage)
-i18n.activate(defaultLocale)
 
 // Don't load plurals
 locales.map(locale => i18n.loadLocaleData(locale, { plurals: () => null }))
@@ -24,8 +19,7 @@ const getInitialLocale = () => {
 }
 
 async function activate(locale: string) {
-    const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/locales/${locale}/catalog.json`)
-    const messages = await resp.json()
+    const { messages } = await import(`@lingui/loader!./locales/${locale}/catalog.json`)
     i18n.load(locale, messages)
     i18n.activate(locale)
 }
@@ -40,17 +34,30 @@ export const LanguageContext = React.createContext<{
 
 const LanguageProvider: FC = ({ children }) => {
     const [language, setLanguage] = useState(getInitialLocale())
+    const [init, setInit] = useState(true)
 
     const _setLanguage = (language: string): void => {
-        activate(language).then(() => {
+        if (!init) {
+            activate(language).then(() => {
+                localStorage.setItem('lang', language)
+                setLanguage(language)
+            })
+        } else {
             localStorage.setItem('lang', language)
             setLanguage(language)
-        })
+        }
     }
 
     useEffect(() => {
-        ;(async () => await activate(language))()
+        const load = async () => {
+            await activate(language)
+            setInit(false)
+        }
+
+        load()
     }, [])
+
+    if (init) return <></>
 
     return (
         <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
