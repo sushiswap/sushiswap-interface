@@ -101,6 +101,7 @@
     "next-unused": "^0.0.6",
     "postcss": "^8.2.15",
     "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.3.1",
     "serve": "^11.3.2",
     "tailwindcss": "^2.1.2",
     "tailwindcss-border-gradient-radius": "^2.0.0",

@@ -20,7 +20,7 @@ export interface LogoProps
  */
 const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
     const [, refresh] = useState<number>(0)
-    const src = srcs.find(src => !BAD_SRCS[src])
+    const src = srcs.find((src) => !BAD_SRCS[src])
 
     if (src) {
         return (
@@ -29,7 +29,7 @@ const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
                 loader={cloudinaryLoader}
                 onError={() => {
                     if (src) BAD_SRCS[src] = true
-                    refresh(i => i + 1)
+                    refresh((i) => i + 1)
                 }}
                 {...rest}
             />

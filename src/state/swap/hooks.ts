@@ -477,15 +477,14 @@ export function useDefaultsFromURLSearch():
     const dispatch = useDispatch<AppDispatch>()
     const parsedQs = useParsedQueryString()
 
-    const [result, setResult] =
-        useState<
-            | {
-                  inputCurrencyId?: string
-                  outputCurrencyId?: string
-                  chainId?: ChainId
-              }
-            | undefined
-        >()
+    const [result, setResult] = useState<
+        | {
+              inputCurrencyId?: string
+              outputCurrencyId?: string
+              chainId?: ChainId
+          }
+        | undefined
+    >()
 
     useEffect(() => {
         if (!chainId) return
