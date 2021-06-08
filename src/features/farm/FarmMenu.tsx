@@ -9,7 +9,8 @@ const Menu = ({ section, setSection }) => {
         <div className="space-y-2">
             <div
                 className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
-                    section === 'portfolio' && 'border-gradient'
+                    section === 'portfolio' &&
+                    'font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900'
                 }`}
                 onClick={() => {
                     return setSection('portfolio')
@@ -19,7 +20,8 @@ const Menu = ({ section, setSection }) => {
             </div>
             <div
                 className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
-                    section === 'all' && 'border-gradient'
+                    section === 'all' &&
+                    'font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900'
                 }`}
                 onClick={() => {
                     return setSection('all')
@@ -31,7 +33,8 @@ const Menu = ({ section, setSection }) => {
                 <>
                     <div
                         className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
-                            section === 'kmp' && 'border-gradient'
+                            section === 'kmp' &&
+                            'font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900'
                         }`}
                         onClick={() => {
                             return setSection('kmp')
@@ -41,7 +44,8 @@ const Menu = ({ section, setSection }) => {
                     </div>
                     <div
                         className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
-                            section === 'slp' && 'border-gradient'
+                            section === 'slp' &&
+                            'font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900'
                         }`}
                         onClick={() => {
                             return setSection('slp')
@@ -51,7 +55,8 @@ const Menu = ({ section, setSection }) => {
                     </div>
                     <div
                         className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex justify-between items-center px-4 py-6 border border-transparent ${
-                            section === 'mcv2' && 'border-gradient'
+                            section === 'mcv2' &&
+                            'font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900'
                         }`}
                         onClick={() => {
                             return setSection('mcv2')
