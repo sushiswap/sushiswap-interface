@@ -19,7 +19,7 @@ const normalize = (src) => {
 }
 
 const loader = ({ src }) => {
-    return `http://res.cloudinary.com/dnz2bkszg/image/fetch/f_auto/${normalize(
+    return `https://res.cloudinary.com/dnz2bkszg/image/fetch/f_auto/${normalize(
         src
     )}`
 }
