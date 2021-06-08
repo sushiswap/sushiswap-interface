@@ -46,21 +46,10 @@ export function useLiquidityPositionSubset(
     swrConfig: SWRConfiguration = undefined
 ) {
     const { chainId } = useActiveWeb3React()
+    const shouldFetch = chainId && user
     const res = useSWR(
-        chainId && user
-            ? [
-                  'liquidityPositionSubset',
-                  chainId,
-                  liquidityPositionSubsetQuery,
-                  user,
-              ]
-            : null,
-        (_, chainId, liquidityPositionSubsetQuery, user) =>
-            getLiquidityPositionSubset(
-                chainId,
-                liquidityPositionSubsetQuery,
-                user
-            ),
+        shouldFetch ? ['liquidityPositionSubset', chainId, user] : null,
+        (_, chainId, user) => getLiquidityPositionSubset(chainId, user),
         swrConfig
     )
     return res
@@ -68,9 +57,9 @@ export function useLiquidityPositionSubset(
 
 export function usePairs(swrConfig: SWRConfiguration = undefined) {
     const { chainId } = useActiveWeb3React()
-
+    const shouldFetch = chainId
     const res = useSWR(
-        chainId ? ['pairs', chainId] : null,
+        shouldFetch ? ['pairs', chainId] : null,
         (_, chainId) => getPairs(chainId),
         swrConfig
     )
@@ -84,7 +73,7 @@ export function usePairSubset(
 ) {
     const { chainId } = useActiveWeb3React()
 
-    const shouldFetch = chainId && pairAddresses
+    const shouldFetch = chainId && pairAddresses && pairAddresses.length
 
     const res = useSWR(
         shouldFetch ? ['pairSubset', chainId, pairAddresses] : null,
