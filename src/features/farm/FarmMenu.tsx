@@ -8,7 +8,7 @@ const Menu = ({ section, setSection }) => {
     return (
         <div className="space-y-2">
             <div
-                className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${
+                className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
                     section === 'portfolio' && 'border-gradient'
                 }`}
                 onClick={() => {
@@ -18,7 +18,7 @@ const Menu = ({ section, setSection }) => {
                 Your Farms
             </div>
             <div
-                className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${
+                className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
                     section === 'all' && 'border-gradient'
                 }`}
                 onClick={() => {
@@ -30,7 +30,7 @@ const Menu = ({ section, setSection }) => {
             {chainId === ChainId.MAINNET && (
                 <>
                     <div
-                        className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${
+                        className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
                             section === 'kmp' && 'border-gradient'
                         }`}
                         onClick={() => {
@@ -40,7 +40,7 @@ const Menu = ({ section, setSection }) => {
                         Kashi Farms
                     </div>
                     <div
-                        className={`cursor-pointer bg-dark-900 rounded flex items-center px-4 py-6 border border-transparent ${
+                        className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex items-center px-4 py-6 border border-transparent ${
                             section === 'slp' && 'border-gradient'
                         }`}
                         onClick={() => {
@@ -50,7 +50,7 @@ const Menu = ({ section, setSection }) => {
                         SushiSwap Farms
                     </div>
                     <div
-                        className={`cursor-pointer bg-dark-900 rounded flex justify-between items-center px-4 py-6 border border-transparent ${
+                        className={`cursor-pointer bg-dark-900 hover:bg-dark-800 rounded flex justify-between items-center px-4 py-6 border border-transparent ${
                             section === 'mcv2' && 'border-gradient'
                         }`}
                         onClick={() => {
