@@ -9,3 +9,8 @@ export enum Rewarder {
     COMPLEX,
     ALCX,
 }
+
+export enum PairType {
+    SWAP,
+    LENDING,
+}
