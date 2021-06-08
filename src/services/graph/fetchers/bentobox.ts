@@ -27,22 +27,18 @@ export const getLendingPairSubset = async (
     chainId = ChainId.MAINNET,
     variables = undefined
 ) => {
-    console.log('getLendingPairSubset')
+    // console.log('getLendingPairSubset')
     const { kashiPairs } = await request(
         `https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`,
         lendingPairSubsetQuery,
         variables
     )
-    console.log('getLendingPairSubset', {
-        kashiPairs,
-        assetIds: kashiPairs.map((pair) => pair.asset.id),
-    })
     // const ethPrice = await getEthPrice()
 
     const assets = await getTokenSubset(chainId, {
         tokenAddresses: kashiPairs.map((pair) => pair.asset.id),
     })
-    console.log('getLendingPairSubset assets', { assets })
+
     // const prices = await getTokenPrices(
     //     chainId,
     //     pairs.map((pair) => pair.asset.id)

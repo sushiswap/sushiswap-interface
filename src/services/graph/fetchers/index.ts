@@ -1,9 +1,11 @@
 import {
     ethPriceQuery,
     liquidityPositionSubsetQuery,
+    miniChefPoolsQuery,
     pairSubsetQuery,
     pairsQuery,
     poolsQuery,
+    poolsV2Query,
     tokenPriceQuery,
 } from '../queries'
 
@@ -47,8 +49,18 @@ export const masterChefV1 = async (query) =>
         query
     )
 
-export const getMasterChefV1Farms = async (query) => {
-    const { pools } = await masterChefV1(query)
+export const getMasterChefV1Farms = async () => {
+    const { pools } = await masterChefV1(poolsQuery)
+    return pools
+}
+
+export const getMasterChefV2Farms = async () => {
+    const { pools } = await masterChefV2(poolsV2Query)
+    return pools
+}
+
+export const getMiniChefFarms = async () => {
+    const { pools } = await miniChef(miniChefPoolsQuery)
     return pools
 }
 

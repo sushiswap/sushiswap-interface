@@ -42,7 +42,7 @@ export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
 // Grabs the last 1000 blocks and averages
 // the time difference between them
 export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
-    console.log('getAverageBlockTime')
+    // console.log('getAverageBlockTime')
     const now = startOfSecond(startOfMinute(startOfHour(Date.now())))
     const start = getUnixTime(subHours(now, 6))
     const end = getUnixTime(now)
