@@ -1,12 +1,8 @@
 import { ChainId, JSBI, Pair } from '@sushiswap/sdk'
-import { ExternalLink as ExternalLinkIcon, User } from 'react-feather'
-import React, { useContext, useMemo } from 'react'
-import styled, { ThemeContext } from 'styled-components'
+import React, { useMemo } from 'react'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../state/user/hooks'
-import useSWR, { SWRResponse } from 'swr'
 
 import Alert from '../components/Alert'
-import { ArrowRightIcon } from '@heroicons/react/outline'
 import { BIG_INT_ZERO } from '../constants'
 import Back from '../components/Back'
 import Button from '../components/Button'
@@ -14,14 +10,10 @@ import Card from '../components/Card'
 import { Currency } from '@sushiswap/sdk'
 import Dots from '../components/Dots'
 import Empty from '../components/Empty'
-import ExternalLink from '../components/ExternalLink'
 import FullPositionCard from '../components/PositionCard'
 import Head from 'next/head'
 import Layout from '../layouts/DefaultLayout'
 import Link from 'next/link'
-import TransactionList from '../components/TransactionList'
-import { getExplorerLink } from '../functions/explorer'
-import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useETHBalances } from '../state/wallet/hooks'
@@ -122,73 +114,6 @@ export default function Pool() {
                 />
             </Head>
             <Back />
-            <div className="w-full max-w-2xl px-4 mb-12">
-                <div className="text-h5 text-semibold">Your Positions</div>
-            </div>
-
-            <div className="w-full max-w-2xl p-4 mb-3 rounded bg-dark-900">
-                <div className="flex justify-between">
-                    <div className="flex">
-                        <div className="p-1.5 bg-dark-800 rounded">
-                            <User
-                                strokeWidth={1}
-                                size={34}
-                                className="text-primary"
-                            />
-                        </div>
-                        <div className="ml-3">
-                            <div className="font-bold text-high-emphesis">
-                                {account && shortenAddress(account)}
-                            </div>
-                            <div className="text-sm text-primary">
-                                {account && chainId && (
-                                    <>
-                                        {userEthBalance ? (
-                                            <div>
-                                                {userEthBalance?.toSignificant(
-                                                    4
-                                                )}{' '}
-                                                {Currency.getNativeCurrencySymbol(
-                                                    chainId
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <Dots>{i18n._(t`Loading`)}</Dots>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="text-sm font-semibold text-primary">
-                        {/* <div className="flex items-center">
-                            <Copy strokeWidth={0.5} size={14} className="text-white"/>
-                            <div className="ml-1">Copy Address</div>
-                        </div> */}
-                        <div className="flex items-center">
-                            <ExternalLinkIcon
-                                strokeWidth={0.5}
-                                size={14}
-                                className="text-white"
-                            />
-                            {/* <div className="ml-1">View on Explorer</div> */}
-                            {chainId && account && (
-                                <ExternalLink
-                                    href={getExplorerLink(
-                                        chainId,
-                                        account,
-                                        'address'
-                                    )}
-                                >
-                                    <span>{i18n._(t`View on explorer`)}</span>
-                                </ExternalLink>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div className="w-full max-w-2xl p-4 rounded bg-dark-900">
                 <Alert
                     title={i18n._(t`Liquidity Provider Rewards`)}
