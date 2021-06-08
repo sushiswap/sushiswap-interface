@@ -117,14 +117,6 @@ export default function Vesting() {
             'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-closed.png'
     }
 
-    console.log(
-        !isAddress(account ?? '') ||
-            claimConfirmed ||
-            !unclaimedAmount ||
-            Number(unclaimedAmount?.toFixed(8)) <= 0 ||
-            pendingTreasurySignature
-    )
-
     return (
         <>
             <Layout>
