@@ -2,5 +2,9 @@
     "presets": [
       "next/babel"
     ],
-    "plugins": ["macros", ["styled-components", { "ssr": true }], "inline-react-svg"]
+    "plugins": [
+      "macros", 
+      ["styled-components", { "ssr": true }], 
+      "inline-react-svg"
+    ]
   }

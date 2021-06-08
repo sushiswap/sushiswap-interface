@@ -1,8 +1,9 @@
 module.exports = {
     catalogs: [
         {
-            path: '<rootDir>/locale/{locale}/catalog',
-            include: ['<rootDir>'],
+            path: '<rootDir>/src/language/locales/{locale}/catalog',
+            include: ['<rootDir>/src'],
+            exclude: ['**/node_modules/**', '**/.next/**'],
         },
     ],
     compileNamespace: 'cjs',
@@ -27,6 +28,6 @@ module.exports = {
     ],
     orderBy: 'messageId',
     pseudoLocale: '',
-    rootDir: './src',
+    rootDir: '.',
     runtimeConfigModule: ['@lingui/core', 'i18n'],
 }
