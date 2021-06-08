@@ -4,6 +4,7 @@ import { HelpCircle } from 'react-feather'
 // import Image from 'next/image'
 import Image from '../Image'
 import { ImageProps } from 'rebass'
+import { cloudinaryLoader } from '../../functions/cloudinary'
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {}
 
@@ -14,31 +15,21 @@ export interface LogoProps
     height: string | number
 }
 
-const normalize = (src) => {
-    return src[0] === '/' ? src.slice(1) : src
-}
-
-const loader = ({ src }) => {
-    return `http://res.cloudinary.com/dnz2bkszg/image/fetch/f_auto/${normalize(
-        src
-    )}`
-}
-
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
 const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
     const [, refresh] = useState<number>(0)
-    const src = srcs.find((src) => !BAD_SRCS[src])
+    const src = srcs.find(src => !BAD_SRCS[src])
 
     if (src) {
         return (
             <Image
                 src={src}
-                loader={loader}
+                loader={cloudinaryLoader}
                 onError={() => {
                     if (src) BAD_SRCS[src] = true
-                    refresh((i) => i + 1)
+                    refresh(i => i + 1)
                 }}
                 {...rest}
             />
