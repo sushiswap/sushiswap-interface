@@ -244,7 +244,7 @@ module.exports = {
                 {
                     '.border-gradient': {
                         border: 'double 1px transparent',
-                        borderRadius: '0.375rem',
+                        borderRadius: '10px',
                         backgroundImage:
                             'linear-gradient(#202231, #202231), linear-gradient(to right, #0993EC, #F338C3)',
                         backgroundOrigin: 'border-box',

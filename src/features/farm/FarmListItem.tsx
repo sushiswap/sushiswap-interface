@@ -44,7 +44,7 @@ const FarmListItem = ({ farm }) => {
     // const [pairState, pair] = usePair(token0, token1)
 
     const balance = useTokenBalance(address)
-    const staked = useUserInfo(farm)
+    const amount = useUserInfo(farm)
     const pending = usePendingSushi(farm)
     const reward = usePendingReward(farm)
 
@@ -68,6 +68,9 @@ const FarmListItem = ({ farm }) => {
     )
 
     const { deposit, withdraw, harvest } = useMasterChef(farm.chef)
+
+    const decimals =
+        farm.pair.type === PairType.LENDING ? farm.pair.token0.decimals : 18
 
     return (
         <div key={`${farm.chef}:${farm.id}`} className="rounded bg-dark-800">
@@ -241,11 +244,7 @@ const FarmListItem = ({ farm }) => {
                                                 const tx = await deposit(
                                                     farm.id,
                                                     depositValue.toBigNumber(
-                                                        farm.pair.type ===
-                                                            PairType.LENDING
-                                                            ? farm.pair.token0
-                                                                  .decimals
-                                                            : 18
+                                                        decimals
                                                     )
                                                 )
 
@@ -266,12 +265,7 @@ const FarmListItem = ({ farm }) => {
                                 {account && (
                                     <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
                                         {i18n._(t`Your Staked`)}:{' '}
-                                        {formatNumber(
-                                            staked.value.toFixed(
-                                                staked.decimals
-                                            )
-                                        )}{' '}
-                                        {farm.type}
+                                        {formatNumber(amount)} {farm.type}
                                     </div>
                                 )}
                                 <div className="relative flex items-center w-full mb-4">
@@ -288,11 +282,7 @@ const FarmListItem = ({ farm }) => {
                                             color="pink"
                                             size="small"
                                             onClick={() => {
-                                                setWithdrawValue(
-                                                    staked.value.toFixed(
-                                                        staked.decimals
-                                                    )
-                                                )
+                                                setWithdrawValue(amount)
                                             }}
                                             className="absolute border-0 right-4 focus:ring focus:ring-pink"
                                         >
@@ -306,12 +296,7 @@ const FarmListItem = ({ farm }) => {
                                     disabled={
                                         pendingTx ||
                                         Number(withdrawValue) === 0 ||
-                                        Number(withdrawValue) >
-                                            Number(
-                                                staked.value.toFixed(
-                                                    staked.decimals
-                                                )
-                                            )
+                                        Number(withdrawValue) > Number(amount)
                                     }
                                     onClick={async () => {
                                         setPendingTx(true)
@@ -320,11 +305,7 @@ const FarmListItem = ({ farm }) => {
                                             const tx = await withdraw(
                                                 farm.id,
                                                 withdrawValue.toBigNumber(
-                                                    farm.pair.type ===
-                                                        PairType.LENDING
-                                                        ? farm.pair.token0
-                                                              .decimals
-                                                        : 18
+                                                    decimals
                                                 )
                                             )
                                             addTransaction(tx, {

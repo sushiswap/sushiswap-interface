@@ -16,6 +16,7 @@ import {
     usePairs,
     useSushiPrice,
 } from '../services/graph'
+import { useChefContracts, usePositions } from '../features/farm/hooks'
 import {
     useMasterChefContract,
     useMasterChefV2Contract,
@@ -35,7 +36,6 @@ import { t } from '@lingui/macro'
 import { useFuse } from '../hooks'
 import { useLendingPairSubset } from '../services/graph/hooks/bentobox'
 import { useLingui } from '@lingui/react'
-import { usePositions } from '../features/farm/hooks'
 
 export default function Farm(): JSX.Element {
     const { i18n } = useLingui()
@@ -74,6 +74,8 @@ export default function Farm(): JSX.Element {
     const masterchefContract = useMasterChefContract()
     const masterchefV2Contract = useMasterChefV2Contract()
     const minichefContract = useMiniChefV2Contract()
+
+    // const chefContracts = useChefContracts()
 
     const masterChefV1Positions = usePositions(masterchefContract)
     const masterChefV2Positions = usePositions(masterchefV2Contract)
@@ -119,6 +121,7 @@ export default function Farm(): JSX.Element {
         }
 
         function getRewards() {
+            // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
             const sushiPerBlock =
                 pool?.owner?.sushiPerBlock / 1e18 ||
                 (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
@@ -139,6 +142,7 @@ export default function Farm(): JSX.Element {
 
             if (chef === Chef.MASTERCHEF_V2) {
                 const rewardPerBlock = 0.437861008791398
+                console.log(pool)
                 return [
                     ...defaultRewards,
                     {
