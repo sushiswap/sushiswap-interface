@@ -15,7 +15,7 @@ import {
     getTokenMetadata,
     getTransaction,
     getTransfers,
-} from '../../fetchers/covalent'
+} from './fetchers'
 
 import useSWR from 'swr'
 
