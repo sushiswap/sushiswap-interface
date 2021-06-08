@@ -3,6 +3,8 @@ import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
 
+import * as Fathom from 'fathom-client'
+
 import LanguageProvider, { activate } from '../language'
 
 import type { AppProps } from 'next/app'
@@ -54,6 +56,28 @@ function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter()
 
     const { pathname, query } = router
+
+    useEffect(() => {
+        // Initialize Fathom when the app loads
+        // Example: yourdomain.com
+        //  - Do not include https://
+        //  - This must be an exact match of your domain.
+        //  - If you're using www. for your domain, make sure you include that here.
+        Fathom.load('JXKVUKNN', {
+            includedDomains: ['sushiswap-interface-canary.vercel.app'],
+        })
+
+        function onRouteChangeComplete() {
+            Fathom.trackPageview()
+        }
+        // Record a pageview when route changes
+        router.events.on('routeChangeComplete', onRouteChangeComplete)
+
+        // Unassign event listener
+        return () => {
+            router.events.off('routeChangeComplete', onRouteChangeComplete)
+        }
+    }, [])
 
     useEffect(() => {
         ReactGA.pageview(`${pathname}${query}`)
