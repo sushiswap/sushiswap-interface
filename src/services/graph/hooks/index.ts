@@ -15,7 +15,7 @@ export function useMasterChefV1Farms(swrConfig = undefined) {
     const { chainId } = useActiveWeb3React()
     const shouldFetch = chainId && chainId === ChainId.MAINNET
     const res = useSWR(
-        shouldFetch ? [] : null,
+        shouldFetch ? 'masterChefV1Farms' : null,
         () => getMasterChefV1Farms(),
         swrConfig
     )
@@ -26,7 +26,7 @@ export function useMasterChefV2Farms(swrConfig: SWRConfiguration = undefined) {
     const { chainId } = useActiveWeb3React()
     const shouldFetch = chainId && chainId === ChainId.MAINNET
     const res = useSWR(
-        shouldFetch ? [] : null,
+        shouldFetch ? 'masterChefV2Farms' : null,
         () => getMasterChefV2Farms(),
         swrConfig
     )
@@ -37,7 +37,7 @@ export function useMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
     const { chainId } = useActiveWeb3React()
     const shouldFetch = chainId && chainId === ChainId.MATIC
     const res = useSWR(
-        shouldFetch ? [] : null,
+        shouldFetch ? 'miniChefFarms' : null,
         () => getMiniChefFarms(),
         swrConfig
     )
