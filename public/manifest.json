@@ -1,6 +1,6 @@
 {
   "short_name": "SUSHI",
-  "name": "SUSHI progressive web applciation",
+  "name": "SUSHI progressive web application",
   "lang": "en",
   "description": "Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi",
   "background_color": "#0D0415",
@@ -8,8 +8,21 @@
   "dir": "ltr",
   "display": "fullscreen",
   "orientation": "portrait",
+  "scope": "/",
   "start_url": "/",
+  "splash_pages": null,
+  "prefer_related_applications": "false",
   "icons": [
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
     {
       "src": "/android-icon-192x192.png",
       "type": "image/png",
@@ -75,6 +88,5 @@
       "type": "image/png",
       "sizes": "16x16"
     }
-  ],
-  "prefer_related_applications": "false"
+  ]
 }
