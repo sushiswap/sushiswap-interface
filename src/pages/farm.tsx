@@ -1,4 +1,4 @@
-import { ChefId, PairType } from '../features/farm/enum'
+import { Chef, PairType } from '../features/farm/enum'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import {
@@ -14,7 +14,6 @@ import {
     usePairs,
     useSushiPrice,
 } from '../services/graph'
-import { useFuse, useSortableData } from '../hooks'
 import {
     useMasterChefContract,
     useMasterChefV2Contract,
@@ -23,6 +22,7 @@ import {
 
 import Card from '../components/Card'
 import CardHeader from '../components/CardHeader'
+import Dots from '../components/Dots'
 import FarmList from '../features/farm/FarmList'
 import Head from 'next/head'
 import Layout from '../layouts/DefaultLayout'
@@ -30,9 +30,10 @@ import Menu from '../features/farm/FarmMenu'
 import Search from '../components/Search'
 import concat from 'lodash/concat'
 import { t } from '@lingui/macro'
+import { useFuse } from '../hooks'
 import { useLendingPairSubset } from '../services/graph/hooks/bentobox'
 import { useLingui } from '@lingui/react'
-import useStaked from '../features/farm/useStaked'
+import { usePositions } from '../features/farm/hooks'
 
 export default function Farm(): JSX.Element {
     const { i18n } = useLingui()
@@ -51,6 +52,35 @@ export default function Farm(): JSX.Element {
 
     const { data: miniChefFarms } = useMiniChefFarms()
 
+    const pairAddresses = useMemo(
+        () =>
+            concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms)
+                .filter((pool) => pool && pool.pair)
+                .map((pool) => pool.pair)
+                .sort(),
+        [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
+    )
+
+    // console.log({
+    //     masterChefV1Farms,
+    //     masterChefV2Farms,
+    //     miniChefFarms,
+    //     pairAddresses,
+    // })
+
+    const { data: swapPairs } = usePairSubset(pairAddresses)
+
+    const { data: lendingPairs } = useLendingPairSubset(pairAddresses)
+
+    // Get Contracts
+    const masterchefContract = useMasterChefContract()
+    const masterchefV2Contract = useMasterChefV2Contract()
+    const minichefContract = useMiniChefV2Contract()
+
+    const masterChefV1Positions = usePositions(masterchefContract)
+    const masterChefV2Positions = usePositions(masterchefV2Contract)
+    const miniChefPositions = usePositions(minichefContract)
+
     // const { data: masterChefV1LiquidityPositions } = useLiquidityPositionSubset(
     //     '0xc2edad668740f1aa35e4d8f227fb8e17dca888cd' // masterchefv1 address
     // )
@@ -59,37 +89,12 @@ export default function Farm(): JSX.Element {
     //     '0xef0881ec094552b2e128cf945ef17a6752b4ec5d' // masterchefv2 address
     // )
 
-    const pairAddresses = useMemo(
-        () =>
-            concat(
-                masterChefV1Farms?.pools,
-                masterChefV2Farms?.pools,
-                miniChefFarms?.pools
-            )
-                .filter((pool) => pool && pool.pair)
-                .map((pool) => pool.pair)
-                .sort(),
-        [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
-    )
-
     // const liquidityPositions = [
     //     ...masterChefV1LiquidityPositions,
     //     ...masterChefV2LiquidityPositions,
     // ]
 
-    const { data: swapPairs } = usePairSubset(pairAddresses)
-
-    const { data: lendingPairs } = useLendingPairSubset(pairAddresses)
-
-    // console.log({
-    //     // masterChefV1Farms,
-    //     // masterChefV2Farms,
-    //     // miniChefFarms,
-    //     // pairAddresses,
-    //     masterChefV1LiquidityPositions,
-    //     pairs,
-    //     sushiPrice,
-    // })
+    const blocksPerDay = 86400 / Number(averageBlockTime)
 
     function filter(pool) {
         if (!swapPairs || !lendingPairs) {
@@ -110,11 +115,15 @@ export default function Farm(): JSX.Element {
         )
     }
 
-    function map(pool) {
+    function map(pool, chef) {
         // TODO: Account for fees generated in case of swap pairs, and use standard compounding
         // algorithm with the same intervals acrosss chains to account for consistency.
         // For lending pairs, what should the equivilent for fees generated? Interest gained?
         // How can we include this?
+
+        // TODO: Deal with inconsistencies between properties on subgraph
+        pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
+        pool.balance = pool?.balance || pool?.slpBalance
 
         const swapPair = swapPairs?.find((pair) => pair.id === pool.pair)
         const lendingPair = lendingPairs?.find((pair) => pair.id === pool.pair)
@@ -142,18 +151,18 @@ export default function Farm(): JSX.Element {
               Number(swapPair.reserveUSD)
             : balance * lendingPair.token0.derivedETH * ethPrice
 
-        // whut pool.owner & pool.masterChef?, consistency plz
-        const totalAllocPoint = pool.owner
-            ? pool.owner.totalAllocPoint
-            : pool.masterChef.totalAllocPoint
+        // override for mcv2...
+        if (pool?.rewarder === '0x7519c93fc5073e15d89131fd38118d73a72370f8') {
+            pool.owner.totalAllocPoint = 100
+        }
 
-        // whut pool.owner & pool.masterChef?, consistency plz
-        const sushiPerBlock = pool.owner
-            ? pool.owner.sushiPerBlock
-            : pool.masterChef.sushiPerBlock
+        const sushiPerBlock =
+            pool?.owner?.sushiPerBlock ||
+            pool?.owner?.sushiPerSecond * averageBlockTime
 
         const rewardPerBlock =
-            ((pool.allocPoint / totalAllocPoint) * sushiPerBlock) / 1e18
+            ((pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock) /
+            1e18
 
         const roiPerBlock = (rewardPerBlock * sushiPrice) / tvl
 
@@ -165,191 +174,151 @@ export default function Farm(): JSX.Element {
 
         const roiPerYear = roiPerMonth * 12
 
+        // Temporary solution
+        function rewards() {
+            const defaultRewards = [
+                {
+                    token: 'SUSHI',
+                    icon: '/images/tokens/sushi-square.jpg',
+                    rewardPerDay: rewardPerBlock * blocksPerDay,
+                },
+            ]
+            if (chef === Chef.MASTERCHEF_V2) {
+                return [
+                    ...defaultRewards,
+                    {
+                        token: 'ALCX',
+                        icon: '/images/tokens/alcx-square.jpg',
+                        rewardPerDay: 0.437861008791398,
+                    },
+                ]
+            } else if (chef === Chef.MINICHEF) {
+                return [
+                    ...defaultRewards,
+                    {
+                        token: 'MATIC',
+                        icon: '/images/tokens/polygon-square.jpg',
+                        rewardPerDay:
+                            ((pool.allocPoint / pool.owner.totalAllocPoint) *
+                                pool.rewarder.rewardPerSecond) /
+                            1e18,
+                    },
+                ]
+            }
+            return defaultRewards
+        }
+
         return {
             ...pool,
+            chef,
             pair: {
                 ...pair,
                 type,
             },
             balance,
+            rewardPerBlock,
             roiPerBlock,
             roiPerHour,
             roiPerDay,
             roiPerMonth,
             roiPerYear,
             rewardPerThousand: 1 * roiPerDay * (1000 / sushiPrice),
+            rewards: rewards(),
             tvl,
         }
     }
 
     const farms = concat(
-        masterChefV1Farms?.pools
-            ? masterChefV1Farms?.pools?.filter?.(filter)?.map((pool) => {
-                  return {
-                      ...map(pool),
-                      chefId: ChefId.MASTERCHEF,
-                  }
+        masterChefV1Farms
+            ? masterChefV1Farms?.filter?.(filter)?.map((pool) => {
+                  return map(pool, Chef.MASTERCHEF)
               })
             : [],
-        masterChefV2Farms?.pools
-            ? masterChefV2Farms?.pools?.filter?.(filter)?.map((pool) => {
-                  return {
-                      ...map(pool),
-                      chefId: ChefId.MASTERCHEF_V2,
-                  }
+        masterChefV2Farms
+            ? masterChefV2Farms?.filter?.(filter)?.map((pool) => {
+                  return map(pool, Chef.MASTERCHEF_V2)
               })
             : [],
-        miniChefFarms?.pools
-            ? miniChefFarms?.pools?.filter?.(filter)?.map((pool) => {
-                  return {
-                      ...map(pool),
-                      chefId: ChefId.MINICHEF,
-                  }
+        miniChefFarms
+            ? miniChefFarms?.filter?.(filter)?.map((pool) => {
+                  return map(pool, Chef.MINICHEF)
               })
             : []
     )
+    // console.log({ farms })
 
-    console.log({ farms })
+    // console.log({
+    //     masterchefv1Positions,
+    //     masterchefv2Positions,
+    //     minichefPositions,
+    // })
 
-    // Get Contracts
-    const masterchefContract = useMasterChefContract()
-    const masterchefV2Contract = useMasterChefV2Contract()
-    const minichefContract = useMiniChefV2Contract()
+    // console.log({ masterChefV1Farms, masterChefV2Farms, miniChefFarms, farms })
 
-    // Get Portfolios
-    const [portfolio, setPortfolio] = useState([])
-    const masterchefv1Positions = useStaked(masterchefContract)
-    const masterchefv2Positions = useStaked(masterchefV2Contract)
-    const minichefPositions = useStaked(minichefContract)
+    // const farms = concat([
+    //     masterChefV1Farms ? masterChefV1Farms : [],
+    //     masterChefV2Farms ? masterChefV2Farms : [],
+    //     miniChefFarms ? miniChefFarms : [],
+    // ])
 
-    useEffect(() => {
-        // determine masterchefv1 positions
-        let masterchefv1Portfolio
-        if (farms) {
-            const masterchefv1WithPids = masterchefv1Positions?.[0].map(
-                (position, index) => {
-                    return {
-                        pid: index,
-                        pending_bn: position?.result?.[0],
-                        staked_bn:
-                            masterchefv1Positions?.[1][index].result?.amount,
-                    }
-                }
-            )
-            const masterchefv1Filtered = masterchefv1WithPids.filter(
-                (position) => {
-                    return (
-                        position?.pending_bn?.gt(0) ||
-                        position?.staked_bn?.gt(0)
-                    )
-                }
-            )
-            // fetch any relevant details through pid
-            const masterchefv1PositionsWithDetails = masterchefv1Filtered.map(
-                (position) => {
-                    const pair = farms?.find(
-                        (pair: any) => pair.pid === position.pid
-                    )
-                    return {
-                        ...pair,
-                        ...position,
-                    }
-                }
-            )
-            masterchefv1Portfolio = masterchefv1PositionsWithDetails
-        }
+    const positions = farms
+        ? [
+              ...masterChefV1Positions.map((position) => ({
+                  ...position,
+                  ...farms?.find(
+                      (farm) =>
+                          farm.id === position.id &&
+                          farm.chef === Chef.MASTERCHEF
+                  ),
+              })),
+              ...masterChefV2Positions.map((position) => ({
+                  ...position,
+                  ...farms?.find(
+                      (farm) =>
+                          farm.id === position.id &&
+                          farm.chef === Chef.MASTERCHEF_V2
+                  ),
+              })),
+              ...miniChefPositions.map((position) => ({
+                  ...position,
+                  ...farms?.find(
+                      (farm) =>
+                          farm.id === position.id && farm.chef === Chef.MINICHEF
+                  ),
+              })),
+          ]
+        : []
 
-        let masterchefv2Portfolio
-        if (farms) {
-            const masterchefv2WithPids = masterchefv2Positions?.[0].map(
-                (position, index) => {
-                    return {
-                        pid: index,
-                        pending_bn: position?.result?.[0],
-                        staked_bn:
-                            masterchefv2Positions?.[1][index].result?.amount,
-                    }
-                }
-            )
-            const masterchefv2Filtered = masterchefv2WithPids.filter(
-                (position) => {
-                    return (
-                        position?.pending_bn?.gt(0) ||
-                        position?.staked_bn?.gt(0)
-                    )
-                }
-            )
-            // fetch any relevant details through pid
-            const masterchefv2PositionsWithDetails = masterchefv2Filtered.map(
-                (position) => {
-                    const pair = farms?.find(
-                        (pair: any) => pair.pid === position.pid
-                    )
-                    return {
-                        ...pair,
-                        ...position,
-                    }
-                }
-            )
-            masterchefv2Portfolio = masterchefv2PositionsWithDetails
-        }
-
-        let minichefPortfolio
-        if (farms) {
-            // determine minichef positions
-            const minichefWithPids = minichefPositions?.[0].map(
-                (position, index) => {
-                    return {
-                        pid: index,
-                        pending: position?.result?.[0],
-                        staked: minichefPositions?.[1][index].result?.amount,
-                    }
-                }
-            )
-            const minichefFiltered = minichefWithPids.filter(
-                (position: any) => {
-                    return position?.pending?.gt(0) || position?.staked?.gt(0)
-                }
-            )
-            // fetch any relevant details through pid
-            const minichefPositionsWithDetails = minichefFiltered.map(
-                (position) => {
-                    const pair = farms?.find(
-                        (pair: any) => pair.pid === position.pid
-                    )
-                    return {
-                        ...pair,
-                        ...position,
-                    }
-                }
-            )
-            minichefPortfolio = minichefPositionsWithDetails
-        }
-
-        console.log({
-            minichefPortfolio,
-            masterchefv1Portfolio,
-            masterchefv2Portfolio,
-        })
-
-        setPortfolio(
-            concat(
-                minichefPortfolio || [],
-                masterchefv1Portfolio || [],
-                masterchefv2Portfolio || []
-            )
-        )
-    }, [farms, masterchefv1Positions, masterchefv2Positions, minichefPositions])
+    // console.log({ positions })
 
     // //Search Setup
-    const options = { keys: ['symbol', 'name', 'pair.id'], threshold: 0.4 }
+    const options = {
+        keys: [
+            'id',
+            'pair.id',
+            'pair.token0.symbol',
+            'pair.token1.symbol',
+            'pair.token0.name',
+            'pair.token1.name',
+        ],
+        threshold: 0.4,
+    }
 
-    const { result, search, term } = useFuse({
-        data: farms && farms.length > 0 ? farms : [],
+    const { result, term, search } = useFuse({
+        data: farms,
         options,
     })
 
-    const filtered = result.map((a: { item: any }) => (a?.item ? a.item : a))
+    const filterForSection = {
+        portfolio: (farm) =>
+            positions.find((position) => position.id === farm.id),
+        all: () => true,
+        slp: (farm) => farm.pair.type === PairType.SWAP,
+        kmp: (farm) => farm.pair.type === PairType.LENDING,
+        mcv2: (farm) => farm.chef === Chef.MASTERCHEF_V2,
+    }
+
+    const filtered = result?.filter(filterForSection[section])
 
     return (
         <Layout>
@@ -368,13 +337,8 @@ export default function Farm(): JSX.Element {
                     <Card
                         className="h-full bg-dark-900"
                         header={
-                            <CardHeader className="flex flex-col items-center bg-dark-800">
-                                <div className="flex justify-between w-full">
-                                    <div className="items-center hidden md:flex">
-                                        <div className="mr-2 text-lg whitespace-nowrap">
-                                            {i18n._(t`Yield Farms`)}
-                                        </div>
-                                    </div>
+                            <CardHeader className="flex items-center bg-dark-800">
+                                <div className="w-full">
                                     <Search search={search} term={term} />
                                 </div>
                                 <div className="container block pt-6 lg:hidden">
@@ -386,38 +350,7 @@ export default function Farm(): JSX.Element {
                             </CardHeader>
                         }
                     >
-                        {section && section === 'portfolio' && (
-                            <FarmList farms={portfolio} term={term} />
-                        )}
-                        {section && section === 'all' && (
-                            <FarmList farms={filtered} term={term} />
-                        )}
-                        {/* {section && section === 'slp' && (
-                            <FarmList
-                                farms={filtered.filter(
-                                    (farm) => farm.type === 'SLP'
-                                )}
-                                term={term}
-                            />
-                        )}
-                        {section && section === 'kmp' && (
-                            <FarmList
-                                farms={filtered.filter(
-                                    (farm) => farm.type === 'KMP'
-                                )}
-                                term={term}
-                            />
-                        )}
-                        {section && section === 'mcv2' && (
-                            <FarmList
-                                farms={filtered.filter(
-                                    (farm) =>
-                                        farm.type === 'SLP' &&
-                                        farm.contract === 'masterchefv2'
-                                )}
-                                term={term}
-                            />
-                        )} */}
+                        <FarmList farms={filtered} term={term} />
                     </Card>
                 </div>
             </div>
