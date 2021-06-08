@@ -102,7 +102,7 @@ export default function Vesting() {
     // remove once treasury signature passed
     const pendingTreasurySignature = false
 
-    let VaultImage
+    let VaultImage = ''
     if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) > 0) {
         VaultImage =
             'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png'
