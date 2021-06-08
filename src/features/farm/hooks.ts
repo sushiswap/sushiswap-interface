@@ -64,7 +64,11 @@ export function usePendingSushi(farm) {
         return [String(farm.id), String(account)]
     }, [farm, account])
 
-    const result = useSingleCallResult(contract, 'pendingSushi', args)?.result
+    const result = useSingleCallResult(
+        args ? contract : null,
+        'pendingSushi',
+        args
+    )?.result
 
     return useMemo(() => result?.[0]?.toFixed(18), [result])
 }
@@ -73,14 +77,14 @@ export function usePendingToken(farm, contract) {
     const { account } = useActiveWeb3React()
 
     const args = useMemo(() => {
-        if (!account) {
+        if (!account || !farm) {
             return
         }
         return [String(farm.pid), String(account)]
     }, [farm, account])
 
     const pendingTokens = useSingleContractMultipleData(
-        contract,
+        args ? contract : null,
         'pendingTokens',
         args.map((arg) => [...arg, '0'])
     )
@@ -99,24 +103,29 @@ export function usePositions(
         'poolLength',
         undefined,
         NEVER_RELOAD
-    )
+    )?.result?.[0]
 
     const args = useMemo(() => {
-        if (!account || numberOfPools.loading) {
+        if (!account || !numberOfPools) {
             return
         }
-        return [...Array(numberOfPools?.result?.[0].toNumber()).keys()].map(
-            (pid) => [String(pid), String(account)]
-        )
+        return [...Array(numberOfPools.toNumber()).keys()].map((pid) => [
+            String(pid),
+            String(account),
+        ])
     }, [numberOfPools, account])
 
     const pendingSushi = useSingleContractMultipleData(
-        contract,
+        args ? contract : null,
         'pendingSushi',
         args
     )
 
-    const userInfo = useSingleContractMultipleData(contract, 'userInfo', args)
+    const userInfo = useSingleContractMultipleData(
+        args ? contract : null,
+        'userInfo',
+        args
+    )
 
     // const pendingTokens = useSingleContractMultipleData(
     //     rewarder,
