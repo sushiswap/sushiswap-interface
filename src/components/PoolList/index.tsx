@@ -36,26 +36,43 @@ const TokenBalance = ({ farm }: any) => {
                 <Paper className="bg-dark-800">
                     <div
                         className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none"
-                        onClick={() => Router.push(`zap?poolAddress=${farm.pairAddress}&currencyId=ETH`)}
+                        onClick={() =>
+                            Router.push(
+                                `zap?poolAddress=${farm.pairAddress}&currencyId=ETH`
+                            )
+                        }
                     >
                         <div className="flex items-center">
                             <div className="mr-4">
                                 <DoubleLogo
-                                    currency0={useCurrency(farm.liquidityPair.token0.id)}
-                                    currency1={useCurrency(farm.liquidityPair.token1.id)}
+                                    currency0={useCurrency(
+                                        farm.liquidityPair.token0.id
+                                    )}
+                                    currency1={useCurrency(
+                                        farm.liquidityPair.token1.id
+                                    )}
                                     size={32}
                                     margin={true}
                                 />
                             </div>
                             <div className="hidden sm:block">
-                                {farm && farm.liquidityPair.token0.symbol + '-' + farm.liquidityPair.token1.symbol}
+                                {farm &&
+                                    farm.liquidityPair.token0.symbol +
+                                        '-' +
+                                        farm.liquidityPair.token1.symbol}
                             </div>
                         </div>
                         <div className="flex items-center justify-end">
                             <div>
-                                <div className="text-right">{formatNumber(farm.tvl, true)} </div>
+                                <div className="text-right">
+                                    {formatNumber(farm.tvl, true)}{' '}
+                                </div>
                                 <div className="text-right text-secondary">
-                                    {formatNumber(farm.slpBalance / 1e18, false)} SLP
+                                    {formatNumber(
+                                        farm.slpBalance / 1e18,
+                                        false
+                                    )}{' '}
+                                    SLP
                                 </div>
                             </div>
                         </div>
@@ -82,9 +99,9 @@ const PoolList = () => {
         data: farms && farms.length > 0 ? farms : [],
         options,
     })
-    const flattenSearchResults = result.map((a: { item: any }) => (a.item ? a.item : a))
+
     // Sorting Setup
-    const { items, requestSort, sortConfig } = useSortableData(flattenSearchResults, {
+    const { items, requestSort, sortConfig } = useSortableData(result, {
         key: 'tvl',
         direction: 'descending',
     })
@@ -93,7 +110,10 @@ const PoolList = () => {
         <>
             <Head>
                 <title>Zap | Sushi</title>
-                <meta name="description" content="Farm SUSHI by staking LP (Liquidity Provider) tokens" />
+                <meta
+                    name="description"
+                    content="Farm SUSHI by staking LP (Liquidity Provider) tokens"
+                />
             </Head>
             <div className="container max-w-2xl px-0 mx-auto sm:px-4">
                 <Card
@@ -103,7 +123,9 @@ const PoolList = () => {
                             <div className="flex flex-col items-center justify-between w-full">
                                 <div className="items-center hidden md:flex">
                                     {/* <BackButton defaultRoute="/pool" /> */}
-                                    <div className="mb-2 mr-2 text-lg whitespace-nowrap">Select a Pool to Zap Into</div>
+                                    <div className="mb-2 mr-2 text-lg whitespace-nowrap">
+                                        Select a Pool to Zap Into
+                                    </div>
                                 </div>
                                 <Search search={search} term={term} />
                             </div>
@@ -119,37 +141,64 @@ const PoolList = () => {
                             <div>Pool</div>
                             {sortConfig &&
                                 sortConfig.key === 'symbol' &&
-                                ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                    (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                                ((sortConfig.direction === 'ascending' && (
+                                    <ChevronUp size={12} />
+                                )) ||
+                                    (sortConfig.direction === 'descending' && (
+                                        <ChevronDown size={12} />
+                                    )))}
                         </div>
-                        <div className="cursor-pointer hover:text-secondary" onClick={() => requestSort('tvl')}>
+                        <div
+                            className="cursor-pointer hover:text-secondary"
+                            onClick={() => requestSort('tvl')}
+                        >
                             <div className="flex items-center justify-end">
                                 <div>TVL</div>
                                 {sortConfig &&
                                     sortConfig.key === 'tvl' &&
-                                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                        (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                                    ((sortConfig.direction === 'ascending' && (
+                                        <ChevronUp size={12} />
+                                    )) ||
+                                        (sortConfig.direction ===
+                                            'descending' && (
+                                            <ChevronDown size={12} />
+                                        )))}
                             </div>
                         </div>
-                        <div className="cursor-pointer hover:text-secondary" onClick={() => requestSort('roiPerYear')}>
+                        <div
+                            className="cursor-pointer hover:text-secondary"
+                            onClick={() => requestSort('roiPerYear')}
+                        >
                             <div className="flex items-center justify-end">
                                 <div>APR</div>
                                 {sortConfig &&
                                     sortConfig.key === 'roiPerYear' &&
-                                    ((sortConfig.direction === 'ascending' && <ChevronUp size={12} />) ||
-                                        (sortConfig.direction === 'descending' && <ChevronDown size={12} />))}
+                                    ((sortConfig.direction === 'ascending' && (
+                                        <ChevronUp size={12} />
+                                    )) ||
+                                        (sortConfig.direction ===
+                                            'descending' && (
+                                            <ChevronDown size={12} />
+                                        )))}
                             </div>
                         </div>
                     </div>
                     <div className="flex-col space-y-2">
                         {items && items.length > 0 ? (
                             items.map((farm: any, i: number) => {
-                                return <TokenBalance key={farm.address + '_' + i} farm={farm} />
+                                return (
+                                    <TokenBalance
+                                        key={farm.address + '_' + i}
+                                        farm={farm}
+                                    />
+                                )
                             })
                         ) : (
                             <>
                                 {term ? (
-                                    <div className="w-full py-6 text-center">No Results.</div>
+                                    <div className="w-full py-6 text-center">
+                                        No Results.
+                                    </div>
                                 ) : (
                                     <div className="w-full py-6 text-center">
                                         <Dots>Fetching Pools</Dots>

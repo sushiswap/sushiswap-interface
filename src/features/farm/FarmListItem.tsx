@@ -7,6 +7,7 @@ import { Chef, PairType } from './enum'
 import React, { useState } from 'react'
 import { Trans, t } from '@lingui/macro'
 import { currencyId, formatNumber, formatPercent } from '../../functions'
+import { usePendingSushi, useUserInfo } from './hooks'
 
 import Button from '../../components/Button'
 import Dots from '../../components/Dots'
@@ -23,9 +24,6 @@ import { useLingui } from '@lingui/react'
 import useMasterChef from './useMasterChef'
 import { usePair } from '../../hooks/usePairs'
 import usePendingReward from './usePendingReward'
-// import usePendingSushi from '../../hooks/usePendingSushi'
-import { usePendingSushi } from './hooks'
-import useStakedBalance from '../../hooks/useStakedBalance'
 import useTokenBalance from '../../hooks/useTokenBalance'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 
@@ -46,7 +44,7 @@ const FarmListItem = ({ farm }) => {
     // const [pairState, pair] = usePair(token0, token1)
 
     const balance = useTokenBalance(address)
-    const staked = useStakedBalance(farm) // kMP depends on decimals of asset, SLP is always 18
+    const staked = useUserInfo(farm)
     const pending = usePendingSushi(farm)
     const reward = usePendingReward(farm)
 

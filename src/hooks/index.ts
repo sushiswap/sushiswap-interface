@@ -1,6 +1,4 @@
 export { default as useActiveWeb3React } from './useActiveWeb3React'
-export { default as useAllEarnings } from './useAllEarnings'
-export { default as useAllEarningsMultiCall } from './useAllEarningsMultiCall'
 export {
     useApproveCallback,
     useApproveCallbackFromTrade,

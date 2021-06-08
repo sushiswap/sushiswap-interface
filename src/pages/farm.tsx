@@ -101,7 +101,6 @@ export default function Farm(): JSX.Element {
         // How can we include this?
 
         // TODO: Deal with inconsistencies between properties on subgraph
-
         pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
         pool.balance = pool?.balance || pool?.slpBalance
 
@@ -119,7 +118,6 @@ export default function Farm(): JSX.Element {
             pool.owner.totalAllocPoint = 26480
         }
 
-        // Temporary solution
         function getRewards() {
             const sushiPerBlock =
                 pool?.owner?.sushiPerBlock / 1e18 ||
@@ -136,7 +134,9 @@ export default function Farm(): JSX.Element {
                 rewardPerDay: rewardPerBlock * blocksPerDay,
                 rewardPrice: sushiPrice,
             }
+
             const defaultRewards = [defaultReward]
+
             if (chef === Chef.MASTERCHEF_V2) {
                 const rewardPerBlock = 0.437861008791398
                 return [
@@ -242,21 +242,6 @@ export default function Farm(): JSX.Element {
               })
             : []
     )
-    // console.log({ farms })
-
-    // console.log({
-    //     masterchefv1Positions,
-    //     masterchefv2Positions,
-    //     minichefPositions,
-    // })
-
-    // console.log({ masterChefV1Farms, masterChefV2Farms, miniChefFarms, farms })
-
-    // const farms = concat([
-    //     masterChefV1Farms ? masterChefV1Farms : [],
-    //     masterChefV2Farms ? masterChefV2Farms : [],
-    //     miniChefFarms ? miniChefFarms : [],
-    // ])
 
     const positions = farms
         ? [
