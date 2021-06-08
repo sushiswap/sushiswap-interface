@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-export const tokenFieldsQuery = gql`
-    fragment tokenFields on Token {
+export const bentoTokenFieldsQuery = gql`
+    fragment bentoTokenFields on Token {
         id
         # bentoBox
         name
@@ -26,10 +26,10 @@ export const lendingPairFields = gql`
         symbol
         oracle
         asset {
-            ...tokenFields
+            ...bentoTokenFields
         }
         collateral {
-            ...tokenFields
+            ...bentoTokenFields
         }
         exchangeRate
         totalAssetElastic
@@ -49,7 +49,7 @@ export const lendingPairFields = gql`
         block
         timestamp
     }
-    ${tokenFieldsQuery}
+    ${bentoTokenFieldsQuery}
 `
 
 export const lendingPairSubsetQuery = gql`
