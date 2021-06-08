@@ -2,55 +2,93 @@ import Head from 'next/head'
 import Layout from '../layouts/DefaultLayout'
 import Typography from '../components/Typography'
 import capitalize from 'lodash/capitalize'
-import { getChainsStatus } from '../fetchers/covalent'
+import { getChainsStatus } from '../services/covalent/fetchers'
 import { useChainsStatus } from '../services/covalent/hooks'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { useState } from 'react'
+import { classNames } from '../functions'
+import Dots from '../components/Dots'
 
-export default function Status() {
-    return <div></div>
+export default function Status({ initialData }) {
+    const res = useChainsStatus({ initialData })
+    const [tabIndex, setTabIndex] = useState(0)
+    const { data } = res.data
+    return (
+        <Layout>
+            <Head>
+                <title>Status | Sushi</title>
+                <meta name="description" content="Sushi Status..." />
+            </Head>
+            <div className="w-full max-w-6xl mx-auto">
+                <Typography component="h1" variant="h1" className="w-full mb-4">
+                    Status
+                </Typography>
+
+                <Tabs
+                    selectedIndex={tabIndex}
+                    onSelect={(index) => setTabIndex(index)}
+                    selectedTabClassName="border-b-2 border-blue"
+                >
+                    <TabList className="flex -mb-px">
+                        <Tab
+                            className={classNames(
+                                tabIndex !== 0 &&
+                                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                'w-1/4 py-4 px-2 text-center border-b-2 font-medium text-sm cursor-pointer'
+                            )}
+                        >
+                            Covalent
+                        </Tab>
+                        <Tab
+                            className={classNames(
+                                tabIndex !== 1 &&
+                                    'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                                'w-1/4 py-4 px-2 text-center border-b-2 font-medium text-sm cursor-pointer'
+                            )}
+                        >
+                            Subgraph
+                        </Tab>
+                    </TabList>
+                    <TabPanel>
+                        <div className="grid items-start justify-start grid-cols-3 gap-4 mx-auto ">
+                            {data.items.map((item) => {
+                                const words = item.name.split('-')
+                                return (
+                                    <div className="p-4 rounded bg-dark-900 text-primary">
+                                        <Typography variant="h5">
+                                            {words.map(
+                                                (word) => `${capitalize(word)} `
+                                            )}
+                                        </Typography>
+                                        <Typography
+                                            variant="caption"
+                                            className="text-secondary"
+                                        >
+                                            Chain Id: {item['chain_id']}
+                                        </Typography>
+                                        <Typography
+                                            variant="caption"
+                                            className="text-secondary"
+                                        >
+                                            Block Height:{' '}
+                                            {item['synced_block_height']}
+                                        </Typography>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <Dots>Coming Soon</Dots>
+                    </TabPanel>
+                </Tabs>
+            </div>
+
+            {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+        </Layout>
+    )
 }
-// export default function Status({ initialData }) {
-//     const res = useChainsStatus({ initialData })
-//     const { data } = res.data
-//     return (
-//         <Layout>
-//             <Head>
-//                 <title>Status | Sushi</title>
-//                 <meta name="description" content="Sushi Status..." />
-//             </Head>
 
-//             <Typography component="h1" variant="h1" className="mb-6">
-//                 Status
-//             </Typography>
-
-//             <div className="grid items-start justify-start w-full max-w-6xl grid-cols-3 gap-4">
-//                 {data.items.map((item) => {
-//                     const words = item.name.split('-')
-//                     return (
-//                         <div className="p-4 rounded bg-dark-900 text-primary">
-//                             <Typography variant="h5">
-//                                 {words.map((word) => `${capitalize(word)} `)}
-//                             </Typography>
-//                             <Typography
-//                                 variant="caption"
-//                                 className="text-secondary"
-//                             >
-//                                 Chain Id: {item['chain_id']}
-//                             </Typography>
-//                             <Typography
-//                                 variant="caption"
-//                                 className="text-secondary"
-//                             >
-//                                 Block Height: {item['synced_block_height']}
-//                             </Typography>
-//                         </div>
-//                     )
-//                 })}
-//             </div>
-//             {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-//         </Layout>
-//     )
-// }
-
-// export async function getStaticProps() {
-//     return { props: { initialData: await getChainsStatus() } }
-// }
+export async function getStaticProps() {
+    return { props: { initialData: await getChainsStatus() } }
+}
