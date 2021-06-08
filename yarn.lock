@@ -2320,10 +2320,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.29.0.tgz#6f33b346f9b4325f1ec8eeda051ea0a3da61001c"
   integrity sha512-Y1uPZ22ZrB1MqX3utF88knE2BDyIpPD3t2b7pf1MAIJ2Tok6CFNkNarnMH31xEEU8fdVMDM/msmqKcmWt98lXA==
 
-"@sushiswap/sdk@^5.0.0-canary.12":
-  version "5.0.0-canary.12"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.12.tgz#d92f77dae8998f0a26a51d01fff12e3eaa21a474"
-  integrity sha512-74BtHjO9ejzqNVk0btMd+WrJEI4B8E1vb9Ec2suhfNavDR3PRg1vtos8DynvcleALNZg5R8uTlYzE5G7nl/nFw==
+"@sushiswap/sdk@^5.0.0-canary.14":
+  version "5.0.0-canary.14"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.14.tgz#5c1d9dbd2ed2d6f5046e0474b14d145d6f1cc447"
+  integrity sha512-AXfHx22DkvlenYPMwaJOW59AKj6Q8bj+dT+KCYd6DSzLH6gl/K+f8UGBIzy/w1rNLXeA1MdU3XOG2Uub8CYMpA==
   dependencies:
     "@uniswap/v2-core" "^1.0.0"
     big.js "^5.2.2"
@@ -2611,6 +2611,15 @@
   version "17.0.6"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.6.tgz#0ec564566302c562bf497d73219797a5e0297013"
   integrity sha512-u/TtPoF/hrvb63LdukET6ncaplYsvCvmkceasx8oG84/ZCsoLxz9Z/raPBP4lTAiWW1Jb889Y9svHmv8R26dWw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^16.8.12":
+  version "16.14.8"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.8.tgz#4aee3ab004cb98451917c9b7ada3c7d7e52db3fe"
+  integrity sha512-QN0/Qhmx+l4moe7WJuTxNiTsjBwlBGHqKGvInSQCBdo7Qio0VtOqwsC0Wq7q3PbJlB0cR4Y4CVo1OOe6BOsOmA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -7254,6 +7263,11 @@ functional-red-black-tree@^1.0.1, functional-red-black-tree@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+
+fuse.js@^3.4.4:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-3.6.1.tgz#7de85fdd6e1b3377c23ce010892656385fd9b10c"
+  integrity sha512-hT9yh/tiinkmirKrlv4KWOjztdoZo1mx9Qh4KvWqC7isoXwdUY3PNWUxceF4/qO9R6riA2C29jdTOeQOIROjgw==
 
 fuse.js@^6.4.6:
   version "6.4.6"
@@ -13489,6 +13503,14 @@ use-callback-ref@^1.2.1, use-callback-ref@^1.2.3:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.2.5.tgz#6115ed242cfbaed5915499c0a9842ca2912f38a5"
   integrity sha512-gN3vgMISAgacF7sqsLPByqoePooY3n2emTH59Ur5d/M8eg4WTWu1xp8i8DHjohftIyEx0S08RiYxbffr4j8Peg==
+
+use-fuse@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/use-fuse/-/use-fuse-0.0.3.tgz#3ad5879f2908fed23eac08dcfc9e54129726d7ed"
+  integrity sha512-bSDl32JkcAjyJgcuMP1qMHCUKnSOuOGOSYqTjOxe4CNnezFBLOlBuFcwAqEO5OKJfLsOzayStQvPF+x+kyUQkw==
+  dependencies:
+    "@types/react" "^16.8.12"
+    fuse.js "^3.4.4"
 
 use-sidecar@^1.0.1:
   version "1.0.5"
