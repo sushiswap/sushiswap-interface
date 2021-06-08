@@ -11,8 +11,12 @@ module.exports = withBundleAnalyzer(
     withPWA({
         pwa: {
             dest: 'public',
-            runtimeCaching,
             disable: process.env.NODE_ENV === 'development',
+            // runtimeCaching,
+            // disable: process.env.NODE_ENV === 'development',
+            // register: true,
+            // scope: '.',
+            // sw: 'service-worker.js',
         },
         future: {
             webpack5: true,
