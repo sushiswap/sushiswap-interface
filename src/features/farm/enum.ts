@@ -1,4 +1,4 @@
-export enum ChefId {
+export enum Chef {
     MASTERCHEF,
     MASTERCHEF_V2,
     MINICHEF,
