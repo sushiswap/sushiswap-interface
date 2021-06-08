@@ -20,7 +20,6 @@ import { useETHBalances } from '../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 import { usePairs } from '../hooks/usePairs'
 import { useRouter } from 'next/router'
-import { useStakingInfo } from '../state/stake/hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../state/wallet/hooks'
 
 const migrateFrom: { [chainId in ChainId]?: string } = {
@@ -81,29 +80,6 @@ export default function Pool() {
         .map(([, pair]) => pair)
         .filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
 
-    // show liquidity even if its deposited in rewards contract
-    const stakingInfo = useStakingInfo()
-    const stakingInfosWithBalance = stakingInfo?.filter((pool) =>
-        JSBI.greaterThan(pool.stakedAmount.raw, BIG_INT_ZERO)
-    )
-    const stakingPairs = usePairs(
-        stakingInfosWithBalance?.map((stakingInfo) => stakingInfo.tokens)
-    )
-
-    // remove any pairs that also are included in pairs with stake in mining pool
-    const v2PairsWithoutStakedAmount = allV2PairsWithLiquidity.filter(
-        (v2Pair) => {
-            return (
-                stakingPairs
-                    ?.map((stakingPair) => stakingPair[1])
-                    .filter(
-                        (stakingPair) =>
-                            stakingPair?.liquidityToken.address ===
-                            v2Pair.liquidityToken.address
-                    ).length === 0
-            )
-        }
-    )
     return (
         <Layout>
             <Head>
@@ -151,36 +127,19 @@ export default function Pool() {
                         <Empty>
                             <Dots>{i18n._(t`Loading`)}</Dots>
                         </Empty>
-                    ) : allV2PairsWithLiquidity?.length > 0 ||
-                      stakingPairs?.length > 0 ? (
+                    ) : allV2PairsWithLiquidity?.length > 0 ? (
                         <>
                             {/* <div className="flex items-center justify-center">
                                 <ExternalLink href={'https://analytics.sushi.com/user/' + account}>
                                     Account analytics and accrued fees <span> ↗</span>
                                 </ExternalLink>
                             </div> */}
-                            {v2PairsWithoutStakedAmount.map((v2Pair) => (
+                            {allV2PairsWithLiquidity.map((v2Pair) => (
                                 <FullPositionCard
                                     key={v2Pair.liquidityToken.address}
                                     pair={v2Pair}
                                 />
                             ))}
-                            {stakingPairs.map(
-                                (stakingPair, i) =>
-                                    stakingPair[1] && ( // skip pairs that arent loaded
-                                        <FullPositionCard
-                                            key={
-                                                stakingInfosWithBalance[i]
-                                                    .stakingRewardAddress
-                                            }
-                                            pair={stakingPair[1]}
-                                            stakedBalance={
-                                                stakingInfosWithBalance[i]
-                                                    .stakedAmount
-                                            }
-                                        />
-                                    )
-                            )}
                         </>
                     ) : (
                         <Empty className="text-center">
