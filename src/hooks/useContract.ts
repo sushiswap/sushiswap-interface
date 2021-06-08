@@ -1,6 +1,6 @@
 import {
     ARGENT_WALLET_DETECTOR_ABI,
-    ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
+    ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
 import {
     BAR_ADDRESS,
@@ -11,7 +11,7 @@ import {
     ROUTER_ADDRESS,
     SUSHI_ADDRESS,
     TIMELOCK_ADDRESS,
-    WETH
+    WETH,
 } from '@sushiswap/sdk'
 import {
     BENTOBOX_ADDRESS,
@@ -21,17 +21,19 @@ import {
     SUSHISWAP_MULTISWAPPER_ADDRESS,
     SUSHISWAP_SWAPPER_ADDRESS,
     SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-    SUSHISWAP_TWAP_1_ORACLE_ADDRESS
+    SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
 import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
+import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
 import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
+import COMPLEX_REWARDER_ABI from '../constants/abis/complex-rewarder.json'
 import { Contract } from '@ethersproject/contracts'
 import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
 import DASHBOARD_ABI from '../constants/abis/dashboard.json'
@@ -365,12 +367,12 @@ export function usePancakeV1FactoryContract(): Contract | null {
                     {
                         internalType: 'address',
                         name: '_feeToSetter',
-                        type: 'address'
-                    }
+                        type: 'address',
+                    },
                 ],
                 payable: false,
                 stateMutability: 'nonpayable',
-                type: 'constructor'
+                type: 'constructor',
             },
             {
                 anonymous: false,
@@ -379,64 +381,64 @@ export function usePancakeV1FactoryContract(): Contract | null {
                         indexed: true,
                         internalType: 'address',
                         name: 'token0',
-                        type: 'address'
+                        type: 'address',
                     },
                     {
                         indexed: true,
                         internalType: 'address',
                         name: 'token1',
-                        type: 'address'
+                        type: 'address',
                     },
                     {
                         indexed: false,
                         internalType: 'address',
                         name: 'pair',
-                        type: 'address'
+                        type: 'address',
                     },
                     {
                         indexed: false,
                         internalType: 'uint256',
                         name: '',
-                        type: 'uint256'
-                    }
+                        type: 'uint256',
+                    },
                 ],
                 name: 'PairCreated',
-                type: 'event'
+                type: 'event',
             },
             {
                 constant: true,
                 inputs: [],
                 name: 'INIT_CODE_PAIR_HASH',
                 outputs: [
-                    { internalType: 'bytes32', name: '', type: 'bytes32' }
+                    { internalType: 'bytes32', name: '', type: 'bytes32' },
                 ],
                 payable: false,
                 stateMutability: 'view',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: true,
                 inputs: [
-                    { internalType: 'uint256', name: '', type: 'uint256' }
+                    { internalType: 'uint256', name: '', type: 'uint256' },
                 ],
                 name: 'allPairs',
                 outputs: [
-                    { internalType: 'address', name: '', type: 'address' }
+                    { internalType: 'address', name: '', type: 'address' },
                 ],
                 payable: false,
                 stateMutability: 'view',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: true,
                 inputs: [],
                 name: 'allPairsLength',
                 outputs: [
-                    { internalType: 'uint256', name: '', type: 'uint256' }
+                    { internalType: 'uint256', name: '', type: 'uint256' },
                 ],
                 payable: false,
                 stateMutability: 'view',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: false,
@@ -444,64 +446,72 @@ export function usePancakeV1FactoryContract(): Contract | null {
                     {
                         internalType: 'address',
                         name: 'tokenA',
-                        type: 'address'
+                        type: 'address',
                     },
-                    { internalType: 'address', name: 'tokenB', type: 'address' }
+                    {
+                        internalType: 'address',
+                        name: 'tokenB',
+                        type: 'address',
+                    },
                 ],
                 name: 'createPair',
                 outputs: [
-                    { internalType: 'address', name: 'pair', type: 'address' }
+                    { internalType: 'address', name: 'pair', type: 'address' },
                 ],
                 payable: false,
                 stateMutability: 'nonpayable',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: true,
                 inputs: [],
                 name: 'feeTo',
                 outputs: [
-                    { internalType: 'address', name: '', type: 'address' }
+                    { internalType: 'address', name: '', type: 'address' },
                 ],
                 payable: false,
                 stateMutability: 'view',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: true,
                 inputs: [],
                 name: 'feeToSetter',
                 outputs: [
-                    { internalType: 'address', name: '', type: 'address' }
+                    { internalType: 'address', name: '', type: 'address' },
                 ],
                 payable: false,
                 stateMutability: 'view',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: true,
                 inputs: [
                     { internalType: 'address', name: '', type: 'address' },
-                    { internalType: 'address', name: '', type: 'address' }
+                    { internalType: 'address', name: '', type: 'address' },
                 ],
                 name: 'getPair',
                 outputs: [
-                    { internalType: 'address', name: '', type: 'address' }
+                    { internalType: 'address', name: '', type: 'address' },
                 ],
                 payable: false,
                 stateMutability: 'view',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: false,
                 inputs: [
-                    { internalType: 'address', name: '_feeTo', type: 'address' }
+                    {
+                        internalType: 'address',
+                        name: '_feeTo',
+                        type: 'address',
+                    },
                 ],
                 name: 'setFeeTo',
                 outputs: [],
                 payable: false,
                 stateMutability: 'nonpayable',
-                type: 'function'
+                type: 'function',
             },
             {
                 constant: false,
@@ -509,15 +519,15 @@ export function usePancakeV1FactoryContract(): Contract | null {
                     {
                         internalType: 'address',
                         name: '_feeToSetter',
-                        type: 'address'
-                    }
+                        type: 'address',
+                    },
                 ],
                 name: 'setFeeToSetter',
                 outputs: [],
                 payable: false,
                 stateMutability: 'nonpayable',
-                type: 'function'
-            }
+                type: 'function',
+            },
         ],
         false
     )
@@ -654,9 +664,9 @@ export function useQuickSwapFactoryContract(): Contract | null {
                     {
                         type: 'address',
                         name: '_feeToSetter',
-                        internalType: 'address'
-                    }
-                ]
+                        internalType: 'address',
+                    },
+                ],
             },
             {
                 type: 'event',
@@ -666,106 +676,110 @@ export function useQuickSwapFactoryContract(): Contract | null {
                         type: 'address',
                         name: 'token0',
                         internalType: 'address',
-                        indexed: true
+                        indexed: true,
                     },
                     {
                         type: 'address',
                         name: 'token1',
                         internalType: 'address',
-                        indexed: true
+                        indexed: true,
                     },
                     {
                         type: 'address',
                         name: 'pair',
                         internalType: 'address',
-                        indexed: false
+                        indexed: false,
                     },
                     {
                         type: 'uint256',
                         name: '',
                         internalType: 'uint256',
-                        indexed: false
-                    }
+                        indexed: false,
+                    },
                 ],
-                anonymous: false
+                anonymous: false,
             },
             {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
                 outputs: [
-                    { type: 'address', name: '', internalType: 'address' }
+                    { type: 'address', name: '', internalType: 'address' },
                 ],
                 name: 'allPairs',
                 inputs: [
-                    { type: 'uint256', name: '', internalType: 'uint256' }
+                    { type: 'uint256', name: '', internalType: 'uint256' },
                 ],
-                constant: true
+                constant: true,
             },
             {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
                 outputs: [
-                    { type: 'uint256', name: '', internalType: 'uint256' }
+                    { type: 'uint256', name: '', internalType: 'uint256' },
                 ],
                 name: 'allPairsLength',
                 inputs: [],
-                constant: true
+                constant: true,
             },
             {
                 type: 'function',
                 stateMutability: 'nonpayable',
                 payable: false,
                 outputs: [
-                    { type: 'address', name: 'pair', internalType: 'address' }
+                    { type: 'address', name: 'pair', internalType: 'address' },
                 ],
                 name: 'createPair',
                 inputs: [
                     {
                         type: 'address',
                         name: 'tokenA',
-                        internalType: 'address'
+                        internalType: 'address',
                     },
-                    { type: 'address', name: 'tokenB', internalType: 'address' }
+                    {
+                        type: 'address',
+                        name: 'tokenB',
+                        internalType: 'address',
+                    },
                 ],
-                constant: false
+                constant: false,
             },
             {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
                 outputs: [
-                    { type: 'address', name: '', internalType: 'address' }
+                    { type: 'address', name: '', internalType: 'address' },
                 ],
                 name: 'feeTo',
                 inputs: [],
-                constant: true
+                constant: true,
             },
             {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
                 outputs: [
-                    { type: 'address', name: '', internalType: 'address' }
+                    { type: 'address', name: '', internalType: 'address' },
                 ],
                 name: 'feeToSetter',
                 inputs: [],
-                constant: true
+                constant: true,
             },
             {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
                 outputs: [
-                    { type: 'address', name: '', internalType: 'address' }
+                    { type: 'address', name: '', internalType: 'address' },
                 ],
                 name: 'getPair',
                 inputs: [
                     { type: 'address', name: '', internalType: 'address' },
-                    { type: 'address', name: '', internalType: 'address' }
+                    { type: 'address', name: '', internalType: 'address' },
                 ],
-                constant: true
+                constant: true,
             },
             {
                 type: 'function',
@@ -774,9 +788,13 @@ export function useQuickSwapFactoryContract(): Contract | null {
                 outputs: [],
                 name: 'setFeeTo',
                 inputs: [
-                    { type: 'address', name: '_feeTo', internalType: 'address' }
+                    {
+                        type: 'address',
+                        name: '_feeTo',
+                        internalType: 'address',
+                    },
                 ],
-                constant: false
+                constant: false,
             },
             {
                 type: 'function',
@@ -788,12 +806,29 @@ export function useQuickSwapFactoryContract(): Contract | null {
                     {
                         type: 'address',
                         name: '_feeToSetter',
-                        internalType: 'address'
-                    }
+                        internalType: 'address',
+                    },
                 ],
-                constant: false
-            }
+                constant: false,
+            },
         ],
         false
+    )
+}
+
+export function useComplexRewarderContract(
+    address,
+    withSignerIfPossible?: boolean
+): Contract | null {
+    return useContract(address, COMPLEX_REWARDER_ABI, withSignerIfPossible)
+}
+
+export function useAlcxRewarderContract(
+    withSignerIfPossible?: boolean
+): Contract | null {
+    return useContract(
+        '0x7519C93fC5073E15d89131fD38118D73A72370F8',
+        ALCX_REWARDER_ABI,
+        withSignerIfPossible
     )
 }
