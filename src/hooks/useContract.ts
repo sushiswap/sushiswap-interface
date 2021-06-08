@@ -166,15 +166,6 @@ export function useMerkleDistributorContract(): Contract | null {
     )
 }
 
-export function useUniContract(): Contract | null {
-    const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId ? SUSHI[chainId]?.address : undefined,
-        UNI_ABI,
-        true
-    )
-}
-
 export function useBoringHelperContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(
