@@ -6,6 +6,7 @@ import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import LanguageSwitch from '../LanguageSwitch'
 import Link from 'next/link'
+import NavLink from '../NavLink'
 import More from './More'
 import { Popover } from '@headlessui/react'
 import QuestionHelper from '../QuestionHelper'
@@ -47,51 +48,51 @@ function AppBar(): JSX.Element {
                                     />
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
-                                            <Link href={'/buy'}>
+                                            <NavLink href={'/buy'}>
                                                 <a
                                                     id={`buy-nav-link`}
                                                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                 >
                                                     {i18n._(t`Buy`)}
                                                 </a>
-                                            </Link>
-                                            <Link href={'/swap'}>
+                                            </NavLink>
+                                            <NavLink href="/swap">
                                                 <a
                                                     id={`swap-nav-link`}
                                                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                 >
                                                     {i18n._(t`Swap`)}
                                                 </a>
-                                            </Link>
-                                            <Link href={'/pool'}>
+                                            </NavLink>
+                                            <NavLink href="/pool">
                                                 <a
                                                     id={`pool-nav-link`}
                                                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                 >
                                                     {i18n._(t`Pool`)}
                                                 </a>
-                                            </Link>
-                                            <Link href={'/migrate'}>
+                                            </NavLink>
+                                            <NavLink href={'/migrate'}>
                                                 <a
                                                     id={`migrate-nav-link`}
                                                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                 >
                                                     {i18n._(t`Migrate`)}
                                                 </a>
-                                            </Link>
+                                            </NavLink>
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
                                                     ChainId.MATIC,
                                                 ].includes(chainId) && (
-                                                    <Link href={'/farm'}>
+                                                    <NavLink href={'/farm'}>
                                                         <a
                                                             id={`farm-nav-link`}
                                                             className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                         >
                                                             {i18n._(t`Farm`)}
                                                         </a>
-                                                    </Link>
+                                                    </NavLink>
                                                 )}
                                             {chainId &&
                                                 [
@@ -101,7 +102,7 @@ function AppBar(): JSX.Element {
                                                     ChainId.MATIC,
                                                 ].includes(chainId) && (
                                                     <>
-                                                        <Link href={'/lend'}>
+                                                        <NavLink href={'/lend'}>
                                                             <a
                                                                 id={`lend-nav-link`}
                                                                 className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -110,8 +111,10 @@ function AppBar(): JSX.Element {
                                                                     t`Lend`
                                                                 )}
                                                             </a>
-                                                        </Link>
-                                                        <Link href={'/borrow'}>
+                                                        </NavLink>
+                                                        <NavLink
+                                                            href={'/borrow'}
+                                                        >
                                                             <a
                                                                 id={`borrow-nav-link`}
                                                                 className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -120,7 +123,7 @@ function AppBar(): JSX.Element {
                                                                     t`Borrow`
                                                                 )}
                                                             </a>
-                                                        </Link>
+                                                        </NavLink>
                                                         {/* <Link href={'/bento'}>
                                                             <a
                                                                 id={`bento-nav-link`}
@@ -133,14 +136,14 @@ function AppBar(): JSX.Element {
                                                 )}
 
                                             {chainId === ChainId.MAINNET && (
-                                                <Link href={'/stake'}>
+                                                <NavLink href={'/stake'}>
                                                     <a
                                                         id={`stake-nav-link`}
                                                         className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                     >
                                                         {i18n._(t`Stake`)}
                                                     </a>
-                                                </Link>
+                                                </NavLink>
                                             )}
                                         </div>
                                     </div>
@@ -353,7 +356,9 @@ function AppBar(): JSX.Element {
                                                 )}
                                             <Web3Status />
                                         </div>
-                                        <LanguageSwitch />
+                                        <div className="hidden md:block">
+                                            <LanguageSwitch />
+                                        </div>
                                         <More />
                                     </div>
                                 </div>
