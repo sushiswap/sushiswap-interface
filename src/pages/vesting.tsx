@@ -238,6 +238,7 @@ export default function Vesting() {
                                         }
                                         size="large"
                                         onClick={onClaim}
+                                        className="inline-flex items-center justify-center"
                                     >
                                         {pendingTreasurySignature ? (
                                             <Dots>
@@ -256,10 +257,10 @@ export default function Vesting() {
 
                                         {attempting && (
                                             <Loader
-                                                stroke="white"
-                                                style={{
-                                                    marginLeft: '10px'
-                                                }}
+                                              stroke="white"
+                                              style={{
+                                                  marginLeft: '10px'
+                                              }}
                                             />
                                         )}
                                     </Button>
