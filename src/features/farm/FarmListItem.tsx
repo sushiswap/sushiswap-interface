@@ -71,7 +71,7 @@ const FarmListItem = ({ farm }) => {
 
     const { deposit, withdraw, harvest } = useMasterChef(farm.chef)
 
-    // console.log({ farm })
+    console.log({ farm })
 
     return (
         <div key={`${farm.chef}:${farm.id}`} className="rounded bg-dark-800">

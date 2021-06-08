@@ -158,7 +158,8 @@ export default function Farm(): JSX.Element {
 
         const sushiPerBlock =
             pool?.owner?.sushiPerBlock ||
-            pool?.owner?.sushiPerSecond * averageBlockTime
+            pool?.owner?.sushiPerSecond * averageBlockTime ||
+            18.6
 
         const rewardPerBlock =
             ((pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock) /
@@ -189,7 +190,10 @@ export default function Farm(): JSX.Element {
                     {
                         token: 'ALCX',
                         icon: '/images/tokens/alcx-square.jpg',
-                        rewardPerDay: 0.437861008791398,
+                        rewardPerDay:
+                            ((pool.allocPoint / pool.owner.totalAllocPoint) *
+                                pool.rewarder.rewardPerSecond) /
+                            1e18,
                     },
                 ]
             } else if (chef === Chef.MINICHEF) {
