@@ -1,9 +1,9 @@
 module.exports = {
     catalogs: [
         {
-            path: '<rootDir>/src/language/locales/{locale}/catalog',
+            path: '<rootDir>/locale/{locale}/catalog',
             include: ['<rootDir>/src'],
-            exclude: ['**/node_modules/**', '**/.next/**'],
+            exclude: ['**/node_modules/**'],
         },
     ],
     compileNamespace: 'cjs',

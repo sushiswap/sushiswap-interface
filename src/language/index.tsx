@@ -17,7 +17,7 @@ locales.map((locale) => i18n.loadLocaleData(locale, { plurals: () => null }))
  * many ways how to load messages — from REST API, from file, from cache, etc.
  */
 export async function activate(locale: string) {
-    const { messages } = await import(`./locales/${locale}/catalog.js`)
+    const { messages } = await import(`../../locale/${locale}/catalog.js`)
     i18n.load(locale, messages)
     i18n.activate(locale)
 }
