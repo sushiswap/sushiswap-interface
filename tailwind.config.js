@@ -34,57 +34,12 @@ module.exports = {
         },
         extend: {
             colors: {
-                // We have to do this for any css variable color or else opacity will not work
-                purple: ({ opacityVariable, opacityValue }) => {
-                    if (opacityValue !== undefined) {
-                        return `rgba(var(--purple), ${opacityValue})`
-                    }
-                    if (opacityVariable !== undefined) {
-                        return `rgba(var(--purple), var(${opacityVariable}, 1))`
-                    }
-                    return `rgb(var(--purple))`
-                },
-                blue: ({ opacityVariable, opacityValue }) => {
-                    if (opacityValue !== undefined) {
-                        return `rgba(var(--blue), ${opacityValue})`
-                    }
-                    if (opacityVariable !== undefined) {
-                        return `rgba(var(--blue), var(${opacityVariable}, 1))`
-                    }
-                    return `rgb(var(--blue))`
-                },
-
-                pink: ({ opacityVariable, opacityValue }) => {
-                    if (opacityValue !== undefined) {
-                        return `rgba(var(--pink), ${opacityValue})`
-                    }
-                    if (opacityVariable !== undefined) {
-                        return `rgba(var(--pink), var(${opacityVariable}, 1))`
-                    }
-                    return `rgb(var(--pink))`
-                },
-
-                green: ({ opacityVariable, opacityValue }) => {
-                    if (opacityValue !== undefined) {
-                        return `rgba(var(--green), ${opacityValue})`
-                    }
-                    if (opacityVariable !== undefined) {
-                        return `rgba(var(--green), var(${opacityVariable}, 1))`
-                    }
-                    return `rgb(var(--green))`
-                },
-
-                red: ({ opacityVariable, opacityValue }) => {
-                    if (opacityValue !== undefined) {
-                        return `rgba(var(--red), ${opacityValue})`
-                    }
-                    if (opacityVariable !== undefined) {
-                        return `rgba(var(--red), var(${opacityVariable}, 1))`
-                    }
-                    return `rgb(var(--red))`
-                },
-
-                yellow: '#FFD166',
+                purple: '#a755dd',
+                blue: '#0993ec',
+                pink: '#f338c3',
+                green: '#7cff6b',
+                red: '#ff3838',
+                yellow: '#ffd166',
 
                 'pink-red': '#FE5A75',
                 'light-brown': '#FEC464',
@@ -229,6 +184,14 @@ module.exports = {
         // require('@tailwindcss/forms'),
         // require('@tailwindcss/line-clamp'),
         // require('@tailwindcss/aspect-ratio'),
+        require('tailwind-css-variables')(
+            {
+                // modules
+            },
+            {
+                // options
+            }
+        ),
         require('tailwindcss-border-gradient-radius'),
         plugin(function ({ addUtilities }) {
             addUtilities({

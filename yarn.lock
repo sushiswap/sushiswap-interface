@@ -12842,6 +12842,11 @@ symbol-observable@^2.0.0:
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-2.0.3.tgz#5b521d3d07a43c351055fa43b8355b62d33fd16a"
   integrity sha512-sQV7phh2WCYAn81oAkakC5qjq2Ml0g8ozqz03wOGnx9dDlG1de6yrF+0RAzSJD8fPUow3PTSMf2SAbOGxb93BA==
 
+tailwind-css-variables@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/tailwind-css-variables/-/tailwind-css-variables-3.0.1.tgz#a4ab01c7722cf1138fac7591f08032f8cd66c52d"
+  integrity sha512-A+nTugMfxrhpTuSuUR+gCjj8ptiyJ7CcPDH15T09KyqaiqXRyxkKBux18/c+qjB8pDUlaZD52IoJVcC0zRsgAw==
+
 tailwindcss-border-gradient-radius@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/tailwindcss-border-gradient-radius/-/tailwindcss-border-gradient-radius-2.0.0.tgz#b4071260e1e5d2517fe91351549987bb5af4dda5"
