@@ -95,6 +95,7 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "eth-permit": "^0.1.9",
         "ethers": "^5.0.7",
+        "fathom-client": "^3.0.0",
         "fuse.js": "^6.4.6",
         "husky": "^6.0.0",
         "jazzicon": "^1.5.0",
