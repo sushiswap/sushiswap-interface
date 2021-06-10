@@ -16,7 +16,6 @@ const NavLink = ({
     // pages/index.js will be matched via props.href
     // pages/about.js will be matched via props.href
     // pages/[slug].js will be matched via props.as
-    console.log({ asPath, props })
     const className =
         asPath === props.href.split('?')?.[0] ||
         asPath === props.href ||

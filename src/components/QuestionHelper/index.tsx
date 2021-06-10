@@ -26,7 +26,11 @@ const LightQuestionWrapper = styled.div`
     }
 `
 
-const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
+const QuestionHelper: FC<{ text: any; className?: string }> = ({
+    className = '',
+    children,
+    text,
+}) => {
     const [show, setShow] = useState<boolean>(false)
 
     const open = useCallback(() => setShow(true), [setShow])
@@ -34,21 +38,23 @@ const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
 
     if (children) {
         return (
-            <Tooltip text={text} show={show}>
-                <div
-                    className="flex items-center justify-center outline-none"
-                    onClick={open}
-                    onMouseEnter={open}
-                    onMouseLeave={close}
-                >
-                    {children}
-                </div>
-            </Tooltip>
+            <div className={className}>
+                <Tooltip text={text} show={show}>
+                    <div
+                        className="flex items-center justify-center outline-none"
+                        onClick={open}
+                        onMouseEnter={open}
+                        onMouseLeave={close}
+                    >
+                        {children}
+                    </div>
+                </Tooltip>
+            </div>
         )
     }
 
     return (
-        <span className="ml-1">
+        <span className={`${className} ml-1`}>
             <Tooltip text={text} show={show}>
                 <div
                     className="flex items-center justify-center outline-none cursor-help hover:text-primary"
@@ -63,17 +69,26 @@ const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
     )
 }
 
-export const LightQuestionHelper: FC<{ text: string }> = ({ text }) => {
+export const LightQuestionHelper: FC<{ text: string; className?: string }> = ({
+    text,
+    className = '',
+}) => {
     const [show, setShow] = useState<boolean>(false)
 
     const open = useCallback(() => setShow(true), [setShow])
     const close = useCallback(() => setShow(false), [setShow])
 
     return (
-        <span className="ml-1">
+        <span className={`${className} ml-1`}>
             <Tooltip text={text} show={show}>
-                <LightQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
-                    <OutlineQuestionMarkCircleIcon>?</OutlineQuestionMarkCircleIcon>
+                <LightQuestionWrapper
+                    onClick={open}
+                    onMouseEnter={open}
+                    onMouseLeave={close}
+                >
+                    <OutlineQuestionMarkCircleIcon>
+                        ?
+                    </OutlineQuestionMarkCircleIcon>
                 </LightQuestionWrapper>
             </Tooltip>
         </span>

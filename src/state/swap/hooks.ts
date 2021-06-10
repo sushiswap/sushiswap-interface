@@ -4,6 +4,7 @@ import {
     Currency,
     CurrencyAmount,
     JSBI,
+    Price,
     Token,
     TokenAmount,
     Trade,
@@ -48,6 +49,8 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import useENS from '../../hooks/useENS'
 import { useLingui } from '@lingui/react'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
+import { usePair } from '../../hooks/usePair'
+import usePool from '../../hooks/usePool'
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>((state) => state.swap)
@@ -511,4 +514,12 @@ export function useDefaultsFromURLSearch():
     }, [dispatch, chainId])
 
     return result
+}
+
+export const useReserveRatio = (inverted = false) => {
+    const { currencies } = useDerivedSwapInfo()
+    const [, pair] = usePair(currencies.INPUT, currencies.OUTPUT)
+    const a = pair?.token0Price.toSignificant(6)
+    const b = pair?.token1Price.toSignificant(6)
+    return pair?.token0 === currencies.INPUT || inverted ? a : b
 }
