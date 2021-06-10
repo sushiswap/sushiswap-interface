@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { AppBar, Polling, Popups } from '../components'
 import Web3ReactManager from '../components/Web3ReactManager'
 import ReactGA from 'react-ga'
@@ -7,13 +7,14 @@ import Routes from '../routes'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../state'
 import { updateUserDarkMode } from '../state/user/actions'
-import { parse } from 'qs'
+import { parse, stringify } from 'qs'
 import isEqual from 'lodash/isEqual'
+import useParsedQueryString from '../hooks/useParsedQueryString'
 
 function App(): JSX.Element {
     const bodyRef = useRef<any>(null)
 
-    const history = useHistory()
+    const { location, replace } = useHistory()
 
     const { search, pathname } = useLocation()
 
@@ -23,20 +24,24 @@ function App(): JSX.Element {
         'flex flex-col flex-1 items-center justify-start w-screen h-full overflow-y-auto overflow-x-hidden z-0 pt-4 sm:pt-8 px-4 md:pt-10 pb-20'
     )
 
-    const [searchCache, setSearchCache] = useState(search)
+    const [preservedSource, setPreservedSource] = useState('')
 
-    useLayoutEffect(() => {
-        if (!isEqual(search, searchCache)) {
-            setSearchCache(search)
-        }
-        if (searchCache) {
-            history.replace({ ...history.location, search: searchCache })
-        }
-    }, [history, search, searchCache])
+    useEffect(() => {
+        const parsed = parse(location.search, { parseArrays: false, ignoreQueryPrefix: true })
 
-    useLayoutEffect(() => {
-        setSearchCache(search)
-    }, [pathname, search])
+        if (!isEqual(parsed['utm_source'], preservedSource)) {
+            setPreservedSource(parsed['utm_source'] as string)
+        }
+
+        if (preservedSource && !location.search.includes('utm_source')) {
+            replace({
+                ...location,
+                search: location.search
+                    ? location.search + '&utm_source=' + preservedSource
+                    : location.search + '?utm_source=' + preservedSource
+            })
+        }
+    }, [preservedSource, location, replace])
 
     useEffect(() => {
         if (pathname === '/trade') {
