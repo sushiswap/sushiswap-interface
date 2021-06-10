@@ -11,6 +11,7 @@ import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import { updateVersion } from './global/actions'
 import user from './user/reducer'
+import limitOrder from './limit-order/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
@@ -24,14 +25,20 @@ const store = configureStore({
         burn,
         multicall,
         lists,
-        zap
+        zap,
+        limitOrder,
     },
     middleware: [
         ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),
-        ...(typeof localStorage !== 'undefined' ? [save({ states: PERSISTED_KEYS })] : [])
+        ...(typeof localStorage !== 'undefined'
+            ? [save({ states: PERSISTED_KEYS })]
+            : []),
     ],
-    preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {},
-    devTools: process.env.NODE_ENV === 'development'
+    preloadedState:
+        typeof localStorage !== 'undefined'
+            ? load({ states: PERSISTED_KEYS })
+            : {},
+    devTools: process.env.NODE_ENV === 'development',
 })
 
 store.dispatch(updateVersion())

@@ -17,6 +17,7 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
+import { ExclamationIcon } from '@heroicons/react/solid'
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
     align-items: center;
@@ -70,6 +71,8 @@ interface CurrencyInputPanelProps {
     cornerRadiusBottomNone?: boolean
     cornerRadiusTopNone?: boolean
     containerBackground?: string
+    error?: string
+    helperText?: string
 }
 
 export default function CurrencyInputPanel({
@@ -91,6 +94,8 @@ export default function CurrencyInputPanel({
     cornerRadiusBottomNone,
     cornerRadiusTopNone,
     containerBackground,
+    error = '',
+    helperText = '',
 }: CurrencyInputPanelProps) {
     const { i18n } = useLingui()
     const [modalOpen, setModalOpen] = useState(false)
@@ -110,15 +115,16 @@ export default function CurrencyInputPanel({
     const valueUSDC = formatNumber(Number(value) * Number(currencyUSDC))
 
     return (
-        <div id={id} className="p-5 rounded bg-dark-800">
-            <div
-                className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row"
-                // hideInput={hideInput}
-                // cornerRadiusBottomNone={cornerRadiusBottomNone}
-                // cornerRadiusTopNone={cornerRadiusTopNone}
-                // containerBackground={containerBackground}
-            >
-                {/* {!hideInput && (
+        <div className="bg-red bg-opacity-20 rounded">
+            <div id={id} className="p-5 rounded bg-dark-800">
+                <div
+                    className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row"
+                    // hideInput={hideInput}
+                    // cornerRadiusBottomNone={cornerRadiusBottomNone}
+                    // cornerRadiusTopNone={cornerRadiusTopNone}
+                    // containerBackground={containerBackground}
+                >
+                    {/* {!hideInput && (
                     <LabelRow>
                         <RowBetween>
                             <div color={theme.text3} fontWeight={500} fontSize={14}>
@@ -140,98 +146,107 @@ export default function CurrencyInputPanel({
                         </RowBetween>
                     </LabelRow>
                 )} */}
-                <div
-                    className="w-full sm:w-2/5"
-                    // style={hideInput ? { padding: '0', borderRadius: '8px' } : {}}
-                    // selected={disableCurrencySelect}
-                >
-                    <CurrencySelect
-                        selected={!!currency}
-                        className="open-currency-select-button"
-                        onClick={() => {
-                            if (!disableCurrencySelect) {
-                                setModalOpen(true)
-                            }
-                        }}
+                    <div
+                        className="w-full sm:w-2/5"
+                        // style={hideInput ? { padding: '0', borderRadius: '8px' } : {}}
+                        // selected={disableCurrencySelect}
                     >
-                        <div className="flex">
-                            {pair ? (
-                                <DoubleCurrencyLogo
-                                    currency0={pair.token0}
-                                    currency1={pair.token1}
-                                    size={54}
-                                    margin={true}
-                                />
-                            ) : currency ? (
-                                <div className="flex items-center">
-                                    <CurrencyLogo
-                                        currency={currency}
-                                        size={'54px'}
+                        <CurrencySelect
+                            selected={!!currency}
+                            className="open-currency-select-button"
+                            onClick={() => {
+                                if (!disableCurrencySelect) {
+                                    setModalOpen(true)
+                                }
+                            }}
+                        >
+                            <div className="flex">
+                                {pair ? (
+                                    <DoubleCurrencyLogo
+                                        currency0={pair.token0}
+                                        currency1={pair.token1}
+                                        size={54}
+                                        margin={true}
                                     />
-                                </div>
-                            ) : (
-                                <div
-                                    className="rounded bg-dark-700"
-                                    style={{ maxWidth: 54, maxHeight: 54 }}
-                                >
-                                    <div style={{ width: 54, height: 54 }}>
-                                        <Lottie
-                                            animationData={selectCoinAnimation}
-                                            autoplay
-                                            loop
+                                ) : currency ? (
+                                    <div className="flex items-center">
+                                        <CurrencyLogo
+                                            currency={currency}
+                                            size={'54px'}
                                         />
                                     </div>
-                                </div>
-                            )}
-                            {pair ? (
-                                <StyledTokenName className="pair-name-container">
-                                    {pair?.token0.symbol}:{pair?.token1.symbol}
-                                </StyledTokenName>
-                            ) : (
-                                <div className="flex flex-1 flex-col items-start justify-center mx-3.5">
-                                    {label && (
-                                        <div className="text-xs font-medium text-secondary whitespace-nowrap">
-                                            {label}
+                                ) : (
+                                    <div
+                                        className="rounded bg-dark-700"
+                                        style={{ maxWidth: 54, maxHeight: 54 }}
+                                    >
+                                        <div style={{ width: 54, height: 54 }}>
+                                            <Lottie
+                                                animationData={
+                                                    selectCoinAnimation
+                                                }
+                                                autoplay
+                                                loop
+                                            />
                                         </div>
-                                    )}
-                                    <div className="flex items-center">
-                                        {/* <StyledTokenName
+                                    </div>
+                                )}
+                                {pair ? (
+                                    <StyledTokenName className="pair-name-container">
+                                        {pair?.token0.symbol}:
+                                        {pair?.token1.symbol}
+                                    </StyledTokenName>
+                                ) : (
+                                    <div className="flex flex-1 flex-col items-start justify-center mx-3.5">
+                                        {label && (
+                                            <div className="text-xs font-medium text-secondary whitespace-nowrap">
+                                                {label}
+                                            </div>
+                                        )}
+                                        <div className="flex items-center">
+                                            {/* <StyledTokenName
                                             className="token-symbol-container"
                                             active={Boolean(currency && currency.symbol)}
                                         > */}
-                                        <div className="text-lg font-bold md:text-2xl">
-                                            {(currency &&
-                                            currency.symbol &&
-                                            currency.symbol.length > 20
-                                                ? currency.symbol.slice(0, 4) +
-                                                  '...' +
-                                                  currency.symbol.slice(
-                                                      currency.symbol.length -
-                                                          5,
-                                                      currency.symbol.length
-                                                  )
-                                                : currency?.getSymbol(
-                                                      chainId
-                                                  )) || (
-                                                <div className="px-2 py-1 mt-1 text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap ">
-                                                    {i18n._(t`Select a token`)}
-                                                </div>
-                                            )}
+                                            <div className="text-lg font-bold md:text-2xl">
+                                                {(currency &&
+                                                currency.symbol &&
+                                                currency.symbol.length > 20
+                                                    ? currency.symbol.slice(
+                                                          0,
+                                                          4
+                                                      ) +
+                                                      '...' +
+                                                      currency.symbol.slice(
+                                                          currency.symbol
+                                                              .length - 5,
+                                                          currency.symbol.length
+                                                      )
+                                                    : currency?.getSymbol(
+                                                          chainId
+                                                      )) || (
+                                                    <div className="px-2 py-1 mt-1 text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap ">
+                                                        {i18n._(
+                                                            t`Select a token`
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* </StyledTokenName> */}
+                                            {!disableCurrencySelect &&
+                                                currency && (
+                                                    <ChevronDownIcon
+                                                        width={16}
+                                                        height={16}
+                                                        className="ml-2 stroke-current"
+                                                    />
+                                                )}
                                         </div>
-                                        {/* </StyledTokenName> */}
-                                        {!disableCurrencySelect && currency && (
-                                            <ChevronDownIcon
-                                                width={16}
-                                                height={16}
-                                                className="ml-2 stroke-current"
-                                            />
-                                        )}
                                     </div>
-                                </div>
-                            )}
-                        </div>
-                    </CurrencySelect>
-                    {/* {!hideInput && (
+                                )}
+                            </div>
+                        </CurrencySelect>
+                        {/* {!hideInput && (
                         <>
                             <NumericalInput
                                 className="token-amount-input"
@@ -245,65 +260,88 @@ export default function CurrencyInputPanel({
                             )}
                         </>
                     )} */}
-                </div>
-                <div className="flex items-center w-full p-3 space-x-3 rounded bg-dark-900 sm:w-3/5">
-                    {!hideInput && (
-                        <>
-                            {account &&
-                                currency &&
-                                showMaxButton &&
-                                label !== 'To' && (
-                                    <Button
-                                        onClick={onMax}
-                                        size="small"
-                                        className="text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap"
-                                    >
-                                        {i18n._(t`Max`)}
-                                    </Button>
-                                )}
-                            <NumericalInput
-                                id="token-amount-input"
-                                value={value}
-                                onUserInput={(val) => {
-                                    onUserInput(val)
-                                }}
-                            />
-                            {account && (
-                                <div className="flex flex-col">
-                                    <div
-                                        onClick={onMax}
-                                        className="text-xs font-medium text-right cursor-pointer text-low-emphesis"
-                                    >
-                                        {!hideBalance &&
-                                        !!currency &&
-                                        selectedCurrencyBalance
-                                            ? (customBalanceText ??
-                                                  'Balance: ') +
-                                              selectedCurrencyBalance?.toSignificant(
-                                                  6
-                                              )
-                                            : ' -'}
-                                    </div>
-                                    {chainId && chainId in USDC && (
-                                        <div className="text-xs font-medium text-right text-secondary">
-                                            ≈ {valueUSDC} USDC
-                                        </div>
+                    </div>
+                    <div
+                        className={`${
+                            error ? 'border border-red border-opacity-40' : ''
+                        } flex items-center w-full p-3 space-x-3 rounded bg-dark-900 sm:w-3/5`}
+                    >
+                        {!hideInput && (
+                            <>
+                                {account &&
+                                    currency &&
+                                    showMaxButton &&
+                                    label !== 'To' && (
+                                        <Button
+                                            onClick={onMax}
+                                            size="small"
+                                            className="text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap"
+                                        >
+                                            {i18n._(t`Max`)}
+                                        </Button>
                                     )}
-                                </div>
-                            )}
-                        </>
-                    )}
+                                <NumericalInput
+                                    id="token-amount-input"
+                                    value={value}
+                                    onUserInput={(val) => {
+                                        onUserInput(val)
+                                    }}
+                                />
+                                {helperText ? (
+                                    <div className="flex flex-col">
+                                        <span className="text-xs font-bold text-high-emphesis">
+                                            {helperText}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    account && (
+                                        <div className="flex flex-col">
+                                            <div
+                                                onClick={onMax}
+                                                className="text-xs font-medium text-right cursor-pointer text-low-emphesis"
+                                            >
+                                                {!hideBalance &&
+                                                !!currency &&
+                                                selectedCurrencyBalance
+                                                    ? (customBalanceText ??
+                                                          'Balance: ') +
+                                                      selectedCurrencyBalance?.toSignificant(
+                                                          6
+                                                      )
+                                                    : ' -'}
+                                            </div>
+                                            {chainId && chainId in USDC && (
+                                                <div className="text-xs font-medium text-right text-secondary">
+                                                    ≈ {valueUSDC} USDC
+                                                </div>
+                                            )}
+                                        </div>
+                                    )
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
+                {!disableCurrencySelect && onCurrencySelect && (
+                    <CurrencySearchModal
+                        isOpen={modalOpen}
+                        onDismiss={handleDismissSearch}
+                        onCurrencySelect={onCurrencySelect}
+                        selectedCurrency={currency}
+                        otherSelectedCurrency={otherCurrency}
+                        showCommonBases={showCommonBases}
+                    />
+                )}
             </div>
-            {!disableCurrencySelect && onCurrencySelect && (
-                <CurrencySearchModal
-                    isOpen={modalOpen}
-                    onDismiss={handleDismissSearch}
-                    onCurrencySelect={onCurrencySelect}
-                    selectedCurrency={currency}
-                    otherSelectedCurrency={otherCurrency}
-                    showCommonBases={showCommonBases}
-                />
+            {error && (
+                <div className="p-3 flex justify-center items-center gap-2">
+                    <span className="text-red flex items-center">
+                        <ExclamationIcon width={20} height={20} />
+                    </span>
+                    <span className="text-high-emphesis font-bold text-sm">
+                        {error}
+                    </span>
+                </div>
             )}
         </div>
     )

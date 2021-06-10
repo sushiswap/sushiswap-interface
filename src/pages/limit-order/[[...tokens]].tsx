@@ -7,7 +7,6 @@ import { useLingui } from '@lingui/react'
 import { CurrencyAmount, JSBI, Token, Trade } from '@sushiswap/sdk'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import {
-    useCurrentPrice,
     useDefaultsFromURLSearch,
     useDerivedSwapInfo,
     useReserveRatio,
@@ -39,6 +38,7 @@ import useENSAddress from '../../hooks/useENSAddress'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks'
 import {
     computeTradePriceBreakdown,
+    formatPercent,
     getRouterAddress,
     maxAmountSpend,
     warningSeverity,
@@ -47,19 +47,21 @@ import { useSwapCallback } from '../../hooks/useSwapCallback'
 import confirmPriceImpactWithoutFee from '../../features/swap/confirmPriceImpactWithoutFee'
 import ReactGA from 'react-ga'
 import { useIsTransactionUnsupported } from '../../hooks/Trades'
-import { AutoColumn } from '../../components/Column'
-import { AutoRow } from '../../components/Row'
 import Lottie from 'lottie-react'
 import swapArrowsAnimationData from '../../animation/swap-arrows.json'
-import LinkStyledButton from '../../components/LinkStyledButton'
 import LimitPriceInputPanel from '../../features/limit-orders/LimitPriceInputPanel'
-import TradePrice from '../../features/swap/TradePrice'
 import ExpertModePanel from '../../components/ExpertModePanel'
 import PriceRatio from '../../features/limit-orders/PriceRatio'
 import OrderExpirationDropdown from '../../features/limit-orders/OrderExpirationDropdown'
-import { ArrowWrapper } from '../../features/swap/styleds'
-import { ArrowDown } from 'react-feather'
 import AddressInputPanel from '../../components/AddressInputPanel'
+import { ArrowDownIcon } from '@heroicons/react/outline'
+import { useLimitOrderState } from '../../state/limit-order/hooks'
+import Button from '../../components/Button'
+import useLimitOrderApproveCallback from '../../hooks/useLimitOrderApproveCallback'
+import { AutoRow } from '../../components/Row'
+import Loader from '../../components/Loader'
+import LimitOrderButton from '../../features/limit-orders/LimitOrderButton'
+import { TokenApproveButton } from '../../components/KashiButton'
 
 export default function LimitOrder() {
     const { i18n } = useLingui()
@@ -405,9 +407,36 @@ export default function LimitOrder() {
 
     const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
 
+    // LIMIT ORDERS
     const currentPrice = useReserveRatio()
-    const [limitPrice, setLimitPrice] = useState<string>()
+    const { limitPrice } = useLimitOrderState()
 
+    const [currencyInputPanelError, setCurrencyInputPanelError] =
+        useState<string>()
+
+    const checkLimitPrice = useCallback(() => {
+        if (limitPrice === currentPrice) return
+        if (limitPrice && currentPrice && +limitPrice < +currentPrice)
+            setCurrencyInputPanelError(
+                i18n._(t`This transaction is below market rate`)
+            )
+        else setCurrencyInputPanelError('')
+    }, [limitPrice, currentPrice])
+
+    const currencyInputPanelHelperText = useMemo(() => {
+        if (limitPrice === currentPrice) return
+        const sign =
+            +limitPrice > +currentPrice ? i18n._(t`above`) : i18n._(t`below`)
+        if (limitPrice && currentPrice)
+            return i18n._(
+                t`${formatPercent(
+                    ((+limitPrice - +currentPrice) / +currentPrice) * 100
+                )} ${sign} market rate`
+            )
+    }, [limitPrice, currentPrice])
+
+    const [limitApproval, limitApproveCallback] = useLimitOrderApproveCallback()
+    console.log(limitApproval)
     return (
         <Layout>
             <Head>
@@ -424,7 +453,13 @@ export default function LimitOrder() {
                 tokens={importTokensNotInDefault}
                 onConfirm={handleConfirmTokenWarning}
             />
-            <ExpertModePanel active={isExpertMode} onClose={toggleExpertMode}>
+            <ExpertModePanel
+                active={isExpertMode}
+                onClose={() => {
+                    onChangeRecipient(null)
+                    toggleExpertMode()
+                }}
+            >
                 <DoubleGlowShadow>
                     <div
                         id="limit-order-page"
@@ -452,7 +487,7 @@ export default function LimitOrder() {
                                 otherCurrency={currencies[Field.OUTPUT]}
                                 id="swap-currency-input"
                             />
-                            <div className="flex flex-row gap-4">
+                            <div className="flex flex-row gap-5">
                                 <div />
                                 <div className="flex items-center relative">
                                     <div className="z-0 absolute w-[2px] bg-dark-800 h-[calc(100%+32px)] top-[-16px] left-[calc(50%-1px)]" />
@@ -486,7 +521,7 @@ export default function LimitOrder() {
                                 <LimitPriceInputPanel
                                     placeholder={currentPrice}
                                     value={limitPrice}
-                                    onUserInput={setLimitPrice}
+                                    onBlur={checkLimitPrice}
                                 />
                             </div>
                             <CurrencyInputPanel
@@ -504,24 +539,37 @@ export default function LimitOrder() {
                                 onCurrencySelect={handleOutputSelect}
                                 otherCurrency={currencies[Field.INPUT]}
                                 id="swap-currency-output"
+                                error={currencyInputPanelError}
+                                helperText={currencyInputPanelHelperText}
                             />
 
                             {recipient !== null && !showWrap ? (
-                                <AddressInputPanel
-                                    id="recipient"
-                                    value={recipient}
-                                    onChange={onChangeRecipient}
-                                />
+                                <div className="relative">
+                                    <div className="bg-dark-800 rounded-full absolute left-[26px] -top-7 p-2 border-2 border-dark-900">
+                                        <ArrowDownIcon
+                                            className="text-high-emphesis"
+                                            strokeWidth={2}
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </div>
+                                    <AddressInputPanel
+                                        id="recipient"
+                                        value={recipient}
+                                        onChange={onChangeRecipient}
+                                    />
+                                </div>
                             ) : null}
                         </div>
 
                         <div className="flex justify-between gap-6">
-                            {currencies.INPUT && currencies.OUTPUT ? (
+                            {currencies[Field.INPUT] &&
+                            currencies[Field.OUTPUT] ? (
                                 <PriceRatio />
                             ) : (
                                 <div />
                             )}
-                            {isExpertMode && (
+                            {isExpertMode && recipient === null && (
                                 <div
                                     className="flex text-blue underline cursor-pointer"
                                     onClick={() => onChangeRecipient('')}
@@ -530,6 +578,29 @@ export default function LimitOrder() {
                                 </div>
                             )}
                             <OrderExpirationDropdown />
+                        </div>
+
+                        {/*// TODO */}
+                        <div className="flex">
+                            <LimitOrderButton
+                                color="gradient"
+                                size="large"
+                                content={(createLimitOrder: any) => (
+                                    <TokenApproveButton
+                                        size="large"
+                                        value={trade?.inputAmount}
+                                        token={currencies[Field.INPUT]}
+                                        needed={true}
+                                    >
+                                        <Button
+                                            size="large"
+                                            onClick={createLimitOrder}
+                                        >
+                                            {i18n._(t`Review Limit Order`)}
+                                        </Button>
+                                    </TokenApproveButton>
+                                )}
+                            />
                         </div>
                     </div>
                 </DoubleGlowShadow>

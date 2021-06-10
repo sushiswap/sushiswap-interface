@@ -53,7 +53,7 @@ export default function ExchangeHeader({
                     }`}
                 >
                     <a className="flex items-center justify-center px-4 text-base font-bold text-center rounded-md md:px-8 text-secondary hover:text-high-emphesis">
-                        {i18n._(t`Limit Order`)}
+                        {i18n._(t`Limit`)}
                     </a>
                 </NavLink>
             </div>
