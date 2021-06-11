@@ -65,7 +65,8 @@ const builders = {
         data: string,
         type: 'transaction' | 'token' | 'address' | 'block'
     ) => {
-        const prefix = `https://explorer-${chainName}.maticvigil.com`
+        // const prefix = `https://explorer-${chainName}.maticvigil.com`
+        const prefix = 'https://polygonscan.com'
         switch (type) {
             case 'transaction':
                 return `${prefix}/tx/${data}`
@@ -82,7 +83,7 @@ const builders = {
         data: string,
         type: 'transaction' | 'token' | 'address' | 'block'
     ) => {
-        const prefix = `https://mainnet-arb-explorer.netlify.app/`
+        const prefix = `https://mainnet-arb-explorer.netlify.app`
         switch (type) {
             case 'transaction':
                 return `${prefix}/tx/${data}`
