@@ -129,7 +129,7 @@ export default function Lend() {
                                                     <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
                                                         <div className="flex flex-col items-start sm:flex-row sm:items-center">
                                                             <div className="hidden space-x-2 md:flex">
-                                                                {/* <AsyncIcon
+                                                                <AsyncIcon
                                                                     src={
                                                                         pair
                                                                             .asset
@@ -146,18 +146,8 @@ export default function Lend() {
                                                                             .logoURI
                                                                     }
                                                                     className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                                                                /> */}
-
-                                                                <DoubleCurrencyLogo
-                                                                    currency0={
-                                                                        pair.asset
-                                                                    }
-                                                                    currency1={
-                                                                        pair.collateral
-                                                                    }
-                                                                    squared
-                                                                    size={48}
                                                                 />
+
                                                             </div>
                                                             <div className="sm:items-end md:hidden">
                                                                 <div>
@@ -346,17 +336,6 @@ export default function Lend() {
                                                                 }
                                                                 className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
                                                             />
-                                                            {/* TODO: Fix bad token management in kashi */}
-                                                            {/* <DoubleCurrencyLogo
-                                                                currency0={
-                                                                    pair.asset
-                                                                }
-                                                                currency1={
-                                                                    pair.collateral
-                                                                }
-                                                                squared
-                                                                size={48}
-                                                            /> */}
                                                         </div>
                                                         <div className="sm:items-end md:hidden">
                                                             <div className="flex flex-col md:flex-row">
