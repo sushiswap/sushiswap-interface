@@ -128,7 +128,7 @@ export function usePositions(
     const { chainId, account } = useActiveWeb3React()
 
     const numberOfPools = useSingleCallResult(
-        contract,
+        contract ? contract : null,
         'poolLength',
         undefined,
         NEVER_RELOAD
@@ -155,6 +155,8 @@ export function usePositions(
         'userInfo',
         args
     )
+
+    // console.log({ numberOfPools, pendingSushi, userInfo })
 
     // const pendingTokens = useSingleContractMultipleData(
     //     rewarder,
