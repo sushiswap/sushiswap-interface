@@ -24,7 +24,8 @@ import { useLingui } from '@lingui/react'
 import useMasterChef from './useMasterChef'
 import { usePair } from '../../hooks/usePairs'
 import usePendingReward from './usePendingReward'
-import useTokenBalance from '../../hooks/useTokenBalance'
+import { useTokenBalance } from '../../state/wallet/hooks'
+// import useTokenBalance from '../../hooks/useTokenBalance'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 
 const FarmListItem = ({ farm }) => {
@@ -42,8 +43,7 @@ const FarmListItem = ({ farm }) => {
 
     // TODO: KashiPair? Refactor usePair to return both a SwapPair & LendingPair in same format
     // const [pairState, pair] = usePair(token0, token1)
-
-    const balance = useTokenBalance(address)
+    
     const amount = useUserInfo(farm)
     const pending = usePendingSushi(farm)
     const reward = usePendingReward(farm)
@@ -61,6 +61,8 @@ const FarmListItem = ({ farm }) => {
         farm.pair.symbol,
         farm.pair.name
     )
+
+    const balance = useTokenBalance(account, liquidityToken)
 
     const [approvalState, approve] = useApproveCallback(
         tryParseAmount(depositValue, liquidityToken),
@@ -173,9 +175,7 @@ const FarmListItem = ({ farm }) => {
                                     <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
                                         {i18n._(t`Wallet Balance`)}:{' '}
                                         {formatNumber(
-                                            balance.value.toFixed(
-                                                balance.decimals
-                                            )
+                                            balance.toSignificant(6)
                                         )}{' '}
                                         {farm.type}
                                     </div>
@@ -195,9 +195,7 @@ const FarmListItem = ({ farm }) => {
                                             size="small"
                                             onClick={() => {
                                                 setDepositValue(
-                                                    balance.value.toFixed(
-                                                        balance.decimals
-                                                    )
+                                                    balance.toFixed(decimals)
                                                 )
                                             }}
                                             className="absolute border-0 right-4 focus:ring focus:ring-blue"
@@ -232,9 +230,7 @@ const FarmListItem = ({ farm }) => {
                                             Number(depositValue) === 0 ||
                                             Number(depositValue) >
                                                 Number(
-                                                    balance.value.toFixed(
-                                                        balance.decimals
-                                                    )
+                                                    balance.toFixed(decimals)
                                                 )
                                         }
                                         onClick={async () => {
