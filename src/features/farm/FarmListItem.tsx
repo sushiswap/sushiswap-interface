@@ -44,6 +44,7 @@ const FarmListItem = ({ farm }) => {
     // TODO: KashiPair? Refactor usePair to return both a SwapPair & LendingPair in same format
     // const [pairState, pair] = usePair(token0, token1)
     
+    // TODO: Replace these
     const amount = useUserInfo(farm)
     const pending = usePendingSushi(farm)
     const reward = usePendingReward(farm)

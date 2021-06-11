@@ -134,6 +134,8 @@ export function usePositions(
         NEVER_RELOAD
     )?.result?.[0]
 
+    console.log({ numberOfPools })
+
     const args = useMemo(() => {
         if (!account || !numberOfPools) {
             return
@@ -155,8 +157,6 @@ export function usePositions(
         'userInfo',
         args
     )
-
-    // console.log({ numberOfPools, pendingSushi, userInfo })
 
     // const pendingTokens = useSingleContractMultipleData(
     //     rewarder,

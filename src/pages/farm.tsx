@@ -82,35 +82,7 @@ export default function Farm(): JSX.Element {
     const masterChefV2Positions = usePositions(masterchefV2Contract)
     const miniChefPositions = usePositions(minichefContract)
 
-    console.log({ miniChefPositions })
-
-    // const positions = farms
-    //     ? [
-    //           ...masterChefV1Positions.map((position) => ({
-    //               ...position,
-    //               ...farms?.find(
-    //                   (farm) =>
-    //                       farm.id === position.id &&
-    //                       farm.chef === Chef.MASTERCHEF
-    //               ),
-    //           })),
-    //           ...masterChefV2Positions.map((position) => ({
-    //               ...position,
-    //               ...farms?.find(
-    //                   (farm) =>
-    //                       farm.id === position.id &&
-    //                       farm.chef === Chef.MASTERCHEF_V2
-    //               ),
-    //           })),
-    //           ...miniChefPositions.map((position) => ({
-    //               ...position,
-    //               ...farms?.find(
-    //                   (farm) =>
-    //                       farm.id === position.id && farm.chef === Chef.MINICHEF
-    //               ),
-    //           })),
-    //       ]
-    //     : []
+    // console.log({ miniChefPositions })
 
     const blocksPerDay = 86400 / Number(averageBlockTime)
 
@@ -261,35 +233,49 @@ export default function Farm(): JSX.Element {
     const farms = concat(
         masterChefV1Farms
             ? masterChefV1Farms?.filter?.(filter)?.map((pool) => {
-                  
-                  return { 
-                      ...map(pool, Chef.MASTERCHEF),
-                      ...masterChefV1Positions?.find(position => position.id === pool.id)
-                  }
+                  return map(pool, Chef.MASTERCHEF)
               })
             : [],
         masterChefV2Farms
             ? masterChefV2Farms?.filter?.(filter)?.map((pool) => {
 
-                return { 
-                    ...map(pool, Chef.MASTERCHEF_V2),
-                    ...masterChefV2Positions?.find(position => position.id === pool.id)
-                }
+                return map(pool, Chef.MASTERCHEF_V2)
               })
             : [],
         miniChefFarms
             ? miniChefFarms?.filter?.(filter)?.map((pool) => {
-                return { 
-                    ...map(pool, Chef.MINICHEF),
-                    ...miniChefPositions?.find(position => position.id === pool.id)
-                }
+                return map(pool, Chef.MINICHEF)
               })
             : []
     )
 
-
-
-    
+    const positions = farms
+    ? [
+          ...masterChefV1Positions.map((position) => ({
+              ...position,
+              ...farms?.find(
+                  (farm) =>
+                      farm.id === position.id &&
+                      farm.chef === Chef.MASTERCHEF
+              ),
+          })),
+          ...masterChefV2Positions.map((position) => ({
+              ...position,
+              ...farms?.find(
+                  (farm) =>
+                      farm.id === position.id &&
+                      farm.chef === Chef.MASTERCHEF_V2
+              ),
+          })),
+          ...miniChefPositions.map((position) => ({
+              ...position,
+              ...farms?.find(
+                  (farm) =>
+                      farm.id === position.id && farm.chef === Chef.MINICHEF
+              ),
+          })),
+      ]
+    : []
 
 
     // //Search Setup
@@ -311,7 +297,7 @@ export default function Farm(): JSX.Element {
     })
 
     const filterForSection = {
-        portfolio: (farm) => !farm?.amount?.isZero(),
+        portfolio: (farm) => positions?.find(position => position.id === farm.id),
         all: () => true,
         slp: (farm) => farm.pair.type === PairType.SWAP,
         kmp: (farm) => farm.pair.type === PairType.LENDING,

@@ -34,6 +34,7 @@ async function fetchChunk(
     console.debug('Fetching chunk', multicallContract, chunk, minBlockNumber)
     let resultsBlockNumber, returnData
     try {
+        // console.log({ calls: chunk.map((obj) => [obj.address, obj.callData])});
         [resultsBlockNumber, returnData] = await multicallContract.aggregate(
             chunk.map((obj) => [obj.address, obj.callData])
         )
@@ -47,6 +48,9 @@ async function fetchChunk(
         )
         throw new RetryableError('Fetched for old block number')
     }
+
+    // console.log({ results: returnData, blockNumber: resultsBlockNumber.toNumber() })
+
     return { results: returnData, blockNumber: resultsBlockNumber.toNumber() }
 }
 

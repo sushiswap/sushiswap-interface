@@ -215,7 +215,6 @@ export function useMasterChefContract(
 export function useMasterChefV2Contract(
     withSignerIfPossible?: boolean
 ): Contract | null {
-    const { chainId } = useActiveWeb3React()
     return useContract(
         '0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d',
         MASTERCHEF_V2_ABI,
