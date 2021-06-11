@@ -31,10 +31,12 @@ export default function Create() {
     const { chainId } = useActiveWeb3React()
     const bentoBoxContract = useBentoBoxContract()
 
-    const [selectedAsset, setSelectedAsset] =
-        useState<WrappedTokenInfo | undefined>(undefined)
-    const [selectedCollateral, setSelectedCollateral] =
-        useState<WrappedTokenInfo | undefined>(undefined)
+    const [selectedAsset, setSelectedAsset] = useState<
+        WrappedTokenInfo | undefined
+    >(undefined)
+    const [selectedCollateral, setSelectedCollateral] = useState<
+        WrappedTokenInfo | undefined
+    >(undefined)
 
     const addTransaction = useTransactionAdder()
 
