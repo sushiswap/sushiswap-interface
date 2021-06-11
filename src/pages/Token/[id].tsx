@@ -358,82 +358,106 @@ export default function Token() {
                 <div className="overflow-x-scroll hide-scroll-bar md:overflow-hidden">
                     <div className="grid grid-cols-4 gap-6 min-w-max">
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
                                 alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="ml-2 text-caption2 md:text-caption text-primary">
                                 SUSHI
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="USDT"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 USDT
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="UNI"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 UNI
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="LINK"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 LINK
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="WBTC"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 WBTC
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="AAVE"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 AAVE
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="COMP"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 COMP
                             </div>
                         </div>
                         <div className="flex items-center bg-dark-900 p-4 rounded text-high-emphesis">
-                            <img
-                                className="w-10 mr-2"
-                                // src={SushiImage}
-                                alt="MKR"
+                            <Image
+                                src="/images/tokens/sushi-square.jpg"
+                                alt="SUSHI"
+                                width="38px"
+                                height="38px"
+                                objectFit="contain"
+                                className="rounded-md"
                             />
-                            <div className="text-caption2 md:text-caption text-primary">
+                            <div className="text-caption2 md:text-caption text-primary ml-2">
                                 MKR
                             </div>
                         </div>
@@ -452,15 +476,21 @@ export default function Token() {
                 </div>
                 <div className="grid grid-cols-3 gap-6 bg-dark-900 rounded p-4">
                     <div className="flex items-center">
-                        <img
-                            className="hidden md:block w-10 mr-1"
-                            // src={SushiImage}
+                        <Image
+                            src="/images/tokens/sushi-square.jpg"
                             alt="SUSHI"
+                            width="38px"
+                            height="38px"
+                            objectFit="contain"
+                            className="hidden md:block rounded-md"
                         />
-                        <img
-                            className="hidden md:block w-10 mr-2"
-                            // src={SushiImage}
+                        <Image
+                            src="/images/tokens/sushi-square.jpg"
                             alt="SUSHI"
+                            width="38px"
+                            height="38px"
+                            objectFit="contain"
+                            className="hidden md:block rounded-md"
                         />
                         <div className="ml-2 font-bold text-high-emphesis">
                             SUSHI-WETH
@@ -470,10 +500,13 @@ export default function Token() {
                         40.32%
                     </div>
                     <div className="flex items-center justify-between">
-                        <img
-                            className="w-10 mr-2"
-                            // src={SushiImage}
+                        <Image
+                            src="/images/tokens/sushi-square.jpg"
                             alt="SUSHI"
+                            width="38px"
+                            height="38px"
+                            objectFit="contain"
+                            className="rounded-md"
                         />
                         <div className="bg-dark-800 rounded-full p-2">
                             <Sliders size="20" />
