@@ -45,7 +45,7 @@ export default function Farm(): JSX.Element {
 
     const { data: averageBlockTime } = useAverageBlockTime()
 
-    // const { data: oneDayBlock } = useOneDayBlock()
+    const { data: oneDayBlock } = useOneDayBlock()
 
     const { data: sushiPrice } = useSushiPrice()
     const { data: ethPrice } = useEthPrice()
@@ -160,13 +160,11 @@ export default function Farm(): JSX.Element {
                     1e18
                 const sushiPerBlock = sushiPerSecond * averageBlockTime
                 const sushiPerDay = sushiPerBlock * blocksPerDay
-
                 const maticPerSecond =
                     ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) /
                     1e18
                 const maticPerBlock = maticPerSecond * averageBlockTime
                 const maticPerDay = maticPerBlock * blocksPerDay
-
                 return [
                     {
                         ...defaultReward,
@@ -275,8 +273,6 @@ export default function Farm(): JSX.Element {
               })),
           ]
         : []
-
-    // console.log({ positions })
 
     // //Search Setup
     const options = {
