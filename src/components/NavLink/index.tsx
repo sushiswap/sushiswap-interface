@@ -18,9 +18,7 @@ const NavLink = ({
     // pages/[slug].js will be matched via props.as
 
     const className =
-        asPath === props.href.split('?')?.[0] ||
-        asPath === props.href ||
-        asPath === props.as
+        asPath === props.href || asPath === props.as
             ? `${childClassName} ${activeClassName}`.trim()
             : childClassName
 

@@ -1,13 +1,14 @@
+import { CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
 import React, { useMemo, useState } from 'react'
 import { StyledBalanceMaxMini, SwapCallbackError } from './styleds'
-import { CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
 import {
     computeSlippageAdjustedAmounts,
     computeTradePriceBreakdown,
     formatExecutionPrice,
-    warningSeverity
+    warningSeverity,
 } from '../../functions'
 
+import { ButtonError } from '../../components/ButtonLegacy'
 import { Field } from '../../state/swap/actions'
 import FormattedPriceImpact from './FormattedPriceImpact'
 import QuestionHelper from '../../components/QuestionHelper'
@@ -16,7 +17,6 @@ import { Text } from 'rebass'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import { ButtonError } from '../../components/ButtonLegacy'
 
 export default function SwapModalFooter({
     trade,
@@ -24,7 +24,7 @@ export default function SwapModalFooter({
     allowedSlippage,
     swapErrorMessage,
     disabledConfirm,
-    archerETHTip
+    archerETHTip,
 }: {
     trade: Trade
     allowedSlippage: number
@@ -36,26 +36,33 @@ export default function SwapModalFooter({
     const { i18n } = useLingui()
     const { chainId } = useActiveWeb3React()
     const [showInverted, setShowInverted] = useState<boolean>(false)
-    const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
-        allowedSlippage,
-        trade
-    ])
-    const { priceImpactWithoutFee, realizedLPFee } = useMemo(() => computeTradePriceBreakdown(trade), [trade])
+    const slippageAdjustedAmounts = useMemo(
+        () => computeSlippageAdjustedAmounts(trade, allowedSlippage),
+        [allowedSlippage, trade]
+    )
+    const { priceImpactWithoutFee, realizedLPFee } = useMemo(
+        () => computeTradePriceBreakdown(trade),
+        [trade]
+    )
     const severity = warningSeverity(priceImpactWithoutFee)
 
     return (
-        <div className="bg-dark-800 -m-6 mt-0 p-6">
+        <div className="p-6 mt-0 -m-6 rounded bg-dark-800">
             <div className="grid gap-1 pb-6">
-                <div className="flex justify-between items-center">
-                    <div className="text-sm text-secondary">{i18n._(t`Price`)}</div>
+                <div className="flex items-center justify-between">
+                    <div className="text-sm text-secondary">
+                        {i18n._(t`Price`)}
+                    </div>
                     <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
                         {formatExecutionPrice(trade, showInverted, chainId)}
-                        <StyledBalanceMaxMini onClick={() => setShowInverted(!showInverted)}>
+                        <StyledBalanceMaxMini
+                            onClick={() => setShowInverted(!showInverted)}
+                        >
                             <Repeat size={14} />
                         </StyledBalanceMaxMini>
                     </div>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                     <div className="text-sm text-secondary">
                         {trade.tradeType === TradeType.EXACT_INPUT
                             ? i18n._(t`Minimum received`)
@@ -68,8 +75,12 @@ export default function SwapModalFooter({
                     </div>
                     <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
                         {trade.tradeType === TradeType.EXACT_INPUT
-                            ? slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4) ?? '-'
-                            : slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4) ?? '-'}
+                            ? slippageAdjustedAmounts[
+                                  Field.OUTPUT
+                              ]?.toSignificant(4) ?? '-'
+                            : slippageAdjustedAmounts[
+                                  Field.INPUT
+                              ]?.toSignificant(4) ?? '-'}
                         <span className="ml-1">
                             {trade.tradeType === TradeType.EXACT_INPUT
                                 ? trade.outputAmount.currency.getSymbol(chainId)
@@ -77,7 +88,7 @@ export default function SwapModalFooter({
                         </span>
                     </div>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                     <div className="text-sm text-secondary">
                         <div className="text-sm">
                             {i18n._(t`Price Impact`)}
@@ -90,35 +101,50 @@ export default function SwapModalFooter({
                     </div>
                     <FormattedPriceImpact priceImpact={priceImpactWithoutFee} />
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex items-center justify-between">
                     <div className="text-sm text-secondary">
-                        <div className="text-sm">{i18n._(t`Liquidity Provider Fee`)}</div>
+                        <div className="text-sm">
+                            {i18n._(t`Liquidity Provider Fee`)}
+                        </div>
                     </div>
                     <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
                         {realizedLPFee
-                            ? realizedLPFee?.toSignificant(6) + ' ' + trade.inputAmount.currency.getSymbol(chainId)
+                            ? realizedLPFee?.toSignificant(6) +
+                              ' ' +
+                              trade.inputAmount.currency.getSymbol(chainId)
                             : '-'}
                     </div>
                 </div>
                 {archerETHTip && (
-                <div className="flex justify-between items-center">
-                    <div className="text-sm text-secondary">
-                        <div className="text-sm">{i18n._(t`Miner Tip`)}</div>
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm text-secondary">
+                            <div className="text-sm">
+                                {i18n._(t`Miner Tip`)}
+                            </div>
+                        </div>
+                        <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
+                            {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
+                        </div>
                     </div>
-                    <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-                        {CurrencyAmount.ether(archerETHTip).toFixed(4)} ETH
-                    </div>
-                </div>
                 )}
             </div>
 
-            <ButtonError onClick={onConfirm} disabled={disabledConfirm} error={severity > 2} id="confirm-swap-or-send">
+            <ButtonError
+                onClick={onConfirm}
+                disabled={disabledConfirm}
+                error={severity > 2}
+                id="confirm-swap-or-send"
+            >
                 <Text fontSize={20} fontWeight={500}>
-                    {severity > 2 ? i18n._(t`Swap Anyway`) : i18n._(t`Confirm Swap`)}
+                    {severity > 2
+                        ? i18n._(t`Swap Anyway`)
+                        : i18n._(t`Confirm Swap`)}
                 </Text>
             </ButtonError>
 
-            {swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
+            {swapErrorMessage ? (
+                <SwapCallbackError error={swapErrorMessage} />
+            ) : null}
         </div>
     )
 }
