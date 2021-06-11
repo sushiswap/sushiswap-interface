@@ -1,7 +1,7 @@
 module.exports = {
     catalogs: [
         {
-            path: '<rootDir>/locale/{locale}/catalog',
+            path: '<rootDir>/locale/{locale}',
             include: ['<rootDir>/src'],
             exclude: ['**/node_modules/**'],
         },
@@ -9,7 +9,7 @@ module.exports = {
     compileNamespace: 'cjs',
     extractBabelOptions: {},
     fallbackLocales: {},
-    format: 'minimal',
+    format: 'po',
     sourceLocale: 'en',
     locales: [
         'de',

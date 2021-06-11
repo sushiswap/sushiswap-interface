@@ -1,0 +1,1498 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: lokalise.com\n"
+"Project-Id-Version: SushiSwap Interface\n"
+"PO-Revision-Date: 2021-05-05 14:23\n"
+"Last-Translator: lokalise.com\n"
+"Language-Team: lokalise.com\n\n"
+"Language: ro\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"Plural-Forms: \n"
+
+#~ msgid ""
+#~ "(COMING SOON) Accrue automatic yield through flash loans and\n"
+#~ "SUSHI strategies"
+#~ msgstr ""
+#~ "(ÎN CURÂND) Acumulați randament automat prin împrumuturi flash și\n"
+#~ "strategii SUSHI"
+
+#~ msgid "(COMING SOON) Accrue automatic yield through flash loans andSUSHI strategies"
+#~ msgstr "(ÎN CURÂND) Acumulați randament automat prin împrumuturi flash și strategii SUSHI"
+
+#~ msgid "+ Add a send (optional)"
+#~ msgstr "+ Adăugați o trimitere (opțional)"
+
+#~ msgid "+ Create a new market"
+#~ msgstr "+ Creați o piață nouă"
+
+#~ msgid "- Remove send"
+#~ msgstr "- Eliminați trimiterea"
+
+#: src/pages/swap/[[...tokens]].tsx:484
+msgid "300M+ TVL on Polygon! Optimized routing enabled"
+msgstr "300M+ TVL pe Polygon! Rutare optimizată activată"
+
+#~ msgid "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive you rewards at any time."
+#~ msgstr "<0>Sfat:</0> Pentru a începe să obțineți recompense, va trebui mai întâi să achiziționați SLP adăugând lichidități la perechea specificată sau <1>migrând lichiditățile existente.</1> Odată ce aveți SLP, îl puteți investi în această fermă de randament pentru a începe să obțineți recompense. Retrageți investiția oricând și apoi vă puteți converti SLP-ul în token-uri de bază făcând clic pe Eliminare lichiditate. Faceți clic pe Recoltare pentru a vă primi recompensele în orice moment."
+
+#, fuzzy
+#~ msgid "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive your rewards at any time."
+#~ msgstr "<0>Sfat:</0> Pentru a începe să obțineți recompense, va trebui mai întâi să achiziționați SLP adăugând lichidități la perechea specificată sau <1>migrând lichiditățile existente.</1> Odată ce aveți SLP, îl puteți investi în această fermă de randament pentru a începe să obțineți recompense. Retrageți investiția oricând și apoi vă puteți converti SLP-ul în token-uri de bază făcând clic pe Eliminare lichiditate. Faceți clic pe Recoltare pentru a vă primi recompensele în orice moment."
+
+#~ msgid "<0>Tip:</0> Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive."
+#~ msgstr "<0>Sfat:</0> Eliminarea token-urilor pentru fondul comun readuce poziția dvs. la token-urile subiacente la rata actuală, proporțional cu cota dvs. din fondul comun. Comisioanele acumulate sunt incluse în sumele pe care le primiți."
+
+#~ msgid "<0>Tip:</0> Use this tool to find pairs that don't automatically appear in the interface"
+#~ msgstr "<0>Sfat:</0> Utilizați acest instrument pentru a găsi perechi care nu apar automat în interfață"
+
+#~ msgid "<0>Tip:</0> When you add liquidity, you will receive pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time."
+#~ msgstr "<0>Sfat:</0> Când adăugați lichidități, veți primi token-uri de fond comun care reprezintă poziția dvs. Aceste token-uri câștigă automat comisioane proporțional cu cota dvs. din fondul comun și pot fi răscumpărate oricând."
+
+#~ msgid "<0>Your</0> Positions"
+#~ msgstr "Pozițiile <0>dvs.</0>"
+
+#: src/components/TradeReview.tsx:58
+#: src/features/swap/AdvancedSwapDetails.tsx:69
+msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
+msgstr "O parte din fiecare tranzacție (0,25%) se îndreaptă către furnizorii de lichidități ca stimulent protocolar."
+
+#: src/pages/borrow/[pair].tsx:232
+msgid "APR"
+msgstr "APR"
+
+#~ msgid "APR (incl. Fees)"
+#~ msgstr "APR - dobânda anuală efectivă (incl. Comisioane)"
+
+#: src/features/farm/FarmList.tsx:56
+msgid "APY"
+msgstr ""
+
+#~ msgid "APY (incl. Fees)"
+#~ msgstr "APY - randament anual procentual (incl. Comisioane)"
+
+#~ msgid "Accept"
+#~ msgstr "Acceptați"
+
+#: src/components/PositionCard/index.tsx:469
+msgid "Add"
+msgstr "Adăugați"
+
+#: src/components/NavigationTabs/index.tsx:100
+#: src/pages/pool.tsx:184
+msgid "Add Liquidity"
+msgstr "Adăugați lichidități"
+
+#: src/components/Header/index.tsx:237
+msgid "Add SUSHI to your MetaMask wallet"
+msgstr ""
+
+#~ msgid "Add Sushi to your Metamask wallet"
+#~ msgstr "Adăugați Sushi la portofelul dvs. Metamask"
+
+#: src/pages/borrow/[pair].tsx:56
+msgid "Add collateral in order to borrow assets"
+msgstr "Adăugați garanții reale pentru a împrumuta active"
+
+#~ msgid "Add liquidity"
+#~ msgstr "Adăugați lichidități"
+
+#: src/components/Header/index.tsx:155
+msgid "Add xSUSHI to your MetaMask wallet"
+msgstr ""
+
+#~ msgid "Add xSushi to your Metamask wallet"
+#~ msgstr "Adăugați xSushi la portofelul dvs. Metamask"
+
+#: src/pages/migrate.tsx:83
+msgid "Amount of Tokens"
+msgstr "Număr de token-uri"
+
+#: src/components/Footer/index.tsx:24
+#: src/components/Header/index.tsx:500
+msgid "Analytics"
+msgstr "Analize"
+
+#: src/components/KashiButton.tsx:65
+#: src/pages/balances.tsx:235
+#: src/pages/migrate.tsx:310
+#: src/pages/stake.tsx:414
+msgid "Approve"
+msgstr "Aprobați"
+
+#: src/components/KashiButton.tsx:37
+msgid "Approve Kashi"
+msgstr "Aprobați Kashi"
+
+#: src/pages/swap/[[...tokens]].tsx:724
+msgid "Approve {0}"
+msgstr "Aprobați {0}"
+
+#: src/pages/migrate.tsx:308
+#: src/pages/swap/[[...tokens]].tsx:721
+msgid "Approved"
+msgstr "Aprobat"
+
+#: src/pages/balances.tsx:233
+#: src/pages/migrate.tsx:306
+#: src/pages/stake.tsx:412
+msgid "Approving"
+msgstr "Se aprobă"
+
+#~ msgid "Approving {0}"
+#~ msgstr "Se aprobă {0}"
+
+#: src/components/Settings/index.tsx:180
+msgid "Are you sure?"
+msgstr "Sunteți sigur?"
+
+#: src/pages/borrow/[pair].tsx:69
+#: src/pages/lend/[pair].tsx:51
+msgid "Available"
+msgstr "Disponibil"
+
+#: src/components/WalletModal/index.tsx:311
+msgid "Back"
+msgstr ""
+
+#: src/pages/migrate.tsx:287
+#: src/pages/stake.tsx:383
+#: src/pages/stake.tsx:450
+msgid "Balance"
+msgstr "Sold"
+
+#: src/pages/balances.tsx:286
+msgid "Bento Balance: {0}"
+msgstr "Sold Bento: {0}"
+
+#: src/components/Header/index.tsx:460
+#: src/pages/balances.tsx:69
+#: src/pages/balances.tsx:83
+#: src/pages/borrow/[pair].tsx:105
+#: src/pages/lend/[pair].tsx:109
+msgid "BentoBox"
+msgstr "BentoBox"
+
+#: src/pages/bentobox.tsx:50
+msgid "BentoBox Apps"
+msgstr "Aplicații BentoBox"
+
+#: src/pages/bentobox.tsx:54
+msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
+msgstr "BentoBox este un mod inovator de a utiliza dapp-uri eficiente din punct de vedere al emisiilor de gaz și de a obține un randament suplimentar."
+
+#: src/pages/balances.tsx:53
+msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
+msgstr "BentoBox oferă un randament suplimentar la depozite cu împrumuturi flash, strategii și transferuri fixe, cu consum redus de gaze între dapp-uri integrate, cum ar fi piețele Kashi"
+
+#: src/pages/borrow/[pair].tsx:115
+msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
+msgstr "Strategiile BentoBox pot crea randament pentru token-urile dvs. pentru garanții reale. Acest token încă nu are o strategie în BentoBox."
+
+#: src/pages/lend/[pair].tsx:117
+msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
+msgstr "Strategiile BentoBox pot crea randament pentru lichiditatea dvs., când aceasta nu este împrumutată. Acest token încă nu are o strategie în BentoBox."
+
+#: src/components/Header/index.tsx:115
+#: src/pages/borrow/[pair].tsx:245
+msgid "Borrow"
+msgstr "Împrumutați"
+
+#: src/pages/borrow/[pair].tsx:93
+#: src/pages/lend/[pair].tsx:73
+msgid "Borrow APR"
+msgstr "Împrumutați APR"
+
+#~ msgid "Borrow assets and leverage up"
+#~ msgstr "Împrumutați active și obțineți un efect de pârghie"
+
+#: src/pages/borrow/[pair].tsx:196
+msgid "Borrow {0}"
+msgstr "Împrumutați {0}"
+
+#: src/pages/borrow/[pair].tsx:168
+msgid "Borrow {0}-{1}"
+msgstr "Împrumutați {0} - {1}"
+
+#: src/pages/borrow/[pair].tsx:77
+#: src/pages/borrow/[pair].tsx:221
+#: src/pages/lend/[pair].tsx:57
+msgid "Borrowed"
+msgstr "Împrumutat"
+
+#~ msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
+#~ msgstr "Împrumutul vă permite să obțineți lichidități fără a vinde. Limita dvs. de împrumut depinde de suma garanției depuse. Veți putea să împrumutați până la 75% din garanția dvs. și să rambursați în orice moment cu dobânda acumulată."
+
+#~ msgid "Bridge Assets"
+#~ msgstr "Active punte"
+
+#: src/components/PositionCard/index.tsx:227
+msgid ""
+"By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\n"
+"of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\n"
+"your liquidity."
+msgstr ""
+"Prin adăugarea de lichidități, veți câștiga 0,25% din toate tranzacțiile pe această pereche, proporțional cu cota dvs.\n"
+"din fondul comun. Comisioanele sunt adăugate la fond, se acumulează în timp real și pot fi revendicate prin retragerea\n"
+"lichidității dvs."
+
+#~ msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your shareof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawingyour liquidity."
+#~ msgstr "Prin adăugarea de lichidități, veți câștiga 0,25% din toate tranzacțiile pe această pereche, proporțional cu cota dvs. din fondul comun. Comisioanele sunt adăugate la fond, se acumulează în timp real și pot fi revendicate prin retragerea lichidității dvs."
+
+#: src/components/Settings/index.tsx:126
+msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
+msgstr "Evită modurile de confirmare și permite tranzacții cu derapaje ridicate. Folosiți pe propria răspundere."
+
+#~ msgid "Check out Sushi on Polygon (Matic)"
+#~ msgstr "Vedeți Sushi pe Polygon (Matic)"
+
+#~ msgid "Claim"
+#~ msgstr "Revendicați"
+
+#~ msgid "Claim SUSHI"
+#~ msgstr "Revendicați SUSHI"
+
+#~ msgid "Claimed"
+#~ msgstr "Revendicat"
+
+#~ msgid "Clear History"
+#~ msgstr "Ștergeți istoricul"
+
+#~ msgid "Click here to switch to Polygon using Metamask"
+#~ msgstr "Faceți clic aici pentru a comuta la Poligon prin Metamask"
+
+#: src/pages/migrate.tsx:465
+msgid ""
+"Click on a pool below, input the amount you wish to migrate or select max, and click\n"
+"migrate"
+msgstr ""
+"Faceți clic pe un fond comun de mai jos, introduceți suma pe care doriți să o migrați sau selectați maximul și faceți clic pe\n"
+"migrare"
+
+#~ msgid "Click on a pool below, input the amount you wish to migrate or select max, and clickmigrate"
+#~ msgstr "Faceți clic pe un fond comun de mai jos, introduceți suma pe care doriți să o migrați sau selectați valoarea maximăși faceți clic pe migrare"
+
+#: src/pages/borrow/[pair].tsx:199
+#: src/pages/borrow/[pair].tsx:212
+#: src/pages/lend/[pair].tsx:81
+msgid "Collateral"
+msgstr "Garanții reale"
+
+#~ msgid "Community Approval"
+#~ msgstr "Aprobarea comunității"
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmați"
+
+#~ msgid "Confirm Adding Liquidity"
+#~ msgstr "Confirmați adăugarea de lichidități"
+
+#: src/pages/stake.tsx:438
+msgid "Confirm Staking"
+msgstr "Confirmați investirea"
+
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+msgid "Confirm Supply"
+msgstr "Confirmați oferta"
+
+#: src/features/swap/SwapModalFooter.tsx:117
+msgid "Confirm Swap"
+msgstr "Confirmați Swap"
+
+#: src/pages/stake.tsx:439
+msgid "Confirm Withdrawal"
+msgstr "Confirmați retragerea"
+
+#: src/components/TransactionConfirmationModal/index.tsx:37
+msgid "Confirm this transaction in your wallet"
+msgstr ""
+
+#: src/pages/stake.tsx:432
+#: src/pages/swap/[[...tokens]].tsx:674
+#: src/state/mint/hooks.ts:244
+msgid "Connect Wallet"
+msgstr "Conectați portofel"
+
+#: src/components/WalletModal/index.tsx:316
+#: src/components/Web3Status/index.tsx:228
+msgid "Connect to a wallet"
+msgstr "Conectați-vă la un portofel"
+
+#~ msgid "Connect to a wallet to find pools"
+#~ msgstr "Conectați-vă la un portofel pentru a găsi fonduri comune"
+
+#: src/pages/migrate.tsx:435
+#: src/pages/pool.tsx:122
+msgid "Connect to a wallet to view your liquidity"
+msgstr "Conectați-vă la un portofel pentru a vedea propriile lichidități"
+
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+msgid "Create Pool & Supply"
+msgstr "Creați fond comun și ofertă"
+
+#~ msgid "Create a Pair"
+#~ msgstr "Creați o pereche"
+
+#: src/components/NavigationTabs/index.tsx:98
+#: src/pages/pool.tsx:198
+msgid "Create a pair"
+msgstr "Creați o pereche"
+
+#~ msgid "Create pool"
+#~ msgstr "Creați un fond comun"
+
+#: src/pages/balances.tsx:256
+msgid "Deposit"
+msgstr "Depuneți"
+
+#~ msgid "Deposit SUSHI into BentoBox"
+#~ msgstr "Depuneți SUSHI în BentoBox"
+
+#: src/pages/balances.tsx:50
+msgid "Deposit tokens into BentoBox for all the yields"
+msgstr "Depuneți token-uri în BentoBox pentru toate randamentele"
+
+#~ msgid "Deposited"
+#~ msgstr "Depus"
+
+#: src/components/Header/More.tsx:18
+#: src/components/Menu.tsx:18
+msgid "Dev"
+msgstr "Dev"
+
+#: src/components/Settings/index.tsx:152
+msgid "Disable Multihops"
+msgstr "Dezactivați Multihops"
+
+#: src/components/WalletModal/index.tsx:283
+msgid "Disconnect"
+msgstr ""
+
+#: src/components/Header/More.tsx:33
+#: src/components/Menu.tsx:33
+msgid "Discord"
+msgstr "Discord"
+
+#: src/components/TransactionFailedModal.tsx:33
+msgid "Dismiss"
+msgstr "Renunțare"
+
+#: src/components/Header/More.tsx:13
+#: src/components/Menu.tsx:13
+msgid "Docs"
+msgstr "Documente"
+
+#: src/components/Header/More.tsx:19
+#: src/components/Menu.tsx:19
+msgid "Documentation for developers of Sushi."
+msgstr "Documentație pentru dezvoltatorii de Sushi."
+
+#: src/components/Header/More.tsx:14
+#: src/components/Menu.tsx:14
+msgid "Documentation for users of Sushi."
+msgstr "Documentație pentru utilizatorii de Sushi."
+
+#: src/pages/pool.tsx:106
+msgid "Don't see a pool you joined?"
+msgstr ""
+
+#~ msgid "Don't see a pool you joined? <0>Import it.</0>"
+#~ msgstr "Nu vedeți un fond comun la care ați participat? <0>Importați-l.</0>"
+
+#~ msgid "Dont see a pool you joined?"
+#~ msgstr "Nu vedeți un fond comun la care ați participat?"
+
+#: src/pages/swap/[[...tokens]].tsx:489
+msgid "Enjoy the lowest slippage on Polygon"
+msgstr "Bucurați-vă de cel mai redus derapaj pe Polygon"
+
+#: src/pages/bentobox.tsx:74
+msgid "Enter"
+msgstr "Introduceți"
+
+#: src/pages/stake.tsx:434
+msgid "Enter Amount"
+msgstr "Introduceți suma"
+
+#: src/state/swap/hooks.ts:224
+msgid "Enter a recipient"
+msgstr "Introduceți un destinatar"
+
+#: src/components/TransactionSettings/index.tsx:258
+msgid "Enter a valid slippage percentage"
+msgstr "Introduceți un procent de derapaj valid"
+
+#: src/state/mint/hooks.ts:252
+#: src/state/swap/hooks.ts:215
+msgid "Enter an amount"
+msgstr "Introduceți o sumă"
+
+#: src/components/TransactionConfirmationModal/index.tsx:115
+#: src/components/Web3Status/index.tsx:221
+msgid "Error"
+msgstr "Eroare"
+
+#: src/components/WalletModal/index.tsx:273
+msgid "Error connecting"
+msgstr ""
+
+#: src/components/WalletModal/index.tsx:279
+msgid "Error connecting. Try refreshing the page."
+msgstr ""
+
+#: src/features/swap/TradePrice.tsx:39
+msgid "Exchange Rate"
+msgstr ""
+
+#: src/components/Settings/index.tsx:184
+msgid ""
+"Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
+"that often result in bad rates and lost funds."
+msgstr ""
+"Modul Expert dezactivează solicitarea de confirmare a tranzacției și permite tranzacții cu derapaj ridicat\n"
+"care duc adesea la rate neperformante și la pierderea de fonduri."
+
+#~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
+#~ msgstr "Modul Expert dezactivează solicitarea de confirmare a tranzacției și permite tranzacții cu derapaj ridicat care duc adesea la rate neperformante și la pierderea de fonduri."
+
+#: src/components/Header/index.tsx:85
+#: src/components/Header/index.tsx:431
+msgid "Farm"
+msgstr ""
+
+#~ msgid "Fetching Instruments"
+#~ msgstr "Instrumente de preluare"
+
+#~ msgid "Find Pool"
+#~ msgstr "Găsiți fond comun"
+
+#: src/pages/stake.tsx:212
+msgid ""
+"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
+"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
+"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
+"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
+"SUSHI and any additional from fees."
+msgstr ""
+"Pentru fiecare swap de pe bursă, pe fiecare lanț, 0,05% din comisioanele de swap sunt distribuite ca SUSHI,\n"
+"proporțional cu cota dvs. din SushiBar. Când SUSHI este investit în SushiBar, primiți\n"
+"xSUSHI în schimbul drepturilor de vot și un token complet compozabil care poate interacționa cu alte protocoale.\n"
+"Investiția dvs. xSUSHI se cumulează continuu, iar atunci când retrageți investiția veți primi toate depozitele inițiale\n"
+"SUSHI și orice sumă suplimentară provenită din comisioane."
+
+#, fuzzy
+#~ msgid "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHIproportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receivexSUSHI in return for voting rights and a fully composable token that can interact with other protocols.Your xSUSHI is continuously compounding, when you unstake you will receive all the originally depositedSUSHI and any additional from fees."
+#~ msgstr "Pentru fiecare swap de pe bursă, pe fiecare lanț, 0,05% din comisioanele de swap sunt distribuite ca SUSHI, proporțional cu cota dvs. din SushiBar. Când SUSHI este investit în SushiBar, primiți xSUSHI în schimbul drepturilor de vot și un token complet compozabil care poate interacționa cu alte protocoale. Investiția dvs. xSUSHI se cumulează continuu, iar atunci când retrageți investiția veți primi toate depozitele inițiale SUSHI și orice sumă suplimentară provenită din comisioane."
+
+#~ msgid "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHIproportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recievexSUSHI in return for voting rights and a fully composable token that can interact with other protocols.Your xSUSHI is continuously compounding, when you unstake you will receive all the originally depositedSUSHI and any additional from fees."
+#~ msgstr "Pentru fiecare swap de pe bursă, pe fiecare lanț, 0,05% din comisioanele de swap sunt distribuite ca SUSHI, proporțional cu cota dvs. din SushiBar. Când SUSHI este investit în SushiBar, primiți xSUSHI în schimbul drepturilor de vot și un token complet compozabil care poate interacționa cu alte protocoale. Investiția dvs. xSUSHI se cumulează continuu, iar atunci când retrageți investiția veți primi toate depozitele inițiale SUSHI și orice sumă suplimentară provenită din comisioane."
+
+#~ msgid "From"
+#~ msgstr "De la"
+
+#~ msgid "From (estimated)"
+#~ msgstr "De la (estimat)"
+
+#: src/pages/borrow/[pair].tsx:58
+msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
+msgstr "Obțineți expunere la token-uri fără a vă reduce activele. Efectul de pârghie vă va permite să luați poziții scurte față de active și să câștigați din evoluțiile negative."
+
+#~ msgid ""
+#~ "Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
+#~ "all swaps from all chains)"
+#~ msgstr ""
+#~ "Obțineți drepturi de guvernanță cu xSUSHI și câștigați 5% APR (0,05% din\n"
+#~ "toate swap-urile din toate lanțurile)"
+
+#~ msgid "Gain governance rights with xSUSHI and earn 5% APR (0.05% ofall swaps from all chains)"
+#~ msgstr "Obțineți drepturi de guvernanță cu xSUSHI și câștigați 5% APR (0,05% din toate swap-urile din toate lanțurile)"
+
+#: src/components/Back.tsx:23
+msgid "Go Back"
+msgstr ""
+
+#: src/pages/migrate.tsx:166
+msgid "Hardware Wallet"
+msgstr "Portofel hardware"
+
+#~ msgid "Harvest {0} SUSHI"
+#~ msgstr "Recoltați {0} SUSHI"
+
+#, fuzzy
+#~ msgid "Harvest {0} SUSHI & {1} ALCX"
+#~ msgstr ""
+
+#~ msgid "Harvest {0} SUSHI & {1} MATIC"
+#~ msgstr "Recoltați {0} SUSHI și {1} MATIC"
+
+#~ msgid "Have Liquidity on {0}?"
+#~ msgstr "Aveți lichiditate pe {0} ?"
+
+#: src/pages/lend/[pair].tsx:34
+msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
+msgstr ""
+
+#~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
+#~ msgstr "Aveți active pentru care doriți să câștigați dobânzi suplimentare? Dați-le cu împrumut pe piețe izolate și câștigați dobânzi de la împrumutați. Este la fel de ușor ca depunerea și vă puteți retrage oricând doriți."
+
+#: src/pages/pool.tsx:158
+msgid "Have {0} Liquidity?"
+msgstr ""
+
+#: src/pages/lend/[pair].tsx:90
+msgid "Health"
+msgstr "Sănătate"
+
+#~ msgid "Helpful Sushi Tools"
+#~ msgstr "Instrumente Sushi utile"
+
+#~ msgid "Historical Total Locked: Connect Wallet"
+#~ msgstr "Valoare istorică totală blocată: Conectați portofelul"
+
+#~ msgid "Historical Total Locked: Fetching Total"
+#~ msgstr "Valoare istorică totală blocată: Preluare valoarea totală"
+
+#~ msgid "Historical Total Locked: {0} SUSHI"
+#~ msgstr "Valoare istorică totală blocată: {0} SUSHI"
+
+#: src/components/NavigationTabs/index.tsx:71
+msgid "Import Pool"
+msgstr "Importați Fond comun"
+
+#~ msgid "Import it"
+#~ msgstr "Importare"
+
+#: src/pages/pool.tsx:112
+msgid "Import it."
+msgstr ""
+
+#~ msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
+#~ msgstr "Valoarea de intrare este estimată. Veți vinde cel mult <0>{0} {1}</0> sau tranzacția se va anula."
+
+#: src/features/farm/FarmList.tsx:20
+msgid "Instruments"
+msgstr "Instrumente"
+
+#: src/pages/migrate.tsx:279
+#: src/pages/stake.tsx:436
+msgid "Insufficient Balance"
+msgstr "Sold insuficient"
+
+#: src/hooks/useWrapCallback.ts:118
+msgid "Insufficient WETH balance"
+msgstr "Sold WETH insuficient"
+
+#: src/pages/swap/[[...tokens]].tsx:692
+msgid "Insufficient liquidity for this trade"
+msgstr "Lichidități insuficiente pentru această tranzacție"
+
+#: src/hooks/useWrapCallback.ts:84
+#: src/state/mint/hooks.ts:265
+#: src/state/mint/hooks.ts:276
+#: src/state/swap/hooks.ts:252
+msgid "Insufficient {0} balance"
+msgstr "Sold {0} insuficient"
+
+#: src/components/Settings/index.tsx:113
+msgid "Interface Settings"
+msgstr "Setări interfață"
+
+#: src/state/mint/hooks.ts:248
+msgid "Invalid pair"
+msgstr "Pereche nevalidă"
+
+#: src/state/swap/hooks.ts:233
+msgid "Invalid recipient"
+msgstr "Destinatar nevalid"
+
+#~ msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
+#~ msgstr "Piețele împrumuturilor izolate vă reduc riscurile în calitate de creditor de active. Aflați exact ce garanție vi se pune la dispoziție în caz de insolvență a contrapărții."
+
+#: src/components/Header/More.tsx:34
+#: src/components/Menu.tsx:34
+msgid "Join the community on Discord."
+msgstr "Alăturați-vă comunității pe Discord."
+
+#: src/components/Header/index.tsx:444
+msgid "Kashi Lending"
+msgstr "Împrumut Kashi"
+
+#~ msgid "Keys Burned: 2022.03.04 at 22:05"
+#~ msgstr "Chei de acces eliminate: 2022.03.04 la 22:05"
+
+#: src/components/WalletModal/index.tsx:334
+msgid "Learn more about wallets"
+msgstr ""
+
+#: src/components/Header/index.tsx:103
+msgid "Lend"
+msgstr "Dați cu împrumut"
+
+#: src/pages/lend/[pair].tsx:32
+msgid "Lend assets for interest from borrowers."
+msgstr "Dați cu împrumut active pentru dobânzi de la împrumutați."
+
+#~ msgid "Lend your assets, earn yield with no impermanent loss"
+#~ msgstr "Dați cu împrumut activele, obțineți randament fără pierderi temporare"
+
+#~ msgid "Lend {assetSymbol}"
+#~ msgstr "Dați cu împrumut {assetSymbol}"
+
+#~ msgid "Lending"
+#~ msgstr "Împrumut"
+
+#~ msgid "Lent"
+#~ msgstr "Împrumutat"
+
+#~ msgid "Limit <0>Used</0>"
+#~ msgstr "Limită <0>Folosit</0>"
+
+#~ msgid "Liquidity"
+#~ msgstr "Lichiditate"
+
+#: src/pages/transactions.tsx:99
+msgid "Liquidity Positions"
+msgstr "Pozițiile lichidităților"
+
+#: src/features/swap/AdvancedSwapDetails.tsx:66
+#: src/features/swap/SwapModalFooter.tsx:95
+msgid "Liquidity Provider Fee"
+msgstr "Comisionul furnizorului de lichidități"
+
+#: src/pages/pool.tsx:95
+msgid "Liquidity Provider Rewards"
+msgstr "Recompense pentru furnizorul de lichidități"
+
+#: src/pages/pool.tsx:96
+msgid ""
+"Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
+"the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
+"withdrawing your liquidity"
+msgstr ""
+"Furnizorii de lichidități câștigă un comision de 0,25% pentru toate tranzacțiile, proporțional cu cota aferentă din\n"
+"fondul comun. Comisioanele sunt adăugate la fondul comun, se acumulează în timp real și pot fi revendicate prin\n"
+"retragerea propriei lichidități"
+
+#~ msgid "Liquidity providers earn a 0.25% fee on all trades proportional to their share ofthe pool. Fees are added to the pool, accrue in real time and can be claimed bywithdrawing your liquidity"
+#~ msgstr "Furnizorii de lichidități câștigă un comision de 0,25% pentru toate tranzacțiile, proporțional cu cota aferentă din fondul comun. Comisioanele sunt adăugate la fondul comun, se acumulează în timp real și pot fi revendicate prin retragerea propriei lichidități"
+
+#: src/components/SearchModal/Manage.tsx:69
+msgid "Lists"
+msgstr "Liste"
+
+#: src/components/PositionCard/index.tsx:305
+#: src/pages/migrate.tsx:282
+#: src/pages/pool.tsx:128
+#: src/pages/transactions.tsx:69
+msgid "Loading"
+msgstr "Se încarcă"
+
+#: src/pages/migrate.tsx:444
+msgid "Loading your {exchange} liquidity positions"
+msgstr "Se încarcă pozițiile lichidităților dvs. {exchange}"
+
+#: src/pages/stake.tsx:271
+msgid "Loading..."
+msgstr "Se încarcă..."
+
+#: src/pages/borrow/[pair].tsx:101
+msgid "Loan to Value"
+msgstr "Împrumut în limita valorii de piață"
+
+#: src/pages/balances.tsx:221
+#: src/pages/balances.tsx:312
+#: src/pages/migrate.tsx:99
+#: src/pages/stake.tsx:393
+msgid "MAX"
+msgstr "MAX"
+
+#: src/components/TransactionSettings/index.tsx:309
+msgid "MEV Shield by Archer DAO"
+msgstr ""
+
+#: src/components/PositionCard/index.tsx:322
+#: src/components/PositionCard/index.tsx:330
+#: src/components/SearchModal/CurrencySearch.tsx:254
+#: src/components/SearchModal/Manage.tsx:55
+msgid "Manage"
+msgstr "Gestionați"
+
+#~ msgid "Manage Liquidity in Rewards Pool"
+#~ msgstr "Gestionați lichiditățile în fondul pentru recompense"
+
+#~ msgid "Manage this pool"
+#~ msgstr "Gestionați acest fond comun"
+
+#: src/pages/borrow/[pair].tsx:66
+#: src/pages/lend/[pair].tsx:42
+msgid "Market Info"
+msgstr "Informații despre piață"
+
+#~ msgid "Market Staked"
+#~ msgstr "Investiție pe piață"
+
+#~ msgid "Markets"
+#~ msgstr "Piețe"
+
+#: src/components/Footer/index.tsx:48
+msgid "Matic Bridge"
+msgstr ""
+
+#: src/components/CurrencyInputPanel/index.tsx:261
+msgid "Max"
+msgstr "Max"
+
+#: src/pages/stake.tsx:204
+msgid "Maximize yield by staking SUSHI for xSUSHI"
+msgstr "Maximizați randamentul investind SUSHI în xSUSHI"
+
+#: src/features/swap/AdvancedSwapDetails.tsx:32
+#: src/features/swap/SwapModalFooter.tsx:62
+msgid "Maximum sold"
+msgstr "Maxim vândut"
+
+#: src/components/Header/index.tsx:72
+#: src/pages/migrate.tsx:328
+msgid "Migrate"
+msgstr "Migrați"
+
+#~ msgid "Migrate Now"
+#~ msgstr "Migrați acum"
+
+#: src/pages/migrate.tsx:421
+msgid "Migrate {exchange} Liquidity"
+msgstr "Migrați lichiditatea {exchange}"
+
+#: src/pages/pool.tsx:166
+msgid "Migrate!"
+msgstr ""
+
+#: src/pages/migrate.tsx:326
+msgid "Migrating"
+msgstr "Se migrează"
+
+#: src/pages/migrate.tsx:161
+msgid "Migration is done in one-click using your signature (permit)"
+msgstr "Migrarea se face cu un singur clic folosind semnătura dvs. (permis)"
+
+#: src/features/swap/SwapModalFooter.tsx:106
+msgid "Miner Tip"
+msgstr ""
+
+#: src/components/TradeReview.tsx:27
+#: src/features/swap/AdvancedSwapDetails.tsx:32
+#: src/features/swap/SwapModalFooter.tsx:61
+msgid "Minimum received"
+msgstr "Minim primit"
+
+#, fuzzy
+#~ msgid "Missed the Auction?"
+#~ msgstr ""
+
+#~ msgid "New network, new features"
+#~ msgstr "Rețea nouă, funcții noi"
+
+#: src/components/WalletModal/index.tsx:332
+msgid "New to Ethereum?"
+msgstr ""
+
+#: src/pages/migrate.tsx:369
+msgid "No Liquidity found"
+msgstr "Nu s-a găsit nicio lichiditate"
+
+#~ msgid "No Results"
+#~ msgstr "Niciun rezultat"
+
+#: src/pages/pool.tsx:146
+msgid "No liquidity found"
+msgstr "Nu s-a găsit nicio lichiditate"
+
+#: src/components/TradeReview.tsx:85
+msgid "No liquidity found to do swap"
+msgstr "Nu s-a găsit nicio lichiditate pentru a realiza un swap"
+
+#~ msgid "No liquidity positions found"
+#~ msgstr "Nu s-au găsit pozițiile lichidităților"
+
+#~ msgid "No pool found"
+#~ msgstr "Nu s-a găsit niciun fond comun"
+
+#: src/components/SearchModal/CurrencySearch.tsx:244
+msgid "No results found"
+msgstr "Nu s-a găsit niciun rezultat"
+
+#: src/pages/migrate.tsx:159
+msgid "Non-hardware Wallet"
+msgstr "Portofel non-hardware"
+
+#: src/pages/borrow/[pair].tsx:112
+#: src/pages/lend/[pair].tsx:114
+msgid "None"
+msgstr "Nimic"
+
+#: src/components/Settings/index.tsx:189
+msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
+msgstr "FOLOSIȚI ACEST MOD DOAR DACĂ SUNTEȚI FAMILIARIZAT CU SITUAȚIA."
+
+#~ msgid "One click SUSHI → xSUSHI → aXSUSHI"
+#~ msgstr "Un singur clic SUSHI → xSUSHI → aXSUSHI"
+
+#: src/components/Web3ReactManager/index.tsx:65
+msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
+msgstr "Hopa! O apărut o eroare necunoscută. Vă rugăm să reîmprospătați pagina sau să folosiți un alt browser sau dispozitiv"
+
+#: src/components/Header/More.tsx:23
+#: src/components/Menu.tsx:23
+msgid "Open Source"
+msgstr "Open Source"
+
+#: src/components/Header/index.tsx:361
+msgid "Open main menu"
+msgstr "Deschideți meniul principal"
+
+#: src/pages/borrow/[pair].tsx:201
+#: src/pages/lend/[pair].tsx:100
+msgid "Oracle"
+msgstr "Oracol"
+
+#~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
+#~ msgstr "Rezultatul este estimat. Dacă prețul suferă modificări mai mari de {0}%, tranzacția dvs. se va anula."
+
+#~ msgid "Output is estimated. You will receive at least <0>{0} {1}</0> or the transaction will revert."
+#~ msgstr "Rezultatul este estimat. Veți primi cel puțin <0>{0} {1}</0> sau tranzacția se va anula."
+
+#~ msgid "Output will be sent to <0>{0}</0>"
+#~ msgstr "Rezultatul va fi trimis către <0>{0}</0>"
+
+#: src/components/Web3Status/index.tsx:204
+msgid "Pending"
+msgstr "În așteptare"
+
+#~ msgid "Pending Treasury Transfer"
+#~ msgstr "Transfer de trezorerie în așteptare"
+
+#: src/components/WalletModal/index.tsx:277
+msgid "Please connect to the appropriate Ethereum network."
+msgstr ""
+
+#: src/components/Settings/index.tsx:199
+msgid "Please type the word \"confirm\" to enable expert mode."
+msgstr "Vă rugăm să tastați cuvântul „confirmare” pentru a activa modul expert."
+
+#: src/components/ExchangeHeader.tsx:54
+#: src/components/Header/index.tsx:64
+#: src/components/Header/index.tsx:417
+msgid "Pool"
+msgstr "Fond comun"
+
+#~ msgid "Pool Found!"
+#~ msgstr "Fond comun găsit!"
+
+#~ msgid "Pool Rewards"
+#~ msgstr "Recompense din fondul comun"
+
+#: src/components/PositionCard/index.tsx:159
+msgid "Pool Tokens"
+msgstr "Token-uri pentru fondul comun"
+
+#: src/components/PositionCard/index.tsx:356
+msgid "Pool tokens in rewards pool"
+msgstr "Token-uri aferente fondului comun în fondul pentru recompense"
+
+#: src/components/PositionCard/index.tsx:367
+#: src/components/PositionCard/index.tsx:399
+msgid "Pooled {0}"
+msgstr "Pus în comun {0}"
+
+#~ msgid "Positions"
+#~ msgstr "Poziții"
+
+#, fuzzy
+#~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
+#~ msgstr ""
+
+#: src/features/swap/SwapModalFooter.tsx:50
+msgid "Price"
+msgstr "Preț"
+
+#: src/components/TradeReview.tsx:42
+#: src/features/swap/AdvancedSwapDetails.tsx:54
+#: src/features/swap/SwapModalFooter.tsx:83
+msgid "Price Impact"
+msgstr "Impactul prețului"
+
+#: src/pages/swap/[[...tokens]].tsx:758
+msgid "Price Impact High"
+msgstr "Impactul asupra prețului este mare"
+
+#: src/pages/swap/[[...tokens]].tsx:797
+msgid "Price Impact Too High"
+msgstr "Impactul asupra prețului este prea mare"
+
+#~ msgid "Price Updated"
+#~ msgstr "Preț actualizat"
+
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+msgid "Rates"
+msgstr "Rate"
+
+#: src/pages/swap/[[...tokens]].tsx:499
+msgid "Read Tutorial"
+msgstr "Citiți tutorialul"
+
+#~ msgid "Read the contract"
+#~ msgstr "Citiți contractul"
+
+#: src/components/PositionCard/index.tsx:485
+msgid "Remove"
+msgstr "Eliminați"
+
+#: src/components/NavigationTabs/index.tsx:101
+msgid "Remove Liquidity"
+msgstr "Eliminare lichiditate"
+
+#: src/pages/swap/[[...tokens]].tsx:618
+msgid "Remove send"
+msgstr "Eliminați trimiterea"
+
+#~ msgid "Removing {0} {1} and {2} {3}"
+#~ msgstr "Se elimină {0} {1} și {2} {3}"
+
+#: src/pages/borrow/[pair].tsx:251
+msgid "Repay"
+msgstr "Rambursare"
+
+#~ msgid "Request Tool"
+#~ msgstr "Instrument de solicitare"
+
+#: src/components/Settings/index.tsx:156
+msgid "Restricts swaps to direct pairs only."
+msgstr "Restricționează swap-urile doar la perechile directe."
+
+#: src/features/farm/FarmList.tsx:32
+msgid "Rewards"
+msgstr ""
+
+#: src/components/TradeReview.tsx:71
+#: src/features/swap/AdvancedSwapDetails.tsx:105
+msgid "Route"
+msgstr "Rută"
+
+#: src/components/TradeReview.tsx:74
+#: src/features/swap/AdvancedSwapDetails.tsx:108
+msgid "Routing through these tokens resulted in the best price for your trade."
+msgstr "Rutarea prin aceste token-uri a dus la cel mai bun preț pentru tranzacția dvs."
+
+#~ msgid "SAAVE: Stack your yields in one transaction"
+#~ msgstr "SAAVE: Cumulați randamentele într-o singură tranzacție"
+
+#: src/pages/borrow/[pair].tsx:123
+msgid "SLP"
+msgstr ""
+
+#~ msgid "SUSHI Balance"
+#~ msgstr "Sold SUSHI"
+
+#~ msgid "SUSHI Balance: {sushiBalance}"
+#~ msgstr "Sold SUSHI: {sushiBalance}"
+
+#~ msgid "SUSHI {0}/{1} Burned"
+#~ msgstr "SUSHI {0}/{1} Ars"
+
+#~ msgid "Search by name, symbol, address"
+#~ msgstr "Căutare după nume, simbol, adresă"
+
+#: src/components/SearchModal/CurrencySearch.tsx:184
+msgid "Search name or paste address"
+msgstr "Căutați numele sau lipiți adresa"
+
+#: src/components/CurrencyInputPanel/index.tsx:217
+#: src/components/CurrencySelectPanel/index.tsx:95
+#: src/state/swap/hooks.ts:219
+msgid "Select a token"
+msgstr "Selectați un token"
+
+#~ msgid "Select a token to find your liquidity"
+#~ msgstr "Selectați un token pentru a găsi lichiditatea"
+
+#: src/components/TransactionSettings/index.tsx:313
+msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
+msgstr ""
+
+#~ msgid "Share of Pool"
+#~ msgstr "Cota din fondul comun"
+
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:70
+msgid "Share of Pool:"
+msgstr "Cota din fondul comun:"
+
+#: src/pages/swap/[[...tokens]].tsx:646
+msgid "Slippage Tolerance"
+msgstr "Toleranță la derapaj"
+
+#: src/components/TransactionSettings/index.tsx:171
+msgid "Slippage tolerance"
+msgstr "Toleranță la derapaj"
+
+#: src/components/KashiButton.tsx:29
+msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
+msgstr "Ceva nu a funcționat corect în timpul semnării aprobării. Acest lucru este de așteptat pentru portofelele hardware, cum ar fi Trezor și Ledger. Faceți clic din nou și va fi utilizată metoda de rezervă"
+
+#~ msgid "Stack Yields with SAAVE"
+#~ msgstr "Cumulați randamentele cu SAAVE"
+
+#: src/components/Header/index.tsx:136
+#: src/components/Header/index.tsx:470
+msgid "Stake"
+msgstr "Investiți"
+
+#: src/pages/stake.tsx:301
+#: src/pages/stake.tsx:326
+msgid "Stake SUSHI"
+msgstr "Investiți SUSHI"
+
+#~ msgid "Stake SUSHI for xSUSHI"
+#~ msgstr "Investiți SUSHI în xSUSHI"
+
+#~ msgid ""
+#~ "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
+#~ "one click"
+#~ msgstr ""
+#~ "Investiți în xSUSHI, adăugați garanții ca axSUSHI pe Aave, toate cu\n"
+#~ "un singur clic"
+
+#~ msgid "Stake into xSUSHI add collateral as axSUSHI on Aave all inone click"
+#~ msgstr "Investiți în xSUSHI, adăugați garanții ca axSUSHI pe Aave, toate cu un singur clic"
+
+#~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click."
+#~ msgstr "Investiți SUSHI în xSUSHI pentru ~5% APY. Depuneți xSUSHI în Aave ca aXSUSHI pentru a obține dobânzi din garanții și capacitate de împrumutare. Toate cu un singur clic."
+
+#~ msgid ""
+#~ "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.\n"
+#~ "Continuously compounding."
+#~ msgstr ""
+#~ "Investiți SUSHI în xSUSHI pentru ~5% APY. Nicio pierdere temporară, nici o pierdere a drepturilor de guvernanță.\n"
+#~ "Cumulare continuă."
+
+#~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.Continuously compounding."
+#~ msgstr "Investiți-vă cota SUSHI în xSUSHI pentru ~5% APY. Nicio pierdere temporară, nici o pierdere a drepturilor de guvernanță. Cumulare continuă."
+
+#: src/pages/stake.tsx:248
+msgid "Staking APR"
+msgstr "Investire APR"
+
+#~ msgid "Submit Tool"
+#~ msgstr "Instrument de trimitere"
+
+#: src/pages/borrow/[pair].tsx:85
+#: src/pages/lend/[pair].tsx:65
+msgid "Supply APR"
+msgstr "Oferiți APR"
+
+#~ msgid "Supplying {0} {1} and {2} {3}"
+#~ msgstr "Oferire {0} {1} și {2} {3}"
+
+#~ msgid "Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
+#~ msgstr "Sushi permite swap-urile de token-uri compatibile ERC20 pe mai multe rețele"
+
+#: src/components/Header/More.tsx:24
+#: src/components/Menu.tsx:24
+msgid "Sushi is a supporter of Open Source."
+msgstr "Sushi susține Open Source."
+
+#~ msgid "SushiBar"
+#~ msgstr "SushiBar"
+
+#~ msgid "SushiBar: Make SUSHI work for you"
+#~ msgstr "SushiBar: Faceți SUSHI să funcționeze pentru dvs."
+
+#: src/pages/swap/[[...tokens]].tsx:442
+msgid "SushiSwap"
+msgstr ""
+
+#: src/components/ExchangeHeader.tsx:39
+#: src/components/Header/index.tsx:56
+#: src/components/Header/index.tsx:409
+#: src/pages/swap/[[...tokens]].tsx:761
+#: src/pages/swap/[[...tokens]].tsx:800
+msgid "Swap"
+msgstr "Swap"
+
+#: src/features/swap/SwapModalFooter.tsx:117
+#: src/pages/swap/[[...tokens]].tsx:760
+#: src/pages/swap/[[...tokens]].tsx:799
+msgid "Swap Anyway"
+msgstr "Swap oricum"
+
+#: src/pages/swap/[[...tokens]].tsx:511
+msgid "Swap From (est.):"
+msgstr "Swap de la (est.):"
+
+#: src/pages/swap/[[...tokens]].tsx:512
+msgid "Swap From:"
+msgstr "Swap de la:"
+
+#: src/pages/swap/[[...tokens]].tsx:588
+msgid "Swap To (est.):"
+msgstr "Swap la (est.):"
+
+#: src/pages/swap/[[...tokens]].tsx:589
+msgid "Swap To:"
+msgstr "Swap la:"
+
+#, fuzzy
+#~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
+#~ msgstr ""
+
+#: src/features/farm/FarmList.tsx:40
+msgid "TVL"
+msgstr "TVL"
+
+#: src/components/TradeReview.tsx:45
+#: src/features/swap/AdvancedSwapDetails.tsx:57
+msgid "The difference between the market price and estimated price due to trade size."
+msgstr "Diferența dintre prețul pieței și prețul estimat ca urmare a dimensiunii tranzacției."
+
+#: src/features/swap/SwapModalFooter.tsx:86
+msgid "The difference between the market price and your price due to trade size."
+msgstr "Diferența dintre prețul pieței și prețul dvs. ca urmare a dimensiunii tranzacției."
+
+#~ msgid "The onchain oracle that tracks the pricing for this pair"
+#~ msgstr "Oracolul pe lanț care urmărește prețurile pentru această pereche"
+
+#: src/hooks/useSwapCallback.ts:276
+#: src/hooks/useSwapCallback.ts:276
+msgid "The transaction cannot succeed due to error: {0}. This is probably an issue with one of the tokens you are swapping."
+msgstr "Tranzacția nu poate reuși din cauza erorii: {0}. Aceasta poate fi o problemă legată de unul dintre token-urile pe care le schimbați."
+
+#~ msgid "Things you can do with your SUSHI"
+#~ msgstr "Ce puteți face cu SUSHI"
+
+#: src/hooks/useSwapCallback.ts:271
+#: src/hooks/useSwapCallback.ts:271
+msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
+msgstr "Această tranzacție nu va reuși din cauza mișcării prețului sau a comisioanelor aferente transferului. Încercați să măriți toleranța la derapaj."
+
+#~ msgid "To"
+#~ msgstr "La"
+
+#~ msgid "To (estimated)"
+#~ msgstr "Către (estimat)"
+
+#~ msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
+#~ msgstr "Pentru retragere în SUSHI, mergeți la Aave și eliminați axSUSHI ca garanție și apoi la SushiBar pentru retragerea investiției. O lichidare completă va fi disponibilă în curând."
+
+#: src/components/Settings/index.tsx:122
+msgid "Toggle Expert Mode"
+msgstr "Comutați la modul Expert"
+
+#: src/pages/balances.tsx:81
+msgid "Token"
+msgstr "Token"
+
+#: src/components/SearchModal/Manage.tsx:75
+msgid "Tokens"
+msgstr "Token-uri"
+
+#: src/components/Header/More.tsx:28
+#: src/components/Menu.tsx:28
+msgid "Tools"
+msgstr "Instrumente"
+
+#: src/components/Header/More.tsx:29
+#: src/components/Menu.tsx:29
+msgid "Tools to optimize your workflow."
+msgstr "Instrumente pentru optimizarea fluxului de lucru."
+
+#: src/pages/lend/[pair].tsx:45
+msgid "Total"
+msgstr "Total"
+
+#~ msgid "Trade"
+#~ msgstr "Tranzacție"
+
+#: src/pages/transactions.tsx:104
+msgid "Transaction History"
+msgstr "Istoricul tranzacțiilor"
+
+#: src/components/Settings/index.tsx:97
+msgid "Transaction Settings"
+msgstr "Setări pentru tranzacție"
+
+#: src/components/TransactionConfirmationModal/index.tsx:62
+msgid "Transaction Submitted"
+msgstr ""
+
+#: src/components/TransactionSettings/index.tsx:269
+msgid "Transaction deadline"
+msgstr "Termen limită pentru tranzacție"
+
+#: src/pages/transactions.tsx:38
+msgid "Transactions"
+msgstr "Tranzacții"
+
+#: src/pages/swap/[[...tokens]].tsx:697
+msgid "Try enabling multi-hop trades"
+msgstr "Încercați să activați tranzacțiile multi-hop"
+
+#: src/components/Settings/index.tsx:209
+msgid "Turn On Expert Mode"
+msgstr "Activați modul Expert"
+
+#~ msgid "Unknown error"
+#~ msgstr "Eroare necunoscută"
+
+#: src/pages/stake.tsx:318
+#: src/pages/stake.tsx:327
+msgid "Unstake"
+msgstr "Retrageți investiția"
+
+#: src/pages/stake.tsx:478
+msgid "Unstaked"
+msgstr "Neinvestit"
+
+#: src/pages/swap/[[...tokens]].tsx:670
+msgid "Unsupported Asset"
+msgstr "Activ neacceptat"
+
+#: src/pages/swap/[[...tokens]].tsx:685
+msgid "Unwrap"
+msgstr "Reluați"
+
+#: src/hooks/useWrapCallback.ts:103
+msgid "Unwrap {0} W{1} to {2}"
+msgstr "Reluați {0} W{1} la {2}"
+
+#~ msgid "Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned."
+#~ msgstr "Utilizați orice instrument de mai jos pentru a vă optimiza fluxul de lucru. Vă rugăm să rețineți faptul că unele instrumente sunt experimentale, așa că trebuie utilizate cu discreție. Dacă instrumentul este vizat de un contract inteligent, citiți codul și confirmați eliminarea cheilor de acces."
+
+#~ msgid "V2 Rewarder"
+#~ msgstr "Programul de recompensare V2"
+
+#: src/components/Header/index.tsx:480
+msgid "Vesting"
+msgstr "Intrare în drepturi"
+
+#~ msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
+#~ msgstr "Intrarea în drepturi este realizată în conformitate cu liniile directoare selectate de comunitate în <0>SIMP3</0>.<1/><2/>Vă rugăm să consultați <3>discuția de pe forum</3> pentru deliberări cu privire la puncte suplimentare.<4/><5/>Înregistrările suplimentare și actualizările săptămânale ale merkle pot fi găsite pe <6>Github</6>"
+
+#: src/pages/stake.tsx:262
+msgid "View Stats"
+msgstr "Vizualizați statisticile"
+
+#~ msgid "View SushiBar Stats"
+#~ msgstr "Vizualizați statisticile SushiBar"
+
+#~ msgid "View Your Liquidity Positions"
+#~ msgstr "Vizualizați pozițiile lichidităților dvs."
+
+#~ msgid "View Your Liquidity Positions >"
+#~ msgstr "Vizualizați pozițiile lichidităților dvs."
+
+#: src/pages/transactions.tsx:87
+msgid "View on explorer"
+msgstr "Vizualizați în explorator"
+
+#: src/features/swap/AdvancedSwapDetails.tsx:130
+msgid "View pair analytics"
+msgstr "Vizualizați analiza perechii"
+
+#~ msgid "View your SushiBar Portfolio"
+#~ msgstr "Vizualizați portofoliul dvs. SushiBar"
+
+#: src/components/TransactionConfirmationModal/index.tsx:33
+msgid "Waiting for Confirmation"
+msgstr ""
+
+#: src/pages/balances.tsx:82
+msgid "Wallet"
+msgstr "Portofel"
+
+#: src/pages/balances.tsx:199
+msgid "Wallet Balance"
+msgstr "Soldul portofelului"
+
+#~ msgid "Welcome to Sushi on Polygon (Matic)"
+#~ msgstr "Bine ați venit la Sushi pe Polygon (Matic)"
+
+#~ msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
+#~ msgstr "Când creați o pereche, sunteți primul furnizor de lichidități. Raportul de token-uri pe care îl adăugați va stabili prețul acestui fond comun. Odată ce sunteți mulțumit de tarif, faceți clic pe furnizare ofertă a revizui"
+
+#: src/pages/balances.tsx:332
+msgid "Withdraw"
+msgstr "Retrageți"
+
+#~ msgid "Withdraw {assetSymbol}"
+#~ msgstr "Retrageți {assetSymbol}"
+
+#: src/pages/swap/[[...tokens]].tsx:683
+msgid "Wrap"
+msgstr "Încheiați"
+
+#: src/components/WalletModal/index.tsx:272
+msgid "Wrong Network"
+msgstr "Rețea greșită"
+
+#: src/pages/stake.tsx:275
+msgid "Yesterday's APR"
+msgstr "APR de ieri"
+
+#~ msgid "Yield"
+#~ msgstr "Randament"
+
+#, fuzzy
+#~ msgid "Yield Debugger"
+#~ msgstr ""
+
+#, fuzzy
+#~ msgid "Yield Farms"
+#~ msgstr ""
+
+#~ msgid "Yield Instruments"
+#~ msgstr "Instrumente de randament"
+
+#~ msgid "You are creating a pool"
+#~ msgstr "Creați un fond comun"
+
+#: src/components/Web3Status/index.tsx:220
+msgid "You are on the wrong network"
+msgstr "Vă aflați în rețeaua greșită"
+
+#~ msgid "You don’t have liquidity in this pool yet"
+#~ msgstr "Încă nu aveți lichidități în acest fond comun"
+
+#: src/pages/migrate.tsx:168
+msgid "You need to first approve LP tokens and then migrate it"
+msgstr "Mai întâi trebuie să aprobați token-urile LP și apoi să le migrați"
+
+#~ msgid "You will receive"
+#~ msgstr "Veți primi"
+
+#~ msgid "Your Claimable SUSHI this Week"
+#~ msgstr "SUSHI revendicabil pentru această săptămână"
+
+#: src/pages/migrate.tsx:459
+msgid "Your Liquidity"
+msgstr "Lichiditatea dvs."
+
+#: src/pages/pool.tsx:103
+msgid "Your Liquidity Positions"
+msgstr "Pozițiile lichidităților dvs."
+
+#~ msgid "Your Pool Share"
+#~ msgstr "Cota dvs. din fondul comun"
+
+#~ msgid "Your Pool Tokens"
+#~ msgstr "Token-urile dvs. pentru fondul comun"
+
+#~ msgid "Your Staked"
+#~ msgstr "Sumele dvs. investite"
+
+#: src/pages/stake.tsx:528
+msgid "Your SushiBar Stats"
+msgstr "Statisticile dvs. SushiBar"
+
+#~ msgid "Your Transaction History"
+#~ msgstr "Istoricul tranzacțiilor dvs."
+
+#: src/components/TransactionList.tsx:22
+msgid "Your Transaction History on {0}"
+msgstr "Istoricul tranzacțiilor dvs. la {0}"
+
+#: src/pages/migrate.tsx:452
+msgid "Your Wallet"
+msgstr "Portofelul dvs."
+
+#~ msgid "Your Yields"
+#~ msgstr "Randamentele dvs."
+
+#: src/components/PositionCard/index.tsx:166
+#: src/components/PositionCard/index.tsx:429
+msgid "Your pool share"
+msgstr "Cota dvs. din fondul comun"
+
+#: src/components/PositionCard/index.tsx:345
+msgid "Your total pool tokens"
+msgstr "Numărul total de token-uri pentru fondul comun"
+
+#: src/components/TransactionSettings/index.tsx:261
+msgid "Your transaction may be frontrun"
+msgstr "Tranzacția dvs. poate fi favorită"
+
+#: src/components/TransactionSettings/index.tsx:260
+msgid "Your transaction may fail"
+msgstr "Tranzacția dvs. poate eșua"
+
+#: src/components/TransactionSettings/index.tsx:274
+msgid "Your transaction will revert if it is pending for more than this long."
+msgstr "Tranzacția dvs. se va anula dacă este în așteptare pentru o perioadă mai lungă de cea stabilită."
+
+#: src/components/TransactionSettings/index.tsx:176
+msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
+msgstr "Tranzacția dvs. se va anula dacă prețul se modifică într-o direcție nefavorabilă, cu mai mult de acest procent."
+
+#: src/components/TradeReview.tsx:30
+#: src/features/swap/AdvancedSwapDetails.tsx:36
+#: src/features/swap/SwapModalFooter.tsx:65
+msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
+msgstr "Tranzacția dvs. se va anula dacă are loc o mișcare de preț mare și nefavorabilă, înainte de confirmare."
+
+#: src/pages/migrate.tsx:341
+msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
+msgstr "Lichiditatea dvs. {exchange} {0}/{1} va deveni lichiditate {2}/{3} SushiSwap."
+
+#: src/pages/zap.tsx:282
+msgid "Zap"
+msgstr ""
+
+#~ msgid "annualized"
+#~ msgstr "anualizat"
+
+#: src/components/Gas/index.tsx:14
+#: src/pages/transactions.tsx:32
+msgid "failed to load"
+msgstr "încărcarea a eșuat"
+
+#~ msgid "import it"
+#~ msgstr "importați"
+
+#: src/components/Gas/index.tsx:15
+#: src/pages/transactions.tsx:33
+msgid "loading..."
+msgstr "se încarcă..."
+
+#: src/components/TransactionSettings/index.tsx:299
+msgid "minutes"
+msgstr "minute"
+
+#~ msgid "per month"
+#~ msgstr "pe lună"
+
+#~ msgid "xSUSHI Balance"
+#~ msgstr "Sold xSUSHI"
+
+#~ msgid ""
+#~ "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional\n"
+#~ "to your share of the SushiBar."
+#~ msgstr ""
+#~ "xSUSHI câștigă automat comisioane (0,05% din toate swap-urile, inclusiv swap-urile multi-lanț) proporțional\n"
+#~ " cu cota dvs. din SushiBar."
+
+#~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
+#~ msgstr "xSUSHI câștigă automat comisioane (0,05% din toate swap-urile, inclusiv swap-urile multi-lanț) proporțional  cu cota dvs. din SushiBar."
+
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:53
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:62
+msgid "{0} Deposited"
+msgstr "{0} Depus"
+
+#: src/pages/borrow/[pair].tsx:109
+#: src/pages/lend/[pair].tsx:112
+msgid "{0} Strategy"
+msgstr "{0} Strategie"
+
+#~ msgid "{0} per {1}"
+#~ msgstr "{0} pe {1}"
