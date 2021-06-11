@@ -1,9 +1,11 @@
 import { FC, useState } from 'react'
-import { useDerivedSwapInfo, useReserveRatio } from '../../state/swap/hooks'
-import { SwitchHorizontalIcon } from '@heroicons/react/outline'
+import {
+    useDerivedLimitOrderInfo,
+    useReserveRatio,
+} from '../../state/limit-order/hooks'
 
 const PriceRatio: FC = () => {
-    const { currencies } = useDerivedSwapInfo()
+    const { currencies } = useDerivedLimitOrderInfo()
     const [inverted, setInverted] = useState(false)
     const price = useReserveRatio(inverted)
 

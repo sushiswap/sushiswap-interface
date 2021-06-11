@@ -515,11 +515,3 @@ export function useDefaultsFromURLSearch():
 
     return result
 }
-
-export const useReserveRatio = (inverted = false) => {
-    const { currencies } = useDerivedSwapInfo()
-    const [, pair] = usePair(currencies.INPUT, currencies.OUTPUT)
-    const a = pair?.token0Price.toSignificant(6)
-    const b = pair?.token1Price.toSignificant(6)
-    return pair?.token0 === currencies.INPUT || inverted ? a : b
-}

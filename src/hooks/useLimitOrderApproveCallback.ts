@@ -10,13 +10,22 @@ import {
 } from './useKashiApproveCallback'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { ethers } from 'ethers'
-import { signMasterContractApproval } from '../entities/KashiCooker'
 import { useLimitOrderApprovalPending } from '../state/limit-order/hooks'
 import { useDispatch } from 'react-redux'
 import { setLimitOrderApprovalPending } from '../state/limit-order/actions'
-import { LimitOrder } from 'limitorderv2-sdk'
-import { TokenAmount } from '@sushiswap/sdk'
-import { e10 } from '../functions'
+import LimitOrderCooker, {
+    signMasterContractApproval,
+} from '../entities/LimitOrderCooker'
+import { useTransactionAdder } from '../state/transactions/hooks'
+import { Token } from '@sushiswap/sdk'
+
+export interface LimitOrderPermit {
+    account: string
+    masterContract: string
+    v: number
+    r: string
+    s: string
+}
 
 const useLimitOrderApproveCallback = () => {
     const { account, library, chainId } = useActiveWeb3React()
@@ -25,7 +34,7 @@ const useLimitOrderApproveCallback = () => {
     const [approveLimitOrderFallback, setApproveLimitOrderFallback] =
         useState<boolean>(false)
     const [limitOrderPermit, setLimitOrderPermit] = useState<
-        KashiPermit | undefined
+        LimitOrderPermit | undefined
     >(undefined)
 
     useEffect(() => {
@@ -39,6 +48,7 @@ const useLimitOrderApproveCallback = () => {
         masterContract,
         account || ethers.constants.AddressZero
     )
+    const addTransaction = useTransactionAdder()
 
     // check the current approval status
     const approvalState: BentoApprovalState = useMemo(() => {
@@ -87,19 +97,17 @@ const useLimitOrderApproveCallback = () => {
                 chainId
             )
             const { v, r, s } = ethers.utils.splitSignature(signature)
-            const tx = await bentoBoxContract?.setMasterContractApproval(
-                account,
-                masterContract,
-                true,
-                v,
-                r,
-                s
-            )
-            dispatch(setLimitOrderApprovalPending('Approve Limit Order'))
-            await tx.wait()
-            dispatch(setLimitOrderApprovalPending(''))
+            return {
+                outcome: BentoApproveOutcome.SUCCESS,
+                permit: { account, masterContract, v, r, s },
+            }
         } catch (e) {
-            dispatch(setLimitOrderApprovalPending(''))
+            return {
+                outcome:
+                    e.code === 4001
+                        ? BentoApproveOutcome.REJECTED
+                        : BentoApproveOutcome.FAILED,
+            }
         }
     }, [
         approvalState,
@@ -110,14 +118,58 @@ const useLimitOrderApproveCallback = () => {
         masterContract,
     ])
 
-    const placeLimitOrder = async function () {}
+    const onApprove = async function () {
+        if (!approveLimitOrderFallback) {
+            const result = await approve()
+            if (result.outcome === BentoApproveOutcome.SUCCESS) {
+                setLimitOrderPermit(result.permit)
+            } else if (result.outcome === BentoApproveOutcome.FAILED) {
+                setApproveLimitOrderFallback(true)
+            }
+        } else {
+            const tx = await bentoBoxContract?.setMasterContractApproval(
+                account,
+                masterContract,
+                true,
+                0,
+                ethers.constants.HashZero,
+                ethers.constants.HashZero
+            )
+            dispatch(setLimitOrderApprovalPending('Approve Limit Order'))
+            await tx.wait()
+            dispatch(setLimitOrderApprovalPending(''))
+        }
+    }
+
+    const execute = async function (
+        token: Token,
+        handler: (cooker: LimitOrderCooker) => Promise<string>
+    ) {
+        const cooker = new LimitOrderCooker(token, account, library, chainId)
+        let summary
+        if (
+            approvalState === BentoApprovalState.NOT_APPROVED &&
+            limitOrderPermit
+        ) {
+            cooker.approve(limitOrderPermit)
+            summary = `Approve Limit Order and ${await handler(cooker)}`
+        } else {
+            summary = await handler(cooker)
+        }
+        const result = await cooker.cook()
+        if (result.success) {
+            addTransaction(result.tx, { summary })
+            setLimitOrderPermit(undefined)
+            await result.tx.wait()
+        }
+    }
 
     return [
         approvalState,
         approveLimitOrderFallback,
         limitOrderPermit,
-        approve,
-        placeLimitOrder,
+        onApprove,
+        execute,
     ]
 }
 

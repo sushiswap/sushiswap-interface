@@ -1,26 +1,25 @@
 import React, { FC, useCallback } from 'react'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { LimitOrder } from 'limitorderv2-sdk'
 import { Input as NumericalInput } from '../../components/NumericalInput'
-import { useDerivedSwapInfo } from '../../state/swap/hooks'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../state'
 import { setLimitPrice } from '../../state/limit-order/actions'
+import {
+    useDerivedLimitOrderInfo,
+    useLimitOrderState,
+    useReserveRatio,
+} from '../../state/limit-order/hooks'
 
 interface LimitPriceInputPanelProps {
-    placeholder: string
-    value: string
     onBlur: () => void
 }
 
-const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({
-    placeholder,
-    value,
-    onBlur,
-}) => {
+const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
     const dispatch = useDispatch<AppDispatch>()
-    const { currencies } = useDerivedSwapInfo()
+    const { limitPrice } = useLimitOrderState()
+    const { currencies } = useDerivedLimitOrderInfo()
+    const currentPrice = useReserveRatio()
     const { i18n } = useLingui()
 
     const handleInput = useCallback((value) => {
@@ -36,7 +35,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({
                 </span>
                 <span
                     className="uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-0.5 px-1.5 text-xs rounded-3xl flex items-center justify-center cursor-pointer hover:border-opacity-100"
-                    onClick={() => handleInput(placeholder)}
+                    onClick={() => handleInput(currentPrice)}
                 >
                     {i18n._(t`Current`)}
                 </span>
@@ -44,9 +43,9 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({
             <div className="flex bg-dark-900 pl-4 pr-5 w-full border-2 border-dark-800 rounded-r items-center gap-3">
                 <NumericalInput
                     className="w-full bg-transparent font-medium text-2xl"
-                    placeholder={placeholder}
+                    placeholder={currentPrice}
                     id="token-amount-input"
-                    value={value}
+                    value={limitPrice}
                     onUserInput={handleInput}
                     onBlur={onBlur}
                 />

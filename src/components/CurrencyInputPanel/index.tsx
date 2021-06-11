@@ -116,9 +116,9 @@ export default function CurrencyInputPanel({
 
     return (
         <div className="bg-red bg-opacity-20 rounded">
-            <div id={id} className="p-5 rounded bg-dark-800">
+            <div id={id} className="rounded bg-dark-800">
                 <div
-                    className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row"
+                    className="p-4 flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row"
                     // hideInput={hideInput}
                     // cornerRadiusBottomNone={cornerRadiusBottomNone}
                     // cornerRadiusTopNone={cornerRadiusTopNone}
@@ -264,62 +264,64 @@ export default function CurrencyInputPanel({
                     <div
                         className={`${
                             error ? 'border border-red border-opacity-40' : ''
-                        } flex items-center w-full p-3 space-x-3 rounded bg-dark-900 sm:w-3/5`}
+                        } flex items-center justify-between w-full px-3 py-2.5 rounded bg-dark-900 sm:w-3/5`}
                     >
                         {!hideInput && (
                             <>
+                                <div className="grid grid-rows-2">
+                                    <div className="w-full">
+                                        <NumericalInput
+                                            className="w-full bg-transparent text-2xl line-height-1"
+                                            id="token-amount-input"
+                                            value={value}
+                                            onUserInput={(val) => {
+                                                onUserInput(val)
+                                            }}
+                                        />
+                                    </div>
+
+                                    {chainId && chainId in USDC && (
+                                        <div className="text-xs font-medium text-low-emphesis">
+                                            ≈ {valueUSDC} USDC
+                                        </div>
+                                    )}
+                                </div>
+
                                 {account &&
                                     currency &&
                                     showMaxButton &&
                                     label !== 'To' && (
-                                        <Button
+                                        <span
                                             onClick={onMax}
-                                            size="small"
-                                            className="text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap"
+                                            className="uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-1 px-2 text-sm rounded-3xl flex items-center justify-center cursor-pointer hover:border-opacity-100"
                                         >
                                             {i18n._(t`Max`)}
-                                        </Button>
+                                        </span>
                                     )}
-                                <NumericalInput
-                                    id="token-amount-input"
-                                    value={value}
-                                    onUserInput={(val) => {
-                                        onUserInput(val)
-                                    }}
-                                />
-                                {helperText ? (
+                                {helperText && (
                                     <div className="flex flex-col">
                                         <span className="text-xs font-bold text-high-emphesis">
                                             {helperText}
                                         </span>
                                     </div>
-                                ) : (
-                                    account && (
-                                        <div className="flex flex-col">
-                                            <div
-                                                onClick={onMax}
-                                                className="text-xs font-medium text-right cursor-pointer text-low-emphesis"
-                                            >
-                                                {!hideBalance &&
-                                                !!currency &&
-                                                selectedCurrencyBalance
-                                                    ? (customBalanceText ??
-                                                          'Balance: ') +
-                                                      selectedCurrencyBalance?.toSignificant(
-                                                          6
-                                                      )
-                                                    : ' -'}
-                                            </div>
-                                            {chainId && chainId in USDC && (
-                                                <div className="text-xs font-medium text-right text-secondary">
-                                                    ≈ {valueUSDC} USDC
-                                                </div>
-                                            )}
-                                        </div>
-                                    )
                                 )}
                             </>
                         )}
+                    </div>
+                </div>
+                <div className="flex flex-col bg-dark-700 rounded-b px-5 py-1">
+                    <div className="flex flex-row gap-2">
+                        <div
+                            onClick={onMax}
+                            className="text-xs font-medium cursor-pointer"
+                        >
+                            {!hideBalance &&
+                            !!currency &&
+                            selectedCurrencyBalance
+                                ? (customBalanceText ?? 'Balance: ') +
+                                  selectedCurrencyBalance?.toSignificant(6)
+                                : ' -'}
+                        </div>
                     </div>
                 </div>
                 {!disableCurrencySelect && onCurrencySelect && (
