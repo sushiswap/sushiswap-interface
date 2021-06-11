@@ -65,12 +65,10 @@ const builders = {
         data: string,
         type: 'transaction' | 'token' | 'address' | 'block'
     ) => {
-        const prefix = `https://explorer-${chainName}.maticvigil.com`
+        const prefix = `https://polygonscan.com`
         switch (type) {
             case 'transaction':
                 return `${prefix}/tx/${data}`
-            case 'token':
-                return `${prefix}/tokens/${data}`
             default:
                 return `${prefix}/${type}/${data}`
         }
