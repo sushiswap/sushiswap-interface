@@ -35,22 +35,40 @@ export default function DoubleCurrencyLogo({
     squared = true,
 }: DoubleCurrencyLogoProps) {
     return (
-        <Wrapper sizeraw={size} margin={margin}>
-            {currency0 && (
-                <HigherLogo
+        <div className="flex space-x-2">
+            <div className="flex items-center ">
+                <CurrencyLogo
                     currency={currency0}
                     size={size.toString() + 'px'}
                     squared={squared}
                 />
-            )}
-            {currency1 && (
-                <CoveredLogo
+            </div>
+            <div className="flex items-center">
+                <CurrencyLogo
                     currency={currency1}
                     size={size.toString() + 'px'}
-                    sizeraw={size}
                     squared={squared}
                 />
-            )}
-        </Wrapper>
+            </div>
+        </div>
     )
+    // return (
+    //     <Wrapper sizeraw={size} margin={margin}>
+    //         {currency0 && (
+    //             <HigherLogo
+    //                 currency={currency0}
+    //                 size={size.toString() + 'px'}
+    //                 squared={squared}
+    //             />
+    //         )}
+    //         {currency1 && (
+    //             <CoveredLogo
+    //                 currency={currency1}
+    //                 size={size.toString() + 'px'}
+    //                 sizeraw={size}
+    //                 squared={squared}
+    //             />
+    //         )}
+    //     </Wrapper>
+    // )
 }
