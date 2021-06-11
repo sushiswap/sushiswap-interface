@@ -3,7 +3,7 @@
       "next/babel"
     ],
     "plugins": [
-      "macros", 
+      "macros",
       ["styled-components", { "ssr": true }]
     ]
   }

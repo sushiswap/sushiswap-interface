@@ -521,6 +521,12 @@ msgstr "Portofel hardware"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Recoltați {0} SUSHI"
 
+#: src/features/farm/FarmListItem.tsx:407
+msgid ""
+"Harvest {0} SUSHI\n"
+"{1}"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Harvest {0} SUSHI & {1} ALCX"
 #~ msgstr ""
@@ -702,6 +708,8 @@ msgstr "Se încarcă..."
 msgid "Loan to Value"
 msgstr "Împrumut în limita valorii de piață"
 
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:286
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -1046,6 +1054,7 @@ msgstr "Ceva nu a funcționat corect în timpul semnării aprobării. Acest lucr
 
 #: src/components/Header/index.tsx:136
 #: src/components/Header/index.tsx:470
+#: src/features/farm/FarmListItem.tsx:257
 msgid "Stake"
 msgstr "Investiți"
 
@@ -1245,6 +1254,7 @@ msgstr "Activați modul Expert"
 #~ msgid "Unknown error"
 #~ msgstr "Eroare necunoscută"
 
+#: src/features/farm/FarmListItem.tsx:318
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1311,6 +1321,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Portofel"
 
+#: src/features/farm/FarmListItem.tsx:177
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Soldul portofelului"
@@ -1388,8 +1399,9 @@ msgstr "Pozițiile lichidităților dvs."
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Token-urile dvs. pentru fondul comun"
 
-#~ msgid "Your Staked"
-#~ msgstr "Sumele dvs. investite"
+#: src/features/farm/FarmListItem.tsx:264
+msgid "Your Staked"
+msgstr "Sumele dvs. investite"
 
 #: src/pages/stake.tsx:528
 msgid "Your SushiBar Stats"

@@ -519,6 +519,12 @@ msgstr "Ví cứng"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Thu hoạch {0} SUSHI"
 
+#: src/features/farm/FarmListItem.tsx:407
+msgid ""
+"Harvest {0} SUSHI\n"
+"{1}"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Harvest {0} SUSHI & {1} ALCX"
 #~ msgstr ""
@@ -700,6 +706,8 @@ msgstr "Đang tải..."
 msgid "Loan to Value"
 msgstr "Khoản vay đối với giá trị"
 
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:286
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -1044,6 +1052,7 @@ msgstr "Đã xảy ra sự cố khi ký phê duyệt. Điều này được mong
 
 #: src/components/Header/index.tsx:136
 #: src/components/Header/index.tsx:470
+#: src/features/farm/FarmListItem.tsx:257
 msgid "Stake"
 msgstr "Đặt cược"
 
@@ -1243,6 +1252,7 @@ msgstr "Bật chế độ Chuyên gia"
 #~ msgid "Unknown error"
 #~ msgstr "Lỗi không xác định"
 
+#: src/features/farm/FarmListItem.tsx:318
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1309,6 +1319,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Ví tiền"
 
+#: src/features/farm/FarmListItem.tsx:177
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Số dư trên ví"
@@ -1386,8 +1397,9 @@ msgstr "Trạng thái thanh khoản của bạn"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Số token trên mạng lưới của bạn"
 
-#~ msgid "Your Staked"
-#~ msgstr "Đặt cược của bạn"
+#: src/features/farm/FarmListItem.tsx:264
+msgid "Your Staked"
+msgstr "Đặt cược của bạn"
 
 #: src/pages/stake.tsx:528
 msgid "Your SushiBar Stats"

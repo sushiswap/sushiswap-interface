@@ -1,13 +1,14 @@
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+
+import Dots from '../components/Dots'
 import Head from 'next/head'
 import Layout from '../layouts/DefaultLayout'
 import Typography from '../components/Typography'
 import capitalize from 'lodash/capitalize'
+import { classNames } from '../functions'
 import { getChainsStatus } from '../services/covalent/fetchers'
 import { useChainsStatus } from '../services/covalent/hooks'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import { useState } from 'react'
-import { classNames } from '../functions'
-import Dots from '../components/Dots'
 
 export default function Status({ initialData }) {
     const res = useChainsStatus({ initialData })

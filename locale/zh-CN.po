@@ -505,6 +505,12 @@ msgstr "硬件钱包"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "收获{0}SUSHI"
 
+#: src/features/farm/FarmListItem.tsx:407
+msgid ""
+"Harvest {0} SUSHI\n"
+"{1}"
+msgstr ""
+
 #~ msgid "Harvest {0} SUSHI & {1} ALCX"
 #~ msgstr "收获{0} SUSHI & {1} ALCX"
 
@@ -682,6 +688,8 @@ msgstr "载入中..."
 msgid "Loan to Value"
 msgstr "贷款价值比（LTV)"
 
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:286
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -1024,6 +1032,7 @@ msgstr "在签署批准时出现错误。可能是硬件钱包例如Trezor和Led
 
 #: src/components/Header/index.tsx:136
 #: src/components/Header/index.tsx:470
+#: src/features/farm/FarmListItem.tsx:257
 msgid "Stake"
 msgstr "质押"
 
@@ -1220,6 +1229,7 @@ msgstr "开启专家模式"
 #~ msgid "Unknown error"
 #~ msgstr "未知错误"
 
+#: src/features/farm/FarmListItem.tsx:318
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1286,6 +1296,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "钱包"
 
+#: src/features/farm/FarmListItem.tsx:177
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "钱包余额"
@@ -1361,8 +1372,9 @@ msgstr "您的LP"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "您池子里的代币"
 
-#~ msgid "Your Staked"
-#~ msgstr "您在流动性池的占比"
+#: src/features/farm/FarmListItem.tsx:264
+msgid "Your Staked"
+msgstr "您在流动性池的占比"
 
 #: src/pages/stake.tsx:528
 msgid "Your SushiBar Stats"

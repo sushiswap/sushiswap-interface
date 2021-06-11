@@ -521,6 +521,12 @@ msgstr "Hardware Wallet"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Raccogli {0} SUSHI"
 
+#: src/features/farm/FarmListItem.tsx:407
+msgid ""
+"Harvest {0} SUSHI\n"
+"{1}"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Harvest {0} SUSHI & {1} ALCX"
 #~ msgstr ""
@@ -699,6 +705,8 @@ msgstr "Caricamento..."
 msgid "Loan to Value"
 msgstr "Loan to Value"
 
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:286
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -1043,6 +1051,7 @@ msgstr "Qualcosa è andato storto durante la firma dell'approvazione. Questo è 
 
 #: src/components/Header/index.tsx:136
 #: src/components/Header/index.tsx:470
+#: src/features/farm/FarmListItem.tsx:257
 msgid "Stake"
 msgstr "Metti in staking"
 
@@ -1242,6 +1251,7 @@ msgstr "Attiva modalità esperto"
 #~ msgid "Unknown error"
 #~ msgstr "Errore sconosciuto"
 
+#: src/features/farm/FarmListItem.tsx:318
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1308,6 +1318,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Wallet"
 
+#: src/features/farm/FarmListItem.tsx:177
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Saldo del wallet"
@@ -1385,8 +1396,9 @@ msgstr "Le tue posizioni di liquidità"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "I tuoi pool token"
 
-#~ msgid "Your Staked"
-#~ msgstr "In staking"
+#: src/features/farm/FarmListItem.tsx:264
+msgid "Your Staked"
+msgstr "In staking"
 
 #: src/pages/stake.tsx:528
 msgid "Your SushiBar Stats"

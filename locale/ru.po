@@ -521,6 +521,12 @@ msgstr "Аппаратный кошелек"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Получить доходы {0} SUSHI"
 
+#: src/features/farm/FarmListItem.tsx:407
+msgid ""
+"Harvest {0} SUSHI\n"
+"{1}"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Harvest {0} SUSHI & {1} ALCX"
 #~ msgstr ""
@@ -702,6 +708,8 @@ msgstr "Загрузка..."
 msgid "Loan to Value"
 msgstr "Кредит до стоимости"
 
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:286
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -1046,6 +1054,7 @@ msgstr "Что-то пошло не так при подписании разр�
 
 #: src/components/Header/index.tsx:136
 #: src/components/Header/index.tsx:470
+#: src/features/farm/FarmListItem.tsx:257
 msgid "Stake"
 msgstr "Сделать ставку"
 
@@ -1245,6 +1254,7 @@ msgstr "Включите экспертный режим"
 #~ msgid "Unknown error"
 #~ msgstr "Неизвестная ошибка"
 
+#: src/features/farm/FarmListItem.tsx:318
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1311,6 +1321,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Кошелек"
 
+#: src/features/farm/FarmListItem.tsx:177
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Баланс Кошелька"
@@ -1388,8 +1399,9 @@ msgstr "Ваши позиции по ликвидности"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Токены вашего пула"
 
-#~ msgid "Your Staked"
-#~ msgstr "Ваша ставка"
+#: src/features/farm/FarmListItem.tsx:264
+msgid "Your Staked"
+msgstr "Ваша ставка"
 
 #: src/pages/stake.tsx:528
 msgid "Your SushiBar Stats"

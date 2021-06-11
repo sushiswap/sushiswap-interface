@@ -521,6 +521,12 @@ msgstr "ハードウェアウォレット"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "{0}SUSHIを収穫"
 
+#: src/features/farm/FarmListItem.tsx:407
+msgid ""
+"Harvest {0} SUSHI\n"
+"{1}"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Harvest {0} SUSHI & {1} ALCX"
 #~ msgstr ""
@@ -702,6 +708,8 @@ msgstr "読み込んでいます..."
 msgid "Loan to Value"
 msgstr "融資比率"
 
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:286
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -1046,6 +1054,7 @@ msgstr "承認の署名中に問題が発生しました。これは、Trezorや
 
 #: src/components/Header/index.tsx:136
 #: src/components/Header/index.tsx:470
+#: src/features/farm/FarmListItem.tsx:257
 msgid "Stake"
 msgstr "出資"
 
@@ -1245,6 +1254,7 @@ msgstr "エキスパートモードをオンにする"
 #~ msgid "Unknown error"
 #~ msgstr "不明なエラー"
 
+#: src/features/farm/FarmListItem.tsx:318
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1311,6 +1321,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "ウォレット"
 
+#: src/features/farm/FarmListItem.tsx:177
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "ウォレット残高"
@@ -1388,8 +1399,9 @@ msgstr "あなたの流動性ポジション"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "あなたのプールトークン"
 
-#~ msgid "Your Staked"
-#~ msgstr "あなたの出資"
+#: src/features/farm/FarmListItem.tsx:264
+msgid "Your Staked"
+msgstr "あなたの出資"
 
 #: src/pages/stake.tsx:528
 msgid "Your SushiBar Stats"

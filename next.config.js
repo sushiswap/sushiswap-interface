@@ -41,15 +41,15 @@ module.exports = withBundleAnalyzer(
             // path: 'http://res.cloudinary.com/dnz2bkszg/image/fetch/',
         },
         reactStrictMode: true,
-        // async redirects() {
-        //     return [
-        //         {
-        //             source: '/',
-        //             destination: '/swap',
-        //             permanent: true,
-        //         },
-        //     ]
-        // },
+        async redirects() {
+            return [
+                {
+                    source: '/',
+                    destination: '/swap',
+                    permanent: true,
+                },
+            ]
+        },
         i18n: {
             locales,
             defaultLocale: sourceLocale,

@@ -43,7 +43,7 @@ const FarmListItem = ({ farm }) => {
 
     // TODO: KashiPair? Refactor usePair to return both a SwapPair & LendingPair in same format
     // const [pairState, pair] = usePair(token0, token1)
-    
+
     // TODO: Replace these
     const amount = useUserInfo(farm)
     const pending = usePendingSushi(farm)
@@ -404,14 +404,17 @@ const FarmListItem = ({ farm }) => {
                                         setPendingTx(false)
                                     }}
                                 >
-                                    <Trans>
-                                        Harvest {formatNumber(pending)} SUSHI{' '}
-                                        {farm.rewards.length > 1
-                                            ? `& ${formatNumber(reward)} ${
-                                                  farm.rewards[1].token
-                                              }`
-                                            : null}
-                                    </Trans>
+                                    {i18n._(t`Harvest ${formatNumber(
+                                        pending
+                                    )} SUSHI
+                                        ${
+                                            farm.rewards.length > 1
+                                                ? `& ${formatNumber(reward)} ${
+                                                      farm.rewards[1].token
+                                                  }`
+                                                : null
+                                        }
+                                    `)}
                                 </Button>
                             </div>
                         )}
