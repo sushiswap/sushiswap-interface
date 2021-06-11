@@ -176,7 +176,7 @@ const FarmListItem = ({ farm }) => {
                                     <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
                                         {i18n._(t`Wallet Balance`)}:{' '}
                                         {formatNumber(
-                                            balance.toSignificant(6)
+                                            balance?.toSignificant(6) ?? 0
                                         )}{' '}
                                         {farm.type}
                                     </div>
