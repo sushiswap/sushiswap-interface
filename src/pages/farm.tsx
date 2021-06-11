@@ -39,8 +39,9 @@ import { useLingui } from '@lingui/react'
 
 export default function Farm(): JSX.Element {
     const { i18n } = useLingui()
-    const [section, setSection] =
-        useState<'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'>('all')
+    const [section, setSection] = useState<
+        'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'
+    >('all')
 
     const { data: averageBlockTime } = useAverageBlockTime()
 

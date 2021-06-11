@@ -26,6 +26,8 @@ import { useColor } from '../../hooks/useColor'
 import { useLingui } from '@lingui/react'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTotalSupply } from '../../hooks/useTotalSupply'
+import { useRouter } from 'next/router'
+import Button from '../Button'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;
@@ -238,6 +240,7 @@ export default function FullPositionCard({
     stakedBalance,
 }: PositionCardProps) {
     const { i18n } = useLingui()
+    const router = useRouter()
     const { account, chainId } = useActiveWeb3React()
 
     const currency0 = unwrappedToken(pair.token0)
@@ -288,7 +291,7 @@ export default function FullPositionCard({
     const backgroundColor = useColor(pair?.token0)
 
     return (
-        <StyledPositionCard border={border} bgColor={backgroundColor}>
+        <div className="my-4">
             <AutoColumn gap="12px">
                 <FixedHeightRow>
                     <AutoRow gap="8px">
@@ -377,11 +380,12 @@ export default function FullPositionCard({
                                     >
                                         {token0Deposited?.toSignificant(6)}
                                     </Text>
-                                    <CurrencyLogo
-                                        size="20px"
-                                        style={{ marginLeft: '8px' }}
-                                        currency={currency0}
-                                    />
+                                    <div style={{ marginLeft: '8px' }}>
+                                        <CurrencyLogo
+                                            size="20px"
+                                            currency={currency0}
+                                        />
+                                    </div>
                                 </RowFixed>
                             ) : (
                                 '-'
@@ -408,11 +412,12 @@ export default function FullPositionCard({
                                     >
                                         {token1Deposited?.toSignificant(6)}
                                     </Text>
-                                    <CurrencyLogo
-                                        size="20px"
-                                        style={{ marginLeft: '8px' }}
-                                        currency={currency1}
-                                    />
+                                    <div style={{ marginLeft: '8px' }}>
+                                        <CurrencyLogo
+                                            size="20px"
+                                            currency={currency1}
+                                        />
+                                    </div>
                                 </RowFixed>
                             ) : (
                                 '-'
@@ -446,56 +451,44 @@ export default function FullPositionCard({
                                 userDefaultPoolBalance.raw,
                                 BIG_INT_ZERO
                             ) && (
-                                <RowBetween marginTop="10px">
-                                    <ButtonPrimaryNormal
-                                        padding="8px"
-                                        borderRadius="8px"
-                                        as={Link}
-                                        to={`/add/${currencyId(
-                                            currency0,
-                                            chainId
-                                        )}/${currencyId(currency1, chainId)}`}
-                                        width="48%"
+                                <div className="grid grid-cols-2 gap-4 mt-4">
+                                    <Button
+                                        color="blue"
+                                        onClick={() => {
+                                            router.push(
+                                                `/add/${currencyId(
+                                                    currency0,
+                                                    chainId
+                                                )}/${currencyId(
+                                                    currency1,
+                                                    chainId
+                                                )}`
+                                            )
+                                        }}
                                     >
                                         {i18n._(t`Add`)}
-                                    </ButtonPrimaryNormal>
-                                    <ButtonPrimaryNormal
-                                        padding="8px"
-                                        borderRadius="8px"
-                                        as={Link}
-                                        width="48%"
-                                        to={`/remove/${currencyId(
-                                            currency0,
-                                            chainId
-                                        )}/${currencyId(currency1, chainId)}`}
+                                    </Button>
+                                    <Button
+                                        color="blue"
+                                        onClick={() => {
+                                            router.push(
+                                                `/remove/${currencyId(
+                                                    currency0,
+                                                    chainId
+                                                )}/${currencyId(
+                                                    currency1,
+                                                    chainId
+                                                )}`
+                                            )
+                                        }}
                                     >
                                         {i18n._(t`Remove`)}
-                                    </ButtonPrimaryNormal>
-                                </RowBetween>
-                            )}
-                        {stakedBalance &&
-                            JSBI.greaterThan(
-                                stakedBalance.raw,
-                                BIG_INT_ZERO
-                            ) && (
-                                <ButtonPrimary
-                                    padding="8px"
-                                    borderRadius="8px"
-                                    as={Link}
-                                    to={`/uni/${currencyId(
-                                        currency0,
-                                        chainId
-                                    )}/${currencyId(currency1, chainId)}`}
-                                    width="100%"
-                                >
-                                    {i18n._(
-                                        t`Manage Liquidity in Rewards Pool`
-                                    )}
-                                </ButtonPrimary>
+                                    </Button>
+                                </div>
                             )}
                     </AutoColumn>
                 )}
             </AutoColumn>
-        </StyledPositionCard>
+        </div>
     )
 }
