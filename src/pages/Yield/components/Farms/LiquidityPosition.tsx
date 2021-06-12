@@ -14,6 +14,12 @@ const LiquidityPosition = ({ farm }: any) => {
         <>
             {farm.type === 'SLP' && (
                 <Paper className="bg-dark-800">
+                    {process.env.NODE_ENV === 'development' && (
+                        <div className="text-xs">
+                            <div>{farm.liquidityPair.token0.id}</div>
+                            <div>{farm.liquidityPair.token1.id}</div>
+                        </div>
+                    )}
                     <div
                         className="bg-dark-850 grid grid-cols-3 md:grid-cols-4 px-4 py-2  cursor-pointer select-none rounded rounded-b-none"
                         onClick={() => setExpand(!expand)}
