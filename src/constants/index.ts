@@ -469,6 +469,14 @@ export const XSUSHI = new Token(
     'SushiBar'
 )
 
+export const MEOW = new Token(
+    ChainId.MAINNET,
+    '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D',
+    18,
+    'MEOW',
+    'Meowshi'
+)
+
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.

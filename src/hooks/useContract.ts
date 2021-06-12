@@ -46,6 +46,7 @@ import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
 import MASTERCHEF_V2_ABI from '../constants/abis/masterchef-v2.json'
+import MEOWSHI_ABI from '../constants/abis/meowshi.json'
 import { abi as MERKLE_DISTRIBUTOR_ABI } from '@uniswap/merkle-distributor/build/MerkleDistributor.json'
 import MINICHEF_V2_ABI from '../constants/abis/minichef-v2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
@@ -801,6 +802,16 @@ export function useAlcxRewarderContract(
     return useContract(
         '0x7519C93fC5073E15d89131fD38118D73A72370F8',
         ALCX_REWARDER_ABI,
+        withSignerIfPossible
+    )
+}
+
+export function useMeowshiContract(
+    withSignerIfPossible?: boolean
+): Contract | null {
+    return useContract(
+        '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D',
+        MEOWSHI_ABI,
         withSignerIfPossible
     )
 }
