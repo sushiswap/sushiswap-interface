@@ -1,30 +1,8 @@
 import { AppDispatch, AppState } from '../index'
-import {
-    ChainId,
-    Currency,
-    CurrencyAmount,
-    JSBI,
-    Token,
-    TokenAmount,
-    Trade,
-} from '@sushiswap/sdk'
-import {
-    DEFAULT_ARCHER_ETH_TIP,
-    DEFAULT_ARCHER_GAS_ESTIMATE,
-} from '../../constants'
-import {
-    EstimatedSwapCall,
-    SuccessfulCall,
-    useSwapCallArguments,
-} from '../../hooks/useSwapCallback'
-import {
-    Field,
-    replaceSwapState,
-    selectCurrency,
-    setRecipient,
-    switchCurrencies,
-    typeInput,
-} from './actions'
+import { ChainId, Currency, CurrencyAmount, JSBI, Token, TokenAmount, Trade } from '@sushiswap/sdk'
+import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+import { EstimatedSwapCall, SuccessfulCall, useSwapCallArguments } from '../../hooks/useSwapCallback'
+import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { isAddress, isZero } from '../../functions/validate'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -105,10 +83,7 @@ export function useSwapActionHandlers(): {
 }
 
 // try to parse a user entered amount for a given token
-export function tryParseAmount(
-    value?: string,
-    currency?: Currency
-): CurrencyAmount | undefined {
+export function tryParseAmount(value?: string, currency?: Currency): CurrencyAmount | undefined {
     if (!value || !currency) {
         return undefined
     }
@@ -140,12 +115,8 @@ const BAD_RECIPIENT_ADDRESSES: string[] = [
  */
 function involvesAddress(trade: Trade, checksummedAddress: string): boolean {
     return (
-        trade.route.path.some(
-            (token) => token.address === checksummedAddress
-        ) ||
-        trade.route.pairs.some(
-            (pair) => pair.liquidityToken.address === checksummedAddress
-        )
+        trade.route.path.some((token) => token.address === checksummedAddress) ||
+        trade.route.pairs.some((pair) => pair.liquidityToken.address === checksummedAddress)
     )
 }
 
@@ -171,8 +142,7 @@ export function useDerivedSwapInfo(doArcher = false): {
     const inputCurrency = useCurrency(inputCurrencyId)
     const outputCurrency = useCurrency(outputCurrencyId)
     const recipientLookup = useENS(recipient ?? undefined)
-    const to: string | null =
-        (recipient === null ? account : recipientLookup.address) ?? null
+    const to: string | null = (recipient === null ? account : recipientLookup.address) ?? null
 
     const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
         inputCurrency ?? undefined,
@@ -180,19 +150,10 @@ export function useDerivedSwapInfo(doArcher = false): {
     ])
 
     const isExactIn: boolean = independentField === Field.INPUT
-    const parsedAmount = tryParseAmount(
-        typedValue,
-        (isExactIn ? inputCurrency : outputCurrency) ?? undefined
-    )
+    const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
-    const bestTradeExactIn = useTradeExactIn(
-        isExactIn ? parsedAmount : undefined,
-        outputCurrency ?? undefined
-    )
-    const bestTradeExactOut = useTradeExactOut(
-        inputCurrency ?? undefined,
-        !isExactIn ? parsedAmount : undefined
-    )
+    const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined)
+    const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedAmount : undefined)
 
     const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
@@ -225,10 +186,8 @@ export function useDerivedSwapInfo(doArcher = false): {
     } else {
         if (
             BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1 ||
-            (bestTradeExactIn &&
-                involvesAddress(bestTradeExactIn, formattedTo)) ||
-            (bestTradeExactOut &&
-                involvesAddress(bestTradeExactOut, formattedTo))
+            (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
+            (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
         ) {
             inputError = inputError ?? i18n._(t`Invalid recipient`)
         }
@@ -237,9 +196,7 @@ export function useDerivedSwapInfo(doArcher = false): {
     const [allowedSlippage] = useUserSlippageTolerance()
 
     const slippageAdjustedAmounts =
-        v2Trade &&
-        allowedSlippage &&
-        computeSlippageAdjustedAmounts(v2Trade, allowedSlippage)
+        v2Trade && allowedSlippage && computeSlippageAdjustedAmounts(v2Trade, allowedSlippage)
 
     // compare input balance to max input based on version
     const [balanceIn, amountIn] = [
@@ -248,23 +205,15 @@ export function useDerivedSwapInfo(doArcher = false): {
     ]
 
     if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-        inputError = i18n._(
-            t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`
-        )
+        inputError = i18n._(t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`)
     }
 
-    const swapCalls = useSwapCallArguments(
-        v2Trade as Trade,
-        allowedSlippage,
-        to,
-        doArcher
-    )
+    const swapCalls = useSwapCallArguments(v2Trade as Trade, allowedSlippage, to, doArcher)
 
     const [, setUserETHTip] = useUserArcherETHTip()
     const [userGasEstimate, setUserGasEstimate] = useUserArcherGasEstimate()
     const [userGasPrice] = useUserArcherGasPrice()
-    const [userTipManualOverride, setUserTipManualOverride] =
-        useUserArcherTipManualOverride()
+    const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
 
     useEffect(() => {
         if (doArcher) {
@@ -278,20 +227,9 @@ export function useDerivedSwapInfo(doArcher = false): {
 
     useEffect(() => {
         if (doArcher && !userTipManualOverride) {
-            setUserETHTip(
-                JSBI.multiply(
-                    JSBI.BigInt(userGasEstimate),
-                    JSBI.BigInt(userGasPrice)
-                ).toString()
-            )
+            setUserETHTip(JSBI.multiply(JSBI.BigInt(userGasEstimate), JSBI.BigInt(userGasPrice)).toString())
         }
-    }, [
-        doArcher,
-        userGasEstimate,
-        userGasPrice,
-        userTipManualOverride,
-        setUserETHTip,
-    ])
+    }, [doArcher, userGasEstimate, userGasPrice, userTipManualOverride, setUserETHTip])
 
     useEffect(() => {
         async function estimateGas() {
@@ -311,15 +249,9 @@ export function useDerivedSwapInfo(doArcher = false): {
                             }
                         })
                         .catch((gasError) => {
-                            console.debug(
-                                'Gas estimate failed, trying eth_call to extract error',
-                                call
-                            )
+                            console.debug('Gas estimate failed, trying eth_call to extract error', call)
 
-                            return contract.callStatic[methodName](
-                                ...args,
-                                options
-                            )
+                            return contract.callStatic[methodName](...args, options)
                                 .then((result) => {
                                     console.debug(
                                         'Unexpected successful call after failed estimate gas',
@@ -329,17 +261,11 @@ export function useDerivedSwapInfo(doArcher = false): {
                                     )
                                     return {
                                         call,
-                                        error: new Error(
-                                            'Unexpected issue with estimating the gas. Please try again.'
-                                        ),
+                                        error: new Error('Unexpected issue with estimating the gas. Please try again.'),
                                     }
                                 })
                                 .catch((callError) => {
-                                    console.debug(
-                                        'Call threw error',
-                                        call,
-                                        callError
-                                    )
+                                    console.debug('Call threw error', call, callError)
                                     let errorMessage: string
                                     switch (callError.reason) {
                                         case 'UniswapV2Router: INSUFFICIENT_OUTPUT_AMOUNT':
@@ -362,8 +288,7 @@ export function useDerivedSwapInfo(doArcher = false): {
             // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
             const successfulEstimation = estimatedCalls.find(
                 (el, ix, list): el is SuccessfulCall =>
-                    'gasEstimate' in el &&
-                    (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
+                    'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
             )
 
             if (successfulEstimation) {
@@ -373,13 +298,7 @@ export function useDerivedSwapInfo(doArcher = false): {
         if (doArcher && v2Trade && swapCalls && !userTipManualOverride) {
             estimateGas()
         }
-    }, [
-        doArcher,
-        v2Trade,
-        swapCalls,
-        userTipManualOverride,
-        setUserGasEstimate,
-    ])
+    }, [doArcher, v2Trade, swapCalls, userTipManualOverride, setUserGasEstimate])
 
     return {
         currencies,
@@ -390,10 +309,7 @@ export function useDerivedSwapInfo(doArcher = false): {
     }
 }
 
-function parseCurrencyFromURLParameter(
-    urlParam: any,
-    chainId = ChainId.MAINNET
-): string {
+function parseCurrencyFromURLParameter(urlParam: any, chainId = ChainId.MAINNET): string {
     if (typeof urlParam === 'string') {
         const valid = isAddress(urlParam)
         const nativeSymbol = Currency.getNativeCurrencySymbol(chainId)
@@ -405,19 +321,14 @@ function parseCurrencyFromURLParameter(
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {
-    return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam))
-        ? urlParam
-        : ''
+    return typeof urlParam === 'string' && !isNaN(parseFloat(urlParam)) ? urlParam : ''
 }
 
 function parseIndependentFieldURLParameter(urlParam: any): Field {
-    return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output'
-        ? Field.OUTPUT
-        : Field.INPUT
+    return typeof urlParam === 'string' && urlParam.toLowerCase() === 'output' ? Field.OUTPUT : Field.INPUT
 }
 
-const ENS_NAME_REGEX =
-    /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
+const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 function validatedRecipient(recipient: any): string | null {
     if (typeof recipient !== 'string') return null
@@ -428,18 +339,9 @@ function validatedRecipient(recipient: any): string | null {
     return null
 }
 
-export function queryParametersToSwapState(
-    parsedQs: ParsedQs,
-    chainId = ChainId.MAINNET
-): SwapState {
-    let inputCurrency = parseCurrencyFromURLParameter(
-        parsedQs.inputCurrency,
-        chainId
-    )
-    let outputCurrency = parseCurrencyFromURLParameter(
-        parsedQs.outputCurrency,
-        chainId
-    )
+export function queryParametersToSwapState(parsedQs: ParsedQs, chainId = ChainId.MAINNET): SwapState {
+    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency, chainId)
+    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency, chainId)
     if (inputCurrency === outputCurrency) {
         if (typeof parsedQs.outputCurrency === 'string') {
             inputCurrency = ''
@@ -458,9 +360,7 @@ export function queryParametersToSwapState(
             currencyId: outputCurrency,
         },
         typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
-        independentField: parseIndependentFieldURLParameter(
-            parsedQs.exactField
-        ),
+        independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
         recipient,
     }
 }

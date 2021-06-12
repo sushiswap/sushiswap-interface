@@ -1,3 +1,4 @@
+import { AppDispatch, AppState } from '../index'
 import {
     Currency,
     CurrencyAmount,
@@ -5,43 +6,40 @@ import {
     Pair,
     Percent,
     Price,
+    ROUTER_ADDRESS,
     TokenAmount,
     Trade,
     WETH,
-    ROUTER_ADDRESS
 } from '@sushiswap/sdk'
-import { useCallback, useMemo, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { ethers } from 'ethers'
-
-import { PairState, usePair } from '../../hooks/usePairs'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import ROUTER_ABI_SLIM from '../../constants/abis/router-slim.json'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useTradeExactIn } from '../../hooks/Trades'
-import { wrappedCurrency, wrappedCurrencyAmount } from '../../functions/currency/wrappedCurrency'
-import { AppDispatch, AppState } from '../index'
-import { tryParseAmount } from '../swap/hooks'
-import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
-import usePool from '../../hooks/usePool'
-import { useCurrency } from '../../hooks/Tokens'
+import { PairState, usePair } from '../../hooks/usePairs'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useUserSingleHopOnly, useUserSlippageTolerance } from '../../state/user/hooks'
+import { wrappedCurrency, wrappedCurrencyAmount } from '../../functions/currency/wrappedCurrency'
+
+import ROUTER_ABI_SLIM from '../../constants/abis/router-slim.json'
+import { ZAPPER_ADDRESS } from '../../constants/addresses'
 import { basisPointsToPercent } from '../../functions'
-import { getZapperAddress } from '../../constants/addresses'
-import useTransactionDeadline from '../../hooks/useTransactionDeadline'
+import { ethers } from 'ethers'
+import { tryParseAmount } from '../swap/hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useCurrency } from '../../hooks/Tokens'
+import { useCurrencyBalances } from '../wallet/hooks'
 import useDebounce from '../../hooks/useDebounce'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
+import usePool from '../../hooks/usePool'
+import { useTotalSupply } from '../../hooks/useTotalSupply'
+import { useTradeExactIn } from '../../hooks/Trades'
+import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 
 const ZERO = JSBI.BigInt(0)
 
 export function useZapState(): AppState['zap'] {
-    return useSelector<AppState, AppState['zap']>(state => state.zap)
+    return useSelector<AppState, AppState['zap']>((state) => state.zap)
 }
 
-export function useZapActionHandlers(
-    noLiquidity: boolean | undefined
-): {
+export function useZapActionHandlers(noLiquidity: boolean | undefined): {
     onFieldInput: (typedValue: string) => void
 } {
     const dispatch = useDispatch<AppDispatch>()
@@ -54,7 +52,7 @@ export function useZapActionHandlers(
     )
 
     return {
-        onFieldInput
+        onFieldInput,
     }
 }
 
@@ -143,7 +141,7 @@ export function useDerivedZapInfo(
     const liquidityMinted = useMemo(() => {
         const [tokenAmountA, tokenAmountB] = [
             wrappedCurrencyAmount(currencyZeroOutput, chainId),
-            wrappedCurrencyAmount(currencyOneOutput, chainId)
+            wrappedCurrencyAmount(currencyOneOutput, chainId),
         ]
         if (pair && totalSupply && tokenAmountA && tokenAmountB) {
             return pair.getLiquidityMinted(totalSupply, tokenAmountA, tokenAmountB)
@@ -175,7 +173,7 @@ export function useDerivedZapInfo(
     // Using a slim abi to improve performance of this call
     const routerIface = new ethers.utils.Interface(ROUTER_ABI_SLIM)
     const pct = basisPointsToPercent(allowedSlippage)
-    const zapperAddress = getZapperAddress(chainId)
+    const zapperAddress = ZAPPER_ADDRESS[chainId]
 
     const encodeSwapData = () => {
         if (!!currencyZeroTrade && !!currencyOneTrade && parsedAmount !== undefined) {
@@ -186,9 +184,9 @@ export function useDerivedZapInfo(
             ) {
                 return routerIface.encodeFunctionData('swapExactETHForTokens', [
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
-                    currencyZeroTrade?.route.path.map(t => t.address),
+                    currencyZeroTrade?.route.path.map((t) => t.address),
                     zapperAddress,
-                    deadline
+                    deadline,
                 ])
             }
 
@@ -200,9 +198,9 @@ export function useDerivedZapInfo(
                 return routerIface.encodeFunctionData('swapExactTokensForTokens', [
                     parsedAmount?.raw.toString(),
                     currencyZeroTrade?.minimumAmountOut(pct).raw.toString(),
-                    currencyZeroTrade?.route.path.map(t => t.address),
+                    currencyZeroTrade?.route.path.map((t) => t.address),
                     zapperAddress,
-                    deadline
+                    deadline,
                 ])
             }
         }
@@ -247,7 +245,7 @@ export function useDerivedZapInfo(
         currencyOneOutput,
         encodeSwapData,
         isTradingUnderlying,
-        bestTrade: bestTradeExactIn ?? undefined
+        bestTrade: bestTradeExactIn ?? undefined,
     }
 }
 
@@ -271,7 +269,7 @@ export function useDefaultsFromURLSearch():
 
         setResult({
             poolAddress: parsedQs.poolAddress,
-            currencyId: parsedQs.currencyId
+            currencyId: parsedQs.currencyId,
         })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

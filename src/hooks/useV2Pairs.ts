@@ -1,11 +1,11 @@
-import { Currency, Pair, TokenAmount } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Pair } from '@sushiswap/sdk'
 
 import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
 import { Interface } from '@ethersproject/abi'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
-import { wrappedCurrency } from '../functions/currency/wrappedCurrency'
+import { wrappedCurrency } from '../functions/currency'
 
 const PAIR_INTERFACE = new Interface(IUniswapV2PairABI)
 
@@ -16,7 +16,7 @@ export enum PairState {
     INVALID,
 }
 
-export function usePairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
+export function useV2Pairs(currencies: [Currency | undefined, Currency | undefined][]): [PairState, Pair | null][] {
     const { chainId } = useActiveWeb3React()
 
     const tokens = useMemo(
@@ -51,12 +51,16 @@ export function usePairs(currencies: [Currency | undefined, Currency | undefined
             const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
             return [
                 PairState.EXISTS,
-                new Pair(new TokenAmount(token0, reserve0.toString()), new TokenAmount(token1, reserve1.toString())),
+                new Pair(
+                    CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
+                    CurrencyAmount.fromRawAmount(token1, reserve1.toString())
+                ),
             ]
         })
     }, [results, tokens])
 }
 
-export function usePair(tokenA?: Currency, tokenB?: Currency): [PairState, Pair | null] {
-    return usePairs([[tokenA, tokenB]])[0]
+export function useV2Pair(tokenA?: Currency, tokenB?: Currency): [PairState, Pair | null] {
+    const inputs: [[Currency | undefined, Currency | undefined]] = useMemo(() => [[tokenA, tokenB]], [tokenA, tokenB])
+    return useV2Pairs(inputs)[0]
 }
