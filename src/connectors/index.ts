@@ -91,9 +91,7 @@ export const injected = new InjectedConnector({
 
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
-    rpc: {
-        [ChainId.MAINNET]: RPC[ChainId.MAINNET],
-    },
+    rpc: RPC,
     bridge: 'https://bridge.walletconnect.org',
     qrcode: true,
     pollingInterval: 15000,
