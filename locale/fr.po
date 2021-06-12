@@ -85,7 +85,7 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/components/NavigationTabs/index.tsx:100
-#: src/pages/pool.tsx:184
+#: src/pages/pool.tsx:145
 msgid "Add Liquidity"
 msgstr "Ajouter de la liquidité"
 
@@ -323,7 +323,7 @@ msgstr ""
 
 #: src/pages/stake.tsx:432
 #: src/pages/swap/[[...tokens]].tsx:674
-#: src/state/mint/hooks.ts:244
+#: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "Connecter le portefeuille"
 
@@ -336,7 +336,7 @@ msgstr "Connecter un portefeuille"
 #~ msgstr "Connectez votre portefeuille pour trouver des pools"
 
 #: src/pages/migrate.tsx:435
-#: src/pages/pool.tsx:122
+#: src/pages/pool.tsx:107
 msgid "Connect to a wallet to view your liquidity"
 msgstr "Connectez votre portefeuille pour consulter vos liquidités"
 
@@ -349,7 +349,7 @@ msgstr "Créer un pool et apporter de la liquidité"
 #~ msgstr "Créer une paire"
 
 #: src/components/NavigationTabs/index.tsx:98
-#: src/pages/pool.tsx:198
+#: src/pages/pool.tsx:153
 msgid "Create a pair"
 msgstr "Créer une paire"
 
@@ -408,7 +408,7 @@ msgstr "Documentation pour les développeurs de Sushi."
 msgid "Documentation for users of Sushi."
 msgstr "Documentation pour les utilisateurs de Sushi."
 
-#: src/pages/pool.tsx:106
+#: src/pages/pool.tsx:96
 msgid "Don't see a pool you joined?"
 msgstr ""
 
@@ -430,7 +430,7 @@ msgstr "Entrer"
 msgid "Enter Amount"
 msgstr "Entrer le montant"
 
-#: src/state/swap/hooks.ts:224
+#: src/state/swap/hooks.ts:185
 msgid "Enter a recipient"
 msgstr "Entrez un destinataire"
 
@@ -438,8 +438,8 @@ msgstr "Entrez un destinataire"
 msgid "Enter a valid slippage percentage"
 msgstr "Entrez un pourcentage de slippage valide"
 
-#: src/state/mint/hooks.ts:252
-#: src/state/swap/hooks.ts:215
+#: src/state/mint/hooks.ts:200
+#: src/state/swap/hooks.ts:176
 msgid "Enter an amount"
 msgstr "Entrez un montant"
 
@@ -562,7 +562,7 @@ msgstr ""
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "Vous avez des actifs que lesquels vous souhaitez faire fructifier? Prêtez-les sur des marchés isolés et collectez des intérêts auprès des emprunteurs. C'est aussi simple que de déposer et de retirer quand vous le souhaitez."
 
-#: src/pages/pool.tsx:158
+#: src/pages/pool.tsx:130
 msgid "Have {0} Liquidity?"
 msgstr ""
 
@@ -589,7 +589,7 @@ msgstr "Importer le pool"
 #~ msgid "Import it"
 #~ msgstr "Importer"
 
-#: src/pages/pool.tsx:112
+#: src/pages/pool.tsx:99
 msgid "Import it."
 msgstr ""
 
@@ -614,9 +614,9 @@ msgid "Insufficient liquidity for this trade"
 msgstr "Liquidité insuffisante pour cette transaction"
 
 #: src/hooks/useWrapCallback.ts:84
-#: src/state/mint/hooks.ts:265
-#: src/state/mint/hooks.ts:276
-#: src/state/swap/hooks.ts:252
+#: src/state/mint/hooks.ts:206
+#: src/state/mint/hooks.ts:210
+#: src/state/swap/hooks.ts:208
 msgid "Insufficient {0} balance"
 msgstr "Solde de {0} insuffisant"
 
@@ -624,11 +624,11 @@ msgstr "Solde de {0} insuffisant"
 msgid "Interface Settings"
 msgstr "Paramètres"
 
-#: src/state/mint/hooks.ts:248
+#: src/state/mint/hooks.ts:196
 msgid "Invalid pair"
 msgstr "Paire invalide"
 
-#: src/state/swap/hooks.ts:233
+#: src/state/swap/hooks.ts:192
 msgid "Invalid recipient"
 msgstr "Destinataire non valide"
 
@@ -688,11 +688,11 @@ msgstr "Positions"
 msgid "Liquidity Provider Fee"
 msgstr "Frais de fournisseur de liquidité"
 
-#: src/pages/pool.tsx:95
+#: src/pages/pool.tsx:87
 msgid "Liquidity Provider Rewards"
 msgstr "Récompenses des fournisseurs de liquidités"
 
-#: src/pages/pool.tsx:96
+#: src/pages/pool.tsx:88
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -711,7 +711,7 @@ msgstr "Listes"
 
 #: src/components/PositionCard/index.tsx:305
 #: src/pages/migrate.tsx:282
-#: src/pages/pool.tsx:128
+#: src/pages/pool.tsx:111
 #: src/pages/transactions.tsx:69
 msgid "Loading"
 msgstr "Chargement"
@@ -796,7 +796,7 @@ msgstr "Migrer"
 msgid "Migrate {exchange} Liquidity"
 msgstr "Migrer les liquidités {exchange}"
 
-#: src/pages/pool.tsx:166
+#: src/pages/pool.tsx:133
 msgid "Migrate!"
 msgstr ""
 
@@ -838,7 +838,7 @@ msgstr "Aucune liquidité trouvée"
 #~ msgid "No Results"
 #~ msgstr "Aucun résultat"
 
-#: src/pages/pool.tsx:146
+#: src/pages/pool.tsx:125
 msgid "No liquidity found"
 msgstr "Aucune liquidité trouvée"
 
@@ -1048,7 +1048,7 @@ msgstr "Rechercher un nom ou coller une adresse"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:219
+#: src/state/swap/hooks.ts:180
 msgid "Select a token"
 msgstr "Sélectionnez un token"
 
@@ -1428,7 +1428,7 @@ msgstr "Vous devez d'abord approuver les tokens LP, puis les migrer"
 msgid "Your Liquidity"
 msgstr "Votre liquidité"
 
-#: src/pages/pool.tsx:103
+#: src/pages/pool.tsx:94
 msgid "Your Liquidity Positions"
 msgstr "Vos positions"
 
@@ -1496,7 +1496,7 @@ msgstr "Votre transaction sera annulée en cas de mouvement de prix important et
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "Votre liquidité {exchange} {0} / {1} deviendra la liquidité SushiSwap {2} / {3} ."
 
-#: src/pages/zap.tsx:282
+#: src/pages/zap.tsx:242
 msgid "Zap"
 msgstr ""
 

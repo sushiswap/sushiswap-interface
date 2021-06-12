@@ -81,7 +81,7 @@ msgid "Add"
 msgstr "添加"
 
 #: src/components/NavigationTabs/index.tsx:100
-#: src/pages/pool.tsx:184
+#: src/pages/pool.tsx:145
 msgid "Add Liquidity"
 msgstr "添加流动性"
 
@@ -306,7 +306,7 @@ msgstr ""
 
 #: src/pages/stake.tsx:432
 #: src/pages/swap/[[...tokens]].tsx:674
-#: src/state/mint/hooks.ts:244
+#: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "连接钱包"
 
@@ -319,7 +319,7 @@ msgstr "连接钱包"
 #~ msgstr "连接钱包以查找池"
 
 #: src/pages/migrate.tsx:435
-#: src/pages/pool.tsx:122
+#: src/pages/pool.tsx:107
 msgid "Connect to a wallet to view your liquidity"
 msgstr "连接钱包以查看您的流动性"
 
@@ -331,7 +331,7 @@ msgstr "创建池和供应"
 #~ msgstr "创建池"
 
 #: src/components/NavigationTabs/index.tsx:98
-#: src/pages/pool.tsx:198
+#: src/pages/pool.tsx:153
 msgid "Create a pair"
 msgstr "创建交易对"
 
@@ -389,7 +389,7 @@ msgstr "Sushi开发文档。"
 msgid "Documentation for users of Sushi."
 msgstr "Sushi用户文档。"
 
-#: src/pages/pool.tsx:106
+#: src/pages/pool.tsx:96
 msgid "Don't see a pool you joined?"
 msgstr ""
 
@@ -411,7 +411,7 @@ msgstr "进入"
 msgid "Enter Amount"
 msgstr "输入金额"
 
-#: src/state/swap/hooks.ts:224
+#: src/state/swap/hooks.ts:185
 msgid "Enter a recipient"
 msgstr "输入接收人"
 
@@ -419,8 +419,8 @@ msgstr "输入接收人"
 msgid "Enter a valid slippage percentage"
 msgstr "输入有效的滑点百分比"
 
-#: src/state/mint/hooks.ts:252
-#: src/state/swap/hooks.ts:215
+#: src/state/mint/hooks.ts:200
+#: src/state/swap/hooks.ts:176
 msgid "Enter an amount"
 msgstr "输入金额"
 
@@ -527,7 +527,7 @@ msgstr ""
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "您有想赚取额外利息的资产吗？把它们借给孤立的市场，从借款人那里赚取利息。这就像存款一样简单，随时取款。"
 
-#: src/pages/pool.tsx:158
+#: src/pages/pool.tsx:130
 msgid "Have {0} Liquidity?"
 msgstr ""
 
@@ -554,7 +554,7 @@ msgstr "导入流动性池"
 #~ msgid "Import it"
 #~ msgstr "导入"
 
-#: src/pages/pool.tsx:112
+#: src/pages/pool.tsx:99
 msgid "Import it."
 msgstr ""
 
@@ -579,9 +579,9 @@ msgid "Insufficient liquidity for this trade"
 msgstr "该交易的流动性不足"
 
 #: src/hooks/useWrapCallback.ts:84
-#: src/state/mint/hooks.ts:265
-#: src/state/mint/hooks.ts:276
-#: src/state/swap/hooks.ts:252
+#: src/state/mint/hooks.ts:206
+#: src/state/mint/hooks.ts:210
+#: src/state/swap/hooks.ts:208
 msgid "Insufficient {0} balance"
 msgstr "代币{0}余额不足"
 
@@ -589,11 +589,11 @@ msgstr "代币{0}余额不足"
 msgid "Interface Settings"
 msgstr "交互设置"
 
-#: src/state/mint/hooks.ts:248
+#: src/state/mint/hooks.ts:196
 msgid "Invalid pair"
 msgstr "无效的代币对"
 
-#: src/state/swap/hooks.ts:233
+#: src/state/swap/hooks.ts:192
 msgid "Invalid recipient"
 msgstr "无效接收人"
 
@@ -651,11 +651,11 @@ msgstr "LP"
 msgid "Liquidity Provider Fee"
 msgstr "LP奖励"
 
-#: src/pages/pool.tsx:95
+#: src/pages/pool.tsx:87
 msgid "Liquidity Provider Rewards"
 msgstr "LP奖励"
 
-#: src/pages/pool.tsx:96
+#: src/pages/pool.tsx:88
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -671,7 +671,7 @@ msgstr "清单"
 
 #: src/components/PositionCard/index.tsx:305
 #: src/pages/migrate.tsx:282
-#: src/pages/pool.tsx:128
+#: src/pages/pool.tsx:111
 #: src/pages/transactions.tsx:69
 msgid "Loading"
 msgstr "载入中"
@@ -754,7 +754,7 @@ msgstr "迁移"
 msgid "Migrate {exchange} Liquidity"
 msgstr "迁移{exchange}流动资金"
 
-#: src/pages/pool.tsx:166
+#: src/pages/pool.tsx:133
 msgid "Migrate!"
 msgstr ""
 
@@ -793,7 +793,7 @@ msgstr "没有发现流动性"
 #~ msgid "No Results"
 #~ msgstr "未找到结果"
 
-#: src/pages/pool.tsx:146
+#: src/pages/pool.tsx:125
 msgid "No liquidity found"
 msgstr "没有发现流动性"
 
@@ -997,7 +997,7 @@ msgstr "搜索名称或粘贴地址"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:219
+#: src/state/swap/hooks.ts:180
 msgid "Select a token"
 msgstr "选择通证"
 
@@ -1362,7 +1362,7 @@ msgstr "您需要首先批准LP代币，然后迁移它"
 msgid "Your Liquidity"
 msgstr "您的流动性"
 
-#: src/pages/pool.tsx:103
+#: src/pages/pool.tsx:94
 msgid "Your Liquidity Positions"
 msgstr "您的LP"
 
@@ -1429,7 +1429,7 @@ msgstr "如果交易在确认之前出现大的不利价格变动，则交易将
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "您的{exchange} {0} / {1}流动性将变为SushiSwap {2} / {3}的流动性。"
 
-#: src/pages/zap.tsx:282
+#: src/pages/zap.tsx:242
 msgid "Zap"
 msgstr ""
 

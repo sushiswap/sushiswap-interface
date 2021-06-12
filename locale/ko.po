@@ -82,7 +82,7 @@ msgid "Add"
 msgstr "추가"
 
 #: src/components/NavigationTabs/index.tsx:100
-#: src/pages/pool.tsx:184
+#: src/pages/pool.tsx:145
 msgid "Add Liquidity"
 msgstr "유동성 추가"
 
@@ -312,7 +312,7 @@ msgstr ""
 
 #: src/pages/stake.tsx:432
 #: src/pages/swap/[[...tokens]].tsx:674
-#: src/state/mint/hooks.ts:244
+#: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "지갑 연결"
 
@@ -325,7 +325,7 @@ msgstr "지갑에 연결"
 #~ msgstr "지갑에 연결하여 풀 찾기"
 
 #: src/pages/migrate.tsx:435
-#: src/pages/pool.tsx:122
+#: src/pages/pool.tsx:107
 msgid "Connect to a wallet to view your liquidity"
 msgstr "유동성을 보려면 지갑에 연결하세요."
 
@@ -337,7 +337,7 @@ msgstr "풀 생성 및 공급"
 #~ msgstr "쌍 만들기"
 
 #: src/components/NavigationTabs/index.tsx:98
-#: src/pages/pool.tsx:198
+#: src/pages/pool.tsx:153
 msgid "Create a pair"
 msgstr "쌍 만들기"
 
@@ -395,7 +395,7 @@ msgstr "Sushi 개발자를 위한 문서."
 msgid "Documentation for users of Sushi."
 msgstr "Sushi 사용자를 위한 문서."
 
-#: src/pages/pool.tsx:106
+#: src/pages/pool.tsx:96
 msgid "Don't see a pool you joined?"
 msgstr ""
 
@@ -417,7 +417,7 @@ msgstr "입력"
 msgid "Enter Amount"
 msgstr "금액 입력"
 
-#: src/state/swap/hooks.ts:224
+#: src/state/swap/hooks.ts:185
 msgid "Enter a recipient"
 msgstr "수신자 입력"
 
@@ -425,8 +425,8 @@ msgstr "수신자 입력"
 msgid "Enter a valid slippage percentage"
 msgstr "유효한 슬리피지 비율 입력"
 
-#: src/state/mint/hooks.ts:252
-#: src/state/swap/hooks.ts:215
+#: src/state/mint/hooks.ts:200
+#: src/state/swap/hooks.ts:176
 msgid "Enter an amount"
 msgstr "금액 입력"
 
@@ -542,7 +542,7 @@ msgstr ""
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "추가적인 이자수익을 발생시킬 수 있는 자산을 보유하고 계신가요? 격리 마켓에 자산을 대출하고 대출자들로부터 이자수익을 받으세요. 입출금 만큼이나 쉽습니다."
 
-#: src/pages/pool.tsx:158
+#: src/pages/pool.tsx:130
 msgid "Have {0} Liquidity?"
 msgstr ""
 
@@ -569,7 +569,7 @@ msgstr "풀 가져오기"
 #~ msgid "Import it"
 #~ msgstr "가져오기"
 
-#: src/pages/pool.tsx:112
+#: src/pages/pool.tsx:99
 msgid "Import it."
 msgstr ""
 
@@ -594,9 +594,9 @@ msgid "Insufficient liquidity for this trade"
 msgstr "이 거래를 위한 유동성 부족"
 
 #: src/hooks/useWrapCallback.ts:84
-#: src/state/mint/hooks.ts:265
-#: src/state/mint/hooks.ts:276
-#: src/state/swap/hooks.ts:252
+#: src/state/mint/hooks.ts:206
+#: src/state/mint/hooks.ts:210
+#: src/state/swap/hooks.ts:208
 msgid "Insufficient {0} balance"
 msgstr "{0} 잔액 부족"
 
@@ -604,11 +604,11 @@ msgstr "{0} 잔액 부족"
 msgid "Interface Settings"
 msgstr "인터페이스 설정"
 
-#: src/state/mint/hooks.ts:248
+#: src/state/mint/hooks.ts:196
 msgid "Invalid pair"
 msgstr "잘못된 쌍"
 
-#: src/state/swap/hooks.ts:233
+#: src/state/swap/hooks.ts:192
 msgid "Invalid recipient"
 msgstr "잘못된 수신자"
 
@@ -666,11 +666,11 @@ msgstr "유동성 포지션"
 msgid "Liquidity Provider Fee"
 msgstr "유동성 제공자 수수료"
 
-#: src/pages/pool.tsx:95
+#: src/pages/pool.tsx:87
 msgid "Liquidity Provider Rewards"
 msgstr "유동성 제공자 보상"
 
-#: src/pages/pool.tsx:96
+#: src/pages/pool.tsx:88
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -689,7 +689,7 @@ msgstr "리스트"
 
 #: src/components/PositionCard/index.tsx:305
 #: src/pages/migrate.tsx:282
-#: src/pages/pool.tsx:128
+#: src/pages/pool.tsx:111
 #: src/pages/transactions.tsx:69
 msgid "Loading"
 msgstr "로드 중"
@@ -772,7 +772,7 @@ msgstr "마이그레이션"
 msgid "Migrate {exchange} Liquidity"
 msgstr "{exchange} 유동성 마이그레이션"
 
-#: src/pages/pool.tsx:166
+#: src/pages/pool.tsx:133
 msgid "Migrate!"
 msgstr ""
 
@@ -812,7 +812,7 @@ msgstr "유동성 없음"
 #~ msgid "No Results"
 #~ msgstr "결과 없음"
 
-#: src/pages/pool.tsx:146
+#: src/pages/pool.tsx:125
 msgid "No liquidity found"
 msgstr "유동성 없음"
 
@@ -1017,7 +1017,7 @@ msgstr "이름 검색 또는 주소 붙여넣기"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:219
+#: src/state/swap/hooks.ts:180
 msgid "Select a token"
 msgstr "토큰 선택"
 
@@ -1387,7 +1387,7 @@ msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다
 msgid "Your Liquidity"
 msgstr "내 유동성"
 
-#: src/pages/pool.tsx:103
+#: src/pages/pool.tsx:94
 msgid "Your Liquidity Positions"
 msgstr "내 유동성 포지션"
 
@@ -1454,7 +1454,7 @@ msgstr "거래가 확인되기 전에 크게 불리한 가격 변동이 있는 �
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변환됩니다."
 
-#: src/pages/zap.tsx:282
+#: src/pages/zap.tsx:242
 msgid "Zap"
 msgstr ""
 

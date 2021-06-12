@@ -82,7 +82,7 @@ msgid "Add"
 msgstr "追加"
 
 #: src/components/NavigationTabs/index.tsx:100
-#: src/pages/pool.tsx:184
+#: src/pages/pool.tsx:145
 msgid "Add Liquidity"
 msgstr "流動性を追加"
 
@@ -312,7 +312,7 @@ msgstr ""
 
 #: src/pages/stake.tsx:432
 #: src/pages/swap/[[...tokens]].tsx:674
-#: src/state/mint/hooks.ts:244
+#: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "ウォレットを接続"
 
@@ -325,7 +325,7 @@ msgstr "ウォレットに接続"
 #~ msgstr "プールを検索するにはウォレットに接続してください"
 
 #: src/pages/migrate.tsx:435
-#: src/pages/pool.tsx:122
+#: src/pages/pool.tsx:107
 msgid "Connect to a wallet to view your liquidity"
 msgstr "ウォレットに接続して流動性を表示"
 
@@ -337,7 +337,7 @@ msgstr "プールおよび供給を作成"
 #~ msgstr "ペアを作成"
 
 #: src/components/NavigationTabs/index.tsx:98
-#: src/pages/pool.tsx:198
+#: src/pages/pool.tsx:153
 msgid "Create a pair"
 msgstr "ペアを作成"
 
@@ -395,7 +395,7 @@ msgstr "Sushiの開発者向けドキュメント。"
 msgid "Documentation for users of Sushi."
 msgstr "Sushiのユーザー向けドキュメント。"
 
-#: src/pages/pool.tsx:106
+#: src/pages/pool.tsx:96
 msgid "Don't see a pool you joined?"
 msgstr ""
 
@@ -417,7 +417,7 @@ msgstr "入力"
 msgid "Enter Amount"
 msgstr "金額を入力"
 
-#: src/state/swap/hooks.ts:224
+#: src/state/swap/hooks.ts:185
 msgid "Enter a recipient"
 msgstr "受領者を入力"
 
@@ -425,8 +425,8 @@ msgstr "受領者を入力"
 msgid "Enter a valid slippage percentage"
 msgstr "有効なスリッページの割合を入力"
 
-#: src/state/mint/hooks.ts:252
-#: src/state/swap/hooks.ts:215
+#: src/state/mint/hooks.ts:200
+#: src/state/swap/hooks.ts:176
 msgid "Enter an amount"
 msgstr "金額を入力"
 
@@ -544,7 +544,7 @@ msgstr ""
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "利子を得たい資産がありますか？孤立した市場で資産を貸し出し、借り手から利息を得ることができます。好きな時に入金して、好きな時に出金するだけの簡単な仕組みです。"
 
-#: src/pages/pool.tsx:158
+#: src/pages/pool.tsx:130
 msgid "Have {0} Liquidity?"
 msgstr ""
 
@@ -571,7 +571,7 @@ msgstr "プールをインポート"
 #~ msgid "Import it"
 #~ msgstr "インポートする"
 
-#: src/pages/pool.tsx:112
+#: src/pages/pool.tsx:99
 msgid "Import it."
 msgstr ""
 
@@ -596,9 +596,9 @@ msgid "Insufficient liquidity for this trade"
 msgstr "この取引の流動性が不足しています"
 
 #: src/hooks/useWrapCallback.ts:84
-#: src/state/mint/hooks.ts:265
-#: src/state/mint/hooks.ts:276
-#: src/state/swap/hooks.ts:252
+#: src/state/mint/hooks.ts:206
+#: src/state/mint/hooks.ts:210
+#: src/state/swap/hooks.ts:208
 msgid "Insufficient {0} balance"
 msgstr "{0}の残高が不足しています"
 
@@ -606,11 +606,11 @@ msgstr "{0}の残高が不足しています"
 msgid "Interface Settings"
 msgstr "インターフェース設定"
 
-#: src/state/mint/hooks.ts:248
+#: src/state/mint/hooks.ts:196
 msgid "Invalid pair"
 msgstr "ペアが無効です"
 
-#: src/state/swap/hooks.ts:233
+#: src/state/swap/hooks.ts:192
 msgid "Invalid recipient"
 msgstr "受領者が無効です"
 
@@ -668,11 +668,11 @@ msgstr "流動性ポジション"
 msgid "Liquidity Provider Fee"
 msgstr "流動性プロバイダーの手数料"
 
-#: src/pages/pool.tsx:95
+#: src/pages/pool.tsx:87
 msgid "Liquidity Provider Rewards"
 msgstr "流動性プロバイダーの報酬"
 
-#: src/pages/pool.tsx:96
+#: src/pages/pool.tsx:88
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -691,7 +691,7 @@ msgstr "リスト"
 
 #: src/components/PositionCard/index.tsx:305
 #: src/pages/migrate.tsx:282
-#: src/pages/pool.tsx:128
+#: src/pages/pool.tsx:111
 #: src/pages/transactions.tsx:69
 msgid "Loading"
 msgstr "読み込んでいます"
@@ -774,7 +774,7 @@ msgstr "移行"
 msgid "Migrate {exchange} Liquidity"
 msgstr "{exchange}の流動性を移行"
 
-#: src/pages/pool.tsx:166
+#: src/pages/pool.tsx:133
 msgid "Migrate!"
 msgstr ""
 
@@ -814,7 +814,7 @@ msgstr "流動性が見つかりません"
 #~ msgid "No Results"
 #~ msgstr "結果がありません"
 
-#: src/pages/pool.tsx:146
+#: src/pages/pool.tsx:125
 msgid "No liquidity found"
 msgstr "流動性が見つかりません"
 
@@ -1019,7 +1019,7 @@ msgstr "名前を検索またはアドレスを貼り付ける"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:219
+#: src/state/swap/hooks.ts:180
 msgid "Select a token"
 msgstr "トークンを選択"
 
@@ -1389,7 +1389,7 @@ msgstr "まずLPトークンを承認してから、移行する必要があり�
 msgid "Your Liquidity"
 msgstr "あなたの流動性"
 
-#: src/pages/pool.tsx:103
+#: src/pages/pool.tsx:94
 msgid "Your Liquidity Positions"
 msgstr "あなたの流動性ポジション"
 
@@ -1456,7 +1456,7 @@ msgstr "確認前に大きな不利な価格変動があった場合、取引は
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange}{0}/{1}の流動性は、SushiSwap{2}/{3}の流動性になります。"
 
-#: src/pages/zap.tsx:282
+#: src/pages/zap.tsx:242
 msgid "Zap"
 msgstr ""
 

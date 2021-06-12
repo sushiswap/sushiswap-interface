@@ -82,7 +82,7 @@ msgid "Add"
 msgstr "Thêm"
 
 #: src/components/NavigationTabs/index.tsx:100
-#: src/pages/pool.tsx:184
+#: src/pages/pool.tsx:145
 msgid "Add Liquidity"
 msgstr "Thêm thanh khoản"
 
@@ -310,7 +310,7 @@ msgstr ""
 
 #: src/pages/stake.tsx:432
 #: src/pages/swap/[[...tokens]].tsx:674
-#: src/state/mint/hooks.ts:244
+#: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "Kết nối ví"
 
@@ -323,7 +323,7 @@ msgstr "Kết nối với ví"
 #~ msgstr "Kết nối với ví để tìm mạng lưới"
 
 #: src/pages/migrate.tsx:435
-#: src/pages/pool.tsx:122
+#: src/pages/pool.tsx:107
 msgid "Connect to a wallet to view your liquidity"
 msgstr "Kết nối với ví để xem thanh khoản của bạn"
 
@@ -335,7 +335,7 @@ msgstr "Tạo mạng lưới & tổng cung"
 #~ msgstr "Tạo một cặp"
 
 #: src/components/NavigationTabs/index.tsx:98
-#: src/pages/pool.tsx:198
+#: src/pages/pool.tsx:153
 msgid "Create a pair"
 msgstr "Tạo một cặp"
 
@@ -393,7 +393,7 @@ msgstr "Tài liệu dành cho các nhà phát triển Sushi."
 msgid "Documentation for users of Sushi."
 msgstr "Tài liệu cho người dùng Sushi."
 
-#: src/pages/pool.tsx:106
+#: src/pages/pool.tsx:96
 msgid "Don't see a pool you joined?"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgstr "Nhập"
 msgid "Enter Amount"
 msgstr "Nhập số tiền"
 
-#: src/state/swap/hooks.ts:224
+#: src/state/swap/hooks.ts:185
 msgid "Enter a recipient"
 msgstr "Nhập người nhận"
 
@@ -423,8 +423,8 @@ msgstr "Nhập người nhận"
 msgid "Enter a valid slippage percentage"
 msgstr "Nhập phần trăm trượt giá hợp lệ"
 
-#: src/state/mint/hooks.ts:252
-#: src/state/swap/hooks.ts:215
+#: src/state/mint/hooks.ts:200
+#: src/state/swap/hooks.ts:176
 msgid "Enter an amount"
 msgstr "Nhập số tiền"
 
@@ -542,7 +542,7 @@ msgstr ""
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "Bạn có tài sản nào mà bạn muốn kiếm thêm tiền lãi không? Cho vay ở những thị trường biệt lập và kiếm lãi từ những người đi vay. Dễ dàng ký quỹ và rút tiền bất cứ khi nào bạn muốn."
 
-#: src/pages/pool.tsx:158
+#: src/pages/pool.tsx:130
 msgid "Have {0} Liquidity?"
 msgstr ""
 
@@ -569,7 +569,7 @@ msgstr "Nhập mạng lưới"
 #~ msgid "Import it"
 #~ msgstr "Nhập"
 
-#: src/pages/pool.tsx:112
+#: src/pages/pool.tsx:99
 msgid "Import it."
 msgstr ""
 
@@ -594,9 +594,9 @@ msgid "Insufficient liquidity for this trade"
 msgstr "Không đủ thanh khoản cho giao dịch này"
 
 #: src/hooks/useWrapCallback.ts:84
-#: src/state/mint/hooks.ts:265
-#: src/state/mint/hooks.ts:276
-#: src/state/swap/hooks.ts:252
+#: src/state/mint/hooks.ts:206
+#: src/state/mint/hooks.ts:210
+#: src/state/swap/hooks.ts:208
 msgid "Insufficient {0} balance"
 msgstr "Số dư {0} không đủ"
 
@@ -604,11 +604,11 @@ msgstr "Số dư {0} không đủ"
 msgid "Interface Settings"
 msgstr "Cài đặt giao diện"
 
-#: src/state/mint/hooks.ts:248
+#: src/state/mint/hooks.ts:196
 msgid "Invalid pair"
 msgstr "Cặp không hợp lệ"
 
-#: src/state/swap/hooks.ts:233
+#: src/state/swap/hooks.ts:192
 msgid "Invalid recipient"
 msgstr "Người nhận không hợp lệ"
 
@@ -666,11 +666,11 @@ msgstr "Trạng thái thanh khoản"
 msgid "Liquidity Provider Fee"
 msgstr "Phí nhà cung cấp thanh khoản"
 
-#: src/pages/pool.tsx:95
+#: src/pages/pool.tsx:87
 msgid "Liquidity Provider Rewards"
 msgstr "Phần thưởng của nhà cung cấp thanh khoản"
 
-#: src/pages/pool.tsx:96
+#: src/pages/pool.tsx:88
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -689,7 +689,7 @@ msgstr "Danh sách"
 
 #: src/components/PositionCard/index.tsx:305
 #: src/pages/migrate.tsx:282
-#: src/pages/pool.tsx:128
+#: src/pages/pool.tsx:111
 #: src/pages/transactions.tsx:69
 msgid "Loading"
 msgstr "Đang tải"
@@ -772,7 +772,7 @@ msgstr "Di chuyển"
 msgid "Migrate {exchange} Liquidity"
 msgstr "Di chuyển thanh khoản {exchange}"
 
-#: src/pages/pool.tsx:166
+#: src/pages/pool.tsx:133
 msgid "Migrate!"
 msgstr ""
 
@@ -812,7 +812,7 @@ msgstr "Không tìm thấy thanh khoản"
 #~ msgid "No Results"
 #~ msgstr "Ko có kết quả"
 
-#: src/pages/pool.tsx:146
+#: src/pages/pool.tsx:125
 msgid "No liquidity found"
 msgstr "Không tìm thấy thanh khoản"
 
@@ -1017,7 +1017,7 @@ msgstr "Tìm kiếm tên hoặc dán địa chỉ"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:219
+#: src/state/swap/hooks.ts:180
 msgid "Select a token"
 msgstr "Chọn một token"
 
@@ -1387,7 +1387,7 @@ msgstr "Trước tiên, bạn cần phê duyệt token LP và sau đó di chuy�
 msgid "Your Liquidity"
 msgstr "Tính thanh khoản của bạn"
 
-#: src/pages/pool.tsx:103
+#: src/pages/pool.tsx:94
 msgid "Your Liquidity Positions"
 msgstr "Trạng thái thanh khoản của bạn"
 
@@ -1454,7 +1454,7 @@ msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu có một biến độn
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh khoản SushiSwap {2}/{3} ."
 
-#: src/pages/zap.tsx:282
+#: src/pages/zap.tsx:242
 msgid "Zap"
 msgstr ""
 
