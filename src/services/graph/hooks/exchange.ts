@@ -8,9 +8,11 @@ import {
     exchange,
     getAlcxPrice,
     getBundle,
+    getCvxPrice,
     getLiquidityPositionSubset,
     getMaticPrice,
     getSushiPrice,
+    getTokenPrice,
 } from '../fetchers'
 import { getEthPrice, getPairSubset, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -38,6 +40,16 @@ export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
     const res = useSWR(
         chainId && chainId === ChainId.MAINNET ? 'aclxPrice' : null,
         () => getAlcxPrice(),
+        swrConfig
+    )
+    return res
+}
+
+export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
+    const { chainId } = useActiveWeb3React()
+    const res = useSWR(
+        chainId && chainId === ChainId.MAINNET ? 'cvxPrice' : null,
+        () => getCvxPrice(),
         swrConfig
     )
     return res

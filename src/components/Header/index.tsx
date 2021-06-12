@@ -6,8 +6,8 @@ import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import LanguageSwitch from '../LanguageSwitch'
 import Link from 'next/link'
-import NavLink from '../NavLink'
 import More from './More'
+import NavLink from '../NavLink'
 import { Popover } from '@headlessui/react'
 import QuestionHelper from '../QuestionHelper'
 import Web3Network from '../Web3Network'
@@ -141,7 +141,7 @@ function AppBar(): JSX.Element {
                                     </div>
                                 </div>
 
-                                <div className="fixed bottom-0 left-0 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
+                                <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                                     <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
                                         {chainId &&
                                             [ChainId.MAINNET].includes(

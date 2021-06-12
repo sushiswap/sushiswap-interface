@@ -28,3 +28,14 @@ export const poolsQuery = gql`
         }
     }
 `
+
+export const masterChefV1TotalAllocPointQuery = gql`
+    query masterChefV1TotalAllocPoint(
+        $id: String! = "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd"
+    ) {
+        masterChef(id: $id) {
+            id
+            totalAllocPoint
+        }
+    }
+`

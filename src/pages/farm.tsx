@@ -4,10 +4,12 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import {
     useAlcxPrice,
     useAverageBlockTime,
+    useCvxPrice,
     useEthPrice,
     useExchange,
     useLiquidityPositionSubset,
     useMasterChefV1Farms,
+    useMasterChefV1TotalAllocPoint,
     useMasterChefV2Farms,
     useMaticPrice,
     useMiniChefFarms,
@@ -52,10 +54,13 @@ export default function Farm(): JSX.Element {
     const { data: maticPrice } = useMaticPrice()
     const { data: alcxPrice } = useAlcxPrice()
 
+    const { data: cvxPrice } = useCvxPrice()
+
+    const { data: masterChefV1TotalAllocPoint } =
+        useMasterChefV1TotalAllocPoint()
+
     const { data: masterChefV1Farms } = useMasterChefV1Farms()
-
     const { data: masterChefV2Farms } = useMasterChefV2Farms()
-
     const { data: miniChefFarms } = useMiniChefFarms()
 
     const pairAddresses = useMemo(
@@ -118,11 +123,6 @@ export default function Farm(): JSX.Element {
 
         const blocksPerHour = 3600 / averageBlockTime
 
-        // override for mcv2...
-        if (pool?.rewarder === '0x7519c93fc5073e15d89131fd38118d73a72370f8') {
-            pool.owner.totalAllocPoint = 26480
-        }
-
         function getRewards() {
             // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
             const sushiPerBlock =
@@ -144,18 +144,37 @@ export default function Farm(): JSX.Element {
             const defaultRewards = [defaultReward]
 
             if (chef === Chef.MASTERCHEF_V2) {
-                const rewardPerBlock = 0.437861008791398
-                console.log(pool)
-                return [
-                    ...defaultRewards,
+                // override for mcv2...
+                pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
+
+                const REWARDS = [
                     {
                         token: 'ALCX',
                         icon: '/images/tokens/alcx-square.jpg',
-                        rewardPerBlock,
-                        rewardPerDay: rewardPerBlock * blocksPerDay,
+                        rewardPerBlock: 0.437861008791398,
+                        rewardPerDay: 0.437861008791398 * blocksPerDay,
                         rewardPrice: alcxPrice,
                     },
+                    {
+                        token: 'CVX',
+                        icon: '/images/tokens/unknown.png',
+                        rewardPerBlock: 0.08336413675376289 * averageBlockTime,
+                        rewardPerDay:
+                            0.08336413675376289 *
+                            averageBlockTime *
+                            blocksPerDay,
+                        rewardPrice: cvxPrice,
+                    },
+                    {
+                        token: 'CVX',
+                        icon: '/images/tokens/unknown.png',
+                        rewardPerBlock: 0.125 * averageBlockTime,
+                        rewardPerDay: 0.125 * averageBlockTime * blocksPerDay,
+                        rewardPrice: cvxPrice,
+                    },
                 ]
+
+                return [...defaultRewards, REWARDS[pool.id]]
             } else if (chef === Chef.MINICHEF) {
                 const sushiPerSecond =
                     ((pool.allocPoint / 1000) * pool.miniChef.sushiPerSecond) /
@@ -204,6 +223,8 @@ export default function Farm(): JSX.Element {
                 )
             }, 0) / tvl
 
+        console.log({ tvl, roiPerBlock })
+
         const roiPerHour = roiPerBlock * blocksPerHour
 
         const roiPerDay = roiPerHour * 24
@@ -238,45 +259,43 @@ export default function Farm(): JSX.Element {
             : [],
         masterChefV2Farms
             ? masterChefV2Farms?.filter?.(filter)?.map((pool) => {
-
-                return map(pool, Chef.MASTERCHEF_V2)
+                  return map(pool, Chef.MASTERCHEF_V2)
               })
             : [],
         miniChefFarms
             ? miniChefFarms?.filter?.(filter)?.map((pool) => {
-                return map(pool, Chef.MINICHEF)
+                  return map(pool, Chef.MINICHEF)
               })
             : []
     )
 
     const positions = farms
-    ? [
-          ...masterChefV1Positions.map((position) => ({
-              ...position,
-              ...farms?.find(
-                  (farm) =>
-                      farm.id === position.id &&
-                      farm.chef === Chef.MASTERCHEF
-              ),
-          })),
-          ...masterChefV2Positions.map((position) => ({
-              ...position,
-              ...farms?.find(
-                  (farm) =>
-                      farm.id === position.id &&
-                      farm.chef === Chef.MASTERCHEF_V2
-              ),
-          })),
-          ...miniChefPositions.map((position) => ({
-              ...position,
-              ...farms?.find(
-                  (farm) =>
-                      farm.id === position.id && farm.chef === Chef.MINICHEF
-              ),
-          })),
-      ]
-    : []
-
+        ? [
+              ...masterChefV1Positions.map((position) => ({
+                  ...position,
+                  ...farms?.find(
+                      (farm) =>
+                          farm.id === position.id &&
+                          farm.chef === Chef.MASTERCHEF
+                  ),
+              })),
+              ...masterChefV2Positions.map((position) => ({
+                  ...position,
+                  ...farms?.find(
+                      (farm) =>
+                          farm.id === position.id &&
+                          farm.chef === Chef.MASTERCHEF_V2
+                  ),
+              })),
+              ...miniChefPositions.map((position) => ({
+                  ...position,
+                  ...farms?.find(
+                      (farm) =>
+                          farm.id === position.id && farm.chef === Chef.MINICHEF
+                  ),
+              })),
+          ]
+        : []
 
     // //Search Setup
     const options = {
@@ -297,7 +316,8 @@ export default function Farm(): JSX.Element {
     })
 
     const filterForSection = {
-        portfolio: (farm) => positions?.find(position => position.id === farm.id),
+        portfolio: (farm) =>
+            positions?.find((position) => position.id === farm.id),
         all: () => true,
         slp: (farm) => farm.pair.type === PairType.SWAP,
         kmp: (farm) => farm.pair.type === PairType.LENDING,

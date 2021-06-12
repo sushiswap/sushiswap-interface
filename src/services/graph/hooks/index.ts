@@ -1,5 +1,6 @@
 import {
     getMasterChefV1Farms,
+    getMasterChefV1TotalAllocPoint,
     getMasterChefV2Farms,
     getMiniChefFarms,
 } from '../fetchers'
@@ -10,6 +11,17 @@ import useActiveWeb3React from '../../../hooks/useActiveWeb3React'
 
 export * from './blocks'
 export * from './exchange'
+
+export function useMasterChefV1TotalAllocPoint(swrConfig = undefined) {
+    const { chainId } = useActiveWeb3React()
+    const shouldFetch = chainId && chainId === ChainId.MAINNET
+    const res = useSWR(
+        shouldFetch ? 'masterChefV1TotalAllocPoint' : null,
+        () => getMasterChefV1TotalAllocPoint(),
+        swrConfig
+    )
+    return res
+}
 
 export function useMasterChefV1Farms(swrConfig = undefined) {
     const { chainId } = useActiveWeb3React()
