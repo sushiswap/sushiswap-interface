@@ -1,33 +1,13 @@
 import { ApprovalState, useApproveCallback } from '../hooks/useApproveCallback'
 import { AutoRow, RowBetween, RowFixed } from '../components/Row'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
-import {
-    ButtonConfirmed,
-    ButtonError,
-    ButtonLight,
-    ButtonPrimary,
-} from '../components/ButtonLegacy'
-import {
-    ChainId,
-    Currency,
-    JSBI,
-    Percent,
-    ROUTER_ADDRESS,
-    Trade,
-    WETH,
-} from '@sushiswap/sdk'
+import { ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary } from '../components/ButtonLegacy'
+import { ChainId, Currency, JSBI, Percent, ROUTER_ADDRESS, Trade, WETH } from '@sushiswap/sdk'
 import Column, { AutoColumn } from '../components/Column'
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-    computeTradePriceBreakdown,
-    warningSeverity,
-} from '../functions/prices'
+import { computeTradePriceBreakdown, warningSeverity } from '../functions/prices'
 import styled, { ThemeContext, keyframes } from 'styled-components'
-import {
-    useDerivedZapInfo,
-    useZapActionHandlers,
-    useZapState,
-} from '../state/zap/hooks'
+import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../state/zap/hooks'
 
 import Alert from '../components/Alert'
 import { AppDispatch } from '../state'
@@ -47,8 +27,8 @@ import Router from 'next/router'
 import Settings from '../components/Settings'
 import SwapRoute from '../features/swap/SwapRoute'
 import { Text } from 'rebass'
+import { ZAPPER_ADDRESS } from '../constants/addresses'
 import { currencyId as getCurrencyId } from '../functions/currency/currencyId'
-import { getZapperAddress } from '../constants/addresses'
 import { maxAmountSpend } from '../functions/currency/maxAmountSpend'
 import { resetZapState } from '../state/zap/actions'
 import { t } from '@lingui/macro'
@@ -101,12 +81,7 @@ const skeletonKeyframes = keyframes`
 
 const Skeleton = styled.span`
     background-color: ${defaultBaseColor};
-    background-image: linear-gradient(
-        90deg,
-        ${defaultBaseColor},
-        ${defaultHighlightColor},
-        ${defaultBaseColor}
-    );
+    background-image: linear-gradient(90deg, ${defaultBaseColor}, ${defaultHighlightColor}, ${defaultBaseColor});
     background-size: 200px 100%;
     background-repeat: no-repeat;
     border-radius: 4px;
@@ -148,11 +123,9 @@ const CardHeader = () => {
                     showIcon={true}
                     message={
                         <>
-                            Zaps allow you to LP in any pool with any asset.
-                            Please be careful when zapping low liquidity tokens
-                            as there may be very high slippage. ETH, WBTC, USDC,
-                            DAI and SUSHI are the safest tokens to zap with. If
-                            price impact seems too high, try disabling multihop.
+                            Zaps allow you to LP in any pool with any asset. Please be careful when zapping low
+                            liquidity tokens as there may be very high slippage. ETH, WBTC, USDC, DAI and SUSHI are the
+                            safest tokens to zap with. If price impact seems too high, try disabling multihop.
                         </>
                     }
                     type="warning"
@@ -169,10 +142,7 @@ export default function Zap() {
 
     const loadedUrlParams = useDefaultsFromURLSearch()
 
-    const [poolAddress, currencyId] = [
-        loadedUrlParams?.poolAddress,
-        loadedUrlParams?.currencyId,
-    ]
+    const [poolAddress, currencyId] = [loadedUrlParams?.poolAddress, loadedUrlParams?.currencyId]
 
     const currency = useCurrency(currencyId)
 
@@ -202,13 +172,10 @@ export default function Zap() {
 
     const { priceImpactWithoutFee } = computeTradePriceBreakdown(bestTrade)
     const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
-    const zapperAddress = getZapperAddress(chainId)
+    const zapperAddress = ZAPPER_ADDRESS[chainId]
 
     // // check whether the user has approved the router on the input token
-    const [approval, approveCallback] = useApproveCallback(
-        parsedAmount,
-        zapperAddress
-    )
+    const [approval, approveCallback] = useApproveCallback(parsedAmount, zapperAddress)
 
     // check if user has gone through approval process, used to show two step buttons, reset on token change
     const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
@@ -219,10 +186,7 @@ export default function Zap() {
     // Get min pooltokens received based on user slippage preferences
     const minTokensReceived = JSBI.divide(
         // Take raw token (number * (10000 - ALLOWED_SLIPPAGE))/10000
-        JSBI.multiply(
-            liquidityMinted?.raw || JSBI.BigInt(0),
-            JSBI.BigInt(10000 - allowedSlippage)
-        ),
+        JSBI.multiply(liquidityMinted?.raw || JSBI.BigInt(0), JSBI.BigInt(10000 - allowedSlippage)),
         JSBI.BigInt(10000)
     )
 
@@ -243,9 +207,7 @@ export default function Zap() {
     const handleCurrencyASelect = useCallback(
         (currency: Currency) => {
             const newCurrencyId = getCurrencyId(currency)
-            Router.push(
-                `zap?poolAddress=${poolAddress}&currencyId=${newCurrencyId}`
-            )
+            Router.push(`zap?poolAddress=${poolAddress}&currencyId=${newCurrencyId}`)
         },
         [history, poolAddress]
     )
@@ -256,9 +218,7 @@ export default function Zap() {
         const swapData = encodeSwapData()
 
         zapIn(
-            currency === Currency.ETHER
-                ? '0x0000000000000000000000000000000000000000'
-                : currencyId,
+            currency === Currency.ETHER ? '0x0000000000000000000000000000000000000000' : currencyId,
             poolAddress,
             parsedAmount,
             currency === Currency.ETHER && isTradingUnderlying
@@ -295,13 +255,7 @@ export default function Zap() {
                             label={'From'}
                             showMaxButton={true}
                             onMax={() => {
-                                onFieldInput(
-                                    maxAmountSpend(
-                                        currencyBalance,
-                                        undefined,
-                                        chainId
-                                    )?.toExact() ?? ''
-                                )
+                                onFieldInput(maxAmountSpend(currencyBalance, undefined, chainId)?.toExact() ?? '')
                             }}
                             value={typedValue ?? ''}
                             currency={currency}
@@ -382,9 +336,7 @@ export default function Zap() {
                         <PoolBreakDownWrapper>
                             <RowBetween>
                                 <div>
-                                    <div style={{ fontSize: '14px' }}>
-                                        Est. Pool Allocation
-                                    </div>
+                                    <div style={{ fontSize: '14px' }}>Est. Pool Allocation</div>
                                     <PoolTokenRow>
                                         <CurrencyLogo
                                             size="22px"
@@ -392,10 +344,7 @@ export default function Zap() {
                                             style={{ marginRight: '6px' }}
                                         />
                                         <div style={{ fontSize: '14px' }}>
-                                            {currencyZeroOutput?.toSignificant(
-                                                6
-                                            ) || 0}{' '}
-                                            {currency0?.symbol}
+                                            {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
                                         </div>
                                     </PoolTokenRow>
                                     <PoolTokenRow>
@@ -405,10 +354,7 @@ export default function Zap() {
                                             style={{ marginRight: '6px' }}
                                         />
                                         <div style={{ fontSize: '14px' }}>
-                                            {currencyOneOutput?.toSignificant(
-                                                6
-                                            ) || 0}{' '}
-                                            {currency1?.symbol}
+                                            {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
                                         </div>
                                     </PoolTokenRow>
                                 </div>
@@ -438,10 +384,7 @@ export default function Zap() {
                                             fontSize: '14px',
                                         }}
                                     >
-                                        {poolTokenPercentage?.toSignificant(
-                                            6
-                                        ) || '0'}
-                                        %
+                                        {poolTokenPercentage?.toSignificant(6) || '0'}%
                                     </div>
                                     <span
                                         style={{
@@ -468,9 +411,7 @@ export default function Zap() {
                                         }}
                                     >
                                         {/* bestTrade?.priceImpact */}
-                                        <FormattedPriceImpact
-                                            priceImpact={bestTrade?.priceImpact}
-                                        />
+                                        <FormattedPriceImpact priceImpact={bestTrade?.priceImpact} />
                                     </div>
                                 </div>
                             </RowBetween>
@@ -482,40 +423,27 @@ export default function Zap() {
                                             alignItems: 'center',
                                         }}
                                     >
-                                        <div className="text-sm text-secondary">
-                                            Route
-                                        </div>
+                                        <div className="text-sm text-secondary">Route</div>
                                         <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
                                     </span>
-                                    {bestTrade && (
-                                        <SwapRoute trade={bestTrade} />
-                                    )}
+                                    {bestTrade && <SwapRoute trade={bestTrade} />}
                                 </RowBetween>
                             )}
                         </PoolBreakDownWrapper>
                         <>
                             {!account ? (
-                                <ButtonLight
-                                    style={{ marginTop: '20px' }}
-                                    onClick={toggleWalletModal}
-                                >
+                                <ButtonLight style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
                                     Connect Wallet
                                 </ButtonLight>
                             ) : noRoute && bestTrade?.inputAmount ? (
                                 <ButtonError style={{ marginTop: '20px' }}>
-                                    <div>
-                                        Insufficient liquidity for this trade.
-                                    </div>
+                                    <div>Insufficient liquidity for this trade.</div>
                                 </ButtonError>
                             ) : showApproveFlow ? (
                                 <RowBetween>
                                     <ButtonPrimary
                                         onClick={approveCallback}
-                                        disabled={
-                                            approval !==
-                                                ApprovalState.NOT_APPROVED ||
-                                            approvalSubmitted
-                                        }
+                                        disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
                                         style={{
                                             width: '48%',
                                             marginTop: '20px',
@@ -523,16 +451,12 @@ export default function Zap() {
                                     >
                                         {approval === ApprovalState.PENDING ? (
                                             <AutoRow gap="6px" justify="center">
-                                                Approving{' '}
-                                                <Loader stroke="white" />
+                                                Approving <Loader stroke="white" />
                                             </AutoRow>
-                                        ) : approvalSubmitted &&
-                                          approval ===
-                                              ApprovalState.APPROVED ? (
+                                        ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
                                             'Approved'
                                         ) : (
-                                            'Approve ' +
-                                            currency?.getSymbol(chainId)
+                                            'Approve ' + currency?.getSymbol(chainId)
                                         )}
                                     </ButtonPrimary>
                                     <ButtonPrimary
@@ -542,17 +466,14 @@ export default function Zap() {
                                             marginTop: '20px',
                                         }}
                                         id="swap-button"
-                                        disabled={
-                                            approval !== ApprovalState.APPROVED
-                                        }
+                                        disabled={approval !== ApprovalState.APPROVED}
                                     >
                                         <Text fontSize={20} fontWeight={500}>
                                             {error ?? 'Zap'}
                                         </Text>
                                     </ButtonPrimary>
                                 </RowBetween>
-                            ) : priceImpactSeverity > 1 &&
-                              error === undefined ? (
+                            ) : priceImpactSeverity > 1 && error === undefined ? (
                                 <ButtonError
                                     disabled={priceImpactSeverity > 3}
                                     error={priceImpactSeverity > 1}
@@ -562,20 +483,14 @@ export default function Zap() {
                                     <Text fontSize={16} fontWeight={500}>
                                         {priceImpactSeverity > 3
                                             ? `Price Impact Too High`
-                                            : `Swap${
-                                                  priceImpactSeverity > 2
-                                                      ? ' Anyway'
-                                                      : ''
-                                              }`}
+                                            : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
                                     </Text>
                                 </ButtonError>
                             ) : (
                                 <ButtonPrimary
                                     style={{ marginTop: '20px' }}
                                     disabled={
-                                        !parsedAmount ||
-                                        error !== undefined ||
-                                        approval !== ApprovalState.APPROVED
+                                        !parsedAmount || error !== undefined || approval !== ApprovalState.APPROVED
                                     }
                                     onClick={() => zapCallback()}
                                 >
@@ -586,11 +501,7 @@ export default function Zap() {
                             )}
                             {showApproveFlow && (
                                 <Column style={{ marginTop: '1rem' }}>
-                                    <ProgressSteps
-                                        steps={[
-                                            approval === ApprovalState.APPROVED,
-                                        ]}
-                                    />
+                                    <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />
                                 </Column>
                             )}
                         </>

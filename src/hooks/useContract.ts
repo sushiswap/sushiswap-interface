@@ -61,28 +61,19 @@ import { abi as UNI_FACTORY_ABI } from '@uniswap/v2-core/build/UniswapV2Factory.
 import { FACTORY_ADDRESS as UNI_FACTORY_ADDRESS } from '@uniswap/sdk'
 import WETH_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
+import { ZAPPER_ADDRESS } from '../constants/addresses'
 import { getContract } from '../functions/contract'
-import { getZapperAddress } from '../constants/addresses'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 
 // returns null on errors
-export function useContract(
-    address: string | undefined,
-    ABI: any,
-    withSignerIfPossible = true
-): Contract | null {
+export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
     const { library, account } = useActiveWeb3React()
 
     return useMemo(() => {
         if (!address || !ABI || !library) return null
         try {
-            return getContract(
-                address,
-                ABI,
-                library,
-                withSignerIfPossible && account ? account : undefined
-            )
+            return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
         } catch (error) {
             console.error('Failed to get contract', error)
             return null
@@ -90,38 +81,25 @@ export function useContract(
     }, [address, ABI, library, withSignerIfPossible, account])
 }
 
-export function useTokenContract(
-    tokenAddress?: string,
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
     return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible)
 }
 
-export function useWETHContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useWETHContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId ? WETH[chainId].address : undefined,
-        WETH_ABI,
-        withSignerIfPossible
-    )
+    return useContract(chainId ? WETH[chainId].address : undefined, WETH_ABI, withSignerIfPossible)
 }
 
 export function useArgentWalletDetectorContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
     return useContract(
-        chainId === ChainId.MAINNET
-            ? ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
-            : undefined,
+        chainId === ChainId.MAINNET ? ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS : undefined,
         ARGENT_WALLET_DETECTOR_ABI,
         false
     )
 }
 
-export function useENSRegistrarContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
     if (chainId) {
@@ -137,99 +115,52 @@ export function useENSRegistrarContract(
     return useContract(address, ENS_ABI, withSignerIfPossible)
 }
 
-export function useENSResolverContract(
-    address: string | undefined,
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useENSResolverContract(address: string | undefined, withSignerIfPossible?: boolean): Contract | null {
     return useContract(address, ENS_PUBLIC_RESOLVER_ABI, withSignerIfPossible)
 }
 
-export function useBytes32TokenContract(
-    tokenAddress?: string,
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useBytes32TokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
     return useContract(tokenAddress, ERC20_BYTES32_ABI, withSignerIfPossible)
 }
 
-export function usePairContract(
-    pairAddress?: string,
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function usePairContract(pairAddress?: string, withSignerIfPossible?: boolean): Contract | null {
     return useContract(pairAddress, IUniswapV2PairABI, withSignerIfPossible)
 }
 
 export function useMerkleDistributorContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined,
-        MERKLE_DISTRIBUTOR_ABI,
-        true
-    )
+    return useContract(chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined, MERKLE_DISTRIBUTOR_ABI, true)
 }
 
 export function useBoringHelperContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && BORING_HELPER_ADDRESS[chainId],
-        BORING_HELPER_ABI,
-        false
-    )
+    return useContract(chainId && BORING_HELPER_ADDRESS[chainId], BORING_HELPER_ABI, false)
 }
 
 export function usePendingContract(): Contract | null {
-    return useContract(
-        '0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029',
-        PENDING_ABI,
-        false
-    )
+    return useContract('0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029', PENDING_ABI, false)
 }
 
 export function useMulticallContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && MULTICALL_NETWORKS[chainId],
-        MULTICALL_ABI,
-        false
-    )
+    return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
 }
 
 export function useSushiContract(withSignerIfPossible = true): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && SUSHI_ADDRESS[chainId],
-        SUSHI_ABI,
-        withSignerIfPossible
-    )
+    return useContract(chainId && SUSHI_ADDRESS[chainId], SUSHI_ABI, withSignerIfPossible)
 }
 
-export function useMasterChefContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && MASTERCHEF_ADDRESS[chainId],
-        MASTERCHEF_ABI,
-        withSignerIfPossible
-    )
+    return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
 }
 
-export function useMasterChefV2Contract(
-    withSignerIfPossible?: boolean
-): Contract | null {
-    return useContract(
-        '0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d',
-        MASTERCHEF_V2_ABI,
-        withSignerIfPossible
-    )
+export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract('0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d', MASTERCHEF_V2_ABI, withSignerIfPossible)
 }
-export function useMiniChefV2Contract(
-    withSignerIfPossible?: boolean
-): Contract | null {
-    return useContract(
-        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
-        MINICHEF_V2_ABI,
-        withSignerIfPossible
-    )
+export function useMiniChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', MINICHEF_V2_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
@@ -242,15 +173,9 @@ export function useRouterContract(): Contract | null {
     return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
 }
 
-export function useSushiBarContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && BAR_ADDRESS[chainId],
-        BAR_ABI,
-        withSignerIfPossible
-    )
+    return useContract(chainId && BAR_ADDRESS[chainId], BAR_ABI, withSignerIfPossible)
 }
 
 export function useMakerContract(): Contract | null {
@@ -260,49 +185,26 @@ export function useMakerContract(): Contract | null {
 
 export function useTimelockContract(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && TIMELOCK_ADDRESS[chainId],
-        TIMELOCK_ABI,
-        false
-    )
+    return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
 
-export function useBentoBoxContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && BENTOBOX_ADDRESS[chainId],
-        BENTOBOX_ABI,
-        withSignerIfPossible
-    )
+    return useContract(chainId && BENTOBOX_ADDRESS[chainId], BENTOBOX_ABI, withSignerIfPossible)
 }
 
-export function useKashiPairContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useKashiPairContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && KASHI_ADDRESS[chainId],
-        KASHIPAIR_ABI,
-        withSignerIfPossible
-    )
+    return useContract(chainId && KASHI_ADDRESS[chainId], KASHIPAIR_ABI, withSignerIfPossible)
 }
 
-export function useKashiPairCloneContract(
-    address: string,
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useKashiPairCloneContract(address: string, withSignerIfPossible?: boolean): Contract | null {
     return useContract(address, KASHIPAIR_ABI, withSignerIfPossible)
 }
 
 export function useSushiSwapSwapper(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && SUSHISWAP_SWAPPER_ADDRESS[chainId],
-        BASE_SWAPPER_ABI,
-        false
-    )
+    return useContract(chainId && SUSHISWAP_SWAPPER_ADDRESS[chainId], BASE_SWAPPER_ABI, false)
 }
 
 export function useChainlinkOracle(): Contract | null {
@@ -310,21 +212,11 @@ export function useChainlinkOracle(): Contract | null {
 }
 
 // experimental:
-export function useSaaveContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
-    return useContract(
-        '0x364762C00b32c4b448f39efaA9CeFC67a25603ff',
-        SAAVE_ABI,
-        withSignerIfPossible
-    )
+export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract('0x364762C00b32c4b448f39efaA9CeFC67a25603ff', SAAVE_ABI, withSignerIfPossible)
 }
 export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
-    return useContract(
-        '0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289',
-        SAAVE_ABI,
-        withSignerIfPossible
-    )
+    return useContract('0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289', SAAVE_ABI, withSignerIfPossible)
 }
 
 export function useUniV2FactoryContract(): Contract | null {
@@ -382,22 +274,16 @@ export function usePancakeV1FactoryContract(): Contract | null {
                 constant: true,
                 inputs: [],
                 name: 'INIT_CODE_PAIR_HASH',
-                outputs: [
-                    { internalType: 'bytes32', name: '', type: 'bytes32' },
-                ],
+                outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function',
             },
             {
                 constant: true,
-                inputs: [
-                    { internalType: 'uint256', name: '', type: 'uint256' },
-                ],
+                inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
                 name: 'allPairs',
-                outputs: [
-                    { internalType: 'address', name: '', type: 'address' },
-                ],
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function',
@@ -406,9 +292,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
                 constant: true,
                 inputs: [],
                 name: 'allPairsLength',
-                outputs: [
-                    { internalType: 'uint256', name: '', type: 'uint256' },
-                ],
+                outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function',
@@ -428,9 +312,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
                     },
                 ],
                 name: 'createPair',
-                outputs: [
-                    { internalType: 'address', name: 'pair', type: 'address' },
-                ],
+                outputs: [{ internalType: 'address', name: 'pair', type: 'address' }],
                 payable: false,
                 stateMutability: 'nonpayable',
                 type: 'function',
@@ -439,9 +321,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
                 constant: true,
                 inputs: [],
                 name: 'feeTo',
-                outputs: [
-                    { internalType: 'address', name: '', type: 'address' },
-                ],
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function',
@@ -450,9 +330,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
                 constant: true,
                 inputs: [],
                 name: 'feeToSetter',
-                outputs: [
-                    { internalType: 'address', name: '', type: 'address' },
-                ],
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function',
@@ -464,9 +342,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
                     { internalType: 'address', name: '', type: 'address' },
                 ],
                 name: 'getPair',
-                outputs: [
-                    { internalType: 'address', name: '', type: 'address' },
-                ],
+                outputs: [{ internalType: 'address', name: '', type: 'address' }],
                 payable: false,
                 stateMutability: 'view',
                 type: 'function',
@@ -506,9 +382,7 @@ export function usePancakeV1FactoryContract(): Contract | null {
     )
 }
 
-export function useSushiRollContract(
-    version: 'v1' | 'v2' = 'v2'
-): Contract | null {
+export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
     const { chainId } = useActiveWeb3React()
     let address: string | undefined
     if (chainId) {
@@ -582,46 +456,29 @@ export function useDashboard2Contract(): Contract | null {
 
 export function useSushiSwapMultiSwapper(): Contract | null {
     const { chainId } = useActiveWeb3React()
-    return useContract(
-        chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId],
-        SUSHISWAP_MULTISWAPPER_ABI
-    )
+    return useContract(chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId], SUSHISWAP_MULTISWAPPER_ABI)
 }
 
 export function useSushiSwapTWAP0Oracle(): Contract | null {
-    return useContract(
-        SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-        SUSHISWAP_TWAP_ORACLE_ABI
-    )
+    return useContract(SUSHISWAP_TWAP_0_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
 }
 
 export function useSushiSwapTWAP1Oracle(): Contract | null {
-    return useContract(
-        SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-        SUSHISWAP_TWAP_ORACLE_ABI
-    )
+    return useContract(SUSHISWAP_TWAP_1_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
 }
 
 export function useSushiSwapTWAPContract(address?: string): Contract | null {
     if (address === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
-        return useContract(
-            SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-            SUSHISWAP_TWAP_ORACLE_ABI
-        )
+        return useContract(SUSHISWAP_TWAP_0_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
     } else if (address === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
-        return useContract(
-            SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-            SUSHISWAP_TWAP_ORACLE_ABI
-        )
+        return useContract(SUSHISWAP_TWAP_1_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
     }
     return undefined
 }
 
-export function useZapperContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useZapperContract(withSignerIfPossible?: boolean): Contract | null {
     const { chainId } = useActiveWeb3React()
-    const address = getZapperAddress(chainId)
+    const address = ZAPPER_ADDRESS[chainId]
     return useContract(address, ZAPPER_ABI, withSignerIfPossible)
 }
 
@@ -676,22 +533,16 @@ export function useQuickSwapFactoryContract(): Contract | null {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
-                outputs: [
-                    { type: 'address', name: '', internalType: 'address' },
-                ],
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
                 name: 'allPairs',
-                inputs: [
-                    { type: 'uint256', name: '', internalType: 'uint256' },
-                ],
+                inputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
                 constant: true,
             },
             {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
-                outputs: [
-                    { type: 'uint256', name: '', internalType: 'uint256' },
-                ],
+                outputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
                 name: 'allPairsLength',
                 inputs: [],
                 constant: true,
@@ -700,9 +551,7 @@ export function useQuickSwapFactoryContract(): Contract | null {
                 type: 'function',
                 stateMutability: 'nonpayable',
                 payable: false,
-                outputs: [
-                    { type: 'address', name: 'pair', internalType: 'address' },
-                ],
+                outputs: [{ type: 'address', name: 'pair', internalType: 'address' }],
                 name: 'createPair',
                 inputs: [
                     {
@@ -722,9 +571,7 @@ export function useQuickSwapFactoryContract(): Contract | null {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
-                outputs: [
-                    { type: 'address', name: '', internalType: 'address' },
-                ],
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
                 name: 'feeTo',
                 inputs: [],
                 constant: true,
@@ -733,9 +580,7 @@ export function useQuickSwapFactoryContract(): Contract | null {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
-                outputs: [
-                    { type: 'address', name: '', internalType: 'address' },
-                ],
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
                 name: 'feeToSetter',
                 inputs: [],
                 constant: true,
@@ -744,9 +589,7 @@ export function useQuickSwapFactoryContract(): Contract | null {
                 type: 'function',
                 stateMutability: 'view',
                 payable: false,
-                outputs: [
-                    { type: 'address', name: '', internalType: 'address' },
-                ],
+                outputs: [{ type: 'address', name: '', internalType: 'address' }],
                 name: 'getPair',
                 inputs: [
                     { type: 'address', name: '', internalType: 'address' },
@@ -789,29 +632,14 @@ export function useQuickSwapFactoryContract(): Contract | null {
     )
 }
 
-export function useComplexRewarderContract(
-    address,
-    withSignerIfPossible?: boolean
-): Contract | null {
+export function useComplexRewarderContract(address, withSignerIfPossible?: boolean): Contract | null {
     return useContract(address, COMPLEX_REWARDER_ABI, withSignerIfPossible)
 }
 
-export function useAlcxRewarderContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
-    return useContract(
-        '0x7519C93fC5073E15d89131fD38118D73A72370F8',
-        ALCX_REWARDER_ABI,
-        withSignerIfPossible
-    )
+export function useAlcxRewarderContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract('0x7519C93fC5073E15d89131fD38118D73A72370F8', ALCX_REWARDER_ABI, withSignerIfPossible)
 }
 
-export function useMeowshiContract(
-    withSignerIfPossible?: boolean
-): Contract | null {
-    return useContract(
-        '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D',
-        MEOWSHI_ABI,
-        withSignerIfPossible
-    )
+export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | null {
+    return useContract('0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D', MEOWSHI_ABI, withSignerIfPossible)
 }

@@ -49,50 +49,36 @@ export default function CommonBases({
                     onClick={() => {
                         if (
                             !selectedCurrency ||
-                            !currencyEquals(
-                                selectedCurrency,
-                                Currency.getNativeCurrency(chainId)
-                            )
+                            !currencyEquals(selectedCurrency, Currency.getNativeCurrency(chainId))
                         ) {
                             onSelect(Currency.getNativeCurrency(chainId))
                         }
                     }}
                     className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
-                    disabled={
-                        selectedCurrency === Currency.getNativeCurrency(chainId)
-                    }
+                    disabled={selectedCurrency === Currency.getNativeCurrency(chainId)}
                 >
-                    <CurrencyLogo
-                        currency={Currency.getNativeCurrency(chainId)}
-                    />
+                    <CurrencyLogo currency={Currency.getNativeCurrency(chainId)} />
                     <Typography variant="caption2" className="font-semibold">
                         {Currency.getNativeCurrencySymbol(chainId)}
                     </Typography>
                 </button>
-                {(chainId ? SUGGESTED_BASES[chainId] : []).map(
-                    (token: Token) => {
-                        const selected =
-                            selectedCurrency instanceof Token &&
-                            selectedCurrency.address === token.address
-                        return (
-                            <button
-                                type="button"
-                                onClick={() => !selected && onSelect(token)}
-                                disabled={selected}
-                                key={token.address}
-                                className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
-                            >
-                                <CurrencyLogo currency={token} />
-                                <Typography
-                                    variant="caption2"
-                                    className="font-semibold"
-                                >
-                                    {token.getSymbol(chainId)}
-                                </Typography>
-                            </button>
-                        )
-                    }
-                )}
+                {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
+                    const selected = selectedCurrency instanceof Token && selectedCurrency.address === token.address
+                    return (
+                        <button
+                            type="button"
+                            onClick={() => !selected && onSelect(token)}
+                            disabled={selected}
+                            key={token.address}
+                            className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+                        >
+                            <CurrencyLogo currency={token} />
+                            <Typography variant="caption2" className="font-semibold">
+                                {token.getSymbol(chainId)}
+                            </Typography>
+                        </button>
+                    )
+                })}
             </AutoRow>
         </AutoColumn>
     )

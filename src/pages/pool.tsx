@@ -33,9 +33,7 @@ export default function Pool() {
     const router = useRouter()
     const { account, chainId } = useActiveWeb3React()
 
-    const userEthBalance = useETHBalances(account ? [account] : [])?.[
-        account ?? ''
-    ]
+    const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
     // fetch the user's balances of all tracked V2 LP tokens
     const trackedTokenPairs = useTrackedTokenPairs()
@@ -49,15 +47,13 @@ export default function Pool() {
     )
 
     const liquidityTokens = useMemo(
-        () =>
-            tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
+        () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
         [tokenPairsWithLiquidityTokens]
     )
-    const [v2PairsBalances, fetchingV2PairBalances] =
-        useTokenBalancesWithLoadingIndicator(
-            account ?? undefined,
-            liquidityTokens
-        )
+    const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
+        account ?? undefined,
+        liquidityTokens
+    )
 
     // fetch the reserves for all V2 pools in which the user has a balance
     const liquidityTokensWithBalances = useMemo(
@@ -68,17 +64,13 @@ export default function Pool() {
         [tokenPairsWithLiquidityTokens, v2PairsBalances]
     )
 
-    const v2Pairs = usePairs(
-        liquidityTokensWithBalances.map(({ tokens }) => tokens)
-    )
+    const v2Pairs = usePairs(liquidityTokensWithBalances.map(({ tokens }) => tokens))
     const v2IsLoading =
         fetchingV2PairBalances ||
         v2Pairs?.length < liquidityTokensWithBalances.length ||
         v2Pairs?.some((V2Pair) => !V2Pair)
 
-    const allV2PairsWithLiquidity = v2Pairs
-        .map(([, pair]) => pair)
-        .filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
+    const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
 
     return (
         <Layout>
@@ -99,16 +91,11 @@ export default function Pool() {
                     type="information"
                 />
                 <div className="flex items-center justify-between mt-6 mb-6">
-                    <div className="font-medium text-h5 text-high-emphesis">
-                        {i18n._(t`Your Liquidity Positions`)}
-                    </div>
+                    <div className="font-medium text-h5 text-high-emphesis">{i18n._(t`Your Liquidity Positions`)}</div>
                     <div className="flex space-x-2 text-sm font-bold">
                         <div>{i18n._(t`Don't see a pool you joined?`)}</div>
                         <Link href="/find">
-                            <a
-                                id="import-pool-link"
-                                className="text-blue text-opacity-80 hover:text-opacity-100"
-                            >
+                            <a id="import-pool-link" className="text-blue text-opacity-80 hover:text-opacity-100">
                                 {i18n._(t`Import it.`)}
                             </a>
                         </Link>
@@ -117,11 +104,7 @@ export default function Pool() {
                 <div className="grid grid-flow-row gap-3">
                     {!account ? (
                         <Card>
-                            <div>
-                                {i18n._(
-                                    t`Connect to a wallet to view your liquidity`
-                                )}
-                            </div>
+                            <div>{i18n._(t`Connect to a wallet to view your liquidity`)}</div>
                         </Card>
                     ) : v2IsLoading ? (
                         <Empty>
@@ -135,51 +118,29 @@ export default function Pool() {
                                 </ExternalLink>
                             </div> */}
                             {allV2PairsWithLiquidity.map((v2Pair) => (
-                                <FullPositionCard
-                                    key={v2Pair.liquidityToken.address}
-                                    pair={v2Pair}
-                                />
+                                <FullPositionCard key={v2Pair.liquidityToken.address} pair={v2Pair} />
                             ))}
                         </>
                     ) : (
-                        <Empty className="text-center">
-                            {i18n._(t`No liquidity found`)}
-                        </Empty>
+                        <Empty className="text-center">{i18n._(t`No liquidity found`)}</Empty>
                     )}
                 </div>
-                {chainId &&
-                    migrateFrom[chainId] &&
-                    [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(
-                        chainId
-                    ) && (
-                        <div className="flex justify-center mt-4 space-x-2 text-sm font-bold">
-                            <div>
-                                {i18n._(
-                                    t`Have ${migrateFrom[chainId]} Liquidity?`
-                                )}
-                            </div>
-                            <Link href="/migrate">
-                                <a
-                                    id="migrate-pool-link"
-                                    className="text-blue text-opacity-80 hover:text-opacity-100"
-                                >
-                                    {i18n._(t`Migrate!`)}
-                                </a>
-                            </Link>
-                        </div>
-                    )}
+                {chainId && migrateFrom[chainId] && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                    <div className="flex justify-center mt-4 space-x-2 text-sm font-bold">
+                        <div>{i18n._(t`Have ${migrateFrom[chainId]} Liquidity?`)}</div>
+                        <Link href="/migrate">
+                            <a id="migrate-pool-link" className="text-blue text-opacity-80 hover:text-opacity-100">
+                                {i18n._(t`Migrate!`)}
+                            </a>
+                        </Link>
+                    </div>
+                )}
                 <div className="grid grid-cols-2 gap-4 mt-4">
                     <Button
                         id="add-pool-button"
                         color="gradient"
                         size="large"
-                        onClick={() =>
-                            router.push(
-                                `/add/${Currency.getNativeCurrencySymbol(
-                                    chainId
-                                )}`
-                            )
-                        }
+                        onClick={() => router.push(`/add/${Currency.getNativeCurrencySymbol(chainId)}`)}
                     >
                         {i18n._(t`Add Liquidity`)}
                     </Button>
@@ -187,13 +148,7 @@ export default function Pool() {
                         id="create-pool-button"
                         color="gray"
                         size="large"
-                        onClick={() =>
-                            router.push(
-                                `/create/${Currency.getNativeCurrencySymbol(
-                                    chainId
-                                )}`
-                            )
-                        }
+                        onClick={() => router.push(`/create/${Currency.getNativeCurrencySymbol(chainId)}`)}
                     >
                         {i18n._(t`Create a pair`)}
                     </Button>
