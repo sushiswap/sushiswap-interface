@@ -1,7 +1,4 @@
-import {
-    ApprovalState,
-    useApproveCallback,
-} from '../../hooks/useApproveCallback'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { ChainId, MASTERCHEF_ADDRESS, Token } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
 import React, { useState } from 'react'
@@ -39,10 +36,9 @@ const FarmListItem = ({ farm }) => {
     const token0 = useCurrency(farm.pair.token0.id)
     const token1 = useCurrency(farm.pair.token1.id)
 
-    const address = getAddress(farm.pair.id)
+    console.log({ token0, token1, farm })
 
-    // TODO: KashiPair? Refactor usePair to return both a SwapPair & LendingPair in same format
-    // const [pairState, pair] = usePair(token0, token1)
+    const address = getAddress(farm.pair.id)
 
     // TODO: Replace these
     const amount = useUserInfo(farm)
@@ -55,13 +51,7 @@ const FarmListItem = ({ farm }) => {
         [Chef.MINICHEF]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
     }
 
-    const liquidityToken = new Token(
-        chainId,
-        address,
-        18,
-        farm.pair.symbol,
-        farm.pair.name
-    )
+    const liquidityToken = new Token(chainId, address, 18, farm.pair.symbol, farm.pair.name)
 
     const balance = useTokenBalance(account, liquidityToken)
 
@@ -72,8 +62,7 @@ const FarmListItem = ({ farm }) => {
 
     const { deposit, withdraw, harvest } = useMasterChef(farm.chef)
 
-    const decimals =
-        farm.pair.type === PairType.LENDING ? farm.pair.token0.decimals : 18
+    const decimals = farm.pair.type === PairType.LENDING ? farm.pair.token0.decimals : 18
 
     return (
         <div key={`${farm.chef}:${farm.id}`} className="rounded bg-dark-800">
@@ -83,21 +72,15 @@ const FarmListItem = ({ farm }) => {
             >
                 <div className="text-sm font-semibold sm:text-base">
                     {farm?.pair?.type === PairType.LENDING && 'km'}
-                    {farm?.pair?.token0?.symbol +
-                        '-' +
-                        farm?.pair?.token1?.symbol}{' '}
+                    {farm?.pair?.token0?.symbol + '-' + farm?.pair?.token1?.symbol}{' '}
                     {farm?.pair?.type === PairType.SWAP && 'SLP'}
                 </div>
                 <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
                     {farm?.rewards?.map((reward) => reward.token).join(' & ')}
                 </div>
-                <div className="text-sm text-right text-gray-500 sm:text-base">
-                    {formatNumber(farm?.tvl, true)}
-                </div>
+                <div className="text-sm text-right text-gray-500 sm:text-base">{formatNumber(farm?.tvl, true)}</div>
                 <div className="text-sm font-semibold text-right sm:text-base">
-                    {farm?.roiPerYear > 100
-                        ? '10000%+'
-                        : formatPercent(farm?.roiPerYear * 100)}
+                    {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)}
                 </div>
             </div>
             <div
@@ -106,12 +89,7 @@ const FarmListItem = ({ farm }) => {
             >
                 <div className="flex items-center col-span-1">
                     <div>
-                        <DoubleLogo
-                            currency0={token0}
-                            currency1={token1}
-                            size={40}
-                            margin={true}
-                        />
+                        <DoubleLogo currency0={token0} currency1={token1} size={40} margin={true} />
                     </div>
                 </div>
                 <div className="flex-row items-center justify-start hidden ml-4 space-x-2 md:col-span-1 md:flex">
@@ -134,8 +112,7 @@ const FarmListItem = ({ farm }) => {
                     <div className="flex flex-col pl-2 space-y-1">
                         {farm?.rewards?.map((reward, i) => (
                             <div key={i} className="text-xs text-gray-500">
-                                {formatNumber(reward.rewardPerDay)}{' '}
-                                {reward.token} / day
+                                {formatNumber(reward.rewardPerDay)} {reward.token} / day
                             </div>
                         ))}
                     </div>
@@ -146,22 +123,16 @@ const FarmListItem = ({ farm }) => {
                         <div className="text-sm font-semibold text-right text-gray-500 sm:text-sm">
                             {formatNumber(farm.balance, false)} {farm.type}
                         </div>
-                        <div className="text-xs text-right text-gray-500">
-                            Market Staked
-                        </div>
+                        <div className="text-xs text-right text-gray-500">Market Staked</div>
                     </div>
                 </div>
                 <div className="flex items-center justify-end md:col-span-1">
                     <div>
                         <div className="text-base font-semibold text-right text-gray-500 sm:text-lg">
-                            {farm?.roiPerYear > 100
-                                ? '10000%+'
-                                : formatPercent(farm?.roiPerYear * 100)}
+                            {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)}
                             {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
                         </div>
-                        <div className="text-xs text-right text-gray-500">
-                            annualized
-                        </div>
+                        <div className="text-xs text-right text-gray-500">annualized</div>
                         {/* <div className="text-xs text-right text-gray-500">per month</div> */}
                     </div>
                 </div>
@@ -174,10 +145,7 @@ const FarmListItem = ({ farm }) => {
                             <div className="col-span-2 text-center md:col-span-1">
                                 {account && (
                                     <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                                        {i18n._(t`Wallet Balance`)}:{' '}
-                                        {formatNumber(
-                                            balance?.toSignificant(6) ?? 0
-                                        )}{' '}
+                                        {i18n._(t`Wallet Balance`)}: {formatNumber(balance?.toSignificant(6) ?? 0)}{' '}
                                         {farm.type}
                                     </div>
                                 )}
@@ -195,9 +163,7 @@ const FarmListItem = ({ farm }) => {
                                             color="blue"
                                             size="small"
                                             onClick={() => {
-                                                setDepositValue(
-                                                    balance.toFixed(decimals)
-                                                )
+                                                setDepositValue(balance.toFixed(decimals))
                                             }}
                                             className="absolute border-0 right-4 focus:ring focus:ring-blue"
                                         >
@@ -209,18 +175,10 @@ const FarmListItem = ({ farm }) => {
                                 approvalState === ApprovalState.PENDING ? (
                                     <Button
                                         color="blue"
-                                        disabled={
-                                            approvalState ===
-                                            ApprovalState.PENDING
-                                        }
+                                        disabled={approvalState === ApprovalState.PENDING}
                                         onClick={approve}
                                     >
-                                        {approvalState ===
-                                        ApprovalState.PENDING ? (
-                                            <Dots>Approving </Dots>
-                                        ) : (
-                                            'Approve'
-                                        )}
+                                        {approvalState === ApprovalState.PENDING ? <Dots>Approving </Dots> : 'Approve'}
                                     </Button>
                                 ) : (
                                     <Button
@@ -229,21 +187,13 @@ const FarmListItem = ({ farm }) => {
                                             pendingTx ||
                                             !balance ||
                                             Number(depositValue) === 0 ||
-                                            Number(depositValue) >
-                                                Number(
-                                                    balance.toFixed(decimals)
-                                                )
+                                            Number(depositValue) > Number(balance.toFixed(decimals))
                                         }
                                         onClick={async () => {
                                             setPendingTx(true)
                                             try {
                                                 // KMP decimals depend on asset, SLP is always 18
-                                                const tx = await deposit(
-                                                    farm.id,
-                                                    depositValue.toBigNumber(
-                                                        decimals
-                                                    )
-                                                )
+                                                const tx = await deposit(farm.id, depositValue.toBigNumber(decimals))
 
                                                 addTransaction(tx, {
                                                     summary: `Deposit ${farm.pair.name}`,
@@ -261,8 +211,7 @@ const FarmListItem = ({ farm }) => {
                             <div className="col-span-2 text-center md:col-span-1">
                                 {account && (
                                     <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                                        {i18n._(t`Your Staked`)}:{' '}
-                                        {formatNumber(amount)} {farm.type}
+                                        {i18n._(t`Your Staked`)}: {formatNumber(amount)} {farm.type}
                                     </div>
                                 )}
                                 <div className="relative flex items-center w-full mb-4">
@@ -299,12 +248,7 @@ const FarmListItem = ({ farm }) => {
                                         setPendingTx(true)
                                         try {
                                             // KMP decimals depend on asset, SLP is always 18
-                                            const tx = await withdraw(
-                                                farm.id,
-                                                withdrawValue.toBigNumber(
-                                                    decimals
-                                                )
-                                            )
+                                            const tx = await withdraw(farm.id, withdrawValue.toBigNumber(decimals))
                                             addTransaction(tx, {
                                                 summary: `Withdraw ${farm.pair.name}`,
                                             })
@@ -323,69 +267,41 @@ const FarmListItem = ({ farm }) => {
                             {farm.pair.type === PairType.SWAP && (
                                 <>
                                     <div className="text-caption2">
-                                        Before depositing liquidity into this
-                                        reward pool you'll need to{' '}
-                                        <Link
-                                            href={`/add/${currencyId(
-                                                token0
-                                            )}/${currencyId(token1)}`}
-                                        >
-                                            <a className="underline text-blue">
-                                                add liquidity
-                                            </a>
+                                        Before depositing liquidity into this reward pool you'll need to{' '}
+                                        <Link href={`/add/${currencyId(token0)}/${currencyId(token1)}`}>
+                                            <a className="underline text-blue">add liquidity</a>
                                         </Link>{' '}
-                                        of {token0.symbol} & {token1.symbol} to
-                                        gain liquidity tokens.
+                                        of {token0.symbol} & {token1.symbol} to gain liquidity tokens.
                                     </div>
 
                                     <div className="text-caption2">
-                                        After withdrawing liquidity from this
-                                        reward pool you can{' '}
-                                        <Link
-                                            href={`/remove/${currencyId(
-                                                token0
-                                            )}/${currencyId(token1)}`}
-                                        >
-                                            <a className="underline text-blue">
-                                                remove liquidity
-                                            </a>
+                                        After withdrawing liquidity from this reward pool you can{' '}
+                                        <Link href={`/remove/${currencyId(token0)}/${currencyId(token1)}`}>
+                                            <a className="underline text-blue">remove liquidity</a>
                                         </Link>{' '}
-                                        to regain your underlying{' '}
-                                        {token0.symbol} & {token1.symbol}.
+                                        to regain your underlying {token0.symbol} & {token1.symbol}.
                                     </div>
                                 </>
                             )}
-                            {farm.pair.type === PairType.LENDING &&
-                                token1.symbol && (
-                                    <>
-                                        <div className="text-caption2">
-                                            Before depositing into this reward
-                                            pool you'll need to{' '}
-                                            <Link
-                                                href={`/lend/${farm.pair.id}`}
-                                            >
-                                                <a className="underline text-blue">
-                                                    lend
-                                                </a>
-                                            </Link>{' '}
-                                            to gain liquidity tokens to deposit.
-                                        </div>
+                            {farm.pair.type === PairType.LENDING && token1.symbol && (
+                                <>
+                                    <div className="text-caption2">
+                                        Before depositing into this reward pool you'll need to{' '}
+                                        <Link href={`/lend/${farm.pair.id}`}>
+                                            <a className="underline text-blue">lend</a>
+                                        </Link>{' '}
+                                        to gain liquidity tokens to deposit.
+                                    </div>
 
-                                        <div className="text-caption2">
-                                            After withdrawing liquidity tokens
-                                            from this reward pool you can{' '}
-                                            <Link
-                                                href={`/lend/${farm.pair.id}`}
-                                            >
-                                                <a className="underline text-blue">
-                                                    collect
-                                                </a>
-                                            </Link>{' '}
-                                            to regain your underlying{' '}
-                                            {token1.symbol}.
-                                        </div>
-                                    </>
-                                )}
+                                    <div className="text-caption2">
+                                        After withdrawing liquidity tokens from this reward pool you can{' '}
+                                        <Link href={`/lend/${farm.pair.id}`}>
+                                            <a className="underline text-blue">collect</a>
+                                        </Link>{' '}
+                                        to regain your underlying {token1.symbol}.
+                                    </div>
+                                </>
+                            )}
                         </div>
                         {pending && Number(pending) > 0 && (
                             <div className="px-4 ">
@@ -404,14 +320,10 @@ const FarmListItem = ({ farm }) => {
                                         setPendingTx(false)
                                     }}
                                 >
-                                    {i18n._(t`Harvest ${formatNumber(
-                                        pending
-                                    )} SUSHI
+                                    {i18n._(t`Harvest ${formatNumber(pending)} SUSHI
                                         ${
                                             farm.rewards.length > 1
-                                                ? `& ${formatNumber(reward)} ${
-                                                      farm.rewards[1].token
-                                                  }`
+                                                ? `& ${formatNumber(reward)} ${farm.rewards[1].token}`
                                                 : null
                                         }
                                     `)}
