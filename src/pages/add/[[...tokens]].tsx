@@ -41,7 +41,6 @@ import { useRouter } from 'next/router'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { PairState } from '../../hooks/useV2Pairs'
 
 export default function Add() {
     const { i18n } = useLingui()

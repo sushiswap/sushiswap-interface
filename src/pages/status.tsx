@@ -11,16 +11,16 @@ import { useChainsStatus } from '../services/covalent/hooks'
 import { useState } from 'react'
 
 export default function Status({ initialData }) {
-    const res = useChainsStatus({ initialData })
-    const [tabIndex, setTabIndex] = useState(0)
-    const { data } = res.data
+    // const res = useChainsStatus({ initialData })
+    // const [tabIndex, setTabIndex] = useState(0)
+    // const { data } = res.data
     return (
         <Layout>
             <Head>
                 <title>Status | Sushi</title>
                 <meta name="description" content="Sushi Status..." />
             </Head>
-            <div className="w-full max-w-6xl mx-auto">
+            {/* <div className="w-full max-w-6xl mx-auto">
                 <Typography component="h1" variant="h1" className="w-full mb-4">
                     Status
                 </Typography>
@@ -89,13 +89,13 @@ export default function Status({ initialData }) {
                         </div>
                     </TabPanel>
                 </Tabs>
-            </div>
+            </div> */}
 
             {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         </Layout>
     )
 }
 
-export async function getStaticProps() {
-    return { props: { initialData: await getChainsStatus() } }
-}
+// export async function getStaticProps() {
+//     return { props: { initialData: await getChainsStatus() } }
+// }
