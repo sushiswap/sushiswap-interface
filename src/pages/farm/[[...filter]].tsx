@@ -285,7 +285,7 @@ export default function Farm(): JSX.Element {
         mcv2: (farm) => farm.chef === Chef.MASTERCHEF_V2,
     }
 
-    const filtered = result?.filter(filterForSection[section])
+    const filtered = useMemo(() => result?.filter(filterForSection[section]), [section])
 
     return (
         <Layout>

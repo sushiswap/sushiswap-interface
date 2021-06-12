@@ -68,10 +68,22 @@ const FarmListItem = ({ farm }) => {
                 className="grid grid-cols-3 px-4 py-2 rounded rounded-b-none cursor-pointer select-none md:grid-cols-4 bg-dark-850"
                 onClick={() => setExpand(!expand)}
             >
-                <div className="text-sm font-semibold sm:text-base">
-                    {farm?.pair?.type === PairType.LENDING && 'km'}
-                    {farm?.pair?.token0?.symbol + '-' + farm?.pair?.token1?.symbol}{' '}
-                    {farm?.pair?.type === PairType.SWAP && 'SLP'}
+                <div className="text-sm sm:text-base">
+                    {farm?.pair?.type === PairType.LENDING && (
+                        <div className="flex items-center space-x-2 text-primary">
+                            <div className="text-gray-500">KM</div>
+                            <div className="font-semibold">{farm?.pair?.token0?.symbol}</div>
+                            <div className="text-gray-500">{farm?.pair?.token1?.symbol}</div>
+                        </div>
+                    )}
+                    {farm?.pair?.type === PairType.SWAP && (
+                        <div className="flex items-center space-x-2 text-primary">
+                            <div className="font-semibold">
+                                {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
+                            </div>
+                            <div className="text-gray-500">SLP</div>
+                        </div>
+                    )}
                 </div>
                 <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
                     {farm?.rewards?.map((reward) => reward.token).join(' & ')}
