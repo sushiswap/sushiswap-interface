@@ -317,11 +317,11 @@ msgstr "Colateral"
 msgid "Confirm Staking"
 msgstr "Confirmar replanteo"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:108
 msgid "Confirm Supply"
 msgstr "Confirmar suministro"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:141
 msgid "Confirm Swap"
 msgstr "Confirmar intercambio"
 
@@ -353,7 +353,7 @@ msgstr "Conectarse a una billetera"
 msgid "Connect to a wallet to view your liquidity"
 msgstr "Conéctese a una billetera para ver su liquidez"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:107
 msgid "Create Pool & Supply"
 msgstr "Crear piscina y suministro"
 
@@ -714,7 +714,7 @@ msgid "Liquidity Positions"
 msgstr "Posiciones de liquidez"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:66
-#: src/features/swap/SwapModalFooter.tsx:95
+#: src/features/swap/SwapModalFooter.tsx:107
 msgid "Liquidity Provider Fee"
 msgstr "Tarifa de proveedor de liquidez"
 
@@ -812,7 +812,7 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Maximice el rendimiento apostando SUSHI para xSUSHI"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:62
+#: src/features/swap/SwapModalFooter.tsx:69
 msgid "Maximum sold"
 msgstr "Máximo vendido"
 
@@ -841,13 +841,13 @@ msgstr "Migrando"
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "La migración se realiza con un solo clic con su firma (permiso)"
 
-#: src/features/swap/SwapModalFooter.tsx:106
+#: src/features/swap/SwapModalFooter.tsx:122
 msgid "Miner Tip"
 msgstr ""
 
 #: src/components/TradeReview.tsx:27
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:61
+#: src/features/swap/SwapModalFooter.tsx:68
 msgid "Minimum received"
 msgstr "Mínimo recibido"
 
@@ -987,13 +987,13 @@ msgstr "{0} agrupado"
 #~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
 #~ msgstr ""
 
-#: src/features/swap/SwapModalFooter.tsx:50
+#: src/features/swap/SwapModalFooter.tsx:54
 msgid "Price"
 msgstr "Precio"
 
 #: src/components/TradeReview.tsx:42
 #: src/features/swap/AdvancedSwapDetails.tsx:54
-#: src/features/swap/SwapModalFooter.tsx:83
+#: src/features/swap/SwapModalFooter.tsx:94
 msgid "Price Impact"
 msgstr "Impacto en el precio"
 
@@ -1009,7 +1009,7 @@ msgstr "Impacto de precio demasiado alto"
 #~ msgid "Price Updated"
 #~ msgstr "Precio actualizado"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:35
 msgid "Rates"
 msgstr "Tarifas"
 
@@ -1109,7 +1109,7 @@ msgstr ""
 #~ msgid "Share of Pool"
 #~ msgstr "Participación de la piscina"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:70
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:93
 msgid "Share of Pool:"
 msgstr "Participación de la piscina:"
 
@@ -1216,7 +1216,7 @@ msgstr ""
 msgid "Swap"
 msgstr "Intercambio"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:140
 #: src/pages/swap/[[...tokens]].tsx:760
 #: src/pages/swap/[[...tokens]].tsx:799
 msgid "Swap Anyway"
@@ -1251,7 +1251,7 @@ msgstr "TVL"
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "La diferencia entre el precio de mercado y el precio estimado debido al tamaño de la operación."
 
-#: src/features/swap/SwapModalFooter.tsx:86
+#: src/features/swap/SwapModalFooter.tsx:97
 msgid "The difference between the market price and your price due to trade size."
 msgstr "La diferencia entre el precio de mercado y su precio debido al tamaño de la operación."
 
@@ -1560,7 +1560,7 @@ msgstr "Su transacción se revertirá si el precio cambia desfavorablemente en m
 
 #: src/components/TradeReview.tsx:30
 #: src/features/swap/AdvancedSwapDetails.tsx:36
-#: src/features/swap/SwapModalFooter.tsx:65
+#: src/features/swap/SwapModalFooter.tsx:72
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "Su transacción se revertirá si hay un movimiento de precios grande y desfavorable antes de que se confirme."
 
@@ -1613,8 +1613,8 @@ msgstr "minutos"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI gana automáticamente tarifas (0.05% de todos los intercambios, incluidos los intercambios  a su parte del SushiBar."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:53
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:62
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:60
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:77
 msgid "{0} Deposited"
 msgstr "{0} depositado"
 

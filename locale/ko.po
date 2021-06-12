@@ -294,11 +294,11 @@ msgstr "담보"
 msgid "Confirm Staking"
 msgstr "스테이킹 확인"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:108
 msgid "Confirm Supply"
 msgstr "공급 확인"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:141
 msgid "Confirm Swap"
 msgstr "스왑 확인"
 
@@ -329,7 +329,7 @@ msgstr "지갑에 연결"
 msgid "Connect to a wallet to view your liquidity"
 msgstr "유동성을 보려면 지갑에 연결하세요."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:107
 msgid "Create Pool & Supply"
 msgstr "풀 생성 및 공급"
 
@@ -662,7 +662,7 @@ msgid "Liquidity Positions"
 msgstr "유동성 포지션"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:66
-#: src/features/swap/SwapModalFooter.tsx:95
+#: src/features/swap/SwapModalFooter.tsx:107
 msgid "Liquidity Provider Fee"
 msgstr "유동성 제공자 수수료"
 
@@ -756,7 +756,7 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "xSUSHI에 대한 SUSHI 스테이킹으로 수익 극대화"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:62
+#: src/features/swap/SwapModalFooter.tsx:69
 msgid "Maximum sold"
 msgstr "최대 매매"
 
@@ -784,13 +784,13 @@ msgstr "마이그레이션"
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "귀하의 서명(허가)과  한 번의 클릭으로 마이그레이션이 수행됩니다"
 
-#: src/features/swap/SwapModalFooter.tsx:106
+#: src/features/swap/SwapModalFooter.tsx:122
 msgid "Miner Tip"
 msgstr ""
 
 #: src/components/TradeReview.tsx:27
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:61
+#: src/features/swap/SwapModalFooter.tsx:68
 msgid "Minimum received"
 msgstr "최소 수령"
 
@@ -920,13 +920,13 @@ msgstr "{0} 풀에 추가됨"
 #~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
 #~ msgstr ""
 
-#: src/features/swap/SwapModalFooter.tsx:50
+#: src/features/swap/SwapModalFooter.tsx:54
 msgid "Price"
 msgstr "가격"
 
 #: src/components/TradeReview.tsx:42
 #: src/features/swap/AdvancedSwapDetails.tsx:54
-#: src/features/swap/SwapModalFooter.tsx:83
+#: src/features/swap/SwapModalFooter.tsx:94
 msgid "Price Impact"
 msgstr "가격 영향"
 
@@ -941,7 +941,7 @@ msgstr "가격 영향이 너무 높음"
 #~ msgid "Price Updated"
 #~ msgstr "가격이 업데이트되었습니다"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:35
 msgid "Rates"
 msgstr "요금"
 
@@ -1031,7 +1031,7 @@ msgstr ""
 #~ msgid "Share of Pool"
 #~ msgstr "풀 지분"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:70
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:93
 msgid "Share of Pool:"
 msgstr "풀 지분:"
 
@@ -1128,7 +1128,7 @@ msgstr ""
 msgid "Swap"
 msgstr "스왑"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:140
 #: src/pages/swap/[[...tokens]].tsx:760
 #: src/pages/swap/[[...tokens]].tsx:799
 msgid "Swap Anyway"
@@ -1163,7 +1163,7 @@ msgstr "전체 동결 가치"
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "시장 가격과 거래 규모로 인한 예상 가격의 차이."
 
-#: src/features/swap/SwapModalFooter.tsx:86
+#: src/features/swap/SwapModalFooter.tsx:97
 msgid "The difference between the market price and your price due to trade size."
 msgstr "시장 가격과 거래 규모로 인한 귀하의 가격 차이."
 
@@ -1446,7 +1446,7 @@ msgstr "가격이 해당 퍼센티지 이상으로 불리하게 변경되면 거
 
 #: src/components/TradeReview.tsx:30
 #: src/features/swap/AdvancedSwapDetails.tsx:36
-#: src/features/swap/SwapModalFooter.tsx:65
+#: src/features/swap/SwapModalFooter.tsx:72
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "거래가 확인되기 전에 크게 불리한 가격 변동이 있는 경우 거래가 취소됩니다."
 
@@ -1494,8 +1494,8 @@ msgstr "분"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI는 귀하의 SushiBar 지분에 따라 수수료(멀티 체인 스왑을 포함한 모든 스왑의 0.05 %)를 자동으로 받습니다."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:53
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:62
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:60
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:77
 msgid "{0} Deposited"
 msgstr "{0} 입금됨"
 

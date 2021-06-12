@@ -294,11 +294,11 @@ msgstr "Garanții reale"
 msgid "Confirm Staking"
 msgstr "Confirmați investirea"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:108
 msgid "Confirm Supply"
 msgstr "Confirmați oferta"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:141
 msgid "Confirm Swap"
 msgstr "Confirmați Swap"
 
@@ -329,7 +329,7 @@ msgstr "Conectați-vă la un portofel"
 msgid "Connect to a wallet to view your liquidity"
 msgstr "Conectați-vă la un portofel pentru a vedea propriile lichidități"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:107
 msgid "Create Pool & Supply"
 msgstr "Creați fond comun și ofertă"
 
@@ -664,7 +664,7 @@ msgid "Liquidity Positions"
 msgstr "Pozițiile lichidităților"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:66
-#: src/features/swap/SwapModalFooter.tsx:95
+#: src/features/swap/SwapModalFooter.tsx:107
 msgid "Liquidity Provider Fee"
 msgstr "Comisionul furnizorului de lichidități"
 
@@ -758,7 +758,7 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Maximizați randamentul investind SUSHI în xSUSHI"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:62
+#: src/features/swap/SwapModalFooter.tsx:69
 msgid "Maximum sold"
 msgstr "Maxim vândut"
 
@@ -786,13 +786,13 @@ msgstr "Se migrează"
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "Migrarea se face cu un singur clic folosind semnătura dvs. (permis)"
 
-#: src/features/swap/SwapModalFooter.tsx:106
+#: src/features/swap/SwapModalFooter.tsx:122
 msgid "Miner Tip"
 msgstr ""
 
 #: src/components/TradeReview.tsx:27
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:61
+#: src/features/swap/SwapModalFooter.tsx:68
 msgid "Minimum received"
 msgstr "Minim primit"
 
@@ -922,13 +922,13 @@ msgstr "Pus în comun {0}"
 #~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
 #~ msgstr ""
 
-#: src/features/swap/SwapModalFooter.tsx:50
+#: src/features/swap/SwapModalFooter.tsx:54
 msgid "Price"
 msgstr "Preț"
 
 #: src/components/TradeReview.tsx:42
 #: src/features/swap/AdvancedSwapDetails.tsx:54
-#: src/features/swap/SwapModalFooter.tsx:83
+#: src/features/swap/SwapModalFooter.tsx:94
 msgid "Price Impact"
 msgstr "Impactul prețului"
 
@@ -943,7 +943,7 @@ msgstr "Impactul asupra prețului este prea mare"
 #~ msgid "Price Updated"
 #~ msgstr "Preț actualizat"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:35
 msgid "Rates"
 msgstr "Rate"
 
@@ -1033,7 +1033,7 @@ msgstr ""
 #~ msgid "Share of Pool"
 #~ msgstr "Cota din fondul comun"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:70
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:93
 msgid "Share of Pool:"
 msgstr "Cota din fondul comun:"
 
@@ -1130,7 +1130,7 @@ msgstr ""
 msgid "Swap"
 msgstr "Swap"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:140
 #: src/pages/swap/[[...tokens]].tsx:760
 #: src/pages/swap/[[...tokens]].tsx:799
 msgid "Swap Anyway"
@@ -1165,7 +1165,7 @@ msgstr "TVL"
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "Diferența dintre prețul pieței și prețul estimat ca urmare a dimensiunii tranzacției."
 
-#: src/features/swap/SwapModalFooter.tsx:86
+#: src/features/swap/SwapModalFooter.tsx:97
 msgid "The difference between the market price and your price due to trade size."
 msgstr "Diferența dintre prețul pieței și prețul dvs. ca urmare a dimensiunii tranzacției."
 
@@ -1448,7 +1448,7 @@ msgstr "Tranzacția dvs. se va anula dacă prețul se modifică într-o direcți
 
 #: src/components/TradeReview.tsx:30
 #: src/features/swap/AdvancedSwapDetails.tsx:36
-#: src/features/swap/SwapModalFooter.tsx:65
+#: src/features/swap/SwapModalFooter.tsx:72
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "Tranzacția dvs. se va anula dacă are loc o mișcare de preț mare și nefavorabilă, înainte de confirmare."
 
@@ -1496,8 +1496,8 @@ msgstr "minute"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI câștigă automat comisioane (0,05% din toate swap-urile, inclusiv swap-urile multi-lanț) proporțional  cu cota dvs. din SushiBar."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:53
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:62
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:60
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:77
 msgid "{0} Deposited"
 msgstr "{0} Depus"
 

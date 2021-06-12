@@ -288,11 +288,11 @@ msgstr "抵押品"
 msgid "Confirm Staking"
 msgstr "确认质押"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:108
 msgid "Confirm Supply"
 msgstr "确认供应"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:141
 msgid "Confirm Swap"
 msgstr "确认交换"
 
@@ -323,7 +323,7 @@ msgstr "连接钱包"
 msgid "Connect to a wallet to view your liquidity"
 msgstr "连接钱包以查看您的流动性"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:79
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:107
 msgid "Create Pool & Supply"
 msgstr "创建池和供应"
 
@@ -647,7 +647,7 @@ msgid "Liquidity Positions"
 msgstr "LP"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:66
-#: src/features/swap/SwapModalFooter.tsx:95
+#: src/features/swap/SwapModalFooter.tsx:107
 msgid "Liquidity Provider Fee"
 msgstr "LP奖励"
 
@@ -738,7 +738,7 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "将SUSHI质押成xSUSHI最大化收益"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:62
+#: src/features/swap/SwapModalFooter.tsx:69
 msgid "Maximum sold"
 msgstr "最大可出售"
 
@@ -766,13 +766,13 @@ msgstr "正在迁移"
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "使用您的签名(许可证)，一键完成迁移"
 
-#: src/features/swap/SwapModalFooter.tsx:106
+#: src/features/swap/SwapModalFooter.tsx:122
 msgid "Miner Tip"
 msgstr ""
 
 #: src/components/TradeReview.tsx:27
 #: src/features/swap/AdvancedSwapDetails.tsx:32
-#: src/features/swap/SwapModalFooter.tsx:61
+#: src/features/swap/SwapModalFooter.tsx:68
 msgid "Minimum received"
 msgstr "最少可获得的数量"
 
@@ -900,13 +900,13 @@ msgstr "汇集{0}"
 #~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
 #~ msgstr "来一碗热味增汤, Sushi全新的<0>代币Launchpad</0>"
 
-#: src/features/swap/SwapModalFooter.tsx:50
+#: src/features/swap/SwapModalFooter.tsx:54
 msgid "Price"
 msgstr "价格"
 
 #: src/components/TradeReview.tsx:42
 #: src/features/swap/AdvancedSwapDetails.tsx:54
-#: src/features/swap/SwapModalFooter.tsx:83
+#: src/features/swap/SwapModalFooter.tsx:94
 msgid "Price Impact"
 msgstr "价格影响"
 
@@ -921,7 +921,7 @@ msgstr "价格影响过高"
 #~ msgid "Price Updated"
 #~ msgstr "价格更新"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:35
 msgid "Rates"
 msgstr "费率"
 
@@ -1011,7 +1011,7 @@ msgstr ""
 #~ msgid "Share of Pool"
 #~ msgstr "池子里的份额"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:70
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:93
 msgid "Share of Pool:"
 msgstr "池子里的份额："
 
@@ -1106,7 +1106,7 @@ msgstr ""
 msgid "Swap"
 msgstr "兑换"
 
-#: src/features/swap/SwapModalFooter.tsx:117
+#: src/features/swap/SwapModalFooter.tsx:140
 #: src/pages/swap/[[...tokens]].tsx:760
 #: src/pages/swap/[[...tokens]].tsx:799
 msgid "Swap Anyway"
@@ -1140,7 +1140,7 @@ msgstr "TVL"
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "因为交易规模所导致的市场价格和预计价格之间的差距。"
 
-#: src/features/swap/SwapModalFooter.tsx:86
+#: src/features/swap/SwapModalFooter.tsx:97
 msgid "The difference between the market price and your price due to trade size."
 msgstr "因为交易规模所导致的市场价格和您的价格之间的差距。"
 
@@ -1421,7 +1421,7 @@ msgstr "如果价格的不利变化超过这个百分比，您的交易将被退
 
 #: src/components/TradeReview.tsx:30
 #: src/features/swap/AdvancedSwapDetails.tsx:36
-#: src/features/swap/SwapModalFooter.tsx:65
+#: src/features/swap/SwapModalFooter.tsx:72
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "如果交易在确认之前出现大的不利价格变动，则交易将恢复。"
 
@@ -1467,8 +1467,8 @@ msgstr "分钟"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI自动收取手续费（按比例收取每笔交易的0.05%）。"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:53
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:62
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:60
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:77
 msgid "{0} Deposited"
 msgstr "{0}存入的"
 
