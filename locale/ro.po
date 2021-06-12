@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Eliminați trimiterea"
 
-#: src/pages/swap/[[...tokens]].tsx:484
+#: src/pages/swap/[[...tokens]].tsx:403
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "300M+ TVL pe Polygon! Rutare optimizată activată"
 
@@ -127,12 +127,12 @@ msgstr "Aprobați"
 msgid "Approve Kashi"
 msgstr "Aprobați Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:724
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Approve {0}"
 msgstr "Aprobați {0}"
 
 #: src/pages/migrate.tsx:308
-#: src/pages/swap/[[...tokens]].tsx:721
+#: src/pages/swap/[[...tokens]].tsx:585
 msgid "Approved"
 msgstr "Aprobat"
 
@@ -311,7 +311,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:432
-#: src/pages/swap/[[...tokens]].tsx:674
+#: src/pages/swap/[[...tokens]].tsx:556
 #: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "Conectați portofel"
@@ -405,7 +405,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Nu vedeți un fond comun la care ați participat?"
 
-#: src/pages/swap/[[...tokens]].tsx:489
+#: src/pages/swap/[[...tokens]].tsx:406
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Bucurați-vă de cel mai redus derapaj pe Polygon"
 
@@ -591,7 +591,7 @@ msgstr "Sold insuficient"
 msgid "Insufficient WETH balance"
 msgstr "Sold WETH insuficient"
 
-#: src/pages/swap/[[...tokens]].tsx:692
+#: src/pages/swap/[[...tokens]].tsx:568
 msgid "Insufficient liquidity for this trade"
 msgstr "Lichidități insuficiente pentru această tranzacție"
 
@@ -932,11 +932,11 @@ msgstr "Preț"
 msgid "Price Impact"
 msgstr "Impactul prețului"
 
-#: src/pages/swap/[[...tokens]].tsx:758
+#: src/pages/swap/[[...tokens]].tsx:616
 msgid "Price Impact High"
 msgstr "Impactul asupra prețului este mare"
 
-#: src/pages/swap/[[...tokens]].tsx:797
+#: src/pages/swap/[[...tokens]].tsx:647
 msgid "Price Impact Too High"
 msgstr "Impactul asupra prețului este prea mare"
 
@@ -947,7 +947,7 @@ msgstr "Impactul asupra prețului este prea mare"
 msgid "Rates"
 msgstr "Rate"
 
-#: src/pages/swap/[[...tokens]].tsx:499
+#: src/pages/swap/[[...tokens]].tsx:415
 msgid "Read Tutorial"
 msgstr "Citiți tutorialul"
 
@@ -962,7 +962,7 @@ msgstr "Eliminați"
 msgid "Remove Liquidity"
 msgstr "Eliminare lichiditate"
 
-#: src/pages/swap/[[...tokens]].tsx:618
+#: src/pages/swap/[[...tokens]].tsx:512
 msgid "Remove send"
 msgstr "Eliminați trimiterea"
 
@@ -1037,7 +1037,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "Cota din fondul comun:"
 
-#: src/pages/swap/[[...tokens]].tsx:646
+#: src/pages/swap/[[...tokens]].tsx:533
 msgid "Slippage Tolerance"
 msgstr "Toleranță la derapaj"
 
@@ -1118,37 +1118,37 @@ msgstr "Sushi susține Open Source."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Faceți SUSHI să funcționeze pentru dvs."
 
-#: src/pages/swap/[[...tokens]].tsx:442
+#: src/pages/swap/[[...tokens]].tsx:370
 msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:39
 #: src/components/Header/index.tsx:56
 #: src/components/Header/index.tsx:409
-#: src/pages/swap/[[...tokens]].tsx:761
-#: src/pages/swap/[[...tokens]].tsx:800
+#: src/pages/swap/[[...tokens]].tsx:619
+#: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
 msgstr "Swap"
 
 #: src/features/swap/SwapModalFooter.tsx:140
-#: src/pages/swap/[[...tokens]].tsx:760
-#: src/pages/swap/[[...tokens]].tsx:799
+#: src/pages/swap/[[...tokens]].tsx:618
+#: src/pages/swap/[[...tokens]].tsx:649
 msgid "Swap Anyway"
 msgstr "Swap oricum"
 
-#: src/pages/swap/[[...tokens]].tsx:511
+#: src/pages/swap/[[...tokens]].tsx:425
 msgid "Swap From (est.):"
 msgstr "Swap de la (est.):"
 
-#: src/pages/swap/[[...tokens]].tsx:512
+#: src/pages/swap/[[...tokens]].tsx:426
 msgid "Swap From:"
 msgstr "Swap de la:"
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:488
 msgid "Swap To (est.):"
 msgstr "Swap la (est.):"
 
-#: src/pages/swap/[[...tokens]].tsx:589
+#: src/pages/swap/[[...tokens]].tsx:489
 msgid "Swap To:"
 msgstr "Swap la:"
 
@@ -1243,7 +1243,7 @@ msgstr "Termen limită pentru tranzacție"
 msgid "Transactions"
 msgstr "Tranzacții"
 
-#: src/pages/swap/[[...tokens]].tsx:697
+#: src/pages/swap/[[...tokens]].tsx:569
 msgid "Try enabling multi-hop trades"
 msgstr "Încercați să activați tranzacțiile multi-hop"
 
@@ -1264,11 +1264,11 @@ msgstr "Retrageți investiția"
 msgid "Unstaked"
 msgstr "Neinvestit"
 
-#: src/pages/swap/[[...tokens]].tsx:670
+#: src/pages/swap/[[...tokens]].tsx:553
 msgid "Unsupported Asset"
 msgstr "Activ neacceptat"
 
-#: src/pages/swap/[[...tokens]].tsx:685
+#: src/pages/swap/[[...tokens]].tsx:563
 msgid "Unwrap"
 msgstr "Reluați"
 
@@ -1339,7 +1339,7 @@ msgstr "Retrageți"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "Retrageți {assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:683
+#: src/pages/swap/[[...tokens]].tsx:561
 msgid "Wrap"
 msgstr "Încheiați"
 

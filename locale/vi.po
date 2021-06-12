@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Xóa gửi"
 
-#: src/pages/swap/[[...tokens]].tsx:484
+#: src/pages/swap/[[...tokens]].tsx:403
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "Hơn 300 triệu tổng giá trị bị khóa, TVL, trên Polygon! Đã bật điều hướng được tối ưu hóa"
 
@@ -127,12 +127,12 @@ msgstr "Phê duyệt"
 msgid "Approve Kashi"
 msgstr "Phê duyệt Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:724
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Approve {0}"
 msgstr "Phê duyệt {0}"
 
 #: src/pages/migrate.tsx:308
-#: src/pages/swap/[[...tokens]].tsx:721
+#: src/pages/swap/[[...tokens]].tsx:585
 msgid "Approved"
 msgstr "Đã phê duyệt"
 
@@ -309,7 +309,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:432
-#: src/pages/swap/[[...tokens]].tsx:674
+#: src/pages/swap/[[...tokens]].tsx:556
 #: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "Kết nối ví"
@@ -403,7 +403,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Không thấy mạng lưới bạn đã tham gia?"
 
-#: src/pages/swap/[[...tokens]].tsx:489
+#: src/pages/swap/[[...tokens]].tsx:406
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Tận hưởng mức trượt thấp nhất trên Polygon"
 
@@ -589,7 +589,7 @@ msgstr "Số dư không đủ"
 msgid "Insufficient WETH balance"
 msgstr "Số dư WETH không đủ"
 
-#: src/pages/swap/[[...tokens]].tsx:692
+#: src/pages/swap/[[...tokens]].tsx:568
 msgid "Insufficient liquidity for this trade"
 msgstr "Không đủ thanh khoản cho giao dịch này"
 
@@ -930,11 +930,11 @@ msgstr "Giá"
 msgid "Price Impact"
 msgstr "Tác động giá"
 
-#: src/pages/swap/[[...tokens]].tsx:758
+#: src/pages/swap/[[...tokens]].tsx:616
 msgid "Price Impact High"
 msgstr "Tác động giá cao"
 
-#: src/pages/swap/[[...tokens]].tsx:797
+#: src/pages/swap/[[...tokens]].tsx:647
 msgid "Price Impact Too High"
 msgstr "Tác động giá quá cao"
 
@@ -945,7 +945,7 @@ msgstr "Tác động giá quá cao"
 msgid "Rates"
 msgstr "Tỷ giá"
 
-#: src/pages/swap/[[...tokens]].tsx:499
+#: src/pages/swap/[[...tokens]].tsx:415
 msgid "Read Tutorial"
 msgstr "Đọc hướng dẫn"
 
@@ -960,7 +960,7 @@ msgstr "Xóa"
 msgid "Remove Liquidity"
 msgstr "Xóa thanh khoản"
 
-#: src/pages/swap/[[...tokens]].tsx:618
+#: src/pages/swap/[[...tokens]].tsx:512
 msgid "Remove send"
 msgstr "Xóa gửi"
 
@@ -1035,7 +1035,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "Cổ phần trong mạng lưới:"
 
-#: src/pages/swap/[[...tokens]].tsx:646
+#: src/pages/swap/[[...tokens]].tsx:533
 msgid "Slippage Tolerance"
 msgstr "Khả năng chịu trượt giá"
 
@@ -1116,37 +1116,37 @@ msgstr "Sushi là người ủng hộ Mã nguồn mở."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Tận dụng SUSHI của bạn"
 
-#: src/pages/swap/[[...tokens]].tsx:442
+#: src/pages/swap/[[...tokens]].tsx:370
 msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:39
 #: src/components/Header/index.tsx:56
 #: src/components/Header/index.tsx:409
-#: src/pages/swap/[[...tokens]].tsx:761
-#: src/pages/swap/[[...tokens]].tsx:800
+#: src/pages/swap/[[...tokens]].tsx:619
+#: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
 msgstr "Hoán đổi"
 
 #: src/features/swap/SwapModalFooter.tsx:140
-#: src/pages/swap/[[...tokens]].tsx:760
-#: src/pages/swap/[[...tokens]].tsx:799
+#: src/pages/swap/[[...tokens]].tsx:618
+#: src/pages/swap/[[...tokens]].tsx:649
 msgid "Swap Anyway"
 msgstr "Vẫn hoán đổi"
 
-#: src/pages/swap/[[...tokens]].tsx:511
+#: src/pages/swap/[[...tokens]].tsx:425
 msgid "Swap From (est.):"
 msgstr "Hoán đổi từ (ước tính):"
 
-#: src/pages/swap/[[...tokens]].tsx:512
+#: src/pages/swap/[[...tokens]].tsx:426
 msgid "Swap From:"
 msgstr "Hoán đổi từ:"
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:488
 msgid "Swap To (est.):"
 msgstr "Hoán đổi sang (ước tính):"
 
-#: src/pages/swap/[[...tokens]].tsx:589
+#: src/pages/swap/[[...tokens]].tsx:489
 msgid "Swap To:"
 msgstr "Hoán đổi sang:"
 
@@ -1241,7 +1241,7 @@ msgstr "Thời hạn giao dịch"
 msgid "Transactions"
 msgstr "Giao dịch"
 
-#: src/pages/swap/[[...tokens]].tsx:697
+#: src/pages/swap/[[...tokens]].tsx:569
 msgid "Try enabling multi-hop trades"
 msgstr "Thử bật giao dịch nhiều bước"
 
@@ -1262,11 +1262,11 @@ msgstr "Hủy đặt cược"
 msgid "Unstaked"
 msgstr "Đã hủy đặt cược"
 
-#: src/pages/swap/[[...tokens]].tsx:670
+#: src/pages/swap/[[...tokens]].tsx:553
 msgid "Unsupported Asset"
 msgstr "Tài sản không được hỗ trợ"
 
-#: src/pages/swap/[[...tokens]].tsx:685
+#: src/pages/swap/[[...tokens]].tsx:563
 msgid "Unwrap"
 msgstr "Mở bọc"
 
@@ -1337,7 +1337,7 @@ msgstr "Rút tiền"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "Rút tiền {assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:683
+#: src/pages/swap/[[...tokens]].tsx:561
 msgid "Wrap"
 msgstr "Bọc lại"
 

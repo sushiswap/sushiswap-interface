@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "-刪除發送"
 
-#: src/pages/swap/[[...tokens]].tsx:484
+#: src/pages/swap/[[...tokens]].tsx:403
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "Polygon上的300M + TVL！啟用優化的路由"
 
@@ -126,12 +126,12 @@ msgstr "批准"
 msgid "Approve Kashi"
 msgstr "批準Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:724
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Approve {0}"
 msgstr "批准{0}"
 
 #: src/pages/migrate.tsx:308
-#: src/pages/swap/[[...tokens]].tsx:721
+#: src/pages/swap/[[...tokens]].tsx:585
 msgid "Approved"
 msgstr "已批準"
 
@@ -305,7 +305,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:432
-#: src/pages/swap/[[...tokens]].tsx:674
+#: src/pages/swap/[[...tokens]].tsx:556
 #: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
 msgstr "連接錢包"
@@ -399,7 +399,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "沒有看到您加入的池子嗎？"
 
-#: src/pages/swap/[[...tokens]].tsx:489
+#: src/pages/swap/[[...tokens]].tsx:406
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "在Polygon上享受最低的滑點"
 
@@ -574,7 +574,7 @@ msgstr "余額不足"
 msgid "Insufficient WETH balance"
 msgstr "WETH餘額不足"
 
-#: src/pages/swap/[[...tokens]].tsx:692
+#: src/pages/swap/[[...tokens]].tsx:568
 msgid "Insufficient liquidity for this trade"
 msgstr "該交易的流動性不足"
 
@@ -910,11 +910,11 @@ msgstr "價格"
 msgid "Price Impact"
 msgstr "價格影響"
 
-#: src/pages/swap/[[...tokens]].tsx:758
+#: src/pages/swap/[[...tokens]].tsx:616
 msgid "Price Impact High"
 msgstr "價格影響高"
 
-#: src/pages/swap/[[...tokens]].tsx:797
+#: src/pages/swap/[[...tokens]].tsx:647
 msgid "Price Impact Too High"
 msgstr "價格影響過高"
 
@@ -925,7 +925,7 @@ msgstr "價格影響過高"
 msgid "Rates"
 msgstr "費率"
 
-#: src/pages/swap/[[...tokens]].tsx:499
+#: src/pages/swap/[[...tokens]].tsx:415
 msgid "Read Tutorial"
 msgstr "閱讀教程"
 
@@ -940,7 +940,7 @@ msgstr "删除"
 msgid "Remove Liquidity"
 msgstr "移除流動性"
 
-#: src/pages/swap/[[...tokens]].tsx:618
+#: src/pages/swap/[[...tokens]].tsx:512
 msgid "Remove send"
 msgstr "刪除發送"
 
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "池子裏的份額："
 
-#: src/pages/swap/[[...tokens]].tsx:646
+#: src/pages/swap/[[...tokens]].tsx:533
 msgid "Slippage Tolerance"
 msgstr "可容忍滑點"
 
@@ -1094,37 +1094,37 @@ msgstr "Sushi是開源協議的支持者。"
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar：讓SUSHI為您工作"
 
-#: src/pages/swap/[[...tokens]].tsx:442
+#: src/pages/swap/[[...tokens]].tsx:370
 msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:39
 #: src/components/Header/index.tsx:56
 #: src/components/Header/index.tsx:409
-#: src/pages/swap/[[...tokens]].tsx:761
-#: src/pages/swap/[[...tokens]].tsx:800
+#: src/pages/swap/[[...tokens]].tsx:619
+#: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
 msgstr "代幣兌換"
 
 #: src/features/swap/SwapModalFooter.tsx:140
-#: src/pages/swap/[[...tokens]].tsx:760
-#: src/pages/swap/[[...tokens]].tsx:799
+#: src/pages/swap/[[...tokens]].tsx:618
+#: src/pages/swap/[[...tokens]].tsx:649
 msgid "Swap Anyway"
 msgstr "仍要交換"
 
-#: src/pages/swap/[[...tokens]].tsx:511
+#: src/pages/swap/[[...tokens]].tsx:425
 msgid "Swap From (est.):"
 msgstr "交換自（估計）："
 
-#: src/pages/swap/[[...tokens]].tsx:512
+#: src/pages/swap/[[...tokens]].tsx:426
 msgid "Swap From:"
 msgstr "交換自："
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:488
 msgid "Swap To (est.):"
 msgstr "交換至（估算）："
 
-#: src/pages/swap/[[...tokens]].tsx:589
+#: src/pages/swap/[[...tokens]].tsx:489
 msgid "Swap To:"
 msgstr "交換至："
 
@@ -1218,7 +1218,7 @@ msgstr "交易期限"
 msgid "Transactions"
 msgstr "交易"
 
-#: src/pages/swap/[[...tokens]].tsx:697
+#: src/pages/swap/[[...tokens]].tsx:569
 msgid "Try enabling multi-hop trades"
 msgstr "嘗試啟用多跳交易"
 
@@ -1239,11 +1239,11 @@ msgstr "解除抵押"
 msgid "Unstaked"
 msgstr "解除質押"
 
-#: src/pages/swap/[[...tokens]].tsx:670
+#: src/pages/swap/[[...tokens]].tsx:553
 msgid "Unsupported Asset"
 msgstr "不支持的資產"
 
-#: src/pages/swap/[[...tokens]].tsx:685
+#: src/pages/swap/[[...tokens]].tsx:563
 msgid "Unwrap"
 msgstr "解開"
 
@@ -1314,7 +1314,7 @@ msgstr "提取"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "提現{assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:683
+#: src/pages/swap/[[...tokens]].tsx:561
 msgid "Wrap"
 msgstr "包裹"
 
