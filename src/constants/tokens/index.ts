@@ -28,6 +28,36 @@ export const MATIC: { [key: string]: Token } = {
     FXS: new Token(ChainId.MATIC, '0x3e121107F6F22DA4911079845a470757aF4e1A1b', 18, 'FXS', 'Frax Share'),
 }
 
+export const OKEX: { [key: string]: Token } = {
+    DAI: new Token(ChainId.OKEX, '0x21cDE7E32a6CAF4742d00d44B07279e7596d26B9', 18, 'DAI', 'Dai Stablecoin'),
+    USDC: new Token(ChainId.OKEX, '0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85', 18, 'USDC', 'USD Coin'),
+    USDT: new Token(ChainId.OKEX, '0x382bB369d343125BfB2117af9c149795C6C65C50', 18, 'USDT', 'Tether USD'),
+    WBTC: new Token(ChainId.OKEX, '0x506f731F7656e2FB34b587B912808f2a7aB640BD', 18, 'WBTC', 'Wrapped Bitcoin'),
+    WETH: new Token(ChainId.OKEX, '0xEF71CA2EE68F45B9Ad6F72fbdb33d707b872315C', 18, 'WBTC', 'Wrapped Ether'),
+}
+
+export const HECO: { [key: string]: Token } = {
+    DAI: new Token(ChainId.HECO, '0x3D760a45D0887DFD89A2F5385a236B29Cb46ED2a', 18, 'DAI', 'Dai Stablecoin'),
+    USDC: new Token(ChainId.HECO, '0x9362Bbef4B8313A8Aa9f0c9808B80577Aa26B73B', 18, 'USDC', 'USD Coin'),
+    USDT: new Token(ChainId.HECO, '0xa71EdC38d189767582C38A3145b5873052c3e47a', 18, 'USDT', 'Tether USD'),
+    WBTC: new Token(ChainId.HECO, '0x66a79D23E58475D2738179Ca52cd0b41d73f0BEa', 18, 'WBTC', 'Wrapped Bitcoin'),
+    WETH: new Token(ChainId.HECO, '0x64FF637fB478863B7468bc97D30a5bF3A428a1fD', 18, 'WBTC', 'Wrapped Ether'),
+}
+
+export const HARMONY: { [key: string]: Token } = {
+    USDC: new Token(ChainId.HARMONY, '0x985458E523dB3d53125813eD68c274899e9DfAb4', 6, 'USDC', 'USD Coin'),
+    USDT: new Token(ChainId.HARMONY, '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f', 6, 'USDT', 'Tether USD'),
+    WBTC: new Token(ChainId.HARMONY, '0x3095c7557bCb296ccc6e363DE01b760bA031F2d9', 8, 'WBTC', 'Wrapped Bitcoin'),
+    WETH: new Token(ChainId.HARMONY, '0x6983D1E6DEf3690C4d616b13597A09e6193EA013', 18, 'WBTC', 'Wrapped Ether'),
+}
+
+export const XDAI: { [key: string]: Token } = {
+    USDC: new Token(ChainId.XDAI, '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83', 6, 'USDC', 'USD Coin'),
+    USDT: new Token(ChainId.XDAI, '0x4ECaBa5870353805a9F068101A40E0f32ed605C6', 6, 'USDT', 'Tether USD'),
+    WBTC: new Token(ChainId.XDAI, '0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252', 8, 'WBTC', 'Wrapped Bitcoin'),
+    WETH: new Token(ChainId.XDAI, '0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1', 18, 'WBTC', 'Wrapped Ether'),
+}
+
 // Default Ethereum chain tokens
 export const ALPHA = new Token(ChainId.MAINNET, '0xa1faa113cbE53436Df28FF0aEe54275c13B40975', 18, 'ALPHA', 'AlphaToken')
 export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')

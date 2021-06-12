@@ -15,13 +15,16 @@ import {
     FEI,
     FRAX,
     FXS,
+    HARMONY,
     HBTC,
+    HECO,
     IBETH,
     LFBTC,
     LIFT,
     MATIC,
     MIR,
     NFTX,
+    OKEX,
     PLAY,
     PONT,
     PWING,
@@ -36,6 +39,7 @@ import {
     USDT,
     UST,
     WBTC,
+    XDAI,
     XSUSHI,
 } from './tokens'
 // a list of tokens by chain
@@ -112,10 +116,17 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
     [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
     [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM]],
+    [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
     [ChainId.AVALANCHE]: [...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE]],
-    [ChainId.HECO]: [...WRAPPED_NATIVE_ONLY[ChainId.HECO]],
-    [ChainId.HARMONY]: [...WRAPPED_NATIVE_ONLY[ChainId.HARMONY]],
-    [ChainId.OKEX]: [...WRAPPED_NATIVE_ONLY[ChainId.OKEX]],
+    [ChainId.HARMONY]: [
+        ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
+        HARMONY.USDC,
+        HARMONY.USDT,
+        HARMONY.WETH,
+        HARMONY.WBTC,
+    ],
+    [ChainId.HECO]: [...WRAPPED_NATIVE_ONLY[ChainId.HECO], HECO.DAI, HECO.USDC, HECO.USDT, HECO.WBTC, HECO.WETH],
+    [ChainId.OKEX]: [...WRAPPED_NATIVE_ONLY[ChainId.OKEX], OKEX.DAI, OKEX.USDC, OKEX.USDT, OKEX.WBTC, OKEX.WETH],
 }
 
 export const ADDITIONAL_BASES: { [chainId: number]: { [tokenAddress: string]: Token[] } } = {
@@ -193,11 +204,17 @@ export const SUGGESTED_BASES: ChainTokenList = {
     [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
     [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
     [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM]],
-    [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI]],
+    [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
     [ChainId.AVALANCHE]: [...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE]],
-    [ChainId.HARMONY]: [...WRAPPED_NATIVE_ONLY[ChainId.HARMONY]],
-    [ChainId.HECO]: [...WRAPPED_NATIVE_ONLY[ChainId.HECO]],
-    [ChainId.OKEX]: [...WRAPPED_NATIVE_ONLY[ChainId.OKEX]],
+    [ChainId.HARMONY]: [
+        ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
+        HARMONY.USDC,
+        HARMONY.USDT,
+        HARMONY.WETH,
+        HARMONY.WBTC,
+    ],
+    [ChainId.HECO]: [...WRAPPED_NATIVE_ONLY[ChainId.HECO], HECO.DAI, HECO.USDC, HECO.USDT, HECO.WBTC, HECO.WETH],
+    [ChainId.OKEX]: [...WRAPPED_NATIVE_ONLY[ChainId.OKEX], OKEX.DAI, OKEX.USDC, OKEX.USDT, OKEX.WBTC, OKEX.WETH],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -208,11 +225,17 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
     [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB],
     [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM]],
-    [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI]],
+    [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
     [ChainId.AVALANCHE]: [...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE]],
-    [ChainId.HARMONY]: [...WRAPPED_NATIVE_ONLY[ChainId.HARMONY]],
-    [ChainId.HECO]: [...WRAPPED_NATIVE_ONLY[ChainId.HECO]],
-    [ChainId.OKEX]: [...WRAPPED_NATIVE_ONLY[ChainId.OKEX]],
+    [ChainId.HARMONY]: [
+        ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
+        HARMONY.USDC,
+        HARMONY.USDT,
+        HARMONY.WETH,
+        HARMONY.WBTC,
+    ],
+    [ChainId.HECO]: [...WRAPPED_NATIVE_ONLY[ChainId.HECO], HECO.DAI, HECO.USDC, HECO.USDT, HECO.WBTC, HECO.WETH],
+    [ChainId.OKEX]: [...WRAPPED_NATIVE_ONLY[ChainId.OKEX], OKEX.DAI, OKEX.USDC, OKEX.USDT, OKEX.WBTC, OKEX.WETH],
 }
 
 export const PINNED_PAIRS: {
