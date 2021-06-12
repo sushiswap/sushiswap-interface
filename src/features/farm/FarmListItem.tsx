@@ -36,8 +36,6 @@ const FarmListItem = ({ farm }) => {
     const token0 = useCurrency(farm.pair.token0.id)
     const token1 = useCurrency(farm.pair.token1.id)
 
-    console.log({ token0, token1, farm })
-
     const address = getAddress(farm.pair.id)
 
     // TODO: Replace these
