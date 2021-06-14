@@ -24,7 +24,7 @@ export default function ExchangeHeader({
     <div className="flex justify-between mb-4 space-x-3">
       <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
         <NavLink
-          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
+          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-800"
           // href={`/swap${
           //   input ? `?inputCurrency=${currencyId(input, chainId)}` : ""
           // }${
