@@ -1,4 +1,4 @@
-import { ChainId, Token, WETH } from '@sushiswap/sdk'
+import { ChainId, SUSHI_ADDRESS, Token, WETH } from '@sushiswap/sdk'
 
 export const BSC: { [key: string]: Token } = {
     DAI: new Token(ChainId.BSC, '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3', 18, 'DAI', 'Dai Stablecoin'),
@@ -173,34 +173,18 @@ type ChainTokenMap = {
 
 // SUSHI
 export const SUSHI: ChainTokenMap = {
-    [ChainId.MAINNET]: new Token(
-        ChainId.MAINNET,
-        '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
-        18,
-        'SUSHI',
-        'SushiToken'
-    ),
-    [ChainId.ROPSTEN]: new Token(
-        ChainId.ROPSTEN,
-        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
-        18,
-        'SUSHI',
-        'SushiToken'
-    ),
-    [ChainId.RINKEBY]: new Token(
-        ChainId.RINKEBY,
-        '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
-        18,
-        'SUSHI',
-        'SushiToken'
-    ),
-    [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
-    [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', 18, 'SUSHI', 'SushiToken'),
-    [ChainId.FANTOM]: new Token(
-        ChainId.FANTOM,
-        '0xae75A438b2E0cB8Bb01Ec1E1e376De11D44477CC',
-        18,
-        'SUSHI',
-        'SushiToken'
-    ),
+    [ChainId.MAINNET]: new Token(ChainId.MAINNET, SUSHI_ADDRESS[ChainId.MAINNET], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, SUSHI_ADDRESS[ChainId.ROPSTEN], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, SUSHI_ADDRESS[ChainId.RINKEBY], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, SUSHI_ADDRESS[ChainId.GÖRLI], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.KOVAN]: new Token(ChainId.KOVAN, SUSHI_ADDRESS[ChainId.KOVAN], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.MATIC]: new Token(ChainId.MATIC, SUSHI_ADDRESS[ChainId.MATIC], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.FANTOM]: new Token(ChainId.FANTOM, SUSHI_ADDRESS[ChainId.FANTOM], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.XDAI]: new Token(ChainId.XDAI, SUSHI_ADDRESS[ChainId.XDAI], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.BSC]: new Token(ChainId.BSC, SUSHI_ADDRESS[ChainId.BSC], 18, 'SUSHI', 'SushiToken'),
+    // [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, SUSHI_ADDRESS[ChainId.ARBITRUM], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.AVALANCHE]: new Token(ChainId.AVALANCHE, SUSHI_ADDRESS[ChainId.AVALANCHE], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.OKEX]: new Token(ChainId.OKEX, SUSHI_ADDRESS[ChainId.OKEX], 18, 'SUSHI', 'SushiToken'),
+    [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
+    // [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
 }
