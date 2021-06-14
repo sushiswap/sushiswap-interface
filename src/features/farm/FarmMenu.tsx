@@ -45,7 +45,7 @@ const Menu = () => {
             </a>
           </NavLink>
           <NavLink
-            href="/farm/dual"
+            href="/farm/2x"
             activeClassName="bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
             <a className="flex items-center justify-between px-4 py-6 font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800 text-caption">

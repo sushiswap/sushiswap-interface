@@ -310,7 +310,7 @@ export default function Farm(): JSX.Element {
     portfolio: (farm) => positions?.find((position) => position.id === farm.id),
     slp: (farm) => farm.pair.type === PairType.SWAP,
     km: (farm) => farm.pair.type === PairType.LENDING,
-    dual: (farm) => farm.chef === Chef.MASTERCHEF_V2,
+    "2x": (farm) => farm.chef === Chef.MASTERCHEF_V2,
   };
 
   const filtered = type ? result?.filter(filterForSection[type]) : result;
