@@ -105,9 +105,9 @@ const FarmListItem = ({ farm }) => {
                 <div key={i} className="flex items-center">
                   <Image
                     src={reward.icon}
-                    width="40px"
-                    height="40px"
-                    className="w-10 h-10 rounded"
+                    width="30px"
+                    height="30px"
+                    className="rounded-sm"
                     alt={reward.token}
                   />
                 </div>
