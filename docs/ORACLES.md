@@ -18,13 +18,13 @@ https://docs.chain.link/docs/xdai-price-feeds/
 https://docs.chain.link/docs/huobi-eco-chain-price-feeds/
 https://docs.chain.link/docs/avalanche-price-feeds/
 
-Each price feed has a pair SUSHI/ETH or SUSHI/USD for example, decimals, and proxy. We use this information to construct mappings of the price feed to their respectful pair tokens.
+Each price feed has a pair token0/token1, SUSHI/ETH or SUSHI/USD for example, decimals, and proxy. We use this information to construct mappings of the price feed to their respectful pair tokens.
 
 Chainlink tokens can be found in src/constants/chainlink/mappings, they are seperated by network.
 
 Any token which is not currently in the Chainlink tokens needs to be added, with the exception of USD, and non-crypto, these should not be added to the Chainlink tokens.
 
-Tip: USD address is 0x0000000000000000000000000000000000000001
+If a newly added token is not in the @sushiswap/default-token-list, it should be added.
 
 Chainlink mappings can be found in src/constants/chainlink/mappings, they are seperated by network.
 
@@ -32,8 +32,10 @@ Any price feed which is not currently in the Chainlink mappings need to be added
 
 Each mapping is keyed by the price feed proxy address, and contains and object with these properties
 
-- from (token0)
-- to (token1)
+Tip: USD address is 0x0000000000000000000000000000000000000001
+
+- from (token0 address)
+- to (token1 address)
 - decimals (price feed decimals)
 - fromDecimals (token0 decimals)
 - toDecimals (token1 decimals)
