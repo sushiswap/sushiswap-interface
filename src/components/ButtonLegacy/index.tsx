@@ -6,6 +6,7 @@ import Button from "../Button";
 import { ChevronDown } from "react-feather";
 import React from "react";
 import { RowBetween } from "../Row";
+import { classNames } from "../../functions";
 
 const Base = styled(RebassButton)<{
   padding?: string;
@@ -237,7 +238,11 @@ export function ButtonConfirmed({
         variant="outlined"
         color="green"
         size="large"
-        className="border opacity-50 border-green"
+        className={classNames(
+          disabled && "cursor-not-allowed",
+          "border opacity-50"
+        )}
+        disabled={disabled}
         {...rest}
       />
     );
