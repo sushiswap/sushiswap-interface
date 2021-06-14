@@ -98,8 +98,6 @@ export default function Swap() {
   // const loadedInputCurrency = useCurrency(currencyIdA);
   // const loadedOutputCurrency = useCurrency(currencyIdB);
 
-  console.log({ query: router.query });
-
   const loadedUrlParams = useDefaultsFromURLSearch();
 
   // token warning stuff

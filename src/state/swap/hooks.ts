@@ -247,8 +247,6 @@ export function useDerivedSwapInfo(doArcher = false): {
     }
   }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate]);
 
-  console.log({ userGasEstimate, userGasPrice });
-
   useEffect(() => {
     if (doArcher && !userTipManualOverride) {
       setUserETHTip(
