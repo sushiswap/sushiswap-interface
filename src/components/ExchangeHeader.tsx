@@ -38,7 +38,7 @@ export default function ExchangeHeader({
         </NavLink>
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-800"
-          href={`/${router.asPath.includes("add") ? "add" : "remove"}${
+          href={`/${router.pathname.includes("swap") ? "add" : "remove"}${
             input ? `/${currencyId(input, chainId)}` : ""
           }${output ? `/${currencyId(output, chainId)}` : ""}`}
         >
