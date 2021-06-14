@@ -33,8 +33,8 @@ msgstr ""
 #~ msgstr "- 제거 요청하기"
 
 #: src/pages/swap/[[...tokens]].tsx:491
-msgid "300M+ TVL on Polygon! Optimized routing enabled"
-msgstr "Polygon에 예치된 300M 이상의 TVL! 최적화된 라우팅 적용"
+#~ msgid "300M+ TVL on Polygon! Optimized routing enabled"
+#~ msgstr "Polygon에 예치된 300M 이상의 TVL! 최적화된 라우팅 적용"
 
 #~ msgid "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive you rewards at any time."
 #~ msgstr "<0>팁</0> 보상을 받으려면 먼저 지정된 쌍에 유동성을 추가하거나 기존 유동성을 <1> </1> SLP가 있으면 이 수확량 농장에 스테이킹하여 보상받을 수 있습니다. 언제든지 언스테이킹 한 다음 유동성 제거를 클릭하여 SLP를 기본 토큰으로 다시 전환할 수 있습니다. 수확을 클릭하면 언제든지 보상받을 수 있습니다."
@@ -55,7 +55,7 @@ msgstr "Polygon에 예치된 300M 이상의 TVL! 최적화된 라우팅 적용"
 #~ msgid "<0>Your</0> Positions"
 #~ msgstr "<0>귀하의</0> 포지션"
 
-#: src/components/TradeReview.tsx:71
+#: src/features/lending/TradeReview.tsx:71
 #: src/features/swap/AdvancedSwapDetails.tsx:88
 msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
 msgstr "각 거래 금액의 일부(0.25%)는 프로토콜 인센티브로 유동성 공급자에게 전달됩니다."
@@ -67,7 +67,7 @@ msgstr "APR"
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "연이율(수수료 포함)"
 
-#: src/features/farm/FarmList.tsx:56
+#: src/features/farm/FarmList.tsx:57
 msgid "APY"
 msgstr ""
 
@@ -77,12 +77,12 @@ msgstr ""
 #~ msgid "Accept"
 #~ msgstr "동의"
 
-#: src/components/PositionCard/index.tsx:419
+#: src/components/PositionCard/index.tsx:349
 msgid "Add"
 msgstr "추가"
 
 #: src/components/NavigationTabs/index.tsx:106
-#: src/pages/pool.tsx:166
+#: src/pages/pool.tsx:179
 msgid "Add Liquidity"
 msgstr "유동성 추가"
 
@@ -116,28 +116,28 @@ msgstr "토큰 양"
 msgid "Analytics"
 msgstr "애널리틱스"
 
-#: src/components/KashiButton.tsx:85
+#: src/features/lending/Button.tsx:92
 #: src/pages/balances.tsx:227
-#: src/pages/migrate.tsx:291
+#: src/pages/migrate.tsx:290
 #: src/pages/stake.tsx:390
 msgid "Approve"
 msgstr "승인"
 
-#: src/components/KashiButton.tsx:47
+#: src/features/lending/Button.tsx:54
 msgid "Approve Kashi"
 msgstr "카시 허용"
 
-#: src/pages/swap/[[...tokens]].tsx:705
+#: src/pages/swap/[[...tokens]].tsx:672
 msgid "Approve {0}"
 msgstr "{0} 승인하기"
 
-#: src/pages/migrate.tsx:289
-#: src/pages/swap/[[...tokens]].tsx:702
+#: src/pages/migrate.tsx:288
+#: src/pages/swap/[[...tokens]].tsx:669
 msgid "Approved"
 msgstr "승인됨"
 
 #: src/pages/balances.tsx:225
-#: src/pages/migrate.tsx:287
+#: src/pages/migrate.tsx:286
 #: src/pages/stake.tsx:388
 msgid "Approving"
 msgstr "승인"
@@ -229,7 +229,7 @@ msgstr "차용금액"
 #~ msgid "Bridge Assets"
 #~ msgstr "브리지 자산"
 
-#: src/components/PositionCard/index.tsx:214
+#: src/components/PositionCard/index.tsx:164
 msgid ""
 "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\n"
 "of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\n"
@@ -264,7 +264,7 @@ msgstr "확인 양식을 우회하고 높은 슬리피지 거래를 허용합니
 #~ msgid "Click here to switch to Polygon using Metamask"
 #~ msgstr "Metamask를 사용하여 Polygon으로 전환하려면 여기를 클릭"
 
-#: src/pages/migrate.tsx:430
+#: src/pages/migrate.tsx:424
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
@@ -298,7 +298,7 @@ msgstr "스테이킹 확인"
 msgid "Confirm Supply"
 msgstr "공급 확인"
 
-#: src/features/swap/SwapModalFooter.tsx:129
+#: src/features/swap/SwapModalFooter.tsx:127
 msgid "Confirm Swap"
 msgstr "스왑 확인"
 
@@ -311,21 +311,20 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:660
+#: src/pages/swap/[[...tokens]].tsx:628
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "지갑 연결"
 
 #: src/components/WalletModal/index.tsx:338
-#: src/components/Web3Status/index.tsx:282
+#: src/components/Web3Connect/index.tsx:47
 msgid "Connect to a wallet"
 msgstr "지갑에 연결"
 
 #~ msgid "Connect to a wallet to find pools"
 #~ msgstr "지갑에 연결하여 풀 찾기"
 
-#: src/pages/migrate.tsx:410
-#: src/pages/pool.tsx:116
+#: src/pages/migrate.tsx:404
 msgid "Connect to a wallet to view your liquidity"
 msgstr "유동성을 보려면 지갑에 연결하세요."
 
@@ -337,7 +336,7 @@ msgstr "풀 생성 및 공급"
 #~ msgstr "쌍 만들기"
 
 #: src/components/NavigationTabs/index.tsx:104
-#: src/pages/pool.tsx:178
+#: src/pages/pool.tsx:191
 msgid "Create a pair"
 msgstr "쌍 만들기"
 
@@ -395,9 +394,9 @@ msgstr "Sushi 개발자를 위한 문서."
 msgid "Documentation for users of Sushi."
 msgstr "Sushi 사용자를 위한 문서."
 
-#: src/pages/pool.tsx:102
-msgid "Don't see a pool you joined?"
-msgstr ""
+#: src/pages/pool.tsx:172
+#~ msgid "Don't see a pool you joined?"
+#~ msgstr ""
 
 #~ msgid "Don't see a pool you joined? <0>Import it.</0>"
 #~ msgstr "가입한 풀이 보이지 않습니까? <0>가져오기</0>"
@@ -406,8 +405,8 @@ msgstr ""
 #~ msgstr "보유 중인 유동성 풀 토큰이 보이지 않습니까?"
 
 #: src/pages/swap/[[...tokens]].tsx:494
-msgid "Enjoy the lowest slippage on Polygon"
-msgstr "Polygon에서 최저 수준의 슬리피지를 경험하세요"
+#~ msgid "Enjoy the lowest slippage on Polygon"
+#~ msgstr "Polygon에서 최저 수준의 슬리피지를 경험하세요"
 
 #: src/pages/bentobox.tsx:74
 msgid "Enter"
@@ -431,7 +430,7 @@ msgid "Enter an amount"
 msgstr "금액 입력"
 
 #: src/components/TransactionConfirmationModal/index.tsx:129
-#: src/components/Web3Status/index.tsx:271
+#: src/components/Web3Connect/index.tsx:35
 msgid "Error"
 msgstr "오류"
 
@@ -519,7 +518,7 @@ msgstr "하드웨어 지갑"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "{0} SUSHI 수확하기"
 
-#: src/features/farm/FarmListItem.tsx:376
+#: src/features/farm/FarmListItem.tsx:380
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -542,9 +541,9 @@ msgstr ""
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "추가적인 이자수익을 발생시킬 수 있는 자산을 보유하고 계신가요? 격리 마켓에 자산을 대출하고 대출자들로부터 이자수익을 받으세요. 입출금 만큼이나 쉽습니다."
 
-#: src/pages/pool.tsx:146
-msgid "Have {0} Liquidity?"
-msgstr ""
+#: src/pages/pool.tsx:186
+#~ msgid "Have {0} Liquidity?"
+#~ msgstr ""
 
 #: src/pages/lend/[pair].tsx:105
 msgid "Health"
@@ -566,19 +565,23 @@ msgstr "건전성"
 msgid "Import Pool"
 msgstr "풀 가져오기"
 
+#: src/pages/pool.tsx:118
+msgid "Import Pool Manually"
+msgstr ""
+
 #~ msgid "Import it"
 #~ msgstr "가져오기"
 
-#: src/pages/pool.tsx:108
-msgid "Import it."
-msgstr ""
+#: src/pages/pool.tsx:178
+#~ msgid "Import it."
+#~ msgstr ""
 
 #~ msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
 #~ msgstr "입력값은 예상치입니다. 최대 <0>{0} {1}</0>가 매매되거나, 거래가 초기화됩니다."
 
 #: src/features/farm/FarmList.tsx:20
-msgid "Instruments"
-msgstr "도구"
+#~ msgid "Instruments"
+#~ msgstr "도구"
 
 #: src/pages/migrate.tsx:263
 #: src/pages/stake.tsx:412
@@ -589,7 +592,7 @@ msgstr "잔액 부족"
 msgid "Insufficient WETH balance"
 msgstr "WETH 잔액 부족"
 
-#: src/pages/swap/[[...tokens]].tsx:678
+#: src/pages/swap/[[...tokens]].tsx:647
 msgid "Insufficient liquidity for this trade"
 msgstr "이 거래를 위한 유동성 부족"
 
@@ -662,15 +665,15 @@ msgid "Liquidity Positions"
 msgstr "유동성 포지션"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:84
-#: src/features/swap/SwapModalFooter.tsx:100
+#: src/features/swap/SwapModalFooter.tsx:99
 msgid "Liquidity Provider Fee"
 msgstr "유동성 제공자 수수료"
 
-#: src/pages/pool.tsx:91
+#: src/pages/pool.tsx:104
 msgid "Liquidity Provider Rewards"
 msgstr "유동성 제공자 보상"
 
-#: src/pages/pool.tsx:92
+#: src/pages/pool.tsx:105
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -683,18 +686,18 @@ msgstr ""
 #~ msgid "Liquidity providers earn a 0.25% fee on all trades proportional to their share ofthe pool. Fees are added to the pool, accrue in real time and can be claimed bywithdrawing your liquidity"
 #~ msgstr "유동성 공급자들은 풀에 대한 지분에 따라 거래시 발생하는 0.25%의 수수료의 일부를 받게 됩니다. 수수료는 풀에 포함되며 실시간으로 발생하고 유동성 출금 시에 받게 됩니다."
 
-#: src/components/SearchModal/Manage.tsx:69
+#: src/components/SearchModal/Manage.tsx:58
 msgid "Lists"
 msgstr "리스트"
 
-#: src/components/PositionCard/index.tsx:292
+#: src/components/PositionCard/index.tsx:244
 #: src/pages/migrate.tsx:266
-#: src/pages/pool.tsx:120
+#: src/pages/pool.tsx:141
 #: src/pages/transactions.tsx:73
 msgid "Loading"
 msgstr "로드 중"
 
-#: src/pages/migrate.tsx:415
+#: src/pages/migrate.tsx:409
 msgid "Loading your {exchange} liquidity positions"
 msgstr "{exchange} 유동성 포지션 로드 중"
 
@@ -706,8 +709,8 @@ msgstr "로드 중..."
 msgid "Loan to Value"
 msgstr "담보 대출 비율"
 
-#: src/features/farm/FarmListItem.tsx:200
-#: src/features/farm/FarmListItem.tsx:276
+#: src/features/farm/FarmListItem.tsx:204
+#: src/features/farm/FarmListItem.tsx:280
 #: src/pages/balances.tsx:213
 #: src/pages/balances.tsx:297
 #: src/pages/migrate.tsx:95
@@ -719,10 +722,9 @@ msgstr "최대"
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
-#: src/components/PositionCard/index.tsx:312
-#: src/components/PositionCard/index.tsx:317
+#: src/components/PositionCard/index.tsx:251
 #: src/components/SearchModal/CurrencySearch.tsx:250
-#: src/components/SearchModal/Manage.tsx:55
+#: src/components/SearchModal/Manage.tsx:44
 msgid "Manage"
 msgstr "관리"
 
@@ -756,27 +758,35 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "xSUSHI에 대한 SUSHI 스테이킹으로 수익 극대화"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:47
-#: src/features/swap/SwapModalFooter.tsx:67
+#: src/features/swap/SwapModalFooter.tsx:66
 msgid "Maximum sold"
 msgstr "최대 매매"
 
 #: src/components/Header/index.tsx:69
-#: src/pages/migrate.tsx:308
+#: src/pages/migrate.tsx:307
 msgid "Migrate"
 msgstr "마이그레이션"
+
+#: src/pages/pool.tsx:131
+msgid "Migrate From {0}"
+msgstr ""
 
 #~ msgid "Migrate Now"
 #~ msgstr "지금 마이그레이션하기"
 
-#: src/pages/migrate.tsx:399
+#: src/pages/pool.tsx:125
+#~ msgid "Migrate {0}"
+#~ msgstr ""
+
+#: src/pages/migrate.tsx:398
 msgid "Migrate {exchange} Liquidity"
 msgstr "{exchange} 유동성 마이그레이션"
 
-#: src/pages/pool.tsx:152
-msgid "Migrate!"
-msgstr ""
+#: src/pages/pool.tsx:192
+#~ msgid "Migrate!"
+#~ msgstr ""
 
-#: src/pages/migrate.tsx:306
+#: src/pages/migrate.tsx:305
 msgid "Migrating"
 msgstr "마이그레이션"
 
@@ -784,13 +794,13 @@ msgstr "마이그레이션"
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "귀하의 서명(허가)과  한 번의 클릭으로 마이그레이션이 수행됩니다"
 
-#: src/features/swap/SwapModalFooter.tsx:113
+#: src/features/swap/SwapModalFooter.tsx:112
 msgid "Miner Tip"
 msgstr ""
 
-#: src/components/TradeReview.tsx:40
+#: src/features/lending/TradeReview.tsx:40
 #: src/features/swap/AdvancedSwapDetails.tsx:46
-#: src/features/swap/SwapModalFooter.tsx:66
+#: src/features/swap/SwapModalFooter.tsx:65
 msgid "Minimum received"
 msgstr "최소 수령"
 
@@ -805,20 +815,24 @@ msgstr "최소 수령"
 msgid "New to Ethereum?"
 msgstr ""
 
-#: src/pages/migrate.tsx:347
+#: src/pages/migrate.tsx:346
 msgid "No Liquidity found"
 msgstr "유동성 없음"
 
 #~ msgid "No Results"
 #~ msgstr "결과 없음"
 
-#: src/pages/pool.tsx:138
-msgid "No liquidity found"
-msgstr "유동성 없음"
+#: src/pages/pool.tsx:157
+#~ msgid "No liquidity found"
+#~ msgstr "유동성 없음"
 
-#: src/components/TradeReview.tsx:101
+#: src/features/lending/TradeReview.tsx:101
 msgid "No liquidity found to do swap"
 msgstr "스왑할 유동성 없음"
+
+#: src/pages/pool.tsx:162
+msgid "No liquidity found."
+msgstr ""
 
 #~ msgid "No liquidity positions found"
 #~ msgstr "유동성 포지션 없음"
@@ -873,7 +887,7 @@ msgstr "오라클"
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "결과는 <0>{0} </0> 로 전송됩니다"
 
-#: src/components/Web3Status/index.tsx:252
+#: src/components/Web3Status/index.tsx:159
 msgid "Pending"
 msgstr "보류 중"
 
@@ -888,9 +902,10 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입력하세요."
 
-#: src/components/ExchangeHeader.tsx:46
+#: src/components/ExchangeHeader.tsx:44
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
+#: src/features/farm/FarmList.tsx:21
 msgid "Pool"
 msgstr "풀"
 
@@ -900,16 +915,16 @@ msgstr "풀"
 #~ msgid "Pool Rewards"
 #~ msgstr "풀 보상"
 
-#: src/components/PositionCard/index.tsx:146
+#: src/components/PositionCard/index.tsx:113
 msgid "Pool Tokens"
 msgstr "풀 토큰"
 
-#: src/components/PositionCard/index.tsx:338
+#: src/components/PositionCard/index.tsx:273
 msgid "Pool tokens in rewards pool"
 msgstr "보상 풀의 풀 토큰"
 
-#: src/components/PositionCard/index.tsx:348
-#: src/components/PositionCard/index.tsx:368
+#: src/components/PositionCard/index.tsx:282
+#: src/components/PositionCard/index.tsx:300
 msgid "Pooled {0}"
 msgstr "{0} 풀에 추가됨"
 
@@ -920,21 +935,21 @@ msgstr "{0} 풀에 추가됨"
 #~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
 #~ msgstr ""
 
-#: src/features/swap/SwapModalFooter.tsx:53
+#: src/features/swap/SwapModalFooter.tsx:52
 msgid "Price"
 msgstr "가격"
 
-#: src/components/TradeReview.tsx:55
+#: src/features/lending/TradeReview.tsx:55
 #: src/features/swap/AdvancedSwapDetails.tsx:70
-#: src/features/swap/SwapModalFooter.tsx:88
+#: src/features/swap/SwapModalFooter.tsx:87
 msgid "Price Impact"
 msgstr "가격 영향"
 
-#: src/pages/swap/[[...tokens]].tsx:735
+#: src/pages/swap/[[...tokens]].tsx:703
 msgid "Price Impact High"
 msgstr "가격 영향 높음"
 
-#: src/pages/swap/[[...tokens]].tsx:770
+#: src/pages/swap/[[...tokens]].tsx:736
 msgid "Price Impact Too High"
 msgstr "가격 영향이 너무 높음"
 
@@ -946,13 +961,13 @@ msgid "Rates"
 msgstr "요금"
 
 #: src/pages/swap/[[...tokens]].tsx:503
-msgid "Read Tutorial"
-msgstr "튜토리얼 읽기"
+#~ msgid "Read Tutorial"
+#~ msgstr "튜토리얼 읽기"
 
 #~ msgid "Read the contract"
 #~ msgstr "계약서 읽기"
 
-#: src/components/PositionCard/index.tsx:432
+#: src/components/PositionCard/index.tsx:363
 msgid "Remove"
 msgstr "제거"
 
@@ -960,7 +975,7 @@ msgstr "제거"
 msgid "Remove Liquidity"
 msgstr "유동성 제거"
 
-#: src/pages/swap/[[...tokens]].tsx:609
+#: src/pages/swap/[[...tokens]].tsx:572
 msgid "Remove send"
 msgstr "보내기 제거"
 
@@ -978,16 +993,16 @@ msgstr "상환"
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
 
-#: src/features/farm/FarmList.tsx:32
+#: src/features/farm/FarmList.tsx:49
 msgid "Rewards"
 msgstr ""
 
-#: src/components/TradeReview.tsx:86
+#: src/features/lending/TradeReview.tsx:86
 #: src/features/swap/AdvancedSwapDetails.tsx:127
 msgid "Route"
 msgstr "루트"
 
-#: src/components/TradeReview.tsx:89
+#: src/features/lending/TradeReview.tsx:89
 #: src/features/swap/AdvancedSwapDetails.tsx:131
 msgid "Routing through these tokens resulted in the best price for your trade."
 msgstr "다음 토큰을 통한 라우팅을 통해 최적의 가격이 산출되었습니다."
@@ -1035,7 +1050,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "풀 지분:"
 
-#: src/pages/swap/[[...tokens]].tsx:634
+#: src/pages/swap/[[...tokens]].tsx:597
 msgid "Slippage Tolerance"
 msgstr "슬리피지 감당 범위"
 
@@ -1043,7 +1058,7 @@ msgstr "슬리피지 감당 범위"
 msgid "Slippage tolerance"
 msgstr "슬리피지 허용 범위"
 
-#: src/components/KashiButton.tsx:39
+#: src/features/lending/Button.tsx:41
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "허가에 서명하는 동안 문제가 발생했습니다. 이는 Trezor 및 Ledger와 같은 하드웨어 지갑에서 발생된 것으로 예상됩니다. 다시 클릭하면 대체 방법이 사용됩니다."
 
@@ -1052,7 +1067,7 @@ msgstr "허가에 서명하는 동안 문제가 발생했습니다. 이는 Trezo
 
 #: src/components/Header/index.tsx:124
 #: src/components/Header/index.tsx:401
-#: src/features/farm/FarmListItem.tsx:243
+#: src/features/farm/FarmListItem.tsx:247
 msgid "Stake"
 msgstr "스테이킹"
 
@@ -1116,37 +1131,37 @@ msgstr "스시는 오픈 소스를 지지합니다."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: 자면서도 SUSHI를 벌 수 있는 방법"
 
-#: src/pages/swap/[[...tokens]].tsx:452
+#: src/pages/swap/[[...tokens]].tsx:438
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:36
+#: src/components/ExchangeHeader.tsx:34
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
-#: src/pages/swap/[[...tokens]].tsx:738
-#: src/pages/swap/[[...tokens]].tsx:773
+#: src/pages/swap/[[...tokens]].tsx:706
+#: src/pages/swap/[[...tokens]].tsx:739
 msgid "Swap"
 msgstr "스왑"
 
-#: src/features/swap/SwapModalFooter.tsx:129
-#: src/pages/swap/[[...tokens]].tsx:737
-#: src/pages/swap/[[...tokens]].tsx:772
+#: src/features/swap/SwapModalFooter.tsx:127
+#: src/pages/swap/[[...tokens]].tsx:705
+#: src/pages/swap/[[...tokens]].tsx:738
 msgid "Swap Anyway"
 msgstr "바로 스왑"
 
-#: src/pages/swap/[[...tokens]].tsx:513
+#: src/pages/swap/[[...tokens]].tsx:476
 msgid "Swap From (est.):"
 msgstr "다음에서 스왑(예상):"
 
-#: src/pages/swap/[[...tokens]].tsx:514
+#: src/pages/swap/[[...tokens]].tsx:477
 msgid "Swap From:"
 msgstr "다음에서 스왑:"
 
-#: src/pages/swap/[[...tokens]].tsx:582
+#: src/pages/swap/[[...tokens]].tsx:545
 msgid "Swap To (est.):"
 msgstr "다음으로 스왑(예상):"
 
-#: src/pages/swap/[[...tokens]].tsx:583
+#: src/pages/swap/[[...tokens]].tsx:546
 msgid "Swap To:"
 msgstr "다음으로 스왑:"
 
@@ -1154,16 +1169,16 @@ msgstr "다음으로 스왑:"
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr ""
 
-#: src/features/farm/FarmList.tsx:40
+#: src/features/farm/FarmList.tsx:36
 msgid "TVL"
 msgstr "전체 동결 가치"
 
-#: src/components/TradeReview.tsx:58
+#: src/features/lending/TradeReview.tsx:58
 #: src/features/swap/AdvancedSwapDetails.tsx:74
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "시장 가격과 거래 규모로 인한 예상 가격의 차이."
 
-#: src/features/swap/SwapModalFooter.tsx:91
+#: src/features/swap/SwapModalFooter.tsx:90
 msgid "The difference between the market price and your price due to trade size."
 msgstr "시장 가격과 거래 규모로 인한 귀하의 가격 차이."
 
@@ -1200,7 +1215,7 @@ msgstr "전문가 모드 전환"
 msgid "Token"
 msgstr "토큰"
 
-#: src/components/SearchModal/Manage.tsx:75
+#: src/components/SearchModal/Manage.tsx:64
 msgid "Tokens"
 msgstr "토큰"
 
@@ -1241,7 +1256,7 @@ msgstr "거래 제한시간"
 msgid "Transactions"
 msgstr "거래"
 
-#: src/pages/swap/[[...tokens]].tsx:682
+#: src/pages/swap/[[...tokens]].tsx:651
 msgid "Try enabling multi-hop trades"
 msgstr "멀티홉 거래 활성화하기"
 
@@ -1252,7 +1267,7 @@ msgstr "전문가 모드 켜기"
 #~ msgid "Unknown error"
 #~ msgstr "알 수 없는 오류"
 
-#: src/features/farm/FarmListItem.tsx:306
+#: src/features/farm/FarmListItem.tsx:310
 #: src/pages/stake.tsx:307
 #: src/pages/stake.tsx:316
 msgid "Unstake"
@@ -1262,11 +1277,11 @@ msgstr "언스테이크"
 msgid "Unstaked"
 msgstr "지분 없음"
 
-#: src/pages/swap/[[...tokens]].tsx:656
+#: src/pages/swap/[[...tokens]].tsx:619
 msgid "Unsupported Asset"
 msgstr "지원되지 않는 자산"
 
-#: src/pages/swap/[[...tokens]].tsx:672
+#: src/pages/swap/[[...tokens]].tsx:641
 msgid "Unwrap"
 msgstr "언랩"
 
@@ -1319,7 +1334,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "지갑"
 
-#: src/features/farm/FarmListItem.tsx:174
+#: src/features/farm/FarmListItem.tsx:178
 #: src/pages/balances.tsx:191
 msgid "Wallet Balance"
 msgstr "지갑 잔액"
@@ -1337,7 +1352,7 @@ msgstr "인출"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "{assetSymbol} 인출하기"
 
-#: src/pages/swap/[[...tokens]].tsx:670
+#: src/pages/swap/[[...tokens]].tsx:639
 msgid "Wrap"
 msgstr "랩"
 
@@ -1366,7 +1381,7 @@ msgstr "어제의 APR"
 #~ msgid "You are creating a pool"
 #~ msgstr "풀 생성 중"
 
-#: src/components/Web3Status/index.tsx:270
+#: src/components/Web3Connect/index.tsx:34
 msgid "You are on the wrong network"
 msgstr "잘못된 네트워크에 있습니다."
 
@@ -1383,11 +1398,11 @@ msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다
 #~ msgid "Your Claimable SUSHI this Week"
 #~ msgstr "이번 주에 출금가능한 SUSHI"
 
-#: src/pages/migrate.tsx:427
+#: src/pages/migrate.tsx:421
 msgid "Your Liquidity"
 msgstr "내 유동성"
 
-#: src/pages/pool.tsx:99
+#: src/pages/pool.tsx:98
 msgid "Your Liquidity Positions"
 msgstr "내 유동성 포지션"
 
@@ -1397,7 +1412,7 @@ msgstr "내 유동성 포지션"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "귀하의 풀 토큰"
 
-#: src/features/farm/FarmListItem.tsx:250
+#: src/features/farm/FarmListItem.tsx:254
 msgid "Your Staked"
 msgstr "귀하의 지분"
 
@@ -1412,19 +1427,19 @@ msgstr "내 SushiBar 통계"
 msgid "Your Transaction History on {0}"
 msgstr "{0}의 거래 내역"
 
-#: src/pages/migrate.tsx:421
+#: src/pages/migrate.tsx:415
 msgid "Your Wallet"
 msgstr "내 지갑"
 
 #~ msgid "Your Yields"
 #~ msgstr "내 수익"
 
-#: src/components/PositionCard/index.tsx:153
-#: src/components/PositionCard/index.tsx:387
+#: src/components/PositionCard/index.tsx:118
+#: src/components/PositionCard/index.tsx:317
 msgid "Your pool share"
 msgstr "풀 점유율"
 
-#: src/components/PositionCard/index.tsx:329
+#: src/components/PositionCard/index.tsx:264
 msgid "Your total pool tokens"
 msgstr "보유 중인 전체 풀 토큰"
 
@@ -1444,17 +1459,17 @@ msgstr "이 기간 이상 보류 상태에 머물러 있는 거래는 취소됩�
 msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
 msgstr "가격이 해당 퍼센티지 이상으로 불리하게 변경되면 거래가 취소됩니다."
 
-#: src/components/TradeReview.tsx:43
+#: src/features/lending/TradeReview.tsx:43
 #: src/features/swap/AdvancedSwapDetails.tsx:51
-#: src/features/swap/SwapModalFooter.tsx:70
+#: src/features/swap/SwapModalFooter.tsx:69
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "거래가 확인되기 전에 크게 불리한 가격 변동이 있는 경우 거래가 취소됩니다."
 
-#: src/pages/migrate.tsx:319
+#: src/pages/migrate.tsx:318
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변환됩니다."
 
-#: src/pages/zap.tsx:275
+#: src/pages/zap.tsx:272
 msgid "Zap"
 msgstr ""
 
