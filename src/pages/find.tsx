@@ -14,7 +14,6 @@ import Head from "next/head";
 import Link from "next/link";
 import { MinimalPositionCard } from "../components/PositionCard";
 import { Plus } from "react-feather";
-import { Text } from "rebass";
 import { ThemeContext } from "styled-components";
 import { currencyId } from "../functions/currency";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
@@ -83,7 +82,7 @@ export default function PoolFinder() {
         else setCurrency1(currency);
       }
     },
-    [activeField]
+    [activeField, currency0, currency1, switchTokens]
   );
 
   const prerequisiteMessage = (
@@ -151,9 +150,7 @@ export default function PoolFinder() {
               justify={"center"}
               gap={"0 3px"}
             >
-              <Text textAlign="center" fontWeight={500}>
-                {i18n._(t`Pool Found!`)}
-              </Text>
+              {i18n._(t`Pool Found!`)}
               <Link href={`/pool`}>
                 <a className="text-center">{i18n._(t`Manage this pool`)}</a>
               </Link>
@@ -167,9 +164,7 @@ export default function PoolFinder() {
               ) : (
                 <div className="p-5 rounded bg-dark-800">
                   <AutoColumn gap="sm" justify="center">
-                    <Text textAlign="center">
-                      {i18n._(t`You don’t have liquidity in this pool yet`)}
-                    </Text>
+                    {i18n._(t`You don’t have liquidity in this pool yet`)}
                     <Link
                       href={`/add/${currencyId(
                         currency0,
@@ -186,7 +181,7 @@ export default function PoolFinder() {
             ) : validPairNoLiquidity ? (
               <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">
-                  <Text textAlign="center">{i18n._(t`No pool found`)}</Text>
+                  {i18n._(t`No pool found`)}
                   <Link
                     href={`/add/${currencyId(currency0, chainId)}/${currencyId(
                       currency1,
@@ -198,21 +193,12 @@ export default function PoolFinder() {
                 </AutoColumn>
               </div>
             ) : pairState === PairState.INVALID ? (
-              <div className="p-5 rounded bg-dark-800">
-                <AutoColumn gap="sm" justify="center">
-                  <Text textAlign="center" fontWeight={500}>
-                    {i18n._(t`Invalid pair`)}
-                  </Text>
-                </AutoColumn>
+              <div className="p-5 text-center rounded bg-dark-800">
+                {i18n._(t`Invalid pair`)}
               </div>
             ) : pairState === PairState.LOADING ? (
-              <div className="p-5 rounded bg-dark-800">
-                <AutoColumn gap="sm" justify="center">
-                  <Text textAlign="center">
-                    {i18n._(t`Loading`)}
-                    <Dots />
-                  </Text>
-                </AutoColumn>
+              <div className="p-5 text-center rounded bg-dark-800">
+                <Dots>{i18n._(t`Loading`)}</Dots>
               </div>
             ) : null
           ) : (

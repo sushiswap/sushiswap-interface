@@ -66,7 +66,6 @@ import MinerTip from "../../components/MinerTip";
 import ProgressSteps from "../../components/ProgressSteps";
 import ReactGA from "react-ga";
 import SwapHeader from "../../components/ExchangeHeader";
-import { Text } from "rebass";
 import TokenWarningModal from "../../components/TokenWarningModal";
 import TradePrice from "../../features/swap/TradePrice";
 import Typography from "../../components/Typography";
@@ -686,7 +685,9 @@ export default function Swap() {
                       });
                     }
                   }}
-                  width="100%"
+                  style={{
+                    width: "100%",
+                  }}
                   id="swap-button"
                   disabled={
                     !isValid ||
@@ -695,13 +696,11 @@ export default function Swap() {
                   }
                   error={isValid && priceImpactSeverity > 2}
                 >
-                  <Text className="font-medium">
-                    {priceImpactSeverity > 3 && !isExpertMode
-                      ? i18n._(t`Price Impact High`)
-                      : priceImpactSeverity > 2
-                      ? i18n._(t`Swap Anyway`)
-                      : i18n._(t`Swap`)}
-                  </Text>
+                  {priceImpactSeverity > 3 && !isExpertMode
+                    ? i18n._(t`Price Impact High`)
+                    : priceImpactSeverity > 2
+                    ? i18n._(t`Swap Anyway`)
+                    : i18n._(t`Swap`)}
                 </ButtonError>
               )}
             </RowBetween>
@@ -728,15 +727,13 @@ export default function Swap() {
               }
               error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
             >
-              <Text fontSize={20} fontWeight={500}>
-                {swapInputError
-                  ? swapInputError
-                  : priceImpactSeverity > 3 && !isExpertMode
-                  ? i18n._(t`Price Impact Too High`)
-                  : priceImpactSeverity > 2
-                  ? i18n._(t`Swap Anyway`)
-                  : i18n._(t`Swap`)}
-              </Text>
+              {swapInputError
+                ? swapInputError
+                : priceImpactSeverity > 3 && !isExpertMode
+                ? i18n._(t`Price Impact Too High`)
+                : priceImpactSeverity > 2
+                ? i18n._(t`Swap Anyway`)
+                : i18n._(t`Swap`)}
             </ButtonError>
           )}
           {showApproveFlow && (

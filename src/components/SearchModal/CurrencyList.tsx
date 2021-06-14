@@ -26,7 +26,6 @@ import Loader from "../Loader";
 import { MenuItem } from "./styleds";
 import { MouseoverTooltip } from "../Tooltip";
 import QuestionHelper from "../QuestionHelper";
-import { Text } from "rebass";
 import { isTokenOnList } from "../../functions/validate";
 import styled from "styled-components";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
@@ -40,13 +39,6 @@ function currencyKey(currency: Currency, chainId = ChainId.MAINNET): string {
     ? Currency.getNativeCurrencySymbol(chainId)
     : "";
 }
-
-const StyledBalanceText = styled(Text)`
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 5rem;
-  text-overflow: ellipsis;
-`;
 
 const Tag = styled.div`
   background-color: ${({ theme }) => theme.bg3};
@@ -72,9 +64,12 @@ const FixedContentRow = styled.div`
 
 function Balance({ balance }: { balance: CurrencyAmount }) {
   return (
-    <StyledBalanceText title={balance.toExact()}>
+    <div
+      className="whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis"
+      title={balance.toExact()}
+    >
       {balance.toSignificant(4)}
-    </StyledBalanceText>
+    </div>
   );
 }
 
@@ -150,9 +145,9 @@ function CurrencyRow({
         <CurrencyLogo currency={currency} size={32} />
       </div>
       <Column>
-        <Text title={currency.getName(chainId)} fontWeight={500}>
+        <div title={currency.getName(chainId)} className="text-sm font-medium">
           {currency.getSymbol(chainId)}
-        </Text>
+        </div>
         <div className="text-sm font-thin">
           {currency.getName(chainId)}{" "}
           {!isOnSelectedList && customAdded && "• Added by user"}

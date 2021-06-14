@@ -113,17 +113,6 @@ const Web3StatusConnected = styled(Web3StatusGeneric)<{ pending?: boolean }>`
     }
 `;
 
-const Text = styled.p`
-  flex: 1 1 auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin: 0 0.5rem 0 0.25rem;
-  font-size: 1rem;
-  width: fit-content;
-  font-weight: 500;
-`;
-
 const NetworkIcon = styled(Activity)`
   margin-left: 0.25rem;
   margin-right: 0.5rem;
@@ -265,11 +254,9 @@ function Web3StatusInner() {
     return (
       <Web3StatusError onClick={toggleWalletModal}>
         <NetworkIcon />
-        <Text>
-          {error instanceof UnsupportedChainIdError
-            ? i18n._(t`You are on the wrong network`)
-            : i18n._(t`Error`)}
-        </Text>
+        {error instanceof UnsupportedChainIdError
+          ? i18n._(t`You are on the wrong network`)
+          : i18n._(t`Error`)}
       </Web3StatusError>
     );
   } else {
@@ -279,7 +266,7 @@ function Web3StatusInner() {
         onClick={toggleWalletModal}
         faded={!account}
       >
-        <Text>{i18n._(t`Connect to a wallet`)}</Text>
+        {i18n._(t`Connect to a wallet`)}
       </Web3StatusConnect>
     );
   }

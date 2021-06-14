@@ -41,13 +41,11 @@ import QuestionHelper from "../components/QuestionHelper";
 import Router from "next/router";
 import Settings from "../components/Settings";
 import SwapRoute from "../features/swap/SwapRoute";
-import { Text } from "rebass";
 import { ZAPPER_ADDRESS } from "../constants/addresses";
 import { currencyId as getCurrencyId } from "../functions/currency/currencyId";
 import { maxAmountSpend } from "../functions/currency/maxAmountSpend";
 import { resetZapState } from "../state/zap/actions";
 import { t } from "@lingui/macro";
-import { transparentize } from "polished";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
 import { useCurrency } from "../hooks/Tokens";
 import { useDefaultsFromURLSearch } from "../state/zap/hooks";
@@ -520,12 +518,10 @@ export default function Zap() {
                       width: "48%",
                       marginTop: "20px",
                     }}
-                    id="swap-button"
+                    id="zap-button"
                     disabled={approval !== ApprovalState.APPROVED}
                   >
-                    <Text fontSize={20} fontWeight={500}>
-                      {error ?? "Zap"}
-                    </Text>
+                    {error ?? "Zap"}
                   </Button>
                 </RowBetween>
               ) : priceImpactSeverity > 1 && error === undefined ? (
@@ -535,11 +531,9 @@ export default function Zap() {
                   style={{ marginTop: "20px" }}
                   onClick={() => zapCallback()}
                 >
-                  <Text fontSize={16} fontWeight={500}>
-                    {priceImpactSeverity > 3
-                      ? `Price Impact Too High`
-                      : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
-                  </Text>
+                  {priceImpactSeverity > 3
+                    ? `Price Impact Too High`
+                    : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
                 </ButtonError>
               ) : (
                 <Button
@@ -553,9 +547,7 @@ export default function Zap() {
                   }
                   onClick={() => zapCallback()}
                 >
-                  <Text fontSize={20} fontWeight={500}>
-                    {error ?? "Zap"}
-                  </Text>
+                  {error ?? "Zap"}
                 </Button>
               )}
               {showApproveFlow && (

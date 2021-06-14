@@ -5,18 +5,17 @@ import styled, { css } from "styled-components";
 import { AlertTriangle } from "react-feather";
 import React from "react";
 import Slider from "rc-slider";
-import { Text } from "rebass";
+import Typography from "../../components/Typography";
 
 export const Wrapper = styled.div`
   position: relative;
   padding: 1rem;
 `;
 
-export const ClickableText = styled(Text)`
+export const ClickableText = styled(Typography)`
   :hover {
     cursor: pointer;
   }
-  // color: ${({ theme }) => theme.primary1};
 `;
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
@@ -43,7 +42,7 @@ export const BottomGrouping = styled.div`
   margin-top: 1rem;
 `;
 
-export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
+export const ErrorText = styled(Typography)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
   color: ${({ theme, severity }) =>
     severity === 3 || severity === 4
       ? theme.red1

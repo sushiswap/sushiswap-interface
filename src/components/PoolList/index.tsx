@@ -1,33 +1,18 @@
 import { ChevronDown, ChevronUp } from "react-feather";
-import React, { useContext, useState } from "react";
-import { RowBetween, RowFixed } from "../../components/Row";
 import { formatNumber, formatPercent } from "../../functions/format";
-import styled, { ThemeContext } from "styled-components";
 import { useFuse, useSortableData } from "../../hooks";
 
-import { AutoColumn } from "../../components/Column";
-import Button from "../../components/Button";
 import Card from "../../components/Card";
 import CardHeader from "../../components/CardHeader";
 import Dots from "../../components/Dots";
-import DoubleCurrencyLogo from "../../components/DoubleLogo";
 import DoubleLogo from "../../components/DoubleLogo";
 import Head from "next/head";
 import Paper from "../../components/Paper";
+import React from "react";
 import Router from "next/router";
 import Search from "../../components/Search";
-import { Text } from "rebass";
 import { useCurrency } from "../../hooks/Tokens";
 import useFarms from "../../hooks/useFarms";
-
-const PageWrapper = styled(AutoColumn)`
-  max-width: 640px;
-  width: 100%;
-`;
-
-const FixedHeightRow = styled(RowBetween)`
-  height: 24px;
-`;
 
 const TokenBalance = ({ farm }: any) => {
   const currency0 = useCurrency(farm.liquidityPair.token0.id);

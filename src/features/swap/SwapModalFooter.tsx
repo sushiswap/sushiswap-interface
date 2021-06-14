@@ -13,7 +13,6 @@ import { Field } from "../../state/swap/actions";
 import FormattedPriceImpact from "./FormattedPriceImpact";
 import QuestionHelper from "../../components/QuestionHelper";
 import { Repeat } from "react-feather";
-import { Text } from "rebass";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";

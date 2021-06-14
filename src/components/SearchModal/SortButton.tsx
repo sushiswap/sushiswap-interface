@@ -1,6 +1,5 @@
 import React from "react";
 import { RowFixed } from "../Row";
-import { Text } from "rebass";
 import styled from "styled-components";
 
 export const FilterWrapper = styled(RowFixed)`
@@ -25,10 +24,8 @@ export default function SortButton({
   ascending: boolean;
 }) {
   return (
-    <FilterWrapper onClick={toggleSortOrder}>
-      <Text fontSize={14} fontWeight={500}>
-        {ascending ? "↑" : "↓"}
-      </Text>
+    <FilterWrapper onClick={toggleSortOrder} className="text-sm bg-dark-800">
+      {ascending ? "↑" : "↓"}
     </FilterWrapper>
   );
 }

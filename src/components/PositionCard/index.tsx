@@ -10,7 +10,6 @@ import Button from "../Button";
 import CurrencyLogo from "../CurrencyLogo";
 import Dots from "../Dots";
 import DoubleCurrencyLogo from "../DoubleLogo";
-import { Text } from "rebass";
 import { shortenString } from "../../functions/format";
 import styled from "styled-components";
 import { t } from "@lingui/macro";
@@ -96,9 +95,7 @@ export function MinimalPositionCard({
       JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
         <div className="p-5 rounded bg-dark-800">
           <AutoColumn gap={"md"}>
-            <Text fontWeight={400} fontSize={18}>
-              Your Position
-            </Text>
+            Your Position
             <div className="flex flex-col md:flex-row md:justify-between">
               <div className="flex items-center">
                 <DoubleCurrencyLogo
@@ -106,75 +103,55 @@ export function MinimalPositionCard({
                   currency1={pair.token1}
                   size={42}
                 />
-                <Text fontWeight={500} fontSize={24} className={"ml-3"}>
+                <div className="ml-3 text-2xl font-semibold">
                   {shortenString(
                     `${pair.token0.getSymbol(chainId)}/${pair.token1.getSymbol(
                       chainId
                     )}`,
                     8
                   )}
-                </Text>
+                </div>
               </div>
               <div className="flex items-center mt-3 md:mt-0">
-                <Text fontSize={16} fontWeight={400}>
-                  {userPoolBalance ? formatBalance() : "-"}
-                </Text>
-                <Text fontSize={16} fontWeight={400} color={"#7F7F7F"}>
-                  &nbsp;
-                  {i18n._(t`Pool Tokens`)}
-                </Text>
+                {userPoolBalance ? formatBalance() : "-"}
+                &nbsp;
+                {i18n._(t`Pool Tokens`)}
               </div>
             </div>
             <div className="flex flex-col w-full p-3 mt-3 space-y-1 rounded bg-dark-900 text-high-emphesis">
               <RowBetween>
-                <Text fontSize={14} fontWeight={400}>
-                  {i18n._(t`Your pool share`)}
-                </Text>
-                <Text fontSize={14} fontWeight={700}>
+                <div className="text-sm">{i18n._(t`Your pool share`)}</div>
+                <div className="text-sm font-bold">
                   {poolTokenPercentage
                     ? poolTokenPercentage.toFixed(6) + "%"
                     : "-"}
-                </Text>
+                </div>
               </RowBetween>
               <RowBetween>
-                <Text fontSize={14} fontWeight={400}>
+                <div className="text-sm">
                   Supplied {currency0.getSymbol(chainId)}:
-                </Text>
+                </div>
                 {token0Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={400}>
-                      {token0Deposited?.toSignificant(6)}
-                    </Text>
-                    <Text
-                      fontSize={14}
-                      fontWeight={700}
-                      marginLeft={"3px"}
-                      className={"text-secondary"}
-                    >
+                    <div>{token0Deposited?.toSignificant(6)}</div>
+                    <div className="ml-2 text-sm font-bold text-secondary">
                       {currency0.getSymbol(chainId)}
-                    </Text>
+                    </div>
                   </RowFixed>
                 ) : (
                   "-"
                 )}
               </RowBetween>
               <RowBetween>
-                <Text fontSize={14} fontWeight={400}>
+                <div className="text-sm">
                   Supplied {currency1.getSymbol(chainId)}:
-                </Text>
+                </div>
                 {token1Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={400}>
-                      {token1Deposited?.toSignificant(6)}
-                    </Text>
-                    <Text
-                      fontSize={14}
-                      fontWeight={700}
-                      marginLeft={"3px"}
-                      className={"text-secondary"}
-                    >
+                    <div>{token1Deposited?.toSignificant(6)}</div>
+                    <div className="ml-2 text-sm font-bold text-secondary">
                       {currency1.getSymbol(chainId)}
-                    </Text>
+                    </div>
                   </RowFixed>
                 ) : (
                   "-"
@@ -265,7 +242,7 @@ export default function FullPositionCard({
               currency1={currency1}
               size={20}
             />
-            <Text fontWeight={500} fontSize={20}>
+            <div className="text-xl font-semibold">
               {!currency0 || !currency1 ? (
                 <Dots>{i18n._(t`Loading`)}</Dots>
               ) : (
@@ -273,7 +250,7 @@ export default function FullPositionCard({
                   chainId
                 )}`
               )}
-            </Text>
+            </div>
           </AutoRow>
           <RowFixed gap="8px">
             <Button
@@ -303,34 +280,34 @@ export default function FullPositionCard({
         {showMore && (
           <AutoColumn gap="8px">
             <FixedHeightRow>
-              <Text fontSize={16} fontWeight={500}>
+              <div className="font-semibold">
                 {i18n._(t`Your total pool tokens`)}:
-              </Text>
-              <Text fontSize={16} fontWeight={500}>
+              </div>
+              <div className="font-semibold">
                 {userPoolBalance ? userPoolBalance.toSignificant(4) : "-"}
-              </Text>
+              </div>
             </FixedHeightRow>
             {stakedBalance && (
               <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
+                <div className="font-semibold">
                   {i18n._(t`Pool tokens in rewards pool`)}:
-                </Text>
-                <Text fontSize={16} fontWeight={500}>
+                </div>
+                <div className="font-semibold">
                   {stakedBalance.toSignificant(4)}
-                </Text>
+                </div>
               </FixedHeightRow>
             )}
             <FixedHeightRow>
               <RowFixed>
-                <Text fontSize={16} fontWeight={500}>
+                <div className="font-semibold">
                   {i18n._(t`Pooled ${currency0?.getSymbol(chainId)}`)}:
-                </Text>
+                </div>
               </RowFixed>
               {token0Deposited ? (
                 <RowFixed>
-                  <Text fontSize={16} fontWeight={500} marginLeft={"6px"}>
+                  <div className="font-semibold ml-1.5">
                     {token0Deposited?.toSignificant(6)}
-                  </Text>
+                  </div>
                   <div style={{ marginLeft: "8px" }}>
                     <CurrencyLogo size="20px" currency={currency0} />
                   </div>
@@ -342,15 +319,15 @@ export default function FullPositionCard({
 
             <FixedHeightRow>
               <RowFixed>
-                <Text fontSize={16} fontWeight={500}>
+                <div className="font-semibold">
                   {i18n._(t`Pooled ${currency1?.getSymbol(chainId)}`)}:
-                </Text>
+                </div>
               </RowFixed>
               {token1Deposited ? (
                 <RowFixed>
-                  <Text fontSize={16} fontWeight={500} marginLeft={"6px"}>
+                  <div className="font-semibold ml-1.5">
                     {token1Deposited?.toSignificant(6)}
-                  </Text>
+                  </div>
                   <div style={{ marginLeft: "8px" }}>
                     <CurrencyLogo size="20px" currency={currency1} />
                   </div>
@@ -361,16 +338,14 @@ export default function FullPositionCard({
             </FixedHeightRow>
 
             <FixedHeightRow>
-              <Text fontSize={16} fontWeight={500}>
-                {i18n._(t`Your pool share`)}:
-              </Text>
-              <Text fontSize={16} fontWeight={500}>
+              <div className="font-semibold">{i18n._(t`Your pool share`)}:</div>
+              <div className="font-semibold">
                 {poolTokenPercentage
                   ? (poolTokenPercentage.toFixed(2) === "0.00"
                       ? "<0.01"
                       : poolTokenPercentage.toFixed(2)) + "%"
                   : "-"}
-              </Text>
+              </div>
             </FixedHeightRow>
 
             {/* <ExternalLink
