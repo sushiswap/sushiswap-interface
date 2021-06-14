@@ -100,7 +100,7 @@ const FarmListItem = ({ farm }) => {
         </div>
         <div className="flex-row items-center justify-start hidden ml-4 space-x-2 md:col-span-1 md:flex">
           <div className="flex flex-col space-y-2 md:col-span-3">
-            <div className="flex flex-row items-center mr-4 space-x-2">
+            <div className="flex flex-row items-center mr-2 space-x-2">
               {farm?.rewards?.map((reward, i) => (
                 <div key={i} className="flex items-center">
                   <Image
@@ -115,7 +115,7 @@ const FarmListItem = ({ farm }) => {
             </div>
           </div>
 
-          <div className="flex flex-col pl-2 space-y-1">
+          <div className="flex flex-col space-y-1">
             {farm?.rewards?.map((reward, i) => (
               <div key={i} className="text-caption">
                 {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
