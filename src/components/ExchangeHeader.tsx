@@ -10,6 +10,7 @@ import settingsAnimationData from "../animation/settings-slider.json";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../hooks";
 import { useLingui } from "@lingui/react";
+import { useRouter } from "next/router";
 
 export default function ExchangeHeader({
   input = undefined,
@@ -19,6 +20,7 @@ export default function ExchangeHeader({
   const { chainId } = useActiveWeb3React();
   const [animateSettings, setAnimateSettings] = useState(false);
   const [animateWallet, setAnimateWallet] = useState(false);
+  const router = useRouter();
   console.log({ input, output });
   return (
     <div className="flex justify-between mb-4 space-x-3">
@@ -48,9 +50,9 @@ export default function ExchangeHeader({
                 </NavLink> */}
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
-          href={`/add${input ? `/${currencyId(input, chainId)}` : ""}${
-            output ? `/${currencyId(output, chainId)}` : ""
-          }`}
+          href={`/${router.asPath.includes("add") ? "add" : "remove"}${
+            input ? `/${currencyId(input, chainId)}` : ""
+          }${output ? `/${currencyId(output, chainId)}` : ""}`}
         >
           <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
             {i18n._(t`Pool`)}
