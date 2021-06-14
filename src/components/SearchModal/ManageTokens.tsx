@@ -22,7 +22,6 @@ import TrashIcon from "../TrashIcon";
 import { getExplorerLink } from "../../functions/explorer";
 import { isAddress } from "../../functions/validate";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import useTheme from "../../hooks/useTheme";
 import { useToken } from "../../hooks/Tokens";
 
 function ManageTokens({
@@ -35,7 +34,6 @@ function ManageTokens({
   const { chainId } = useActiveWeb3React();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const theme = useTheme();
 
   // manage focus on modal show
   const inputRef = useRef<HTMLInputElement>();
