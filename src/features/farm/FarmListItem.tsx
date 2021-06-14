@@ -332,6 +332,7 @@ const FarmListItem = ({ farm }) => {
               <div className="px-4 ">
                 <Button
                   color="gradient"
+                  size="large"
                   onClick={async () => {
                     setPendingTx(true);
                     try {

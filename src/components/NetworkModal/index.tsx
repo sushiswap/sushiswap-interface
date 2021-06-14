@@ -148,7 +148,7 @@ export default function NetworkModal(): JSX.Element | null {
     <Modal
       isOpen={networkModalOpen}
       onDismiss={toggleNetworkModal}
-      maxWidth={1024}
+      maxWidth={768}
     >
       <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
       <div className="mb-6 text-lg text-primary">
