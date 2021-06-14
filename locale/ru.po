@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Удалить отправку"
 
-#: src/pages/swap/[[...tokens]].tsx:470
+#: src/pages/swap/[[...tokens]].tsx:495
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "300M+ TVL на Polygon! Включена оптимизированная маршрутизация"
 
@@ -127,12 +127,12 @@ msgstr "Утвердить"
 msgid "Approve Kashi"
 msgstr "Утвердить Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:680
+#: src/pages/swap/[[...tokens]].tsx:705
 msgid "Approve {0}"
 msgstr "Утвердить {0}"
 
 #: src/pages/migrate.tsx:289
-#: src/pages/swap/[[...tokens]].tsx:677
+#: src/pages/swap/[[...tokens]].tsx:702
 msgid "Approved"
 msgstr "Утверждено"
 
@@ -311,7 +311,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:639
+#: src/pages/swap/[[...tokens]].tsx:664
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "Подключите кошелек"
@@ -405,7 +405,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Не видите пул, к которому вы присоединились?"
 
-#: src/pages/swap/[[...tokens]].tsx:473
+#: src/pages/swap/[[...tokens]].tsx:498
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Наслаждайтесь самым низким проскальзыванием на Polygon"
 
@@ -591,7 +591,7 @@ msgstr "Недостаточный остаток"
 msgid "Insufficient WETH balance"
 msgstr "Недостаточный остаток WETH"
 
-#: src/pages/swap/[[...tokens]].tsx:653
+#: src/pages/swap/[[...tokens]].tsx:678
 msgid "Insufficient liquidity for this trade"
 msgstr "Недостаточная ликвидность для этой сделки"
 
@@ -890,7 +890,7 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Введите слово «подтвердить», чтобы включить экспертный режим."
 
-#: src/components/ExchangeHeader.tsx:52
+#: src/components/ExchangeHeader.tsx:46
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
 msgid "Pool"
@@ -932,11 +932,11 @@ msgstr "Цена"
 msgid "Price Impact"
 msgstr "Влияние на цену"
 
-#: src/pages/swap/[[...tokens]].tsx:710
+#: src/pages/swap/[[...tokens]].tsx:735
 msgid "Price Impact High"
 msgstr "Сильное влияние на цену"
 
-#: src/pages/swap/[[...tokens]].tsx:745
+#: src/pages/swap/[[...tokens]].tsx:770
 msgid "Price Impact Too High"
 msgstr "Слишком сильное влияние на цену"
 
@@ -947,7 +947,7 @@ msgstr "Слишком сильное влияние на цену"
 msgid "Rates"
 msgstr "Тарифы"
 
-#: src/pages/swap/[[...tokens]].tsx:482
+#: src/pages/swap/[[...tokens]].tsx:507
 msgid "Read Tutorial"
 msgstr "Прочитать руководство"
 
@@ -962,7 +962,7 @@ msgstr "Удалить"
 msgid "Remove Liquidity"
 msgstr "Удалить ликвидность"
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:613
 msgid "Remove send"
 msgstr "Удалить отправку"
 
@@ -1037,7 +1037,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "Доля пула:"
 
-#: src/pages/swap/[[...tokens]].tsx:613
+#: src/pages/swap/[[...tokens]].tsx:638
 msgid "Slippage Tolerance"
 msgstr "Допуск по проскальзыванию"
 
@@ -1118,37 +1118,37 @@ msgstr "Sushi поддерживает Open Source."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Заставьте SUSHI работать на вас"
 
-#: src/pages/swap/[[...tokens]].tsx:431
+#: src/pages/swap/[[...tokens]].tsx:456
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:37
+#: src/components/ExchangeHeader.tsx:36
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
-#: src/pages/swap/[[...tokens]].tsx:713
-#: src/pages/swap/[[...tokens]].tsx:748
+#: src/pages/swap/[[...tokens]].tsx:738
+#: src/pages/swap/[[...tokens]].tsx:773
 msgid "Swap"
 msgstr "Обменять"
 
 #: src/features/swap/SwapModalFooter.tsx:129
-#: src/pages/swap/[[...tokens]].tsx:712
-#: src/pages/swap/[[...tokens]].tsx:747
+#: src/pages/swap/[[...tokens]].tsx:737
+#: src/pages/swap/[[...tokens]].tsx:772
 msgid "Swap Anyway"
 msgstr "Обменять в любом случае"
 
-#: src/pages/swap/[[...tokens]].tsx:492
+#: src/pages/swap/[[...tokens]].tsx:517
 msgid "Swap From (est.):"
 msgstr "Обменять с (прибл.):"
 
-#: src/pages/swap/[[...tokens]].tsx:493
+#: src/pages/swap/[[...tokens]].tsx:518
 msgid "Swap From:"
 msgstr "Обменять с:"
 
-#: src/pages/swap/[[...tokens]].tsx:561
+#: src/pages/swap/[[...tokens]].tsx:586
 msgid "Swap To (est.):"
 msgstr "Обменять на (прибл.):"
 
-#: src/pages/swap/[[...tokens]].tsx:562
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Swap To:"
 msgstr "Обменять на:"
 
@@ -1243,7 +1243,7 @@ msgstr "Крайний срок транзакции"
 msgid "Transactions"
 msgstr "Сделки"
 
-#: src/pages/swap/[[...tokens]].tsx:657
+#: src/pages/swap/[[...tokens]].tsx:682
 msgid "Try enabling multi-hop trades"
 msgstr "Попробуйте включить многоскачковые сделки"
 
@@ -1264,11 +1264,11 @@ msgstr "Отменить ставку"
 msgid "Unstaked"
 msgstr "Без ставки"
 
-#: src/pages/swap/[[...tokens]].tsx:635
+#: src/pages/swap/[[...tokens]].tsx:660
 msgid "Unsupported Asset"
 msgstr "Неподдерживаемый актив"
 
-#: src/pages/swap/[[...tokens]].tsx:647
+#: src/pages/swap/[[...tokens]].tsx:672
 msgid "Unwrap"
 msgstr "Развернуть"
 
@@ -1339,7 +1339,7 @@ msgstr "Снять"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "Вывести {assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:645
+#: src/pages/swap/[[...tokens]].tsx:670
 msgid "Wrap"
 msgstr "Завернуть"
 

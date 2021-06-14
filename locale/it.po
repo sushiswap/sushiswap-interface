@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Rimuovi invio"
 
-#: src/pages/swap/[[...tokens]].tsx:470
+#: src/pages/swap/[[...tokens]].tsx:495
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "Oltre 300 milioni di TVL su Polygon! Routing ottimizzato abilitato"
 
@@ -127,12 +127,12 @@ msgstr "Approva"
 msgid "Approve Kashi"
 msgstr "Approva Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:680
+#: src/pages/swap/[[...tokens]].tsx:705
 msgid "Approve {0}"
 msgstr "Approva {0}"
 
 #: src/pages/migrate.tsx:289
-#: src/pages/swap/[[...tokens]].tsx:677
+#: src/pages/swap/[[...tokens]].tsx:702
 msgid "Approved"
 msgstr "Approvato"
 
@@ -311,7 +311,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:639
+#: src/pages/swap/[[...tokens]].tsx:664
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "Collega wallet"
@@ -405,7 +405,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Non vedi un pool a cui ti sei unito?"
 
-#: src/pages/swap/[[...tokens]].tsx:473
+#: src/pages/swap/[[...tokens]].tsx:498
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Approfitta del minimo slippage su Polygon"
 
@@ -591,7 +591,7 @@ msgstr "Saldo insufficiente"
 msgid "Insufficient WETH balance"
 msgstr "Saldo WETH insufficiente"
 
-#: src/pages/swap/[[...tokens]].tsx:653
+#: src/pages/swap/[[...tokens]].tsx:678
 msgid "Insufficient liquidity for this trade"
 msgstr "Liquidità insufficiente per questa operazione"
 
@@ -887,7 +887,7 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Digita \"conferma\" per attivare la modalità esperto."
 
-#: src/components/ExchangeHeader.tsx:52
+#: src/components/ExchangeHeader.tsx:46
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
 msgid "Pool"
@@ -929,11 +929,11 @@ msgstr "Prezzo"
 msgid "Price Impact"
 msgstr "Impatto sul prezzo"
 
-#: src/pages/swap/[[...tokens]].tsx:710
+#: src/pages/swap/[[...tokens]].tsx:735
 msgid "Price Impact High"
 msgstr "Impatto sul prezzo elevato"
 
-#: src/pages/swap/[[...tokens]].tsx:745
+#: src/pages/swap/[[...tokens]].tsx:770
 msgid "Price Impact Too High"
 msgstr "Impatto sul prezzo troppo elevato"
 
@@ -944,7 +944,7 @@ msgstr "Impatto sul prezzo troppo elevato"
 msgid "Rates"
 msgstr "Tassi"
 
-#: src/pages/swap/[[...tokens]].tsx:482
+#: src/pages/swap/[[...tokens]].tsx:507
 msgid "Read Tutorial"
 msgstr "Leggi il tutorial"
 
@@ -959,7 +959,7 @@ msgstr "Rimuovi"
 msgid "Remove Liquidity"
 msgstr "Rimuovi liquidità"
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:613
 msgid "Remove send"
 msgstr "Rimuovi invio"
 
@@ -1034,7 +1034,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "Quota del pool:"
 
-#: src/pages/swap/[[...tokens]].tsx:613
+#: src/pages/swap/[[...tokens]].tsx:638
 msgid "Slippage Tolerance"
 msgstr "Tolleranza slippage"
 
@@ -1115,37 +1115,37 @@ msgstr "Sushi è un sostenitore dell'Open Source."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Metti SUSHI al lavoro per te"
 
-#: src/pages/swap/[[...tokens]].tsx:431
+#: src/pages/swap/[[...tokens]].tsx:456
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:37
+#: src/components/ExchangeHeader.tsx:36
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
-#: src/pages/swap/[[...tokens]].tsx:713
-#: src/pages/swap/[[...tokens]].tsx:748
+#: src/pages/swap/[[...tokens]].tsx:738
+#: src/pages/swap/[[...tokens]].tsx:773
 msgid "Swap"
 msgstr "Scambia"
 
 #: src/features/swap/SwapModalFooter.tsx:129
-#: src/pages/swap/[[...tokens]].tsx:712
-#: src/pages/swap/[[...tokens]].tsx:747
+#: src/pages/swap/[[...tokens]].tsx:737
+#: src/pages/swap/[[...tokens]].tsx:772
 msgid "Swap Anyway"
 msgstr "Scambia comunque"
 
-#: src/pages/swap/[[...tokens]].tsx:492
+#: src/pages/swap/[[...tokens]].tsx:517
 msgid "Swap From (est.):"
 msgstr "Scambia da (stimato):"
 
-#: src/pages/swap/[[...tokens]].tsx:493
+#: src/pages/swap/[[...tokens]].tsx:518
 msgid "Swap From:"
 msgstr "Scambia da:"
 
-#: src/pages/swap/[[...tokens]].tsx:561
+#: src/pages/swap/[[...tokens]].tsx:586
 msgid "Swap To (est.):"
 msgstr "Scambia in (stimato):"
 
-#: src/pages/swap/[[...tokens]].tsx:562
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Swap To:"
 msgstr "Scambia in:"
 
@@ -1240,7 +1240,7 @@ msgstr "Scadenza transazione"
 msgid "Transactions"
 msgstr "Transazioni"
 
-#: src/pages/swap/[[...tokens]].tsx:657
+#: src/pages/swap/[[...tokens]].tsx:682
 msgid "Try enabling multi-hop trades"
 msgstr "Prova ad abilitare le operazioni multi-hop"
 
@@ -1261,11 +1261,11 @@ msgstr "Togli dallo staking"
 msgid "Unstaked"
 msgstr "Tolto dallo staking"
 
-#: src/pages/swap/[[...tokens]].tsx:635
+#: src/pages/swap/[[...tokens]].tsx:660
 msgid "Unsupported Asset"
 msgstr "Asset non supportato"
 
-#: src/pages/swap/[[...tokens]].tsx:647
+#: src/pages/swap/[[...tokens]].tsx:672
 msgid "Unwrap"
 msgstr "Unwrap"
 
@@ -1336,7 +1336,7 @@ msgstr "Preleva"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "Preleva {assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:645
+#: src/pages/swap/[[...tokens]].tsx:670
 msgid "Wrap"
 msgstr "Wrap"
 

@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- 제거 요청하기"
 
-#: src/pages/swap/[[...tokens]].tsx:470
+#: src/pages/swap/[[...tokens]].tsx:495
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "Polygon에 예치된 300M 이상의 TVL! 최적화된 라우팅 적용"
 
@@ -127,12 +127,12 @@ msgstr "승인"
 msgid "Approve Kashi"
 msgstr "카시 허용"
 
-#: src/pages/swap/[[...tokens]].tsx:680
+#: src/pages/swap/[[...tokens]].tsx:705
 msgid "Approve {0}"
 msgstr "{0} 승인하기"
 
 #: src/pages/migrate.tsx:289
-#: src/pages/swap/[[...tokens]].tsx:677
+#: src/pages/swap/[[...tokens]].tsx:702
 msgid "Approved"
 msgstr "승인됨"
 
@@ -311,7 +311,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:639
+#: src/pages/swap/[[...tokens]].tsx:664
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "지갑 연결"
@@ -405,7 +405,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "보유 중인 유동성 풀 토큰이 보이지 않습니까?"
 
-#: src/pages/swap/[[...tokens]].tsx:473
+#: src/pages/swap/[[...tokens]].tsx:498
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Polygon에서 최저 수준의 슬리피지를 경험하세요"
 
@@ -589,7 +589,7 @@ msgstr "잔액 부족"
 msgid "Insufficient WETH balance"
 msgstr "WETH 잔액 부족"
 
-#: src/pages/swap/[[...tokens]].tsx:653
+#: src/pages/swap/[[...tokens]].tsx:678
 msgid "Insufficient liquidity for this trade"
 msgstr "이 거래를 위한 유동성 부족"
 
@@ -888,7 +888,7 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입력하세요."
 
-#: src/components/ExchangeHeader.tsx:52
+#: src/components/ExchangeHeader.tsx:46
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
 msgid "Pool"
@@ -930,11 +930,11 @@ msgstr "가격"
 msgid "Price Impact"
 msgstr "가격 영향"
 
-#: src/pages/swap/[[...tokens]].tsx:710
+#: src/pages/swap/[[...tokens]].tsx:735
 msgid "Price Impact High"
 msgstr "가격 영향 높음"
 
-#: src/pages/swap/[[...tokens]].tsx:745
+#: src/pages/swap/[[...tokens]].tsx:770
 msgid "Price Impact Too High"
 msgstr "가격 영향이 너무 높음"
 
@@ -945,7 +945,7 @@ msgstr "가격 영향이 너무 높음"
 msgid "Rates"
 msgstr "요금"
 
-#: src/pages/swap/[[...tokens]].tsx:482
+#: src/pages/swap/[[...tokens]].tsx:507
 msgid "Read Tutorial"
 msgstr "튜토리얼 읽기"
 
@@ -960,7 +960,7 @@ msgstr "제거"
 msgid "Remove Liquidity"
 msgstr "유동성 제거"
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:613
 msgid "Remove send"
 msgstr "보내기 제거"
 
@@ -1035,7 +1035,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "풀 지분:"
 
-#: src/pages/swap/[[...tokens]].tsx:613
+#: src/pages/swap/[[...tokens]].tsx:638
 msgid "Slippage Tolerance"
 msgstr "슬리피지 감당 범위"
 
@@ -1116,37 +1116,37 @@ msgstr "스시는 오픈 소스를 지지합니다."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: 자면서도 SUSHI를 벌 수 있는 방법"
 
-#: src/pages/swap/[[...tokens]].tsx:431
+#: src/pages/swap/[[...tokens]].tsx:456
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:37
+#: src/components/ExchangeHeader.tsx:36
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
-#: src/pages/swap/[[...tokens]].tsx:713
-#: src/pages/swap/[[...tokens]].tsx:748
+#: src/pages/swap/[[...tokens]].tsx:738
+#: src/pages/swap/[[...tokens]].tsx:773
 msgid "Swap"
 msgstr "스왑"
 
 #: src/features/swap/SwapModalFooter.tsx:129
-#: src/pages/swap/[[...tokens]].tsx:712
-#: src/pages/swap/[[...tokens]].tsx:747
+#: src/pages/swap/[[...tokens]].tsx:737
+#: src/pages/swap/[[...tokens]].tsx:772
 msgid "Swap Anyway"
 msgstr "바로 스왑"
 
-#: src/pages/swap/[[...tokens]].tsx:492
+#: src/pages/swap/[[...tokens]].tsx:517
 msgid "Swap From (est.):"
 msgstr "다음에서 스왑(예상):"
 
-#: src/pages/swap/[[...tokens]].tsx:493
+#: src/pages/swap/[[...tokens]].tsx:518
 msgid "Swap From:"
 msgstr "다음에서 스왑:"
 
-#: src/pages/swap/[[...tokens]].tsx:561
+#: src/pages/swap/[[...tokens]].tsx:586
 msgid "Swap To (est.):"
 msgstr "다음으로 스왑(예상):"
 
-#: src/pages/swap/[[...tokens]].tsx:562
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Swap To:"
 msgstr "다음으로 스왑:"
 
@@ -1241,7 +1241,7 @@ msgstr "거래 제한시간"
 msgid "Transactions"
 msgstr "거래"
 
-#: src/pages/swap/[[...tokens]].tsx:657
+#: src/pages/swap/[[...tokens]].tsx:682
 msgid "Try enabling multi-hop trades"
 msgstr "멀티홉 거래 활성화하기"
 
@@ -1262,11 +1262,11 @@ msgstr "언스테이크"
 msgid "Unstaked"
 msgstr "지분 없음"
 
-#: src/pages/swap/[[...tokens]].tsx:635
+#: src/pages/swap/[[...tokens]].tsx:660
 msgid "Unsupported Asset"
 msgstr "지원되지 않는 자산"
 
-#: src/pages/swap/[[...tokens]].tsx:647
+#: src/pages/swap/[[...tokens]].tsx:672
 msgid "Unwrap"
 msgstr "언랩"
 
@@ -1337,7 +1337,7 @@ msgstr "인출"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "{assetSymbol} 인출하기"
 
-#: src/pages/swap/[[...tokens]].tsx:645
+#: src/pages/swap/[[...tokens]].tsx:670
 msgid "Wrap"
 msgstr "랩"
 

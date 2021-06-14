@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "-删除发送"
 
-#: src/pages/swap/[[...tokens]].tsx:470
+#: src/pages/swap/[[...tokens]].tsx:495
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "Polygon上的300M+ TVL!启用优化的路由"
 
@@ -126,12 +126,12 @@ msgstr "批准"
 msgid "Approve Kashi"
 msgstr "批准Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:680
+#: src/pages/swap/[[...tokens]].tsx:705
 msgid "Approve {0}"
 msgstr "批准{0}"
 
 #: src/pages/migrate.tsx:289
-#: src/pages/swap/[[...tokens]].tsx:677
+#: src/pages/swap/[[...tokens]].tsx:702
 msgid "Approved"
 msgstr "已批准"
 
@@ -305,7 +305,7 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:639
+#: src/pages/swap/[[...tokens]].tsx:664
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "连接钱包"
@@ -399,7 +399,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "没有看到您加入的池子吗？"
 
-#: src/pages/swap/[[...tokens]].tsx:473
+#: src/pages/swap/[[...tokens]].tsx:498
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "在Polygon上享受最低的滑点"
 
@@ -574,7 +574,7 @@ msgstr "余额不足"
 msgid "Insufficient WETH balance"
 msgstr "WETH余额不足"
 
-#: src/pages/swap/[[...tokens]].tsx:653
+#: src/pages/swap/[[...tokens]].tsx:678
 msgid "Insufficient liquidity for this trade"
 msgstr "该交易的流动性不足"
 
@@ -869,7 +869,7 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "请输入“确认”以开启专家模式。"
 
-#: src/components/ExchangeHeader.tsx:52
+#: src/components/ExchangeHeader.tsx:46
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
 msgid "Pool"
@@ -910,11 +910,11 @@ msgstr "价格"
 msgid "Price Impact"
 msgstr "价格影响"
 
-#: src/pages/swap/[[...tokens]].tsx:710
+#: src/pages/swap/[[...tokens]].tsx:735
 msgid "Price Impact High"
 msgstr "价格影响高"
 
-#: src/pages/swap/[[...tokens]].tsx:745
+#: src/pages/swap/[[...tokens]].tsx:770
 msgid "Price Impact Too High"
 msgstr "价格影响过高"
 
@@ -925,7 +925,7 @@ msgstr "价格影响过高"
 msgid "Rates"
 msgstr "费率"
 
-#: src/pages/swap/[[...tokens]].tsx:482
+#: src/pages/swap/[[...tokens]].tsx:507
 msgid "Read Tutorial"
 msgstr "阅读教程"
 
@@ -940,7 +940,7 @@ msgstr "去除"
 msgid "Remove Liquidity"
 msgstr "删除流动金"
 
-#: src/pages/swap/[[...tokens]].tsx:588
+#: src/pages/swap/[[...tokens]].tsx:613
 msgid "Remove send"
 msgstr "删除发送"
 
@@ -1015,7 +1015,7 @@ msgstr ""
 msgid "Share of Pool:"
 msgstr "池子里的份额："
 
-#: src/pages/swap/[[...tokens]].tsx:613
+#: src/pages/swap/[[...tokens]].tsx:638
 msgid "Slippage Tolerance"
 msgstr "可容忍滑点"
 
@@ -1094,37 +1094,37 @@ msgstr "Sushi是开源协议的支持者。"
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar：让SUSHI为您工作"
 
-#: src/pages/swap/[[...tokens]].tsx:431
+#: src/pages/swap/[[...tokens]].tsx:456
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:37
+#: src/components/ExchangeHeader.tsx:36
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
-#: src/pages/swap/[[...tokens]].tsx:713
-#: src/pages/swap/[[...tokens]].tsx:748
+#: src/pages/swap/[[...tokens]].tsx:738
+#: src/pages/swap/[[...tokens]].tsx:773
 msgid "Swap"
 msgstr "兑换"
 
 #: src/features/swap/SwapModalFooter.tsx:129
-#: src/pages/swap/[[...tokens]].tsx:712
-#: src/pages/swap/[[...tokens]].tsx:747
+#: src/pages/swap/[[...tokens]].tsx:737
+#: src/pages/swap/[[...tokens]].tsx:772
 msgid "Swap Anyway"
 msgstr "仍要交换"
 
-#: src/pages/swap/[[...tokens]].tsx:492
+#: src/pages/swap/[[...tokens]].tsx:517
 msgid "Swap From (est.):"
 msgstr "交换自（估计）："
 
-#: src/pages/swap/[[...tokens]].tsx:493
+#: src/pages/swap/[[...tokens]].tsx:518
 msgid "Swap From:"
 msgstr "交换自："
 
-#: src/pages/swap/[[...tokens]].tsx:561
+#: src/pages/swap/[[...tokens]].tsx:586
 msgid "Swap To (est.):"
 msgstr "交换至（估算）："
 
-#: src/pages/swap/[[...tokens]].tsx:562
+#: src/pages/swap/[[...tokens]].tsx:587
 msgid "Swap To:"
 msgstr "交换至："
 
@@ -1218,7 +1218,7 @@ msgstr "交易期限"
 msgid "Transactions"
 msgstr "交易"
 
-#: src/pages/swap/[[...tokens]].tsx:657
+#: src/pages/swap/[[...tokens]].tsx:682
 msgid "Try enabling multi-hop trades"
 msgstr "尝试启用多跳交易"
 
@@ -1239,11 +1239,11 @@ msgstr "解除抵押"
 msgid "Unstaked"
 msgstr "解除质押"
 
-#: src/pages/swap/[[...tokens]].tsx:635
+#: src/pages/swap/[[...tokens]].tsx:660
 msgid "Unsupported Asset"
 msgstr "不支持的资产"
 
-#: src/pages/swap/[[...tokens]].tsx:647
+#: src/pages/swap/[[...tokens]].tsx:672
 msgid "Unwrap"
 msgstr "解开"
 
@@ -1314,7 +1314,7 @@ msgstr "提取"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "提现{assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:645
+#: src/pages/swap/[[...tokens]].tsx:670
 msgid "Wrap"
 msgstr "包裹"
 
