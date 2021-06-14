@@ -400,9 +400,9 @@ export default function Migrate() {
 
       <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
         {!account ? (
-          <Typography variant="body" className="p-4 text-center text-primary">
+          <Button variant="outlined" color="blue" size="large">
             {i18n._(t`Connect to a wallet to view your liquidity`)}
-          </Typography>
+          </Button>
         ) : state.loading ? (
           <Typography variant="body" className="p-4 text-center text-primary">
             <Dots>

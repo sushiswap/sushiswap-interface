@@ -1,11 +1,5 @@
-import {
-  ExchangeRateCheckBox,
-  SwapCheckbox,
-} from "../../components/KashiCheckbox";
-import {
-  KashiApproveButton,
-  TokenApproveButton,
-} from "../../components/KashiButton";
+import { ExchangeRateCheckBox, SwapCheckbox } from "./Checkbox";
+import { KashiApproveButton, TokenApproveButton } from "./Button";
 import React, { useContext, useState } from "react";
 import {
   SUSHISWAP_MULTISWAPPER_ADDRESS,
@@ -31,11 +25,11 @@ import { Field } from "../../state/swap/actions";
 import { KashiContext } from "../../context";
 import { KashiCooker } from "../../entities";
 import SmartNumberInput from "../../components/SmartNumberInput";
-import TradeReview from "../../components/TradeReview";
+import TradeReview from "./TradeReview";
 import { TransactionReview } from "../../entities/TransactionReview";
 import TransactionReviewView from "./TransactionReview";
 import { WETH } from "@sushiswap/sdk";
-import WarningsView from "../../components/WarningsList";
+import WarningsView from "./WarningsList";
 import { defaultAbiCoder } from "@ethersproject/abi";
 import { ethers } from "ethers";
 import { tryParseAmount } from "../../functions/parse";

@@ -1,6 +1,6 @@
-import Alert from "./Alert";
+import Alert from "../../components/Alert";
 import React from "react";
-import { Warnings } from "../entities/Warnings";
+import { Warnings } from "../../entities/Warnings";
 
 function WarningsList({ warnings }: { warnings: Warnings }) {
   return (

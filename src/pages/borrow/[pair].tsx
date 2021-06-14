@@ -1,4 +1,4 @@
-import { Borrow, Repay } from "../../features/borrow";
+import { Borrow, Repay } from "../../features/lending";
 import { KashiContext, useKashiPair } from "../../context";
 import React, { useCallback, useContext, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";

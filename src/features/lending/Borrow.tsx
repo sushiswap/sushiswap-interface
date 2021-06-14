@@ -1,16 +1,6 @@
-import {
-  ApprovalState,
-  useApproveCallback,
-} from "../../hooks/useApproveCallback";
 import { BigNumber, ethers } from "ethers";
-import {
-  ExchangeRateCheckBox,
-  SwapCheckbox,
-} from "../../components/KashiCheckbox";
-import {
-  KashiApproveButton,
-  TokenApproveButton,
-} from "../../components/KashiButton";
+import { ExchangeRateCheckBox, SwapCheckbox } from "./Checkbox";
+import { KashiApproveButton, TokenApproveButton } from "./Button";
 import React, { useContext, useState } from "react";
 import { Warning, Warnings } from "../../entities/Warnings";
 import { ZERO, e10, maximum, minimum } from "../../functions/math";
@@ -24,21 +14,17 @@ import {
   useUserSlippageTolerance,
 } from "../../state/user/hooks";
 
-import Alert from "../../components/Alert";
-import Badge from "../../components/Badge";
 import Button from "../../components/Button";
-import Checkbox from "../../components/Checkbox";
-import Dots from "../../components/Dots";
 import { Field } from "../../state/swap/actions";
 import { KashiContext } from "../../context";
 import KashiCooker from "../../entities/KashiCooker";
 import { SUSHISWAP_MULTISWAPPER_ADDRESS } from "../../constants/kashi";
 import SmartNumberInput from "../../components/SmartNumberInput";
-import TradeReview from "../../components/TradeReview";
+import TradeReview from "./TradeReview";
 import { TransactionReview } from "../../entities/TransactionReview";
 import TransactionReviewView from "./TransactionReview";
 import { WETH } from "@sushiswap/sdk";
-import WarningsView from "../../components/WarningsList";
+import WarningsView from "./WarningsList";
 import { defaultAbiCoder } from "@ethersproject/abi";
 import { toShare } from "../../functions/bentobox";
 import { tryParseAmount } from "../../functions/parse";

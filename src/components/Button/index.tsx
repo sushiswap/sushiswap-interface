@@ -75,7 +75,7 @@ function Button({
     <button
       className={classNames(
         VARIANT[variant][color],
-        SIZE[size],
+        variant !== "empty" && SIZE[size],
         "rounded focus:outline-none focus:ring disabled:opacity-50 font-medium",
         className
       )}

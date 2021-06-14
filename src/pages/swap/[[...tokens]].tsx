@@ -614,16 +614,22 @@ export default function Swap() {
         </div>
         <BottomGrouping>
           {swapIsUnsupported ? (
-            <Button color="gradient" disabled>
+            <Button color="red" size="large" disabled>
               {i18n._(t`Unsupported Asset`)}
             </Button>
           ) : !account ? (
-            <Button variant="outlined" color="blue" onClick={toggleWalletModal}>
+            <Button
+              variant="outlined"
+              color="blue"
+              size="large"
+              onClick={toggleWalletModal}
+            >
               {i18n._(t`Connect Wallet`)}
             </Button>
           ) : showWrap ? (
             <Button
               color="gradient"
+              size="large"
               disabled={Boolean(wrapInputError)}
               onClick={onWrap}
             >
@@ -652,8 +658,6 @@ export default function Swap() {
                 disabled={
                   approval !== ApprovalState.NOT_APPROVED || approvalSubmitted
                 }
-                style={{ width: "100%" }}
-                // altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
                 confirmed={approval === ApprovalState.APPROVED}
               >
                 {approval === ApprovalState.PENDING ? (

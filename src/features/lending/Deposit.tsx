@@ -1,8 +1,5 @@
 import { Direction, TransactionReview } from "../../entities/TransactionReview";
-import {
-  KashiApproveButton,
-  TokenApproveButton,
-} from "../../components/KashiButton";
+import { KashiApproveButton, TokenApproveButton } from "./Button";
 import React, { useContext, useState } from "react";
 import { ZERO, e10 } from "../../functions/math";
 
@@ -13,7 +10,7 @@ import SmartNumberInput from "../../components/SmartNumberInput";
 import TransactionReviewList from "./TransactionReview";
 import { WETH } from "@sushiswap/sdk";
 import { Warnings } from "../../entities/Warnings";
-import WarningsList from "../../components/WarningsList";
+import WarningsList from "./WarningsList";
 import { formatNumber } from "../../functions/format";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useCurrency } from "../../hooks/Tokens";
