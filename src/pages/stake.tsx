@@ -121,13 +121,14 @@ export default function Stake() {
   };
 
   const insufficientFunds =
-    balance.equalTo(ZERO) || parsedAmount?.greaterThan(balance);
+    (balance && balance.equalTo(ZERO)) || parsedAmount?.greaterThan(balance);
 
   const inputError = insufficientFunds;
 
   const [pendingTx, setPendingTx] = useState(false);
 
-  const buttonDisabled = !input || pendingTx || parsedAmount.equalTo(ZERO);
+  const buttonDisabled =
+    !input || pendingTx || (parsedAmount && parsedAmount.equalTo(ZERO));
 
   const handleClickButton = async () => {
     if (buttonDisabled) return;

@@ -66,7 +66,7 @@ const FarmList = ({ farms, term }) => {
         </div>
       </div>
       <div className="flex-col space-y-2">
-        {items.map((farm, i) => {
+        {items.map((farm) => {
           return <FarmListItem key={`${farm.chef}_${farm.id}`} farm={farm} />;
         })}
       </div>

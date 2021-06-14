@@ -38,7 +38,7 @@ import { WETH } from "@sushiswap/sdk";
 import WarningsView from "../../components/WarningsList";
 import { defaultAbiCoder } from "@ethersproject/abi";
 import { ethers } from "ethers";
-import { tryParseAmount } from "../functions/parse";
+import { tryParseAmount } from "../../functions/parse";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useCurrency } from "../../hooks/Tokens";
 
