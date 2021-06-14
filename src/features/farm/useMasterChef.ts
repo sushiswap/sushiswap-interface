@@ -3,7 +3,6 @@ import { useActiveWeb3React, useSushiContract } from '../../hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Chef } from './enum'
 import { Zero } from '@ethersproject/constants'
-import { parseUnits } from '@ethersproject/units'
 import { useCallback } from 'react'
 import { useChefContract } from './hooks'
 
@@ -65,30 +64,27 @@ export default function useMasterChef(chef: Chef) {
             try {
                 console.log('harvest', { contract, account, pid })
 
-                const pendingSushi = await contract?.pendingSushi(pid, account)
-
-                const balanceOf = await sushi?.balanceOf(contract?.address)
-
                 let tx
 
                 if (chef === Chef.MASTERCHEF) {
                     tx = await contract?.deposit(pid, Zero)
-                } else if (
-                    chef === Chef.MASTERCHEF_V2 &&
-                    pendingSushi.gt(balanceOf)
-                ) {
-                    tx = await contract?.batch(
-                        [
-                            contract?.interface?.encodeFunctionData(
-                                'harvestFromMasterChef'
-                            ),
-                            contract?.interface?.encodeFunctionData('harvest', [
-                                pid,
-                                account,
-                            ]),
-                        ],
-                        true
-                    )
+                } else if (chef === Chef.MASTERCHEF_V2) {
+                    const pendingSushi = await contract?.pendingSushi(pid, account)
+
+                    const balanceOf = await sushi?.balanceOf(contract?.address)
+
+                    // If MasterChefV2 doesn't have enough sushi to harvest, batch in a harvest.
+                    if (pendingSushi.gt(balanceOf)) {
+                        tx = await contract?.batch(
+                            [
+                                contract?.interface?.encodeFunctionData('harvestFromMasterChef'),
+                                contract?.interface?.encodeFunctionData('harvest', [pid, account]),
+                            ],
+                            true
+                        )
+                    } else {
+                        tx = await contract?.harvest(pid, account)
+                    }
                 } else if (chef === Chef.MINICHEF) {
                     tx = await contract?.harvest(pid, account)
                 }

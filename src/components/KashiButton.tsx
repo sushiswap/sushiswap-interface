@@ -8,7 +8,7 @@ import Dots from './Dots'
 import React from 'react'
 import { WETH } from '@sushiswap/sdk'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../state/swap/hooks'
+import { tryParseAmount } from '../functions/parse'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 

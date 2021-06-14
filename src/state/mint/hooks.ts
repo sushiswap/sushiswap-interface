@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { wrappedCurrency, wrappedCurrencyAmount } from '../../functions/currency/wrappedCurrency'
 
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../swap/hooks'
+import { tryParseAmount } from '../../functions/parse'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { useLingui } from '@lingui/react'

@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount, JSBI, Pair, Percent, TokenAmount } from '@sus
 import { Field, typeInput } from './actions'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { tryParseAmount } from '../swap/hooks'
+import { tryParseAmount } from '../../functions/parse'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCallback } from 'react'
 import { usePair } from '../../hooks/usePairs'

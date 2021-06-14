@@ -345,7 +345,7 @@ export default function Add() {
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
             </div>
-            <div className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity">
+            <div className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity">
                 <Header input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 <div>
                     <TransactionConfirmationModal
@@ -533,9 +533,8 @@ export default function Add() {
                 {!addIsUnsupported ? (
                     pair && !noLiquidity && pairState !== PairState.INVALID ? (
                         <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
-                    ) : (
-                        <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue)} />
-                    )
+                    ) : null
+                    // <AdvancedLiquidityDetailsDropdown show={Boolean(typedValue)} />
                 ) : (
                     <UnsupportedCurrencyFooter
                         show={addIsUnsupported}

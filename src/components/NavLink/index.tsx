@@ -1,7 +1,6 @@
 import Link, { LinkProps } from 'next/link'
 import React, { Children } from 'react'
 
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 const NavLink = ({ children, activeClassName = 'text-high-emphesis', ...props }) => {
@@ -23,11 +22,6 @@ const NavLink = ({ children, activeClassName = 'text-high-emphesis', ...props })
             })}
         </Link>
     )
-}
-
-NavLink.propTypes = {
-    activeClassName: PropTypes.string.isRequired,
-    href: PropTypes.string.isRequired,
 }
 
 export default NavLink

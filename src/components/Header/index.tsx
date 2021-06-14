@@ -24,28 +24,18 @@ function AppBar(): JSX.Element {
     const { i18n } = useLingui()
     const { account, chainId, library } = useActiveWeb3React()
 
-    const userEthBalance = useETHBalances(account ? [account] : [])?.[
-        account ?? ''
-    ]
+    const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
     return (
         //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
         <header className="flex-shrink-0 w-full">
-            <Popover
-                as="nav"
-                className="z-10 w-full bg-transparent header-border-b"
-            >
+            <Popover as="nav" className="z-10 w-full bg-transparent header-border-b">
                 {({ open }) => (
                     <>
                         <div className="px-4 py-4">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center">
-                                    <Image
-                                        src="/logo.png"
-                                        alt="Sushi"
-                                        width="32px"
-                                        height="32px"
-                                    />
+                                    <Image src="/logo.png" alt="Sushi" width="32px" height="32px" />
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
                                             <NavLink href="/swap">
@@ -72,48 +62,35 @@ function AppBar(): JSX.Element {
                                                     {i18n._(t`Migrate`)}
                                                 </a>
                                             </NavLink>
+                                            {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                                                <NavLink href={'/farm'}>
+                                                    <a
+                                                        id={`farm-nav-link`}
+                                                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                                                    >
+                                                        {i18n._(t`Farm`)}
+                                                    </a>
+                                                </NavLink>
+                                            )}
                                             {chainId &&
-                                                [
-                                                    ChainId.MAINNET,
-                                                    ChainId.MATIC,
-                                                ].includes(chainId) && (
-                                                    <NavLink href={'/farm'}>
-                                                        <a
-                                                            id={`farm-nav-link`}
-                                                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                                                        >
-                                                            {i18n._(t`Farm`)}
-                                                        </a>
-                                                    </NavLink>
-                                                )}
-                                            {chainId &&
-                                                [
-                                                    ChainId.MAINNET,
-                                                    ChainId.KOVAN,
-                                                    ChainId.BSC,
-                                                    ChainId.MATIC,
-                                                ].includes(chainId) && (
+                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
+                                                    chainId
+                                                ) && (
                                                     <>
                                                         <NavLink href={'/lend'}>
                                                             <a
                                                                 id={`lend-nav-link`}
                                                                 className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                             >
-                                                                {i18n._(
-                                                                    t`Lend`
-                                                                )}
+                                                                {i18n._(t`Lend`)}
                                                             </a>
                                                         </NavLink>
-                                                        <NavLink
-                                                            href={'/borrow'}
-                                                        >
+                                                        <NavLink href={'/borrow'}>
                                                             <a
                                                                 id={`borrow-nav-link`}
                                                                 className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                                             >
-                                                                {i18n._(
-                                                                    t`Borrow`
-                                                                )}
+                                                                {i18n._(t`Borrow`)}
                                                             </a>
                                                         </NavLink>
                                                         {/* <Link href={'/bento'}>
@@ -144,69 +121,47 @@ function AppBar(): JSX.Element {
                                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                                     <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
                                         {chainId &&
-                                            [ChainId.MAINNET].includes(
-                                                chainId
-                                            ) &&
+                                            [ChainId.MAINNET].includes(chainId) &&
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
                                                     <QuestionHelper
-                                                        text={i18n._(
-                                                            t`Add xSUSHI to your MetaMask wallet`
-                                                        )}
+                                                        text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}
                                                     >
                                                         <div
                                                             className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
                                                             onClick={() => {
-                                                                const params: any =
-                                                                    {
-                                                                        type: 'ERC20',
-                                                                        options:
-                                                                            {
-                                                                                address:
-                                                                                    '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
-                                                                                symbol: 'XSUSHI',
-                                                                                decimals: 18,
-                                                                                image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
-                                                                            },
-                                                                    }
+                                                                const params: any = {
+                                                                    type: 'ERC20',
+                                                                    options: {
+                                                                        address:
+                                                                            '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                                                        symbol: 'XSUSHI',
+                                                                        decimals: 18,
+                                                                        image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
+                                                                    },
+                                                                }
 
                                                                 if (
                                                                     library &&
-                                                                    library
-                                                                        .provider
-                                                                        .isMetaMask &&
-                                                                    library
-                                                                        .provider
-                                                                        .request
+                                                                    library.provider.isMetaMask &&
+                                                                    library.provider.request
                                                                 ) {
                                                                     library.provider
-                                                                        .request(
-                                                                            {
-                                                                                method: 'wallet_watchAsset',
-                                                                                params,
+                                                                        .request({
+                                                                            method: 'wallet_watchAsset',
+                                                                            params,
+                                                                        })
+                                                                        .then((success) => {
+                                                                            if (success) {
+                                                                                console.log(
+                                                                                    'Successfully added XSUSHI to MetaMask'
+                                                                                )
+                                                                            } else {
+                                                                                throw new Error('Something went wrong.')
                                                                             }
-                                                                        )
-                                                                        .then(
-                                                                            (
-                                                                                success
-                                                                            ) => {
-                                                                                if (
-                                                                                    success
-                                                                                ) {
-                                                                                    console.log(
-                                                                                        'Successfully added XSUSHI to MetaMask'
-                                                                                    )
-                                                                                } else {
-                                                                                    throw new Error(
-                                                                                        'Something went wrong.'
-                                                                                    )
-                                                                                }
-                                                                            }
-                                                                        )
-                                                                        .catch(
-                                                                            console.error
-                                                                        )
+                                                                        })
+                                                                        .catch(console.error)
                                                                 }
                                                             }}
                                                         >
@@ -224,28 +179,16 @@ function AppBar(): JSX.Element {
                                             )}
 
                                         {chainId &&
-                                            [
-                                                ChainId.MAINNET,
-                                                ChainId.BSC,
-                                                ChainId.MATIC,
-                                            ].includes(chainId) &&
+                                            [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) &&
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <QuestionHelper
-                                                        text={i18n._(
-                                                            t`Add SUSHI to your MetaMask wallet`
-                                                        )}
-                                                    >
+                                                    <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>
                                                         <div
                                                             className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"
                                                             onClick={() => {
-                                                                let address:
-                                                                    | string
-                                                                    | undefined
-                                                                switch (
-                                                                    chainId
-                                                                ) {
+                                                                let address: string | undefined
+                                                                switch (chainId) {
                                                                     case ChainId.MAINNET:
                                                                         address =
                                                                             '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
@@ -259,55 +202,36 @@ function AppBar(): JSX.Element {
                                                                             '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
                                                                         break
                                                                 }
-                                                                const params: any =
-                                                                    {
-                                                                        type: 'ERC20',
-                                                                        options:
-                                                                            {
-                                                                                address:
-                                                                                    address,
-                                                                                symbol: 'SUSHI',
-                                                                                decimals: 18,
-                                                                                image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
-                                                                            },
-                                                                    }
+                                                                const params: any = {
+                                                                    type: 'ERC20',
+                                                                    options: {
+                                                                        address: address,
+                                                                        symbol: 'SUSHI',
+                                                                        decimals: 18,
+                                                                        image: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
+                                                                    },
+                                                                }
 
                                                                 if (
                                                                     library &&
-                                                                    library
-                                                                        .provider
-                                                                        .isMetaMask &&
-                                                                    library
-                                                                        .provider
-                                                                        .request
+                                                                    library.provider.isMetaMask &&
+                                                                    library.provider.request
                                                                 ) {
                                                                     library.provider
-                                                                        .request(
-                                                                            {
-                                                                                method: 'wallet_watchAsset',
-                                                                                params,
+                                                                        .request({
+                                                                            method: 'wallet_watchAsset',
+                                                                            params,
+                                                                        })
+                                                                        .then((success) => {
+                                                                            if (success) {
+                                                                                console.log(
+                                                                                    'Successfully added SUSHI to MetaMask'
+                                                                                )
+                                                                            } else {
+                                                                                throw new Error('Something went wrong.')
                                                                             }
-                                                                        )
-                                                                        .then(
-                                                                            (
-                                                                                success
-                                                                            ) => {
-                                                                                if (
-                                                                                    success
-                                                                                ) {
-                                                                                    console.log(
-                                                                                        'Successfully added SUSHI to MetaMask'
-                                                                                    )
-                                                                                } else {
-                                                                                    throw new Error(
-                                                                                        'Something went wrong.'
-                                                                                    )
-                                                                                }
-                                                                            }
-                                                                        )
-                                                                        .catch(
-                                                                            console.error
-                                                                        )
+                                                                        })
+                                                                        .catch(console.error)
                                                                 }
                                                             }}
                                                         >
@@ -324,28 +248,21 @@ function AppBar(): JSX.Element {
                                                 </>
                                             )}
 
-                                        {library &&
-                                            library.provider.isMetaMask && (
-                                                <div className="hidden sm:inline-block">
-                                                    <Web3Network />
-                                                </div>
-                                            )}
+                                        {library && library.provider.isMetaMask && (
+                                            <div className="hidden sm:inline-block">
+                                                <Web3Network />
+                                            </div>
+                                        )}
 
                                         <div className="w-auto flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
-                                            {account &&
-                                                chainId &&
-                                                userEthBalance && (
-                                                    <>
-                                                        <div className="px-3 py-2 text-primary text-bold">
-                                                            {userEthBalance?.toSignificant(
-                                                                4
-                                                            )}{' '}
-                                                            {Currency.getNativeCurrencySymbol(
-                                                                chainId
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                )}
+                                            {account && chainId && userEthBalance && (
+                                                <>
+                                                    <div className="px-3 py-2 text-primary text-bold">
+                                                        {userEthBalance?.toSignificant(4)}{' '}
+                                                        {Currency.getNativeCurrencySymbol(chainId)}
+                                                    </div>
+                                                </>
+                                            )}
                                             <Web3Status />
                                         </div>
                                         <div className="hidden md:block">
@@ -357,9 +274,7 @@ function AppBar(): JSX.Element {
                                 <div className="flex -mr-2 sm:hidden">
                                     {/* Mobile menu button */}
                                     <Popover.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
-                                        <span className="sr-only">
-                                            {i18n._(t`Open main menu`)}
-                                        </span>
+                                        <span className="sr-only">{i18n._(t`Open main menu`)}</span>
                                         {open ? (
                                             <svg
                                                 className="block w-6 h-6"
@@ -418,40 +333,25 @@ function AppBar(): JSX.Element {
                                     </a>
                                 </Link>
 
+                                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                                    <Link href={'/farm'}>
+                                        <a
+                                            id={`yield-nav-link`}
+                                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                                        >
+                                            {' '}
+                                            {i18n._(t`Farm`)}
+                                        </a>
+                                    </Link>
+                                )}
                                 {chainId &&
-                                    [ChainId.MAINNET, ChainId.MATIC].includes(
-                                        chainId
-                                    ) && (
-                                        <Link href={'/farm'}>
-                                            <a
-                                                id={`yield-nav-link`}
-                                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                                            >
-                                                {' '}
-                                                {i18n._(t`Farm`)}
-                                            </a>
-                                        </Link>
-                                    )}
-                                {chainId &&
-                                    [
-                                        ChainId.MAINNET,
-                                        ChainId.KOVAN,
-                                        ChainId.BSC,
-                                        ChainId.MATIC,
-                                    ].includes(chainId) && (
+                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <Link href={'/lend'}>
-                                            <a id={`kashi-nav-link`}>
-                                                {i18n._(t`Kashi Lending`)}
-                                            </a>
+                                            <a id={`kashi-nav-link`}>{i18n._(t`Kashi Lending`)}</a>
                                         </Link>
                                     )}
                                 {chainId &&
-                                    [
-                                        ChainId.MAINNET,
-                                        ChainId.KOVAN,
-                                        ChainId.BSC,
-                                        ChainId.MATIC,
-                                    ].includes(chainId) && (
+                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <Link href={'/bentobox'}>
                                             <a
                                                 id={`bento-nav-link`}
@@ -491,10 +391,7 @@ function AppBar(): JSX.Element {
                                     ].includes(chainId) && (
                                         <ExternalLink
                                             id={`analytics-nav-link`}
-                                            href={
-                                                ANALYTICS_URL[chainId] ||
-                                                'https://analytics.sushi.com'
-                                            }
+                                            href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                             className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                                         >
                                             {i18n._(t`Analytics`)}

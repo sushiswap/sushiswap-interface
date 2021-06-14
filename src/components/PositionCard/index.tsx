@@ -13,6 +13,7 @@ import { darken, transparentize } from 'polished'
 
 import { AutoColumn } from '../Column'
 import { BIG_INT_ZERO } from '../../constants'
+import Button from '../Button'
 import CurrencyLogo from '../CurrencyLogo'
 import Dots from '../Dots'
 import DoubleCurrencyLogo from '../DoubleLogo'
@@ -24,10 +25,9 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useColor } from '../../hooks/useColor'
 import { useLingui } from '@lingui/react'
+import { useRouter } from 'next/router'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useRouter } from 'next/router'
-import Button from '../Button'
 
 export const FixedHeightRow = styled(RowBetween)`
     height: 24px;

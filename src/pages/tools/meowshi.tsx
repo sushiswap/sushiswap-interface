@@ -1,8 +1,11 @@
 import { MEOW, SUSHI, XSUSHI } from '../../constants'
 
 import { ChainId } from '@sushiswap/sdk'
+import Container from '../../components/Container'
 import Head from 'next/head'
+import Image from 'next/image'
 import Layout from '../../layouts/DefaultLayout'
+import Typography from '../../components/Typography'
 import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
 import useMeowshi from '../../hooks/useMeowshi'
@@ -25,6 +28,12 @@ export default function Meowshi() {
                 <title>Meowshi | Sushi</title>
                 <meta name="description" content="SushiSwap Meowshi..." />
             </Head>
+
+            <Container className="text-center">
+                <Typography component="h1" variant="h1" className="mb-4">
+                    Meowshi
+                </Typography>
+            </Container>
         </Layout>
     )
 }

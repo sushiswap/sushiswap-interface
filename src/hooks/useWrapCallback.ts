@@ -1,7 +1,7 @@
 import { Currency, WETH, currencyEquals } from '@sushiswap/sdk'
 
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../state/swap/hooks'
+import { tryParseAmount } from '../functions/parse'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
@@ -36,23 +36,15 @@ export default function useWrapCallback(
     const wethContract = useWETHContract()
     const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
     // we can always parse the amount typed as the input currency, since wrapping is 1:1
-    const inputAmount = useMemo(
-        () => tryParseAmount(typedValue, inputCurrency),
-        [inputCurrency, typedValue]
-    )
+    const inputAmount = useMemo(() => tryParseAmount(typedValue, inputCurrency), [inputCurrency, typedValue])
     const addTransaction = useTransactionAdder()
 
     return useMemo(() => {
-        if (!wethContract || !chainId || !inputCurrency || !outputCurrency)
-            return NOT_APPLICABLE
+        if (!wethContract || !chainId || !inputCurrency || !outputCurrency) return NOT_APPLICABLE
 
-        const sufficientBalance =
-            inputAmount && balance && !balance.lessThan(inputAmount)
+        const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
 
-        if (
-            inputCurrency === Currency.getNativeCurrency(chainId) &&
-            currencyEquals(WETH[chainId], outputCurrency)
-        ) {
+        if (inputCurrency === Currency.getNativeCurrency(chainId) && currencyEquals(WETH[chainId], outputCurrency)) {
             return {
                 wrapType: WrapType.WRAP,
                 execute:
@@ -60,18 +52,12 @@ export default function useWrapCallback(
                         ? async () => {
                               try {
                                   const txReceipt = await wethContract.deposit({
-                                      value: `0x${inputAmount.raw.toString(
-                                          16
-                                      )}`,
+                                      value: `0x${inputAmount.raw.toString(16)}`,
                                   })
                                   addTransaction(txReceipt, {
-                                      summary: `Wrap ${inputAmount.toSignificant(
-                                          6
-                                      )} ${Currency.getNativeCurrencySymbol(
+                                      summary: `Wrap ${inputAmount.toSignificant(6)} ${Currency.getNativeCurrencySymbol(
                                           chainId
-                                      )} to W${Currency.getNativeCurrencySymbol(
-                                          chainId
-                                      )}`,
+                                      )} to W${Currency.getNativeCurrencySymbol(chainId)}`,
                                   })
                               } catch (error) {
                                   console.error('Could not deposit', error)
@@ -80,11 +66,7 @@ export default function useWrapCallback(
                         : undefined,
                 inputError: sufficientBalance
                     ? undefined
-                    : i18n._(
-                          t`Insufficient ${Currency.getNativeCurrencySymbol(
-                              chainId
-                          )} balance`
-                      ),
+                    : i18n._(t`Insufficient ${Currency.getNativeCurrencySymbol(chainId)} balance`),
             }
         } else if (
             currencyEquals(WETH[chainId], inputCurrency) &&
@@ -96,37 +78,23 @@ export default function useWrapCallback(
                     sufficientBalance && inputAmount
                         ? async () => {
                               try {
-                                  const txReceipt = await wethContract.withdraw(
-                                      `0x${inputAmount.raw.toString(16)}`
-                                  )
+                                  const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
                                   addTransaction(txReceipt, {
                                       summary: t`Unwrap ${inputAmount.toSignificant(
                                           6
                                       )} W${Currency.getNativeCurrencySymbol(
                                           chainId
-                                      )} to ${Currency.getNativeCurrencySymbol(
-                                          chainId
-                                      )}`,
+                                      )} to ${Currency.getNativeCurrencySymbol(chainId)}`,
                                   })
                               } catch (error) {
                                   console.error('Could not withdraw', error)
                               }
                           }
                         : undefined,
-                inputError: sufficientBalance
-                    ? undefined
-                    : i18n._(t`Insufficient WETH balance`),
+                inputError: sufficientBalance ? undefined : i18n._(t`Insufficient WETH balance`),
             }
         } else {
             return NOT_APPLICABLE
         }
-    }, [
-        wethContract,
-        chainId,
-        inputCurrency,
-        outputCurrency,
-        inputAmount,
-        balance,
-        addTransaction,
-    ])
+    }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction])
 }
