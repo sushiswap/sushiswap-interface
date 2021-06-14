@@ -67,7 +67,7 @@ msgstr "APR"
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "APR - dobânda anuală efectivă (incl. Comisioane)"
 
-#: src/features/farm/FarmList.tsx:56
+#: src/features/farm/FarmList.tsx:42
 msgid "APY"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr "Adăugați"
 msgid "Add Liquidity"
 msgstr "Adăugați lichidități"
 
-#: src/components/Header/index.tsx:237
+#: src/components/Header/index.tsx:186
 msgid "Add SUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -100,7 +100,7 @@ msgstr "Adăugați garanții reale pentru a împrumuta active"
 #~ msgid "Add liquidity"
 #~ msgstr "Adăugați lichidități"
 
-#: src/components/Header/index.tsx:155
+#: src/components/Header/index.tsx:129
 msgid "Add xSUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -112,7 +112,7 @@ msgid "Amount of Tokens"
 msgstr "Număr de token-uri"
 
 #: src/components/Footer/index.tsx:24
-#: src/components/Header/index.tsx:500
+#: src/components/Header/index.tsx:397
 msgid "Analytics"
 msgstr "Analize"
 
@@ -168,7 +168,7 @@ msgstr "Sold"
 msgid "Bento Balance: {0}"
 msgstr "Sold Bento: {0}"
 
-#: src/components/Header/index.tsx:460
+#: src/components/Header/index.tsx:360
 #: src/pages/balances.tsx:69
 #: src/pages/balances.tsx:83
 #: src/pages/borrow/[pair].tsx:105
@@ -196,7 +196,7 @@ msgstr "Strategiile BentoBox pot crea randament pentru token-urile dvs. pentru g
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 msgstr "Strategiile BentoBox pot crea randament pentru lichiditatea dvs., când aceasta nu este împrumutată. Acest token încă nu are o strategie în BentoBox."
 
-#: src/components/Header/index.tsx:115
+#: src/components/Header/index.tsx:93
 #: src/pages/borrow/[pair].tsx:245
 msgid "Borrow"
 msgstr "Împrumutați"
@@ -458,8 +458,8 @@ msgstr ""
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "Modul Expert dezactivează solicitarea de confirmare a tranzacției și permite tranzacții cu derapaj ridicat care duc adesea la rate neperformante și la pierderea de fonduri."
 
-#: src/components/Header/index.tsx:85
-#: src/components/Header/index.tsx:431
+#: src/components/Header/index.tsx:71
+#: src/components/Header/index.tsx:343
 msgid "Farm"
 msgstr ""
 
@@ -521,7 +521,7 @@ msgstr "Portofel hardware"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Recoltați {0} SUSHI"
 
-#: src/features/farm/FarmListItem.tsx:407
+#: src/features/farm/FarmListItem.tsx:336
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -622,7 +622,7 @@ msgstr "Destinatar nevalid"
 msgid "Join the community on Discord."
 msgstr "Alăturați-vă comunității pe Discord."
 
-#: src/components/Header/index.tsx:444
+#: src/components/Header/index.tsx:350
 msgid "Kashi Lending"
 msgstr "Împrumut Kashi"
 
@@ -633,7 +633,7 @@ msgstr "Împrumut Kashi"
 msgid "Learn more about wallets"
 msgstr ""
 
-#: src/components/Header/index.tsx:103
+#: src/components/Header/index.tsx:85
 msgid "Lend"
 msgstr "Dați cu împrumut"
 
@@ -708,8 +708,8 @@ msgstr "Se încarcă..."
 msgid "Loan to Value"
 msgstr "Împrumut în limita valorii de piață"
 
-#: src/features/farm/FarmListItem.tsx:204
-#: src/features/farm/FarmListItem.tsx:286
+#: src/features/farm/FarmListItem.tsx:174
+#: src/features/farm/FarmListItem.tsx:245
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -762,7 +762,7 @@ msgstr "Maximizați randamentul investind SUSHI în xSUSHI"
 msgid "Maximum sold"
 msgstr "Maxim vândut"
 
-#: src/components/Header/index.tsx:72
+#: src/components/Header/index.tsx:62
 #: src/pages/migrate.tsx:328
 msgid "Migrate"
 msgstr "Migrați"
@@ -857,7 +857,7 @@ msgstr "Hopa! O apărut o eroare necunoscută. Vă rugăm să reîmprospătați 
 msgid "Open Source"
 msgstr "Open Source"
 
-#: src/components/Header/index.tsx:361
+#: src/components/Header/index.tsx:277
 msgid "Open main menu"
 msgstr "Deschideți meniul principal"
 
@@ -891,8 +891,8 @@ msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Vă rugăm să tastați cuvântul „confirmare” pentru a activa modul expert."
 
 #: src/components/ExchangeHeader.tsx:54
-#: src/components/Header/index.tsx:64
-#: src/components/Header/index.tsx:417
+#: src/components/Header/index.tsx:54
+#: src/components/Header/index.tsx:332
 msgid "Pool"
 msgstr "Fond comun"
 
@@ -980,7 +980,7 @@ msgstr "Rambursare"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restricționează swap-urile doar la perechile directe."
 
-#: src/features/farm/FarmList.tsx:32
+#: src/features/farm/FarmList.tsx:28
 msgid "Rewards"
 msgstr ""
 
@@ -1052,9 +1052,9 @@ msgstr "Ceva nu a funcționat corect în timpul semnării aprobării. Acest lucr
 #~ msgid "Stack Yields with SAAVE"
 #~ msgstr "Cumulați randamentele cu SAAVE"
 
-#: src/components/Header/index.tsx:136
-#: src/components/Header/index.tsx:470
-#: src/features/farm/FarmListItem.tsx:257
+#: src/components/Header/index.tsx:113
+#: src/components/Header/index.tsx:370
+#: src/features/farm/FarmListItem.tsx:214
 msgid "Stake"
 msgstr "Investiți"
 
@@ -1123,8 +1123,8 @@ msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:39
-#: src/components/Header/index.tsx:56
-#: src/components/Header/index.tsx:409
+#: src/components/Header/index.tsx:46
+#: src/components/Header/index.tsx:324
 #: src/pages/swap/[[...tokens]].tsx:619
 #: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
@@ -1156,7 +1156,7 @@ msgstr "Swap la:"
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr ""
 
-#: src/features/farm/FarmList.tsx:40
+#: src/features/farm/FarmList.tsx:33
 msgid "TVL"
 msgstr "TVL"
 
@@ -1254,7 +1254,7 @@ msgstr "Activați modul Expert"
 #~ msgid "Unknown error"
 #~ msgstr "Eroare necunoscută"
 
-#: src/features/farm/FarmListItem.tsx:318
+#: src/features/farm/FarmListItem.tsx:275
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1282,7 +1282,7 @@ msgstr "Reluați {0} W{1} la {2}"
 #~ msgid "V2 Rewarder"
 #~ msgstr "Programul de recompensare V2"
 
-#: src/components/Header/index.tsx:480
+#: src/components/Header/index.tsx:380
 msgid "Vesting"
 msgstr "Intrare în drepturi"
 
@@ -1321,7 +1321,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Portofel"
 
-#: src/features/farm/FarmListItem.tsx:177
+#: src/features/farm/FarmListItem.tsx:150
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Soldul portofelului"
@@ -1399,7 +1399,7 @@ msgstr "Pozițiile lichidităților dvs."
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Token-urile dvs. pentru fondul comun"
 
-#: src/features/farm/FarmListItem.tsx:264
+#: src/features/farm/FarmListItem.tsx:221
 msgid "Your Staked"
 msgstr "Sumele dvs. investite"
 

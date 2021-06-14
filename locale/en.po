@@ -66,7 +66,7 @@ msgstr "APR"
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "APR (incl. Fees)"
 
-#: src/features/farm/FarmList.tsx:56
+#: src/features/farm/FarmList.tsx:42
 msgid "APY"
 msgstr "APY"
 
@@ -85,7 +85,7 @@ msgstr "Add"
 msgid "Add Liquidity"
 msgstr "Add Liquidity"
 
-#: src/components/Header/index.tsx:237
+#: src/components/Header/index.tsx:186
 msgid "Add SUSHI to your MetaMask wallet"
 msgstr "Add SUSHI to your MetaMask wallet"
 
@@ -99,7 +99,7 @@ msgstr "Add collateral in order to borrow assets"
 #~ msgid "Add liquidity"
 #~ msgstr "Add liquidity"
 
-#: src/components/Header/index.tsx:155
+#: src/components/Header/index.tsx:129
 msgid "Add xSUSHI to your MetaMask wallet"
 msgstr "Add xSUSHI to your MetaMask wallet"
 
@@ -111,7 +111,7 @@ msgid "Amount of Tokens"
 msgstr "Amount of Tokens"
 
 #: src/components/Footer/index.tsx:24
-#: src/components/Header/index.tsx:500
+#: src/components/Header/index.tsx:397
 msgid "Analytics"
 msgstr "Analytics"
 
@@ -167,7 +167,7 @@ msgstr "Balance"
 msgid "Bento Balance: {0}"
 msgstr "Bento Balance: {0}"
 
-#: src/components/Header/index.tsx:460
+#: src/components/Header/index.tsx:360
 #: src/pages/balances.tsx:69
 #: src/pages/balances.tsx:83
 #: src/pages/borrow/[pair].tsx:105
@@ -195,7 +195,7 @@ msgstr "BentoBox strategies can create yield for your collateral tokens. This to
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 msgstr "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 
-#: src/components/Header/index.tsx:115
+#: src/components/Header/index.tsx:93
 #: src/pages/borrow/[pair].tsx:245
 msgid "Borrow"
 msgstr "Borrow"
@@ -457,8 +457,8 @@ msgstr ""
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 
-#: src/components/Header/index.tsx:85
-#: src/components/Header/index.tsx:431
+#: src/components/Header/index.tsx:71
+#: src/components/Header/index.tsx:343
 msgid "Farm"
 msgstr "Farm"
 
@@ -519,7 +519,7 @@ msgstr "Hardware Wallet"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Harvest {0} SUSHI"
 
-#: src/features/farm/FarmListItem.tsx:407
+#: src/features/farm/FarmListItem.tsx:336
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -622,7 +622,7 @@ msgstr "Invalid recipient"
 msgid "Join the community on Discord."
 msgstr "Join the community on Discord."
 
-#: src/components/Header/index.tsx:444
+#: src/components/Header/index.tsx:350
 msgid "Kashi Lending"
 msgstr "Kashi Lending"
 
@@ -633,7 +633,7 @@ msgstr "Kashi Lending"
 msgid "Learn more about wallets"
 msgstr "Learn more about wallets"
 
-#: src/components/Header/index.tsx:103
+#: src/components/Header/index.tsx:85
 msgid "Lend"
 msgstr "Lend"
 
@@ -708,8 +708,8 @@ msgstr "Loading..."
 msgid "Loan to Value"
 msgstr "Loan to Value"
 
-#: src/features/farm/FarmListItem.tsx:204
-#: src/features/farm/FarmListItem.tsx:286
+#: src/features/farm/FarmListItem.tsx:174
+#: src/features/farm/FarmListItem.tsx:245
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -762,7 +762,7 @@ msgstr "Maximize yield by staking SUSHI for xSUSHI"
 msgid "Maximum sold"
 msgstr "Maximum sold"
 
-#: src/components/Header/index.tsx:72
+#: src/components/Header/index.tsx:62
 #: src/pages/migrate.tsx:328
 msgid "Migrate"
 msgstr "Migrate"
@@ -857,7 +857,7 @@ msgstr "Oops! An unknown error occurred. Please refresh the page, or visit from 
 msgid "Open Source"
 msgstr "Open Source"
 
-#: src/components/Header/index.tsx:361
+#: src/components/Header/index.tsx:277
 msgid "Open main menu"
 msgstr "Open main menu"
 
@@ -891,8 +891,8 @@ msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Please type the word \"confirm\" to enable expert mode."
 
 #: src/components/ExchangeHeader.tsx:54
-#: src/components/Header/index.tsx:64
-#: src/components/Header/index.tsx:417
+#: src/components/Header/index.tsx:54
+#: src/components/Header/index.tsx:332
 msgid "Pool"
 msgstr "Pool"
 
@@ -980,7 +980,7 @@ msgstr "Repay"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restricts swaps to direct pairs only."
 
-#: src/features/farm/FarmList.tsx:32
+#: src/features/farm/FarmList.tsx:28
 msgid "Rewards"
 msgstr "Rewards"
 
@@ -1052,9 +1052,9 @@ msgstr "Something went wrong during signing of the approval. This is expected fo
 #~ msgid "Stack Yields with SAAVE"
 #~ msgstr "Stack Yields with SAAVE"
 
-#: src/components/Header/index.tsx:136
-#: src/components/Header/index.tsx:470
-#: src/features/farm/FarmListItem.tsx:257
+#: src/components/Header/index.tsx:113
+#: src/components/Header/index.tsx:370
+#: src/features/farm/FarmListItem.tsx:214
 msgid "Stake"
 msgstr "Stake"
 
@@ -1123,8 +1123,8 @@ msgid "SushiSwap"
 msgstr "SushiSwap"
 
 #: src/components/ExchangeHeader.tsx:39
-#: src/components/Header/index.tsx:56
-#: src/components/Header/index.tsx:409
+#: src/components/Header/index.tsx:46
+#: src/components/Header/index.tsx:324
 #: src/pages/swap/[[...tokens]].tsx:619
 #: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
@@ -1156,7 +1156,7 @@ msgstr "Swap To:"
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr ""
 
-#: src/features/farm/FarmList.tsx:40
+#: src/features/farm/FarmList.tsx:33
 msgid "TVL"
 msgstr "TVL"
 
@@ -1254,7 +1254,7 @@ msgstr "Turn On Expert Mode"
 #~ msgid "Unknown error"
 #~ msgstr "Unknown error"
 
-#: src/features/farm/FarmListItem.tsx:318
+#: src/features/farm/FarmListItem.tsx:275
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1282,7 +1282,7 @@ msgstr "Unwrap {0} W{1} to {2}"
 #~ msgid "V2 Rewarder"
 #~ msgstr "V2 Rewarder"
 
-#: src/components/Header/index.tsx:480
+#: src/components/Header/index.tsx:380
 msgid "Vesting"
 msgstr "Vesting"
 
@@ -1321,7 +1321,7 @@ msgstr "Waiting for Confirmation"
 msgid "Wallet"
 msgstr "Wallet"
 
-#: src/features/farm/FarmListItem.tsx:177
+#: src/features/farm/FarmListItem.tsx:150
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Wallet Balance"
@@ -1399,7 +1399,7 @@ msgstr "Your Liquidity Positions"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Your Pool Tokens"
 
-#: src/features/farm/FarmListItem.tsx:264
+#: src/features/farm/FarmListItem.tsx:221
 msgid "Your Staked"
 msgstr "Your Staked"
 

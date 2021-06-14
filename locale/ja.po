@@ -67,7 +67,7 @@ msgstr "APR"
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "APR (手数料込み)"
 
-#: src/features/farm/FarmList.tsx:56
+#: src/features/farm/FarmList.tsx:42
 msgid "APY"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr "追加"
 msgid "Add Liquidity"
 msgstr "流動性を追加"
 
-#: src/components/Header/index.tsx:237
+#: src/components/Header/index.tsx:186
 msgid "Add SUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -100,7 +100,7 @@ msgstr "資産を借り入れるために担保を追加"
 #~ msgid "Add liquidity"
 #~ msgstr "流動性を追加"
 
-#: src/components/Header/index.tsx:155
+#: src/components/Header/index.tsx:129
 msgid "Add xSUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -112,7 +112,7 @@ msgid "Amount of Tokens"
 msgstr "トークンの量"
 
 #: src/components/Footer/index.tsx:24
-#: src/components/Header/index.tsx:500
+#: src/components/Header/index.tsx:397
 msgid "Analytics"
 msgstr "分析"
 
@@ -168,7 +168,7 @@ msgstr "残高"
 msgid "Bento Balance: {0}"
 msgstr "Bentoの残高：{0}"
 
-#: src/components/Header/index.tsx:460
+#: src/components/Header/index.tsx:360
 #: src/pages/balances.tsx:69
 #: src/pages/balances.tsx:83
 #: src/pages/borrow/[pair].tsx:105
@@ -196,7 +196,7 @@ msgstr "BentoBox戦略は、担保トークンの利回りを生み出すこと�
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 msgstr "BentoBox戦略は、流動性が貸し出されていない間に利回りを生み出すことができます。このトークンにはまだBentoBox戦略がありません。"
 
-#: src/components/Header/index.tsx:115
+#: src/components/Header/index.tsx:93
 #: src/pages/borrow/[pair].tsx:245
 msgid "Borrow"
 msgstr "借入れる"
@@ -458,8 +458,8 @@ msgstr ""
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "エキスパートモードでは、取引確認のプロンプトをオフにすると、結果的にレートが悪くなり、資金を失ってしまうことがよくある高スリッページの取引が可能になります。"
 
-#: src/components/Header/index.tsx:85
-#: src/components/Header/index.tsx:431
+#: src/components/Header/index.tsx:71
+#: src/components/Header/index.tsx:343
 msgid "Farm"
 msgstr ""
 
@@ -521,7 +521,7 @@ msgstr "ハードウェアウォレット"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "{0}SUSHIを収穫"
 
-#: src/features/farm/FarmListItem.tsx:407
+#: src/features/farm/FarmListItem.tsx:336
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -622,7 +622,7 @@ msgstr "受領者が無効です"
 msgid "Join the community on Discord."
 msgstr "Discordのコミュニティに参加しましょう。"
 
-#: src/components/Header/index.tsx:444
+#: src/components/Header/index.tsx:350
 msgid "Kashi Lending"
 msgstr "Kashiを貸し出しています"
 
@@ -633,7 +633,7 @@ msgstr "Kashiを貸し出しています"
 msgid "Learn more about wallets"
 msgstr ""
 
-#: src/components/Header/index.tsx:103
+#: src/components/Header/index.tsx:85
 msgid "Lend"
 msgstr "貸し出す"
 
@@ -708,8 +708,8 @@ msgstr "読み込んでいます..."
 msgid "Loan to Value"
 msgstr "融資比率"
 
-#: src/features/farm/FarmListItem.tsx:204
-#: src/features/farm/FarmListItem.tsx:286
+#: src/features/farm/FarmListItem.tsx:174
+#: src/features/farm/FarmListItem.tsx:245
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -762,7 +762,7 @@ msgstr "xSUSHIにSUSHIを出資して利回りを最大化"
 msgid "Maximum sold"
 msgstr "最大の売却"
 
-#: src/components/Header/index.tsx:72
+#: src/components/Header/index.tsx:62
 #: src/pages/migrate.tsx:328
 msgid "Migrate"
 msgstr "移行"
@@ -857,7 +857,7 @@ msgstr "おっと！不明なエラーが発生しました。ページを更新
 msgid "Open Source"
 msgstr "オープンソース"
 
-#: src/components/Header/index.tsx:361
+#: src/components/Header/index.tsx:277
 msgid "Open main menu"
 msgstr "メインメニューを開く"
 
@@ -891,8 +891,8 @@ msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "エキスパートモードを有効にするには、「確認」という単語を入力してください。"
 
 #: src/components/ExchangeHeader.tsx:54
-#: src/components/Header/index.tsx:64
-#: src/components/Header/index.tsx:417
+#: src/components/Header/index.tsx:54
+#: src/components/Header/index.tsx:332
 msgid "Pool"
 msgstr "プール"
 
@@ -980,7 +980,7 @@ msgstr "払い戻す"
 msgid "Restricts swaps to direct pairs only."
 msgstr "スワップを直接ペアのみに制限します。"
 
-#: src/features/farm/FarmList.tsx:32
+#: src/features/farm/FarmList.tsx:28
 msgid "Rewards"
 msgstr ""
 
@@ -1052,9 +1052,9 @@ msgstr "承認の署名中に問題が発生しました。これは、Trezorや
 #~ msgid "Stack Yields with SAAVE"
 #~ msgstr "SAAVEで利回りを積み上げる"
 
-#: src/components/Header/index.tsx:136
-#: src/components/Header/index.tsx:470
-#: src/features/farm/FarmListItem.tsx:257
+#: src/components/Header/index.tsx:113
+#: src/components/Header/index.tsx:370
+#: src/features/farm/FarmListItem.tsx:214
 msgid "Stake"
 msgstr "出資"
 
@@ -1123,8 +1123,8 @@ msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:39
-#: src/components/Header/index.tsx:56
-#: src/components/Header/index.tsx:409
+#: src/components/Header/index.tsx:46
+#: src/components/Header/index.tsx:324
 #: src/pages/swap/[[...tokens]].tsx:619
 #: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
@@ -1156,7 +1156,7 @@ msgstr "スワップ先："
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr ""
 
-#: src/features/farm/FarmList.tsx:40
+#: src/features/farm/FarmList.tsx:33
 msgid "TVL"
 msgstr "TVL"
 
@@ -1254,7 +1254,7 @@ msgstr "エキスパートモードをオンにする"
 #~ msgid "Unknown error"
 #~ msgstr "不明なエラー"
 
-#: src/features/farm/FarmListItem.tsx:318
+#: src/features/farm/FarmListItem.tsx:275
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1282,7 +1282,7 @@ msgstr "{0}W{1}を{2}にアンラップ"
 #~ msgid "V2 Rewarder"
 #~ msgstr "V2リワーダー"
 
-#: src/components/Header/index.tsx:480
+#: src/components/Header/index.tsx:380
 msgid "Vesting"
 msgstr "権利を確定しています"
 
@@ -1321,7 +1321,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "ウォレット"
 
-#: src/features/farm/FarmListItem.tsx:177
+#: src/features/farm/FarmListItem.tsx:150
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "ウォレット残高"
@@ -1399,7 +1399,7 @@ msgstr "あなたの流動性ポジション"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "あなたのプールトークン"
 
-#: src/features/farm/FarmListItem.tsx:264
+#: src/features/farm/FarmListItem.tsx:221
 msgid "Your Staked"
 msgstr "あなたの出資"
 

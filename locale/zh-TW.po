@@ -66,7 +66,7 @@ msgstr "APR"
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "APR(含費用)"
 
-#: src/features/farm/FarmList.tsx:56
+#: src/features/farm/FarmList.tsx:42
 msgid "APY"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr "添加"
 msgid "Add Liquidity"
 msgstr "添加流動性"
 
-#: src/components/Header/index.tsx:237
+#: src/components/Header/index.tsx:186
 msgid "Add SUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr "添加抵押品以借出資產"
 #~ msgid "Add liquidity"
 #~ msgstr "添加流動性"
 
-#: src/components/Header/index.tsx:155
+#: src/components/Header/index.tsx:129
 msgid "Add xSUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -111,7 +111,7 @@ msgid "Amount of Tokens"
 msgstr "代幣數量"
 
 #: src/components/Footer/index.tsx:24
-#: src/components/Header/index.tsx:500
+#: src/components/Header/index.tsx:397
 msgid "Analytics"
 msgstr "分析界面"
 
@@ -167,7 +167,7 @@ msgstr "餘額"
 msgid "Bento Balance: {0}"
 msgstr "Bento余额： {0}"
 
-#: src/components/Header/index.tsx:460
+#: src/components/Header/index.tsx:360
 #: src/pages/balances.tsx:69
 #: src/pages/balances.tsx:83
 #: src/pages/borrow/[pair].tsx:105
@@ -195,7 +195,7 @@ msgstr "BentoBox策略可以為您的抵押代幣創造收益。這個代幣暫�
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 msgstr "BentoBox策略可以在未借出資金時為您的流動資金創造收益。該代币在BentoBox中尚無策略。"
 
-#: src/components/Header/index.tsx:115
+#: src/components/Header/index.tsx:93
 #: src/pages/borrow/[pair].tsx:245
 msgid "Borrow"
 msgstr "借"
@@ -450,8 +450,8 @@ msgstr "專家模式關閉確認交易彈出、允許高交易滑點經常會導
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "專家模式關閉確認交易彈出、允許高交易滑點經常會導致不好的價格和資金的丟失。"
 
-#: src/components/Header/index.tsx:85
-#: src/components/Header/index.tsx:431
+#: src/components/Header/index.tsx:71
+#: src/components/Header/index.tsx:343
 msgid "Farm"
 msgstr ""
 
@@ -505,7 +505,7 @@ msgstr "硬件錢包"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "收穫{0}SUSHI"
 
-#: src/features/farm/FarmListItem.tsx:407
+#: src/features/farm/FarmListItem.tsx:336
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -605,7 +605,7 @@ msgstr "无效收件人"
 msgid "Join the community on Discord."
 msgstr "加入Discord社區。"
 
-#: src/components/Header/index.tsx:444
+#: src/components/Header/index.tsx:350
 msgid "Kashi Lending"
 msgstr "Kashi借貸"
 
@@ -616,7 +616,7 @@ msgstr "Kashi借貸"
 msgid "Learn more about wallets"
 msgstr ""
 
-#: src/components/Header/index.tsx:103
+#: src/components/Header/index.tsx:85
 msgid "Lend"
 msgstr "借貸"
 
@@ -688,8 +688,8 @@ msgstr "載入中..."
 msgid "Loan to Value"
 msgstr "貸款價值比（LTV)"
 
-#: src/features/farm/FarmListItem.tsx:204
-#: src/features/farm/FarmListItem.tsx:286
+#: src/features/farm/FarmListItem.tsx:174
+#: src/features/farm/FarmListItem.tsx:245
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
@@ -742,7 +742,7 @@ msgstr "將SUSHI質押成xSUSHI最大化收益"
 msgid "Maximum sold"
 msgstr "最大可出售"
 
-#: src/components/Header/index.tsx:72
+#: src/components/Header/index.tsx:62
 #: src/pages/migrate.tsx:328
 msgid "Migrate"
 msgstr "遷移"
@@ -836,7 +836,7 @@ msgstr "糟糕！出現未知錯誤。請刷新頁面，或從其他瀏覽器或
 msgid "Open Source"
 msgstr "開源"
 
-#: src/components/Header/index.tsx:361
+#: src/components/Header/index.tsx:277
 msgid "Open main menu"
 msgstr "打開主菜單"
 
@@ -870,8 +870,8 @@ msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "請輸入單詞“ confirm”以啟用專家模式。"
 
 #: src/components/ExchangeHeader.tsx:54
-#: src/components/Header/index.tsx:64
-#: src/components/Header/index.tsx:417
+#: src/components/Header/index.tsx:54
+#: src/components/Header/index.tsx:332
 msgid "Pool"
 msgstr "資金池"
 
@@ -958,7 +958,7 @@ msgstr "還款"
 msgid "Restricts swaps to direct pairs only."
 msgstr "限制只交易直接交易對。"
 
-#: src/features/farm/FarmList.tsx:32
+#: src/features/farm/FarmList.tsx:28
 msgid "Rewards"
 msgstr ""
 
@@ -1030,9 +1030,9 @@ msgstr "在簽署批準時出現錯誤。可能是硬件錢包例如Trezor和Led
 #~ msgid "Stack Yields with SAAVE"
 #~ msgstr "使用SAAVE疊加收益"
 
-#: src/components/Header/index.tsx:136
-#: src/components/Header/index.tsx:470
-#: src/features/farm/FarmListItem.tsx:257
+#: src/components/Header/index.tsx:113
+#: src/components/Header/index.tsx:370
+#: src/features/farm/FarmListItem.tsx:214
 msgid "Stake"
 msgstr "質押"
 
@@ -1099,8 +1099,8 @@ msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:39
-#: src/components/Header/index.tsx:56
-#: src/components/Header/index.tsx:409
+#: src/components/Header/index.tsx:46
+#: src/components/Header/index.tsx:324
 #: src/pages/swap/[[...tokens]].tsx:619
 #: src/pages/swap/[[...tokens]].tsx:650
 msgid "Swap"
@@ -1131,7 +1131,7 @@ msgstr "交換至："
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr "即刻在Sushi上購買SAK3。點擊此處兌換。"
 
-#: src/features/farm/FarmList.tsx:40
+#: src/features/farm/FarmList.tsx:33
 msgid "TVL"
 msgstr "TVL"
 
@@ -1229,7 +1229,7 @@ msgstr "開啟專家模式"
 #~ msgid "Unknown error"
 #~ msgstr "未知錯誤"
 
-#: src/features/farm/FarmListItem.tsx:318
+#: src/features/farm/FarmListItem.tsx:275
 #: src/pages/stake.tsx:318
 #: src/pages/stake.tsx:327
 msgid "Unstake"
@@ -1257,7 +1257,7 @@ msgstr "解開{0}W{1}到{2}的包裝"
 #~ msgid "V2 Rewarder"
 #~ msgstr "V2獎勵器"
 
-#: src/components/Header/index.tsx:480
+#: src/components/Header/index.tsx:380
 msgid "Vesting"
 msgstr "鎖倉"
 
@@ -1296,7 +1296,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "錢包"
 
-#: src/features/farm/FarmListItem.tsx:177
+#: src/features/farm/FarmListItem.tsx:150
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "錢包余額"
@@ -1372,7 +1372,7 @@ msgstr "您的LP"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "您池子裏的代幣"
 
-#: src/features/farm/FarmListItem.tsx:264
+#: src/features/farm/FarmListItem.tsx:221
 msgid "Your Staked"
 msgstr "您在流動性池的占比"
 
