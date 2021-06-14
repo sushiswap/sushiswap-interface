@@ -17,7 +17,7 @@ import {
   computeTradePriceBreakdown,
   warningSeverity,
 } from "../functions/prices";
-import styled, { ThemeContext, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   useDerivedZapInfo,
   useZapActionHandlers,

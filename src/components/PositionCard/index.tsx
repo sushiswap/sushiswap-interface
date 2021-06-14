@@ -1,10 +1,8 @@
 import { AutoRow, RowBetween, RowFixed } from "../Row";
-import Card, { LightCard } from "../CardLegacy";
 import { ChevronDown, ChevronUp } from "react-feather";
 import { Fraction, JSBI, Pair, Percent, TokenAmount } from "@sushiswap/sdk";
 import React, { useState } from "react";
 import { currencyId, unwrappedToken } from "../../functions/currency";
-import { darken, transparentize } from "polished";
 
 import { AutoColumn } from "../Column";
 import { BIG_INT_ZERO } from "../../constants";
@@ -12,7 +10,6 @@ import Button from "../Button";
 import CurrencyLogo from "../CurrencyLogo";
 import Dots from "../Dots";
 import DoubleCurrencyLogo from "../DoubleLogo";
-import Link from "next/link";
 import { Text } from "rebass";
 import { shortenString } from "../../functions/format";
 import styled from "styled-components";
@@ -26,25 +23,6 @@ import { useTotalSupply } from "../../hooks/useTotalSupply";
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
-`;
-
-export const HoverCard = styled(Card)`
-  border: 1px solid transparent;
-  :hover {
-    border: 1px solid ${({ theme }) => darken(0.06, theme.bg2)};
-  }
-`;
-const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  border: none
-//   background: ${({ theme }) => transparentize(0.6, theme.bg1)};
-  /* background: ${({ theme, bgColor }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(
-      0.8,
-      bgColor
-    )} 0%, ${theme.bg3} 100%) `}; */
-  position: relative;
-  overflow: hidden;
 `;
 
 interface PositionCardProps {

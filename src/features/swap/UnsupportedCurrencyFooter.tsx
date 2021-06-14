@@ -1,5 +1,4 @@
 import { AutoRow, RowBetween } from "../../components/Row";
-import Card, { OutlineCard } from "../../components/CardLegacy";
 import { Currency, Token } from "@sushiswap/sdk";
 import React, { useState } from "react";
 
@@ -62,7 +61,7 @@ export default function UnsupportedCurrencyFooter({
   return (
     <DetailsFooter show={show}>
       <Modal isOpen={showDetails} onDismiss={() => setShowDetails(false)}>
-        <Card padding="2rem">
+        <div style={{ padding: "2rem" }}>
           <AutoColumn gap="lg">
             <RowBetween>
               <div>Unsupported Assets</div>
@@ -74,7 +73,10 @@ export default function UnsupportedCurrencyFooter({
                 token &&
                 unsupportedTokens &&
                 Object.keys(unsupportedTokens).includes(token.address) && (
-                  <OutlineCard key={token.address?.concat("not-supported")}>
+                  <div
+                    className="border border-dark-700"
+                    key={token.address?.concat("not-supported")}
+                  >
                     <AutoColumn gap="10px">
                       <AutoRow gap="5px" align="center">
                         <CurrencyLogo currency={token} size={"24px"} />
@@ -92,7 +94,7 @@ export default function UnsupportedCurrencyFooter({
                         </ExternalLink>
                       )}
                     </AutoColumn>
-                  </OutlineCard>
+                  </div>
                 )
               );
             })}
@@ -104,11 +106,11 @@ export default function UnsupportedCurrencyFooter({
               </div>
             </AutoColumn>
           </AutoColumn>
-        </Card>
+        </div>
       </Modal>
       <Button
         variant="empty"
-        padding={"0"}
+        style={{ padding: "0px" }}
         onClick={() => setShowDetails(true)}
       >
         <div>Read more about unsupported assets</div>

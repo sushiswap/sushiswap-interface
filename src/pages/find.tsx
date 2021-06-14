@@ -11,7 +11,6 @@ import { DefaultLayout } from "../layouts";
 import Dots from "../components/Dots";
 import { FindPoolTabs } from "../components/NavigationTabs";
 import Head from "next/head";
-import { LightCard } from "../components/CardLegacy";
 import Link from "next/link";
 import { MinimalPositionCard } from "../components/PositionCard";
 import { Plus } from "react-feather";
@@ -88,13 +87,11 @@ export default function PoolFinder() {
   );
 
   const prerequisiteMessage = (
-    <LightCard padding="45px 10px">
-      <Text textAlign="center">
-        {!account
-          ? i18n._(t`Connect to a wallet to find pools`)
-          : i18n._(t`Select a token to find your liquidity`)}
-      </Text>
-    </LightCard>
+    <div className="p-5 text-center rounded bg-dark-800">
+      {!account
+        ? i18n._(t`Connect to a wallet to find pools`)
+        : i18n._(t`Select a token to find your liquidity`)}
+    </div>
   );
 
   return (
@@ -105,7 +102,7 @@ export default function PoolFinder() {
       </Head>
       <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity">
         <FindPoolTabs />
-        <AutoColumn style={{ padding: "1rem" }} gap="md">
+        <div className="p-4 space-y-6">
           <Alert
             showIcon={false}
             message={
@@ -168,7 +165,7 @@ export default function PoolFinder() {
               hasPosition && pair ? (
                 <MinimalPositionCard pair={pair} border="1px solid #CED0D9" />
               ) : (
-                <LightCard padding="45px 10px">
+                <div className="p-5 rounded bg-dark-800">
                   <AutoColumn gap="sm" justify="center">
                     <Text textAlign="center">
                       {i18n._(t`You don’t have liquidity in this pool yet`)}
@@ -184,10 +181,10 @@ export default function PoolFinder() {
                       </a>
                     </Link>
                   </AutoColumn>
-                </LightCard>
+                </div>
               )
             ) : validPairNoLiquidity ? (
-              <LightCard padding="45px 10px">
+              <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">
                   <Text textAlign="center">{i18n._(t`No pool found`)}</Text>
                   <Link
@@ -199,29 +196,29 @@ export default function PoolFinder() {
                     <a className="text-center">{i18n._(t`Create pool`)}</a>
                   </Link>
                 </AutoColumn>
-              </LightCard>
+              </div>
             ) : pairState === PairState.INVALID ? (
-              <LightCard padding="45px 10px">
+              <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">
                   <Text textAlign="center" fontWeight={500}>
                     {i18n._(t`Invalid pair`)}
                   </Text>
                 </AutoColumn>
-              </LightCard>
+              </div>
             ) : pairState === PairState.LOADING ? (
-              <LightCard padding="45px 10px">
+              <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">
                   <Text textAlign="center">
                     {i18n._(t`Loading`)}
                     <Dots />
                   </Text>
                 </AutoColumn>
-              </LightCard>
+              </div>
             ) : null
           ) : (
             prerequisiteMessage
           )}
-        </AutoColumn>
+        </div>
       </div>
     </DefaultLayout>
   );

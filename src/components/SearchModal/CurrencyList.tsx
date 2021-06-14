@@ -22,7 +22,6 @@ import Column from "../Column";
 import CurrencyLogo from "../CurrencyLogo";
 import { FixedSizeList } from "react-window";
 import ImportRow from "./ImportRow";
-import { LightGreyCard } from "../CardLegacy";
 import Loader from "../Loader";
 import { MenuItem } from "./styleds";
 import { MouseoverTooltip } from "../Tooltip";
@@ -230,7 +229,7 @@ export default function CurrencyList({
       if (index === breakIndex || !data) {
         return (
           <FixedContentRow style={style}>
-            <LightGreyCard padding="8px 12px" borderRadius="8px">
+            <div className="rounded bg-dark-700">
               <RowBetween>
                 <RowFixed>
                   <TokenListLogoWrapper src="/tokenlist.svg" />
@@ -238,7 +237,7 @@ export default function CurrencyList({
                 </RowFixed>
                 <QuestionHelper text="Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists." />
               </RowBetween>
-            </LightGreyCard>
+            </div>
           </FixedContentRow>
         );
       }
