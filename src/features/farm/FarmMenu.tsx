@@ -7,7 +7,7 @@ import { useActiveWeb3React } from "../../hooks";
 const Menu = () => {
   const { chainId } = useActiveWeb3React();
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <NavLink
         href="/farm/portfolio"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"

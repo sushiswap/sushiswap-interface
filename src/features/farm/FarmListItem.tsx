@@ -71,48 +71,31 @@ const FarmListItem = ({ farm }) => {
   const { deposit, withdraw, harvest } = useMasterChef(farm.chef);
 
   return (
-    <div className="rounded bg-dark-800">
+    <div className="rounded bg-dark-900">
       <div
-        className="grid grid-cols-3 px-4 py-2 rounded rounded-b-none cursor-pointer select-none md:grid-cols-4 bg-dark-850"
+        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none text-primary text-body md:grid-cols-4"
         onClick={() => setExpand(!expand)}
       >
-        <div className="text-sm sm:text-base">
-          <div className="flex items-center space-x-2">
-            <div className="font-semibold">
+        <div className="flex items-center col-span-1 space-x-4">
+          <DoubleLogo currency0={token0} currency1={token1} size={42} />
+          <div>
+            <div className="font-bold">
               {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
             </div>
             {farm?.pair?.type === PairType.SWAP && (
-              <div className="text-gray-500">SLP</div>
+              <div className="text-caption text-secondary">SushiSwap Farm</div>
             )}
             {farm?.pair?.type === PairType.LENDING && (
-              <div className="text-gray-500">KM</div>
+              <div className="text-caption text-secondary">Kashi Farm</div>
             )}
           </div>
         </div>
-        <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
-          {farm?.rewards?.map((reward) => reward.token).join(" & ")}
-        </div>
-        <div className="text-sm text-right text-gray-500 sm:text-base">
-          {formatNumber(farm?.tvl, true)}
-        </div>
-        <div className="text-sm font-semibold text-right sm:text-base">
-          {farm?.roiPerYear > 100
-            ? "10000%+"
-            : formatPercent(farm?.roiPerYear * 100)}
-        </div>
-      </div>
-      <div
-        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none md:grid-cols-4"
-        onClick={() => setExpand(!expand)}
-      >
-        <div className="flex items-center col-span-1">
+        <div className="flex items-center md:col-span-1">
           <div>
-            <DoubleLogo
-              currency0={token0}
-              currency1={token1}
-              size={40}
-              margin={true}
-            />
+            <div className="font-bold">{formatNumber(farm.tvl, true)}</div>
+            <div className="text-caption text-secondary">
+              {formatNumber(farm.balance, false)} {farm.type} Market Staked
+            </div>
           </div>
         </div>
         <div className="flex-row items-center justify-start hidden ml-4 space-x-2 md:col-span-1 md:flex">
@@ -134,33 +117,22 @@ const FarmListItem = ({ farm }) => {
 
           <div className="flex flex-col pl-2 space-y-1">
             {farm?.rewards?.map((reward, i) => (
-              <div key={i} className="text-xs text-gray-500">
-                {formatNumber(reward.rewardPerDay)} {reward.token} / day
+              <div key={i} className="text-caption">
+                {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
               </div>
             ))}
           </div>
         </div>
         <div className="flex items-center justify-end md:col-span-1">
           <div>
-            {/* <div className="text-right">{formattedNum(farm.tvl, true)} </div> */}
-            <div className="text-sm font-semibold text-right text-gray-500 sm:text-sm">
-              {formatNumber(farm.balance, false)} {farm.type}
-            </div>
-            <div className="text-xs text-right text-gray-500">
-              Market Staked
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-end md:col-span-1">
-          <div>
-            <div className="text-base font-semibold text-right text-gray-500 sm:text-lg">
+            <div className="font-bold text-right text-body text-high-emphesis">
               {farm?.roiPerYear > 100
                 ? "10000%+"
                 : formatPercent(farm?.roiPerYear * 100)}
-              {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
             </div>
-            <div className="text-xs text-right text-gray-500">annualized</div>
-            {/* <div className="text-xs text-right text-gray-500">per month</div> */}
+            <div className="text-right text-caption text-secondary">
+              annualized
+            </div>
           </div>
         </div>
       </div>
