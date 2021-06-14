@@ -1,12 +1,15 @@
-import { ParsedQs, parse } from 'qs'
+import { ParsedQs, parse } from "qs";
 
-import { useMemo } from 'react'
+import { useMemo } from "react";
 
 export default function useParsedQueryString(): ParsedQs {
-    // const { search } = useLocation()
-    const search = location.search
-    return useMemo(
-        () => (search && search.length > 1 ? parse(search, { parseArrays: false, ignoreQueryPrefix: true }) : {}),
-        [search]
-    )
+  // const { search } = useLocation()
+  const search = location.search;
+  return useMemo(
+    () =>
+      search && search.length > 1
+        ? parse(search, { parseArrays: false, ignoreQueryPrefix: true })
+        : {},
+    [search]
+  );
 }

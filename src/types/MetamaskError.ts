@@ -1,4 +1,4 @@
 export default interface MetamaskError {
-    code?: any
-    message?: string
+  code?: unknown;
+  message?: string;
 }

@@ -1,5 +1,7 @@
-import { classNames } from '../functions/styling'
+import { classNames } from "../functions/styling";
 
-const Box = ({ children, className }) => <div className={classNames('p-4', className)}>{children}</div>
+const Box = ({ children, className }) => (
+  <div className={classNames("p-4", className)}>{children}</div>
+);
 
-export default Box
+export default Box;

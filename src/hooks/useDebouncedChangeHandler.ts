@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Easy way to debounce the handling of a rapidly changing value, e.g. a changing slider input
@@ -7,34 +7,34 @@ import { useCallback, useEffect, useRef, useState } from 'react'
  * @param debouncedMs how long we should wait for changes to be applied
  */
 export default function useDebouncedChangeHandler<T>(
-    value: T,
-    onChange: (newValue: T) => void,
-    debouncedMs = 100
+  value: T,
+  onChange: (newValue: T) => void,
+  debouncedMs = 100
 ): [T, (value: T) => void] {
-    const [inner, setInner] = useState<T>(() => value)
-    const timer = useRef<ReturnType<typeof setTimeout>>()
+  const [inner, setInner] = useState<T>(() => value);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
-    const onChangeInner = useCallback(
-        (newValue: T) => {
-            setInner(newValue)
-            if (timer.current) {
-                clearTimeout(timer.current)
-            }
-            timer.current = setTimeout(() => {
-                onChange(newValue)
-                timer.current = undefined
-            }, debouncedMs)
-        },
-        [debouncedMs, onChange]
-    )
+  const onChangeInner = useCallback(
+    (newValue: T) => {
+      setInner(newValue);
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+      timer.current = setTimeout(() => {
+        onChange(newValue);
+        timer.current = undefined;
+      }, debouncedMs);
+    },
+    [debouncedMs, onChange]
+  );
 
-    useEffect(() => {
-        if (timer.current) {
-            clearTimeout(timer.current)
-            timer.current = undefined
-        }
-        setInner(value)
-    }, [value])
+  useEffect(() => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = undefined;
+    }
+    setInner(value);
+  }, [value]);
 
-    return [inner, onChangeInner]
+  return [inner, onChangeInner];
 }

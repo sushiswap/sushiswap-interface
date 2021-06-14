@@ -1,58 +1,74 @@
 import {
-    useAverageBlockTime,
-    useBundle,
-    useMasterChefV1Farms,
-    useMasterChefV2Farms,
-    useMiniChefFarms,
-    useOneDayBlock,
-    usePairs,
-    useSushiPrice,
-} from '../services/graph'
+  useAverageBlockTime,
+  useBundle,
+  useMasterChefV1Farms,
+  useMasterChefV2Farms,
+  useMiniChefFarms,
+  useOneDayBlock,
+  usePairs,
+  useSushiPrice,
+} from "../services/graph";
+// import useFarms from '../features/farm/useFarms'
+import { useMasterChefContract, useMulticallContract } from "../hooks";
 
-import Head from 'next/head'
-import Layout from '../layouts/DefaultLayout'
-import useFarms from '../features/farm/useFarms'
-import { useMasterChefContract } from '../hooks'
+import Head from "next/head";
+import Layout from "../layouts/DefaultLayout";
+import { useEffect } from "react";
 
 // import useUserInfo from '../features/farm/useUserInfo'
 
 export default function Test() {
-    // const masterChefContract = useMasterChefContract()
-    // const res = useUserInfo(masterChefContract)
+  const masterChefContract = useMulticallContract();
+  useEffect(() => {
+    (async function () {
+      try {
+        console.log(
+          await masterChefContract.aggregate([
+            ["0x0769fd68dFb93167989C6f7254cd0D766Fb2841F", "0x081e3eda"],
+            // { "target": "0x0769fd68dFb93167989C6f7254cd0D766Fb2841F", "callData": "0x081e3eda"}
+          ])
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  });
 
-    // console.log({ res })
+  // const res = useUserInfo(masterChefContract)
 
-    const res1 = useOneDayBlock()
-    const res2 = useAverageBlockTime()
+  // console.log({ res })
 
-    const res3 = useMasterChefV1Farms()
-    const res4 = useMasterChefV2Farms()
-    const res5 = useMiniChefFarms()
+  // const res1 = useOneDayBlock()
+  // const res2 = useAverageBlockTime()
 
-    const res6 = usePairs()
+  // const res3 = useMasterChefV1Farms()
+  // const res4 = useMasterChefV2Farms()
+  // const res5 = useMiniChefFarms()
 
-    // console.log({ res1, res2, res3, res4, res5, res6 })
-    // const farms = useFarms()
-    // console.log({ farms })
+  // const res6 = usePairs()
 
-    // const {
-    //     data: { ethRate },
-    // } = useBundle()
+  // console.log({ res1, res2, res3, res4, res5, res6 })
+  // const farms = useFarms()
+  // console.log({ farms })
 
-    // const {
-    //     data: { bundles },
-    // } = useBundle()
+  // const {
+  //     data: { ethRate },
+  // } = useBundle()
 
-    // const res = useSushiPrice()
+  // const {
+  //     data: { bundles },
+  // } = useBundle()
 
-    // console.log({ res, res2 })
+  // const res = useSushiPrice()
 
-    return (
-        <Layout>
-            <Head>
-                <title>Test | Sushi</title>
-                <meta name="description" content="Test..." />
-            </Head>
-        </Layout>
-    )
+  // console.log({ res, res2 })
+
+  return (
+    <Layout>
+      <Head>
+        <title>Test | Sushi</title>
+        <meta name="description" content="Test..." />
+      </Head>
+    </Layout>
+  );
 }

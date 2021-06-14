@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
-    id: number
-}
+  id: number;
+};
 
-const pairs = [{ id: 1 }, { id: 2 }, { id: 3 }]
+const pairs = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
 export default (req: NextApiRequest, res: NextApiResponse<Data[]>) => {
-    res.status(200).json(pairs)
-}
+  res.status(200).json(pairs);
+};

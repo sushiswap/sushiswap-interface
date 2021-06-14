@@ -1,2 +1,2 @@
-export * from './token'
-export * from './mapping'
+export * from "./tokens";
+export * from "./mappings";
