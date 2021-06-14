@@ -340,26 +340,18 @@ export default function Farm(): JSX.Element {
                 "relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5",
             }}
           />
+
+          {/* <div className="flex items-center font-bold text-body text-high-emphesis whitespace-nowrap">
+            Ready to Stake{" "}
+            <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
+          </div>
+          <FarmList farms={filtered} term={term} /> */}
+
           <div className="flex items-center font-bold text-body text-high-emphesis whitespace-nowrap">
             Farms{" "}
             <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
           </div>
           <FarmList farms={filtered} term={term} />
-          {/* <Card
-            className="h-full bg-dark-900"
-            header={
-              <CardHeader className="flex flex-col items-center bg-dark-800">
-                <div className="w-full">
-                  <Search search={search} term={term} />
-                </div>
-                <div className="container block pt-6 lg:hidden">
-                  <Menu />
-                </div>
-              </CardHeader>
-            }
-          >
-            <FarmList farms={filtered} term={term} />
-          </Card> */}
         </div>
       </Container>
     </Layout>
