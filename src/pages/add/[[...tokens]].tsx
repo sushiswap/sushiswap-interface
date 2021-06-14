@@ -405,7 +405,10 @@ export default function Add() {
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
       </div>
-      <div className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity">
+      <div
+        className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity"
+        style={{ zIndex: 1 }}
+      >
         <Header
           input={currencies[Field.CURRENCY_A]}
           output={currencies[Field.CURRENCY_B]}

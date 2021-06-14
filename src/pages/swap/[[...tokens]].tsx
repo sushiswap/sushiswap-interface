@@ -448,7 +448,8 @@ export default function Swap() {
       />
       <div
         id="swap-page"
-        className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-swap"
+        className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-swap"
+        style={{ zIndex: 1 }}
       >
         <SwapHeader
           input={currencies[Field.INPUT]}
