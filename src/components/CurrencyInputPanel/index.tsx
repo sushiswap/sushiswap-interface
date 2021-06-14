@@ -309,18 +309,25 @@ export default function CurrencyInputPanel({
                         )}
                     </div>
                 </div>
-                <div className="flex flex-col bg-dark-700 rounded-b px-5 py-1">
-                    <div className="flex flex-row gap-2">
+                <div className="flex flex-col bg-dark-700 rounded-b px-5 py-1 justify-between">
+                    <div
+                        onClick={onMax}
+                        className="text-xs font-medium cursor-pointer"
+                    >
+                        {!hideBalance && !!currency && selectedCurrencyBalance
+                            ? (customBalanceText ?? 'Balance: ') +
+                              selectedCurrencyBalance?.toSignificant(6)
+                            : ' -'}
+                    </div>
+                    <div className="flex gap-2">
                         <div
                             onClick={onMax}
-                            className="text-xs font-medium cursor-pointer"
+                            className="text-xs font-medium cursor-pointer text-secondary"
                         >
-                            {!hideBalance &&
-                            !!currency &&
-                            selectedCurrencyBalance
-                                ? (customBalanceText ?? 'Balance: ') +
-                                  selectedCurrencyBalance?.toSignificant(6)
-                                : ' -'}
+                            {i18n._(t`Pay From:`)}
+                        </div>
+                        <div className="text-xs font-bold text-high-emphesis">
+                            Wallet
                         </div>
                     </div>
                 </div>
