@@ -73,7 +73,7 @@ const FarmListItem = ({ farm }) => {
   return (
     <div className="rounded bg-dark-900">
       <div
-        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none text-primary text-body md:grid-cols-4"
+        className="grid grid-cols-3 px-4 py-6 text-sm rounded cursor-pointer select-none text-primary text-body md:grid-cols-4"
         onClick={() => setExpand(!expand)}
       >
         <div className="flex items-center col-span-1 space-x-4">
