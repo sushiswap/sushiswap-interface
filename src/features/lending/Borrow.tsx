@@ -36,7 +36,7 @@ import { SUSHISWAP_MULTISWAPPER_ADDRESS } from "../../constants/kashi";
 import SmartNumberInput from "../../components/SmartNumberInput";
 import TradeReview from "../../components/TradeReview";
 import { TransactionReview } from "../../entities/TransactionReview";
-import TransactionReviewView from "../../components/TransactionReview";
+import TransactionReviewView from "./TransactionReview";
 import { WETH } from "@sushiswap/sdk";
 import WarningsView from "../../components/WarningsList";
 import { defaultAbiCoder } from "@ethersproject/abi";

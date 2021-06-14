@@ -10,7 +10,7 @@ import Button from "../../components/Button";
 import { KashiContext } from "../../context";
 import KashiCooker from "../../entities/KashiCooker";
 import SmartNumberInput from "../../components/SmartNumberInput";
-import TransactionReviewList from "../../components/TransactionReview";
+import TransactionReviewList from "./TransactionReview";
 import { WETH } from "@sushiswap/sdk";
 import { Warnings } from "../../entities/Warnings";
 import WarningsList from "../../components/WarningsList";

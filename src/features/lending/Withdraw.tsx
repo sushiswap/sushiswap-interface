@@ -11,7 +11,7 @@ import KashiCooker from "../../entities/KashiCooker";
 import { Input as NumericalInput } from "../../components/NumericalInput";
 import SmartNumberInput from "../../components/SmartNumberInput";
 import { TransactionReview } from "../../entities/TransactionReview";
-import TransactionReviewView from "../../components/TransactionReview";
+import TransactionReviewView from "./TransactionReview";
 import { Warnings } from "../../entities/Warnings";
 import WarningsView from "../../components/WarningsList";
 import { easyAmount } from "../../functions/kashi";
