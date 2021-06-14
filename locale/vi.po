@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Xóa gửi"
 
-#: src/pages/swap/[[...tokens]].tsx:495
+#: src/pages/swap/[[...tokens]].tsx:491
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "Hơn 300 triệu tổng giá trị bị khóa, TVL, trên Polygon! Đã bật điều hướng được tối ưu hóa"
 
@@ -77,7 +77,7 @@ msgstr ""
 #~ msgid "Accept"
 #~ msgstr "Chấp nhận"
 
-#: src/components/PositionCard/index.tsx:422
+#: src/components/PositionCard/index.tsx:419
 msgid "Add"
 msgstr "Thêm"
 
@@ -229,7 +229,7 @@ msgstr "Đã vay"
 #~ msgid "Bridge Assets"
 #~ msgstr "Tài sản bắc cầu"
 
-#: src/components/PositionCard/index.tsx:219
+#: src/components/PositionCard/index.tsx:214
 msgid ""
 "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\n"
 "of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\n"
@@ -292,7 +292,7 @@ msgstr "Tài sản thế chấp"
 msgid "Confirm Staking"
 msgstr "Xác nhận đặt cược"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:95
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:91
 msgid "Confirm Supply"
 msgstr "Xác nhận tổng cung"
 
@@ -309,13 +309,13 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:664
+#: src/pages/swap/[[...tokens]].tsx:660
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "Kết nối ví"
 
 #: src/components/WalletModal/index.tsx:338
-#: src/components/Web3Status/index.tsx:280
+#: src/components/Web3Status/index.tsx:282
 msgid "Connect to a wallet"
 msgstr "Kết nối với ví"
 
@@ -327,7 +327,7 @@ msgstr "Kết nối với ví"
 msgid "Connect to a wallet to view your liquidity"
 msgstr "Kết nối với ví để xem thanh khoản của bạn"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:94
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:90
 msgid "Create Pool & Supply"
 msgstr "Tạo mạng lưới & tổng cung"
 
@@ -403,7 +403,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Không thấy mạng lưới bạn đã tham gia?"
 
-#: src/pages/swap/[[...tokens]].tsx:498
+#: src/pages/swap/[[...tokens]].tsx:494
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Tận hưởng mức trượt thấp nhất trên Polygon"
 
@@ -428,8 +428,8 @@ msgstr "Nhập phần trăm trượt giá hợp lệ"
 msgid "Enter an amount"
 msgstr "Nhập số tiền"
 
-#: src/components/TransactionConfirmationModal/index.tsx:125
-#: src/components/Web3Status/index.tsx:269
+#: src/components/TransactionConfirmationModal/index.tsx:129
+#: src/components/Web3Status/index.tsx:271
 msgid "Error"
 msgstr "Lỗi"
 
@@ -687,7 +687,7 @@ msgstr ""
 msgid "Lists"
 msgstr "Danh sách"
 
-#: src/components/PositionCard/index.tsx:297
+#: src/components/PositionCard/index.tsx:292
 #: src/pages/migrate.tsx:266
 #: src/pages/pool.tsx:120
 #: src/pages/transactions.tsx:73
@@ -719,8 +719,8 @@ msgstr "TỐI ĐA"
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
-#: src/components/PositionCard/index.tsx:314
-#: src/components/PositionCard/index.tsx:319
+#: src/components/PositionCard/index.tsx:312
+#: src/components/PositionCard/index.tsx:317
 #: src/components/SearchModal/CurrencySearch.tsx:250
 #: src/components/SearchModal/Manage.tsx:55
 msgid "Manage"
@@ -873,7 +873,7 @@ msgstr "Oracle"
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Đầu ra sẽ được gửi đến <0>{0}</0>"
 
-#: src/components/Web3Status/index.tsx:250
+#: src/components/Web3Status/index.tsx:252
 msgid "Pending"
 msgstr "Đang chờ xử lý"
 
@@ -900,16 +900,16 @@ msgstr "Mạng lưới"
 #~ msgid "Pool Rewards"
 #~ msgstr "Phần thưởng mạng lưới"
 
-#: src/components/PositionCard/index.tsx:151
+#: src/components/PositionCard/index.tsx:146
 msgid "Pool Tokens"
 msgstr "Token mạng lưới"
 
-#: src/components/PositionCard/index.tsx:340
+#: src/components/PositionCard/index.tsx:338
 msgid "Pool tokens in rewards pool"
 msgstr "Token mạng lưới trong mạng lưới phần thưởng"
 
-#: src/components/PositionCard/index.tsx:350
-#: src/components/PositionCard/index.tsx:370
+#: src/components/PositionCard/index.tsx:348
+#: src/components/PositionCard/index.tsx:368
 msgid "Pooled {0}"
 msgstr "Đã gộp chung {0}"
 
@@ -941,18 +941,18 @@ msgstr "Tác động giá quá cao"
 #~ msgid "Price Updated"
 #~ msgstr "Đã cập nhật giá"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:31
 msgid "Rates"
 msgstr "Tỷ giá"
 
-#: src/pages/swap/[[...tokens]].tsx:507
+#: src/pages/swap/[[...tokens]].tsx:503
 msgid "Read Tutorial"
 msgstr "Đọc hướng dẫn"
 
 #~ msgid "Read the contract"
 #~ msgstr "Đọc hợp đồng"
 
-#: src/components/PositionCard/index.tsx:435
+#: src/components/PositionCard/index.tsx:432
 msgid "Remove"
 msgstr "Xóa"
 
@@ -960,7 +960,7 @@ msgstr "Xóa"
 msgid "Remove Liquidity"
 msgstr "Xóa thanh khoản"
 
-#: src/pages/swap/[[...tokens]].tsx:613
+#: src/pages/swap/[[...tokens]].tsx:609
 msgid "Remove send"
 msgstr "Xóa gửi"
 
@@ -1031,11 +1031,11 @@ msgstr ""
 #~ msgid "Share of Pool"
 #~ msgstr "Cổ phần trong mạng lưới"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:83
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:80
 msgid "Share of Pool:"
 msgstr "Cổ phần trong mạng lưới:"
 
-#: src/pages/swap/[[...tokens]].tsx:638
+#: src/pages/swap/[[...tokens]].tsx:634
 msgid "Slippage Tolerance"
 msgstr "Khả năng chịu trượt giá"
 
@@ -1116,7 +1116,7 @@ msgstr "Sushi là người ủng hộ Mã nguồn mở."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Tận dụng SUSHI của bạn"
 
-#: src/pages/swap/[[...tokens]].tsx:456
+#: src/pages/swap/[[...tokens]].tsx:452
 msgid "SushiSwap"
 msgstr ""
 
@@ -1134,19 +1134,19 @@ msgstr "Hoán đổi"
 msgid "Swap Anyway"
 msgstr "Vẫn hoán đổi"
 
-#: src/pages/swap/[[...tokens]].tsx:517
+#: src/pages/swap/[[...tokens]].tsx:513
 msgid "Swap From (est.):"
 msgstr "Hoán đổi từ (ước tính):"
 
-#: src/pages/swap/[[...tokens]].tsx:518
+#: src/pages/swap/[[...tokens]].tsx:514
 msgid "Swap From:"
 msgstr "Hoán đổi từ:"
 
-#: src/pages/swap/[[...tokens]].tsx:586
+#: src/pages/swap/[[...tokens]].tsx:582
 msgid "Swap To (est.):"
 msgstr "Hoán đổi sang (ước tính):"
 
-#: src/pages/swap/[[...tokens]].tsx:587
+#: src/pages/swap/[[...tokens]].tsx:583
 msgid "Swap To:"
 msgstr "Hoán đổi sang:"
 
@@ -1262,7 +1262,7 @@ msgstr "Hủy đặt cược"
 msgid "Unstaked"
 msgstr "Đã hủy đặt cược"
 
-#: src/pages/swap/[[...tokens]].tsx:660
+#: src/pages/swap/[[...tokens]].tsx:656
 msgid "Unsupported Asset"
 msgstr "Tài sản không được hỗ trợ"
 
@@ -1366,7 +1366,7 @@ msgstr "Tỷ suất lợi nhuận hàng năm của ngày hôm qua"
 #~ msgid "You are creating a pool"
 #~ msgstr "Bạn đang tạo một mạng lưới"
 
-#: src/components/Web3Status/index.tsx:268
+#: src/components/Web3Status/index.tsx:270
 msgid "You are on the wrong network"
 msgstr "Bạn đang kết nối sai mạng"
 
@@ -1419,12 +1419,12 @@ msgstr "Ví của bạn"
 #~ msgid "Your Yields"
 #~ msgstr "Lợi suất của bạn"
 
-#: src/components/PositionCard/index.tsx:158
-#: src/components/PositionCard/index.tsx:389
+#: src/components/PositionCard/index.tsx:153
+#: src/components/PositionCard/index.tsx:387
 msgid "Your pool share"
 msgstr "Cổ phần trên mạng lưới của bạn"
 
-#: src/components/PositionCard/index.tsx:331
+#: src/components/PositionCard/index.tsx:329
 msgid "Your total pool tokens"
 msgstr "Tổng số token trên mạng lưới của bạn"
 
@@ -1454,7 +1454,7 @@ msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu có một biến độn
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh khoản SushiSwap {2}/{3} ."
 
-#: src/pages/zap.tsx:279
+#: src/pages/zap.tsx:275
 msgid "Zap"
 msgstr ""
 
@@ -1494,8 +1494,8 @@ msgstr "phút"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI tự động thu phí (0,05% của tất cả các giao dịch hoán đổi, bao gồm cả các giao dịch hoán đổi đa chuỗi) tỷ lệ thuận với cổ phần của bạn trên SushiBar."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:58
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:71
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:55
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:68
 msgid "{0} Deposited"
 msgstr "{0} Đã ký quỹ"
 

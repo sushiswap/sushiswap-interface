@@ -32,7 +32,7 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Удалить отправку"
 
-#: src/pages/swap/[[...tokens]].tsx:495
+#: src/pages/swap/[[...tokens]].tsx:491
 msgid "300M+ TVL on Polygon! Optimized routing enabled"
 msgstr "300M+ TVL на Polygon! Включена оптимизированная маршрутизация"
 
@@ -77,7 +77,7 @@ msgstr ""
 #~ msgid "Accept"
 #~ msgstr "Принять"
 
-#: src/components/PositionCard/index.tsx:422
+#: src/components/PositionCard/index.tsx:419
 msgid "Add"
 msgstr "Добавить"
 
@@ -229,7 +229,7 @@ msgstr "Взято в кредит"
 #~ msgid "Bridge Assets"
 #~ msgstr "Активы Bridge"
 
-#: src/components/PositionCard/index.tsx:219
+#: src/components/PositionCard/index.tsx:214
 msgid ""
 "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\n"
 "of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\n"
@@ -294,7 +294,7 @@ msgstr "Обеспечение"
 msgid "Confirm Staking"
 msgstr "Подтвердите стейкинг"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:95
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:91
 msgid "Confirm Supply"
 msgstr "Подтвердите поставку"
 
@@ -311,13 +311,13 @@ msgid "Confirm this transaction in your wallet"
 msgstr ""
 
 #: src/pages/stake.tsx:408
-#: src/pages/swap/[[...tokens]].tsx:664
+#: src/pages/swap/[[...tokens]].tsx:660
 #: src/state/mint/hooks.ts:235
 msgid "Connect Wallet"
 msgstr "Подключите кошелек"
 
 #: src/components/WalletModal/index.tsx:338
-#: src/components/Web3Status/index.tsx:280
+#: src/components/Web3Status/index.tsx:282
 msgid "Connect to a wallet"
 msgstr "Подключиться к кошельку"
 
@@ -329,7 +329,7 @@ msgstr "Подключиться к кошельку"
 msgid "Connect to a wallet to view your liquidity"
 msgstr "Подключитесь к кошельку, чтобы посмотреть свою ликвидность"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:94
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:90
 msgid "Create Pool & Supply"
 msgstr "Создать пул и поставку"
 
@@ -405,7 +405,7 @@ msgstr ""
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Не видите пул, к которому вы присоединились?"
 
-#: src/pages/swap/[[...tokens]].tsx:498
+#: src/pages/swap/[[...tokens]].tsx:494
 msgid "Enjoy the lowest slippage on Polygon"
 msgstr "Наслаждайтесь самым низким проскальзыванием на Polygon"
 
@@ -430,8 +430,8 @@ msgstr "Введите допустимый процент проскальзы�
 msgid "Enter an amount"
 msgstr "Введите сумму"
 
-#: src/components/TransactionConfirmationModal/index.tsx:125
-#: src/components/Web3Status/index.tsx:269
+#: src/components/TransactionConfirmationModal/index.tsx:129
+#: src/components/Web3Status/index.tsx:271
 msgid "Error"
 msgstr "Ошибка"
 
@@ -689,7 +689,7 @@ msgstr ""
 msgid "Lists"
 msgstr "Списки"
 
-#: src/components/PositionCard/index.tsx:297
+#: src/components/PositionCard/index.tsx:292
 #: src/pages/migrate.tsx:266
 #: src/pages/pool.tsx:120
 #: src/pages/transactions.tsx:73
@@ -721,8 +721,8 @@ msgstr "МАКСИМУМ"
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
-#: src/components/PositionCard/index.tsx:314
-#: src/components/PositionCard/index.tsx:319
+#: src/components/PositionCard/index.tsx:312
+#: src/components/PositionCard/index.tsx:317
 #: src/components/SearchModal/CurrencySearch.tsx:250
 #: src/components/SearchModal/Manage.tsx:55
 msgid "Manage"
@@ -875,7 +875,7 @@ msgstr "Оракул"
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Вывод будет отправлен на <0>{0}</0>"
 
-#: src/components/Web3Status/index.tsx:250
+#: src/components/Web3Status/index.tsx:252
 msgid "Pending"
 msgstr "В ожидании"
 
@@ -902,16 +902,16 @@ msgstr "Пул"
 #~ msgid "Pool Rewards"
 #~ msgstr "Вознаграждения пула"
 
-#: src/components/PositionCard/index.tsx:151
+#: src/components/PositionCard/index.tsx:146
 msgid "Pool Tokens"
 msgstr "Токены пула"
 
-#: src/components/PositionCard/index.tsx:340
+#: src/components/PositionCard/index.tsx:338
 msgid "Pool tokens in rewards pool"
 msgstr "Токены пула в пуле вознаграждений"
 
-#: src/components/PositionCard/index.tsx:350
-#: src/components/PositionCard/index.tsx:370
+#: src/components/PositionCard/index.tsx:348
+#: src/components/PositionCard/index.tsx:368
 msgid "Pooled {0}"
 msgstr "Объединено {0}"
 
@@ -943,18 +943,18 @@ msgstr "Слишком сильное влияние на цену"
 #~ msgid "Price Updated"
 #~ msgstr "Цена обновлена"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:34
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:31
 msgid "Rates"
 msgstr "Тарифы"
 
-#: src/pages/swap/[[...tokens]].tsx:507
+#: src/pages/swap/[[...tokens]].tsx:503
 msgid "Read Tutorial"
 msgstr "Прочитать руководство"
 
 #~ msgid "Read the contract"
 #~ msgstr "Прочитать контракт"
 
-#: src/components/PositionCard/index.tsx:435
+#: src/components/PositionCard/index.tsx:432
 msgid "Remove"
 msgstr "Удалить"
 
@@ -962,7 +962,7 @@ msgstr "Удалить"
 msgid "Remove Liquidity"
 msgstr "Удалить ликвидность"
 
-#: src/pages/swap/[[...tokens]].tsx:613
+#: src/pages/swap/[[...tokens]].tsx:609
 msgid "Remove send"
 msgstr "Удалить отправку"
 
@@ -1033,11 +1033,11 @@ msgstr ""
 #~ msgid "Share of Pool"
 #~ msgstr "Доля пула"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:83
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:80
 msgid "Share of Pool:"
 msgstr "Доля пула:"
 
-#: src/pages/swap/[[...tokens]].tsx:638
+#: src/pages/swap/[[...tokens]].tsx:634
 msgid "Slippage Tolerance"
 msgstr "Допуск по проскальзыванию"
 
@@ -1118,7 +1118,7 @@ msgstr "Sushi поддерживает Open Source."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Заставьте SUSHI работать на вас"
 
-#: src/pages/swap/[[...tokens]].tsx:456
+#: src/pages/swap/[[...tokens]].tsx:452
 msgid "SushiSwap"
 msgstr ""
 
@@ -1136,19 +1136,19 @@ msgstr "Обменять"
 msgid "Swap Anyway"
 msgstr "Обменять в любом случае"
 
-#: src/pages/swap/[[...tokens]].tsx:517
+#: src/pages/swap/[[...tokens]].tsx:513
 msgid "Swap From (est.):"
 msgstr "Обменять с (прибл.):"
 
-#: src/pages/swap/[[...tokens]].tsx:518
+#: src/pages/swap/[[...tokens]].tsx:514
 msgid "Swap From:"
 msgstr "Обменять с:"
 
-#: src/pages/swap/[[...tokens]].tsx:586
+#: src/pages/swap/[[...tokens]].tsx:582
 msgid "Swap To (est.):"
 msgstr "Обменять на (прибл.):"
 
-#: src/pages/swap/[[...tokens]].tsx:587
+#: src/pages/swap/[[...tokens]].tsx:583
 msgid "Swap To:"
 msgstr "Обменять на:"
 
@@ -1264,7 +1264,7 @@ msgstr "Отменить ставку"
 msgid "Unstaked"
 msgstr "Без ставки"
 
-#: src/pages/swap/[[...tokens]].tsx:660
+#: src/pages/swap/[[...tokens]].tsx:656
 msgid "Unsupported Asset"
 msgstr "Неподдерживаемый актив"
 
@@ -1368,7 +1368,7 @@ msgstr "Вчерашняя годовая процентная ставка"
 #~ msgid "You are creating a pool"
 #~ msgstr "Вы создаете пул"
 
-#: src/components/Web3Status/index.tsx:268
+#: src/components/Web3Status/index.tsx:270
 msgid "You are on the wrong network"
 msgstr "Вы не в той сети"
 
@@ -1421,12 +1421,12 @@ msgstr "Ваш кошелек"
 #~ msgid "Your Yields"
 #~ msgstr "Ваша доходность"
 
-#: src/components/PositionCard/index.tsx:158
-#: src/components/PositionCard/index.tsx:389
+#: src/components/PositionCard/index.tsx:153
+#: src/components/PositionCard/index.tsx:387
 msgid "Your pool share"
 msgstr "Ваша доля в пуле"
 
-#: src/components/PositionCard/index.tsx:331
+#: src/components/PositionCard/index.tsx:329
 msgid "Your total pool tokens"
 msgstr "Всего ваших токенов пула"
 
@@ -1456,7 +1456,7 @@ msgstr "Ваша транзакция будет отменена, если пр
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "Ваша ликвидность {exchange} {0}/{1} станет ликвидностью SushiSwap {2}/{3}."
 
-#: src/pages/zap.tsx:279
+#: src/pages/zap.tsx:275
 msgid "Zap"
 msgstr ""
 
@@ -1496,8 +1496,8 @@ msgstr "минут"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI автоматически получает комиссию (0,05% от всех обменов, включая обмены между разными цепочками) пропорционально вашей доле в SushiBar."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:58
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:71
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:55
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:68
 msgid "{0} Deposited"
 msgstr "Внесено {0}"
 
