@@ -3,12 +3,12 @@
 import { ChainId, ROUTER_ADDRESS } from '@sushiswap/sdk'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 
-import { AddressZero } from '@ethersproject/constants'
-import { Contract } from '@ethersproject/contracts'
-import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { isAddress } from '../functions/validate'
 import { ARCHER_ROUTER_ADDRESS } from '../constants'
+import { AddressZero } from '@ethersproject/constants'
 import ArcherSwapRouterABI from '../constants/abis/ArcherSwapRouter.json'
+import { Contract } from '@ethersproject/contracts'
+import IUniswapV2Router02ABI from '../constants/abis/uniswap-v2-router-02.json'
+import { isAddress } from '../functions/validate'
 
 // account is not optional
 export function getSigner(library: Web3Provider, account: string): JsonRpcSigner {
