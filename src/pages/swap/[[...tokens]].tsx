@@ -21,7 +21,14 @@ import {
   ButtonPrimary,
 } from "../../components/ButtonLegacy";
 import Card, { DarkCard, GreyCard } from "../../components/CardLegacy";
-import { ChainId, CurrencyAmount, JSBI, Token, Trade } from "@sushiswap/sdk";
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Token,
+  Trade,
+} from "@sushiswap/sdk";
 import Column, { AutoColumn } from "../../components/Column";
 import React, {
   useCallback,
@@ -98,11 +105,16 @@ export default function Swap() {
   const toggleNetworkModal = useNetworkModalToggle();
 
   // TODO: Use?
-  // const router = useRouter()
-  // const tokens = router.query.tokens
-  // const [currencyIdA, currencyIdB] = tokens as string[]
-  // const currencyA = useCurrency(currencyIdA)
-  // const currencyB = useCurrency(currencyIdB)
+  const router = useRouter();
+  // const tokens = router.query.tokens;
+  // const [currencyIdA, currencyIdB] = (tokens as string[]) || [
+  //   Currency.getNativeCurrencySymbol(chainId),
+  //   undefined,
+  // ];
+  // const loadedInputCurrency = useCurrency(currencyIdA);
+  // const loadedOutputCurrency = useCurrency(currencyIdB);
+
+  console.log({ query: router.query });
 
   const loadedUrlParams = useDefaultsFromURLSearch();
 
@@ -111,6 +123,7 @@ export default function Swap() {
     useCurrency(loadedUrlParams?.inputCurrencyId),
     useCurrency(loadedUrlParams?.outputCurrencyId),
   ];
+
   const [dismissTokenWarning, setDismissTokenWarning] =
     useState<boolean>(false);
   const urlLoadedTokens: Token[] = useMemo(
@@ -173,19 +186,31 @@ export default function Swap() {
 
   const trade = showWrap ? undefined : v2Trade;
 
-  const parsedAmounts = showWrap
-    ? {
-        [Field.INPUT]: parsedAmount,
-        [Field.OUTPUT]: parsedAmount,
-      }
-    : {
-        [Field.INPUT]:
-          independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-        [Field.OUTPUT]:
-          independentField === Field.OUTPUT
-            ? parsedAmount
-            : trade?.outputAmount,
-      };
+  const parsedAmounts = useMemo(
+    () =>
+      showWrap
+        ? {
+            [Field.INPUT]: parsedAmount,
+            [Field.OUTPUT]: parsedAmount,
+          }
+        : {
+            [Field.INPUT]:
+              independentField === Field.INPUT
+                ? parsedAmount
+                : trade?.inputAmount,
+            [Field.OUTPUT]:
+              independentField === Field.OUTPUT
+                ? parsedAmount
+                : trade?.outputAmount,
+          },
+    [
+      independentField,
+      parsedAmount,
+      showWrap,
+      trade?.inputAmount,
+      trade?.outputAmount,
+    ]
+  );
 
   const {
     onSwitchTokens,

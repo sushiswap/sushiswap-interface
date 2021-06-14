@@ -562,7 +562,7 @@ export default function Remove() {
         router.push(`/remove/${currencyId(currency, chainId)}/${currencyIdB}`);
       }
     },
-    [currencyIdA, currencyIdB, router]
+    [chainId, currencyIdA, currencyIdB, router]
   );
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
@@ -572,7 +572,7 @@ export default function Remove() {
         router.push(`/remove/${currencyIdA}/${currencyId(currency, chainId)}`);
       }
     },
-    [currencyIdA, currencyIdB, router]
+    [chainId, currencyIdA, currencyIdB, router]
   );
 
   const handleDismissConfirmation = useCallback(() => {
