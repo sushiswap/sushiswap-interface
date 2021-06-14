@@ -27,7 +27,6 @@ module.exports = {
         "dark-pink-red": "#4e3034",
       },
       border: {
-        0.5: "0.5px",
         1: "1px",
         2: "2px",
         3: "3px",
