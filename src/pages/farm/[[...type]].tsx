@@ -332,7 +332,14 @@ export default function Farm(): JSX.Element {
           <Menu />
         </div>
         <div className="col-span-4 space-y-6 lg:col-span-3">
-          <Search search={search} term={term} />
+          <Search
+            search={search}
+            term={term}
+            inputProps={{
+              className:
+                "relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5",
+            }}
+          />
           <div className="flex items-center font-bold text-body text-high-emphesis whitespace-nowrap">
             Farms{" "}
             <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
