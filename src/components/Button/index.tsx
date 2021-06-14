@@ -2,7 +2,7 @@ import React from "react";
 import { classNames } from "../../functions";
 
 const SIZE = {
-  default: "px-4 py-3 text-base",
+  default: "px-4 py-2 text-base",
   small: "px-2 py-1 text-xs",
   large: "px-6 py-4 text-base",
 };
@@ -65,7 +65,7 @@ export type ButtonProps = {
 
 function Button({
   children,
-  className,
+  className = undefined,
   color = "default",
   size = "default",
   variant = "filled",
@@ -73,7 +73,12 @@ function Button({
 }: ButtonProps): JSX.Element {
   return (
     <button
-      className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 font-medium ${className}`}
+      className={classNames(
+        VARIANT[variant][color],
+        SIZE[size],
+        "rounded focus:outline-none focus:ring disabled:opacity-50 font-medium",
+        className
+      )}
       {...rest}
     >
       {children}
