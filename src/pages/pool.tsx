@@ -108,6 +108,27 @@ export default function Pool() {
             type="information"
           />
 
+          <div className="flex items-center justify-start p-4 mt-6 mb-6">
+            <div className="text-sm font-bold text-right cursor-pointer text-secondary hover:text-high-emphesis">
+              <Link href="/find">
+                <a id="import-pool-link">{i18n._(t`Import Pool`)}</a>
+              </Link>
+            </div>
+            {chainId &&
+              migrateFrom[chainId] &&
+              [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(
+                chainId
+              ) && (
+                <div className="text-sm font-bold text-right cursor-pointer text-secondary hover:text-high-emphesis">
+                  <Link href="/migrate">
+                    <a id="migrate-pool-link">
+                      {i18n._(t`Migrate ${migrateFrom[chainId]}`)}
+                    </a>
+                  </Link>
+                </div>
+              )}
+          </div>
+
           <div className="grid grid-flow-row gap-3">
             {!account ? (
               <Web3Connect size="large" />
@@ -117,13 +138,13 @@ export default function Pool() {
               </Empty>
             ) : allV2PairsWithLiquidity?.length > 0 ? (
               <>
-                <div className="flex items-center justify-center">
+                {/* <div className="flex items-center justify-center">
                   <ExternalLink
                     href={"https://analytics.sushi.com/user/" + account}
                   >
                     Account analytics and accrued fees <span> ↗</span>
                   </ExternalLink>
-                </div>
+                </div> */}
                 {allV2PairsWithLiquidity.map((v2Pair) => (
                   <FullPositionCard
                     key={v2Pair.liquidityToken.address}
@@ -137,6 +158,7 @@ export default function Pool() {
               </Empty>
             )}
           </div>
+
           {account && (
             <div className="grid grid-cols-2 gap-4 mt-4">
               <Button
@@ -165,35 +187,6 @@ export default function Pool() {
               </Button>
             </div>
           )}
-        </div>
-
-        <div className="flex items-center justify-between p-4 mt-6 mb-6">
-          <div className="flex flex-col space-y-1 text-sm font-bold">
-            <div>{i18n._(t`Don't see a pool you joined?`)}</div>
-            <Link href="/find">
-              <a
-                id="import-pool-link"
-                className="text-blue text-opacity-80 hover:text-opacity-100"
-              >
-                {i18n._(t`Import it.`)}
-              </a>
-            </Link>
-          </div>
-          {chainId &&
-            migrateFrom[chainId] &&
-            [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-              <div className="flex flex-col space-y-1 text-sm font-bold text-right">
-                <div>{i18n._(t`Have ${migrateFrom[chainId]} Liquidity?`)}</div>
-                <Link href="/migrate">
-                  <a
-                    id="migrate-pool-link"
-                    className="text-blue text-opacity-80 hover:text-opacity-100"
-                  >
-                    {i18n._(t`Migrate!`)}
-                  </a>
-                </Link>
-              </div>
-            )}
         </div>
       </Container>
     </Layout>
