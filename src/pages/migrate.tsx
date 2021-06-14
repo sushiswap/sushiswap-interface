@@ -399,11 +399,6 @@ export default function Migrate() {
       </div>
 
       <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
-        {/* <div className="flex items-center justify-between p-3">
-        <BackArrow to="/pool" />
-        <div>Select your wallet</div>
-        <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
-    </div> */}
         {!account ? (
           <Typography variant="body" className="p-4 text-center text-primary">
             {i18n._(t`Connect to a wallet to view your liquidity`)}
