@@ -35,7 +35,7 @@ export default function ExchangeHeader({
           </a>
         </NavLink>
         <NavLink
-          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-800"
+          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
           href={`/add${input ? `/${currencyId(input, chainId)}` : ""}${
             output ? `/${currencyId(output, chainId)}` : ""
           }`}
