@@ -121,7 +121,7 @@ export function ButtonError({
 }: {
   error?: boolean;
   disabled?: boolean;
-}) {
+} & ButtonProps) {
   if (error) {
     return <Button color="red" size="large" {...rest} />;
   } else {
