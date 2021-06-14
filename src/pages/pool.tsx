@@ -108,28 +108,32 @@ export default function Pool() {
             type="information"
           />
 
-          <div className="flex items-center justify-start p-4 mt-6 mb-6">
-            <div className="text-sm font-bold text-right cursor-pointer text-secondary hover:text-high-emphesis">
+          <div className="grid grid-flow-row gap-3">
+            <div className="flex items-center">
               <Link href="/find">
-                <a id="import-pool-link">{i18n._(t`Import Pool`)}</a>
+                <a
+                  id="import-pool-link"
+                  className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
+                >
+                  {i18n._(t`Import Pool Manually`)}
+                </a>
               </Link>
-            </div>
-            {chainId &&
-              migrateFrom[chainId] &&
-              [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(
-                chainId
-              ) && (
-                <div className="text-sm font-bold text-right cursor-pointer text-secondary hover:text-high-emphesis">
+              {chainId &&
+                migrateFrom[chainId] &&
+                [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(
+                  chainId
+                ) && (
                   <Link href="/migrate">
-                    <a id="migrate-pool-link">
-                      {i18n._(t`Migrate ${migrateFrom[chainId]}`)}
+                    <a
+                      id="migrate-pool-link"
+                      className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
+                    >
+                      {i18n._(t`Migrate From ${migrateFrom[chainId]}`)}
                     </a>
                   </Link>
-                </div>
-              )}
-          </div>
+                )}
+            </div>
 
-          <div className="grid grid-flow-row gap-3">
             {!account ? (
               <Web3Connect size="large" />
             ) : v2IsLoading ? (
@@ -153,40 +157,42 @@ export default function Pool() {
                 ))}
               </>
             ) : (
-              <Empty className="text-center">
-                {i18n._(t`No liquidity found`)}
+              <Empty className="flex space-y-2 text-center text-low-emphesis">
+                <div className="px-4 py-2">
+                  {i18n._(t`No liquidity found. `)}
+                </div>
               </Empty>
             )}
-          </div>
 
-          {account && (
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <Button
-                id="add-pool-button"
-                color="gradient"
-                size="large"
-                onClick={() =>
-                  router.push(
-                    `/add/${Currency.getNativeCurrencySymbol(chainId)}`
-                  )
-                }
-              >
-                {i18n._(t`Add Liquidity`)}
-              </Button>
-              <Button
-                id="create-pool-button"
-                color="gray"
-                size="large"
-                onClick={() =>
-                  router.push(
-                    `/create/${Currency.getNativeCurrencySymbol(chainId)}`
-                  )
-                }
-              >
-                {i18n._(t`Create a pair`)}
-              </Button>
-            </div>
-          )}
+            {account && (
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <Button
+                  id="add-pool-button"
+                  color="gradient"
+                  size="large"
+                  onClick={() =>
+                    router.push(
+                      `/add/${Currency.getNativeCurrencySymbol(chainId)}`
+                    )
+                  }
+                >
+                  {i18n._(t`Add Liquidity`)}
+                </Button>
+                <Button
+                  id="create-pool-button"
+                  color="gray"
+                  size="large"
+                  onClick={() =>
+                    router.push(
+                      `/create/${Currency.getNativeCurrencySymbol(chainId)}`
+                    )
+                  }
+                >
+                  {i18n._(t`Create a pair`)}
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </Container>
     </Layout>
