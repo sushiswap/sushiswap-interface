@@ -39,10 +39,11 @@ const StyledDialogContent = styled(
   &[data-reach-dialog-content] {
     display: flex;
     align-self: ${({ mobile }) => (mobile ? "flex-end" : "center")};
-    margin: 0 0 0 0;
+    margin: 0 0 6rem 0;
+    padding: 0;
     background-color: #000;
     box-shadow: 0 4px 8px 0 ${() => transparentize(0.95, "#000")};
-    padding: 0px;
+
     width: 100vw;
     border-radius: 10px;
     overflow-y: ${({ mobile }) => (mobile ? "scroll" : "hidden")};
