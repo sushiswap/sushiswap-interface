@@ -1,9 +1,10 @@
+import { ChainId, JSBI, TokenAmount } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefV2Contract } from '../../hooks'
 
-import { ChainId } from '@sushiswap/sdk'
 import { Contract } from '@ethersproject/contracts'
+import { SUSHI } from '../../constants'
 import { Zero } from '@ethersproject/constants'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useMemo } from 'react'
@@ -44,7 +45,7 @@ export function useChefContracts(chefs: Chef[]) {
     return chefs.map((chef) => contracts[chef])
 }
 
-export function useUserInfo(farm) {
+export function useUserInfo(farm, token) {
     const { account } = useActiveWeb3React()
 
     const contract = useChefContract(farm.chef)
@@ -58,14 +59,15 @@ export function useUserInfo(farm) {
 
     const result = useSingleCallResult(args ? contract : null, 'userInfo', args)?.result
 
-    return useMemo(
-        () => result?.[0]?.toFixed(farm?.pair?.type === PairType.LENDING ? farm.pair.token0.decimals : 18),
-        [result]
-    )
+    const value = result?.[0]
+
+    const amount = value ? JSBI.BigInt(value.toString()) : undefined
+
+    return amount ? new TokenAmount(token, amount) : undefined
 }
 
 export function usePendingSushi(farm) {
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
 
     const contract = useChefContract(farm.chef)
 
@@ -78,7 +80,11 @@ export function usePendingSushi(farm) {
 
     const result = useSingleCallResult(args ? contract : null, 'pendingSushi', args)?.result
 
-    return useMemo(() => result?.[0]?.toFixed(18), [result])
+    const value = result?.[0]
+
+    const amount = value ? JSBI.BigInt(value.toString()) : undefined
+
+    return amount ? new TokenAmount(SUSHI[chainId], amount) : undefined
 }
 
 export function usePendingToken(farm, contract) {
@@ -138,5 +144,3 @@ export function usePositions(contract?: Contract | null, rewarder?: Contract | n
         [pendingSushi, userInfo]
     )
 }
-
-export default usePositions

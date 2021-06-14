@@ -1,8 +1,7 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { ChainId, MASTERCHEF_ADDRESS, Token } from '@sushiswap/sdk'
+import { ChainId, MASTERCHEF_ADDRESS, Token, ZERO } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
 import React, { useState } from 'react'
-import { Trans, t } from '@lingui/macro'
 import { currencyId, formatNumber, formatPercent } from '../../functions'
 import { usePendingSushi, useUserInfo } from './hooks'
 
@@ -12,17 +11,15 @@ import DoubleLogo from '../../components/DoubleLogo'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Input as NumericalInput } from '../../components/NumericalInput'
-import Paper from '../../components/Paper'
 import { getAddress } from '@ethersproject/address'
-import { tryParseAmount } from '../../state/swap/hooks'
+import { t } from '@lingui/macro'
+import { tryParseAmount } from '../../functions/parse'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
 import useMasterChef from './useMasterChef'
-import { usePair } from '../../hooks/usePairs'
 import usePendingReward from './usePendingReward'
 import { useTokenBalance } from '../../state/wallet/hooks'
-// import useTokenBalance from '../../hooks/useTokenBalance'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 
 const FarmListItem = ({ farm }) => {
@@ -32,15 +29,26 @@ const FarmListItem = ({ farm }) => {
     const [pendingTx, setPendingTx] = useState(false)
     const [depositValue, setDepositValue] = useState('')
     const [withdrawValue, setWithdrawValue] = useState('')
+
     const addTransaction = useTransactionAdder()
     const token0 = useCurrency(farm.pair.token0.id)
     const token1 = useCurrency(farm.pair.token1.id)
 
-    const address = getAddress(farm.pair.id)
+    const liquidityToken = new Token(
+        chainId,
+        getAddress(farm.pair.id),
+        farm.pair.decimals,
+        farm.pair.symbol,
+        farm.pair.name
+    )
+
+    // User liquidity token balance
+    const balance = useTokenBalance(account, liquidityToken)
 
     // TODO: Replace these
-    const amount = useUserInfo(farm)
-    const pending = usePendingSushi(farm)
+    const amount = useUserInfo(farm, liquidityToken)
+    const pendingSushi = usePendingSushi(farm)
+
     const reward = usePendingReward(farm)
 
     const APPROVAL_ADDRESSES = {
@@ -49,41 +57,27 @@ const FarmListItem = ({ farm }) => {
         [Chef.MINICHEF]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
     }
 
-    const liquidityToken = new Token(chainId, address, 18, farm.pair.symbol, farm.pair.name)
+    const typedDepositValue = tryParseAmount(depositValue, liquidityToken)
+    const typedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
 
-    const balance = useTokenBalance(account, liquidityToken)
-
-    const [approvalState, approve] = useApproveCallback(
-        tryParseAmount(depositValue, liquidityToken),
-        APPROVAL_ADDRESSES[farm.chef]
-    )
+    const [approvalState, approve] = useApproveCallback(typedDepositValue, APPROVAL_ADDRESSES[farm.chef])
 
     const { deposit, withdraw, harvest } = useMasterChef(farm.chef)
 
-    const decimals = farm.pair.type === PairType.LENDING ? farm.pair.token0.decimals : 18
-
     return (
-        <div key={`${farm.chef}:${farm.id}`} className="rounded bg-dark-800">
+        <div key={`${farm.chef}_${farm.id}`} className="rounded bg-dark-800">
             <div
                 className="grid grid-cols-3 px-4 py-2 rounded rounded-b-none cursor-pointer select-none md:grid-cols-4 bg-dark-850"
                 onClick={() => setExpand(!expand)}
             >
                 <div className="text-sm sm:text-base">
-                    {farm?.pair?.type === PairType.LENDING && (
-                        <div className="flex items-center space-x-2 text-primary">
-                            <div className="text-gray-500">KM</div>
-                            <div className="font-semibold">{farm?.pair?.token0?.symbol}</div>
-                            <div className="text-gray-500">{farm?.pair?.token1?.symbol}</div>
+                    <div className="flex items-center space-x-2">
+                        <div className="font-semibold">
+                            {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
                         </div>
-                    )}
-                    {farm?.pair?.type === PairType.SWAP && (
-                        <div className="flex items-center space-x-2 text-primary">
-                            <div className="font-semibold">
-                                {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
-                            </div>
-                            <div className="text-gray-500">SLP</div>
-                        </div>
-                    )}
+                        {farm?.pair?.type === PairType.SWAP && <div className="text-gray-500">SLP</div>}
+                        {farm?.pair?.type === PairType.LENDING && <div className="text-gray-500">KM</div>}
+                    </div>
                 </div>
                 <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
                     {farm?.rewards?.map((reward) => reward.token).join(' & ')}
@@ -147,7 +141,6 @@ const FarmListItem = ({ farm }) => {
                     </div>
                 </div>
             </div>
-            {/* <pre>{JSON.stringify(farm, null, 2)}</pre> */}
             {expand && (
                 <>
                     <div className="flex flex-col py-6 space-y-4">
@@ -173,7 +166,9 @@ const FarmListItem = ({ farm }) => {
                                             color="blue"
                                             size="small"
                                             onClick={() => {
-                                                setDepositValue(balance.toFixed(decimals))
+                                                if (!balance.equalTo(ZERO)) {
+                                                    setDepositValue(balance.toFixed(liquidityToken.decimals))
+                                                }
                                             }}
                                             className="absolute border-0 right-4 focus:ring focus:ring-blue"
                                         >
@@ -194,16 +189,16 @@ const FarmListItem = ({ farm }) => {
                                     <Button
                                         color="blue"
                                         disabled={
-                                            pendingTx ||
-                                            !balance ||
-                                            Number(depositValue) === 0 ||
-                                            Number(depositValue) > Number(balance.toFixed(decimals))
+                                            pendingTx || !typedDepositValue || balance.lessThan(typedDepositValue)
                                         }
                                         onClick={async () => {
                                             setPendingTx(true)
                                             try {
                                                 // KMP decimals depend on asset, SLP is always 18
-                                                const tx = await deposit(farm.id, depositValue.toBigNumber(decimals))
+                                                const tx = await deposit(
+                                                    farm.id,
+                                                    depositValue.toBigNumber(liquidityToken?.decimals)
+                                                )
 
                                                 addTransaction(tx, {
                                                     summary: `Deposit ${farm.pair.name}`,
@@ -221,7 +216,8 @@ const FarmListItem = ({ farm }) => {
                             <div className="col-span-2 text-center md:col-span-1">
                                 {account && (
                                     <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                                        {i18n._(t`Your Staked`)}: {formatNumber(amount)} {farm.type}
+                                        {i18n._(t`Your Staked`)}: {formatNumber(amount?.toSignificant(6)) ?? 0}{' '}
+                                        {farm.type}
                                     </div>
                                 )}
                                 <div className="relative flex items-center w-full mb-4">
@@ -238,7 +234,9 @@ const FarmListItem = ({ farm }) => {
                                             color="pink"
                                             size="small"
                                             onClick={() => {
-                                                setWithdrawValue(amount)
+                                                if (!amount.equalTo(ZERO)) {
+                                                    setWithdrawValue(amount.toFixed(liquidityToken.decimals))
+                                                }
                                             }}
                                             className="absolute border-0 right-4 focus:ring focus:ring-pink"
                                         >
@@ -249,16 +247,15 @@ const FarmListItem = ({ farm }) => {
                                 <Button
                                     color="pink"
                                     className="border-0"
-                                    disabled={
-                                        pendingTx ||
-                                        Number(withdrawValue) === 0 ||
-                                        Number(withdrawValue) > Number(amount)
-                                    }
+                                    disabled={pendingTx || !typedWithdrawValue || amount.lessThan(typedWithdrawValue)}
                                     onClick={async () => {
                                         setPendingTx(true)
                                         try {
                                             // KMP decimals depend on asset, SLP is always 18
-                                            const tx = await withdraw(farm.id, withdrawValue.toBigNumber(decimals))
+                                            const tx = await withdraw(
+                                                farm.id,
+                                                withdrawValue.toBigNumber(liquidityToken?.decimals)
+                                            )
                                             addTransaction(tx, {
                                                 summary: `Withdraw ${farm.pair.name}`,
                                             })
@@ -313,7 +310,7 @@ const FarmListItem = ({ farm }) => {
                                 </>
                             )}
                         </div>
-                        {pending && Number(pending) > 0 && (
+                        {pendingSushi && pendingSushi.greaterThan(ZERO) && (
                             <div className="px-4 ">
                                 <Button
                                     color="gradient"
@@ -330,7 +327,7 @@ const FarmListItem = ({ farm }) => {
                                         setPendingTx(false)
                                     }}
                                 >
-                                    {i18n._(t`Harvest ${formatNumber(pending)} SUSHI
+                                    {i18n._(t`Harvest ${formatNumber(pendingSushi.toFixed(18))} SUSHI
                                         ${
                                             farm.rewards.length > 1
                                                 ? `& ${formatNumber(reward)} ${farm.rewards[1].token}`

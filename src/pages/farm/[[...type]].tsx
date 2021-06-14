@@ -38,12 +38,9 @@ import { useRouter } from 'next/router'
 
 export default function Farm(): JSX.Element {
     const { i18n } = useLingui()
-    // const [section, setSection] = useState<
-    //     'portfolio' | 'all' | 'kmp' | 'slp' | 'mcv2'
-    // >('all')
 
     const router = useRouter()
-    const section = router.query.filter?.[0] ?? 'all'
+    const type = router.query.type?.[0]
 
     const { data: averageBlockTime } = useAverageBlockTime()
 
@@ -218,6 +215,7 @@ export default function Farm(): JSX.Element {
             chef,
             pair: {
                 ...pair,
+                decimals: pair.type === PairType.LENDING ? Number(pair.asset.decimals) : 18,
                 type,
             },
             balance,
@@ -279,13 +277,12 @@ export default function Farm(): JSX.Element {
 
     const filterForSection = {
         portfolio: (farm) => positions?.find((position) => position.id === farm.id),
-        all: () => true,
         slp: (farm) => farm.pair.type === PairType.SWAP,
         km: (farm) => farm.pair.type === PairType.LENDING,
-        mcv2: (farm) => farm.chef === Chef.MASTERCHEF_V2,
+        dual: (farm) => farm.chef === Chef.MASTERCHEF_V2,
     }
 
-    const filtered = useMemo(() => result?.filter(filterForSection[section]), [section])
+    const filtered = type ? result?.filter(filterForSection[type]) : result
 
     return (
         <Layout>
