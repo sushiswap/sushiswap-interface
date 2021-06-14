@@ -14,7 +14,8 @@
     "unused": "next-unused",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
-    "prettier": "prettier --write 'src/**/*.{ts,tsx}'"
+    "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
+    "lint": "eslint --cache --fix 'src/**/*.{ts,tsx}'"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -82,6 +83,12 @@
     "wcag-contrast": "^3.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@ethersproject/abi": "^5.3.1",
+    "@ethersproject/bignumber": "^5.3.0",
+    "@ethersproject/contracts": "^5.3.0",
+    "@ethersproject/providers": "^5.3.1",
     "@fontsource/dm-sans": "^4.3.0",
     "@lingui/cli": "^3.9.0",
     "@lingui/loader": "^3.9.0",
@@ -96,9 +103,9 @@
     "babel-plugin-styled-components": "^1.12.0",
     "cookie-cutter": "^0.2.0",
     "eslint": "^7.28.0",
-    "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "fathom-client": "^3.0.0",
     "graphql-tag": "^2.12.4",
     "husky": "^6.0.0",
@@ -108,6 +115,7 @@
     "postcss": "^8.3.0",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.3.1",
+    "redux": "^4.1.0",
     "serve": "^11.3.2",
     "tailwindcss": "^2.1.4",
     "tailwindcss-border-gradient-radius": "^2.0.0",

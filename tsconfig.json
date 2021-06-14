@@ -7,13 +7,10 @@
       "esnext"
     ],
     "allowJs": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "module": "esnext",

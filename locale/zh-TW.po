@@ -118,7 +118,7 @@ msgstr "分析界面"
 #: src/components/KashiButton.tsx:65
 #: src/pages/balances.tsx:235
 #: src/pages/migrate.tsx:310
-#: src/pages/stake.tsx:414
+#: src/pages/stake.tsx:353
 msgid "Approve"
 msgstr "批准"
 
@@ -137,7 +137,7 @@ msgstr "已批準"
 
 #: src/pages/balances.tsx:233
 #: src/pages/migrate.tsx:306
-#: src/pages/stake.tsx:412
+#: src/pages/stake.tsx:351
 msgid "Approving"
 msgstr "批準中"
 
@@ -158,8 +158,8 @@ msgid "Back"
 msgstr ""
 
 #: src/pages/migrate.tsx:287
-#: src/pages/stake.tsx:383
-#: src/pages/stake.tsx:450
+#: src/pages/stake.tsx:330
+#: src/pages/stake.tsx:389
 msgid "Balance"
 msgstr "餘額"
 
@@ -284,7 +284,7 @@ msgstr "抵押品"
 #~ msgid "Confirm Adding Liquidity"
 #~ msgstr "確認添加流動性"
 
-#: src/pages/stake.tsx:438
+#: src/pages/stake.tsx:377
 msgid "Confirm Staking"
 msgstr "確認質押"
 
@@ -296,7 +296,7 @@ msgstr "確認供應"
 msgid "Confirm Swap"
 msgstr "確認交換"
 
-#: src/pages/stake.tsx:439
+#: src/pages/stake.tsx:378
 msgid "Confirm Withdrawal"
 msgstr "確認提取"
 
@@ -304,7 +304,7 @@ msgstr "確認提取"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/pages/stake.tsx:432
+#: src/pages/stake.tsx:371
 #: src/pages/swap/[[...tokens]].tsx:556
 #: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
@@ -407,11 +407,11 @@ msgstr "在Polygon上享受最低的滑點"
 msgid "Enter"
 msgstr "進入"
 
-#: src/pages/stake.tsx:434
+#: src/pages/stake.tsx:373
 msgid "Enter Amount"
 msgstr "輸入金額"
 
-#: src/state/swap/hooks.ts:185
+#: src/state/swap/hooks.ts:165
 msgid "Enter a recipient"
 msgstr "輸入收件人"
 
@@ -420,7 +420,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "輸入有效的滑點百分比"
 
 #: src/state/mint/hooks.ts:200
-#: src/state/swap/hooks.ts:176
+#: src/state/swap/hooks.ts:156
 msgid "Enter an amount"
 msgstr "輸入金額"
 
@@ -461,7 +461,7 @@ msgstr ""
 #~ msgid "Find Pool"
 #~ msgstr "查找池"
 
-#: src/pages/stake.tsx:212
+#: src/pages/stake.tsx:191
 msgid ""
 "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
 "proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
@@ -505,7 +505,7 @@ msgstr "硬件錢包"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "收穫{0}SUSHI"
 
-#: src/features/farm/FarmListItem.tsx:336
+#: src/features/farm/FarmListItem.tsx:330
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -566,11 +566,11 @@ msgid "Instruments"
 msgstr "工具"
 
 #: src/pages/migrate.tsx:279
-#: src/pages/stake.tsx:436
+#: src/pages/stake.tsx:375
 msgid "Insufficient Balance"
 msgstr "余額不足"
 
-#: src/hooks/useWrapCallback.ts:118
+#: src/hooks/useWrapCallback.ts:94
 msgid "Insufficient WETH balance"
 msgstr "WETH餘額不足"
 
@@ -578,10 +578,10 @@ msgstr "WETH餘額不足"
 msgid "Insufficient liquidity for this trade"
 msgstr "該交易的流動性不足"
 
-#: src/hooks/useWrapCallback.ts:84
+#: src/hooks/useWrapCallback.ts:69
 #: src/state/mint/hooks.ts:206
 #: src/state/mint/hooks.ts:210
-#: src/state/swap/hooks.ts:208
+#: src/state/swap/hooks.ts:188
 msgid "Insufficient {0} balance"
 msgstr "代幣{0}餘額不足"
 
@@ -593,7 +593,7 @@ msgstr "交互設置"
 msgid "Invalid pair"
 msgstr "無效的代幣對"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:172
 msgid "Invalid recipient"
 msgstr "无效收件人"
 
@@ -680,7 +680,7 @@ msgstr "載入中"
 msgid "Loading your {exchange} liquidity positions"
 msgstr "正在加載您的{exchange}您的流動性倉位"
 
-#: src/pages/stake.tsx:271
+#: src/pages/stake.tsx:247
 msgid "Loading..."
 msgstr "載入中..."
 
@@ -688,12 +688,12 @@ msgstr "載入中..."
 msgid "Loan to Value"
 msgstr "貸款價值比（LTV)"
 
-#: src/features/farm/FarmListItem.tsx:174
-#: src/features/farm/FarmListItem.tsx:245
+#: src/features/farm/FarmListItem.tsx:175
+#: src/features/farm/FarmListItem.tsx:243
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
-#: src/pages/stake.tsx:393
+#: src/pages/stake.tsx:337
 msgid "MAX"
 msgstr "最大數量"
 
@@ -733,7 +733,7 @@ msgstr ""
 msgid "Max"
 msgstr "最大數量"
 
-#: src/pages/stake.tsx:204
+#: src/pages/stake.tsx:184
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "將SUSHI質押成xSUSHI最大化收益"
 
@@ -997,7 +997,7 @@ msgstr "搜索名稱或粘貼地址"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:180
+#: src/state/swap/hooks.ts:160
 msgid "Select a token"
 msgstr "選擇代幣"
 
@@ -1032,12 +1032,12 @@ msgstr "在簽署批準時出現錯誤。可能是硬件錢包例如Trezor和Led
 
 #: src/components/Header/index.tsx:113
 #: src/components/Header/index.tsx:370
-#: src/features/farm/FarmListItem.tsx:214
+#: src/features/farm/FarmListItem.tsx:212
 msgid "Stake"
 msgstr "質押"
 
-#: src/pages/stake.tsx:301
-#: src/pages/stake.tsx:326
+#: src/pages/stake.tsx:267
+#: src/pages/stake.tsx:285
 msgid "Stake SUSHI"
 msgstr "質押SUSHI"
 
@@ -1065,7 +1065,7 @@ msgstr "質押SUSHI"
 #~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.Continuously compounding."
 #~ msgstr "質押SUSHI獲得xSUSHI，年化收益近5%。沒有無常損失、享受治理權、可持續複利。"
 
-#: src/pages/stake.tsx:248
+#: src/pages/stake.tsx:227
 msgid "Staking APR"
 msgstr "質押APR"
 
@@ -1229,13 +1229,13 @@ msgstr "開啟專家模式"
 #~ msgid "Unknown error"
 #~ msgstr "未知錯誤"
 
-#: src/features/farm/FarmListItem.tsx:275
-#: src/pages/stake.tsx:318
-#: src/pages/stake.tsx:327
+#: src/features/farm/FarmListItem.tsx:269
+#: src/pages/stake.tsx:278
+#: src/pages/stake.tsx:285
 msgid "Unstake"
 msgstr "解除抵押"
 
-#: src/pages/stake.tsx:478
+#: src/pages/stake.tsx:411
 msgid "Unstaked"
 msgstr "解除質押"
 
@@ -1247,7 +1247,7 @@ msgstr "不支持的資產"
 msgid "Unwrap"
 msgstr "解開"
 
-#: src/hooks/useWrapCallback.ts:103
+#: src/hooks/useWrapCallback.ts:83
 msgid "Unwrap {0} W{1} to {2}"
 msgstr "解開{0}W{1}到{2}的包裝"
 
@@ -1264,7 +1264,7 @@ msgstr "鎖倉"
 #~ msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
 #~ msgstr "鎖倉是社區在<0>SIMP3</0>中決定執行的。<1/><2/>請參考<3>論壇的討論</3>，以了解更多要點。<4/><5/>其他記錄和每周Merkle的更新可以在<6>Github</6>上找到。"
 
-#: src/pages/stake.tsx:262
+#: src/pages/stake.tsx:241
 msgid "View Stats"
 msgstr "查看數據"
 
@@ -1296,7 +1296,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "錢包"
 
-#: src/features/farm/FarmListItem.tsx:150
+#: src/features/farm/FarmListItem.tsx:151
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "錢包余額"
@@ -1322,7 +1322,7 @@ msgstr "包裹"
 msgid "Wrong Network"
 msgstr "錯誤的網絡"
 
-#: src/pages/stake.tsx:275
+#: src/pages/stake.tsx:250
 msgid "Yesterday's APR"
 msgstr "昨天的APR"
 
@@ -1372,11 +1372,11 @@ msgstr "您的LP"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "您池子裏的代幣"
 
-#: src/features/farm/FarmListItem.tsx:221
+#: src/features/farm/FarmListItem.tsx:219
 msgid "Your Staked"
 msgstr "您在流動性池的占比"
 
-#: src/pages/stake.tsx:528
+#: src/pages/stake.tsx:455
 msgid "Your SushiBar Stats"
 msgstr "您的SushiBar統計信息"
 

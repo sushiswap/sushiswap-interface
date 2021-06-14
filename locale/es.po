@@ -119,7 +119,7 @@ msgstr "Análisis"
 #: src/components/KashiButton.tsx:65
 #: src/pages/balances.tsx:235
 #: src/pages/migrate.tsx:310
-#: src/pages/stake.tsx:414
+#: src/pages/stake.tsx:353
 msgid "Approve"
 msgstr "Aprobar"
 
@@ -138,7 +138,7 @@ msgstr "Aprobado"
 
 #: src/pages/balances.tsx:233
 #: src/pages/migrate.tsx:306
-#: src/pages/stake.tsx:412
+#: src/pages/stake.tsx:351
 msgid "Approving"
 msgstr "Aprobando"
 
@@ -159,8 +159,8 @@ msgid "Back"
 msgstr ""
 
 #: src/pages/migrate.tsx:287
-#: src/pages/stake.tsx:383
-#: src/pages/stake.tsx:450
+#: src/pages/stake.tsx:330
+#: src/pages/stake.tsx:389
 msgid "Balance"
 msgstr "Saldo"
 
@@ -290,7 +290,7 @@ msgstr "Garantía"
 #~ msgid "Confirm Adding Liquidity"
 #~ msgstr "Confirmar adición de liquidez"
 
-#: src/pages/stake.tsx:438
+#: src/pages/stake.tsx:377
 msgid "Confirm Staking"
 msgstr "Confirmar apuesta"
 
@@ -302,7 +302,7 @@ msgstr "Confirmar suministro"
 msgid "Confirm Swap"
 msgstr "Confirmar intercambio"
 
-#: src/pages/stake.tsx:439
+#: src/pages/stake.tsx:378
 msgid "Confirm Withdrawal"
 msgstr "Confirmar retirada"
 
@@ -310,7 +310,7 @@ msgstr "Confirmar retirada"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/pages/stake.tsx:432
+#: src/pages/stake.tsx:371
 #: src/pages/swap/[[...tokens]].tsx:556
 #: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
@@ -413,11 +413,11 @@ msgstr "Disfrute del menor deslizamiento en Polygon"
 msgid "Enter"
 msgstr "Introducir"
 
-#: src/pages/stake.tsx:434
+#: src/pages/stake.tsx:373
 msgid "Enter Amount"
 msgstr "Introduzca la cantidad"
 
-#: src/state/swap/hooks.ts:185
+#: src/state/swap/hooks.ts:165
 msgid "Enter a recipient"
 msgstr "Introduzca un destinatario"
 
@@ -426,7 +426,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "Introduzca un porcentaje de deslizamiento válido"
 
 #: src/state/mint/hooks.ts:200
-#: src/state/swap/hooks.ts:176
+#: src/state/swap/hooks.ts:156
 msgid "Enter an amount"
 msgstr "Introduzca una cantidad"
 
@@ -469,7 +469,7 @@ msgstr ""
 #~ msgid "Find Pool"
 #~ msgstr "Buscar fondo"
 
-#: src/pages/stake.tsx:212
+#: src/pages/stake.tsx:191
 msgid ""
 "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
 "proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
@@ -521,7 +521,7 @@ msgstr "Cartera de hardware"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Cosecha {0} SUSHI"
 
-#: src/features/farm/FarmListItem.tsx:336
+#: src/features/farm/FarmListItem.tsx:330
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -583,11 +583,11 @@ msgid "Instruments"
 msgstr "Instrumentos"
 
 #: src/pages/migrate.tsx:279
-#: src/pages/stake.tsx:436
+#: src/pages/stake.tsx:375
 msgid "Insufficient Balance"
 msgstr "Saldo insuficiente"
 
-#: src/hooks/useWrapCallback.ts:118
+#: src/hooks/useWrapCallback.ts:94
 msgid "Insufficient WETH balance"
 msgstr "Saldo WETH insuficiente"
 
@@ -595,10 +595,10 @@ msgstr "Saldo WETH insuficiente"
 msgid "Insufficient liquidity for this trade"
 msgstr "Liquidez insuficiente para esta operación"
 
-#: src/hooks/useWrapCallback.ts:84
+#: src/hooks/useWrapCallback.ts:69
 #: src/state/mint/hooks.ts:206
 #: src/state/mint/hooks.ts:210
-#: src/state/swap/hooks.ts:208
+#: src/state/swap/hooks.ts:188
 msgid "Insufficient {0} balance"
 msgstr "Saldo {0} insuficiente"
 
@@ -610,7 +610,7 @@ msgstr "Configuración de la interfaz"
 msgid "Invalid pair"
 msgstr "Par inválido"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:172
 msgid "Invalid recipient"
 msgstr "Destinatario no válido"
 
@@ -700,7 +700,7 @@ msgstr "Cargando"
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Cargando sus posiciones de liquidez {exchange}"
 
-#: src/pages/stake.tsx:271
+#: src/pages/stake.tsx:247
 msgid "Loading..."
 msgstr "Cargando..."
 
@@ -708,12 +708,12 @@ msgstr "Cargando..."
 msgid "Loan to Value"
 msgstr "Préstamo a valor"
 
-#: src/features/farm/FarmListItem.tsx:174
-#: src/features/farm/FarmListItem.tsx:245
+#: src/features/farm/FarmListItem.tsx:175
+#: src/features/farm/FarmListItem.tsx:243
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
-#: src/pages/stake.tsx:393
+#: src/pages/stake.tsx:337
 msgid "MAX"
 msgstr "MAX"
 
@@ -753,7 +753,7 @@ msgstr ""
 msgid "Max"
 msgstr "Max"
 
-#: src/pages/stake.tsx:204
+#: src/pages/stake.tsx:184
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Maximice el rendimiento apostando SUSHI por xSUSHI"
 
@@ -1019,7 +1019,7 @@ msgstr "Buscar nombre o pegar dirección"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:180
+#: src/state/swap/hooks.ts:160
 msgid "Select a token"
 msgstr "Seleccione un token"
 
@@ -1054,12 +1054,12 @@ msgstr "Algo salió mal durante la firma de la aprobación. Esto es lo que suele
 
 #: src/components/Header/index.tsx:113
 #: src/components/Header/index.tsx:370
-#: src/features/farm/FarmListItem.tsx:214
+#: src/features/farm/FarmListItem.tsx:212
 msgid "Stake"
 msgstr "Apostar"
 
-#: src/pages/stake.tsx:301
-#: src/pages/stake.tsx:326
+#: src/pages/stake.tsx:267
+#: src/pages/stake.tsx:285
 msgid "Stake SUSHI"
 msgstr "Apueste su SUSHI"
 
@@ -1087,7 +1087,7 @@ msgstr "Apueste su SUSHI"
 #~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.Continuously compounding."
 #~ msgstr "Apueste su SUSHI en xSUSHI por ~ 5 % APY. Sin pérdida impermanente y sin perder de derechos de gobernanza. Continuamente capitalizando."
 
-#: src/pages/stake.tsx:248
+#: src/pages/stake.tsx:227
 msgid "Staking APR"
 msgstr "Apuesta APR"
 
@@ -1252,13 +1252,13 @@ msgstr "Activar el modo experto"
 #~ msgid "Unknown error"
 #~ msgstr "Error desconocido"
 
-#: src/features/farm/FarmListItem.tsx:275
-#: src/pages/stake.tsx:318
-#: src/pages/stake.tsx:327
+#: src/features/farm/FarmListItem.tsx:269
+#: src/pages/stake.tsx:278
+#: src/pages/stake.tsx:285
 msgid "Unstake"
 msgstr "Retirar apuesta"
 
-#: src/pages/stake.tsx:478
+#: src/pages/stake.tsx:411
 msgid "Unstaked"
 msgstr "Sin apostar"
 
@@ -1270,7 +1270,7 @@ msgstr "Activo no admitido"
 msgid "Unwrap"
 msgstr "Desenvolver"
 
-#: src/hooks/useWrapCallback.ts:103
+#: src/hooks/useWrapCallback.ts:83
 msgid "Unwrap {0} W{1} to {2}"
 msgstr "Desenvolver {0} W{1} a {2}"
 
@@ -1287,7 +1287,7 @@ msgstr "Conferir"
 #~ msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
 #~ msgstr "La adquisición de derechos se ejecuta dentro de las pautas seleccionadas por la comunidad en <0>SIMP3</0>.<1/><2/> Consulte el <3>foro de discusión</3> para deliberaciones sobre puntos adicionales.<4/><5/>Se pueden encontrar registros adicionales y actualizaciones semanales de merkle en <6>Github</6>"
 
-#: src/pages/stake.tsx:262
+#: src/pages/stake.tsx:241
 msgid "View Stats"
 msgstr "Ver estadísticas"
 
@@ -1319,7 +1319,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Cartera"
 
-#: src/features/farm/FarmListItem.tsx:150
+#: src/features/farm/FarmListItem.tsx:151
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Saldo de la cartera"
@@ -1345,7 +1345,7 @@ msgstr "Envolver"
 msgid "Wrong Network"
 msgstr "Red incorrecta"
 
-#: src/pages/stake.tsx:275
+#: src/pages/stake.tsx:250
 msgid "Yesterday's APR"
 msgstr "APR de ayer"
 
@@ -1397,11 +1397,11 @@ msgstr "Sus posiciones de liquidez"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Sus tokens en el fondo"
 
-#: src/features/farm/FarmListItem.tsx:221
+#: src/features/farm/FarmListItem.tsx:219
 msgid "Your Staked"
 msgstr "Su apuesta"
 
-#: src/pages/stake.tsx:528
+#: src/pages/stake.tsx:455
 msgid "Your SushiBar Stats"
 msgstr "Sus estadísticas de SushiBar"
 

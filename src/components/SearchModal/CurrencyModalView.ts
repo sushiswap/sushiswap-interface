@@ -1,8 +1,8 @@
 enum CurrencyModalView {
-    search,
-    manage,
-    importToken,
-    importList
+  search,
+  manage,
+  importToken,
+  importList,
 }
 
-export default CurrencyModalView
+export default CurrencyModalView;

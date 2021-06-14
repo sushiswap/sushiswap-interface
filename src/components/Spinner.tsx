@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from "styled-components";
 
 const rotate = keyframes`
   from {
@@ -7,15 +7,15 @@ const rotate = keyframes`
   to {
     transform: rotate(360deg);
   }
-`
+`;
 
 export const Spinner = styled.img`
-    animation: 2s ${rotate} linear infinite;
-    width: 16px;
-    height: 16px;
-`
+  animation: 2s ${rotate} linear infinite;
+  width: 16px;
+  height: 16px;
+`;
 
 export const CustomLightSpinner = styled(Spinner)<{ size: string }>`
-    height: ${({ size }) => size};
-    width: ${({ size }) => size};
-`
+  height: ${({ size }) => size};
+  width: ${({ size }) => size};
+`;

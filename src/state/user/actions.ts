@@ -1,64 +1,64 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createAction } from "@reduxjs/toolkit";
 
 export interface SerializedToken {
-    chainId: number
-    address: string
-    decimals: number
-    symbol?: string
-    name?: string
+  chainId: number;
+  address: string;
+  decimals: number;
+  symbol?: string;
+  name?: string;
 }
 
 export interface SerializedPair {
-    token0: SerializedToken
-    token1: SerializedToken
+  token0: SerializedToken;
+  token1: SerializedToken;
 }
 
 export const updateMatchesDarkMode = createAction<{ matchesDarkMode: boolean }>(
-    'user/updateMatchesDarkMode'
-)
+  "user/updateMatchesDarkMode"
+);
 export const updateUserDarkMode = createAction<{ userDarkMode: boolean }>(
-    'user/updateUserDarkMode'
-)
+  "user/updateUserDarkMode"
+);
 export const updateUserExpertMode = createAction<{ userExpertMode: boolean }>(
-    'user/updateUserExpertMode'
-)
+  "user/updateUserExpertMode"
+);
 export const updateUserSingleHopOnly = createAction<{
-    userSingleHopOnly: boolean
-}>('user/updateUserSingleHopOnly')
+  userSingleHopOnly: boolean;
+}>("user/updateUserSingleHopOnly");
 export const updateUserSlippageTolerance = createAction<{
-    userSlippageTolerance: number
-}>('user/updateUserSlippageTolerance')
+  userSlippageTolerance: number;
+}>("user/updateUserSlippageTolerance");
 export const updateUserDeadline = createAction<{ userDeadline: number }>(
-    'user/updateUserDeadline'
-)
+  "user/updateUserDeadline"
+);
 export const addSerializedToken = createAction<{
-    serializedToken: SerializedToken
-}>('user/addSerializedToken')
+  serializedToken: SerializedToken;
+}>("user/addSerializedToken");
 export const removeSerializedToken = createAction<{
-    chainId: number
-    address: string
-}>('user/removeSerializedToken')
+  chainId: number;
+  address: string;
+}>("user/removeSerializedToken");
 export const addSerializedPair = createAction<{
-    serializedPair: SerializedPair
-}>('user/addSerializedPair')
+  serializedPair: SerializedPair;
+}>("user/addSerializedPair");
 export const removeSerializedPair = createAction<{
-    chainId: number
-    tokenAAddress: string
-    tokenBAddress: string
-}>('user/removeSerializedPair')
-export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
+  chainId: number;
+  tokenAAddress: string;
+  tokenBAddress: string;
+}>("user/removeSerializedPair");
+export const toggleURLWarning = createAction<void>("app/toggleURLWarning");
 export const updateUserArcherUseRelay = createAction<{
-    userArcherUseRelay: boolean
-}>('user/updateUserArcherUseRelay')
+  userArcherUseRelay: boolean;
+}>("user/updateUserArcherUseRelay");
 export const updateUserArcherGasPrice = createAction<{
-    userArcherGasPrice: string
-}>('user/updateUserArcherGasPrice')
+  userArcherGasPrice: string;
+}>("user/updateUserArcherGasPrice");
 export const updateUserArcherETHTip = createAction<{
-    userArcherETHTip: string
-}>('user/updateUserArcherETHTip')
+  userArcherETHTip: string;
+}>("user/updateUserArcherETHTip");
 export const updateUserArcherGasEstimate = createAction<{
-    userArcherGasEstimate: string
-}>('user/updateUserArcherGasEstimate')
+  userArcherGasEstimate: string;
+}>("user/updateUserArcherGasEstimate");
 export const updateUserArcherTipManualOverride = createAction<{
-    userArcherTipManualOverride: boolean
-}>('user/updateUserArcherTipManualOverride')
+  userArcherTipManualOverride: boolean;
+}>("user/updateUserArcherTipManualOverride");

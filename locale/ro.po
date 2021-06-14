@@ -119,7 +119,7 @@ msgstr "Analize"
 #: src/components/KashiButton.tsx:65
 #: src/pages/balances.tsx:235
 #: src/pages/migrate.tsx:310
-#: src/pages/stake.tsx:414
+#: src/pages/stake.tsx:353
 msgid "Approve"
 msgstr "Aprobați"
 
@@ -138,7 +138,7 @@ msgstr "Aprobat"
 
 #: src/pages/balances.tsx:233
 #: src/pages/migrate.tsx:306
-#: src/pages/stake.tsx:412
+#: src/pages/stake.tsx:351
 msgid "Approving"
 msgstr "Se aprobă"
 
@@ -159,8 +159,8 @@ msgid "Back"
 msgstr ""
 
 #: src/pages/migrate.tsx:287
-#: src/pages/stake.tsx:383
-#: src/pages/stake.tsx:450
+#: src/pages/stake.tsx:330
+#: src/pages/stake.tsx:389
 msgid "Balance"
 msgstr "Sold"
 
@@ -290,7 +290,7 @@ msgstr "Garanții reale"
 #~ msgid "Confirm Adding Liquidity"
 #~ msgstr "Confirmați adăugarea de lichidități"
 
-#: src/pages/stake.tsx:438
+#: src/pages/stake.tsx:377
 msgid "Confirm Staking"
 msgstr "Confirmați investirea"
 
@@ -302,7 +302,7 @@ msgstr "Confirmați oferta"
 msgid "Confirm Swap"
 msgstr "Confirmați Swap"
 
-#: src/pages/stake.tsx:439
+#: src/pages/stake.tsx:378
 msgid "Confirm Withdrawal"
 msgstr "Confirmați retragerea"
 
@@ -310,7 +310,7 @@ msgstr "Confirmați retragerea"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/pages/stake.tsx:432
+#: src/pages/stake.tsx:371
 #: src/pages/swap/[[...tokens]].tsx:556
 #: src/state/mint/hooks.ts:192
 msgid "Connect Wallet"
@@ -413,11 +413,11 @@ msgstr "Bucurați-vă de cel mai redus derapaj pe Polygon"
 msgid "Enter"
 msgstr "Introduceți"
 
-#: src/pages/stake.tsx:434
+#: src/pages/stake.tsx:373
 msgid "Enter Amount"
 msgstr "Introduceți suma"
 
-#: src/state/swap/hooks.ts:185
+#: src/state/swap/hooks.ts:165
 msgid "Enter a recipient"
 msgstr "Introduceți un destinatar"
 
@@ -426,7 +426,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "Introduceți un procent de derapaj valid"
 
 #: src/state/mint/hooks.ts:200
-#: src/state/swap/hooks.ts:176
+#: src/state/swap/hooks.ts:156
 msgid "Enter an amount"
 msgstr "Introduceți o sumă"
 
@@ -469,7 +469,7 @@ msgstr ""
 #~ msgid "Find Pool"
 #~ msgstr "Găsiți fond comun"
 
-#: src/pages/stake.tsx:212
+#: src/pages/stake.tsx:191
 msgid ""
 "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
 "proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
@@ -521,7 +521,7 @@ msgstr "Portofel hardware"
 #~ msgid "Harvest {0} SUSHI"
 #~ msgstr "Recoltați {0} SUSHI"
 
-#: src/features/farm/FarmListItem.tsx:336
+#: src/features/farm/FarmListItem.tsx:330
 msgid ""
 "Harvest {0} SUSHI\n"
 "{1}"
@@ -583,11 +583,11 @@ msgid "Instruments"
 msgstr "Instrumente"
 
 #: src/pages/migrate.tsx:279
-#: src/pages/stake.tsx:436
+#: src/pages/stake.tsx:375
 msgid "Insufficient Balance"
 msgstr "Sold insuficient"
 
-#: src/hooks/useWrapCallback.ts:118
+#: src/hooks/useWrapCallback.ts:94
 msgid "Insufficient WETH balance"
 msgstr "Sold WETH insuficient"
 
@@ -595,10 +595,10 @@ msgstr "Sold WETH insuficient"
 msgid "Insufficient liquidity for this trade"
 msgstr "Lichidități insuficiente pentru această tranzacție"
 
-#: src/hooks/useWrapCallback.ts:84
+#: src/hooks/useWrapCallback.ts:69
 #: src/state/mint/hooks.ts:206
 #: src/state/mint/hooks.ts:210
-#: src/state/swap/hooks.ts:208
+#: src/state/swap/hooks.ts:188
 msgid "Insufficient {0} balance"
 msgstr "Sold {0} insuficient"
 
@@ -610,7 +610,7 @@ msgstr "Setări interfață"
 msgid "Invalid pair"
 msgstr "Pereche nevalidă"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:172
 msgid "Invalid recipient"
 msgstr "Destinatar nevalid"
 
@@ -700,7 +700,7 @@ msgstr "Se încarcă"
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Se încarcă pozițiile lichidităților dvs. {exchange}"
 
-#: src/pages/stake.tsx:271
+#: src/pages/stake.tsx:247
 msgid "Loading..."
 msgstr "Se încarcă..."
 
@@ -708,12 +708,12 @@ msgstr "Se încarcă..."
 msgid "Loan to Value"
 msgstr "Împrumut în limita valorii de piață"
 
-#: src/features/farm/FarmListItem.tsx:174
-#: src/features/farm/FarmListItem.tsx:245
+#: src/features/farm/FarmListItem.tsx:175
+#: src/features/farm/FarmListItem.tsx:243
 #: src/pages/balances.tsx:221
 #: src/pages/balances.tsx:312
 #: src/pages/migrate.tsx:99
-#: src/pages/stake.tsx:393
+#: src/pages/stake.tsx:337
 msgid "MAX"
 msgstr "MAX"
 
@@ -753,7 +753,7 @@ msgstr ""
 msgid "Max"
 msgstr "Max"
 
-#: src/pages/stake.tsx:204
+#: src/pages/stake.tsx:184
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Maximizați randamentul investind SUSHI în xSUSHI"
 
@@ -1019,7 +1019,7 @@ msgstr "Căutați numele sau lipiți adresa"
 
 #: src/components/CurrencyInputPanel/index.tsx:217
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:180
+#: src/state/swap/hooks.ts:160
 msgid "Select a token"
 msgstr "Selectați un token"
 
@@ -1054,12 +1054,12 @@ msgstr "Ceva nu a funcționat corect în timpul semnării aprobării. Acest lucr
 
 #: src/components/Header/index.tsx:113
 #: src/components/Header/index.tsx:370
-#: src/features/farm/FarmListItem.tsx:214
+#: src/features/farm/FarmListItem.tsx:212
 msgid "Stake"
 msgstr "Investiți"
 
-#: src/pages/stake.tsx:301
-#: src/pages/stake.tsx:326
+#: src/pages/stake.tsx:267
+#: src/pages/stake.tsx:285
 msgid "Stake SUSHI"
 msgstr "Investiți SUSHI"
 
@@ -1089,7 +1089,7 @@ msgstr "Investiți SUSHI"
 #~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.Continuously compounding."
 #~ msgstr "Investiți-vă cota SUSHI în xSUSHI pentru ~5% APY. Nicio pierdere temporară, nici o pierdere a drepturilor de guvernanță. Cumulare continuă."
 
-#: src/pages/stake.tsx:248
+#: src/pages/stake.tsx:227
 msgid "Staking APR"
 msgstr "Investire APR"
 
@@ -1254,13 +1254,13 @@ msgstr "Activați modul Expert"
 #~ msgid "Unknown error"
 #~ msgstr "Eroare necunoscută"
 
-#: src/features/farm/FarmListItem.tsx:275
-#: src/pages/stake.tsx:318
-#: src/pages/stake.tsx:327
+#: src/features/farm/FarmListItem.tsx:269
+#: src/pages/stake.tsx:278
+#: src/pages/stake.tsx:285
 msgid "Unstake"
 msgstr "Retrageți investiția"
 
-#: src/pages/stake.tsx:478
+#: src/pages/stake.tsx:411
 msgid "Unstaked"
 msgstr "Neinvestit"
 
@@ -1272,7 +1272,7 @@ msgstr "Activ neacceptat"
 msgid "Unwrap"
 msgstr "Reluați"
 
-#: src/hooks/useWrapCallback.ts:103
+#: src/hooks/useWrapCallback.ts:83
 msgid "Unwrap {0} W{1} to {2}"
 msgstr "Reluați {0} W{1} la {2}"
 
@@ -1289,7 +1289,7 @@ msgstr "Intrare în drepturi"
 #~ msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
 #~ msgstr "Intrarea în drepturi este realizată în conformitate cu liniile directoare selectate de comunitate în <0>SIMP3</0>.<1/><2/>Vă rugăm să consultați <3>discuția de pe forum</3> pentru deliberări cu privire la puncte suplimentare.<4/><5/>Înregistrările suplimentare și actualizările săptămânale ale merkle pot fi găsite pe <6>Github</6>"
 
-#: src/pages/stake.tsx:262
+#: src/pages/stake.tsx:241
 msgid "View Stats"
 msgstr "Vizualizați statisticile"
 
@@ -1321,7 +1321,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Portofel"
 
-#: src/features/farm/FarmListItem.tsx:150
+#: src/features/farm/FarmListItem.tsx:151
 #: src/pages/balances.tsx:199
 msgid "Wallet Balance"
 msgstr "Soldul portofelului"
@@ -1347,7 +1347,7 @@ msgstr "Încheiați"
 msgid "Wrong Network"
 msgstr "Rețea greșită"
 
-#: src/pages/stake.tsx:275
+#: src/pages/stake.tsx:250
 msgid "Yesterday's APR"
 msgstr "APR de ieri"
 
@@ -1399,11 +1399,11 @@ msgstr "Pozițiile lichidităților dvs."
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Token-urile dvs. pentru fondul comun"
 
-#: src/features/farm/FarmListItem.tsx:221
+#: src/features/farm/FarmListItem.tsx:219
 msgid "Your Staked"
 msgstr "Sumele dvs. investite"
 
-#: src/pages/stake.tsx:528
+#: src/pages/stake.tsx:455
 msgid "Your SushiBar Stats"
 msgstr "Statisticile dvs. SushiBar"
 

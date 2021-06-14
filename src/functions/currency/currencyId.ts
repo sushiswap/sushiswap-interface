@@ -1,7 +1,11 @@
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, Token } from "@sushiswap/sdk";
 
-export function currencyId(currency: Currency, chainId = ChainId.MAINNET): string {
-    if (currency === Currency.getNativeCurrency(chainId)) return Currency.getNativeCurrencySymbol(chainId)
-    if (currency instanceof Token) return currency.address
-    throw new Error('invalid currency')
+export function currencyId(
+  currency: Currency,
+  chainId = ChainId.MAINNET
+): string {
+  if (currency === Currency.getNativeCurrency(chainId))
+    return Currency.getNativeCurrencySymbol(chainId);
+  if (currency instanceof Token) return currency.address;
+  throw new Error("invalid currency");
 }

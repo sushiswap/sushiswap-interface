@@ -1,129 +1,145 @@
-import { PaddedColumn, SearchInput, Separator } from './styleds'
-import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
-import Row, { RowBetween, RowFixed } from '../Row'
-import { useRemoveUserAddedToken, useUserAddedTokens } from '../../state/user/hooks'
+import { PaddedColumn, SearchInput, Separator } from "./styleds";
+import React, {
+  RefObject,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import Row, { RowBetween, RowFixed } from "../Row";
+import {
+  useRemoveUserAddedToken,
+  useUserAddedTokens,
+} from "../../state/user/hooks";
 
-import ButtonText from '../ButtonText'
-import Card from '../Card'
-import Column from '../Column'
-import CurrencyLogo from '../CurrencyLogo'
-import CurrencyModalView from './CurrencyModalView'
-import ExternalLink from '../ExternalLink'
-import { ExternalLinkIcon } from '../ExternalLinkIcon'
-import ImportRow from './ImportRow'
-import { Token } from '@sushiswap/sdk'
-import TrashIcon from '../TrashIcon'
-import { classNames } from '../../functions'
-import { getExplorerLink } from '../../functions/explorer'
-import { isAddress } from '../../functions/validate'
-import styled from 'styled-components'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import useTheme from '../../hooks/useTheme'
-import { useToken } from '../../hooks/Tokens'
+import ButtonText from "../ButtonText";
+import Card from "../Card";
+import Column from "../Column";
+import CurrencyLogo from "../CurrencyLogo";
+import CurrencyModalView from "./CurrencyModalView";
+import ExternalLink from "../ExternalLink";
+import { ExternalLinkIcon } from "../ExternalLinkIcon";
+import ImportRow from "./ImportRow";
+import { Token } from "@sushiswap/sdk";
+import TrashIcon from "../TrashIcon";
+import { classNames } from "../../functions";
+import { getExplorerLink } from "../../functions/explorer";
+import { isAddress } from "../../functions/validate";
+import styled from "styled-components";
+import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
+import useTheme from "../../hooks/useTheme";
+import { useToken } from "../../hooks/Tokens";
 
 const Wrapper = styled.div`
-    width: 100%;
-    height: calc(100% - 60px);
-    position: relative;
-    padding-bottom: 60px;
-`
+  width: 100%;
+  height: calc(100% - 60px);
+  position: relative;
+  padding-bottom: 60px;
+`;
 
 function ManageTokens({
-    setModalView,
-    setImportToken
+  setModalView,
+  setImportToken,
 }: {
-    setModalView: (view: CurrencyModalView) => void
-    setImportToken: (token: Token) => void
+  setModalView: (view: CurrencyModalView) => void;
+  setImportToken: (token: Token) => void;
 }) {
-    const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-    const [searchQuery, setSearchQuery] = useState<string>('')
-    const theme = useTheme()
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const theme = useTheme();
 
-    // manage focus on modal show
-    const inputRef = useRef<HTMLInputElement>()
-    const handleInput = useCallback(event => {
-        const input = event.target.value
-        const checksummedInput = isAddress(input)
-        setSearchQuery(checksummedInput || input)
-    }, [])
+  // manage focus on modal show
+  const inputRef = useRef<HTMLInputElement>();
+  const handleInput = useCallback((event) => {
+    const input = event.target.value;
+    const checksummedInput = isAddress(input);
+    setSearchQuery(checksummedInput || input);
+  }, []);
 
-    // if they input an address, use it
-    const isAddressSearch = isAddress(searchQuery)
-    const searchToken = useToken(searchQuery)
+  // if they input an address, use it
+  const isAddressSearch = isAddress(searchQuery);
+  const searchToken = useToken(searchQuery);
 
-    // all tokens for local lisr
-    const userAddedTokens: Token[] = useUserAddedTokens()
-    const removeToken = useRemoveUserAddedToken()
+  // all tokens for local lisr
+  const userAddedTokens: Token[] = useUserAddedTokens();
+  const removeToken = useRemoveUserAddedToken();
 
-    const handleRemoveAll = useCallback(() => {
-        if (chainId && userAddedTokens) {
-            userAddedTokens.map(token => {
-                return removeToken(chainId, token.address)
-            })
-        }
-    }, [removeToken, userAddedTokens, chainId])
+  const handleRemoveAll = useCallback(() => {
+    if (chainId && userAddedTokens) {
+      userAddedTokens.map((token) => {
+        return removeToken(chainId, token.address);
+      });
+    }
+  }, [removeToken, userAddedTokens, chainId]);
 
-    const tokenList = useMemo(() => {
-        return (
-            chainId &&
-            userAddedTokens.map(token => (
-                <RowBetween key={token.address} width="100%">
-                    <RowFixed>
-                        <CurrencyLogo currency={token} size={'20px'} />
-                        <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
-                            <div className="ml-2.5 font-semibold">{token.symbol}</div>
-                        </ExternalLink>
-                    </RowFixed>
-                    <RowFixed>
-                        <TrashIcon onClick={() => removeToken(chainId, token.address)} />
-                        <ExternalLinkIcon href={getExplorerLink(chainId, token.address, 'address')} />
-                    </RowFixed>
-                </RowBetween>
-            ))
-        )
-    }, [userAddedTokens, chainId, removeToken])
-
+  const tokenList = useMemo(() => {
     return (
-        <div className="relative flex-1 w-full h-full mt-4 space-y-4 overflow-y-hidden">
-            <div className="space-y-3">
-                <input
-                    id="token-search-input"
-                    type="text"
-                    placeholder={'0x0000'}
-                    className="w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
-                    value={searchQuery}
-                    autoComplete="off"
-                    onChange={handleInput}
-                    ref={inputRef as RefObject<HTMLInputElement>}
-                    autoCorrect="off"
-                />
-                {searchQuery !== '' && !isAddressSearch && <div className="text-red">Enter valid token address</div>}
-                {searchToken && (
-                    <ImportRow
-                        token={searchToken}
-                        showImportView={() => setModalView(CurrencyModalView.importToken)}
-                        setImportToken={setImportToken}
-                        style={{ height: 'fit-content' }}
-                    />
-                )}
-                <div className="flex justify-between">
-                    <div className="font-semibold">
-                        {userAddedTokens?.length} Custom {userAddedTokens.length === 1 ? 'Token' : 'Tokens'}
-                    </div>
-                    {userAddedTokens.length > 0 && (
-                        <ButtonText onClick={handleRemoveAll}>
-                            <div>Clear all</div>
-                        </ButtonText>
-                    )}
-                </div>
-                {tokenList}
-            </div>
-            <div className="absolute bottom-0 p-3 text-caption2">
-                Tip: Custom tokens are stored locally in your browser
-            </div>
+      chainId &&
+      userAddedTokens.map((token) => (
+        <RowBetween key={token.address} width="100%">
+          <RowFixed>
+            <CurrencyLogo currency={token} size={"20px"} />
+            <ExternalLink
+              href={getExplorerLink(chainId, token.address, "address")}
+            >
+              <div className="ml-2.5 font-semibold">{token.symbol}</div>
+            </ExternalLink>
+          </RowFixed>
+          <RowFixed>
+            <TrashIcon onClick={() => removeToken(chainId, token.address)} />
+            <ExternalLinkIcon
+              href={getExplorerLink(chainId, token.address, "address")}
+            />
+          </RowFixed>
+        </RowBetween>
+      ))
+    );
+  }, [userAddedTokens, chainId, removeToken]);
+
+  return (
+    <div className="relative flex-1 w-full h-full mt-4 space-y-4 overflow-y-hidden">
+      <div className="space-y-3">
+        <input
+          id="token-search-input"
+          type="text"
+          placeholder={"0x0000"}
+          className="w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
+          value={searchQuery}
+          autoComplete="off"
+          onChange={handleInput}
+          ref={inputRef as RefObject<HTMLInputElement>}
+          autoCorrect="off"
+        />
+        {searchQuery !== "" && !isAddressSearch && (
+          <div className="text-red">Enter valid token address</div>
+        )}
+        {searchToken && (
+          <ImportRow
+            token={searchToken}
+            showImportView={() => setModalView(CurrencyModalView.importToken)}
+            setImportToken={setImportToken}
+            style={{ height: "fit-content" }}
+          />
+        )}
+        <div className="flex justify-between">
+          <div className="font-semibold">
+            {userAddedTokens?.length} Custom{" "}
+            {userAddedTokens.length === 1 ? "Token" : "Tokens"}
+          </div>
+          {userAddedTokens.length > 0 && (
+            <ButtonText onClick={handleRemoveAll}>
+              <div>Clear all</div>
+            </ButtonText>
+          )}
         </div>
-    )
+        {tokenList}
+      </div>
+      <div className="absolute bottom-0 p-3 text-caption2">
+        Tip: Custom tokens are stored locally in your browser
+      </div>
+    </div>
+  );
 }
 
-export default ManageTokens
+export default ManageTokens;

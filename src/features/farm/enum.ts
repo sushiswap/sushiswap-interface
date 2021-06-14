@@ -1,16 +1,16 @@
 export enum Chef {
-    MASTERCHEF,
-    MASTERCHEF_V2,
-    MINICHEF,
+  MASTERCHEF,
+  MASTERCHEF_V2,
+  MINICHEF,
 }
 
 export enum Rewarder {
-    SIMPLE,
-    COMPLEX,
-    ALCX,
+  SIMPLE,
+  COMPLEX,
+  ALCX,
 }
 
 export enum PairType {
-    SWAP,
-    LENDING,
+  SWAP,
+  LENDING,
 }
