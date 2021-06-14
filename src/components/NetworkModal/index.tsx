@@ -145,7 +145,11 @@ export default function NetworkModal(): JSX.Element | null {
   if (!chainId) return null;
 
   return (
-    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
+    <Modal
+      isOpen={networkModalOpen}
+      onDismiss={toggleNetworkModal}
+      maxWidth={1024}
+    >
       <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
       <div className="mb-6 text-lg text-primary">
         You are currently browsing{" "}
@@ -157,7 +161,7 @@ export default function NetworkModal(): JSX.Element | null {
         network
       </div>
 
-      <div className="flex flex-col space-y-5 overflow-y-auto">
+      <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
         {[
           ChainId.MAINNET,
           ChainId.MATIC,
@@ -174,7 +178,7 @@ export default function NetworkModal(): JSX.Element | null {
             return (
               <button
                 key={i}
-                className="w-full p-px rounded bg-gradient-to-r from-blue to-pink"
+                className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink"
               >
                 <div className="flex items-center w-full h-full p-3 rounded bg-dark-1000">
                   <img
@@ -198,7 +202,7 @@ export default function NetworkModal(): JSX.Element | null {
                 cookie.set("chainId", key);
                 library?.send("wallet_addEthereumChain", [params, account]);
               }}
-              className="flex items-center w-full p-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+              className="flex items-center w-full col-span-1 p-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
             >
               <img
                 src={NETWORK_ICON[key]}

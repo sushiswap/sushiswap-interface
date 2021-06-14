@@ -31,7 +31,7 @@ export default function Layout({
     <div className="z-0 flex flex-col items-start w-full h-full overflow-x-hidden overflow-y-auto">
       <Header />
       <Main>
-        <div className="container px-0 mx-auto sm:px-4">
+        <div className="container px-0 mx-auto">
           <div className={`mb-2 grid grid-cols-12 gap-4`}>
             <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
               <Link href="/borrow">
