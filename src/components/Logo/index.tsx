@@ -11,8 +11,8 @@ export type LogoProps = {
   srcs: string[];
   width: string | number;
   height: string | number;
-} & ImageProps &
-  IconProps;
+  alt?: string;
+} & IconProps;
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert

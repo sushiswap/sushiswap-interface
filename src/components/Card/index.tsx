@@ -1,5 +1,13 @@
 import React from "react";
 
+type CardProps = {
+  header?: React.ReactChild;
+  footer?: React.ReactChild;
+  backgroundImage?: string;
+  title?: string;
+  description?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
+
 export default function Card({
   header = undefined,
   footer = undefined,
@@ -8,8 +16,7 @@ export default function Card({
   description = "",
   children,
   className,
-  padding = undefined,
-}) {
+}: CardProps) {
   return (
     <div
       className={`relative ${className}`}

@@ -1,7 +1,7 @@
 import { AppDispatch, AppState } from "../../state";
 import { CheckCircle, Settings } from "react-feather";
 import Column, { AutoColumn } from "../Column";
-import { PaddedColumn, SearchInput, Separator, SeparatorDark } from "./styleds";
+import { PaddedColumn, SeparatorDark } from "./styleds";
 import React, {
   memo,
   useCallback,
@@ -26,7 +26,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import AutoSizer from "react-virtualized-auto-sizer";
 import Button from "../Button";
-import Card from "../Card";
 import CurrencyModalView from "./CurrencyModalView";
 import ExternalLink from "../ExternalLink";
 import IconWrapper from "../IconWrapper";
@@ -399,39 +398,37 @@ function ManageLists({
       ) : null}
       {tempList && (
         <PaddedColumn style={{ paddingTop: 0 }}>
-          <Card>
-            <RowBetween>
-              <RowFixed>
-                {tempList.logoURI && (
-                  <ListLogo logoURI={tempList.logoURI} size="40px" />
-                )}
-                <AutoColumn gap="4px" style={{ marginLeft: "20px" }}>
-                  <div className="font-semibold">{tempList.name}</div>
-                  <div className="text-xs">{tempList.tokens.length} tokens</div>
-                </AutoColumn>
-              </RowFixed>
-              {isImported ? (
-                <RowFixed>
-                  <IconWrapper size="16px" marginRight={"10px"}>
-                    <CheckCircle />
-                  </IconWrapper>
-                  <div>Loaded</div>
-                </RowFixed>
-              ) : (
-                <Button
-                  color="gradient"
-                  style={{
-                    width: "fit-content",
-                    padding: "6px 8px",
-                    fontSize: "14px",
-                  }}
-                  onClick={handleImport}
-                >
-                  Import
-                </Button>
+          <RowBetween>
+            <RowFixed>
+              {tempList.logoURI && (
+                <ListLogo logoURI={tempList.logoURI} size="40px" />
               )}
-            </RowBetween>
-          </Card>
+              <AutoColumn gap="4px" style={{ marginLeft: "20px" }}>
+                <div className="font-semibold">{tempList.name}</div>
+                <div className="text-xs">{tempList.tokens.length} tokens</div>
+              </AutoColumn>
+            </RowFixed>
+            {isImported ? (
+              <RowFixed>
+                <IconWrapper size="16px" marginRight={"10px"}>
+                  <CheckCircle />
+                </IconWrapper>
+                <div>Loaded</div>
+              </RowFixed>
+            ) : (
+              <Button
+                color="gradient"
+                style={{
+                  width: "fit-content",
+                  padding: "6px 8px",
+                  fontSize: "14px",
+                }}
+                onClick={handleImport}
+              >
+                Import
+              </Button>
+            )}
+          </RowBetween>
         </PaddedColumn>
       )}
       <ListContainer>

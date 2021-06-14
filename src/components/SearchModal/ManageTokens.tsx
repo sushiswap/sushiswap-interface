@@ -1,4 +1,3 @@
-import { PaddedColumn, SearchInput, Separator } from "./styleds";
 import React, {
   RefObject,
   useCallback,
@@ -6,15 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Row, { RowBetween, RowFixed } from "../Row";
+import { RowBetween, RowFixed } from "../Row";
 import {
   useRemoveUserAddedToken,
   useUserAddedTokens,
 } from "../../state/user/hooks";
 
 import ButtonText from "../ButtonText";
-import Card from "../Card";
-import Column from "../Column";
 import CurrencyLogo from "../CurrencyLogo";
 import CurrencyModalView from "./CurrencyModalView";
 import ExternalLink from "../ExternalLink";
@@ -22,20 +19,11 @@ import { ExternalLinkIcon } from "../ExternalLinkIcon";
 import ImportRow from "./ImportRow";
 import { Token } from "@sushiswap/sdk";
 import TrashIcon from "../TrashIcon";
-import { classNames } from "../../functions";
 import { getExplorerLink } from "../../functions/explorer";
 import { isAddress } from "../../functions/validate";
-import styled from "styled-components";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import useTheme from "../../hooks/useTheme";
 import { useToken } from "../../hooks/Tokens";
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: calc(100% - 60px);
-  position: relative;
-  padding-bottom: 60px;
-`;
 
 function ManageTokens({
   setModalView,

@@ -88,7 +88,7 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
       </PaddedColumn>
       <PaddedColumn gap="md">
         <AutoColumn gap="md">
-          <Card padding="12px 20px">
+          <div style={{ padding: "12px 20px" }}>
             <RowBetween>
               <RowFixed>
                 {list.logoURI && (
@@ -108,8 +108,8 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
                 </AutoColumn>
               </RowFixed>
             </RowBetween>
-          </Card>
-          <Card>
+          </div>
+          <div>
             <AutoColumn
               justify="center"
               style={{ textAlign: "center", gap: "16px", marginBottom: "12px" }}
@@ -151,7 +151,7 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
               />
               <div className="text-red ml-2.5 font-medium">I understand</div>
             </AutoRow>
-          </Card>
+          </div>
 
           <Button
             color="gradient"
@@ -175,7 +175,6 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             </div>
           ) : null}
         </AutoColumn>
-        {/* </Card> */}
       </PaddedColumn>
     </Wrapper>
   );

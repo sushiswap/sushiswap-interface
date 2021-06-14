@@ -281,7 +281,6 @@ const MigrateButtons = ({
               disabled={
                 approval !== ApprovalState.NOT_APPROVED || isButtonDisabled
               }
-              altDisabledStyle={approval === ApprovalState.PENDING}
             >
               {approval === ApprovalState.PENDING ? (
                 <Dots>{i18n._(t`Approving`)}</Dots>

@@ -11,7 +11,7 @@ import {
   WETH,
   currencyEquals,
 } from "@sushiswap/sdk";
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Trans, t } from "@lingui/macro";
 import TransactionConfirmationModal, {
   ConfirmationModalContent,

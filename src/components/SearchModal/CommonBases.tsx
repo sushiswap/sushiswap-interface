@@ -5,6 +5,7 @@ import { AutoRow } from "../Row";
 import CurrencyLogo from "../CurrencyLogo";
 import QuestionHelper from "../QuestionHelper";
 import React from "react";
+import { SUGGESTED_BASES } from "../../constants";
 import Typography from "../Typography";
 
 export default function CommonBases({

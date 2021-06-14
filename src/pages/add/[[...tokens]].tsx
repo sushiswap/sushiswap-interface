@@ -49,7 +49,6 @@ import NavLink from "../../components/NavLink";
 import { PairState } from "../../hooks/usePairs";
 import { Plus } from "react-feather";
 import ReactGA from "react-ga";
-import { Text } from "rebass";
 import { TransactionResponse } from "@ethersproject/providers";
 import UnsupportedCurrencyFooter from "../../features/swap/UnsupportedCurrencyFooter";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";

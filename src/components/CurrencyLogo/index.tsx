@@ -9,17 +9,17 @@ import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import useHttpLocations from "../../hooks/useHttpLocations";
 
 const AvalancheLogo = "/images/native-tokens/avax.png";
-const BinanceCoinLogo = "/images/native-tokens/bnb.png";
-const EthereumLogo = "/images/native-tokens/eth.png";
-const FantomLogo = "/images/native-tokens/ftm.png";
+const BinanceCoinLogo = "/images/tokens/bnb-square.jpg";
+const EthereumLogo = "/images/tokens/eth-square.jpg";
+const FantomLogo = "/images/tokens/ftm-square.jpg";
 const HarmonyLogo = "/images/native-tokens/one.png";
-const HecoLogo = "/images/native-tokens/ht.png";
-const MaticLogo = "/images/native-tokens/matic.png";
-const MoonbeamLogo = "/images/native-tokens/moonbeam.png";
-const OKExLogo = "/images/native-tokens/okt.png";
+const HecoLogo = "/images/tokens/heco-square.jpg";
+const MaticLogo = "/images/tokens/matic-square.jpg";
+const MoonbeamLogo = "/images/tokens/eth-square.jpg";
+const OKExLogo = "/images/tokens/okt-square.jpg";
 const xDaiLogo = "/images/native-tokens/xdai.png";
 
-const getTokenLogoURL = (address: string, chainId: any) => {
+const getTokenLogoURL = (address: string, chainId: ChainId) => {
   let imageURL;
   if (chainId === ChainId.MAINNET) {
     imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
