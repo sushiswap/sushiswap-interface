@@ -4,7 +4,7 @@ import { Currency, Token } from "@sushiswap/sdk";
 import React, { useState } from "react";
 
 import { AutoColumn } from "../../components/Column";
-import { ButtonEmpty } from "../../components/ButtonLegacy";
+import Button from "../../components/Button";
 import CloseIcon from "../../components/CloseIcon";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import ExternalLink from "../../components/ExternalLink";
@@ -106,9 +106,13 @@ export default function UnsupportedCurrencyFooter({
           </AutoColumn>
         </Card>
       </Modal>
-      <ButtonEmpty padding={"0"} onClick={() => setShowDetails(true)}>
+      <Button
+        variant="empty"
+        padding={"0"}
+        onClick={() => setShowDetails(true)}
+      >
         <div>Read more about unsupported assets</div>
-      </ButtonEmpty>
+      </Button>
     </DetailsFooter>
   );
 }

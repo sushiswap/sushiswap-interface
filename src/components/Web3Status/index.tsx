@@ -17,7 +17,7 @@ import styled, { css } from "styled-components";
 
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import { Activity } from "react-feather";
-import { ButtonSecondary } from "../ButtonLegacy";
+import Button from "../Button";
 import Image from "next/image";
 import Loader from "../Loader";
 import { NetworkContextName } from "../../constants";
@@ -39,18 +39,20 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `;
 
-const Web3StatusGeneric = styled(ButtonSecondary)`
-  // ${({ theme }) => theme.flexRowNoWrap}
+const Web3StatusGeneric = styled(Button)`
+  display: flex;
+  flex-flow: row nowrap;
   width: 100%;
   align-items: center;
   padding: 0.5rem;
-  // border-radius: ${({ theme }) => theme.borderRadius};
+  border-radius: 10px;
   cursor: pointer;
   user-select: none;
   :focus {
     outline: none;
   }
 `;
+
 const Web3StatusError = styled(Web3StatusGeneric)`
   background-color: ${({ theme }) => theme.red1};
   border: 1px solid ${({ theme }) => theme.red1};

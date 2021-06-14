@@ -1,12 +1,7 @@
 import { ApprovalState, useApproveCallback } from "../hooks/useApproveCallback";
 import { AutoRow, RowBetween, RowFixed } from "../components/Row";
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from "../constants";
-import {
-  ButtonConfirmed,
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../components/ButtonLegacy";
+import Button, { ButtonError } from "../components/Button";
 import {
   ChainId,
   Currency,
@@ -479,19 +474,23 @@ export default function Zap() {
             </PoolBreakDownWrapper>
             <>
               {!account ? (
-                <ButtonLight
+                <Button
+                  variant="outlined"
+                  color="blue"
                   style={{ marginTop: "20px" }}
                   onClick={toggleWalletModal}
                 >
                   Connect Wallet
-                </ButtonLight>
+                </Button>
               ) : noRoute && bestTrade?.inputAmount ? (
                 <ButtonError style={{ marginTop: "20px" }}>
                   <div>Insufficient liquidity for this trade.</div>
                 </ButtonError>
               ) : showApproveFlow ? (
                 <RowBetween>
-                  <ButtonPrimary
+                  <Button
+                    color="gradient"
+                    size="large"
                     onClick={approveCallback}
                     disabled={
                       approval !== ApprovalState.NOT_APPROVED ||
@@ -512,8 +511,10 @@ export default function Zap() {
                     ) : (
                       "Approve " + currency?.getSymbol(chainId)
                     )}
-                  </ButtonPrimary>
-                  <ButtonPrimary
+                  </Button>
+                  <Button
+                    color="gradient"
+                    size="large"
                     onClick={() => zapCallback()}
                     style={{
                       width: "48%",
@@ -525,7 +526,7 @@ export default function Zap() {
                     <Text fontSize={20} fontWeight={500}>
                       {error ?? "Zap"}
                     </Text>
-                  </ButtonPrimary>
+                  </Button>
                 </RowBetween>
               ) : priceImpactSeverity > 1 && error === undefined ? (
                 <ButtonError
@@ -541,7 +542,9 @@ export default function Zap() {
                   </Text>
                 </ButtonError>
               ) : (
-                <ButtonPrimary
+                <Button
+                  color="gradient"
+                  size="large"
                   style={{ marginTop: "20px" }}
                   disabled={
                     !parsedAmount ||
@@ -553,7 +556,7 @@ export default function Zap() {
                   <Text fontSize={20} fontWeight={500}>
                     {error ?? "Zap"}
                   </Text>
-                </ButtonPrimary>
+                </Button>
               )}
               {showApproveFlow && (
                 <Column style={{ marginTop: "1rem" }}>

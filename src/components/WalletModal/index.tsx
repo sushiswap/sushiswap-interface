@@ -9,7 +9,7 @@ import {
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import AccountDetails from "../AccountDetails";
 import { ApplicationModal } from "../../state/application/actions";
-import { ButtonError } from "../ButtonLegacy";
+import { ButtonError } from "../Button";
 import ExternalLink from "../ExternalLink";
 import Image from "next/image";
 import Modal from "../Modal";

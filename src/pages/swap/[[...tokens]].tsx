@@ -14,12 +14,7 @@ import {
   Wrapper,
 } from "../../features/swap/styleds";
 import { AutoRow, RowBetween } from "../../components/Row";
-import {
-  ButtonConfirmed,
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../../components/ButtonLegacy";
+import { ButtonConfirmed, ButtonError } from "../../components/Button";
 import Card, { DarkCard, GreyCard } from "../../components/CardLegacy";
 import {
   ChainId,
@@ -67,6 +62,7 @@ import useWrapCallback, { WrapType } from "../../hooks/useWrapCallback";
 import AddressInputPanel from "../../components/AddressInputPanel";
 import AdvancedSwapDetailsDropdown from "../../features/swap/AdvancedSwapDetailsDropdown";
 import { ArrowDown } from "react-feather";
+import Button from "../../components/Button";
 import ConfirmSwapModal from "../../features/swap/ConfirmSwapModal";
 import CurrencyInputPanel from "../../components/CurrencyInputPanel";
 import { Field } from "../../state/swap/actions";
@@ -656,22 +652,26 @@ export default function Swap() {
         </div>
         <BottomGrouping>
           {swapIsUnsupported ? (
-            <ButtonPrimary disabled={true}>
-              <div>{i18n._(t`Unsupported Asset`)}</div>
-            </ButtonPrimary>
+            <Button color="gradient" disabled>
+              {i18n._(t`Unsupported Asset`)}
+            </Button>
           ) : !account ? (
-            <ButtonLight onClick={toggleWalletModal}>
+            <Button variant="outlined" color="blue" onClick={toggleWalletModal}>
               {i18n._(t`Connect Wallet`)}
-            </ButtonLight>
+            </Button>
           ) : showWrap ? (
-            <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
+            <Button
+              color="gradient"
+              disabled={Boolean(wrapInputError)}
+              onClick={onWrap}
+            >
               {wrapInputError ??
                 (wrapType === WrapType.WRAP
                   ? i18n._(t`Wrap`)
                   : wrapType === WrapType.UNWRAP
                   ? i18n._(t`Unwrap`)
                   : null)}
-            </ButtonPrimary>
+            </Button>
           ) : noRoute && userHasSpecifiedInputOutput ? (
             <GreyCard style={{ textAlign: "center" }}>
               <div className="mb-1">

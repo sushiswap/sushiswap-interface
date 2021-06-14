@@ -1,9 +1,4 @@
 import { AutoRow, RowBetween, RowFixed } from "../Row";
-import {
-  ButtonEmpty,
-  ButtonPrimary,
-  ButtonPrimaryNormal,
-} from "../ButtonLegacy";
 import Card, { LightCard } from "../CardLegacy";
 import { ChevronDown, ChevronUp } from "react-feather";
 import { Fraction, JSBI, Pair, Percent, TokenAmount } from "@sushiswap/sdk";
@@ -303,10 +298,13 @@ export default function FullPositionCard({
             </Text>
           </AutoRow>
           <RowFixed gap="8px">
-            <ButtonEmpty
-              padding="6px 8px"
-              borderRadius="20px"
-              width="fit-content"
+            <Button
+              variant="empty"
+              style={{
+                padding: "6px 8px",
+                borderRadius: "20px",
+                width: "fit-content",
+              }}
               onClick={() => setShowMore(!showMore)}
             >
               {showMore ? (
@@ -320,7 +318,7 @@ export default function FullPositionCard({
                   <ChevronDown size="20" style={{ marginLeft: "10px" }} />
                 </>
               )}
-            </ButtonEmpty>
+            </Button>
           </RowFixed>
         </FixedHeightRow>
 
@@ -397,14 +395,13 @@ export default function FullPositionCard({
               </Text>
             </FixedHeightRow>
 
-            {/* <ButtonSecondary padding="8px" borderRadius="8px">
-              <ExternalLink
-                style={{ width: '100%', textAlign: 'center' }}
-                href={`https://uniswap.info/account/${account}`}
-              >
-                View accrued fees and analytics<span style={{ fontSize: '11px' }}>↗</span>
-              </ExternalLink>
-            </ButtonSecondary> */}
+            {/* <ExternalLink
+              style={{ width: "100%", textAlign: "center" }}
+              href={`https://uniswap.info/account/${account}`}
+            >
+              View accrued fees and analytics
+              <span style={{ fontSize: "11px" }}>↗</span>
+            </ExternalLink> */}
             {userDefaultPoolBalance &&
               JSBI.greaterThan(userDefaultPoolBalance.raw, BIG_INT_ZERO) && (
                 <div className="grid grid-cols-2 gap-4 mt-4">

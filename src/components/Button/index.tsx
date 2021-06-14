@@ -1,4 +1,5 @@
 import React from "react";
+import { classNames } from "../../functions";
 
 const SIZE = {
   default: "px-4 py-3 text-base",
@@ -30,9 +31,15 @@ const OUTLINED = {
     "bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 disabled:bg-opacity-20",
 };
 
+const EMPTY = {
+  default:
+    "flex bg-transparent justify-center items-center focus:underline action:no-underline disabled:opacity-50 disabled:cursor-auto",
+};
+
 const VARIANT = {
   outlined: OUTLINED,
   filled: FILLED,
+  empty: EMPTY,
 };
 
 export type ButtonColor =
@@ -41,18 +48,20 @@ export type ButtonColor =
   | "gradient"
   | "gray"
   | "default"
-  | "red";
+  | "red"
+  | "green";
 
 export type ButtonSize = "small" | "large" | "default";
 
-export type ButtonVariant = "outlined" | "filled";
+export type ButtonVariant = "outlined" | "filled" | "empty";
 
-export interface ButtonProps {
-  children?: React.ReactChild | React.ReactChild[];
+export type ButtonProps = {
   color?: ButtonColor;
   size?: ButtonSize;
   variant?: ButtonVariant;
-}
+} & {
+  ref?: React.Ref<HTMLButtonElement>;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 function Button({
   children,
@@ -61,7 +70,7 @@ function Button({
   size = "default",
   variant = "filled",
   ...rest
-}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>): JSX.Element {
+}: ButtonProps): JSX.Element {
   return (
     <button
       className={`${VARIANT[variant][color]} ${SIZE[size]} rounded focus:outline-none focus:ring disabled:opacity-50 font-medium ${className}`}
@@ -73,3 +82,56 @@ function Button({
 }
 
 export default Button;
+
+export function ButtonConfirmed({
+  confirmed,
+  disabled,
+  ...rest
+}: { confirmed?: boolean; disabled?: boolean } & ButtonProps) {
+  if (confirmed) {
+    return (
+      <Button
+        variant="outlined"
+        color="green"
+        size="large"
+        className={classNames(
+          disabled && "cursor-not-allowed",
+          "border opacity-50"
+        )}
+        disabled={disabled}
+        {...rest}
+      />
+    );
+  } else {
+    return (
+      <Button
+        color={disabled ? "gray" : "gradient"}
+        size="large"
+        disabled={disabled}
+        {...rest}
+      />
+    );
+  }
+}
+
+export function ButtonError({
+  error,
+  disabled,
+  ...rest
+}: {
+  error?: boolean;
+  disabled?: boolean;
+}) {
+  if (error) {
+    return <Button color="red" size="large" {...rest} />;
+  } else {
+    return (
+      <Button
+        color={disabled ? "gray" : "gradient"}
+        disabled={disabled}
+        size="large"
+        {...rest}
+      />
+    );
+  }
+}

@@ -3,7 +3,7 @@ import React, { CSSProperties } from "react";
 import { useIsTokenActive, useIsUserAddedToken } from "../../hooks/Tokens";
 
 import { AutoColumn } from "../Column";
-import { ButtonPrimary } from "../ButtonLegacy";
+import Button from "../Button";
 import { CheckCircle } from "react-feather";
 import CurrencyLogo from "../CurrencyLogo";
 import ListLogo from "../ListLogo";
@@ -87,18 +87,20 @@ export default function ImportRow({
         )}
       </AutoColumn>
       {!isActive && !isAdded ? (
-        <ButtonPrimary
-          width="fit-content"
-          padding="6px 12px"
-          fontWeight={500}
-          fontSize="14px"
+        <Button
+          color="gradient"
+          size="small"
+          style={{
+            width: "fit-content",
+            padding: "6px 12px",
+          }}
           onClick={() => {
             setImportToken && setImportToken(token);
             showImportView();
           }}
         >
           Import
-        </ButtonPrimary>
+        </Button>
       ) : (
         <RowFixed style={{ minWidth: "fit-content" }}>
           <CheckIcon />

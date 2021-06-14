@@ -10,7 +10,7 @@ import useMigrateState, { MigrateState } from "../hooks/useMigrateState";
 import { AddressZero } from "@ethersproject/constants";
 import Badge from "../components/Badge";
 import Button from "../components/Button";
-import { ButtonConfirmed } from "../components/ButtonLegacy";
+import { ButtonConfirmed } from "../components/Button";
 import Dots from "../components/Dots";
 import DoubleCurrencyLogo from "../components/DoubleLogo";
 import Empty from "../components/Empty";

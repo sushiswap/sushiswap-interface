@@ -1,11 +1,8 @@
 import { Currency, CurrencyAmount, Fraction, Percent } from "@sushiswap/sdk";
-import { RowBetween, RowFixed } from "../../components/Row";
 
-import { ButtonPrimary } from "../../components/ButtonLegacy";
-import CurrencyLogo from "../../components/CurrencyLogo";
+import Button from "../../components/Button";
 import { Field } from "../../state/mint/actions";
 import React from "react";
-import { Text } from "rebass";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -88,13 +85,11 @@ export function ConfirmAddModalBottom({
         </div>
       </div>
 
-      <ButtonPrimary onClick={onAdd}>
-        <div className="text-lg font-medium">
-          {noLiquidity
-            ? i18n._(t`Create Pool & Supply`)
-            : i18n._(t`Confirm Supply`)}
-        </div>
-      </ButtonPrimary>
+      <Button color="gradient" size="large" onClick={onAdd}>
+        {noLiquidity
+          ? i18n._(t`Create Pool & Supply`)
+          : i18n._(t`Confirm Supply`)}
+      </Button>
     </div>
   );
 }

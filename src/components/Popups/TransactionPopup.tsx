@@ -24,7 +24,7 @@ export default function TransactionPopup({
   const { chainId } = useActiveWeb3React();
 
   return (
-    <RowNoFlex>
+    <RowNoFlex style={{ zIndex: 1000 }}>
       <div style={{ paddingRight: 16 }}>
         {success ? (
           <CheckCircle className="text-2xl text-green" />
@@ -32,7 +32,7 @@ export default function TransactionPopup({
           <AlertCircle className="text-2xl text-red" />
         )}
       </div>
-      <AutoColumn gap="8px">
+      <AutoColumn gap="sm">
         <div className="font-medium">
           {summary ?? "Hash: " + hash.slice(0, 8) + "..." + hash.slice(58, 65)}
         </div>

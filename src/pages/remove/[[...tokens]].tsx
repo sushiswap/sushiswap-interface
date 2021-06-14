@@ -3,12 +3,7 @@ import {
   useApproveCallback,
 } from "../../hooks/useApproveCallback";
 import { ArrowDown, Plus } from "react-feather";
-import {
-  ButtonConfirmed,
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../../components/ButtonLegacy";
+import { ButtonConfirmed, ButtonError } from "../../components/Button";
 import {
   ChainId,
   Currency,
@@ -38,6 +33,7 @@ import Alert from "../../components/Alert";
 import { AutoColumn } from "../../components/Column";
 import { AutoRow } from "../../components/Row";
 import { BigNumber } from "@ethersproject/bignumber";
+import Button from "../../components/Button";
 import { Contract } from "@ethersproject/contracts";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import Dots from "../../components/Dots";
@@ -51,7 +47,6 @@ import { MinimalPositionCard } from "../../components/PositionCard";
 import PercentInputPanel from "../../components/PercentInputPanel";
 import ReactGA from "react-ga";
 import RemoveLiquidityReceiveDetails from "../../features/liquidity/RemoveLiquidityReceiveDetails";
-import { Text } from "rebass";
 import { TransactionResponse } from "@ethersproject/providers";
 import { splitSignature } from "@ethersproject/bytes";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
@@ -518,14 +513,16 @@ export default function Remove() {
             </div>
           </div>
         </div>
-        <ButtonPrimary
+        <Button
+          color="gradient"
+          size="large"
           disabled={
             !(approval === ApprovalState.APPROVED || signatureData !== null)
           }
           onClick={onRemove}
         >
-          <div className="text-lg font-medium">{i18n._(t`Confirm`)}</div>
-        </ButtonPrimary>
+          {i18n._(t`Confirm`)}
+        </Button>
       </div>
     );
   }
@@ -684,9 +681,13 @@ export default function Remove() {
             )}
             <div style={{ position: "relative" }}>
               {!account ? (
-                <ButtonLight onClick={toggleWalletModal}>
+                <Button
+                  variant="outlined"
+                  color="blue"
+                  onClick={toggleWalletModal}
+                >
                   {i18n._(t`Connect Wallet`)}
-                </ButtonLight>
+                </Button>
               ) : (
                 <div className="grid grid-cols-2 gap-4">
                   <ButtonConfirmed

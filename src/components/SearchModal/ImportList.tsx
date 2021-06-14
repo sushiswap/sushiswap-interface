@@ -6,7 +6,7 @@ import { enableList, removeList } from "../../state/lists/actions";
 
 import { AppDispatch } from "../../state";
 import { AutoColumn } from "../Column";
-import { ButtonPrimary } from "../ButtonLegacy";
+import Button from "../Button";
 import Card from "../Card";
 import CloseIcon from "../CloseIcon";
 import CurrencyModalView from "./CurrencyModalView";
@@ -15,7 +15,6 @@ import ListLogo from "../ListLogo";
 import ReactGA from "react-ga";
 import { TokenList } from "@uniswap/token-lists";
 import styled from "styled-components";
-import { transparentize } from "polished";
 import { useAllLists } from "../../state/lists/hooks";
 import { useDispatch } from "react-redux";
 import { useFetchListCallback } from "../../hooks/useFetchListCallback";
@@ -154,15 +153,18 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             </AutoRow>
           </Card>
 
-          <ButtonPrimary
+          <Button
+            color="gradient"
+            size="small"
+            style={{
+              borderRadius: "20px",
+              padding: "10px 1rem",
+            }}
             disabled={!confirmed}
-            altDisabledStyle={true}
-            borderRadius="20px"
-            padding="10px 1rem"
             onClick={handleAddList}
           >
             Import
-          </ButtonPrimary>
+          </Button>
           {addError ? (
             <div
               title={addError}

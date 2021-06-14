@@ -3,13 +3,9 @@ import {
   useApproveCallback,
 } from "../../hooks/useApproveCallback";
 import { AutoRow, RowBetween } from "../../components/Row";
-import {
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../../components/ButtonLegacy";
+import Button, { ButtonError } from "../../components/Button";
 import { Currency, TokenAmount, WETH, currencyEquals } from "@sushiswap/sdk";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Trans, t } from "@lingui/macro";
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
@@ -523,13 +519,17 @@ export default function Add() {
               )}
 
             {addIsUnsupported ? (
-              <ButtonPrimary disabled={true}>
+              <Button color="gradient" size="large" disabled>
                 {i18n._(t`Unsupported Asset`)}
-              </ButtonPrimary>
+              </Button>
             ) : !account ? (
-              <ButtonLight onClick={toggleWalletModal}>
+              <Button
+                variant="outlined"
+                color="blue"
+                onClick={toggleWalletModal}
+              >
                 {i18n._(t`Connect Wallet`)}
-              </ButtonLight>
+              </Button>
             ) : (
               <AutoColumn gap={"md"}>
                 {(approvalA === ApprovalState.NOT_APPROVED ||
@@ -539,14 +539,17 @@ export default function Add() {
                   isValid && (
                     <RowBetween>
                       {approvalA !== ApprovalState.APPROVED && (
-                        <ButtonPrimary
+                        <Button
+                          color="gradient"
+                          size="large"
                           onClick={approveACallback}
                           disabled={approvalA === ApprovalState.PENDING}
-                          width={
-                            approvalB !== ApprovalState.APPROVED
-                              ? "48%"
-                              : "100%"
-                          }
+                          style={{
+                            width:
+                              approvalB !== ApprovalState.APPROVED
+                                ? "48%"
+                                : "100%",
+                          }}
                         >
                           {approvalA === ApprovalState.PENDING ? (
                             <Dots>
@@ -561,17 +564,20 @@ export default function Add() {
                               ]?.getSymbol(chainId)}`
                             )
                           )}
-                        </ButtonPrimary>
+                        </Button>
                       )}
                       {approvalB !== ApprovalState.APPROVED && (
-                        <ButtonPrimary
+                        <Button
+                          color="gradient"
+                          size="large"
                           onClick={approveBCallback}
                           disabled={approvalB === ApprovalState.PENDING}
-                          width={
-                            approvalA !== ApprovalState.APPROVED
-                              ? "48%"
-                              : "100%"
-                          }
+                          style={{
+                            width:
+                              approvalA !== ApprovalState.APPROVED
+                                ? "48%"
+                                : "100%",
+                          }}
                         >
                           {approvalB === ApprovalState.PENDING ? (
                             <Dots>
@@ -586,7 +592,7 @@ export default function Add() {
                               ]?.getSymbol(chainId)}`
                             )
                           )}
-                        </ButtonPrimary>
+                        </Button>
                       )}
                     </RowBetween>
                   )}

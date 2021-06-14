@@ -27,13 +27,6 @@ export default function ExchangeHeader({
       <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-800"
-          // href={`/swap${
-          //   input ? `?inputCurrency=${currencyId(input, chainId)}` : ""
-          // }${
-          //   output && output.address
-          //     ? `&outputCurrency=${currencyId(output, chainId)}`
-          //     : ""
-          // }`}
           href={`/swap${input ? `/${currencyId(input, chainId)}` : ""}${
             output ? `/${currencyId(output, chainId)}` : ""
           }`}
@@ -43,13 +36,8 @@ export default function ExchangeHeader({
             {i18n._(t`Swap`)}
           </a>
         </NavLink>
-        {/* <NavLink activeClassName="bg-dark-900 text-high-emphesis" to="/limit-order">
-                    <a className="px-4 py-2 text-xs font-medium text-center rounded-md text-secondary hover:text-high-emphesis">
-                        {i18n._(t`Limit Order`)}
-                    </a>
-                </NavLink> */}
         <NavLink
-          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
+          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-800"
           href={`/${router.asPath.includes("add") ? "add" : "remove"}${
             input ? `/${currencyId(input, chainId)}` : ""
           }${output ? `/${currencyId(output, chainId)}` : ""}`}

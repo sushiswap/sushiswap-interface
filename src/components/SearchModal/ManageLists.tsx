@@ -1,5 +1,4 @@
 import { AppDispatch, AppState } from "../../state";
-import { ButtonEmpty, ButtonPrimary } from "../ButtonLegacy";
 import { CheckCircle, Settings } from "react-feather";
 import Column, { AutoColumn } from "../Column";
 import { PaddedColumn, SearchInput, Separator, SeparatorDark } from "./styleds";
@@ -26,6 +25,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import AutoSizer from "react-virtualized-auto-sizer";
+import Button from "../Button";
 import Card from "../Card";
 import CurrencyModalView from "./CurrencyModalView";
 import ExternalLink from "../ExternalLink";
@@ -124,7 +124,7 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
 
   const [open, toggle] = useToggle(false);
   const node = useRef<HTMLDivElement>();
-  const [referenceElement, setReferenceElement] = useState<HTMLDivElement>();
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement>();
   const [popperElement, setPopperElement] = useState<HTMLDivElement>();
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -214,9 +214,14 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
             {list.tokens.length} tokens
           </StyledListUrlText>
           <StyledMenu ref={node as any}>
-            <ButtonEmpty onClick={toggle} ref={setReferenceElement} padding="0">
+            <Button
+              variant="empty"
+              onClick={toggle}
+              ref={setReferenceElement}
+              style={{ padding: "0" }}
+            >
               <Settings size={12} className="ml-1 stroke-current" />
-            </ButtonEmpty>
+            </Button>
             {open && (
               <PopoverContainer
                 show={true}
@@ -413,14 +418,17 @@ function ManageLists({
                   <div>Loaded</div>
                 </RowFixed>
               ) : (
-                <ButtonPrimary
-                  style={{ fontSize: "14px" }}
-                  padding="6px 8px"
-                  width="fit-content"
+                <Button
+                  color="gradient"
+                  style={{
+                    width: "fit-content",
+                    padding: "6px 8px",
+                    fontSize: "14px",
+                  }}
                   onClick={handleImport}
                 >
                   Import
-                </ButtonPrimary>
+                </Button>
               )}
             </RowBetween>
           </Card>

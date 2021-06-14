@@ -1,13 +1,12 @@
-import { AlertTriangle, ArrowLeft } from "react-feather";
-import { AutoRow, RowBetween, RowFixed } from "../../components/Row";
-import { Checkbox, PaddedColumn } from "./styleds";
+import { AutoRow, RowFixed } from "../../components/Row";
 import { Currency, Token } from "@sushiswap/sdk";
 import React, { useState } from "react";
 
+import { AlertTriangle } from "react-feather";
 import { AutoColumn } from "../Column";
-import { ButtonPrimary } from "../ButtonLegacy";
+import Button from "../Button";
 import Card from "../Card";
-import CloseIcon from "../CloseIcon";
+import { Checkbox } from "./styleds";
 import CurrencyLogo from "../CurrencyLogo";
 import ExternalLink from "../ExternalLink";
 import ListLogo from "../ListLogo";
@@ -195,11 +194,10 @@ export function ImportToken({
           </div>
         </AutoRow>
       </Card>
-      <ButtonPrimary
+      <Button
+        color="gradient"
+        size="small"
         disabled={!confirmed}
-        altDisabledStyle={true}
-        borderRadius="20px"
-        padding="10px 1rem"
         onClick={() => {
           tokens.map((token) => addToken(token));
           handleCurrencySelect && handleCurrencySelect(tokens[0]);
@@ -207,7 +205,7 @@ export function ImportToken({
         className=".token-dismiss-button"
       >
         Import
-      </ButtonPrimary>
+      </Button>
     </Wrapper>
   );
 }
