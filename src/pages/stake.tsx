@@ -1,8 +1,8 @@
 import { ApprovalState, useApproveCallback } from '../hooks/useApproveCallback'
+import { BAR_ADDRESS, ZERO } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
 import { SUSHI, XSUSHI } from '../constants'
 
-import { BAR_ADDRESS } from '@sushiswap/sdk'
 import Button from '../components/Button'
 import { ChainId } from '@sushiswap/sdk'
 import Dots from '../components/Dots'
@@ -55,19 +55,15 @@ const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
 const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
 
-const fetcher = (query) =>
-    request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
+const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
 
 export default function Stake() {
     const { i18n } = useLingui()
     const { account } = useActiveWeb3React()
-    const sushiBalance = useTokenBalance(
-        account ?? undefined,
-        SUSHI[ChainId.MAINNET]
-    )
+    const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.MAINNET])
     const xSushiBalance = useTokenBalance(account ?? undefined, XSUSHI)
 
-    const { allowance, enter, leave } = useSushiBar()
+    const { enter, leave } = useSushiBar()
 
     const { data } = useSWR(
         `{
@@ -77,14 +73,6 @@ export default function Stake() {
         }`,
         fetcher
     )
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const results = await Promise.all([sushiData.bar.info()])
-    //         setExchangeRate(results[0].ratio)
-    //     }
-    //     fetchData()
-    // }, [])
 
     const xSushiPerSushi = parseFloat(data?.bar?.ratio)
 
@@ -101,9 +89,9 @@ export default function Stake() {
 
     const formattedBalance = balance?.toSignificant(4)
 
-    const parsedAmount = usingBalance
-        ? balance
-        : tryParseAmount(input, balance?.token)
+    const parsedAmount = usingBalance ? balance : tryParseAmount(input, balance?.token)
+
+    const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.MAINNET])
 
     const handleInput = (v: string) => {
         if (v.length <= INPUT_CHAR_LIMIT) {
@@ -111,19 +99,19 @@ export default function Stake() {
             setInput(v)
         }
     }
+
     const handleClickMax = () => {
-        // setInput(parsedAmount ? parsedAmount.toSignificant(balance.token.decimals).substring(0, INPUT_CHAR_LIMIT) : '')
-        setInput(parsedAmount?.toExact() ?? '')
+        setInput(parsedAmount ? parsedAmount.toSignificant(balance.token.decimals).substring(0, INPUT_CHAR_LIMIT) : '')
         setUsingBalance(true)
     }
 
-    const insufficientFunds = parsedAmount && balance?.lessThan(parsedAmount)
+    const insufficientFunds = balance.equalTo(ZERO) || parsedAmount?.greaterThan(balance)
 
     const inputError = insufficientFunds
 
     const [pendingTx, setPendingTx] = useState(false)
 
-    const buttonDisabled = !input || pendingTx || Number(input) === 0
+    const buttonDisabled = !input || pendingTx || parsedAmount.equalTo(ZERO)
 
     const handleClickButton = async () => {
         if (buttonDisabled) return
@@ -134,7 +122,7 @@ export default function Stake() {
             setPendingTx(true)
 
             if (activeTab === 0) {
-                if (Number(allowance) === 0) {
+                if (approvalState === ApprovalState.NOT_APPROVED) {
                     const success = await sendTx(() => approve())
                     if (!success) {
                         setPendingTx(false)
@@ -162,11 +150,6 @@ export default function Stake() {
         }
     }
 
-    const [approvalState, approve] = useApproveCallback(
-        parsedAmount,
-        BAR_ADDRESS[ChainId.MAINNET]
-    )
-
     const [apr, setApr] = useState<any>()
 
     useEffect(() => {
@@ -177,9 +160,7 @@ export default function Stake() {
                 sushiData.sushi.priceUSD(),
             ])
             const apr =
-                (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) *
-                    365) /
-                (results[0].ratio * results[2])
+                (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) * 365) / (results[0].ratio * results[2])
 
             setApr(apr)
         }
@@ -200,9 +181,7 @@ export default function Stake() {
                     <div className="flex flex-col w-full max-w-xl mt-auto mb-2">
                         <div className="flex max-w-lg">
                             <div className="self-end mb-3 font-bold text-body md:text-h5 text-high-emphesis md:mb-7">
-                                {i18n._(
-                                    t`Maximize yield by staking SUSHI for xSUSHI`
-                                )}
+                                {i18n._(t`Maximize yield by staking SUSHI for xSUSHI`)}
                             </div>
                             {/* <div className="self-start pl-6 pr-3 mb-1 min-w-max md:hidden">
                                 <img src={XSushiSignSmall} alt="xsushi sign" />
@@ -265,11 +244,7 @@ export default function Stake() {
                                 </div>
                                 <div className="flex flex-col">
                                     <p className="mb-1 text-lg font-bold text-right text-high-emphesis md:text-h4">
-                                        {`${
-                                            apr
-                                                ? apr.toFixed(2) + '%'
-                                                : i18n._(t`Loading...`)
-                                        }`}
+                                        {`${apr ? apr.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
                                     </p>
                                     <p className="w-32 text-right text-primary md:w-64 text-caption2 md:text-base">
                                         {i18n._(t`Yesterday's APR`)}
@@ -278,10 +253,7 @@ export default function Stake() {
                             </div>
                         </div>
                         <div>
-                            <TransactionFailedModal
-                                isOpen={modalOpen}
-                                onDismiss={() => setModalOpen(false)}
-                            />
+                            <TransactionFailedModal isOpen={modalOpen} onDismiss={() => setModalOpen(false)} />
                             <div className="w-full max-w-xl px-3 pt-2 pb-6 rounded bg-dark-900 md:pb-9 md:pt-4 md:px-8">
                                 <div className="flex w-full rounded h-14 bg-dark-800">
                                     <div
@@ -291,13 +263,7 @@ export default function Stake() {
                                             handleInput('')
                                         }}
                                     >
-                                        <div
-                                            className={
-                                                activeTab === 0
-                                                    ? activeTabStyle
-                                                    : inactiveTabStyle
-                                            }
-                                        >
+                                        <div className={activeTab === 0 ? activeTabStyle : inactiveTabStyle}>
                                             <p>{i18n._(t`Stake SUSHI`)}</p>
                                         </div>
                                     </div>
@@ -308,13 +274,7 @@ export default function Stake() {
                                             handleInput('')
                                         }}
                                     >
-                                        <div
-                                            className={
-                                                activeTab === 1
-                                                    ? activeTabStyle
-                                                    : inactiveTabStyle
-                                            }
-                                        >
+                                        <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
                                             <p>{i18n._(t`Unstake`)}</p>
                                         </div>
                                     </div>
@@ -322,21 +282,17 @@ export default function Stake() {
 
                                 <div className="flex items-center justify-between w-full mt-6">
                                     <p className="font-bold text-large md:text-h5 text-high-emphesis">
-                                        {activeTab === 0
-                                            ? i18n._(t`Stake SUSHI`)
-                                            : i18n._(t`Unstake`)}
+                                        {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
                                     </p>
                                     <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-caption md:font-normal">
-                                        {`1 xSUSHI = ${xSushiPerSushi.toFixed(
-                                            4
-                                        )} SUSHI`}
+                                        {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
                                     </div>
                                 </div>
 
                                 <StyledNumericalInput
                                     value={input}
                                     onUserInput={handleInput}
-                                    className={`w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-caption2 md:text-lg font-bold text-dark-800${
+                                    className={`w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-caption2 md:text-lg font-bold text-dark-800 whitespace-nowrap${
                                         inputError ? ' pl-9 md:pl-12' : ''
                                     }`}
                                     placeholder=" "
@@ -346,9 +302,7 @@ export default function Stake() {
                                 <div className="relative w-full h-0 pointer-events-none bottom-14">
                                     <div
                                         className={`flex justify-between items-center h-14 rounded px-3 md:px-5 ${
-                                            inputError
-                                                ? ' border border-red'
-                                                : ''
+                                            inputError ? ' border border-red' : ''
                                         }`}
                                     >
                                         <div className="flex">
@@ -360,31 +314,21 @@ export default function Stake() {
                                                 />
                                             )}
                                             <p
-                                                className={`text-caption2 md:text-lg font-bold ${
-                                                    input
-                                                        ? 'text-high-emphesis'
-                                                        : 'text-secondary'
+                                                className={`text-caption2 md:text-lg font-bold whitespace-nowrap ${
+                                                    input ? 'text-high-emphesis' : 'text-secondary'
                                                 }`}
                                             >
-                                                {`${input ? input : '0'} ${
-                                                    activeTab === 0 ? '' : 'x'
-                                                }SUSHI`}
+                                                {`${input ? input : '0'} ${activeTab === 0 ? '' : 'x'}SUSHI`}
                                             </p>
                                         </div>
                                         <div className="flex items-center text-secondary text-caption2 md:text-caption">
                                             <div
                                                 className={
-                                                    input
-                                                        ? 'hidden md:flex md:items-center'
-                                                        : 'flex items-center'
+                                                    input ? 'hidden md:flex md:items-center' : 'flex items-center'
                                                 }
                                             >
-                                                <p>
-                                                    {i18n._(t`Balance`)}:&nbsp;
-                                                </p>
-                                                <p className="font-bold text-caption">
-                                                    {formattedBalance}
-                                                </p>
+                                                <p>{i18n._(t`Balance`)}:&nbsp;</p>
+                                                <p className="font-bold text-caption">{formattedBalance}</p>
                                             </div>
                                             <button
                                                 className="px-2 py-1 ml-3 text-xs font-bold border pointer-events-auto focus:outline-none focus:ring hover:bg-opacity-40 md:bg-cyan-blue md:bg-opacity-30 border-secondary md:border-cyan-blue rounded-2xl md:py-1 md:px-3 md:ml-4 md:text-caption2 md:font-normal md:text-cyan-blue"
@@ -395,20 +339,15 @@ export default function Stake() {
                                         </div>
                                     </div>
                                 </div>
-                                {(approvalState ===
-                                    ApprovalState.NOT_APPROVED ||
+                                {(approvalState === ApprovalState.NOT_APPROVED ||
                                     approvalState === ApprovalState.PENDING) &&
                                 activeTab === 0 ? (
                                     <Button
                                         className={`${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`}
-                                        disabled={
-                                            approvalState ===
-                                            ApprovalState.PENDING
-                                        }
+                                        disabled={approvalState === ApprovalState.PENDING}
                                         onClick={approve}
                                     >
-                                        {approvalState ===
-                                        ApprovalState.PENDING ? (
+                                        {approvalState === ApprovalState.PENDING ? (
                                             <Dots>{i18n._(t`Approving`)} </Dots>
                                         ) : (
                                             i18n._(t`Approve`)
@@ -459,15 +398,9 @@ export default function Stake() {
                                         />
                                         <div className="flex flex-col justify-center">
                                             <p className="font-bold text-caption2 md:text-lg text-high-emphesis">
-                                                {xSushiBalance
-                                                    ? xSushiBalance.toSignificant(
-                                                          4
-                                                      )
-                                                    : '-'}
+                                                {xSushiBalance ? xSushiBalance.toSignificant(4) : '-'}
                                             </p>
-                                            <p className="text-caption2 md:text-caption text-primary">
-                                                xSUSHI
-                                            </p>
+                                            <p className="text-caption2 md:text-caption text-primary">xSUSHI</p>
                                         </div>
                                     </div>
                                 </div>
@@ -489,15 +422,9 @@ export default function Stake() {
                                         />
                                         <div className="flex flex-col justify-center">
                                             <p className="font-bold text-caption2 md:text-lg text-high-emphesis">
-                                                {sushiBalance
-                                                    ? sushiBalance.toSignificant(
-                                                          4
-                                                      )
-                                                    : '-'}
+                                                {sushiBalance ? sushiBalance.toSignificant(4) : '-'}
                                             </p>
-                                            <p className="text-caption2 md:text-caption text-primary">
-                                                SUSHI
-                                            </p>
+                                            <p className="text-caption2 md:text-caption text-primary">SUSHI</p>
                                         </div>
                                     </div>
                                 </div>
