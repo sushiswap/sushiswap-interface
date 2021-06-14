@@ -688,7 +688,7 @@ export default function Remove() {
                   {i18n._(t`Connect Wallet`)}
                 </ButtonLight>
               ) : (
-                <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:justify-between">
+                <div className="grid grid-cols-2 gap-4">
                   <ButtonConfirmed
                     onClick={onAttemptToApprove}
                     confirmed={
@@ -699,9 +699,6 @@ export default function Remove() {
                       approval !== ApprovalState.NOT_APPROVED ||
                       signatureData !== null
                     }
-                    mr="0.5rem"
-                    fontWeight={500}
-                    fontSize={16}
                   >
                     {approval === ApprovalState.PENDING ? (
                       <Dots>{i18n._(t`Approving`)}</Dots>
@@ -727,9 +724,7 @@ export default function Remove() {
                       !!parsedAmounts[Field.CURRENCY_B]
                     }
                   >
-                    <Text className="font-medium">
-                      {error || i18n._(t`Confirm Withdrawal`)}
-                    </Text>
+                    {error || i18n._(t`Confirm Withdrawal`)}
                   </ButtonError>
                 </div>
               )}

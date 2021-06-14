@@ -324,39 +324,32 @@ const ButtonConfirmedStyle = styled(Base)`
   }
 `;
 
-const ButtonErrorStyle = styled(Base)`
-  // background-color: ${({ theme }) => theme.red1};
-  // border: 1px solid ${({ theme }) => theme.red1};
-
-  &:focus {
-    // box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.05, theme.red1)};
-    // background-color: ${({ theme }) => darken(0.05, theme.red1)};
-  }
-  &:hover {
-    // background-color: ${({ theme }) => darken(0.05, theme.red1)};
-  }
-  &:active {
-    // box-shadow: 0 0 0 1pt ${({ theme }) => darken(0.1, theme.red1)};
-    // background-color: ${({ theme }) => darken(0.1, theme.red1)};
-  }
-  &:disabled {
-    opacity: 50%;
-    cursor: auto;
-    box-shadow: none;
-    // background-color: ${({ theme }) => theme.red1};
-    // border: 1px solid ${({ theme }) => theme.red1};
-  }
-`;
-
 export function ButtonConfirmed({
   confirmed,
+  disabled,
   altDisabledStyle,
   ...rest
 }: { confirmed?: boolean; altDisabledStyle?: boolean } & ButtonProps) {
   if (confirmed) {
-    return <ButtonConfirmedStyle {...rest} />;
+    return (
+      <Button
+        variant="outlined"
+        color="green"
+        size="large"
+        className="border opacity-50 border-green"
+        {...rest}
+      />
+    );
   } else {
-    return <ButtonPrimary {...rest} altDisabledStyle={altDisabledStyle} />;
+    return (
+      <Button
+        color={disabled ? "gray" : "gradient"}
+        size="large"
+        disabled={disabled}
+        altDisabledStyle={altDisabledStyle}
+        {...rest}
+      />
+    );
   }
 }
 

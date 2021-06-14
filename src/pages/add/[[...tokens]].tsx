@@ -590,25 +590,26 @@ export default function Add() {
                       )}
                     </RowBetween>
                   )}
-                <ButtonError
-                  onClick={() => {
-                    expertMode ? onAdd() : setShowConfirm(true);
-                  }}
-                  disabled={
-                    !isValid ||
-                    approvalA !== ApprovalState.APPROVED ||
-                    approvalB !== ApprovalState.APPROVED
-                  }
-                  error={
-                    !isValid &&
-                    !!parsedAmounts[Field.CURRENCY_A] &&
-                    !!parsedAmounts[Field.CURRENCY_B]
-                  }
-                >
-                  <Text fontSize={20} fontWeight={500}>
-                    {error ?? i18n._(t`Confirm Adding Liquidity`)}
-                  </Text>
-                </ButtonError>
+                {approvalA === ApprovalState.APPROVED &&
+                  approvalB === ApprovalState.APPROVED && (
+                    <ButtonError
+                      onClick={() => {
+                        expertMode ? onAdd() : setShowConfirm(true);
+                      }}
+                      disabled={
+                        !isValid ||
+                        approvalA !== ApprovalState.APPROVED ||
+                        approvalB !== ApprovalState.APPROVED
+                      }
+                      error={
+                        !isValid &&
+                        !!parsedAmounts[Field.CURRENCY_A] &&
+                        !!parsedAmounts[Field.CURRENCY_B]
+                      }
+                    >
+                      {error ?? i18n._(t`Confirm Adding Liquidity`)}
+                    </ButtonError>
+                  )}
               </AutoColumn>
             )}
           </AutoColumn>

@@ -1,28 +1,33 @@
 import React from "react";
 
 const SIZE = {
-  default: "px-4 py-3",
-  small: "px-2 py-1",
-  large: "px-6 py-4",
+  default: "px-4 py-3 text-base",
+  small: "px-2 py-1 text-xs",
+  large: "px-6 py-4 text-base",
 };
 
 const FILLED = {
   default: "bg-transparent",
-  red: "bg-red bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100",
-  blue: "bg-blue bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100",
-  pink: "bg-pink bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100",
-  gray: "bg-dark-700 bg-opacity-80 w-full rounded text-base text-high-emphesis hover:bg-opacity-100",
+  red: "bg-red bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80",
+  blue: "bg-blue bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80",
+  pink: "bg-pink bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80",
+  gray: "bg-dark-700 bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80",
+  green:
+    "bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80",
   gradient:
-    "w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100",
+    "w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 disabled:bg-opacity-80",
 };
 
 const OUTLINED = {
   default: "bg-transparent",
-  red: "bg-red bg-opacity-20 outline-red rounded text-xs text-red hover:bg-opacity-40",
-  blue: "bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue hover:bg-opacity-40",
-  pink: "bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40",
-  gray: "bg-dark-700 bg-opacity-20 outline-pink rounded text-xs text-pink hover:bg-opacity-40",
-  gradient: "bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100",
+  red: "bg-red bg-opacity-20 outline-red rounded text-red hover:bg-opacity-40 disabled:bg-opacity-20",
+  blue: "bg-blue bg-opacity-20 outline-blue rounded text-blue hover:bg-opacity-40 disabled:bg-opacity-20",
+  pink: "bg-pink bg-opacity-20 outline-pink rounded text-pink hover:bg-opacity-40 disabled:bg-opacity-20",
+  gray: "bg-dark-700 bg-opacity-20 outline-pink rounded text-pink hover:bg-opacity-40 disabled:bg-opacity-20",
+  green:
+    "bg-green bg-opacity-20 outline-pink rounded text-green hover:bg-opacity-40 disabled:bg-opacity-20",
+  gradient:
+    "bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 disabled:bg-opacity-20",
 };
 
 const VARIANT = {
