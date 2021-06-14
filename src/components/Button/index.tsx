@@ -4,6 +4,7 @@ import { classNames } from "../../functions";
 const SIZE = {
   default: "px-4 py-2 text-base",
   small: "px-2 py-1 text-xs",
+  medium: "px-4 py-3 text-base",
   large: "px-6 py-4 text-base",
 };
 
@@ -51,7 +52,7 @@ export type ButtonColor =
   | "red"
   | "green";
 
-export type ButtonSize = "small" | "large" | "default";
+export type ButtonSize = "small" | "large" | "medium" | "default";
 
 export type ButtonVariant = "outlined" | "filled" | "empty";
 
