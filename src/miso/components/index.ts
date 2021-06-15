@@ -1,1 +1,6 @@
 export { default as AboutCard } from './AboutCard'
+export { default as BaseButton } from './BaseButton'
+export { default as BaseRadio } from './BaseRadio'
+export { default as BaseInput } from './BaseInput'
+export { default as SidebarNotification } from './tokens/SidebarNotification'
+export { default as Wizard } from './Wizard'
