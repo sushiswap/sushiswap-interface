@@ -94,6 +94,8 @@ export const Input = React.memo(
   }
 );
 
+Input.displayName = "PercentInput";
+
 export default Input;
 
 // const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
