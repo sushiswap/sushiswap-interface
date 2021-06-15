@@ -37,13 +37,13 @@ Any price feed which is not currently in the Chainlink mappings need to be added
 
 Each mapping is keyed by the price feed proxy address, and contains and object with these properties
 
-Tip: USD address is 0x0000000000000000000000000000000000000001
-
 - from (token0 address)
 - to (token1 address)
 - decimals (price feed decimals)
 - fromDecimals (token0 decimals)
 - toDecimals (token1 decimals)
+
+Tip: USD address is 0x0000000000000000000000000000000000000001 and decimals 8
 
 <!-- ## SushiSwap TWAP
 
