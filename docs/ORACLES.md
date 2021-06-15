@@ -12,10 +12,15 @@ Currently there is two types of oracles which the sushi interface supports, Chai
 Chainlink price feeds...
 
 https://docs.chain.link/docs/ethereum-addresses/
+
 https://docs.chain.link/docs/binance-smart-chain-addresses/
+
 https://docs.chain.link/docs/matic-addresses/
+
 https://docs.chain.link/docs/xdai-price-feeds/
+
 https://docs.chain.link/docs/huobi-eco-chain-price-feeds/
+
 https://docs.chain.link/docs/avalanche-price-feeds/
 
 Each price feed has a pair token0/token1, SUSHI/ETH or SUSHI/USD for example, decimals, and proxy. We use this information to construct mappings of the price feed to their respectful pair tokens.
