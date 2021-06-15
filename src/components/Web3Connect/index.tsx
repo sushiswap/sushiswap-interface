@@ -17,7 +17,7 @@ const NetworkIcon = styled(Activity)`
 
 export default function Web3Connect({
   color = "gray",
-  size = "sm",
+  size = undefined,
   className = "",
   ...rest
 }: ButtonProps) {
