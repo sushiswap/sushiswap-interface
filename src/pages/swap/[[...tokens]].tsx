@@ -623,6 +623,7 @@ export default function Swap() {
               variant="outlined"
               color="blue"
               size="large"
+              className="w-full"
               onClick={toggleWalletModal}
             >
               {i18n._(t`Connect Wallet`)}
