@@ -45,12 +45,7 @@ export function KashiApproveButton({ content, color }: any): any {
       )}
 
       {showApprove && (
-        <Button
-          color={color}
-          onClick={onApprove}
-          size="medium"
-          className="mb-4"
-        >
+        <Button color={color} onClick={onApprove} className="mb-4">
           {i18n._(t`Approve Kashi`)}
         </Button>
       )}
@@ -84,7 +79,7 @@ export function TokenApproveButton({
       approvalState === ApprovalState.PENDING);
 
   return showApprove ? (
-    <Button color={color} onClick={approve} size="medium" className="mb-4">
+    <Button color={color} onClick={approve} className="mb-4">
       <Dots
         pending={approvalState === ApprovalState.PENDING}
         pendingTitle={`Approving ${token.symbol}`}
