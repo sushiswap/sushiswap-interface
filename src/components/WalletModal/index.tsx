@@ -301,7 +301,7 @@ export default function WalletModal({
               i18n._(t`Error connecting. Try refreshing the page.`)
             )}
             <div style={{ marginTop: "1rem" }} />
-            <ButtonError error={true} size="small" onClick={deactivate}>
+            <ButtonError error={true} size="xs" onClick={deactivate}>
               {i18n._(t`Disconnect`)}
             </ButtonError>
           </div>

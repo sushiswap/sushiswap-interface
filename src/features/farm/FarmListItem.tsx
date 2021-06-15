@@ -176,7 +176,7 @@ const FarmListItem = ({ farm }) => {
                       <Button
                         variant="outlined"
                         color="blue"
-                        size="small"
+                        size="xs"
                         onClick={() => {
                           if (!balance.equalTo(ZERO)) {
                             setDepositValue(
@@ -252,7 +252,7 @@ const FarmListItem = ({ farm }) => {
                       <Button
                         variant="outlined"
                         color="pink"
-                        size="small"
+                        size="xs"
                         onClick={() => {
                           if (!amount.equalTo(ZERO)) {
                             setWithdrawValue(
@@ -327,7 +327,8 @@ const FarmListItem = ({ farm }) => {
                 {farm.pair.type === PairType.LENDING && token1.symbol && (
                   <>
                     <div className="text-caption2">
-                      Before depositing into this reward pool you'll need to{" "}
+                      Before depositing into this reward pool you&apos;ll need
+                      to{" "}
                       <Link href={`/lend/${farm.pair.id}`}>
                         <a className="underline text-blue">lend</a>
                       </Link>{" "}
@@ -349,7 +350,7 @@ const FarmListItem = ({ farm }) => {
                 <div className="px-4 ">
                   <Button
                     color="gradient"
-                    size="large"
+                    size="lg"
                     onClick={async () => {
                       setPendingTx(true);
                       try {

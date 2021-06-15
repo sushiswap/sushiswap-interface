@@ -521,13 +521,14 @@ export default function Add() {
               )}
 
             {addIsUnsupported ? (
-              <Button color="gradient" size="large" disabled>
+              <Button color="gradient" size="lg" disabled>
                 {i18n._(t`Unsupported Asset`)}
               </Button>
             ) : !account ? (
               <Button
                 variant="outlined"
                 color="blue"
+                className="w-full"
                 onClick={toggleWalletModal}
               >
                 {i18n._(t`Connect Wallet`)}
@@ -543,7 +544,7 @@ export default function Add() {
                       {approvalA !== ApprovalState.APPROVED && (
                         <Button
                           color="gradient"
-                          size="large"
+                          size="lg"
                           onClick={approveACallback}
                           disabled={approvalA === ApprovalState.PENDING}
                           style={{
@@ -571,7 +572,7 @@ export default function Add() {
                       {approvalB !== ApprovalState.APPROVED && (
                         <Button
                           color="gradient"
-                          size="large"
+                          size="lg"
                           onClick={approveBCallback}
                           disabled={approvalB === ApprovalState.PENDING}
                           style={{

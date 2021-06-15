@@ -88,7 +88,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
         <Button
           variant="outlined"
           color="pink"
-          size="small"
+          size="xs"
           onClick={onPressMax}
           className="absolute right-4 focus:ring focus:ring-pink"
         >
@@ -400,7 +400,7 @@ export default function Migrate() {
 
       <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
         {!account ? (
-          <Button variant="outlined" color="blue" size="large">
+          <Button variant="outlined" color="blue" className="w-full">
             {i18n._(t`Connect to a wallet to view your liquidity`)}
           </Button>
         ) : state.loading ? (

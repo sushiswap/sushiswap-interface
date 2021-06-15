@@ -196,7 +196,7 @@ export function ImportToken({
       </Card>
       <Button
         color="gradient"
-        size="small"
+        size="xs"
         disabled={!confirmed}
         onClick={() => {
           tokens.map((token) => addToken(token));

@@ -89,7 +89,7 @@ export default function ImportRow({
       {!isActive && !isAdded ? (
         <Button
           color="gradient"
-          size="small"
+          size="xs"
           style={{
             width: "fit-content",
             padding: "6px 12px",

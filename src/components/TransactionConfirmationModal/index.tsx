@@ -140,7 +140,7 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({
         </div>
       </div>
       <div>
-        <Button color="gradient" size="large" onClick={onDismiss}>
+        <Button color="gradient" size="lg" onClick={onDismiss}>
           Dismiss
         </Button>
       </div>

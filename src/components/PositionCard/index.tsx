@@ -336,7 +336,7 @@ export default function FullPositionCard({
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <Button
                   color="blue"
-                  size="large"
+                  size="lg"
                   onClick={() => {
                     router.push(
                       `/add/${currencyId(currency0, chainId)}/${currencyId(
@@ -350,7 +350,7 @@ export default function FullPositionCard({
                 </Button>
                 <Button
                   color="blue"
-                  size="large"
+                  size="lg"
                   onClick={() => {
                     router.push(
                       `/remove/${currencyId(currency0, chainId)}/${currencyId(

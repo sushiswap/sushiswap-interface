@@ -85,7 +85,7 @@ export function ConfirmAddModalBottom({
         </div>
       </div>
 
-      <Button color="gradient" size="large" onClick={onAdd}>
+      <Button color="gradient" size="lg" onClick={onAdd}>
         {noLiquidity
           ? i18n._(t`Create Pool & Supply`)
           : i18n._(t`Confirm Supply`)}

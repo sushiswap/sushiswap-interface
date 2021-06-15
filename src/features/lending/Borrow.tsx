@@ -468,7 +468,7 @@ export default function Borrow({ pair }: BorrowProps) {
               (multipler, i) => (
                 <Button
                   variant="outlined"
-                  size="small"
+                  size="xs"
                   color="pink"
                   key={i}
                   onClick={() => {

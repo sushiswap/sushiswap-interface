@@ -178,7 +178,7 @@ export default function SettingsTab() {
           </Typography>
           <Button
             color="red"
-            size="large"
+            size="lg"
             onClick={() => {
               if (
                 window.prompt(

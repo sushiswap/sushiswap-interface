@@ -515,7 +515,7 @@ export default function Remove() {
         </div>
         <Button
           color="gradient"
-          size="large"
+          size="lg"
           disabled={
             !(approval === ApprovalState.APPROVED || signatureData !== null)
           }

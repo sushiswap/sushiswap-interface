@@ -2,10 +2,10 @@ import React from "react";
 import { classNames } from "../../functions";
 
 const SIZE = {
-  default: "px-4 py-2 text-base",
-  small: "px-2 py-1 text-xs",
-  medium: "px-4 py-3 text-base",
-  large: "px-6 py-4 text-base",
+  xs: "px-2 py-1 text-xs",
+  sm: "px-4 py-2 text-base",
+  default: "px-4 py-3 text-base",
+  lg: "px-6 py-4 text-base",
 };
 
 const FILLED = {
@@ -52,7 +52,7 @@ export type ButtonColor =
   | "red"
   | "green";
 
-export type ButtonSize = "small" | "large" | "medium" | "default";
+export type ButtonSize = "xs" | "sm" | "lg" | "default";
 
 export type ButtonVariant = "outlined" | "filled" | "empty";
 
@@ -99,7 +99,7 @@ export function ButtonConfirmed({
       <Button
         variant="outlined"
         color="green"
-        size="large"
+        size="lg"
         className={classNames(
           disabled && "cursor-not-allowed",
           "border opacity-50"
@@ -112,7 +112,7 @@ export function ButtonConfirmed({
     return (
       <Button
         color={disabled ? "gray" : "gradient"}
-        size="large"
+        size="lg"
         disabled={disabled}
         {...rest}
       />
@@ -129,13 +129,13 @@ export function ButtonError({
   disabled?: boolean;
 } & ButtonProps) {
   if (error) {
-    return <Button color="red" size="large" {...rest} />;
+    return <Button color="red" size="lg" {...rest} />;
   } else {
     return (
       <Button
         color={disabled ? "gray" : "gradient"}
         disabled={disabled}
-        size="large"
+        size="lg"
         {...rest}
       />
     );

@@ -227,7 +227,7 @@ export default function Vesting() {
                       Number(unclaimedAmount?.toFixed(8)) <= 0 ||
                       pendingTreasurySignature
                     }
-                    size="large"
+                    size="lg"
                     onClick={onClaim}
                     className="inline-flex items-center justify-center"
                   >

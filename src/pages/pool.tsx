@@ -135,7 +135,7 @@ export default function Pool() {
             </div>
 
             {!account ? (
-              <Web3Connect size="large" />
+              <Web3Connect size="lg" />
             ) : v2IsLoading ? (
               <Empty>
                 <Dots>{i18n._(t`Loading`)}</Dots>
@@ -169,7 +169,6 @@ export default function Pool() {
                 <Button
                   id="add-pool-button"
                   color="gradient"
-                  size="large"
                   onClick={() =>
                     router.push(
                       `/add/${Currency.getNativeCurrencySymbol(chainId)}`
@@ -181,7 +180,6 @@ export default function Pool() {
                 <Button
                   id="create-pool-button"
                   color="gray"
-                  size="large"
                   onClick={() =>
                     router.push(
                       `/create/${Currency.getNativeCurrencySymbol(chainId)}`

@@ -488,7 +488,7 @@ export default function Zap() {
                 <RowBetween>
                   <Button
                     color="gradient"
-                    size="large"
+                    size="lg"
                     onClick={approveCallback}
                     disabled={
                       approval !== ApprovalState.NOT_APPROVED ||
@@ -512,7 +512,7 @@ export default function Zap() {
                   </Button>
                   <Button
                     color="gradient"
-                    size="large"
+                    size="lg"
                     onClick={() => zapCallback()}
                     style={{
                       width: "48%",
@@ -538,7 +538,7 @@ export default function Zap() {
               ) : (
                 <Button
                   color="gradient"
-                  size="large"
+                  size="lg"
                   style={{ marginTop: "20px" }}
                   disabled={
                     !parsedAmount ||

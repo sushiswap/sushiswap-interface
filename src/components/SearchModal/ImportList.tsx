@@ -155,7 +155,7 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
 
           <Button
             color="gradient"
-            size="small"
+            size="xs"
             style={{
               borderRadius: "20px",
               padding: "10px 1rem",

@@ -615,14 +615,13 @@ export default function Swap() {
         </div>
         <BottomGrouping>
           {swapIsUnsupported ? (
-            <Button color="red" size="large" disabled>
+            <Button color="red" size="lg" disabled>
               {i18n._(t`Unsupported Asset`)}
             </Button>
           ) : !account ? (
             <Button
               variant="outlined"
               color="blue"
-              size="large"
               className="w-full"
               onClick={toggleWalletModal}
             >
@@ -631,7 +630,7 @@ export default function Swap() {
           ) : showWrap ? (
             <Button
               color="gradient"
-              size="large"
+              size="lg"
               disabled={Boolean(wrapInputError)}
               onClick={onWrap}
             >
