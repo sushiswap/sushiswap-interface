@@ -1,14 +1,22 @@
-import React, { FC } from 'react'
+import React, { FC } from "react";
+import Badge from "../../components/Badge";
+import useLimitOrders from "../../hooks/useLimitOrders";
+import { useLingui } from "@lingui/react";
+import { t } from "@lingui/macro";
+import NavLink from "../../components/NavLink";
 
 const MyOrders: FC = () => {
-    return (
-        <div className="md:flex hidden gap-3 items-center text-secondary hover:text-high-emphesis">
-            <div>My Orders</div>
-            <span className="bg-blue bg-opacity-30 hover:bg-opacity-40 text-blue rounded-2xl px-3 py-0.5">
-                0
-            </span>
-        </div>
-    )
-}
+  const { i18n } = useLingui();
+  const { pending } = useLimitOrders();
 
-export default MyOrders
+  return (
+    <NavLink href="/open-orders">
+      <a className="md:flex hidden gap-3 items-center text-secondary hover:text-high-emphesis">
+        <div>{i18n._(t`My Orders`)}</div>
+        <Badge color="blue">{pending.length}</Badge>
+      </a>
+    </NavLink>
+  );
+};
+
+export default MyOrders;

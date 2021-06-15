@@ -117,6 +117,7 @@ msgid "Analytics"
 msgstr "애널리틱스"
 
 #: src/components/KashiButton.tsx:85
+#: src/features/limit-orders/LimitOrderButton.tsx:99
 #: src/pages/balances.tsx:227
 #: src/pages/migrate.tsx:291
 #: src/pages/stake.tsx:390
@@ -126,6 +127,10 @@ msgstr "승인"
 #: src/components/KashiButton.tsx:47
 msgid "Approve Kashi"
 msgstr "카시 허용"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:53
+msgid "Approve Limit Order"
+msgstr ""
 
 #: src/pages/swap/[[...tokens]].tsx:680
 msgid "Approve {0}"
@@ -246,6 +251,10 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "확인 양식을 우회하고 높은 슬리피지 거래를 허용합니다. 위험을 감수하고 사용하세요."
 
+#: src/pages/limit-order/[[...tokens]].tsx:299
+msgid "Change Recipient"
+msgstr ""
+
 #~ msgid "Check out Sushi on Polygon (Matic)"
 #~ msgstr "Polygon (Matic)에서 Sushi 확인"
 
@@ -310,6 +319,7 @@ msgstr "출금 확인"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
+#: src/features/limit-orders/LimitOrderButton.tsx:38
 #: src/pages/stake.tsx:408
 #: src/pages/swap/[[...tokens]].tsx:639
 #: src/state/mint/hooks.ts:235
@@ -343,6 +353,10 @@ msgstr "쌍 만들기"
 
 #~ msgid "Create pool"
 #~ msgstr "풀 만들기"
+
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:40
+msgid "Current"
+msgstr ""
 
 #: src/pages/balances.tsx:243
 msgid "Deposit"
@@ -445,6 +459,10 @@ msgstr ""
 
 #: src/features/swap/TradePrice.tsx:39
 msgid "Exchange Rate"
+msgstr ""
+
+#: src/components/ExpertModePanel/index.tsx:24
+msgid "Expert Mode"
 msgstr ""
 
 #: src/components/Settings/index.tsx:173
@@ -651,8 +669,16 @@ msgstr "자산을 대출하고 대출에 대한 이자수익을 벌어보세요.
 #~ msgid "Lent"
 #~ msgstr "차용"
 
+#: src/components/ExchangeHeader.tsx:52
+msgid "Limit"
+msgstr ""
+
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "한도 <0>사용됨</0>"
+
+#: src/pages/limit-order/[[...tokens]].tsx:176
+msgid "Limit order"
+msgstr ""
 
 #~ msgid "Liquidity"
 #~ msgstr "유동성"
@@ -747,7 +773,7 @@ msgstr "마켓 정보"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:247
+#: src/components/CurrencyInputPanel/index.tsx:298
 msgid "Max"
 msgstr "최대"
 
@@ -864,6 +890,10 @@ msgstr "메인 메뉴 열기"
 msgid "Oracle"
 msgstr "오라클"
 
+#: src/features/limit-orders/OrderExpirationDropdown.tsx:22
+msgid "Order Expiration"
+msgstr ""
+
 #~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 #~ msgstr "결과는 예상치입니다. 가격이 {0}% 이상 변동하면 거래가 취소됩니다."
 
@@ -872,6 +902,10 @@ msgstr "오라클"
 
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "결과는 <0>{0} </0> 로 전송됩니다"
+
+#: src/components/CurrencyInputPanel/index.tsx:327
+msgid "Pay From:"
+msgstr ""
 
 #: src/components/Web3Status/index.tsx:250
 msgid "Pending"
@@ -888,7 +922,6 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입력하세요."
 
-#: src/components/ExchangeHeader.tsx:52
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
 msgid "Pool"
@@ -941,6 +974,10 @@ msgstr "가격 영향이 너무 높음"
 #~ msgid "Price Updated"
 #~ msgstr "가격이 업데이트되었습니다"
 
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:34
+msgid "Rate"
+msgstr ""
+
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:34
 msgid "Rates"
 msgstr "요금"
@@ -977,6 +1014,10 @@ msgstr "상환"
 #: src/components/Settings/index.tsx:146
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
+
+#: src/pages/limit-order/[[...tokens]].tsx:322
+msgid "Review Limit Order"
+msgstr ""
 
 #: src/features/farm/FarmList.tsx:32
 msgid "Rewards"
@@ -1015,7 +1056,7 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "이름 검색 또는 주소 붙여넣기"
 
-#: src/components/CurrencyInputPanel/index.tsx:206
+#: src/components/CurrencyInputPanel/index.tsx:230
 #: src/components/CurrencySelectPanel/index.tsx:101
 #: src/state/swap/hooks.ts:194
 msgid "Select a token"
@@ -1044,6 +1085,7 @@ msgid "Slippage tolerance"
 msgstr "슬리피지 허용 범위"
 
 #: src/components/KashiButton.tsx:39
+#: src/features/limit-orders/LimitOrderButton.tsx:45
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "허가에 서명하는 동안 문제가 발생했습니다. 이는 Trezor 및 Ledger와 같은 하드웨어 지갑에서 발생된 것으로 예상됩니다. 다시 클릭하면 대체 방법이 사용됩니다."
 
@@ -1120,7 +1162,7 @@ msgstr "스시는 오픈 소스를 지지합니다."
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:37
+#: src/components/ExchangeHeader.tsx:38
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
 #: src/pages/swap/[[...tokens]].tsx:713
@@ -1177,6 +1219,10 @@ msgstr "오류로 인해 트랜잭션이 불가합니다: {0}. 스와핑 대상 
 
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "SUSHI로 할 수 있는 것들"
+
+#: src/pages/limit-order/[[...tokens]].tsx:134
+msgid "This transaction is below market rate"
+msgstr ""
 
 #: src/hooks/useSwapCallback.ts:248
 #: src/hooks/useSwapCallback.ts:248
@@ -1377,6 +1423,14 @@ msgstr "잘못된 네트워크에 있습니다."
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다"
 
+#: src/pages/limit-order/[[...tokens]].tsx:207
+msgid "You pay"
+msgstr ""
+
+#: src/pages/limit-order/[[...tokens]].tsx:258
+msgid "You receive:"
+msgstr ""
+
 #~ msgid "You will receive"
 #~ msgstr "예상 수령"
 
@@ -1458,8 +1512,16 @@ msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변
 msgid "Zap"
 msgstr ""
 
+#: src/pages/limit-order/[[...tokens]].tsx:142
+msgid "above"
+msgstr ""
+
 #~ msgid "annualized"
 #~ msgstr "연단위 환산"
+
+#: src/pages/limit-order/[[...tokens]].tsx:142
+msgid "below"
+msgstr ""
 
 #: src/components/Gas/index.tsx:14
 #: src/pages/transactions.tsx:34
@@ -1506,3 +1568,7 @@ msgstr "{0} 전략"
 
 #~ msgid "{0} per {1}"
 #~ msgstr "{0}/{1}"
+
+#: src/pages/limit-order/[[...tokens]].tsx:145
+msgid "{0} {sign} market rate"
+msgstr ""

@@ -1,6 +1,6 @@
 import { AppDispatch, AppState } from "../index";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Field,
   replaceLimitOrderState,
@@ -18,6 +18,12 @@ import { isAddress, tryParseAmount, wrappedCurrency } from "../../functions";
 import useParsedQueryString from "../../hooks/useParsedQueryString";
 import { ParsedQs } from "qs";
 import { LimitOrderState } from "./reducer";
+import { useBentoBalances } from "../bentobox/hooks";
+import { useTradeExactIn, useTradeExactOut } from "../../hooks/Trades";
+import useENS from "../../hooks/useENS";
+import { t } from "@lingui/macro";
+import { BAD_RECIPIENT_ADDRESSES } from "../../constants";
+import { i18n } from "@lingui/core";
 
 export function useLimitOrderActionHandlers(): {
   onCurrencySelection: (field: Field, currency: Currency) => void;
@@ -74,24 +80,43 @@ export function useDerivedLimitOrderInfo(): {
   currencies: { [field in Field]?: Currency };
   parsedAmounts: { [field in Field]?: CurrencyAmount | undefined };
   currencyBalances: { [field in Field]?: CurrencyAmount };
+  inputError?: string;
 } {
-  const { account } = useActiveWeb3React();
+  const { account, chainId } = useActiveWeb3React();
   const {
     [Field.INPUT]: { currencyId: inputCurrencyId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
     typedValue,
     independentField,
     limitPrice,
+    fromBentoBalance,
+    recipient,
   } = useLimitOrderState();
 
   const inputCurrency = useCurrency(inputCurrencyId);
   const outputCurrency = useCurrency(outputCurrencyId);
+  const inputToken = wrappedCurrency(inputCurrency, chainId);
+  const recipientLookup = useENS(recipient ?? undefined);
+  const to: string | null =
+    (recipient === null ? account : recipientLookup.address) ?? null;
 
   const isExactIn: boolean = independentField === Field.INPUT;
-  const parsedInputAmount = tryParseAmount(
+  const parsedAmount = tryParseAmount(
     typedValue,
     (isExactIn ? inputCurrency : outputCurrency) ?? undefined
   );
+
+  const bestTradeExactIn = useTradeExactIn(
+    isExactIn ? parsedAmount : undefined,
+    outputCurrency ?? undefined
+  );
+  const bestTradeExactOut = useTradeExactOut(
+    inputCurrency ?? undefined,
+    !isExactIn ? parsedAmount : undefined
+  );
+
+  const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut;
+  const rate = trade?.nextMidPrice;
 
   const parsedOutputAmount = tryParseAmount(
     (isExactIn
@@ -101,32 +126,78 @@ export function useDerivedLimitOrderInfo(): {
     (isExactIn ? outputCurrency : inputCurrency) ?? undefined
   );
 
+  const bentoBoxBalances = useBentoBalances();
+  const balance = useMemo(
+    () => bentoBoxBalances?.find((el) => el.address === inputToken?.address),
+    [bentoBoxBalances, inputToken?.address]
+  );
+
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
     outputCurrency ?? undefined,
   ]);
 
   const currencyBalances = {
-    [Field.INPUT]: relevantTokenBalances[0],
+    [Field.INPUT]: fromBentoBalance
+      ? CurrencyAmount.fromRawAmount(
+          inputCurrency,
+          balance?.bentoBalance ? balance.bentoBalance : 0
+        )
+      : relevantTokenBalances[0],
     [Field.OUTPUT]: relevantTokenBalances[1],
   };
 
   const parsedAmounts = {
     [Field.INPUT]:
-      independentField === Field.INPUT ? parsedInputAmount : parsedOutputAmount,
+      independentField === Field.INPUT ? parsedAmount : parsedOutputAmount,
     [Field.OUTPUT]:
-      independentField === Field.OUTPUT
-        ? parsedInputAmount
-        : parsedOutputAmount,
+      independentField === Field.OUTPUT ? parsedAmount : parsedOutputAmount,
   };
 
+  const currencies: { [field in Field]?: Currency } = {
+    [Field.INPUT]: inputCurrency ?? undefined,
+    [Field.OUTPUT]: outputCurrency ?? undefined,
+  };
+
+  let inputError: string | undefined;
+  if (!account) {
+    inputError = "Connect Wallet";
+  }
+
+  if (!parsedAmount) {
+    inputError = inputError ?? i18n._(t`Enter an amount`);
+  }
+
+  if (!currencies[Field.INPUT] || !currencies[Field.OUTPUT]) {
+    inputError = inputError ?? i18n._(t`Select a token`);
+  }
+
+  const formattedTo = isAddress(to);
+  if (!to || !formattedTo) {
+    inputError = inputError ?? i18n._(t`Enter a recipient`);
+  } else {
+    if (BAD_RECIPIENT_ADDRESSES.indexOf(formattedTo) !== -1) {
+      inputError = inputError ?? i18n._(t`Invalid recipient`);
+    }
+  }
+
+  // compare input balance to max input based on version
+  const [balanceIn, amountIn] = [
+    currencyBalances[Field.INPUT],
+    parsedAmounts[Field.INPUT],
+  ];
+
+  if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
+    inputError = i18n._(
+      t`Insufficient ${amountIn.currency.getSymbol(chainId)} balance`
+    );
+  }
+
   return {
-    currencies: {
-      [Field.INPUT]: inputCurrency,
-      [Field.OUTPUT]: outputCurrency,
-    },
+    currencies,
     parsedAmounts,
     currencyBalances,
+    inputError,
   };
 }
 
@@ -148,10 +219,10 @@ export const useReserveRatio = (inverted = false) => {
   const tokenA = wrappedCurrency(currencies[Field.INPUT], chainId);
   const tokenB = wrappedCurrency(currencies[Field.OUTPUT], chainId);
 
+  // TODO doesnt work with native ETH
   const [, pair] = usePair(tokenA, tokenB);
   const a = pair?.token0Price.toSignificant(6);
   const b = pair?.token1Price.toSignificant(6);
-  console.log(pair);
   return pair?.token0 === tokenA || inverted ? a : b;
 };
 

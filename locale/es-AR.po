@@ -127,6 +127,7 @@ msgid "Analytics"
 msgstr "Analítica"
 
 #: src/components/KashiButton.tsx:85
+#: src/features/limit-orders/LimitOrderButton.tsx:99
 #: src/pages/balances.tsx:227
 #: src/pages/migrate.tsx:291
 #: src/pages/stake.tsx:390
@@ -136,6 +137,10 @@ msgstr "Aprobar"
 #: src/components/KashiButton.tsx:47
 msgid "Approve Kashi"
 msgstr "Aprobar Kashi"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:53
+msgid "Approve Limit Order"
+msgstr ""
 
 #: src/pages/swap/[[...tokens]].tsx:680
 msgid "Approve {0}"
@@ -260,6 +265,10 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Omite los modales de confirmación y permite operaciones de alto deslizamiento. Úselo bajo su propio riesgo."
 
+#: src/pages/limit-order/[[...tokens]].tsx:299
+msgid "Change Recipient"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Check out Sushi on Polygon (Matic)"
 #~ msgstr "Echa un vistazo a Sushi on Polygon (Matic)"
@@ -333,6 +342,7 @@ msgstr "Confirmar retiro"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
+#: src/features/limit-orders/LimitOrderButton.tsx:38
 #: src/pages/stake.tsx:408
 #: src/pages/swap/[[...tokens]].tsx:639
 #: src/state/mint/hooks.ts:235
@@ -369,6 +379,10 @@ msgstr "Crea un par"
 #, fuzzy
 #~ msgid "Create pool"
 #~ msgstr "Crear grupo"
+
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:40
+msgid "Current"
+msgstr ""
 
 #: src/pages/balances.tsx:243
 msgid "Deposit"
@@ -474,6 +488,10 @@ msgstr ""
 
 #: src/features/swap/TradePrice.tsx:39
 msgid "Exchange Rate"
+msgstr ""
+
+#: src/components/ExpertModePanel/index.tsx:24
+msgid "Expert Mode"
 msgstr ""
 
 #: src/components/Settings/index.tsx:173
@@ -702,8 +720,16 @@ msgstr "Prestar activos a cambio de intereses de los prestatarios."
 #~ msgid "Lent"
 #~ msgstr "Prestado"
 
+#: src/components/ExchangeHeader.tsx:52
+msgid "Limit"
+msgstr ""
+
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Límite <0> Usado </0>"
+
+#: src/pages/limit-order/[[...tokens]].tsx:176
+msgid "Limit order"
+msgstr ""
 
 #, fuzzy
 #~ msgid "Liquidity"
@@ -803,7 +829,7 @@ msgstr "Información del mercado"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:247
+#: src/components/CurrencyInputPanel/index.tsx:298
 msgid "Max"
 msgstr "Max"
 
@@ -926,6 +952,10 @@ msgstr "Abrir menú principal"
 msgid "Oracle"
 msgstr "Oráculo"
 
+#: src/features/limit-orders/OrderExpirationDropdown.tsx:22
+msgid "Order Expiration"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 #~ msgstr "Se estima la producción. Si el precio cambia en más del {0} %, su transacción se revertirá."
@@ -935,6 +965,10 @@ msgstr "Oráculo"
 
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "La salida se enviará a <0> {0} </0>"
+
+#: src/components/CurrencyInputPanel/index.tsx:327
+msgid "Pay From:"
+msgstr ""
 
 #: src/components/Web3Status/index.tsx:250
 msgid "Pending"
@@ -952,7 +986,6 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Escriba la palabra \"confirmar\" para habilitar el modo experto."
 
-#: src/components/ExchangeHeader.tsx:52
 #: src/components/Header/index.tsx:61
 #: src/components/Header/index.tsx:353
 msgid "Pool"
@@ -1009,6 +1042,10 @@ msgstr "Impacto de precio demasiado alto"
 #~ msgid "Price Updated"
 #~ msgstr "Precio actualizado"
 
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:34
+msgid "Rate"
+msgstr ""
+
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:34
 msgid "Rates"
 msgstr "Tarifas"
@@ -1048,6 +1085,10 @@ msgstr "Pagar"
 #: src/components/Settings/index.tsx:146
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restringe los intercambios a pares directos únicamente."
+
+#: src/pages/limit-order/[[...tokens]].tsx:322
+msgid "Review Limit Order"
+msgstr ""
 
 #: src/features/farm/FarmList.tsx:32
 msgid "Rewards"
@@ -1091,7 +1132,7 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "Buscar nombre o pegar dirección"
 
-#: src/components/CurrencyInputPanel/index.tsx:206
+#: src/components/CurrencyInputPanel/index.tsx:230
 #: src/components/CurrencySelectPanel/index.tsx:101
 #: src/state/swap/hooks.ts:194
 msgid "Select a token"
@@ -1122,6 +1163,7 @@ msgid "Slippage tolerance"
 msgstr "Tolerancia al deslizamiento"
 
 #: src/components/KashiButton.tsx:39
+#: src/features/limit-orders/LimitOrderButton.tsx:45
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Algo salió mal durante la firma de la aprobación. Esto se espera para carteras de hardware, como Trezor y Ledger. Haga clic de nuevo y se utilizará el método alternativo."
 
@@ -1208,7 +1250,7 @@ msgstr "Sushi es un partidario del código abierto."
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:37
+#: src/components/ExchangeHeader.tsx:38
 #: src/components/Header/index.tsx:53
 #: src/components/Header/index.tsx:345
 #: src/pages/swap/[[...tokens]].tsx:713
@@ -1267,6 +1309,10 @@ msgstr "La transacción no puede realizarse correctamente debido al error: {0} .
 #, fuzzy
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "Cosas que puedes hacer con tu SUSHI"
+
+#: src/pages/limit-order/[[...tokens]].tsx:134
+msgid "This transaction is below market rate"
+msgstr ""
 
 #: src/hooks/useSwapCallback.ts:248
 #: src/hooks/useSwapCallback.ts:248
@@ -1485,6 +1531,14 @@ msgstr "Estás en la red equivocada"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Primero debe aprobar los tokens LP y luego migrarlos"
 
+#: src/pages/limit-order/[[...tokens]].tsx:207
+msgid "You pay"
+msgstr ""
+
+#: src/pages/limit-order/[[...tokens]].tsx:258
+msgid "You receive:"
+msgstr ""
+
 #, fuzzy
 #~ msgid "You will receive"
 #~ msgstr "Usted recibirá"
@@ -1572,9 +1626,17 @@ msgstr "Su liquidez de {exchange} {0} / {1} se convertirá en sushiSwap {2} / {3
 msgid "Zap"
 msgstr ""
 
+#: src/pages/limit-order/[[...tokens]].tsx:142
+msgid "above"
+msgstr ""
+
 #, fuzzy
 #~ msgid "annualized"
 #~ msgstr ""
+
+#: src/pages/limit-order/[[...tokens]].tsx:142
+msgid "below"
+msgstr ""
 
 #: src/components/Gas/index.tsx:14
 #: src/pages/transactions.tsx:34
@@ -1626,3 +1688,7 @@ msgstr "{0} Estrategia"
 #, fuzzy
 #~ msgid "{0} per {1}"
 #~ msgstr "{0} por {1}"
+
+#: src/pages/limit-order/[[...tokens]].tsx:145
+msgid "{0} {sign} market rate"
+msgstr ""

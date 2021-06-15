@@ -1,12 +1,10 @@
 import { useActiveWeb3React } from "./useActiveWeb3React";
-import { LIMIT_ORDER_ADDRESS } from "../constants/limit-order";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useBentoBoxContract } from "./useContract";
 import {
   BentoApprovalState,
   BentoApproveOutcome,
   BentoApproveResult,
-  KashiPermit,
 } from "./useKashiApproveCallback";
 import { useBentoMasterContractAllowed } from "../state/bentobox/hooks";
 import { ethers } from "ethers";
@@ -18,6 +16,7 @@ import LimitOrderCooker, {
 } from "../entities/LimitOrderCooker";
 import { useTransactionAdder } from "../state/transactions/hooks";
 import { Token } from "@sushiswap/sdk";
+import { getVerifyingContract } from "limitorderv2-sdk";
 
 export interface LimitOrderPermit {
   account: string;
@@ -41,7 +40,7 @@ const useLimitOrderApproveCallback = () => {
     setLimitOrderPermit(undefined);
   }, [account, chainId]);
 
-  const masterContract = chainId && LIMIT_ORDER_ADDRESS[chainId];
+  const masterContract = chainId && getVerifyingContract(chainId);
 
   const pendingApproval = useLimitOrderApprovalPending();
   const currentAllowed = useBentoMasterContractAllowed(

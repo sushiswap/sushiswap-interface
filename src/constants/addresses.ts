@@ -17,3 +17,9 @@ export const MERKLE_DISTRIBUTOR_ADDRESS: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: "0xcBE6B83e77cdc011Cc18F6f0Df8444E5783ed982",
   [ChainId.ROPSTEN]: "0x84d1f7202e0e7dac211617017ca72a2cb5e2b955",
 };
+
+export const BAD_RECIPIENT_ADDRESSES: string[] = [
+  "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f", // v2 factory
+  "0xf164fC0Ec4E93095b804a4795bBe1e041497b92a", // v2 router 01
+  "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D", // v2 router 02
+];

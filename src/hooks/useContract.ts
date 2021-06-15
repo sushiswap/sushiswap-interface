@@ -64,6 +64,8 @@ import { ZAPPER_ADDRESS } from "../constants/addresses";
 import { getContract } from "../functions/contract";
 import { useActiveWeb3React } from "./useActiveWeb3React";
 import { useMemo } from "react";
+import LIMIT_ORDER_ABI from "../constants/abis/limit-order.json";
+import { getVerifyingContract } from "limitorderv2-sdk";
 
 const UNI_FACTORY_ADDRESS = "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f";
 
@@ -782,5 +784,16 @@ export function useMeowshiContract(
     "0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D",
     MEOWSHI_ABI,
     withSignerIfPossible
+  );
+}
+
+export function useLimitOrderContract(
+  withSignerIfPossibe?: boolean
+): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(
+    getVerifyingContract(chainId),
+    LIMIT_ORDER_ABI,
+    withSignerIfPossibe
   );
 }
