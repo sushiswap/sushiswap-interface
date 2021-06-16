@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { ChainId } from "@sushiswap/sdk";
 import Gas from "./Gas";
 import Lottie from "lottie-react";
 import NavLink from "./NavLink";
@@ -60,9 +61,11 @@ export default function ExchangeHeader({
                 fill="#7CFF6B"
               />
             </svg>
-            <div className="hidden md:block text-green text-baseline">
-              <Gas />
-            </div>
+            {chainId === ChainId.MAINNET && (
+              <div className="hidden md:block text-green text-baseline">
+                <Gas />
+              </div>
+            )}
           </div>
 
           {/* <button
