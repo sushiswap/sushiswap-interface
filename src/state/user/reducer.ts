@@ -86,7 +86,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
-  userArcherUseRelay: true,
+  userArcherUseRelay: false,
   userArcherGasPrice: DEFAULT_ARCHER_GAS_PRICES[4].toString(),
   userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
   userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
