@@ -29,6 +29,19 @@ module.exports = withBundleAnalyzer(
 
       return config;
     },
+    headers: async () => {
+      return [
+        {
+          source: "/(.*)?", // Matches all pages
+          headers: [
+            {
+              key: "X-Frame-Options",
+              value: "ALLOW",
+            },
+          ],
+        },
+      ];
+    },
     images: {
       domains: ["assets.sushi.com", "res.cloudinary.com"],
       // loader: 'cloudinary',
