@@ -16,7 +16,6 @@ interface OpenOrder {
   filled: boolean;
   filledPercent: string;
   inRaw: string;
-  index: number;
   isCanceled: boolean;
   limitOrder: LimitOrder;
   minOutRaw: string;
@@ -45,65 +44,55 @@ const useLimitOrders = () => {
   );
 
   useEffect(() => {
-    if (!data || data.length === 0) return;
+    if (!Array.isArray(data)) return;
 
-    const state = data.reduce(
-      async (acc, order: any, index: number) => {
-        order.chainId = +order.chainId;
-        order.tokenInDecimals = +order.tokenInDecimals || 18;
-        order.tokenOutDecimals = +order.tokenOutDecimals || 18;
+    const transform = async () => {
+      return await data.reduce(
+        async (accP, order: any) => {
+          const acc = await accP;
 
-        const limitOrder = LimitOrder.getLimitOrder(order);
-        const digest = limitOrder.getTypeHash();
+          const limitOrder = LimitOrder.getLimitOrder({
+            ...order,
+            chainId: +order.chainId,
+            tokenInDecimals: +order.tokenInDecimals || 18,
+            tokenOutDecimals: +order.tokenOutDecimals || 18,
+          });
+          const digest = limitOrder.getTypeHash();
+          const filledAmount = await limitOrderContract.orderStatus(digest);
 
-        const filledAmount = await limitOrderContract.orderStatus(digest);
-        const filledPercent = filledAmount
-          .mul(BigNumber.from("100"))
-          .div(BigNumber.from(order.amountIn))
-          .toString();
-        const isCanceled = await limitOrderContract.cancelledOrder(
-          account,
-          digest
-        );
-        const filled = filledAmount.toString() == order.amountIn;
+          const openOrder: OpenOrder = {
+            tokenIn: limitOrder.amountIn.token,
+            tokenOut: limitOrder.amountOut.token,
+            limitOrder,
+            filledPercent: filledAmount
+              .mul(BigNumber.from("100"))
+              .div(BigNumber.from(order.amountIn))
+              .toString(),
+            isCanceled: await limitOrderContract.cancelledOrder(
+              account,
+              digest
+            ),
+            filled: filledAmount.toString() == order.amountIn,
+            inRaw: limitOrder.amountInRaw,
+            minOutRaw: limitOrder.amountOutRaw,
+          };
 
-        const openOrder: OpenOrder = {
-          tokenIn: new Token(
-            chainId,
-            limitOrder.tokenInAddress,
-            limitOrder.tokenInDecimals,
-            limitOrder.tokenInSymbol
-          ),
-          tokenOut: new Token(
-            chainId,
-            limitOrder.tokenOutAddress,
-            limitOrder.tokenOutDecimals,
-            limitOrder.tokenOutSymbol
-          ),
-          limitOrder,
-          filledPercent,
-          index,
-          isCanceled,
-          filled,
-          inRaw: limitOrder.amountInRaw,
-          minOutRaw: limitOrder.amountOutRaw,
-        };
+          if (openOrder.filled || openOrder.isCanceled) {
+            acc.completed.push(openOrder);
+          } else {
+            acc.pending.push(openOrder);
+          }
 
-        if (filled || isCanceled) {
-          acc.completed.push(openOrder);
-        } else {
-          acc.pending.push(openOrder);
-        }
+          return acc;
+        },
+        Promise.resolve({
+          pending: [],
+          completed: [],
+        })
+      );
+    };
 
-        return acc;
-      },
-      {
-        pending: [],
-        completed: [],
-      }
-    );
-
-    state.then((state) => setOpenOrders(state));
+    transform().then((state) => setOpenOrders(state));
   }, [account, chainId, data, limitOrderContract]);
 
   return {

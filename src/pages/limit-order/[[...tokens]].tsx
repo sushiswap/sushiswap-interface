@@ -11,7 +11,9 @@ import SwapHeader from "../../components/ExchangeHeader";
 import { useExpertModeManager } from "../../state/user/hooks";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import DoubleGlowShadow from "../../components/DoubleGlowShadow";
-import CurrencyInputPanel from "../../components/CurrencyInputPanel";
+import CurrencyInputPanel, {
+  CurrencyInputPanelVariant,
+} from "../../components/CurrencyInputPanel";
 import {
   formatPercent,
   maxAmountSpend,
@@ -30,14 +32,8 @@ import {
   useDerivedLimitOrderInfo,
   useLimitOrderActionHandlers,
   useLimitOrderState,
-  useReserveRatio,
 } from "../../state/limit-order/hooks";
-import Button from "../../components/Button";
-import LimitOrderButton, {
-  TokenApproveButton,
-} from "../../features/limit-orders/LimitOrderButton";
-import LimitOrderCooker from "../../entities/LimitOrderCooker";
-import { useBentoBalances } from "../../state/bentobox/hooks";
+import LimitOrderButton from "../../features/limit-orders/LimitOrderButton";
 import BalancePanel from "../../features/limit-orders/BalancePanel";
 
 export default function LimitOrder() {
@@ -77,9 +73,6 @@ export default function LimitOrder() {
   // for expert mode
   const [isExpertMode, toggleExpertMode] = useExpertModeManager();
 
-  // LIMIT ORDERS
-  const currentPrice = useReserveRatio();
-
   // Limit order state
   const {
     independentField,
@@ -89,8 +82,13 @@ export default function LimitOrder() {
     fromBentoBalance,
   } = useLimitOrderState();
 
-  const { currencies, parsedAmounts, currencyBalances } =
-    useDerivedLimitOrderInfo();
+  const {
+    currencies,
+    parsedAmounts,
+    currencyBalances,
+    currentPrice,
+    inputError,
+  } = useDerivedLimitOrderInfo();
 
   const {
     onSwitchTokens,
@@ -145,7 +143,7 @@ export default function LimitOrder() {
     useState<string>();
 
   const checkLimitPrice = useCallback(() => {
-    if (limitPrice === currentPrice) return;
+    if (limitPrice === currentPrice?.toSignificant(6)) return;
     if (limitPrice && currentPrice && +limitPrice < +currentPrice)
       setCurrencyInputPanelError(
         i18n._(t`This transaction is below market rate`)
@@ -154,7 +152,7 @@ export default function LimitOrder() {
   }, [limitPrice, currentPrice, i18n]);
 
   const currencyInputPanelHelperText = useMemo(() => {
-    if (limitPrice === currentPrice) return;
+    if (limitPrice === currentPrice?.toSignificant(6)) return;
     const sign =
       +limitPrice > +currentPrice ? i18n._(t`above`) : i18n._(t`below`);
     if (limitPrice && currentPrice)
@@ -166,21 +164,6 @@ export default function LimitOrder() {
   }, [limitPrice, currentPrice, i18n]);
 
   const tokenA = wrappedCurrency(currencies[Field.INPUT], chainId);
-
-  async function onExecute(cooker: LimitOrderCooker): Promise<string> {
-    let summary = "";
-
-    // Deposit to Bento
-    if (!fromBentoBalance) {
-      cooker.bentoDepositCollateral(
-        parsedAmounts[Field.INPUT].toExact().toBigNumber(tokenA.decimals)
-      );
-
-      summary = "Deposit";
-    }
-
-    return summary;
-  }
 
   return (
     <Layout>
@@ -224,6 +207,7 @@ export default function LimitOrder() {
                 otherCurrency={currencies[Field.OUTPUT]}
                 id="swap-currency-input"
                 customBalanceComponent={<BalancePanel />}
+                variant={CurrencyInputPanelVariant.limit}
               />
               <div className="flex flex-row gap-5">
                 <div />
@@ -262,6 +246,7 @@ export default function LimitOrder() {
                 id="swap-currency-output"
                 error={currencyInputPanelError}
                 helperText={currencyInputPanelHelperText}
+                variant={CurrencyInputPanelVariant.limit}
               />
 
               {recipient !== null ? (
@@ -283,43 +268,27 @@ export default function LimitOrder() {
               ) : null}
             </div>
 
-            <div className="flex justify-between gap-6">
-              {currencies[Field.INPUT] && currencies[Field.OUTPUT] ? (
-                <PriceRatio />
-              ) : (
-                <div />
-              )}
-              {isExpertMode && recipient === null && (
-                <div
-                  className="flex text-blue underline cursor-pointer"
-                  onClick={() => onChangeRecipient("")}
-                >
-                  {i18n._(t`Change Recipient`)}
-                </div>
-              )}
+            <div className="flex justify-between gap-4 items-center w-full">
+              <div className="flex flex-1">
+                {currencies[Field.INPUT] && currencies[Field.OUTPUT] && (
+                  <PriceRatio />
+                )}
+              </div>
+              <div className="flex flex-1">
+                {isExpertMode && recipient === null && (
+                  <div
+                    className="flex text-blue underline cursor-pointer items-center"
+                    onClick={() => onChangeRecipient("")}
+                  >
+                    {i18n._(t`Change Recipient`)}
+                  </div>
+                )}
+              </div>
               <OrderExpirationDropdown />
             </div>
 
-            {/*// TODO */}
             <div className="flex">
-              <LimitOrderButton color="gradient" size="large">
-                {({ execute }) => (
-                  <TokenApproveButton
-                    size="large"
-                    color="gradient"
-                    value={parsedAmounts[Field.INPUT]}
-                    token={tokenA}
-                  >
-                    <Button
-                      size="large"
-                      color="gradient"
-                      onClick={() => execute(tokenA, onExecute)}
-                    >
-                      {i18n._(t`Review Limit Order`)}
-                    </Button>
-                  </TokenApproveButton>
-                )}
-              </LimitOrderButton>
+              <LimitOrderButton color="gradient" size="large" token={tokenA} />
             </div>
           </div>
         </DoubleGlowShadow>

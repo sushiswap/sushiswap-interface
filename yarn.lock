@@ -9351,9 +9351,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"limitorderv2-sdk@git+ssh://git@github.com:sarangparikh22/LimitOrderV2-sdk.git":
-  version "0.1.38"
-  resolved "git+ssh://git@github.com:sarangparikh22/LimitOrderV2-sdk.git#37b9af08d3836bb73c7831f525517c19edfdaad3"
+limitorderv2-sdk@^0.1.45:
+  version "0.1.45"
+  resolved "https://registry.yarnpkg.com/limitorderv2-sdk/-/limitorderv2-sdk-0.1.45.tgz#5a9cb0811d593b5ca7fa8e2449f7b193dafd283b"
+  integrity sha512-OV87fNMjuDood4Tuu6z1jGV9kp3+v+4qpi1QpLs75CWXJNXOqjTKyl1Lk+CW2bkthXxFbMDCqcRxLe7kzdfCXw==
   dependencies:
     "@sushiswap/sdk" "^5.0.0-canary.6"
     axios "^0.21.1"

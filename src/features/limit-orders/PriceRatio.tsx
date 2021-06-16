@@ -1,13 +1,10 @@
 import { FC, useState } from "react";
-import {
-  useDerivedLimitOrderInfo,
-  useReserveRatio,
-} from "../../state/limit-order/hooks";
+import { useDerivedLimitOrderInfo } from "../../state/limit-order/hooks";
 
 const PriceRatio: FC = () => {
   const { currencies } = useDerivedLimitOrderInfo();
   const [inverted, setInverted] = useState(false);
-  const price = useReserveRatio(inverted);
+  const { currentPrice } = useDerivedLimitOrderInfo();
 
   return (
     <div className="flex flex-row">
@@ -15,7 +12,10 @@ const PriceRatio: FC = () => {
         <div className="py-2 px-4">
           <span className="">
             1 {inverted ? currencies.OUTPUT?.symbol : currencies.INPUT?.symbol}{" "}
-            = {price}{" "}
+            ={" "}
+            {inverted
+              ? currentPrice?.invert().toSignificant(6)
+              : currentPrice?.toSignificant(6)}{" "}
             {inverted ? currencies.INPUT?.symbol : currencies.OUTPUT?.symbol}
           </span>
         </div>

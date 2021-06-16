@@ -169,11 +169,16 @@ msgstr ""
 msgid "Balance"
 msgstr "잔액"
 
+#: src/features/limit-orders/BalancePanel.tsx:49
+msgid "Balance:"
+msgstr ""
+
 #: src/pages/balances.tsx:273
 msgid "Bento Balance: {0}"
 msgstr "Bento 잔액 : {0}"
 
 #: src/components/Header/index.tsx:391
+#: src/features/limit-orders/BalancePanel.tsx:60
 #: src/pages/balances.tsx:67
 #: src/pages/balances.tsx:81
 #: src/pages/borrow/[pair].tsx:122
@@ -251,7 +256,15 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "확인 양식을 우회하고 높은 슬리피지 거래를 허용합니다. 위험을 감수하고 사용하세요."
 
-#: src/pages/limit-order/[[...tokens]].tsx:299
+#: src/features/open-orders/OpenOrders.tsx:117
+msgid "Cancel Order"
+msgstr ""
+
+#: src/features/open-orders/CompletedOrders.tsx:87
+msgid "Cancelled"
+msgstr ""
+
+#: src/pages/limit-order/[[...tokens]].tsx:297
 msgid "Change Recipient"
 msgstr ""
 
@@ -354,7 +367,7 @@ msgstr "쌍 만들기"
 #~ msgid "Create pool"
 #~ msgstr "풀 만들기"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:40
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:41
 msgid "Current"
 msgstr ""
 
@@ -431,6 +444,7 @@ msgstr "입력"
 msgid "Enter Amount"
 msgstr "금액 입력"
 
+#: src/state/limit-order/hooks.ts:177
 #: src/state/swap/hooks.ts:199
 msgid "Enter a recipient"
 msgstr "수신자 입력"
@@ -439,6 +453,7 @@ msgstr "수신자 입력"
 msgid "Enter a valid slippage percentage"
 msgstr "유효한 슬리피지 비율 입력"
 
+#: src/state/limit-order/hooks.ts:168
 #: src/state/mint/hooks.ts:243
 #: src/state/swap/hooks.ts:190
 msgid "Enter an amount"
@@ -483,6 +498,12 @@ msgstr ""
 
 #~ msgid "Fetching Instruments"
 #~ msgstr "도구 가져오기"
+
+#: src/features/open-orders/CompletedOrders.tsx:46
+#: src/features/open-orders/CompletedOrders.tsx:92
+#: src/features/open-orders/OpenOrders.tsx:97
+msgid "Filled"
+msgstr ""
 
 #~ msgid "Find Pool"
 #~ msgstr "풀 찾기"
@@ -612,6 +633,7 @@ msgid "Insufficient liquidity for this trade"
 msgstr "이 거래를 위한 유동성 부족"
 
 #: src/hooks/useWrapCallback.ts:80
+#: src/state/limit-order/hooks.ts:192
 #: src/state/mint/hooks.ts:256
 #: src/state/mint/hooks.ts:267
 #: src/state/swap/hooks.ts:225
@@ -626,6 +648,7 @@ msgstr "인터페이스 설정"
 msgid "Invalid pair"
 msgstr "잘못된 쌍"
 
+#: src/state/limit-order/hooks.ts:180
 #: src/state/swap/hooks.ts:206
 msgid "Invalid recipient"
 msgstr "잘못된 수신자"
@@ -676,7 +699,7 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "한도 <0>사용됨</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:176
+#: src/pages/limit-order/[[...tokens]].tsx:188
 msgid "Limit order"
 msgstr ""
 
@@ -773,7 +796,7 @@ msgstr "마켓 정보"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:298
+#: src/components/CurrencyInputPanel/index.tsx:281
 msgid "Max"
 msgstr "최대"
 
@@ -824,6 +847,10 @@ msgstr "최소 수령"
 #~ msgid "Missed the Auction?"
 #~ msgstr ""
 
+#: src/features/limit-orders/MyOrders.tsx:15
+msgid "My Orders"
+msgstr ""
+
 #~ msgid "New network, new features"
 #~ msgstr "새로운 네트워크, 새로운 기능"
 
@@ -848,6 +875,10 @@ msgstr "스왑할 유동성 없음"
 
 #~ msgid "No liquidity positions found"
 #~ msgstr "유동성 포지션 없음"
+
+#: src/features/open-orders/CompletedOrders.tsx:103
+msgid "No order history"
+msgstr ""
 
 #~ msgid "No pool found"
 #~ msgstr "풀 없음"
@@ -876,6 +907,10 @@ msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "이런! 알 수 없는 오류가 발생했습니다. 페이지를 새로 고침하거나 다른 브라우저 또는 기기에서 방문하세요."
 
+#: src/features/open-orders/OpenOrders.tsx:38
+msgid "Open Orders"
+msgstr ""
+
 #: src/components/Header/More.tsx:23
 #: src/components/Menu.tsx:23
 msgid "Open Source"
@@ -894,6 +929,10 @@ msgstr "오라클"
 msgid "Order Expiration"
 msgstr ""
 
+#: src/features/open-orders/CompletedOrders.tsx:20
+msgid "Order History"
+msgstr ""
+
 #~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 #~ msgstr "결과는 예상치입니다. 가격이 {0}% 이상 변동하면 거래가 취소됩니다."
 
@@ -903,7 +942,12 @@ msgstr ""
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "결과는 <0>{0} </0> 로 전송됩니다"
 
-#: src/components/CurrencyInputPanel/index.tsx:327
+#: src/features/open-orders/CompletedOrders.tsx:40
+#: src/features/open-orders/OpenOrders.tsx:58
+msgid "Pay"
+msgstr ""
+
+#: src/features/limit-orders/BalancePanel.tsx:56
 msgid "Pay From:"
 msgstr ""
 
@@ -974,7 +1018,9 @@ msgstr "가격 영향이 너무 높음"
 #~ msgid "Price Updated"
 #~ msgstr "가격이 업데이트되었습니다"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:34
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:36
+#: src/features/open-orders/CompletedOrders.tsx:43
+#: src/features/open-orders/OpenOrders.tsx:61
 msgid "Rate"
 msgstr ""
 
@@ -989,6 +1035,12 @@ msgstr "튜토리얼 읽기"
 #~ msgid "Read the contract"
 #~ msgstr "계약서 읽기"
 
+#: src/features/open-orders/CompletedOrders.tsx:37
+#: src/features/open-orders/OpenOrders.tsx:55
+msgid "Receive"
+msgstr ""
+
+#: src/components/AddressInputPanel/index.tsx:112
 #: src/components/PositionCard/index.tsx:435
 msgid "Remove"
 msgstr "제거"
@@ -1015,7 +1067,7 @@ msgstr "상환"
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
 
-#: src/pages/limit-order/[[...tokens]].tsx:322
+#: src/pages/limit-order/[[...tokens]].tsx:318
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1056,14 +1108,19 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "이름 검색 또는 주소 붙여넣기"
 
-#: src/components/CurrencyInputPanel/index.tsx:230
+#: src/components/CurrencyInputPanel/index.tsx:218
 #: src/components/CurrencySelectPanel/index.tsx:101
+#: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:194
 msgid "Select a token"
 msgstr "토큰 선택"
 
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "토큰을 선택하여 유동성 찾기"
+
+#: src/components/AddressInputPanel/index.tsx:107
+msgid "Send to:"
+msgstr ""
 
 #: src/components/TransactionSettings/index.tsx:304
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
@@ -1220,7 +1277,7 @@ msgstr "오류로 인해 트랜잭션이 불가합니다: {0}. 스와핑 대상 
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "SUSHI로 할 수 있는 것들"
 
-#: src/pages/limit-order/[[...tokens]].tsx:134
+#: src/pages/limit-order/[[...tokens]].tsx:151
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1361,6 +1418,7 @@ msgstr "거래쌍 분석 보기"
 msgid "Waiting for Confirmation"
 msgstr ""
 
+#: src/features/limit-orders/BalancePanel.tsx:60
 #: src/pages/balances.tsx:80
 msgid "Wallet"
 msgstr "지갑"
@@ -1423,11 +1481,11 @@ msgstr "잘못된 네트워크에 있습니다."
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다"
 
-#: src/pages/limit-order/[[...tokens]].tsx:207
+#: src/pages/limit-order/[[...tokens]].tsx:217
 msgid "You pay"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:258
+#: src/pages/limit-order/[[...tokens]].tsx:257
 msgid "You receive:"
 msgstr ""
 
@@ -1512,14 +1570,14 @@ msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변
 msgid "Zap"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:142
+#: src/pages/limit-order/[[...tokens]].tsx:159
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "연단위 환산"
 
-#: src/pages/limit-order/[[...tokens]].tsx:142
+#: src/pages/limit-order/[[...tokens]].tsx:159
 msgid "below"
 msgstr ""
 
@@ -1569,6 +1627,6 @@ msgstr "{0} 전략"
 #~ msgid "{0} per {1}"
 #~ msgstr "{0}/{1}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:145
+#: src/pages/limit-order/[[...tokens]].tsx:162
 msgid "{0} {sign} market rate"
 msgstr ""

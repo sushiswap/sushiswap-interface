@@ -168,11 +168,16 @@ msgstr ""
 msgid "Balance"
 msgstr "餘額"
 
+#: src/features/limit-orders/BalancePanel.tsx:49
+msgid "Balance:"
+msgstr ""
+
 #: src/pages/balances.tsx:273
 msgid "Bento Balance: {0}"
 msgstr "Bento余额： {0}"
 
 #: src/components/Header/index.tsx:391
+#: src/features/limit-orders/BalancePanel.tsx:60
 #: src/pages/balances.tsx:67
 #: src/pages/balances.tsx:81
 #: src/pages/borrow/[pair].tsx:122
@@ -247,7 +252,15 @@ msgstr "通過添加流動性，您可以按比例收取所有交易的0.25%作�
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "跳過確認、接受交易高滑點。使用時風險自擔。"
 
-#: src/pages/limit-order/[[...tokens]].tsx:299
+#: src/features/open-orders/OpenOrders.tsx:117
+msgid "Cancel Order"
+msgstr ""
+
+#: src/features/open-orders/CompletedOrders.tsx:87
+msgid "Cancelled"
+msgstr ""
+
+#: src/pages/limit-order/[[...tokens]].tsx:297
 msgid "Change Recipient"
 msgstr ""
 
@@ -348,7 +361,7 @@ msgstr "創建交易對"
 #~ msgid "Create pool"
 #~ msgstr "創建池"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:40
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:41
 msgid "Current"
 msgstr ""
 
@@ -425,6 +438,7 @@ msgstr "進入"
 msgid "Enter Amount"
 msgstr "輸入金額"
 
+#: src/state/limit-order/hooks.ts:177
 #: src/state/swap/hooks.ts:199
 msgid "Enter a recipient"
 msgstr "輸入收件人"
@@ -433,6 +447,7 @@ msgstr "輸入收件人"
 msgid "Enter a valid slippage percentage"
 msgstr "輸入有效的滑點百分比"
 
+#: src/state/limit-order/hooks.ts:168
 #: src/state/mint/hooks.ts:243
 #: src/state/swap/hooks.ts:190
 msgid "Enter an amount"
@@ -475,6 +490,12 @@ msgstr ""
 
 #~ msgid "Fetching Instruments"
 #~ msgstr "提取工具"
+
+#: src/features/open-orders/CompletedOrders.tsx:46
+#: src/features/open-orders/CompletedOrders.tsx:92
+#: src/features/open-orders/OpenOrders.tsx:97
+msgid "Filled"
+msgstr ""
 
 #~ msgid "Find Pool"
 #~ msgstr "查找池"
@@ -597,6 +618,7 @@ msgid "Insufficient liquidity for this trade"
 msgstr "該交易的流動性不足"
 
 #: src/hooks/useWrapCallback.ts:80
+#: src/state/limit-order/hooks.ts:192
 #: src/state/mint/hooks.ts:256
 #: src/state/mint/hooks.ts:267
 #: src/state/swap/hooks.ts:225
@@ -611,6 +633,7 @@ msgstr "交互設置"
 msgid "Invalid pair"
 msgstr "無效的代幣對"
 
+#: src/state/limit-order/hooks.ts:180
 #: src/state/swap/hooks.ts:206
 msgid "Invalid recipient"
 msgstr "无效收件人"
@@ -661,7 +684,7 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "限制<0>使用</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:176
+#: src/pages/limit-order/[[...tokens]].tsx:188
 msgid "Limit order"
 msgstr ""
 
@@ -755,7 +778,7 @@ msgstr "市場信息"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:298
+#: src/components/CurrencyInputPanel/index.tsx:281
 msgid "Max"
 msgstr "最大數量"
 
@@ -805,6 +828,10 @@ msgstr "最少可獲得的數量"
 #~ msgid "Missed the Auction?"
 #~ msgstr "錯過了拍賣？"
 
+#: src/features/limit-orders/MyOrders.tsx:15
+msgid "My Orders"
+msgstr ""
+
 #~ msgid "New network, new features"
 #~ msgstr "新網絡，新功能"
 
@@ -829,6 +856,10 @@ msgstr "沒有發現流動性可以互換"
 
 #~ msgid "No liquidity positions found"
 #~ msgstr "沒有發現流動性"
+
+#: src/features/open-orders/CompletedOrders.tsx:103
+msgid "No order history"
+msgstr ""
 
 #~ msgid "No pool found"
 #~ msgstr "未找到池"
@@ -857,6 +888,10 @@ msgstr "只有当您知道自己在做什么时，才会使用此模式。"
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "糟糕！出現未知錯誤。請刷新頁面，或從其他瀏覽器或設備訪問"
 
+#: src/features/open-orders/OpenOrders.tsx:38
+msgid "Open Orders"
+msgstr ""
+
 #: src/components/Header/More.tsx:23
 #: src/components/Menu.tsx:23
 msgid "Open Source"
@@ -875,6 +910,10 @@ msgstr "預言機"
 msgid "Order Expiration"
 msgstr ""
 
+#: src/features/open-orders/CompletedOrders.tsx:20
+msgid "Order History"
+msgstr ""
+
 #~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 #~ msgstr "估計輸出。如果價格變化超過{0} ％，您的交易將被退回。"
 
@@ -884,7 +923,12 @@ msgstr ""
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "輸出將發送到<0> {0} </0>"
 
-#: src/components/CurrencyInputPanel/index.tsx:327
+#: src/features/open-orders/CompletedOrders.tsx:40
+#: src/features/open-orders/OpenOrders.tsx:58
+msgid "Pay"
+msgstr ""
+
+#: src/features/limit-orders/BalancePanel.tsx:56
 msgid "Pay From:"
 msgstr ""
 
@@ -954,7 +998,9 @@ msgstr "價格影響過高"
 #~ msgid "Price Updated"
 #~ msgstr "價格更新"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:34
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:36
+#: src/features/open-orders/CompletedOrders.tsx:43
+#: src/features/open-orders/OpenOrders.tsx:61
 msgid "Rate"
 msgstr ""
 
@@ -969,6 +1015,12 @@ msgstr "閱讀教程"
 #~ msgid "Read the contract"
 #~ msgstr "閱讀合約"
 
+#: src/features/open-orders/CompletedOrders.tsx:37
+#: src/features/open-orders/OpenOrders.tsx:55
+msgid "Receive"
+msgstr ""
+
+#: src/components/AddressInputPanel/index.tsx:112
 #: src/components/PositionCard/index.tsx:435
 msgid "Remove"
 msgstr "删除"
@@ -995,7 +1047,7 @@ msgstr "還款"
 msgid "Restricts swaps to direct pairs only."
 msgstr "限制只交易直接交易對。"
 
-#: src/pages/limit-order/[[...tokens]].tsx:322
+#: src/pages/limit-order/[[...tokens]].tsx:318
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1036,14 +1088,19 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "搜索名稱或粘貼地址"
 
-#: src/components/CurrencyInputPanel/index.tsx:230
+#: src/components/CurrencyInputPanel/index.tsx:218
 #: src/components/CurrencySelectPanel/index.tsx:101
+#: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:194
 msgid "Select a token"
 msgstr "選擇代幣"
 
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "选择代币以找到您的流动性"
+
+#: src/components/AddressInputPanel/index.tsx:107
+msgid "Send to:"
+msgstr ""
 
 #: src/components/TransactionSettings/index.tsx:304
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
@@ -1197,7 +1254,7 @@ msgstr "交易未成功因为错误: {0}。可能是因为您交换中的一个�
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "SUSHI可以做的事情"
 
-#: src/pages/limit-order/[[...tokens]].tsx:134
+#: src/pages/limit-order/[[...tokens]].tsx:151
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1338,6 +1395,7 @@ msgstr "查看交易對分析"
 msgid "Waiting for Confirmation"
 msgstr ""
 
+#: src/features/limit-orders/BalancePanel.tsx:60
 #: src/pages/balances.tsx:80
 msgid "Wallet"
 msgstr "錢包"
@@ -1398,11 +1456,11 @@ msgstr "您位在錯誤的網路"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "您需要首先批準LP代幣，然後遷移它"
 
-#: src/pages/limit-order/[[...tokens]].tsx:207
+#: src/pages/limit-order/[[...tokens]].tsx:217
 msgid "You pay"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:258
+#: src/pages/limit-order/[[...tokens]].tsx:257
 msgid "You receive:"
 msgstr ""
 
@@ -1487,14 +1545,14 @@ msgstr "您的{exchange} {0} / {1}流動性將變為SushiSwap {2} / {3}的流動
 msgid "Zap"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:142
+#: src/pages/limit-order/[[...tokens]].tsx:159
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "年化"
 
-#: src/pages/limit-order/[[...tokens]].tsx:142
+#: src/pages/limit-order/[[...tokens]].tsx:159
 msgid "below"
 msgstr ""
 
@@ -1542,6 +1600,6 @@ msgstr "{0}策略"
 #~ msgid "{0} per {1}"
 #~ msgstr "{0}每{1}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:145
+#: src/pages/limit-order/[[...tokens]].tsx:162
 msgid "{0} {sign} market rate"
 msgstr ""

@@ -10,7 +10,13 @@ import {
   typeInput,
 } from "./actions";
 import { useCurrency } from "../../hooks/Tokens";
-import { ChainId, Currency, CurrencyAmount, Token } from "@sushiswap/sdk";
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Price,
+  Token,
+} from "@sushiswap/sdk";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { usePair } from "../../hooks/usePair";
 import { useCurrencyBalances } from "../wallet/hooks";
@@ -81,6 +87,7 @@ export function useDerivedLimitOrderInfo(): {
   parsedAmounts: { [field in Field]?: CurrencyAmount | undefined };
   currencyBalances: { [field in Field]?: CurrencyAmount };
   inputError?: string;
+  currentPrice: Price;
 } {
   const { account, chainId } = useActiveWeb3React();
   const {
@@ -91,6 +98,7 @@ export function useDerivedLimitOrderInfo(): {
     limitPrice,
     fromBentoBalance,
     recipient,
+    orderExpiration,
   } = useLimitOrderState();
 
   const inputCurrency = useCurrency(inputCurrencyId);
@@ -106,6 +114,8 @@ export function useDerivedLimitOrderInfo(): {
     (isExactIn ? inputCurrency : outputCurrency) ?? undefined
   );
 
+  // Why is this part so slow and why does it not work on matic
+  // ---------------------------------------------------------------------------
   const bestTradeExactIn = useTradeExactIn(
     isExactIn ? parsedAmount : undefined,
     outputCurrency ?? undefined
@@ -117,6 +127,7 @@ export function useDerivedLimitOrderInfo(): {
 
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut;
   const rate = trade?.nextMidPrice;
+  // ---------------------------------------------------------------------------
 
   const parsedOutputAmount = tryParseAmount(
     (isExactIn
@@ -181,6 +192,14 @@ export function useDerivedLimitOrderInfo(): {
     }
   }
 
+  if (!limitPrice) {
+    inputError = inputError ?? i18n._(t`Select a limit price`);
+  }
+
+  if (!orderExpiration) {
+    inputError = inputError ?? i18n._(t`Select an order expiration`);
+  }
+
   // compare input balance to max input based on version
   const [balanceIn, amountIn] = [
     currencyBalances[Field.INPUT],
@@ -198,6 +217,7 @@ export function useDerivedLimitOrderInfo(): {
     parsedAmounts,
     currencyBalances,
     inputError,
+    currentPrice: rate,
   };
 }
 
@@ -212,19 +232,6 @@ export function useLimitOrderApprovalPending(): string {
     (state: AppState) => state.limitOrder.limitOrderApprovalPending
   );
 }
-
-export const useReserveRatio = (inverted = false) => {
-  const { chainId } = useActiveWeb3React();
-  const { currencies } = useDerivedLimitOrderInfo();
-  const tokenA = wrappedCurrency(currencies[Field.INPUT], chainId);
-  const tokenB = wrappedCurrency(currencies[Field.OUTPUT], chainId);
-
-  // TODO doesnt work with native ETH
-  const [, pair] = usePair(tokenA, tokenB);
-  const a = pair?.token0Price.toSignificant(6);
-  const b = pair?.token1Price.toSignificant(6);
-  return pair?.token0 === tokenA || inverted ? a : b;
-};
 
 function parseCurrencyFromURLParameter(
   urlParam: any,
@@ -305,6 +312,7 @@ export function queryParametersToSwapState(
     recipient,
     limitPrice: parseTokenAmountURLParameter(parsedQs.exactRate),
     fromBentoBalance: parseBooleanFieldParameter(parsedQs.fromBento),
+    orderExpiration: "never",
   };
 }
 
@@ -332,8 +340,6 @@ export function useDefaultsFromURLSearch():
   useEffect(() => {
     if (!chainId) return;
 
-    // TODO: Prompt for chain switch is result.chainId !== chainId
-
     const parsed = queryParametersToSwapState(parsedQs, chainId);
 
     dispatch(
@@ -345,6 +351,7 @@ export function useDefaultsFromURLSearch():
         recipient: parsed.recipient,
         fromBentoBalance: parsed.fromBentoBalance,
         limitPrice: parsed.limitPrice,
+        orderExpiration: parsed.orderExpiration,
       })
     );
 
