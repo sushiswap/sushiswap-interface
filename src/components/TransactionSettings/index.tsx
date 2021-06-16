@@ -1,15 +1,12 @@
-import React, { useContext, useRef, useState } from "react";
-import { RowBetween, RowFixed } from "../Row";
-import styled, { ThemeContext } from "styled-components";
+import React, { useRef, useState } from "react";
 
 import { AutoColumn } from "../Column";
-import { ChainId } from "@sushiswap/sdk";
 import QuestionHelper from "../QuestionHelper";
-import Toggle from "../Toggle";
+import { RowFixed } from "../Row";
 import Typography from "../Typography";
 import { classNames } from "../../functions";
+import styled from "styled-components";
 import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../../hooks";
 import { useLingui } from "@lingui/react";
 
 enum SlippageError {

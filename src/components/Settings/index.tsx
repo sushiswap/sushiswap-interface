@@ -102,8 +102,6 @@ export default function SettingsTab() {
               setRawSlippage={setUserslippageTolerance}
               deadline={ttl}
               setDeadline={setTtl}
-              useArcher={userUseArcher}
-              setUseArcher={setUserUseArcher}
             />
 
             <Typography variant="lg" className="text-high-emphesis">
