@@ -205,7 +205,7 @@ export default function NetworkModal(): JSX.Element | null {
                 cookie.set("chainId", key);
                 library?.send("wallet_addEthereumChain", [params, account]);
               }}
-              className="flex items-center w-full col-span-1 p-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+              className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
             >
               <Image
                 src={NETWORK_ICON[key]}
