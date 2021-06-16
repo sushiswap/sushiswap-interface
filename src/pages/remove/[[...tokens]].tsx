@@ -67,7 +67,10 @@ export default function Remove() {
   const { i18n } = useLingui();
   const router = useRouter();
   const tokens = router.query.tokens;
-  const [currencyIdA, currencyIdB] = tokens as string[];
+  const [currencyIdA, currencyIdB] = (tokens as string[]) || [
+    undefined,
+    undefined,
+  ];
   const [currencyA, currencyB] = [
     useCurrency(currencyIdA) ?? undefined,
     useCurrency(currencyIdB) ?? undefined,

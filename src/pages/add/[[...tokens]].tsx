@@ -4,8 +4,14 @@ import {
 } from "../../hooks/useApproveCallback";
 import { AutoRow, RowBetween } from "../../components/Row";
 import Button, { ButtonError } from "../../components/Button";
-import { Currency, TokenAmount, WETH, currencyEquals } from "@sushiswap/sdk";
-import React, { useCallback, useState } from "react";
+import {
+  ChainId,
+  Currency,
+  TokenAmount,
+  WETH,
+  currencyEquals,
+} from "@sushiswap/sdk";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Trans, t } from "@lingui/macro";
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
@@ -56,6 +62,7 @@ import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useCurrency } from "../../hooks/Tokens";
 import { useIsTransactionUnsupported } from "../../hooks/Trades";
 import { useLingui } from "@lingui/react";
+import usePrevious from "../../hooks/usePrevious";
 import { useRouter } from "next/router";
 import { useTransactionAdder } from "../../state/transactions/hooks";
 import useTransactionDeadline from "../../hooks/useTransactionDeadline";
@@ -66,7 +73,10 @@ export default function Add() {
   const { account, chainId, library } = useActiveWeb3React();
   const router = useRouter();
   const tokens = router.query.tokens;
-  const [currencyIdA, currencyIdB] = tokens as string[];
+  const [currencyIdA, currencyIdB] = (tokens as string[]) || [
+    undefined,
+    undefined,
+  ];
 
   // console.log({ currencyIdA, currencyIdB })
 
@@ -333,8 +343,10 @@ export default function Add() {
       const newCurrencyIdA = currencyId(currencyA, chainId);
       if (newCurrencyIdA === currencyIdB) {
         router.push(`/add/${currencyIdB}/${currencyIdA}`);
-      } else {
+      } else if (currencyIdB) {
         router.push(`/add/${newCurrencyIdA}/${currencyIdB}`);
+      } else {
+        router.push(`/add/${newCurrencyIdA}`);
       }
     },
     [chainId, currencyIdB, router, currencyIdA]
@@ -342,20 +354,12 @@ export default function Add() {
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
       const newCurrencyIdB = currencyId(currencyB, chainId);
-      if (currencyIdA === newCurrencyIdB) {
-        if (currencyIdB) {
-          router.push(`/add/${currencyIdB}/${newCurrencyIdB}`);
-        } else {
-          router.push(`/add/${newCurrencyIdB}`);
-        }
+      if (newCurrencyIdB === currencyIdA) {
+        router.push(`/add/${currencyIdB}/${currencyIdA}`);
+      } else if (currencyIdA) {
+        router.push(`/add/${newCurrencyIdB}/${currencyIdA}`);
       } else {
-        router.push(
-          `/add/${
-            currencyIdA
-              ? currencyIdA
-              : Currency.getNativeCurrencySymbol(chainId)
-          }/${newCurrencyIdB}`
-        );
+        router.push(`/add/${newCurrencyIdB}`);
       }
     },
     [chainId, currencyIdA, currencyIdB, router]
@@ -376,6 +380,18 @@ export default function Add() {
     currencies?.CURRENCY_A,
     currencies?.CURRENCY_B
   );
+
+  const previousChainId = usePrevious<ChainId>(chainId);
+
+  useEffect(() => {
+    if (
+      previousChainId &&
+      previousChainId !== chainId &&
+      router.asPath.includes(Currency.getNativeCurrencySymbol(previousChainId))
+    ) {
+      router.push(`/add/${Currency.getNativeCurrencySymbol(chainId)}`);
+    }
+  }, [chainId, previousChainId, router]);
 
   return (
     <Layout>

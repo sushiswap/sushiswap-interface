@@ -14,8 +14,15 @@ import {
 } from "../../features/swap/styleds";
 import { AutoRow, RowBetween } from "../../components/Row";
 import { ButtonConfirmed, ButtonError } from "../../components/Button";
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Token,
+  Trade,
+} from "@sushiswap/sdk";
 import Column, { AutoColumn } from "../../components/Column";
-import { CurrencyAmount, JSBI, Token, Trade } from "@sushiswap/sdk";
 import React, {
   useCallback,
   useContext,
@@ -81,6 +88,7 @@ import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import useENSAddress from "../../hooks/useENSAddress";
 import { useIsTransactionUnsupported } from "../../hooks/Trades";
 import { useLingui } from "@lingui/react";
+import usePrevious from "../../hooks/usePrevious";
 import { useRouter } from "next/router";
 import { useSwapCallback } from "../../hooks/useSwapCallback";
 
@@ -432,6 +440,17 @@ export default function Swap() {
   );
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false);
+
+  const previousChainId = usePrevious<ChainId>(chainId);
+  useEffect(() => {
+    if (
+      previousChainId &&
+      previousChainId !== chainId &&
+      router.asPath.includes(Currency.getNativeCurrencySymbol(previousChainId))
+    ) {
+      router.push(`/swap/${Currency.getNativeCurrencySymbol(chainId)}`);
+    }
+  }, [chainId, previousChainId, router]);
 
   return (
     <Layout>
