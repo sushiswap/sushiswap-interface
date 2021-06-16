@@ -15,11 +15,11 @@
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
-    "lint": "eslint --cache --fix 'src/**/*.{ts,tsx}'"
+    "lint": "next lint"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --cache --fix",
+      "next lint",
       "prettier --write"
     ],
     "*.{md,css}": "prettier --write"
