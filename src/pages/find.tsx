@@ -15,6 +15,7 @@ import Link from "next/link";
 import { MinimalPositionCard } from "../components/PositionCard";
 import { Plus } from "react-feather";
 import { ThemeContext } from "styled-components";
+import Web3Connect from "../components/Web3Connect";
 import { currencyId } from "../functions/currency";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -87,9 +88,7 @@ export default function PoolFinder() {
 
   const prerequisiteMessage = (
     <div className="p-5 text-center rounded bg-dark-800">
-      {!account
-        ? i18n._(t`Connect to a wallet to find pools`)
-        : i18n._(t`Select a token to find your liquidity`)}
+      {i18n._(t`Select a token to find your liquidity`)}
     </div>
   );
 
@@ -201,6 +200,8 @@ export default function PoolFinder() {
                 <Dots>{i18n._(t`Loading`)}</Dots>
               </div>
             ) : null
+          ) : !account ? (
+            <Web3Connect className="w-full" size="lg" color="blue" />
           ) : (
             prerequisiteMessage
           )}
