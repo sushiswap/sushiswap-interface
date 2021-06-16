@@ -337,7 +337,7 @@ export default function Add() {
         router.push(`/add/${newCurrencyIdA}/${currencyIdB}`);
       }
     },
-    [currencyIdB, router, currencyIdA]
+    [chainId, currencyIdB, router, currencyIdA]
   );
   const handleCurrencyBSelect = useCallback(
     (currencyB: Currency) => {
@@ -358,7 +358,7 @@ export default function Add() {
         );
       }
     },
-    [currencyIdA, router, currencyIdB]
+    [chainId, currencyIdA, currencyIdB, router]
   );
 
   const handleDismissConfirmation = useCallback(() => {
@@ -370,7 +370,7 @@ export default function Add() {
     setTxHash("");
   }, [onFieldAInput, txHash]);
 
-  const isCreate = router.pathname.includes("/create");
+  const isCreate = router.asPath.includes("/create");
 
   const addIsUnsupported = useIsTransactionUnsupported(
     currencies?.CURRENCY_A,

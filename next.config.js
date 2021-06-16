@@ -44,6 +44,14 @@ module.exports = withBundleAnalyzer(
         },
       ];
     },
+    async rewrites() {
+      return [
+        {
+          source: "/create/:token*",
+          destination: "/add/:token*",
+        },
+      ];
+    },
     i18n: {
       locales,
       defaultLocale: sourceLocale,

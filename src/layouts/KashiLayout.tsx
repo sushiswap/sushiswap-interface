@@ -54,7 +54,7 @@ export default function Layout({
                     <a
                       className={
                         "pl-4 pr-2 sm:pl-8 sm:pr-4 flex items-center font-medium " +
-                        (router.pathname.startsWith("/bento/kashi/lend")
+                        (router.pathname.startsWith("/lend")
                           ? "text-high-emphesis"
                           : "text-secondary hover:text-primary")
                       }
@@ -66,7 +66,7 @@ export default function Layout({
                     <a
                       className={
                         "px-2 sm:px-4 flex items-center font-medium " +
-                        (router.pathname.startsWith("/bento/kashi/borrow")
+                        (router.pathname.startsWith("/borrow")
                           ? "text-high-emphesis"
                           : "text-secondary hover:text-primary")
                       }
@@ -75,11 +75,11 @@ export default function Layout({
                     </a>
                   </NavLink>
 
-                  <NavLink href="/create">
+                  <NavLink href="/kashi/create">
                     <a
                       className={
                         "px-2 sm:px-4 flex items-center font-medium " +
-                        (router.pathname.startsWith("/bento/kashi/create")
+                        (router.pathname.startsWith("/kashi/create")
                           ? "text-high-emphesis"
                           : "text-secondary hover:text-primary")
                       }
