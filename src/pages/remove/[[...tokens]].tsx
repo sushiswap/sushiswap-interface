@@ -48,6 +48,7 @@ import PercentInputPanel from "../../components/PercentInputPanel";
 import ReactGA from "react-ga";
 import RemoveLiquidityReceiveDetails from "../../features/liquidity/RemoveLiquidityReceiveDetails";
 import { TransactionResponse } from "@ethersproject/providers";
+import Web3Connect from "../../components/Web3Connect";
 import { splitSignature } from "@ethersproject/bytes";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useCurrency } from "../../hooks/Tokens";
@@ -684,13 +685,7 @@ export default function Remove() {
             )}
             <div style={{ position: "relative" }}>
               {!account ? (
-                <Button
-                  variant="outlined"
-                  color="blue"
-                  onClick={toggleWalletModal}
-                >
-                  {i18n._(t`Connect Wallet`)}
-                </Button>
+                <Web3Connect size="lg" color="blue" className="w-full" />
               ) : (
                 <div className="grid grid-cols-2 gap-4">
                   <ButtonConfirmed

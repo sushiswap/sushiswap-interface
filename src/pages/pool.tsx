@@ -135,7 +135,7 @@ export default function Pool() {
             </div>
 
             {!account ? (
-              <Web3Connect size="lg" />
+              <Web3Connect size="lg" color="blue" className="w-full" />
             ) : v2IsLoading ? (
               <Empty>
                 <Dots>{i18n._(t`Loading`)}</Dots>

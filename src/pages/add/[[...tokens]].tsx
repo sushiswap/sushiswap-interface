@@ -51,6 +51,7 @@ import { Plus } from "react-feather";
 import ReactGA from "react-ga";
 import { TransactionResponse } from "@ethersproject/providers";
 import UnsupportedCurrencyFooter from "../../features/swap/UnsupportedCurrencyFooter";
+import Web3Connect from "../../components/Web3Connect";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useCurrency } from "../../hooks/Tokens";
 import { useIsTransactionUnsupported } from "../../hooks/Trades";
@@ -525,14 +526,7 @@ export default function Add() {
                 {i18n._(t`Unsupported Asset`)}
               </Button>
             ) : !account ? (
-              <Button
-                variant="outlined"
-                color="blue"
-                className="w-full"
-                onClick={toggleWalletModal}
-              >
-                {i18n._(t`Connect Wallet`)}
-              </Button>
+              <Web3Connect size="lg" color="blue" className="w-full" />
             ) : (
               <AutoColumn gap={"md"}>
                 {(approvalA === ApprovalState.NOT_APPROVED ||

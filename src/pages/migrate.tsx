@@ -20,6 +20,7 @@ import Layout from "../layouts/DefaultLayout";
 import MetamaskError from "../types/MetamaskError";
 import { Input as NumericalInput } from "../components/NumericalInput";
 import Typography from "../components/Typography";
+import Web3Connect from "../components/Web3Connect";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -400,9 +401,7 @@ export default function Migrate() {
 
       <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
         {!account ? (
-          <Button variant="outlined" color="blue" className="w-full">
-            {i18n._(t`Connect to a wallet to view your liquidity`)}
-          </Button>
+          <Web3Connect color="blue" className="w-full" />
         ) : state.loading ? (
           <Typography variant="body" className="p-4 text-center text-primary">
             <Dots>

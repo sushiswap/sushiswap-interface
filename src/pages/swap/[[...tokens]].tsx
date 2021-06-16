@@ -70,6 +70,7 @@ import TokenWarningModal from "../../components/TokenWarningModal";
 import TradePrice from "../../features/swap/TradePrice";
 import Typography from "../../components/Typography";
 import UnsupportedCurrencyFooter from "../../features/swap/UnsupportedCurrencyFooter";
+import Web3Connect from "../../components/Web3Connect";
 import confirmPriceImpactWithoutFee from "../../features/swap/confirmPriceImpactWithoutFee";
 import { getRouterAddress } from "../../functions";
 import { maxAmountSpend } from "../../functions/currency";
@@ -619,14 +620,7 @@ export default function Swap() {
               {i18n._(t`Unsupported Asset`)}
             </Button>
           ) : !account ? (
-            <Button
-              variant="outlined"
-              color="blue"
-              className="w-full"
-              onClick={toggleWalletModal}
-            >
-              {i18n._(t`Connect Wallet`)}
-            </Button>
+            <Web3Connect size="lg" color="blue" className="w-full" />
           ) : showWrap ? (
             <Button
               color="gradient"
