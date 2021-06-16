@@ -9,8 +9,6 @@ import { useLingui } from "@lingui/react";
 import { useWalletModalToggle } from "../../state/application/hooks";
 
 const NetworkIcon = styled(Activity)`
-  margin-left: 0.25rem;
-  margin-right: 0.5rem;
   width: 16px;
   height: 16px;
 `;
@@ -26,10 +24,12 @@ export default function Web3Connect({
   const { error } = useWeb3React();
   return error ? (
     <div
-      className="font-semibold text-white border bg-opacity-80 border-red bg-red hover:bg-opacity-100"
+      className="flex items-center justify-center px-4 py-2 font-semibold text-white border rounded bg-opacity-80 border-red bg-red hover:bg-opacity-100"
       onClick={toggleWalletModal}
     >
-      <NetworkIcon />
+      <div className="mr-1">
+        <NetworkIcon />
+      </div>
       {error instanceof UnsupportedChainIdError
         ? i18n._(t`You are on the wrong network`)
         : i18n._(t`Error`)}
