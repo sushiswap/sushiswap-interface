@@ -8,7 +8,7 @@ import { getMaticTokenLogoURL } from "../../constants/maticTokenMapping";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import useHttpLocations from "../../hooks/useHttpLocations";
 
-const AvalancheLogo = "/images/native-tokens/avax.png";
+const AvalancheLogo = "/images/tokens/avax-sqaure.jpg";
 const BinanceCoinLogo = "/images/tokens/bnb-square.jpg";
 const EthereumLogo = "/images/tokens/eth-square.jpg";
 const FantomLogo = "/images/tokens/ftm-square.jpg";
@@ -18,6 +18,7 @@ const MaticLogo = "/images/tokens/polygon-square.jpg";
 const MoonbeamLogo = "/images/tokens/eth-square.jpg";
 const OKExLogo = "/images/native-tokens/okt.png";
 const xDaiLogo = "/images/native-tokens/xdai.png";
+const CeloLogo = "/images/tokens/celo-square.jpg";
 
 const getTokenLogoURL = (address: string, chainId: ChainId) => {
   let imageURL;
@@ -53,6 +54,7 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.OKEX_TESTNET]: OKExLogo,
   [ChainId.ARBITRUM]: EthereumLogo,
   [ChainId.ARBITRUM_TESTNET]: EthereumLogo,
+  [ChainId.CELO]: CeloLogo,
 };
 
 interface CurrencyLogoProps {
