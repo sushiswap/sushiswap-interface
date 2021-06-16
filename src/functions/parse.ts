@@ -18,6 +18,10 @@ export function tryParseAmount(
   try {
     const typedValueParsed = parseUnits(value, currency.decimals).toString();
     if (typedValueParsed !== "0") {
+      // return CurrencyAmount.fromRawAmount(
+      //   currency,
+      //   JSBI.BigInt(typedValueParsed)
+      // );
       return currency instanceof Token
         ? new TokenAmount(currency, JSBI.BigInt(typedValueParsed))
         : CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed));
