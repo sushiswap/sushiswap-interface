@@ -339,11 +339,11 @@ export const SUGGESTED_BASES: ChainTokenList = {
     OKEX.WETH,
   ],
   [ChainId.CELO]: [
-    ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
-    CELO.mCUSD,
-    CELO.mCELO,
-    CELO.mcEURO,
-    CELO.cEUR,
+    // ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    // CELO.mCUSD,
+    // CELO.mCELO,
+    // CELO.mcEURO,
+    // CELO.cEUR,
   ],
 };
 

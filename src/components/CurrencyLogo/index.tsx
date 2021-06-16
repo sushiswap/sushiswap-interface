@@ -1,4 +1,4 @@
-import { ChainId, Currency, Token } from "@sushiswap/sdk";
+import { ChainId, Currency, Token, WETH } from "@sushiswap/sdk";
 import React, { FC, useMemo } from "react";
 
 import Image from "next/image";
@@ -91,7 +91,10 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
     return [];
   }, [chainId, currency, uriLocations]);
 
-  if (currency === Currency.getNativeCurrency(chainId)) {
+  if (
+    currency === Currency.getNativeCurrency(chainId) ||
+    currency === WETH[chainId] // wrapped native
+  ) {
     return (
       <Image
         width={size}

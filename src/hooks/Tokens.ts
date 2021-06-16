@@ -239,13 +239,19 @@ export function useCurrency(
   currencyId: string | undefined
 ): Currency | null | undefined {
   const { chainId } = useActiveWeb3React();
-  // console.log({ currencyId });
+
   const isETH =
     currencyId?.toUpperCase() === Currency.getNativeCurrencySymbol(chainId);
-  const token = useToken(isETH ? undefined : currencyId);
-  return isETH
-    ? ![ChainId.CELO].includes(chainId)
-      ? Currency.getNativeCurrency(chainId)
-      : WETH[chainId]
+
+  const token = useToken(
+    isETH
+      ? ![ChainId.CELO].includes(chainId) // if native is not token
+        ? undefined
+        : WETH[chainId].address
+      : currencyId
+  );
+
+  return isETH && ![ChainId.CELO].includes(chainId)
+    ? Currency.getNativeCurrency(chainId)
     : token;
 }
