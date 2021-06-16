@@ -56,7 +56,7 @@ export default function Status({ initialData }) {
                                 const words = item.name.split('-')
                                 return (
                                     <div className="p-4 rounded bg-dark-900 text-primary">
-                                        <Typography variant="h5">
+                                        <Typography variant="h3">
                                             {words.map(
                                                 (word) => `${capitalize(word)} `
                                             )}
@@ -82,7 +82,7 @@ export default function Status({ initialData }) {
                     <TabPanel>
                         <div className="grid items-start justify-start grid-cols-3 gap-4 mx-auto ">
                             <div className="p-4 text-primary">
-                                <Typography variant="h5">
+                                <Typography variant="h3">
                                     <Dots>Under Construction</Dots>
                                 </Typography>
                             </div>

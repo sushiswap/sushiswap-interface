@@ -16,7 +16,7 @@ export default function Pairs() {
           content="SLP (Sushi Liquidity Pair) Analytics by Sushi"
         />
       </Head>
-      <Typography variant="h4" component="h1" className="text-high-emphesis">
+      <Typography variant="h2" component="h1" className="text-high-emphesis">
         Pairs
       </Typography>
 

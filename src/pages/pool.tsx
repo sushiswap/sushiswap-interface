@@ -94,7 +94,7 @@ export default function Pool() {
         <div className="p-4 mb-3 space-y-3">
           <Back />
 
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h2">
             {i18n._(t`Your Liquidity Positions`)}
           </Typography>
         </div>

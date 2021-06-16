@@ -93,7 +93,7 @@ export default function SettingsTab() {
       {open && (
         <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded">
           <div className="p-8 space-y-4">
-            <Typography variant="h5" className="text-high-emphesis">
+            <Typography variant="h3" className="text-high-emphesis">
               {i18n._(t`Transaction Settings`)}
             </Typography>
 
