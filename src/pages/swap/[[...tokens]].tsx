@@ -610,7 +610,7 @@ export default function Swap() {
                 {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
                   <RowBetween align="center">
                     <Typography
-                      variant="caption2"
+                      variant="sm"
                       className="text-secondary"
                       onClick={toggleSettings}
                     >
@@ -618,7 +618,7 @@ export default function Swap() {
                     </Typography>
 
                     <Typography
-                      variant="caption2"
+                      variant="sm"
                       className="text-secondary"
                       onClick={toggleSettings}
                     >

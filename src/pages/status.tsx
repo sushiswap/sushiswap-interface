@@ -62,13 +62,13 @@ export default function Status({ initialData }) {
                                             )}
                                         </Typography>
                                         <Typography
-                                            variant="caption"
+                                            variant="sm"
                                             className="text-secondary"
                                         >
                                             Chain Id: {item['chain_id']}
                                         </Typography>
                                         <Typography
-                                            variant="caption"
+                                            variant="sm"
                                             className="text-secondary"
                                         >
                                             Block Height:{' '}

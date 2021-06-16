@@ -15,7 +15,7 @@ export default function Saave() {
         <Typography component="h1" variant="h1" className="mb-4">
           Saave
         </Typography>
-        <Typography variant="body">
+        <Typography variant="lg">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
           iaculis cursus nunc. Pellentesque aliquam, mi sed rhoncus cursus,
           turpis lectus vehicula enim, eu volutpat diam quam at felis.

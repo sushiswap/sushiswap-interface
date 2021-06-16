@@ -104,14 +104,14 @@ export default function MinerTip() {
     <>
       <RowBetween align="center">
         <Typography
-          variant="caption2"
+          variant="sm"
           className="text-secondary"
           onClick={toggleSettings}
         >
           Miner Tip
         </Typography>
         <Typography
-          variant="caption2"
+          variant="sm"
           className="text-secondary"
           onClick={toggleSettings}
         >
