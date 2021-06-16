@@ -87,8 +87,6 @@ export interface SlippageTabsProps {
   setRawSlippage: (rawSlippage: number) => void;
   deadline: number;
   setDeadline: (deadline: number) => void;
-  useArcher: boolean;
-  setUseArcher: (useArcher: boolean) => void;
 }
 
 export default function SlippageTabs({
@@ -96,12 +94,8 @@ export default function SlippageTabs({
   setRawSlippage,
   deadline,
   setDeadline,
-  useArcher,
-  setUseArcher,
 }: SlippageTabsProps) {
   const { i18n } = useLingui();
-  const theme = useContext(ThemeContext);
-  const { chainId } = useActiveWeb3React();
 
   const inputRef = useRef<HTMLInputElement>();
 
@@ -166,7 +160,7 @@ export default function SlippageTabs({
     <AutoColumn gap="md">
       <AutoColumn gap="sm">
         <RowFixed>
-          <Typography variant="body" className="text-high-emphesis">
+          <Typography variant="lg" className="text-high-emphesis">
             {i18n._(t`Slippage tolerance`)}
           </Typography>
 
@@ -247,7 +241,7 @@ export default function SlippageTabs({
                 : "text-yellow",
               "font-medium"
             )}
-            variant="caption2"
+            variant="sm"
           >
             {slippageError === SlippageError.InvalidInput
               ? i18n._(t`Enter a valid slippage percentage`)
@@ -260,7 +254,7 @@ export default function SlippageTabs({
 
       <AutoColumn gap="sm">
         <RowFixed>
-          <Typography variant="body" className="text-high-emphesis">
+          <Typography variant="lg" className="text-high-emphesis">
             {i18n._(t`Transaction deadline`)}
           </Typography>
 
@@ -288,31 +282,9 @@ export default function SlippageTabs({
               }}
             />
           </OptionCustom>
-          <Typography variant="caption2">{i18n._(t`minutes`)}</Typography>
+          <Typography variant="sm">{i18n._(t`minutes`)}</Typography>
         </div>
       </AutoColumn>
-
-      {chainId === ChainId.MAINNET && (
-        <AutoColumn gap="sm">
-          <RowBetween>
-            <RowFixed>
-              <Typography variant="caption2">
-                {i18n._(t`MEV Shield by Archer DAO`)}
-              </Typography>
-              <QuestionHelper
-                text={i18n._(
-                  t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
-                )}
-              />
-            </RowFixed>
-            <Toggle
-              id="toggle-use-archer"
-              isActive={useArcher}
-              toggle={() => setUseArcher(!useArcher)}
-            />
-          </RowBetween>
-        </AutoColumn>
-      )}
     </AutoColumn>
   );
 }

@@ -106,13 +106,13 @@ export default function SettingsTab() {
               setUseArcher={setUserUseArcher}
             />
 
-            <Typography variant="body" className="text-high-emphesis">
+            <Typography variant="lg" className="text-high-emphesis">
               {i18n._(t`Interface Settings`)}
             </Typography>
 
             <RowBetween>
               <RowFixed>
-                <Typography variant="caption2" className="text-high-emphesis">
+                <Typography variant="sm" className="text-primary">
                   {i18n._(t`Toggle Expert Mode`)}
                 </Typography>
                 <QuestionHelper
@@ -139,7 +139,7 @@ export default function SettingsTab() {
             </RowBetween>
             <RowBetween>
               <RowFixed>
-                <Typography variant="caption2" className="text-high-emphesis">
+                <Typography variant="sm" className="text-primary">
                   {i18n._(t`Disable Multihops`)}
                 </Typography>
                 <QuestionHelper
@@ -156,6 +156,23 @@ export default function SettingsTab() {
                 }
               />
             </RowBetween>
+            <RowBetween>
+              <RowFixed>
+                <Typography variant="sm" className="text-primary">
+                  {i18n._(t`MEV Shield by Archer DAO`)}
+                </Typography>
+                <QuestionHelper
+                  text={i18n._(
+                    t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
+                  )}
+                />
+              </RowFixed>
+              <Toggle
+                id="toggle-use-archer"
+                isActive={userUseArcher}
+                toggle={() => setUserUseArcher(!userUseArcher)}
+              />
+            </RowBetween>
           </div>
         </div>
       )}
@@ -169,11 +186,11 @@ export default function SettingsTab() {
             title={i18n._(t`Are you sure?`)}
             onClose={() => setShowConfirmation(false)}
           />
-          <Typography variant="body">
+          <Typography variant="lg">
             {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
           </Typography>
-          <Typography variant="caption" className="font-medium">
+          <Typography variant="sm" className="font-medium">
             {i18n._(t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`)}
           </Typography>
           <Button
@@ -192,7 +209,7 @@ export default function SettingsTab() {
               }
             }}
           >
-            <Typography variant="body" id="confirm-expert-mode">
+            <Typography variant="lg" id="confirm-expert-mode">
               {i18n._(t`Turn On Expert Mode`)}
             </Typography>
           </Button>
