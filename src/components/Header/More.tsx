@@ -34,6 +34,11 @@ const items = (i18n: I18n) => [
     description: i18n._(t`Join the community on Discord.`),
     href: "https://discord.gg/NVPXN4e",
   },
+  {
+    name: i18n._(t`Vesting`),
+    description: i18n._(t`Weekly unlocks from the vesting period.`),
+    href: "/vesting",
+  },
 ];
 
 export default function Menu() {
