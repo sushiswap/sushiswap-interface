@@ -12,12 +12,13 @@ export type LogoProps = {
   width: string | number;
   height: string | number;
   alt?: string;
-} & IconProps;
+} & ImageProps &
+  IconProps;
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
-const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
+const Logo: FC<LogoProps> = ({ srcs, width, height, ...rest }) => {
   const [, refresh] = useState<number>(0);
   const src = srcs.find((src) => !BAD_SRCS[src]);
 
@@ -30,6 +31,10 @@ const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
           if (src) BAD_SRCS[src] = true;
           refresh((i) => i + 1);
         }}
+        width={width}
+        height={height}
+        layout="fixed"
+        style={{ minWidth: width, minHeight: height }}
         {...rest}
       />
     );

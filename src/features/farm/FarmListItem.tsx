@@ -83,60 +83,64 @@ const FarmListItem = ({ farm }) => {
           <Disclosure.Button
             className={classNames(
               open && "rounded-b-none",
-              "grid w-full grid-cols-3 px-4 py-6 text-sm text-left rounded cursor-pointer select-none bg-dark-900 text-primary text-body md:grid-cols-4"
+              "w-full px-4 py-6 text-left rounded cursor-pointer select-none bg-dark-900 text-primary text-sm md:text-lg"
             )}
           >
-            <div className="flex col-span-1 space-x-4">
-              <DoubleLogo currency0={token0} currency1={token1} size={40} />
-              <div>
-                <div className="font-bold">
-                  {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
+            <div className="grid grid-cols-4">
+              <div className="flex col-span-2 space-x-4 md:col-span-1">
+                <DoubleLogo currency0={token0} currency1={token1} size={40} />
+                <div className="flex flex-col justify-center">
+                  <div className="font-bold">
+                    {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
+                  </div>
+                  {farm?.pair?.type === PairType.SWAP && (
+                    <div className="text-xs md:text-base text-secondary">
+                      SushiSwap Farm
+                    </div>
+                  )}
+                  {farm?.pair?.type === PairType.LENDING && (
+                    <div className="text-xs md:text-base text-secondary">
+                      Kashi Farm
+                    </div>
+                  )}
                 </div>
-                {farm?.pair?.type === PairType.SWAP && (
-                  <div className="text-caption text-secondary">
-                    SushiSwap Farm
-                  </div>
-                )}
-                {farm?.pair?.type === PairType.LENDING && (
-                  <div className="text-caption text-secondary">Kashi Farm</div>
-                )}
               </div>
-            </div>
-            <div className="flex flex-col md:col-span-1">
-              <div className="font-bold">{formatNumber(farm.tvl, true)}</div>
-              <div className="text-caption text-secondary">
-                {formatNumber(farm.balance, false)} {farm.type} Market Staked
+              <div className="flex flex-col justify-center font-bold">
+                {formatNumber(farm.tvl, true)}
               </div>
-            </div>
-            <div className="flex items-center h-full space-x-2 ">
-              <div className="flex items-center">
-                {farm?.rewards?.map((reward, i) => (
-                  <Image
-                    key={i}
-                    src={reward.icon}
-                    width="30px"
-                    height="30px"
-                    className="rounded-sm"
-                    alt={reward.token}
-                  />
-                ))}
+              <div className="flex-col items-center hidden space-x-2 md:flex">
+                <div className="flex items-center space-x-2">
+                  {farm?.rewards?.map((reward, i) => (
+                    <div key={i} className="flex items-center">
+                      <Image
+                        src={reward.icon}
+                        width="30px"
+                        height="30px"
+                        className="rounded-md"
+                        layout="fixed"
+                        alt={reward.token}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col space-y-1">
+                  {farm?.rewards?.map((reward, i) => (
+                    <div
+                      key={i}
+                      className="text-xs md:text-base whitespace-nowrap"
+                    >
+                      {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="flex flex-col space-y-1">
-                {farm?.rewards?.map((reward, i) => (
-                  <div key={i} className="text-caption">
-                    {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center justify-end md:col-span-1">
-              <div>
-                <div className="font-bold text-right text-body text-high-emphesis">
+              <div className="flex flex-col items-end justify-center">
+                <div className="font-bold text-righttext-high-emphesis">
                   {farm?.roiPerYear > 100
                     ? "10000%+"
                     : formatPercent(farm?.roiPerYear * 100)}
                 </div>
-                <div className="text-right text-caption text-secondary">
+                <div className="text-xs text-right md:text-base text-secondary">
                   annualized
                 </div>
               </div>
@@ -299,7 +303,7 @@ const FarmListItem = ({ farm }) => {
               <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
                 {farm.pair.type === PairType.SWAP && (
                   <>
-                    {/* <div className="text-caption2">
+                    {/* <div className="text-sm">
                     Before depositing liquidity into this reward pool you'll
                     need to{" "}
                     <Link
@@ -311,7 +315,7 @@ const FarmListItem = ({ farm }) => {
                     tokens.
                   </div>
 
-                  <div className="text-caption2">
+                  <div className="text-sm">
                     After withdrawing liquidity from this reward pool you can{" "}
                     <Link
                       href={`/remove/${currencyId(token0)}/${currencyId(
@@ -326,7 +330,7 @@ const FarmListItem = ({ farm }) => {
                 )}
                 {farm.pair.type === PairType.LENDING && token1.symbol && (
                   <>
-                    <div className="text-caption2">
+                    <div className="text-sm">
                       Before depositing into this reward pool you&apos;ll need
                       to{" "}
                       <Link href={`/lend/${farm.pair.id}`}>
@@ -335,7 +339,7 @@ const FarmListItem = ({ farm }) => {
                       to gain liquidity tokens to deposit.
                     </div>
 
-                    <div className="text-caption2">
+                    <div className="text-sm">
                       After withdrawing liquidity tokens from this reward pool
                       you can{" "}
                       <Link href={`/lend/${farm.pair.id}`}>
