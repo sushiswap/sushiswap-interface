@@ -16,21 +16,20 @@ import loadingCircle from "../../animation/loading-circle.json";
 const OpenOrders: FC = () => {
   const { i18n } = useLingui();
   const { chainId } = useActiveWeb3React();
-  const { pending, loading } = useLimitOrders();
+  const { pending, loading, mutate } = useLimitOrders();
   const limitOrderContract = useLimitOrderContract(true);
   const addTransaction = useTransactionAdder();
 
-  const cancelOrder = useCallback(
-    async (limitOrder: LimitOrder, summary: string) => {
-      const resp = await limitOrderContract.cancelOrder(
-        limitOrder.getTypeHash()
-      );
-      addTransaction(resp, {
-        summary,
-      });
-    },
-    [addTransaction, limitOrderContract]
-  );
+  const cancelOrder = async (limitOrder: LimitOrder, summary: string) => {
+    const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash());
+    addTransaction(tx, {
+      summary,
+    });
+
+    await tx.wait();
+    console.log("tx done");
+    await mutate((data) => ({ ...data }));
+  };
 
   return (
     <>
@@ -42,57 +41,64 @@ const OpenOrders: FC = () => {
           </Badge>
         </span>
       </div>
-      <div className="text-secondary text-center py-4">
-        {loading && (
-          <div className="w-8 m-auto">
-            <Lottie animationData={loadingCircle} autoplay loop />
-          </div>
-        )}
+      <div className="text-secondary text-center">
         {pending.length > 0 ? (
           <>
-            <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
+            <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
               <div className="flex items-center cursor-pointer hover:text-primary">
                 {i18n._(t`Receive`)}
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary">
                 {i18n._(t`Pay`)}
               </div>
-              <div className="flex items-center cursor-pointer hover:text-primary">
+              <div className="flex items-center cursor-pointer hover:text-primary hidden mb:block">
                 {i18n._(t`Rate`)}
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary justify-end"></div>
             </div>
-            <div className="flex-col space-y-2">
+            <div className="flex-col space-y-2 md:space-y-5">
               {pending.map((order, index) => (
                 <div
                   key={index}
                   className="block text-high-emphesis bg-dark-800 overflow-hidden rounded"
                 >
-                  <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary bg-gradient-to-r from-dark-blue">
+                  <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
                     <div className="flex flex-col">
-                      <div className="flex gap-2 font-bold items-center">
-                        <CurrencyLogo size={42} currency={order.tokenOut} />
-                        {order.limitOrder.amountOut.toSignificant(6)}{" "}
-                        {order.tokenOut.getSymbol(chainId)}
-                        WETH
+                      <div className="flex gap-4 font-bold items-center">
+                        <div className="min-w-[32px] flex items-center">
+                          <CurrencyLogo size={32} currency={order.tokenOut} />
+                        </div>
+                        <div className="flex flex-col">
+                          <div>
+                            {order.limitOrder.amountOut.toSignificant(6)}{" "}
+                          </div>
+                          <div className="text-left text-secondary text-xs">
+                            {order.tokenOut.getSymbol(chainId)}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="text-left font-bold">
-                      {order.limitOrder.amountIn.toSignificant(6)}{" "}
-                      {order.tokenIn.getSymbol(chainId)}
-                      WBTC
+                      <div className="flex flex-col">
+                        <div>{order.limitOrder.amountIn.toSignificant(6)} </div>
+                        <div className="text-left text-secondary text-xs">
+                          {order.tokenIn.getSymbol(chainId)}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-left">
+                    <div className="text-left font-bold hidden md:block">
                       <div>
                         {JSBI.divide(
                           order.limitOrder.amountOut.raw,
                           order.limitOrder.amountIn.raw
                         )}{" "}
-                        WBTC
                       </div>
-                      <div className="text-xs text-secondary">per SUSHI</div>
+                      <div className="text-xs text-secondary">
+                        {order.tokenOut.getSymbol(chainId)} per{" "}
+                        {order.tokenIn.getSymbol(chainId)}
+                      </div>
                     </div>
-                    <div className="hidden md:block text-right font-bold">
+                    <div className="text-right font-bold">
                       <div className="mb-1">
                         {order.filledPercent}% {i18n._(t`Filled`)}
                       </div>
@@ -100,7 +106,7 @@ const OpenOrders: FC = () => {
                         <Button
                           color="pink"
                           variant="outlined"
-                          size="small"
+                          size="xs"
                           onClick={() =>
                             cancelOrder(
                               order.limitOrder,
@@ -123,6 +129,10 @@ const OpenOrders: FC = () => {
               ))}
             </div>
           </>
+        ) : loading ? (
+          <div className="w-8 m-auto">
+            <Lottie animationData={loadingCircle} autoplay loop />
+          </div>
         ) : (
           <span>
             No open limit orders. Why not{" "}

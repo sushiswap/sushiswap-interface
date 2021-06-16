@@ -24,29 +24,24 @@ const CompletedOrders: FC = () => {
           </Badge>
         </span>
       </div>
-      <div className="text-secondary text-center py-4">
-        {loading && (
-          <div className="w-8 m-auto">
-            <Lottie animationData={loadingCircle} autoplay loop />
-          </div>
-        )}
+      <div className="text-secondary text-center">
         {completed.length > 0 ? (
           <>
-            <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
+            <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
               <div className="flex items-center cursor-pointer hover:text-primary">
                 {i18n._(t`Receive`)}
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary">
                 {i18n._(t`Pay`)}
               </div>
-              <div className="flex items-center cursor-pointer hover:text-primary">
+              <div className="flex items-center cursor-pointer hover:text-primary hidden mb:block">
                 {i18n._(t`Rate`)}
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary justify-end">
                 {i18n._(t`Filled`)}
               </div>
             </div>
-            <div className="flex-col space-y-2">
+            <div className="flex-col space-y-2 md:space-y-5">
               {completed.map((order, index) => (
                 <div
                   key={index}
@@ -57,19 +52,31 @@ const CompletedOrders: FC = () => {
                       : "linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231;",
                   }}
                 >
-                  <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary bg-gradient-to-r from-dark-blue">
+                  <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
                     <div className="flex flex-col">
-                      <div className="flex gap-2 font-bold items-center">
-                        <CurrencyLogo size={42} currency={order.tokenOut} />
-                        {order.limitOrder.amountOut.toSignificant(6)}{" "}
-                        {order.tokenIn.getSymbol(chainId)}
+                      <div className="flex gap-4 font-bold items-center">
+                        <div className="min-w-[32px] flex items-center">
+                          <CurrencyLogo size={32} currency={order.tokenOut} />
+                        </div>
+                        <div className="flex flex-col">
+                          <div>
+                            {order.limitOrder.amountOut.toSignificant(6)}{" "}
+                          </div>
+                          <div className="text-left text-secondary text-xs">
+                            {order.tokenOut.getSymbol(chainId)}
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="text-left font-bold">
-                      {order.limitOrder.amountIn.toSignificant(6)}{" "}
-                      {order.tokenIn.getSymbol(chainId)}
+                      <div className="flex flex-col">
+                        <div>{order.limitOrder.amountIn.toSignificant(6)} </div>
+                        <div className="text-left text-secondary text-xs">
+                          {order.tokenIn.getSymbol(chainId)}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-left">
+                    <div className="hidden md:block text-left font-bold">
                       <div>
                         {JSBI.divide(
                           order.limitOrder.amountOut.raw,
@@ -77,10 +84,11 @@ const CompletedOrders: FC = () => {
                         )}{" "}
                       </div>
                       <div className="text-xs text-secondary">
-                        per {order.tokenIn.getSymbol(chainId)}
+                        {order.tokenOut.getSymbol(chainId)} per{" "}
+                        {order.tokenIn.getSymbol(chainId)}
                       </div>
                     </div>
-                    <div className="hidden md:block text-right">
+                    <div className="text-right">
                       <div className="mb-1">
                         {order.isCanceled && (
                           <span className="text-secondary">
@@ -99,6 +107,10 @@ const CompletedOrders: FC = () => {
               ))}
             </div>
           </>
+        ) : loading ? (
+          <div className="w-8 m-auto">
+            <Lottie animationData={loadingCircle} autoplay loop />
+          </div>
         ) : (
           <span>{i18n._(t`No order history`)}</span>
         )}

@@ -78,6 +78,8 @@ export default function Add() {
     undefined,
   ];
 
+  // console.log({ currencyIdA, currencyIdB })
+
   const currencyA = useCurrency(currencyIdA);
   const currencyB = useCurrency(currencyIdB);
 
@@ -154,7 +156,6 @@ export default function Add() {
     parsedAmounts[Field.CURRENCY_A],
     getRouterAddress(chainId)
   );
-
   const [approvalB, approveBCallback] = useApproveCallback(
     parsedAmounts[Field.CURRENCY_B],
     getRouterAddress(chainId)
@@ -162,156 +163,119 @@ export default function Add() {
 
   const addTransaction = useTransactionAdder();
 
-  const onAdd = useCallback(
-    async function () {
-      if (!chainId || !library || !account) return;
-      const router = getRouterContract(chainId, library, account);
+  async function onAdd() {
+    if (!chainId || !library || !account) return;
+    const router = getRouterContract(chainId, library, account);
 
-      const {
-        [Field.CURRENCY_A]: parsedAmountA,
-        [Field.CURRENCY_B]: parsedAmountB,
-      } = parsedAmounts;
-      if (
-        !parsedAmountA ||
-        !parsedAmountB ||
-        !currencyA ||
-        !currencyB ||
-        !deadline
-      ) {
-        return;
-      }
+    const {
+      [Field.CURRENCY_A]: parsedAmountA,
+      [Field.CURRENCY_B]: parsedAmountB,
+    } = parsedAmounts;
+    if (
+      !parsedAmountA ||
+      !parsedAmountB ||
+      !currencyA ||
+      !currencyB ||
+      !deadline
+    ) {
+      return;
+    }
 
-      console.log({
-        currencyIdA,
-        currencyIdB,
-        currencyA,
-        currencyB,
-        parsedAmounts,
-      });
+    const amountsMin = {
+      [Field.CURRENCY_A]: calculateSlippageAmount(
+        parsedAmountA,
+        noLiquidity ? 0 : allowedSlippage
+      )[0],
+      [Field.CURRENCY_B]: calculateSlippageAmount(
+        parsedAmountB,
+        noLiquidity ? 0 : allowedSlippage
+      )[0],
+    };
 
-      const amountsMin = {
-        [Field.CURRENCY_A]: calculateSlippageAmount(
-          parsedAmountA,
-          noLiquidity ? 0 : allowedSlippage
-        )[0],
-        [Field.CURRENCY_B]: calculateSlippageAmount(
-          parsedAmountB,
-          noLiquidity ? 0 : allowedSlippage
-        )[0],
-      };
+    let estimate;
+    let method: (...args: any) => Promise<TransactionResponse>;
+    let args: Array<string | string[] | number>;
+    let value: BigNumber | null;
+    if (
+      currencyA === Currency.getNativeCurrency(chainId) ||
+      currencyB === Currency.getNativeCurrency(chainId)
+    ) {
+      const tokenBIsETH = currencyB === Currency.getNativeCurrency(chainId);
+      estimate = router.estimateGas.addLiquidityETH;
+      method = router.addLiquidityETH;
+      args = [
+        wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)
+          ?.address ?? "", // token
+        (tokenBIsETH ? parsedAmountA : parsedAmountB).raw.toString(), // token desired
+        amountsMin[
+          tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B
+        ].toString(), // token min
+        amountsMin[
+          tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A
+        ].toString(), // eth min
+        account,
+        deadline.toHexString(),
+      ];
+      value = BigNumber.from(
+        (tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString()
+      );
+    } else {
+      estimate = router.estimateGas.addLiquidity;
+      method = router.addLiquidity;
+      args = [
+        wrappedCurrency(currencyA, chainId)?.address ?? "",
+        wrappedCurrency(currencyB, chainId)?.address ?? "",
+        parsedAmountA.raw.toString(),
+        parsedAmountB.raw.toString(),
+        amountsMin[Field.CURRENCY_A].toString(),
+        amountsMin[Field.CURRENCY_B].toString(),
+        account,
+        deadline.toHexString(),
+      ];
+      value = null;
+    }
 
-      let estimate;
-      let method: (...args: any) => Promise<TransactionResponse>;
-      let args: Array<string | string[] | number>;
-      let value: BigNumber | null;
-      if (
-        (currencyA === Currency.getNativeCurrency(chainId) ||
-          currencyB === Currency.getNativeCurrency(chainId)) &&
-        chainId !== ChainId.CELO
-      ) {
-        const tokenBIsETH = currencyB === Currency.getNativeCurrency(chainId);
-        estimate = router.estimateGas.addLiquidityETH;
-        method = router.addLiquidityETH;
-        args = [
-          wrappedCurrency(tokenBIsETH ? currencyA : currencyB, chainId)
-            ?.address ?? "", // token
-          (tokenBIsETH ? parsedAmountA : parsedAmountB).raw.toString(), // token desired
-          amountsMin[
-            tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B
-          ].toString(), // token min
-          amountsMin[
-            tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A
-          ].toString(), // eth min
-          account,
-          deadline.toHexString(),
-        ];
-        value = BigNumber.from(
-          (tokenBIsETH ? parsedAmountB : parsedAmountA).raw.toString()
-        );
-      } else {
-        estimate = router.estimateGas.addLiquidity;
-        method = router.addLiquidity;
-
-        // console.log({
-        //   a: wrappedCurrency(currencyA, chainId)?.address,
-        //   b: wrappedCurrency(currencyB, chainId)?.address,
-        // });
-
-        console.log("BEFORE");
-        args = [
-          wrappedCurrency(currencyA, chainId)?.address ?? "",
-          wrappedCurrency(currencyB, chainId)?.address ?? "",
-          parsedAmountA.raw.toString(),
-          parsedAmountB.raw.toString(),
-          amountsMin[Field.CURRENCY_A].toString(),
-          amountsMin[Field.CURRENCY_B].toString(),
-          account,
-          deadline.toHexString(),
-        ];
-        console.log("AFTER");
-        console.log({ args });
-
-        value = null;
-      }
-
-      setAttemptingTxn(true);
-      await estimate(...args, value ? { value } : {})
-        .then((estimatedGasLimit) =>
-          method(...args, {
-            ...(value ? { value } : {}),
-            gasLimit: calculateGasMargin(estimatedGasLimit),
-          }).then((response) => {
-            setAttemptingTxn(false);
-
-            addTransaction(response, {
-              summary:
-                "Add " +
-                parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
-                " " +
-                currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
-                " and " +
-                parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
-                " " +
-                currencies[Field.CURRENCY_B]?.getSymbol(chainId),
-            });
-
-            setTxHash(response.hash);
-
-            ReactGA.event({
-              category: "Liquidity",
-              action: "Add",
-              label: [
-                currencies[Field.CURRENCY_A]?.getSymbol(chainId),
-                currencies[Field.CURRENCY_B]?.getSymbol(chainId),
-              ].join("/"),
-            });
-          })
-        )
-        .catch((error) => {
-          console.error(error);
+    setAttemptingTxn(true);
+    await estimate(...args, value ? { value } : {})
+      .then((estimatedGasLimit) =>
+        method(...args, {
+          ...(value ? { value } : {}),
+          gasLimit: calculateGasMargin(estimatedGasLimit),
+        }).then((response) => {
           setAttemptingTxn(false);
-          // we only care if the error is something _other_ than the user rejected the tx
-          if (error?.code !== 4001) {
-            console.error(error);
-          }
-        });
-    },
-    [
-      account,
-      addTransaction,
-      allowedSlippage,
-      chainId,
-      currencies,
-      currencyA,
-      currencyB,
-      currencyIdA,
-      currencyIdB,
-      deadline,
-      library,
-      noLiquidity,
-      parsedAmounts,
-    ]
-  );
+
+          addTransaction(response, {
+            summary:
+              "Add " +
+              parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
+              " " +
+              currencies[Field.CURRENCY_A]?.getSymbol(chainId) +
+              " and " +
+              parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
+              " " +
+              currencies[Field.CURRENCY_B]?.getSymbol(chainId),
+          });
+
+          setTxHash(response.hash);
+
+          ReactGA.event({
+            category: "Liquidity",
+            action: "Add",
+            label: [
+              currencies[Field.CURRENCY_A]?.getSymbol(chainId),
+              currencies[Field.CURRENCY_B]?.getSymbol(chainId),
+            ].join("/"),
+          });
+        })
+      )
+      .catch((error) => {
+        setAttemptingTxn(false);
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (error?.code !== 4001) {
+          console.error(error);
+        }
+      });
+  }
 
   const modalHeader = () => {
     return noLiquidity ? (
@@ -428,8 +392,6 @@ export default function Add() {
       router.push(`/add/${Currency.getNativeCurrencySymbol(chainId)}`);
     }
   }, [chainId, previousChainId, router]);
-
-  console.log({ isValid, approvalA, approvalB });
 
   return (
     <Layout>

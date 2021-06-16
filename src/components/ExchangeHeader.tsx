@@ -12,6 +12,7 @@ import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../hooks";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
+import MyOrders from "../features/limit-orders/MyOrders";
 
 export default function ExchangeHeader({
   input = undefined,
@@ -21,10 +22,11 @@ export default function ExchangeHeader({
   const { chainId } = useActiveWeb3React();
   const [animateSettings, setAnimateSettings] = useState(false);
   const [animateWallet, setAnimateWallet] = useState(false);
-  console.log({ input, output, chainId });
+  const { route } = useRouter();
+
   return (
     <div className="flex justify-between mb-4 space-x-3">
-      <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
+      <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800 h-[46px]">
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
           href={`/swap${input ? `/${currencyId(input, chainId)}` : ""}${
@@ -32,25 +34,30 @@ export default function ExchangeHeader({
           }`}
           as="/swap"
         >
-          <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
+          <a className="flex items-center justify-center px-4 text-base font-bold text-center rounded-md md:px-8 text-secondary hover:text-high-emphesis">
             {i18n._(t`Swap`)}
           </a>
         </NavLink>
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
-          href={`/add${input ? `/${currencyId(input, chainId)}` : ""}${
+          href={`/limit-order${input ? `/${currencyId(input, chainId)}` : ""}${
             output ? `/${currencyId(output, chainId)}` : ""
           }`}
         >
-          <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
-            {i18n._(t`Pool`)}
+          <a className="flex items-center justify-center px-4 text-base font-bold text-center rounded-md md:px-8 text-secondary hover:text-high-emphesis">
+            {i18n._(t`Limit`)}
           </a>
         </NavLink>
       </div>
-      <div className="flex items-center rounded md:border-2 md:border-dark-800 md:p-2">
+      <div className="flex items-center">
         <div className="grid grid-flow-col gap-3">
+          {route.includes("limit-order") && (
+            <div className="hidden md:flex items-center h-full w-full cursor-pointer hover:bg-dark-800 rounded px-3 py-1">
+              <MyOrders />
+            </div>
+          )}
           {chainId === ChainId.MAINNET && (
-            <div className="hidden md:flex space-x-3 items-center bg-dark-800 rounded-sm h-full w-full px-2 py-1.5 cursor-pointer">
+            <div className="hidden md:flex space-x-3 items-center hover:bg-dark-800 rounded h-full w-full px-3 py-1 cursor-pointer">
               <svg
                 width="18"
                 height="20"
@@ -69,33 +76,7 @@ export default function ExchangeHeader({
               </div>
             </div>
           )}
-
-          {/* <button
-                        onMouseEnter={() => setAnimateSettings(true)}
-                        onMouseLeave={() => setAnimateSettings(false)}
-                        className="flex items-center justify-center w-full h-full p-1 rounded-sm bg-dark-800 hover:bg-dark-700 md:px-2"
-                    >
-                        <Lottie
-                            animationData={settingsAnimationData}
-                            autoplay={animateSettings}
-                            loop={false}
-                            style={{ width: 28, height: 28 }}
-                            className="transform rotate-90"
-                        />
-                    </button> */}
-          {/* <button
-                        onMouseEnter={() => setAnimateWallet(true)}
-                        onMouseLeave={() => setAnimateWallet(false)}
-                        className="items-center justify-center hidden w-full h-full px-2 rounded-sm md:flex bg-dark-800 hover:bg-dark-700"
-                    >
-                        <Lottie
-                            animationData={profileAnimationData}
-                            autoplay={animateWallet}
-                            loop={false}
-                            style={{ width: 24, height: 24 }}
-                        />
-                    </button> */}
-          <div className="relative w-full h-full p-1 rounded-sm bg-dark-800 hover:bg-dark-700 md:px-2">
+          <div className="relative w-full h-full rounded cursor-pointer flex items-center text-secondary hover:text-high-emphesis hover:bg-dark-800 rounded px-1 py-1">
             <Settings />
           </div>
         </div>

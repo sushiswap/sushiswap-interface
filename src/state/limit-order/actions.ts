@@ -9,9 +9,10 @@ export const setLimitPrice = createAction<string | null>(
   "limit-order/setLimitPrice"
 );
 
-export const setOrderExpiration = createAction<string | null>(
-  "limit-order/setOrderExpiration"
-);
+export const setOrderExpiration = createAction<{
+  value: string;
+  label: string;
+} | null>("limit-order/setOrderExpiration");
 
 export const setFromBentoBalance = createAction<boolean>(
   "limit-order/setFromBentoBalance"
@@ -29,7 +30,7 @@ export const replaceLimitOrderState = createAction<{
   recipient: string | null;
   fromBentoBalance?: boolean;
   limitPrice: string;
-  orderExpiration?: string;
+  orderExpiration?: { value: string; label: string };
 }>("limit-order/replaceLimitOrderState");
 
 export const selectCurrency = createAction<{

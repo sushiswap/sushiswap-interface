@@ -288,7 +288,7 @@ export default function LimitOrder() {
             </div>
 
             <div className="flex">
-              <LimitOrderButton color="gradient" size="large" token={tokenA} />
+              <LimitOrderButton color="gradient" size="lg" token={tokenA} />
             </div>
           </div>
         </DoubleGlowShadow>

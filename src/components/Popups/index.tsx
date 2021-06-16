@@ -48,7 +48,6 @@ export default function Popups() {
   const activePopups = useActivePopups();
 
   const urlWarningActive = useURLWarningVisible();
-
   return (
     <>
       <FixedPopupColumn gap="20px" extraPadding={urlWarningActive}>

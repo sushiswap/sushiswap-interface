@@ -8,6 +8,7 @@ import { Token } from "@sushiswap/sdk";
 interface State {
   pending: OpenOrder[];
   completed: OpenOrder[];
+  loading: boolean;
 }
 
 interface OpenOrder {
@@ -34,23 +35,25 @@ const useLimitOrders = () => {
   const [openOrders, setOpenOrders] = useState<State>({
     pending: [],
     completed: [],
+    loading: true,
   });
 
   const { account, chainId } = useActiveWeb3React();
   const limitOrderContract = useLimitOrderContract();
-  const { data }: SWRResponse<any, Error> = useSWR(
-    [url, account, chainId],
+
+  const shouldFetch = url && account && chainId;
+  const { data, mutate }: SWRResponse<any, Error> = useSWR(
+    shouldFetch ? [url, account, chainId] : null,
     fetcher
   );
 
+  console.log(data);
   useEffect(() => {
     if (!Array.isArray(data)) return;
 
-    const transform = async () => {
-      return await data.reduce(
-        async (accP, order: any) => {
-          const acc = await accP;
-
+    const transform = async () =>
+      Promise.all(
+        data.map(async (order: any) => {
           const limitOrder = LimitOrder.getLimitOrder({
             ...order,
             chainId: +order.chainId,
@@ -77,27 +80,37 @@ const useLimitOrders = () => {
             minOutRaw: limitOrder.amountOutRaw,
           };
 
-          if (openOrder.filled || openOrder.isCanceled) {
-            acc.completed.push(openOrder);
-          } else {
-            acc.pending.push(openOrder);
+          return openOrder;
+        }, [])
+      ).then((data) =>
+        data.reduce(
+          (acc, cur) => {
+            if (cur.filled || cur.isCanceled) {
+              acc.completed.push(cur);
+            } else {
+              acc.pending.push(cur);
+            }
+
+            return acc;
+          },
+          {
+            completed: [],
+            pending: [],
           }
-
-          return acc;
-        },
-        Promise.resolve({
-          pending: [],
-          completed: [],
-        })
+        )
       );
-    };
 
-    transform().then((state) => setOpenOrders(state));
+    transform().then((state) =>
+      setOpenOrders({
+        ...state,
+        loading: false,
+      })
+    );
   }, [account, chainId, data, limitOrderContract]);
 
   return {
     ...openOrders,
-    loading: !data,
+    mutate,
   };
 };
 

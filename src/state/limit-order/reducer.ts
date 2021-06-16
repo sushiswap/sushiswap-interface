@@ -12,6 +12,14 @@ import {
   typeInput,
 } from "./actions";
 
+export enum OrderExpiration {
+  never = "never",
+  hour = "hour",
+  day = "day",
+  week = "week",
+  month = "month",
+}
+
 export interface LimitOrderState {
   readonly independentField: Field;
   readonly typedValue: string;
@@ -26,7 +34,10 @@ export interface LimitOrderState {
   readonly recipient: string | null;
   readonly fromBentoBalance: boolean;
   readonly limitOrderApprovalPending: string;
-  readonly orderExpiration: string;
+  readonly orderExpiration: {
+    value: OrderExpiration | string;
+    label: string;
+  };
 }
 
 const initialState: LimitOrderState = {
@@ -42,7 +53,10 @@ const initialState: LimitOrderState = {
   recipient: null,
   fromBentoBalance: false,
   limitOrderApprovalPending: "",
-  orderExpiration: "",
+  orderExpiration: {
+    value: "",
+    label: "",
+  },
 };
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>

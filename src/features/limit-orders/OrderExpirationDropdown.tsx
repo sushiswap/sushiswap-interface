@@ -9,17 +9,18 @@ import { setOrderExpiration } from "../../state/limit-order/actions";
 import { useLimitOrderState } from "../../state/limit-order/hooks";
 import useToggle from "../../hooks/useToggle";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
+import { OrderExpiration } from "../../state/limit-order/reducer";
 
 const OrderExpirationDropdown: FC = () => {
   const { i18n } = useLingui();
   const dispatch = useDispatch<AppDispatch>();
   const { orderExpiration } = useLimitOrderState();
   const items = {
-    never: i18n._(t`Never`),
-    hour: i18n._(t`1 Hour`),
-    day: i18n._(t`24 Hours`),
-    week: i18n._(t`1 Week`),
-    month: i18n._(t`30 Days`),
+    [OrderExpiration.never]: i18n._(t`Never`),
+    [OrderExpiration.hour]: i18n._(t`1 Hour`),
+    [OrderExpiration.day]: i18n._(t`24 Hours`),
+    [OrderExpiration.week]: i18n._(t`1 Week`),
+    [OrderExpiration.month]: i18n._(t`30 Days`),
   };
 
   const [open, toggle] = useToggle(false);
@@ -30,7 +31,12 @@ const OrderExpirationDropdown: FC = () => {
     (e, item) => {
       e.stopPropagation();
       toggle();
-      dispatch(setOrderExpiration(item));
+      dispatch(
+        setOrderExpiration({
+          label: items[item],
+          value: item,
+        })
+      );
     },
     [dispatch, toggle]
   );
@@ -44,12 +50,16 @@ const OrderExpirationDropdown: FC = () => {
       >
         <div className="flex flex-row items-center">
           <span className="">{i18n._(t`Order Expiration`)}:</span>
-          <QuestionHelper text="test" />
+          <QuestionHelper
+            text={i18n._(
+              t`Expiration is the time at which the order will become invalid`
+            )}
+          />
         </div>
         <div className="relative">
           <div className="flex border border-dark-800 rounded divide-x divide-dark-800">
             <div className="text-sm text-primary flex h-10 items-center pl-3 min-w-[80px]">
-              {items[orderExpiration]}
+              {items[orderExpiration.value]}
             </div>
             <div className="flex h-10 items-center justify-center w-9 font-bold">
               <ChevronDownIcon width={16} height={16} strokeWidth={2} />

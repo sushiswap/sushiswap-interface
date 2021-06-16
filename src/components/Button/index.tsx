@@ -17,7 +17,7 @@ const FILLED = {
   green:
     "bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80",
   gradient:
-    "w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 disabled:bg-opacity-80",
+    "w-full text-high-emphesis bg-gradient-to-r from-blue to-pink bg-opacity-80 hover:opacity-100 disabled:bg-opacity-80",
 };
 
 const OUTLINED = {
@@ -56,13 +56,13 @@ export type ButtonSize = "xs" | "sm" | "lg" | "default";
 
 export type ButtonVariant = "outlined" | "filled" | "empty";
 
-export type ButtonProps = {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ButtonColor;
   size?: ButtonSize;
   variant?: ButtonVariant;
-} & {
   ref?: React.Ref<HTMLButtonElement>;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+}
 
 function Button({
   children,
@@ -77,7 +77,7 @@ function Button({
       className={classNames(
         VARIANT[variant][color],
         variant !== "empty" && SIZE[size],
-        "rounded focus:outline-none focus:ring disabled:opacity-50 font-medium",
+        "rounded focus:outline-none focus:ring disabled:opacity-50 font-medium disabled:cursor-default",
         className
       )}
       {...rest}

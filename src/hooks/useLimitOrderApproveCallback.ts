@@ -9,18 +9,20 @@ import {
   useLimitOrderState,
 } from "../state/limit-order/hooks";
 import { useDispatch } from "react-redux";
-import { setLimitOrderApprovalPending } from "../state/limit-order/actions";
-import { useTransactionAdder } from "../state/transactions/hooks";
-import { Currency, CurrencyAmount, Token, WETH } from "@sushiswap/sdk";
 import {
-  getVerifyingContract,
+  setFromBentoBalance,
+  setLimitOrderApprovalPending,
+} from "../state/limit-order/actions";
+import { useTransactionAdder } from "../state/transactions/hooks";
+import { Token, TokenAmount, WETH } from "@sushiswap/sdk";
+import {
   getSignatureWithProviderBentobox,
+  getVerifyingContract,
+  LimitOrder,
 } from "limitorderv2-sdk";
 import { Field } from "../state/swap/actions";
-import { e10, toShare, ZERO } from "../functions";
-import { BigNumber } from "@ethersproject/bignumber";
-import JSBI from "jsbi";
-import { parseUnits } from "@ethersproject/units";
+import { wrappedCurrency, ZERO } from "../functions";
+import { OrderExpiration } from "../state/limit-order/reducer";
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -41,8 +43,8 @@ const useLimitOrderApproveCallback = () => {
   const { account, library, chainId } = useActiveWeb3React();
   const dispatch = useDispatch();
 
-  const { fromBentoBalance } = useLimitOrderState();
-  const { parsedAmounts } = useDerivedLimitOrderInfo();
+  const { fromBentoBalance, recipient, orderExpiration } = useLimitOrderState();
+  const { parsedAmounts, currencies } = useDerivedLimitOrderInfo();
   const [fallback, setFallback] = useState(false);
   const [limitOrderPermit, setLimitOrderPermit] = useState(undefined);
 
@@ -166,31 +168,42 @@ const useLimitOrderApproveCallback = () => {
       summary.push("Approve Limit Order");
     }
 
-    const useNative = token.address === WETH[chainId].address;
+    const tokenAddressChecksum = ethers.utils.getAddress(token.address);
+    const useNative = tokenAddressChecksum === WETH[chainId].address;
     const amount = parsedAmounts[Field.INPUT].raw.toString();
     if (!fromBentoBalance) {
       summary.push("Deposit");
-      batch.push(
-        bentoBoxContract?.interface?.encodeFunctionData("deposit", [
-          useNative ? ethers.constants.AddressZero : token.address,
-          account,
-          masterContract,
-          amount,
-          BigNumber.from(0),
-        ])
-      );
+      if (useNative) {
+        batch.push(
+          bentoBoxContract?.interface?.encodeFunctionData("deposit", [
+            ethers.constants.AddressZero,
+            account,
+            account,
+            amount,
+            0,
+          ])
+        );
+      } else {
+        batch.push(
+          bentoBoxContract?.interface?.encodeFunctionData("deposit", [
+            tokenAddressChecksum,
+            account,
+            account,
+            amount,
+            0,
+          ])
+        );
+      }
     }
 
     const tx = await bentoBoxContract?.batch(batch, true, {
-      value: useNative && !fromBentoBalance ? amount : ZERO,
+      value: useNative ? amount : ZERO,
     });
     addTransaction(tx, { summary: summary.join(", ") });
     setLimitOrderPermit(undefined);
-    const resp = await tx.wait();
+    await tx.wait();
 
-    if (resp.success) {
-      alert("hi");
-    }
+    dispatch(setFromBentoBalance(true));
   };
 
   return [approvalState, fallback, limitOrderPermit, onApprove, execute];

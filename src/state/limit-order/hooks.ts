@@ -18,12 +18,11 @@ import {
   Token,
 } from "@sushiswap/sdk";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { usePair } from "../../hooks/usePair";
 import { useCurrencyBalances } from "../wallet/hooks";
 import { isAddress, tryParseAmount, wrappedCurrency } from "../../functions";
 import useParsedQueryString from "../../hooks/useParsedQueryString";
 import { ParsedQs } from "qs";
-import { LimitOrderState } from "./reducer";
+import { LimitOrderState, OrderExpiration } from "./reducer";
 import { useBentoBalances } from "../bentobox/hooks";
 import { useTradeExactIn, useTradeExactOut } from "../../hooks/Trades";
 import useENS from "../../hooks/useENS";
@@ -312,7 +311,7 @@ export function queryParametersToSwapState(
     recipient,
     limitPrice: parseTokenAmountURLParameter(parsedQs.exactRate),
     fromBentoBalance: parseBooleanFieldParameter(parsedQs.fromBento),
-    orderExpiration: "never",
+    orderExpiration: { value: OrderExpiration.never, label: i18n._(t`Never`) },
   };
 }
 

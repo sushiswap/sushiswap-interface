@@ -29,6 +29,7 @@ module.exports = withBundleAnalyzer(
 
       return config;
     },
+
     images: {
       domains: ["assets.sushi.com", "res.cloudinary.com"],
       // loader: 'cloudinary',
