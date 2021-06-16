@@ -1,4 +1,4 @@
-import { HelpCircle, IconProps } from "react-feather";
+import { HelpCircle, Icon, IconProps } from "react-feather";
 import React, { FC, useState } from "react";
 
 import Image from "../Image";
@@ -12,13 +12,12 @@ export type LogoProps = {
   width: string | number;
   height: string | number;
   alt?: string;
-} & ImageProps &
-  IconProps;
+} & IconProps;
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
-const Logo: FC<LogoProps> = ({ srcs, width, height, ...rest }) => {
+const Logo: FC<LogoProps> = ({ srcs, width, height, alt = "", ...rest }) => {
   const [, refresh] = useState<number>(0);
   const src = srcs.find((src) => !BAD_SRCS[src]);
 
@@ -33,6 +32,7 @@ const Logo: FC<LogoProps> = ({ srcs, width, height, ...rest }) => {
         }}
         width={width}
         height={height}
+        alt={alt}
         layout="fixed"
         style={{ minWidth: width, minHeight: height }}
         {...rest}
