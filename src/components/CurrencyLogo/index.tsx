@@ -16,7 +16,7 @@ const HarmonyLogo = "/images/native-tokens/one.png";
 const HecoLogo = "/images/tokens/heco-square.jpg";
 const MaticLogo = "/images/tokens/polygon-square.jpg";
 const MoonbeamLogo = "/images/tokens/eth-square.jpg";
-const OKExLogo = "/images/tokens/okt-square.jpg";
+const OKExLogo = "/images/native-tokens/okt.png";
 const xDaiLogo = "/images/native-tokens/xdai.png";
 
 const getTokenLogoURL = (address: string, chainId: ChainId) => {
