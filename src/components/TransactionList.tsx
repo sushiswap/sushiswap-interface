@@ -1,6 +1,7 @@
 import { ArrowUpRight, CheckCircle } from "react-feather";
 
 import Dots from "../components/Dots";
+import Image from "next/image";
 import { NETWORK_LABEL } from "../constants/networks";
 import React from "react";
 import { getExplorerLink } from "../functions/explorer";
@@ -36,17 +37,21 @@ export default function TransactionList({ transactions }: any) {
             >
               <div className="flex flex-row items-center space-x-1">
                 <div>
-                  <img
+                  <Image
                     src={t.token_0.logo_url}
                     className="block w-6 h-6 rounded-full"
-                    alt=""
+                    alt={t.token_0.symbol}
+                    width="24px"
+                    height="24px"
                   />
                 </div>
                 <div>
-                  <img
+                  <Image
                     src={t.token_1.logo_url}
                     className="block w-6 h-6 mr-2 rounded-full"
-                    alt=""
+                    alt={t.token_1.symbol}
+                    width="24px"
+                    height="24px"
                   />
                 </div>
               </div>

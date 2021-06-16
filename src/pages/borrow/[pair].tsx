@@ -45,7 +45,7 @@ export default function Pair() {
     addTransaction(result.tx, {
       summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate`,
     });
-  }, [pair]);
+  }, [account, addTransaction, chainId, library, pair]);
 
   if (!pair)
     return info && info.blockTimeStamp.isZero() ? null : router.push("/borrow");

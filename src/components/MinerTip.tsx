@@ -79,7 +79,7 @@ export default function MinerTip() {
       setUserGasPrice(marks[newValue].price);
       // setUserSlippageTolerance(marks[newValue].slippage);
     },
-    [marks, setValue, setUserGasPrice, setUserSlippageTolerance]
+    [marks, setValue, setUserGasPrice]
   );
 
   React.useEffect(() => {

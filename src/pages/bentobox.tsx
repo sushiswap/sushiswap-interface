@@ -70,9 +70,9 @@ export default function BenotBox() {
                 />
                 {account ? (
                   <Link href="/borrow">
-                    <div className="w-full px-4 py-2 text-center bg-transparent border border-transparent rounded text-high-emphesis border-gradient-r-blue-pink-dark-900">
+                    <a className="w-full px-4 py-2 text-center bg-transparent border border-transparent rounded text-high-emphesis border-gradient-r-blue-pink-dark-900">
                       {i18n._(t`Enter`)}
-                    </div>
+                    </a>
                   </Link>
                 ) : (
                   <Web3Status />

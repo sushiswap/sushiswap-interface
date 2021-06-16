@@ -94,6 +94,7 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({
       <Image
         width={size}
         height={size}
+        alt={currency.getSymbol(chainId)}
         className={`${squared ? "rounded" : "rounded-full"} ${className}`}
         src={logo[chainId] || `/images/tokens/unknown.png`}
       />

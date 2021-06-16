@@ -207,10 +207,12 @@ export default function NetworkModal(): JSX.Element | null {
               }}
               className="flex items-center w-full col-span-1 p-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
             >
-              <img
+              <Image
                 src={NETWORK_ICON[key]}
                 alt="Switch Network"
-                className="w-8 h-8 mr-2 rounded-md"
+                className="rounded-md"
+                width="32px"
+                height="32px"
               />
               <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
             </button>

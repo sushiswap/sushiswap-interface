@@ -198,7 +198,7 @@ export default function Stake() {
         <div className="flex justify-center mb-6">
           <div className="flex flex-col w-full max-w-xl mt-auto mb-2">
             <div className="flex max-w-lg">
-              <div className="self-end mb-3 font-bold text-lg md:text-2xl text-high-emphesis md:mb-7">
+              <div className="self-end mb-3 text-lg font-bold md:text-2xl text-high-emphesis md:mb-7">
                 {i18n._(t`Maximize yield by staking SUSHI for xSUSHI`)}
               </div>
               {/* <div className="self-start pl-6 pr-3 mb-1 min-w-max md:hidden">
@@ -214,12 +214,12 @@ export default function Stake() {
             </div>
             {/* <div className="flex">
                             <div className="mr-14 md:mr-9">
-                                <StyledLink className="text-lg whitespace-nowrap text-sm md:text-lg md:leading-5">
+                                <StyledLink className="text-sm text-lg whitespace-nowrap md:text-lg md:leading-5">
                                     Enter the Kitchen
                                 </StyledLink>
                             </div>
                             <div>
-                                <StyledLink className="text-lg whitespace-nowrap text-sm md:text-lg md:leading-5">
+                                <StyledLink className="text-sm text-lg whitespace-nowrap md:text-lg md:leading-5">
                                     Tips for using xSUSHI
                                 </StyledLink>
                             </div>
@@ -241,7 +241,7 @@ export default function Stake() {
               <div className="flex items-center justify-between w-full h-24 max-w-xl p-4 rounded md:pl-5 md:pr-7 bg-light-yellow bg-opacity-40">
                 <div className="flex flex-col">
                   <div className="flex items-center justify-center mb-4 flex-nowrap md:mb-2">
-                    <p className="font-bold whitespace-nowrap text-sm md:text-lg md:leading-5 text-high-emphesis">
+                    <p className="text-sm font-bold whitespace-nowrap md:text-lg md:leading-5 text-high-emphesis">
                       {i18n._(t`Staking APR`)}{" "}
                     </p>
                     {/* <img className="ml-3 cursor-pointer" src={MoreInfoSymbol} alt={'more info'} /> */}
@@ -264,7 +264,7 @@ export default function Stake() {
                   <p className="mb-1 text-lg font-bold text-right text-high-emphesis md:text-3xl">
                     {`${apr ? apr.toFixed(2) + "%" : i18n._(t`Loading...`)}`}
                   </p>
-                  <p className="w-32 text-right text-primary md:w-64 text-sm md:text-base">
+                  <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">
                     {i18n._(t`Yesterday's APR`)}
                   </p>
                 </div>
@@ -338,10 +338,12 @@ export default function Stake() {
                   >
                     <div className="flex">
                       {inputError && (
-                        <img
-                          className="w-4 mr-2 md:w-5"
+                        <Image
+                          className="mr-2 max-w-4 md:max-w-5"
                           src="/error-triangle.svg"
                           alt="error"
+                          width="20px"
+                          height="20px"
                         />
                       )}
                       <p
@@ -354,7 +356,7 @@ export default function Stake() {
                         }SUSHI`}
                       </p>
                     </div>
-                    <div className="flex items-center text-secondary text-sm md:text-base">
+                    <div className="flex items-center text-sm text-secondary md:text-base">
                       <div
                         className={
                           input
@@ -363,7 +365,7 @@ export default function Stake() {
                         }
                       >
                         <p>{i18n._(t`Balance`)}:&nbsp;</p>
-                        <p className="font-bold text-base">
+                        <p className="text-base font-bold">
                           {formattedBalance}
                         </p>
                       </div>
@@ -434,7 +436,7 @@ export default function Stake() {
                       height={64}
                     />
                     <div className="flex flex-col justify-center">
-                      <p className="font-bold text-sm md:text-lg text-high-emphesis">
+                      <p className="text-sm font-bold md:text-lg text-high-emphesis">
                         {xSushiBalance ? xSushiBalance.toSignificant(4) : "-"}
                       </p>
                       <p className="text-sm md:text-base text-primary">
@@ -460,7 +462,7 @@ export default function Stake() {
                       height={64}
                     />
                     <div className="flex flex-col justify-center">
-                      <p className="font-bold text-sm md:text-lg text-high-emphesis">
+                      <p className="text-sm font-bold md:text-lg text-high-emphesis">
                         {sushiBalance ? sushiBalance.toSignificant(4) : "-"}
                       </p>
                       <p className="text-sm md:text-base text-primary">SUSHI</p>
@@ -471,7 +473,7 @@ export default function Stake() {
                 <div className="flex flex-col w-full mb-4 mt-7 md:mb-0">
                   {/* <div className="flex items-center justify-between">
                         <div className="flex items-center flex-1 flex-nowrap">
-                            <p className="font-bold text-base md:text-lg text-high-emphesis">Weighted APR</p>
+                            <p className="text-base font-bold md:text-lg text-high-emphesis">Weighted APR</p>
                             <img className="w-4 ml-2 cursor-pointer" src={MoreInfoSymbol} alt={'more info'} />
                         </div>
                         <div className="flex flex-1 md:flex-initial">

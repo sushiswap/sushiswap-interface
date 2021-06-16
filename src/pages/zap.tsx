@@ -116,14 +116,13 @@ const CardHeader = () => {
     <AutoColumn>
       <RowBetween style={{ padding: "1rem 0rem 1rem" }}>
         <Link href="/zap">
-          <div>
-            <a
-              onClick={(e) => {
-                dispatch(resetZapState());
-              }}
-            />
+          <a
+            onClick={(e) => {
+              dispatch(resetZapState());
+            }}
+          >
             <StyledArrowLeft />
-          </div>
+          </a>
         </Link>
         <div
           style={{
@@ -237,7 +236,7 @@ export default function Zap() {
       const newCurrencyId = getCurrencyId(currency);
       Router.push(`zap?poolAddress=${poolAddress}&currencyId=${newCurrencyId}`);
     },
-    [history, poolAddress]
+    [poolAddress]
   );
 
   const toggleWalletModal = useWalletModalToggle();
@@ -262,7 +261,18 @@ export default function Zap() {
       () => dispatch(resetZapState()),
       (err) => console.log(err, "zap error")
     );
-  }, [currency, poolAddress, chainId, parsedAmount, minTokensReceived]);
+  }, [
+    encodeSwapData,
+    zapIn,
+    currency,
+    currencyId,
+    poolAddress,
+    parsedAmount,
+    isTradingUnderlying,
+    chainId,
+    minTokensReceived,
+    dispatch,
+  ]);
 
   const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2);
 
