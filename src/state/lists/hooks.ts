@@ -72,6 +72,7 @@ const EMPTY_LIST: TokenAddressMap = {
   [ChainId.HARMONY_TESTNET]: {},
   [ChainId.OKEX]: {},
   [ChainId.OKEX_TESTNET]: {},
+  [ChainId.CELO]: {},
 };
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -153,6 +154,7 @@ function combineMaps(
     1666700000: { ...map1[1666700000], ...map2[1666700000] }, // harmony testnet
     66: { ...map1[66], ...map2[66] }, // okex
     65: { ...map1[65], ...map2[65] }, // okex testnet
+    42220: { ...map1[42220], ...map2[42220] }, // celo
   };
 }
 

@@ -136,6 +136,17 @@ const PARAMS: {
     rpcUrls: ["https://arb1.arbitrum.io/rpc"],
     blockExplorerUrls: ["https://mainnet-arb-explorer.netlify.app"],
   },
+  [ChainId.CELO]: {
+    chainId: "0xA4EC",
+    chainName: "Celo",
+    nativeCurrency: {
+      name: "Celo",
+      symbol: "CELO",
+      decimals: 18,
+    },
+    rpcUrls: ["https://forno.celo.org"],
+    blockExplorerUrls: ["https://explorer.celo.org"],
+  },
 };
 
 export default function NetworkModal(): JSX.Element | null {
@@ -174,6 +185,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.XDAI,
           ChainId.HARMONY,
           ChainId.AVALANCHE,
+          ChainId.CELO,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (

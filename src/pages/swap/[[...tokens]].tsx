@@ -163,6 +163,9 @@ export default function Swap() {
     currencies,
     inputError: swapInputError,
   } = useDerivedSwapInfo(doArcher);
+
+  console.log({ currencies });
+
   const {
     wrapType,
     execute: onWrap,

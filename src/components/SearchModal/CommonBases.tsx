@@ -45,7 +45,7 @@ export default function CommonBases({
             {Currency.getNativeCurrencySymbol(chainId)}
           </Typography>
         </button>
-        {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
+        {(SUGGESTED_BASES[chainId] ?? []).map((token: Token) => {
           const selected =
             selectedCurrency instanceof Token &&
             selectedCurrency.address === token.address;

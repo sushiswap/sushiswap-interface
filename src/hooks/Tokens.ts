@@ -1,4 +1,4 @@
-import { Currency, Token, currencyEquals } from "@sushiswap/sdk";
+import { ChainId, Currency, Token, WETH, currencyEquals } from "@sushiswap/sdk";
 import { NEVER_RELOAD, useSingleCallResult } from "../state/multicall/hooks";
 import {
   TokenAddressMap,
@@ -239,8 +239,13 @@ export function useCurrency(
   currencyId: string | undefined
 ): Currency | null | undefined {
   const { chainId } = useActiveWeb3React();
+  // console.log({ currencyId });
   const isETH =
     currencyId?.toUpperCase() === Currency.getNativeCurrencySymbol(chainId);
   const token = useToken(isETH ? undefined : currencyId);
-  return isETH ? Currency.getNativeCurrency(chainId) : token;
+  return isETH
+    ? ![ChainId.CELO].includes(chainId)
+      ? Currency.getNativeCurrency(chainId)
+      : WETH[chainId]
+    : token;
 }

@@ -28,6 +28,8 @@ function AppBar(): JSX.Element {
     account ?? ""
   ];
 
+  console.log({ userEthBalance });
+
   return (
     //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
     <header className="flex-shrink-0 w-full">

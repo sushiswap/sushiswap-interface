@@ -1,4 +1,4 @@
-import { Currency, Token } from "@sushiswap/sdk";
+import { ChainId, Currency, Token } from "@sushiswap/sdk";
 import React, {
   KeyboardEvent,
   RefObject,
@@ -215,7 +215,7 @@ export function CurrencySearch({
             {({ height }) => (
               <CurrencyList
                 height={height}
-                showETH={showETH}
+                showETH={showETH && ![ChainId.CELO].includes(chainId)}
                 currencies={
                   filteredInactiveTokens
                     ? filteredSortedTokens.concat(filteredInactiveTokens)

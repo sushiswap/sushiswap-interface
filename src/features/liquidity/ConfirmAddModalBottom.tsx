@@ -30,20 +30,20 @@ export function ConfirmAddModalBottom({
         <div className="flex items-center justify-between">
           <div className="text-sm text-high-emphesis">{i18n._(t`Rates`)}</div>
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-            {`1 ${parsedAmounts[Field.CURRENCY_A].currency.symbol} = ${price
-              ?.invert()
-              .toSignificant(4)} ${
-              parsedAmounts[Field.CURRENCY_B].currency.symbol
-            }`}
+            {`1 ${parsedAmounts[Field.CURRENCY_A]?.currency.getSymbol(
+              chainId
+            )} = ${price?.invert().toSignificant(4)} ${parsedAmounts[
+              Field.CURRENCY_B
+            ]?.currency.getSymbol(chainId)}`}
           </div>
         </div>
         <div className="flex items-center justify-end">
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-            {`1 ${
-              parsedAmounts[Field.CURRENCY_B].currency.symbol
-            } = ${price?.toSignificant(4)} ${
-              parsedAmounts[Field.CURRENCY_A].currency.symbol
-            }`}
+            {`1 ${parsedAmounts[Field.CURRENCY_B]?.currency.getSymbol(
+              chainId
+            )} = ${price?.toSignificant(4)} ${parsedAmounts[
+              Field.CURRENCY_A
+            ]?.currency.getSymbol(chainId)}`}
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@ export function ConfirmAddModalBottom({
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
             <div>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</div>
             <span className="ml-1">
-              {parsedAmounts[Field.CURRENCY_A].currency.symbol}
+              {parsedAmounts[Field.CURRENCY_A]?.currency.getSymbol(chainId)}
             </span>
           </div>
         </div>
@@ -71,7 +71,7 @@ export function ConfirmAddModalBottom({
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
             <div>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</div>
             <span className="ml-1">
-              {parsedAmounts[Field.CURRENCY_B].currency.symbol}
+              {parsedAmounts[Field.CURRENCY_B]?.currency.getSymbol(chainId)}
             </span>
           </div>
         </div>

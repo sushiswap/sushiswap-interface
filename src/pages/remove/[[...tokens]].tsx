@@ -297,7 +297,7 @@ export default function Remove() {
     // we have approval, use normal remove liquidity
     if (approval === ApprovalState.APPROVED) {
       // removeLiquidityETH
-      if (oneCurrencyIsETH) {
+      if (oneCurrencyIsETH && ![ChainId.CELO].includes(chainId)) {
         methodNames = [
           "removeLiquidityETH",
           "removeLiquidityETHSupportingFeeOnTransferTokens",
@@ -332,7 +332,7 @@ export default function Remove() {
     // we have a signataure, use permit versions of remove liquidity
     else if (signatureData !== null) {
       // removeLiquidityETHWithPermit
-      if (oneCurrencyIsETH) {
+      if (oneCurrencyIsETH && ![ChainId.CELO].includes(chainId)) {
         methodNames = [
           "removeLiquidityETHWithPermit",
           "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
