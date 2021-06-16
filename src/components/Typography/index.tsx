@@ -19,8 +19,6 @@ const VARIANTS = {
   hero: "text-hero",
   h1: "text-4xl",
   h2: "text-3xl",
-  h3: "text-h3",
-  h4: "text-3xl",
   h5: "text-2xl",
   body: "text-lg",
   caption: "text-base",

@@ -82,7 +82,7 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 
       <div className="relative flex items-center w-full mb-4">
         <NumericalInput
-          className="w-full p-3 rounded bg-input focus:ring focus:ring-pink"
+          className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
           value={state.amount}
           onUserInput={(val) => state.setAmount(val)}
         />
