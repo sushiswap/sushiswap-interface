@@ -154,7 +154,7 @@ function CurrencyRow({
         </div>
       </Column>
       <TokenTags currency={currency} />
-      <div className="flex items-start justify-end">
+      <div className="flex items-center justify-end">
         {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
       </div>
     </MenuItem>
