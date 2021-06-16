@@ -59,7 +59,7 @@ export default function Create() {
     ) {
       setSelectedCollateral(undefined);
     }
-  }, [selectedAsset]);
+  }, [getOracleData, selectedAsset, selectedCollateral]);
 
   const getOracleData = async (
     asset: WrappedTokenInfo,

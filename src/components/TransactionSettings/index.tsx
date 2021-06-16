@@ -204,15 +204,6 @@ export default function SlippageTabs({
             tabIndex={-1}
           >
             <div className="flex items-center">
-              {/* {!!slippageInput &&
-                            (slippageError === SlippageError.RiskyLow ||
-                                slippageError === SlippageError.RiskyHigh) ? (
-                                <SlippageEmojiContainer>
-                                    <span role="img" aria-label="warning">
-                                        ⚠️
-                                    </span>
-                                </SlippageEmojiContainer>
-                            ) : null} */}
               {/* https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451 */}
               <Input
                 ref={inputRef as any}
@@ -239,15 +230,17 @@ export default function SlippageTabs({
               slippageError === SlippageError.InvalidInput
                 ? "text-red"
                 : "text-yellow",
-              "font-medium"
+              "font-medium flex items-center space-x-2"
             )}
             variant="sm"
           >
-            {slippageError === SlippageError.InvalidInput
-              ? i18n._(t`Enter a valid slippage percentage`)
-              : slippageError === SlippageError.RiskyLow
-              ? i18n._(t`Your transaction may fail`)
-              : i18n._(t`Your transaction may be frontrun`)}
+            <div>
+              {slippageError === SlippageError.InvalidInput
+                ? i18n._(t`Enter a valid slippage percentage`)
+                : slippageError === SlippageError.RiskyLow
+                ? i18n._(t`Your transaction may fail`)
+                : i18n._(t`Your transaction may be frontrun`)}
+            </div>
           </Typography>
         )}
       </AutoColumn>

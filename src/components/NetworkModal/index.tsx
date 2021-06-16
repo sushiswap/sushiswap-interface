@@ -6,6 +6,7 @@ import {
 
 import { ApplicationModal } from "../../state/application/actions";
 import { ChainId } from "@sushiswap/sdk";
+import Image from "next/image";
 import Modal from "../Modal";
 import ModalHeader from "../ModalHeader";
 import React from "react";
@@ -180,11 +181,13 @@ export default function NetworkModal(): JSX.Element | null {
                 key={i}
                 className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink"
               >
-                <div className="flex items-center w-full h-full p-3 rounded bg-dark-1000">
-                  <img
+                <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
+                  <Image
                     src={NETWORK_ICON[key]}
                     alt="Switch Network"
-                    className="w-8 h-8 mr-3 rounded-md"
+                    className="rounded-md"
+                    width="32px"
+                    height="32px"
                   />
                   <div className="font-bold text-primary">
                     {NETWORK_LABEL[key]}

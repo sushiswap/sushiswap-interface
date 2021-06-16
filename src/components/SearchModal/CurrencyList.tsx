@@ -197,7 +197,7 @@ export default function CurrencyList({
       ];
     }
     return formatted;
-  }, [breakIndex, currencies, showETH]);
+  }, [breakIndex, chainId, currencies, showETH]);
 
   const inactiveTokens: {
     [address: string]: Token;

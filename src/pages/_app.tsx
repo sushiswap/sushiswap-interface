@@ -77,7 +77,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return () => {
       router.events.off("routeChangeComplete", onRouteChangeComplete);
     };
-  }, []);
+  }, [router.events]);
 
   useEffect(() => {
     ReactGA.pageview(`${pathname}${query}`);

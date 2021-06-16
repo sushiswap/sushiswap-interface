@@ -1,4 +1,5 @@
 import CloseIcon from "./CloseIcon";
+import Image from "next/image";
 import Modal from "./Modal";
 import React from "react";
 import { t } from "@lingui/macro";
@@ -22,20 +23,21 @@ export default function TransactionFailedModal({
           <CloseIcon onClick={onDismiss} />
         </div>
         <div className="flex justify-center">
-          <img
-            className="w-24"
+          <Image
             src={"/transaction-rejected.png"}
+            width="96px"
+            height="96px"
             alt="transaction rejected"
           />
         </div>
-        <div className="flex items-baseline justify-center flex-nowrap text-3xl mt-3">
+        <div className="flex items-baseline justify-center mt-3 text-3xl flex-nowrap">
           <p className="text-high-emphesis">Uh Oh!&nbsp;</p>
           <p className="text-pink">Transaction rejected.</p>
         </div>
         <div className="flex justify-center mt-5">
           <button
             onClick={onDismiss}
-            className="flex justify-center items-center w-full h-12 rounded bg-pink hover:bg-opacity-90 text-lg font-medium text-high-emphesis"
+            className="flex items-center justify-center w-full h-12 text-lg font-medium rounded bg-pink hover:bg-opacity-90 text-high-emphesis"
           >
             {i18n._(t`Dismiss`)}
           </button>

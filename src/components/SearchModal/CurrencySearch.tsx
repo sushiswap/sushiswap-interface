@@ -159,7 +159,7 @@ export function CurrencySearch({
         }
       }
     },
-    [filteredSortedTokens, handleCurrencySelect, debouncedQuery]
+    [debouncedQuery, filteredSortedTokens, handleCurrencySelect, chainId]
   );
 
   // menu ui
