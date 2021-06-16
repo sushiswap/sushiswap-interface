@@ -1,0 +1,10 @@
+{
+  "short_name": "Sushiswap",
+  "name": "Sushiswap Safe App",
+  "description": "Sushi is the best AMM to get the juciest yields",
+  "iconPath": "logo.svg",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

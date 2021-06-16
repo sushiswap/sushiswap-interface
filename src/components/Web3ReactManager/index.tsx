@@ -6,9 +6,14 @@ import { network } from "../../connectors";
 import styled from "styled-components";
 import { t } from "@lingui/macro";
 import useEagerConnect from "../../hooks/useEagerConnect";
+import {
+  useSafeAppConnection,
+  SafeAppConnector,
+} from "@gnosis.pm/safe-apps-web3-react";
 import useInactiveListener from "../../hooks/useInactiveListener";
 import { useLingui } from "@lingui/react";
 import { useWeb3React } from "@web3-react/core";
+import { AbstractConnectorArguments } from "@web3-react/types";
 
 const MessageWrapper = styled.div`
   display: flex;
@@ -33,6 +38,15 @@ export default function Web3ReactManager({
     error: networkError,
     activate: activateNetwork,
   } = useWeb3React(NetworkContextName);
+
+  let safeMultisigConnector;
+  if (typeof window !== "undefined") {
+    // Client-side-only code
+    // Try to eagerly connect to Gnosis Safe
+    const safeMultisigConnector = new SafeAppConnector();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
+  }
 
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect();
