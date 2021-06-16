@@ -7,12 +7,12 @@ import { useActiveWeb3React } from "../../hooks";
 const Menu = () => {
   const { chainId } = useActiveWeb3React();
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <NavLink
         href="/farm/portfolio"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
-        <a className="flex items-center justify-between px-4 py-6 border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
+        <a className="flex items-center justify-between px-4 py-6 font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800 text-base">
           Your Farms
         </a>
       </NavLink>
@@ -21,7 +21,7 @@ const Menu = () => {
         href="/farm"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
-        <a className="flex items-center justify-between px-4 py-6 border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
+        <a className="flex items-center justify-between px-4 py-6 font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800 text-base">
           All Farms
         </a>
       </NavLink>
@@ -32,7 +32,7 @@ const Menu = () => {
             href="/farm/km"
             activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
-            <a className="flex items-center justify-between px-4 py-6 border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
+            <a className="flex items-center justify-between px-4 py-6 font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800 text-base">
               Kashi Farms
             </a>
           </NavLink>
@@ -40,17 +40,16 @@ const Menu = () => {
             href="/farm/slp"
             activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
-            <a className="flex items-center justify-between px-4 py-6 border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
+            <a className="flex items-center justify-between px-4 py-6 font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800 text-base">
               SushiSwap Farms
             </a>
           </NavLink>
           <NavLink
-            href="/farm/dual"
-            activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
+            href="/farm/2x"
+            activeClassName="bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
-            <a className="flex items-center justify-between px-4 py-6 border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
-              Dual Reward Farms
-              <Badge color="blue">New</Badge>
+            <a className="flex items-center justify-between px-4 py-6 font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800 text-base">
+              2x Reward Farms
             </a>
           </NavLink>
         </>

@@ -1,13 +1,14 @@
-import { StyledMenu } from "../StyledMenu";
 import React, { memo, useRef } from "react";
 import { useModalOpen, useToggleModal } from "../../state/application/hooks";
 
 import { ApplicationModal } from "../../state/application/actions";
 import Image from "next/image";
+import Link from "next/link";
+import { StyledMenu } from "../StyledMenu";
+import getConfig from "next/config";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import getConfig from "next/config";
+
 const { publicRuntimeConfig } = getConfig();
 const { locales } = publicRuntimeConfig;
 
@@ -100,12 +101,12 @@ function LanguageSwitch() {
             const { flag, language, dialect } = LANGUAGES[key];
             return (
               <Link href={pathname} locale={key} key={key}>
-                <div
+                <a
                   className="cursor-pointer flex items-center px-3 py-1.5 hover:bg-dark-800 hover:text-high-emphesis font-bold"
                   onClick={toggle}
                 >
                   <Image
-                    className="inline mr-1 w-3 h-3 align-middle"
+                    className="inline w-3 h-3 mr-1 align-middle"
                     src={flag}
                     width={20}
                     height={20}
@@ -117,7 +118,7 @@ function LanguageSwitch() {
                       <small>{dialect}</small>
                     </sup>
                   )}
-                </div>
+                </a>
               </Link>
             );
           })}

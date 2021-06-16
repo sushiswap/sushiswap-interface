@@ -211,6 +211,22 @@ const builders = {
         return `${prefix}/${type}/${data}`;
     }
   },
+
+  celo: (
+    chainName: string,
+    data: string,
+    type: "transaction" | "token" | "address" | "block"
+  ) => {
+    const prefix = "https://explorer.celo.org";
+    switch (type) {
+      case "transaction":
+        return `${prefix}/tx/${data}`;
+      case "token":
+        return `${prefix}/tokens/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
 };
 
 interface ChainObject {
@@ -316,6 +332,10 @@ const chains: ChainObject = {
   [ChainId.OKEX_TESTNET]: {
     chainName: "",
     builder: builders.okexTestnet,
+  },
+  [ChainId.CELO]: {
+    chainName: "",
+    builder: builders.celo,
   },
 };
 

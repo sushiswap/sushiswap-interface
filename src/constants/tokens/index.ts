@@ -1,5 +1,36 @@
 import { ChainId, SUSHI_ADDRESS, Token, WETH } from "@sushiswap/sdk";
 
+export const CELO: { [key: string]: Token } = {
+  mCUSD: new Token(
+    ChainId.CELO,
+    "0x64dEFa3544c695db8c535D289d843a189aa26b98",
+    18,
+    "mCUSD",
+    "Moola cUSD"
+  ),
+  mCELO: new Token(
+    ChainId.CELO,
+    "0x7037F7296B2fc7908de7b57a89efaa8319f0C500",
+    18,
+    "mCELO",
+    "Moola CELO"
+  ),
+  mcEURO: new Token(
+    ChainId.CELO,
+    "0xa8d0E6799FF3Fd19c6459bf02689aE09c4d78Ba7",
+    18,
+    "mCEUR",
+    "Moola Celo Euro"
+  ),
+  cEURO: new Token(
+    ChainId.CELO,
+    "0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73",
+    18,
+    "cEUR",
+    "Celo Euro"
+  ),
+};
+
 export const BSC: { [key: string]: Token } = {
   DAI: new Token(
     ChainId.BSC,

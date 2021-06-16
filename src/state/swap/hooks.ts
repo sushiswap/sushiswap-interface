@@ -76,7 +76,7 @@ export function useSwapActionHandlers(): {
         })
       );
     },
-    [dispatch]
+    [chainId, dispatch]
   );
 
   const onSwitchTokens = useCallback(() => {
@@ -241,8 +241,6 @@ export function useDerivedSwapInfo(doArcher = false): {
       setUserGasEstimate(DEFAULT_ARCHER_GAS_ESTIMATE.toString());
     }
   }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate]);
-
-  console.log({ userGasEstimate, userGasPrice });
 
   useEffect(() => {
     if (doArcher && !userTipManualOverride) {

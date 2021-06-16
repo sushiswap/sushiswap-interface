@@ -11,6 +11,7 @@ import { BigNumber } from "@ethersproject/bignumber";
 import Button from "../components/Button";
 import { ChevronRight } from "react-feather";
 import Dots from "../components/Dots";
+import ExternalLink from "../components/ExternalLink";
 import Fraction from "../entities/Fraction";
 import Head from "next/head";
 import Image from "next/image";
@@ -147,35 +148,23 @@ export default function Vesting() {
                   <Trans>
                     Vesting is executed within the guidelines selected by the
                     community in{" "}
-                    <a
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ"
-                    >
+                    <ExternalLink href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ">
                       SIMP3
-                    </a>
+                    </ExternalLink>
                     .
                     <br />
                     <br />
                     Please refer to the{" "}
-                    <a
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794"
-                    >
+                    <ExternalLink href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794">
                       forum discussion
-                    </a>{" "}
+                    </ExternalLink>{" "}
                     for deliberations on additional points.
                     <br />
                     <br />
                     Additional records and weekly merkle updates can be found on{" "}
-                    <a
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      href="https://github.com/sushiswap/sushi-vesting"
-                    >
+                    <ExternalLink href="https://github.com/sushiswap/sushi-vesting">
                       Github
-                    </a>
+                    </ExternalLink>
                   </Trans>
                 </div>
               </div>
@@ -227,7 +216,7 @@ export default function Vesting() {
                       Number(unclaimedAmount?.toFixed(8)) <= 0 ||
                       pendingTreasurySignature
                     }
-                    size="large"
+                    size="lg"
                     onClick={onClaim}
                     className="inline-flex items-center justify-center"
                   >
@@ -259,8 +248,8 @@ export default function Vesting() {
                     {i18n._(t`Things you can do with your SUSHI`)}
                   </div>
                   <div className="p-4 rounded bg-dark-800">
-                    <Link href={`/stake`}>
-                      <div className="flex items-center justify-between gap-3">
+                    <Link href="/stake">
+                      <a className="flex items-center justify-between gap-3">
                         <div className="flex flex-col gap-1">
                           <div className="font-bold text-white">
                             {i18n._(t`Stake SUSHI for xSUSHI`)}
@@ -273,12 +262,12 @@ export default function Vesting() {
                         <div className="min-w-[32px]">
                           <ChevronRight />
                         </div>
-                      </div>
+                      </a>
                     </Link>
                   </div>
                   <div className="p-4 rounded bg-dark-800">
                     <Link href={`/saave`}>
-                      <div className="flex items-center justify-between gap-3">
+                      <a className="flex items-center justify-between gap-3">
                         <div className="flex flex-col gap-1">
                           <div className="font-bold text-white">
                             {i18n._(t`Stack Yields with SAAVE`)}
@@ -291,7 +280,7 @@ export default function Vesting() {
                         <div className="min-w-[32px]">
                           <ChevronRight />
                         </div>
-                      </div>
+                      </a>
                     </Link>
                   </div>
                   <div className="p-4 rounded bg-dark-800">

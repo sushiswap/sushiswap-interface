@@ -6,7 +6,7 @@ const Back = () => {
   const { i18n } = useLingui();
   const router = useRouter();
   return (
-    <div className="w-full max-w-2xl px-4 mb-3.5">
+    <div>
       <a
         onClick={router.back}
         className="flex items-center space-x-2 text-base text-center cursor-pointer font text-secondary hover:text-high-emphesis"

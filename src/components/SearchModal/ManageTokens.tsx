@@ -1,4 +1,3 @@
-import { PaddedColumn, SearchInput, Separator } from "./styleds";
 import React, {
   RefObject,
   useCallback,
@@ -6,15 +5,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Row, { RowBetween, RowFixed } from "../Row";
+import { RowBetween, RowFixed } from "../Row";
 import {
   useRemoveUserAddedToken,
   useUserAddedTokens,
 } from "../../state/user/hooks";
 
 import ButtonText from "../ButtonText";
-import Card from "../Card";
-import Column from "../Column";
 import CurrencyLogo from "../CurrencyLogo";
 import CurrencyModalView from "./CurrencyModalView";
 import ExternalLink from "../ExternalLink";
@@ -22,20 +19,10 @@ import { ExternalLinkIcon } from "../ExternalLinkIcon";
 import ImportRow from "./ImportRow";
 import { Token } from "@sushiswap/sdk";
 import TrashIcon from "../TrashIcon";
-import { classNames } from "../../functions";
 import { getExplorerLink } from "../../functions/explorer";
 import { isAddress } from "../../functions/validate";
-import styled from "styled-components";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import useTheme from "../../hooks/useTheme";
 import { useToken } from "../../hooks/Tokens";
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: calc(100% - 60px);
-  position: relative;
-  padding-bottom: 60px;
-`;
 
 function ManageTokens({
   setModalView,
@@ -47,7 +34,6 @@ function ManageTokens({
   const { chainId } = useActiveWeb3React();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const theme = useTheme();
 
   // manage focus on modal show
   const inputRef = useRef<HTMLInputElement>();
@@ -104,7 +90,7 @@ function ManageTokens({
           id="token-search-input"
           type="text"
           placeholder={"0x0000"}
-          className="w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
+          className="w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5 appearance-none"
           value={searchQuery}
           autoComplete="off"
           onChange={handleInput}
@@ -135,7 +121,7 @@ function ManageTokens({
         </div>
         {tokenList}
       </div>
-      <div className="absolute bottom-0 p-3 text-caption2">
+      <div className="absolute bottom-0 p-3 text-sm">
         Tip: Custom tokens are stored locally in your browser
       </div>
     </div>

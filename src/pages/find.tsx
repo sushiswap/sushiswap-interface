@@ -11,12 +11,11 @@ import { DefaultLayout } from "../layouts";
 import Dots from "../components/Dots";
 import { FindPoolTabs } from "../components/NavigationTabs";
 import Head from "next/head";
-import { LightCard } from "../components/CardLegacy";
 import Link from "next/link";
 import { MinimalPositionCard } from "../components/PositionCard";
 import { Plus } from "react-feather";
-import { Text } from "rebass";
 import { ThemeContext } from "styled-components";
+import Web3Connect from "../components/Web3Connect";
 import { currencyId } from "../functions/currency";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -84,17 +83,13 @@ export default function PoolFinder() {
         else setCurrency1(currency);
       }
     },
-    [activeField]
+    [activeField, currency0, currency1, switchTokens]
   );
 
   const prerequisiteMessage = (
-    <LightCard padding="45px 10px">
-      <Text textAlign="center">
-        {!account
-          ? i18n._(t`Connect to a wallet to find pools`)
-          : i18n._(t`Select a token to find your liquidity`)}
-      </Text>
-    </LightCard>
+    <div className="p-5 text-center rounded bg-dark-800">
+      {i18n._(t`Select a token to find your liquidity`)}
+    </div>
   );
 
   return (
@@ -105,7 +100,7 @@ export default function PoolFinder() {
       </Head>
       <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity">
         <FindPoolTabs />
-        <AutoColumn style={{ padding: "1rem" }} gap="md">
+        <div className="p-4 space-y-6">
           <Alert
             showIcon={false}
             message={
@@ -154,9 +149,7 @@ export default function PoolFinder() {
               justify={"center"}
               gap={"0 3px"}
             >
-              <Text textAlign="center" fontWeight={500}>
-                {i18n._(t`Pool Found!`)}
-              </Text>
+              {i18n._(t`Pool Found!`)}
               <Link href={`/pool`}>
                 <a className="text-center">{i18n._(t`Manage this pool`)}</a>
               </Link>
@@ -168,11 +161,9 @@ export default function PoolFinder() {
               hasPosition && pair ? (
                 <MinimalPositionCard pair={pair} border="1px solid #CED0D9" />
               ) : (
-                <LightCard padding="45px 10px">
+                <div className="p-5 rounded bg-dark-800">
                   <AutoColumn gap="sm" justify="center">
-                    <Text textAlign="center">
-                      {i18n._(t`You don’t have liquidity in this pool yet`)}
-                    </Text>
+                    {i18n._(t`You don’t have liquidity in this pool yet`)}
                     <Link
                       href={`/add/${currencyId(
                         currency0,
@@ -184,12 +175,12 @@ export default function PoolFinder() {
                       </a>
                     </Link>
                   </AutoColumn>
-                </LightCard>
+                </div>
               )
             ) : validPairNoLiquidity ? (
-              <LightCard padding="45px 10px">
+              <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">
-                  <Text textAlign="center">{i18n._(t`No pool found`)}</Text>
+                  {i18n._(t`No pool found`)}
                   <Link
                     href={`/add/${currencyId(currency0, chainId)}/${currencyId(
                       currency1,
@@ -199,29 +190,22 @@ export default function PoolFinder() {
                     <a className="text-center">{i18n._(t`Create pool`)}</a>
                   </Link>
                 </AutoColumn>
-              </LightCard>
+              </div>
             ) : pairState === PairState.INVALID ? (
-              <LightCard padding="45px 10px">
-                <AutoColumn gap="sm" justify="center">
-                  <Text textAlign="center" fontWeight={500}>
-                    {i18n._(t`Invalid pair`)}
-                  </Text>
-                </AutoColumn>
-              </LightCard>
+              <div className="p-5 text-center rounded bg-dark-800">
+                {i18n._(t`Invalid pair`)}
+              </div>
             ) : pairState === PairState.LOADING ? (
-              <LightCard padding="45px 10px">
-                <AutoColumn gap="sm" justify="center">
-                  <Text textAlign="center">
-                    {i18n._(t`Loading`)}
-                    <Dots />
-                  </Text>
-                </AutoColumn>
-              </LightCard>
+              <div className="p-5 text-center rounded bg-dark-800">
+                <Dots>{i18n._(t`Loading`)}</Dots>
+              </div>
             ) : null
+          ) : !account ? (
+            <Web3Connect className="w-full" size="lg" color="blue" />
           ) : (
             prerequisiteMessage
           )}
-        </AutoColumn>
+        </div>
       </div>
     </DefaultLayout>
   );

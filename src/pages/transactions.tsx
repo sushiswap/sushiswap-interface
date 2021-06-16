@@ -42,7 +42,7 @@ function Transactions() {
       </Head>
 
       {/* <div className="w-full max-w-2xl">
-                <Button size="small" className="flex items-center text-white">
+                <Button size="xs" className="flex items-center text-white">
                     <ChevronLeft strokeWidth={2} size={18} color="currentColor" />
                     <span className="ml-1">Go Back</span>
                 </Button>

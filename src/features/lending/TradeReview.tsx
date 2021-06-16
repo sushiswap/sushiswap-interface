@@ -1,16 +1,16 @@
 import {
   computeSlippageAdjustedAmounts,
   computeTradePriceBreakdown,
-} from "../functions/prices";
+} from "../../functions/prices";
 
-import { Field } from "../state/swap/actions";
-import FormattedPriceImpact from "../features/swap/FormattedPriceImpact";
-import QuestionHelper from "./QuestionHelper";
+import { Field } from "../../state/swap/actions";
+import FormattedPriceImpact from "../swap/FormattedPriceImpact";
+import QuestionHelper from "../../components/QuestionHelper";
 import React from "react";
-import SwapRoute from "../features/swap/SwapRoute";
+import SwapRoute from "../swap/SwapRoute";
 import { Trade } from "@sushiswap/sdk";
 import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
+import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
 
 function TradeReview({

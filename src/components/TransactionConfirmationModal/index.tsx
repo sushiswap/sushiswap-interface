@@ -1,17 +1,17 @@
 import { AlertTriangle, ArrowUpCircle } from "react-feather";
 import React, { FC } from "react";
 
-import { ButtonPrimary } from "../ButtonLegacy";
+import Button from "../Button";
 import { ChainId } from "@sushiswap/sdk";
 import CloseIcon from "../CloseIcon";
 import ExternalLink from "../ExternalLink";
+import Lottie from "lottie-react";
 import Modal from "../Modal";
 import { getExplorerLink } from "../../functions/explorer";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import Lottie from "lottie-react";
 import loadingRollingCircle from "../../animation/loading-rolling-circle.json";
-import { useLingui } from "@lingui/react";
 import { t } from "@lingui/macro";
+import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
+import { useLingui } from "@lingui/react";
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void;
@@ -27,16 +27,16 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> =
         <div className="flex justify-end">
           <CloseIcon onClick={onDismiss} />
         </div>
-        <div className="m-auto w-24 pb-4">
+        <div className="w-24 pb-4 m-auto">
           <Lottie animationData={loadingRollingCircle} autoplay loop />
         </div>
-        <div className="flex flex-col gap-3 justify-center items-center">
+        <div className="flex flex-col items-center justify-center gap-3">
           <div className="text-xl font-bold text-high-emphesis">
             {i18n._(t`Waiting for Confirmation`)}
           </div>
           <div className="font-bold">{pendingText}</div>
           <div className="font-bold">{pendingText2}</div>
-          <div className="text-sm text-secondary font-bold">
+          <div className="text-sm font-bold text-secondary">
             {i18n._(t`Confirm this transaction in your wallet`)}
           </div>
         </div>
@@ -59,21 +59,25 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
         <div className="flex justify-end">
           <CloseIcon onClick={onDismiss} />
         </div>
-        <div className="m-auto w-24 pb-4">
+        <div className="w-24 pb-4 m-auto">
           <ArrowUpCircle strokeWidth={0.5} size={90} className="text-blue" />
         </div>
-        <div className="flex gap-1 justify-center flex-col items-center">
+        <div className="flex flex-col items-center justify-center gap-1">
           <div className="text-xl font-bold">
             {i18n._(t`Transaction Submitted`)}
           </div>
           {chainId && hash && (
             <ExternalLink href={getExplorerLink(chainId, hash, "transaction")}>
-              <div className="text-blue font-bold">View on explorer</div>
+              <div className="font-bold text-blue">View on explorer</div>
             </ExternalLink>
           )}
-          <ButtonPrimary onClick={onDismiss} style={{ margin: "20px 0 0 0" }}>
-            <div className="text-lg font-medium">Close</div>
-          </ButtonPrimary>
+          <Button
+            color="gradient"
+            onClick={onDismiss}
+            style={{ margin: "20px 0 0 0" }}
+          >
+            Close
+          </Button>
         </div>
       </div>
     );
@@ -126,17 +130,19 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({
           </div>
           <CloseIcon onClick={onDismiss} />
         </div>
-        <div className="flex gap-3 justify-center flex-col items-center">
+        <div className="flex flex-col items-center justify-center gap-3">
           <AlertTriangle
             className="text-red"
             style={{ strokeWidth: 1.5 }}
             size={64}
           />
-          <div className="text-red font-bold">{message}</div>
+          <div className="font-bold text-red">{message}</div>
         </div>
       </div>
       <div>
-        <ButtonPrimary onClick={onDismiss}>Dismiss</ButtonPrimary>
+        <Button color="gradient" size="lg" onClick={onDismiss}>
+          Dismiss
+        </Button>
       </div>
     </div>
   );

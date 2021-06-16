@@ -28,6 +28,8 @@ function AppBar(): JSX.Element {
     account ?? ""
   ];
 
+  console.log({ userEthBalance });
+
   return (
     //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
     <header className="flex-shrink-0 w-full">
@@ -354,10 +356,19 @@ function AppBar(): JSX.Element {
                   </a>
                 </Link>
 
+                <Link href={"/migrate"}>
+                  <a
+                    id={`migrate-nav-link`}
+                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                  >
+                    {i18n._(t`Migrate`)}
+                  </a>
+                </Link>
+
                 {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                   <Link href={"/farm"}>
                     <a
-                      id={`yield-nav-link`}
+                      id={`farm-nav-link`}
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                     >
                       {" "}
@@ -365,6 +376,7 @@ function AppBar(): JSX.Element {
                     </a>
                   </Link>
                 )}
+
                 {chainId &&
                   [
                     ChainId.MAINNET,
@@ -372,25 +384,25 @@ function AppBar(): JSX.Element {
                     ChainId.BSC,
                     ChainId.MATIC,
                   ].includes(chainId) && (
-                    <Link href={"/lend"}>
-                      <a id={`kashi-nav-link`}>{i18n._(t`Kashi Lending`)}</a>
-                    </Link>
-                  )}
-                {chainId &&
-                  [
-                    ChainId.MAINNET,
-                    ChainId.KOVAN,
-                    ChainId.BSC,
-                    ChainId.MATIC,
-                  ].includes(chainId) && (
-                    <Link href={"/bentobox"}>
-                      <a
-                        id={`bento-nav-link`}
-                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                      >
-                        {i18n._(t`BentoBox`)}
-                      </a>
-                    </Link>
+                    <>
+                      <Link href={"/lend"}>
+                        <a
+                          id={`lend-nav-link`}
+                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                        >
+                          {i18n._(t`Lend`)}
+                        </a>
+                      </Link>
+
+                      <Link href={"/borrow"}>
+                        <a
+                          id={`borrow-nav-link`}
+                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                        >
+                          {i18n._(t`Borrow`)}
+                        </a>
+                      </Link>
+                    </>
                   )}
                 {chainId === ChainId.MAINNET && (
                   <Link href={"/stake"}>
@@ -399,16 +411,6 @@ function AppBar(): JSX.Element {
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                     >
                       {i18n._(t`Stake`)}
-                    </a>
-                  </Link>
-                )}
-                {chainId === ChainId.MAINNET && (
-                  <Link href={"/vesting"}>
-                    <a
-                      id={`vesting-nav-link`}
-                      className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                    >
-                      {i18n._(t`Vesting`)}
                     </a>
                   </Link>
                 )}

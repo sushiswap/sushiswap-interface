@@ -9,22 +9,20 @@ export type TypographyVariant =
   | "h1"
   | "h2"
   | "h3"
-  | "h4"
-  | "h5"
-  | "body"
-  | "caption"
-  | "caption2";
+  | "lg"
+  | "base"
+  | "sm"
+  | "xs";
 
 const VARIANTS = {
   hero: "text-hero",
-  h1: "text-h1",
-  h2: "text-h2",
-  h3: "text-h3",
-  h4: "text-h4",
-  h5: "text-h5",
-  body: "text-body",
-  caption: "text-caption",
-  caption2: "text-caption2",
+  h1: "text-4xl",
+  h2: "text-3xl",
+  h3: "text-2xl",
+  lg: "text-lg",
+  base: "text-base",
+  sm: "text-sm",
+  xs: "text-xs",
 };
 
 export interface TypographyProps {
@@ -37,7 +35,7 @@ export interface TypographyProps {
 }
 
 function Typography({
-  variant = "body",
+  variant = "base",
   weight = 400,
   component = "div",
   className = "text-primary",

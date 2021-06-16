@@ -3,12 +3,7 @@ import {
   useApproveCallback,
 } from "../../hooks/useApproveCallback";
 import { ArrowDown, Plus } from "react-feather";
-import {
-  ButtonConfirmed,
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../../components/ButtonLegacy";
+import { ButtonConfirmed, ButtonError } from "../../components/Button";
 import {
   ChainId,
   Currency,
@@ -16,7 +11,7 @@ import {
   WETH,
   currencyEquals,
 } from "@sushiswap/sdk";
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Trans, t } from "@lingui/macro";
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
@@ -38,6 +33,7 @@ import Alert from "../../components/Alert";
 import { AutoColumn } from "../../components/Column";
 import { AutoRow } from "../../components/Row";
 import { BigNumber } from "@ethersproject/bignumber";
+import Button from "../../components/Button";
 import { Contract } from "@ethersproject/contracts";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import Dots from "../../components/Dots";
@@ -51,8 +47,8 @@ import { MinimalPositionCard } from "../../components/PositionCard";
 import PercentInputPanel from "../../components/PercentInputPanel";
 import ReactGA from "react-ga";
 import RemoveLiquidityReceiveDetails from "../../features/liquidity/RemoveLiquidityReceiveDetails";
-import { Text } from "rebass";
 import { TransactionResponse } from "@ethersproject/providers";
+import Web3Connect from "../../components/Web3Connect";
 import { splitSignature } from "@ethersproject/bytes";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useCurrency } from "../../hooks/Tokens";
@@ -71,7 +67,10 @@ export default function Remove() {
   const { i18n } = useLingui();
   const router = useRouter();
   const tokens = router.query.tokens;
-  const [currencyIdA, currencyIdB] = tokens as string[];
+  const [currencyIdA, currencyIdB] = (tokens as string[]) || [
+    undefined,
+    undefined,
+  ];
   const [currencyA, currencyB] = [
     useCurrency(currencyIdA) ?? undefined,
     useCurrency(currencyIdB) ?? undefined,
@@ -298,7 +297,7 @@ export default function Remove() {
     // we have approval, use normal remove liquidity
     if (approval === ApprovalState.APPROVED) {
       // removeLiquidityETH
-      if (oneCurrencyIsETH) {
+      if (oneCurrencyIsETH && ![ChainId.CELO].includes(chainId)) {
         methodNames = [
           "removeLiquidityETH",
           "removeLiquidityETHSupportingFeeOnTransferTokens",
@@ -333,7 +332,7 @@ export default function Remove() {
     // we have a signataure, use permit versions of remove liquidity
     else if (signatureData !== null) {
       // removeLiquidityETHWithPermit
-      if (oneCurrencyIsETH) {
+      if (oneCurrencyIsETH && ![ChainId.CELO].includes(chainId)) {
         methodNames = [
           "removeLiquidityETHWithPermit",
           "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
@@ -518,14 +517,16 @@ export default function Remove() {
             </div>
           </div>
         </div>
-        <ButtonPrimary
+        <Button
+          color="gradient"
+          size="lg"
           disabled={
             !(approval === ApprovalState.APPROVED || signatureData !== null)
           }
           onClick={onRemove}
         >
-          <div className="text-lg font-medium">{i18n._(t`Confirm`)}</div>
-        </ButtonPrimary>
+          {i18n._(t`Confirm`)}
+        </Button>
       </div>
     );
   }
@@ -562,7 +563,7 @@ export default function Remove() {
         router.push(`/remove/${currencyId(currency, chainId)}/${currencyIdB}`);
       }
     },
-    [currencyIdA, currencyIdB, router]
+    [chainId, currencyIdA, currencyIdB, router]
   );
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
@@ -572,7 +573,7 @@ export default function Remove() {
         router.push(`/remove/${currencyIdA}/${currencyId(currency, chainId)}`);
       }
     },
-    [currencyIdA, currencyIdB, router]
+    [chainId, currencyIdA, currencyIdB, router]
   );
 
   const handleDismissConfirmation = useCallback(() => {
@@ -618,7 +619,10 @@ export default function Remove() {
                     {currencies[Field.CURRENCY_B]?.getSymbol(chainId)} POOL
                 </button> */}
       </div>
-      <div className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity">
+      <div
+        className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-liquidity"
+        style={{ zIndex: 1 }}
+      >
         <Header input={currencyA} output={currencyB} />
         <div>
           <TransactionConfirmationModal
@@ -684,11 +688,9 @@ export default function Remove() {
             )}
             <div style={{ position: "relative" }}>
               {!account ? (
-                <ButtonLight onClick={toggleWalletModal}>
-                  {i18n._(t`Connect Wallet`)}
-                </ButtonLight>
+                <Web3Connect size="lg" color="blue" className="w-full" />
               ) : (
-                <div className="flex flex-col space-y-3 md:space-y-0 md:flex-row md:justify-between">
+                <div className="grid grid-cols-2 gap-4">
                   <ButtonConfirmed
                     onClick={onAttemptToApprove}
                     confirmed={
@@ -699,9 +701,6 @@ export default function Remove() {
                       approval !== ApprovalState.NOT_APPROVED ||
                       signatureData !== null
                     }
-                    mr="0.5rem"
-                    fontWeight={500}
-                    fontSize={16}
                   >
                     {approval === ApprovalState.PENDING ? (
                       <Dots>{i18n._(t`Approving`)}</Dots>
@@ -727,9 +726,7 @@ export default function Remove() {
                       !!parsedAmounts[Field.CURRENCY_B]
                     }
                   >
-                    <Text className="font-medium">
-                      {error || i18n._(t`Confirm Withdrawal`)}
-                    </Text>
+                    {error || i18n._(t`Confirm Withdrawal`)}
                   </ButtonError>
                 </div>
               )}

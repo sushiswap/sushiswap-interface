@@ -150,7 +150,10 @@ export function useDerivedMintInfo(
             ? pair.priceOf(tokenA).quote(wrappedIndependentAmount)
             : pair.priceOf(tokenB).quote(wrappedIndependentAmount);
         return dependentCurrency === Currency.getNativeCurrency(chainId)
-          ? CurrencyAmount.ether(dependentTokenAmount.raw)
+          ? CurrencyAmount.fromRawAmount(
+              Currency.getNativeCurrency(chainId),
+              dependentTokenAmount.raw
+            )
           : dependentTokenAmount;
       }
       return undefined;

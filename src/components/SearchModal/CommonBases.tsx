@@ -6,25 +6,7 @@ import CurrencyLogo from "../CurrencyLogo";
 import QuestionHelper from "../QuestionHelper";
 import React from "react";
 import { SUGGESTED_BASES } from "../../constants";
-import { Text } from "rebass";
 import Typography from "../Typography";
-import styled from "styled-components";
-
-// const BaseWrapper = styled.div<{ disable?: boolean }>`
-//     border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.bg3)};
-//     border-radius: 10px;
-//     display: flex;
-//     padding: 6px;
-
-//     align-items: center;
-//     :hover {
-//         cursor: ${({ disable }) => !disable && 'pointer'};
-//         background-color: ${({ theme, disable }) => !disable && theme.bg2};
-//     }
-
-//     background-color: ${({ theme, disable }) => disable && theme.bg3};
-//     opacity: ${({ disable }) => disable && '0.4'};
-// `
 
 export default function CommonBases({
   chainId,
@@ -38,9 +20,7 @@ export default function CommonBases({
   return (
     <AutoColumn gap="md">
       <AutoRow>
-        <Text fontWeight={500} fontSize={14}>
-          Common bases
-        </Text>
+        Common bases
         <QuestionHelper text="These tokens are commonly paired with other tokens." />
       </AutoRow>
       <AutoRow gap="4px" justify="start">
@@ -61,11 +41,11 @@ export default function CommonBases({
           disabled={selectedCurrency === Currency.getNativeCurrency(chainId)}
         >
           <CurrencyLogo currency={Currency.getNativeCurrency(chainId)} />
-          <Typography variant="caption2" className="font-semibold">
+          <Typography variant="sm" className="font-semibold">
             {Currency.getNativeCurrencySymbol(chainId)}
           </Typography>
         </button>
-        {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
+        {(SUGGESTED_BASES[chainId] ?? []).map((token: Token) => {
           const selected =
             selectedCurrency instanceof Token &&
             selectedCurrency.address === token.address;
@@ -78,7 +58,7 @@ export default function CommonBases({
               className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
             >
               <CurrencyLogo currency={token} />
-              <Typography variant="caption2" className="font-semibold">
+              <Typography variant="sm" className="font-semibold">
                 {token.getSymbol(chainId)}
               </Typography>
             </button>

@@ -1,11 +1,8 @@
 import { Currency, CurrencyAmount, Fraction, Percent } from "@sushiswap/sdk";
-import { RowBetween, RowFixed } from "../../components/Row";
 
-import { ButtonPrimary } from "../../components/ButtonLegacy";
-import CurrencyLogo from "../../components/CurrencyLogo";
+import Button from "../../components/Button";
 import { Field } from "../../state/mint/actions";
 import React from "react";
-import { Text } from "rebass";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -33,20 +30,20 @@ export function ConfirmAddModalBottom({
         <div className="flex items-center justify-between">
           <div className="text-sm text-high-emphesis">{i18n._(t`Rates`)}</div>
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-            {`1 ${parsedAmounts[Field.CURRENCY_A].currency.symbol} = ${price
-              ?.invert()
-              .toSignificant(4)} ${
-              parsedAmounts[Field.CURRENCY_B].currency.symbol
-            }`}
+            {`1 ${parsedAmounts[Field.CURRENCY_A]?.currency.getSymbol(
+              chainId
+            )} = ${price?.invert().toSignificant(4)} ${parsedAmounts[
+              Field.CURRENCY_B
+            ]?.currency.getSymbol(chainId)}`}
           </div>
         </div>
         <div className="flex items-center justify-end">
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-            {`1 ${
-              parsedAmounts[Field.CURRENCY_B].currency.symbol
-            } = ${price?.toSignificant(4)} ${
-              parsedAmounts[Field.CURRENCY_A].currency.symbol
-            }`}
+            {`1 ${parsedAmounts[Field.CURRENCY_B]?.currency.getSymbol(
+              chainId
+            )} = ${price?.toSignificant(4)} ${parsedAmounts[
+              Field.CURRENCY_A
+            ]?.currency.getSymbol(chainId)}`}
           </div>
         </div>
       </div>
@@ -61,7 +58,7 @@ export function ConfirmAddModalBottom({
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
             <div>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</div>
             <span className="ml-1">
-              {parsedAmounts[Field.CURRENCY_A].currency.symbol}
+              {parsedAmounts[Field.CURRENCY_A]?.currency.getSymbol(chainId)}
             </span>
           </div>
         </div>
@@ -74,7 +71,7 @@ export function ConfirmAddModalBottom({
           <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
             <div>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</div>
             <span className="ml-1">
-              {parsedAmounts[Field.CURRENCY_B].currency.symbol}
+              {parsedAmounts[Field.CURRENCY_B]?.currency.getSymbol(chainId)}
             </span>
           </div>
         </div>
@@ -88,13 +85,11 @@ export function ConfirmAddModalBottom({
         </div>
       </div>
 
-      <ButtonPrimary onClick={onAdd}>
-        <div className="text-lg font-medium">
-          {noLiquidity
-            ? i18n._(t`Create Pool & Supply`)
-            : i18n._(t`Confirm Supply`)}
-        </div>
-      </ButtonPrimary>
+      <Button color="gradient" size="lg" onClick={onAdd}>
+        {noLiquidity
+          ? i18n._(t`Create Pool & Supply`)
+          : i18n._(t`Confirm Supply`)}
+      </Button>
     </div>
   );
 }

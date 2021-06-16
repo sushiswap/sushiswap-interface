@@ -1,5 +1,5 @@
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "react-feather";
-import { Direction, TransactionReview } from "../entities/TransactionReview";
+import { Direction, TransactionReview } from "../../entities/TransactionReview";
 
 import React from "react";
 

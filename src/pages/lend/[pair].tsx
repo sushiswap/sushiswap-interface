@@ -1,4 +1,4 @@
-import { Deposit, Withdraw } from "../../features/lend";
+import { Deposit, Withdraw } from "../../features/lending";
 import { KashiContext, useKashiPair } from "../../context";
 import React, { useContext, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";

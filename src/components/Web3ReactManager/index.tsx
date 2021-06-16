@@ -17,10 +17,6 @@ const MessageWrapper = styled.div`
   height: 20rem;
 `;
 
-const Message = styled.h2`
-  // color: ${({ theme }) => theme.secondary1};
-`;
-
 export default function Web3ReactManager({
   children,
 }: {
@@ -68,11 +64,11 @@ export default function Web3ReactManager({
   if (!active && networkError) {
     return (
       <MessageWrapper>
-        <Message>
+        <div className="text-secondary">
           {i18n._(
             t`Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device`
           )}
-        </Message>
+        </div>
       </MessageWrapper>
     );
   }

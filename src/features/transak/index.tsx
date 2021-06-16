@@ -1,9 +1,9 @@
 import { ChainId } from "@sushiswap/sdk";
-import Head from "next/head";
-import Layout from "../layouts/DefaultLayout";
+import { t } from "@lingui/macro";
 import transakSDK from "@transak/transak-sdk";
-import { useActiveWeb3React } from "../hooks";
-import { useEffect } from "react";
+import { useActiveWeb3React } from "../../hooks";
+import { useCallback } from "react";
+import { useLingui } from "@lingui/react";
 
 const DEFAULT_NETWORK = {
   [ChainId.MAINNET]: "ethereum",
@@ -19,11 +19,11 @@ const DEFAULT_CRYPTO_CURRENCY = {
 
 export default function Buy() {
   const { account, chainId } = useActiveWeb3React();
-  useEffect(() => {
+  const { i18n } = useLingui();
+  useCallback(() => {
     if (!(chainId in DEFAULT_NETWORK)) {
       return;
     }
-    console.log({ chainId });
 
     const transak = new transakSDK({
       apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY, // Your API Key
@@ -58,27 +58,14 @@ export default function Buy() {
       console.log("TRANSAK_ORDER_SUCCESSFUL", orderData);
       transak.close();
     });
-  }, []);
-  return (
-    <Layout>
-      <Head>
-        <title>Buy | Sushi</title>
-        <meta name="description" content="Buy..." />
-      </Head>
+  }, [account, chainId]);
 
-      {/* <iframe
-                height="600"
-                title="Transak On/Off Ramp Widget (Website)"
-                src={`https://staging-global.transak.com?apiKey=${process.env.NEXT_PUBLIC_TRANSAK_API_KEY}`}
-                frameBorder="no"
-                allowTransparency
-                allowFullScreen
-                style={{
-                    width: '100%',
-                    maxWidth: '450px',
-                }}
-                className="h-full"
-            ></iframe> */}
-    </Layout>
+  return (
+    <a
+      id={`buy-link`}
+      className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+    >
+      {i18n._(t`Buy`)}
+    </a>
   );
 }

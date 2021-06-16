@@ -9,7 +9,7 @@ import {
 import { AbstractConnector } from "@web3-react/abstract-connector";
 import AccountDetails from "../AccountDetails";
 import { ApplicationModal } from "../../state/application/actions";
-import { ButtonError } from "../ButtonLegacy";
+import { ButtonError } from "../Button";
 import ExternalLink from "../ExternalLink";
 import Image from "next/image";
 import Modal from "../Modal";
@@ -301,7 +301,7 @@ export default function WalletModal({
               i18n._(t`Error connecting. Try refreshing the page.`)
             )}
             <div style={{ marginTop: "1rem" }} />
-            <ButtonError error={true} size="small" onClick={deactivate}>
+            <ButtonError error={true} size="sm" onClick={deactivate}>
               {i18n._(t`Disconnect`)}
             </ButtonError>
           </div>

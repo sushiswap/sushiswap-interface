@@ -25,7 +25,7 @@ function ModalHeader({
         />
       )}
       {title && (
-        <Typography component="h2" variant="h5" className="font-bold">
+        <Typography component="h2" variant="h3" className="font-bold">
           {title}
         </Typography>
       )}

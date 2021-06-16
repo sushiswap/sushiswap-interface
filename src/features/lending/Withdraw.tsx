@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import { e10, minimum } from "../../functions/math";
-import useKashiApproveCallback, {
-  BentoApprovalState,
-} from "../../hooks/useKashiApproveCallback";
 
 import Button from "../../components/Button";
-import { KASHI_ADDRESS } from "../../constants/kashi";
-import { KashiApproveButton } from "../../components/KashiButton";
+import { KashiApproveButton } from "./Button";
 import KashiCooker from "../../entities/KashiCooker";
-import { Input as NumericalInput } from "../../components/NumericalInput";
 import SmartNumberInput from "../../components/SmartNumberInput";
 import { TransactionReview } from "../../entities/TransactionReview";
-import TransactionReviewView from "../../components/TransactionReview";
+import TransactionReviewView from "./TransactionReview";
 import { Warnings } from "../../entities/Warnings";
-import WarningsView from "../../components/WarningsList";
-import { easyAmount } from "../../functions/kashi";
-import { formatNumber } from "../../functions/format";
+import WarningsView from "./WarningsList";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useKashiApprovalPending } from "../../state/application/hooks";
+import useKashiApproveCallback from "../../hooks/useKashiApproveCallback";
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
   const { account } = useActiveWeb3React();

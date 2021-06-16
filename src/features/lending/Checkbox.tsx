@@ -1,7 +1,7 @@
-import Checkbox from "./Checkbox";
-import QuestionHelper from "./QuestionHelper";
+import Checkbox from "../../components/Checkbox";
+import QuestionHelper from "../../components/QuestionHelper";
 import React from "react";
-import Settings from "./Settings";
+import Settings from "../../components/Settings";
 
 export function ExchangeRateCheckBox({
   color,
@@ -27,7 +27,7 @@ export function ExchangeRateCheckBox({
           disabled={pair.currentExchangeRate.isZero()}
           set={setUpdateOracle}
         />
-        <span className="text-primary ml-2 mr-1">
+        <span className="ml-2 mr-1 text-primary">
           Update exchange rate from the oracle
         </span>
         <QuestionHelper
@@ -47,7 +47,7 @@ export function SwapCheckbox({ title, color, swap, setSwap, help }: any) {
     <div className="flex items-center justify-between mb-4">
       <div>
         <Checkbox color={color} checked={swap} set={setSwap} />
-        <span className="text-primary ml-2 mr-1">{title}</span>
+        <span className="ml-2 mr-1 text-primary">{title}</span>
         <QuestionHelper text={help} />
       </div>
       {swap && <Settings />}

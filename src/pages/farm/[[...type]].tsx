@@ -27,6 +27,7 @@ import {
 
 import Card from "../../components/Card";
 import CardHeader from "../../components/CardHeader";
+import Container from "../../components/Container";
 import Dots from "../../components/Dots";
 import FarmList from "../../features/farm/FarmList";
 import Head from "next/head";
@@ -152,8 +153,8 @@ export default function Farm(): JSX.Element {
           {
             token: "ALCX",
             icon: "/images/tokens/alcx-square.jpg",
-            rewardPerBlock: 0.437861008791398,
-            rewardPerDay: 0.437861008791398 * blocksPerDay,
+            rewardPerBlock: 0.217544236043011,
+            rewardPerDay: 0.217544236043011 * blocksPerDay,
             rewardPrice: alcxPrice,
           },
           {
@@ -309,7 +310,7 @@ export default function Farm(): JSX.Element {
     portfolio: (farm) => positions?.find((position) => position.id === farm.id),
     slp: (farm) => farm.pair.type === PairType.SWAP,
     km: (farm) => farm.pair.type === PairType.LENDING,
-    dual: (farm) => farm.chef === Chef.MASTERCHEF_V2,
+    "2x": (farm) => farm.chef === Chef.MASTERCHEF_V2,
   };
 
   const filtered = type ? result?.filter(filterForSection[type]) : result;
@@ -320,31 +321,39 @@ export default function Farm(): JSX.Element {
         <title>Farm | Sushi</title>
         <meta name="description" content="Farm SUSHI" />
       </Head>
-      <div className="container grid h-full grid-cols-4 gap-4 mx-auto">
+      <Container
+        maxWidth="full"
+        className="grid h-full grid-cols-4 mx-auto gap-9"
+      >
         <div
           className="sticky top-0 hidden lg:block md:col-span-1"
           style={{ maxHeight: "40rem" }}
         >
           <Menu />
         </div>
-        <div className="col-span-4 lg:col-span-3">
-          <Card
-            className="h-full bg-dark-900"
-            header={
-              <CardHeader className="flex flex-col items-center bg-dark-800">
-                <div className="w-full">
-                  <Search search={search} term={term} />
-                </div>
-                <div className="container block pt-6 lg:hidden">
-                  <Menu />
-                </div>
-              </CardHeader>
-            }
-          >
-            <FarmList farms={filtered} term={term} />
-          </Card>
+        <div className="col-span-4 space-y-6 lg:col-span-3">
+          <Search
+            search={search}
+            term={term}
+            inputProps={{
+              className:
+                "relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5",
+            }}
+          />
+
+          {/* <div className="flex items-center font-bold text-lg text-high-emphesis whitespace-nowrap">
+            Ready to Stake{" "}
+            <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
+          </div>
+          <FarmList farms={filtered} term={term} /> */}
+
+          <div className="flex items-center font-bold text-lg text-high-emphesis whitespace-nowrap">
+            Farms{" "}
+            <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
+          </div>
+          <FarmList farms={filtered} term={term} />
         </div>
-      </div>
+      </Container>
     </Layout>
   );
 }

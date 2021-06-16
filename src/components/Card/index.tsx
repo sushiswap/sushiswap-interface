@@ -1,5 +1,13 @@
 import React from "react";
 
+type CardProps = {
+  header?: React.ReactChild;
+  footer?: React.ReactChild;
+  backgroundImage?: string;
+  title?: string;
+  description?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
+
 export default function Card({
   header = undefined,
   footer = undefined,
@@ -8,8 +16,7 @@ export default function Card({
   description = "",
   children,
   className,
-  padding = undefined,
-}: any) {
+}: CardProps) {
   return (
     <div
       className={`relative ${className}`}
@@ -25,7 +32,7 @@ export default function Card({
 
       <div className="px-2 py-4 sm:p-8">
         {title && (
-          <div className="text-2xl text-high-emphesis mb-4">{title}</div>
+          <div className="mb-4 text-2xl text-high-emphesis">{title}</div>
         )}
         {description && (
           <div className="text-base text-secondary">{description}</div>

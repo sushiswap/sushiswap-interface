@@ -10,7 +10,7 @@ import useMigrateState, { MigrateState } from "../hooks/useMigrateState";
 import { AddressZero } from "@ethersproject/constants";
 import Badge from "../components/Badge";
 import Button from "../components/Button";
-import { ButtonConfirmed } from "../components/ButtonLegacy";
+import { ButtonConfirmed } from "../components/Button";
 import Dots from "../components/Dots";
 import DoubleCurrencyLogo from "../components/DoubleLogo";
 import Empty from "../components/Empty";
@@ -20,6 +20,7 @@ import Layout from "../layouts/DefaultLayout";
 import MetamaskError from "../types/MetamaskError";
 import { Input as NumericalInput } from "../components/NumericalInput";
 import Typography from "../components/Typography";
+import Web3Connect from "../components/Web3Connect";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -59,11 +60,11 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
   if (!state.mode || !state.selectedLPToken) {
     return (
       <>
-        <Typography variant="caption" className="text-secondary">
+        <Typography variant="sm" className="text-secondary">
           Amount of Tokens
         </Typography>
         <div className="p-3 text-center rounded cursor-not-allowed bg-dark-800">
-          <Typography variant="body" className="text-secondary">
+          <Typography variant="lg" className="text-secondary">
             {state.mode && state.lpTokens.length === 0
               ? "No LP tokens found"
               : "Select an LP Token"}
@@ -75,20 +76,20 @@ const AmountInput = ({ state }: { state: MigrateState }) => {
 
   return (
     <>
-      <Typography variant="caption" className="text-secondary">
+      <Typography variant="sm" className="text-secondary">
         {i18n._(t`Amount of Tokens`)}
       </Typography>
 
       <div className="relative flex items-center w-full mb-4">
         <NumericalInput
-          className="w-full p-3 rounded bg-input focus:ring focus:ring-pink"
+          className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
           value={state.amount}
           onUserInput={(val) => state.setAmount(val)}
         />
         <Button
           variant="outlined"
           color="pink"
-          size="small"
+          size="xs"
           onClick={onPressMax}
           className="absolute right-4 focus:ring focus:ring-pink"
         >
@@ -127,7 +128,7 @@ const LPTokenSelect = ({
           size={20}
         />
         <Typography
-          variant="body"
+          variant="lg"
           className="text-primary"
         >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
         {lpToken.version && <Badge color="pink">{lpToken.version}</Badge>}
@@ -176,10 +177,10 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
             >
               <div>
                 <div>
-                  <Typography variant="caption">{text}</Typography>
+                  <Typography variant="sm">{text}</Typography>
                 </div>
                 <div>
-                  <Typography variant="caption2" className="text-secondary">
+                  <Typography variant="sm" className="text-secondary">
                     {description}
                   </Typography>
                 </div>
@@ -281,7 +282,6 @@ const MigrateButtons = ({
               disabled={
                 approval !== ApprovalState.NOT_APPROVED || isButtonDisabled
               }
-              altDisabledStyle={approval === ApprovalState.PENDING}
             >
               {approval === ApprovalState.PENDING ? (
                 <Dots>{i18n._(t`Approving`)}</Dots>
@@ -400,17 +400,10 @@ export default function Migrate() {
       </div>
 
       <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
-        {/* <div className="flex items-center justify-between p-3">
-        <BackArrow to="/pool" />
-        <div>Select your wallet</div>
-        <QuestionHelper text={`Migrate your ${exchange} LP tokens to SushiSwap LP tokens.`} />
-    </div> */}
         {!account ? (
-          <Typography variant="body" className="p-4 text-center text-primary">
-            {i18n._(t`Connect to a wallet to view your liquidity`)}
-          </Typography>
+          <Web3Connect color="blue" className="w-full" />
         ) : state.loading ? (
-          <Typography variant="body" className="p-4 text-center text-primary">
+          <Typography variant="lg" className="p-4 text-center text-primary">
             <Dots>
               {i18n._(t`Loading your ${exchange} liquidity positions`)}
             </Dots>
@@ -418,15 +411,15 @@ export default function Migrate() {
         ) : (
           <>
             {!state.loading && (
-              <Typography variant="body">{i18n._(t`Your Wallet`)}</Typography>
+              <Typography variant="lg">{i18n._(t`Your Wallet`)}</Typography>
             )}
             <MigrateModeSelect state={state} />
             {!state.loading && state.lpTokens.length > 0 && (
               <div>
-                <Typography variant="body">
+                <Typography variant="lg">
                   {i18n._(t`Your Liquidity`)}
                 </Typography>
-                <Typography variant="caption" className="text-secondary">
+                <Typography variant="sm" className="text-secondary">
                   {t`Click on a pool below, input the amount you wish to migrate or select max, and click
                         migrate`}
                 </Typography>

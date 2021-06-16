@@ -10,16 +10,12 @@ import Link from "next/link";
 import ListHeaderWithSort from "../../components/ListHeaderWithSort";
 import MarketHeader from "../../components/MarketHeader";
 import React from "react";
-import { ZERO } from "../../functions/math";
-import { getCurrency } from "../../functions/currency";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useKashiPairs } from "../../context";
 import { useLingui } from "@lingui/react";
 import useSearchAndSort from "../../hooks/useSearchAndSort";
 
 export default function Borrow() {
   const { i18n } = useLingui();
-  const { chainId } = useActiveWeb3React();
   const fullPairs = useKashiPairs();
 
   const positions = useSearchAndSort(

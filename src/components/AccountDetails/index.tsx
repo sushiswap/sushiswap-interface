@@ -196,7 +196,7 @@ export default function AccountDetails({
                 <Button
                   variant="filled"
                   color="pink"
-                  size="small"
+                  size="sm"
                   onClick={() => {
                     (connector as any).close();
                   }}
@@ -207,7 +207,7 @@ export default function AccountDetails({
               <Button
                 variant="filled"
                 color="blue"
-                size="small"
+                size="sm"
                 onClick={() => {
                   openOptions();
                 }}

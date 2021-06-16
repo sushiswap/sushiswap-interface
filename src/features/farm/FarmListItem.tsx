@@ -4,8 +4,14 @@ import {
 } from "../../hooks/useApproveCallback";
 import { ChainId, MASTERCHEF_ADDRESS, Token, ZERO } from "@sushiswap/sdk";
 import { Chef, PairType } from "./enum";
+import { Disclosure, Transition } from "@headlessui/react";
 import React, { useState } from "react";
-import { currencyId, formatNumber, formatPercent } from "../../functions";
+import {
+  classNames,
+  currencyId,
+  formatNumber,
+  formatPercent,
+} from "../../functions";
 import { usePendingSushi, useUserInfo } from "./hooks";
 
 import Button from "../../components/Button";
@@ -71,246 +77,233 @@ const FarmListItem = ({ farm }) => {
   const { deposit, withdraw, harvest } = useMasterChef(farm.chef);
 
   return (
-    <div className="rounded bg-dark-800">
-      <div
-        className="grid grid-cols-3 px-4 py-2 rounded rounded-b-none cursor-pointer select-none md:grid-cols-4 bg-dark-850"
-        onClick={() => setExpand(!expand)}
-      >
-        <div className="text-sm sm:text-base">
-          <div className="flex items-center space-x-2">
-            <div className="font-semibold">
-              {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
-            </div>
-            {farm?.pair?.type === PairType.SWAP && (
-              <div className="text-gray-500">SLP</div>
-            )}
-            {farm?.pair?.type === PairType.LENDING && (
-              <div className="text-gray-500">KM</div>
-            )}
-          </div>
-        </div>
-        <div className="hidden ml-4 text-sm text-gray-500 md:block sm:text-base">
-          {farm?.rewards?.map((reward) => reward.token).join(" & ")}
-        </div>
-        <div className="text-sm text-right text-gray-500 sm:text-base">
-          {formatNumber(farm?.tvl, true)}
-        </div>
-        <div className="text-sm font-semibold text-right sm:text-base">
-          {farm?.roiPerYear > 100
-            ? "10000%+"
-            : formatPercent(farm?.roiPerYear * 100)}
-        </div>
-      </div>
-      <div
-        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none md:grid-cols-4"
-        onClick={() => setExpand(!expand)}
-      >
-        <div className="flex items-center col-span-1">
-          <div>
-            <DoubleLogo
-              currency0={token0}
-              currency1={token1}
-              size={40}
-              margin={true}
-            />
-          </div>
-        </div>
-        <div className="flex-row items-center justify-start hidden ml-4 space-x-2 md:col-span-1 md:flex">
-          <div className="flex flex-col space-y-2 md:col-span-3">
-            <div className="flex flex-row items-center mr-4 space-x-2">
-              {farm?.rewards?.map((reward, i) => (
-                <div key={i} className="flex items-center">
-                  <Image
-                    src={reward.icon}
-                    width="40px"
-                    height="40px"
-                    className="w-10 h-10 rounded"
-                    alt={reward.token}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col pl-2 space-y-1">
-            {farm?.rewards?.map((reward, i) => (
-              <div key={i} className="text-xs text-gray-500">
-                {formatNumber(reward.rewardPerDay)} {reward.token} / day
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex items-center justify-end md:col-span-1">
-          <div>
-            {/* <div className="text-right">{formattedNum(farm.tvl, true)} </div> */}
-            <div className="text-sm font-semibold text-right text-gray-500 sm:text-sm">
-              {formatNumber(farm.balance, false)} {farm.type}
-            </div>
-            <div className="text-xs text-right text-gray-500">
-              Market Staked
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center justify-end md:col-span-1">
-          <div>
-            <div className="text-base font-semibold text-right text-gray-500 sm:text-lg">
-              {farm?.roiPerYear > 100
-                ? "10000%+"
-                : formatPercent(farm?.roiPerYear * 100)}
-              {/* {formattedPercent(farm.roiPerMonth * 100)}{' '} */}
-            </div>
-            <div className="text-xs text-right text-gray-500">annualized</div>
-            {/* <div className="text-xs text-right text-gray-500">per month</div> */}
-          </div>
-        </div>
-      </div>
-      {expand && (
+    <Disclosure as="div">
+      {({ open }) => (
         <>
-          <div className="flex flex-col py-6 space-y-4">
-            <div className="grid grid-cols-2 gap-4 px-4">
-              <div className="col-span-2 text-center md:col-span-1">
-                {account && (
-                  <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                    {i18n._(t`Wallet Balance`)}:{" "}
-                    {formatNumber(balance?.toSignificant(6) ?? 0)} {farm.type}
+          <Disclosure.Button
+            className={classNames(
+              open && "rounded-b-none",
+              "w-full px-4 py-6 text-left rounded cursor-pointer select-none bg-dark-900 text-primary text-sm md:text-lg"
+            )}
+          >
+            <div className="grid grid-cols-4">
+              <div className="flex col-span-2 space-x-4 md:col-span-1">
+                <DoubleLogo currency0={token0} currency1={token1} size={40} />
+                <div className="flex flex-col justify-center">
+                  <div className="font-bold">
+                    {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
                   </div>
-                )}
-                <div className="relative flex items-center w-full mb-4">
-                  <NumericalInput
-                    className="w-full p-3 pr-20 rounded bg-dark-700 bg-input focus:ring focus:ring-blue"
-                    value={depositValue}
-                    onUserInput={(value) => {
-                      setDepositValue(value);
-                    }}
-                  />
-                  {account && (
-                    <Button
-                      variant="outlined"
-                      color="blue"
-                      size="small"
-                      onClick={() => {
-                        if (!balance.equalTo(ZERO)) {
-                          setDepositValue(
-                            balance.toFixed(liquidityToken.decimals)
-                          );
-                        }
-                      }}
-                      className="absolute border-0 right-4 focus:ring focus:ring-blue"
+                  {farm?.pair?.type === PairType.SWAP && (
+                    <div className="text-xs md:text-base text-secondary">
+                      SushiSwap Farm
+                    </div>
+                  )}
+                  {farm?.pair?.type === PairType.LENDING && (
+                    <div className="text-xs md:text-base text-secondary">
+                      Kashi Farm
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col justify-center font-bold">
+                {formatNumber(farm.tvl, true)}
+              </div>
+              <div className="flex-row items-center hidden space-x-4 md:flex">
+                <div className="flex items-center space-x-2">
+                  {farm?.rewards?.map((reward, i) => (
+                    <div key={i} className="flex items-center">
+                      <Image
+                        src={reward.icon}
+                        width="30px"
+                        height="30px"
+                        className="rounded-md"
+                        layout="fixed"
+                        alt={reward.token}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col space-y-1">
+                  {farm?.rewards?.map((reward, i) => (
+                    <div
+                      key={i}
+                      className="text-xs md:text-sm whitespace-nowrap"
                     >
-                      {i18n._(t`MAX`)}
+                      {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col items-end justify-center">
+                <div className="font-bold text-righttext-high-emphesis">
+                  {farm?.roiPerYear > 100
+                    ? "10000%+"
+                    : formatPercent(farm?.roiPerYear * 100)}
+                </div>
+                <div className="text-xs text-right md:text-base text-secondary">
+                  annualized
+                </div>
+              </div>
+            </div>
+          </Disclosure.Button>
+
+          <Transition
+            show={open}
+            enter="transition-opacity duration-75"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity duration-150"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Disclosure.Panel
+              className="flex flex-col w-full border-t-0 rounded rounded-t-none bg-dark-800"
+              static
+            >
+              <div className="grid grid-cols-2 gap-4 p-4">
+                <div className="col-span-2 text-center md:col-span-1">
+                  {account && (
+                    <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
+                      {i18n._(t`Wallet Balance`)}:{" "}
+                      {formatNumber(balance?.toSignificant(6) ?? 0)} {farm.type}
+                    </div>
+                  )}
+                  <div className="relative flex items-center w-full mb-4">
+                    <NumericalInput
+                      className="w-full p-3 pr-20 rounded bg-dark-700 focus:ring focus:ring-blue"
+                      value={depositValue}
+                      onUserInput={(value) => {
+                        setDepositValue(value);
+                      }}
+                    />
+                    {account && (
+                      <Button
+                        variant="outlined"
+                        color="blue"
+                        size="xs"
+                        onClick={() => {
+                          if (!balance.equalTo(ZERO)) {
+                            setDepositValue(
+                              balance.toFixed(liquidityToken.decimals)
+                            );
+                          }
+                        }}
+                        className="absolute border-0 right-4 focus:ring focus:ring-blue"
+                      >
+                        {i18n._(t`MAX`)}
+                      </Button>
+                    )}
+                  </div>
+                  {approvalState === ApprovalState.NOT_APPROVED ||
+                  approvalState === ApprovalState.PENDING ? (
+                    <Button
+                      color="blue"
+                      disabled={approvalState === ApprovalState.PENDING}
+                      onClick={approve}
+                    >
+                      {approvalState === ApprovalState.PENDING ? (
+                        <Dots>Approving </Dots>
+                      ) : (
+                        "Approve"
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      color="blue"
+                      disabled={
+                        pendingTx ||
+                        !typedDepositValue ||
+                        balance.lessThan(typedDepositValue)
+                      }
+                      onClick={async () => {
+                        setPendingTx(true);
+                        try {
+                          // KMP decimals depend on asset, SLP is always 18
+                          const tx = await deposit(
+                            farm.id,
+                            depositValue.toBigNumber(liquidityToken?.decimals)
+                          );
+
+                          addTransaction(tx, {
+                            summary: `Deposit ${farm.pair.name}`,
+                          });
+                        } catch (error) {
+                          console.error(error);
+                        }
+                        setPendingTx(false);
+                      }}
+                    >
+                      {i18n._(t`Stake`)}
                     </Button>
                   )}
                 </div>
-                {approvalState === ApprovalState.NOT_APPROVED ||
-                approvalState === ApprovalState.PENDING ? (
-                  <Button
-                    color="blue"
-                    disabled={approvalState === ApprovalState.PENDING}
-                    onClick={approve}
-                  >
-                    {approvalState === ApprovalState.PENDING ? (
-                      <Dots>Approving </Dots>
-                    ) : (
-                      "Approve"
+                <div className="col-span-2 text-center md:col-span-1">
+                  {account && (
+                    <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
+                      {i18n._(t`Your Staked`)}:{" "}
+                      {formatNumber(amount?.toSignificant(6)) ?? 0} {farm.type}
+                    </div>
+                  )}
+                  <div className="relative flex items-center w-full mb-4">
+                    <NumericalInput
+                      className="w-full p-3 pr-20 rounded bg-dark-700 focus:ring focus:ring-pink"
+                      value={withdrawValue}
+                      onUserInput={(value) => {
+                        setWithdrawValue(value);
+                      }}
+                    />
+                    {account && (
+                      <Button
+                        variant="outlined"
+                        color="pink"
+                        size="xs"
+                        onClick={() => {
+                          if (!amount.equalTo(ZERO)) {
+                            setWithdrawValue(
+                              amount.toFixed(liquidityToken.decimals)
+                            );
+                          }
+                        }}
+                        className="absolute border-0 right-4 focus:ring focus:ring-pink"
+                      >
+                        {i18n._(t`MAX`)}
+                      </Button>
                     )}
-                  </Button>
-                ) : (
+                  </div>
                   <Button
-                    color="blue"
+                    color="pink"
+                    className="border-0"
                     disabled={
                       pendingTx ||
-                      !typedDepositValue ||
-                      balance.lessThan(typedDepositValue)
+                      !typedWithdrawValue ||
+                      amount.lessThan(typedWithdrawValue)
                     }
                     onClick={async () => {
                       setPendingTx(true);
                       try {
                         // KMP decimals depend on asset, SLP is always 18
-                        const tx = await deposit(
+                        const tx = await withdraw(
                           farm.id,
-                          depositValue.toBigNumber(liquidityToken?.decimals)
+                          withdrawValue.toBigNumber(liquidityToken?.decimals)
                         );
-
                         addTransaction(tx, {
-                          summary: `Deposit ${farm.pair.name}`,
+                          summary: `Withdraw ${farm.pair.name}`,
                         });
                       } catch (error) {
                         console.error(error);
                       }
+
                       setPendingTx(false);
                     }}
                   >
-                    {i18n._(t`Stake`)}
+                    {i18n._(t`Unstake`)}
                   </Button>
-                )}
-              </div>
-              <div className="col-span-2 text-center md:col-span-1">
-                {account && (
-                  <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-                    {i18n._(t`Your Staked`)}:{" "}
-                    {formatNumber(amount?.toSignificant(6)) ?? 0} {farm.type}
-                  </div>
-                )}
-                <div className="relative flex items-center w-full mb-4">
-                  <NumericalInput
-                    className="w-full p-3 pr-20 rounded bg-dark-700 bg-input focus:ring focus:ring-pink"
-                    value={withdrawValue}
-                    onUserInput={(value) => {
-                      setWithdrawValue(value);
-                    }}
-                  />
-                  {account && (
-                    <Button
-                      variant="outlined"
-                      color="pink"
-                      size="small"
-                      onClick={() => {
-                        if (!amount.equalTo(ZERO)) {
-                          setWithdrawValue(
-                            amount.toFixed(liquidityToken.decimals)
-                          );
-                        }
-                      }}
-                      className="absolute border-0 right-4 focus:ring focus:ring-pink"
-                    >
-                      {i18n._(t`MAX`)}
-                    </Button>
-                  )}
                 </div>
-                <Button
-                  color="pink"
-                  className="border-0"
-                  disabled={
-                    pendingTx ||
-                    !typedWithdrawValue ||
-                    amount.lessThan(typedWithdrawValue)
-                  }
-                  onClick={async () => {
-                    setPendingTx(true);
-                    try {
-                      // KMP decimals depend on asset, SLP is always 18
-                      const tx = await withdraw(
-                        farm.id,
-                        withdrawValue.toBigNumber(liquidityToken?.decimals)
-                      );
-                      addTransaction(tx, {
-                        summary: `Withdraw ${farm.pair.name}`,
-                      });
-                    } catch (error) {
-                      console.error(error);
-                    }
-
-                    setPendingTx(false);
-                  }}
-                >
-                  {i18n._(t`Unstake`)}
-                </Button>
               </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
-              {farm.pair.type === PairType.SWAP && (
-                <>
-                  <div className="text-caption2">
+              <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2">
+                {farm.pair.type === PairType.SWAP && (
+                  <>
+                    {/* <div className="text-sm">
                     Before depositing liquidity into this reward pool you'll
                     need to{" "}
                     <Link
@@ -322,7 +315,7 @@ const FarmListItem = ({ farm }) => {
                     tokens.
                   </div>
 
-                  <div className="text-caption2">
+                  <div className="text-sm">
                     After withdrawing liquidity from this reward pool you can{" "}
                     <Link
                       href={`/remove/${currencyId(token0)}/${currencyId(
@@ -332,65 +325,65 @@ const FarmListItem = ({ farm }) => {
                       <a className="underline text-blue">remove liquidity</a>
                     </Link>{" "}
                     to regain your underlying {token0.symbol} & {token1.symbol}.
-                  </div>
-                </>
-              )}
-              {farm.pair.type === PairType.LENDING && token1.symbol && (
-                <>
-                  <div className="text-caption2">
-                    Before depositing into this reward pool you'll need to{" "}
-                    <Link href={`/lend/${farm.pair.id}`}>
-                      <a className="underline text-blue">lend</a>
-                    </Link>{" "}
-                    to gain liquidity tokens to deposit.
-                  </div>
+                  </div> */}
+                  </>
+                )}
+                {farm.pair.type === PairType.LENDING && token1.symbol && (
+                  <>
+                    <div className="text-sm">
+                      Before depositing into this reward pool you&apos;ll need
+                      to{" "}
+                      <Link href={`/lend/${farm.pair.id}`}>
+                        <a className="underline text-blue">lend</a>
+                      </Link>{" "}
+                      to gain liquidity tokens to deposit.
+                    </div>
 
-                  <div className="text-caption2">
-                    After withdrawing liquidity tokens from this reward pool you
-                    can{" "}
-                    <Link href={`/lend/${farm.pair.id}`}>
-                      <a className="underline text-blue">collect</a>
-                    </Link>{" "}
-                    to regain your underlying {token1.symbol}.
-                  </div>
-                </>
-              )}
-            </div>
-            {pendingSushi && pendingSushi.greaterThan(ZERO) && (
-              <div className="px-4 ">
-                <Button
-                  color="gradient"
-                  onClick={async () => {
-                    setPendingTx(true);
-                    try {
-                      const tx = await harvest(farm.id);
-                      addTransaction(tx, {
-                        summary: `Harvest ${farm.pair.name}`,
-                      });
-                    } catch (error) {
-                      console.error(error);
-                    }
-                    setPendingTx(false);
-                  }}
-                >
-                  {i18n._(t`Harvest ${formatNumber(
-                    pendingSushi.toFixed(18)
-                  )} SUSHI
-                                        ${
-                                          farm.rewards.length > 1
-                                            ? `& ${formatNumber(reward)} ${
-                                                farm.rewards[1].token
-                                              }`
-                                            : null
-                                        }
-                                    `)}
-                </Button>
+                    <div className="text-sm">
+                      After withdrawing liquidity tokens from this reward pool
+                      you can{" "}
+                      <Link href={`/lend/${farm.pair.id}`}>
+                        <a className="underline text-blue">collect</a>
+                      </Link>{" "}
+                      to regain your underlying {token1.symbol}.
+                    </div>
+                  </>
+                )}
               </div>
-            )}
-          </div>
+              {pendingSushi && pendingSushi.greaterThan(ZERO) && (
+                <div className="px-4 ">
+                  <Button
+                    color="gradient"
+                    size="lg"
+                    onClick={async () => {
+                      setPendingTx(true);
+                      try {
+                        const tx = await harvest(farm.id);
+                        addTransaction(tx, {
+                          summary: `Harvest ${farm.pair.name}`,
+                        });
+                      } catch (error) {
+                        console.error(error);
+                      }
+                      setPendingTx(false);
+                    }}
+                  >
+                    {i18n._(t`Harvest ${formatNumber(
+                      pendingSushi.toFixed(18)
+                    )} SUSHI ${
+                      farm.rewards.length > 1
+                        ? `& ${formatNumber(reward)} ${farm.rewards[1].token}`
+                        : null
+                    }
+                `)}
+                  </Button>
+                </div>
+              )}
+            </Disclosure.Panel>
+          </Transition>
         </>
       )}
-    </div>
+    </Disclosure>
   );
 };
 

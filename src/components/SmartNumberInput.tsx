@@ -60,7 +60,7 @@ export default function SmartNumberInput({
           <span>
             <Button
               variant="outlined"
-              size="small"
+              size="xs"
               color={color}
               className={
                 "disabled:cursor-not-allowed focus:ring focus:ring-" + color
@@ -103,7 +103,7 @@ export default function SmartNumberInput({
         {showMax && max.gt(0) && (
           <Button
             variant="outlined"
-            size="small"
+            size="xs"
             color={color}
             onClick={() => {
               if (setPinMax) {

@@ -1,12 +1,7 @@
 import { ApprovalState, useApproveCallback } from "../hooks/useApproveCallback";
 import { AutoRow, RowBetween, RowFixed } from "../components/Row";
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from "../constants";
-import {
-  ButtonConfirmed,
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../components/ButtonLegacy";
+import Button, { ButtonError } from "../components/Button";
 import {
   ChainId,
   Currency,
@@ -22,7 +17,7 @@ import {
   computeTradePriceBreakdown,
   warningSeverity,
 } from "../functions/prices";
-import styled, { ThemeContext, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   useDerivedZapInfo,
   useZapActionHandlers,
@@ -46,13 +41,11 @@ import QuestionHelper from "../components/QuestionHelper";
 import Router from "next/router";
 import Settings from "../components/Settings";
 import SwapRoute from "../features/swap/SwapRoute";
-import { Text } from "rebass";
 import { ZAPPER_ADDRESS } from "../constants/addresses";
 import { currencyId as getCurrencyId } from "../functions/currency/currencyId";
 import { maxAmountSpend } from "../functions/currency/maxAmountSpend";
 import { resetZapState } from "../state/zap/actions";
 import { t } from "@lingui/macro";
-import { transparentize } from "polished";
 import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
 import { useCurrency } from "../hooks/Tokens";
 import { useDefaultsFromURLSearch } from "../state/zap/hooks";
@@ -123,14 +116,13 @@ const CardHeader = () => {
     <AutoColumn>
       <RowBetween style={{ padding: "1rem 0rem 1rem" }}>
         <Link href="/zap">
-          <div>
-            <a
-              onClick={(e) => {
-                dispatch(resetZapState());
-              }}
-            />
+          <a
+            onClick={(e) => {
+              dispatch(resetZapState());
+            }}
+          >
             <StyledArrowLeft />
-          </div>
+          </a>
         </Link>
         <div
           style={{
@@ -244,7 +236,7 @@ export default function Zap() {
       const newCurrencyId = getCurrencyId(currency);
       Router.push(`zap?poolAddress=${poolAddress}&currencyId=${newCurrencyId}`);
     },
-    [history, poolAddress]
+    [poolAddress]
   );
 
   const toggleWalletModal = useWalletModalToggle();
@@ -269,7 +261,18 @@ export default function Zap() {
       () => dispatch(resetZapState()),
       (err) => console.log(err, "zap error")
     );
-  }, [currency, poolAddress, chainId, parsedAmount, minTokensReceived]);
+  }, [
+    encodeSwapData,
+    zapIn,
+    currency,
+    currencyId,
+    poolAddress,
+    parsedAmount,
+    isTradingUnderlying,
+    chainId,
+    minTokensReceived,
+    dispatch,
+  ]);
 
   const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2);
 
@@ -479,19 +482,23 @@ export default function Zap() {
             </PoolBreakDownWrapper>
             <>
               {!account ? (
-                <ButtonLight
+                <Button
+                  variant="outlined"
+                  color="blue"
                   style={{ marginTop: "20px" }}
                   onClick={toggleWalletModal}
                 >
                   Connect Wallet
-                </ButtonLight>
+                </Button>
               ) : noRoute && bestTrade?.inputAmount ? (
                 <ButtonError style={{ marginTop: "20px" }}>
                   <div>Insufficient liquidity for this trade.</div>
                 </ButtonError>
               ) : showApproveFlow ? (
                 <RowBetween>
-                  <ButtonPrimary
+                  <Button
+                    color="gradient"
+                    size="lg"
                     onClick={approveCallback}
                     disabled={
                       approval !== ApprovalState.NOT_APPROVED ||
@@ -512,20 +519,20 @@ export default function Zap() {
                     ) : (
                       "Approve " + currency?.getSymbol(chainId)
                     )}
-                  </ButtonPrimary>
-                  <ButtonPrimary
+                  </Button>
+                  <Button
+                    color="gradient"
+                    size="lg"
                     onClick={() => zapCallback()}
                     style={{
                       width: "48%",
                       marginTop: "20px",
                     }}
-                    id="swap-button"
+                    id="zap-button"
                     disabled={approval !== ApprovalState.APPROVED}
                   >
-                    <Text fontSize={20} fontWeight={500}>
-                      {error ?? "Zap"}
-                    </Text>
-                  </ButtonPrimary>
+                    {error ?? "Zap"}
+                  </Button>
                 </RowBetween>
               ) : priceImpactSeverity > 1 && error === undefined ? (
                 <ButtonError
@@ -534,14 +541,14 @@ export default function Zap() {
                   style={{ marginTop: "20px" }}
                   onClick={() => zapCallback()}
                 >
-                  <Text fontSize={16} fontWeight={500}>
-                    {priceImpactSeverity > 3
-                      ? `Price Impact Too High`
-                      : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
-                  </Text>
+                  {priceImpactSeverity > 3
+                    ? `Price Impact Too High`
+                    : `Swap${priceImpactSeverity > 2 ? " Anyway" : ""}`}
                 </ButtonError>
               ) : (
-                <ButtonPrimary
+                <Button
+                  color="gradient"
+                  size="lg"
                   style={{ marginTop: "20px" }}
                   disabled={
                     !parsedAmount ||
@@ -550,10 +557,8 @@ export default function Zap() {
                   }
                   onClick={() => zapCallback()}
                 >
-                  <Text fontSize={20} fontWeight={500}>
-                    {error ?? "Zap"}
-                  </Text>
-                </ButtonPrimary>
+                  {error ?? "Zap"}
+                </Button>
               )}
               {showApproveFlow && (
                 <Column style={{ marginTop: "1rem" }}>

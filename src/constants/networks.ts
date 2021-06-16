@@ -16,7 +16,7 @@ const Polygon = "/images/networks/polygon-network.jpg";
 const Rinkeby = "/images/networks/rinkeby-network.jpg";
 const Ropsten = "/images/networks/ropsten-network.jpg";
 const xDai = "/images/networks/xdai-network.jpg";
-
+const Celo = "/images/networks/celo-network.jpg";
 export const NETWORK_ICON = {
   [ChainId.MAINNET]: Mainnet,
   [ChainId.ROPSTEN]: Ropsten,
@@ -41,6 +41,7 @@ export const NETWORK_ICON = {
   [ChainId.HARMONY_TESTNET]: Harmony,
   [ChainId.OKEX]: OKEx,
   [ChainId.OKEX_TESTNET]: OKEx,
+  [ChainId.CELO]: Celo,
 };
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -67,4 +68,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.HARMONY_TESTNET]: "Harmony Testnet",
   [ChainId.OKEX]: "OKEx",
   [ChainId.OKEX_TESTNET]: "OKEx",
+  [ChainId.CELO]: "Celo",
 };

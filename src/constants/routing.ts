@@ -5,6 +5,7 @@ import {
   BAB,
   BAC,
   BSC,
+  CELO,
   CREAM,
   CRV,
   CVXCRV,
@@ -107,6 +108,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.HARMONY_TESTNET]: [WETH[ChainId.HARMONY_TESTNET]],
   [ChainId.OKEX]: [WETH[ChainId.OKEX]],
   [ChainId.OKEX_TESTNET]: [WETH[ChainId.OKEX_TESTNET]],
+  [ChainId.CELO]: [WETH[ChainId.CELO]],
 };
 
 // used to construct intermediary pairs for trading
@@ -183,6 +185,13 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     OKEX.USDT,
     OKEX.WBTC,
     OKEX.WETH,
+  ],
+  [ChainId.CELO]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    CELO.mCUSD,
+    CELO.mCELO,
+    CELO.mcEURO,
+    CELO.cEUR,
   ],
 };
 
@@ -329,6 +338,13 @@ export const SUGGESTED_BASES: ChainTokenList = {
     OKEX.WBTC,
     OKEX.WETH,
   ],
+  [ChainId.CELO]: [
+    // ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    // CELO.mCUSD,
+    // CELO.mCELO,
+    // CELO.mcEURO,
+    // CELO.cEUR,
+  ],
 };
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -402,6 +418,13 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     OKEX.USDT,
     OKEX.WBTC,
     OKEX.WETH,
+  ],
+  [ChainId.CELO]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    CELO.mCUSD,
+    CELO.mCELO,
+    CELO.mcEURO,
+    CELO.cEUR,
   ],
 };
 

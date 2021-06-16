@@ -22,12 +22,10 @@ import Column from "../Column";
 import CurrencyLogo from "../CurrencyLogo";
 import { FixedSizeList } from "react-window";
 import ImportRow from "./ImportRow";
-import { LightGreyCard } from "../CardLegacy";
 import Loader from "../Loader";
 import { MenuItem } from "./styleds";
 import { MouseoverTooltip } from "../Tooltip";
 import QuestionHelper from "../QuestionHelper";
-import { Text } from "rebass";
 import { isTokenOnList } from "../../functions/validate";
 import styled from "styled-components";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
@@ -41,13 +39,6 @@ function currencyKey(currency: Currency, chainId = ChainId.MAINNET): string {
     ? Currency.getNativeCurrencySymbol(chainId)
     : "";
 }
-
-const StyledBalanceText = styled(Text)`
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 5rem;
-  text-overflow: ellipsis;
-`;
 
 const Tag = styled.div`
   background-color: ${({ theme }) => theme.bg3};
@@ -73,9 +64,12 @@ const FixedContentRow = styled.div`
 
 function Balance({ balance }: { balance: CurrencyAmount }) {
   return (
-    <StyledBalanceText title={balance.toExact()}>
+    <div
+      className="whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis"
+      title={balance.toExact()}
+    >
       {balance.toSignificant(4)}
-    </StyledBalanceText>
+    </div>
   );
 }
 
@@ -151,16 +145,16 @@ function CurrencyRow({
         <CurrencyLogo currency={currency} size={32} />
       </div>
       <Column>
-        <Text title={currency.getName(chainId)} fontWeight={500}>
+        <div title={currency.getName(chainId)} className="text-sm font-medium">
           {currency.getSymbol(chainId)}
-        </Text>
+        </div>
         <div className="text-sm font-thin">
           {currency.getName(chainId)}{" "}
           {!isOnSelectedList && customAdded && "• Added by user"}
         </div>
       </Column>
       <TokenTags currency={currency} />
-      <div className="flex items-start justify-end">
+      <div className="flex items-center justify-end">
         {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
       </div>
     </MenuItem>
@@ -203,7 +197,7 @@ export default function CurrencyList({
       ];
     }
     return formatted;
-  }, [breakIndex, currencies, showETH]);
+  }, [breakIndex, chainId, currencies, showETH]);
 
   const inactiveTokens: {
     [address: string]: Token;
@@ -230,7 +224,7 @@ export default function CurrencyList({
       if (index === breakIndex || !data) {
         return (
           <FixedContentRow style={style}>
-            <LightGreyCard padding="8px 12px" borderRadius="8px">
+            <div className="rounded bg-dark-700">
               <RowBetween>
                 <RowFixed>
                   <TokenListLogoWrapper src="/tokenlist.svg" />
@@ -238,7 +232,7 @@ export default function CurrencyList({
                 </RowFixed>
                 <QuestionHelper text="Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists." />
               </RowBetween>
-            </LightGreyCard>
+            </div>
           </FixedContentRow>
         );
       }

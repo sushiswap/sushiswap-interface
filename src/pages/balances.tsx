@@ -204,7 +204,7 @@ export function Deposit({
           <Button
             variant="outlined"
             color="blue"
-            size="small"
+            size="xs"
             onClick={() => {
               setValue(balance.value.toFixed(balance.decimals));
             }}
@@ -288,7 +288,7 @@ function Withdraw({
           <Button
             variant="outlined"
             color="pink"
-            size="small"
+            size="xs"
             onClick={() => {
               setValue(balance.value.toFixed(balance.decimals));
             }}

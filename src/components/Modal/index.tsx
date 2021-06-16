@@ -10,13 +10,12 @@ import { transparentize } from "polished";
 import { useGesture } from "react-use-gesture";
 
 const AnimatedDialogOverlay = animated(DialogOverlay);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
   &[data-reach-dialog-overlay] {
     z-index: 10;
     background-color: transparent;
     overflow: hidden;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,60 +26,54 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
 
 const AnimatedDialogContent = animated(DialogContent);
 // destructure to not pass custom props to Dialog DOM element
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const StyledDialogContent = styled(
-  ({ minHeight, maxHeight, mobile, isOpen, ...rest }) => (
+  ({ minHeight, maxHeight, maxWidth, mobile, isOpen, ...rest }) => (
     <AnimatedDialogContent {...rest} />
   )
 ).attrs({
   "aria-label": "dialog",
 })`
+  overflow-y: ${({ mobile }) => (mobile ? "scroll" : "hidden")};
+
+  &[data-reach-dialog-content] {
+    display: flex;
+    align-self: ${({ mobile }) => (mobile ? "flex-end" : "center")};
+    margin: 4rem 0.5rem;
+    padding: 0;
+    background-color: #000;
+    box-shadow: 0 4px 8px 0 ${() => transparentize(0.95, "#000")};
+
+    width: 100vw;
+    border-radius: 10px;
     overflow-y: ${({ mobile }) => (mobile ? "scroll" : "hidden")};
+    overflow-x: hidden;
 
-    &[data-reach-dialog-content] {
-        margin: 0 0 2rem 0;
-        background-color: #000;
-        box-shadow: 0 4px 8px 0 ${() => transparentize(0.95, "#000")};
-        padding: 0px;
-        width: 50vw;
-        overflow-y: ${({ mobile }) => (mobile ? "scroll" : "hidden")};
-        overflow-x: hidden;
+    ${({ maxWidth }) =>
+      maxWidth &&
+      css`
+        max-width: ${maxWidth}px;
+      `}
 
-        align-self: ${({ mobile }) => (mobile ? "flex-end" : "center")};
+    ${({ maxHeight }) =>
+      maxHeight &&
+      css`
+        max-height: ${maxHeight}vh;
+      `}
 
-        max-width: 420px;
-
-        ${({ maxHeight }) =>
-          maxHeight &&
-          css`
-            max-height: ${maxHeight}vh;
-          `}
-
-        ${({ minHeight }) =>
-          minHeight &&
-          css`
-            min-height: ${minHeight}vh;
-          `}
+    ${({ minHeight }) =>
+      minHeight &&
+      css`
+        min-height: ${minHeight}vh;
+      `}
             
-        display: flex;
-        border-radius: 10px;
 
-        @media (min-width: 640px) {
-            width: 65vw;
-            margin: 0;
-        }
 
-        @media (min-width: 768px) {
-            width: 85vw;
-            ${({ mobile }) =>
-              mobile &&
-              css`
-                width: 100vw;
-                border-radius: 10px;
-                border-bottom-left-radius: 0;
-                border-bottom-right-radius: 0;
-              `}
+    @media (min-width: 640px) {
+      width: 65vw;
+      margin: 0;
     }
+  }
 `;
 
 interface ModalProps {
@@ -91,6 +84,8 @@ interface ModalProps {
   initialFocusRef?: React.RefObject<any>;
   children?: React.ReactNode;
   padding?: number;
+  maxWidth?: number;
+  className?: string;
 }
 
 export default function Modal({
@@ -101,6 +96,7 @@ export default function Modal({
   initialFocusRef,
   children,
   padding = 5,
+  maxWidth = 420,
 }: ModalProps) {
   const fadeTransition = useTransition(isOpen, null, {
     config: { duration: 200 },
@@ -152,6 +148,7 @@ export default function Modal({
                 aria-label="dialog content"
                 minHeight={minHeight}
                 maxHeight={maxHeight}
+                maxWidth={maxWidth}
                 mobile={isMobile}
               >
                 <div className="w-full p-px rounded bg-gradient-to-r from-blue to-pink">

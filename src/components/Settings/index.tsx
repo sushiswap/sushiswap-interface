@@ -93,7 +93,7 @@ export default function SettingsTab() {
       {open && (
         <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded">
           <div className="p-8 space-y-4">
-            <Typography variant="h5" className="text-high-emphesis">
+            <Typography variant="h3" className="text-high-emphesis">
               {i18n._(t`Transaction Settings`)}
             </Typography>
 
@@ -102,17 +102,15 @@ export default function SettingsTab() {
               setRawSlippage={setUserslippageTolerance}
               deadline={ttl}
               setDeadline={setTtl}
-              useArcher={userUseArcher}
-              setUseArcher={setUserUseArcher}
             />
 
-            <Typography variant="body" className="text-high-emphesis">
+            <Typography variant="lg" className="text-high-emphesis">
               {i18n._(t`Interface Settings`)}
             </Typography>
 
             <RowBetween>
               <RowFixed>
-                <Typography variant="caption2" className="text-high-emphesis">
+                <Typography variant="sm" className="text-primary">
                   {i18n._(t`Toggle Expert Mode`)}
                 </Typography>
                 <QuestionHelper
@@ -139,7 +137,7 @@ export default function SettingsTab() {
             </RowBetween>
             <RowBetween>
               <RowFixed>
-                <Typography variant="caption2" className="text-high-emphesis">
+                <Typography variant="sm" className="text-primary">
                   {i18n._(t`Disable Multihops`)}
                 </Typography>
                 <QuestionHelper
@@ -156,6 +154,23 @@ export default function SettingsTab() {
                 }
               />
             </RowBetween>
+            <RowBetween>
+              <RowFixed>
+                <Typography variant="sm" className="text-primary">
+                  {i18n._(t`MEV Shield by Archer DAO`)}
+                </Typography>
+                <QuestionHelper
+                  text={i18n._(
+                    t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
+                  )}
+                />
+              </RowFixed>
+              <Toggle
+                id="toggle-use-archer"
+                isActive={userUseArcher}
+                toggle={() => setUserUseArcher(!userUseArcher)}
+              />
+            </RowBetween>
           </div>
         </div>
       )}
@@ -169,16 +184,16 @@ export default function SettingsTab() {
             title={i18n._(t`Are you sure?`)}
             onClose={() => setShowConfirmation(false)}
           />
-          <Typography variant="body">
+          <Typography variant="lg">
             {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
           </Typography>
-          <Typography variant="caption" className="font-medium">
+          <Typography variant="sm" className="font-medium">
             {i18n._(t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`)}
           </Typography>
           <Button
             color="red"
-            size="large"
+            size="lg"
             onClick={() => {
               if (
                 window.prompt(
@@ -192,7 +207,7 @@ export default function SettingsTab() {
               }
             }}
           >
-            <Typography variant="body" id="confirm-expert-mode">
+            <Typography variant="lg" id="confirm-expert-mode">
               {i18n._(t`Turn On Expert Mode`)}
             </Typography>
           </Button>

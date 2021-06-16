@@ -8,7 +8,7 @@ export const Column: FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...rest
 }) => (
   <div
-    className={classNames("flex flex-col justify-start", className)}
+    className={classNames("flex flex-col justify-center", className)}
     {...rest}
   >
     {children}

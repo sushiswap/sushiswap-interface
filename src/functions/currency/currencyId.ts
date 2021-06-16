@@ -1,4 +1,4 @@
-import { ChainId, Currency, Token } from "@sushiswap/sdk";
+import { ChainId, Currency, Token, WETH } from "@sushiswap/sdk";
 
 export function currencyId(
   currency: Currency,

@@ -1,8 +1,7 @@
 import { AppDispatch, AppState } from "../../state";
-import { ButtonEmpty, ButtonPrimary } from "../ButtonLegacy";
 import { CheckCircle, Settings } from "react-feather";
 import Column, { AutoColumn } from "../Column";
-import { PaddedColumn, SearchInput, Separator, SeparatorDark } from "./styleds";
+import { PaddedColumn, SeparatorDark } from "./styleds";
 import React, {
   memo,
   useCallback,
@@ -26,7 +25,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import AutoSizer from "react-virtualized-auto-sizer";
-import Card from "../Card";
+import Button from "../Button";
 import CurrencyModalView from "./CurrencyModalView";
 import ExternalLink from "../ExternalLink";
 import IconWrapper from "../IconWrapper";
@@ -124,7 +123,7 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
 
   const [open, toggle] = useToggle(false);
   const node = useRef<HTMLDivElement>();
-  const [referenceElement, setReferenceElement] = useState<HTMLDivElement>();
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement>();
   const [popperElement, setPopperElement] = useState<HTMLDivElement>();
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -214,9 +213,14 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
             {list.tokens.length} tokens
           </StyledListUrlText>
           <StyledMenu ref={node as any}>
-            <ButtonEmpty onClick={toggle} ref={setReferenceElement} padding="0">
+            <Button
+              variant="empty"
+              onClick={toggle}
+              ref={setReferenceElement}
+              style={{ padding: "0" }}
+            >
               <Settings size={12} className="ml-1 stroke-current" />
-            </ButtonEmpty>
+            </Button>
             {open && (
               <PopoverContainer
                 show={true}
@@ -377,7 +381,7 @@ function ManageLists({
         id="list-add-input"
         type="text"
         placeholder="https:// or ipfs:// or ENS name"
-        className="mt-4 w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5 appearance-none"
+        className="mt-4 w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5 appearance-none"
         value={listUrlInput}
         onChange={handleInput}
         title="List URI"
@@ -394,36 +398,37 @@ function ManageLists({
       ) : null}
       {tempList && (
         <PaddedColumn style={{ paddingTop: 0 }}>
-          <Card>
-            <RowBetween>
-              <RowFixed>
-                {tempList.logoURI && (
-                  <ListLogo logoURI={tempList.logoURI} size="40px" />
-                )}
-                <AutoColumn gap="4px" style={{ marginLeft: "20px" }}>
-                  <div className="font-semibold">{tempList.name}</div>
-                  <div className="text-xs">{tempList.tokens.length} tokens</div>
-                </AutoColumn>
-              </RowFixed>
-              {isImported ? (
-                <RowFixed>
-                  <IconWrapper size="16px" marginRight={"10px"}>
-                    <CheckCircle />
-                  </IconWrapper>
-                  <div>Loaded</div>
-                </RowFixed>
-              ) : (
-                <ButtonPrimary
-                  style={{ fontSize: "14px" }}
-                  padding="6px 8px"
-                  width="fit-content"
-                  onClick={handleImport}
-                >
-                  Import
-                </ButtonPrimary>
+          <RowBetween>
+            <RowFixed>
+              {tempList.logoURI && (
+                <ListLogo logoURI={tempList.logoURI} size="40px" />
               )}
-            </RowBetween>
-          </Card>
+              <AutoColumn gap="4px" style={{ marginLeft: "20px" }}>
+                <div className="font-semibold">{tempList.name}</div>
+                <div className="text-xs">{tempList.tokens.length} tokens</div>
+              </AutoColumn>
+            </RowFixed>
+            {isImported ? (
+              <RowFixed>
+                <IconWrapper size="16px" marginRight={"10px"}>
+                  <CheckCircle />
+                </IconWrapper>
+                <div>Loaded</div>
+              </RowFixed>
+            ) : (
+              <Button
+                color="gradient"
+                style={{
+                  width: "fit-content",
+                  padding: "6px 8px",
+                  fontSize: "14px",
+                }}
+                onClick={handleImport}
+              >
+                Import
+              </Button>
+            )}
+          </RowBetween>
         </PaddedColumn>
       )}
       <ListContainer>

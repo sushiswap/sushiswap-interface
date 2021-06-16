@@ -118,9 +118,9 @@ export default function CurrencyInputPanel({
     setModalOpen(false);
   }, [setModalOpen]);
 
-  const currencyUSDC = useUSDCPrice(currency ? currency : undefined)?.toFixed(
-    18
-  );
+  const currencyUSDC = useUSDCPrice(
+    currency && chainId in USDC ? currency : undefined
+  )?.toFixed(18);
   const valueUSDC = formatNumber(Number(value) * Number(currencyUSDC));
 
   if (variant === CurrencyInputPanelVariant.limit) {
@@ -372,7 +372,7 @@ export default function CurrencyInputPanel({
               {account && currency && showMaxButton && label !== "To" && (
                 <Button
                   onClick={onMax}
-                  size="small"
+                  size="xs"
                   className="text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap"
                 >
                   {i18n._(t`Max`)}

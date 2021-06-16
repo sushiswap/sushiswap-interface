@@ -8,12 +8,11 @@ import {
   warningSeverity,
 } from "../../functions";
 
-import { ButtonError } from "../../components/ButtonLegacy";
+import { ButtonError } from "../../components/Button";
 import { Field } from "../../state/swap/actions";
 import FormattedPriceImpact from "./FormattedPriceImpact";
 import QuestionHelper from "../../components/QuestionHelper";
 import { Repeat } from "react-feather";
-import { Text } from "rebass";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import { useLingui } from "@lingui/react";
@@ -125,9 +124,7 @@ export default function SwapModalFooter({
         error={severity > 2}
         id="confirm-swap-or-send"
       >
-        <Text fontSize={20} fontWeight={500}>
-          {severity > 2 ? i18n._(t`Swap Anyway`) : i18n._(t`Confirm Swap`)}
-        </Text>
+        {severity > 2 ? i18n._(t`Swap Anyway`) : i18n._(t`Confirm Swap`)}
       </ButtonError>
 
       {swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}

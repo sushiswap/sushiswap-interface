@@ -9,7 +9,7 @@ export default function Tokens() {
         <title>Token Analytics | Sushi</title>
         <meta name="description" content="Token Analytics by Sushi" />
       </Head>
-      <Typography variant="h4" component="h1" className="text-high-emphesis">
+      <Typography variant="h2" component="h1" className="text-high-emphesis">
         Tokens
       </Typography>
     </Layout>

@@ -1,24 +1,24 @@
-import { CHAINLINK_MAPPING, CHAINLINK_TOKENS } from "../constants/chainlink";
-import { CHAINLINK_ORACLE_ADDRESS, KASHI_ADDRESS } from "../constants/kashi";
+import { CHAINLINK_MAPPING, CHAINLINK_TOKENS } from "../../constants/chainlink";
+import { CHAINLINK_ORACLE_ADDRESS, KASHI_ADDRESS } from "../../constants/kashi";
 import { Currency, Token } from "@sushiswap/sdk";
 import { Listbox, Transition } from "@headlessui/react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import Button from "../components/Button";
-import Card from "../components/Card";
-import CardHeader from "../components/CardHeader";
-import CurrencyLogo from "../components/CurrencyLogo";
+import Button from "../../components/Button";
+import Card from "../../components/Card";
+import CardHeader from "../../components/CardHeader";
+import CurrencyLogo from "../../components/CurrencyLogo";
 import Head from "next/head";
 import Image from "next/image";
-import Layout from "../layouts/KashiLayout";
-import { WrappedTokenInfo } from "../state/lists/hooks";
-import { e10 } from "../functions/math";
+import Layout from "../../layouts/KashiLayout";
+import { WrappedTokenInfo } from "../../state/lists/hooks";
+import { e10 } from "../../functions/math";
 import { ethers } from "ethers";
-import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
-import { useAllTokens } from "../hooks/Tokens";
-import { useBentoBoxContract } from "../hooks/useContract";
+import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
+import { useAllTokens } from "../../hooks/Tokens";
+import { useBentoBoxContract } from "../../hooks/useContract";
 import { useRouter } from "next/router";
-import { useTransactionAdder } from "../state/transactions/hooks";
+import { useTransactionAdder } from "../../state/transactions/hooks";
 
 export type ChainlinkToken = {
   symbol: string;
@@ -49,6 +49,71 @@ export default function Create() {
   // const tokens: ChainlinkToken[] = CHAINLINK_TOKENS[chainId || 1] || []
   // const empty = { symbol: '', name: 'Select a token', address: '0', decimals: 0 }
 
+  const getOracleData = useCallback(
+    async (asset: WrappedTokenInfo, collateral: WrappedTokenInfo) => {
+      const oracleData = "";
+
+      const mapping = CHAINLINK_MAPPING[chainId || 1] || {};
+
+      for (const address in mapping) {
+        mapping[address].address = address;
+      }
+
+      let multiply = ethers.constants.AddressZero;
+      let divide = ethers.constants.AddressZero;
+      const multiplyMatches = Object.values(mapping).filter(
+        (m) => m.from === asset.address && m.to === collateral.address
+      );
+
+      let decimals = 0;
+      if (multiplyMatches.length) {
+        const match = multiplyMatches[0];
+        multiply = match.address!;
+        decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals;
+      } else {
+        const divideMatches = Object.values(mapping).filter(
+          (m) => m.from === collateral.address && m.to === asset.address
+        );
+        if (divideMatches.length) {
+          const match = divideMatches[0];
+          divide = match.address!;
+          decimals =
+            36 - match.decimals - match.toDecimals + match.fromDecimals;
+        } else {
+          const mapFrom = Object.values(mapping).filter(
+            (m) => m.from === asset.address
+          );
+          const mapTo = Object.values(mapping).filter(
+            (m) => m.from === collateral.address
+          );
+          const match = mapFrom
+            .map((mfrom) => ({
+              mfrom: mfrom,
+              mto: mapTo.filter((mto) => mfrom.to === mto.to),
+            }))
+            .filter((path) => path.mto.length);
+          if (match.length) {
+            multiply = match[0].mfrom.address!;
+            divide = match[0].mto[0].address!;
+            decimals =
+              18 +
+              match[0].mfrom.decimals -
+              match[0].mto[0].decimals -
+              collateral.decimals +
+              asset.decimals;
+          } else {
+            return "";
+          }
+        }
+      }
+      return ethers.utils.defaultAbiCoder.encode(
+        ["address", "address", "uint256"],
+        [multiply, divide, e10(decimals)]
+      );
+    },
+    [chainId]
+  );
+
   useEffect(() => {
     if (
       selectedAsset &&
@@ -59,71 +124,7 @@ export default function Create() {
     ) {
       setSelectedCollateral(undefined);
     }
-  }, [selectedAsset]);
-
-  const getOracleData = async (
-    asset: WrappedTokenInfo,
-    collateral: WrappedTokenInfo
-  ) => {
-    const oracleData = "";
-
-    const mapping = CHAINLINK_MAPPING[chainId || 1] || {};
-
-    for (const address in mapping) {
-      mapping[address].address = address;
-    }
-
-    let multiply = ethers.constants.AddressZero;
-    let divide = ethers.constants.AddressZero;
-    const multiplyMatches = Object.values(mapping).filter(
-      (m) => m.from === asset.address && m.to === collateral.address
-    );
-
-    let decimals = 0;
-    if (multiplyMatches.length) {
-      const match = multiplyMatches[0];
-      multiply = match.address!;
-      decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals;
-    } else {
-      const divideMatches = Object.values(mapping).filter(
-        (m) => m.from === collateral.address && m.to === asset.address
-      );
-      if (divideMatches.length) {
-        const match = divideMatches[0];
-        divide = match.address!;
-        decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals;
-      } else {
-        const mapFrom = Object.values(mapping).filter(
-          (m) => m.from === asset.address
-        );
-        const mapTo = Object.values(mapping).filter(
-          (m) => m.from === collateral.address
-        );
-        const match = mapFrom
-          .map((mfrom) => ({
-            mfrom: mfrom,
-            mto: mapTo.filter((mto) => mfrom.to === mto.to),
-          }))
-          .filter((path) => path.mto.length);
-        if (match.length) {
-          multiply = match[0].mfrom.address!;
-          divide = match[0].mto[0].address!;
-          decimals =
-            18 +
-            match[0].mfrom.decimals -
-            match[0].mto[0].decimals -
-            collateral.decimals +
-            asset.decimals;
-        } else {
-          return "";
-        }
-      }
-    }
-    return ethers.utils.defaultAbiCoder.encode(
-      ["address", "address", "uint256"],
-      [multiply, divide, e10(decimals)]
-    );
-  };
+  }, [getOracleData, selectedAsset, selectedCollateral]);
 
   // const assetTokens = Object.values(tokens).filter((token: Token) => {
   //     return true

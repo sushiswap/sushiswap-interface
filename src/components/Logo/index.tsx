@@ -1,24 +1,23 @@
+import { HelpCircle, Icon, IconProps } from "react-feather";
 import React, { FC, useState } from "react";
 
-import { HelpCircle } from "react-feather";
-// import Image from 'next/image'
 import Image from "../Image";
-import { ImageProps } from "rebass";
+import { ImageProps } from "next/image";
 import { cloudinaryLoader } from "../../functions/cloudinary";
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {};
 
-export interface LogoProps
-  extends Pick<ImageProps, "style" | "alt" | "className"> {
+export type LogoProps = {
   srcs: string[];
   width: string | number;
   height: string | number;
-}
+  alt?: string;
+} & IconProps;
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
-const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
+const Logo: FC<LogoProps> = ({ srcs, width, height, alt = "", ...rest }) => {
   const [, refresh] = useState<number>(0);
   const src = srcs.find((src) => !BAD_SRCS[src]);
 
@@ -31,6 +30,11 @@ const Logo: FC<LogoProps> = ({ srcs, ...rest }) => {
           if (src) BAD_SRCS[src] = true;
           refresh((i) => i + 1);
         }}
+        width={width}
+        height={height}
+        alt={alt}
+        layout="fixed"
+        style={{ minWidth: width, minHeight: height }}
         {...rest}
       />
     );

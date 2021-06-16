@@ -1,28 +1,17 @@
-import { PaddedColumn, Separator } from "./styleds";
 import React, { useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
-import { ArrowLeft } from "react-feather";
-import CloseIcon from "../CloseIcon";
 import Column from "../Column";
 import CurrencyModalView from "./CurrencyModalView";
 import ManageLists from "./ManageLists";
 import ManageTokens from "./ManageTokens";
 import ModalHeader from "../ModalHeader";
-import { RowBetween } from "../Row";
-import { Text } from "rebass";
 import { Token } from "@sushiswap/sdk";
 import { TokenList } from "@uniswap/token-lists";
 import styled from "styled-components";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 
-// const Wrapper = styled.div`
-//     width: 100%;
-//     height: 100%;
-//     position: relative;
-//     padding-bottom: 80px;
-// `
 const ContentWrapper = styled(Column)`
   height: 100%;
   width: 100%;

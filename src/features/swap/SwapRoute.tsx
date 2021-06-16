@@ -1,7 +1,6 @@
 import React, { Fragment, memo } from "react";
 
 import { ChevronRight } from "react-feather";
-import { Flex } from "rebass";
 import { Trade } from "@sushiswap/sdk";
 import { unwrappedToken } from "../../functions/currency/wrappedCurrency";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
@@ -9,12 +8,7 @@ import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 export default memo(({ trade }: { trade: Trade }) => {
   const { chainId } = useActiveWeb3React();
   return (
-    <Flex
-      flexWrap="wrap"
-      width="100%"
-      justifyContent="flex-end"
-      alignItems="center"
-    >
+    <div className="flex flex-wrap items-center justify-end">
       {trade.route.path.map((token, i, path) => {
         const isLastItem: boolean = i === path.length - 1;
         const currency = unwrappedToken(token);
@@ -29,6 +23,6 @@ export default memo(({ trade }: { trade: Trade }) => {
           </Fragment>
         );
       })}
-    </Flex>
+    </div>
   );
 });

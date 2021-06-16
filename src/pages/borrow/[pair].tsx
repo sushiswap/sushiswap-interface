@@ -1,4 +1,4 @@
-import { Borrow, Repay } from "../../features/borrow";
+import { Borrow, Repay } from "../../features/lending";
 import { KashiContext, useKashiPair } from "../../context";
 import React, { useCallback, useContext, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -45,7 +45,7 @@ export default function Pair() {
     addTransaction(result.tx, {
       summary: `Update ${pair.collateral.symbol}/${pair.asset.symbol} exchange rate`,
     });
-  }, [pair]);
+  }, [account, addTransaction, chainId, library, pair]);
 
   if (!pair)
     return info && info.blockTimeStamp.isZero() ? null : router.push("/borrow");

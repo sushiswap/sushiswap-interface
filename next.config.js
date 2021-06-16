@@ -29,9 +29,6 @@ module.exports = withBundleAnalyzer(
 
       return config;
     },
-    future: {
-      webpack5: true,
-    },
     images: {
       domains: ["assets.sushi.com", "res.cloudinary.com"],
       // loader: 'cloudinary',
@@ -44,6 +41,14 @@ module.exports = withBundleAnalyzer(
           source: "/",
           destination: "/swap",
           permanent: true,
+        },
+      ];
+    },
+    async rewrites() {
+      return [
+        {
+          source: "/create/:token*",
+          destination: "/add/:token*",
         },
       ];
     },

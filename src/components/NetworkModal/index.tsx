@@ -6,6 +6,7 @@ import {
 
 import { ApplicationModal } from "../../state/application/actions";
 import { ChainId } from "@sushiswap/sdk";
+import Image from "next/image";
 import Modal from "../Modal";
 import ModalHeader from "../ModalHeader";
 import React from "react";
@@ -135,6 +136,17 @@ const PARAMS: {
     rpcUrls: ["https://arb1.arbitrum.io/rpc"],
     blockExplorerUrls: ["https://mainnet-arb-explorer.netlify.app"],
   },
+  [ChainId.CELO]: {
+    chainId: "0xA4EC",
+    chainName: "Celo",
+    nativeCurrency: {
+      name: "Celo",
+      symbol: "CELO",
+      decimals: 18,
+    },
+    rpcUrls: ["https://forno.celo.org"],
+    blockExplorerUrls: ["https://explorer.celo.org"],
+  },
 };
 
 export default function NetworkModal(): JSX.Element | null {
@@ -145,7 +157,11 @@ export default function NetworkModal(): JSX.Element | null {
   if (!chainId) return null;
 
   return (
-    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
+    <Modal
+      isOpen={networkModalOpen}
+      onDismiss={toggleNetworkModal}
+      maxWidth={768}
+    >
       <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
       <div className="mb-6 text-lg text-primary">
         You are currently browsing{" "}
@@ -157,7 +173,7 @@ export default function NetworkModal(): JSX.Element | null {
         network
       </div>
 
-      <div className="flex flex-col space-y-5 overflow-y-auto">
+      <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
         {[
           ChainId.MAINNET,
           ChainId.MATIC,
@@ -169,18 +185,21 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.XDAI,
           ChainId.HARMONY,
           ChainId.AVALANCHE,
+          ChainId.CELO,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (
               <button
                 key={i}
-                className="w-full p-px rounded bg-gradient-to-r from-blue to-pink"
+                className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink"
               >
-                <div className="flex items-center w-full h-full p-3 rounded bg-dark-1000">
-                  <img
+                <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
+                  <Image
                     src={NETWORK_ICON[key]}
                     alt="Switch Network"
-                    className="w-8 h-8 mr-3 rounded-md"
+                    className="rounded-md"
+                    width="32px"
+                    height="32px"
                   />
                   <div className="font-bold text-primary">
                     {NETWORK_LABEL[key]}
@@ -198,12 +217,14 @@ export default function NetworkModal(): JSX.Element | null {
                 cookie.set("chainId", key);
                 library?.send("wallet_addEthereumChain", [params, account]);
               }}
-              className="flex items-center w-full p-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+              className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
             >
-              <img
+              <Image
                 src={NETWORK_ICON[key]}
                 alt="Switch Network"
-                className="w-8 h-8 mr-2 rounded-md"
+                className="rounded-md"
+                width="32px"
+                height="32px"
               />
               <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
             </button>

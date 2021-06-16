@@ -1,15 +1,8 @@
-import { AutoRow, RowBetween, RowFixed } from "../Row";
-import {
-  ButtonEmpty,
-  ButtonPrimary,
-  ButtonPrimaryNormal,
-} from "../ButtonLegacy";
-import Card, { LightCard } from "../CardLegacy";
-import { ChevronDown, ChevronUp } from "react-feather";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import { Fraction, JSBI, Pair, Percent, TokenAmount } from "@sushiswap/sdk";
 import React, { useState } from "react";
+import { RowBetween, RowFixed } from "../Row";
 import { currencyId, unwrappedToken } from "../../functions/currency";
-import { darken, transparentize } from "polished";
 
 import { AutoColumn } from "../Column";
 import { BIG_INT_ZERO } from "../../constants";
@@ -17,40 +10,14 @@ import Button from "../Button";
 import CurrencyLogo from "../CurrencyLogo";
 import Dots from "../Dots";
 import DoubleCurrencyLogo from "../DoubleLogo";
-import Link from "next/link";
-import { Text } from "rebass";
 import { shortenString } from "../../functions/format";
 import styled from "styled-components";
 import { t } from "@lingui/macro";
 import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useColor } from "../../hooks/useColor";
 import { useLingui } from "@lingui/react";
 import { useRouter } from "next/router";
 import { useTokenBalance } from "../../state/wallet/hooks";
 import { useTotalSupply } from "../../hooks/useTotalSupply";
-
-export const FixedHeightRow = styled(RowBetween)`
-  height: 24px;
-`;
-
-export const HoverCard = styled(Card)`
-  border: 1px solid transparent;
-  :hover {
-    border: 1px solid ${({ theme }) => darken(0.06, theme.bg2)};
-  }
-`;
-const StyledPositionCard = styled(LightCard)<{ bgColor: any }>`
-  /* border: 1px solid ${({ theme }) => theme.text4}; */
-  border: none
-//   background: ${({ theme }) => transparentize(0.6, theme.bg1)};
-  /* background: ${({ theme, bgColor }) =>
-    `radial-gradient(91.85% 100% at 1.84% 0%, ${transparentize(
-      0.8,
-      bgColor
-    )} 0%, ${theme.bg3} 100%) `}; */
-  position: relative;
-  overflow: hidden;
-`;
 
 interface PositionCardProps {
   pair: Pair;
@@ -123,9 +90,7 @@ export function MinimalPositionCard({
       JSBI.greaterThan(userPoolBalance.raw, JSBI.BigInt(0)) ? (
         <div className="p-5 rounded bg-dark-800">
           <AutoColumn gap={"md"}>
-            <Text fontWeight={400} fontSize={18}>
-              Your Position
-            </Text>
+            Your Position
             <div className="flex flex-col md:flex-row md:justify-between">
               <div className="flex items-center">
                 <DoubleCurrencyLogo
@@ -133,75 +98,55 @@ export function MinimalPositionCard({
                   currency1={pair.token1}
                   size={42}
                 />
-                <Text fontWeight={500} fontSize={24} className={"ml-3"}>
+                <div className="ml-3 text-2xl font-semibold">
                   {shortenString(
                     `${pair.token0.getSymbol(chainId)}/${pair.token1.getSymbol(
                       chainId
                     )}`,
                     8
                   )}
-                </Text>
+                </div>
               </div>
               <div className="flex items-center mt-3 md:mt-0">
-                <Text fontSize={16} fontWeight={400}>
-                  {userPoolBalance ? formatBalance() : "-"}
-                </Text>
-                <Text fontSize={16} fontWeight={400} color={"#7F7F7F"}>
-                  &nbsp;
-                  {i18n._(t`Pool Tokens`)}
-                </Text>
+                {userPoolBalance ? formatBalance() : "-"}
+                &nbsp;
+                {i18n._(t`Pool Tokens`)}
               </div>
             </div>
             <div className="flex flex-col w-full p-3 mt-3 space-y-1 rounded bg-dark-900 text-high-emphesis">
               <RowBetween>
-                <Text fontSize={14} fontWeight={400}>
-                  {i18n._(t`Your pool share`)}
-                </Text>
-                <Text fontSize={14} fontWeight={700}>
+                <div className="text-sm">{i18n._(t`Your pool share`)}</div>
+                <div className="text-sm font-bold">
                   {poolTokenPercentage
                     ? poolTokenPercentage.toFixed(6) + "%"
                     : "-"}
-                </Text>
+                </div>
               </RowBetween>
               <RowBetween>
-                <Text fontSize={14} fontWeight={400}>
+                <div className="text-sm">
                   Supplied {currency0.getSymbol(chainId)}:
-                </Text>
+                </div>
                 {token0Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={400}>
-                      {token0Deposited?.toSignificant(6)}
-                    </Text>
-                    <Text
-                      fontSize={14}
-                      fontWeight={700}
-                      marginLeft={"3px"}
-                      className={"text-secondary"}
-                    >
+                    <div>{token0Deposited?.toSignificant(6)}</div>
+                    <div className="ml-2 text-sm font-bold text-secondary">
                       {currency0.getSymbol(chainId)}
-                    </Text>
+                    </div>
                   </RowFixed>
                 ) : (
                   "-"
                 )}
               </RowBetween>
               <RowBetween>
-                <Text fontSize={14} fontWeight={400}>
+                <div className="text-sm">
                   Supplied {currency1.getSymbol(chainId)}:
-                </Text>
+                </div>
                 {token1Deposited ? (
                   <RowFixed>
-                    <Text fontSize={16} fontWeight={400}>
-                      {token1Deposited?.toSignificant(6)}
-                    </Text>
-                    <Text
-                      fontSize={14}
-                      fontWeight={700}
-                      marginLeft={"3px"}
-                      className={"text-secondary"}
-                    >
+                    <div>{token1Deposited?.toSignificant(6)}</div>
+                    <div className="ml-2 text-sm font-bold text-secondary">
                       {currency1.getSymbol(chainId)}
-                    </Text>
+                    </div>
                   </RowFixed>
                 ) : (
                   "-"
@@ -280,165 +225,147 @@ export default function FullPositionCard({
         ]
       : [undefined, undefined];
 
-  const backgroundColor = useColor(pair?.token0);
-
   return (
-    <div className="my-4">
-      <AutoColumn gap="12px">
-        <FixedHeightRow>
-          <AutoRow gap="8px">
-            <DoubleCurrencyLogo
-              currency0={currency0}
-              currency1={currency1}
-              size={20}
-            />
-            <Text fontWeight={500} fontSize={20}>
-              {!currency0 || !currency1 ? (
-                <Dots>{i18n._(t`Loading`)}</Dots>
-              ) : (
-                `${currency0.getSymbol(chainId)}/${currency1.getSymbol(
-                  chainId
-                )}`
-              )}
-            </Text>
-          </AutoRow>
-          <RowFixed gap="8px">
-            <ButtonEmpty
-              padding="6px 8px"
-              borderRadius="20px"
-              width="fit-content"
-              onClick={() => setShowMore(!showMore)}
-            >
-              {showMore ? (
-                <>
-                  {i18n._(t`Manage`)}
-                  <ChevronUp size="20" style={{ marginLeft: "10px" }} />
-                </>
-              ) : (
-                <>
-                  {i18n._(t`Manage`)}
-                  <ChevronDown size="20" style={{ marginLeft: "10px" }} />
-                </>
-              )}
-            </ButtonEmpty>
-          </RowFixed>
-        </FixedHeightRow>
-
-        {showMore && (
-          <AutoColumn gap="8px">
-            <FixedHeightRow>
-              <Text fontSize={16} fontWeight={500}>
-                {i18n._(t`Your total pool tokens`)}:
-              </Text>
-              <Text fontSize={16} fontWeight={500}>
-                {userPoolBalance ? userPoolBalance.toSignificant(4) : "-"}
-              </Text>
-            </FixedHeightRow>
-            {stakedBalance && (
-              <FixedHeightRow>
-                <Text fontSize={16} fontWeight={500}>
-                  {i18n._(t`Pool tokens in rewards pool`)}:
-                </Text>
-                <Text fontSize={16} fontWeight={500}>
-                  {stakedBalance.toSignificant(4)}
-                </Text>
-              </FixedHeightRow>
+    <div className="rounded ">
+      <Button
+        variant="empty"
+        className="flex items-center justify-between w-full px-4 py-6 cursor-pointer bg-dark-800 hover:bg-dark-700"
+        style={{ boxShadow: "none" }}
+        onClick={() => setShowMore(!showMore)}
+      >
+        <div className="flex items-center space-x-4">
+          <DoubleCurrencyLogo
+            currency0={currency0}
+            currency1={currency1}
+            size={20}
+          />
+          <div className="text-xl font-semibold">
+            {!currency0 || !currency1 ? (
+              <Dots>{i18n._(t`Loading`)}</Dots>
+            ) : (
+              `${currency0.getSymbol(chainId)}/${currency1.getSymbol(chainId)}`
             )}
-            <FixedHeightRow>
-              <RowFixed>
-                <Text fontSize={16} fontWeight={500}>
-                  {i18n._(t`Pooled ${currency0?.getSymbol(chainId)}`)}:
-                </Text>
-              </RowFixed>
-              {token0Deposited ? (
-                <RowFixed>
-                  <Text fontSize={16} fontWeight={500} marginLeft={"6px"}>
-                    {token0Deposited?.toSignificant(6)}
-                  </Text>
-                  <div style={{ marginLeft: "8px" }}>
-                    <CurrencyLogo size="20px" currency={currency0} />
-                  </div>
-                </RowFixed>
-              ) : (
-                "-"
-              )}
-            </FixedHeightRow>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          {i18n._(t`Manage`)}
+          {showMore ? (
+            <ChevronUpIcon width="20px" height="20px" className="ml-4" />
+          ) : (
+            <ChevronDownIcon width="20px" height="20px" className="ml-4" />
+          )}
+        </div>
+      </Button>
 
-            <FixedHeightRow>
-              <RowFixed>
-                <Text fontSize={16} fontWeight={500}>
-                  {i18n._(t`Pooled ${currency1?.getSymbol(chainId)}`)}:
-                </Text>
-              </RowFixed>
-              {token1Deposited ? (
-                <RowFixed>
-                  <Text fontSize={16} fontWeight={500} marginLeft={"6px"}>
-                    {token1Deposited?.toSignificant(6)}
-                  </Text>
-                  <div style={{ marginLeft: "8px" }}>
-                    <CurrencyLogo size="20px" currency={currency1} />
-                  </div>
-                </RowFixed>
-              ) : (
-                "-"
-              )}
-            </FixedHeightRow>
-
-            <FixedHeightRow>
-              <Text fontSize={16} fontWeight={500}>
-                {i18n._(t`Your pool share`)}:
-              </Text>
-              <Text fontSize={16} fontWeight={500}>
-                {poolTokenPercentage
-                  ? (poolTokenPercentage.toFixed(2) === "0.00"
-                      ? "<0.01"
-                      : poolTokenPercentage.toFixed(2)) + "%"
-                  : "-"}
-              </Text>
-            </FixedHeightRow>
-
-            {/* <ButtonSecondary padding="8px" borderRadius="8px">
-              <ExternalLink
-                style={{ width: '100%', textAlign: 'center' }}
-                href={`https://uniswap.info/account/${account}`}
-              >
-                View accrued fees and analytics<span style={{ fontSize: '11px' }}>↗</span>
-              </ExternalLink>
-            </ButtonSecondary> */}
-            {userDefaultPoolBalance &&
-              JSBI.greaterThan(userDefaultPoolBalance.raw, BIG_INT_ZERO) && (
-                <div className="grid grid-cols-2 gap-4 mt-4">
-                  <Button
-                    color="blue"
-                    onClick={() => {
-                      router.push(
-                        `/add/${currencyId(currency0, chainId)}/${currencyId(
-                          currency1,
-                          chainId
-                        )}`
-                      );
-                    }}
-                  >
-                    {i18n._(t`Add`)}
-                  </Button>
-                  <Button
-                    color="blue"
-                    onClick={() => {
-                      router.push(
-                        `/remove/${currencyId(currency0, chainId)}/${currencyId(
-                          currency1,
-                          chainId
-                        )}`
-                      );
-                    }}
-                  >
-                    {i18n._(t`Remove`)}
-                  </Button>
+      {showMore && (
+        <div className="px-4 py-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="font-semibold">
+              {i18n._(t`Your total pool tokens`)}:
+            </div>
+            <div className="font-semibold">
+              {userPoolBalance ? userPoolBalance.toSignificant(4) : "-"}
+            </div>
+          </div>
+          {stakedBalance && (
+            <div className="flex items-center justify-between">
+              <div className="font-semibold">
+                {i18n._(t`Pool tokens in rewards pool`)}:
+              </div>
+              <div className="font-semibold">
+                {stakedBalance.toSignificant(4)}
+              </div>
+            </div>
+          )}
+          <div className="flex items-center justify-between">
+            <div className="font-semibold">
+              {i18n._(t`Pooled ${currency0?.getSymbol(chainId)}`)}:
+            </div>
+            {token0Deposited ? (
+              <div className="flex items-center justify-between">
+                <div className="font-semibold ml-1.5">
+                  {token0Deposited?.toSignificant(6)}
                 </div>
-              )}
-          </AutoColumn>
-        )}
-      </AutoColumn>
+                <div style={{ marginLeft: "8px" }}>
+                  <CurrencyLogo size="20px" currency={currency0} />
+                </div>
+              </div>
+            ) : (
+              "-"
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="font-semibold">
+              {i18n._(t`Pooled ${currency1?.getSymbol(chainId)}`)}:
+            </div>
+            {token1Deposited ? (
+              <div className="flex items-center justify-between">
+                <div className="font-semibold ml-1.5">
+                  {token1Deposited?.toSignificant(6)}
+                </div>
+                <div style={{ marginLeft: "8px" }}>
+                  <CurrencyLogo size="20px" currency={currency1} />
+                </div>
+              </div>
+            ) : (
+              "-"
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="font-semibold">{i18n._(t`Your pool share`)}:</div>
+            <div className="font-semibold">
+              {poolTokenPercentage
+                ? (poolTokenPercentage.toFixed(2) === "0.00"
+                    ? "<0.01"
+                    : poolTokenPercentage.toFixed(2)) + "%"
+                : "-"}
+            </div>
+          </div>
+
+          {/* <ExternalLink
+              style={{ width: "100%", textAlign: "center" }}
+              href={`https://uniswap.info/account/${account}`}
+            >
+              View accrued fees and analytics
+              <span style={{ fontSize: "11px" }}>↗</span>
+            </ExternalLink> */}
+          {userDefaultPoolBalance &&
+            JSBI.greaterThan(userDefaultPoolBalance.raw, BIG_INT_ZERO) && (
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <Button
+                  color="blue"
+                  size="lg"
+                  onClick={() => {
+                    router.push(
+                      `/add/${currencyId(currency0, chainId)}/${currencyId(
+                        currency1,
+                        chainId
+                      )}`
+                    );
+                  }}
+                >
+                  {i18n._(t`Add`)}
+                </Button>
+                <Button
+                  color="blue"
+                  size="lg"
+                  onClick={() => {
+                    router.push(
+                      `/remove/${currencyId(currency0, chainId)}/${currencyId(
+                        currency1,
+                        chainId
+                      )}`
+                    );
+                  }}
+                >
+                  {i18n._(t`Remove`)}
+                </Button>
+              </div>
+            )}
+        </div>
+      )}
     </div>
   );
 }

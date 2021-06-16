@@ -11,17 +11,17 @@ import {
   ArrowWrapper,
   BottomGrouping,
   SwapCallbackError,
-  Wrapper,
 } from "../../features/swap/styleds";
 import { AutoRow, RowBetween } from "../../components/Row";
+import { ButtonConfirmed, ButtonError } from "../../components/Button";
 import {
-  ButtonConfirmed,
-  ButtonError,
-  ButtonLight,
-  ButtonPrimary,
-} from "../../components/ButtonLegacy";
-import Card, { DarkCard, GreyCard } from "../../components/CardLegacy";
-import { ChainId, CurrencyAmount, JSBI, Token, Trade } from "@sushiswap/sdk";
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Token,
+  Trade,
+} from "@sushiswap/sdk";
 import Column, { AutoColumn } from "../../components/Column";
 import React, {
   useCallback,
@@ -60,11 +60,11 @@ import useWrapCallback, { WrapType } from "../../hooks/useWrapCallback";
 import AddressInputPanel from "../../components/AddressInputPanel";
 import AdvancedSwapDetailsDropdown from "../../features/swap/AdvancedSwapDetailsDropdown";
 import { ArrowDown } from "react-feather";
+import Button from "../../components/Button";
 import ConfirmSwapModal from "../../features/swap/ConfirmSwapModal";
 import CurrencyInputPanel from "../../components/CurrencyInputPanel";
 import { Field } from "../../state/swap/actions";
 import Head from "next/head";
-import Image from "next/image";
 import Layout from "../../layouts/DefaultLayout";
 import LinkStyledButton from "../../components/LinkStyledButton";
 import Loader from "../../components/Loader";
@@ -73,12 +73,11 @@ import MinerTip from "../../components/MinerTip";
 import ProgressSteps from "../../components/ProgressSteps";
 import ReactGA from "react-ga";
 import SwapHeader from "../../components/ExchangeHeader";
-import { Text } from "rebass";
-import { ThemeContext } from "styled-components";
 import TokenWarningModal from "../../components/TokenWarningModal";
 import TradePrice from "../../features/swap/TradePrice";
 import Typography from "../../components/Typography";
 import UnsupportedCurrencyFooter from "../../features/swap/UnsupportedCurrencyFooter";
+import Web3Connect from "../../components/Web3Connect";
 import confirmPriceImpactWithoutFee from "../../features/swap/confirmPriceImpactWithoutFee";
 import { getRouterAddress } from "../../functions";
 import { maxAmountSpend } from "../../functions/currency";
@@ -89,6 +88,7 @@ import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
 import useENSAddress from "../../hooks/useENSAddress";
 import { useIsTransactionUnsupported } from "../../hooks/Trades";
 import { useLingui } from "@lingui/react";
+import usePrevious from "../../hooks/usePrevious";
 import { useRouter } from "next/router";
 import { useSwapCallback } from "../../hooks/useSwapCallback";
 
@@ -98,11 +98,14 @@ export default function Swap() {
   const toggleNetworkModal = useNetworkModalToggle();
 
   // TODO: Use?
-  // const router = useRouter()
-  // const tokens = router.query.tokens
-  // const [currencyIdA, currencyIdB] = tokens as string[]
-  // const currencyA = useCurrency(currencyIdA)
-  // const currencyB = useCurrency(currencyIdB)
+  const router = useRouter();
+  // const tokens = router.query.tokens;
+  // const [currencyIdA, currencyIdB] = (tokens as string[]) || [
+  //   Currency.getNativeCurrencySymbol(chainId),
+  //   undefined,
+  // ];
+  // const loadedInputCurrency = useCurrency(currencyIdA);
+  // const loadedOutputCurrency = useCurrency(currencyIdB);
 
   const loadedUrlParams = useDefaultsFromURLSearch();
 
@@ -111,6 +114,7 @@ export default function Swap() {
     useCurrency(loadedUrlParams?.inputCurrencyId),
     useCurrency(loadedUrlParams?.outputCurrencyId),
   ];
+
   const [dismissTokenWarning, setDismissTokenWarning] =
     useState<boolean>(false);
   const urlLoadedTokens: Token[] = useMemo(
@@ -159,6 +163,9 @@ export default function Swap() {
     currencies,
     inputError: swapInputError,
   } = useDerivedSwapInfo(doArcher);
+
+  console.log({ currencies });
+
   const {
     wrapType,
     execute: onWrap,
@@ -173,19 +180,31 @@ export default function Swap() {
 
   const trade = showWrap ? undefined : v2Trade;
 
-  const parsedAmounts = showWrap
-    ? {
-        [Field.INPUT]: parsedAmount,
-        [Field.OUTPUT]: parsedAmount,
-      }
-    : {
-        [Field.INPUT]:
-          independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-        [Field.OUTPUT]:
-          independentField === Field.OUTPUT
-            ? parsedAmount
-            : trade?.outputAmount,
-      };
+  const parsedAmounts = useMemo(
+    () =>
+      showWrap
+        ? {
+            [Field.INPUT]: parsedAmount,
+            [Field.OUTPUT]: parsedAmount,
+          }
+        : {
+            [Field.INPUT]:
+              independentField === Field.INPUT
+                ? parsedAmount
+                : trade?.inputAmount,
+            [Field.OUTPUT]:
+              independentField === Field.OUTPUT
+                ? parsedAmount
+                : trade?.outputAmount,
+          },
+    [
+      independentField,
+      parsedAmount,
+      showWrap,
+      trade?.inputAmount,
+      trade?.outputAmount,
+    ]
+  );
 
   const {
     onSwitchTokens,
@@ -425,6 +444,17 @@ export default function Swap() {
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false);
 
+  const previousChainId = usePrevious<ChainId>(chainId);
+  useEffect(() => {
+    if (
+      previousChainId &&
+      previousChainId !== chainId &&
+      router.asPath.includes(Currency.getNativeCurrencySymbol(previousChainId))
+    ) {
+      router.push(`/swap/${Currency.getNativeCurrencySymbol(chainId)}`);
+    }
+  }, [chainId, previousChainId, router]);
+
   return (
     <Layout>
       <Head>
@@ -441,7 +471,8 @@ export default function Swap() {
       />
       <div
         id="swap-page"
-        className="z-10 w-full max-w-2xl p-4 rounded bg-dark-900 shadow-swap"
+        className="w-full max-w-2xl p-4 rounded bg-dark-900 shadow-swap"
+        style={{ zIndex: 1 }}
       >
         <SwapHeader
           input={currencies[Field.INPUT]}
@@ -461,30 +492,6 @@ export default function Swap() {
           onDismiss={handleConfirmDismiss}
           archerETHTip={doArcher ? archerETHTip : undefined}
         />
-        {chainId && chainId === ChainId.MATIC && (
-          <div className="hidden pb-4 space-y-2 md:block">
-            <DarkCard>
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-white">
-                    {i18n._(t`300M+ TVL on Polygon! Optimized routing enabled`)}
-                  </div>
-                  <div className="text-sm text-purple">
-                    {i18n._(t`Enjoy the lowest slippage on Polygon`)}
-                  </div>
-                </div>
-                <a
-                  href="https://ayokiroll.medium.com/cf7e932f3a8"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="inline-flex items-center px-3 py-2 border-2 rounded-sm border-purple text-purple"
-                >
-                  {i18n._(t`Read Tutorial`)}
-                </a>
-              </div>
-            </DarkCard>
-          </div>
-        )}
         <div>
           <CurrencyInputPanel
             label={
@@ -606,7 +613,7 @@ export default function Swap() {
                 {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
                   <RowBetween align="center">
                     <Typography
-                      variant="caption2"
+                      variant="sm"
                       className="text-secondary"
                       onClick={toggleSettings}
                     >
@@ -614,7 +621,7 @@ export default function Swap() {
                     </Typography>
 
                     <Typography
-                      variant="caption2"
+                      variant="sm"
                       className="text-secondary"
                       onClick={toggleSettings}
                     >
@@ -631,24 +638,27 @@ export default function Swap() {
         </div>
         <BottomGrouping>
           {swapIsUnsupported ? (
-            <ButtonPrimary disabled={true}>
-              <div>{i18n._(t`Unsupported Asset`)}</div>
-            </ButtonPrimary>
+            <Button color="red" size="lg" disabled>
+              {i18n._(t`Unsupported Asset`)}
+            </Button>
           ) : !account ? (
-            <ButtonLight onClick={toggleWalletModal}>
-              {i18n._(t`Connect Wallet`)}
-            </ButtonLight>
+            <Web3Connect size="lg" color="blue" className="w-full" />
           ) : showWrap ? (
-            <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
+            <Button
+              color="gradient"
+              size="lg"
+              disabled={Boolean(wrapInputError)}
+              onClick={onWrap}
+            >
               {wrapInputError ??
                 (wrapType === WrapType.WRAP
                   ? i18n._(t`Wrap`)
                   : wrapType === WrapType.UNWRAP
                   ? i18n._(t`Unwrap`)
                   : null)}
-            </ButtonPrimary>
+            </Button>
           ) : noRoute && userHasSpecifiedInputOutput ? (
-            <GreyCard style={{ textAlign: "center" }}>
+            <div style={{ textAlign: "center" }}>
               <div className="mb-1">
                 {i18n._(t`Insufficient liquidity for this trade`)}
               </div>
@@ -657,7 +667,7 @@ export default function Swap() {
                   {i18n._(t`Try enabling multi-hop trades`)}
                 </div>
               )}
-            </GreyCard>
+            </div>
           ) : showApproveFlow ? (
             <RowBetween>
               <ButtonConfirmed
@@ -665,8 +675,6 @@ export default function Swap() {
                 disabled={
                   approval !== ApprovalState.NOT_APPROVED || approvalSubmitted
                 }
-                width="100%"
-                altDisabledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
                 confirmed={approval === ApprovalState.APPROVED}
               >
                 {approval === ApprovalState.PENDING ? (
@@ -696,7 +704,9 @@ export default function Swap() {
                       });
                     }
                   }}
-                  width="100%"
+                  style={{
+                    width: "100%",
+                  }}
                   id="swap-button"
                   disabled={
                     !isValid ||
@@ -705,13 +715,11 @@ export default function Swap() {
                   }
                   error={isValid && priceImpactSeverity > 2}
                 >
-                  <Text className="font-medium">
-                    {priceImpactSeverity > 3 && !isExpertMode
-                      ? i18n._(t`Price Impact High`)
-                      : priceImpactSeverity > 2
-                      ? i18n._(t`Swap Anyway`)
-                      : i18n._(t`Swap`)}
-                  </Text>
+                  {priceImpactSeverity > 3 && !isExpertMode
+                    ? i18n._(t`Price Impact High`)
+                    : priceImpactSeverity > 2
+                    ? i18n._(t`Swap Anyway`)
+                    : i18n._(t`Swap`)}
                 </ButtonError>
               )}
             </RowBetween>
@@ -738,15 +746,13 @@ export default function Swap() {
               }
               error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
             >
-              <Text fontSize={20} fontWeight={500}>
-                {swapInputError
-                  ? swapInputError
-                  : priceImpactSeverity > 3 && !isExpertMode
-                  ? i18n._(t`Price Impact Too High`)
-                  : priceImpactSeverity > 2
-                  ? i18n._(t`Swap Anyway`)
-                  : i18n._(t`Swap`)}
-              </Text>
+              {swapInputError
+                ? swapInputError
+                : priceImpactSeverity > 3 && !isExpertMode
+                ? i18n._(t`Price Impact Too High`)
+                : priceImpactSeverity > 2
+                ? i18n._(t`Swap Anyway`)
+                : i18n._(t`Swap`)}
             </ButtonError>
           )}
           {showApproveFlow && (

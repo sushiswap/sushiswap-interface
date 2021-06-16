@@ -6,7 +6,7 @@ import { enableList, removeList } from "../../state/lists/actions";
 
 import { AppDispatch } from "../../state";
 import { AutoColumn } from "../Column";
-import { ButtonPrimary } from "../ButtonLegacy";
+import Button from "../Button";
 import Card from "../Card";
 import CloseIcon from "../CloseIcon";
 import CurrencyModalView from "./CurrencyModalView";
@@ -15,7 +15,6 @@ import ListLogo from "../ListLogo";
 import ReactGA from "react-ga";
 import { TokenList } from "@uniswap/token-lists";
 import styled from "styled-components";
-import { transparentize } from "polished";
 import { useAllLists } from "../../state/lists/hooks";
 import { useDispatch } from "react-redux";
 import { useFetchListCallback } from "../../hooks/useFetchListCallback";
@@ -89,7 +88,7 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
       </PaddedColumn>
       <PaddedColumn gap="md">
         <AutoColumn gap="md">
-          <Card padding="12px 20px">
+          <div style={{ padding: "12px 20px" }}>
             <RowBetween>
               <RowFixed>
                 {list.logoURI && (
@@ -109,8 +108,8 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
                 </AutoColumn>
               </RowFixed>
             </RowBetween>
-          </Card>
-          <Card>
+          </div>
+          <div>
             <AutoColumn
               justify="center"
               style={{ textAlign: "center", gap: "16px", marginBottom: "12px" }}
@@ -152,17 +151,20 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
               />
               <div className="text-red ml-2.5 font-medium">I understand</div>
             </AutoRow>
-          </Card>
+          </div>
 
-          <ButtonPrimary
+          <Button
+            color="gradient"
+            size="xs"
+            style={{
+              borderRadius: "20px",
+              padding: "10px 1rem",
+            }}
             disabled={!confirmed}
-            altDisabledStyle={true}
-            borderRadius="20px"
-            padding="10px 1rem"
             onClick={handleAddList}
           >
             Import
-          </ButtonPrimary>
+          </Button>
           {addError ? (
             <div
               title={addError}
@@ -173,7 +175,6 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             </div>
           ) : null}
         </AutoColumn>
-        {/* </Card> */}
       </PaddedColumn>
     </Wrapper>
   );

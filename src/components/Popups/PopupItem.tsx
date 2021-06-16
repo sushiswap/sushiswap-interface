@@ -1,11 +1,10 @@
-import React, { useCallback, useContext, useEffect } from "react";
-import styled, { ThemeContext } from "styled-components";
+import React, { useCallback, useEffect } from "react";
 
-import ListUpdatePopup from "./ListUpdatePopup";
 import { PopupContent } from "../../state/application/actions";
 import TransactionPopup from "./TransactionPopup";
 import { X } from "react-feather";
 import { animated } from "react-spring";
+import styled from "styled-components";
 import { useRemovePopup } from "../../state/application/hooks";
 import { useSpring } from "react-spring/web";
 
@@ -73,8 +72,6 @@ export default function PopupItem({
     };
   }, [removeAfterMs, removeThisPopup]);
 
-  const theme = useContext(ThemeContext);
-
   let popupContent;
   if ("txn" in content) {
     const {
@@ -82,19 +79,6 @@ export default function PopupItem({
     } = content;
     popupContent = (
       <TransactionPopup hash={hash} success={success} summary={summary} />
-    );
-  } else if ("listUpdate" in content) {
-    const {
-      listUpdate: { listUrl, oldList, newList, auto },
-    } = content;
-    popupContent = (
-      <ListUpdatePopup
-        popKey={popKey}
-        listUrl={listUrl}
-        oldList={oldList}
-        newList={newList}
-        auto={auto}
-      />
     );
   }
 

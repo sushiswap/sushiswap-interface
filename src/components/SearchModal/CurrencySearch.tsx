@@ -1,4 +1,4 @@
-import { Currency, Token } from "@sushiswap/sdk";
+import { ChainId, Currency, Token } from "@sushiswap/sdk";
 import React, {
   KeyboardEvent,
   RefObject,
@@ -159,7 +159,7 @@ export function CurrencySearch({
         }
       }
     },
-    [filteredSortedTokens, handleCurrencySelect, debouncedQuery]
+    [debouncedQuery, filteredSortedTokens, handleCurrencySelect, chainId]
   );
 
   // menu ui
@@ -187,7 +187,7 @@ export function CurrencySearch({
           ref={inputRef as RefObject<HTMLInputElement>}
           onChange={handleInput}
           onKeyDown={handleEnter}
-          className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-caption px-6 py-3.5"
+          className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
         />
       </div>
       {showCommonBases && (
@@ -215,7 +215,7 @@ export function CurrencySearch({
             {({ height }) => (
               <CurrencyList
                 height={height}
-                showETH={showETH}
+                showETH={showETH && ![ChainId.CELO].includes(chainId)}
                 currencies={
                   filteredInactiveTokens
                     ? filteredSortedTokens.concat(filteredInactiveTokens)
