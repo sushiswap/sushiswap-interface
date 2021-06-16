@@ -103,9 +103,9 @@ export default function CurrencyInputPanel({
     setModalOpen(false);
   }, [setModalOpen]);
 
-  const currencyUSDC = useUSDCPrice(currency ? currency : undefined)?.toFixed(
-    18
-  );
+  const currencyUSDC = useUSDCPrice(
+    currency && chainId in USDC ? currency : undefined
+  )?.toFixed(18);
   const valueUSDC = formatNumber(Number(value) * Number(currencyUSDC));
 
   return (

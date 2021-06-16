@@ -54,7 +54,6 @@ export default function ConfirmSwapModal({
   swapErrorMessage: string | undefined;
   onDismiss: () => void;
 }) {
-  console.log({ trade });
 
   const { chainId } = useActiveWeb3React();
 
