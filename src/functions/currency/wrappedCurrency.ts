@@ -11,10 +11,6 @@ export function wrappedCurrency(
   currency: Currency | undefined,
   chainId: ChainId | undefined
 ): Token | undefined {
-  console.log("wrapped", {
-    currency,
-    native: Currency.getNativeCurrency(chainId),
-  });
   return chainId && currency === Currency.getNativeCurrency(chainId)
     ? WETH[chainId]
     : currency instanceof Token

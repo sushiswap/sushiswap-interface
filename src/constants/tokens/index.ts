@@ -2,7 +2,7 @@ import { ChainId, SUSHI_ADDRESS, Token, WETH } from "@sushiswap/sdk";
 
 export const CELO: { [key: string]: Token } = {
   mCUSD: new Token(
-    ChainId.MAINNET,
+    ChainId.CELO,
     "0x64dEFa3544c695db8c535D289d843a189aa26b98",
     18,
     "mCUSD",

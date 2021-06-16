@@ -189,9 +189,9 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.CELO]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
     CELO.mCUSD,
-    OKEX.cEUR,
-    OKEX.mcUSD,
-    OKEX.mcEUR,
+    CELO.mCELO,
+    CELO.mcEURO,
+    CELO.cEUR,
   ],
 };
 
@@ -341,9 +341,9 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.CELO]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
     CELO.mCUSD,
-    OKEX.cEUR,
-    OKEX.mcUSD,
-    OKEX.mcEUR,
+    CELO.mCELO,
+    CELO.mcEURO,
+    CELO.cEUR,
   ],
 };
 
@@ -422,9 +422,9 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.CELO]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
     CELO.mCUSD,
-    OKEX.cEUR,
-    OKEX.mcUSD,
-    OKEX.mcEUR,
+    CELO.mCELO,
+    CELO.mcEURO,
+    CELO.cEUR,
   ],
 };
 
