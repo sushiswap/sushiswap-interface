@@ -13,7 +13,7 @@ const FarmList = ({ farms, term }) => {
 
   return items ? (
     <>
-      <div className="grid grid-cols-3 font-bold md:grid-cols-4 text-caption text-primary">
+      <div className="grid grid-cols-3 font-bold md:grid-cols-4 text-base text-primary">
         <div
           className="flex items-center px-4 cursor-pointer"
           onClick={() => requestSort("symbol")}

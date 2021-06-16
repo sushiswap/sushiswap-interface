@@ -28,7 +28,7 @@ export default function TransactionFailedModal({
             alt="transaction rejected"
           />
         </div>
-        <div className="flex items-baseline justify-center flex-nowrap text-h4 mt-3">
+        <div className="flex items-baseline justify-center flex-nowrap text-3xl mt-3">
           <p className="text-high-emphesis">Uh Oh!&nbsp;</p>
           <p className="text-pink">Transaction rejected.</p>
         </div>

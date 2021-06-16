@@ -17,14 +17,14 @@ export type TypographyVariant =
 
 const VARIANTS = {
   hero: "text-hero",
-  h1: "text-h1",
-  h2: "text-h2",
+  h1: "text-4xl",
+  h2: "text-3xl",
   h3: "text-h3",
-  h4: "text-h4",
-  h5: "text-h5",
-  body: "text-body",
-  caption: "text-caption",
-  caption2: "text-caption2",
+  h4: "text-3xl",
+  h5: "text-2xl",
+  body: "text-lg",
+  caption: "text-base",
+  caption2: "text-sm",
 };
 
 export interface TypographyProps {

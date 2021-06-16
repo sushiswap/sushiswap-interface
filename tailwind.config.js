@@ -76,65 +76,6 @@ module.exports = {
             fontWeight: 700,
           },
         ],
-        h1: [
-          "36px",
-          {
-            letterSpacing: "-0.02em;",
-            lineHeight: "36px",
-            fontWeight: 700,
-          },
-        ],
-        h2: [
-          "30px",
-          {
-            letterSpacing: "-0.01em;",
-            lineHeight: "36px",
-            fontWeight: 700,
-          },
-        ],
-        h3: [
-          "28px",
-          {
-            letterSpacing: "-0.01em;",
-            lineHeight: "30px",
-            fontWeight: 700,
-          },
-        ],
-        h4: [
-          "24px",
-          {
-            letterSpacing: "-0.01em;",
-            lineHeight: "28px",
-            fontWeight: 700,
-          },
-        ],
-        h5: [
-          "24px",
-          {
-            letterSpacing: "-0.01em;",
-            lineHeight: "28px",
-            fontWeight: 500,
-          },
-        ],
-        body: [
-          "18px",
-          {
-            letterSpacing: "-0.01em;",
-            lineHeight: "26px",
-          },
-        ],
-        caption: [
-          "16px",
-          {
-            lineHeight: "24px",
-          },
-        ],
-        caption2: [
-          "14px",
-          {
-            lineHeight: "20px",
-          },
-        ],
       },
       borderRadius: {
         none: "0",
