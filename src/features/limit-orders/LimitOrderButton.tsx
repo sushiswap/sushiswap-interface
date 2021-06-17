@@ -34,7 +34,7 @@ interface LimitOrderButtonProps extends ButtonProps {
 const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
   const { i18n } = useLingui();
   const { fromBentoBalance, orderExpiration, recipient } = useLimitOrderState();
-  const { parsedAmounts, currencies } = useDerivedLimitOrderInfo();
+  const { parsedAmounts, currencies, inputError } = useDerivedLimitOrderInfo();
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
   const { mutate } = useLimitOrders();
   const addPopup = useAddPopup();
@@ -42,8 +42,6 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
   const [approvalState, fallback, permit, onApprove, execute] =
     useLimitOrderApproveCallback();
   const toggleWalletModal = useWalletModalToggle();
-
-  const { inputError } = useDerivedLimitOrderInfo();
   const wrongChain = ![ChainId.MAINNET, ChainId.MATIC].includes(chainId);
   const disabled = wrongChain || !!inputError;
 
@@ -151,14 +149,17 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
         <Button disabled={disabled} onClick={toggleWalletModal} {...rest}>
           {i18n._(t`Connect Wallet`)}
         </Button>
+      ) : inputError ? (
+        <Button disabled={true} {...rest} color="gray">
+          {inputError}
+        </Button>
       ) : showTokenApprove ? (
         <Button onClick={tokenApprove} className="mb-4" {...rest}>
-          <Dots
-            pending={tokenApprovalState === ApprovalState.PENDING}
-            pendingTitle={`Approving ${token.symbol}`}
-          >
-            {i18n._(t`Approve`)} {token.symbol}
-          </Dots>
+          {tokenApprovalState === ApprovalState.PENDING ? (
+            <Dots>{i18n._(t`Approving ${token.symbol}`)}</Dots>
+          ) : (
+            i18n._(t`Approve ${token.symbol}`)
+          )}
         </Button>
       ) : showLimitApprove ? (
         <Button disabled={disabled} onClick={onApprove} {...rest}>
@@ -169,7 +170,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
           approvalState === BentoApprovalState.APPROVED &&
           !fromBentoBalance) ? (
         <Button disabled={disabled} onClick={() => execute(token)} {...rest}>
-          {i18n._(t`Deposit`)}
+          {i18n._(t`Deposit ${token.symbol} into BentoBox`)}
         </Button>
       ) : (
         <Button

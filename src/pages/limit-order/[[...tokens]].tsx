@@ -82,13 +82,10 @@ export default function LimitOrder() {
     fromBentoBalance,
   } = useLimitOrderState();
 
-  const {
-    currencies,
-    parsedAmounts,
-    currencyBalances,
-    currentPrice,
-    inputError,
-  } = useDerivedLimitOrderInfo();
+  const { currencies, parsedAmounts, currencyBalances, currentPrice } =
+    useDerivedLimitOrderInfo();
+
+  const currentPriceAsString = currentPrice?.toSignificant(6);
 
   const {
     onSwitchTokens,
@@ -143,25 +140,25 @@ export default function LimitOrder() {
     useState<string>();
 
   const checkLimitPrice = useCallback(() => {
-    if (limitPrice === currentPrice?.toSignificant(6)) return;
-    if (limitPrice && currentPrice && +limitPrice < +currentPrice)
+    if (limitPrice === currentPriceAsString) return;
+    if (limitPrice && currentPrice && +limitPrice < +currentPriceAsString)
       setCurrencyInputPanelError(
         i18n._(t`This transaction is below market rate`)
       );
     else setCurrencyInputPanelError("");
-  }, [limitPrice, currentPrice, i18n]);
+  }, [limitPrice, currentPriceAsString, currentPrice, i18n]);
 
   const currencyInputPanelHelperText = useMemo(() => {
-    if (limitPrice === currentPrice?.toSignificant(6)) return;
+    if (limitPrice === currentPriceAsString) return;
     const sign =
-      +limitPrice > +currentPrice ? i18n._(t`above`) : i18n._(t`below`);
-    if (limitPrice && currentPrice)
+      +limitPrice > +currentPriceAsString ? i18n._(t`above`) : i18n._(t`below`);
+    if (limitPrice && currentPriceAsString)
       return i18n._(
         t`${formatPercent(
-          ((+limitPrice - +currentPrice) / +currentPrice) * 100
+          ((+limitPrice - +currentPriceAsString) / +currentPriceAsString) * 100
         )} ${sign} market rate`
       );
-  }, [limitPrice, currentPrice, i18n]);
+  }, [limitPrice, currentPriceAsString, i18n]);
 
   const tokenA = wrappedCurrency(currencies[Field.INPUT], chainId);
 
@@ -269,21 +266,26 @@ export default function LimitOrder() {
             </div>
 
             <div className="flex justify-between gap-4 items-center w-full">
-              <div className="flex flex-1">
-                {currencies[Field.INPUT] && currencies[Field.OUTPUT] && (
+              {currencies[Field.INPUT] && currencies[Field.OUTPUT] && (
+                <div className="flex flex-1">
                   <PriceRatio />
-                )}
-              </div>
-              <div className="flex flex-1">
-                {isExpertMode && recipient === null && (
+                </div>
+              )}
+              {isExpertMode && recipient === null && (
+                <div className="flex flex-1">
                   <div
-                    className="flex text-blue underline cursor-pointer items-center"
+                    className="flex text-blue underline cursor-pointer items-center text-sm"
                     onClick={() => onChangeRecipient("")}
                   >
                     {i18n._(t`Change Recipient`)}
                   </div>
+                </div>
+              )}
+              {!(currencies[Field.INPUT] && currencies[Field.OUTPUT]) &&
+                !(isExpertMode && recipient === null) && (
+                  <div className="flex flex-1" />
                 )}
-              </div>
+
               <OrderExpirationDropdown />
             </div>
 

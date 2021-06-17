@@ -112,8 +112,24 @@ export function useDerivedLimitOrderInfo(): {
     typedValue,
     (isExactIn ? inputCurrency : outputCurrency) ?? undefined
   );
+  const parsedRate = tryParseAmount(
+    limitPrice,
+    (isExactIn ? inputCurrency : outputCurrency) ?? undefined
+  );
 
-  // Why is this part so slow and why does it not work on matic
+  // TODO calculation is redundant, need to multiply CurrencyAmount
+  const outputValue =
+    parsedAmount && parsedRate
+      ? isExactIn
+        ? parsedAmount.multiply(parsedRate)?.toSignificant(6)
+        : parsedAmount.divide(parsedRate)?.toSignificant(6)
+      : "0";
+  const parsedOutputAmount = tryParseAmount(
+    outputValue,
+    (isExactIn ? outputCurrency : inputCurrency) ?? undefined
+  );
+
+  // TODO Why is this part so slow and why does it not work on matic
   // ---------------------------------------------------------------------------
   const bestTradeExactIn = useTradeExactIn(
     isExactIn ? parsedAmount : undefined,
@@ -127,14 +143,6 @@ export function useDerivedLimitOrderInfo(): {
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut;
   const rate = trade?.nextMidPrice;
   // ---------------------------------------------------------------------------
-
-  const parsedOutputAmount = tryParseAmount(
-    (isExactIn
-      ? +typedValue * +limitPrice
-      : +typedValue / +limitPrice
-    ).toString(),
-    (isExactIn ? outputCurrency : inputCurrency) ?? undefined
-  );
 
   const bentoBoxBalances = useBentoBalances();
   const balance = useMemo(
@@ -174,7 +182,7 @@ export function useDerivedLimitOrderInfo(): {
     inputError = "Connect Wallet";
   }
 
-  if (!parsedAmount) {
+  if (!parsedAmount || !parsedOutputAmount) {
     inputError = inputError ?? i18n._(t`Enter an amount`);
   }
 
@@ -192,7 +200,7 @@ export function useDerivedLimitOrderInfo(): {
   }
 
   if (!limitPrice) {
-    inputError = inputError ?? i18n._(t`Select a limit price`);
+    inputError = inputError ?? i18n._(t`Select a rate`);
   }
 
   if (!orderExpiration) {
@@ -204,6 +212,10 @@ export function useDerivedLimitOrderInfo(): {
     currencyBalances[Field.INPUT],
     parsedAmounts[Field.INPUT],
   ];
+
+  if (!balanceIn) {
+    inputError = i18n._(t`Loading balance`);
+  }
 
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
     inputError = i18n._(

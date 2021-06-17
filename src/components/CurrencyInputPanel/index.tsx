@@ -241,7 +241,7 @@ export default function CurrencyInputPanel({
                   )}
                   {helperText && (
                     <div className="flex flex-col">
-                      <span className="text-xs font-bold text-high-emphesis">
+                      <span className="text-xs font-bold text-high-emphesis text-right">
                         {helperText}
                       </span>
                     </div>

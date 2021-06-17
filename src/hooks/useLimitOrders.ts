@@ -47,7 +47,6 @@ const useLimitOrders = () => {
     fetcher
   );
 
-  console.log(data);
   useEffect(() => {
     if (!Array.isArray(data)) return;
 

@@ -49,7 +49,7 @@ const OrderExpirationDropdown: FC = () => {
         onClick={toggle}
       >
         <div className="flex flex-row items-center">
-          <span className="">{i18n._(t`Order Expiration`)}:</span>
+          <span className="text-sm">{i18n._(t`Order Expiration`)}:</span>
           <QuestionHelper
             text={i18n._(
               t`Expiration is the time at which the order will become invalid`
@@ -57,11 +57,11 @@ const OrderExpirationDropdown: FC = () => {
           />
         </div>
         <div className="relative">
-          <div className="flex border border-dark-800 rounded divide-x divide-dark-800">
-            <div className="text-sm text-primary flex h-10 items-center pl-3 min-w-[80px]">
+          <div className="flex border border-dark-800  h-[38px] rounded divide-x divide-dark-800">
+            <div className="text-sm text-primary flex items-center pl-3 min-w-[80px] font-bold">
               {items[orderExpiration.value]}
             </div>
-            <div className="flex h-10 items-center justify-center w-9 font-bold">
+            <div className="flex items-center justify-center w-9 font-bold text-primary">
               <ChevronDownIcon width={16} height={16} strokeWidth={2} />
             </div>
           </div>
