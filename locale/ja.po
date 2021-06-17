@@ -132,7 +132,6 @@ msgid "Analytics"
 msgstr "分析"
 
 #: src/features/lending/Button.tsx:87
-#: src/features/limit-orders/LimitOrderButton.tsx:160
 #: src/pages/balances.tsx:227
 #: src/pages/migrate.tsx:291
 #: src/pages/stake.tsx:392
@@ -143,10 +142,11 @@ msgstr "承認"
 msgid "Approve Kashi"
 msgstr "Kashiを承認"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:165
+#: src/features/limit-orders/LimitOrderButton.tsx:166
 msgid "Approve Limit Order"
 msgstr ""
 
+#: src/features/limit-orders/LimitOrderButton.tsx:161
 #: src/pages/swap/[[...tokens]].tsx:688
 msgid "Approve {0}"
 msgstr "{0}を承認"
@@ -162,8 +162,9 @@ msgstr "承認済み"
 msgid "Approving"
 msgstr "承認しています"
 
-#~ msgid "Approving {0}"
-#~ msgstr "{0}を承認しています"
+#: src/features/limit-orders/LimitOrderButton.tsx:159
+msgid "Approving {0}"
+msgstr "{0}を承認しています"
 
 #: src/components/Settings/index.tsx:184
 msgid "Are you sure?"
@@ -287,11 +288,11 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:148
+#: src/features/limit-orders/LimitOrderButton.tsx:146
 msgid "Chain not supported yet"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:283
+#: src/pages/limit-order/[[...tokens]].tsx:280
 msgid "Change Recipient"
 msgstr ""
 
@@ -359,7 +360,7 @@ msgstr "引き出しを確認"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:152
+#: src/features/limit-orders/LimitOrderButton.tsx:150
 #: src/pages/stake.tsx:410
 #: src/state/mint/hooks.ts:238
 msgid "Connect Wallet"
@@ -395,7 +396,6 @@ msgstr "ペアを作成"
 msgid "Current"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:172
 #: src/pages/balances.tsx:243
 msgid "Deposit"
 msgstr "預け入れる"
@@ -406,6 +406,10 @@ msgstr "預け入れる"
 #: src/pages/balances.tsx:49
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "すべての利回りのためにBentoBoxにトークンを預け入れましょう"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:173
+msgid "Deposit {0} into BentoBox"
+msgstr ""
 
 #~ msgid "Deposited"
 #~ msgstr "預入済み"
@@ -464,7 +468,7 @@ msgstr "入力"
 msgid "Enter Amount"
 msgstr "金額を入力"
 
-#: src/state/limit-order/hooks.ts:187
+#: src/state/limit-order/hooks.ts:195
 #: src/state/swap/hooks.ts:194
 msgid "Enter a recipient"
 msgstr "受領者を入力"
@@ -473,7 +477,7 @@ msgstr "受領者を入力"
 msgid "Enter a valid slippage percentage"
 msgstr "有効なスリッページの割合を入力"
 
-#: src/state/limit-order/hooks.ts:178
+#: src/state/limit-order/hooks.ts:186
 #: src/state/mint/hooks.ts:246
 #: src/state/swap/hooks.ts:185
 msgid "Enter an amount"
@@ -652,7 +656,7 @@ msgid "Insufficient liquidity for this trade"
 msgstr "この取引の流動性が不足しています"
 
 #: src/hooks/useWrapCallback.ts:80
-#: src/state/limit-order/hooks.ts:210
+#: src/state/limit-order/hooks.ts:222
 #: src/state/mint/hooks.ts:259
 #: src/state/mint/hooks.ts:270
 #: src/state/swap/hooks.ts:220
@@ -667,7 +671,7 @@ msgstr "インターフェース設定"
 msgid "Invalid pair"
 msgstr "ペアが無効です"
 
-#: src/state/limit-order/hooks.ts:190
+#: src/state/limit-order/hooks.ts:198
 #: src/state/swap/hooks.ts:201
 msgid "Invalid recipient"
 msgstr "受領者が無効です"
@@ -718,7 +722,7 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "<0>使用済み</0>に制限"
 
-#: src/pages/limit-order/[[...tokens]].tsx:171
+#: src/pages/limit-order/[[...tokens]].tsx:168
 msgid "Limit order"
 msgstr ""
 
@@ -761,6 +765,10 @@ msgstr "リスト"
 #: src/pages/transactions.tsx:73
 msgid "Loading"
 msgstr "読み込んでいます"
+
+#: src/state/limit-order/hooks.ts:217
+msgid "Loading balance"
+msgstr ""
 
 #: src/pages/migrate.tsx:408
 msgid "Loading your {exchange} liquidity positions"
@@ -872,7 +880,7 @@ msgid "My Orders"
 msgstr ""
 
 #: src/features/limit-orders/OrderExpirationDropdown.tsx:19
-#: src/state/limit-order/hooks.ts:314
+#: src/state/limit-order/hooks.ts:326
 msgid "Never"
 msgstr ""
 
@@ -1095,7 +1103,7 @@ msgstr "払い戻す"
 msgid "Restricts swaps to direct pairs only."
 msgstr "スワップを直接ペアのみに制限します。"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:180
+#: src/features/limit-orders/LimitOrderButton.tsx:181
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1137,13 +1145,17 @@ msgid "Search name or paste address"
 msgstr "名前を検索またはアドレスを貼り付ける"
 
 #: src/state/limit-order/hooks.ts:195
-msgid "Select a limit price"
+#~ msgid "Select a limit price"
+#~ msgstr ""
+
+#: src/state/limit-order/hooks.ts:203
+msgid "Select a rate"
 msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:191
 #: src/components/CurrencyInputPanel/index.tsx:352
 #: src/components/CurrencySelectPanel/index.tsx:101
-#: src/state/limit-order/hooks.ts:182
+#: src/state/limit-order/hooks.ts:190
 #: src/state/swap/hooks.ts:189
 msgid "Select a token"
 msgstr "トークンを選択"
@@ -1151,7 +1163,7 @@ msgstr "トークンを選択"
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "トークンを選択して流動性を検索"
 
-#: src/state/limit-order/hooks.ts:199
+#: src/state/limit-order/hooks.ts:207
 msgid "Select an order expiration"
 msgstr ""
 
@@ -1179,7 +1191,7 @@ msgid "Slippage tolerance"
 msgstr "スリッページの許容範囲"
 
 #: src/features/lending/Button.tsx:41
-#: src/features/limit-orders/LimitOrderButton.tsx:140
+#: src/features/limit-orders/LimitOrderButton.tsx:138
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "承認の署名中に問題が発生しました。これは、TrezorやLedgerなどのハードウェアウォレットに対して想定されています。もう一度クリックすると、フォールバックメソッドが使用されます"
 
@@ -1314,7 +1326,7 @@ msgstr "以下のエラーが発生したため、取引が上手くいきませ
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "SUSHIでできること"
 
-#: src/pages/limit-order/[[...tokens]].tsx:149
+#: src/pages/limit-order/[[...tokens]].tsx:146
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1522,11 +1534,11 @@ msgstr "間違ったネットワークにいます"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "まずLPトークンを承認してから、移行する必要があります"
 
-#: src/pages/limit-order/[[...tokens]].tsx:200
+#: src/pages/limit-order/[[...tokens]].tsx:197
 msgid "You pay"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:241
+#: src/pages/limit-order/[[...tokens]].tsx:238
 msgid "You receive:"
 msgstr ""
 
@@ -1611,14 +1623,14 @@ msgstr "{exchange}{0}/{1}の流動性は、SushiSwap{2}/{3}の流動性になり
 msgid "Zap"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:157
+#: src/pages/limit-order/[[...tokens]].tsx:154
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "年換算"
 
-#: src/pages/limit-order/[[...tokens]].tsx:157
+#: src/pages/limit-order/[[...tokens]].tsx:154
 msgid "below"
 msgstr ""
 
@@ -1668,6 +1680,6 @@ msgstr "{0}戦略"
 #~ msgid "{0} per {1}"
 #~ msgstr "{1}あたりの{0}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:160
+#: src/pages/limit-order/[[...tokens]].tsx:157
 msgid "{0} {sign} market rate"
 msgstr ""

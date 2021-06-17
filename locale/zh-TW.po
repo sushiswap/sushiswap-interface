@@ -131,7 +131,6 @@ msgid "Analytics"
 msgstr "分析界面"
 
 #: src/features/lending/Button.tsx:87
-#: src/features/limit-orders/LimitOrderButton.tsx:160
 #: src/pages/balances.tsx:227
 #: src/pages/migrate.tsx:291
 #: src/pages/stake.tsx:392
@@ -142,10 +141,11 @@ msgstr "批准"
 msgid "Approve Kashi"
 msgstr "批準Kashi"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:165
+#: src/features/limit-orders/LimitOrderButton.tsx:166
 msgid "Approve Limit Order"
 msgstr ""
 
+#: src/features/limit-orders/LimitOrderButton.tsx:161
 #: src/pages/swap/[[...tokens]].tsx:688
 msgid "Approve {0}"
 msgstr "批准{0}"
@@ -161,8 +161,9 @@ msgstr "已批準"
 msgid "Approving"
 msgstr "批準中"
 
-#~ msgid "Approving {0}"
-#~ msgstr "批准{0}"
+#: src/features/limit-orders/LimitOrderButton.tsx:159
+msgid "Approving {0}"
+msgstr "批准{0}"
 
 #: src/components/Settings/index.tsx:184
 msgid "Are you sure?"
@@ -283,11 +284,11 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:148
+#: src/features/limit-orders/LimitOrderButton.tsx:146
 msgid "Chain not supported yet"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:283
+#: src/pages/limit-order/[[...tokens]].tsx:280
 msgid "Change Recipient"
 msgstr ""
 
@@ -353,7 +354,7 @@ msgstr "確認提取"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:152
+#: src/features/limit-orders/LimitOrderButton.tsx:150
 #: src/pages/stake.tsx:410
 #: src/state/mint/hooks.ts:238
 msgid "Connect Wallet"
@@ -389,7 +390,6 @@ msgstr "創建交易對"
 msgid "Current"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:172
 #: src/pages/balances.tsx:243
 msgid "Deposit"
 msgstr "存款"
@@ -400,6 +400,10 @@ msgstr "存款"
 #: src/pages/balances.tsx:49
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "將代幣存入BentoBox，以獲得所有收益。"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:173
+msgid "Deposit {0} into BentoBox"
+msgstr ""
 
 #~ msgid "Deposited"
 #~ msgstr "已存入"
@@ -458,7 +462,7 @@ msgstr "進入"
 msgid "Enter Amount"
 msgstr "輸入金額"
 
-#: src/state/limit-order/hooks.ts:187
+#: src/state/limit-order/hooks.ts:195
 #: src/state/swap/hooks.ts:194
 msgid "Enter a recipient"
 msgstr "輸入收件人"
@@ -467,7 +471,7 @@ msgstr "輸入收件人"
 msgid "Enter a valid slippage percentage"
 msgstr "輸入有效的滑點百分比"
 
-#: src/state/limit-order/hooks.ts:178
+#: src/state/limit-order/hooks.ts:186
 #: src/state/mint/hooks.ts:246
 #: src/state/swap/hooks.ts:185
 msgid "Enter an amount"
@@ -635,7 +639,7 @@ msgid "Insufficient liquidity for this trade"
 msgstr "該交易的流動性不足"
 
 #: src/hooks/useWrapCallback.ts:80
-#: src/state/limit-order/hooks.ts:210
+#: src/state/limit-order/hooks.ts:222
 #: src/state/mint/hooks.ts:259
 #: src/state/mint/hooks.ts:270
 #: src/state/swap/hooks.ts:220
@@ -650,7 +654,7 @@ msgstr "交互設置"
 msgid "Invalid pair"
 msgstr "無效的代幣對"
 
-#: src/state/limit-order/hooks.ts:190
+#: src/state/limit-order/hooks.ts:198
 #: src/state/swap/hooks.ts:201
 msgid "Invalid recipient"
 msgstr "无效收件人"
@@ -701,7 +705,7 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "限制<0>使用</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:171
+#: src/pages/limit-order/[[...tokens]].tsx:168
 msgid "Limit order"
 msgstr ""
 
@@ -741,6 +745,10 @@ msgstr "清單"
 #: src/pages/transactions.tsx:73
 msgid "Loading"
 msgstr "載入中"
+
+#: src/state/limit-order/hooks.ts:217
+msgid "Loading balance"
+msgstr ""
 
 #: src/pages/migrate.tsx:408
 msgid "Loading your {exchange} liquidity positions"
@@ -851,7 +859,7 @@ msgid "My Orders"
 msgstr ""
 
 #: src/features/limit-orders/OrderExpirationDropdown.tsx:19
-#: src/state/limit-order/hooks.ts:314
+#: src/state/limit-order/hooks.ts:326
 msgid "Never"
 msgstr ""
 
@@ -1073,7 +1081,7 @@ msgstr "還款"
 msgid "Restricts swaps to direct pairs only."
 msgstr "限制只交易直接交易對。"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:180
+#: src/features/limit-orders/LimitOrderButton.tsx:181
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1115,13 +1123,17 @@ msgid "Search name or paste address"
 msgstr "搜索名稱或粘貼地址"
 
 #: src/state/limit-order/hooks.ts:195
-msgid "Select a limit price"
+#~ msgid "Select a limit price"
+#~ msgstr ""
+
+#: src/state/limit-order/hooks.ts:203
+msgid "Select a rate"
 msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:191
 #: src/components/CurrencyInputPanel/index.tsx:352
 #: src/components/CurrencySelectPanel/index.tsx:101
-#: src/state/limit-order/hooks.ts:182
+#: src/state/limit-order/hooks.ts:190
 #: src/state/swap/hooks.ts:189
 msgid "Select a token"
 msgstr "選擇代幣"
@@ -1129,7 +1141,7 @@ msgstr "選擇代幣"
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "选择代币以找到您的流动性"
 
-#: src/state/limit-order/hooks.ts:199
+#: src/state/limit-order/hooks.ts:207
 msgid "Select an order expiration"
 msgstr ""
 
@@ -1157,7 +1169,7 @@ msgid "Slippage tolerance"
 msgstr "可容忍滑點"
 
 #: src/features/lending/Button.tsx:41
-#: src/features/limit-orders/LimitOrderButton.tsx:140
+#: src/features/limit-orders/LimitOrderButton.tsx:138
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "在簽署批準時出現錯誤。可能是硬件錢包例如Trezor和Ledger。再次點擊，將使用倒退的辦法。"
 
@@ -1289,7 +1301,7 @@ msgstr "交易未成功因为错误: {0}。可能是因为您交换中的一个�
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "SUSHI可以做的事情"
 
-#: src/pages/limit-order/[[...tokens]].tsx:149
+#: src/pages/limit-order/[[...tokens]].tsx:146
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1495,11 +1507,11 @@ msgstr "您位在錯誤的網路"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "您需要首先批準LP代幣，然後遷移它"
 
-#: src/pages/limit-order/[[...tokens]].tsx:200
+#: src/pages/limit-order/[[...tokens]].tsx:197
 msgid "You pay"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:241
+#: src/pages/limit-order/[[...tokens]].tsx:238
 msgid "You receive:"
 msgstr ""
 
@@ -1584,14 +1596,14 @@ msgstr "您的{exchange} {0} / {1}流動性將變為SushiSwap {2} / {3}的流動
 msgid "Zap"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:157
+#: src/pages/limit-order/[[...tokens]].tsx:154
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "年化"
 
-#: src/pages/limit-order/[[...tokens]].tsx:157
+#: src/pages/limit-order/[[...tokens]].tsx:154
 msgid "below"
 msgstr ""
 
@@ -1639,6 +1651,6 @@ msgstr "{0}策略"
 #~ msgid "{0} per {1}"
 #~ msgstr "{0}每{1}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:160
+#: src/pages/limit-order/[[...tokens]].tsx:157
 msgid "{0} {sign} market rate"
 msgstr ""

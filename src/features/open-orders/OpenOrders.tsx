@@ -1,6 +1,6 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useState } from "react";
 import useLimitOrders from "../../hooks/useLimitOrders";
-import { t, Trans } from "@lingui/macro";
+import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import CurrencyLogo from "../../components/CurrencyLogo";
 import { JSBI } from "@sushiswap/sdk";
@@ -12,6 +12,7 @@ import Badge from "../../components/Badge";
 import { useTransactionAdder } from "../../state/transactions/hooks";
 import Lottie from "lottie-react";
 import loadingCircle from "../../animation/loading-circle.json";
+import TransactionConfirmationModal from "../../components/TransactionConfirmationModal";
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui();
@@ -19,6 +20,7 @@ const OpenOrders: FC = () => {
   const { pending, loading, mutate } = useLimitOrders();
   const limitOrderContract = useLimitOrderContract(true);
   const addTransaction = useTransactionAdder();
+  const [hash, setHash] = useState("");
 
   const cancelOrder = async (limitOrder: LimitOrder, summary: string) => {
     const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash());
@@ -26,13 +28,22 @@ const OpenOrders: FC = () => {
       summary,
     });
 
+    setHash(tx.hash);
+
     await tx.wait();
-    console.log("tx done");
     await mutate((data) => ({ ...data }));
   };
 
   return (
     <>
+      <TransactionConfirmationModal
+        isOpen={!!hash}
+        onDismiss={() => setHash("")}
+        hash={hash}
+        content={() => <div />}
+        attemptingTxn={false}
+        pendingText={""}
+      />
       <div className="text-xl text-high-emphesis flex items-center gap-2 border-b border-dark-800 pb-4">
         {i18n._(t`Open Orders`)}{" "}
         <span className="inline-flex">
@@ -108,16 +119,7 @@ const OpenOrders: FC = () => {
                           variant="outlined"
                           size="xs"
                           onClick={() =>
-                            cancelOrder(
-                              order.limitOrder,
-                              `Cancel order receive ${order.limitOrder.amountOut.toSignificant(
-                                6
-                              )} ${order.tokenOut.getSymbol(
-                                chainId
-                              )} for ${order.limitOrder.amountIn.toSignificant(
-                                6
-                              )} ${order.tokenIn.getSymbol(chainId)}`
-                            )
+                            cancelOrder(order.limitOrder, `Cancel order`)
                           }
                         >
                           {i18n._(t`Cancel Order`)}

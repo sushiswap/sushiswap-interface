@@ -4,6 +4,7 @@ import { LAMBDA_URL, LimitOrder } from "limitorderv2-sdk";
 import { BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 import { Token } from "@sushiswap/sdk";
+import { useAllTokens } from "./Tokens";
 
 interface State {
   pending: OpenOrder[];
@@ -38,6 +39,7 @@ const useLimitOrders = () => {
     loading: true,
   });
 
+  const tokens = useAllTokens();
   const { account, chainId } = useActiveWeb3React();
   const limitOrderContract = useLimitOrderContract();
 
@@ -62,9 +64,25 @@ const useLimitOrders = () => {
           const digest = limitOrder.getTypeHash();
           const filledAmount = await limitOrderContract.orderStatus(digest);
 
+          const tokenIn = limitOrder.amountIn.token;
+          const tokenOut = limitOrder.amountOut.token;
           const openOrder: OpenOrder = {
-            tokenIn: limitOrder.amountIn.token,
-            tokenOut: limitOrder.amountOut.token,
+            tokenIn:
+              tokens[tokenIn.address] ||
+              new Token(
+                chainId,
+                tokenIn.address.toLowerCase(),
+                tokenIn.decimals,
+                tokenIn.symbol
+              ),
+            tokenOut:
+              tokens[tokenOut.address] ||
+              new Token(
+                chainId,
+                tokenOut.address.toLowerCase(),
+                tokenOut.decimals,
+                tokenOut.symbol
+              ),
             limitOrder,
             filledPercent: filledAmount
               .mul(BigNumber.from("100"))
@@ -105,7 +123,7 @@ const useLimitOrders = () => {
         loading: false,
       })
     );
-  }, [account, chainId, data, limitOrderContract]);
+  }, [account, chainId, data, limitOrderContract, tokens]);
 
   return {
     ...openOrders,

@@ -172,7 +172,7 @@ const useLimitOrderApproveCallback = () => {
     const useNative = tokenAddressChecksum === WETH[chainId].address;
     const amount = parsedAmounts[Field.INPUT].raw.toString();
     if (!fromBentoBalance) {
-      summary.push("Deposit");
+      summary.push(`Deposit ${token.symbol} into BentoBox`);
       if (useNative) {
         batch.push(
           bentoBoxContract?.interface?.encodeFunctionData("deposit", [

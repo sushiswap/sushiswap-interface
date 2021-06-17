@@ -1,5 +1,4 @@
 import React, { HTMLProps, useCallback } from "react";
-
 import ReactGA from "react-ga";
 
 function ExternalLink({

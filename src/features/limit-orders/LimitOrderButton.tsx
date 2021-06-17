@@ -45,6 +45,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
   const wrongChain = ![ChainId.MAINNET, ChainId.MATIC].includes(chainId);
   const disabled = wrongChain || !!inputError;
 
+  // TODO useApproveCallback returns state 1 before 3 after successful approve
   const [tokenApprovalState, tokenApprove] = useApproveCallback(
     parsedAmounts[Field.INPUT],
     chainId && BENTOBOX_ADDRESS[chainId]
