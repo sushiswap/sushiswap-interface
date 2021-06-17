@@ -179,17 +179,17 @@
 				"type": "address"
 			},
 			{
-				"internalType": "uint32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "uint32"
+				"type": "uint256"
 			}
 		],
 		"name": "checkpoints",
 		"outputs": [
 			{
-				"internalType": "uint32",
+				"internalType": "uint256",
 				"name": "fromBlock",
-				"type": "uint32"
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
@@ -295,7 +295,7 @@
 		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "votes",
 				"type": "uint256"
 			}
 		],
@@ -436,9 +436,9 @@
 		"name": "numCheckpoints",
 		"outputs": [
 			{
-				"internalType": "uint32",
+				"internalType": "uint256",
 				"name": "",
-				"type": "uint32"
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
