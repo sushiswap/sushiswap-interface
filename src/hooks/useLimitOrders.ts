@@ -123,7 +123,7 @@ const useLimitOrders = () => {
         loading: false,
       })
     );
-  }, [account, chainId, data, limitOrderContract, tokens]);
+  }, [account, chainId, data, limitOrderContract]);
 
   return {
     ...openOrders,
