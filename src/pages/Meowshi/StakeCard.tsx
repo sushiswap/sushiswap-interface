@@ -132,7 +132,7 @@ export default function StakeCard({ xSushiBalance, meowBalance }: StakeCardProps
             new Token(1, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', ''),
             parsedInput.value.toString()
         ),
-        '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D'
+        '0xDB27dA48027062B4035fb5991660F12df1d553F1'
     )
 
     console.log('approvalState:', approvalState, parsedInput.value.toString())
