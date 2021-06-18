@@ -23,7 +23,7 @@ export const setLimitOrderApprovalPending = createAction<string>(
 );
 
 export const replaceLimitOrderState = createAction<{
-  field: Field;
+  independentField: Field;
   typedValue: string;
   inputCurrencyId?: string;
   outputCurrencyId?: string;

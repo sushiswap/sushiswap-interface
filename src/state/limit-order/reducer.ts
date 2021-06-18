@@ -69,7 +69,7 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
           payload: {
             typedValue,
             recipient,
-            field,
+            independentField,
             inputCurrencyId,
             outputCurrencyId,
             fromBentoBalance,
@@ -84,7 +84,7 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
         [Field.OUTPUT]: {
           currencyId: outputCurrencyId,
         },
-        independentField: field,
+        independentField,
         typedValue: typedValue,
         recipient,
         fromBentoBalance,

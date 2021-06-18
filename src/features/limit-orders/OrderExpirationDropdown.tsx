@@ -1,15 +1,13 @@
-import { FC, useCallback, useRef } from "react";
+import { FC, useCallback } from "react";
 import { useLingui } from "@lingui/react";
 import { t } from "@lingui/macro";
 import QuestionHelper from "../../components/QuestionHelper";
-import { ChevronDownIcon } from "@heroicons/react/outline";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../state";
 import { setOrderExpiration } from "../../state/limit-order/actions";
 import { useLimitOrderState } from "../../state/limit-order/hooks";
-import useToggle from "../../hooks/useToggle";
-import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 import { OrderExpiration } from "../../state/limit-order/reducer";
+import NeonSelect, { NeonSelectItem } from "../../components/Neon/Select";
 
 const OrderExpirationDropdown: FC = () => {
   const { i18n } = useLingui();
@@ -23,14 +21,8 @@ const OrderExpirationDropdown: FC = () => {
     [OrderExpiration.month]: i18n._(t`30 Days`),
   };
 
-  const [open, toggle] = useToggle(false);
-  const node = useRef<HTMLDivElement>();
-  useOnClickOutside(node, open ? toggle : undefined);
-
   const handler = useCallback(
     (e, item) => {
-      e.stopPropagation();
-      toggle();
       dispatch(
         setOrderExpiration({
           label: items[item],
@@ -38,16 +30,12 @@ const OrderExpirationDropdown: FC = () => {
         })
       );
     },
-    [dispatch, toggle]
+    [dispatch, items]
   );
 
   return (
     <>
-      <div
-        ref={node}
-        className="flex items-center text-secondary gap-3 cursor-pointer"
-        onClick={toggle}
-      >
+      <div className="flex items-center text-secondary gap-3 cursor-pointer">
         <div className="flex flex-row items-center">
           <span className="text-sm">{i18n._(t`Order Expiration`)}:</span>
           <QuestionHelper
@@ -56,35 +44,13 @@ const OrderExpirationDropdown: FC = () => {
             )}
           />
         </div>
-        <div className="relative">
-          <div className="flex border border-dark-800  h-[38px] rounded divide-x divide-dark-800">
-            <div className="text-sm text-primary flex items-center pl-3 min-w-[80px] font-bold">
-              {items[orderExpiration.value]}
-            </div>
-            <div className="flex items-center justify-center w-9 font-bold text-primary">
-              <ChevronDownIcon width={16} height={16} strokeWidth={2} />
-            </div>
-          </div>
-          <div
-            className={`w-full absolute overflow-hidden right-0 lg:top-12 lg:bottom-[unset] bottom-12 p-3 gap-2 ${
-              open ? "flex flex-col" : "hidden"
-            } z-10 bg-dark-700 rounded`}
-          >
-            {Object.entries(items).map(([k, v]) => (
-              <div
-                key={k}
-                className={`${
-                  `${orderExpiration}` === `${k}`
-                    ? "text-high-emphesis"
-                    : "text-secondary"
-                } flex w-full font-bold cursor-pointer hover:text-white`}
-                onClick={(e) => handler(e, k)}
-              >
-                {v}
-              </div>
-            ))}
-          </div>
-        </div>
+        <NeonSelect value={orderExpiration.label}>
+          {Object.entries(items).map(([k, v]) => (
+            <NeonSelectItem key={k} value={k} onClick={handler}>
+              {v}
+            </NeonSelectItem>
+          ))}
+        </NeonSelect>
       </div>
     </>
   );

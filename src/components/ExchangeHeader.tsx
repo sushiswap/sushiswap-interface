@@ -25,10 +25,10 @@ export default function ExchangeHeader({
   const { route } = useRouter();
 
   return (
-    <div className="flex justify-between mb-4 space-x-3">
-      <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800 h-[46px]">
+    <div className="flex justify-between mb-4 space-x-3 items-start">
+      <div className="grid grid-cols-2 rounded p-3px md:bg-dark-800 h-[46px]">
         <NavLink
-          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
+          activeClassName="font-bold border rounded text-high-emphesis border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink"
           href={`/swap${input ? `/${currencyId(input, chainId)}` : ""}${
             output ? `/${currencyId(output, chainId)}` : ""
           }`}
@@ -39,7 +39,7 @@ export default function ExchangeHeader({
           </a>
         </NavLink>
         <NavLink
-          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
+          activeClassName="font-bold border rounded text-high-emphesis border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink"
           href={`/limit-order${input ? `/${currencyId(input, chainId)}` : ""}${
             output ? `/${currencyId(output, chainId)}` : ""
           }`}
@@ -52,12 +52,12 @@ export default function ExchangeHeader({
       <div className="flex items-center">
         <div className="grid grid-flow-col gap-3">
           {route.includes("limit-order") && (
-            <div className="hidden md:flex items-center h-full w-full cursor-pointer hover:bg-dark-800 rounded px-3 py-1">
+            <div className="hidden md:flex items-center h-full w-full cursor-pointer bg-dark-800 hover:bg-dark-700 rounded px-3 py-1.5">
               <MyOrders />
             </div>
           )}
           {chainId === ChainId.MAINNET && (
-            <div className="hidden md:flex space-x-3 items-center hover:bg-dark-800 rounded h-full w-full px-3 py-1 cursor-pointer">
+            <div className=" text-green text-opacity-80 hover:text-opacity-100 hidden md:flex space-x-3 items-center bg-dark-800 hover:bg-dark-700 rounded h-full w-full px-3 py-1.5 cursor-pointer">
               <svg
                 width="18"
                 height="20"
@@ -71,12 +71,12 @@ export default function ExchangeHeader({
                 />
               </svg>
 
-              <div className="hidden md:block text-green text-baseline">
+              <div className="hidden md:block  text-baseline">
                 <Gas />
               </div>
             </div>
           )}
-          <div className="relative w-full h-full rounded cursor-pointer flex items-center text-secondary hover:text-high-emphesis hover:bg-dark-800 rounded px-1 py-1">
+          <div className="relative w-full h-full rounded cursor-pointer flex items-center text-secondary hover:text-high-emphesis bg-dark-800 hover:bg-dark-700 rounded px-1 py-1">
             <Settings />
           </div>
         </div>

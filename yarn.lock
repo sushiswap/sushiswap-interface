@@ -1408,6 +1408,15 @@
     "@ethersproject/properties" "^5.3.0"
     "@ethersproject/transactions" "^5.3.0"
 
+"@ethersproject/experimental@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@ethersproject/experimental/-/experimental-5.3.0.tgz#3a2698f6b274aff7d5ed27ad741710f573046df4"
+  integrity sha512-her9cBipGroubkod7s1c1clJtbT0oHqOMhQwhvTVcO7tJr+jl631ZAunsO9aNRLE4C1lAip+kCi/GvcZtXichA==
+  dependencies:
+    "@ethersproject/web" "^5.3.0"
+    ethers "^5.3.0"
+    scrypt-js "3.0.1"
+
 "@ethersproject/hash@5.3.0", "@ethersproject/hash@>=5.0.0-beta.128", "@ethersproject/hash@^5.0.4", "@ethersproject/hash@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/hash/-/hash-5.3.0.tgz#f65e3bf3db3282df4da676db6cfa049535dd3643"
@@ -2309,23 +2318,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.39.0.tgz#337c7b8a4f2728ca683d2514cb60fa6fa8e646aa"
   integrity sha512-Ezv/+H2MXIFTE7dqdozjltv5uYqPLYDzwRs62wFPrU5DFGz7h9iiD3AJ6ZJ1r2NWyuJHYFLUajpOnD8WEeyfXQ==
 
-"@sushiswap/sdk@5.0.0-canary.21":
+"@sushiswap/sdk@5.0.0-canary.21", "@sushiswap/sdk@^5.0.0-canary.6":
   version "5.0.0-canary.21"
   resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.21.tgz#e41f907ab7f504501ebe307d31ff19baaca62801"
   integrity sha512-yX9oT62SHUR0eWxpEf3jILA0uCpz28UqvPPCa1+WFumG80mfBV9tVeS6QBYiftBnlcd8iVpnx08INBgEMy10lw==
-  dependencies:
-    "@uniswap/v2-core" "^1.0.0"
-    big.js "^5.2.2"
-    decimal.js-light "^2.5.0"
-    jsbi "^3.1.1"
-    tiny-invariant "^1.1.0"
-    tiny-warning "^1.0.3"
-    toformat "^2.0.0"
-
-"@sushiswap/sdk@^5.0.0-canary.6":
-  version "5.0.0-canary.19"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.19.tgz#28a1f6765cd029e79d1bb8a71b24160355a43aa9"
-  integrity sha512-ncnzV/V7Tm4lh/5MUdgFufgWgxDI4TuhhML2yZxqeS5iqdv4fR67KMe900jQXvluE6hBPZ6rOlD37OnSArwsLA==
   dependencies:
     "@uniswap/v2-core" "^1.0.0"
     big.js "^5.2.2"
@@ -6963,7 +6959,7 @@ ethers@^5.0.31, ethers@^5.1.4:
     "@ethersproject/web" "5.3.0"
     "@ethersproject/wordlists" "5.3.0"
 
-ethers@^5.1.0:
+ethers@^5.1.0, ethers@^5.3.0:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.3.1.tgz#1f018f0aeb651576cd84fd987a45f0b99646d761"
   integrity sha512-xCKmC0gsZ9gks89ZfK3B1y6LlPdvX5fxDtu9SytnpdDJR1M7pmJI+4H0AxQPMgUYr7GtQdmECLR0gWdJQ+lZYw==
@@ -9337,11 +9333,12 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-limitorderv2-sdk@^0.1.45:
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/limitorderv2-sdk/-/limitorderv2-sdk-0.1.49.tgz#3fd239bf1688a5665ed29947fc258aace10fefe9"
-  integrity sha512-/XYplfmmfnyhSX/IbM7A3MzddSaOeqFGxr5G9q3ZRXkKfkQAMSh4uKRHu6BEDJlcim15qgXgrYQVl+CfSLHrQQ==
+limitorderv2-sdk@^0.1.52:
+  version "0.1.52"
+  resolved "https://registry.yarnpkg.com/limitorderv2-sdk/-/limitorderv2-sdk-0.1.52.tgz#ed85cb8adc6b44e3c07b123b293361746d4c2b3f"
+  integrity sha512-tyO3PjILsyBbksxv4zshUtEl0gZUqhPCAuQseIM8Fz2ahkOPNAV4C1KbcK/En3ejgq0MeVFHh7qQ2Qw14dt3nQ==
   dependencies:
+    "@ethersproject/experimental" "^5.3.0"
     "@sushiswap/sdk" "^5.0.0-canary.6"
     axios "^0.21.1"
     big.js "^5.2.2"

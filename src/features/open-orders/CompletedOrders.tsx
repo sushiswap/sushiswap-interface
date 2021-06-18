@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import CurrencyLogo from "../../components/CurrencyLogo";
-import { JSBI } from "@sushiswap/sdk";
 import { useActiveWeb3React } from "../../hooks";
 import useLimitOrders from "../../hooks/useLimitOrders";
 import Badge from "../../components/Badge";
@@ -34,14 +33,14 @@ const CompletedOrders: FC = () => {
               <div className="flex items-center cursor-pointer hover:text-primary">
                 {i18n._(t`Pay`)}
               </div>
-              <div className="flex items-center cursor-pointer hover:text-primary hidden mb:block">
+              <div className="flex items-center cursor-pointer hover:text-primary text-left hidden md:block">
                 {i18n._(t`Rate`)}
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary justify-end">
                 {i18n._(t`Filled`)}
               </div>
             </div>
-            <div className="flex-col space-y-2 md:space-y-5">
+            <div className="flex flex-col-reverse gap-2 md:gap-5">
               {completed.map((order, index) => (
                 <div
                   key={index}
@@ -78,10 +77,9 @@ const CompletedOrders: FC = () => {
                     </div>
                     <div className="hidden md:block text-left font-bold">
                       <div>
-                        {JSBI.divide(
-                          order.limitOrder.amountOut.raw,
-                          order.limitOrder.amountIn.raw
-                        )}{" "}
+                        {order.limitOrder.amountOut
+                          .divide(order.limitOrder.amountIn)
+                          .toSignificant(6)}
                       </div>
                       <div className="text-xs text-secondary">
                         {order.tokenOut.getSymbol(chainId)} per{" "}

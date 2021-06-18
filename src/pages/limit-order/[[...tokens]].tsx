@@ -40,12 +40,9 @@ export default function LimitOrder() {
   const { i18n } = useLingui();
   const { chainId } = useActiveWeb3React();
 
-  const loadedUrlParams = useDefaultsFromURLSearch();
-
-  const [loadedInputCurrency, loadedOutputCurrency] = [
-    useCurrency(loadedUrlParams?.inputCurrencyId),
-    useCurrency(loadedUrlParams?.outputCurrencyId),
-  ];
+  const [currencyIdA, currencyIdB] = useDefaultsFromURLSearch();
+  const loadedInputCurrency = useCurrency(currencyIdA);
+  const loadedOutputCurrency = useCurrency(currencyIdB);
 
   // token warning stuff
   const [dismissTokenWarning, setDismissTokenWarning] =
@@ -82,17 +79,19 @@ export default function LimitOrder() {
     fromBentoBalance,
   } = useLimitOrderState();
 
+  // Limit order derived state
   const { currencies, parsedAmounts, currencyBalances, currentPrice } =
     useDerivedLimitOrderInfo();
 
-  const currentPriceAsString = currentPrice?.toSignificant(6);
-
+  // Limit order state handlers
   const {
     onSwitchTokens,
     onCurrencySelection,
     onUserInput,
     onChangeRecipient,
   } = useLimitOrderActionHandlers();
+
+  const currentPriceAsString = currentPrice?.toSignificant(6);
 
   const dependentField: Field =
     independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT;

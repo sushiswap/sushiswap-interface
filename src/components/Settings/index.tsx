@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { RowBetween, RowFixed } from "../Row";
-import { StyledMenu, StyledMenuButton } from "../StyledMenu";
-import styled, { ThemeContext } from "styled-components";
+import { StyledMenu } from "../StyledMenu";
 import {
   useExpertModeManager,
   useUserArcherUseRelay,
@@ -19,26 +18,13 @@ import Button from "../Button";
 import Modal from "../Modal";
 import ModalHeader from "../ModalHeader";
 import QuestionHelper from "../QuestionHelper";
-import { Settings } from "react-feather";
 import Toggle from "../Toggle";
 import TransactionSettings from "../TransactionSettings";
 import Typography from "../Typography";
 import { t } from "@lingui/macro";
 import { useLingui } from "@lingui/react";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
-
-const StyledMenuIcon = styled(Settings)`
-  height: 20px;
-  width: 20px;
-
-  > * {
-    stroke: currentColor;
-  }
-
-  :hover {
-    opacity: 0.7;
-  }
-`;
+import { AdjustmentsIcon } from "@heroicons/react/outline";
 
 export default function SettingsTab() {
   const { i18n } = useLingui();
@@ -47,7 +33,6 @@ export default function SettingsTab() {
   const open = useModalOpen(ApplicationModal.SETTINGS);
   const toggle = useToggleSettingsMenu();
 
-  const theme = useContext(ThemeContext);
   const [userSlippageTolerance, setUserslippageTolerance] =
     useUserSlippageTolerance();
 
@@ -66,30 +51,17 @@ export default function SettingsTab() {
 
   return (
     <StyledMenu ref={node}>
-      <StyledMenuButton onClick={toggle} id="open-settings-dialog-button">
-        {/* <StyledMenuIcon /> */}
-        {/* {expertMode ? (
-                    <EmojiWrapper>
-                        <span role="img" aria-label="wizard-icon">
-                            🧙
-                        </span>
-                    </EmojiWrapper>
-                ) : null} */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5 transform rotate-90"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-          />
-        </svg>
-      </StyledMenuButton>
+      <div
+        onClick={toggle}
+        id="open-settings-dialog-button"
+        className="w-7 h-7 flex items-center justify-center"
+      >
+        <AdjustmentsIcon
+          width={24}
+          height={24}
+          className="transform rotate-90"
+        />
+      </div>
       {open && (
         <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded">
           <div className="p-8 space-y-4">

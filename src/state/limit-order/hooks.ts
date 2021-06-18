@@ -22,13 +22,14 @@ import { useCurrencyBalances } from "../wallet/hooks";
 import { isAddress, tryParseAmount, wrappedCurrency } from "../../functions";
 import useParsedQueryString from "../../hooks/useParsedQueryString";
 import { ParsedQs } from "qs";
-import { LimitOrderState, OrderExpiration } from "./reducer";
+import { OrderExpiration } from "./reducer";
 import { useBentoBalances } from "../bentobox/hooks";
 import { useTradeExactIn, useTradeExactOut } from "../../hooks/Trades";
 import useENS from "../../hooks/useENS";
 import { t } from "@lingui/macro";
 import { BAD_RECIPIENT_ADDRESSES } from "../../constants";
 import { i18n } from "@lingui/core";
+import { useRouter } from "next/router";
 
 export function useLimitOrderActionHandlers(): {
   onCurrencySelection: (field: Field, currency: Currency) => void;
@@ -244,20 +245,6 @@ export function useLimitOrderApprovalPending(): string {
   );
 }
 
-function parseCurrencyFromURLParameter(
-  urlParam: any,
-  chainId = ChainId.MAINNET
-): string {
-  if (typeof urlParam === "string") {
-    const valid = isAddress(urlParam);
-    const nativeSymbol = Currency.getNativeCurrencySymbol(chainId);
-    if (valid) return valid;
-    if (urlParam.toUpperCase() === nativeSymbol) return nativeSymbol;
-    if (valid === false) return nativeSymbol;
-  }
-  return Currency.getNativeCurrencySymbol(chainId) ?? "";
-}
-
 function parseTokenAmountURLParameter(urlParam: any): string {
   return typeof urlParam === "string" && !isNaN(parseFloat(urlParam))
     ? urlParam
@@ -289,38 +276,11 @@ function validatedRecipient(recipient: any): string | null {
   return null;
 }
 
-export function queryParametersToSwapState(
-  parsedQs: ParsedQs,
-  chainId = ChainId.MAINNET
-): Partial<LimitOrderState> {
-  let inputCurrency = parseCurrencyFromURLParameter(
-    parsedQs.inputCurrency,
-    chainId
-  );
-  let outputCurrency = parseCurrencyFromURLParameter(
-    parsedQs.outputCurrency,
-    chainId
-  );
-  if (inputCurrency === outputCurrency) {
-    if (typeof parsedQs.outputCurrency === "string") {
-      inputCurrency = "";
-    } else {
-      outputCurrency = "";
-    }
-  }
-
-  const recipient = validatedRecipient(parsedQs.recipient);
-
+export function queryParametersToSwapState(parsedQs: ParsedQs) {
   return {
-    [Field.INPUT]: {
-      currencyId: inputCurrency,
-    },
-    [Field.OUTPUT]: {
-      currencyId: outputCurrency,
-    },
     typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
     independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
-    recipient,
+    recipient: validatedRecipient(parsedQs.recipient),
     limitPrice: parseTokenAmountURLParameter(parsedQs.exactRate),
     fromBentoBalance: parseBooleanFieldParameter(parsedQs.fromBento),
     orderExpiration: { value: OrderExpiration.never, label: i18n._(t`Never`) },
@@ -328,50 +288,30 @@ export function queryParametersToSwapState(
 }
 
 // updates the swap state to use the defaults for a given network
-export function useDefaultsFromURLSearch():
-  | {
-      inputCurrencyId?: string;
-      outputCurrencyId?: string;
-      chainId?: ChainId;
-    }
-  | undefined {
+export function useDefaultsFromURLSearch() {
   const { chainId } = useActiveWeb3React();
   const dispatch = useDispatch<AppDispatch>();
   const parsedQs = useParsedQueryString();
 
-  const [result, setResult] = useState<
-    | {
-        inputCurrencyId?: string;
-        outputCurrencyId?: string;
-        chainId?: ChainId;
-      }
-    | undefined
-  >();
+  const {
+    query: { tokens },
+  } = useRouter();
+  const [currencyIdA, currencyIdB] = tokens || [
+    Currency.getNativeCurrencySymbol(chainId),
+    undefined,
+  ];
 
   useEffect(() => {
     if (!chainId) return;
 
-    const parsed = queryParametersToSwapState(parsedQs, chainId);
-
     dispatch(
       replaceLimitOrderState({
-        typedValue: parsed.typedValue,
-        field: parsed.independentField,
-        inputCurrencyId: parsed[Field.INPUT].currencyId,
-        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-        recipient: parsed.recipient,
-        fromBentoBalance: parsed.fromBentoBalance,
-        limitPrice: parsed.limitPrice,
-        orderExpiration: parsed.orderExpiration,
+        ...queryParametersToSwapState(parsedQs),
+        inputCurrencyId: currencyIdA,
+        outputCurrencyId: currencyIdB,
       })
     );
+  }, [dispatch, chainId, parsedQs, currencyIdA, currencyIdB]);
 
-    setResult({
-      inputCurrencyId: parsed[Field.INPUT].currencyId,
-      outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, chainId]);
-
-  return result;
+  return [currencyIdA, currencyIdB];
 }

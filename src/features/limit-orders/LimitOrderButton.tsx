@@ -31,7 +31,11 @@ interface LimitOrderButtonProps extends ButtonProps {
   token: Token;
 }
 
-const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
+const LimitOrderButton: FC<LimitOrderButtonProps> = ({
+  token,
+  color,
+  ...rest
+}) => {
   const { i18n } = useLingui();
   const { fromBentoBalance, orderExpiration, recipient } = useLimitOrderState();
   const { parsedAmounts, currencies, inputError } = useDerivedLimitOrderInfo();
@@ -143,19 +147,34 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
       )}
 
       {wrongChain ? (
-        <Button disabled={disabled} onClick={toggleWalletModal} {...rest}>
+        <Button
+          disabled={disabled}
+          color={disabled ? "gray" : color}
+          onClick={toggleWalletModal}
+          {...rest}
+        >
           {i18n._(t`Chain not supported yet`)}
         </Button>
       ) : !account ? (
-        <Button disabled={disabled} onClick={toggleWalletModal} {...rest}>
+        <Button
+          disabled={disabled}
+          color={disabled ? "gray" : color}
+          onClick={toggleWalletModal}
+          {...rest}
+        >
           {i18n._(t`Connect Wallet`)}
         </Button>
       ) : inputError ? (
-        <Button disabled={true} {...rest} color="gray">
+        <Button color={"gray"} disabled={true} {...rest}>
           {inputError}
         </Button>
       ) : showTokenApprove ? (
-        <Button onClick={tokenApprove} className="mb-4" {...rest}>
+        <Button
+          onClick={tokenApprove}
+          color={disabled ? "gray" : color}
+          className="mb-4"
+          {...rest}
+        >
           {tokenApprovalState === ApprovalState.PENDING ? (
             <Dots>{i18n._(t`Approving ${token.symbol}`)}</Dots>
           ) : (
@@ -163,21 +182,32 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ token, ...rest }) => {
           )}
         </Button>
       ) : showLimitApprove ? (
-        <Button disabled={disabled} onClick={onApprove} {...rest}>
+        <Button
+          disabled={disabled}
+          color={disabled ? "gray" : color}
+          onClick={onApprove}
+          {...rest}
+        >
           {i18n._(t`Approve Limit Order`)}
         </Button>
       ) : (permit && !fromBentoBalance) ||
         (!permit &&
           approvalState === BentoApprovalState.APPROVED &&
           !fromBentoBalance) ? (
-        <Button disabled={disabled} onClick={() => execute(token)} {...rest}>
+        <Button
+          disabled={disabled}
+          color={disabled ? "gray" : color}
+          onClick={() => execute(token)}
+          {...rest}
+        >
           {i18n._(t`Deposit ${token.symbol} into BentoBox`)}
         </Button>
       ) : (
         <Button
           disabled={disabled}
-          {...rest}
+          color={disabled ? "gray" : color}
           onClick={() => setOpenConfirmationModal(true)}
+          {...rest}
         >
           {i18n._(t`Review Limit Order`)}
         </Button>
