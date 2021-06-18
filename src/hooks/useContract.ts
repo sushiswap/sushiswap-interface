@@ -27,6 +27,7 @@ import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from "../constants";
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from "../constants/multicall";
 
 import ALCX_REWARDER_ABI from "../constants/abis/alcx-rewarder.json";
+import AXSUSHI_ABI from '../constants/abis/axsushi.json';
 import BAR_ABI from "../constants/abis/bar.json";
 import BASE_SWAPPER_ABI from "../constants/abis/swapper.json";
 import BENTOBOX_ABI from "../constants/abis/bentobox.json";
@@ -34,6 +35,7 @@ import BORING_HELPER_ABI from "../constants/abis/boring-helper.json";
 import CHAINLINK_ORACLE_ABI from "../constants/abis/chainlink-oracle.json";
 import COMPLEX_REWARDER_ABI from "../constants/abis/complex-rewarder.json";
 import { Contract } from "@ethersproject/contracts";
+import CRXSUSHI_ABI from '../constants/abis/crxsushi.json';
 import DASHBOARD2_ABI from "../constants/abis/dashboard2.json";
 import DASHBOARD_ABI from "../constants/abis/dashboard.json";
 import ENS_ABI from "../constants/abis/ens-registrar.json";
@@ -41,6 +43,7 @@ import ENS_PUBLIC_RESOLVER_ABI from "../constants/abis/ens-public-resolver.json"
 import ERC20_ABI from "../constants/abis/erc20.json";
 import { ERC20_BYTES32_ABI } from "../constants/abis/erc20";
 import FACTORY_ABI from "../constants/abis/factory.json";
+import INARI_ABI from '../constants/abis/inari.json';
 import IUniswapV2PairABI from "../constants/abis/uniswap-v2-pair.json";
 import KASHIPAIR_ABI from "../constants/abis/kashipair.json";
 import MAKER_ABI from "../constants/abis/maker.json";
@@ -203,6 +206,14 @@ export function useSushiContract(withSignerIfPossible = true): Contract | null {
   );
 }
 
+export function useAXSushiContract(withSignerIfPossible = true): Contract | null {
+  return useContract('0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a', AXSUSHI_ABI, withSignerIfPossible);
+}
+
+export function useCrXSushiContract(withSignerIfPossible = true): Contract | null {
+  return useContract('0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2', CRXSUSHI_ABI, withSignerIfPossible);
+}
+
 export function useMasterChefContract(
   withSignerIfPossible?: boolean
 ): Contract | null {
@@ -304,6 +315,10 @@ export function useSushiSwapSwapper(): Contract | null {
 
 export function useChainlinkOracle(): Contract | null {
   return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false);
+}
+
+export function useInariContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0x8A8038243F1c5f3Cf8B8d59000d31b467Fd4beF6', INARI_ABI, withSignerIfPossible);
 }
 
 // experimental:

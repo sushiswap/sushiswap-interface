@@ -583,6 +583,22 @@ export const XSUSHI = new Token(
   "SushiBar"
 );
 
+export const CRXSUSHI = new Token(
+  ChainId.MAINNET,
+  '0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2',
+  8,
+  'crXSUSHI',
+  'Cream SushiBar'
+);
+
+export const AXSUSHI = new Token(
+  ChainId.MAINNET,
+  '0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a',
+  18,
+  'aXSUSHI',
+  'Aave interest bearing XSUSHI'
+);
+
 export const LIFT = new Token(
   ChainId.MAINNET,
   "0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6",
