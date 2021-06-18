@@ -13,7 +13,16 @@
     "circular": "madge --circular src --extensions ts,tsx,js,jsx",
     "unused": "next-unused",
     "prepare": "husky install",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
+    "lint": "next lint"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "next lint",
+      "prettier --write"
+    ],
+    "*.{md,css}": "prettier --write"
   },
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
