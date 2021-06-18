@@ -43,6 +43,7 @@ export default function ExchangeHeader({
           href={`/limit-order${input ? `/${currencyId(input, chainId)}` : ""}${
             output ? `/${currencyId(output, chainId)}` : ""
           }`}
+          as="/limit-order"
         >
           <a className="flex items-center justify-center px-4 text-base font-bold text-center rounded-md md:px-8 text-secondary hover:text-high-emphesis">
             {i18n._(t`Limit`)}
