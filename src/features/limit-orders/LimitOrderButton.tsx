@@ -111,7 +111,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({
       setOpenConfirmationModal(false);
 
       const resp = await order.send();
-
+      console.log(resp);
       if (resp.success) {
         addPopup({
           txn: { hash: null, summary: "Limit order created", success: true },
@@ -122,7 +122,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({
       addPopup({
         txn: {
           hash: null,
-          summary: `Error creating limit order: ${e?.data}`,
+          summary: `Error: ${e?.response?.data?.data}`,
           success: false,
         },
       });
