@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import dynamic from "next/dynamic";
 import Loader from "../Loader";
 import { NetworkContextName } from "../../constants";
 import { network } from "../../connectors";
@@ -26,6 +26,10 @@ const Message = styled.h2`
   // color: ${({ theme }) => theme.secondary1};
 `;
 
+const GnosisManagerNoSSR = dynamic(() => import("./GnosisManager"), {
+  ssr: false,
+});
+
 export default function Web3ReactManager({
   children,
 }: {
@@ -38,15 +42,6 @@ export default function Web3ReactManager({
     error: networkError,
     activate: activateNetwork,
   } = useWeb3React(NetworkContextName);
-
-  let safeMultisigConnector;
-  if (typeof window !== "undefined") {
-    // Client-side-only code
-    // Try to eagerly connect to Gnosis Safe
-    const safeMultisigConnector = new SafeAppConnector();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const triedToConnectToSafe = useSafeAppConnection(safeMultisigConnector);
-  }
 
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect();
@@ -100,5 +95,10 @@ export default function Web3ReactManager({
     ) : null;
   }
 
-  return children;
+  return (
+    <>
+      <GnosisManagerNoSSR />
+      {children}
+    </>
+  );
 }
