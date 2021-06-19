@@ -22,7 +22,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://gnosis-safe.io/*"
+          "value": "frame-ancestors https://gnosis-safe.io/*"
         }
       ]
     }
