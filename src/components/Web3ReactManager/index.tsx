@@ -6,10 +6,6 @@ import { network } from "../../connectors";
 import styled from "styled-components";
 import { t } from "@lingui/macro";
 import useEagerConnect from "../../hooks/useEagerConnect";
-import {
-  useSafeAppConnection,
-  SafeAppConnector,
-} from "@gnosis.pm/safe-apps-web3-react";
 import useInactiveListener from "../../hooks/useInactiveListener";
 import { useLingui } from "@lingui/react";
 import { useWeb3React } from "@web3-react/core";
