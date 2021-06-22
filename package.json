@@ -37,7 +37,7 @@
     "@reduxjs/toolkit": "^1.5.1",
     "@sushiswap/core": "2.0.0-canary.0",
     "@sushiswap/default-token-list": "6.39.0",
-    "@sushiswap/sdk": "^5.0.0-canary.21",
+    "@sushiswap/sdk": "5.0.0-canary.22",
     "@sushiswap/sushi-data": "^1.0.24",
     "@transak/transak-sdk": "^1.0.28",
     "@uniswap/token-lists": "1.0.0-beta.24",

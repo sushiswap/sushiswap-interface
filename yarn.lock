@@ -2245,7 +2245,7 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
-"@sushiswap/core@2.0.0-canary.0":
+"@sushiswap/core@2.0.0-canary.0", "@sushiswap/core@^2.0.0-canary.0":
   version "2.0.0-canary.0"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
@@ -2255,12 +2255,12 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.39.0.tgz#337c7b8a4f2728ca683d2514cb60fa6fa8e646aa"
   integrity sha512-Ezv/+H2MXIFTE7dqdozjltv5uYqPLYDzwRs62wFPrU5DFGz7h9iiD3AJ6ZJ1r2NWyuJHYFLUajpOnD8WEeyfXQ==
 
-"@sushiswap/sdk@^5.0.0-canary.21":
-  version "5.0.0-canary.21"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.21.tgz#e41f907ab7f504501ebe307d31ff19baaca62801"
-  integrity sha512-yX9oT62SHUR0eWxpEf3jILA0uCpz28UqvPPCa1+WFumG80mfBV9tVeS6QBYiftBnlcd8iVpnx08INBgEMy10lw==
+"@sushiswap/sdk@5.0.0-canary.22":
+  version "5.0.0-canary.22"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.22.tgz#6d6ba76d816d606164992086117a814a7d7d8aad"
+  integrity sha512-75jVt5u3ToxysZxk3ke7dkriqeOUF1B9PbatWxElwQfuZiBfBkUD/tiS/WhkUqdRsnk2Xia5p8XQdAJzPdZv8w==
   dependencies:
-    "@uniswap/v2-core" "^1.0.0"
+    "@sushiswap/core" "^2.0.0-canary.0"
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
     jsbi "^3.1.1"
@@ -2689,11 +2689,6 @@
   version "1.0.0-beta.24"
   resolved "https://registry.yarnpkg.com/@uniswap/token-lists/-/token-lists-1.0.0-beta.24.tgz#6809b80bee58e4a2f235cdedc07113652c85a741"
   integrity sha512-9IMltV7ITwxnjuK0LYXlUZhYIB8wVAdwx5NAbGjHF9ss+zKL9FTyFfWTFif/EL6PCWvST+2B15ofUwSVZd17RA==
-
-"@uniswap/v2-core@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@uniswap/v2-core/-/v2-core-1.0.1.tgz#af8f508bf183204779938969e2e54043e147d425"
-  integrity sha512-MtybtkUPSyysqLY2U210NBDeCHX+ltHt3oADGdjqoThZaFRDKwM6k1Nb3F0A3hk5hwuQvytFWhrWHOEq6nVJ8Q==
 
 "@walletconnect/browser-utils@^1.4.1":
   version "1.4.1"
