@@ -1,38 +1,38 @@
-import { useActiveWeb3React, useSushiContract } from "../../hooks";
+import { useActiveWeb3React, useSushiContract } from '../../hooks'
 
-import { BigNumber } from "@ethersproject/bignumber";
-import { Chef } from "./enum";
-import { Zero } from "@ethersproject/constants";
-import { useCallback } from "react";
-import { useChefContract } from "./hooks";
+import { BigNumber } from '@ethersproject/bignumber'
+import { Chef } from './enum'
+import { Zero } from '@ethersproject/constants'
+import { useCallback } from 'react'
+import { useChefContract } from './hooks'
 
 export default function useMasterChef(chef: Chef) {
-  const { account } = useActiveWeb3React();
+  const { account } = useActiveWeb3React()
 
-  const sushi = useSushiContract();
+  const sushi = useSushiContract()
 
-  const contract = useChefContract(chef);
+  const contract = useChefContract(chef)
 
   // Deposit
   const deposit = useCallback(
     async (pid: number, amount: BigNumber) => {
       try {
-        let tx;
+        let tx
 
         if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.deposit(pid, amount);
+          tx = await contract?.deposit(pid, amount)
         } else {
-          tx = await contract?.deposit(pid, amount, account);
+          tx = await contract?.deposit(pid, amount, account)
         }
 
-        return tx;
+        return tx
       } catch (e) {
-        console.error(e);
-        return e;
+        console.error(e)
+        return e
       }
     },
     [account, contract]
-  );
+  )
 
   // Withdraw
   const withdraw = useCallback(
@@ -42,66 +42,61 @@ export default function useMasterChef(chef: Chef) {
       //     amount,
       // })
       try {
-        let tx;
+        let tx
 
         if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.withdraw(pid, amount);
+          tx = await contract?.withdraw(pid, amount)
         } else {
-          tx = await contract?.withdraw(pid, amount, account);
+          tx = await contract?.withdraw(pid, amount, account)
         }
 
-        return tx;
+        return tx
       } catch (e) {
-        console.error(e);
-        return e;
+        console.error(e)
+        return e
       }
     },
     [account, contract]
-  );
+  )
 
   const harvest = useCallback(
     async (pid: number) => {
       try {
-        console.log("harvest", { contract, account, pid });
+        console.log('harvest', { contract, account, pid })
 
-        let tx;
+        let tx
 
         if (chef === Chef.MASTERCHEF) {
-          tx = await contract?.deposit(pid, Zero);
+          tx = await contract?.deposit(pid, Zero)
         } else if (chef === Chef.MASTERCHEF_V2) {
-          const pendingSushi = await contract?.pendingSushi(pid, account);
+          const pendingSushi = await contract?.pendingSushi(pid, account)
 
-          const balanceOf = await sushi?.balanceOf(contract?.address);
+          const balanceOf = await sushi?.balanceOf(contract?.address)
 
           // If MasterChefV2 doesn't have enough sushi to harvest, batch in a harvest.
           if (pendingSushi.gt(balanceOf)) {
             tx = await contract?.batch(
               [
-                contract?.interface?.encodeFunctionData(
-                  "harvestFromMasterChef"
-                ),
-                contract?.interface?.encodeFunctionData("harvest", [
-                  pid,
-                  account,
-                ]),
+                contract?.interface?.encodeFunctionData('harvestFromMasterChef'),
+                contract?.interface?.encodeFunctionData('harvest', [pid, account]),
               ],
               true
-            );
+            )
           } else {
-            tx = await contract?.harvest(pid, account);
+            tx = await contract?.harvest(pid, account)
           }
         } else if (chef === Chef.MINICHEF) {
-          tx = await contract?.harvest(pid, account);
+          tx = await contract?.harvest(pid, account)
         }
 
-        return tx;
+        return tx
       } catch (e) {
-        console.error(e);
-        return e;
+        console.error(e)
+        return e
       }
     },
     [account, contract, sushi]
-  );
+  )
 
-  return { deposit, withdraw, harvest };
+  return { deposit, withdraw, harvest }
 }

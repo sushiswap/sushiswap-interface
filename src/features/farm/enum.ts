@@ -12,5 +12,5 @@ export enum Rewarder {
 
 export enum PairType {
   SWAP,
-  LENDING,
+  KASHI,
 }
