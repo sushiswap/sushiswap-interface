@@ -97,6 +97,14 @@ module.exports = withBundleAnalyzer(
         //   source: '/farm/:type*',
         //   destination: '/onsen/:type*',
         // },
+        {
+          source: '/me',
+          destination: '/user',
+        },
+        {
+          source: '/balances',
+          destination: '/user/balances',
+        },
       ]
     },
     i18n: {
