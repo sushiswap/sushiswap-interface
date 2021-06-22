@@ -105,6 +105,10 @@ module.exports = withBundleAnalyzer(
           source: '/balances',
           destination: '/user/balances',
         },
+        {
+          source: '/bentobox',
+          destination: '/landing/bentobox',
+        },
       ]
     },
     i18n: {

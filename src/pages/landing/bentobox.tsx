@@ -1,11 +1,11 @@
-import Card from '../components/Card'
+import Card from '../../components/Card'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import Web3Status from '../components/Web3Status'
+import Web3Status from '../../components/Web3Status'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 
 export default function BenotBox() {
