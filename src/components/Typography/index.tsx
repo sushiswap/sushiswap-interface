@@ -4,6 +4,11 @@ import { classNames } from "../../functions";
 
 export type TypographyWeight = 400 | 700;
 
+const WEIGHTS = {
+  400: "font-medium",
+  700: "font-bold",
+};
+
 export type TypographyVariant =
   | "hero"
   | "h1"
@@ -49,6 +54,7 @@ function Typography({
     {
       className: classNames(
         VARIANTS[variant],
+        WEIGHTS[weight],
         onClick ? "cursor-pointer select-none" : "",
         className
       ),
