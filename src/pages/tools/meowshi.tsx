@@ -157,7 +157,7 @@ export default function Meowshi() {
             />
           </div>
 
-          <div className="bg-[rgba(255,255,255,0.04)] p-4 rounded flex flex-row items-center gap-4 h-[58px] mb-[54px]">
+          <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4 mb-[54px]">
             <InformationCircleIcon width={48} height={48} color="pink" />
             <Typography variant="xs" weight={700}>
               {i18n._(t`MEOW tokens wrap xSUSHI into BentoBox for double yields and can be
