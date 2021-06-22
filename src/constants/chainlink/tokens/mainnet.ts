@@ -1,5 +1,11 @@
 const MAINNET_CHAINLINK_TOKENS = [
   {
+    symbol: 'FEI',
+    name: 'Fei Money',
+    address: '0x956F47F50A910163D8BF957Cf5846D573E7f87CA',
+    decimals: 18,
+  },
+  {
     symbol: '1INCH',
     name: '1INCH Token',
     address: '0x111111111117dC0aa78b770fA6A738034120C302',
