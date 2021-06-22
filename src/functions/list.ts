@@ -1,13 +1,13 @@
-import { contenthashToUri, uriToHttp } from "./convert";
+import { contenthashToUri, uriToHttp } from './convert'
 
-import Ajv from "ajv";
-import { DEFAULT_LIST_OF_LISTS } from "../constants/token-lists";
-import { TokenList } from "@uniswap/token-lists";
-import { Version } from "@uniswap/token-lists";
-import { parseENSAddress } from "./ens";
-import schema from "@uniswap/token-lists/src/tokenlist.schema.json";
+import Ajv from 'ajv'
+import { DEFAULT_LIST_OF_LISTS } from '../constants/token-lists'
+import { TokenList } from '@uniswap/token-lists'
+import { Version } from '@uniswap/token-lists'
+import { parseENSAddress } from './ens'
+import schema from '@uniswap/token-lists/src/tokenlist.schema.json'
 
-const tokenListValidator = new Ajv({ allErrors: true }).compile(schema);
+const tokenListValidator = new Ajv({ allErrors: true }).compile(schema)
 
 /**
  * Contains the logic for resolving a list URL to a validated token list
@@ -18,75 +18,69 @@ export async function getTokenList(
   listUrl: string,
   resolveENSContentHash: (ensName: string) => Promise<string>
 ): Promise<TokenList> {
-  const parsedENS = parseENSAddress(listUrl);
-  let urls: string[];
+  const parsedENS = parseENSAddress(listUrl)
+  let urls: string[]
   if (parsedENS) {
-    let contentHashUri;
+    let contentHashUri
     try {
-      contentHashUri = await resolveENSContentHash(parsedENS.ensName);
+      contentHashUri = await resolveENSContentHash(parsedENS.ensName)
     } catch (error) {
-      console.debug(`Failed to resolve ENS name: ${parsedENS.ensName}`, error);
-      throw new Error(`Failed to resolve ENS name: ${parsedENS.ensName}`);
+      console.debug(`Failed to resolve ENS name: ${parsedENS.ensName}`, error)
+      throw new Error(`Failed to resolve ENS name: ${parsedENS.ensName}`)
     }
-    let translatedUri;
+    let translatedUri
     try {
-      translatedUri = contenthashToUri(contentHashUri);
+      translatedUri = contenthashToUri(contentHashUri)
     } catch (error) {
-      console.debug("Failed to translate contenthash to URI", contentHashUri);
-      throw new Error(
-        `Failed to translate contenthash to URI: ${contentHashUri}`
-      );
+      console.debug('Failed to translate contenthash to URI', contentHashUri)
+      throw new Error(`Failed to translate contenthash to URI: ${contentHashUri}`)
     }
-    urls = uriToHttp(`${translatedUri}${parsedENS.ensPath ?? ""}`);
+    urls = uriToHttp(`${translatedUri}${parsedENS.ensPath ?? ''}`)
   } else {
-    urls = uriToHttp(listUrl);
+    urls = uriToHttp(listUrl)
   }
   for (let i = 0; i < urls.length; i++) {
-    const url = urls[i];
-    const isLast = i === urls.length - 1;
-    let response;
+    const url = urls[i]
+    const isLast = i === urls.length - 1
+    let response
     try {
-      response = await fetch(url);
+      response = await fetch(url)
     } catch (error) {
-      console.debug("Failed to fetch list", listUrl, error);
-      if (isLast) throw new Error(`Failed to download list ${listUrl}`);
-      continue;
+      console.debug('Failed to fetch list', listUrl, error)
+      if (isLast) throw new Error(`Failed to download list ${listUrl}`)
+      continue
     }
 
     if (!response.ok) {
-      if (isLast) throw new Error(`Failed to download list ${listUrl}`);
-      continue;
+      if (isLast) throw new Error(`Failed to download list ${listUrl}`)
+      continue
     }
 
-    const json = await response.json();
+    const json = await response.json()
     if (!tokenListValidator(json)) {
       const validationErrors: string =
         tokenListValidator.errors?.reduce<string>((memo, error) => {
-          const add = `${error.dataPath} ${error.message ?? ""}`;
-          return memo.length > 0 ? `${memo}; ${add}` : `${add}`;
-        }, "") ?? "unknown error";
-      throw new Error(`Token list failed validation: ${validationErrors}`);
+          const add = `${error.dataPath} ${error.message ?? ''}`
+          return memo.length > 0 ? `${memo}; ${add}` : `${add}`
+        }, '') ?? 'unknown error'
+      throw new Error(`Token list failed validation: ${validationErrors}`)
     }
-    return json;
+    return json
   }
-  throw new Error("Unrecognized list URL protocol.");
+  throw new Error('Unrecognized list URL protocol.')
 }
 
 // use ordering of default list of lists to assign priority
 export function sortByListPriority(urlA: string, urlB: string) {
-  const first = DEFAULT_LIST_OF_LISTS.includes(urlA)
-    ? DEFAULT_LIST_OF_LISTS.indexOf(urlA)
-    : Number.MAX_SAFE_INTEGER;
-  const second = DEFAULT_LIST_OF_LISTS.includes(urlB)
-    ? DEFAULT_LIST_OF_LISTS.indexOf(urlB)
-    : Number.MAX_SAFE_INTEGER;
+  const first = DEFAULT_LIST_OF_LISTS.includes(urlA) ? DEFAULT_LIST_OF_LISTS.indexOf(urlA) : Number.MAX_SAFE_INTEGER
+  const second = DEFAULT_LIST_OF_LISTS.includes(urlB) ? DEFAULT_LIST_OF_LISTS.indexOf(urlB) : Number.MAX_SAFE_INTEGER
 
   // need reverse order to make sure mapping includes top priority last
-  if (first < second) return 1;
-  else if (first > second) return -1;
-  return 0;
+  if (first < second) return 1
+  else if (first > second) return -1
+  return 0
 }
 
 export function listVersionLabel(version: Version): string {
-  return `v${version.major}.${version.minor}.${version.patch}`;
+  return `v${version.major}.${version.minor}.${version.patch}`
 }

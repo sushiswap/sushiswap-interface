@@ -1,130 +1,150 @@
 // CONVENTION formatFoo -> string
 
-import { BigNumber } from "@ethersproject/bignumber";
-import Numeral from "numeral";
-import { ethers } from "ethers";
-import { getAddress } from "@ethersproject/address";
+import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/sdk'
+
+import { BigNumber } from '@ethersproject/bignumber'
+import Numeral from 'numeral'
+import { ethers } from 'ethers'
+import { getAddress } from '@ethersproject/address'
 
 export const capitalize = (s) => {
-  if (typeof s !== "string") return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
 
 export const formatK = (value: string) => {
-  return Numeral(value).format("0.[00]a");
-};
+  return Numeral(value).format('0.[00]a')
+}
 
 // shorten the checksummed version of the input address to have 0x + 4 characters at start and end
 export function shortenAddress(address: string, chars = 4): string {
   try {
-    const parsed = getAddress(address);
-    return `${parsed.substring(0, chars + 2)}...${parsed.substring(
-      42 - chars
-    )}`;
+    const parsed = getAddress(address)
+    return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
   } catch (error) {
-    throw Error(`Invalid 'address' parameter '${address}'.`);
+    throw Error(`Invalid 'address' parameter '${address}'.`)
   }
 }
 
 // shorten string to its maximum length using three dots
 export function shortenString(string: string, length: number): string {
-  if (!string) return "";
-  if (length < 5) return string;
-  if (string.length <= length) return string;
-  return (
-    string.slice(0, 4) +
-    "..." +
-    string.slice(string.length - length + 5, string.length)
-  );
+  if (!string) return ''
+  if (length < 5) return string
+  if (string.length <= length) return string
+  return string.slice(0, 4) + '...' + string.slice(string.length - length + 5, string.length)
 }
 
 // using a currency library here in case we want to add more in future
-const priceFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
+const priceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
   minimumFractionDigits: 2,
-});
+})
 
 export function formatPercent(percentString: any) {
-  const percent = parseFloat(percentString);
+  const percent = parseFloat(percentString)
   if (!percent || percent === 0) {
-    return "0%";
+    return '0%'
   }
   if (percent < 0.0001 && percent > 0) {
-    return "< 0.0001%";
+    return '< 0.0001%'
   }
   if (percent < 0 && percent > -0.0001) {
-    return "< 0.0001%";
+    return '< 0.0001%'
   }
-  const fixedPercent = percent.toFixed(2);
-  if (fixedPercent === "0.00") {
-    return "0%";
+  const fixedPercent = percent.toFixed(2)
+  if (fixedPercent === '0.00') {
+    return '0%'
   }
   if (Number(fixedPercent) > 0) {
     if (Number(fixedPercent) > 100) {
-      return `${percent?.toFixed(0).toLocaleString()}%`;
+      return `${percent?.toFixed(0).toLocaleString()}%`
     } else {
-      return `${fixedPercent}%`;
+      return `${fixedPercent}%`
     }
   } else {
-    return `${fixedPercent}%`;
+    return `${fixedPercent}%`
   }
 }
 
 export const formatNumber = (number: any, usd = false) => {
-  if (isNaN(number) || number === "" || number === undefined) {
-    return usd ? "$0.00" : "0";
+  if (isNaN(number) || number === '' || number === undefined) {
+    return usd ? '$0.00' : '0'
   }
-  const num = parseFloat(number);
+  const num = parseFloat(number)
 
   if (num > 500000000) {
-    return (usd ? "$" : "") + formatK(num.toFixed(0));
+    return (usd ? '$' : '') + formatK(num.toFixed(0))
   }
 
   if (num === 0) {
     if (usd) {
-      return "$0.00";
+      return '$0.00'
     }
-    return "0";
+    return '0'
   }
 
   if (num < 0.0001 && num > 0) {
-    return usd ? "< $0.0001" : "< 0.0001";
+    return usd ? '< $0.0001' : '< 0.0001'
   }
 
   if (num > 1000) {
     return usd
-      ? "$" + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
-      : "" + Number(parseFloat(String(num)).toFixed(0)).toLocaleString();
+      ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+      : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
   }
 
   if (usd) {
     if (num < 0.1) {
-      return "$" + Number(parseFloat(String(num)).toFixed(4));
+      return '$' + Number(parseFloat(String(num)).toFixed(4))
     } else {
-      const usdString = priceFormatter.format(num);
-      return "$" + usdString.slice(1, usdString.length);
+      const usdString = priceFormatter.format(num)
+      return '$' + usdString.slice(1, usdString.length)
     }
   }
 
-  return parseFloat(String(num)).toPrecision(4);
-};
-
-export function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+  return parseFloat(String(num)).toPrecision(4)
 }
 
-export const formatBalance = (
-  value: ethers.BigNumberish,
-  decimals = 18,
-  maxFraction = 0
-) => {
-  const formatted = ethers.utils.formatUnits(value, decimals);
+export function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+}
+
+export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
+  const formatted = ethers.utils.formatUnits(value, decimals)
   if (maxFraction > 0) {
-    const split = formatted.split(".");
+    const split = formatted.split('.')
     if (split.length > 1) {
-      return split[0] + "." + split[1].substr(0, maxFraction);
+      return split[0] + '.' + split[1].substr(0, maxFraction)
     }
   }
-  return formatted;
-};
+  return formatted
+}
+
+export function formatCurrencyAmount(amount: CurrencyAmount<Currency> | undefined, sigFigs: number) {
+  if (!amount) {
+    return '-'
+  }
+
+  if (JSBI.equal(amount.quotient, JSBI.BigInt(0))) {
+    return '0'
+  }
+
+  if (amount.divide(amount.decimalScale).lessThan(new Fraction(1, 100000))) {
+    return '<0.00001'
+  }
+
+  return amount.toSignificant(sigFigs)
+}
+
+export function formatPrice(price: Price<Currency, Currency> | undefined, sigFigs: number) {
+  if (!price) {
+    return '-'
+  }
+
+  if (parseFloat(price.toFixed(sigFigs)) < 0.0001) {
+    return '<0.0001'
+  }
+
+  return price.toSignificant(sigFigs)
+}
