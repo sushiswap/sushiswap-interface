@@ -1,13 +1,12 @@
-import Head from "next/head";
-import Layout from "../../layouts/DefaultLayout";
+import Head from 'next/head'
 
 export default function Analytics() {
   return (
-    <Layout>
+    <>
       <Head>
-        <title>Analytics | Sushi</title>
-        <meta name="description" content="Sushi Analytics..." />
+        <title>Analytics Dashboard | Sushi</title>
+        <meta name="description" content="SUSHI Analytics Dashboard by Sushi..." />
       </Head>
-    </Layout>
-  );
+    </>
+  )
 }
