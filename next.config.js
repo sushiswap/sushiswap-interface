@@ -91,14 +91,14 @@ module.exports = withBundleAnalyzer(
           destination: '/kashi/lend/:token*',
         },
         // Onsen
-        {
-          source: '/farm',
-          destination: '/onsen',
-        },
-        {
-          source: '/farm/:type*',
-          destination: '/onsen/:type*',
-        },
+        // {
+        //   source: '/farm',
+        //   destination: '/onsen',
+        // },
+        // {
+        //   source: '/farm/:type*',
+        //   destination: '/onsen/:type*',
+        // },
       ]
     },
     i18n: {
