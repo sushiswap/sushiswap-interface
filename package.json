@@ -28,6 +28,7 @@
     "@binance-chain/bsc-connector": "^1.0.0",
     "@ethereumjs/common": "^2.3.0",
     "@ethereumjs/tx": "^3.2.0",
+    "@gnosis.pm/safe-apps-web3-react": "^0.5.0",
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
     "@lingui/core": "^3.10.0",
