@@ -1,13 +1,9 @@
-import { ArrowDownRight, ArrowRight, ArrowUpRight } from "react-feather";
-import { Direction, TransactionReview } from "../../entities/TransactionReview";
+import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'react-feather'
+import { Direction, TransactionReview } from '../../entities/TransactionReview'
 
-import React from "react";
+import React from 'react'
 
-function TransactionReviewView({
-  transactionReview,
-}: {
-  transactionReview: TransactionReview;
-}) {
+function TransactionReviewView({ transactionReview }: { transactionReview: TransactionReview }) {
   return (
     <>
       {transactionReview && transactionReview.length > 0 && (
@@ -23,39 +19,39 @@ function TransactionReviewView({
                     <ArrowRight
                       size="1rem"
                       style={{
-                        display: "inline",
-                        marginRight: "6px",
-                        marginLeft: "6px",
+                        display: 'inline',
+                        marginRight: '6px',
+                        marginLeft: '6px',
                       }}
                     />
                   ) : line.direction === Direction.UP ? (
                     <ArrowUpRight
                       size="1rem"
                       style={{
-                        display: "inline",
-                        marginRight: "6px",
-                        marginLeft: "6px",
+                        display: 'inline',
+                        marginRight: '6px',
+                        marginLeft: '6px',
                       }}
                     />
                   ) : (
                     <ArrowDownRight
                       size="1rem"
                       style={{
-                        display: "inline",
-                        marginRight: "6px",
-                        marginLeft: "6px",
+                        display: 'inline',
+                        marginRight: '6px',
+                        marginLeft: '6px',
                       }}
                     />
                   )}
                   {line.to}
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       )}
     </>
-  );
+  )
 }
 
-export default TransactionReviewView;
+export default TransactionReviewView
