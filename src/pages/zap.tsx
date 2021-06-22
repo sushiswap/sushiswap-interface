@@ -1,87 +1,74 @@
-import { ApprovalState, useApproveCallback } from "../hooks/useApproveCallback";
-import { AutoRow, RowBetween, RowFixed } from "../components/Row";
-import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from "../constants";
-import Button, { ButtonError } from "../components/Button";
+import { ApprovalState, useApproveCallback } from '../hooks/useApproveCallback'
+import { AutoRow, RowBetween, RowFixed } from '../components/Row'
+import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../constants'
+import Button, { ButtonError } from '../components/Button'
+import { ChainId, Currency, JSBI, Percent, ROUTER_ADDRESS, Trade, WNATIVE } from '@sushiswap/sdk'
+import Column, { AutoColumn } from '../components/Column'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
-  ChainId,
-  Currency,
-  JSBI,
-  Percent,
-  ROUTER_ADDRESS,
-  Trade,
-  WETH,
-} from "@sushiswap/sdk";
-import Column, { AutoColumn } from "../components/Column";
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  computeTradePriceBreakdown,
+  // computeTradePriceBreakdown,
   warningSeverity,
-} from "../functions/prices";
-import styled, { keyframes } from "styled-components";
-import {
-  useDerivedZapInfo,
-  useZapActionHandlers,
-  useZapState,
-} from "../state/zap/hooks";
+} from '../functions/prices'
+import styled, { keyframes } from 'styled-components'
+import { useDerivedZapInfo, useZapActionHandlers, useZapState } from '../state/zap/hooks'
 
-import Alert from "../components/Alert";
-import { AppDispatch } from "../state";
-import { ArrowLeft } from "react-feather";
-import CurrencyInputPanel from "../components/CurrencyInputPanel";
-import CurrencyLogo from "../components/CurrencyLogo";
-import DoubleCurrencyLogo from "../components/DoubleLogo";
-import FormattedPriceImpact from "../features/swap/FormattedPriceImpact";
-import Head from "next/head";
-import Layout from "../layouts/DefaultLayout";
-import Link from "next/link";
-import Loader from "../components/Loader";
-import PoolList from "../components/PoolList";
-import ProgressSteps from "../components/ProgressSteps";
-import QuestionHelper from "../components/QuestionHelper";
-import Router from "next/router";
-import Settings from "../components/Settings";
-import SwapRoute from "../features/swap/SwapRoute";
-import { ZAPPER_ADDRESS } from "../constants/addresses";
-import { currencyId as getCurrencyId } from "../functions/currency/currencyId";
-import { maxAmountSpend } from "../functions/currency/maxAmountSpend";
-import { resetZapState } from "../state/zap/actions";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
-import { useCurrency } from "../hooks/Tokens";
-import { useDefaultsFromURLSearch } from "../state/zap/hooks";
-import { useDispatch } from "react-redux";
-import { useLingui } from "@lingui/react";
-import usePool from "../hooks/usePool";
-import { useRouterContract } from "../hooks/useContract";
-import { useUserSlippageTolerance } from "../state/user/hooks";
-import { useWalletModalToggle } from "../state/application/hooks";
-import useZapper from "../hooks/useZapper";
+import Alert from '../components/Alert'
+import { AppDispatch } from '../state'
+import { ArrowLeft } from 'react-feather'
+import CurrencyInputPanel from '../components/CurrencyInputPanel'
+import CurrencyLogo from '../components/CurrencyLogo'
+import DoubleCurrencyLogo from '../components/DoubleLogo'
+import FormattedPriceImpact from '../features/swap/FormattedPriceImpact'
+import Head from 'next/head'
+import Link from 'next/link'
+import Loader from '../components/Loader'
+import PoolList from '../components/PoolList'
+import ProgressSteps from '../components/ProgressSteps'
+import QuestionHelper from '../components/QuestionHelper'
+import Router from 'next/router'
+import Settings from '../components/Settings'
+import SwapRoute from '../features/swap/SwapRoute'
+import { ZAPPER_ADDRESS } from '../constants/addresses'
+import { currencyId as getCurrencyId } from '../functions/currency/currencyId'
+import { maxAmountSpend } from '../functions/currency/maxAmountSpend'
+import { resetZapState } from '../state/zap/actions'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useCurrency } from '../hooks/Tokens'
+import { useDefaultsFromURLSearch } from '../state/zap/hooks'
+import { useDispatch } from 'react-redux'
+import { useLingui } from '@lingui/react'
+import usePool from '../hooks/usePool'
+import { useRouterContract } from '../hooks/useContract'
+import { useUserSlippageTolerance } from '../state/user/hooks'
+import { useWalletModalToggle } from '../state/application/hooks'
+import useZapper from '../hooks/useZapper'
 
 const PoolAllocationWrapper = styled.div`
   margin-top: 1rem;
   background-color: ${({ theme }) => theme.bg1};
   border-radius: 0.625rem 0.625rem 0 0;
   padding: 1rem;
-`;
+`
 
 const PoolBreakDownWrapper = styled.div`
   background-color: ${({ theme }) => theme.bg1};
   border-top: 1px solid rgba(42, 58, 80, 0.4);
   padding: 1rem
   border-radius: 0 0 0.625rem 0.625rem;
-`;
+`
 
 const StyledArrowLeft = styled(ArrowLeft)`
   color: ${({ theme }) => theme.text1};
-`;
+`
 
 const PoolTokenRow = styled.span`
   display: flex;
   margin: 10px 0;
-`;
+`
 
-const defaultHighlightColor = "#2b2f3e";
-const defaultBaseColor = "#21262b";
+const defaultHighlightColor = '#2b2f3e'
+const defaultBaseColor = '#21262b'
 
 const skeletonKeyframes = keyframes`
   0% {
@@ -90,16 +77,11 @@ const skeletonKeyframes = keyframes`
   100% {
     background-position: calc(200px + 100%) 0;
   }
-`;
+`
 
 const Skeleton = styled.span`
   background-color: ${defaultBaseColor};
-  background-image: linear-gradient(
-    90deg,
-    ${defaultBaseColor},
-    ${defaultHighlightColor},
-    ${defaultBaseColor}
-  );
+  background-image: linear-gradient(90deg, ${defaultBaseColor}, ${defaultHighlightColor}, ${defaultBaseColor});
   background-size: 200px 100%;
   background-repeat: no-repeat;
   border-radius: 4px;
@@ -107,18 +89,18 @@ const Skeleton = styled.span`
   display: inline-block;
   line-height: 1;
   width: 100%;
-`;
+`
 
 const CardHeader = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>()
 
   return (
     <AutoColumn>
-      <RowBetween style={{ padding: "1rem 0rem 1rem" }}>
+      <RowBetween style={{ padding: '1rem 0rem 1rem' }}>
         <Link href="/zap">
           <a
             onClick={(e) => {
-              dispatch(resetZapState());
+              dispatch(resetZapState())
             }}
           >
             <StyledArrowLeft />
@@ -127,157 +109,156 @@ const CardHeader = () => {
         <div
           style={{
             fontWeight: 500,
-            fontSize: "22px",
-            marginBottom: "20px",
+            fontSize: '22px',
+            marginBottom: '20px',
           }}
         >
           Zap Liquidity
         </div>
-        <Settings />
+        {/* <Settings /> */}
       </RowBetween>
-      <RowBetween style={{ padding: "0rem 0rem 1rem" }}>
+      <RowBetween style={{ padding: '0rem 0rem 1rem' }}>
         <Alert
           showIcon={true}
           message={
             <>
-              Zaps allow you to LP in any pool with any asset. Please be careful
-              when zapping low liquidity tokens as there may be very high
-              slippage. ETH, WBTC, USDC, DAI and SUSHI are the safest tokens to
-              zap with. If price impact seems too high, try disabling multihop.
+              Zaps allow you to LP in any pool with any asset. Please be careful when zapping low liquidity tokens as
+              there may be very high slippage. ETH, WBTC, USDC, DAI and SUSHI are the safest tokens to zap with. If
+              price impact seems too high, try disabling multihop.
             </>
           }
           type="warning"
         />
       </RowBetween>
     </AutoColumn>
-  );
-};
+  )
+}
 
 export default function Zap() {
-  const { i18n } = useLingui();
+  const { i18n } = useLingui()
 
-  const { account, chainId } = useActiveWeb3React();
+  // const { account, chainId } = useActiveWeb3React();
 
-  const loadedUrlParams = useDefaultsFromURLSearch();
+  // const loadedUrlParams = useDefaultsFromURLSearch();
 
-  const [poolAddress, currencyId] = [
-    loadedUrlParams?.poolAddress,
-    loadedUrlParams?.currencyId,
-  ];
+  // const [poolAddress, currencyId] = [
+  //   loadedUrlParams?.poolAddress,
+  //   loadedUrlParams?.currencyId,
+  // ];
 
-  const currency = useCurrency(currencyId);
+  // const currency = useCurrency(currencyId);
 
-  const { onFieldInput } = useZapActionHandlers(false);
-  const {
-    typedValue,
-    currency0,
-    currency1,
-    token0,
-    token1,
-    poolTokenPercentage,
-    currencyBalance,
-    parsedAmount,
-    error,
-    bestTrade,
-    liquidityMinted,
-    currencyOneOutput,
-    currencyZeroOutput,
-    isTradingUnderlying,
-    encodeSwapData,
-  } = useDerivedZapInfo(currency ?? undefined, poolAddress);
-  const { zapIn } = useZapper(currency ?? undefined);
-  const dispatch = useDispatch<AppDispatch>();
+  // const { onFieldInput } = useZapActionHandlers(false);
+  // const {
+  //   typedValue,
+  //   currency0,
+  //   currency1,
+  //   token0,
+  //   token1,
+  //   poolTokenPercentage,
+  //   currencyBalance,
+  //   parsedAmount,
+  //   error,
+  //   bestTrade,
+  //   liquidityMinted,
+  //   currencyOneOutput,
+  //   currencyZeroOutput,
+  //   isTradingUnderlying,
+  //   encodeSwapData,
+  // } = useDerivedZapInfo(currency ?? undefined, poolAddress);
+  // const { zapIn } = useZapper(currency ?? undefined);
+  // const dispatch = useDispatch<AppDispatch>();
 
-  const route = bestTrade?.route;
-  const noRoute = !route;
+  // const route = bestTrade?.route;
+  // const noRoute = !route;
 
-  const { priceImpactWithoutFee } = computeTradePriceBreakdown(bestTrade);
-  const priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
-  const zapperAddress = ZAPPER_ADDRESS[chainId];
+  // const { priceImpactWithoutFee } = computeTradePriceBreakdown(bestTrade);
+  // const priceImpactSeverity = warningSeverity(priceImpactWithoutFee);
+  // const zapperAddress = ZAPPER_ADDRESS[chainId];
 
-  // // check whether the user has approved the router on the input token
-  const [approval, approveCallback] = useApproveCallback(
-    parsedAmount,
-    zapperAddress
-  );
+  // // // check whether the user has approved the router on the input token
+  // const [approval, approveCallback] = useApproveCallback(
+  //   parsedAmount,
+  //   zapperAddress
+  // );
 
-  // check if user has gone through approval process, used to show two step buttons, reset on token change
-  const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false);
+  // // check if user has gone through approval process, used to show two step buttons, reset on token change
+  // const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false);
 
-  // get custom setting values for user in bips
-  const [allowedSlippage] = useUserSlippageTolerance();
+  // // get custom setting values for user in bips
+  // const [allowedSlippage] = useUserSlippageTolerance();
 
-  // Get min pooltokens received based on user slippage preferences
-  const minTokensReceived = JSBI.divide(
-    // Take raw token (number * (10000 - ALLOWED_SLIPPAGE))/10000
-    JSBI.multiply(
-      liquidityMinted?.raw || JSBI.BigInt(0),
-      JSBI.BigInt(10000 - allowedSlippage)
-    ),
-    JSBI.BigInt(10000)
-  );
+  // // Get min pooltokens received based on user slippage preferences
+  // const minTokensReceived = JSBI.divide(
+  //   // Take raw token (number * (10000 - ALLOWED_SLIPPAGE))/10000
+  //   JSBI.multiply(
+  //     liquidityMinted?.raw || JSBI.BigInt(0),
+  //     JSBI.BigInt(10000 - allowedSlippage)
+  //   ),
+  //   JSBI.BigInt(10000)
+  // );
 
-  // mark when a user has submitted an approval, reset onTokenSelection for input field
-  useEffect(() => {
-    if (approval === ApprovalState.PENDING) {
-      setApprovalSubmitted(true);
-    }
-  }, [approval, approvalSubmitted]);
+  // // mark when a user has submitted an approval, reset onTokenSelection for input field
+  // useEffect(() => {
+  //   if (approval === ApprovalState.PENDING) {
+  //     setApprovalSubmitted(true);
+  //   }
+  // }, [approval, approvalSubmitted]);
 
-  // show approve flow when: no error on inputs, not approved or pending, or approved in current session
-  const showApproveFlow =
-    !error &&
-    (approval === ApprovalState.NOT_APPROVED ||
-      approval === ApprovalState.PENDING ||
-      (approvalSubmitted && approval === ApprovalState.APPROVED));
+  // // show approve flow when: no error on inputs, not approved or pending, or approved in current session
+  // const showApproveFlow =
+  //   !error &&
+  //   (approval === ApprovalState.NOT_APPROVED ||
+  //     approval === ApprovalState.PENDING ||
+  //     (approvalSubmitted && approval === ApprovalState.APPROVED));
 
-  const handleCurrencyASelect = useCallback(
-    (currency: Currency) => {
-      const newCurrencyId = getCurrencyId(currency);
-      Router.push(`zap?poolAddress=${poolAddress}&currencyId=${newCurrencyId}`);
-    },
-    [poolAddress]
-  );
+  // const handleCurrencyASelect = useCallback(
+  //   (currency: Currency) => {
+  //     const newCurrencyId = getCurrencyId(currency);
+  //     Router.push(`zap?poolAddress=${poolAddress}&currencyId=${newCurrencyId}`);
+  //   },
+  //   [poolAddress]
+  // );
 
-  const toggleWalletModal = useWalletModalToggle();
+  // const toggleWalletModal = useWalletModalToggle();
 
-  const zapCallback = useCallback(() => {
-    const swapData = encodeSwapData();
+  // const zapCallback = useCallback(() => {
+  //   const swapData = encodeSwapData();
 
-    zapIn(
-      currency === Currency.ETHER
-        ? "0x0000000000000000000000000000000000000000"
-        : currencyId,
-      poolAddress,
-      parsedAmount,
-      currency === Currency.ETHER && isTradingUnderlying
-        ? WETH[chainId || 1].address
-        : isTradingUnderlying
-        ? poolAddress
-        : ROUTER_ADDRESS[chainId || 1],
-      minTokensReceived.toString(),
-      swapData
-    ).then(
-      () => dispatch(resetZapState()),
-      (err) => console.log(err, "zap error")
-    );
-  }, [
-    encodeSwapData,
-    zapIn,
-    currency,
-    currencyId,
-    poolAddress,
-    parsedAmount,
-    isTradingUnderlying,
-    chainId,
-    minTokensReceived,
-    dispatch,
-  ]);
+  //   zapIn(
+  //     currency === Currency.ETHER
+  //       ? "0x0000000000000000000000000000000000000000"
+  //       : currencyId,
+  //     poolAddress,
+  //     parsedAmount,
+  //     currency === Currency.ETHER && isTradingUnderlying
+  //       ? WETH[chainId || 1].address
+  //       : isTradingUnderlying
+  //       ? poolAddress
+  //       : ROUTER_ADDRESS[chainId || 1],
+  //     minTokensReceived.toString(),
+  //     swapData
+  //   ).then(
+  //     () => dispatch(resetZapState()),
+  //     (err) => console.log(err, "zap error")
+  //   );
+  // }, [
+  //   encodeSwapData,
+  //   zapIn,
+  //   currency,
+  //   currencyId,
+  //   poolAddress,
+  //   parsedAmount,
+  //   isTradingUnderlying,
+  //   chainId,
+  //   minTokensReceived,
+  //   dispatch,
+  // ]);
 
-  const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2);
+  // const showRoute = Boolean(bestTrade && bestTrade.route.path.length > 2);
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{i18n._(t`Zap`)} | Sushi</title>
         <meta
@@ -285,7 +266,7 @@ export default function Zap() {
           content="SushiSwap allows for swapping of ERC20 compatible tokens across multiple networks"
         />
       </Head>
-      {!poolAddress ? (
+      {/* {!poolAddress ? (
         <PoolList />
       ) : (
         <div className="w-full max-w-xl p-4 rounded bg-dark-900 shadow-swap">
@@ -308,7 +289,6 @@ export default function Zap() {
               onUserInput={onFieldInput}
               onCurrencySelect={handleCurrencyASelect}
               id="zap-currency-input"
-              cornerRadiusBottomNone={false}
               showCommonBases
             />
             <PoolAllocationWrapper>
@@ -458,7 +438,6 @@ export default function Zap() {
                       fontSize: "14px",
                     }}
                   >
-                    {/* bestTrade?.priceImpact */}
                     <FormattedPriceImpact
                       priceImpact={bestTrade?.priceImpact}
                     />
@@ -517,7 +496,7 @@ export default function Zap() {
                       approval === ApprovalState.APPROVED ? (
                       "Approved"
                     ) : (
-                      "Approve " + currency?.getSymbol(chainId)
+                      "Approve " + currency?.symbol
                     )}
                   </Button>
                   <Button
@@ -570,7 +549,7 @@ export default function Zap() {
             </>
           </AutoColumn>
         </div>
-      )}
-    </Layout>
-  );
+      )} */}
+    </>
+  )
 }

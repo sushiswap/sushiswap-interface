@@ -7,32 +7,31 @@ import {
   useOneDayBlock,
   usePairs,
   useSushiPrice,
-} from "../services/graph";
+} from '../services/graph'
 // import useFarms from '../features/farm/useFarms'
-import { useMasterChefContract, useMulticallContract } from "../hooks";
+import { useMasterChefContract, useMulticallContract } from '../hooks'
 
-import Head from "next/head";
-import Layout from "../layouts/DefaultLayout";
-import { useEffect } from "react";
+import Head from 'next/head'
+import { useEffect } from 'react'
 
 // import useUserInfo from '../features/farm/useUserInfo'
 
 export default function Test() {
-  const masterChefContract = useMulticallContract();
+  const masterChefContract = useMulticallContract()
   useEffect(() => {
-    (async function () {
+    ;(async function () {
       try {
         console.log(
           await masterChefContract.aggregate([
-            ["0x0769fd68dFb93167989C6f7254cd0D766Fb2841F", "0x081e3eda"],
+            ['0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', '0x081e3eda'],
             // { "target": "0x0769fd68dFb93167989C6f7254cd0D766Fb2841F", "callData": "0x081e3eda"}
           ])
-        );
+        )
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    })();
-  });
+    })()
+  })
 
   // const res = useUserInfo(masterChefContract)
 
@@ -64,11 +63,11 @@ export default function Test() {
   // console.log({ res, res2 })
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Test | Sushi</title>
         <meta name="description" content="Test..." />
       </Head>
-    </Layout>
-  );
+    </>
+  )
 }

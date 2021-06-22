@@ -1,21 +1,20 @@
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 
-import Dots from "../components/Dots";
-import Head from "next/head";
-import Layout from "../layouts/DefaultLayout";
-import Typography from "../components/Typography";
-import capitalize from "lodash/capitalize";
-import { classNames } from "../functions";
-import { getChainsStatus } from "../services/covalent/fetchers";
-import { useChainsStatus } from "../services/covalent/hooks";
-import { useState } from "react";
+import Dots from '../components/Dots'
+import Head from 'next/head'
+import Typography from '../components/Typography'
+import capitalize from 'lodash/capitalize'
+import { classNames } from '../functions'
+import { getChainsStatus } from '../services/covalent/fetchers'
+import { useChainsStatus } from '../services/covalent/hooks'
+import { useState } from 'react'
 
 export default function Status({ initialData }) {
   // const res = useChainsStatus({ initialData })
   // const [tabIndex, setTabIndex] = useState(0)
   // const { data } = res.data
   return (
-    <Layout>
+    <>
       <Head>
         <title>Status | Sushi</title>
         <meta name="description" content="Sushi Status..." />
@@ -92,8 +91,8 @@ export default function Status({ initialData }) {
             </div> */}
 
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-    </Layout>
-  );
+    </>
+  )
 }
 
 // export async function getStaticProps() {

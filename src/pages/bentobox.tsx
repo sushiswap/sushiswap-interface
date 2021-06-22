@@ -1,19 +1,18 @@
-import Card from "../components/Card";
-import Head from "next/head";
-import Image from "next/image";
-import Layout from "../layouts/DefaultLayout";
-import Link from "next/link";
-import React from "react";
-import Web3Status from "../components/Web3Status";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
-import { useLingui } from "@lingui/react";
+import Card from '../components/Card'
+import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
+import React from 'react'
+import Web3Status from '../components/Web3Status'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 export default function BenotBox() {
-  const { i18n } = useLingui();
-  const { account } = useActiveWeb3React();
+  const { i18n } = useLingui()
+  const { account } = useActiveWeb3React()
   return (
-    <Layout>
+    <>
       <Head>
         <title>BentoBox | Sushi</title>
         <meta
@@ -21,10 +20,7 @@ export default function BenotBox() {
           content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
         />
       </Head>
-      <div
-        className="absolute top-0 left-0 right-0"
-        style={{ maxHeight: 700, zIndex: -1 }}
-      >
+      <div className="absolute top-0 left-0 right-0" style={{ maxHeight: 700, zIndex: -1 }}>
         <Image
           className="opacity-50"
           src="/bentobox-hero.jpg"
@@ -46,13 +42,9 @@ export default function BenotBox() {
         />
 
         <div className="container max-w-5xl mx-auto">
-          <div className="text-3xl font-bold md:text-5xl text-high-emphesis">
-            {i18n._(t`BentoBox Apps`)}
-          </div>
+          <div className="text-3xl font-bold md:text-5xl text-high-emphesis">{i18n._(t`BentoBox Apps`)}</div>
           <div className="p-4 mt-0 mb-8 text-base font-medium md:text-lg lg:text-xltext-high-emphesis md:mt-4">
-            {i18n._(
-              t`BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield.`
-            )}
+            {i18n._(t`BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield.`)}
           </div>
         </div>
 
@@ -112,6 +104,6 @@ export default function BenotBox() {
           </div>
         </div>
       </div>
-    </Layout>
-  );
+    </>
+  )
 }
