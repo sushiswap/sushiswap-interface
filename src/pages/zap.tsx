@@ -172,8 +172,6 @@ export default function Zap() {
   const route = bestTrade?.route
   const noRoute = !route
 
-  // const { priceImpactWithoutFee } = computeTradePriceBreakdown(bestTrade)
-
   const { realizedLPFee, priceImpact } = useMemo(() => {
     if (!bestTrade) return { realizedLPFee: undefined, priceImpact: undefined }
 
@@ -194,8 +192,6 @@ export default function Zap() {
 
   // get custom setting values for user in bips
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ZAP_SLIPPAGE_TOLERANCE)
-
-  console.log({ allowedSlippage })
 
   // Get min pooltokens received based on user slippage preferences
   const minTokensReceived = JSBI.divide(

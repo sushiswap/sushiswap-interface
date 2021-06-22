@@ -15,8 +15,6 @@ import { useCurrency } from '../../hooks/Tokens'
 import useFarms from '../../hooks/useZapperFarms'
 
 const TokenBalance = ({ farm }: any) => {
-  console.log({ lp: farm.liquidityPair })
-
   const currency0 = useCurrency(farm.liquidityPair.token0.id)
   const currency1 = useCurrency(farm.liquidityPair.token1.id)
   return (
