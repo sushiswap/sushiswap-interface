@@ -339,7 +339,7 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">New Yield Farms: IRON, DHT, WFIL, PAUTO </div>
+                                        <div className="text-white">New Yield Farms: ibBTC, BIFI, dTOP </div>
                                         <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
                                     <div className=""></div>
