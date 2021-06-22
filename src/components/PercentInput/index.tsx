@@ -1,11 +1,11 @@
-import React from "react";
-import { escapeRegExp } from "../../functions";
-import styled from "styled-components";
+import React from 'react'
+import { escapeRegExp } from '../../functions'
+import styled from 'styled-components'
 
 const StyledInput = styled.input<{
-  error?: boolean;
-  fontSize?: string;
-  align?: string;
+  error?: boolean
+  fontSize?: string
+  align?: string
 }>`
   color: ${({ error, theme }) => (error ? theme.red1 : theme.text1)};
   width: 0;
@@ -15,7 +15,7 @@ const StyledInput = styled.input<{
   border: none;
   flex: 1 1 auto;
   background-color: transparent;
-  font-size: ${({ fontSize }) => fontSize ?? "24px"};
+  font-size: ${({ fontSize }) => fontSize ?? '24px'};
   text-align: ${({ align }) => align && align};
   white-space: nowrap;
   overflow: hidden;
@@ -27,7 +27,7 @@ const StyledInput = styled.input<{
     -webkit-appearance: none;
   }
 
-  [type="number"] {
+  [type='number'] {
     -moz-appearance: textfield;
   }
 
@@ -39,9 +39,9 @@ const StyledInput = styled.input<{
   ::placeholder {
     color: ${({ theme }) => theme.text4};
   }
-`;
+`
 
-const inputRegex = RegExp(`^\\d*$`); // match escaped "." characters via in a non-capturing group
+const inputRegex = RegExp(`^\\d*$`) // match escaped "." characters via in a non-capturing group
 
 export const Input = React.memo(
   ({
@@ -51,20 +51,17 @@ export const Input = React.memo(
     className,
     ...rest
   }: {
-    value: string | number;
-    onUserInput: (input: string) => void;
-    error?: boolean;
-    fontSize?: string;
-    align?: "right" | "left";
-  } & Omit<React.HTMLProps<HTMLInputElement>, "ref" | "onChange" | "as">) => {
+    value: string | number
+    onUserInput: (input: string) => void
+    error?: boolean
+    fontSize?: string
+    align?: 'right' | 'left'
+  } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
     const enforcer = (nextUserInput: string) => {
-      if (
-        nextUserInput === "" ||
-        inputRegex.test(escapeRegExp(nextUserInput))
-      ) {
-        onUserInput(nextUserInput);
+      if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
+        onUserInput(nextUserInput)
       }
-    };
+    }
 
     return (
       <StyledInput
@@ -72,7 +69,7 @@ export const Input = React.memo(
         value={value}
         onChange={(event) => {
           // replace commas with periods, because uniswap exclusively uses period as the decimal separator
-          enforcer(event.target.value.replace(/,/g, ".").replace(/%/g, ""));
+          enforcer(event.target.value.replace(/,/g, '.').replace(/%/g, ''))
         }}
         // universal input options
         inputMode="decimal"
@@ -82,7 +79,7 @@ export const Input = React.memo(
         // text-specific options
         type="text"
         pattern="^[0-9]*$"
-        placeholder={placeholder || "100"}
+        placeholder={placeholder || '100'}
         min={0}
         max={100}
         minLength={1}
@@ -90,12 +87,12 @@ export const Input = React.memo(
         spellCheck="false"
         className={className}
       />
-    );
+    )
   }
-);
+)
 
-Input.displayName = "PercentInput";
+Input.displayName = 'PercentInput'
 
-export default Input;
+export default Input
 
 // const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group

@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export const poolsV2Query = gql`
   query poolsV2Query(
@@ -7,12 +7,7 @@ export const poolsV2Query = gql`
     $orderBy: String! = "timestamp"
     $orderDirection: String! = "desc"
   ) {
-    pools(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-    ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       pair
       allocPoint
@@ -23,4 +18,4 @@ export const poolsV2Query = gql`
       }
     }
   }
-`;
+`

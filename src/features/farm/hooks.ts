@@ -1,27 +1,19 @@
-import { ChainId, JSBI, TokenAmount } from "@sushiswap/sdk";
-import { Chef, PairType } from "./enum";
-import {
-  NEVER_RELOAD,
-  useSingleCallResult,
-  useSingleContractMultipleData,
-} from "../../state/multicall/hooks";
-import {
-  useMasterChefContract,
-  useMasterChefV2Contract,
-  useMiniChefV2Contract,
-} from "../../hooks";
+import { ChainId, CurrencyAmount, JSBI } from '@sushiswap/sdk'
+import { Chef, PairType } from './enum'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
+import { useMasterChefContract, useMasterChefV2Contract, useMiniChefV2Contract } from '../../hooks'
 
-import { Contract } from "@ethersproject/contracts";
-import { SUSHI } from "../../constants";
-import { Zero } from "@ethersproject/constants";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useMemo } from "react";
-import zip from "lodash/zip";
+import { Contract } from '@ethersproject/contracts'
+import { SUSHI } from '../../constants'
+import { Zero } from '@ethersproject/constants'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useMemo } from 'react'
+import zip from 'lodash/zip'
 
 export function useChefContract(chef: Chef) {
-  const masterChefContract = useMasterChefContract();
-  const masterChefV2Contract = useMasterChefV2Contract();
-  const miniChefContract = useMiniChefV2Contract();
+  const masterChefContract = useMasterChefContract()
+  const masterChefV2Contract = useMasterChefV2Contract()
+  const miniChefContract = useMiniChefV2Contract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
@@ -29,19 +21,19 @@ export function useChefContract(chef: Chef) {
       [Chef.MINICHEF]: miniChefContract,
     }),
     [masterChefContract, masterChefV2Contract, miniChefContract]
-  );
-  return useMemo(() => contracts[chef], [contracts, chef]);
+  )
+  return useMemo(() => contracts[chef], [contracts, chef])
 }
 
 const CHEFS = {
   [ChainId.MAINNET]: [Chef.MASTERCHEF, Chef.MASTERCHEF_V2],
   [ChainId.MATIC]: [Chef.MINICHEF],
-};
+}
 
 export function useChefContracts(chefs: Chef[]) {
-  const masterChefContract = useMasterChefContract();
-  const masterChefV2Contract = useMasterChefV2Contract();
-  const miniChefContract = useMiniChefV2Contract();
+  const masterChefContract = useMasterChefContract()
+  const masterChefV2Contract = useMasterChefV2Contract()
+  const miniChefContract = useMiniChefV2Contract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
@@ -49,113 +41,87 @@ export function useChefContracts(chefs: Chef[]) {
       [Chef.MINICHEF]: miniChefContract,
     }),
     [masterChefContract, masterChefV2Contract, miniChefContract]
-  );
-  return chefs.map((chef) => contracts[chef]);
+  )
+  return chefs.map((chef) => contracts[chef])
 }
 
 export function useUserInfo(farm, token) {
-  const { account } = useActiveWeb3React();
+  const { account } = useActiveWeb3React()
 
-  const contract = useChefContract(farm.chef);
+  const contract = useChefContract(farm.chef)
 
   const args = useMemo(() => {
     if (!account || !farm) {
-      return;
+      return
     }
-    return [String(farm.id), String(account)];
-  }, [farm, account]);
+    return [String(farm.id), String(account)]
+  }, [farm, account])
 
-  const result = useSingleCallResult(
-    args ? contract : null,
-    "userInfo",
-    args
-  )?.result;
+  const result = useSingleCallResult(args ? contract : null, 'userInfo', args)?.result
 
-  const value = result?.[0];
+  const value = result?.[0]
 
-  const amount = value ? JSBI.BigInt(value.toString()) : undefined;
+  const amount = value ? JSBI.BigInt(value.toString()) : undefined
 
-  return amount ? new TokenAmount(token, amount) : undefined;
+  return amount ? CurrencyAmount.fromRawAmount(token, amount) : undefined
 }
 
 export function usePendingSushi(farm) {
-  const { account, chainId } = useActiveWeb3React();
+  const { account, chainId } = useActiveWeb3React()
 
-  const contract = useChefContract(farm.chef);
+  const contract = useChefContract(farm.chef)
 
   const args = useMemo(() => {
     if (!account || !farm) {
-      return;
+      return
     }
-    return [String(farm.id), String(account)];
-  }, [farm, account]);
+    return [String(farm.id), String(account)]
+  }, [farm, account])
 
-  const result = useSingleCallResult(
-    args ? contract : null,
-    "pendingSushi",
-    args
-  )?.result;
+  const result = useSingleCallResult(args ? contract : null, 'pendingSushi', args)?.result
 
-  const value = result?.[0];
+  const value = result?.[0]
 
-  const amount = value ? JSBI.BigInt(value.toString()) : undefined;
+  const amount = value ? JSBI.BigInt(value.toString()) : undefined
 
-  return amount ? new TokenAmount(SUSHI[chainId], amount) : undefined;
+  return amount ? CurrencyAmount.fromRawAmount(SUSHI[chainId], amount) : undefined
 }
 
 export function usePendingToken(farm, contract) {
-  const { account } = useActiveWeb3React();
+  const { account } = useActiveWeb3React()
 
   const args = useMemo(() => {
     if (!account || !farm) {
-      return;
+      return
     }
-    return [String(farm.pid), String(account)];
-  }, [farm, account]);
+    return [String(farm.pid), String(account)]
+  }, [farm, account])
 
   const pendingTokens = useSingleContractMultipleData(
     args ? contract : null,
-    "pendingTokens",
-    args.map((arg) => [...arg, "0"])
-  );
+    'pendingTokens',
+    args.map((arg) => [...arg, '0'])
+  )
 
-  return useMemo(() => pendingTokens, [pendingTokens]);
+  return useMemo(() => pendingTokens, [pendingTokens])
 }
 
-export function usePositions(
-  contract?: Contract | null,
-  rewarder?: Contract | null
-) {
-  const { chainId, account } = useActiveWeb3React();
+export function usePositions(contract?: Contract | null, rewarder?: Contract | null) {
+  const { chainId, account } = useActiveWeb3React()
 
-  const numberOfPools = useSingleCallResult(
-    contract ? contract : null,
-    "poolLength",
-    undefined,
-    NEVER_RELOAD
-  )?.result?.[0];
+  const numberOfPools = useSingleCallResult(contract ? contract : null, 'poolLength', undefined, NEVER_RELOAD)
+    ?.result?.[0]
 
   const args = useMemo(() => {
     if (!account || !numberOfPools) {
-      return;
+      return
     }
-    return [...Array(numberOfPools.toNumber()).keys()].map((pid) => [
-      String(pid),
-      String(account),
-    ]);
-  }, [numberOfPools, account]);
+    return [...Array(numberOfPools.toNumber()).keys()].map((pid) => [String(pid), String(account)])
+  }, [numberOfPools, account])
 
-  const pendingSushi = useSingleContractMultipleData(
-    args ? contract : null,
-    "pendingSushi",
-    args
-  );
+  const pendingSushi = useSingleContractMultipleData(args ? contract : null, 'pendingSushi', args)
 
-  const userInfo = useSingleContractMultipleData(
-    args ? contract : null,
-    "userInfo",
-    args
-  );
+  const userInfo = useSingleContractMultipleData(args ? contract : null, 'userInfo', args)
 
   // const pendingTokens = useSingleContractMultipleData(
   //     rewarder,
@@ -173,11 +139,8 @@ export function usePositions(
           // pendingTokens: data?.[2]?.result,
         }))
         .filter(({ pendingSushi, amount }) => {
-          return (
-            (pendingSushi && !pendingSushi.isZero()) ||
-            (amount && !amount.isZero())
-          );
+          return (pendingSushi && !pendingSushi.isZero()) || (amount && !amount.isZero())
         }),
-    [pendingSushi, userInfo]
-  );
+    [args, pendingSushi, userInfo]
+  )
 }

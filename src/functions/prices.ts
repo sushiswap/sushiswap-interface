@@ -3,113 +3,79 @@ import {
   ALLOWED_PRICE_IMPACT_LOW,
   ALLOWED_PRICE_IMPACT_MEDIUM,
   BLOCKED_PRICE_IMPACT_NON_EXPERT,
-} from "../constants";
-import {
-  ChainId,
-  CurrencyAmount,
-  Fraction,
-  JSBI,
-  Percent,
-  TokenAmount,
-  Trade,
-} from "@sushiswap/sdk";
+} from '../constants'
+import { ChainId, Currency, CurrencyAmount, Fraction, JSBI, Percent, Trade, TradeType } from '@sushiswap/sdk'
 
-import { Field } from "../state/swap/actions";
-import { basisPointsToPercent } from "./convert";
+import { Field } from '../state/swap/actions'
+import { basisPointsToPercent } from './convert'
 
-const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000));
-const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000));
-const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE);
-
-// computes price breakdown for the trade
-export function computeTradePriceBreakdown(trade?: Trade | null): {
-  priceImpactWithoutFee: Percent | undefined;
-  realizedLPFee: CurrencyAmount | undefined | null;
-} {
-  // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
-  // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
-  const realizedLPFee = !trade
-    ? undefined
-    : ONE_HUNDRED_PERCENT.subtract(
-        trade.route.pairs.reduce<Fraction>(
-          (currentFee: Fraction): Fraction =>
-            currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
-          ONE_HUNDRED_PERCENT
-        )
-      );
-
-  // remove lp fees from price impact
-  const priceImpactWithoutFeeFraction =
-    trade && realizedLPFee
-      ? trade.priceImpact.subtract(realizedLPFee)
-      : undefined;
-
-  // the x*y=k impact
-  const priceImpactWithoutFeePercent = priceImpactWithoutFeeFraction
-    ? new Percent(
-        priceImpactWithoutFeeFraction?.numerator,
-        priceImpactWithoutFeeFraction?.denominator
-      )
-    : undefined;
-
-  // the amount of the input that accrues to LPs
-  const realizedLPFeeAmount =
-    realizedLPFee &&
-    trade &&
-    (trade.inputAmount instanceof TokenAmount
-      ? new TokenAmount(
-          trade.inputAmount.token,
-          realizedLPFee.multiply(trade.inputAmount.raw).quotient
-        )
-      : CurrencyAmount.ether(
-          realizedLPFee.multiply(trade.inputAmount.raw).quotient
-        ));
-
-  return {
-    priceImpactWithoutFee: priceImpactWithoutFeePercent,
-    realizedLPFee: realizedLPFeeAmount,
-  };
-}
-
-// computes the minimum amount out and maximum amount in for a trade given a user specified allowed slippage in bips
-export function computeSlippageAdjustedAmounts(
-  trade: Trade | undefined,
-  allowedSlippage: number
-): { [field in Field]?: CurrencyAmount } {
-  const pct = basisPointsToPercent(allowedSlippage);
-  return {
-    [Field.INPUT]: trade?.maximumAmountIn(pct),
-    [Field.OUTPUT]: trade?.minimumAmountOut(pct),
-  };
-}
-
-export function warningSeverity(
-  priceImpact: Percent | undefined
-): 0 | 1 | 2 | 3 | 4 {
-  if (!priceImpact?.lessThan(BLOCKED_PRICE_IMPACT_NON_EXPERT)) return 4;
-  if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) return 3;
-  if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_MEDIUM)) return 2;
-  if (!priceImpact?.lessThan(ALLOWED_PRICE_IMPACT_LOW)) return 1;
-  return 0;
-}
+const THIRTY_BIPS_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
+const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
+const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(THIRTY_BIPS_FEE)
 
 export function formatExecutionPrice(
-  trade?: Trade,
+  trade: Trade<Currency, Currency, TradeType>,
   inverted?: boolean,
   chainId?: ChainId
 ): string {
   if (!trade) {
-    return "";
+    return ''
   }
   return inverted
-    ? `${trade.executionPrice
-        .invert()
-        .toSignificant(6)} ${trade.inputAmount.currency.getSymbol(
-        chainId
-      )} / ${trade.outputAmount.currency.getSymbol(chainId)}`
-    : `${trade.executionPrice.toSignificant(
-        6
-      )} ${trade.outputAmount.currency.getSymbol(
-        chainId
-      )} / ${trade.inputAmount.currency.getSymbol(chainId)}`;
+    ? `${trade.executionPrice.invert().toSignificant(6)} ${trade.inputAmount.currency.symbol} / ${
+        trade.outputAmount.currency.symbol
+      }`
+    : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.symbol} / ${
+        trade.inputAmount.currency.symbol
+      }`
+}
+
+// computes realized lp fee as a percent
+export function computeRealizedLPFeePercent(trade: Trade<Currency, Currency, TradeType>): Percent {
+  let percent: Percent
+  if (trade instanceof Trade) {
+    // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
+    // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
+    percent = ONE_HUNDRED_PERCENT.subtract(
+      trade.route.pairs.reduce<Percent>(
+        (currentFee: Percent): Percent => currentFee.multiply(INPUT_FRACTION_AFTER_FEE),
+        ONE_HUNDRED_PERCENT
+      )
+    )
+  }
+
+  return new Percent(percent.numerator, percent.denominator)
+}
+
+// computes price breakdown for the trade
+export function computeRealizedLPFeeAmount(
+  trade?: Trade<Currency, Currency, TradeType> | null
+): CurrencyAmount<Currency> | undefined {
+  if (trade) {
+    const realizedLPFee = computeRealizedLPFeePercent(trade)
+
+    // the amount of the input that accrues to LPs
+    return CurrencyAmount.fromRawAmount(trade.inputAmount.currency, trade.inputAmount.multiply(realizedLPFee).quotient)
+  }
+
+  return undefined
+}
+
+const IMPACT_TIERS = [
+  BLOCKED_PRICE_IMPACT_NON_EXPERT,
+  ALLOWED_PRICE_IMPACT_HIGH,
+  ALLOWED_PRICE_IMPACT_MEDIUM,
+  ALLOWED_PRICE_IMPACT_LOW,
+]
+
+type WarningSeverity = 0 | 1 | 2 | 3 | 4
+
+export function warningSeverity(priceImpact: Percent | undefined): WarningSeverity {
+  if (!priceImpact) return 4
+  let impact: WarningSeverity = IMPACT_TIERS.length as WarningSeverity
+  for (const impactLevel of IMPACT_TIERS) {
+    if (impactLevel.lessThan(priceImpact)) return impact
+    impact--
+  }
+  return 0
 }

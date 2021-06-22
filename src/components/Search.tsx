@@ -1,28 +1,27 @@
-import React from "react";
-import { Search as SearchIcon } from "react-feather";
-import { classNames } from "../functions";
+import React from 'react'
+import { Search as SearchIcon } from 'react-feather'
+import { classNames } from '../functions'
 
 export default function Search({
   term,
   search,
-  className = "bg-dark-900",
+  className = 'bg-dark-900',
   inputProps = {
     className:
-      "text-baseline bg-transparent w-full py-3 pl-4 pr-14 rounded w-full bg-transparent focus:outline-none bg-dark-700 rounded focus:ring focus:ring-blue",
+      'text-baseline bg-transparent w-full py-3 pl-4 pr-14 rounded w-full bg-transparent focus:outline-none bg-dark-700 rounded focus:ring focus:ring-blue',
   },
   ...rest
 }: {
-  term: string;
-  search: (value: string) => void;
-  inputProps?: any;
-  className?: string;
+  term: string
+  search: (value: string) => void
+  inputProps?: any
+  className?: string
 }) {
   return (
-    <div className={classNames("relative w-full rounded", className)} {...rest}>
+    <div className={classNames('relative w-full rounded', className)} {...rest}>
       <input
         className={classNames(
-          inputProps.className ||
-            "text-baseline py-3 pl-4 pr-14 rounded w-full bg-transparent focus:outline-none"
+          inputProps.className || 'text-baseline py-3 pl-4 pr-14 rounded w-full bg-transparent focus:outline-none'
         )}
         onChange={(e) => search(e.target.value)}
         value={term}
@@ -33,5 +32,5 @@ export default function Search({
         <SearchIcon size={16} />
       </div>
     </div>
-  );
+  )
 }

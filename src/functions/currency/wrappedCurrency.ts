@@ -1,38 +1,16 @@
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Token,
-  TokenAmount,
-  WETH,
-} from "@sushiswap/sdk";
+import { Currency, NATIVE, WNATIVE } from '@sushiswap/sdk'
+import { ExtendedEther, WETH9_EXTENDED } from '../../constants/tokens'
 
-export function wrappedCurrency(
-  currency: Currency | undefined,
-  chainId: ChainId | undefined
-): Token | undefined {
-  return chainId && currency === Currency.getNativeCurrency(chainId)
-    ? WETH[chainId]
-    : currency instanceof Token
-    ? currency
-    : undefined;
-}
+import { supportedChainId } from '../chain'
 
-export function wrappedCurrencyAmount(
-  currencyAmount: CurrencyAmount | undefined,
-  chainId: ChainId | undefined
-): TokenAmount | undefined {
-  const token =
-    currencyAmount && chainId
-      ? wrappedCurrency(currencyAmount.currency, chainId)
-      : undefined;
-  return token && currencyAmount
-    ? new TokenAmount(token, currencyAmount.raw)
-    : undefined;
-}
+export function unwrappedToken(currency: Currency): Currency {
+  if (currency.isNative) return currency
 
-export function unwrappedToken(token: Token): Currency {
-  if (token.equals(WETH[token.chainId]))
-    return Currency.getNativeCurrency(token.chainId);
-  return token;
+  const formattedChainId = supportedChainId(currency.chainId)
+  // if (formattedChainId && currency.equals(WETH9_EXTENDED[formattedChainId]))
+  //   return ExtendedEther.onChain(currency.chainId)
+
+  if (formattedChainId && currency.equals(WNATIVE[formattedChainId])) return NATIVE[currency.chainId]
+
+  return currency
 }

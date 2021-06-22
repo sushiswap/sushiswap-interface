@@ -2,6 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 . "$(dirname "$0")/common.sh"
 
+yarn lint
 yarn lint-staged
 yarn lingui:extract
 yarn lingui:compile

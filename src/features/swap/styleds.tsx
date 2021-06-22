@@ -1,22 +1,22 @@
-import "rc-slider/assets/index.css";
+import 'rc-slider/assets/index.css'
 
-import styled, { css } from "styled-components";
+import React, { ReactNode } from 'react'
+import styled, { css } from 'styled-components'
 
-import { AlertTriangle } from "react-feather";
-import React from "react";
-import Slider from "rc-slider";
-import Typography from "../../components/Typography";
+import { AlertTriangle } from 'react-feather'
+import Slider from 'rc-slider'
+import Typography from '../../components/Typography'
 
 export const Wrapper = styled.div`
   position: relative;
   padding: 1rem;
-`;
+`
 
 export const ClickableText = styled(Typography)`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
   padding: 2px;
@@ -30,17 +30,17 @@ export const ArrowWrapper = styled.div<{ clickable: boolean }>`
           }
         `
       : null}
-`;
+`
 
 export const SectionBreak = styled.div`
   height: 1px;
   width: 100%;
   // background-color: ${({ theme }) => theme.bg3};
-`;
+`
 
 export const BottomGrouping = styled.div`
   margin-top: 1rem;
-`;
+`
 
 export const ErrorText = styled(Typography)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
   color: ${({ theme, severity }) =>
@@ -51,7 +51,7 @@ export const ErrorText = styled(Typography)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
       : severity === 1
       ? theme.text3
       : theme.green1};
-`;
+`
 
 export const StyledBalanceMaxMini = styled.button`
   height: 22px;
@@ -77,37 +77,37 @@ export const StyledBalanceMaxMini = styled.button`
     // background-color: ${({ theme }) => theme.bg3};
     outline: none;
   }
-`;
+`
 
 // styles
 export const Dots = styled.span`
   &::after {
     display: inline-block;
     animation: ellipsis 1.25s infinite;
-    content: ".";
+    content: '.';
     width: 1em;
     text-align: left;
   }
   @keyframes ellipsis {
     0% {
-      content: ".";
+      content: '.';
     }
     33% {
-      content: "..";
+      content: '..';
     }
     66% {
-      content: "...";
+      content: '...';
     }
   }
-`;
+`
 
-export function SwapCallbackError({ error }: { error: string }) {
+export function SwapCallbackError({ error }: { error: ReactNode }) {
   return (
     <div className="flex items-center justify-center pt-6 text-red">
       <AlertTriangle size={16} />
       <div className="ml-4 text-sm">{error}</div>
     </div>
-  );
+  )
 }
 
 export const StyledSlider = styled(Slider)`
@@ -145,4 +145,4 @@ export const StyledSlider = styled(Slider)`
   .rc-slider-dot-active {
     border-color: #fa52a0;
   }
-`;
+`

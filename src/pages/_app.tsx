@@ -1,37 +1,35 @@
-import "../bootstrap";
-import "../styles/index.css";
-import "@fontsource/dm-sans/index.css";
-import "react-tabs/style/react-tabs.css";
+import '../bootstrap'
+import '../styles/index.css'
+import '@fontsource/dm-sans/index.css'
+import 'react-tabs/style/react-tabs.css'
 
-import * as Fathom from "fathom-client";
+import LanguageProvider, { activate } from '../language'
 
-import LanguageProvider, { activate } from "../language";
+import type { AppProps } from 'next/app'
+import ApplicationUpdater from '../state/application/updater'
+import DefaultLayout from '../layouts/Default'
+import { FC } from 'react'
+import Head from 'next/head'
+import ListsUpdater from '../state/lists/updater'
+import MulticallUpdater from '../state/multicall/updater'
+import { NextComponentType } from 'next'
+import { Provider } from 'react'
+import ReactGA from 'react-ga'
+import { Provider as ReduxProvider } from 'react-redux'
+import TransactionUpdater from '../state/transactions/updater'
+import UserUpdater from '../state/user/updater'
+import Web3ReactManager from '../components/Web3ReactManager'
+import { Web3ReactProvider } from '@web3-react/core'
+import dynamic from 'next/dynamic'
+import getLibrary from '../functions/getLibrary'
+import store from '../state'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
-import type { AppProps } from "next/app";
-import ApplicationUpdater from "../state/application/updater";
-import Head from "next/head";
-import { KashiProvider } from "../context";
-import ListsUpdater from "../state/lists/updater";
-import MulticallUpdater from "../state/multicall/updater";
-import { Provider } from "react-redux";
-import ReactGA from "react-ga";
-import TransactionUpdater from "../state/transactions/updater";
-import UserUpdater from "../state/user/updater";
-import Web3ReactManager from "../components/Web3ReactManager";
-import { Web3ReactProvider } from "@web3-react/core";
-import dynamic from "next/dynamic";
-import getLibrary from "../functions/getLibrary";
-import store from "../state";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
-const Web3ProviderNetwork = dynamic(
-  () => import("../components/Web3ProviderNetwork"),
-  { ssr: false }
-);
-
-if (typeof window !== "undefined" && !!window.ethereum) {
-  window.ethereum.autoRefreshOnNetworkChange = false;
+if (typeof window !== 'undefined' && !!window.ethereum) {
+  window.ethereum.autoRefreshOnNetworkChange = false
 }
 
 function Updaters() {
@@ -43,60 +41,37 @@ function Updaters() {
       <TransactionUpdater />
       <MulticallUpdater />
     </>
-  );
+  )
 }
 
-const NOOP = ({ children }) => children;
+const NOOP = ({ children }) => children
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps,
+}: AppProps & {
+  Component: NextComponentType & {
+    Layout: FC
+    Provider: any
+  }
+}) {
   useEffect(() => {
     // Activate the default locale on page load
-    activate("en");
-  }, []);
-  const router = useRouter();
+    activate('en')
+  }, [])
+  const router = useRouter()
 
-  const { pathname, query } = router;
-
-  useEffect(() => {
-    // Initialize Fathom when the app loads
-    // Example: yourdomain.com
-    //  - Do not include https://
-    //  - This must be an exact match of your domain.
-    //  - If you're using www. for your domain, make sure you include that here.
-    Fathom.load("JXKVUKNN", {
-      includedDomains: ["sushiswap-interface-canary.vercel.app"],
-    });
-
-    function onRouteChangeComplete() {
-      Fathom.trackPageview();
-    }
-    // Record a pageview when route changes
-    router.events.on("routeChangeComplete", onRouteChangeComplete);
-
-    // Unassign event listener
-    return () => {
-      router.events.off("routeChangeComplete", onRouteChangeComplete);
-    };
-  }, []);
+  const { pathname, query } = router
 
   useEffect(() => {
-    ReactGA.pageview(`${pathname}${query}`);
-  }, [pathname, query]);
+    ReactGA.pageview(`${pathname}${query}`)
+  }, [pathname, query])
 
-  // TODO: Refactor KashiProvider to /state/kashi to align with rest of app currently
-  const isKashi = ["/lend", "/borrow", "/create", "/balances"].some((path) =>
-    router.asPath.includes(path)
-  );
+  // Allows for conditionally setting a provider to be hoisted per page
+  const Provider = Component.Provider || NOOP
 
-  // const Layout = isKashi
-  //     ? ({ children }) => (
-  //           <KashiProvider>
-  //               <KashiLayout>{children}</KashiLayout>
-  //           </KashiProvider>
-  //       )
-  //     : ({ children }) => <DefaultLayout>{children}</DefaultLayout>
-
-  const KashiDataProvider = isKashi ? KashiProvider : NOOP;
+  // Allows for conditionally setting a layout to be hoisted per page
+  const Layout = Component.Layout || (({ children }) => <DefaultLayout>{children}</DefaultLayout>)
 
   return (
     <>
@@ -111,19 +86,21 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Web3ReactProvider getLibrary={getLibrary}>
         <Web3ProviderNetwork getLibrary={getLibrary}>
           <LanguageProvider>
-            <Provider store={store}>
-              <Updaters />
-              <Web3ReactManager>
-                <KashiDataProvider>
-                  <Component {...pageProps} />
-                </KashiDataProvider>
-              </Web3ReactManager>
-            </Provider>
+            <Web3ReactManager>
+              <ReduxProvider store={store}>
+                <Updaters />
+                <Provider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </Provider>
+              </ReduxProvider>
+            </Web3ReactManager>
           </LanguageProvider>
         </Web3ProviderNetwork>
       </Web3ReactProvider>
     </>
-  );
+  )
 }
 
-export default MyApp;
+export default MyApp

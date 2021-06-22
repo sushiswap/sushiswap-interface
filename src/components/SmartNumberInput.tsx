@@ -1,43 +1,43 @@
-import { ArrowDownRight, ArrowUpRight } from "react-feather";
+import { ArrowDownRight, ArrowUpRight } from 'react-feather'
 
-import { BigNumber } from "@ethersproject/bignumber";
-import Button from "./Button";
-import { Input as NumericalInput } from "./NumericalInput";
-import React from "react";
-import { formatNumber } from "../functions/format";
+import { BigNumber } from '@ethersproject/bignumber'
+import Button from './Button'
+import { Input as NumericalInput } from './NumericalInput'
+import React from 'react'
+import { formatNumber } from '../functions/format'
 
 type SmartNumberInputProps = {
-  color: "blue" | "pink";
-  token: any;
-  value: string;
-  setValue: any;
+  color: 'blue' | 'pink'
+  token: any
+  value: string
+  setValue: any
 
-  useBentoTitleDirection: "up" | "down";
-  useBentoTitle: string;
-  useBento: boolean;
-  setUseBento: any;
+  useBentoTitleDirection: 'up' | 'down'
+  useBentoTitle: string
+  useBento: boolean
+  setUseBento: any
 
-  maxTitle?: string;
-  max: BigNumber;
-  pinMax?: boolean;
-  setPinMax?: any;
-  showMax?: boolean;
-  disabled?: boolean;
-  switchDisabled?: boolean;
-};
+  maxTitle?: string
+  max: BigNumber
+  pinMax?: boolean
+  setPinMax?: any
+  showMax?: boolean
+  disabled?: boolean
+  switchDisabled?: boolean
+}
 
 export default function SmartNumberInput({
-  color = "blue",
+  color = 'blue',
   token,
   value,
   setValue,
 
-  useBentoTitleDirection = "down",
-  useBentoTitle = "",
+  useBentoTitleDirection = 'down',
+  useBentoTitle = '',
   useBento,
   setUseBento,
 
-  maxTitle = "Max",
+  maxTitle = 'Max',
   max,
   pinMax = false,
   setPinMax,
@@ -50,10 +50,10 @@ export default function SmartNumberInput({
       <div className="flex items-center justify-between my-4">
         <div className="flex items-center text-base text-secondary">
           <span>
-            {useBentoTitleDirection == "down" ? (
-              <ArrowDownRight size="1rem" style={{ display: "inline" }} />
+            {useBentoTitleDirection == 'down' ? (
+              <ArrowDownRight size="1rem" style={{ display: 'inline' }} />
             ) : (
-              <ArrowUpRight size="1rem" style={{ display: "inline" }} />
+              <ArrowUpRight size="1rem" style={{ display: 'inline' }} />
             )}
           </span>
           <span className="mx-2">{useBentoTitle}</span>
@@ -62,22 +62,17 @@ export default function SmartNumberInput({
               variant="outlined"
               size="xs"
               color={color}
-              className={
-                "disabled:cursor-not-allowed focus:ring focus:ring-" + color
-              }
+              className={'disabled:cursor-not-allowed focus:ring focus:ring-' + color}
               onClick={() => {
-                setUseBento(!useBento);
+                setUseBento(!useBento)
               }}
               disabled={switchDisabled}
             >
-              {useBento ? "BentoBox" : "Wallet"}
+              {useBento ? 'BentoBox' : 'Wallet'}
             </Button>
           </span>
         </div>
-        <div
-          className="text-base text-right text-secondary"
-          style={{ display: "inline", cursor: "pointer" }}
-        >
+        <div className="text-base text-right text-secondary" style={{ display: 'inline', cursor: 'pointer' }}>
           {maxTitle} {formatNumber(max.toFixed(token.decimals))}
         </div>
       </div>
@@ -85,17 +80,17 @@ export default function SmartNumberInput({
       <div className="relative flex items-center w-full mb-4">
         <NumericalInput
           className={
-            "w-full p-3 bg-dark-700 rounded disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring focus:ring-" +
+            'w-full p-3 bg-dark-700 rounded disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring focus:ring-' +
             color
           }
           value={value}
           onUserInput={setValue}
           onFocus={() => {
             if (pinMax) {
-              setValue("");
+              setValue('')
             }
             if (setPinMax) {
-              setPinMax(false);
+              setPinMax(false)
             }
           }}
           disabled={disabled}
@@ -107,17 +102,17 @@ export default function SmartNumberInput({
             color={color}
             onClick={() => {
               if (setPinMax) {
-                setPinMax(true);
+                setPinMax(true)
               } else {
-                setValue(max.toFixed(token.decimals));
+                setValue(max.toFixed(token.decimals))
               }
             }}
-            className={"absolute right-4 focus:ring focus:ring-" + color}
+            className={'absolute right-4 focus:ring focus:ring-' + color}
           >
             MAX
           </Button>
         )}
       </div>
     </>
-  );
+  )
 }

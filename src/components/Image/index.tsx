@@ -1,21 +1,21 @@
-import NextImage from "next/image";
+import NextImage from 'next/image'
 
 // Cloudflare Loader
 const normalize = (src) => {
-  return src[0] === "/" ? src.slice(1) : src;
-};
+  return src[0] === '/' ? src.slice(1) : src
+}
 
 const loader = ({ src, width, quality }) => {
-  const params = [`width=${width}`];
+  const params = [`width=${width}`]
   if (quality) {
-    params.push(`quality=${quality}`);
+    params.push(`quality=${quality}`)
   }
-  const paramsString = params.join(",");
-  return `/cdn-cgi/image/${paramsString}/${normalize(src)}`;
-};
+  const paramsString = params.join(',')
+  return `/cdn-cgi/image/${paramsString}/${normalize(src)}`
+}
 
 const Image = (props) => {
-  return <NextImage loader={loader} {...props} />;
-};
+  return <NextImage loader={loader} {...props} />
+}
 
-export default Image;
+export default Image

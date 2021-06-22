@@ -1,32 +1,33 @@
-import { ChainId, Currency } from "@sushiswap/sdk";
-import React, { useEffect, useState } from "react";
+import { ChainId, Currency, NATIVE } from '@sushiswap/sdk'
+import React, { useEffect, useState } from 'react'
 
-import { ANALYTICS_URL } from "../../constants";
-import ExternalLink from "../ExternalLink";
-import Image from "next/image";
-import LanguageSwitch from "../LanguageSwitch";
-import Link from "next/link";
-import More from "./More";
-import NavLink from "../NavLink";
-import { Popover } from "@headlessui/react";
-import QuestionHelper from "../QuestionHelper";
-import Web3Network from "../Web3Network";
-import Web3Status from "../Web3Status";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useETHBalances } from "../../state/wallet/hooks";
-import { useLingui } from "@lingui/react";
+import { ANALYTICS_URL } from '../../constants'
+import Buy from '../../features/ramp'
+import ExternalLink from '../ExternalLink'
+import Image from 'next/image'
+import LanguageSwitch from '../LanguageSwitch'
+import Link from 'next/link'
+import More from './More'
+import NavLink from '../NavLink'
+import { Popover } from '@headlessui/react'
+import QuestionHelper from '../QuestionHelper'
+import Web3Network from '../Web3Network'
+import Web3Status from '../Web3Status'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useETHBalances } from '../../state/wallet/hooks'
+import { useLingui } from '@lingui/react'
 
 // import { ExternalLink, NavLink } from "./Link";
 // import { ReactComponent as Burger } from "../assets/images/burger.svg";
 
 function AppBar(): JSX.Element {
-  const { i18n } = useLingui();
-  const { account, chainId, library } = useActiveWeb3React();
+  const { i18n } = useLingui()
+  const { account, chainId, library } = useActiveWeb3React()
 
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[
-    account ?? ""
-  ];
+  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+
+  console.log({ userEthBalance })
 
   return (
     //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
@@ -37,14 +38,10 @@ function AppBar(): JSX.Element {
             <div className="px-4 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Image
-                    src="/logo.png"
-                    alt="Sushi"
-                    width="32px"
-                    height="32px"
-                  />
+                  <Image src="/logo.png" alt="Sushi" width="32px" height="32px" />
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
+                      <Buy />
                       <NavLink href="/swap">
                         <a
                           id={`swap-nav-link`}
@@ -61,7 +58,7 @@ function AppBar(): JSX.Element {
                           {i18n._(t`Pool`)}
                         </a>
                       </NavLink>
-                      <NavLink href={"/migrate"}>
+                      <NavLink href={'/migrate'}>
                         <a
                           id={`migrate-nav-link`}
                           className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -69,42 +66,35 @@ function AppBar(): JSX.Element {
                           {i18n._(t`Migrate`)}
                         </a>
                       </NavLink>
-                      {chainId &&
-                        [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
-                          <NavLink href={"/farm"}>
+                      {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                        <NavLink href={'/farm'}>
+                          <a
+                            id={`farm-nav-link`}
+                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                          >
+                            {i18n._(t`Farm`)}
+                          </a>
+                        </NavLink>
+                      )}
+                      {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                        <>
+                          <NavLink href={'/lend'}>
                             <a
-                              id={`farm-nav-link`}
+                              id={`lend-nav-link`}
                               className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                             >
-                              {i18n._(t`Farm`)}
+                              {i18n._(t`Lend`)}
                             </a>
                           </NavLink>
-                        )}
-                      {chainId &&
-                        [
-                          ChainId.MAINNET,
-                          ChainId.KOVAN,
-                          ChainId.BSC,
-                          ChainId.MATIC,
-                        ].includes(chainId) && (
-                          <>
-                            <NavLink href={"/lend"}>
-                              <a
-                                id={`lend-nav-link`}
-                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                              >
-                                {i18n._(t`Lend`)}
-                              </a>
-                            </NavLink>
-                            <NavLink href={"/borrow"}>
-                              <a
-                                id={`borrow-nav-link`}
-                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                              >
-                                {i18n._(t`Borrow`)}
-                              </a>
-                            </NavLink>
-                            {/* <Link href={'/bento'}>
+                          <NavLink href={'/borrow'}>
+                            <a
+                              id={`borrow-nav-link`}
+                              className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                            >
+                              {i18n._(t`Borrow`)}
+                            </a>
+                          </NavLink>
+                          {/* <Link href={'/bento'}>
                                                             <a
                                                                 id={`bento-nav-link`}
                                                                 className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -112,11 +102,10 @@ function AppBar(): JSX.Element {
                                                                 {i18n._(t`BentoBox`)}
                                                             </a>
                                                         </Link> */}
-                          </>
-                        )}
-
+                        </>
+                      )}
                       {chainId === ChainId.MAINNET && (
-                        <NavLink href={"/stake"}>
+                        <NavLink href={'/stake'}>
                           <a
                             id={`stake-nav-link`}
                             className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -131,128 +120,99 @@ function AppBar(): JSX.Element {
 
                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
+                    {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
+                      <>
+                        <QuestionHelper text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}>
+                          <div
+                            className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
+                            onClick={() => {
+                              const params: any = {
+                                type: 'ERC20',
+                                options: {
+                                  address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                  symbol: 'XSUSHI',
+                                  decimals: 18,
+                                  image:
+                                    'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
+                                },
+                              }
+
+                              if (library && library.provider.isMetaMask && library.provider.request) {
+                                library.provider
+                                  .request({
+                                    method: 'wallet_watchAsset',
+                                    params,
+                                  })
+                                  .then((success) => {
+                                    if (success) {
+                                      console.log('Successfully added XSUSHI to MetaMask')
+                                    } else {
+                                      throw new Error('Something went wrong.')
+                                    }
+                                  })
+                                  .catch(console.error)
+                              }
+                            }}
+                          >
+                            <Image
+                              src="/images/tokens/xsushi-square.jpg"
+                              alt="xSUSHI"
+                              width="38px"
+                              height="38px"
+                              objectFit="contain"
+                              className="rounded-md"
+                            />
+                          </div>
+                        </QuestionHelper>
+                      </>
+                    )}
+
                     {chainId &&
-                      [ChainId.MAINNET].includes(chainId) &&
+                      [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) &&
                       library &&
                       library.provider.isMetaMask && (
                         <>
-                          <QuestionHelper
-                            text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}
-                          >
-                            <div
-                              className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
-                              onClick={() => {
-                                const params: any = {
-                                  type: "ERC20",
-                                  options: {
-                                    address:
-                                      "0x8798249c2e607446efb7ad49ec89dd1865ff4272",
-                                    symbol: "XSUSHI",
-                                    decimals: 18,
-                                    image:
-                                      "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png",
-                                  },
-                                };
-
-                                if (
-                                  library &&
-                                  library.provider.isMetaMask &&
-                                  library.provider.request
-                                ) {
-                                  library.provider
-                                    .request({
-                                      method: "wallet_watchAsset",
-                                      params,
-                                    })
-                                    .then((success) => {
-                                      if (success) {
-                                        console.log(
-                                          "Successfully added XSUSHI to MetaMask"
-                                        );
-                                      } else {
-                                        throw new Error(
-                                          "Something went wrong."
-                                        );
-                                      }
-                                    })
-                                    .catch(console.error);
-                                }
-                              }}
-                            >
-                              <Image
-                                src="/images/tokens/xsushi-square.jpg"
-                                alt="xSUSHI"
-                                width="38px"
-                                height="38px"
-                                objectFit="contain"
-                                className="rounded-md"
-                              />
-                            </div>
-                          </QuestionHelper>
-                        </>
-                      )}
-
-                    {chainId &&
-                      [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(
-                        chainId
-                      ) &&
-                      library &&
-                      library.provider.isMetaMask && (
-                        <>
-                          <QuestionHelper
-                            text={i18n._(t`Add SUSHI to your MetaMask wallet`)}
-                          >
+                          <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>
                             <div
                               className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"
                               onClick={() => {
-                                let address: string | undefined;
+                                let address: string | undefined
                                 switch (chainId) {
                                   case ChainId.MAINNET:
-                                    address =
-                                      "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2";
-                                    break;
+                                    address = '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
+                                    break
                                   case ChainId.BSC:
-                                    address =
-                                      "0x947950BcC74888a40Ffa2593C5798F11Fc9124C4";
-                                    break;
+                                    address = '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
+                                    break
                                   case ChainId.MATIC:
-                                    address =
-                                      "0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a";
-                                    break;
+                                    address = '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
+                                    break
                                 }
                                 const params: any = {
-                                  type: "ERC20",
+                                  type: 'ERC20',
                                   options: {
                                     address: address,
-                                    symbol: "SUSHI",
+                                    symbol: 'SUSHI',
                                     decimals: 18,
                                     image:
-                                      "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png",
+                                      'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
                                   },
-                                };
+                                }
 
-                                if (
-                                  library &&
-                                  library.provider.isMetaMask &&
-                                  library.provider.request
-                                ) {
+                                if (library && library.provider.isMetaMask && library.provider.request) {
                                   library.provider
                                     .request({
-                                      method: "wallet_watchAsset",
+                                      method: 'wallet_watchAsset',
                                       params,
                                     })
                                     .then((success) => {
                                       if (success) {
-                                        console.log(
-                                          "Successfully added SUSHI to MetaMask"
-                                        );
+                                        console.log('Successfully added SUSHI to MetaMask')
                                       } else {
-                                        throw new Error(
-                                          "Something went wrong."
-                                        );
+                                        throw new Error('Something went wrong.')
                                       }
                                     })
-                                    .catch(console.error);
+                                    .catch(console.error)
                                 }
                               }}
                             >
@@ -279,8 +239,7 @@ function AppBar(): JSX.Element {
                       {account && chainId && userEthBalance && (
                         <>
                           <div className="px-3 py-2 text-primary text-bold">
-                            {userEthBalance?.toSignificant(4)}{" "}
-                            {Currency.getNativeCurrencySymbol(chainId)}
+                            {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
                           </div>
                         </>
                       )}
@@ -304,12 +263,7 @@ function AppBar(): JSX.Element {
                         viewBox="0 0 24 24"
                         stroke="currentColor"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     ) : (
                       // <X title="Close" className="block w-6 h-6" aria-hidden="true" />
@@ -337,7 +291,7 @@ function AppBar(): JSX.Element {
 
             <Popover.Panel className="sm:hidden">
               <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
-                <Link href={"/swap"}>
+                <Link href={'/swap'}>
                   <a
                     id={`swap-nav-link`}
                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -345,7 +299,7 @@ function AppBar(): JSX.Element {
                     {i18n._(t`Swap`)}
                   </a>
                 </Link>
-                <Link href={"/pool"}>
+                <Link href={'/pool'}>
                   <a
                     id={`pool-nav-link`}
                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -354,46 +308,50 @@ function AppBar(): JSX.Element {
                   </a>
                 </Link>
 
+                <Link href={'/migrate'}>
+                  <a
+                    id={`migrate-nav-link`}
+                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                  >
+                    {i18n._(t`Migrate`)}
+                  </a>
+                </Link>
+
                 {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
-                  <Link href={"/farm"}>
+                  <Link href={'/farm'}>
                     <a
-                      id={`yield-nav-link`}
+                      id={`farm-nav-link`}
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                     >
-                      {" "}
+                      {' '}
                       {i18n._(t`Farm`)}
                     </a>
                   </Link>
                 )}
-                {chainId &&
-                  [
-                    ChainId.MAINNET,
-                    ChainId.KOVAN,
-                    ChainId.BSC,
-                    ChainId.MATIC,
-                  ].includes(chainId) && (
-                    <Link href={"/lend"}>
-                      <a id={`kashi-nav-link`}>{i18n._(t`Kashi Lending`)}</a>
-                    </Link>
-                  )}
-                {chainId &&
-                  [
-                    ChainId.MAINNET,
-                    ChainId.KOVAN,
-                    ChainId.BSC,
-                    ChainId.MATIC,
-                  ].includes(chainId) && (
-                    <Link href={"/bentobox"}>
+
+                {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                  <>
+                    <Link href={'/lend'}>
                       <a
-                        id={`bento-nav-link`}
+                        id={`lend-nav-link`}
                         className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                       >
-                        {i18n._(t`BentoBox`)}
+                        {i18n._(t`Lend`)}
                       </a>
                     </Link>
-                  )}
+
+                    <Link href={'/borrow'}>
+                      <a
+                        id={`borrow-nav-link`}
+                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                      >
+                        {i18n._(t`Borrow`)}
+                      </a>
+                    </Link>
+                  </>
+                )}
                 {chainId === ChainId.MAINNET && (
-                  <Link href={"/stake"}>
+                  <Link href={'/stake'}>
                     <a
                       id={`stake-nav-link`}
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -402,29 +360,11 @@ function AppBar(): JSX.Element {
                     </a>
                   </Link>
                 )}
-                {chainId === ChainId.MAINNET && (
-                  <Link href={"/vesting"}>
-                    <a
-                      id={`vesting-nav-link`}
-                      className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                    >
-                      {i18n._(t`Vesting`)}
-                    </a>
-                  </Link>
-                )}
                 {chainId &&
-                  [
-                    ChainId.MAINNET,
-                    ChainId.BSC,
-                    ChainId.XDAI,
-                    ChainId.FANTOM,
-                    ChainId.MATIC,
-                  ].includes(chainId) && (
+                  [ChainId.MAINNET, ChainId.BSC, ChainId.XDAI, ChainId.FANTOM, ChainId.MATIC].includes(chainId) && (
                     <ExternalLink
                       id={`analytics-nav-link`}
-                      href={
-                        ANALYTICS_URL[chainId] || "https://analytics.sushi.com"
-                      }
+                      href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                     >
                       {i18n._(t`Analytics`)}
@@ -436,7 +376,7 @@ function AppBar(): JSX.Element {
         )}
       </Popover>
     </header>
-  );
+  )
 }
 
-export default AppBar;
+export default AppBar

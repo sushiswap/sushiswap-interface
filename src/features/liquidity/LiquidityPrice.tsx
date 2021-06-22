@@ -1,30 +1,57 @@
-import { Currency, Price } from "@sushiswap/sdk";
+import { Currency, Percent, Price } from '@sushiswap/sdk'
+import { Trans, t } from '@lingui/macro'
 
-import React from "react";
-import Typography from "../../components/Typography";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
+import { Field } from '../../state/mint/actions'
+import { ONE_BIPS } from '../../constants'
+import React from 'react'
+import Typography from '../../components/Typography'
+import { classNames } from '../../functions'
+import { useLingui } from '@lingui/react'
 
 export default function LiquidityPrice({
-  input,
-  output,
+  currencies,
   price,
+  noLiquidity,
+  poolTokenPercentage,
+  className,
 }: {
-  input?: Currency;
-  output?: Currency;
-  price?: Price;
+  currencies: { [field in Field]?: Currency }
+  price?: Price<Currency, Currency>
+  noLiquidity?: boolean
+  poolTokenPercentage?: Percent
+  className?: string
 }): JSX.Element {
-  const { chainId } = useActiveWeb3React();
+  const { i18n } = useLingui()
   return (
-    <div className="p-1 -mt-5 rounded-b-md bg-dark-800">
-      <div className="flex justify-between w-full px-5 py-1 rounded-b-md md:bg-dark-900 text-secondary">
-        <Typography variant="caption2" className="text-secondary">
-          Exchange Rate
+    <div className={classNames('flex justify-between items-center rounded py-2 px-4 bg-dark-900', className)}>
+      <div className="flex flex-col w-full text-secondary">
+        <Typography variant="sm" className="select-none">
+          {i18n._(
+            t`${price?.invert()?.toSignificant(6) ?? '-'} ${currencies[Field.CURRENCY_B]?.symbol} per ${
+              currencies[Field.CURRENCY_A]?.symbol
+            }`
+          )}
         </Typography>
-        <Typography variant="caption2" className="text-secondary">
-          {price?.toSignificant(6) ?? "-"} {output?.getSymbol(chainId)} per{" "}
-          {input?.getSymbol(chainId)}
+        <Typography variant="sm" className="select-none">
+          {i18n._(
+            t`${price?.invert()?.toSignificant(6) ?? '-'} ${currencies[Field.CURRENCY_A]?.symbol} per ${
+              currencies[Field.CURRENCY_B]?.symbol
+            }`
+          )}
+        </Typography>
+      </div>
+
+      <div className="flex flex-col w-full text-right text-secondary">
+        <Typography variant="sm" className="select-none">
+          {noLiquidity && price
+            ? '100'
+            : (poolTokenPercentage?.lessThan(ONE_BIPS) ? '<0.01' : poolTokenPercentage?.toFixed(2)) ?? '0'}
+          %
+        </Typography>
+        <Typography variant="sm" className="select-none">
+          <Trans>Share of Pool</Trans>
         </Typography>
       </div>
     </div>
-  );
+  )
 }

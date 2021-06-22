@@ -1,27 +1,22 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export const factoryQuery = gql`
-  query factoryQuery(
-    $id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"
-  ) {
+  query factoryQuery($id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac") {
     factory(id: $id) {
       id
       volumeUSD
     }
   }
-`;
+`
 
 export const factoryTimeTravelQuery = gql`
-  query factoryTimeTravelQuery(
-    $id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac"
-    $block: Block_height!
-  ) {
+  query factoryTimeTravelQuery($id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac", $block: Block_height!) {
     factory(id: $id, block: $block) {
       id
       volumeUSD
     }
   }
-`;
+`
 
 export const userIdsQuery = gql`
   query userIdsQuery($first: Int! = 1000, $skip: Int! = 0) {
@@ -29,7 +24,7 @@ export const userIdsQuery = gql`
       id
     }
   }
-`;
+`
 
 export const uniswapUserQuery = gql`
   query uniswapUserQuery($id: String!) {
@@ -50,14 +45,14 @@ export const uniswapUserQuery = gql`
       }
     }
   }
-`;
+`
 
 export const bundleFields = gql`
   fragment bundleFields on Bundle {
     id
     ethPrice
   }
-`;
+`
 
 export const ethPriceQuery = gql`
   query ethPriceQuery($id: Int! = 1) {
@@ -66,7 +61,7 @@ export const ethPriceQuery = gql`
     }
   }
   ${bundleFields}
-`;
+`
 
 export const ethPriceTimeTravelQuery = gql`
   query ethPriceTimeTravelQuery($id: Int! = 1, $block: Block_height!) {
@@ -75,7 +70,7 @@ export const ethPriceTimeTravelQuery = gql`
     }
   }
   ${bundleFields}
-`;
+`
 
 export const tokenPriceQuery = gql`
   query tokenPriceQuery($id: String!) {
@@ -84,7 +79,7 @@ export const tokenPriceQuery = gql`
       derivedETH
     }
   }
-`;
+`
 
 export const dayDataFieldsQuery = gql`
   fragment dayDataFields on DayData {
@@ -97,7 +92,7 @@ export const dayDataFieldsQuery = gql`
     liquidityUSD
     txCount
   }
-`;
+`
 
 // Dashboard...
 export const dayDatasQuery = gql`
@@ -107,7 +102,7 @@ export const dayDatasQuery = gql`
     }
   }
   ${dayDataFieldsQuery}
-`;
+`
 
 // Pairs...
 
@@ -119,7 +114,7 @@ export const pairTokenFieldsQuery = gql`
     totalSupply
     derivedETH
   }
-`;
+`
 
 export const pairFieldsQuery = gql`
   fragment pairFields on Pair {
@@ -144,7 +139,7 @@ export const pairFieldsQuery = gql`
     timestamp
   }
   ${pairTokenFieldsQuery}
-`;
+`
 
 export const pairQuery = gql`
   query pairQuery($id: String!) {
@@ -153,7 +148,7 @@ export const pairQuery = gql`
     }
   }
   ${pairFieldsQuery}
-`;
+`
 
 export const pairTimeTravelQuery = gql`
   query pairTimeTravelQuery($id: String!, $block: Block_height!) {
@@ -162,7 +157,7 @@ export const pairTimeTravelQuery = gql`
     }
   }
   ${pairFieldsQuery}
-`;
+`
 
 export const pairIdsQuery = gql`
   query pairIdsQuery {
@@ -170,7 +165,7 @@ export const pairIdsQuery = gql`
       id
     }
   }
-`;
+`
 
 export const pairCountQuery = gql`
   query pairCountQuery {
@@ -178,20 +173,11 @@ export const pairCountQuery = gql`
       pairCount
     }
   }
-`;
+`
 
 export const pairDayDatasQuery = gql`
-  query pairDayDatasQuery(
-    $first: Int = 1000
-    $date: Int = 0
-    $pairs: [Bytes]!
-  ) {
-    pairDayDatas(
-      first: $first
-      orderBy: date
-      orderDirection: desc
-      where: { pair_in: $pairs, date_gt: $date }
-    ) {
+  query pairDayDatasQuery($first: Int = 1000, $date: Int = 0, $pairs: [Bytes]!) {
+    pairDayDatas(first: $first, orderBy: date, orderDirection: desc, where: { pair_in: $pairs, date_gt: $date }) {
       date
       pair {
         id
@@ -209,7 +195,7 @@ export const pairDayDatasQuery = gql`
       txCount
     }
   }
-`;
+`
 
 export const liquidityPositionSubsetQuery = gql`
   query liquidityPositionSubsetQuery($first: Int! = 1000, $user: Bytes!) {
@@ -224,7 +210,7 @@ export const liquidityPositionSubsetQuery = gql`
       }
     }
   }
-`;
+`
 
 export const pairSubsetQuery = gql`
   query pairSubsetQuery(
@@ -233,37 +219,24 @@ export const pairSubsetQuery = gql`
     $orderBy: String! = "trackedReserveETH"
     $orderDirection: String! = "desc"
   ) {
-    pairs(
-      first: $first
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      where: { id_in: $pairAddresses }
-    ) {
+    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, where: { id_in: $pairAddresses }) {
       ...pairFields
     }
   }
   ${pairFieldsQuery}
-`;
+`
 
 export const pairsQuery = gql`
-  query pairsQuery(
-    $first: Int! = 1000
-    $orderBy: String! = "trackedReserveETH"
-    $orderDirection: String! = "desc"
-  ) {
+  query pairsQuery($first: Int! = 1000, $orderBy: String! = "trackedReserveETH", $orderDirection: String! = "desc") {
     pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
       ...pairFields
     }
   }
   ${pairFieldsQuery}
-`;
+`
 
 export const pairsTimeTravelQuery = gql`
-  query pairsTimeTravelQuery(
-    $first: Int! = 1000
-    $pairAddresses: [Bytes]!
-    $block: Block_height!
-  ) {
+  query pairsTimeTravelQuery($first: Int! = 1000, $pairAddresses: [Bytes]!, $block: Block_height!) {
     pairs(
       first: $first
       block: $block
@@ -279,7 +252,7 @@ export const pairsTimeTravelQuery = gql`
       txCount
     }
   }
-`;
+`
 
 // Tokens...
 export const tokenFieldsQuery = gql`
@@ -296,7 +269,7 @@ export const tokenFieldsQuery = gql`
     liquidity
     derivedETH
   }
-`;
+`
 
 export const tokenQuery = gql`
   query tokenQuery($id: String!) {
@@ -305,7 +278,7 @@ export const tokenQuery = gql`
     }
   }
   ${tokenFieldsQuery}
-`;
+`
 
 export const tokenTimeTravelQuery = gql`
   query tokenTimeTravelQuery($id: String!, $block: Block_height!) {
@@ -314,7 +287,7 @@ export const tokenTimeTravelQuery = gql`
     }
   }
   ${tokenFieldsQuery}
-`;
+`
 
 export const tokenIdsQuery = gql`
   query tokenIdsQuery {
@@ -322,20 +295,11 @@ export const tokenIdsQuery = gql`
       id
     }
   }
-`;
+`
 
 export const tokenDayDatasQuery = gql`
-  query tokenDayDatasQuery(
-    $first: Int! = 1000
-    $tokens: [Bytes]!
-    $date: Int! = 0
-  ) {
-    tokenDayDatas(
-      first: $first
-      orderBy: date
-      orderDirection: desc
-      where: { token_in: $tokens, date_gt: $date }
-    ) {
+  query tokenDayDatasQuery($first: Int! = 1000, $tokens: [Bytes]!, $date: Int! = 0) {
+    tokenDayDatas(first: $first, orderBy: date, orderDirection: desc, where: { token_in: $tokens, date_gt: $date }) {
       id
       date
       token {
@@ -347,29 +311,19 @@ export const tokenDayDatasQuery = gql`
       txCount
     }
   }
-`;
+`
 
 export const tokenPairsQuery = gql`
   query tokenPairsQuery($id: String!) {
-    pairs0: pairs(
-      first: 1000
-      orderBy: reserveUSD
-      orderDirection: desc
-      where: { token0: $id }
-    ) {
+    pairs0: pairs(first: 1000, orderBy: reserveUSD, orderDirection: desc, where: { token0: $id }) {
       ...pairFields
     }
-    pairs1: pairs(
-      first: 1000
-      orderBy: reserveUSD
-      orderDirection: desc
-      where: { token1: $id }
-    ) {
+    pairs1: pairs(first: 1000, orderBy: reserveUSD, orderDirection: desc, where: { token1: $id }) {
       ...pairFields
     }
   }
   ${pairFieldsQuery}
-`;
+`
 
 export const tokensQuery = gql`
   query tokensQuery($first: Int! = 1000) {
@@ -385,7 +339,7 @@ export const tokensQuery = gql`
     }
   }
   ${tokenFieldsQuery}
-`;
+`
 
 export const tokenSubsetQuery = gql`
   query tokenSubsetQuery(
@@ -394,17 +348,12 @@ export const tokenSubsetQuery = gql`
     $orderBy: String! = "id"
     $orderDirection: String! = "desc"
   ) {
-    tokens(
-      first: $first
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      where: { id_in: $tokenAddresses }
-    ) {
+    tokens(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, where: { id_in: $tokenAddresses }) {
       ...tokenFields
     }
   }
   ${tokenFieldsQuery}
-`;
+`
 
 export const tokensTimeTravelQuery = gql`
   query tokensTimeTravelQuery($first: Int! = 1000, $block: Block_height!) {
@@ -413,16 +362,12 @@ export const tokensTimeTravelQuery = gql`
     }
   }
   ${tokenFieldsQuery}
-`;
+`
 
 // Transactions...
 export const transactionsQuery = gql`
   query transactionsQuery($pairAddresses: [Bytes]!) {
-    swaps(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { pair_in: $pairAddresses }
-    ) {
+    swaps(orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairAddresses }) {
       id
       timestamp
       pair {
@@ -441,11 +386,7 @@ export const transactionsQuery = gql`
       amountUSD
       to
     }
-    mints(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { pair_in: $pairAddresses }
-    ) {
+    mints(orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairAddresses }) {
       id
       timestamp
       pair {
@@ -462,11 +403,7 @@ export const transactionsQuery = gql`
       amountUSD
       to
     }
-    burns(
-      orderBy: timestamp
-      orderDirection: desc
-      where: { pair_in: $pairAddresses }
-    ) {
+    burns(orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairAddresses }) {
       id
       timestamp
       pair {
@@ -484,4 +421,4 @@ export const transactionsQuery = gql`
       to
     }
   }
-`;
+`

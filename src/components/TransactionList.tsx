@@ -1,68 +1,65 @@
-import { ArrowUpRight, CheckCircle } from "react-feather";
+import { ArrowUpRight, CheckCircle } from 'react-feather'
 
-import Dots from "../components/Dots";
-import { NETWORK_LABEL } from "../constants/networks";
-import React from "react";
-import { getExplorerLink } from "../functions/explorer";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
-import { useLingui } from "@lingui/react";
+import Button from './Button'
+import Dots from '../components/Dots'
+import Image from 'next/image'
+import { NETWORK_LABEL } from '../constants/networks'
+import React from 'react'
+import { getExplorerLink } from '../functions/explorer'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 // type Props = {
 //     transactions: string[]
 // }
 
 export default function TransactionList({ transactions }: any) {
-  const { i18n } = useLingui();
-  const { chainId } = useActiveWeb3React();
+  const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
   return (
     <>
-      <div className="flex justify-between mb-6 flex-col sm:flex-row items-start">
+      <div className="flex flex-col items-start justify-between mb-6 sm:flex-row">
         <div className="text-xl font-medium text-white">
-          {i18n._(
-            t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`
-          )}
+          {i18n._(t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`)}
         </div>
-        {/* <LinkStyledButton>
-                    <span className="text-sm">{i18n._(t`Clear History`)}</span>
-                </LinkStyledButton> */}
+        <Button variant="link">
+          <span className="text-sm">{i18n._(t`Clear History`)}</span>
+        </Button>
       </div>
       <div>
         {transactions ? (
           transactions.map((t: any) => (
-            <div
-              key={t.tx_hash}
-              className="flex justify-between items-center rounded bg-dark-800 px-3 py-1 mb-3"
-            >
-              <div className="flex flex-row space-x-1 items-center">
+            <div key={t.tx_hash} className="flex items-center justify-between px-3 py-1 mb-3 rounded bg-dark-800">
+              <div className="flex flex-row items-center space-x-1">
                 <div>
-                  <img
+                  <Image
                     src={t.token_0.logo_url}
                     className="block w-6 h-6 rounded-full"
-                    alt=""
+                    alt={t.token_0.symbol}
+                    width="24px"
+                    height="24px"
                   />
                 </div>
                 <div>
-                  <img
+                  <Image
                     src={t.token_1.logo_url}
-                    className="block w-6 h-6 rounded-full mr-2"
-                    alt=""
+                    className="block w-6 h-6 mr-2 rounded-full"
+                    alt={t.token_1.symbol}
+                    width="24px"
+                    height="24px"
                   />
                 </div>
               </div>
               {chainId && (
                 <a
-                  href={getExplorerLink(chainId, t.tx_hash, "transaction")}
+                  href={getExplorerLink(chainId, t.tx_hash, 'transaction')}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="flex flex-1 items-center text-sm px-3 py-2 text-primary rounded-lg text-bold bg-dark-900"
+                  className="flex items-center flex-1 px-3 py-2 text-sm rounded-lg text-primary text-bold bg-dark-900"
                 >
                   <span className="mr-1">{t.description}</span>
-                  <ArrowUpRight
-                    strokeWidth={2}
-                    size={14}
-                    className="text-blue"
-                  />
+                  <ArrowUpRight strokeWidth={2} size={14} className="text-blue" />
                 </a>
               )}
               <div className="ml-4 mr-1">
@@ -71,11 +68,11 @@ export default function TransactionList({ transactions }: any) {
             </div>
           ))
         ) : (
-          <div className="text-gray-500 text-center px-4 py-14 border border-gray-800 rounded">
+          <div className="px-4 text-center text-gray-500 border border-gray-800 rounded py-14">
             <Dots>Loading</Dots>
           </div>
         )}
       </div>
     </>
-  );
+  )
 }
