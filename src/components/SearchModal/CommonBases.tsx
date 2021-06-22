@@ -1,70 +1,52 @@
-import { ChainId, Currency, Token, currencyEquals } from "@sushiswap/sdk";
+import { ChainId, Currency, Token, currencyEquals } from '@sushiswap/sdk'
 
-import { AutoColumn } from "../Column";
-import { AutoRow } from "../Row";
-import CurrencyLogo from "../CurrencyLogo";
-import QuestionHelper from "../QuestionHelper";
-import React from "react";
-import { SUGGESTED_BASES } from "../../constants";
-import Typography from "../Typography";
+import { AutoColumn } from '../Column'
+import { AutoRow } from '../Row'
+import Button from '../Button'
+import { COMMON_BASES } from '../../constants/routing'
+import CurrencyLogo from '../CurrencyLogo'
+import QuestionHelper from '../QuestionHelper'
+import React from 'react'
+import Typography from '../Typography'
+import { currencyId } from '../../functions'
 
 export default function CommonBases({
   chainId,
   onSelect,
   selectedCurrency,
 }: {
-  chainId?: ChainId;
-  selectedCurrency?: Currency | null;
-  onSelect: (currency: Currency) => void;
+  chainId?: number
+  selectedCurrency?: Currency | null
+  onSelect: (currency: Currency) => void
 }) {
+  const bases = typeof chainId !== 'undefined' ? COMMON_BASES[chainId] ?? [] : []
+
   return (
-    <AutoColumn gap="md">
-      <AutoRow>
+    <div className="flex flex-col space-y-2">
+      <div className="flex flex-row">
         Common bases
         <QuestionHelper text="These tokens are commonly paired with other tokens." />
-      </AutoRow>
-      <AutoRow gap="4px" justify="start">
-        <button
-          type="button"
-          onClick={() => {
-            if (
-              !selectedCurrency ||
-              !currencyEquals(
-                selectedCurrency,
-                Currency.getNativeCurrency(chainId)
-              )
-            ) {
-              onSelect(Currency.getNativeCurrency(chainId));
-            }
-          }}
-          className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
-          disabled={selectedCurrency === Currency.getNativeCurrency(chainId)}
-        >
-          <CurrencyLogo currency={Currency.getNativeCurrency(chainId)} />
-          <Typography variant="sm" className="font-semibold">
-            {Currency.getNativeCurrencySymbol(chainId)}
-          </Typography>
-        </button>
-        {(SUGGESTED_BASES[chainId] ?? []).map((token: Token) => {
-          const selected =
-            selectedCurrency instanceof Token &&
-            selectedCurrency.address === token.address;
+      </div>
+      <div className="flex flex-wrap">
+        {bases.map((currency: Currency) => {
+          const isSelected = selectedCurrency?.equals(currency)
           return (
-            <button
+            <Button
+              variant="empty"
               type="button"
-              onClick={() => !selected && onSelect(token)}
-              disabled={selected}
-              key={token.address}
-              className="flex items-center p-2 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+              onClick={() => !isSelected && onSelect(currency)}
+              disabled={isSelected}
+              key={currencyId(currency)}
+              className="flex items-center p-2 m-1 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
             >
-              <CurrencyLogo currency={token} />
+              <CurrencyLogo currency={currency} />
               <Typography variant="sm" className="font-semibold">
-                {token.getSymbol(chainId)}
+                {currency.symbol}
               </Typography>
-            </button>
-          );
+            </Button>
+          )
         })}
-      </AutoRow>
-    </AutoColumn>
-  );
+      </div>
+    </div>
+  )
 }

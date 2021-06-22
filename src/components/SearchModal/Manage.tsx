@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import React, { useState } from 'react'
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 
-import Column from "../Column";
-import CurrencyModalView from "./CurrencyModalView";
-import ManageLists from "./ManageLists";
-import ManageTokens from "./ManageTokens";
-import ModalHeader from "../ModalHeader";
-import { Token } from "@sushiswap/sdk";
-import { TokenList } from "@uniswap/token-lists";
-import styled from "styled-components";
-import { t } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import Column from '../Column'
+import CurrencyModalView from './CurrencyModalView'
+import ManageLists from './ManageLists'
+import ManageTokens from './ManageTokens'
+import ModalHeader from '../ModalHeader'
+import { Token } from '@sushiswap/sdk'
+import { TokenList } from '@uniswap/token-lists'
+import styled from 'styled-components'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const ContentWrapper = styled(Column)`
   height: 100%;
@@ -18,7 +18,7 @@ const ContentWrapper = styled(Column)`
   flex: 1 1;
   position: relative;
   overflow-y: hidden;
-`;
+`
 
 function Manage({
   onDismiss,
@@ -27,15 +27,15 @@ function Manage({
   setImportToken,
   setListUrl,
 }: {
-  onDismiss: () => void;
-  setModalView: (view: CurrencyModalView) => void;
-  setImportToken: (token: Token) => void;
-  setImportList: (list: TokenList) => void;
-  setListUrl: (url: string) => void;
+  onDismiss: () => void
+  setModalView: (view: CurrencyModalView) => void
+  setImportToken: (token: Token) => void
+  setImportList: (list: TokenList) => void
+  setListUrl: (url: string) => void
 }) {
-  const { i18n } = useLingui();
+  const { i18n } = useLingui()
 
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0)
 
   return (
     <ContentWrapper>
@@ -65,21 +65,14 @@ function Manage({
           </Tab>
         </TabList>
         <TabPanel style={{ flexGrow: 1 }}>
-          <ManageLists
-            setModalView={setModalView}
-            setImportList={setImportList}
-            setListUrl={setListUrl}
-          />
+          <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
         </TabPanel>
         <TabPanel style={{ flexGrow: 1 }}>
-          <ManageTokens
-            setModalView={setModalView}
-            setImportToken={setImportToken}
-          />
+          <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
         </TabPanel>
       </Tabs>
     </ContentWrapper>
-  );
+  )
 }
 
-export default Manage;
+export default Manage

@@ -1,211 +1,92 @@
-import { AutoRow, RowFixed } from "../../components/Row";
-import { Currency, Token } from "@sushiswap/sdk";
-import React, { useState } from "react";
-
-import { AlertTriangle } from "react-feather";
-import { AutoColumn } from "../Column";
-import Button from "../Button";
-import Card from "../Card";
-import { Checkbox } from "./styleds";
-import CurrencyLogo from "../CurrencyLogo";
-import ExternalLink from "../ExternalLink";
-import ListLogo from "../ListLogo";
-import ModalHeader from "../ModalHeader";
-import { classNames } from "../../functions";
-import { getExplorerLink } from "../../functions/explorer";
-import styled from "styled-components";
-import { transparentize } from "polished";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useAddUserToken } from "../../state/user/hooks";
-import { useCombinedInactiveList } from "../../state/lists/hooks";
-import useTheme from "../../hooks/useTheme";
-
-const Wrapper = styled.div`
-  // position: relative;
-  // width: 100%;
-  // overflow: auto;
-  overflow: hidden;
-`;
+import { AutoRow, RowFixed } from '../../components/Row'
+import { Currency, Token } from '@sushiswap/sdk'
+import React from 'react'
+import { AlertTriangle } from 'react-feather'
+import { AutoColumn } from '../Column'
+import Button from '../Button'
+import Card from '../Card'
+import CurrencyLogo from '../CurrencyLogo'
+import ExternalLink from '../ExternalLink'
+import ListLogo from '../ListLogo'
+import ModalHeader from '../ModalHeader'
+import { TokenList } from '@uniswap/token-lists/dist/types'
+import { getExplorerLink } from '../../functions/explorer'
+import styled from 'styled-components'
+import { transparentize } from 'polished'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useAddUserToken } from '../../state/user/hooks'
+import Typography from '../Typography'
+import { Plural, Trans } from '@lingui/macro'
+import { shortenAddress } from '../../functions'
 
 const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
   // background-color: ${({ theme, highWarning }) =>
-    highWarning
-      ? transparentize(0.8, theme.red1)
-      : transparentize(0.8, theme.yellow2)};
-  // width: fit-content;
-`;
-
-const AddressText = styled.div`
-  font-size: 12px;
-  color: blue;
-  // ${({ theme }) => theme.mediaWidth.upToSmall`
-    // font-size: 10px;
-`}
-`;
+    highWarning ? transparentize(0.8, theme.red1) : transparentize(0.8, theme.yellow2)};
+  width: fit-content;
+`
 
 interface ImportProps {
-  tokens: Token[];
-  onBack?: () => void;
-  onDismiss?: () => void;
-  handleCurrencySelect?: (currency: Currency) => void;
+  tokens: Token[]
+  list?: TokenList
+  onBack?: () => void
+  onDismiss?: () => void
+  handleCurrencySelect?: (currency: Currency) => void
 }
 
-export function ImportToken({
-  tokens,
-  onBack,
-  onDismiss,
-  handleCurrencySelect,
-}: ImportProps) {
-  const theme = useTheme();
+export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySelect }: ImportProps) {
+  const { chainId } = useActiveWeb3React()
 
-  const { chainId } = useActiveWeb3React();
-
-  const [confirmed, setConfirmed] = useState(false);
-
-  const addToken = useAddUserToken();
-
-  // use for showing import source on inactive tokens
-  const inactiveTokenList = useCombinedInactiveList();
-
-  // higher warning severity if either is not on a list
-  const fromLists =
-    (chainId && inactiveTokenList?.[chainId]?.[tokens[0]?.address]?.list) ||
-    (chainId && inactiveTokenList?.[chainId]?.[tokens[1]?.address]?.list);
-
+  const addToken = useAddUserToken()
   return (
-    <Wrapper>
-      <ModalHeader
-        onBack={onBack}
-        onClose={onDismiss}
-        title={`Import ${tokens.length > 1 ? "Tokens" : "Token"}`}
-      />
+    <div className="relative w-full space-y-3 overflow-auto">
+      <ModalHeader onBack={onBack} onClose={onDismiss} title={`Import ${tokens.length > 1 ? 'Tokens' : 'Token'}`} />
+      <Typography className="text-center">
+        <Trans>
+          This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to
+          trade.
+        </Trans>
+      </Typography>
       {tokens.map((token) => {
-        const list =
-          chainId && inactiveTokenList?.[chainId]?.[token.address]?.list;
         return (
-          <Card
-            key={"import" + token.address}
-            className=".token-warning-container"
-          >
-            <AutoColumn gap="10px">
-              <AutoRow align="center">
-                <CurrencyLogo currency={token} size={"24px"} />
-                <div className="mx-2 font-medium">{token.symbol}</div>
-                <div className="font-light">{token.name}</div>
-              </AutoRow>
+          <div key={'import' + token.address} className=".token-warning-container bg-dark-800 rounded p-5">
+            <AutoColumn gap="10px" justify="center">
+              <CurrencyLogo currency={token} size={'32px'} />
+              <AutoColumn gap="4px" justify="center">
+                <div className="mx-2 text-xl font-medium text-high-emphesis">{token.symbol}</div>
+                <div className="text-sm font-light text-secondary">{token.name}</div>
+              </AutoColumn>
               {chainId && (
-                <ExternalLink
-                  href={getExplorerLink(chainId, token.address, "address")}
-                >
-                  <AddressText>{token.address}</AddressText>
+                <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
+                  {shortenAddress(token.address)}
                 </ExternalLink>
               )}
               {list !== undefined ? (
-                <RowFixed>
-                  {list.logoURI && (
-                    <ListLogo logoURI={list.logoURI} size="12px" />
-                  )}
-                  <div className="ml-1">via {list.name}</div>
+                <RowFixed align="center">
+                  {list.logoURI && <ListLogo logoURI={list.logoURI} size="16px" />}
+                  <div className="ml-2 text-sm text-secondary">via {list.name}</div>
                 </RowFixed>
               ) : (
-                <WarningWrapper
-                  borderRadius="4px"
-                  padding="4px"
-                  highWarning={true}
-                >
+                <WarningWrapper borderRadius="4px" padding="4px" highWarning={true}>
                   <RowFixed>
-                    <AlertTriangle
-                      className="stroke-current text-red"
-                      size="10px"
-                    />
-                    <div className="ml-1 text-xs font-semibold text-red">
-                      Unknown Source
-                    </div>
+                    <AlertTriangle className="stroke-current text-red" size="10px" />
+                    <div className="ml-1 text-xs font-semibold text-red">Unknown Source</div>
                   </RowFixed>
                 </WarningWrapper>
               )}
             </AutoColumn>
-          </Card>
-        );
+          </div>
+        )
       })}
-
-      <Card
-        className={classNames(
-          fromLists ? "bg-yellow" : "bg-red",
-          "bg-opacity-80"
-        )}
-      >
-        <AutoColumn
-          justify="center"
-          style={{ textAlign: "center", gap: "16px", marginBottom: "12px" }}
-        >
-          <AlertTriangle
-            className={classNames(
-              fromLists ? "text-yellow" : "text-red",
-              "stroke-current"
-            )}
-            size={32}
-          />
-          <div
-            className={classNames(
-              fromLists ? "text-yellow" : "text-red",
-              "font-semibold text-xl"
-            )}
-          >
-            Trade at your own risk!
-          </div>
-        </AutoColumn>
-
-        <AutoColumn
-          style={{ textAlign: "center", gap: "16px", marginBottom: "12px" }}
-        >
-          <div className={fromLists ? "text-yellow" : "text-red"}>
-            Anyone can create a token, including creating fake versions of
-            existing tokens that claim to represent projects.
-          </div>
-          <div
-            className={classNames(
-              fromLists ? "text-yellow" : "text-red",
-              "font-medium"
-            )}
-          >
-            If you purchase this token, you may not be able to sell it back.
-          </div>
-        </AutoColumn>
-        <AutoRow
-          justify="center"
-          style={{ cursor: "pointer" }}
-          onClick={() => setConfirmed(!confirmed)}
-        >
-          <Checkbox
-            className=".understand-checkbox"
-            name="confirmed"
-            type="checkbox"
-            checked={confirmed}
-            onChange={() => setConfirmed(!confirmed)}
-          />
-          <div
-            className={classNames(
-              fromLists ? "text-yellow" : "text-red",
-              "font-medium ml-2.5"
-            )}
-          >
-            I understand
-          </div>
-        </AutoRow>
-      </Card>
       <Button
         color="gradient"
-        size="xs"
-        disabled={!confirmed}
         onClick={() => {
-          tokens.map((token) => addToken(token));
-          handleCurrencySelect && handleCurrencySelect(tokens[0]);
+          tokens.map((token) => addToken(token))
+          handleCurrencySelect && handleCurrencySelect(tokens[0])
         }}
         className=".token-dismiss-button"
       >
-        Import
+        <Trans>Import</Trans>
       </Button>
-    </Wrapper>
-  );
+    </div>
+  )
 }

@@ -1,30 +1,23 @@
-import React, { useCallback, useContext } from "react";
-import {
-  fortmatic,
-  injected,
-  portis,
-  torus,
-  walletconnect,
-  walletlink,
-} from "../../connectors";
-import styled, { ThemeContext } from "styled-components";
+import React, { useCallback, useContext } from 'react'
+import { fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
+import styled, { ThemeContext } from 'styled-components'
 
-import { AppDispatch } from "../../state";
-import Button from "../Button";
-import Copy from "./Copy";
-import ExternalLink from "../ExternalLink";
-import Identicon from "../Identicon";
-import Image from "next/image";
-import { ExternalLink as LinkIcon } from "react-feather";
-import LinkStyledButton from "../LinkStyledButton";
-import ModalHeader from "../ModalHeader";
-import { SUPPORTED_WALLETS } from "../../constants";
-import Transaction from "./Transaction";
-import { clearAllTransactions } from "../../state/transactions/actions";
-import { getExplorerLink } from "../../functions/explorer";
-import { shortenAddress } from "../../functions/format";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useDispatch } from "react-redux";
+import { AppDispatch } from '../../state'
+import Button from '../Button'
+import Copy from './Copy'
+import ExternalLink from '../ExternalLink'
+import Identicon from '../Identicon'
+import Image from 'next/image'
+import { ExternalLink as LinkIcon } from 'react-feather'
+import LinkStyledButton from '../LinkStyledButton'
+import ModalHeader from '../ModalHeader'
+import { SUPPORTED_WALLETS } from '../../constants'
+import Transaction from './Transaction'
+import { clearAllTransactions } from '../../state/transactions/actions'
+import { getExplorerLink } from '../../functions/explorer'
+import { shortenAddress } from '../../functions/format'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useDispatch } from 'react-redux'
 
 const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
   font-size: 0.825rem;
@@ -35,14 +28,14 @@ const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
   :hover {
     // color: ${({ theme }) => theme.text2};
   }
-`;
+`
 
 const WalletName = styled.div`
   width: initial;
   font-size: 0.825rem;
   font-weight: 500;
   // color: ${({ theme }) => theme.text3};
-`;
+`
 
 const IconWrapper = styled.div<{ size?: number }>`
   // ${({ theme }) => theme.flexColumnNoWrap};
@@ -51,34 +44,34 @@ const IconWrapper = styled.div<{ size?: number }>`
   margin-right: 8px;
   & > img,
   span {
-    height: ${({ size }) => (size ? size + "px" : "32px")};
-    width: ${({ size }) => (size ? size + "px" : "32px")};
+    height: ${({ size }) => (size ? size + 'px' : '32px')};
+    width: ${({ size }) => (size ? size + 'px' : '32px')};
   }
   // ${({ theme }) => theme.mediaWidth.upToMedium`
     align-items: flex-end;
   `};
-`;
+`
 
 const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
-`;
+`
 
 function renderTransactions(transactions: string[]) {
   return (
     <TransactionListWrapper>
       {transactions.map((hash, i) => {
-        return <Transaction key={i} hash={hash} />;
+        return <Transaction key={i} hash={hash} />
       })}
     </TransactionListWrapper>
-  );
+  )
 }
 
 interface AccountDetailsProps {
-  toggleWalletModal: () => void;
-  pendingTransactions: string[];
-  confirmedTransactions: string[];
-  ENSName?: string;
-  openOptions: () => void;
+  toggleWalletModal: () => void
+  pendingTransactions: string[]
+  confirmedTransactions: string[]
+  ENSName?: string
+  openOptions: () => void
 }
 
 export default function AccountDetails({
@@ -88,21 +81,20 @@ export default function AccountDetails({
   ENSName,
   openOptions,
 }: AccountDetailsProps): any {
-  const { chainId, account, connector } = useActiveWeb3React();
-  const theme = useContext(ThemeContext);
-  const dispatch = useDispatch<AppDispatch>();
+  const { chainId, account, connector } = useActiveWeb3React()
+  const theme = useContext(ThemeContext)
+  const dispatch = useDispatch<AppDispatch>()
 
   function formatConnectorName() {
-    const { ethereum } = window;
-    const isMetaMask = !!(ethereum && ethereum.isMetaMask);
+    const { ethereum } = window
+    const isMetaMask = !!(ethereum && ethereum.isMetaMask)
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter(
         (k) =>
-          SUPPORTED_WALLETS[k].connector === connector &&
-          (connector !== injected || isMetaMask === (k === "METAMASK"))
+          SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
       )
-      .map((k) => SUPPORTED_WALLETS[k].name)[0];
-    return <WalletName>Connected with {name}</WalletName>;
+      .map((k) => SUPPORTED_WALLETS[k].name)[0]
+    return <WalletName>Connected with {name}</WalletName>
   }
 
   function getStatusIcon() {
@@ -111,78 +103,53 @@ export default function AccountDetails({
         <IconWrapper size={16}>
           <Identicon />
         </IconWrapper>
-      );
+      )
     } else if (connector === walletconnect) {
       return (
         <IconWrapper size={16}>
-          <Image
-            src="/wallet-connect.png"
-            alt={"Wallet Connect"}
-            width="16px"
-            height="16px"
-          />
+          <Image src="/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
         </IconWrapper>
-      );
+      )
     } else if (connector === walletlink) {
       return (
         <IconWrapper size={16}>
-          <Image
-            src="/coinbase.svg"
-            alt={"Coinbase Wallet"}
-            width="16px"
-            height="16px"
-          />
+          <Image src="/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
         </IconWrapper>
-      );
+      )
     } else if (connector === fortmatic) {
       return (
         <IconWrapper size={16}>
-          <Image
-            src="/fortmatic.png"
-            alt={"Fortmatic"}
-            width="16px"
-            height="16px"
-          />
+          <Image src="/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
         </IconWrapper>
-      );
+      )
     } else if (connector === portis) {
       return (
         <>
           <IconWrapper size={16}>
-            <Image
-              src="/portis.png"
-              alt={"Portis"}
-              width="16px"
-              height="16px"
-            />
+            <Image src="/portis.png" alt={'Portis'} width="16px" height="16px" />
             <Button
               onClick={() => {
-                portis.portis.showPortis();
+                portis.portis.showPortis()
               }}
             >
               Show Portis
             </Button>
           </IconWrapper>
         </>
-      );
+      )
     } else if (connector === torus) {
       return (
         <IconWrapper size={16}>
-          <Image
-            src="/torus.png"
-            alt={"Coinbase Wallet"}
-            width="16px"
-            height="16px"
-          />
+          <Image src="/torus.png" alt={'Coinbase Wallet'} width="16px" height="16px" />
         </IconWrapper>
-      );
+      )
     }
-    return null;
+    return null
   }
 
   const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) dispatch(clearAllTransactions({ chainId }));
-  }, [dispatch, chainId]);
+    if (chainId) dispatch(clearAllTransactions({ chainId }))
+  }, [dispatch, chainId])
 
   return (
     <div className="space-y-3">
@@ -198,7 +165,7 @@ export default function AccountDetails({
                   color="pink"
                   size="sm"
                   onClick={() => {
-                    (connector as any).close();
+                    ;(connector as any).close()
                   }}
                 >
                   Disconnect
@@ -209,17 +176,14 @@ export default function AccountDetails({
                 color="blue"
                 size="sm"
                 onClick={() => {
-                  openOptions();
+                  openOptions()
                 }}
               >
                 Change
               </Button>
             </div>
           </div>
-          <div
-            id="web3-account-identifier-row"
-            className="flex items-center space-x-3"
-          >
+          <div id="web3-account-identifier-row" className="flex items-center space-x-3">
             {ENSName ? (
               <>
                 {getStatusIcon()}
@@ -238,21 +202,17 @@ export default function AccountDetails({
                 <div className="flex items-center space-x-3">
                   {account && (
                     <Copy toCopy={account}>
-                      <span style={{ marginLeft: "4px" }}>Copy Address</span>
+                      <span style={{ marginLeft: '4px' }}>Copy Address</span>
                     </Copy>
                   )}
                   {chainId && account && (
                     <AddressLink
                       hasENS={!!ENSName}
                       isENS={true}
-                      href={
-                        chainId && getExplorerLink(chainId, ENSName, "address")
-                      }
+                      href={chainId && getExplorerLink(chainId, ENSName, 'address')}
                     >
                       <LinkIcon size={16} />
-                      <span style={{ marginLeft: "4px" }}>
-                        View on explorer
-                      </span>
+                      <span style={{ marginLeft: '4px' }}>View on explorer</span>
                     </AddressLink>
                   )}
                 </div>
@@ -266,11 +226,7 @@ export default function AccountDetails({
                     </Copy>
                   )}
                   {chainId && account && (
-                    <AddressLink
-                      hasENS={!!ENSName}
-                      isENS={false}
-                      href={getExplorerLink(chainId, account, "address")}
-                    >
+                    <AddressLink hasENS={!!ENSName} isENS={false} href={getExplorerLink(chainId, account, 'address')}>
                       <LinkIcon size={16} />
                       <span className="ml-1">View on explorer</span>
                     </AddressLink>
@@ -294,5 +250,5 @@ export default function AccountDetails({
         <div>Your transactions will appear here...</div>
       )}
     </div>
-  );
+  )
 }

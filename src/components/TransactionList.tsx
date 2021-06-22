@@ -1,40 +1,36 @@
-import { ArrowUpRight, CheckCircle } from "react-feather";
+import { ArrowUpRight, CheckCircle } from 'react-feather'
 
-import Dots from "../components/Dots";
-import Image from "next/image";
-import { NETWORK_LABEL } from "../constants/networks";
-import React from "react";
-import { getExplorerLink } from "../functions/explorer";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../hooks/useActiveWeb3React";
-import { useLingui } from "@lingui/react";
+import Button from './Button'
+import Dots from '../components/Dots'
+import Image from 'next/image'
+import { NETWORK_LABEL } from '../constants/networks'
+import React from 'react'
+import { getExplorerLink } from '../functions/explorer'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 // type Props = {
 //     transactions: string[]
 // }
 
 export default function TransactionList({ transactions }: any) {
-  const { i18n } = useLingui();
-  const { chainId } = useActiveWeb3React();
+  const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
   return (
     <>
       <div className="flex flex-col items-start justify-between mb-6 sm:flex-row">
         <div className="text-xl font-medium text-white">
-          {i18n._(
-            t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`
-          )}
+          {i18n._(t`Your Transaction History on ${chainId && NETWORK_LABEL[chainId]}`)}
         </div>
-        {/* <LinkStyledButton>
-                    <span className="text-sm">{i18n._(t`Clear History`)}</span>
-                </LinkStyledButton> */}
+        <Button variant="link">
+          <span className="text-sm">{i18n._(t`Clear History`)}</span>
+        </Button>
       </div>
       <div>
         {transactions ? (
           transactions.map((t: any) => (
-            <div
-              key={t.tx_hash}
-              className="flex items-center justify-between px-3 py-1 mb-3 rounded bg-dark-800"
-            >
+            <div key={t.tx_hash} className="flex items-center justify-between px-3 py-1 mb-3 rounded bg-dark-800">
               <div className="flex flex-row items-center space-x-1">
                 <div>
                   <Image
@@ -57,17 +53,13 @@ export default function TransactionList({ transactions }: any) {
               </div>
               {chainId && (
                 <a
-                  href={getExplorerLink(chainId, t.tx_hash, "transaction")}
+                  href={getExplorerLink(chainId, t.tx_hash, 'transaction')}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="flex items-center flex-1 px-3 py-2 text-sm rounded-lg text-primary text-bold bg-dark-900"
                 >
                   <span className="mr-1">{t.description}</span>
-                  <ArrowUpRight
-                    strokeWidth={2}
-                    size={14}
-                    className="text-blue"
-                  />
+                  <ArrowUpRight strokeWidth={2} size={14} className="text-blue" />
                 </a>
               )}
               <div className="ml-4 mr-1">
@@ -82,5 +74,5 @@ export default function TransactionList({ transactions }: any) {
         )}
       </div>
     </>
-  );
+  )
 }

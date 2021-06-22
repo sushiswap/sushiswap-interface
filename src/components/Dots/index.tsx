@@ -1,24 +1,24 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const Dots = styled.span`
   &::after {
     display: inline-block;
     animation: ellipsis 1.25s infinite;
-    content: ".";
+    content: '.';
     width: 1em;
     text-align: left;
   }
   @keyframes ellipsis {
     0% {
-      content: ".";
+      content: '.';
     }
     33% {
-      content: "..";
+      content: '..';
     }
     66% {
-      content: "...";
+      content: '...';
     }
   }
-`;
+`
 
-export default Dots;
+export default Dots
