@@ -109,7 +109,7 @@ const PARAMS: {
       decimals: 18,
     },
     rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-    blockExplorerUrls: ['https://explorer.avax.network'],
+    blockExplorerUrls: ['https://cchain.explorer.avax.network'],
   },
   [ChainId.OKEX]: {
     chainId: '0x42',
