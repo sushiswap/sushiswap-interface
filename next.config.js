@@ -16,19 +16,17 @@ module.exports = withBundleAnalyzer(
     },
     images: {
       domains: ['assets.sushi.com', 'res.cloudinary.com'],
-      // loader: 'cloudinary',
-      // path: 'http://res.cloudinary.com/dnz2bkszg/image/fetch/',
     },
     reactStrictMode: true,
-    // async redirects() {
-    //   return [
-    //     {
-    //       source: "/",
-    //       destination: "/swap",
-    //       permanent: true,
-    //     },
-    //   ];
-    // },
+    async redirects() {
+      return [
+        {
+          source: '/',
+          destination: '/swap',
+          permanent: true,
+        },
+      ]
+    },
     async rewrites() {
       return [
         // Bar
@@ -37,10 +35,10 @@ module.exports = withBundleAnalyzer(
           destination: '/bar',
         },
         // Exchange
-        {
-          source: '/',
-          destination: '/swap',
-        },
+        // {
+        //   source: '/',
+        //   destination: '/swap',
+        // },
         {
           source: '/add/:token*',
           destination: '/exchange/add/:token*',
