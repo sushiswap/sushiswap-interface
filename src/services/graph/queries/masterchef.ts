@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export const poolsQuery = gql`
   query poolsQuery(
@@ -7,12 +7,7 @@ export const poolsQuery = gql`
     $orderBy: String! = "timestamp"
     $orderDirection: String! = "desc"
   ) {
-    pools(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-    ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       pair
       allocPoint
@@ -27,15 +22,13 @@ export const poolsQuery = gql`
       }
     }
   }
-`;
+`
 
 export const masterChefV1TotalAllocPointQuery = gql`
-  query masterChefV1TotalAllocPoint(
-    $id: String! = "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd"
-  ) {
+  query masterChefV1TotalAllocPoint($id: String! = "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd") {
     masterChef(id: $id) {
       id
       totalAllocPoint
     }
   }
-`;
+`
