@@ -23,7 +23,7 @@ import Typography from '../Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { Percent } from '../../../../sushiswap-sdk/dist'
+import { Percent } from '@sushiswap/sdk'
 
 const StyledMenuIcon = styled(Settings)`
   height: 20px;
