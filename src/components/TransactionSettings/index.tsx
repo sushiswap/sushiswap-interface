@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { RowBetween, RowFixed } from '../Row'
-import { Trans, useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react'
 import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
 
 import { AutoColumn } from '../Column'
@@ -10,7 +10,7 @@ import QuestionHelper from '../QuestionHelper'
 import Typography from '../Typography'
 import { classNames } from '../../functions'
 import styled from 'styled-components'
-import { t } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
