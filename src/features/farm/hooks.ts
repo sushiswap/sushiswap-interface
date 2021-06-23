@@ -1,7 +1,7 @@
 import { ChainId, CurrencyAmount, JSBI } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
-import { useMasterChefContract, useMasterChefV2Contract, useMiniChefV2Contract } from '../../hooks'
+import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks'
 
 import { Contract } from '@ethersproject/contracts'
 import { SUSHI } from '../../constants'
@@ -13,7 +13,7 @@ import zip from 'lodash/zip'
 export function useChefContract(chef: Chef) {
   const masterChefContract = useMasterChefContract()
   const masterChefV2Contract = useMasterChefV2Contract()
-  const miniChefContract = useMiniChefV2Contract()
+  const miniChefContract = useMiniChefContract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
@@ -33,7 +33,7 @@ const CHEFS = {
 export function useChefContracts(chefs: Chef[]) {
   const masterChefContract = useMasterChefContract()
   const masterChefV2Contract = useMasterChefV2Contract()
-  const miniChefContract = useMiniChefV2Contract()
+  const miniChefContract = useMiniChefContract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,

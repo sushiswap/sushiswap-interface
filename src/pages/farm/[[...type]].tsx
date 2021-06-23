@@ -19,7 +19,7 @@ import {
   useSushiPrice,
 } from '../../services/graph'
 import { useChefContracts, usePositions } from '../../features/farm/hooks'
-import { useMasterChefContract, useMasterChefV2Contract, useMiniChefV2Contract } from '../../hooks/useContract'
+import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks/useContract'
 
 import Card from '../../components/Card'
 import CardHeader from '../../components/CardHeader'
@@ -75,7 +75,7 @@ export default function Farm(): JSX.Element {
   // Get Contracts
   const masterchefContract = useMasterChefContract()
   const masterchefV2Contract = useMasterChefV2Contract()
-  const minichefContract = useMiniChefV2Contract()
+  const minichefContract = useMiniChefContract()
 
   // const chefContracts = useChefContracts()
 
