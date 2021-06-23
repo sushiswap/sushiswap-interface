@@ -27,8 +27,6 @@ function AppBar(): JSX.Element {
 
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
-  console.log({ userEthBalance })
-
   return (
     //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
     <header className="flex-shrink-0 w-full">

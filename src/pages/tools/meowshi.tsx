@@ -19,8 +19,6 @@ export default function Meowshi() {
 
   const { allowance, meow, unmeow } = useMeowshi()
 
-  console.log({ sushiBalance, xSushiBalance, meowBalance })
-
   return (
     <>
       <Head>

@@ -195,8 +195,6 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const tokens = useAllTokens()
 
-  console.log({ tokens })
-
   const updatePairs = useCallback(async () => {
     if (!account || !chainId || ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId)) {
       return

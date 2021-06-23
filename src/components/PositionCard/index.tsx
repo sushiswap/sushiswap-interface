@@ -57,8 +57,6 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
         ]
       : [undefined, undefined]
 
-  console.log({ currency0, currency1 })
-
   return (
     <>
       {userPoolBalance && JSBI.greaterThan(userPoolBalance.quotient, JSBI.BigInt(0)) ? (

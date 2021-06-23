@@ -1,9 +1,7 @@
 import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { RowBetween, RowFixed } from '../Row'
-import { useCombinedActiveList } from '../../state/lists/hooks'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { useIsUserAddedToken } from '../../hooks/Tokens'
+
 import Card from '../Card'
 import Column from '../Column'
 import CurrencyLogo from '../CurrencyLogo'
@@ -13,14 +11,17 @@ import Loader from '../Loader'
 import { MenuItem } from './styleds'
 import { MouseoverTooltip } from '../Tooltip'
 import QuestionHelper from '../QuestionHelper'
-import { useLingui } from '@lingui/react'
 import Typography from '../Typography'
+import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
+import { i18n } from '@lingui/core'
 import { isTokenOnList } from '../../functions/validate'
 import styled from 'styled-components'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useCombinedActiveList } from '../../state/lists/hooks'
+import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useIsUserAddedToken } from '../../hooks/Tokens'
+import { useLingui } from '@lingui/react'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
@@ -113,8 +114,6 @@ function CurrencyRow({
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
-
-  console.log({ currency })
 
   // only show add or remove buttons if not on selected list
   return (
