@@ -1,33 +1,32 @@
-import React, { FC } from "react";
-import Image from "next/image";
-import { Field, MeowshiState } from "../../../pages/tools/meowshi";
-import Typography from "../../../components/Typography";
-import { useLingui } from "@lingui/react";
-import { t } from "@lingui/macro";
-import { Input as NumericalInput } from "../../../components/NumericalInput";
-import { ChainId } from "@sushiswap/sdk";
-import { useToken } from "../../../hooks/Tokens";
-import { SUSHI, XSUSHI } from "../../../constants";
-import { useTokenBalance } from "../../../state/wallet/hooks";
-import { useActiveWeb3React } from "../../../hooks";
+import React, { FC } from 'react'
+import Image from 'next/image'
+import { Field, MeowshiState } from '../../../pages/tools/meowshi'
+import Typography from '../../../components/Typography'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
+import { Input as NumericalInput } from '../../../components/NumericalInput'
+import { ChainId } from '@sushiswap/sdk'
+import { SUSHI, XSUSHI } from '../../../constants'
+import { useTokenBalance } from '../../../state/wallet/hooks'
+import { useActiveWeb3React } from '../../../hooks'
+import { useUSDCValue } from '../../../hooks/useUSDCPrice'
+import { tryParseAmount } from '../../../functions'
 
 interface CurrencyInputPanelProps {
-  field: Field;
-  meowshiState: MeowshiState;
-  showMax: boolean;
+  field: Field
+  meowshiState: MeowshiState
+  showMax: boolean
 }
 
-const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({
-  field,
-  meowshiState,
-  showMax,
-}) => {
-  const { currencies, handleInput, setCurrency, fields } = meowshiState;
+const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, showMax }) => {
+  const { currencies, handleInput, setCurrency, fields } = meowshiState
 
-  const { account } = useActiveWeb3React();
-  const { i18n } = useLingui();
-  const currency = currencies[field];
-  const balance = useTokenBalance(account, currency);
+  const { account } = useActiveWeb3React()
+  const { i18n } = useLingui()
+  const currency = currencies[field]
+  const balance = useTokenBalance(account, currency)
+  const inputUSDCValue = useUSDCValue(tryParseAmount(fields[field], currencies[field]))
+  const balanceUSDCValue = useUSDCValue(balance)
 
   return (
     <>
@@ -38,10 +37,10 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({
               <Image
                 src={
                   currency === SUSHI[ChainId.MAINNET]
-                    ? "/images/tokens/sushi-square.jpg"
+                    ? '/images/tokens/sushi-square.jpg'
                     : currency === XSUSHI
-                    ? "/images/tokens/xsushi-square.jpg"
-                    : "/images/tokens/nyan-square.jpg"
+                    ? '/images/tokens/xsushi-square.jpg'
+                    : '/images/tokens/nyan-square.jpg'
                 }
                 alt="SUSHI"
                 width="62px"
@@ -50,28 +49,16 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({
                 className="rounded-full"
               />
               <div className="flex flex-col items-start">
-                <Typography
-                  variant="h3"
-                  className="text-high-emphesis leading-6"
-                  weight={700}
-                >
+                <Typography variant="h3" className="text-high-emphesis leading-6" weight={700}>
                   {currency?.symbol}
                 </Typography>
-                {(currency === SUSHI[ChainId.MAINNET] ||
-                  currency === XSUSHI) && (
+                {(currency === SUSHI[ChainId.MAINNET] || currency === XSUSHI) && (
                   <Typography
                     variant="xs"
                     className="underline text-blue cursor-pointer"
-                    onClick={() =>
-                      setCurrency(
-                        currency === XSUSHI ? SUSHI[ChainId.MAINNET] : XSUSHI,
-                        field
-                      )
-                    }
+                    onClick={() => setCurrency(currency === XSUSHI ? SUSHI[ChainId.MAINNET] : XSUSHI, field)}
                   >
-                    {currencies[field] === SUSHI[ChainId.MAINNET]
-                      ? i18n._(t`Use xSUSHI`)
-                      : i18n._(t`Use SUSHI`)}
+                    {currencies[field] === SUSHI[ChainId.MAINNET] ? i18n._(t`Use xSUSHI`) : i18n._(t`Use SUSHI`)}
                   </Typography>
                 )}
               </div>
@@ -87,10 +74,11 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({
                   onUserInput={(val) => handleInput(val, field)}
                 />
               </div>
-
-              <div className="text-xs font-medium text-low-emphesis">
-                ≈ 343453 USDC
-              </div>
+              {inputUSDCValue && (
+                <div className="text-xs font-medium text-low-emphesis">
+                  ≈ {inputUSDCValue?.toSignificant(6, { groupSeparator: ',' })} USDC
+                </div>
+              )}
             </div>
 
             {showMax && (
@@ -103,19 +91,29 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({
             )}
           </div>
         </div>
-        <div className="bg-dark-700 rounded-b flex justify-end px-5 py-1">
+        <div className="bg-dark-700 rounded-b flex justify-end px-5 py-1.5 gap-2">
           <Typography
             variant="xs"
             component="span"
             onClick={() => handleInput(balance?.toExact(), field)}
-            className="cursor-pointer"
+            className="cursor-pointer text-primary"
           >
-            Balance: {balance?.toSignificant(6) || "0"} {currency?.symbol} ≈
+            Balance: {balance?.toSignificant(6, { groupSeparator: ',' }) || '0'} {currency?.symbol}
           </Typography>
+          {balanceUSDCValue && (
+            <>
+              <Typography variant="xs" component="span" className="text-pr]">
+                {' ≈ '}
+              </Typography>
+              <Typography variant="xs" component="span" className="text-secondary">
+                ${balanceUSDCValue?.toSignificant(6, { groupSeparator: ',' })} USDC
+              </Typography>
+            </>
+          )}
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default CurrencyInputPanel;
+export default CurrencyInputPanel
