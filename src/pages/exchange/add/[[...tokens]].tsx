@@ -305,8 +305,6 @@ export default function Add() {
     setTxHash('')
   }, [onFieldAInput, txHash])
 
-  const isCreate = router.asPath.includes('/create')
-
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
   return (
@@ -362,32 +360,31 @@ export default function Add() {
             pendingText={pendingText}
           />
           <div className="flex flex-col space-y-4">
-            {noLiquidity ||
-              (isCreate ? (
+            {isCreate ? (
+              <Alert
+                message={i18n._(
+                  t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
+                )}
+                type="information"
+              />
+            ) : (
+              <>
                 <Alert
-                  message={i18n._(
-                    t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
-                  )}
+                  showIcon={false}
+                  message={
+                    <Trans>
+                      <b>Tip:</b> When you add liquidity, you will receive pool tokens representing your position. These
+                      tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any
+                      time.
+                    </Trans>
+                  }
                   type="information"
                 />
-              ) : (
-                <>
-                  <Alert
-                    showIcon={false}
-                    message={
-                      <Trans>
-                        <b>Tip:</b> When you add liquidity, you will receive pool tokens representing your position.
-                        These tokens automatically earn fees proportional to your share of the pool, and can be redeemed
-                        at any time.
-                      </Trans>
-                    }
-                    type="information"
-                  />
-                  {pair && !noLiquidity && pairState !== PairState.INVALID && (
-                    <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
-                  )}
-                </>
-              ))}
+                {pair && !noLiquidity && pairState !== PairState.INVALID && (
+                  <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
+                )}
+              </>
+            )}
 
             <div>
               <CurrencyInputPanel

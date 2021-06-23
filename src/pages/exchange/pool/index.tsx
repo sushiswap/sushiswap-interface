@@ -173,7 +173,7 @@ export default function Pool() {
                 <Button id="add-pool-button" color="gradient" onClick={() => router.push(`/add/ETH`)}>
                   {i18n._(t`Add Liquidity`)}
                 </Button>
-                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/create/ETH`)}>
+                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/ETH`)}>
                   {i18n._(t`Create a pair`)}
                 </Button>
               </div>
