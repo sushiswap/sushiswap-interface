@@ -23,7 +23,7 @@ export interface BentoBalance {
   address: string
   name: string
   symbol: string
-  decimals: number | string
+  decimals: number
   balance: any
   bentoBalance: any
   wallet: any
@@ -50,8 +50,6 @@ export function useBentoBalances(): BentoBalance[] {
     [KASHI_ADDRESS[chainId]],
   ])
 
-  console.log({ uiData, balanceData })
-
   // IERC20 token = addresses[i];
   // balances[i].totalSupply = token.totalSupply();
   // balances[i].token = token;
@@ -75,8 +73,6 @@ export function useBentoBalances(): BentoBalance[] {
     return tokenAddresses
       .map((key: string, i: number) => {
         const token = tokens[key]
-
-        console.log(token.decimals, uiData.result?.[0]?.ethRate || Zero, balanceData.result[0][i].rate)
 
         const usd = e10(token.decimals).mulDiv(uiData.result[0].ethRate, balanceData.result[0][i].rate)
 
@@ -129,6 +125,8 @@ export function useBentoBalance(tokenAddress: string): {
   const currentTransactionStatus = useTransactionStatus()
 
   const [balance, setBalance] = useState<any>()
+
+  // const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
 
   const fetchBentoBalance = useCallback(async () => {
     const balances = await boringHelperContract?.getBalances(account, [tokenAddressChecksum])
