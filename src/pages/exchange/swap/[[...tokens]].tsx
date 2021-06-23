@@ -29,7 +29,7 @@ import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 import AddressInputPanel from '../../../components/AddressInputPanel'
 import { AdvancedSwapDetails } from '../../../features/swap/AdvancedSwapDetails'
 import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDetailsDropdown'
-import { ArrowDown } from 'react-feather'
+import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
 import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
@@ -496,33 +496,39 @@ export default function Swap() {
             showCommonBases={true}
             id="swap-currency-input"
           />
-          <AutoColumn justify="space-between" className="py-2.5">
+          <AutoColumn justify="space-between" className="py-3">
             <AutoRow justify={isExpertMode ? 'space-between' : 'flex-start'} style={{ padding: '0 1rem' }}>
               <button
-                className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px"
+                className="z-10 -mt-6 -mb-6 rounded-full"
                 onClick={() => {
                   setApprovalSubmitted(false) // reset 2 step UI for approvals
                   onSwitchTokens()
                 }}
               >
-                <div
-                  className="p-3 rounded-full bg-dark-800 hover:bg-dark-700"
-                  onMouseEnter={() => setAnimateSwapArrows(true)}
-                  onMouseLeave={() => setAnimateSwapArrows(false)}
-                >
-                  <Lottie
-                    animationData={swapArrowsAnimationData}
-                    autoplay={animateSwapArrows}
-                    loop={false}
-                    style={{ width: 32, height: 32 }}
-                  />
+                <div className="rounded-full bg-dark-900 p-3px">
+                  <div
+                    className="p-3 rounded-full bg-dark-800 hover:bg-dark-700"
+                    onMouseEnter={() => setAnimateSwapArrows(true)}
+                    onMouseLeave={() => setAnimateSwapArrows(false)}
+                  >
+                    <Lottie
+                      animationData={swapArrowsAnimationData}
+                      autoplay={animateSwapArrows}
+                      loop={false}
+                      style={{ width: 32, height: 32 }}
+                    />
+                  </div>
                 </div>
               </button>
               {recipient === null && !showWrap && isExpertMode ? (
-                <Button variant="link" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
-                  + Add a send (optional)
+                <Button variant="link" size="none" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
+                  + Add recipient (optional)
                 </Button>
-              ) : null}
+              ) : (
+                <Button variant="link" size="none" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
+                  - {i18n._(t`Remove recipient`)}
+                </Button>
+              )}
             </AutoRow>
           </AutoColumn>
 
@@ -554,19 +560,9 @@ export default function Swap() {
           </div>
         </div>
 
-        {recipient !== null && !showWrap ? (
-          <>
-            <AutoRow justify="space-between" style={{ padding: '0 1rem' }}>
-              <ArrowWrapper clickable={false}>
-                <ArrowDown size={16} />
-              </ArrowWrapper>
-              <Button variant="link" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
-                - {i18n._(t`Remove send`)}
-              </Button>
-            </AutoRow>
-            <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
-          </>
-        ) : null}
+        {recipient !== null && !showWrap && (
+          <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
+        )}
 
         {/* {showWrap ? null : (
             <div
