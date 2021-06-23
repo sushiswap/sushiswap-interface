@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { XIcon } from "@heroicons/react/outline";
+import { FC } from 'react'
+import { XIcon } from '@heroicons/react/outline'
 
 const Banner: FC = () => (
   <div className="relative w-full bg-purple bg-opacity-20">
@@ -7,12 +7,10 @@ const Banner: FC = () => (
       <div className="pr-16 sm:text-center sm:px-16">
         <p className="font-medium text-white">
           <span className="md:hidden">We announced a new product!</span>
-          <span className="hidden md:inline">
-            Big news! We&apos;re excited to announce a brand new product.
-          </span>
+          <span className="hidden md:inline">Big news! We&apos;re excited to announce a brand new product.</span>
           <span className="block sm:ml-2 sm:inline-block">
             <a href="#" className="font-bold text-white underline">
-              {" "}
+              {' '}
               Learn more <span aria-hidden="true">&rarr;</span>
             </a>
           </span>
@@ -26,6 +24,6 @@ const Banner: FC = () => (
       </div>
     </div>
   </div>
-);
+)
 
-export default Banner;
+export default Banner

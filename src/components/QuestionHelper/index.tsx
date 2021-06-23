@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState } from 'react'
 
-import { QuestionMarkCircleIcon as OutlineQuestionMarkCircleIcon } from "@heroicons/react/outline";
-import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from "@heroicons/react/solid";
-import Tooltip from "../Tooltip";
-import styled from "styled-components";
+import { QuestionMarkCircleIcon as OutlineQuestionMarkCircleIcon } from '@heroicons/react/outline'
+import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
+import Tooltip from '../Tooltip'
+import styled from 'styled-components'
 
 const LightQuestionWrapper = styled.div`
   display: flex;
@@ -24,13 +24,13 @@ const LightQuestionWrapper = styled.div`
   :focus {
     opacity: 0.7;
   }
-`;
+`
 
 const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
-  const [show, setShow] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false)
 
-  const open = useCallback(() => setShow(true), [setShow]);
-  const close = useCallback(() => setShow(false), [setShow]);
+  const open = useCallback(() => setShow(true), [setShow])
+  const close = useCallback(() => setShow(false), [setShow])
 
   if (children) {
     return (
@@ -44,7 +44,7 @@ const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
           {children}
         </div>
       </Tooltip>
-    );
+    )
   }
 
   return (
@@ -60,28 +60,24 @@ const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
         </div>
       </Tooltip>
     </span>
-  );
-};
+  )
+}
 
 export const LightQuestionHelper: FC<{ text: string }> = ({ text }) => {
-  const [show, setShow] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false)
 
-  const open = useCallback(() => setShow(true), [setShow]);
-  const close = useCallback(() => setShow(false), [setShow]);
+  const open = useCallback(() => setShow(true), [setShow])
+  const close = useCallback(() => setShow(false), [setShow])
 
   return (
     <span className="ml-1">
       <Tooltip text={text} show={show}>
-        <LightQuestionWrapper
-          onClick={open}
-          onMouseEnter={open}
-          onMouseLeave={close}
-        >
+        <LightQuestionWrapper onClick={open} onMouseEnter={open} onMouseLeave={close}>
           <OutlineQuestionMarkCircleIcon>?</OutlineQuestionMarkCircleIcon>
         </LightQuestionWrapper>
       </Tooltip>
     </span>
-  );
-};
+  )
+}
 
-export default QuestionHelper;
+export default QuestionHelper

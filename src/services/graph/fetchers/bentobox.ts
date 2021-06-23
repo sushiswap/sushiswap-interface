@@ -1,43 +1,32 @@
-import {
-  getEthPrice,
-  getTokenPrices,
-  getTokenSubset,
-  getTokens,
-} from "./exchange";
+import { getEthPrice, getTokenPrices, getTokenSubset, getTokens } from './exchange'
 
-import { ChainId } from "@sushiswap/sdk";
-import { lendingPairSubsetQuery } from "../queries/bentobox";
-import { request } from "graphql-request";
-import { tokens } from "@sushiswap/sushi-data/typings/exchange";
+import { ChainId } from '@sushiswap/sdk'
+import { lendingPairSubsetQuery } from '../queries/bentobox'
+import { request } from 'graphql-request'
+import { tokens } from '@sushiswap/sushi-data/typings/exchange'
 
 export const BENTOBOX = {
-  [ChainId.MAINNET]: "sushiswap/bentobox",
-  [ChainId.XDAI]: "sushiswap/xdai-bentobox",
-  [ChainId.MATIC]: "sushiswap/matic-bentobox",
-  [ChainId.FANTOM]: "sushiswap/fantom-bentobox",
-  [ChainId.BSC]: "sushiswap/bsc-bentobox",
-};
+  [ChainId.MAINNET]: 'sushiswap/bentobox',
+  [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
+  [ChainId.MATIC]: 'sushiswap/matic-bentobox',
+  [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
+  [ChainId.BSC]: 'sushiswap/bsc-bentobox',
+}
 export const bentobox = async (query, chainId = ChainId.MAINNET) =>
-  request(
-    `https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`,
-    query
-  );
+  request(`https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`, query)
 
-export const getLendingPairSubset = async (
-  chainId = ChainId.MAINNET,
-  variables = undefined
-) => {
+export const getLendingPairSubset = async (chainId = ChainId.MAINNET, variables = undefined) => {
   // console.log('getLendingPairSubset')
   const { kashiPairs } = await request(
     `https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`,
     lendingPairSubsetQuery,
     variables
-  );
+  )
   // const ethPrice = await getEthPrice()
 
   const assets = await getTokenSubset(chainId, {
     tokenAddresses: kashiPairs.map((pair) => pair.asset.id),
-  });
+  })
 
   // const prices = await getTokenPrices(
   //     chainId,
@@ -56,5 +45,5 @@ export const getLendingPairSubset = async (
     token1: {
       ...pair.collateral,
     },
-  }));
-};
+  }))
+}

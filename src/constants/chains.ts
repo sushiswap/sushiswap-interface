@@ -22,4 +22,5 @@ export enum SupportedChainId {
   HARMONY_TESTNET = 1666700000,
   OKEX = 66,
   OKEX_TESTNET = 65,
+  CELO = 42220,
 }

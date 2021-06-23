@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export const bentoTokenFieldsQuery = gql`
   fragment bentoTokenFields on Token {
@@ -12,7 +12,7 @@ export const bentoTokenFieldsQuery = gql`
     block
     timestamp
   }
-`;
+`
 
 export const lendingPairFields = gql`
   fragment lendingPairFields on KashiPair {
@@ -50,7 +50,7 @@ export const lendingPairFields = gql`
     timestamp
   }
   ${bentoTokenFieldsQuery}
-`;
+`
 
 export const lendingPairSubsetQuery = gql`
   query lendingPairSubsetQuery(
@@ -59,14 +59,9 @@ export const lendingPairSubsetQuery = gql`
     $orderBy: String! = "utilization"
     $orderDirection: String! = "desc"
   ) {
-    kashiPairs(
-      first: $first
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      where: { id_in: $pairAddresses }
-    ) {
+    kashiPairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, where: { id_in: $pairAddresses }) {
       ...lendingPairFields
     }
   }
   ${lendingPairFields}
-`;
+`

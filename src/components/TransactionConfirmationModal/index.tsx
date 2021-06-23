@@ -1,93 +1,94 @@
-import { AlertTriangle, ArrowUpCircle } from "react-feather";
-import React, { FC } from "react";
+import { AlertTriangle, ArrowUpCircle } from 'react-feather'
+import React, { FC } from 'react'
 
-import Button from "../Button";
-import { ChainId } from "@sushiswap/sdk";
-import CloseIcon from "../CloseIcon";
-import ExternalLink from "../ExternalLink";
-import Lottie from "lottie-react";
-import Modal from "../Modal";
-import { getExplorerLink } from "../../functions/explorer";
-import loadingRollingCircle from "../../animation/loading-rolling-circle.json";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useLingui } from "@lingui/react";
+import Button from '../Button'
+import { ChainId, Currency } from '@sushiswap/sdk'
+import CloseIcon from '../CloseIcon'
+import ExternalLink from '../ExternalLink'
+import Lottie from 'lottie-react'
+import Modal from '../Modal'
+import ModalHeader from '../ModalHeader'
+import { getExplorerLink } from '../../functions/explorer'
+import loadingRollingCircle from '../../animation/loading-rolling-circle.json'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
+import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask'
 
 interface ConfirmationPendingContentProps {
-  onDismiss: () => void;
-  pendingText: string;
-  pendingText2: string;
+  onDismiss: () => void
+  pendingText: string
+  pendingText2: string
 }
 
-export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> =
-  ({ onDismiss, pendingText, pendingText2 }) => {
-    const { i18n } = useLingui();
-    return (
-      <div>
-        <div className="flex justify-end">
-          <CloseIcon onClick={onDismiss} />
-        </div>
-        <div className="w-24 pb-4 m-auto">
-          <Lottie animationData={loadingRollingCircle} autoplay loop />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-3">
-          <div className="text-xl font-bold text-high-emphesis">
-            {i18n._(t`Waiting for Confirmation`)}
-          </div>
-          <div className="font-bold">{pendingText}</div>
-          <div className="font-bold">{pendingText2}</div>
-          <div className="text-sm font-bold text-secondary">
-            {i18n._(t`Confirm this transaction in your wallet`)}
-          </div>
-        </div>
+export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({
+  onDismiss,
+  pendingText,
+  pendingText2,
+}) => {
+  const { i18n } = useLingui()
+  return (
+    <div>
+      <div className="flex justify-end">
+        <CloseIcon onClick={onDismiss} />
       </div>
-    );
-  };
+      <div className="w-24 pb-4 m-auto">
+        <Lottie animationData={loadingRollingCircle} autoplay loop />
+      </div>
+      <div className="flex flex-col items-center justify-center gap-3">
+        <div className="text-xl font-bold text-high-emphesis">{i18n._(t`Waiting for Confirmation`)}</div>
+        <div className="font-bold">{pendingText}</div>
+        <div className="font-bold">{pendingText2}</div>
+        <div className="text-sm font-bold text-secondary">{i18n._(t`Confirm this transaction in your wallet`)}</div>
+      </div>
+    </div>
+  )
+}
 
 interface TransactionSubmittedContentProps {
-  onDismiss: () => void;
-  hash: string | undefined;
-  chainId: ChainId;
+  onDismiss: () => void
+  hash: string | undefined
+  chainId: ChainId
+  currencyToAdd?: Currency | undefined
+  inline?: boolean // not in modal
 }
 
-export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
-  ({ onDismiss, chainId, hash }) => {
-    const { i18n } = useLingui();
-
-    return (
-      <div>
-        <div className="flex justify-end">
-          <CloseIcon onClick={onDismiss} />
-        </div>
-        <div className="w-24 pb-4 m-auto">
-          <ArrowUpCircle strokeWidth={0.5} size={90} className="text-blue" />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-1">
-          <div className="text-xl font-bold">
-            {i18n._(t`Transaction Submitted`)}
-          </div>
-          {chainId && hash && (
-            <ExternalLink href={getExplorerLink(chainId, hash, "transaction")}>
-              <div className="font-bold text-blue">View on explorer</div>
-            </ExternalLink>
-          )}
-          <Button
-            color="gradient"
-            onClick={onDismiss}
-            style={{ margin: "20px 0 0 0" }}
-          >
-            Close
-          </Button>
-        </div>
+export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> = ({
+  onDismiss,
+  chainId,
+  hash,
+  currencyToAdd,
+}) => {
+  const { i18n } = useLingui()
+  const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
+  return (
+    <div>
+      <div className="flex justify-end">
+        <CloseIcon onClick={onDismiss} />
       </div>
-    );
-  };
+      <div className="w-24 pb-4 m-auto">
+        <ArrowUpCircle strokeWidth={0.5} size={90} className="text-blue" />
+      </div>
+      <div className="flex flex-col items-center justify-center gap-1">
+        <div className="text-xl font-bold">{i18n._(t`Transaction Submitted`)}</div>
+        {chainId && hash && (
+          <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
+            <div className="font-bold text-blue">View on explorer</div>
+          </ExternalLink>
+        )}
+        <Button color="gradient" onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
+          Close
+        </Button>
+      </div>
+    </div>
+  )
+}
 
 interface ConfirmationModelContentProps {
-  title: string;
-  onDismiss: () => void;
-  topContent: () => React.ReactNode;
-  bottomContent: () => React.ReactNode;
+  title: string
+  onDismiss: () => void
+  topContent: () => React.ReactNode
+  bottomContent: () => React.ReactNode
 }
 
 export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
@@ -97,45 +98,31 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   topContent,
 }) => {
   return (
-    <div className="grid gap-3">
-      <div>
-        <div className="flex justify-between">
-          <div className="text-lg font-bold text-high-emphesis">{title}</div>
-          <CloseIcon onClick={onDismiss} />
-        </div>
-        {topContent()}
-      </div>
-      <div>{bottomContent()}</div>
+    <div className="grid gap-4">
+      <ModalHeader title={title} onClose={onDismiss} />
+      {topContent()}
+      {bottomContent()}
     </div>
-  );
-};
-
-interface TransactionErrorContentProps {
-  message: string;
-  onDismiss: () => void;
+  )
 }
 
-export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({
-  message,
-  onDismiss,
-}) => {
-  const { i18n } = useLingui();
+interface TransactionErrorContentProps {
+  message: string
+  onDismiss: () => void
+}
+
+export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ message, onDismiss }) => {
+  const { i18n } = useLingui()
 
   return (
     <div className="grid gap-6">
       <div>
         <div className="flex justify-between">
-          <div className="text-lg font-medium text-high-emphesis">
-            {i18n._(t`Error`)}
-          </div>
+          <div className="text-lg font-medium text-high-emphesis">{i18n._(t`Error`)}</div>
           <CloseIcon onClick={onDismiss} />
         </div>
         <div className="flex flex-col items-center justify-center gap-3">
-          <AlertTriangle
-            className="text-red"
-            style={{ strokeWidth: 1.5 }}
-            size={64}
-          />
+          <AlertTriangle className="text-red" style={{ strokeWidth: 1.5 }} size={64} />
           <div className="font-bold text-red">{message}</div>
         </div>
       </div>
@@ -145,17 +132,18 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
 interface ConfirmationModalProps {
-  isOpen: boolean;
-  onDismiss: () => void;
-  hash: string | undefined;
-  content: () => React.ReactNode;
-  attemptingTxn: boolean;
-  pendingText: string;
-  pendingText2?: string;
+  isOpen: boolean
+  onDismiss: () => void
+  hash: string | undefined
+  content: () => React.ReactNode
+  attemptingTxn: boolean
+  pendingText: string
+  pendingText2?: string
+  currencyToAdd?: Currency | undefined
 }
 
 const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -166,31 +154,29 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   pendingText,
   pendingText2,
   content,
+  currencyToAdd,
 }) => {
-  const { chainId } = useActiveWeb3React();
+  const { chainId } = useActiveWeb3React()
 
-  if (!chainId) return null;
+  if (!chainId) return null
 
   // confirmation screen
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90}>
       {attemptingTxn ? (
-        <ConfirmationPendingContent
-          onDismiss={onDismiss}
-          pendingText={pendingText}
-          pendingText2={pendingText2}
-        />
+        <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} pendingText2={pendingText2} />
       ) : hash ? (
         <TransactionSubmittedContent
           chainId={chainId}
           hash={hash}
           onDismiss={onDismiss}
+          currencyToAdd={currencyToAdd}
         />
       ) : (
         content()
       )}
     </Modal>
-  );
-};
+  )
+}
 
-export default TransactionConfirmationModal;
+export default TransactionConfirmationModal

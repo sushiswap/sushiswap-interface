@@ -1,90 +1,72 @@
-import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
-import { One, Zero } from "@ethersproject/constants";
-import { formatBalance, parseBalance } from "../functions";
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { One, Zero } from '@ethersproject/constants'
+import { formatBalance, parseBalance } from '../functions'
 
-import { Fraction as SDKFraction } from "@sushiswap/sdk";
-import { isEmptyValue } from "../functions/validate";
+import { Fraction as SDKFraction } from '@sushiswap/sdk'
+import { isEmptyValue } from '../functions/validate'
 
 class Fraction {
-  static BASE = BigNumber.from(10).pow(18);
+  static BASE = BigNumber.from(10).pow(18)
 
-  static NAN = new Fraction(Zero, Zero);
+  static NAN = new Fraction(Zero, Zero)
 
-  static ZERO = new Fraction(Zero, One);
+  static ZERO = new Fraction(Zero, One)
 
   static convert(sdk: SDKFraction): Fraction {
-    return new Fraction(
-      BigNumber.from(sdk.numerator.toString()),
-      BigNumber.from(sdk.denominator.toString())
-    );
+    return new Fraction(BigNumber.from(sdk.numerator.toString()), BigNumber.from(sdk.denominator.toString()))
   }
 
   static from(numerator: BigNumberish, denominator: BigNumberish): Fraction {
-    return new Fraction(BigNumber.from(numerator), BigNumber.from(denominator));
+    return new Fraction(BigNumber.from(numerator), BigNumber.from(denominator))
   }
 
   static parse(value: string): Fraction {
-    return value === ""
+    return value === ''
       ? Fraction.NAN
       : isEmptyValue(value)
       ? Fraction.ZERO
-      : new Fraction(parseBalance(value, 18), Fraction.BASE);
+      : new Fraction(parseBalance(value, 18), Fraction.BASE)
   }
 
-  numerator: BigNumber;
-  denominator: BigNumber;
+  numerator: BigNumber
+  denominator: BigNumber
 
   private constructor(numerator: BigNumber, denominator: BigNumber) {
-    this.numerator = numerator;
-    this.denominator = denominator;
+    this.numerator = numerator
+    this.denominator = denominator
   }
 
   isZero(): boolean {
-    return !this.isNaN() && this.numerator.isZero();
+    return !this.isNaN() && this.numerator.isZero()
   }
 
   isNaN(): boolean {
-    return this.denominator.isZero();
+    return this.denominator.isZero()
   }
 
   eq(fraction: Fraction): boolean {
-    return this.numerator
-      .mul(fraction.denominator)
-      .div(fraction.numerator)
-      .eq(this.denominator);
+    return this.numerator.mul(fraction.denominator).div(fraction.numerator).eq(this.denominator)
   }
 
   gt(fraction: Fraction): boolean {
-    return this.numerator
-      .mul(fraction.denominator)
-      .div(fraction.numerator)
-      .gt(this.denominator);
+    return this.numerator.mul(fraction.denominator).div(fraction.numerator).gt(this.denominator)
   }
 
   lt(fraction: Fraction): boolean {
-    return this.numerator
-      .mul(fraction.denominator)
-      .div(fraction.numerator)
-      .lt(this.denominator);
+    return this.numerator.mul(fraction.denominator).div(fraction.numerator).lt(this.denominator)
   }
 
   toString(maxFractions = 8): string {
-    if (this.isNaN()) return "";
-    if (this.isZero()) return "0";
-    let str = formatBalance(
-      this.numerator.mul(Fraction.BASE).div(this.denominator),
-      18,
-      maxFractions
-    );
-    if (str.endsWith(".0")) str = str.substring(0, str.length - 2);
-    return str;
+    if (this.isNaN()) return ''
+    if (this.isZero()) return '0'
+    let str = formatBalance(this.numerator.mul(Fraction.BASE).div(this.denominator), 18, maxFractions)
+    if (str.endsWith('.0')) str = str.substring(0, str.length - 2)
+    return str
   }
 
   apply(value: BigNumberish): BigNumber {
-    return this.denominator.isZero()
-      ? Zero
-      : this.numerator.mul(value).div(this.denominator);
+    return this.denominator.isZero() ? Zero : this.numerator.mul(value).div(this.denominator)
   }
 }
 
-export default Fraction;
+export default Fraction

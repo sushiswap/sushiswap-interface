@@ -1,12 +1,12 @@
-import { RowBetween, RowFixed } from "../../components/Row";
+import { RowBetween, RowFixed } from '../../components/Row'
 
-import { AutoColumn } from "../../components/Column";
-import React from "react";
+import { AutoColumn } from '../../components/Column'
+import React from 'react'
 
 function TradeSummary() {
   return (
     <>
-      <AutoColumn style={{ padding: "0 16px" }} className="text-sm">
+      <AutoColumn style={{ padding: '0 16px' }} className="text-sm">
         <RowBetween>
           <RowFixed>
             <div className="text-secondary">Your Pool Tokens</div>
@@ -47,11 +47,11 @@ function TradeSummary() {
         </RowBetween>
       </AutoColumn>
     </>
-  );
+  )
 }
 
 export interface AdvancedLiquidityDetailsProps {
-  show?: boolean;
+  show?: boolean
 }
 
 export function AdvancedLiquidityDetails() {
@@ -59,7 +59,7 @@ export function AdvancedLiquidityDetails() {
     <AutoColumn gap="0px">
       <TradeSummary />
     </AutoColumn>
-  );
+  )
 }
 
-export default AdvancedLiquidityDetails;
+export default AdvancedLiquidityDetails

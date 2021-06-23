@@ -1,64 +1,64 @@
-import { ChainId } from "@sushiswap/sdk";
-import { t } from "@lingui/macro";
-import transakSDK from "@transak/transak-sdk";
-import { useActiveWeb3React } from "../../hooks";
-import { useCallback } from "react";
-import { useLingui } from "@lingui/react";
+import { ChainId } from '@sushiswap/sdk'
+import { t } from '@lingui/macro'
+import transakSDK from '@transak/transak-sdk'
+import { useActiveWeb3React } from '../../hooks'
+import { useCallback } from 'react'
+import { useLingui } from '@lingui/react'
 
 const DEFAULT_NETWORK = {
-  [ChainId.MAINNET]: "ethereum",
-  [ChainId.BSC]: "bsc",
-  [ChainId.MATIC]: "matic",
-};
+  [ChainId.MAINNET]: 'ethereum',
+  [ChainId.BSC]: 'bsc',
+  [ChainId.MATIC]: 'matic',
+}
 
 const DEFAULT_CRYPTO_CURRENCY = {
-  [ChainId.MAINNET]: "ETH",
-  [ChainId.BSC]: "BNB",
-  [ChainId.MATIC]: "MATIC",
-};
+  [ChainId.MAINNET]: 'ETH',
+  [ChainId.BSC]: 'BNB',
+  [ChainId.MATIC]: 'MATIC',
+}
 
 export default function Buy() {
-  const { account, chainId } = useActiveWeb3React();
-  const { i18n } = useLingui();
+  const { account, chainId } = useActiveWeb3React()
+  const { i18n } = useLingui()
   useCallback(() => {
     if (!(chainId in DEFAULT_NETWORK)) {
-      return;
+      return
     }
 
     const transak = new transakSDK({
       apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY, // Your API Key
       environment: process.env.NEXT_PUBLIC_TRANSAK_ENVIRONMENT, // STAGING/PRODUCTION
       walletAddress: account,
-      fiatCurrency: "", // INR/GBP
+      fiatCurrency: '', // INR/GBP
       // email: '', // Your customer's email address
-      redirectURL: "",
+      redirectURL: '',
       hostURL: window.location.origin,
-      themeColor: "#0D0415",
-      widgetHeight: "680px",
-      widgetWidth: "100%",
+      themeColor: '#0D0415',
+      widgetHeight: '680px',
+      widgetWidth: '100%',
       defaultNetwork: DEFAULT_NETWORK[chainId],
       defaultCryptoCurrency: DEFAULT_CRYPTO_CURRENCY[chainId],
-    });
+    })
 
-    transak.init();
+    transak.init()
 
     // To get all the events
     transak.on(transak.ALL_EVENTS, (data) => {
-      console.log("ALL_EVENTS", data);
-    });
+      console.log('ALL_EVENTS', data)
+    })
 
     // This will trigger when the user closed the widget
     transak.on(transak.EVENTS.TRANSAK_WIDGET_CLOSE, (orderData) => {
-      console.log("TRANSAK_WIDGET_CLOSE", orderData);
-      transak.close();
-    });
+      console.log('TRANSAK_WIDGET_CLOSE', orderData)
+      transak.close()
+    })
 
     // This will trigger when the user marks payment is made.
     transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
-      console.log("TRANSAK_ORDER_SUCCESSFUL", orderData);
-      transak.close();
-    });
-  }, [account, chainId]);
+      console.log('TRANSAK_ORDER_SUCCESSFUL', orderData)
+      transak.close()
+    })
+  }, [account, chainId])
 
   return (
     <a
@@ -67,5 +67,5 @@ export default function Buy() {
     >
       {i18n._(t`Buy`)}
     </a>
-  );
+  )
 }

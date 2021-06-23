@@ -1,41 +1,13 @@
-import React, { FC, useCallback, useContext } from "react";
-import styled, { ThemeContext } from "styled-components";
+import React, { useCallback, useContext } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 
-import { AutoColumn } from "../Column";
-import ExternalLink from "../ExternalLink";
-import { RowBetween } from "../Row";
-import { getExplorerLink } from "../../functions/explorer";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import useENS from "../../hooks/useENS";
-import { t } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
-
-const InputPanel = styled.div`
-  // ${({ theme }) => theme.flexColumnNoWrap}
-  position: relative;
-  border-radius: 1.25rem;
-  // background-color: ${({ theme }) => theme.bg1};
-  z-index: 1;
-  width: 100%;
-`;
-
-const ContainerRow = styled.div<{ error: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1.25rem;
-  // border: 1px solid ${({ error, theme }) =>
-    error ? theme.red1 : theme.bg2};
-  transition: border-color 300ms
-      ${({ error }) => (error ? "step-end" : "step-start")},
-    color 500ms ${({ error }) => (error ? "step-end" : "step-start")};
-  // background-color: ${({ theme }) => theme.bg1};
-`;
-
-const InputContainer = styled.div`
-  flex: 1;
-  padding: 1rem;
-`;
+import { AutoColumn } from '../Column'
+import ExternalLink from '../ExternalLink'
+import { RowBetween } from '../Row'
+import { getExplorerLink } from '../../functions/explorer'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import useENS from '../../hooks/useENS'
+import { classNames } from '../../functions'
 
 const Input = styled.input<{ error?: boolean }>`
   font-size: 1.25rem;
@@ -44,7 +16,7 @@ const Input = styled.input<{ error?: boolean }>`
   flex: 1 1 auto;
   width: 0;
   // background-color: ${({ theme }) => theme.bg1};
-  transition: color 300ms ${({ error }) => (error ? "step-end" : "step-start")};
+  transition: color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')};
   // color: ${({ error, theme }) => (error ? theme.red1 : theme.primary1)};
   overflow: hidden;
   text-overflow: ellipsis;
@@ -68,66 +40,80 @@ const Input = styled.input<{ error?: boolean }>`
   ::placeholder {
     // color: ${({ theme }) => theme.text4};
   }
-`;
+`
 
-interface AddressInputPanelProps {
-  id?: string;
-  value: string;
-  onChange: (value: string) => void;
-}
+const ContainerRow = styled.div<{ error: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.25rem;
+  // border: 1px solid ${({ error, theme }) => (error ? theme.red1 : theme.bg2)};
+  transition: border-color 300ms ${({ error }) => (error ? 'step-end' : 'step-start')},
+    color 500ms ${({ error }) => (error ? 'step-end' : 'step-start')};
+  // background-color: ${({ theme }) => theme.bg1};
+`
 
-const AddressInputPanel: FC<AddressInputPanelProps> = ({
+export default function AddressInputPanel({
   id,
   value,
   onChange,
-}) => {
-  const { i18n } = useLingui();
-  const { chainId } = useActiveWeb3React();
-  const { address, loading, name } = useENS(value);
+}: {
+  id?: string
+  // the typed string value
+  value: string
+  // triggers whenever the typed value changes
+  onChange: (value: string) => void
+}) {
+  const { chainId } = useActiveWeb3React()
+  const theme = useContext(ThemeContext)
+
+  const { address, loading, name } = useENS(value)
 
   const handleInput = useCallback(
     (event) => {
-      const input = event.target.value;
-      const withoutSpaces = input.replace(/\s+/g, "");
-      onChange(withoutSpaces);
+      const input = event.target.value
+      const withoutSpaces = input.replace(/\s+/g, '')
+      onChange(withoutSpaces)
     },
     [onChange]
-  );
+  )
 
-  const error = Boolean(value.length > 0 && !loading && !address);
+  const error = Boolean(value.length > 0 && !loading && !address)
 
   return (
-    <div
-      className={`flex flex-row bg-dark-800 rounded items-center h-[68px] ${
-        error ? "border border-red border-opacity-50" : ""
-      }`}
-      id={id}
-    >
-      <div className="flex justify-between w-full sm:w-2/5 px-5">
-        <span className="text-[18px] text-primary">{i18n._(t`Send to:`)}</span>
-        <span
-          className="text-blue text-sm underline cursor-pointer"
-          onClick={() => onChange(null)}
-        >
-          {i18n._(t`Remove`)}
-        </span>
-      </div>
-      <div className="flex w-full h-full sm:w-3/5 border-2 border-dark-800 rounded-r">
-        <input
-          className="p-3 w-full flex overflow-ellipsis font-bold recipient-address-input bg-dark-900 h-full w-full rounded placeholder-low-emphesis"
-          type="text"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          placeholder="Wallet Address or ENS name"
-          pattern="^(0x[a-fA-F0-9]{40})$"
-          onChange={handleInput}
-          value={value}
-        />
+    <div className="relative z-10 flex w-full transition-colors rounded flex-nowrap bg-800" id={id}>
+      <div
+        className={classNames(
+          'flex justify-center items-center rounded border bg-700 w-full',
+          error ? 'border-red' : 'border-transparent'
+        )}
+      >
+        <AutoColumn gap="md" className="w-full p-5 rounded bg-dark-800">
+          <RowBetween>
+            <div className="text-xs font-medium text-secondary whitespace-nowrap">Recipient:</div>
+            {address && chainId && (
+              <ExternalLink href={getExplorerLink(chainId, name ?? address, 'address')} style={{ fontSize: '14px' }}>
+                (View on explorer)
+              </ExternalLink>
+            )}
+          </RowBetween>
+          <input
+            className={classNames(
+              'flex-auto rounded p-3 w-full transition-colors border-none outline-none recipient-address-input bg-dark-900 focus:bg-dark-700 font-medium overflow-hidden overflow-ellipsis disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring-blue placeholder-low-emphesis focus:placeholder-primary',
+              error ? 'text-red' : 'text-primary'
+            )}
+            type="text"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            placeholder="Wallet Address or ENS name"
+            pattern="^(0x[a-fA-F0-9]{40})$"
+            onChange={handleInput}
+            value={value}
+          />
+        </AutoColumn>
       </div>
     </div>
-  );
-};
-
-export default AddressInputPanel;
+  )
+}

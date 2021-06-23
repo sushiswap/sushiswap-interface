@@ -1,5 +1,5 @@
-import { Trash } from "react-feather";
-import styled from "styled-components";
+import { Trash } from 'react-feather'
+import styled from 'styled-components'
 
 export const TrashIcon = styled(Trash)`
   height: 16px;
@@ -15,6 +15,6 @@ export const TrashIcon = styled(Trash)`
   :hover {
     opacity: 0.7;
   }
-`;
+`
 
-export default TrashIcon;
+export default TrashIcon

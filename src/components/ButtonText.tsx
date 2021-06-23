@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const ButtonText = styled.button`
   outline: none;
@@ -16,6 +16,6 @@ const ButtonText = styled.button`
   :focus {
     text-decoration: underline;
   }
-`;
+`
 
-export default ButtonText;
+export default ButtonText

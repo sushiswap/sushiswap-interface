@@ -1,19 +1,19 @@
-import { BorrowCardHeader, LendCardHeader } from "./CardHeader";
+import { BorrowCardHeader, LendCardHeader } from './CardHeader'
 
-import React from "react";
-import { Search } from "react-feather";
+import React from 'react'
+import { Search } from 'react-feather'
 
-function MarketHeader({ type = "Borrow", lists }: any) {
+function MarketHeader({ type = 'Borrow', lists }: any) {
   if (lists.setTerm) {
-    lists = [lists];
+    lists = [lists]
   }
 
-  const Header = type === "Borrow" ? BorrowCardHeader : LendCardHeader;
+  const Header = type === 'Borrow' ? BorrowCardHeader : LendCardHeader
 
   function onSearch(term: any) {
     lists.forEach((list: any) => {
-      list.setTerm(term);
-    });
+      list.setTerm(term)
+    })
   }
 
   return (
@@ -27,10 +27,10 @@ function MarketHeader({ type = "Borrow", lists }: any) {
           <div className="relative w-full max-w-md">
             <input
               className={`py-3 pl-4 pr-14 rounded w-full focus:outline-none focus:ring ${
-                type === "Borrow" ? "focus:ring-pink" : "focus:ring-blue"
+                type === 'Borrow' ? 'focus:ring-pink' : 'focus:ring-blue'
               }`}
               onChange={(e) => onSearch(e.target.value)}
-              style={{ background: "#161522" }}
+              style={{ background: '#161522' }}
               value={lists[0].term}
               placeholder="Search by symbol"
             />
@@ -41,7 +41,7 @@ function MarketHeader({ type = "Borrow", lists }: any) {
         </div>
       </div>
     </Header>
-  );
+  )
 }
 
-export default MarketHeader;
+export default MarketHeader

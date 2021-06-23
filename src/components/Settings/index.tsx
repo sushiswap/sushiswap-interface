@@ -1,67 +1,89 @@
-import React, { useRef, useState } from "react";
-import { RowBetween, RowFixed } from "../Row";
-import { StyledMenu } from "../StyledMenu";
+import React, { useContext, useRef, useState } from 'react'
+import { RowBetween, RowFixed } from '../Row'
+import { StyledMenu, StyledMenuButton } from '../StyledMenu'
+import styled, { ThemeContext } from 'styled-components'
 import {
   useExpertModeManager,
   useUserArcherUseRelay,
   useUserSingleHopOnly,
   useUserSlippageTolerance,
   useUserTransactionTTL,
-} from "../../state/user/hooks";
-import {
-  useModalOpen,
-  useToggleSettingsMenu,
-} from "../../state/application/hooks";
+} from '../../state/user/hooks'
+import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
-import { ApplicationModal } from "../../state/application/actions";
-import Button from "../Button";
-import Modal from "../Modal";
-import ModalHeader from "../ModalHeader";
-import QuestionHelper from "../QuestionHelper";
-import Toggle from "../Toggle";
-import TransactionSettings from "../TransactionSettings";
-import Typography from "../Typography";
-import { t } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
-import { useOnClickOutside } from "../../hooks/useOnClickOutside";
-import { AdjustmentsIcon } from "@heroicons/react/outline";
+import { ApplicationModal } from '../../state/application/actions'
+import Button from '../Button'
+import Modal from '../Modal'
+import ModalHeader from '../ModalHeader'
+import QuestionHelper from '../QuestionHelper'
+import { Settings } from 'react-feather'
+import Toggle from '../Toggle'
+import TransactionSettings from '../TransactionSettings'
+import Typography from '../Typography'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { Percent } from '@sushiswap/sdk'
 
-export default function SettingsTab() {
-  const { i18n } = useLingui();
+const StyledMenuIcon = styled(Settings)`
+  height: 20px;
+  width: 20px;
 
-  const node = useRef<HTMLDivElement>(null);
-  const open = useModalOpen(ApplicationModal.SETTINGS);
-  const toggle = useToggleSettingsMenu();
+  > * {
+    stroke: currentColor;
+  }
 
-  const [userSlippageTolerance, setUserslippageTolerance] =
-    useUserSlippageTolerance();
+  :hover {
+    opacity: 0.7;
+  }
+`
 
-  const [ttl, setTtl] = useUserTransactionTTL();
+export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage: Percent }) {
+  const { i18n } = useLingui()
 
-  const [expertMode, toggleExpertMode] = useExpertModeManager();
+  const node = useRef<HTMLDivElement>(null)
+  const open = useModalOpen(ApplicationModal.SETTINGS)
+  const toggle = useToggleSettingsMenu()
 
-  const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly();
+  const [expertMode, toggleExpertMode] = useExpertModeManager()
+
+  const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
 
   // show confirmation view before turning on
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false)
 
-  const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay();
+  useOnClickOutside(node, open ? toggle : undefined)
 
-  useOnClickOutside(node, open ? toggle : undefined);
+  const [ttl, setTtl] = useUserTransactionTTL()
+
+  const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
 
   return (
     <StyledMenu ref={node}>
-      <div
-        onClick={toggle}
-        id="open-settings-dialog-button"
-        className="w-7 h-7 flex items-center justify-center"
-      >
-        <AdjustmentsIcon
-          width={24}
-          height={24}
-          className="transform rotate-90"
-        />
-      </div>
+      <StyledMenuButton onClick={toggle} id="open-settings-dialog-button">
+        {/* <StyledMenuIcon /> */}
+        {/* {expertMode ? (
+                    <EmojiWrapper>
+                        <span role="img" aria-label="wizard-icon">
+                            🧙
+                        </span>
+                    </EmojiWrapper>
+                ) : null} */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-5 h-5 transform rotate-90"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+          />
+        </svg>
+      </StyledMenuButton>
       {open && (
         <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded">
           <div className="p-8 space-y-4">
@@ -69,12 +91,14 @@ export default function SettingsTab() {
               {i18n._(t`Transaction Settings`)}
             </Typography>
 
-            <TransactionSettings
+            <TransactionSettings placeholderSlippage={placeholderSlippage} />
+
+            {/* <TransactionSettings
               rawSlippage={userSlippageTolerance}
               setRawSlippage={setUserslippageTolerance}
               deadline={ttl}
               setDeadline={setTtl}
-            />
+            /> */}
 
             <Typography variant="lg" className="text-high-emphesis">
               {i18n._(t`Interface Settings`)}
@@ -86,9 +110,7 @@ export default function SettingsTab() {
                   {i18n._(t`Toggle Expert Mode`)}
                 </Typography>
                 <QuestionHelper
-                  text={i18n._(
-                    t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`
-                  )}
+                  text={i18n._(t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`)}
                 />
               </RowFixed>
               <Toggle
@@ -97,12 +119,12 @@ export default function SettingsTab() {
                 toggle={
                   expertMode
                     ? () => {
-                        toggleExpertMode();
-                        setShowConfirmation(false);
+                        toggleExpertMode()
+                        setShowConfirmation(false)
                       }
                     : () => {
-                        toggle();
-                        setShowConfirmation(true);
+                        toggle()
+                        setShowConfirmation(true)
                       }
                 }
               />
@@ -112,18 +134,12 @@ export default function SettingsTab() {
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Disable Multihops`)}
                 </Typography>
-                <QuestionHelper
-                  text={i18n._(t`Restricts swaps to direct pairs only.`)}
-                />
+                <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
               </RowFixed>
               <Toggle
                 id="toggle-disable-multihop-button"
                 isActive={singleHopOnly}
-                toggle={() =>
-                  singleHopOnly
-                    ? setSingleHopOnly(false)
-                    : setSingleHopOnly(true)
-                }
+                toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </RowBetween>
             <RowBetween>
@@ -137,25 +153,15 @@ export default function SettingsTab() {
                   )}
                 />
               </RowFixed>
-              <Toggle
-                id="toggle-use-archer"
-                isActive={userUseArcher}
-                toggle={() => setUserUseArcher(!userUseArcher)}
-              />
+              <Toggle id="toggle-use-archer" isActive={userUseArcher} toggle={() => setUserUseArcher(!userUseArcher)} />
             </RowBetween>
           </div>
         </div>
       )}
 
-      <Modal
-        isOpen={showConfirmation}
-        onDismiss={() => setShowConfirmation(false)}
-      >
+      <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
         <div className="space-y-4">
-          <ModalHeader
-            title={i18n._(t`Are you sure?`)}
-            onClose={() => setShowConfirmation(false)}
-          />
+          <ModalHeader title={i18n._(t`Are you sure?`)} onClose={() => setShowConfirmation(false)} />
           <Typography variant="lg">
             {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
@@ -167,15 +173,9 @@ export default function SettingsTab() {
             color="red"
             size="lg"
             onClick={() => {
-              if (
-                window.prompt(
-                  i18n._(
-                    t`Please type the word "confirm" to enable expert mode.`
-                  )
-                ) === "confirm"
-              ) {
-                toggleExpertMode();
-                setShowConfirmation(false);
+              if (window.prompt(i18n._(t`Please type the word "confirm" to enable expert mode.`)) === 'confirm') {
+                toggleExpertMode()
+                setShowConfirmation(false)
               }
             }}
           >
@@ -186,5 +186,5 @@ export default function SettingsTab() {
         </div>
       </Modal>
     </StyledMenu>
-  );
+  )
 }

@@ -1,11 +1,8 @@
-import {
-  AdvancedSwapDetails,
-  AdvancedSwapDetailsProps,
-} from "./AdvancedSwapDetails";
+import { AdvancedSwapDetails, AdvancedSwapDetailsProps } from './AdvancedSwapDetails'
 
-import React from "react";
-import styled from "styled-components";
-import { useLastTruthy } from "../../hooks/useLast";
+import React from 'react'
+import styled from 'styled-components'
+import { useLastTruthy } from '../../hooks/useLast'
 
 const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
   width: 100%;
@@ -18,18 +15,15 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
   max-width: 662px;
   padding-right: 10px;
   padding-left: 10px;
-  transform: ${({ show }) => (show ? "translateY(0%)" : "translateY(-100%)")};
+  transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};
   transition: transform 300ms ease-in-out;
-`;
+`
 
-export default function AdvancedSwapDetailsDropdown({
-  trade,
-  ...rest
-}: AdvancedSwapDetailsProps) {
-  const lastTrade = useLastTruthy(trade);
+export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: AdvancedSwapDetailsProps) {
+  const lastTrade = useLastTruthy(trade)
   return (
     <AdvancedDetailsFooter show={Boolean(trade)}>
       <AdvancedSwapDetails {...rest} trade={trade ?? lastTrade ?? undefined} />
     </AdvancedDetailsFooter>
-  );
+  )
 }
