@@ -1,23 +1,23 @@
 import { ChainId, Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
 import React, { ReactNode, useCallback, useState } from 'react'
+import { Trans, t } from '@lingui/macro'
 import { USDC, useUSDCPrice } from '../../hooks'
+import { classNames, formatCurrencyAmount } from '../../functions'
 
 import Button from '../Button'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import CurrencyLogo from '../CurrencyLogo'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import DoubleCurrencyLogo from '../DoubleLogo'
+import { FiatValue } from './FiatValue'
 import Lottie from 'lottie-react'
 import { Input as NumericalInput } from '../NumericalInput'
 import { darken } from 'polished'
-import { classNames, formatCurrencyAmount } from '../../functions'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import styled from 'styled-components'
-import { t, Trans } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
-import { FiatValue } from './FiatValue'
 
 const CurrencySelect = styled.button<{ selected: boolean }>`
   align-items: center;
@@ -169,7 +169,12 @@ export default function CurrencyInputPanel({
                     )} */}
         </div>
         {!hideInput && (
-          <div className="flex items-center w-full p-3 space-x-3 rounded bg-dark-900 sm:w-3/5">
+          <div
+            className={classNames(
+              'flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 px-3 sm:w-3/5'
+              // showMaxButton && selectedCurrencyBalance && 'px-3'
+            )}
+          >
             <>
               {showMaxButton && selectedCurrencyBalance && (
                 <Button
@@ -187,22 +192,20 @@ export default function CurrencyInputPanel({
                   onUserInput(val)
                 }}
               />
-              {account && (
+              {!hideBalance && currency && selectedCurrencyBalance ? (
                 <div className="flex flex-col">
                   <div onClick={onMax} className="text-xs font-medium text-right cursor-pointer text-low-emphesis">
-                    {!hideBalance && currency && selectedCurrencyBalance ? (
-                      renderBalance ? (
-                        renderBalance(selectedCurrencyBalance)
-                      ) : (
-                        <Trans>
-                          Balance: {formatCurrencyAmount(selectedCurrencyBalance, 4)} {currency.symbol}
-                        </Trans>
-                      )
-                    ) : null}
+                    {renderBalance ? (
+                      renderBalance(selectedCurrencyBalance)
+                    ) : (
+                      <Trans>
+                        Balance: {formatCurrencyAmount(selectedCurrencyBalance, 4)} {currency.symbol}
+                      </Trans>
+                    )}
                   </div>
                   <FiatValue fiatValue={fiatValue} priceImpact={priceImpact} />
                 </div>
-              )}
+              ) : null}
             </>
           </div>
         )}
