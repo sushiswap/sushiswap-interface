@@ -61,17 +61,17 @@ export function useDerivedCreateInfo(): {
   const {
     independentField,
     typedValue,
-    [Field.CURRENCY_A]: { currencyId: currencyAId },
-    [Field.CURRENCY_B]: { currencyId: currencyBId },
+    [Field.COLLATERAL]: { currencyId: collateralId },
+    [Field.ASSET]: { currencyId: assetId },
   } = useCreateState()
 
-  const currencyA = useCurrency(currencyAId)
+  const collateral = useCurrency(collateralId)
 
-  const currencyB = useCurrency(currencyBId)
+  const asset = useCurrency(assetId)
 
   const currencies: { [field in Field]?: Currency } = {
-    [Field.CURRENCY_A]: currencyA ?? undefined,
-    [Field.CURRENCY_B]: currencyB ?? undefined,
+    [Field.COLLATERAL]: collateral ?? undefined,
+    [Field.ASSET]: asset ?? undefined,
   }
 
   let inputError: string | undefined
@@ -80,8 +80,12 @@ export function useDerivedCreateInfo(): {
     inputError = 'Connect Wallet'
   }
 
-  if (!currencies[Field.CURRENCY_A] || !currencies[Field.CURRENCY_B]) {
-    inputError = inputError ?? i18n._(t`Select a token`)
+  if (!currencies[Field.COLLATERAL]) {
+    inputError = inputError ?? i18n._(t`Select a collateral token`)
+  }
+
+  if (!currencies[Field.ASSET] || !currencies[Field.ASSET]) {
+    inputError = inputError ?? i18n._(t`Select a asset token`)
   }
 
   return {

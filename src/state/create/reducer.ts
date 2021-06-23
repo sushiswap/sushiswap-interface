@@ -5,50 +5,46 @@ import { createReducer } from '@reduxjs/toolkit'
 export interface CreateState {
   readonly independentField: Field
   readonly typedValue: string
-  readonly [Field.CURRENCY_A]: {
+  readonly [Field.COLLATERAL]: {
     readonly currencyId: string | undefined
   }
-  readonly [Field.CURRENCY_B]: {
+  readonly [Field.ASSET]: {
     readonly currencyId: string | undefined
   }
-  // the typed recipient address or ENS name, or null if swap should go to sender
-  readonly recipient: string | null
 }
 
 const initialState: CreateState = {
-  independentField: Field.CURRENCY_A,
+  independentField: Field.COLLATERAL,
   typedValue: '',
-  [Field.CURRENCY_A]: {
+  [Field.COLLATERAL]: {
     currencyId: '',
   },
-  [Field.CURRENCY_B]: {
+  [Field.ASSET]: {
     currencyId: '',
   },
-  recipient: null,
 }
 
 export default createReducer<CreateState>(initialState, (builder) =>
   builder
-    .addCase(replaceCreateState, (state, { payload: { typedValue, recipient, field, currencyAId, currencyBId } }) => {
+    .addCase(replaceCreateState, (state, { payload: { typedValue, field, collateralId, assetId } }) => {
       return {
-        [Field.CURRENCY_A]: {
-          currencyId: currencyAId,
+        [Field.COLLATERAL]: {
+          currencyId: collateralId,
         },
-        [Field.CURRENCY_B]: {
-          currencyId: currencyBId,
+        [Field.ASSET]: {
+          currencyId: assetId,
         },
         independentField: field,
         typedValue: typedValue,
-        recipient,
       }
     })
     .addCase(selectCurrency, (state, { payload: { currencyId, field } }) => {
-      const otherField = field === Field.CURRENCY_A ? Field.CURRENCY_B : Field.CURRENCY_A
+      const otherField = field === Field.COLLATERAL ? Field.ASSET : Field.COLLATERAL
       if (currencyId === state[otherField].currencyId) {
         // the case where we have to swap the order
         return {
           ...state,
-          independentField: state.independentField === Field.CURRENCY_A ? Field.CURRENCY_B : Field.CURRENCY_A,
+          independentField: state.independentField === Field.COLLATERAL ? Field.ASSET : Field.COLLATERAL,
           [field]: { currencyId: currencyId },
           [otherField]: { currencyId: state[field].currencyId },
         }
@@ -63,9 +59,9 @@ export default createReducer<CreateState>(initialState, (builder) =>
     .addCase(switchCurrencies, (state) => {
       return {
         ...state,
-        independentField: state.independentField === Field.CURRENCY_A ? Field.CURRENCY_B : Field.CURRENCY_A,
-        [Field.CURRENCY_A]: { currencyId: state[Field.CURRENCY_B].currencyId },
-        [Field.CURRENCY_B]: { currencyId: state[Field.CURRENCY_A].currencyId },
+        independentField: state.independentField === Field.COLLATERAL ? Field.ASSET : Field.COLLATERAL,
+        [Field.COLLATERAL]: { currencyId: state[Field.ASSET].currencyId },
+        [Field.ASSET]: { currencyId: state[Field.COLLATERAL].currencyId },
       }
     })
     .addCase(typeInput, (state, { payload: { field, typedValue } }) => {

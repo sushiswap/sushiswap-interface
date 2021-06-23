@@ -47,7 +47,7 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 
 interface CurrencyInputPanelProps {
   value?: string
-  onUserInput: (value: string) => void
+  onUserInput?: (value: string) => void
   onMax?: () => void
   showMaxButton: boolean
   label?: string
