@@ -24,6 +24,7 @@ import { toElastic } from '../../functions/rebase'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useBlockNumber } from '../../state/application/hooks'
+import usePrevious from '../../hooks/usePrevious'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -185,9 +186,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const weth = WNATIVE[chainId].address
+  const weth = WNATIVE[chainId]
 
-  const currency: Token = USDC[chainId]
+  const currency = USDC[chainId]
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -233,7 +234,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()
 
-      pairTokens.add(currency)
+      pairTokens.add(currency.address)
 
       pairs.forEach((pair: any, i: number) => {
         pair.address = allPairAddresses[i]
@@ -264,7 +265,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
       // Calculate the USD price for each token
       Object.values(pairTokens).forEach((token: any) => {
-        token.symbol = token.address === weth ? NATIVE[chainId].symbol : token.symbol
+        token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency.address].rate, token.rate)
       })
       console.log('here!')
@@ -434,9 +435,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     }
   }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, weth])
 
+  const previousBlockNumber = usePrevious(blockNumber)
+
   useEffect(() => {
-    blockNumber && updatePairs()
-  }, [blockNumber, updatePairs])
+    blockNumber !== previousBlockNumber && updatePairs()
+  }, [blockNumber, previousBlockNumber, updatePairs])
 
   return (
     <KashiContext.Provider
