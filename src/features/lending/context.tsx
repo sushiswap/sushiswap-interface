@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import {
@@ -10,16 +10,12 @@ import {
   takeFee,
 } from '../../functions/kashi'
 import { toAmount, toShare } from '../../functions/bentobox'
-import {
-  useBentoBoxContract,
-  useBoringHelperContract,
-  useSushiSwapTWAP0Oracle,
-  useSushiSwapTWAP1Oracle,
-} from '../../hooks/useContract'
+import { useBentoBoxContract, useBoringHelperContract } from '../../hooks/useContract'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../entities/Fraction'
 import { KASHI_ADDRESS } from '../../constants/kashi'
+import { USDC } from '../../hooks'
 import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
 import { getCurrency } from '../../functions/currency'
@@ -189,11 +185,9 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const chain: ChainId = chainId || 1
+  const weth = WNATIVE[chainId].address
 
-  const weth = WNATIVE[chain].address
-
-  const curreny: any = getCurrency(chain).address
+  const currency: Token = USDC[chainId]
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -206,10 +200,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
     if (!account || !chainId || ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId)) {
       return
     }
+
     if (boringHelperContract && bentoBoxContract) {
       // console.log('READY TO RUMBLE')
       const info = rpcToObj(
-        await boringHelperContract.getUIInfo(account, [], getCurrency(chainId).address, [KASHI_ADDRESS[chainId]])
+        await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
       )
 
       // Get the deployed pairs from the logs and decode
@@ -221,7 +216,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
       const allPairAddresses = logPairs
         .filter((pair: any) => {
-          const oracle = getOracle(pair, chain, tokens)
+          const oracle = getOracle(pair, chainId, tokens)
           if (!oracle.valid) {
             // console.log(pair, oracle.valid, oracle.error)
             invalidOracles.push({ pair, error: oracle.error })
@@ -238,7 +233,8 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()
 
-      pairTokens.add(curreny)
+      pairTokens.add(currency)
+
       pairs.forEach((pair: any, i: number) => {
         pair.address = allPairAddresses[i]
         pair.collateral = pairTokens.add(pair.collateral)
@@ -269,7 +265,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       // Calculate the USD price for each token
       Object.values(pairTokens).forEach((token: any) => {
         token.symbol = token.address === weth ? NATIVE[chainId].symbol : token.symbol
-        token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[curreny].rate, token.rate)
+        token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency.address].rate, token.rate)
       })
       console.log('here!')
 
@@ -393,7 +389,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
               pair.search = pair.asset.tokenInfo.symbol + '/' + pair.collateral.tokenInfo.symbol
 
-              pair.oracle = getOracle(pair, chain, tokens)
+              pair.oracle = getOracle(pair, chainId, tokens)
 
               pair.interestPerYear = {
                 value: pair.interestPerYear,
@@ -436,13 +432,11 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, curreny, chain, tokens])
+  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, weth])
 
   useEffect(() => {
-    if (account && chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].indexOf(chainId) != -1) {
-      updatePairs()
-    }
-  }, [blockNumber, chainId, account])
+    blockNumber && updatePairs()
+  }, [blockNumber, updatePairs])
 
   return (
     <KashiContext.Provider
@@ -454,6 +448,14 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
       {children}
     </KashiContext.Provider>
   )
+}
+
+export function useKashiInfo() {
+  const context = useContext(KashiContext)
+  if (context === undefined) {
+    throw new Error('useKashiInfo must be used within a KashiProvider')
+  }
+  return context.state.info
 }
 
 export function useKashiPairs() {

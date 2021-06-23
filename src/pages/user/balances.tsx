@@ -1,7 +1,7 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { BentoBalance, useBentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
+import { CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { useState } from 'react'
-import { Token, CurrencyAmount, WNATIVE } from '@sushiswap/sdk'
 import { useFuse, useSortableData } from '../../hooks'
 
 import AsyncIcon from '../../components/AsyncIcon'
@@ -27,6 +27,8 @@ function Balances() {
   const { i18n } = useLingui()
   const balances = useBentoBalances()
 
+  console.log({ balances })
+
   // Search Setup
   const options = { keys: ['symbol', 'name'], threshold: 0.1 }
   const { result, search, term } = useFuse({
@@ -34,10 +36,12 @@ function Balances() {
     options,
   })
 
-  console.log({ balances })
+  // console.log({ balances })
 
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(result)
+
+  console.log({ items })
 
   return (
     <>
@@ -103,6 +107,7 @@ export default Balances
 
 const TokenBalance = ({ balance }: { balance: any }) => {
   const [expand, setExpand] = useState<boolean>(false)
+  console.log({ balance })
   return (
     <Paper className="bg-dark-800 ">
       <div
