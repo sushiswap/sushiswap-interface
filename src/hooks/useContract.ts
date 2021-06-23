@@ -1,3 +1,4 @@
+import { ARCHER_ROUTER_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -25,10 +26,10 @@ import {
   SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
 import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
-import { MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
+import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
@@ -181,9 +182,13 @@ export function useFactoryContract(): Contract | null {
   return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
 }
 
-export function useRouterContract(): Contract | null {
+export function useRouterContract(useArcher = false): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
+
+  const address = useArcher ? ARCHER_ROUTER_ADDRESS[chainId] : ROUTER_ADDRESS[chainId]
+  const abi = useArcher ? ARCHER_ROUTER_ABI[chainId] : ROUTER_ABI
+
+  return useContract(address, abi, true)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {

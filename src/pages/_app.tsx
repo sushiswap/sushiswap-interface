@@ -71,7 +71,7 @@ function MyApp({
   const Provider = Component.Provider || NOOP
 
   // Allows for conditionally setting a layout to be hoisted per page
-  const Layout = Component.Layout || (({ children }) => <DefaultLayout>{children}</DefaultLayout>)
+  const Layout = Component.Layout || DefaultLayout
 
   return (
     <>

@@ -210,11 +210,7 @@ export default function Swap() {
   const noRoute = !route
 
   // check whether the user has approved the router on the input token
-  const [approvalState, approveCallback] = useApproveCallbackFromTrade(
-    // doArcher ? ARCHER_ROUTER_ADDRESS[chainId ?? 1] : getRouterAddress(chainId),
-    trade,
-    allowedSlippage
-  )
+  const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, doArcher)
 
   const {
     state: signatureState,
@@ -264,7 +260,8 @@ export default function Swap() {
     trade,
     allowedSlippage,
     recipient,
-    signatureData
+    signatureData,
+    doArcher ? ttl : undefined
   )
 
   // // the callback to execute the swap

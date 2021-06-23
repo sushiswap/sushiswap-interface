@@ -1,6 +1,18 @@
-import { Currency, Percent, Router, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
+import { ARCHER_RELAY_URI, BIPS_BASE } from '../constants'
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Ether,
+  JSBI,
+  Percent,
+  Router,
+  TradeType,
+  Trade as V2Trade,
+} from '@sushiswap/sdk'
 import { isAddress, isZero } from '../functions/validate'
 
+import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
 import { SignatureData } from './useERC20Permit'
 import approveAmountCalldata from '../functions/approveAmountCalldata'
@@ -14,6 +26,7 @@ import { useMemo } from 'react'
 import { useRouterContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
+import { useUserArcherETHTip } from '../state/user/hooks'
 
 export enum SwapCallbackState {
   INVALID,
@@ -52,15 +65,20 @@ export function useSwapCallArguments(
   trade: V2Trade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
-  signatureData: SignatureData | null | undefined
+  signatureData: SignatureData | null | undefined,
+  useArcher: boolean = false
 ): SwapCall[] {
   const { account, chainId, library } = useActiveWeb3React()
 
   const { address: recipientAddress } = useENS(recipientAddressOrName)
   const recipient = recipientAddressOrName === null ? account : recipientAddress
   const deadline = useTransactionDeadline()
-  const routerContract = useRouterContract()
+
+  const routerContract = useRouterContract(useArcher)
+
   const argentWalletContract = useArgentWalletContract()
+
+  const [archerETHTip] = useUserArcherETHTip()
 
   return useMemo(() => {
     if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
@@ -68,23 +86,33 @@ export function useSwapCallArguments(
     if (trade instanceof V2Trade) {
       if (!routerContract) return []
       const swapMethods = []
-
-      swapMethods.push(
-        Router.swapCallParameters(trade, {
-          feeOnTransfer: false,
-          allowedSlippage,
-          recipient,
-          deadline: deadline.toNumber(),
-        })
-      )
-
-      if (trade.tradeType === TradeType.EXACT_INPUT) {
+      if (!useArcher) {
         swapMethods.push(
           Router.swapCallParameters(trade, {
-            feeOnTransfer: true,
+            feeOnTransfer: false,
             allowedSlippage,
             recipient,
             deadline: deadline.toNumber(),
+          })
+        )
+
+        if (trade.tradeType === TradeType.EXACT_INPUT) {
+          swapMethods.push(
+            Router.swapCallParameters(trade, {
+              feeOnTransfer: true,
+              allowedSlippage,
+              recipient,
+              deadline: deadline.toNumber(),
+            })
+          )
+        }
+      } else {
+        swapMethods.push(
+          ArcherRouter.swapCallParameters(routerContract.address, trade, {
+            allowedSlippage: new Percent(JSBI.BigInt(allowedSlippage), BIPS_BASE),
+            recipient,
+            ttl: deadline.toNumber(),
+            ethTip: CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), archerETHTip),
           })
         )
       }
@@ -113,7 +141,19 @@ export function useSwapCallArguments(
         }
       })
     }
-  }, [account, allowedSlippage, argentWalletContract, chainId, deadline, library, recipient, routerContract, trade])
+  }, [
+    account,
+    allowedSlippage,
+    archerETHTip,
+    argentWalletContract,
+    chainId,
+    deadline,
+    library,
+    recipient,
+    routerContract,
+    trade,
+    useArcher,
+  ])
 }
 
 /**
@@ -163,7 +203,8 @@ export function useSwapCallback(
   trade: V2Trade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
-  signatureData: SignatureData | undefined | null
+  signatureData: SignatureData | undefined | null,
+  archerRelayDeadline?: number // deadline to use for archer relay -- set to undefined for no relay
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
@@ -171,12 +212,17 @@ export function useSwapCallback(
 } {
   const { account, chainId, library } = useActiveWeb3React()
 
-  const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData)
+  const useArcher = archerRelayDeadline !== undefined
+
+  const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useArcher)
 
   const addTransaction = useTransactionAdder()
 
   const { address: recipientAddress } = useENS(recipientAddressOrName)
+
   const recipient = recipientAddressOrName === null ? account : recipientAddress
+
+  const [archerETHTip] = useUserArcherETHTip()
 
   return useMemo(() => {
     if (!trade || !library || !account || !chainId) {
@@ -271,53 +317,229 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
-        return library
-          .getSigner()
-          .sendTransaction({
-            from: account,
-            to: address,
-            data: calldata,
-            // let the wallet try if we can't estimate the gas
-            ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-            ...(value && !isZero(value) ? { value } : {}),
-          })
-          .then((response) => {
-            const inputSymbol = trade.inputAmount.currency.symbol
-            const outputSymbol = trade.outputAmount.currency.symbol
-            const inputAmount = trade.inputAmount.toSignificant(4)
-            const outputAmount = trade.outputAmount.toSignificant(4)
-
-            const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
-            const withRecipient =
-              recipient === account
-                ? base
-                : `${base} to ${
-                    recipientAddressOrName && isAddress(recipientAddressOrName)
-                      ? shortenAddress(recipientAddressOrName)
-                      : recipientAddressOrName
-                  }`
-
-            addTransaction(response, {
-              summary: withRecipient,
+        if (!useArcher) {
+          return library
+            .getSigner()
+            .sendTransaction({
+              from: account,
+              to: address,
+              data: calldata,
+              // let the wallet try if we can't estimate the gas
+              ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
+              ...(value && !isZero(value) ? { value } : {}),
             })
+            .then((response) => {
+              const inputSymbol = trade.inputAmount.currency.symbol
+              const outputSymbol = trade.outputAmount.currency.symbol
+              const inputAmount = trade.inputAmount.toSignificant(4)
+              const outputAmount = trade.outputAmount.toSignificant(4)
 
-            return response.hash
-          })
-          .catch((error) => {
-            // if the user rejected the tx, pass this along
-            if (error?.code === 4001) {
-              throw new Error('Transaction rejected.')
-            } else {
-              // otherwise, the error was unexpected and we need to convey that
-              console.error(`Swap failed`, error, address, calldata, value)
+              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
+              const withRecipient =
+                recipient === account
+                  ? base
+                  : `${base} to ${
+                      recipientAddressOrName && isAddress(recipientAddressOrName)
+                        ? shortenAddress(recipientAddressOrName)
+                        : recipientAddressOrName
+                    }`
 
-              throw new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`)
-            }
-          })
+              addTransaction(response, {
+                summary: withRecipient,
+              })
+
+              return response.hash
+            })
+            .catch((error) => {
+              // if the user rejected the tx, pass this along
+              if (error?.code === 4001) {
+                throw new Error('Transaction rejected.')
+              } else {
+                // otherwise, the error was unexpected and we need to convey that
+                console.error(`Swap failed`, error, address, calldata, value)
+
+                throw new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`)
+              }
+            })
+        } else {
+          //   const postToRelay = (rawTransaction: string, deadline: number) => {
+          //     // as a wise man on the critically acclaimed hit TV series "MTV's Cribs" once said:
+          //     // "this is where the magic happens"
+          //     const relayURI = chainId ? ARCHER_RELAY_URI[chainId] : undefined;
+          //     if (!relayURI)
+          //       throw new Error("Could not determine relay URI for this network");
+          //     const body = JSON.stringify({
+          //       method: "archer_submitTx",
+          //       tx: rawTransaction,
+          //       deadline: deadline.toString(),
+          //     });
+          //     return fetch(relayURI, {
+          //       method: "POST",
+          //       body,
+          //       headers: {
+          //         Authorization: process.env.NEXT_PUBLIC_ARCHER_API_KEY ?? "",
+          //         "Content-Type": "application/json",
+          //       },
+          //     }).then((res) => {
+          //       if (res.status !== 200) throw Error(res.statusText);
+          //     });
+          //   };
+          //   const partialTx = {
+          //     to: contract.address,
+          //     from: account,
+          //     gasLimit: calculateGasMargin(gasEstimate),
+          //     data: contract.interface.encodeFunctionData(methodName, args),
+          //     ...(archerRelayDeadline ? { gasPrice: 0 } : {}),
+          //     ...(value && !isZero(value) ? { value } : {}),
+          //   };
+          //   return routerContract.signer
+          //     .populateTransaction(partialTx)
+          //     .then((fullTx) => {
+          //       // metamask doesn't support Signer.signTransaction, so we have to do all this manually
+          //       // return contract.signer.signTransaction(fullTx)
+          //       const chainNames: {
+          //         [chainId in ChainId]?: string;
+          //       } = {
+          //         [ChainId.MAINNET]: "mainnet",
+          //       };
+          //       const chain = chainNames[chainId];
+          //       if (!chain)
+          //         throw new Error(
+          //           `Unknown chain ID ${chainId} when building transaction`
+          //         );
+          //       const common = new Common({
+          //         chain,
+          //         hardfork: "berlin",
+          //       });
+          //       const txParams = {
+          //         nonce:
+          //           fullTx.nonce !== undefined
+          //             ? ethers.utils.hexlify(fullTx.nonce, {
+          //                 hexPad: "left",
+          //               })
+          //             : undefined,
+          //         gasPrice:
+          //           fullTx.gasPrice !== undefined
+          //             ? ethers.utils.hexlify(fullTx.gasPrice, { hexPad: "left" })
+          //             : undefined,
+          //         gasLimit:
+          //           fullTx.gasLimit !== undefined
+          //             ? ethers.utils.hexlify(fullTx.gasLimit, { hexPad: "left" })
+          //             : undefined,
+          //         to: fullTx.to,
+          //         value:
+          //           fullTx.value !== undefined
+          //             ? ethers.utils.hexlify(fullTx.value, {
+          //                 hexPad: "left",
+          //               })
+          //             : undefined,
+          //         data: fullTx.data?.toString(),
+          //         chainId:
+          //           fullTx.chainId !== undefined
+          //             ? ethers.utils.hexlify(fullTx.chainId)
+          //             : undefined,
+          //         type:
+          //           fullTx.type !== undefined
+          //             ? ethers.utils.hexlify(fullTx.type)
+          //             : undefined,
+          //       };
+          //       const tx: any = TransactionFactory.fromTxData(txParams, {
+          //         common,
+          //       });
+          //       const unsignedTx = tx.getMessageToSign();
+          //       if (!(contract.signer instanceof JsonRpcSigner)) {
+          //         throw new Error(
+          //           `Cannot sign transactions with this wallet type`
+          //         );
+          //       }
+          //       const signer = contract.signer as JsonRpcSigner;
+          //       // ethers will change eth_sign to personal_sign if it detects metamask
+          //       // https://github.com/ethers-io/ethers.js/blob/2a7dbf05718e29e550f7a208d35a095547b9ccc2/packages/providers/src.ts/web3-provider.ts#L33
+          //       let isMetamask: boolean | undefined;
+          //       let web3Provider: Web3Provider | undefined;
+          //       if (signer.provider instanceof Web3Provider) {
+          //         web3Provider = signer.provider as Web3Provider;
+          //         isMetamask = web3Provider.provider.isMetaMask;
+          //         web3Provider.provider.isMetaMask = false;
+          //       }
+          //       return signer.provider
+          //         .send("eth_sign", [account, ethers.utils.hexlify(unsignedTx)])
+          //         .then((signature) => {
+          //           const signatureParts = ethers.utils.splitSignature(signature);
+          //           // really crossing the streams here
+          //           // eslint-disable-next-line
+          //           // @ts-ignore
+          //           const txWithSignature = tx._processSignature(
+          //             signatureParts.v,
+          //             ethers.utils.arrayify(signatureParts.r),
+          //             ethers.utils.arrayify(signatureParts.s)
+          //           );
+          //           return {
+          //             signedTx: ethers.utils.hexlify(txWithSignature.serialize()),
+          //             fullTx,
+          //           };
+          //         })
+          //         .finally(() => {
+          //           if (web3Provider) {
+          //             web3Provider.provider.isMetaMask = isMetamask;
+          //           }
+          //         });
+          //     })
+          //     .then(({ signedTx, fullTx }) => {
+          //       const hash = ethers.utils.keccak256(signedTx);
+          //       const inputSymbol = trade.inputAmount.currency.symbol;
+          //       const outputSymbol = trade.outputAmount.currency.symbol;
+          //       const inputAmount = trade.inputAmount.toSignificant(3);
+          //       const outputAmount = trade.outputAmount.toSignificant(3);
+          //       const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`;
+          //       const withRecipient =
+          //         (recipient === account
+          //           ? base
+          //           : `${base} to ${
+          //               recipientAddressOrName &&
+          //               isAddress(recipientAddressOrName)
+          //                 ? shortenAddress(recipientAddressOrName)
+          //                 : recipientAddressOrName
+          //             }`) + (archerRelayDeadline ? " 🏹" : "");
+          //       const archer =
+          //         useArcher && archerRelayDeadline
+          //           ? {
+          //               rawTransaction: signedTx,
+          //               deadline: Math.floor(
+          //                 archerRelayDeadline + new Date().getTime() / 1000
+          //               ),
+          //               nonce: ethers.BigNumber.from(fullTx.nonce).toNumber(),
+          //               ethTip: archerETHTip,
+          //             }
+          //           : undefined;
+          //       addTransaction(
+          //         { hash },
+          //         {
+          //           summary: withRecipient,
+          //           archer,
+          //         }
+          //       );
+          //       return archer
+          //         ? postToRelay(archer.rawTransaction, archer.deadline).then(
+          //             () => hash
+          //           )
+          //         : hash;
+          //     })
+          //     .catch((error: any) => {
+          //       // if the user rejected the tx, pass this along
+          //       if (error?.code === 4001) {
+          //         throw new Error("Transaction rejected.");
+          //       } else {
+          //         // otherwise, the error was unexpected and we need to convey that
+          //         console.error(`Swap failed`, error, methodName, args, value);
+          //         throw new Error(`Swap failed: ${error.message}`);
+          //       }
+          //     });
+        }
       },
       error: null,
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, addTransaction])
+  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, useArcher, addTransaction])
 }
 
 // import {
