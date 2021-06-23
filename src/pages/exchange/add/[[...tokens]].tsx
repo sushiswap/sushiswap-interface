@@ -317,7 +317,7 @@ export default function Add() {
         />
       </Head>
 
-      <Container id="remove-liquidity-page" maxWidth="2xl">
+      <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-6">
         <div className="flex items-center justify-between px-4 mb-5">
           <NavLink className="text-base font-medium text-center text-secondary hover:text-high-emphesis" href={'/pool'}>
             <a>{i18n._(t`View Your Liquidity Positions`)} &gt;</a>
@@ -334,6 +334,23 @@ export default function Add() {
             FARM THE {currencies[Field.CURRENCY_A]?.symbol}-{currencies[Field.CURRENCY_B]?.symbol} POOL
           </button> */}
         </div>
+
+        <Alert
+          message={
+            noLiquidity ? (
+              i18n._(
+                t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
+              )
+            ) : (
+              <Trans>
+                <b>Tip:</b> By adding liquidity you&apos;ll earn 0.25% of all trades on this pair proportional to your
+                share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
+                your liquidity.
+              </Trans>
+            )
+          }
+          type="information"
+        />
 
         <div className="p-4 space-y-4 rounded bg-dark-900 shadow-liquidity" style={{ zIndex: 1 }}>
           {/* <AddRemoveTabs creating={isCreate} adding={true} defaultSlippage={DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE} /> */}
@@ -360,30 +377,8 @@ export default function Add() {
             pendingText={pendingText}
           />
           <div className="flex flex-col space-y-4">
-            {noLiquidity ? (
-              <Alert
-                message={i18n._(
-                  t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
-                )}
-                type="information"
-              />
-            ) : (
-              <>
-                <Alert
-                  showIcon={false}
-                  message={
-                    <Trans>
-                      <b>Tip:</b> When you add liquidity, you will receive pool tokens representing your position. These
-                      tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any
-                      time.
-                    </Trans>
-                  }
-                  type="information"
-                />
-                {pair && pairState !== PairState.INVALID && (
-                  <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
-                )}
-              </>
+            {pair && pairState !== PairState.INVALID && (
+              <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
             )}
 
             <div>
