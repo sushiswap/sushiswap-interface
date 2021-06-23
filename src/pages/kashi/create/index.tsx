@@ -173,7 +173,7 @@ function Create() {
         }
       >
         <Container maxWidth="full" className="space-y-6">
-          <div className="grid grid-cols-1 grid-rows-2 gap-6 md:grid-rows-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 grid-rows-2 gap-4 md:grid-rows-1 md:grid-cols-2">
             <CurrencyInputPanel
               label="Collateral"
               showMaxButton={false}
@@ -212,8 +212,6 @@ function Create() {
     </>
   )
 }
-
-Create.Provider = Provider
 
 const CreateLayout = ({ children }) => {
   const { i18n } = useLingui()
