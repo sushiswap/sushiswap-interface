@@ -26,12 +26,6 @@ import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hook
 import { useV2Pairs } from '../../../hooks/useV2Pairs'
 import Image from 'next/image'
 
-const migrateFrom: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'Uniswap',
-  [ChainId.BSC]: 'PancakeSwap',
-  [ChainId.MATIC]: 'QuickSwap',
-}
-
 export default function Pool() {
   const { i18n } = useLingui()
   const router = useRouter()
@@ -144,7 +138,7 @@ export default function Pool() {
               </>
             ) : (
               <>
-                <Empty className="flex text-center text-low-emphesis">
+                <Empty className="flex text-lg text-center text-low-emphesis">
                   <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
                 </Empty>
                 <div className="grid grid-cols-3 gap-4">
@@ -161,7 +155,7 @@ export default function Pool() {
                     {i18n._(t`Import`)}
                   </Button>
                   <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/migrate`)}>
-                    {i18n._(t`Migrate ${migrateFrom[chainId]}`)}
+                    {i18n._(t`Migrate`)}
                   </Button>
                 </div>
               </>
