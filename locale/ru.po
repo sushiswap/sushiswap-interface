@@ -55,19 +55,19 @@ msgstr ""
 #~ msgid "<0>Your</0> Positions"
 #~ msgstr "<0>Ваши</0> позиции"
 
-#: src/features/lending/TradeReview.tsx:71
-#: src/features/swap/AdvancedSwapDetails.tsx:88
+#: src/features/lending/TradeReview.tsx:72
+#: src/features/swap/AdvancedSwapDetails.tsx:78
 msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
 msgstr "Часть каждой сделки (0,25%) направляется поставщикам ликвидности в качестве стимула протокола."
 
-#: src/pages/borrow/[pair].tsx:271
+#: src/pages/kashi/borrow/[pair].tsx:113
 msgid "APR"
 msgstr "Годовая процентная ставка"
 
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "Годовая процентная ставка (вкл. комиссии)"
 
-#: src/features/farm/FarmList.tsx:52
+#: src/features/farm/FarmList.tsx:44
 msgid "APY"
 msgstr ""
 
@@ -78,156 +78,164 @@ msgstr ""
 #~ msgstr "Принять"
 
 #: src/components/PositionCard/index.tsx:349
-msgid "Add"
-msgstr "Добавить"
+#~ msgid "Add"
+#~ msgstr "Добавить"
 
-#: src/components/NavigationTabs/index.tsx:106
-#: src/pages/pool.tsx:178
+#: src/components/NavigationTabs/index.tsx:69
+#: src/pages/exchange/pool/index.tsx:174
 msgid "Add Liquidity"
 msgstr "Добавить ликвидность"
 
-#: src/components/Header/index.tsx:205
+#: src/components/Header/index.tsx:175
 msgid "Add SUSHI to your MetaMask wallet"
 msgstr ""
 
 #~ msgid "Add Sushi to your Metamask wallet"
 #~ msgstr "Добавьте Sushi в свой кошелек Metamask"
 
-#: src/pages/borrow/[pair].tsx:59
+#: src/pages/kashi/borrow/[pair].tsx:164
 msgid "Add collateral in order to borrow assets"
 msgstr "Добавьте залог, чтобы заимствовать активы"
 
 #~ msgid "Add liquidity"
 #~ msgstr "Добавить ликвидность"
 
-#: src/components/Header/index.tsx:142
+#: src/components/Header/index.tsx:125
 msgid "Add xSUSHI to your MetaMask wallet"
 msgstr ""
 
 #~ msgid "Add xSushi to your Metamask wallet"
 #~ msgstr "Добавьте xSushi в свой кошелек Metamask"
 
-#: src/pages/migrate.tsx:80
+#: src/pages/exchange/migrate/index.tsx:69
 msgid "Amount of Tokens"
 msgstr "Количество токенов"
 
-#: src/components/Footer/index.tsx:30
-#: src/components/Header/index.tsx:432
+#: src/hooks/useSwapCallback.ts:154
+msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
+msgstr ""
+
+#: src/components/Footer/index.tsx:23
+#: src/components/Header/index.tsx:370
 msgid "Analytics"
 msgstr "Аналитика"
 
-#: src/features/lending/Button.tsx:87
-#: src/pages/balances.tsx:227
-#: src/pages/migrate.tsx:291
-#: src/pages/stake.tsx:392
+#: src/features/lending/Button.tsx:64
+#: src/pages/balances.tsx:200
+#: src/pages/bar/index.tsx:335
+#: src/pages/exchange/migrate/index.tsx:234
+#: src/pages/exchange/remove/[[...tokens]].tsx:838
 msgid "Approve"
 msgstr "Утвердить"
 
-#: src/features/lending/Button.tsx:49
+#: src/features/lending/Button.tsx:36
 msgid "Approve Kashi"
 msgstr "Утвердить Kashi"
 
-#: src/pages/swap/[[...tokens]].tsx:688
+#: src/pages/exchange/swap/[[...tokens]].tsx:648
 msgid "Approve {0}"
 msgstr "Утвердить {0}"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:92
-msgid "Approve {SYMBOL}"
-msgstr ""
-
-#: src/pages/migrate.tsx:289
-#: src/pages/swap/[[...tokens]].tsx:685
+#: src/pages/exchange/migrate/index.tsx:232
+#: src/pages/exchange/remove/[[...tokens]].tsx:836
+#: src/pages/exchange/swap/[[...tokens]].tsx:646
 msgid "Approved"
 msgstr "Утверждено"
 
-#: src/pages/balances.tsx:225
-#: src/pages/migrate.tsx:287
-#: src/pages/stake.tsx:390
+#: src/pages/balances.tsx:200
+#: src/pages/bar/index.tsx:333
+#: src/pages/exchange/migrate/index.tsx:230
+#: src/pages/exchange/remove/[[...tokens]].tsx:834
 msgid "Approving"
 msgstr "Утверждение"
 
 #~ msgid "Approving {0}"
 #~ msgstr "Утверждение {0}"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:99
-msgid "Approving {SYMBOL}"
-msgstr ""
-
-#: src/components/Settings/index.tsx:184
+#: src/components/Settings/index.tsx:164
 msgid "Are you sure?"
 msgstr "Вы уверены?"
 
-#: src/pages/borrow/[pair].tsx:75
-#: src/pages/lend/[pair].tsx:55
+#: src/components/TransactionSettings/index.tsx:179
+msgid "Auto"
+msgstr ""
+
+#: src/pages/kashi/borrow/[pair].tsx:177
+#: src/pages/kashi/lend/[pair].tsx:141
 msgid "Available"
 msgstr "Доступно"
 
-#: src/components/WalletModal/index.tsx:333
+#: src/components/WalletModal/index.tsx:306
 msgid "Back"
 msgstr ""
 
-#: src/pages/migrate.tsx:272
-#: src/pages/stake.tsx:367
-#: src/pages/stake.tsx:428
+#: src/pages/bar/index.tsx:313
+#: src/pages/bar/index.tsx:371
+#: src/pages/exchange/migrate/index.tsx:219
+#: src/pages/me/index.tsx:28
 msgid "Balance"
 msgstr "Баланс"
 
-#: src/pages/balances.tsx:273
+#: src/pages/balances.tsx:236
 msgid "Bento Balance: {0}"
 msgstr "Баланс Bento: {0}"
 
+#: src/pages/balances.tsx:54
 #: src/pages/balances.tsx:67
-#: src/pages/balances.tsx:81
-#: src/pages/borrow/[pair].tsx:122
-#: src/pages/lend/[pair].tsx:130
+#: src/pages/kashi/borrow/[pair].tsx:207
+#: src/pages/kashi/lend/[pair].tsx:191
 msgid "BentoBox"
 msgstr "BentoBox"
 
-#: src/pages/bentobox.tsx:50
+#: src/pages/bentobox.tsx:45
 msgid "BentoBox Apps"
 msgstr "Приложения BentoBox"
 
-#: src/pages/bentobox.tsx:54
+#: src/pages/me.tsx:35
+#~ msgid "BentoBox Balance"
+#~ msgstr ""
+
+#: src/pages/bentobox.tsx:47
 msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
 msgstr "BentoBox – это инновационный способ экономного использования децентрализованных приложений и получения дополнительной прибыли."
 
-#: src/pages/balances.tsx:51
+#: src/pages/balances.tsx:90
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox обеспечивает дополнительную доходность по депозитам с помощью мгновенного кредитования, стратегий и экономичных фиксированных переводов между такими интегрированными децентрализованными приложениями, как рынки Kashi"
 
-#: src/pages/borrow/[pair].tsx:133
+#: src/pages/kashi/borrow/[pair].tsx:215
 msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
 msgstr "Стратегии BentoBox могут повысить доходность ваших залоговых токенов. У этого токена еще нет стратегии в BentoBox."
 
-#: src/pages/lend/[pair].tsx:141
+#: src/pages/kashi/lend/[pair].tsx:199
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 msgstr "Стратегии BentoBox могут повысить доходность вашей ликвидности, пока она не ссужается. У этого токена еще нет стратегии в BentoBox."
 
-#: src/components/Header/index.tsx:106
-#: src/components/Header/index.tsx:402
-#: src/pages/borrow/[pair].tsx:288
+#: src/components/Header/index.tsx:94
+#: src/components/Header/index.tsx:348
+#: src/pages/kashi/borrow/[pair].tsx:124
 msgid "Borrow"
 msgstr "Взять в кредит"
 
-#: src/pages/borrow/[pair].tsx:106
-#: src/pages/lend/[pair].tsx:83
+#: src/pages/kashi/borrow/[pair].tsx:197
+#: src/pages/kashi/lend/[pair].tsx:159
 msgid "Borrow APR"
 msgstr "Годовая процентная ставка кредита"
 
 #~ msgid "Borrow assets and leverage up"
 #~ msgstr "Возьмите активы в кредит и увеличьте кредитное плечо"
 
-#: src/pages/borrow/[pair].tsx:223
+#: src/pages/kashi/borrow/[pair].tsx:80
 msgid "Borrow {0}"
 msgstr "Взять в кредит {0}"
 
-#: src/pages/borrow/[pair].tsx:193
+#: src/pages/kashi/borrow/[pair].tsx:53
 msgid "Borrow {0}-{1}"
 msgstr "Взять в кредит {0} - {1}"
 
-#: src/pages/borrow/[pair].tsx:86
-#: src/pages/borrow/[pair].tsx:259
-#: src/pages/lend/[pair].tsx:63
+#: src/pages/kashi/borrow/[pair].tsx:102
+#: src/pages/kashi/borrow/[pair].tsx:185
+#: src/pages/kashi/lend/[pair].tsx:147
 msgid "Borrowed"
 msgstr "Взято в кредит"
 
@@ -237,24 +245,25 @@ msgstr "Взято в кредит"
 #~ msgid "Bridge Assets"
 #~ msgstr "Активы Bridge"
 
+#: src/features/ramp/index.tsx:44
 #: src/features/transak/index.tsx:68
 msgid "Buy"
 msgstr ""
 
 #: src/components/PositionCard/index.tsx:164
-msgid ""
-"By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\n"
-"of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\n"
-"your liquidity."
-msgstr ""
-"Добавляя ликвидность, вы зарабатываете 0,25% от всех сделок по этой паре пропорционально вашей доле \n"
-" в пуле. Комиссии добавляются в пул, накапливаются в режиме реального времени и могут быть востребованы путем снятия \n"
-" вашей ликвидности."
+#~ msgid ""
+#~ "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\n"
+#~ "of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\n"
+#~ "your liquidity."
+#~ msgstr ""
+#~ "Добавляя ликвидность, вы зарабатываете 0,25% от всех сделок по этой паре пропорционально вашей доле \n"
+#~ " в пуле. Комиссии добавляются в пул, накапливаются в режиме реального времени и могут быть востребованы путем снятия \n"
+#~ " вашей ликвидности."
 
 #~ msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your shareof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawingyour liquidity."
 #~ msgstr "Добавляя ликвидность, вы зарабатываете 0,25% от всех сделок по этой паре пропорционально вашей доле в пуле. Комиссии добавляются в пул, накапливаются в режиме реального времени и могут быть востребованы путем снятия вашей ликвидности."
 
-#: src/components/Settings/index.tsx:118
+#: src/components/Settings/index.tsx:113
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Обходит режимы подтверждения и допускает сделки с высоким проскальзыванием. Используйте на свой риск."
 
@@ -270,13 +279,14 @@ msgstr "Обходит режимы подтверждения и допуска
 #~ msgid "Claimed"
 #~ msgstr "Сделан запрос"
 
-#~ msgid "Clear History"
-#~ msgstr "Очистить историю"
+#: src/components/TransactionList.tsx:27
+msgid "Clear History"
+msgstr "Очистить историю"
 
 #~ msgid "Click here to switch to Polygon using Metamask"
 #~ msgstr "Щелкните здесь, чтобы переключиться на Polygon с помощью Metamask"
 
-#: src/pages/migrate.tsx:423
+#: src/pages/exchange/migrate/index.tsx:333
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
@@ -287,48 +297,51 @@ msgstr ""
 #~ msgid "Click on a pool below, input the amount you wish to migrate or select max, and clickmigrate"
 #~ msgstr "Нажмите на пул ниже, введите сумму, которую вы хотите перенести, или выберите максимум и нажмите перенести"
 
-#: src/pages/borrow/[pair].tsx:227
-#: src/pages/borrow/[pair].tsx:248
-#: src/pages/lend/[pair].tsx:93
+#: src/pages/kashi/borrow/[pair].tsx:82
+#: src/pages/kashi/borrow/[pair].tsx:95
+#: src/pages/kashi/lend/[pair].tsx:165
 msgid "Collateral"
 msgstr "Обеспечение"
 
 #~ msgid "Community Approval"
 #~ msgstr "Утверждение сообщества"
 
-#~ msgid "Confirm"
-#~ msgstr "Подтвердить"
+#: src/pages/exchange/remove/[[...tokens]].tsx:651
+msgid "Confirm"
+msgstr "Подтвердить"
 
 #~ msgid "Confirm Adding Liquidity"
 #~ msgstr "Подтвердите добавление ликвидности"
 
-#: src/pages/stake.tsx:416
+#: src/pages/bar/index.tsx:359
 msgid "Confirm Staking"
 msgstr "Подтвердите стейкинг"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:91
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:69
 msgid "Confirm Supply"
 msgstr "Подтвердите поставку"
 
-#: src/features/swap/SwapModalFooter.tsx:127
+#: src/features/swap/SwapModalFooter.tsx:100
 msgid "Confirm Swap"
 msgstr "Подтвердить обмен"
 
-#: src/pages/stake.tsx:417
+#: src/pages/bar/index.tsx:360
+#: src/pages/exchange/remove/[[...tokens]].tsx:848
 msgid "Confirm Withdrawal"
 msgstr "Подтвердите вывод средств"
 
-#: src/components/TransactionConfirmationModal/index.tsx:40
+#: src/components/TransactionConfirmationModal/index.tsx:42
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/pages/stake.tsx:410
-#: src/state/mint/hooks.ts:238
+#: src/pages/bar/index.tsx:353
+#: src/state/burn/hooks.ts:134
+#: src/state/mint/hooks.ts:194
 msgid "Connect Wallet"
 msgstr "Подключите кошелек"
 
-#: src/components/WalletModal/index.tsx:338
-#: src/components/Web3Connect/index.tsx:47
+#: src/components/WalletModal/index.tsx:311
+#: src/components/Web3Connect/index.tsx:40
 msgid "Connect to a wallet"
 msgstr "Подключиться к кошельку"
 
@@ -339,37 +352,33 @@ msgstr "Подключиться к кошельку"
 #~ msgid "Connect to a wallet to view your liquidity"
 #~ msgstr "Подключитесь к кошельку, чтобы посмотреть свою ликвидность"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:74
-msgid "Connect to wallet"
-msgstr ""
-
-#: src/features/tools/meowshi/MeowshiButton.tsx:110
-msgid "Convert"
-msgstr ""
-
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:90
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:69
 msgid "Create Pool & Supply"
 msgstr "Создать пул и поставку"
 
 #~ msgid "Create a Pair"
 #~ msgstr "Создать пару"
 
-#: src/components/NavigationTabs/index.tsx:104
-#: src/pages/pool.tsx:189
+#: src/pages/kashi/create/index.tsx:342
+msgid "Create a new Kashi Market"
+msgstr ""
+
+#: src/components/NavigationTabs/index.tsx:69
+#: src/pages/exchange/pool/index.tsx:177
 msgid "Create a pair"
 msgstr "Создать пару"
 
 #~ msgid "Create pool"
 #~ msgstr "Создать пул"
 
-#: src/pages/balances.tsx:243
+#: src/pages/balances.tsx:213
 msgid "Deposit"
 msgstr "Депозит"
 
 #~ msgid "Deposit SUSHI into BentoBox"
 #~ msgstr "Внесите SUSHI в BentoBox"
 
-#: src/pages/balances.tsx:49
+#: src/pages/balances.tsx:88
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Внесите токены в BentoBox для всех доходов"
 
@@ -381,11 +390,11 @@ msgstr "Внесите токены в BentoBox для всех доходов"
 msgid "Dev"
 msgstr "Dev"
 
-#: src/components/Settings/index.tsx:141
+#: src/components/Settings/index.tsx:135
 msgid "Disable Multihops"
 msgstr "Отключить Multihops"
 
-#: src/components/WalletModal/index.tsx:305
+#: src/components/WalletModal/index.tsx:278
 msgid "Disconnect"
 msgstr ""
 
@@ -394,7 +403,7 @@ msgstr ""
 msgid "Discord"
 msgstr "Разногласие"
 
-#: src/components/TransactionFailedModal.tsx:42
+#: src/components/TransactionFailedModal.tsx:34
 msgid "Dismiss"
 msgstr "Отклонить"
 
@@ -427,45 +436,50 @@ msgstr "Документация для пользователей Sushi."
 #~ msgid "Enjoy the lowest slippage on Polygon"
 #~ msgstr "Наслаждайтесь самым низким проскальзыванием на Polygon"
 
-#: src/pages/bentobox.tsx:74
+#: src/pages/bentobox.tsx:66
 msgid "Enter"
 msgstr "Ввести"
 
-#: src/pages/stake.tsx:412
+#: src/pages/bar/index.tsx:355
 msgid "Enter Amount"
 msgstr "Ввести сумму"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:181
 msgid "Enter a recipient"
 msgstr "Введите получателя"
 
-#: src/components/TransactionSettings/index.tsx:236
+#: src/components/TransactionSettings/index.tsx:221
 msgid "Enter a valid slippage percentage"
 msgstr "Введите допустимый процент проскальзывания"
 
-#: src/state/mint/hooks.ts:246
-#: src/state/swap/hooks.ts:190
+#: src/state/burn/hooks.ts:138
+#: src/state/mint/hooks.ts:202
+#: src/state/swap/hooks.ts:172
 msgid "Enter an amount"
 msgstr "Введите сумму"
 
-#: src/components/TransactionConfirmationModal/index.tsx:129
-#: src/components/Web3Connect/index.tsx:35
+#: src/components/TransactionConfirmationModal/index.tsx:121
+#: src/components/Web3Connect/index.tsx:28
 msgid "Error"
 msgstr "Ошибка"
 
-#: src/components/WalletModal/index.tsx:293
+#: src/components/WalletModal/index.tsx:268
 msgid "Error connecting"
 msgstr ""
 
-#: src/components/WalletModal/index.tsx:301
+#: src/components/WalletModal/index.tsx:274
 msgid "Error connecting. Try refreshing the page."
 msgstr ""
 
-#: src/features/swap/TradePrice.tsx:39
+#: src/features/swap/TradePrice.tsx:45
 msgid "Exchange Rate"
 msgstr ""
 
-#: src/components/Settings/index.tsx:188
+#: src/components/SearchModal/CurrencyList.tsx:162
+msgid "Expanded results from inactive Token Lists"
+msgstr ""
+
+#: src/components/Settings/index.tsx:166
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
@@ -476,8 +490,8 @@ msgstr ""
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "Экспертный режим отключает запрос на подтверждение транзакции и позволяет совершать сделки с высоким проскальзыванием, что часто приводит к плохим курсам и потере средств."
 
-#: src/components/Header/index.tsx:81
-#: src/components/Header/index.tsx:375
+#: src/components/Header/index.tsx:75
+#: src/components/Header/index.tsx:327
 msgid "Farm"
 msgstr ""
 
@@ -487,7 +501,7 @@ msgstr ""
 #~ msgid "Find Pool"
 #~ msgstr "Найти пул"
 
-#: src/pages/stake.tsx:209
+#: src/pages/bar/index.tsx:182
 msgid ""
 "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
 "proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
@@ -514,7 +528,7 @@ msgstr ""
 #~ msgid "From (estimated)"
 #~ msgstr "От (по оценкам)"
 
-#: src/pages/borrow/[pair].tsx:61
+#: src/pages/kashi/borrow/[pair].tsx:166
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "Получите доступ к токенам, не уменьшая свои активы. Кредитное плечо позволит вам открывать короткие позиции по активам и зарабатывать на движении вниз."
 
@@ -528,11 +542,11 @@ msgstr "Получите доступ к токенам, не уменьшая �
 #~ msgid "Gain governance rights with xSUSHI and earn 5% APR (0.05% ofall swaps from all chains)"
 #~ msgstr "Получите права управления с xSUSHI и заработайте 5% годовых (0,05% от всех обменов из всех цепочек)"
 
-#: src/components/Back.tsx:28
+#: src/components/Back.tsx:23
 msgid "Go Back"
 msgstr ""
 
-#: src/pages/migrate.tsx:161
+#: src/pages/exchange/migrate/index.tsx:134
 msgid "Hardware Wallet"
 msgstr "Аппаратный кошелек"
 
@@ -552,14 +566,14 @@ msgstr "Аппаратный кошелек"
 #~ msgid "Harvest {0} SUSHI & {1} MATIC"
 #~ msgstr "Получить доходы {0} SUSHI & {1} MATIC"
 
-#: src/features/farm/FarmListItem.tsx:371
+#: src/features/farm/FarmListItem.tsx:264
 msgid "Harvest {0} SUSHI {1}"
 msgstr ""
 
 #~ msgid "Have Liquidity on {0}?"
 #~ msgstr "Есть ликвидность на {0}?"
 
-#: src/pages/lend/[pair].tsx:35
+#: src/pages/kashi/lend/[pair].tsx:124
 msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
 msgstr ""
 
@@ -570,7 +584,7 @@ msgstr ""
 #~ msgid "Have {0} Liquidity?"
 #~ msgstr ""
 
-#: src/pages/lend/[pair].tsx:105
+#: src/pages/kashi/lend/[pair].tsx:174
 msgid "Health"
 msgstr "Здоровье"
 
@@ -586,11 +600,15 @@ msgstr "Здоровье"
 #~ msgid "Historical Total Locked: {0} SUSHI"
 #~ msgstr "Всего заблокировано исторически {0} SUSHI"
 
-#: src/components/NavigationTabs/index.tsx:71
+#: src/pages/kashi/create/index.tsx:344
+msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
+msgstr ""
+
+#: src/components/NavigationTabs/index.tsx:32
 msgid "Import Pool"
 msgstr "Импортировать пул"
 
-#: src/pages/pool.tsx:118
+#: src/pages/exchange/pool/index.tsx:127
 msgid "Import Pool Manually"
 msgstr ""
 
@@ -608,36 +626,34 @@ msgstr ""
 #~ msgid "Instruments"
 #~ msgstr "Инструменты"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:67
-#: src/pages/migrate.tsx:264
-#: src/pages/stake.tsx:414
+#: src/pages/bar/index.tsx:357
+#: src/pages/exchange/migrate/index.tsx:212
 msgid "Insufficient Balance"
 msgstr "Недостаточный остаток"
 
 #: src/hooks/useWrapCallback.ts:112
-msgid "Insufficient WETH balance"
-msgstr "Недостаточный остаток WETH"
+#~ msgid "Insufficient WETH balance"
+#~ msgstr "Недостаточный остаток WETH"
 
-#: src/pages/swap/[[...tokens]].tsx:663
+#: src/pages/exchange/swap/[[...tokens]].tsx:631
 msgid "Insufficient liquidity for this trade"
 msgstr "Недостаточная ликвидность для этой сделки"
 
-#: src/hooks/useWrapCallback.ts:80
-#: src/state/mint/hooks.ts:259
-#: src/state/mint/hooks.ts:270
-#: src/state/swap/hooks.ts:225
+#: src/state/mint/hooks.ts:208
+#: src/state/mint/hooks.ts:212
+#: src/state/swap/hooks.ts:198
 msgid "Insufficient {0} balance"
 msgstr "Недостаточный остаток {0}"
 
-#: src/components/Settings/index.tsx:108
+#: src/components/Settings/index.tsx:104
 msgid "Interface Settings"
 msgstr "Настройки интерфейса"
 
-#: src/state/mint/hooks.ts:242
+#: src/state/mint/hooks.ts:198
 msgid "Invalid pair"
 msgstr "Недействительная пара"
 
-#: src/state/swap/hooks.ts:206
+#: src/state/swap/hooks.ts:188
 msgid "Invalid recipient"
 msgstr "Недействительный получатель"
 
@@ -656,16 +672,16 @@ msgstr "Присоединяйтесь к сообществу на Discord."
 #~ msgid "Keys Burned: 2022.03.04 at 22:05"
 #~ msgstr "Ключи сожжены: 2022.03.04 в 22:05"
 
-#: src/components/WalletModal/index.tsx:358
+#: src/components/WalletModal/index.tsx:328
 msgid "Learn more about wallets"
 msgstr ""
 
-#: src/components/Header/index.tsx:98
-#: src/components/Header/index.tsx:393
+#: src/components/Header/index.tsx:86
+#: src/components/Header/index.tsx:339
 msgid "Lend"
 msgstr "Предоставить кредит"
 
-#: src/pages/lend/[pair].tsx:33
+#: src/pages/kashi/lend/[pair].tsx:122
 msgid "Lend assets for interest from borrowers."
 msgstr "Давайте активы в кредит под проценты от заемщиков."
 
@@ -684,23 +700,23 @@ msgstr "Давайте активы в кредит под проценты от
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Лимит <0>Используется</0>"
 
-#~ msgid "Liquidity"
-#~ msgstr "Ликвидность"
+#: src/components/ExchangeHeader.tsx:52
+msgid "Liquidity"
+msgstr "Ликвидность"
 
-#: src/pages/transactions.tsx:109
+#: src/pages/transactions.tsx:93
 msgid "Liquidity Positions"
 msgstr "Позиции ликвидности"
 
-#: src/features/swap/AdvancedSwapDetails.tsx:84
-#: src/features/swap/SwapModalFooter.tsx:99
+#: src/features/swap/AdvancedSwapDetails.tsx:76
 msgid "Liquidity Provider Fee"
 msgstr "Комиссия поставщика ликвидности"
 
-#: src/pages/pool.tsx:104
+#: src/pages/exchange/pool/index.tsx:113
 msgid "Liquidity Provider Rewards"
 msgstr "Вознаграждения поставщика ликвидности"
 
-#: src/pages/pool.tsx:105
+#: src/pages/exchange/pool/index.tsx:114
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -717,46 +733,37 @@ msgstr ""
 msgid "Lists"
 msgstr "Списки"
 
-#: src/components/PositionCard/index.tsx:244
-#: src/pages/migrate.tsx:267
-#: src/pages/pool.tsx:141
-#: src/pages/transactions.tsx:73
+#: src/pages/exchange/migrate/index.tsx:214
+#: src/pages/exchange/pool/index.tsx:146
+#: src/pages/transactions.tsx:64
 msgid "Loading"
 msgstr "Загрузка"
 
-#: src/pages/migrate.tsx:408
+#: src/pages/exchange/migrate/index.tsx:323
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Загрузка ваших позиций ликвидности {exchange}"
 
-#: src/pages/stake.tsx:265
+#: src/pages/bar/index.tsx:232
 msgid "Loading..."
 msgstr "Загрузка..."
 
-#: src/pages/borrow/[pair].tsx:116
+#: src/pages/kashi/borrow/[pair].tsx:203
 msgid "Loan to Value"
 msgstr "Кредит до стоимости"
 
-#: src/features/farm/FarmListItem.tsx:193
-#: src/features/farm/FarmListItem.tsx:269
-#: src/pages/balances.tsx:213
-#: src/pages/balances.tsx:297
-#: src/pages/migrate.tsx:96
-#: src/pages/stake.tsx:376
+#: src/features/farm/FarmListItem.tsx:163
+#: src/features/farm/FarmListItem.tsx:220
+#: src/pages/balances.tsx:193
+#: src/pages/balances.tsx:257
+#: src/pages/bar/index.tsx:320
+#: src/pages/exchange/migrate/index.tsx:85
 msgid "MAX"
 msgstr "МАКСИМУМ"
 
-#: src/pages/tools/meowshi.tsx:163
-msgid ""
-"MEOW tokens wrap xSUSHI into BentoBox for double yields and can be\n"
-"used to vote in special MEOW governor contracts."
-msgstr ""
-
-#: src/components/Settings/index.tsx:160
+#: src/components/Settings/index.tsx:148
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
-#: src/components/PositionCard/index.tsx:251
-#: src/components/SearchModal/CurrencySearch.tsx:250
 #: src/components/SearchModal/Manage.tsx:44
 msgid "Manage"
 msgstr "Управлять"
@@ -764,11 +771,15 @@ msgstr "Управлять"
 #~ msgid "Manage Liquidity in Rewards Pool"
 #~ msgstr "Управлять ликвидностью в пуле вознаграждений"
 
+#: src/components/SearchModal/CurrencySearch.tsx:218
+msgid "Manage Token Lists"
+msgstr ""
+
 #~ msgid "Manage this pool"
 #~ msgstr "Управлять этим пулом"
 
-#: src/pages/borrow/[pair].tsx:70
-#: src/pages/lend/[pair].tsx:44
+#: src/pages/kashi/borrow/[pair].tsx:174
+#: src/pages/kashi/lend/[pair].tsx:132
 msgid "Market Info"
 msgstr "Информация о рынке"
 
@@ -778,31 +789,33 @@ msgstr "Информация о рынке"
 #~ msgid "Markets"
 #~ msgstr "Рынки"
 
-#: src/components/Footer/index.tsx:54
+#: src/components/Footer/index.tsx:42
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:247
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:101
-msgid "Max"
-msgstr "Максимум"
+#: src/components/CurrencyInputPanel/index.tsx:250
+#~ msgid "Max"
+#~ msgstr "Максимум"
 
-#: src/pages/stake.tsx:202
+#: src/pages/bar/index.tsx:175
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Увеличьте доход, ставя SUSHI на xSUSHI"
 
-#: src/features/swap/AdvancedSwapDetails.tsx:47
-#: src/features/swap/SwapModalFooter.tsx:66
-msgid "Maximum sold"
-msgstr "Максимум продаж"
+#: src/features/swap/AdvancedSwapDetails.tsx:48
+msgid "Maximum sent"
+msgstr ""
 
-#: src/components/Header/index.tsx:71
-#: src/components/Header/index.tsx:364
-#: src/pages/migrate.tsx:308
+#: src/features/swap/AdvancedSwapDetails copy.tsx:64
+#~ msgid "Maximum sold"
+#~ msgstr "Максимум продаж"
+
+#: src/components/Header/index.tsx:66
+#: src/components/Header/index.tsx:316
+#: src/pages/exchange/migrate/index.tsx:243
 msgid "Migrate"
 msgstr "Перенести"
 
-#: src/pages/pool.tsx:131
+#: src/pages/exchange/pool/index.tsx:136
 msgid "Migrate From {0}"
 msgstr ""
 
@@ -813,7 +826,7 @@ msgstr ""
 #~ msgid "Migrate {0}"
 #~ msgstr ""
 
-#: src/pages/migrate.tsx:399
+#: src/pages/exchange/migrate/index.tsx:316
 msgid "Migrate {exchange} Liquidity"
 msgstr "Перенести ликвидность {exchange}"
 
@@ -821,21 +834,20 @@ msgstr "Перенести ликвидность {exchange}"
 #~ msgid "Migrate!"
 #~ msgstr ""
 
-#: src/pages/migrate.tsx:306
+#: src/pages/exchange/migrate/index.tsx:243
 msgid "Migrating"
 msgstr "Перенос"
 
-#: src/pages/migrate.tsx:156
+#: src/pages/exchange/migrate/index.tsx:130
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "Перенос осуществляется в один клик с помощью вашей подписи (разрешения)"
 
-#: src/features/swap/SwapModalFooter.tsx:112
+#: src/features/swap/AdvancedSwapDetails.tsx:97
 msgid "Miner Tip"
 msgstr ""
 
-#: src/features/lending/TradeReview.tsx:40
-#: src/features/swap/AdvancedSwapDetails.tsx:46
-#: src/features/swap/SwapModalFooter.tsx:65
+#: src/features/lending/TradeReview.tsx:45
+#: src/features/swap/AdvancedSwapDetails.tsx:48
 msgid "Minimum received"
 msgstr "Полученный минимум"
 
@@ -843,18 +855,18 @@ msgstr "Полученный минимум"
 #~ msgid "Missed the Auction?"
 #~ msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:81
-msgid "Network not supported yet"
+#: src/pages/me/index.tsx:23
+msgid "My SUSHI"
 msgstr ""
 
 #~ msgid "New network, new features"
 #~ msgstr "Новая сеть, новые возможности"
 
-#: src/components/WalletModal/index.tsx:356
+#: src/components/WalletModal/index.tsx:327
 msgid "New to Ethereum?"
 msgstr ""
 
-#: src/pages/migrate.tsx:347
+#: src/pages/exchange/migrate/index.tsx:271
 msgid "No Liquidity found"
 msgstr "Ликвидность не найдена"
 
@@ -865,11 +877,11 @@ msgstr "Ликвидность не найдена"
 #~ msgid "No liquidity found"
 #~ msgstr "Ликвидность не найдена"
 
-#: src/features/lending/TradeReview.tsx:101
+#: src/features/lending/TradeReview.tsx:94
 msgid "No liquidity found to do swap"
 msgstr "Ликвидность для обмена не обнаружена"
 
-#: src/pages/pool.tsx:162
+#: src/pages/exchange/pool/index.tsx:167
 msgid "No liquidity found."
 msgstr ""
 
@@ -879,27 +891,27 @@ msgstr ""
 #~ msgid "No pool found"
 #~ msgstr "Пул не найден"
 
-#: src/components/SearchModal/CurrencySearch.tsx:241
+#: src/components/SearchModal/CurrencySearch.tsx:213
 msgid "No results found"
 msgstr "Результаты не найдены"
 
-#: src/pages/migrate.tsx:154
+#: src/pages/exchange/migrate/index.tsx:129
 msgid "Non-hardware Wallet"
 msgstr "Неаппаратный кошелек"
 
-#: src/pages/borrow/[pair].tsx:130
-#: src/pages/lend/[pair].tsx:138
+#: src/pages/kashi/borrow/[pair].tsx:212
+#: src/pages/kashi/lend/[pair].tsx:196
 msgid "None"
 msgstr "Нет"
 
-#: src/components/Settings/index.tsx:192
+#: src/components/Settings/index.tsx:170
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ИСПОЛЬЗУЙТЕ ЭТОТ РЕЖИМ ТОЛЬКО, ЕСЛИ ЗНАЕТЕ, ЧТО ВЫ ДЕЛАЕТЕ."
 
 #~ msgid "One click SUSHI → xSUSHI → aXSUSHI"
 #~ msgstr "Один клик SUSHI → xSUSHI → aXSUSHI"
 
-#: src/components/Web3ReactManager/index.tsx:69
+#: src/components/Web3ReactManager/index.tsx:60
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Ой! Произошла неизвестная ошибка. Обновите страницу или перейдите в другой браузер или устройство"
 
@@ -908,17 +920,18 @@ msgstr "Ой! Произошла неизвестная ошибка. Обнов
 msgid "Open Source"
 msgstr "Открытый источник"
 
-#: src/components/Header/index.tsx:300
+#: src/components/Header/index.tsx:257
 msgid "Open main menu"
 msgstr "Открыть главное меню"
 
-#: src/pages/borrow/[pair].tsx:233
-#: src/pages/lend/[pair].tsx:117
+#: src/pages/kashi/borrow/[pair].tsx:84
+#: src/pages/kashi/lend/[pair].tsx:182
 msgid "Oracle"
 msgstr "Оракул"
 
-#~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
-#~ msgstr "Вывод оценен. Если цена изменится более чем на {0}%, транзакция будет отменена."
+#: src/pages/exchange/remove/[[...tokens]].tsx:604
+msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
+msgstr "Вывод оценен. Если цена изменится более чем на {0}%, транзакция будет отменена."
 
 #~ msgid "Output is estimated. You will receive at least <0>{0} {1}</0> or the transaction will revert."
 #~ msgstr "Вывод оценен. Вы получите не менее <0>{0} {1}</0>, или транзакция будет отменена."
@@ -926,24 +939,23 @@ msgstr "Оракул"
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Вывод будет отправлен на <0>{0}</0>"
 
-#: src/components/Web3Status/index.tsx:166
+#: src/components/Web3Status/index.tsx:120
 msgid "Pending"
 msgstr "В ожидании"
 
 #~ msgid "Pending Treasury Transfer"
 #~ msgstr "Перевод казначейства в ожидании"
 
-#: src/components/WalletModal/index.tsx:298
+#: src/components/WalletModal/index.tsx:272
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
-#: src/components/Settings/index.tsx:201
+#: src/components/Settings/index.tsx:176
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Введите слово «подтвердить», чтобы включить экспертный режим."
 
-#: src/components/ExchangeHeader.tsx:46
-#: src/components/Header/index.tsx:63
-#: src/components/Header/index.tsx:355
+#: src/components/Header/index.tsx:58
+#: src/components/Header/index.tsx:307
 #: src/features/farm/FarmList.tsx:21
 msgid "Pool"
 msgstr "Пул"
@@ -955,17 +967,17 @@ msgstr "Пул"
 #~ msgstr "Вознаграждения пула"
 
 #: src/components/PositionCard/index.tsx:113
-msgid "Pool Tokens"
-msgstr "Токены пула"
+#~ msgid "Pool Tokens"
+#~ msgstr "Токены пула"
 
 #: src/components/PositionCard/index.tsx:273
-msgid "Pool tokens in rewards pool"
-msgstr "Токены пула в пуле вознаграждений"
+#~ msgid "Pool tokens in rewards pool"
+#~ msgstr "Токены пула в пуле вознаграждений"
 
 #: src/components/PositionCard/index.tsx:282
 #: src/components/PositionCard/index.tsx:300
-msgid "Pooled {0}"
-msgstr "Объединено {0}"
+#~ msgid "Pooled {0}"
+#~ msgstr "Объединено {0}"
 
 #~ msgid "Positions"
 #~ msgstr "Позиции"
@@ -975,27 +987,27 @@ msgstr "Объединено {0}"
 #~ msgstr ""
 
 #: src/features/swap/SwapModalFooter.tsx:52
-msgid "Price"
-msgstr "Цена"
+#~ msgid "Price"
+#~ msgstr "Цена"
 
-#: src/features/lending/TradeReview.tsx:55
-#: src/features/swap/AdvancedSwapDetails.tsx:70
-#: src/features/swap/SwapModalFooter.tsx:87
+#: src/features/lending/TradeReview.tsx:59
+#: src/features/swap/AdvancedSwapDetails.tsx:66
 msgid "Price Impact"
 msgstr "Влияние на цену"
 
-#: src/pages/swap/[[...tokens]].tsx:719
+#: src/pages/exchange/swap/[[...tokens]].tsx:676
 msgid "Price Impact High"
 msgstr "Сильное влияние на цену"
 
-#: src/pages/swap/[[...tokens]].tsx:752
+#: src/pages/exchange/swap/[[...tokens]].tsx:705
 msgid "Price Impact Too High"
 msgstr "Слишком сильное влияние на цену"
 
 #~ msgid "Price Updated"
 #~ msgstr "Цена обновлена"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:31
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:29
+#: src/pages/exchange/remove/[[...tokens]].tsx:619
 msgid "Rates"
 msgstr "Тарифы"
 
@@ -1007,49 +1019,55 @@ msgstr "Тарифы"
 #~ msgstr "Прочитать контракт"
 
 #: src/components/PositionCard/index.tsx:363
-msgid "Remove"
-msgstr "Удалить"
+#~ msgid "Remove"
+#~ msgstr "Удалить"
 
-#: src/components/NavigationTabs/index.tsx:107
+#: src/components/NavigationTabs/index.tsx:69
 msgid "Remove Liquidity"
 msgstr "Удалить ликвидность"
 
-#: src/pages/swap/[[...tokens]].tsx:595
+#: src/pages/exchange/swap/[[...tokens]].tsx:567
 msgid "Remove send"
 msgstr "Удалить отправку"
 
-#~ msgid "Removing {0} {1} and {2} {3}"
-#~ msgstr "Удаление {0} {1} и {2} {3}"
+#: src/pages/exchange/remove/[[...tokens]].tsx:278
+#: src/pages/exchange/remove/[[...tokens]].tsx:278
+msgid "Remove {0} {1} and {2} {3}"
+msgstr ""
 
-#: src/pages/borrow/[pair].tsx:294
+#: src/pages/exchange/remove/[[...tokens]].tsx:658
+msgid "Removing {0} {1} and {2} {3}"
+msgstr "Удаление {0} {1} и {2} {3}"
+
+#: src/pages/kashi/borrow/[pair].tsx:130
 msgid "Repay"
 msgstr "Погасить"
 
 #~ msgid "Request Tool"
 #~ msgstr "Запросить инструмент"
 
-#: src/components/Settings/index.tsx:144
+#: src/components/Settings/index.tsx:137
 msgid "Restricts swaps to direct pairs only."
 msgstr "Ограничивает обмены только прямыми парами."
 
-#: src/features/farm/FarmList.tsx:46
+#: src/features/farm/FarmList.tsx:38
 msgid "Rewards"
 msgstr ""
 
-#: src/features/lending/TradeReview.tsx:86
-#: src/features/swap/AdvancedSwapDetails.tsx:127
+#: src/features/lending/TradeReview.tsx:82
+#: src/features/swap/AdvancedSwapDetails.tsx:39
 msgid "Route"
 msgstr "Маршрут"
 
-#: src/features/lending/TradeReview.tsx:89
-#: src/features/swap/AdvancedSwapDetails.tsx:131
+#: src/features/lending/TradeReview.tsx:84
+#: src/features/swap/AdvancedSwapDetails.tsx:40
 msgid "Routing through these tokens resulted in the best price for your trade."
 msgstr "Маршрутизация через эти токены привела к лучшей цене для вашей сделки."
 
 #~ msgid "SAAVE: Stack your yields in one transaction"
 #~ msgstr "SAAVE: получайте доход за одну транзакцию"
 
-#: src/pages/borrow/[pair].tsx:142
+#: src/pages/kashi/borrow/[pair].tsx:223
 msgid "SLP"
 msgstr ""
 
@@ -1065,53 +1083,58 @@ msgstr ""
 #~ msgid "Search by name, symbol, address"
 #~ msgstr "Поиск по имени, символу, адресу"
 
-#: src/components/SearchModal/CurrencySearch.tsx:184
+#: src/components/SearchModal/CurrencySearch.tsx:174
 msgid "Search name or paste address"
 msgstr "Найдите имя или вставьте адрес"
 
-#: src/components/CurrencyInputPanel/index.tsx:206
-#: src/components/CurrencySelectPanel/index.tsx:101
-#: src/state/swap/hooks.ts:194
+#: src/components/CurrencySelectPanel/index.tsx:95
+#: src/state/swap/hooks.ts:176
 msgid "Select a token"
 msgstr "Выберите токен"
 
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "Выберите токен, чтобы узнать свою ликвидность"
 
-#: src/components/Settings/index.tsx:164
+#: src/components/Settings/index.tsx:152
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
 msgstr ""
 
 #~ msgid "Share of Pool"
 #~ msgstr "Доля пула"
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:80
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:61
 msgid "Share of Pool:"
 msgstr "Доля пула:"
 
-#: src/pages/swap/[[...tokens]].tsx:620
-msgid "Slippage Tolerance"
-msgstr "Допуск по проскальзыванию"
+#: src/pages/swap/[[...tokens]].tsx:618
+#~ msgid "Slippage Tolerance"
+#~ msgstr "Допуск по проскальзыванию"
 
-#: src/components/TransactionSettings/index.tsx:161
+#: src/components/TransactionSettings/index.tsx:163
+#: src/features/swap/AdvancedSwapDetails.tsx:88
 msgid "Slippage tolerance"
 msgstr "Допуск по проскальзыванию"
 
-#: src/features/lending/Button.tsx:41
+#: src/features/swap/AdvancedSwapDetails.tsx:89
+#: src/features/swap/AdvancedSwapDetails.tsx:98
+msgid "Slippage tolerance..."
+msgstr ""
+
+#: src/features/lending/Button.tsx:28
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Что-то пошло не так при подписании разрешения. Это ожидается для аппаратных кошельков, таких как Trezor и Ledger. Щелкните еще раз, и будет использован резервный метод"
 
 #~ msgid "Stack Yields with SAAVE"
 #~ msgstr "Суммируйте доходность с помощью SAAVE"
 
-#: src/components/Header/index.tsx:126
-#: src/components/Header/index.tsx:413
-#: src/features/farm/FarmListItem.tsx:236
+#: src/components/Header/index.tsx:113
+#: src/components/Header/index.tsx:359
+#: src/features/farm/FarmListItem.tsx:190
 msgid "Stake"
 msgstr "Сделать ставку"
 
-#: src/pages/stake.tsx:292
-#: src/pages/stake.tsx:315
+#: src/pages/bar/index.tsx:252
+#: src/pages/bar/index.tsx:270
 msgid "Stake SUSHI"
 msgstr "Ставка SUSHI"
 
@@ -1141,15 +1164,15 @@ msgstr "Ставка SUSHI"
 #~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.Continuously compounding."
 #~ msgstr "Ставьте свои SUSHI в xSUSHI за ~ 5% годовых. Без временных потерь, без потери прав на управление. Постоянный сложный процент."
 
-#: src/pages/stake.tsx:245
+#: src/pages/bar/index.tsx:212
 msgid "Staking APR"
 msgstr "Ставка годовых"
 
 #~ msgid "Submit Tool"
 #~ msgstr "Отправить инструмент"
 
-#: src/pages/borrow/[pair].tsx:96
-#: src/pages/lend/[pair].tsx:73
+#: src/pages/kashi/borrow/[pair].tsx:191
+#: src/pages/kashi/lend/[pair].tsx:153
 msgid "Supply APR"
 msgstr "Поставка годовой процентной ставки"
 
@@ -1170,37 +1193,36 @@ msgstr "Sushi поддерживает Open Source."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Заставьте SUSHI работать на вас"
 
-#: src/pages/swap/[[...tokens]].tsx:461
+#: src/pages/exchange/swap/[[...tokens]].tsx:449
 msgid "SushiSwap"
 msgstr ""
 
-#: src/components/ExchangeHeader.tsx:36
-#: src/components/Header/index.tsx:55
-#: src/components/Header/index.tsx:347
-#: src/pages/swap/[[...tokens]].tsx:722
-#: src/pages/swap/[[...tokens]].tsx:755
+#: src/components/ExchangeHeader.tsx:42
+#: src/components/Header/index.tsx:50
+#: src/components/Header/index.tsx:299
+#: src/pages/exchange/swap/[[...tokens]].tsx:679
+#: src/pages/exchange/swap/[[...tokens]].tsx:708
 msgid "Swap"
 msgstr "Обменять"
 
-#: src/features/swap/SwapModalFooter.tsx:127
-#: src/pages/swap/[[...tokens]].tsx:721
-#: src/pages/swap/[[...tokens]].tsx:754
+#: src/pages/exchange/swap/[[...tokens]].tsx:678
+#: src/pages/exchange/swap/[[...tokens]].tsx:707
 msgid "Swap Anyway"
 msgstr "Обменять в любом случае"
 
-#: src/pages/swap/[[...tokens]].tsx:499
+#: src/pages/exchange/swap/[[...tokens]].tsx:489
 msgid "Swap From (est.):"
 msgstr "Обменять с (прибл.):"
 
-#: src/pages/swap/[[...tokens]].tsx:500
+#: src/pages/exchange/swap/[[...tokens]].tsx:489
 msgid "Swap From:"
 msgstr "Обменять с:"
 
-#: src/pages/swap/[[...tokens]].tsx:568
+#: src/pages/exchange/swap/[[...tokens]].tsx:536
 msgid "Swap To (est.):"
 msgstr "Обменять на (прибл.):"
 
-#: src/pages/swap/[[...tokens]].tsx:569
+#: src/pages/exchange/swap/[[...tokens]].tsx:536
 msgid "Swap To:"
 msgstr "Обменять на:"
 
@@ -1208,32 +1230,52 @@ msgstr "Обменять на:"
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr ""
 
-#: src/features/farm/FarmList.tsx:35
+#: src/features/farm/FarmList.tsx:31
 msgid "TVL"
 msgstr "TVL"
 
-#: src/features/lending/TradeReview.tsx:58
-#: src/features/swap/AdvancedSwapDetails.tsx:74
+#: src/hooks/useSwapCallback.ts:144
+msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
+msgstr ""
+
+#: src/features/lending/TradeReview.tsx:61
+#: src/features/swap/AdvancedSwapDetails.tsx:68
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "Разница между рыночной ценой и оценочной ценой из-за размера сделки."
 
 #: src/features/swap/SwapModalFooter.tsx:90
-msgid "The difference between the market price and your price due to trade size."
-msgstr "Разница между рыночной ценой и вашей ценой из-за размера сделки."
+#~ msgid "The difference between the market price and your price due to trade size."
+#~ msgstr "Разница между рыночной ценой и вашей ценой из-за размера сделки."
+
+#: src/hooks/useSwapCallback.ts:140
+msgid "The input token cannot be transferred. There may be an issue with the input token."
+msgstr ""
 
 #~ msgid "The onchain oracle that tracks the pricing for this pair"
 #~ msgstr "Ончейн-оракул, отслеживающий цены на эту пару"
 
+#: src/hooks/useSwapCallback.ts:142
+#: src/hooks/useSwapCallback.ts:150
+msgid "The output token cannot be transferred. There may be an issue with the output token."
+msgstr ""
+
 #: src/hooks/useSwapCallback.ts:253
 #: src/hooks/useSwapCallback.ts:253
-msgid "The transaction cannot succeed due to error: {0}. This is probably an issue with one of the tokens you are swapping."
-msgstr "Транзакция не может быть успешной из-за ошибки: {0}. Вероятно, это проблема с одним из токенов, которые вы обмениваете."
+#~ msgid "The transaction cannot succeed due to error: {0}. This is probably an issue with one of the tokens you are swapping."
+#~ msgstr "Транзакция не может быть успешной из-за ошибки: {0}. Вероятно, это проблема с одним из токенов, которые вы обмениваете."
+
+#: src/hooks/useSwapCallback.ts:135
+msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
+msgstr ""
 
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "Что вы можете делать со своими SUSHI"
 
-#: src/hooks/useSwapCallback.ts:248
-#: src/hooks/useSwapCallback.ts:248
+#: src/hooks/useSwapCallback.ts:148
+msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
+msgstr ""
+
+#: src/hooks/useSwapCallback.ts:138
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "Эта транзакция не будет успешной из-за движения цены или комиссии за перевод. Попробуйте повысить устойчивость к проскальзыванию."
 
@@ -1246,17 +1288,23 @@ msgstr "Эта транзакция не будет успешной из-за �
 #~ msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
 #~ msgstr "Чтобы вывести в SUSHI, перейдите в Aave и удалите axSUSHI в качестве залога, а затем в SushiBar для отмены ставки. Вскоре будет доступен полный вывод."
 
-#: src/components/Settings/index.tsx:114
+#: src/components/Settings/index.tsx:110
 msgid "Toggle Expert Mode"
 msgstr "Переключить экспертный режим"
 
-#: src/pages/balances.tsx:79
+#: src/pages/balances.tsx:65
 msgid "Token"
 msgstr "Токен"
 
 #: src/components/SearchModal/Manage.tsx:64
 msgid "Tokens"
 msgstr "Токены"
+
+#: src/components/SearchModal/CurrencyList.tsx:166
+msgid ""
+"Tokens from inactive lists. Import specific tokens below or\n"
+"click Manage to activate more lists."
+msgstr ""
 
 #: src/components/Header/More.tsx:28
 #: src/components/Menu.tsx:28
@@ -1268,76 +1316,72 @@ msgstr "Инструменты"
 msgid "Tools to optimize your workflow."
 msgstr "Инструменты для оптимизации вашего рабочего процесса."
 
-#: src/pages/lend/[pair].tsx:48
+#: src/pages/kashi/lend/[pair].tsx:135
 msgid "Total"
 msgstr "Итого"
 
 #~ msgid "Trade"
 #~ msgstr "Торговля"
 
-#: src/pages/transactions.tsx:114
+#: src/pages/transactions.tsx:97
 msgid "Transaction History"
 msgstr "История транзакций"
 
-#: src/components/Settings/index.tsx:97
+#: src/components/Settings/index.tsx:91
 msgid "Transaction Settings"
 msgstr "Настройки транзакции"
 
-#: src/components/TransactionConfirmationModal/index.tsx:67
+#: src/components/TransactionConfirmationModal/index.tsx:73
 msgid "Transaction Submitted"
 msgstr ""
 
-#: src/components/TransactionSettings/index.tsx:248
+#: src/components/TransactionSettings/index.tsx:233
 msgid "Transaction deadline"
 msgstr "Крайний срок транзакции"
 
-#: src/pages/transactions.tsx:40
+#: src/pages/transactions.tsx:36
 msgid "Transactions"
 msgstr "Сделки"
 
-#: src/pages/swap/[[...tokens]].tsx:667
+#: src/pages/exchange/swap/[[...tokens]].tsx:632
 msgid "Try enabling multi-hop trades"
 msgstr "Попробуйте включить многоскачковые сделки"
 
-#: src/components/Settings/index.tsx:211
+#: src/components/Settings/index.tsx:183
 msgid "Turn On Expert Mode"
 msgstr "Включите экспертный режим"
 
 #~ msgid "Unknown error"
 #~ msgstr "Неизвестная ошибка"
 
-#: src/features/farm/FarmListItem.tsx:299
-#: src/pages/stake.tsx:307
-#: src/pages/stake.tsx:316
+#: src/hooks/useSwapCallback.ts:156
+msgid "Unknown error{0}. Try increasing your slippage tolerance."
+msgstr ""
+
+#: src/features/farm/FarmListItem.tsx:243
+#: src/pages/bar/index.tsx:263
+#: src/pages/bar/index.tsx:270
 msgid "Unstake"
 msgstr "Отменить ставку"
 
-#: src/pages/stake.tsx:452
+#: src/pages/bar/index.tsx:393
 msgid "Unstaked"
 msgstr "Без ставки"
 
-#: src/pages/swap/[[...tokens]].tsx:642
+#: src/pages/exchange/swap/[[...tokens]].tsx:616
 msgid "Unsupported Asset"
 msgstr "Неподдерживаемый актив"
 
-#: src/pages/swap/[[...tokens]].tsx:657
+#: src/pages/exchange/swap/[[...tokens]].tsx:626
 msgid "Unwrap"
 msgstr "Развернуть"
 
-#: src/hooks/useWrapCallback.ts:99
-msgid "Unwrap {0} W{1} to {2}"
-msgstr "Развернуть {0} W {1} на {2}"
-
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:74
-msgid "Use SUSHI"
-msgstr ""
+#: src/hooks/useWrapCallback.ts:100
+#~ msgid "Unwrap {0} W{1} to {2}"
+#~ msgstr "Развернуть {0} W {1} на {2}"
 
 #~ msgid "Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned."
 #~ msgstr "Используйте любой инструмент ниже, чтобы оптимизировать свой рабочий процесс. Обратите внимание, что некоторые инструменты являются экспериментальными, поэтому используйте их с осторожностью. Если для инструмента задействован смарт-контракт, прочтите код и подтвердите, что ключи были сожжены."
-
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:73
-msgid "Use xSUSHI"
-msgstr ""
 
 #~ msgid "V2 Rewarder"
 #~ msgstr "V2 Rewarder"
@@ -1349,7 +1393,7 @@ msgstr "Передача прав на ценные бумаги"
 #~ msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
 #~ msgstr "Передача выполняется в соответствии с рекомендациями, выбранными сообществом в <0>SIMP3</0>.<1/><2/>Пожалуйста, обратитесь к <3>обсуждению на форуме</3> для обсуждения дополнительных вопросов.<4/><5/>Дополнительные записи и еженедельные обновления Меркла можно найти на <6>Github</6>"
 
-#: src/pages/stake.tsx:259
+#: src/pages/bar/index.tsx:226
 msgid "View Stats"
 msgstr "Посмотреть статистику"
 
@@ -1359,30 +1403,31 @@ msgstr "Посмотреть статистику"
 #~ msgid "View Your Liquidity Positions"
 #~ msgstr "Просмотрите свои позиции по ликвидности"
 
-#~ msgid "View Your Liquidity Positions >"
-#~ msgstr "Просмотрите свои позиции по ликвидности"
+#: src/pages/exchange/remove/[[...tokens]].tsx:723
+msgid "View Your Liquidity Positions >"
+msgstr "Просмотрите свои позиции по ликвидности"
 
-#: src/pages/transactions.tsx:96
+#: src/pages/transactions.tsx:82
 msgid "View on explorer"
 msgstr "Посмотреть в проводнике"
 
-#: src/features/swap/AdvancedSwapDetails.tsx:157
-msgid "View pair analytics"
-msgstr "Посмотреть аналитику пар"
+#: src/features/swap/AdvancedSwapDetails copy.tsx:169
+#~ msgid "View pair analytics"
+#~ msgstr "Посмотреть аналитику пар"
 
 #~ msgid "View your SushiBar Portfolio"
 #~ msgstr "Посмотреть свое портфолио SushiBar"
 
-#: src/components/TransactionConfirmationModal/index.tsx:35
+#: src/components/TransactionConfirmationModal/index.tsx:39
 msgid "Waiting for Confirmation"
 msgstr ""
 
-#: src/pages/balances.tsx:80
+#: src/pages/balances.tsx:66
 msgid "Wallet"
 msgstr "Кошелек"
 
-#: src/features/farm/FarmListItem.tsx:167
-#: src/pages/balances.tsx:191
+#: src/features/farm/FarmListItem.tsx:140
+#: src/pages/balances.tsx:172
 msgid "Wallet Balance"
 msgstr "Баланс Кошелька"
 
@@ -1396,22 +1441,22 @@ msgstr ""
 #~ msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 #~ msgstr "Создавая пару, вы являетесь первым поставщиком ликвидности. Соотношение добавляемых вами токенов будет определять цену этого пула. Как только вы будете довольны ставкой, нажмите «поставка», чтобы просмотреть"
 
-#: src/pages/balances.tsx:312
+#: src/pages/balances.tsx:270
 msgid "Withdraw"
 msgstr "Снять"
 
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "Вывести {assetSymbol}"
 
-#: src/pages/swap/[[...tokens]].tsx:655
+#: src/pages/exchange/swap/[[...tokens]].tsx:624
 msgid "Wrap"
 msgstr "Завернуть"
 
-#: src/components/WalletModal/index.tsx:292
+#: src/components/WalletModal/index.tsx:268
 msgid "Wrong Network"
 msgstr "Неправильная сеть"
 
-#: src/pages/stake.tsx:268
+#: src/pages/bar/index.tsx:235
 msgid "Yesterday's APR"
 msgstr "Вчерашняя годовая процентная ставка"
 
@@ -1432,28 +1477,29 @@ msgstr "Вчерашняя годовая процентная ставка"
 #~ msgid "You are creating a pool"
 #~ msgstr "Вы создаете пул"
 
-#: src/components/Web3Connect/index.tsx:34
+#: src/components/Web3Connect/index.tsx:28
 msgid "You are on the wrong network"
 msgstr "Вы не в той сети"
 
 #~ msgid "You don’t have liquidity in this pool yet"
 #~ msgstr "У вас еще нет ликвидности в этом пуле"
 
-#: src/pages/migrate.tsx:163
+#: src/pages/exchange/migrate/index.tsx:135
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Вам необходимо сначала утвердить токены LP, а затем перенести их"
 
-#~ msgid "You will receive"
-#~ msgstr "Вы получите"
+#: src/pages/exchange/remove/[[...tokens]].tsx:742
+msgid "You will receive"
+msgstr "Вы получите"
 
 #~ msgid "Your Claimable SUSHI this Week"
 #~ msgstr "SUSHI, которые вы можете запросить на этой неделе"
 
-#: src/pages/migrate.tsx:420
+#: src/pages/exchange/migrate/index.tsx:331
 msgid "Your Liquidity"
 msgstr "Ваша ликвидность"
 
-#: src/pages/pool.tsx:98
+#: src/pages/exchange/pool/index.tsx:107
 msgid "Your Liquidity Positions"
 msgstr "Ваши позиции по ликвидности"
 
@@ -1463,11 +1509,11 @@ msgstr "Ваши позиции по ликвидности"
 #~ msgid "Your Pool Tokens"
 #~ msgstr "Токены вашего пула"
 
-#: src/features/farm/FarmListItem.tsx:243
+#: src/features/farm/FarmListItem.tsx:197
 msgid "Your Staked"
 msgstr "Ваша ставка"
 
-#: src/pages/stake.tsx:496
+#: src/pages/bar/index.tsx:437
 msgid "Your SushiBar Stats"
 msgstr "Статистика вашего SushiBar"
 
@@ -1478,7 +1524,7 @@ msgstr "Статистика вашего SushiBar"
 msgid "Your Transaction History on {0}"
 msgstr "Ваша история транзакций на {0}"
 
-#: src/pages/migrate.tsx:414
+#: src/pages/exchange/migrate/index.tsx:327
 msgid "Your Wallet"
 msgstr "Ваш кошелек"
 
@@ -1487,40 +1533,39 @@ msgstr "Ваш кошелек"
 
 #: src/components/PositionCard/index.tsx:118
 #: src/components/PositionCard/index.tsx:317
-msgid "Your pool share"
-msgstr "Ваша доля в пуле"
+#~ msgid "Your pool share"
+#~ msgstr "Ваша доля в пуле"
 
 #: src/components/PositionCard/index.tsx:264
-msgid "Your total pool tokens"
-msgstr "Всего ваших токенов пула"
+#~ msgid "Your total pool tokens"
+#~ msgstr "Всего ваших токенов пула"
 
-#: src/components/TransactionSettings/index.tsx:239
+#: src/components/TransactionSettings/index.tsx:224
 msgid "Your transaction may be frontrun"
 msgstr "Ваша транзакция может быть авансированной"
 
-#: src/components/TransactionSettings/index.tsx:238
+#: src/components/TransactionSettings/index.tsx:223
 msgid "Your transaction may fail"
 msgstr "Ваша транзакция может завершиться неудачно"
 
-#: src/components/TransactionSettings/index.tsx:253
+#: src/components/TransactionSettings/index.tsx:236
 msgid "Your transaction will revert if it is pending for more than this long."
 msgstr "Ваша транзакция будет отменена, если она ожидает более этого времени."
 
-#: src/components/TransactionSettings/index.tsx:166
+#: src/components/TransactionSettings/index.tsx:168
 msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
 msgstr "Ваша транзакция будет отменена, если цена изменится в неблагоприятную сторону более, чем на этот процент."
 
-#: src/features/lending/TradeReview.tsx:43
-#: src/features/swap/AdvancedSwapDetails.tsx:51
-#: src/features/swap/SwapModalFooter.tsx:69
+#: src/features/lending/TradeReview.tsx:48
+#: src/features/swap/AdvancedSwapDetails.tsx:52
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "Ваша транзакция будет отменена, если произойдет значительное неблагоприятное изменение цены до ее подтверждения."
 
-#: src/pages/migrate.tsx:319
+#: src/pages/exchange/migrate/index.tsx:251
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "Ваша ликвидность {exchange} {0}/{1} станет ликвидностью SushiSwap {2}/{3}."
 
-#: src/pages/zap.tsx:282
+#: src/pages/zap.tsx:263
 msgid "Zap"
 msgstr ""
 
@@ -1528,7 +1573,7 @@ msgstr ""
 #~ msgstr "за год"
 
 #: src/components/Gas/index.tsx:14
-#: src/pages/transactions.tsx:34
+#: src/pages/transactions.tsx:30
 msgid "failed to load"
 msgstr "не удалось загрузить"
 
@@ -1536,11 +1581,11 @@ msgstr "не удалось загрузить"
 #~ msgstr "импортировать"
 
 #: src/components/Gas/index.tsx:15
-#: src/pages/transactions.tsx:35
+#: src/pages/transactions.tsx:31
 msgid "loading..."
 msgstr "загрузка..."
 
-#: src/components/TransactionSettings/index.tsx:275
+#: src/components/TransactionSettings/index.tsx:257
 msgid "minutes"
 msgstr "минут"
 
@@ -1560,15 +1605,19 @@ msgstr "минут"
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI автоматически получает комиссию (0,05% от всех обменов, включая обмены между разными цепочками) пропорционально вашей доле в SushiBar."
 
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:55
-#: src/features/liquidity/ConfirmAddModalBottom.tsx:68
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:47
+#: src/features/liquidity/ConfirmAddModalBottom.tsx:54
 msgid "{0} Deposited"
 msgstr "Внесено {0}"
 
-#: src/pages/borrow/[pair].tsx:127
-#: src/pages/lend/[pair].tsx:135
+#: src/pages/kashi/borrow/[pair].tsx:210
+#: src/pages/kashi/lend/[pair].tsx:194
 msgid "{0} Strategy"
 msgstr "Стратегия {0}"
 
 #~ msgid "{0} per {1}"
 #~ msgstr "{0} за {1}"
+
+#: src/pages/exchange/remove/[[...tokens]].tsx:639
+msgid "{0}/{1} Burned"
+msgstr ""

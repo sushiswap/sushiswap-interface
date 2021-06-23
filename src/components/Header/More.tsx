@@ -1,49 +1,49 @@
-import { Popover, Transition } from "@headlessui/react";
-import React, { Fragment } from "react";
+import { Popover, Transition } from '@headlessui/react'
+import React, { Fragment } from 'react'
 
-import ExternalLink from "../ExternalLink";
-import { I18n } from "@lingui/core";
-import Image from "next/image";
-import { classNames } from "../../functions/styling";
-import { t } from "@lingui/macro";
-import { useLingui } from "@lingui/react";
+import ExternalLink from '../ExternalLink'
+import { I18n } from '@lingui/core'
+import Image from 'next/image'
+import { classNames } from '../../functions/styling'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const items = (i18n: I18n) => [
   {
     name: i18n._(t`Docs`),
     description: i18n._(t`Documentation for users of Sushi.`),
-    href: "https://docs.sushi.com",
+    href: 'https://docs.sushi.com',
   },
   {
     name: i18n._(t`Dev`),
     description: i18n._(t`Documentation for developers of Sushi.`),
-    href: "https://dev.sushi.com",
+    href: 'https://dev.sushi.com',
   },
   {
     name: i18n._(t`Open Source`),
     description: i18n._(t`Sushi is a supporter of Open Source.`),
-    href: "https://github.com/sushiswap",
+    href: 'https://github.com/sushiswap',
   },
   {
     name: i18n._(t`Tools`),
     description: i18n._(t`Tools to optimize your workflow.`),
-    href: "/tools",
+    href: '/tools',
   },
   {
     name: i18n._(t`Discord`),
     description: i18n._(t`Join the community on Discord.`),
-    href: "https://discord.gg/NVPXN4e",
+    href: 'https://discord.gg/NVPXN4e',
   },
   {
     name: i18n._(t`Vesting`),
     description: i18n._(t`Weekly unlocks from the vesting period.`),
-    href: "/vesting",
+    href: '/vesting',
   },
-];
+]
 
 export default function Menu() {
-  const { i18n } = useLingui();
-  const solutions = items(i18n);
+  const { i18n } = useLingui()
+  const solutions = items(i18n)
 
   return (
     <Popover className="relative ml-auto md:m-0">
@@ -51,8 +51,8 @@ export default function Menu() {
         <>
           <Popover.Button
             className={classNames(
-              open ? "text-primary" : "text-secondary",
-              "focus:outline-none hover:text-high-emphesis"
+              open ? 'text-primary' : 'text-secondary',
+              'focus:outline-none hover:text-high-emphesis'
             )}
           >
             <svg
@@ -109,12 +109,8 @@ export default function Menu() {
                       href={item.href}
                       className="block p-3 -m-3 transition duration-150 ease-in-out rounded-md hover:bg-dark-800"
                     >
-                      <p className="text-base font-medium text-high-emphesis">
-                        {item.name}
-                      </p>
-                      <p className="mt-1 text-sm text-secondary">
-                        {item.description}
-                      </p>
+                      <p className="text-base font-medium text-high-emphesis">{item.name}</p>
+                      <p className="mt-1 text-sm text-secondary">{item.description}</p>
                     </ExternalLink>
                   ))}
                 </div>
@@ -124,5 +120,5 @@ export default function Menu() {
         </>
       )}
     </Popover>
-  );
+  )
 }

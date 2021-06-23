@@ -1,49 +1,41 @@
-import React, { FunctionComponent } from "react";
+import React from 'react'
 
-import { classNames } from "../../functions";
+import { classNames } from '../../functions'
 
-export type TypographyWeight = 400 | 700;
+export type TypographyWeight = 400 | 700
 
 const WEIGHTS = {
-  400: "font-medium",
-  700: "font-bold",
-};
+  400: 'font-medium',
+  700: 'font-bold',
+}
 
-export type TypographyVariant =
-  | "hero"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "lg"
-  | "base"
-  | "sm"
-  | "xs";
+export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 'sm' | 'xs'
 
 const VARIANTS = {
-  hero: "text-hero",
-  h1: "text-4xl",
-  h2: "text-3xl",
-  h3: "text-2xl",
-  lg: "text-lg",
-  base: "text-base",
-  sm: "text-sm",
-  xs: "text-xs",
-};
+  hero: 'text-hero',
+  h1: 'text-4xl',
+  h2: 'text-3xl',
+  h3: 'text-2xl',
+  lg: 'text-lg',
+  base: 'text-base',
+  sm: 'text-sm',
+  xs: 'text-xs',
+}
 
 export interface TypographyProps {
-  variant?: TypographyVariant;
-  weight?: TypographyWeight;
-  component?: keyof React.ReactHTML;
-  className?: string;
+  variant?: TypographyVariant
+  weight?: TypographyWeight
+  component?: keyof React.ReactHTML
+  className?: string
   // children?: React.ReactNode | React.ReactNode[]
-  clickable?: boolean;
+  clickable?: boolean
 }
 
 function Typography({
-  variant = "base",
+  variant = 'base',
   weight = 400,
-  component = "div",
-  className = "text-primary",
+  component = 'div',
+  className = 'currentColor',
   clickable = false,
   children = [],
   onClick = undefined,
@@ -52,17 +44,12 @@ function Typography({
   return React.createElement(
     component,
     {
-      className: classNames(
-        VARIANTS[variant],
-        WEIGHTS[weight],
-        onClick ? "cursor-pointer select-none" : "",
-        className
-      ),
+      className: classNames(VARIANTS[variant], WEIGHTS[weight], onClick ? 'cursor-pointer select-none' : '', className),
       onClick,
       ...rest,
     },
     children
-  );
+  )
 }
 
-export default Typography;
+export default Typography

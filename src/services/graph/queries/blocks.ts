@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 const blockFieldsQuery = gql`
   fragment blockFields on Block {
@@ -6,29 +6,19 @@ const blockFieldsQuery = gql`
     number
     timestamp
   }
-`;
+`
 
 export const blockQuery = gql`
   query blockQuery($start: Int!, $end: Int!) {
-    blocks(
-      first: 1
-      orderBy: timestamp
-      orderDirection: asc
-      where: { timestamp_gt: $start, timestamp_lt: $end }
-    ) {
+    blocks(first: 1, orderBy: timestamp, orderDirection: asc, where: { timestamp_gt: $start, timestamp_lt: $end }) {
       ...blockFields
     }
   }
   ${blockFieldsQuery}
-`;
+`
 
 export const blocksQuery = gql`
-  query blocksQuery(
-    $first: Int! = 1000
-    $skip: Int! = 0
-    $start: Int!
-    $end: Int!
-  ) {
+  query blocksQuery($first: Int! = 1000, $skip: Int! = 0, $start: Int!, $end: Int!) {
     blocks(
       first: $first
       skip: $skip
@@ -40,4 +30,4 @@ export const blocksQuery = gql`
     }
   }
   ${blockFieldsQuery}
-`;
+`

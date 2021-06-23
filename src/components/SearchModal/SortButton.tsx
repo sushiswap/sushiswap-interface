@@ -1,6 +1,6 @@
-import React from "react";
-import { RowFixed } from "../Row";
-import styled from "styled-components";
+import React from 'react'
+import { RowFixed } from '../Row'
+import styled from 'styled-components'
 
 export const FilterWrapper = styled(RowFixed)`
   padding: 8px;
@@ -14,18 +14,18 @@ export const FilterWrapper = styled(RowFixed)`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 export default function SortButton({
   toggleSortOrder,
   ascending,
 }: {
-  toggleSortOrder: () => void;
-  ascending: boolean;
+  toggleSortOrder: () => void
+  ascending: boolean
 }) {
   return (
     <FilterWrapper onClick={toggleSortOrder} className="text-sm bg-dark-800">
-      {ascending ? "↑" : "↓"}
+      {ascending ? '↑' : '↓'}
     </FilterWrapper>
-  );
+  )
 }

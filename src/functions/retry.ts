@@ -1,11 +1,11 @@
 /* eslint-disable */
 
 function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 function waitRandom(min: number, max: number): Promise<void> {
-  return wait(min + Math.round(Math.random() * Math.max(0, max - min)));
+  return wait(min + Math.round(Math.random() * Math.max(0, max - min)))
 }
 
 /**
@@ -13,7 +13,7 @@ function waitRandom(min: number, max: number): Promise<void> {
  */
 export class CancelledError extends Error {
   constructor() {
-    super("Cancelled");
+    super('Cancelled')
   }
 }
 
@@ -33,39 +33,39 @@ export function retry<T>(
   fn: () => Promise<T>,
   { n, minWait, maxWait }: { n: number; minWait: number; maxWait: number }
 ): { promise: Promise<T>; cancel: () => void } {
-  let completed = false;
-  let rejectCancelled: (error: Error) => void;
+  let completed = false
+  let rejectCancelled: (error: Error) => void
   const promise = new Promise<T>(async (resolve, reject) => {
-    rejectCancelled = reject;
+    rejectCancelled = reject
     while (true) {
-      let result: T;
+      let result: T
       try {
-        result = await fn();
+        result = await fn()
         if (!completed) {
-          resolve(result);
-          completed = true;
+          resolve(result)
+          completed = true
         }
-        break;
+        break
       } catch (error) {
         if (completed) {
-          break;
+          break
         }
         if (n <= 0 || !(error instanceof RetryableError)) {
-          reject(error);
-          completed = true;
-          break;
+          reject(error)
+          completed = true
+          break
         }
-        n--;
+        n--
       }
-      await waitRandom(minWait, maxWait);
+      await waitRandom(minWait, maxWait)
     }
-  });
+  })
   return {
     promise,
     cancel: () => {
-      if (completed) return;
-      completed = true;
-      rejectCancelled(new CancelledError());
+      if (completed) return
+      completed = true
+      rejectCancelled(new CancelledError())
     },
-  };
+  }
 }

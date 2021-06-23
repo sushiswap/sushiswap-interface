@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from 'react'
 
-import { PopupContent } from "../../state/application/actions";
-import TransactionPopup from "./TransactionPopup";
-import { X } from "react-feather";
-import { animated } from "react-spring";
-import styled from "styled-components";
-import { useRemovePopup } from "../../state/application/hooks";
-import { useSpring } from "react-spring/web";
+import { PopupContent } from '../../state/application/actions'
+import TransactionPopup from './TransactionPopup'
+import { X } from 'react-feather'
+import { animated } from 'react-spring'
+import styled from 'styled-components'
+import { useRemovePopup } from '../../state/application/hooks'
+import { useSpring } from 'react-spring/web'
 
 export const StyledClose = styled(X)`
   position: absolute;
@@ -16,7 +16,7 @@ export const StyledClose = styled(X)`
   :hover {
     cursor: pointer;
   }
-`;
+`
 export const Popup = styled.div`
   display: inline-block;
   width: 100%;
@@ -34,7 +34,7 @@ export const Popup = styled.div`
       margin-right: 20px;
     }
   `}
-`;
+`
 const Fader = styled.div`
   position: absolute;
   bottom: 0px;
@@ -42,51 +42,46 @@ const Fader = styled.div`
   width: 100%;
   height: 2px;
   // background-color: ${({ theme }) => theme.bg3};
-`;
+`
 
-const AnimatedFader = animated(Fader);
+const AnimatedFader = animated(Fader)
 
 export default function PopupItem({
   removeAfterMs,
   content,
   popKey,
 }: {
-  removeAfterMs: number | null;
-  content: PopupContent;
-  popKey: string;
+  removeAfterMs: number | null
+  content: PopupContent
+  popKey: string
 }) {
-  const removePopup = useRemovePopup();
-  const removeThisPopup = useCallback(
-    () => removePopup(popKey),
-    [popKey, removePopup]
-  );
+  const removePopup = useRemovePopup()
+  const removeThisPopup = useCallback(() => removePopup(popKey), [popKey, removePopup])
   useEffect(() => {
-    if (removeAfterMs === null) return undefined;
+    if (removeAfterMs === null) return undefined
 
     const timeout = setTimeout(() => {
-      removeThisPopup();
-    }, removeAfterMs);
+      removeThisPopup()
+    }, removeAfterMs)
 
     return () => {
-      clearTimeout(timeout);
-    };
-  }, [removeAfterMs, removeThisPopup]);
+      clearTimeout(timeout)
+    }
+  }, [removeAfterMs, removeThisPopup])
 
-  let popupContent;
-  if ("txn" in content) {
+  let popupContent
+  if ('txn' in content) {
     const {
       txn: { hash, success, summary },
-    } = content;
-    popupContent = (
-      <TransactionPopup hash={hash} success={success} summary={summary} />
-    );
+    } = content
+    popupContent = <TransactionPopup hash={hash} success={success} summary={summary} />
   }
 
   const faderStyle = useSpring({
-    from: { width: "100%" },
-    to: { width: "0%" },
+    from: { width: '100%' },
+    to: { width: '0%' },
     config: { duration: removeAfterMs ?? undefined },
-  });
+  })
 
   return (
     <Popup>
@@ -94,5 +89,5 @@ export default function PopupItem({
       {popupContent}
       {removeAfterMs !== null ? <AnimatedFader style={faderStyle} /> : null}
     </Popup>
-  );
+  )
 }

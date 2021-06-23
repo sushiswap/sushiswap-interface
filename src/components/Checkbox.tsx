@@ -1,23 +1,23 @@
-import QuestionHelper from "./QuestionHelper";
-import React from "react";
-import Settings from "./Settings";
+import QuestionHelper from './QuestionHelper'
+import React from 'react'
+import Settings from './Settings'
 
-export type Color = "pink" | "blue";
+export type Color = 'pink' | 'blue'
 
 const COLOR = {
-  pink: "checked:bg-pink checked:border-transparent focus:ring-pink",
-  blue: "checked:bg-blue checked:border-transparent focus:ring-blue",
-};
+  pink: 'checked:bg-pink checked:border-transparent focus:ring-pink',
+  blue: 'checked:bg-blue checked:border-transparent focus:ring-blue',
+}
 
 export interface CheckboxProps {
-  color: Color;
-  set: (value: boolean) => void;
+  color: Color
+  set: (value: boolean) => void
 }
 
 function Checkbox({
   color,
   set,
-  className = "",
+  className = '',
   ...rest
 }: CheckboxProps & React.InputHTMLAttributes<HTMLInputElement>): JSX.Element {
   return (
@@ -27,7 +27,7 @@ function Checkbox({
       className={`appearance-none h-5 w-5 rounded-sm bg-dark-700 border-transparent disabled:bg-dark-1000 disabled:border-dark-800 ${COLOR[color]} ${className}`}
       {...rest}
     />
-  );
+  )
 }
 
-export default Checkbox;
+export default Checkbox

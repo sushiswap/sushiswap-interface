@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export const miniChefPoolsQuery = gql`
   query miniChefPoolsQuery(
@@ -7,12 +7,7 @@ export const miniChefPoolsQuery = gql`
     $orderBy: String! = "timestamp"
     $orderDirection: String! = "desc"
   ) {
-    pools(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-    ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       pair
       rewarder {
@@ -32,4 +27,4 @@ export const miniChefPoolsQuery = gql`
       }
     }
   }
-`;
+`

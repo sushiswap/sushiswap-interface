@@ -1,18 +1,18 @@
-import React from "react";
-import { ChevronDown, ChevronUp } from "react-feather";
+import React from 'react'
+import { ChevronDown, ChevronUp } from 'react-feather'
 
 function ListHeaderWithSort({
-  className = "",
+  className = '',
   sort,
   sortKey,
-  direction = "ascending",
+  direction = 'ascending',
   children,
 }: {
-  className?: any;
-  sort: any;
-  sortKey: any;
-  direction?: any;
-  children: any;
+  className?: any
+  sort: any
+  sortKey: any
+  direction?: any
+  children: any
 }) {
   return (
     <div
@@ -22,14 +22,10 @@ function ListHeaderWithSort({
       <div>{children}</div>
       {sort.sortConfig &&
         sort.sortConfig.key === sortKey &&
-        ((sort.sortConfig.direction === "ascending" && (
-          <ChevronUp size={12} className="ml-2" />
-        )) ||
-          (sort.sortConfig.direction === "descending" && (
-            <ChevronDown size={12} className="ml-2" />
-          )))}
+        ((sort.sortConfig.direction === 'ascending' && <ChevronUp size={12} className="ml-2" />) ||
+          (sort.sortConfig.direction === 'descending' && <ChevronDown size={12} className="ml-2" />))}
     </div>
-  );
+  )
 }
 
-export default ListHeaderWithSort;
+export default ListHeaderWithSort

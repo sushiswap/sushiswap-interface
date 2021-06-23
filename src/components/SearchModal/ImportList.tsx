@@ -1,108 +1,101 @@
-import { AlertTriangle, ArrowLeft } from "react-feather";
-import { AutoRow, RowBetween, RowFixed } from "../Row";
-import { Checkbox, PaddedColumn, TextDot } from "./styleds";
-import React, { useCallback, useState } from "react";
-import { enableList, removeList } from "../../state/lists/actions";
+import { AlertTriangle, ArrowLeft } from 'react-feather'
+import { AutoRow, RowBetween, RowFixed } from '../Row'
+import { Checkbox, PaddedColumn, TextDot } from './styleds'
+import React, { useCallback, useState } from 'react'
+import { enableList, removeList } from '../../state/lists/actions'
 
-import { AppDispatch } from "../../state";
-import { AutoColumn } from "../Column";
-import Button from "../Button";
-import Card from "../Card";
-import CloseIcon from "../CloseIcon";
-import CurrencyModalView from "./CurrencyModalView";
-import ExternalLink from "../ExternalLink";
-import ListLogo from "../ListLogo";
-import ReactGA from "react-ga";
-import { TokenList } from "@uniswap/token-lists";
-import styled from "styled-components";
-import { useAllLists } from "../../state/lists/hooks";
-import { useDispatch } from "react-redux";
-import { useFetchListCallback } from "../../hooks/useFetchListCallback";
-import useTheme from "../../hooks/useTheme";
+import { AppDispatch } from '../../state'
+import { AutoColumn } from '../Column'
+import Button from '../Button'
+import Card from '../Card'
+import CloseIcon from '../CloseIcon'
+import CurrencyModalView from './CurrencyModalView'
+import ExternalLink from '../ExternalLink'
+import ListLogo from '../ListLogo'
+import ReactGA from 'react-ga'
+import { TokenList } from '@uniswap/token-lists'
+import styled from 'styled-components'
+import { useAllLists } from '../../state/lists/hooks'
+import { useDispatch } from 'react-redux'
+import { useFetchListCallback } from '../../hooks/useFetchListCallback'
+import useTheme from '../../hooks/useTheme'
 
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
   overflow: auto;
-`;
+`
 
 interface ImportProps {
-  listURL: string;
-  list: TokenList;
-  onDismiss: () => void;
-  setModalView: (view: CurrencyModalView) => void;
+  listURL: string
+  list: TokenList
+  onDismiss: () => void
+  setModalView: (view: CurrencyModalView) => void
 }
 
 function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
-  const theme = useTheme();
-  const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme()
+  const dispatch = useDispatch<AppDispatch>()
 
   // user must accept
-  const [confirmed, setConfirmed] = useState(false);
+  const [confirmed, setConfirmed] = useState(false)
 
-  const lists = useAllLists();
-  const fetchList = useFetchListCallback();
+  const lists = useAllLists()
+  const fetchList = useFetchListCallback()
 
   // monitor is list is loading
-  const adding = Boolean(lists[listURL]?.loadingRequestId);
-  const [addError, setAddError] = useState<string | null>(null);
+  const adding = Boolean(lists[listURL]?.loadingRequestId)
+  const [addError, setAddError] = useState<string | null>(null)
 
   const handleAddList = useCallback(() => {
-    if (adding) return;
-    setAddError(null);
+    if (adding) return
+    setAddError(null)
     fetchList(listURL)
       .then(() => {
         ReactGA.event({
-          category: "Lists",
-          action: "Add List",
+          category: 'Lists',
+          action: 'Add List',
           label: listURL,
-        });
+        })
 
         // turn list on
-        dispatch(enableList(listURL));
+        dispatch(enableList(listURL))
         // go back to lists
-        setModalView(CurrencyModalView.manage);
+        setModalView(CurrencyModalView.manage)
       })
       .catch((error) => {
         ReactGA.event({
-          category: "Lists",
-          action: "Add List Failed",
+          category: 'Lists',
+          action: 'Add List Failed',
           label: listURL,
-        });
-        setAddError(error.message);
-        dispatch(removeList(listURL));
-      });
-  }, [adding, dispatch, fetchList, listURL, setModalView]);
+        })
+        setAddError(error.message)
+        dispatch(removeList(listURL))
+      })
+  }, [adding, dispatch, fetchList, listURL, setModalView])
 
   return (
     <Wrapper>
-      <PaddedColumn gap="14px" style={{ width: "100%", flex: "1 1" }}>
+      <PaddedColumn gap="14px" style={{ width: '100%', flex: '1 1' }}>
         <RowBetween>
-          <ArrowLeft
-            style={{ cursor: "pointer" }}
-            onClick={() => setModalView(CurrencyModalView.manage)}
-          />
+          <ArrowLeft style={{ cursor: 'pointer' }} onClick={() => setModalView(CurrencyModalView.manage)} />
           <div>Import List</div>
           <CloseIcon onClick={onDismiss} />
         </RowBetween>
       </PaddedColumn>
       <PaddedColumn gap="md">
         <AutoColumn gap="md">
-          <div style={{ padding: "12px 20px" }}>
+          <div style={{ padding: '12px 20px' }}>
             <RowBetween>
               <RowFixed>
-                {list.logoURI && (
-                  <ListLogo logoURI={list.logoURI} size="40px" />
-                )}
-                <AutoColumn gap="sm" style={{ marginLeft: "20px" }}>
+                {list.logoURI && <ListLogo logoURI={list.logoURI} size="40px" />}
+                <AutoColumn gap="sm" style={{ marginLeft: '20px' }}>
                   <RowFixed>
                     <div className="mr-1.5 font-semibold">{list.name}</div>
                     <TextDot />
                     <div className="ml-1.5">{list.tokens.length} tokens</div>
                   </RowFixed>
-                  <ExternalLink
-                    href={`https://tokenlists.org/token-list?url=${listURL}`}
-                  >
+                  <ExternalLink href={`https://tokenlists.org/token-list?url=${listURL}`}>
                     <div className="font-sm text-blue">{listURL}</div>
                   </ExternalLink>
                 </AutoColumn>
@@ -110,39 +103,22 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             </RowBetween>
           </div>
           <div>
-            <AutoColumn
-              justify="center"
-              style={{ textAlign: "center", gap: "16px", marginBottom: "12px" }}
-            >
-              <AlertTriangle
-                className="text-red"
-                stroke="currentColor"
-                size={32}
-              />
-              <div className="text-lg font-medium text-red">
-                Import at your own risk{" "}
-              </div>
+            <AutoColumn justify="center" style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
+              <AlertTriangle className="text-red" stroke="currentColor" size={32} />
+              <div className="text-lg font-medium text-red">Import at your own risk </div>
             </AutoColumn>
 
-            <AutoColumn
-              style={{ textAlign: "center", gap: "16px", marginBottom: "12px" }}
-            >
+            <AutoColumn style={{ textAlign: 'center', gap: '16px', marginBottom: '12px' }}>
               <div className="font-semibold text-red">
-                By adding this list you are implicitly trusting that the data is
-                correct. Anyone can create a list, including creating fake
-                versions of existing lists and lists that claim to represent
-                projects that do not have one.
+                By adding this list you are implicitly trusting that the data is correct. Anyone can create a list,
+                including creating fake versions of existing lists and lists that claim to represent projects that do
+                not have one.
               </div>
               <div className="font-semibold text-red">
-                If you purchase a token from this list, you may not be able to
-                sell it back.
+                If you purchase a token from this list, you may not be able to sell it back.
               </div>
             </AutoColumn>
-            <AutoRow
-              justify="center"
-              style={{ cursor: "pointer" }}
-              onClick={() => setConfirmed(!confirmed)}
-            >
+            <AutoRow justify="center" style={{ cursor: 'pointer' }} onClick={() => setConfirmed(!confirmed)}>
               <Checkbox
                 name="confirmed"
                 type="checkbox"
@@ -157,8 +133,8 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             color="gradient"
             size="xs"
             style={{
-              borderRadius: "20px",
-              padding: "10px 1rem",
+              borderRadius: '20px',
+              padding: '10px 1rem',
             }}
             disabled={!confirmed}
             onClick={handleAddList}
@@ -166,18 +142,14 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             Import
           </Button>
           {addError ? (
-            <div
-              title={addError}
-              style={{ textOverflow: "ellipsis", overflow: "hidden" }}
-              className="text-red"
-            >
+            <div title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} className="text-red">
               {addError}
             </div>
           ) : null}
         </AutoColumn>
       </PaddedColumn>
     </Wrapper>
-  );
+  )
 }
 
-export default ImportList;
+export default ImportList

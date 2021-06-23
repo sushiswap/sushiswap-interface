@@ -1,34 +1,39 @@
-import {
-  computeSlippageAdjustedAmounts,
-  computeTradePriceBreakdown,
-} from "../../functions/prices";
-
-import { Field } from "../../state/swap/actions";
-import FormattedPriceImpact from "../swap/FormattedPriceImpact";
-import QuestionHelper from "../../components/QuestionHelper";
-import React from "react";
-import SwapRoute from "../swap/SwapRoute";
-import { Trade } from "@sushiswap/sdk";
-import { t } from "@lingui/macro";
-import { useActiveWeb3React } from "../../hooks/useActiveWeb3React";
-import { useLingui } from "@lingui/react";
+import { computeRealizedLPFeePercent } from '../../functions/prices'
+import FormattedPriceImpact from '../swap/FormattedPriceImpact'
+import QuestionHelper from '../../components/QuestionHelper'
+import React, { useMemo } from 'react'
+import SwapRoute from '../swap/SwapRoute'
+import { TradeType, Trade as V2Trade, Currency } from '@sushiswap/sdk'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useLingui } from '@lingui/react'
 
 function TradeReview({
   trade,
   allowedSlippage,
 }: {
-  trade: Trade | undefined;
-  allowedSlippage: any;
+  trade: V2Trade<Currency, Currency, TradeType> | undefined
+  allowedSlippage: any
 }) {
-  const { i18n } = useLingui();
-  const { chainId } = useActiveWeb3React();
-  const showRoute = Boolean(trade && trade.route.path.length > 2);
-  const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(
-    trade,
-    allowedSlippage
-  );
-  const { priceImpactWithoutFee, realizedLPFee } =
-    computeTradePriceBreakdown(trade);
+  const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
+  const showRoute = Boolean(trade && trade.route.path.length > 2)
+
+  // const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(
+  //   trade,
+  //   allowedSlippage
+  // );
+  // const { priceImpactWithoutFee, realizedLPFee } =
+  //   computeTradePriceBreakdown(trade);
+
+  const { realizedLPFee, priceImpact } = useMemo(() => {
+    if (!trade) return { realizedLPFee: undefined, priceImpact: undefined }
+
+    const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
+    const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
+    const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
+    return { priceImpact, realizedLPFee }
+  }, [trade])
 
   return (
     <>
@@ -45,39 +50,30 @@ function TradeReview({
               />
             </div>
             <div className="text-lg">
-              {`${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(
-                4
-              )} ${trade.outputAmount.currency.getSymbol(chainId)}` ?? "-"}
+              {`${trade.minimumAmountOut(allowedSlippage)?.toSignificant(4)} ${trade.outputAmount.currency.symbol}` ??
+                '-'}
             </div>
           </div>
           <div className="flex items-center justify-between">
             <div className="text-lg text-secondary">
               {i18n._(t`Price Impact`)}
               <QuestionHelper
-                text={i18n._(
-                  t`The difference between the market price and estimated price due to trade size.`
-                )}
+                text={i18n._(t`The difference between the market price and estimated price due to trade size.`)}
               />
             </div>
             <div className="text-lg">
-              <FormattedPriceImpact priceImpact={priceImpactWithoutFee} />
+              <FormattedPriceImpact priceImpact={priceImpact} />
             </div>
           </div>
           <div className="flex items-center justify-between">
             <div className="text-lg text-secondary">
               Liquidity Provider Fee
               <QuestionHelper
-                text={i18n._(
-                  t`A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive.`
-                )}
+                text={i18n._(t`A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive.`)}
               />
             </div>
             <div className="text-lg">
-              {realizedLPFee
-                ? `${realizedLPFee.toSignificant(
-                    4
-                  )} ${trade.inputAmount.currency.getSymbol(chainId)}`
-                : "-"}
+              {realizedLPFee ? `${realizedLPFee.toSignificant(4)} ${trade.inputAmount.currency.symbol}` : '-'}
             </div>
           </div>
           {showRoute && (
@@ -85,9 +81,7 @@ function TradeReview({
               <div className="text-lg text-secondary">
                 {i18n._(t`Route`)}
                 <QuestionHelper
-                  text={i18n._(
-                    t`Routing through these tokens resulted in the best price for your trade.`
-                  )}
+                  text={i18n._(t`Routing through these tokens resulted in the best price for your trade.`)}
                 />
               </div>
               <div className="text-lg">
@@ -97,12 +91,10 @@ function TradeReview({
           )}
         </div>
       ) : (
-        <div className="mb-4 text-lg text-secondary">
-          {i18n._(t`No liquidity found to do swap`)}
-        </div>
+        <div className="mb-4 text-lg text-secondary">{i18n._(t`No liquidity found to do swap`)}</div>
       )}
     </>
-  );
+  )
 }
 
-export default TradeReview;
+export default TradeReview
