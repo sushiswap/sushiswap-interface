@@ -6,6 +6,7 @@ const SIZE = {
   sm: 'px-4 py-2 text-base',
   default: 'px-4 py-3 text-base',
   lg: 'px-6 py-4 text-base',
+  none: 'p-0 text-base',
 }
 
 const FILLED = {
@@ -35,7 +36,7 @@ const EMPTY = {
 }
 
 const LINK = {
-  default: 'p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap',
+  default: 'text-primary hover:text-high-emphesis focus:text-high-emphesis whitespace-nowrap focus:ring-0',
 }
 
 const VARIANT = {
@@ -47,7 +48,7 @@ const VARIANT = {
 
 export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default' | 'red' | 'green'
 
-export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default'
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 
 export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
