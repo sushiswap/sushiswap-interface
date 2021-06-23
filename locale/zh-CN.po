@@ -76,16 +76,16 @@ msgstr ""
 #~ msgid "Accept"
 #~ msgstr "接受"
 
-#: src/components/PositionCard/index.tsx:349
-#~ msgid "Add"
-#~ msgstr "添加"
+#: src/components/PositionCard/index.tsx:232
+#: src/pages/exchange/pool/index.tsx:151
+msgid "Add"
+msgstr "添加"
 
 #: src/components/NavigationTabs/index.tsx:69
-#: src/pages/exchange/pool/index.tsx:174
 msgid "Add Liquidity"
 msgstr "添加流动性"
 
-#: src/components/Header/index.tsx:175
+#: src/components/Header/index.tsx:173
 msgid "Add SUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr "添加抵押品以借出资产"
 #~ msgid "Add liquidity"
 #~ msgstr "添加流动性"
 
-#: src/components/Header/index.tsx:125
+#: src/components/Header/index.tsx:123
 msgid "Add xSUSHI to your MetaMask wallet"
 msgstr ""
 
@@ -115,7 +115,7 @@ msgid "An error occurred when trying to execute this swap. You may need to incre
 msgstr ""
 
 #: src/components/Footer/index.tsx:23
-#: src/components/Header/index.tsx:370
+#: src/components/Header/index.tsx:368
 msgid "Analytics"
 msgstr "分析界面"
 
@@ -124,7 +124,7 @@ msgstr "分析界面"
 #: src/pages/bar/index.tsx:335
 #: src/pages/exchange/migrate/index.tsx:234
 #: src/pages/exchange/remove/[[...tokens]].tsx:838
-#: src/pages/user/balances.tsx:200
+#: src/pages/user/balances.tsx:194
 msgid "Approve"
 msgstr "批准"
 
@@ -150,7 +150,7 @@ msgstr "已批准"
 #: src/pages/bar/index.tsx:333
 #: src/pages/exchange/migrate/index.tsx:230
 #: src/pages/exchange/remove/[[...tokens]].tsx:834
-#: src/pages/user/balances.tsx:200
+#: src/pages/user/balances.tsx:194
 msgid "Approving"
 msgstr "批准中"
 
@@ -185,14 +185,14 @@ msgstr ""
 msgid "Balance"
 msgstr "余额"
 
-#: src/pages/user/balances.tsx:236
+#: src/pages/user/balances.tsx:229
 msgid "Bento Balance: {0}"
 msgstr "Bento余额： {0}"
 
 #: src/pages/kashi/borrow/[pair].tsx:207
 #: src/pages/kashi/lend/[pair].tsx:191
-#: src/pages/user/balances.tsx:54
-#: src/pages/user/balances.tsx:67
+#: src/pages/user/balances.tsx:52
+#: src/pages/user/balances.tsx:65
 msgid "BentoBox"
 msgstr "BentoBox"
 
@@ -208,7 +208,7 @@ msgstr "BentoBox应用"
 msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
 msgstr "BentoBox可以实现用很低的gas费用体验高收益的dapp。"
 
-#: src/pages/user/balances.tsx:90
+#: src/pages/user/balances.tsx:86
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox通过在集成的dapp中使用闪电贷、策略以及固定和低Gas的转账，来提供额外收益"
 
@@ -220,8 +220,8 @@ msgstr "BentoBox策略可以为您的抵押代币创造收益。这个代币暂�
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
 msgstr "BentoBox策略可以为您的流动性在不借出的情况下创造收益。这个代币暂时在BentoBox中没有策略。"
 
-#: src/components/Header/index.tsx:94
-#: src/components/Header/index.tsx:348
+#: src/components/Header/index.tsx:92
+#: src/components/Header/index.tsx:346
 #: src/pages/kashi/borrow/[pair].tsx:124
 msgid "Borrow"
 msgstr "借"
@@ -384,21 +384,20 @@ msgid "Create a new Kashi Market"
 msgstr ""
 
 #: src/components/NavigationTabs/index.tsx:69
-#: src/pages/exchange/pool/index.tsx:177
 msgid "Create a pair"
 msgstr "创建交易对"
 
 #~ msgid "Create pool"
 #~ msgstr "创建池"
 
-#: src/pages/user/balances.tsx:213
+#: src/pages/user/balances.tsx:207
 msgid "Deposit"
 msgstr "存款"
 
 #~ msgid "Deposit SUSHI into BentoBox"
 #~ msgstr "将SUSHI存入BentoBox"
 
-#: src/pages/user/balances.tsx:88
+#: src/pages/user/balances.tsx:84
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "将代币存入BentoBox，以获得所有收益。"
 
@@ -495,7 +494,7 @@ msgstr ""
 msgid "Exchange Rate"
 msgstr ""
 
-#: src/components/SearchModal/CurrencyList.tsx:162
+#: src/components/SearchModal/CurrencyList.tsx:161
 msgid "Expanded results from inactive Token Lists"
 msgstr ""
 
@@ -508,8 +507,8 @@ msgstr "专家模式关闭确认交易弹出、允许高交易滑点经常会导
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "专家模式关闭确认交易弹出、允许高交易滑点经常会导致不好的价格和资金的丢失。"
 
-#: src/components/Header/index.tsx:75
-#: src/components/Header/index.tsx:327
+#: src/components/Header/index.tsx:73
+#: src/components/Header/index.tsx:325
 msgid "Farm"
 msgstr ""
 
@@ -613,13 +612,17 @@ msgstr "健康值"
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
 
+#: src/pages/exchange/pool/index.tsx:155
+msgid "Import"
+msgstr ""
+
 #: src/components/NavigationTabs/index.tsx:32
 msgid "Import Pool"
 msgstr "导入流动性池"
 
 #: src/pages/exchange/pool/index.tsx:127
-msgid "Import Pool Manually"
-msgstr ""
+#~ msgid "Import Pool Manually"
+#~ msgstr ""
 
 #~ msgid "Import it"
 #~ msgstr "导入"
@@ -686,8 +689,8 @@ msgstr "加入Discord社区。"
 msgid "Learn more about wallets"
 msgstr ""
 
-#: src/components/Header/index.tsx:86
-#: src/components/Header/index.tsx:339
+#: src/components/Header/index.tsx:84
+#: src/components/Header/index.tsx:337
 msgid "Lend"
 msgstr "借贷"
 
@@ -722,11 +725,11 @@ msgstr "LP"
 msgid "Liquidity Provider Fee"
 msgstr "LP奖励"
 
-#: src/pages/exchange/pool/index.tsx:113
+#: src/pages/exchange/pool/index.tsx:107
 msgid "Liquidity Provider Rewards"
 msgstr "LP奖励"
 
-#: src/pages/exchange/pool/index.tsx:114
+#: src/pages/exchange/pool/index.tsx:108
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -740,8 +743,9 @@ msgstr "流动性提供者(LP)可按比例收取流动性池中交易额的0.25%
 msgid "Lists"
 msgstr "清单"
 
+#: src/components/PositionCard/index.tsx:165
 #: src/pages/exchange/migrate/index.tsx:214
-#: src/pages/exchange/pool/index.tsx:146
+#: src/pages/exchange/pool/index.tsx:120
 #: src/pages/user/transactions.tsx:64
 msgid "Loading"
 msgstr "载入中"
@@ -766,8 +770,8 @@ msgstr "贷款价值比（LTV)"
 #: src/features/farm/FarmListItem.tsx:220
 #: src/pages/bar/index.tsx:320
 #: src/pages/exchange/migrate/index.tsx:85
-#: src/pages/user/balances.tsx:193
-#: src/pages/user/balances.tsx:257
+#: src/pages/user/balances.tsx:187
+#: src/pages/user/balances.tsx:251
 msgid "MAX"
 msgstr "最大数量"
 
@@ -781,6 +785,7 @@ msgstr ""
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
+#: src/components/PositionCard/index.tsx:169
 #: src/components/SearchModal/Manage.tsx:44
 msgid "Manage"
 msgstr "管理"
@@ -826,15 +831,16 @@ msgstr ""
 #~ msgid "Maximum sold"
 #~ msgstr "最大可出售"
 
-#: src/components/Header/index.tsx:66
-#: src/components/Header/index.tsx:316
+#: src/components/Header/index.tsx:64
+#: src/components/Header/index.tsx:314
 #: src/pages/exchange/migrate/index.tsx:243
+#: src/pages/exchange/pool/index.tsx:158
 msgid "Migrate"
 msgstr "迁移"
 
 #: src/pages/exchange/pool/index.tsx:136
-msgid "Migrate From {0}"
-msgstr ""
+#~ msgid "Migrate From {0}"
+#~ msgstr ""
 
 #~ msgid "Migrate Now"
 #~ msgstr "立即迁移"
@@ -871,6 +877,10 @@ msgstr "最少可获得的数量"
 #~ msgid "Missed the Auction?"
 #~ msgstr "错过了拍卖？"
 
+#: src/pages/exchange/pool/index.tsx:102
+msgid "My Liquidity Positions"
+msgstr ""
+
 #: src/pages/user/index.tsx:23
 msgid "My SUSHI"
 msgstr ""
@@ -902,11 +912,15 @@ msgid "No liquidity found to do swap"
 msgstr "该交换没有流动性"
 
 #: src/pages/exchange/pool/index.tsx:167
-msgid "No liquidity found."
-msgstr ""
+#~ msgid "No liquidity found."
+#~ msgstr ""
 
 #~ msgid "No liquidity positions found"
 #~ msgstr "没有发现流动性"
+
+#: src/pages/exchange/pool/index.tsx:142
+msgid "No liquidity was found."
+msgstr ""
 
 #~ msgid "No pool found"
 #~ msgstr "未找到池"
@@ -940,7 +954,7 @@ msgstr "糟糕！出现未知错误。请刷新页面，或从其他浏览器或
 msgid "Open Source"
 msgstr "开源"
 
-#: src/components/Header/index.tsx:257
+#: src/components/Header/index.tsx:255
 msgid "Open main menu"
 msgstr "打开主菜单"
 
@@ -978,8 +992,8 @@ msgstr ""
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "请输入“确认”以开启专家模式。"
 
-#: src/components/Header/index.tsx:58
-#: src/components/Header/index.tsx:307
+#: src/components/Header/index.tsx:56
+#: src/components/Header/index.tsx:305
 #: src/features/farm/FarmList.tsx:21
 msgid "Pool"
 msgstr "资金池"
@@ -994,14 +1008,14 @@ msgstr "资金池"
 #~ msgid "Pool Tokens"
 #~ msgstr "流动性池中的总代币"
 
-#: src/components/PositionCard/index.tsx:273
-#~ msgid "Pool tokens in rewards pool"
-#~ msgstr "奖励池中的代币"
+#: src/components/PositionCard/index.tsx:187
+msgid "Pool tokens in rewards pool"
+msgstr "奖励池中的代币"
 
-#: src/components/PositionCard/index.tsx:282
-#: src/components/PositionCard/index.tsx:300
-#~ msgid "Pooled {0}"
-#~ msgstr "汇集{0}"
+#: src/components/PositionCard/index.tsx:192
+#: src/components/PositionCard/index.tsx:204
+msgid "Pooled {0}"
+msgstr "汇集{0}"
 
 #~ msgid "Positions"
 #~ msgstr "仓位"
@@ -1041,9 +1055,9 @@ msgstr "费率"
 #~ msgid "Read the contract"
 #~ msgstr "阅读合约"
 
-#: src/components/PositionCard/index.tsx:363
-#~ msgid "Remove"
-#~ msgstr "去除"
+#: src/components/PositionCard/index.tsx:240
+msgid "Remove"
+msgstr "去除"
 
 #: src/components/NavigationTabs/index.tsx:69
 msgid "Remove Liquidity"
@@ -1162,8 +1176,8 @@ msgstr "在签署批准时出现错误。可能是硬件钱包例如Trezor和Led
 #~ msgid "Stack Yields with SAAVE"
 #~ msgstr "使用SAAVE叠加收益"
 
-#: src/components/Header/index.tsx:113
-#: src/components/Header/index.tsx:359
+#: src/components/Header/index.tsx:111
+#: src/components/Header/index.tsx:357
 #: src/features/farm/FarmListItem.tsx:190
 msgid "Stake"
 msgstr "质押"
@@ -1231,8 +1245,8 @@ msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:42
-#: src/components/Header/index.tsx:50
-#: src/components/Header/index.tsx:299
+#: src/components/Header/index.tsx:48
+#: src/components/Header/index.tsx:297
 #: src/pages/exchange/swap/[[...tokens]].tsx:672
 #: src/pages/exchange/swap/[[...tokens]].tsx:701
 msgid "Swap"
@@ -1324,7 +1338,7 @@ msgstr "交易未成功，可能因为价格变动，也可能转账中产生的
 msgid "Toggle Expert Mode"
 msgstr "切换专家模式"
 
-#: src/pages/user/balances.tsx:65
+#: src/pages/user/balances.tsx:63
 msgid "Token"
 msgstr "代币"
 
@@ -1332,7 +1346,7 @@ msgstr "代币"
 msgid "Tokens"
 msgstr "代币"
 
-#: src/components/SearchModal/CurrencyList.tsx:166
+#: src/components/SearchModal/CurrencyList.tsx:165
 msgid ""
 "Tokens from inactive lists. Import specific tokens below or\n"
 "click Manage to activate more lists."
@@ -1462,12 +1476,12 @@ msgstr "在浏览器查看"
 msgid "Waiting for Confirmation"
 msgstr ""
 
-#: src/pages/user/balances.tsx:66
+#: src/pages/user/balances.tsx:64
 msgid "Wallet"
 msgstr "钱包"
 
 #: src/features/farm/FarmListItem.tsx:140
-#: src/pages/user/balances.tsx:172
+#: src/pages/user/balances.tsx:166
 msgid "Wallet Balance"
 msgstr "钱包余额"
 
@@ -1481,7 +1495,7 @@ msgstr ""
 #~ msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 #~ msgstr "当创建一个交易对时，您是第一个流动性提供者。您添加的代币比例将决定这个池子的价格。一旦您对该比率满意，点击供应进行查看"
 
-#: src/pages/user/balances.tsx:270
+#: src/pages/user/balances.tsx:264
 msgid "Withdraw"
 msgstr "提取"
 
@@ -1538,8 +1552,8 @@ msgid "Your Liquidity"
 msgstr "您的流动性"
 
 #: src/pages/exchange/pool/index.tsx:107
-msgid "Your Liquidity Positions"
-msgstr "您的LP"
+#~ msgid "Your Liquidity Positions"
+#~ msgstr "您的LP"
 
 #~ msgid "Your Pool Share"
 #~ msgstr "您在流动性池的占比"
@@ -1569,14 +1583,14 @@ msgstr "您的钱包"
 #~ msgid "Your Yields"
 #~ msgstr "您的收益"
 
-#: src/components/PositionCard/index.tsx:118
-#: src/components/PositionCard/index.tsx:317
-#~ msgid "Your pool share"
-#~ msgstr "您在流动性池的占比"
+#: src/components/PositionCard/index.tsx:80
+#: src/components/PositionCard/index.tsx:216
+msgid "Your pool share"
+msgstr "您在流动性池的占比"
 
-#: src/components/PositionCard/index.tsx:264
-#~ msgid "Your total pool tokens"
-#~ msgstr "流动性池中的总代币"
+#: src/components/PositionCard/index.tsx:182
+msgid "Your total pool tokens"
+msgstr "流动性池中的总代币"
 
 #: src/components/TransactionSettings/index.tsx:224
 msgid "Your transaction may be frontrun"
