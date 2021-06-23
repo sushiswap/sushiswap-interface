@@ -68,7 +68,7 @@ function Balances() {
           </div>
           {items &&
             items.length > 0 &&
-            items.map((token: BentoBalance, i: number) => <TokenBalance key={token.address + '_' + i} token={token} />)}
+            items.map((token, i: number) => <TokenBalance key={token.address + '_' + i} token={token} />)}
         </div>
       </Card>
     </>
