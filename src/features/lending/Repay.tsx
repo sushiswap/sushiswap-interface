@@ -17,7 +17,6 @@ import { useV2TradeExactIn, useV2TradeExactOut } from '../../hooks/useV2Trades'
 import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
 import { Field } from '../../state/swap/actions'
-import { KashiContext } from './context'
 import { KashiCooker } from '../../entities'
 import SmartNumberInput from '../../components/SmartNumberInput'
 import TradeReview from './TradeReview'
@@ -29,6 +28,7 @@ import { ethers } from 'ethers'
 import { tryParseAmount } from '../../functions/parse'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
+import { useKashiInfo } from './context'
 
 interface RepayProps {
   pair: any
@@ -38,7 +38,7 @@ const DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 export default function Repay({ pair }: RepayProps) {
   const { account, chainId } = useActiveWeb3React()
-  const info = useContext(KashiContext).state.info
+  const info = useKashiInfo()
 
   // State
   const [useBentoRepay, setUseBentoRepay] = useState<boolean>(pair.asset.bentoBalance.gt(0))

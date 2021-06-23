@@ -1,6 +1,6 @@
 import { Borrow, Repay } from '../../../features/lending'
-import Provider, { KashiContext, useKashiPair } from '../../../features/lending/context'
-import React, { useCallback, useContext, useState } from 'react'
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
+import React, { useCallback, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
@@ -34,7 +34,7 @@ function Pair() {
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
 
-  const info = useContext(KashiContext).state.info
+  const info = useKashiInfo()
 
   const addTransaction = useTransactionAdder()
   const onUpdateExchangeRate = useCallback(async () => {

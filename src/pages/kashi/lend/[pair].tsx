@@ -1,6 +1,6 @@
 import { Deposit, Withdraw } from '../../../features/lending'
-import Provider, { KashiContext, useKashiPair } from '../../../features/lending/context'
-import React, { useContext, useState } from 'react'
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
+import React, { useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
@@ -18,7 +18,8 @@ export default function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
   const [tabIndex, setTabIndex] = useState(0)
-  const info = useContext(KashiContext).state.info
+  const info = useKashiInfo()
+
   const pair = useKashiPair(router.query.pair as string)
 
   if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')

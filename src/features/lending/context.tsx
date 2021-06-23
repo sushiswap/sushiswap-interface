@@ -25,6 +25,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useBlockNumber } from '../../state/application/hooks'
 import usePrevious from '../../hooks/usePrevious'
+import { useSingleCallResult } from '../../state/multicall/hooks'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -195,19 +196,26 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
 
   const tokens = useAllTokens()
 
+  const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
+    account,
+    [],
+    USDC[chainId].address,
+    [KASHI_ADDRESS[chainId]],
+  ])?.result?.[0]
+
   const updatePairs = useCallback(async () => {
     if (!account || !chainId || ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId)) {
       return
     }
 
     if (boringHelperContract && bentoBoxContract) {
-      // console.log('READY TO RUMBLE')
-      const info = rpcToObj(
-        await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
-      )
+      // // console.log('READY TO RUMBLE')
+      // const info = rpcToObj(
+      //   await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
+      // )
 
       // Get the deployed pairs from the logs and decode
-      const logPairs = await getPairs(bentoBoxContract, chainId || 1)
+      const logPairs = await getPairs(bentoBoxContract, chainId)
 
       // Filter all pairs by supported oracles and verify the oracle setup
 
@@ -431,7 +439,7 @@ export function KashiProvider({ children }: { children: JSX.Element }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, weth])
+  }, [account, chainId, boringHelperContract, bentoBoxContract, currency.address, info, tokens, weth.address])
 
   const previousBlockNumber = usePrevious(blockNumber)
 
