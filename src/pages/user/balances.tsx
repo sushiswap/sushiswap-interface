@@ -133,11 +133,11 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="grid grid-cols-2 gap-4 p-4 rounded bg-dark-800">
-          <div className="col-span-2 text-center md:col-span-1">
+        <div className="grid grid-cols-2 gap-4 ">
+          <div className="col-span-2 p-4 text-center rounded md:col-span-1 bg-dark-800">
             <Deposit token={token} />
           </div>
-          <div className="col-span-2 text-center md:col-span-1">
+          <div className="col-span-2 p-4 text-center rounded md:col-span-1 bg-dark-800">
             <Withdraw token={token} />
           </div>
         </div>
