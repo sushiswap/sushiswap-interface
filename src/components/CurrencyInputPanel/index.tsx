@@ -46,7 +46,7 @@ const StyledTokenName = styled.span<{ active?: boolean }>`
 `
 
 interface CurrencyInputPanelProps {
-  value: string
+  value?: string
   onUserInput: (value: string) => void
   onMax?: () => void
   showMaxButton: boolean
@@ -168,8 +168,8 @@ export default function CurrencyInputPanel({
                         </>
                     )} */}
         </div>
-        <div className="flex items-center w-full p-3 space-x-3 rounded bg-dark-900 sm:w-3/5">
-          {!hideInput && (
+        {!hideInput && (
+          <div className="flex items-center w-full p-3 space-x-3 rounded bg-dark-900 sm:w-3/5">
             <>
               {showMaxButton && selectedCurrencyBalance && (
                 <Button
@@ -204,8 +204,8 @@ export default function CurrencyInputPanel({
                 </div>
               )}
             </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       {!disableCurrencySelect && onCurrencySelect && (
         <CurrencySearchModal

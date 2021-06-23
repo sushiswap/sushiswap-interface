@@ -1,6 +1,6 @@
 import { CHAINLINK_MAPPING, CHAINLINK_TOKENS } from '../../../constants/chainlink'
 import { CHAINLINK_ORACLE_ADDRESS, KASHI_ADDRESS } from '../../../constants/kashi'
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, JSBI, Token } from '@sushiswap/sdk'
 import { Listbox, Transition } from '@headlessui/react'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -22,6 +22,10 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTransactionAdder } from '../../../state/transactions/hooks'
 import Provider from '../../../features/lending/context'
+import CurrencySelectPanel from '../../../components/CurrencySelectPanel'
+import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
+import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook'
+import { Field } from '../../../state/create/actions'
 
 export type ChainlinkToken = {
   symbol: string
@@ -153,6 +157,28 @@ function Create() {
     }
   }
 
+  // swap state
+  const { independentField, typedValue, recipient } = useCreateState()
+  const { onSwitchTokens, onCurrencySelection, onUserInput } = useCreateActionHandlers()
+
+  const { currencies, inputError } = useDerivedCreateInfo()
+
+  const handleAssetSelect = useCallback(
+    (inputCurrency) => {
+      onCurrencySelection(Field.CURRENCY_A, inputCurrency)
+    },
+    [onCurrencySelection]
+  )
+
+  const handleTypeAsset = useCallback(
+    (value: string) => {
+      onUserInput(Field.CURRENCY_A, value)
+    },
+    [onUserInput]
+  )
+
+  const both = Boolean(currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B])
+
   return (
     <>
       <Head>
@@ -168,7 +194,33 @@ function Create() {
         }
       >
         <div className="space-y-6">
-          <Listbox
+          <CurrencyInputPanel
+            onUserInput={handleTypeAsset}
+            label="Asset"
+            showMaxButton={false}
+            hideBalance={true}
+            hideInput={true}
+            currency={currencies[Field.CURRENCY_A]}
+            onCurrencySelect={handleAssetSelect}
+            otherCurrency={currencies[Field.CURRENCY_B]}
+            showCommonBases={true}
+            id="kashi-currency-asset"
+          />
+
+          <CurrencyInputPanel
+            onUserInput={handleTypeAsset}
+            label="Collateral"
+            showMaxButton={false}
+            hideBalance={true}
+            hideInput={true}
+            currency={currencies[Field.CURRENCY_B]}
+            onCurrencySelect={handleAssetSelect}
+            otherCurrency={currencies[Field.CURRENCY_A]}
+            showCommonBases={true}
+            id="kashi-currency-collateral"
+          />
+
+          {/* <Listbox
             as="div"
             className="space-y-1 cursor-pointer"
             value={selectedAsset}
@@ -313,7 +365,7 @@ function Create() {
                 </div>
               </>
             )}
-          </Listbox>
+          </Listbox> */}
 
           <Button
             color="gradient"

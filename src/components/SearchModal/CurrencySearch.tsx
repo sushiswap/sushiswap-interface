@@ -26,6 +26,8 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
 import { ExtendedEther } from '../../constants'
+import { useRouter } from 'next/router'
+import { CHAINLINK_TOKENS } from '../../constants/chainlink'
 
 const ContentWrapper = styled(Column)`
   height: 100%;
@@ -70,7 +72,18 @@ export function CurrencySearch({
 
   const [invertSearchOrder] = useState<boolean>(false)
 
-  const allTokens = useAllTokens()
+  let allTokens = useAllTokens()
+
+  const router = useRouter()
+
+  if (router.asPath.startsWith('/kashi/create')) {
+    allTokens = Object.keys(allTokens)
+      .filter((key) => CHAINLINK_TOKENS[chainId].find((token) => token.address === key))
+      .reduce((obj, key) => {
+        obj[key] = allTokens[key]
+        return obj
+      }, {})
+  }
 
   // if they input an address, use it
   const isAddressSearch = isAddress(debouncedQuery)
