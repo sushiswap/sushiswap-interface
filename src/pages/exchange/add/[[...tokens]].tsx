@@ -360,7 +360,7 @@ export default function Add() {
             pendingText={pendingText}
           />
           <div className="flex flex-col space-y-4">
-            {isCreate ? (
+            {noLiquidity ? (
               <Alert
                 message={i18n._(
                   t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
@@ -380,7 +380,7 @@ export default function Add() {
                   }
                   type="information"
                 />
-                {pair && !noLiquidity && pairState !== PairState.INVALID && (
+                {pair && pairState !== PairState.INVALID && (
                   <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
                 )}
               </>
