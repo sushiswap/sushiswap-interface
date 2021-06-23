@@ -24,6 +24,7 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hooks'
 import { useV2Pairs } from '../../../hooks/useV2Pairs'
+import Image from 'next/image'
 
 const migrateFrom: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'Uniswap',
@@ -99,24 +100,24 @@ export default function Pool() {
         />
       </Head>
 
-      <Container maxWidth="2xl">
+      <Container maxWidth="2xl" className="space-y-6">
         <div className="p-4 mb-3 space-y-3">
           <Back />
 
           <Typography component="h1" variant="h2">
-            {i18n._(t`Your Liquidity Positions`)}
+            {i18n._(t`My Liquidity Positions`)}
           </Typography>
         </div>
 
-        <div className="p-4 space-y-4 rounded bg-dark-900">
-          <Alert
-            title={i18n._(t`Liquidity Provider Rewards`)}
-            message={i18n._(t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
+        <Alert
+          title={i18n._(t`Liquidity Provider Rewards`)}
+          message={i18n._(t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
                         the pool. Fees are added to the pool, accrue in real time and can be claimed by
                         withdrawing your liquidity`)}
-            type="information"
-          />
+          type="information"
+        />
 
+        <div className="p-4 space-y-4 rounded bg-dark-900">
           <div className="grid grid-flow-row gap-3">
             {!account ? (
               <Web3Connect size="lg" color="blue" className="w-full" />
@@ -142,40 +143,28 @@ export default function Pool() {
                 ))}
               </>
             ) : (
-              <Empty className="flex text-center text-low-emphesis">
-                <div className="px-4 py-2">{i18n._(t`No liquidity found. `)}</div>
-                <div className="flex items-center">
-                  <Link href="/find">
-                    <a
-                      id="import-pool-link"
-                      className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
-                    >
-                      {i18n._(t`Import Pool Manually`)}
-                    </a>
-                  </Link>
-                  {chainId && migrateFrom[chainId] && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                    <Link href="/migrate">
-                      <a
-                        id="migrate-pool-link"
-                        className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
-                      >
-                        {i18n._(t`Migrate From ${migrateFrom[chainId]}`)}
-                      </a>
-                    </Link>
-                  )}
+              <>
+                <Empty className="flex text-center text-low-emphesis">
+                  <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
+                </Empty>
+                <div className="grid grid-cols-3 gap-4">
+                  <Button
+                    id="add-pool-button"
+                    color="gradient"
+                    className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
+                    onClick={() => router.push(`/add/ETH`)}
+                  >
+                    {i18n._(t`Add`)}
+                    <Image src="/liquid.svg" width="16px" height="24px" objectFit="scale-down" alt="Add Liquidity" />
+                  </Button>
+                  <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
+                    {i18n._(t`Import`)}
+                  </Button>
+                  <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/migrate`)}>
+                    {i18n._(t`Migrate ${migrateFrom[chainId]}`)}
+                  </Button>
                 </div>
-              </Empty>
-            )}
-
-            {account && (
-              <div className="grid grid-cols-2 gap-4">
-                <Button id="add-pool-button" color="gradient" onClick={() => router.push(`/add/ETH`)}>
-                  {i18n._(t`Add Liquidity`)}
-                </Button>
-                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/ETH`)}>
-                  {i18n._(t`Create a pair`)}
-                </Button>
-              </div>
+              </>
             )}
           </div>
         </div>
