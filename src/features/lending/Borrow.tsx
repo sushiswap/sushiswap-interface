@@ -2,19 +2,14 @@ import { BigNumber, ethers } from 'ethers'
 import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
 import { KashiApproveButton, TokenApproveButton } from './Button'
 import { Percent, WNATIVE } from '@sushiswap/sdk'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
-import {
-  useExpertModeManager,
-  useUserSlippageTolerance,
-  useUserSlippageToleranceWithDefault,
-} from '../../state/user/hooks'
+import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
 
 import Button from '../../components/Button'
 import { Field } from '../../state/swap/actions'
-import { KashiContext } from './context'
 import KashiCooker from '../../entities/KashiCooker'
 import { SUSHISWAP_MULTISWAPPER_ADDRESS } from '../../constants/kashi'
 import SmartNumberInput from '../../components/SmartNumberInput'
@@ -27,6 +22,7 @@ import { toShare } from '../../functions/bentobox'
 import { tryParseAmount } from '../../functions/parse'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
+import { useKashiInfo } from './context'
 import { useV2TradeExactIn } from '../../hooks/useV2Trades'
 
 interface BorrowProps {
@@ -37,7 +33,7 @@ const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export default function Borrow({ pair }: BorrowProps) {
   const { account, chainId } = useActiveWeb3React()
-  const info = useContext(KashiContext).state.info
+  const info = useKashiInfo()
 
   // State
   const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))

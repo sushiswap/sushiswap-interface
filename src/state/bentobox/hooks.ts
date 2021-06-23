@@ -1,8 +1,6 @@
-import { Currency, Token, WNATIVE } from '@sushiswap/sdk'
-import { KashiContext, useKashiInfo } from '../../features/lending/context'
-import { useAllTokens, useTokens } from '../../hooks/Tokens'
+import { Token, WNATIVE } from '@sushiswap/sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import ERC20_ABI from '../../constants/abis/erc20.json'
@@ -14,8 +12,8 @@ import { e10 } from '../../functions/math'
 import { easyAmount } from '../../functions/kashi'
 import { getAddress } from '@ethersproject/address'
 import { toAmount } from '../../functions/bentobox'
-import { unwrappedToken } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useAllTokens } from '../../hooks/Tokens'
 import { useSingleCallResult } from '../multicall/hooks'
 import useTransactionStatus from '../../hooks/useTransactionStatus'
 
@@ -37,7 +35,7 @@ export function useBentoBalances(): BentoBalance[] {
 
   const tokens = useAllTokens()
 
-  const weth = WNATIVE[chainId || 1].address
+  const weth = WNATIVE[chainId].address
 
   const tokenAddresses = Object.keys(tokens)
 

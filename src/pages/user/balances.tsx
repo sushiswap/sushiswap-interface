@@ -1,5 +1,5 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BentoBalance, useBentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
+import { BentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
 import { CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { useState } from 'react'
 import { useFuse, useSortableData } from '../../hooks'
@@ -16,6 +16,8 @@ import Layout from '../../layouts/Kashi'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import Paper from '../../components/Paper'
 import Search from '../../components/Search'
+import { Transition } from '@headlessui/react'
+import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import { formatNumber } from '../../functions/format'
 import { t } from '@lingui/macro'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
@@ -97,12 +99,12 @@ Balances.Layout = BalancesLayout
 
 export default Balances
 
-const TokenBalance = ({ token }: { token: BentoBalance }) => {
+const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => {
   const [expand, setExpand] = useState<boolean>(false)
   return (
-    <Paper className="bg-dark-800 ">
+    <Paper className="space-y-4">
       <div
-        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none "
+        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none bg-dark-800"
         onClick={() => setExpand(!expand)}
       >
         <div className="flex items-center">
@@ -122,21 +124,29 @@ const TokenBalance = ({ token }: { token: BentoBalance }) => {
           </div>
         </div>
       </div>
-      {expand && (
-        <div className="grid grid-cols-2 gap-4 px-4 pb-4">
-          <div className="col-span-2 text-center md:col-span-1">
+      <Transition
+        show={expand}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="grid grid-cols-2 gap-4 ">
+          <div className="col-span-2 p-4 text-center rounded md:col-span-1 bg-dark-800">
             <Deposit token={token} />
           </div>
-          <div className="col-span-2 text-center md:col-span-1">
+          <div className="col-span-2 p-4 text-center rounded md:col-span-1 bg-dark-800">
             <Withdraw token={token} />
           </div>
         </div>
-      )}
+      </Transition>
     </Paper>
   )
 }
 
-export function Deposit({ token }: { token: BentoBalance; tokenAddress: string; tokenSymbol: string }): JSX.Element {
+export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.Element {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
 
@@ -211,7 +221,7 @@ export function Deposit({ token }: { token: BentoBalance; tokenAddress: string; 
   )
 }
 
-function Withdraw({ token }: { token: BentoBalance; tokenAddress: string; tokenSymbol: string }): JSX.Element {
+function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.Element {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
 
