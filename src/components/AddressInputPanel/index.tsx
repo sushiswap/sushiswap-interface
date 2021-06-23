@@ -88,9 +88,9 @@ export default function AddressInputPanel({
           error ? 'border-red' : 'border-transparent'
         )}
       >
-        <AutoColumn gap="md" className="w-full">
+        <AutoColumn gap="md" className="w-full p-5 rounded bg-dark-800">
           <RowBetween>
-            <div className="text-sm font-medium text-secondary">Recipient</div>
+            <div className="text-xs font-medium text-secondary whitespace-nowrap">Recipient:</div>
             {address && chainId && (
               <ExternalLink href={getExplorerLink(chainId, name ?? address, 'address')} style={{ fontSize: '14px' }}>
                 (View on explorer)
@@ -99,7 +99,7 @@ export default function AddressInputPanel({
           </RowBetween>
           <input
             className={classNames(
-              'flex-auto rounded p-3 w-full transition-colors border-none outline-none recipient-address-input bg-dark-700 font-medium overflow-hidden overflow-ellipsis disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring-blue',
+              'flex-auto rounded p-3 w-full transition-colors border-none outline-none recipient-address-input bg-dark-900 focus:bg-dark-700 font-medium overflow-hidden overflow-ellipsis disabled:cursor-not-allowed disabled:bg-dark-1000 disabled:ring disabled:ring-dark-800 focus:ring-blue placeholder-low-emphesis focus:placeholder-primary',
               error ? 'text-red' : 'text-primary'
             )}
             type="text"
@@ -108,7 +108,6 @@ export default function AddressInputPanel({
             autoCapitalize="off"
             spellCheck="false"
             placeholder="Wallet Address or ENS name"
-            // error={error}
             pattern="^(0x[a-fA-F0-9]{40})$"
             onChange={handleInput}
             value={value}

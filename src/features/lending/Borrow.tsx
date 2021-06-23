@@ -5,12 +5,7 @@ import { Percent, WNATIVE } from '@sushiswap/sdk'
 import React, { useContext, useMemo, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
-import {
-  computeRealizedLPFeePercent,
-  // computeSlippageAdjustedAmounts,
-  // computeTradePriceBreakdown,
-  warningSeverity,
-} from '../../functions/prices'
+import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
 import {
   useExpertModeManager,
   useUserSlippageTolerance,
@@ -88,8 +83,6 @@ export default function Borrow({ pair }: BorrowProps) {
   const extraCollateral =
     swap && foundTrade ? BigNumber.from(foundTrade.minimumAmountOut(allowedSlippage).quotient.toString()) : ZERO
 
-  console.log({ pair })
-
   // const extraCollateral = swap
   //   ? computeSlippageAdjustedAmounts(foundTrade, allowedSlippage)
   //       [Field.OUTPUT]?.toFixed(pair.collateral.tokenInfo.decimals)
@@ -146,8 +139,6 @@ export default function Borrow({ pair }: BorrowProps) {
     } balance is sufficient to deposit and then try again.`,
     true
   )
-
-  console.log({ borrowValue, borrowAmount, nextMaxBorrowMinimum })
 
   const borrowWarnings = new Warnings()
     .add(

@@ -98,10 +98,6 @@ export function useV2TradeExactOut(
             maxHops: i,
             maxNumResults: 1,
           })[0] ?? null
-        console.log({
-          bestTradeSoFar,
-          currentTrade,
-        })
         if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
           bestTradeSoFar = currentTrade
         }

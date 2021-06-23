@@ -95,8 +95,6 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, c
     )
   }
 
-  // console.log({ currency })
-
   return (
     <Logo
       width={size}

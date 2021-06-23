@@ -9,73 +9,59 @@ import { CHAINLINK_MAPPING } from '../constants/chainlink'
 import { e10 } from '../functions/math'
 import { ethers } from 'ethers'
 
-export interface IOracle {
+export interface Oracle {
   address: string
   name: string
   data: string
   warning: string
   error: string
-  readonly valid: boolean
+  valid: boolean
 }
 
-export default class Oracle implements IOracle {
-  public address = ''
-  public name = 'None'
-  public data = ''
-  public warning = ''
-  public error = ''
-  protected _chainId = ChainId.MAINNET
-  protected _pair: any
-  protected tokens: Token[]
+export abstract class AbstractOracle implements Oracle {
+  address = ''
+  name = 'None'
+  data = ''
+  warning = ''
+  error = ''
+  chainId = ChainId.MAINNET
+  pair: any
+  tokens: Token[]
+  valid
 
-  constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
+  constructor(pair: any, chainId, tokens?: Token[]) {
     this.address = pair.oracle
     this.data = pair.oracleData
-    this._pair = pair
-    this._chainId = chainId
+    this.pair = pair
+    this.chainId = chainId
     this.tokens = tokens
-  }
-
-  get valid(): boolean {
-    return false
+    this.valid = false
   }
 }
 
-export class SushiSwapTWAP0Oracle extends Oracle {
+export class SushiSwapTWAP0Oracle extends AbstractOracle {
   constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'SushiSwap'
   }
-  get valid(): boolean {
-    return true
-  }
 }
 
-export class SushiSwapTWAP1Oracle extends Oracle {
+export class SushiSwapTWAP1Oracle extends AbstractOracle {
   constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'SushiSwap'
   }
-  get valid(): boolean {
-    return true
-  }
 }
 
-export class ChainlinkOracle extends Oracle {
-  private _valid = false
-
+export class ChainlinkOracle extends AbstractOracle {
   constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'Chainlink'
-    this._valid = this._validate()
+    this.valid = this.validate()
   }
 
-  get valid(): boolean {
-    return this._valid
-  }
-
-  private _validate() {
-    const mapping = CHAINLINK_MAPPING[this._chainId]
+  private validate() {
+    const mapping = CHAINLINK_MAPPING[this.chainId]
     if (!mapping) {
       return false
     }
@@ -112,13 +98,13 @@ export class ChainlinkOracle extends Oracle {
       }
     }
     if (
-      from === this._pair.assetAddress &&
-      to === this._pair.collateralAddress &&
-      this.tokens[this._pair.collateralAddress] &&
-      this.tokens[this._pair.assetAddress]
+      from === this.pair.assetAddress &&
+      to === this.pair.collateralAddress &&
+      this.tokens[this.pair.collateralAddress] &&
+      this.tokens[this.pair.assetAddress]
     ) {
       const needed =
-        this.tokens[this._pair.collateralAddress].decimals + 18 - this.tokens[this._pair.assetAddress].decimals
+        this.tokens[this.pair.collateralAddress].decimals + 18 - this.tokens[this.pair.assetAddress].decimals
       const divider = e10(decimals - needed)
       if (!divider.eq(params[2])) {
         this.error =
@@ -138,14 +124,12 @@ function lowerEqual(value1: string, value2: string) {
   return value1.toLowerCase() === value2.toLowerCase()
 }
 
-export function getOracle(pair: any, chainId: ChainId, tokens: any): IOracle {
+export function getOracle(pair: any, chainId: ChainId, tokens: any): Oracle {
   if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
     return new ChainlinkOracle(pair, chainId, tokens)
   } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
     return new SushiSwapTWAP0Oracle(pair, chainId, tokens)
   } else if (pair.oracle === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
     return new SushiSwapTWAP1Oracle(pair, chainId, tokens)
-  } else {
-    return new Oracle(pair, chainId, tokens)
   }
 }
