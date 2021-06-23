@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
-import { ApprovalState, useActiveWeb3React, useApproveCallback } from '../../../hooks'
+import { ApprovalState, useActiveWeb3React } from '../../../hooks'
 import Button from '../../../components/Button'
 import Dots from '../../../components/Dots'
 import useMeowshi from '../../../hooks/useMeowshi'
