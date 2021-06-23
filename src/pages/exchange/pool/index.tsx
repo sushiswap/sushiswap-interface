@@ -118,27 +118,6 @@ export default function Pool() {
           />
 
           <div className="grid grid-flow-row gap-3">
-            <div className="flex items-center">
-              <Link href="/find">
-                <a
-                  id="import-pool-link"
-                  className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
-                >
-                  {i18n._(t`Import Pool Manually`)}
-                </a>
-              </Link>
-              {chainId && migrateFrom[chainId] && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                <Link href="/migrate">
-                  <a
-                    id="migrate-pool-link"
-                    className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
-                  >
-                    {i18n._(t`Migrate From ${migrateFrom[chainId]}`)}
-                  </a>
-                </Link>
-              )}
-            </div>
-
             {!account ? (
               <Web3Connect size="lg" color="blue" className="w-full" />
             ) : v2IsLoading ? (
@@ -163,13 +142,33 @@ export default function Pool() {
                 ))}
               </>
             ) : (
-              <Empty className="flex space-y-2 text-center text-low-emphesis">
+              <Empty className="flex text-center text-low-emphesis">
                 <div className="px-4 py-2">{i18n._(t`No liquidity found. `)}</div>
+                <div className="flex items-center">
+                  <Link href="/find">
+                    <a
+                      id="import-pool-link"
+                      className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
+                    >
+                      {i18n._(t`Import Pool Manually`)}
+                    </a>
+                  </Link>
+                  {chainId && migrateFrom[chainId] && [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                    <Link href="/migrate">
+                      <a
+                        id="migrate-pool-link"
+                        className="px-4 py-2 text-sm text-center cursor-pointer md:p-3 text-semibold text-secondary hover:text-high-emphesis"
+                      >
+                        {i18n._(t`Migrate From ${migrateFrom[chainId]}`)}
+                      </a>
+                    </Link>
+                  )}
+                </div>
               </Empty>
             )}
 
             {account && (
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 gap-4">
                 <Button id="add-pool-button" color="gradient" onClick={() => router.push(`/add/ETH`)}>
                   {i18n._(t`Add Liquidity`)}
                 </Button>
