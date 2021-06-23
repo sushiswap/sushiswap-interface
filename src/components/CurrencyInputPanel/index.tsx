@@ -1,7 +1,6 @@
-import { ChainId, Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
 import React, { ReactNode, useCallback, useState } from 'react'
 import { Trans, t } from '@lingui/macro'
-import { USDC, useUSDCPrice } from '../../hooks'
 import { classNames, formatCurrencyAmount } from '../../functions'
 
 import Button from '../Button'
@@ -12,38 +11,10 @@ import DoubleCurrencyLogo from '../DoubleLogo'
 import { FiatValue } from './FiatValue'
 import Lottie from 'lottie-react'
 import { Input as NumericalInput } from '../NumericalInput'
-import { darken } from 'polished'
 import selectCoinAnimation from '../../animation/select-coin.json'
-import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
-
-const CurrencySelect = styled.button<{ selected: boolean }>`
-  align-items: center;
-  height: 100%;
-  font-size: 20px;
-  font-weight: 500;
-  // background-color: ${({ selected, theme }) => (selected ? theme.bg1 : theme.primary1)};
-  // color: ${({ selected, theme }) => (selected ? theme.text1 : theme.white)};
-  // border-radius: ${({ theme }) => theme.borderRadius};
-  // box-shadow: ${({ selected }) => (selected ? 'none' : '0px 6px 10px rgba(0, 0, 0, 0.075)')};
-  outline: none;
-  cursor: pointer;
-  user-select: none;
-  border: none;
-  // padding: 0 0.5rem;
-
-  :focus,
-  :hover {
-    // background-color: ${({ selected, theme }) => (selected ? theme.bg2 : darken(0.05, theme.primary1))};
-  }
-`
-
-const StyledTokenName = styled.span<{ active?: boolean }>`
-  //   ${({ active }) => (active ? '  margin: 0 0.25rem 0 0.75rem;' : '  margin: 0 0.25rem 0 0.25rem;')}
-  //   font-size:  ${({ active }) => (active ? '24px' : '12px')};
-`
 
 interface CurrencyInputPanelProps {
   value?: string
@@ -98,13 +69,15 @@ export default function CurrencyInputPanel({
   }, [setModalOpen])
 
   return (
-    <div id={id} className={classNames(hideInput ? 'p-0' : 'p-5', 'p-5 rounded bg-dark-800')}>
+    <div id={id} className={classNames(hideInput ? 'p-4' : 'p-5', 'rounded bg-dark-800')}>
       <div className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row">
         <div className={classNames('w-full sm:w-2/5')}>
-          <CurrencySelect
-            selected={!!currency}
-            hideInput={hideInput}
-            className="open-currency-select-button"
+          <button
+            type="button"
+            className={classNames(
+              !!currency ? 'text-primary' : 'text-high-emphesis',
+              'open-currency-select-button h-full outline-none select-none cursor-pointer border-none text-xl font-medium items-center'
+            )}
             onClick={() => {
               if (onCurrencySelect) {
                 setModalOpen(true)
@@ -126,9 +99,14 @@ export default function CurrencyInputPanel({
                 </div>
               )}
               {pair ? (
-                <StyledTokenName className="pair-name-container">
+                <span
+                  className={classNames(
+                    'pair-name-container',
+                    Boolean(currency && currency.symbol) ? 'text-2xl' : 'text-xs'
+                  )}
+                >
                   {pair?.token0.symbol}:{pair?.token1.symbol}
-                </StyledTokenName>
+                </span>
               ) : (
                 <div className="flex flex-1 flex-col items-start justify-center mx-3.5">
                   {label && <div className="text-xs font-medium text-secondary whitespace-nowrap">{label}</div>}
@@ -152,21 +130,7 @@ export default function CurrencyInputPanel({
                 </div>
               )}
             </div>
-          </CurrencySelect>
-          {/* {!hideInput && (
-                        <>
-                            <NumericalInput
-                                className="token-amount-input"
-                                value={value}
-                                onUserInput={val => {
-                                    onUserInput(val)
-                                }}
-                            />
-                            {account && currency && showMaxButton && label !== 'To' && (
-                                <StyledBalanceMax onClick={onMax}>MAX</StyledBalanceMax>
-                            )}
-                        </>
-                    )} */}
+          </button>
         </div>
         {!hideInput && (
           <div
