@@ -1,8 +1,13 @@
-import React, { FunctionComponent } from 'react'
+import React from 'react'
 
 import { classNames } from '../../functions'
 
 export type TypographyWeight = 400 | 700
+
+const WEIGHTS = {
+  400: 'font-medium',
+  700: 'font-bold',
+}
 
 export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 'sm' | 'xs'
 
@@ -39,7 +44,7 @@ function Typography({
   return React.createElement(
     component,
     {
-      className: classNames(VARIANTS[variant], onClick ? 'cursor-pointer select-none' : '', className),
+      className: classNames(VARIANTS[variant], WEIGHTS[weight], onClick ? 'cursor-pointer select-none' : '', className),
       onClick,
       ...rest,
     },
