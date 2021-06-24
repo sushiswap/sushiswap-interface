@@ -147,11 +147,11 @@ msgstr "Approve"
 msgid "Approve Kashi"
 msgstr "Approve Kashi"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:190
+#: src/features/limit-orders/LimitOrderButton.tsx:163
 msgid "Approve Limit Order"
 msgstr "Approve Limit Order"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:180
+#: src/features/limit-orders/LimitOrderButton.tsx:153
 #: src/pages/exchange/swap/[[...tokens]].tsx:641
 msgid "Approve {0}"
 msgstr "Approve {0}"
@@ -169,7 +169,11 @@ msgstr "Approved"
 msgid "Approving"
 msgstr "Approving"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:178
+#: src/features/limit-orders/LimitOrderButton.tsx:161
+msgid "Approving Limit Order"
+msgstr "Approving Limit Order"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:151
 msgid "Approving {0}"
 msgstr "Approving {0}"
 
@@ -190,7 +194,7 @@ msgstr "Available"
 msgid "Back"
 msgstr "Back"
 
-#: src/pages/open-orders.tsx:28
+#: src/pages/open-orders.tsx:22
 msgid "Back to Limit Orders"
 msgstr "Back to Limit Orders"
 
@@ -202,14 +206,13 @@ msgid "Balance"
 msgstr "Balance"
 
 #: src/features/limit-orders/BalancePanel.tsx:49
-msgid "Balance:"
-msgstr "Balance:"
+#~ msgid "Balance:"
+#~ msgstr "Balance:"
 
 #: src/pages/user/balances.tsx:239
 msgid "Bento Balance: {0}"
 msgstr "Bento Balance: {0}"
 
-#: src/features/limit-orders/BalancePanel.tsx:60
 #: src/pages/kashi/borrow/[pair].tsx:207
 #: src/pages/kashi/lend/[pair].tsx:192
 #: src/pages/user/balances.tsx:54
@@ -297,19 +300,19 @@ msgstr "Buy"
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 
-#: src/features/open-orders/OpenOrders.tsx:123
+#: src/features/open-orders/OpenOrders.tsx:107
 msgid "Cancel Order"
 msgstr "Cancel Order"
 
-#: src/features/open-orders/CompletedOrders.tsx:93
+#: src/features/open-orders/CompletedOrders.tsx:78
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:155
+#: src/features/limit-orders/LimitOrderButton.tsx:132
 msgid "Chain not supported yet"
 msgstr "Chain not supported yet"
 
-#: src/pages/limit-order/[[...tokens]].tsx:279
+#: src/pages/limit-order/[[...tokens]].tsx:303
 msgid "Change Recipient"
 msgstr "Change Recipient"
 
@@ -380,7 +383,7 @@ msgstr "Confirm Withdrawal"
 msgid "Confirm this transaction in your wallet"
 msgstr "Confirm this transaction in your wallet"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:164
+#: src/features/limit-orders/LimitOrderButton.tsx:138
 #: src/pages/bar/index.tsx:353
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
@@ -417,7 +420,7 @@ msgstr "Create a pair"
 #~ msgid "Create pool"
 #~ msgstr "Create pool"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:46
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:43
 msgid "Current"
 msgstr "Current"
 
@@ -432,12 +435,16 @@ msgstr "Deposit"
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Deposit tokens into BentoBox for all the yields"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:202
+#: src/features/limit-orders/LimitOrderButton.tsx:179
 msgid "Deposit {0} into BentoBox"
 msgstr "Deposit {0} into BentoBox"
 
 #~ msgid "Deposited"
 #~ msgstr "Deposited"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:170
+msgid "Depositing {0} into BentoBox"
+msgstr "Depositing {0} into BentoBox"
 
 #: src/components/Header/More.tsx:18
 #: src/components/Menu.tsx:18
@@ -498,7 +505,7 @@ msgstr "Enter"
 msgid "Enter Amount"
 msgstr "Enter Amount"
 
-#: src/state/limit-order/hooks.ts:196
+#: src/state/limit-order/hooks.ts:171
 #: src/state/swap/hooks.ts:181
 msgid "Enter a recipient"
 msgstr "Enter a recipient"
@@ -508,7 +515,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "Enter a valid slippage percentage"
 
 #: src/state/burn/hooks.ts:138
-#: src/state/limit-order/hooks.ts:187
+#: src/state/limit-order/hooks.ts:162
 #: src/state/mint/hooks.ts:202
 #: src/state/swap/hooks.ts:172
 msgid "Enter an amount"
@@ -562,9 +569,9 @@ msgstr "Farm"
 #~ msgid "Fetching Instruments"
 #~ msgstr "Fetching Instruments"
 
-#: src/features/open-orders/CompletedOrders.tsx:40
-#: src/features/open-orders/CompletedOrders.tsx:98
-#: src/features/open-orders/OpenOrders.tsx:112
+#: src/features/open-orders/CompletedOrders.tsx:35
+#: src/features/open-orders/CompletedOrders.tsx:79
+#: src/features/open-orders/OpenOrders.tsx:98
 msgid "Filled"
 msgstr "Filled"
 
@@ -694,6 +701,14 @@ msgstr "Import Pool"
 #~ msgid "Import it."
 #~ msgstr "Import it."
 
+#: src/features/limit-orders/BalancePanel.tsx:36
+msgid "In Bento:"
+msgstr "In Bento:"
+
+#: src/features/limit-orders/BalancePanel.tsx:44
+msgid "In Wallet:"
+msgstr "In Wallet:"
+
 #~ msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
 #~ msgstr "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
 
@@ -714,7 +729,7 @@ msgstr "Insufficient Balance"
 msgid "Insufficient liquidity for this trade"
 msgstr "Insufficient liquidity for this trade"
 
-#: src/state/limit-order/hooks.ts:223
+#: src/state/limit-order/hooks.ts:193
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
 #: src/state/swap/hooks.ts:198
@@ -729,7 +744,6 @@ msgstr "Interface Settings"
 msgid "Invalid pair"
 msgstr "Invalid pair"
 
-#: src/state/limit-order/hooks.ts:199
 #: src/state/swap/hooks.ts:188
 msgid "Invalid recipient"
 msgstr "Invalid recipient"
@@ -774,10 +788,14 @@ msgstr "Lend assets for interest from borrowers."
 #~ msgid "Lent"
 #~ msgstr "Lent"
 
+#: src/features/limit-orders/ExchangeHeader.tsx:41
+msgid "Limit"
+msgstr "Limit"
+
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Limit <0>Used</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:167
+#: src/pages/limit-order/[[...tokens]].tsx:170
 msgid "Limit order"
 msgstr "Limit order"
 
@@ -821,7 +839,7 @@ msgstr "Lists"
 msgid "Loading"
 msgstr "Loading"
 
-#: src/state/limit-order/hooks.ts:218
+#: src/state/limit-order/hooks.ts:189
 msgid "Loading balance"
 msgstr "Loading balance"
 
@@ -880,9 +898,9 @@ msgstr "Market Info"
 msgid "Matic Bridge"
 msgstr "Matic Bridge"
 
-#: src/components/CurrencyInputPanel/index.tsx:250
-#~ msgid "Max"
-#~ msgstr "Max"
+#: src/features/limit-orders/CurrencyInput.tsx:34
+msgid "Max"
+msgstr "Max"
 
 #: src/pages/bar/index.tsx:175
 msgid "Maximize yield by staking SUSHI for xSUSHI"
@@ -956,7 +974,7 @@ msgid "My SUSHI"
 msgstr "My SUSHI"
 
 #: src/features/limit-orders/OrderExpirationDropdown.tsx:17
-#: src/state/limit-order/hooks.ts:286
+#: src/state/limit-order/hooks.ts:266
 msgid "Never"
 msgstr "Never"
 
@@ -993,7 +1011,7 @@ msgstr "No liquidity found to do swap"
 msgid "No liquidity was found."
 msgstr "No liquidity was found."
 
-#: src/features/open-orders/CompletedOrders.tsx:113
+#: src/features/open-orders/CompletedOrders.tsx:92
 msgid "No order history"
 msgstr "No order history"
 
@@ -1060,14 +1078,18 @@ msgstr "Output is estimated. If the price changes by more than {0}% your transac
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Output will be sent to <0>{0}</0>"
 
-#: src/features/open-orders/CompletedOrders.tsx:34
-#: src/features/open-orders/OpenOrders.tsx:62
+#: src/features/open-orders/CompletedOrders.tsx:31
+#: src/features/open-orders/OpenOrders.tsx:59
 msgid "Pay"
 msgstr "Pay"
 
 #: src/features/limit-orders/BalancePanel.tsx:56
-msgid "Pay From:"
-msgstr "Pay From:"
+#~ msgid "Pay From:"
+#~ msgstr "Pay From:"
+
+#: src/features/limit-orders/PayFromToggle.tsx:23
+msgid "Pay from:"
+msgstr "Pay from:"
 
 #: src/components/Web3Status/index.tsx:120
 msgid "Pending"
@@ -1136,9 +1158,9 @@ msgstr "Price Impact Too High"
 #~ msgid "Price Updated"
 #~ msgstr "Price Updated"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:39
-#: src/features/open-orders/CompletedOrders.tsx:37
-#: src/features/open-orders/OpenOrders.tsx:65
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:36
+#: src/features/open-orders/CompletedOrders.tsx:33
+#: src/features/open-orders/OpenOrders.tsx:61
 msgid "Rate"
 msgstr "Rate"
 
@@ -1154,8 +1176,8 @@ msgstr "Rates"
 #~ msgid "Read the contract"
 #~ msgstr "Read the contract"
 
-#: src/features/open-orders/CompletedOrders.tsx:31
-#: src/features/open-orders/OpenOrders.tsx:59
+#: src/features/open-orders/CompletedOrders.tsx:30
+#: src/features/open-orders/OpenOrders.tsx:58
 msgid "Receive"
 msgstr "Receive"
 
@@ -1195,7 +1217,7 @@ msgstr "Repay"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restricts swaps to direct pairs only."
 
-#: src/features/limit-orders/LimitOrderButton.tsx:211
+#: src/features/limit-orders/LimitOrderButton.tsx:124
 msgid "Review Limit Order"
 msgstr "Review Limit Order"
 
@@ -1244,12 +1266,13 @@ msgstr "Select a asset token"
 msgid "Select a collateral token"
 msgstr "Select a collateral token"
 
-#: src/state/limit-order/hooks.ts:204
+#: src/state/limit-order/hooks.ts:175
 msgid "Select a rate"
 msgstr "Select a rate"
 
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/limit-order/hooks.ts:191
+#: src/features/limit-orders/CurrencySelect.tsx:68
+#: src/state/limit-order/hooks.ts:166
 #: src/state/swap/hooks.ts:176
 msgid "Select a token"
 msgstr "Select a token"
@@ -1257,7 +1280,7 @@ msgstr "Select a token"
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "Select a token to find your liquidity"
 
-#: src/state/limit-order/hooks.ts:208
+#: src/state/limit-order/hooks.ts:179
 msgid "Select an order expiration"
 msgstr "Select an order expiration"
 
@@ -1287,7 +1310,7 @@ msgid "Slippage tolerance..."
 msgstr "Slippage tolerance..."
 
 #: src/features/lending/Button.tsx:28
-#: src/features/limit-orders/LimitOrderButton.tsx:142
+#: src/features/limit-orders/LimitOrderButton.tsx:188
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 
@@ -1367,6 +1390,7 @@ msgstr "SushiSwap"
 #: src/components/ExchangeHeader.tsx:42
 #: src/components/Header/index.tsx:48
 #: src/components/Header/index.tsx:297
+#: src/features/limit-orders/ExchangeHeader.tsx:30
 #: src/pages/exchange/swap/[[...tokens]].tsx:672
 #: src/pages/exchange/swap/[[...tokens]].tsx:701
 msgid "Swap"
@@ -1438,7 +1462,7 @@ msgstr "The transaction could not be sent because the deadline has passed. Pleas
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "Things you can do with your SUSHI"
 
-#: src/pages/limit-order/[[...tokens]].tsx:145
+#: src/pages/limit-order/[[...tokens]].tsx:142
 msgid "This transaction is below market rate"
 msgstr "This transaction is below market rate"
 
@@ -1595,7 +1619,7 @@ msgstr "View on explorer"
 msgid "Waiting for Confirmation"
 msgstr "Waiting for Confirmation"
 
-#: src/features/limit-orders/BalancePanel.tsx:60
+#: src/features/limit-orders/PayFromToggle.tsx:45
 #: src/pages/user/balances.tsx:66
 msgid "Wallet"
 msgstr "Wallet"
@@ -1662,11 +1686,11 @@ msgstr "You are on the wrong network"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "You need to first approve LP tokens and then migrate it"
 
-#: src/pages/limit-order/[[...tokens]].tsx:196
+#: src/pages/limit-order/[[...tokens]].tsx:201
 msgid "You pay"
 msgstr "You pay"
 
-#: src/pages/limit-order/[[...tokens]].tsx:237
+#: src/pages/limit-order/[[...tokens]].tsx:247
 msgid "You receive:"
 msgstr "You receive:"
 
@@ -1751,14 +1775,14 @@ msgstr "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidit
 msgid "Zap"
 msgstr "Zap"
 
-#: src/pages/limit-order/[[...tokens]].tsx:153
+#: src/pages/limit-order/[[...tokens]].tsx:162
 msgid "above"
 msgstr "above"
 
 #~ msgid "annualized"
 #~ msgstr "annualized"
 
-#: src/pages/limit-order/[[...tokens]].tsx:153
+#: src/pages/limit-order/[[...tokens]].tsx:162
 msgid "below"
 msgstr "below"
 
@@ -1808,7 +1832,7 @@ msgstr "{0} Strategy"
 #~ msgid "{0} per {1}"
 #~ msgstr "{0} per {1}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:156
+#: src/pages/limit-order/[[...tokens]].tsx:164
 msgid "{0} {sign} market rate"
 msgstr "{0} {sign} market rate"
 

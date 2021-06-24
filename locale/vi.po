@@ -148,11 +148,11 @@ msgstr "Phê duyệt"
 msgid "Approve Kashi"
 msgstr "Phê duyệt Kashi"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:190
+#: src/features/limit-orders/LimitOrderButton.tsx:163
 msgid "Approve Limit Order"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:180
+#: src/features/limit-orders/LimitOrderButton.tsx:153
 #: src/pages/exchange/swap/[[...tokens]].tsx:641
 msgid "Approve {0}"
 msgstr "Phê duyệt {0}"
@@ -170,7 +170,11 @@ msgstr "Đã phê duyệt"
 msgid "Approving"
 msgstr "Đang phê duyệt"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:178
+#: src/features/limit-orders/LimitOrderButton.tsx:161
+msgid "Approving Limit Order"
+msgstr ""
+
+#: src/features/limit-orders/LimitOrderButton.tsx:151
 msgid "Approving {0}"
 msgstr "Đang phê duyệt {0}"
 
@@ -191,7 +195,7 @@ msgstr "Có sẵn"
 msgid "Back"
 msgstr ""
 
-#: src/pages/open-orders.tsx:28
+#: src/pages/open-orders.tsx:22
 msgid "Back to Limit Orders"
 msgstr ""
 
@@ -203,14 +207,13 @@ msgid "Balance"
 msgstr "Số dư"
 
 #: src/features/limit-orders/BalancePanel.tsx:49
-msgid "Balance:"
-msgstr ""
+#~ msgid "Balance:"
+#~ msgstr ""
 
 #: src/pages/user/balances.tsx:239
 msgid "Bento Balance: {0}"
 msgstr "Số dư Bento: {0}"
 
-#: src/features/limit-orders/BalancePanel.tsx:60
 #: src/pages/kashi/borrow/[pair].tsx:207
 #: src/pages/kashi/lend/[pair].tsx:192
 #: src/pages/user/balances.tsx:54
@@ -298,19 +301,19 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Bỏ qua các phương thức xác nhận và cho phép các giao dịch có độ trượt giá cao. Bạn phải tự chịu rủi ro khi sử dụng."
 
-#: src/features/open-orders/OpenOrders.tsx:123
+#: src/features/open-orders/OpenOrders.tsx:107
 msgid "Cancel Order"
 msgstr ""
 
-#: src/features/open-orders/CompletedOrders.tsx:93
+#: src/features/open-orders/CompletedOrders.tsx:78
 msgid "Cancelled"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:155
+#: src/features/limit-orders/LimitOrderButton.tsx:132
 msgid "Chain not supported yet"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:279
+#: src/pages/limit-order/[[...tokens]].tsx:303
 msgid "Change Recipient"
 msgstr ""
 
@@ -379,7 +382,7 @@ msgstr "Xác nhận rút tiền"
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/features/limit-orders/LimitOrderButton.tsx:164
+#: src/features/limit-orders/LimitOrderButton.tsx:138
 #: src/pages/bar/index.tsx:353
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
@@ -416,7 +419,7 @@ msgstr "Tạo một cặp"
 #~ msgid "Create pool"
 #~ msgstr "Tạo mạng lưới"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:46
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:43
 msgid "Current"
 msgstr ""
 
@@ -431,12 +434,16 @@ msgstr "Ký quỹ"
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Ký quỹ token vào BentoBox để nhận tất cả lợi suất"
 
-#: src/features/limit-orders/LimitOrderButton.tsx:202
+#: src/features/limit-orders/LimitOrderButton.tsx:179
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
 #~ msgid "Deposited"
 #~ msgstr "Đã ký quỹ"
+
+#: src/features/limit-orders/LimitOrderButton.tsx:170
+msgid "Depositing {0} into BentoBox"
+msgstr ""
 
 #: src/components/Header/More.tsx:18
 #: src/components/Menu.tsx:18
@@ -497,7 +504,7 @@ msgstr "Nhập"
 msgid "Enter Amount"
 msgstr "Nhập số tiền"
 
-#: src/state/limit-order/hooks.ts:196
+#: src/state/limit-order/hooks.ts:171
 #: src/state/swap/hooks.ts:181
 msgid "Enter a recipient"
 msgstr "Nhập người nhận"
@@ -507,7 +514,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "Nhập phần trăm trượt giá hợp lệ"
 
 #: src/state/burn/hooks.ts:138
-#: src/state/limit-order/hooks.ts:187
+#: src/state/limit-order/hooks.ts:162
 #: src/state/mint/hooks.ts:202
 #: src/state/swap/hooks.ts:172
 msgid "Enter an amount"
@@ -561,9 +568,9 @@ msgstr ""
 #~ msgid "Fetching Instruments"
 #~ msgstr "Tải công cụ"
 
-#: src/features/open-orders/CompletedOrders.tsx:40
-#: src/features/open-orders/CompletedOrders.tsx:98
-#: src/features/open-orders/OpenOrders.tsx:112
+#: src/features/open-orders/CompletedOrders.tsx:35
+#: src/features/open-orders/CompletedOrders.tsx:79
+#: src/features/open-orders/OpenOrders.tsx:98
 msgid "Filled"
 msgstr ""
 
@@ -692,6 +699,14 @@ msgstr "Nhập mạng lưới"
 #~ msgid "Import it."
 #~ msgstr ""
 
+#: src/features/limit-orders/BalancePanel.tsx:36
+msgid "In Bento:"
+msgstr ""
+
+#: src/features/limit-orders/BalancePanel.tsx:44
+msgid "In Wallet:"
+msgstr ""
+
 #~ msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
 #~ msgstr "Đã ước tính đầu vào. Bạn sẽ bán tối đa <0>{0} {1}</0> nếu không giao dịch sẽ hoàn nguyên."
 
@@ -712,7 +727,7 @@ msgstr "Số dư không đủ"
 msgid "Insufficient liquidity for this trade"
 msgstr "Không đủ thanh khoản cho giao dịch này"
 
-#: src/state/limit-order/hooks.ts:223
+#: src/state/limit-order/hooks.ts:193
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
 #: src/state/swap/hooks.ts:198
@@ -727,7 +742,6 @@ msgstr "Cài đặt giao diện"
 msgid "Invalid pair"
 msgstr "Cặp không hợp lệ"
 
-#: src/state/limit-order/hooks.ts:199
 #: src/state/swap/hooks.ts:188
 msgid "Invalid recipient"
 msgstr "Người nhận không hợp lệ"
@@ -772,10 +786,14 @@ msgstr "Cho khách hàng vay tài sản lấy lãi."
 #~ msgid "Lent"
 #~ msgstr "Đã cho vay"
 
+#: src/features/limit-orders/ExchangeHeader.tsx:41
+msgid "Limit"
+msgstr ""
+
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Giới hạn <0>Đã sử dụng</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:167
+#: src/pages/limit-order/[[...tokens]].tsx:170
 msgid "Limit order"
 msgstr ""
 
@@ -819,7 +837,7 @@ msgstr "Danh sách"
 msgid "Loading"
 msgstr "Đang tải"
 
-#: src/state/limit-order/hooks.ts:218
+#: src/state/limit-order/hooks.ts:189
 msgid "Loading balance"
 msgstr ""
 
@@ -878,9 +896,9 @@ msgstr "Thông tin thị trường"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:250
-#~ msgid "Max"
-#~ msgstr "Tối đa"
+#: src/features/limit-orders/CurrencyInput.tsx:34
+msgid "Max"
+msgstr "Tối đa"
 
 #: src/pages/bar/index.tsx:175
 msgid "Maximize yield by staking SUSHI for xSUSHI"
@@ -954,7 +972,7 @@ msgid "My SUSHI"
 msgstr ""
 
 #: src/features/limit-orders/OrderExpirationDropdown.tsx:17
-#: src/state/limit-order/hooks.ts:286
+#: src/state/limit-order/hooks.ts:266
 msgid "Never"
 msgstr ""
 
@@ -991,7 +1009,7 @@ msgstr "Không tìm thấy thanh khoản để thực hiện hoán đổi"
 msgid "No liquidity was found."
 msgstr ""
 
-#: src/features/open-orders/CompletedOrders.tsx:113
+#: src/features/open-orders/CompletedOrders.tsx:92
 msgid "No order history"
 msgstr ""
 
@@ -1058,13 +1076,17 @@ msgstr "Đã ước tính đầu ra. Nếu giá thay đổi hơn {0} % thì giao
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Đầu ra sẽ được gửi đến <0>{0}</0>"
 
-#: src/features/open-orders/CompletedOrders.tsx:34
-#: src/features/open-orders/OpenOrders.tsx:62
+#: src/features/open-orders/CompletedOrders.tsx:31
+#: src/features/open-orders/OpenOrders.tsx:59
 msgid "Pay"
 msgstr ""
 
 #: src/features/limit-orders/BalancePanel.tsx:56
-msgid "Pay From:"
+#~ msgid "Pay From:"
+#~ msgstr ""
+
+#: src/features/limit-orders/PayFromToggle.tsx:23
+msgid "Pay from:"
 msgstr ""
 
 #: src/components/Web3Status/index.tsx:120
@@ -1134,9 +1156,9 @@ msgstr "Tác động giá quá cao"
 #~ msgid "Price Updated"
 #~ msgstr "Đã cập nhật giá"
 
-#: src/features/limit-orders/LimitPriceInputPanel.tsx:39
-#: src/features/open-orders/CompletedOrders.tsx:37
-#: src/features/open-orders/OpenOrders.tsx:65
+#: src/features/limit-orders/LimitPriceInputPanel.tsx:36
+#: src/features/open-orders/CompletedOrders.tsx:33
+#: src/features/open-orders/OpenOrders.tsx:61
 msgid "Rate"
 msgstr ""
 
@@ -1152,8 +1174,8 @@ msgstr "Tỷ giá"
 #~ msgid "Read the contract"
 #~ msgstr "Đọc hợp đồng"
 
-#: src/features/open-orders/CompletedOrders.tsx:31
-#: src/features/open-orders/OpenOrders.tsx:59
+#: src/features/open-orders/CompletedOrders.tsx:30
+#: src/features/open-orders/OpenOrders.tsx:58
 msgid "Receive"
 msgstr ""
 
@@ -1193,7 +1215,7 @@ msgstr "Hoàn trả"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Chỉ hạn chế hoán đổi đối với các cặp trực tiếp."
 
-#: src/features/limit-orders/LimitOrderButton.tsx:211
+#: src/features/limit-orders/LimitOrderButton.tsx:124
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1242,12 +1264,13 @@ msgstr ""
 msgid "Select a collateral token"
 msgstr ""
 
-#: src/state/limit-order/hooks.ts:204
+#: src/state/limit-order/hooks.ts:175
 msgid "Select a rate"
 msgstr ""
 
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/limit-order/hooks.ts:191
+#: src/features/limit-orders/CurrencySelect.tsx:68
+#: src/state/limit-order/hooks.ts:166
 #: src/state/swap/hooks.ts:176
 msgid "Select a token"
 msgstr "Chọn một token"
@@ -1255,7 +1278,7 @@ msgstr "Chọn một token"
 #~ msgid "Select a token to find your liquidity"
 #~ msgstr "Chọn một token để tìm thanh khoản của bạn"
 
-#: src/state/limit-order/hooks.ts:208
+#: src/state/limit-order/hooks.ts:179
 msgid "Select an order expiration"
 msgstr ""
 
@@ -1285,7 +1308,7 @@ msgid "Slippage tolerance..."
 msgstr ""
 
 #: src/features/lending/Button.tsx:28
-#: src/features/limit-orders/LimitOrderButton.tsx:142
+#: src/features/limit-orders/LimitOrderButton.tsx:188
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Đã xảy ra sự cố khi ký phê duyệt. Điều này được mong đợi đối với các ví cứng, chẳng hạn như Trezor và Ledger. Nhấp lại và phương pháp dự phòng sẽ được sử dụng"
 
@@ -1365,6 +1388,7 @@ msgstr ""
 #: src/components/ExchangeHeader.tsx:42
 #: src/components/Header/index.tsx:48
 #: src/components/Header/index.tsx:297
+#: src/features/limit-orders/ExchangeHeader.tsx:30
 #: src/pages/exchange/swap/[[...tokens]].tsx:672
 #: src/pages/exchange/swap/[[...tokens]].tsx:701
 msgid "Swap"
@@ -1436,7 +1460,7 @@ msgstr ""
 #~ msgid "Things you can do with your SUSHI"
 #~ msgstr "Những điều bạn có thể làm với SUSHI của mình"
 
-#: src/pages/limit-order/[[...tokens]].tsx:145
+#: src/pages/limit-order/[[...tokens]].tsx:142
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1591,7 +1615,7 @@ msgstr "Xem trên explorer"
 msgid "Waiting for Confirmation"
 msgstr ""
 
-#: src/features/limit-orders/BalancePanel.tsx:60
+#: src/features/limit-orders/PayFromToggle.tsx:45
 #: src/pages/user/balances.tsx:66
 msgid "Wallet"
 msgstr "Ví tiền"
@@ -1658,11 +1682,11 @@ msgstr "Bạn đang kết nối sai mạng"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Trước tiên, bạn cần phê duyệt token LP và sau đó di chuyển"
 
-#: src/pages/limit-order/[[...tokens]].tsx:196
+#: src/pages/limit-order/[[...tokens]].tsx:201
 msgid "You pay"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:237
+#: src/pages/limit-order/[[...tokens]].tsx:247
 msgid "You receive:"
 msgstr ""
 
@@ -1747,14 +1771,14 @@ msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh k
 msgid "Zap"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:153
+#: src/pages/limit-order/[[...tokens]].tsx:162
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "hàng năm"
 
-#: src/pages/limit-order/[[...tokens]].tsx:153
+#: src/pages/limit-order/[[...tokens]].tsx:162
 msgid "below"
 msgstr ""
 
@@ -1804,7 +1828,7 @@ msgstr "{0} Chiến lược"
 #~ msgid "{0} per {1}"
 #~ msgstr "{0} mỗi {1}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:156
+#: src/pages/limit-order/[[...tokens]].tsx:164
 msgid "{0} {sign} market rate"
 msgstr ""
 

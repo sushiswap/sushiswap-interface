@@ -1,28 +1,16 @@
-import { useActiveWeb3React } from "./useActiveWeb3React";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useBentoBoxContract } from "./useContract";
-import { useBentoMasterContractAllowed } from "../state/bentobox/hooks";
-import { ethers } from "ethers";
-import {
-  useDerivedLimitOrderInfo,
-  useLimitOrderApprovalPending,
-  useLimitOrderState,
-} from "../state/limit-order/hooks";
-import { useDispatch } from "react-redux";
-import {
-  setFromBentoBalance,
-  setLimitOrderApprovalPending,
-} from "../state/limit-order/actions";
-import { useTransactionAdder } from "../state/transactions/hooks";
-import { Token, TokenAmount, WETH } from "@sushiswap/sdk";
-import {
-  getSignatureWithProviderBentobox,
-  getVerifyingContract,
-  LimitOrder,
-} from "limitorderv2-sdk";
-import { Field } from "../state/swap/actions";
-import { wrappedCurrency, ZERO } from "../functions";
-import { OrderExpiration } from "../state/limit-order/reducer";
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useBentoBoxContract } from './useContract'
+import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
+import { ethers } from 'ethers'
+import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
+import { useDispatch } from 'react-redux'
+import { setFromBentoBalance, setLimitOrderApprovalPending } from '../state/limit-order/actions'
+import { useTransactionAdder } from '../state/transactions/hooks'
+import { Token } from '@sushiswap/sdk'
+import { getSignatureWithProviderBentobox, getVerifyingContract } from 'limitorderv2-sdk'
+import { Field } from '../state/swap/actions'
+import { ZERO } from '../functions'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -40,68 +28,63 @@ export enum BentoApproveOutcome {
 }
 
 const useLimitOrderApproveCallback = () => {
-  const { account, library, chainId } = useActiveWeb3React();
-  const dispatch = useDispatch();
+  const { account, library, chainId } = useActiveWeb3React()
+  const dispatch = useDispatch()
 
-  const { fromBentoBalance, recipient, orderExpiration } = useLimitOrderState();
-  const { parsedAmounts, currencies } = useDerivedLimitOrderInfo();
-  const [fallback, setFallback] = useState(false);
-  const [limitOrderPermit, setLimitOrderPermit] = useState(undefined);
+  const { fromBentoBalance } = useLimitOrderState()
+  const { parsedAmounts } = useDerivedLimitOrderInfo()
+  const [fallback, setFallback] = useState(false)
+  const [limitOrderPermit, setLimitOrderPermit] = useState(undefined)
 
   useEffect(() => {
-    setLimitOrderPermit(undefined);
-  }, [account, chainId]);
+    setLimitOrderPermit(undefined)
+  }, [account, chainId])
 
-  const masterContract = chainId && getVerifyingContract(chainId);
+  const masterContract = chainId && getVerifyingContract(chainId)
 
-  const pendingApproval = useLimitOrderApprovalPending();
-  const currentAllowed = useBentoMasterContractAllowed(
-    masterContract,
-    account || ethers.constants.AddressZero
-  );
-  const addTransaction = useTransactionAdder();
+  const pendingApproval = useLimitOrderApprovalPending()
+  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
+  const addTransaction = useTransactionAdder()
 
   // check the current approval status
   const approvalState: BentoApprovalState = useMemo(() => {
-    if (!masterContract) return BentoApprovalState.UNKNOWN;
-    if (!currentAllowed && pendingApproval) return BentoApprovalState.PENDING;
+    if (!masterContract) return BentoApprovalState.UNKNOWN
+    if (!currentAllowed && pendingApproval) return BentoApprovalState.PENDING
 
-    return currentAllowed
-      ? BentoApprovalState.APPROVED
-      : BentoApprovalState.NOT_APPROVED;
-  }, [masterContract, currentAllowed, pendingApproval]);
+    return currentAllowed ? BentoApprovalState.APPROVED : BentoApprovalState.NOT_APPROVED
+  }, [masterContract, currentAllowed, pendingApproval])
 
-  const bentoBoxContract = useBentoBoxContract();
+  const bentoBoxContract = useBentoBoxContract()
 
   const approve = useCallback(async () => {
     if (approvalState !== BentoApprovalState.NOT_APPROVED) {
-      console.error("approve was called unnecessarily");
-      return { outcome: BentoApproveOutcome.NOT_READY };
+      console.error('approve was called unnecessarily')
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
     if (!masterContract) {
-      console.error("no token");
-      return { outcome: BentoApproveOutcome.NOT_READY };
+      console.error('no token')
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
 
     if (!bentoBoxContract) {
-      console.error("no bentobox contract");
-      return { outcome: BentoApproveOutcome.NOT_READY };
+      console.error('no bentobox contract')
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
 
     if (!account) {
-      console.error("no account");
-      return { outcome: BentoApproveOutcome.NOT_READY };
+      console.error('no account')
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
     if (!library) {
-      console.error("no library");
-      return { outcome: BentoApproveOutcome.NOT_READY };
+      console.error('no library')
+      return { outcome: BentoApproveOutcome.NOT_READY }
     }
 
     try {
-      const nonce = await bentoBoxContract?.nonces(account);
+      const nonce = await bentoBoxContract?.nonces(account)
       const { v, r, s } = await getSignatureWithProviderBentobox(
         {
-          warning: "Give FULL access to funds in (and approved to) BentoBox?",
+          warning: 'Give FULL access to funds in (and approved to) BentoBox?',
           user: account,
           masterContract,
           approved: true,
@@ -109,32 +92,26 @@ const useLimitOrderApproveCallback = () => {
         },
         chainId,
         library
-      );
+      )
 
       return {
         outcome: BentoApproveOutcome.SUCCESS,
-        data: bentoBoxContract?.interface?.encodeFunctionData(
-          "setMasterContractApproval",
-          [account, masterContract, true, v, r, s]
-        ),
-      };
+        data: bentoBoxContract?.interface?.encodeFunctionData('setMasterContractApproval', [
+          account,
+          masterContract,
+          true,
+          v,
+          r,
+          s,
+        ]),
+      }
     } catch (e) {
-      console.log(e);
+      console.log(e)
       return {
-        outcome:
-          e.code === 4001
-            ? BentoApproveOutcome.REJECTED
-            : BentoApproveOutcome.FAILED,
-      };
+        outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
+      }
     }
-  }, [
-    approvalState,
-    account,
-    library,
-    chainId,
-    bentoBoxContract,
-    masterContract,
-  ]);
+  }, [approvalState, account, library, chainId, bentoBoxContract, masterContract])
 
   const onApprove = async function () {
     if (fallback) {
@@ -145,68 +122,63 @@ const useLimitOrderApproveCallback = () => {
         0,
         ethers.constants.HashZero,
         ethers.constants.HashZero
-      );
-      dispatch(setLimitOrderApprovalPending("Approve Limit Order"));
-      await tx.wait();
-      dispatch(setLimitOrderApprovalPending(""));
+      )
+      dispatch(setLimitOrderApprovalPending('Approve Limit Order'))
+      await tx.wait()
+      dispatch(setLimitOrderApprovalPending(''))
     } else {
-      const result = await approve();
+      const result = await approve()
 
-      if (result.outcome === BentoApproveOutcome.SUCCESS)
-        setLimitOrderPermit(result.data);
-      else setFallback(true);
+      if (result.outcome === BentoApproveOutcome.SUCCESS) setLimitOrderPermit(result.data)
+      else setFallback(true)
     }
-  };
+  }
 
   const execute = async function (token: Token) {
-    const summary = [];
-    const batch = [];
+    const summary = []
+    const batch = []
 
     // If bento is not yet approved but we do have the permit, add the permit to the batch
     if (approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit) {
-      batch.push(limitOrderPermit);
-      summary.push("Approve Limit Order");
+      batch.push(limitOrderPermit)
+      summary.push('Approve Limit Order')
     }
 
-    const tokenAddressChecksum = ethers.utils.getAddress(token.address);
-    const useNative = tokenAddressChecksum === WETH[chainId].address;
-    const amount = parsedAmounts[Field.INPUT].raw.toString();
+    const amount = parsedAmounts[Field.INPUT].quotient.toString()
     if (!fromBentoBalance) {
-      summary.push(`Deposit ${token.symbol} into BentoBox`);
-      if (useNative) {
+      summary.push(`Deposit ${token.symbol} into BentoBox`)
+      if (token.isNative) {
         batch.push(
-          bentoBoxContract?.interface?.encodeFunctionData("deposit", [
+          bentoBoxContract?.interface?.encodeFunctionData('deposit', [
             ethers.constants.AddressZero,
             account,
             account,
             amount,
             0,
           ])
-        );
+        )
       } else {
         batch.push(
-          bentoBoxContract?.interface?.encodeFunctionData("deposit", [
-            tokenAddressChecksum,
+          bentoBoxContract?.interface?.encodeFunctionData('deposit', [
+            ethers.utils.getAddress(token.wrapped.address),
             account,
             account,
             amount,
             0,
           ])
-        );
+        )
       }
     }
 
     const tx = await bentoBoxContract?.batch(batch, true, {
-      value: useNative ? amount : ZERO,
-    });
-    addTransaction(tx, { summary: summary.join(", ") });
-    setLimitOrderPermit(undefined);
-    await tx.wait();
+      value: token.isNative ? amount : ZERO,
+    })
+    addTransaction(tx, { summary: summary.join(', ') })
+    setLimitOrderPermit(undefined)
+    return tx
+  }
 
-    dispatch(setFromBentoBalance(true));
-  };
+  return [approvalState, fallback, limitOrderPermit, onApprove, execute]
+}
 
-  return [approvalState, fallback, limitOrderPermit, onApprove, execute];
-};
-
-export default useLimitOrderApproveCallback;
+export default useLimitOrderApproveCallback

@@ -2,16 +2,13 @@ import Head from 'next/head'
 import { t } from '@lingui/macro'
 import TokenWarningModal from '../../components/TokenWarningModal'
 import React, { useCallback, useMemo, useState } from 'react'
-import Layout from '../../layouts/DefaultLayout'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Token } from '@sushiswap/sdk'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import { Field } from '../../state/swap/actions'
-import SwapHeader from '../../components/ExchangeHeader'
 import { useExpertModeManager } from '../../state/user/hooks'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import { formatPercent, maxAmountSpend, wrappedCurrency } from '../../functions'
+import { formatPercent, maxAmountSpend, tryParseAmount } from '../../functions'
 import Lottie from 'lottie-react'
 import swapArrowsAnimationData from '../../animation/swap-arrows.json'
 import LimitPriceInputPanel from '../../features/limit-orders/LimitPriceInputPanel'
@@ -28,15 +25,37 @@ import {
 } from '../../state/limit-order/hooks'
 import LimitOrderButton from '../../features/limit-orders/LimitOrderButton'
 import BalancePanel from '../../features/limit-orders/BalancePanel'
-import CurrencyInputPanel, { CurrencyInputPanelVariant } from '../../features/limit-orders/CurrencyInputPanel'
+import ExchangeHeader from '../../features/limit-orders/ExchangeHeader'
+import CurrencyInputPanel from '../../features/limit-orders/CurrencyInputPanel'
+import CurrencyInput from '../../features/limit-orders/CurrencyInput'
+import CurrencySelect from '../../features/limit-orders/CurrencySelect'
+import Typography from '../../components/Typography'
+import PayFromToggle from '../../features/limit-orders/PayFromToggle'
+import { ExclamationIcon } from '@heroicons/react/solid'
+import useSWR, { SWRResponse } from 'swr'
+import { LAMBDA_URL } from 'limitorderv2-sdk'
+import { useActiveWeb3React } from '../../hooks'
+
+const url = `${LAMBDA_URL}/orders/pairs`
+const fetcher = (url, chainId) =>
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({ chainId }),
+  })
+    .then((r) => r.json())
+    .then((j) => j.data)
 
 export default function LimitOrder() {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
-  const [currencyIdA, currencyIdB] = useDefaultsFromURLSearch()
-  const loadedInputCurrency = useCurrency(currencyIdA)
-  const loadedOutputCurrency = useCurrency(currencyIdB)
+  const loadedUrlParams = useDefaultsFromURLSearch()
+  const [loadedInputCurrency, loadedOutputCurrency] = [
+    useCurrency(loadedUrlParams?.inputCurrencyId),
+    useCurrency(loadedUrlParams?.outputCurrencyId),
+  ]
+
+  // const { data, mutate }: SWRResponse<any, Error> = useSWR(shouldFetch ? [url, chainId] : null, fetcher)
 
   // token warning stuff
   const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
@@ -64,12 +83,10 @@ export default function LimitOrder() {
   const { independentField, typedValue, recipient, limitPrice, fromBentoBalance } = useLimitOrderState()
 
   // Limit order derived state
-  const { currencies, parsedAmounts, currencyBalances, currentPrice } = useDerivedLimitOrderInfo()
+  const { currencies, parsedAmounts, walletBalances, bentoboxBalances, currentPrice } = useDerivedLimitOrderInfo()
 
   // Limit order state handlers
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useLimitOrderActionHandlers()
-
-  const currentPriceAsString = currentPrice?.toSignificant(6)
 
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
 
@@ -78,11 +95,11 @@ export default function LimitOrder() {
     [dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
-  const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT], undefined, chainId)
+  const maxAmountInput = maxAmountSpend(walletBalances[Field.INPUT])
 
   const atMaxAmountInput = Boolean(
     fromBentoBalance
-      ? parsedAmounts[Field.INPUT]?.equalTo(currencyBalances[Field.INPUT])
+      ? parsedAmounts[Field.INPUT]?.equalTo(bentoboxBalances[Field.INPUT])
       : maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
   )
 
@@ -95,11 +112,11 @@ export default function LimitOrder() {
 
   const handleMaxInput = useCallback(() => {
     if (fromBentoBalance) {
-      onUserInput(Field.INPUT, currencyBalances[Field.INPUT].toExact())
+      onUserInput(Field.INPUT, bentoboxBalances[Field.INPUT].toExact())
     } else {
       maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
     }
-  }, [currencyBalances, fromBentoBalance, maxAmountInput, onUserInput])
+  }, [bentoboxBalances, fromBentoBalance, maxAmountInput, onUserInput])
 
   const handleOutputSelect = useCallback(
     (outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency),
@@ -110,26 +127,45 @@ export default function LimitOrder() {
 
   const [currencyInputPanelError, setCurrencyInputPanelError] = useState<string>()
 
-  const checkLimitPrice = useCallback(() => {
-    if (limitPrice === currentPriceAsString) return
-    if (limitPrice && currentPrice && +limitPrice < +currentPriceAsString)
-      setCurrencyInputPanelError(i18n._(t`This transaction is below market rate`))
-    else setCurrencyInputPanelError('')
-  }, [limitPrice, currentPriceAsString, currentPrice, i18n])
+  const checkLimitPrice = useCallback(
+    (limitPrice) => {
+      const parsedLimitPrice = tryParseAmount(
+        limitPrice,
+        (dependentField === Field.INPUT ? currencies[Field.INPUT] : currencies[Field.OUTPUT]) ?? undefined
+      )
+      const parsedCurrentPrice = tryParseAmount(
+        currentPrice?.toSignificant(6),
+        (dependentField === Field.INPUT ? currencies[Field.INPUT] : currencies[Field.OUTPUT]) ?? undefined
+      )
+
+      if (parsedLimitPrice?.lessThan(parsedCurrentPrice?.quotient)) {
+        setCurrencyInputPanelError(i18n._(t`This transaction is below market rate`))
+      } else {
+        setCurrencyInputPanelError('')
+      }
+    },
+    [currencies, currentPrice, dependentField, i18n]
+  )
 
   const currencyInputPanelHelperText = useMemo(() => {
-    if (limitPrice === currentPriceAsString) return
-    const sign = +limitPrice > +currentPriceAsString ? i18n._(t`above`) : i18n._(t`below`)
-    if (limitPrice && currentPriceAsString)
-      return i18n._(
-        t`${formatPercent(((+limitPrice - +currentPriceAsString) / +currentPriceAsString) * 100)} ${sign} market rate`
-      )
-  }, [limitPrice, currentPriceAsString, i18n])
+    const parsedLimitPrice = tryParseAmount(
+      limitPrice,
+      (dependentField === Field.INPUT ? currencies[Field.INPUT] : currencies[Field.OUTPUT]) ?? undefined
+    )
+    const parsedCurrentPrice = tryParseAmount(
+      currentPrice?.toFixed(),
+      (dependentField === Field.INPUT ? currencies[Field.INPUT] : currencies[Field.OUTPUT]) ?? undefined
+    )
 
-  const tokenA = wrappedCurrency(currencies[Field.INPUT], chainId)
+    if (!parsedLimitPrice || !parsedCurrentPrice || parsedLimitPrice.equalTo(parsedCurrentPrice)) return
+
+    const sign = parsedLimitPrice.greaterThan(parsedCurrentPrice) ? i18n._(t`above`) : i18n._(t`below`)
+    const pct = ((+limitPrice - +currentPrice?.toSignificant(6)) / +currentPrice?.toSignificant(6)) * 100
+    return i18n._(t`${formatPercent(pct)} ${sign} market rate`)
+  }, [limitPrice, dependentField, currencies, currentPrice, i18n])
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{i18n._(t`Limit order`)} | Sushi</title>
         <meta
@@ -151,20 +187,29 @@ export default function LimitOrder() {
       >
         <DoubleGlowShadow>
           <div id="limit-order-page" className="flex flex-col w-full max-w-2xl p-6 rounded bg-dark-900 gap-4">
-            <SwapHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
+            <ExchangeHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
             <div className="flex flex-col gap-4">
               <CurrencyInputPanel
-                label={i18n._(t`You pay`)}
-                value={formattedAmounts[Field.INPUT]}
-                showMaxButton={!atMaxAmountInput}
-                currency={currencies[Field.INPUT]}
-                onUserInput={(value) => onUserInput(Field.INPUT, value)}
-                onMax={handleMaxInput}
-                onCurrencySelect={handleInputSelect}
-                otherCurrency={currencies[Field.OUTPUT]}
+                className="rounded-t"
                 id="swap-currency-input"
-                customBalanceComponent={<BalancePanel />}
-                variant={CurrencyInputPanelVariant.limit}
+                topAdornment={<PayFromToggle />}
+                bottomAdornment={<BalancePanel />}
+                selectComponent={
+                  <CurrencySelect
+                    currency={currencies[Field.INPUT]}
+                    otherCurrency={currencies[Field.OUTPUT]}
+                    label={i18n._(t`You pay`)}
+                    onSelect={handleInputSelect}
+                  />
+                }
+                inputComponent={
+                  <CurrencyInput
+                    onMax={handleMaxInput}
+                    showMaxButton={!atMaxAmountInput}
+                    onUserInput={(value) => onUserInput(Field.INPUT, value)}
+                    value={formattedAmounts[Field.INPUT]}
+                  />
+                }
               />
               <div className="flex flex-row gap-5">
                 <div />
@@ -193,19 +238,46 @@ export default function LimitOrder() {
                 <LimitPriceInputPanel onBlur={checkLimitPrice} />
               </div>
               <CurrencyInputPanel
-                value={formattedAmounts[Field.OUTPUT]}
-                onUserInput={(value) => onUserInput(Field.OUTPUT, value)}
-                label={i18n._(t`You receive:`)}
-                showMaxButton={false}
-                currency={currencies[Field.OUTPUT]}
-                onCurrencySelect={handleOutputSelect}
-                otherCurrency={currencies[Field.INPUT]}
-                id="swap-currency-output"
-                error={currencyInputPanelError}
-                helperText={currencyInputPanelHelperText}
-                variant={CurrencyInputPanelVariant.limit}
+                className="relative z-1 rounded"
+                id="swap-currency-input"
+                selectComponent={
+                  <CurrencySelect
+                    currency={currencies[Field.OUTPUT]}
+                    otherCurrency={currencies[Field.INPUT]}
+                    label={i18n._(t`You receive:`)}
+                    onSelect={handleOutputSelect}
+                  />
+                }
+                inputComponent={
+                  <CurrencyInput
+                    showMaxButton={false}
+                    onUserInput={(value) => onUserInput(Field.OUTPUT, value)}
+                    value={formattedAmounts[Field.OUTPUT]}
+                    error={currencyInputPanelError}
+                    endAdornment={
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-high-emphesis text-right">
+                          {currencyInputPanelHelperText}
+                        </span>
+                      </div>
+                    }
+                  />
+                }
+                bottomAdornment={
+                  currencyInputPanelError ? (
+                    <div className="bg-red bg-opacity-20 rounded-b flex items-center py-2 justify-center z-0 -mt-2">
+                      <div className="pt-2 flex gap-2 items-center">
+                        <ExclamationIcon className="text-red" width={24} height={24} />
+                        <Typography variant="xs" weight={700}>
+                          {currencyInputPanelError}
+                        </Typography>
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )
+                }
               />
-
               {recipient !== null ? (
                 <>
                   <div className="relative left-9">
@@ -240,11 +312,11 @@ export default function LimitOrder() {
             </div>
 
             <div className="flex">
-              <LimitOrderButton color="gradient" size="lg" token={tokenA} />
+              <LimitOrderButton color="gradient" size="lg" currency={currencies[Field.INPUT]} />
             </div>
           </div>
         </DoubleGlowShadow>
       </ExpertModePanel>
-    </Layout>
+    </>
   )
 }
