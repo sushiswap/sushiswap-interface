@@ -3,6 +3,7 @@ import React, { FC, useState } from 'react'
 
 import Image from '../Image'
 import { ImageProps } from 'next/image'
+import { classNames } from '../../functions'
 import { cloudinaryLoader } from '../../functions/cloudinary'
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {}
@@ -17,7 +18,7 @@ export type LogoProps = {
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
-const Logo: FC<LogoProps> = ({ srcs, width, height, style, alt = '', ...rest }) => {
+const Logo: FC<LogoProps> = ({ srcs, width, height, style, alt = '', className, ...rest }) => {
   const [, refresh] = useState<number>(0)
   const src = srcs.find((src) => !BAD_SRCS[src])
 
@@ -34,6 +35,7 @@ const Logo: FC<LogoProps> = ({ srcs, width, height, style, alt = '', ...rest }) 
         height={height}
         alt={alt}
         layout="fixed"
+        className={classNames('rounded', className)}
         style={{ minWidth: width, minHeight: height, ...style }}
         {...rest}
       />
