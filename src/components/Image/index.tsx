@@ -31,18 +31,20 @@ const shimmer = (w, h) => `
 
 const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toString('base64') : window.btoa(str))
 
-const Image = ({ src, width, height, layout, loader = undefined, ...rest }) => {
+const Image = ({ src, width, height, layout = undefined, loader = undefined, ...rest }) => {
   return (
-    <NextImage
-      loader={loader}
-      src={src}
-      width={width}
-      height={height}
-      layout={layout}
-      placeholder="blur"
-      blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
-      {...rest}
-    />
+    <div style={{ width, height }} className="rounded">
+      <NextImage
+        loader={loader}
+        src={src}
+        width={width}
+        height={height}
+        layout={layout}
+        placeholder="blur"
+        blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
+        {...rest}
+      />
+    </div>
   )
 }
 

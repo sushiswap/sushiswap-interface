@@ -24,21 +24,23 @@ const Logo: FC<LogoProps> = ({ srcs, width, height, style, alt = '', className, 
 
   if (src) {
     return (
-      <Image
-        src={src}
-        loader={cloudinaryLoader}
-        onError={() => {
-          if (src) BAD_SRCS[src] = true
-          refresh((i) => i + 1)
-        }}
-        width={width}
-        height={height}
-        alt={alt}
-        layout="fixed"
-        className={classNames('rounded', className)}
-        style={{ minWidth: width, minHeight: height, ...style }}
-        {...rest}
-      />
+      <div className="rounded" style={{ width, height }}>
+        <Image
+          src={src}
+          loader={cloudinaryLoader}
+          onError={() => {
+            if (src) BAD_SRCS[src] = true
+            refresh((i) => i + 1)
+          }}
+          width={width}
+          height={height}
+          alt={alt}
+          layout="fixed"
+          className={classNames('rounded', className)}
+          style={{ minWidth: width, minHeight: height, ...style }}
+          {...rest}
+        />
+      </div>
     )
   }
 

@@ -4,7 +4,6 @@ import { CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { useState } from 'react'
 import { useFuse, useSortableData } from '../../hooks'
 
-import AsyncIcon from '../../components/AsyncIcon'
 import { BENTOBOX_ADDRESS } from '../../constants/kashi'
 import Back from '../../components/Back'
 import Button from '../../components/Button'
@@ -12,12 +11,14 @@ import Card from '../../components/Card'
 import CardHeader from '../../components/CardHeader'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
+import Image from '../../components/Image'
 import Layout from '../../layouts/Kashi'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import Paper from '../../components/Paper'
 import Search from '../../components/Search'
 import { Transition } from '@headlessui/react'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
+import { cloudinaryLoader } from '../../functions/cloudinary'
 import { formatNumber } from '../../functions/format'
 import { t } from '@lingui/macro'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
@@ -108,7 +109,14 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
         onClick={() => setExpand(!expand)}
       >
         <div className="flex items-center">
-          <AsyncIcon src={token.tokenInfo.logoURI} className="w-10 mr-4 rounded-lg sm:w-14" />
+          <Image
+            loader={cloudinaryLoader}
+            height={56}
+            width={56}
+            src={token.tokenInfo.logoURI}
+            className="w-10 mr-4 rounded-lg sm:w-14"
+            alt={pair.collateral.tokenInfo.symbol}
+          />
           <div>{token && token.symbol}</div>
         </div>
         <div className="flex items-center justify-end">

@@ -4,12 +4,13 @@ import React, { useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
-import AsyncIcon from '../../../components/AsyncIcon'
 import Card from '../../../components/Card'
 import Head from 'next/head'
+import Image from '../../../components/Image'
 import Layout from '../../../layouts/Kashi'
 import { LendCardHeader } from '../../../components/CardHeader'
 import QuestionHelper from '../../../components/QuestionHelper'
+import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
@@ -38,10 +39,21 @@ export default function Pair() {
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
                   <>
-                    <AsyncIcon src={pair?.asset.tokenInfo.logoURI} className="w-10 h-10 rounded-lg sm:w-12 sm:h-12" />
-                    <AsyncIcon
-                      src={pair?.collateral.tokenInfo.logoURI}
+                    <Image
+                      loader={cloudinaryLoader}
+                      height={48}
+                      width={48}
+                      src={pair.asset.tokenInfo.logoURI}
                       className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      alt={pair.asset.tokenInfo.symbol}
+                    />
+                    <Image
+                      loader={cloudinaryLoader}
+                      height={48}
+                      width={48}
+                      src={pair.collateral.tokenInfo.logoURI}
+                      className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      alt={pair.collateral.tokenInfo.symbol}
                     />
                   </>
                 )}
