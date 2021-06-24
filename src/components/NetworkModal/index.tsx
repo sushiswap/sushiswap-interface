@@ -198,7 +198,11 @@ export default function NetworkModal(): JSX.Element | null {
                 toggleNetworkModal()
                 const params = PARAMS[key]
                 cookie.set('chainId', key)
-                library?.send('wallet_addEthereumChain', [params, account])
+                if (key === ChainId.MAINNET) {
+                  library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
+                } else {
+                  library?.send('wallet_addEthereumChain', [params, account])
+                }
               }}
               className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
             >
