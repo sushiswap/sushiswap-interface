@@ -108,14 +108,14 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
         className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none bg-dark-800"
         onClick={() => setExpand(!expand)}
       >
-        <div className="flex items-center">
+        <div className="flex items-center space-x-3">
           <Image
             loader={cloudinaryLoader}
             height={56}
             width={56}
             src={token.tokenInfo.logoURI}
             className="w-10 mr-4 rounded-lg sm:w-14"
-            alt={pair.collateral.tokenInfo.symbol}
+            alt={token.tokenInfo.symbol}
           />
           <div>{token && token.symbol}</div>
         </div>
