@@ -165,7 +165,7 @@ function Create() {
         <meta name="description" content="Create Lending Pair on Kashi by Sushi" />
       </Head>
       <Card
-        className="bg-dark-900"
+        className="h-full bg-dark-900"
         header={
           <CardHeader className="bg-dark-800">
             <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
