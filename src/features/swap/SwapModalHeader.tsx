@@ -1,7 +1,6 @@
 import { AlertTriangle, ArrowDown } from 'react-feather'
 import { Currency, Percent, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
 import React, { useState } from 'react'
-import { Trans, t } from '@lingui/macro'
 import { isAddress, shortenAddress } from '../../functions'
 
 import { AdvancedSwapDetails } from './AdvancedSwapDetails'
@@ -11,6 +10,7 @@ import { Field } from '../../state/swap/actions'
 import { RowBetween } from '../../components/Row'
 import TradePrice from './TradePrice'
 import Typography from '../../components/Typography'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
@@ -92,30 +92,30 @@ export default function SwapModalHeader({
       ) : null}
       <div className="justify-start text-sm text-secondary">
         {trade.tradeType === TradeType.EXACT_INPUT ? (
-          <Trans>
-            Output is estimated. You will receive at least{' '}
+          <>
+            {i18n._(t`Output is estimated. You will receive at least`)}{' '}
             <b>
               {trade.minimumAmountOut(allowedSlippage).toSignificant(6)} {trade.outputAmount.currency.symbol}
             </b>{' '}
-            or the transaction will revert.
-          </Trans>
+            {i18n._(t`or the transaction will revert.`)}
+          </>
         ) : (
-          <Trans>
-            Input is estimated. You will sell at most{' '}
+          <>
+            {i18n._(t`Input is estimated. You will sell at most`)}{' '}
             <b>
               {trade.maximumAmountIn(allowedSlippage).toSignificant(6)} {trade.inputAmount.currency.symbol}
             </b>{' '}
-            or the transaction will revert.
-          </Trans>
+            {i18n._(t`or the transaction will revert.`)}
+          </>
         )}
       </div>
 
       {recipient !== null ? (
         <div className="flex-start">
-          <Trans>
-            Output will be sent to{' '}
+          <>
+            {i18n._(t`Output will be sent to`)}{' '}
             <b title={recipient}>{isAddress(recipient) ? shortenAddress(recipient) : recipient}</b>
-          </Trans>
+          </>
         </div>
       ) : null}
     </div>

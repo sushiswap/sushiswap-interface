@@ -1,6 +1,5 @@
 import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
 import React, { ReactNode, useCallback, useState } from 'react'
-import { Trans, t } from '@lingui/macro'
 import { classNames, formatCurrencyAmount } from '../../functions'
 
 import Button from '../Button'
@@ -12,6 +11,7 @@ import { FiatValue } from './FiatValue'
 import Lottie from 'lottie-react'
 import { Input as NumericalInput } from '../NumericalInput'
 import selectCoinAnimation from '../../animation/select-coin.json'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
@@ -162,9 +162,9 @@ export default function CurrencyInputPanel({
                     {renderBalance ? (
                       renderBalance(selectedCurrencyBalance)
                     ) : (
-                      <Trans>
-                        Balance: {formatCurrencyAmount(selectedCurrencyBalance, 4)} {currency.symbol}
-                      </Trans>
+                      <>
+                        {i18n._(t`Balance:`)} {formatCurrencyAmount(selectedCurrencyBalance, 4)} {currency.symbol}
+                      </>
                     )}
                   </div>
                   <FiatValue fiatValue={fiatValue} priceImpact={priceImpact} />

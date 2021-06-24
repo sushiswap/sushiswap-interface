@@ -1,11 +1,11 @@
 import { Currency, Percent, Price } from '@sushiswap/sdk'
-import { Trans, t } from '@lingui/macro'
 
 import { Field } from '../../state/mint/actions'
 import { ONE_BIPS } from '../../constants'
 import React from 'react'
 import Typography from '../../components/Typography'
 import { classNames } from '../../functions'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 export default function LiquidityPrice({
@@ -49,7 +49,7 @@ export default function LiquidityPrice({
           %
         </Typography>
         <Typography variant="sm" className="select-none">
-          <Trans>Share of Pool</Trans>
+          {i18n._(t`Share of Pool`)}
         </Typography>
       </div>
     </div>

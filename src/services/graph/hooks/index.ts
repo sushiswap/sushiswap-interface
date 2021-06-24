@@ -23,6 +23,13 @@ export function useMasterChefV1TotalAllocPoint(swrConfig = undefined) {
   return res
 }
 
+export function useMasterChefV1SushiPerBlock(swrConfig = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.MAINNET
+  const res = useSWR(shouldFetch ? 'masterChefV1SushiPerBlock' : null, () => getMasterChefV1SushiPerBlock(), swrConfig)
+  return res
+}
+
 export function useMasterChefV1Farms(swrConfig = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.MAINNET

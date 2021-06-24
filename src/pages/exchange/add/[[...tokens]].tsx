@@ -4,7 +4,6 @@ import Button, { ButtonError } from '../../../components/Button'
 import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
 import { ONE_BIPS, ZERO_PERCENT } from '../../../constants'
 import React, { useCallback, useState } from 'react'
-import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
 } from '../../../components/TransactionConfirmationModal'
@@ -23,6 +22,7 @@ import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import Dots from '../../../components/Dots'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import ExchangeHeader from '../../../components/ExchangeHeader'
 import { Field } from '../../../state/mint/actions'
 import Head from 'next/head'
 import LiquidityHeader from '../../../features/liquidity/LiquidityHeader'
@@ -36,6 +36,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import Typography from '../../../components/Typography'
 import UnsupportedCurrencyFooter from '../../../features/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../../components/Web3Connect'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useIsSwapUnsupported } from '../../../hooks/useIsSwapUnsupported'
@@ -45,7 +46,6 @@ import { useRouterContract } from '../../../hooks'
 import { useTransactionAdder } from '../../../state/transactions/hooks'
 import useTransactionDeadline from '../../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../../state/application/hooks'
-import ExchangeHeader from '../../../components/ExchangeHeader'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -342,11 +342,14 @@ export default function Add() {
                 t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review`
               )
             ) : (
-              <Trans>
-                <b>Tip:</b> By adding liquidity you&apos;ll earn 0.25% of all trades on this pair proportional to your
-                share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
-                your liquidity.
-              </Trans>
+              <>
+                <b>{i18n._(t`Tip:`)}</b>{' '}
+                {i18n._(
+                  t`By adding liquidity you&apos;ll earn 0.25% of all trades on this pair
+                proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be
+                claimed by withdrawing your liquidity.`
+                )}
+              </>
             )
           }
           type="information"

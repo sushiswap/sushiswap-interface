@@ -1,6 +1,6 @@
 import { AutoRow, RowFixed } from '../../components/Row'
 import { Currency, Token } from '@sushiswap/sdk'
-import React from 'react'
+
 import { AlertTriangle } from 'react-feather'
 import { AutoColumn } from '../Column'
 import Button from '../Button'
@@ -9,15 +9,17 @@ import CurrencyLogo from '../CurrencyLogo'
 import ExternalLink from '../ExternalLink'
 import ListLogo from '../ListLogo'
 import ModalHeader from '../ModalHeader'
+import React from 'react'
 import { TokenList } from '@uniswap/token-lists/dist/types'
+import Typography from '../Typography'
 import { getExplorerLink } from '../../functions/explorer'
+import { shortenAddress } from '../../functions'
 import styled from 'styled-components'
+import { t } from '@lingui/macro'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAddUserToken } from '../../state/user/hooks'
-import Typography from '../Typography'
-import { Plural, Trans } from '@lingui/macro'
-import { shortenAddress } from '../../functions'
+import { useLingui } from '@lingui/react'
 
 const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
   // background-color: ${({ theme, highWarning }) =>
@@ -35,16 +37,16 @@ interface ImportProps {
 
 export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySelect }: ImportProps) {
   const { chainId } = useActiveWeb3React()
+  const { i18n } = useLingui()
 
   const addToken = useAddUserToken()
   return (
     <div className="relative w-full space-y-3 overflow-auto">
       <ModalHeader onBack={onBack} onClose={onDismiss} title={`Import ${tokens.length > 1 ? 'Tokens' : 'Token'}`} />
       <Typography className="text-center">
-        <Trans>
-          This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to
-          trade.
-        </Trans>
+        {i18n._(
+          t`This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade.`
+        )}
       </Typography>
       {tokens.map((token) => {
         return (
@@ -85,7 +87,7 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
         }}
         className=".token-dismiss-button"
       >
-        <Trans>Import</Trans>
+        {i18n._(t`Import`)}
       </Button>
     </div>
   )

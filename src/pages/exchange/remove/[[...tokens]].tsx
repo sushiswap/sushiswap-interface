@@ -2,9 +2,8 @@ import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCall
 import { ArrowDown, Plus } from 'react-feather'
 import { AutoRow, RowBetween } from '../../../components/Row'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
-import { ChainId, Currency, Percent, WNATIVE, NATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Trans, t } from '@lingui/macro'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
 } from '../../../components/TransactionConfirmationModal'
@@ -37,6 +36,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import Web3Connect from '../../../components/Web3Connect'
 import { currencyId } from '../../../functions/currency'
 import { splitSignature } from '@ethersproject/bytes'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../../hooks/Tokens'
 import useDebouncedChangeHandler from '../../../hooks/useDebouncedChangeHandler'

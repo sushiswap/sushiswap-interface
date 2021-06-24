@@ -1,6 +1,7 @@
 import {
   ethPriceQuery,
   liquidityPositionSubsetQuery,
+  masterChefV1SushiPerBlockQuery,
   masterChefV1TotalAllocPointQuery,
   miniChefPoolsQuery,
   pairSubsetQuery,
@@ -40,6 +41,11 @@ export const masterChefV1 = async (query) =>
 export const getMasterChefV1TotalAllocPoint = async () => {
   const { masterChef } = await masterChefV1(masterChefV1TotalAllocPointQuery)
   return masterChef?.totalAllocPoint
+}
+
+export const getMasterChefV1SushiPerBlock = async () => {
+  const { masterChef } = await masterChefV1(masterChefV1SushiPerBlockQuery)
+  return masterChef?.sushiPerBlock
 }
 
 export const getMasterChefV1Farms = async () => {

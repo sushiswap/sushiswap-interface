@@ -9,6 +9,7 @@ import {
   useExchange,
   useLiquidityPositionSubset,
   useMasterChefV1Farms,
+  useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMasterChefV2Farms,
   useMaticPrice,
@@ -50,10 +51,10 @@ export default function Farm(): JSX.Element {
   const { data: ethPrice } = useEthPrice()
   const { data: maticPrice } = useMaticPrice()
   const { data: alcxPrice } = useAlcxPrice()
-
   const { data: cvxPrice } = useCvxPrice()
 
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
+  const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
   const { data: masterChefV1Farms } = useMasterChefV1Farms()
   const { data: masterChefV2Farms } = useMasterChefV2Farms()

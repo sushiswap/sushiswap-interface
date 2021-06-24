@@ -1,5 +1,4 @@
 import Provider, { useKashiPairs } from '../../../features/lending/context'
-import { Trans, t } from '@lingui/macro'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
 import Card from '../../../components/Card'
@@ -12,6 +11,7 @@ import ListHeaderWithSort from '../../../components/ListHeaderWithSort'
 import MarketHeader from '../../../components/MarketHeader'
 import React from 'react'
 import { cloudinaryLoader } from '../../../functions/cloudinary'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSearchAndSort from '../../../hooks/useSearchAndSort'
 
@@ -50,9 +50,9 @@ function Borrow() {
                   sort={positions}
                   sortKey="search"
                 >
-                  <Trans>
-                    <span className="hidden md:inline-block">Your</span> Positions
-                  </Trans>
+                  <>
+                    <span className="hidden md:inline-block">{i18n._(t`Your`)}</span> {i18n._(t`Positions`)}
+                  </>
                 </ListHeaderWithSort>
                 <ListHeaderWithSort
                   className="justify-end"
@@ -76,9 +76,9 @@ function Borrow() {
                   sortKey="health.value"
                   direction="descending"
                 >
-                  <Trans>
-                    Limit <span className="hidden md:inline-block">Used</span>
-                  </Trans>
+                  <>
+                    {i18n._(t`Limit`)} <span className="hidden md:inline-block">{i18n._(t`Used`)}</span>
+                  </>
                 </ListHeaderWithSort>
                 <ListHeaderWithSort
                   className="justify-end"

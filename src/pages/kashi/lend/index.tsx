@@ -1,5 +1,4 @@
 import Provider, { useKashiPairs } from '../../../features/lending/context'
-import { Trans, t } from '@lingui/macro'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
 import Card from '../../../components/Card'
@@ -13,6 +12,7 @@ import MarketHeader from '../../../components/MarketHeader'
 import QuestionHelper from '../../../components/QuestionHelper'
 import React from 'react'
 import { cloudinaryLoader } from '../../../functions/cloudinary'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSearchAndSort from '../../../hooks/useSearchAndSort'
 
@@ -45,9 +45,9 @@ function Lend() {
             <div>
               <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm md:grid-cols-6 lg:grid-cols-7 text-secondary">
                 <ListHeaderWithSort sort={positions} sortKey="search">
-                  <Trans>
-                    <span className="hidden md:inline-block">Your</span> Positions
-                  </Trans>
+                  <>
+                    <span className="hidden md:inline-block">{i18n._(t`Your`)}</span> {i18n._(t`Positions`)}
+                  </>
                 </ListHeaderWithSort>
                 <ListHeaderWithSort className="hidden md:flex" sort={positions} sortKey="asset.tokenInfo.symbol">
                   {i18n._(t`Lending`)}
