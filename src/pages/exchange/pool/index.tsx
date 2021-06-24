@@ -14,6 +14,7 @@ import Empty from '../../../components/Empty'
 import ExternalLink from '../../../components/ExternalLink'
 import FullPositionCard from '../../../components/PositionCard'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import Typography from '../../../components/Typography'
 import Web3Connect from '../../../components/Web3Connect'
@@ -24,7 +25,6 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hooks'
 import { useV2Pairs } from '../../../hooks/useV2Pairs'
-import Image from 'next/image'
 
 export default function Pool() {
   const { i18n } = useLingui()
@@ -137,29 +137,26 @@ export default function Pool() {
                 ))}
               </>
             ) : (
-              <>
-                <Empty className="flex text-lg text-center text-low-emphesis">
-                  <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
-                </Empty>
-                <div className="grid grid-cols-3 gap-4">
-                  <Button
-                    id="add-pool-button"
-                    color="gradient"
-                    className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
-                    onClick={() => router.push(`/add/ETH`)}
-                  >
-                    {i18n._(t`Add`)}
-                    <Image src="/liquid.svg" width="16px" height="24px" objectFit="scale-down" alt="Add Liquidity" />
-                  </Button>
-                  <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
-                    {i18n._(t`Import`)}
-                  </Button>
-                  <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/migrate`)}>
-                    {i18n._(t`Migrate`)}
-                  </Button>
-                </div>
-              </>
+              <Empty className="flex text-lg text-center text-low-emphesis">
+                <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
+              </Empty>
             )}
+            <div className="grid grid-cols-3 gap-4">
+              <Button
+                id="add-pool-button"
+                color="gradient"
+                className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
+                onClick={() => router.push(`/add/ETH`)}
+              >
+                {i18n._(t`Add`)}
+              </Button>
+              <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
+                {i18n._(t`Import`)}
+              </Button>
+              <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/migrate`)}>
+                {i18n._(t`Migrate`)}
+              </Button>
+            </div>
           </div>
         </div>
       </Container>
