@@ -1,4 +1,4 @@
-import { NATIVE, ChainId, Currency, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Row, { RowFixed } from '../Row'
 import { filterTokens, useSortedTokensByQuery } from './filtering'
@@ -7,10 +7,12 @@ import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToke
 import AutoSizer from 'react-virtualized-auto-sizer'
 import Button from '../Button'
 import ButtonText from '../ButtonText'
+import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import Column from '../Column'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
 import { Edit } from 'react-feather'
+import { ExtendedEther } from '../../constants'
 import { FixedSizeList } from 'react-window'
 import IconWrapper from '../IconWrapper'
 import ImportRow from './ImportRow'
@@ -23,11 +25,9 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useDebounce from '../../hooks/useDebounce'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { useRouter } from 'next/router'
 import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
-import { ExtendedEther } from '../../constants'
-import { useRouter } from 'next/router'
-import { CHAINLINK_TOKENS } from '../../constants/chainlink'
 
 const ContentWrapper = styled(Column)`
   height: 100%;
@@ -78,7 +78,7 @@ export function CurrencySearch({
 
   if (router.asPath.startsWith('/kashi/create')) {
     allTokens = Object.keys(allTokens)
-      .filter((key) => CHAINLINK_TOKENS[chainId].find((token) => token.address === key))
+      .filter((key) => CHAINLINK_TOKENS[chainId].find((address) => address === key))
       .reduce((obj, key) => {
         obj[key] = allTokens[key]
         return obj
