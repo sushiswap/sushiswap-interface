@@ -167,6 +167,7 @@ export default function LimitOrder() {
 
   useEffect(() => {
     if (
+      data &&
       currencies[Field.INPUT] &&
       currencies[Field.OUTPUT] &&
       !data.pairs.find(
@@ -182,7 +183,7 @@ export default function LimitOrder() {
   }, [currencies, data])
 
   const inputTokenList = useMemo(() => {
-    if (!data || !(data.pairs.length > 0)) return []
+    if (!data || !data.pairs || !(data.pairs.length > 0)) return []
     return data.pairs.reduce((acc, { token0, token1 }) => {
       acc.push(token0.address)
       acc.push(token1.address)
@@ -191,7 +192,7 @@ export default function LimitOrder() {
   }, [data])
 
   const outputTokenList = useMemo(() => {
-    if (!data || !(data.pairs.length > 0)) return []
+    if (!data || !data.pairs || !(data.pairs.length > 0)) return []
     if (currencies[Field.INPUT]) {
       return data.pairs.reduce((acc, { token0, token1 }) => {
         if (currencies[Field.INPUT].wrapped.address === token0.address) acc.push(token1.address)
