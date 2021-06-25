@@ -40,6 +40,7 @@ import usePool from '../../hooks/usePool'
 import { useRouterContract } from '../../hooks/useContract'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import useZapper from '../../hooks/useZapper'
+import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 
 const PoolAllocationWrapper = styled.div`
   margin-top: 1rem;
@@ -267,253 +268,255 @@ export default function Zap() {
       {!poolAddress ? (
         <PoolList />
       ) : (
-        <div className="w-full max-w-xl p-4 rounded bg-dark-900 shadow-swap">
-          <CardHeader />
-          <AutoColumn>
-            <CurrencyInputPanel
-              label={'From'}
-              showMaxButton={true}
-              onMax={() => {
-                onFieldInput(maxAmountSpend(currencyBalance)?.toExact() ?? '')
-              }}
-              value={typedValue ?? ''}
-              currency={currency}
-              onUserInput={onFieldInput}
-              onCurrencySelect={handleCurrencyASelect}
-              id="zap-currency-input"
-              showCommonBases
-            />
-            <PoolAllocationWrapper>
-              <RowBetween style={{ marginBottom: '12px' }}>
-                <div style={{ fontSize: '14px' }}>To</div>
-                {currency0 && currency1 ? (
-                  <DoubleCurrencyLogo
-                    currency0={currency0 ?? undefined}
-                    currency1={currency1 ?? undefined}
-                    margin={false}
-                    size={20}
-                  />
-                ) : (
-                  <Skeleton
-                    style={{
-                      width: '60px',
-                      height: '20px',
-                    }}
-                  />
-                )}
-              </RowBetween>
-              <RowBetween>
-                <div
-                  style={{
-                    fontWeight: 500,
-                    fontSize: '22px',
-                  }}
-                >
-                  {liquidityMinted?.toSignificant(6) || '0'}
-                </div>
-                <div className="inline-flex">
+        <DoubleGlowShadow>
+          <div className="w-full max-w-xl p-4 rounded bg-dark-900">
+            <CardHeader />
+            <AutoColumn>
+              <CurrencyInputPanel
+                label={'From'}
+                showMaxButton={true}
+                onMax={() => {
+                  onFieldInput(maxAmountSpend(currencyBalance)?.toExact() ?? '')
+                }}
+                value={typedValue ?? ''}
+                currency={currency}
+                onUserInput={onFieldInput}
+                onCurrencySelect={handleCurrencyASelect}
+                id="zap-currency-input"
+                showCommonBases
+              />
+              <PoolAllocationWrapper>
+                <RowBetween style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '14px' }}>To</div>
                   {currency0 && currency1 ? (
-                    <>
-                      <div
-                        style={{
-                          fontWeight: 500,
-                          fontSize: '22px',
-                        }}
-                      >
-                        {`${currency0?.symbol}${' '}`}
-                      </div>
-                      <div
-                        style={{
-                          fontWeight: 500,
-                          fontSize: '22px',
-                        }}
-                        className="mx-1"
-                      >
-                        /
-                      </div>
-                      <div
-                        style={{
-                          fontWeight: 500,
-                          fontSize: '22px',
-                        }}
-                      >
-                        {`${' '}${currency1?.symbol}`}
-                      </div>
-                    </>
+                    <DoubleCurrencyLogo
+                      currency0={currency0 ?? undefined}
+                      currency1={currency1 ?? undefined}
+                      margin={false}
+                      size={20}
+                    />
                   ) : (
                     <Skeleton
                       style={{
-                        width: '120px',
-                        height: '26px',
+                        width: '60px',
+                        height: '20px',
                       }}
                     />
                   )}
-                </div>
-              </RowBetween>
-            </PoolAllocationWrapper>
-            <PoolBreakDownWrapper>
-              <RowBetween>
-                <div>
-                  <div style={{ fontSize: '14px' }}>Est. Pool Allocation</div>
-                  <PoolTokenRow>
-                    <CurrencyLogo size="22px" currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
-                    <div style={{ fontSize: '14px' }}>
-                      {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
-                    </div>
-                  </PoolTokenRow>
-                  <PoolTokenRow>
-                    <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
-                    <div style={{ fontSize: '14px' }}>
-                      {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
-                    </div>
-                  </PoolTokenRow>
-                </div>
-                <div style={{ height: '91px' }}>
-                  <span
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    <QuestionHelper text="Your share of the total liquidity pool" />
-                    <div
-                      style={{
-                        textAlign: 'right',
-                        fontSize: '14px',
-                        marginLeft: '0.25rem',
-                      }}
-                    >
-                      Pool Share
-                    </div>
-                  </span>
-                  <div
-                    style={{
-                      marginBottom: '8px',
-                      textAlign: 'right',
-                      fontSize: '14px',
-                    }}
-                  >
-                    {poolTokenPercentage?.toSignificant(6) || '0'}%
-                  </div>
-                  <span
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    <QuestionHelper text="The difference between the market price and the estimated price due to trade size." />
-                    <div
-                      style={{
-                        fontSize: '14px',
-                        textAlign: 'right',
-                        marginLeft: '0.25rem',
-                      }}
-                    >
-                      Price Impact
-                    </div>
-                  </span>
-                  <div
-                    style={{
-                      textAlign: 'right',
-                      fontSize: '14px',
-                    }}
-                  >
-                    <FormattedPriceImpact priceImpact={bestTrade?.priceImpact} />
-                  </div>
-                </div>
-              </RowBetween>
-              {showRoute && (
-                <RowBetween style={{ padding: '16px 0 0 0' }}>
-                  <span
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <div className="text-sm text-secondary">Route</div>
-                    <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
-                  </span>
-                  {bestTrade && <SwapRoute trade={bestTrade} />}
                 </RowBetween>
-              )}
-            </PoolBreakDownWrapper>
-            <>
-              {!account ? (
-                <Button variant="outlined" color="blue" style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
-                  Connect Wallet
-                </Button>
-              ) : noRoute && bestTrade?.inputAmount ? (
-                <ButtonError style={{ marginTop: '20px' }}>
-                  <div>Insufficient liquidity for this trade.</div>
-                </ButtonError>
-              ) : showApproveFlow ? (
                 <RowBetween>
-                  <Button
-                    color="gradient"
-                    size="lg"
-                    onClick={approveCallback}
-                    disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                  <div
                     style={{
-                      width: '48%',
-                      marginTop: '20px',
+                      fontWeight: 500,
+                      fontSize: '22px',
                     }}
                   >
-                    {approval === ApprovalState.PENDING ? (
-                      <AutoRow gap="6px" justify="center">
-                        Approving <Loader stroke="white" />
-                      </AutoRow>
-                    ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                      'Approved'
+                    {liquidityMinted?.toSignificant(6) || '0'}
+                  </div>
+                  <div className="inline-flex">
+                    {currency0 && currency1 ? (
+                      <>
+                        <div
+                          style={{
+                            fontWeight: 500,
+                            fontSize: '22px',
+                          }}
+                        >
+                          {`${currency0?.symbol}${' '}`}
+                        </div>
+                        <div
+                          style={{
+                            fontWeight: 500,
+                            fontSize: '22px',
+                          }}
+                          className="mx-1"
+                        >
+                          /
+                        </div>
+                        <div
+                          style={{
+                            fontWeight: 500,
+                            fontSize: '22px',
+                          }}
+                        >
+                          {`${' '}${currency1?.symbol}`}
+                        </div>
+                      </>
                     ) : (
-                      'Approve ' + currency?.symbol
+                      <Skeleton
+                        style={{
+                          width: '120px',
+                          height: '26px',
+                        }}
+                      />
                     )}
+                  </div>
+                </RowBetween>
+              </PoolAllocationWrapper>
+              <PoolBreakDownWrapper>
+                <RowBetween>
+                  <div>
+                    <div style={{ fontSize: '14px' }}>Est. Pool Allocation</div>
+                    <PoolTokenRow>
+                      <CurrencyLogo size="22px" currency={currency0 ?? undefined} style={{ marginRight: '6px' }} />
+                      <div style={{ fontSize: '14px' }}>
+                        {currencyZeroOutput?.toSignificant(6) || 0} {currency0?.symbol}
+                      </div>
+                    </PoolTokenRow>
+                    <PoolTokenRow>
+                      <CurrencyLogo size="22px" currency={currency1 ?? undefined} style={{ marginRight: '6px' }} />
+                      <div style={{ fontSize: '14px' }}>
+                        {currencyOneOutput?.toSignificant(6) || 0} {currency1?.symbol}
+                      </div>
+                    </PoolTokenRow>
+                  </div>
+                  <div style={{ height: '91px' }}>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <QuestionHelper text="Your share of the total liquidity pool" />
+                      <div
+                        style={{
+                          textAlign: 'right',
+                          fontSize: '14px',
+                          marginLeft: '0.25rem',
+                        }}
+                      >
+                        Pool Share
+                      </div>
+                    </span>
+                    <div
+                      style={{
+                        marginBottom: '8px',
+                        textAlign: 'right',
+                        fontSize: '14px',
+                      }}
+                    >
+                      {poolTokenPercentage?.toSignificant(6) || '0'}%
+                    </div>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <QuestionHelper text="The difference between the market price and the estimated price due to trade size." />
+                      <div
+                        style={{
+                          fontSize: '14px',
+                          textAlign: 'right',
+                          marginLeft: '0.25rem',
+                        }}
+                      >
+                        Price Impact
+                      </div>
+                    </span>
+                    <div
+                      style={{
+                        textAlign: 'right',
+                        fontSize: '14px',
+                      }}
+                    >
+                      <FormattedPriceImpact priceImpact={bestTrade?.priceImpact} />
+                    </div>
+                  </div>
+                </RowBetween>
+                {showRoute && (
+                  <RowBetween style={{ padding: '16px 0 0 0' }}>
+                    <span
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div className="text-sm text-secondary">Route</div>
+                      <QuestionHelper text="Routing through these tokens resulted in the best price for your trade." />
+                    </span>
+                    {bestTrade && <SwapRoute trade={bestTrade} />}
+                  </RowBetween>
+                )}
+              </PoolBreakDownWrapper>
+              <>
+                {!account ? (
+                  <Button variant="outlined" color="blue" style={{ marginTop: '20px' }} onClick={toggleWalletModal}>
+                    Connect Wallet
                   </Button>
+                ) : noRoute && bestTrade?.inputAmount ? (
+                  <ButtonError style={{ marginTop: '20px' }}>
+                    <div>Insufficient liquidity for this trade.</div>
+                  </ButtonError>
+                ) : showApproveFlow ? (
+                  <RowBetween>
+                    <Button
+                      color="gradient"
+                      size="lg"
+                      onClick={approveCallback}
+                      disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                      style={{
+                        width: '48%',
+                        marginTop: '20px',
+                      }}
+                    >
+                      {approval === ApprovalState.PENDING ? (
+                        <AutoRow gap="6px" justify="center">
+                          Approving <Loader stroke="white" />
+                        </AutoRow>
+                      ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
+                        'Approved'
+                      ) : (
+                        'Approve ' + currency?.symbol
+                      )}
+                    </Button>
+                    <Button
+                      color="gradient"
+                      size="lg"
+                      onClick={() => zapCallback()}
+                      style={{
+                        width: '48%',
+                        marginTop: '20px',
+                      }}
+                      id="zap-button"
+                      disabled={approval !== ApprovalState.APPROVED}
+                    >
+                      {error ?? 'Zap'}
+                    </Button>
+                  </RowBetween>
+                ) : priceImpactSeverity > 1 && error === undefined ? (
+                  <ButtonError
+                    disabled={priceImpactSeverity > 3}
+                    error={priceImpactSeverity > 1}
+                    style={{ marginTop: '20px' }}
+                    onClick={() => zapCallback()}
+                  >
+                    {priceImpactSeverity > 3
+                      ? `Price Impact Too High`
+                      : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                  </ButtonError>
+                ) : (
                   <Button
                     color="gradient"
                     size="lg"
+                    style={{ marginTop: '20px' }}
+                    disabled={!parsedAmount || error !== undefined || approval !== ApprovalState.APPROVED}
                     onClick={() => zapCallback()}
-                    style={{
-                      width: '48%',
-                      marginTop: '20px',
-                    }}
-                    id="zap-button"
-                    disabled={approval !== ApprovalState.APPROVED}
                   >
                     {error ?? 'Zap'}
                   </Button>
-                </RowBetween>
-              ) : priceImpactSeverity > 1 && error === undefined ? (
-                <ButtonError
-                  disabled={priceImpactSeverity > 3}
-                  error={priceImpactSeverity > 1}
-                  style={{ marginTop: '20px' }}
-                  onClick={() => zapCallback()}
-                >
-                  {priceImpactSeverity > 3
-                    ? `Price Impact Too High`
-                    : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
-                </ButtonError>
-              ) : (
-                <Button
-                  color="gradient"
-                  size="lg"
-                  style={{ marginTop: '20px' }}
-                  disabled={!parsedAmount || error !== undefined || approval !== ApprovalState.APPROVED}
-                  onClick={() => zapCallback()}
-                >
-                  {error ?? 'Zap'}
-                </Button>
-              )}
-              {showApproveFlow && (
-                <Column style={{ marginTop: '1rem' }}>
-                  <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />
-                </Column>
-              )}
-            </>
-          </AutoColumn>
-        </div>
+                )}
+                {showApproveFlow && (
+                  <Column style={{ marginTop: '1rem' }}>
+                    <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />
+                  </Column>
+                )}
+              </>
+            </AutoColumn>
+          </div>
+        </DoubleGlowShadow>
       )}
     </>
   )

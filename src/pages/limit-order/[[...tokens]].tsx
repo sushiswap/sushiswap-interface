@@ -25,7 +25,7 @@ import {
 } from '../../state/limit-order/hooks'
 import LimitOrderButton from '../../features/limit-orders/LimitOrderButton'
 import BalancePanel from '../../features/limit-orders/BalancePanel'
-import ExchangeHeader from '../../features/limit-orders/ExchangeHeader'
+import ExchangeHeader from '../../components/ExchangeHeader'
 import CurrencyInputPanel from '../../features/limit-orders/CurrencyInputPanel'
 import CurrencyInput from '../../features/limit-orders/CurrencyInput'
 import CurrencySelect from '../../features/limit-orders/CurrencySelect'
