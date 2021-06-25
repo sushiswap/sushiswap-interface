@@ -24,6 +24,7 @@ import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } f
 
 import Card from '../../components/Card'
 import CardHeader from '../../components/CardHeader'
+import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import FarmList from '../../features/farm/FarmList'
@@ -169,9 +170,19 @@ export default function Farm(): JSX.Element {
         const sushiPerSecond = ((pool.allocPoint / 1000) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
-        const maticPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
-        const maticPerBlock = maticPerSecond * averageBlockTime
-        const maticPerDay = maticPerBlock * blocksPerDay
+        const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+        const reward = {
+          [ChainId.MATIC]: {
+            token: 'MATIC',
+            icon: '/images/tokens/polygon-square.jpg',
+          },
+          [ChainId.XDAI]: {
+            token: 'STAKE',
+            icon: '/images/tokens/stake-square.jpg',
+          },
+        }
         return [
           {
             ...defaultReward,
@@ -179,10 +190,9 @@ export default function Farm(): JSX.Element {
             rewardPerDay: sushiPerDay,
           },
           {
-            token: 'MATIC',
-            icon: '/images/tokens/polygon-square.jpg',
-            rewardPerBlock: maticPerBlock,
-            rewardPerDay: maticPerDay,
+            ...reward,
+            rewardPerBlock: rewardPerBlock,
+            rewardPerDay: rewardPerDay,
             rewardPrice: maticPrice,
           },
         ]

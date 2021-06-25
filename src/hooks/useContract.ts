@@ -1,4 +1,4 @@
-import { ARCHER_ROUTER_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
+import { ARCHER_ROUTER_ADDRESS, MINICHEF_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -174,7 +174,8 @@ export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contrac
   return useContract('0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d', MASTERCHEF_V2_ABI, withSignerIfPossible)
 }
 export function useMiniChefContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', MINICHEF_ABI, withSignerIfPossible)
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && MINICHEF_ADDRESS[chainId], MINICHEF_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
