@@ -1,5 +1,6 @@
 import {
   getMasterChefV1Farms,
+  getMasterChefV1SushiPerBlock,
   getMasterChefV1TotalAllocPoint,
   getMasterChefV2Farms,
   getMiniChefFarms,
