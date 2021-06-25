@@ -140,8 +140,8 @@ msgstr ""
 #~ msgid "Add xSushi to your Metamask wallet"
 #~ msgstr "Metamask 지갑에 xSushi 추가"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:197
-#: src/pages/exchange/add/[[...tokens]].tsx:197
+#: src/pages/exchange/add/[[...tokens]].tsx:198
+#: src/pages/exchange/add/[[...tokens]].tsx:198
 msgid "Add {0} {1} and {2} {3}"
 msgstr ""
 
@@ -166,7 +166,7 @@ msgstr "애널리틱스"
 #: src/features/tools/meowshi/MeowshiButton.tsx:125
 #: src/pages/bar/index.tsx:335
 #: src/pages/exchange/migrate/index.tsx:235
-#: src/pages/exchange/remove/[[...tokens]].tsx:838
+#: src/pages/exchange/remove/[[...tokens]].tsx:841
 #: src/pages/user/balances.tsx:212
 msgid "Approve"
 msgstr "승인"
@@ -180,14 +180,14 @@ msgid "Approve Limit Order"
 msgstr ""
 
 #: src/features/limit-orders/LimitOrderButton.tsx:153
-#: src/pages/exchange/add/[[...tokens]].tsx:469
-#: src/pages/exchange/add/[[...tokens]].tsx:486
+#: src/pages/exchange/add/[[...tokens]].tsx:471
+#: src/pages/exchange/add/[[...tokens]].tsx:488
 #: src/pages/exchange/swap/[[...tokens]].tsx:640
 msgid "Approve {0}"
 msgstr "{0} 승인하기"
 
 #: src/pages/exchange/migrate/index.tsx:233
-#: src/pages/exchange/remove/[[...tokens]].tsx:836
+#: src/pages/exchange/remove/[[...tokens]].tsx:839
 #: src/pages/exchange/swap/[[...tokens]].tsx:638
 msgid "Approved"
 msgstr "승인됨"
@@ -195,7 +195,7 @@ msgstr "승인됨"
 #: src/features/tools/meowshi/MeowshiButton.tsx:118
 #: src/pages/bar/index.tsx:333
 #: src/pages/exchange/migrate/index.tsx:231
-#: src/pages/exchange/remove/[[...tokens]].tsx:834
+#: src/pages/exchange/remove/[[...tokens]].tsx:837
 #: src/pages/user/balances.tsx:212
 msgid "Approving"
 msgstr "승인"
@@ -205,8 +205,8 @@ msgid "Approving Limit Order"
 msgstr ""
 
 #: src/features/limit-orders/LimitOrderButton.tsx:151
-#: src/pages/exchange/add/[[...tokens]].tsx:467
-#: src/pages/exchange/add/[[...tokens]].tsx:484
+#: src/pages/exchange/add/[[...tokens]].tsx:469
+#: src/pages/exchange/add/[[...tokens]].tsx:486
 msgid "Approving {0}"
 msgstr "{0} 승인"
 
@@ -228,7 +228,7 @@ msgstr "유효"
 msgid "Back"
 msgstr ""
 
-#: src/pages/open-orders.tsx:22
+#: src/pages/exchange/open-orders/index.tsx:22
 msgid "Back to Limit Orders"
 msgstr ""
 
@@ -321,7 +321,7 @@ msgstr "대출을 통해 자산 매도 없이 유동성을 얻을 수 있습니�
 msgid "Buy"
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:352
+#: src/pages/exchange/add/[[...tokens]].tsx:353
 msgid ""
 "By adding liquidity you&apos;ll earn 0.25% of all trades on this pair\n"
 "proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
@@ -357,7 +357,7 @@ msgstr ""
 msgid "Chain not supported yet"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:303
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:303
 msgid "Change Recipient"
 msgstr ""
 
@@ -411,11 +411,11 @@ msgstr "담보"
 msgid "Community Approval"
 msgstr "커뮤니티 승인"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:651
+#: src/pages/exchange/remove/[[...tokens]].tsx:652
 msgid "Confirm"
 msgstr "확인"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:503
+#: src/pages/exchange/add/[[...tokens]].tsx:505
 msgid "Confirm Adding Liquidity"
 msgstr "유동성 추가 확인"
 
@@ -432,7 +432,7 @@ msgid "Confirm Swap"
 msgstr "스왑 확인"
 
 #: src/pages/bar/index.tsx:360
-#: src/pages/exchange/remove/[[...tokens]].tsx:848
+#: src/pages/exchange/remove/[[...tokens]].tsx:851
 msgid "Confirm Withdrawal"
 msgstr "출금 확인"
 
@@ -884,7 +884,7 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "한도 <0>사용됨</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:170
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:170
 msgid "Limit order"
 msgstr ""
 
@@ -1174,13 +1174,13 @@ msgstr ""
 msgid "Order History"
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:244
+#: src/pages/exchange/add/[[...tokens]].tsx:245
 msgid ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
 "will revert."
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:604
+#: src/pages/exchange/remove/[[...tokens]].tsx:605
 msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 msgstr "결과는 예상치입니다. 가격이 {0}% 이상 변동하면 거래가 취소됩니다."
 
@@ -1247,7 +1247,7 @@ msgstr "풀을 찾았습니다!"
 #~ msgid "Pool Rewards"
 #~ msgstr "풀 보상"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:241
+#: src/pages/exchange/add/[[...tokens]].tsx:242
 msgid "Pool Tokens"
 msgstr "풀 토큰"
 
@@ -1299,7 +1299,7 @@ msgid "Rate"
 msgstr ""
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:29
-#: src/pages/exchange/remove/[[...tokens]].tsx:619
+#: src/pages/exchange/remove/[[...tokens]].tsx:620
 msgid "Rates"
 msgstr "요금"
 
@@ -1332,12 +1332,12 @@ msgstr ""
 #~ msgid "Remove send"
 #~ msgstr "보내기 제거"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
+#: src/pages/exchange/remove/[[...tokens]].tsx:279
+#: src/pages/exchange/remove/[[...tokens]].tsx:279
 msgid "Remove {0} {1} and {2} {3}"
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:658
+#: src/pages/exchange/remove/[[...tokens]].tsx:659
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "{0} {1} 및 {2} {3} 제거 중"
 
@@ -1516,7 +1516,7 @@ msgstr "APR 스테이킹"
 msgid "Supply APR"
 msgstr "공급 APR"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:267
+#: src/pages/exchange/add/[[...tokens]].tsx:268
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "{0} {1} 및 {2} {3} 공급 중"
 
@@ -1621,7 +1621,7 @@ msgstr "SUSHI로 할 수 있는 것들"
 msgid "This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:142
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:142
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1633,7 +1633,7 @@ msgstr ""
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "이 거래는 가격 변동이나 이체 수수료 문제로 불가능합니다. 슬리피지 허용치를 높이세요."
 
-#: src/pages/exchange/add/[[...tokens]].tsx:350
+#: src/pages/exchange/add/[[...tokens]].tsx:351
 #: src/pages/exchange/find/index.tsx:110
 msgid "Tip:"
 msgstr ""
@@ -1732,7 +1732,7 @@ msgstr "언스테이크"
 msgid "Unstaked"
 msgstr "지분 없음"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:443
+#: src/pages/exchange/add/[[...tokens]].tsx:445
 #: src/pages/exchange/swap/[[...tokens]].tsx:608
 msgid "Unsupported Asset"
 msgstr "지원되지 않는 자산"
@@ -1789,11 +1789,11 @@ msgstr "통계 보기"
 #~ msgid "View SushiBar Stats"
 #~ msgstr "SushiBar 통계 보기"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:327
+#: src/pages/exchange/add/[[...tokens]].tsx:328
 msgid "View Your Liquidity Positions"
 msgstr "유동성 포지션 보기"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:723
+#: src/pages/exchange/remove/[[...tokens]].tsx:724
 msgid "View Your Liquidity Positions >"
 msgstr "유동성 포지션 보기 〉"
 
@@ -1831,7 +1831,7 @@ msgstr ""
 #~ msgid "Welcome to Sushi on Polygon (Matic)"
 #~ msgstr "Polygon(Matic)의 Sushi에 오신 것을 환영합니다."
 
-#: src/pages/exchange/add/[[...tokens]].tsx:346
+#: src/pages/exchange/add/[[...tokens]].tsx:347
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "쌍을 만들 때 귀하는 최초의 유동성 공급자입니다. 추가하는 토큰의 비율이이 풀의 가격을 설정합니다. 요금에 만족하면 공급을 클릭하여 검토하세요."
 
@@ -1871,7 +1871,7 @@ msgstr "어제의 APR"
 #~ msgid "Yield Instruments"
 #~ msgstr "수익 도구"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
+#: src/pages/exchange/add/[[...tokens]].tsx:380
 msgid "You are creating a pool"
 msgstr "풀 생성 중"
 
@@ -1887,16 +1887,16 @@ msgstr "아직 이 풀에 유동성이 없습니다"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다"
 
-#: src/pages/limit-order/[[...tokens]].tsx:201
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:201
 msgid "You pay"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:247
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:247
 msgid "You receive:"
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
-#: src/pages/exchange/remove/[[...tokens]].tsx:742
+#: src/pages/exchange/add/[[...tokens]].tsx:380
+#: src/pages/exchange/remove/[[...tokens]].tsx:745
 msgid "You will receive"
 msgstr "예상 수령"
 
@@ -1990,14 +1990,14 @@ msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변
 msgid "Zap"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:162
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:162
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "연단위 환산"
 
-#: src/pages/limit-order/[[...tokens]].tsx:162
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:162
 msgid "below"
 msgstr ""
 
@@ -2070,10 +2070,10 @@ msgstr "{0} 전략"
 msgid "{0} {1} per {2}"
 msgstr ""
 
-#: src/pages/limit-order/[[...tokens]].tsx:164
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:164
 msgid "{0} {sign} market rate"
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:639
+#: src/pages/exchange/remove/[[...tokens]].tsx:640
 msgid "{0}/{1} Burned"
 msgstr ""

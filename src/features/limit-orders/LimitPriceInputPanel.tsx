@@ -48,7 +48,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
           disabled={disabled}
           className="w-full bg-transparent font-medium text-2xl"
           placeholder={currentPrice?.toSignificant(6)}
-          id="token-amount-input"
+          id="limit-price-input"
           value={limitPrice || ''}
           onUserInput={handleInput}
           onBlur={() => onBlur(limitPrice)}

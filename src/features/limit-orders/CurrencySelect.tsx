@@ -16,6 +16,7 @@ interface CurrencySelectProps {
   onSelect: (x: Currency) => void
   disabled?: boolean
   label: string
+  currencyList?: string[]
 }
 
 const CurrencySelect: FC<CurrencySelectProps> = ({
@@ -24,6 +25,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
   showCommonBases,
   onSelect,
   label,
+  currencyList,
   disabled = false,
 }) => {
   const { i18n } = useLingui()
@@ -83,6 +85,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          currencyList={currencyList}
         />
       )}
     </>

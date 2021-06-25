@@ -9239,10 +9239,10 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-limitorderv2-sdk@^0.1.54:
-  version "0.1.54"
-  resolved "https://registry.yarnpkg.com/limitorderv2-sdk/-/limitorderv2-sdk-0.1.54.tgz#c607bf84b3ac51eac056e0576a8bdce2137fdfdc"
-  integrity sha512-2ciNcOr4va5udX2+bUWV6HEJJu1+EM/T6dnTLM4fmEAPsuwl9md+z+MX5HDt3KXJMa0O9f+hUfjvB/zBb/tAWw==
+limitorderv2-sdk@^0.1.56:
+  version "0.1.56"
+  resolved "https://registry.yarnpkg.com/limitorderv2-sdk/-/limitorderv2-sdk-0.1.56.tgz#d2b8b191fed613ca6a9dc469bc0000b7fda77b29"
+  integrity sha512-GB3z1iw1HOgFiEMi5sKL3Dyng7v2zV5ap/9AmvqCP5rLS2v2jqPAfy9YuAitSkCJaimCMOwjce7EagC7uk2lvQ==
   dependencies:
     "@ethersproject/experimental" "^5.3.0"
     "@sushiswap/sdk" "^5.0.0-canary.22"

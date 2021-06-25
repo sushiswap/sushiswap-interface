@@ -141,8 +141,8 @@ msgstr "Add xSUSHI to your MetaMask wallet"
 #~ msgid "Add xSushi to your Metamask wallet"
 #~ msgstr "Add xSushi to your Metamask wallet"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:197
-#: src/pages/exchange/add/[[...tokens]].tsx:197
+#: src/pages/exchange/add/[[...tokens]].tsx:198
+#: src/pages/exchange/add/[[...tokens]].tsx:198
 msgid "Add {0} {1} and {2} {3}"
 msgstr "Add {0} {1} and {2} {3}"
 
@@ -167,7 +167,7 @@ msgstr "Analytics"
 #: src/features/tools/meowshi/MeowshiButton.tsx:125
 #: src/pages/bar/index.tsx:335
 #: src/pages/exchange/migrate/index.tsx:235
-#: src/pages/exchange/remove/[[...tokens]].tsx:838
+#: src/pages/exchange/remove/[[...tokens]].tsx:841
 #: src/pages/user/balances.tsx:212
 msgid "Approve"
 msgstr "Approve"
@@ -181,14 +181,14 @@ msgid "Approve Limit Order"
 msgstr "Approve Limit Order"
 
 #: src/features/limit-orders/LimitOrderButton.tsx:153
-#: src/pages/exchange/add/[[...tokens]].tsx:469
-#: src/pages/exchange/add/[[...tokens]].tsx:486
+#: src/pages/exchange/add/[[...tokens]].tsx:471
+#: src/pages/exchange/add/[[...tokens]].tsx:488
 #: src/pages/exchange/swap/[[...tokens]].tsx:640
 msgid "Approve {0}"
 msgstr "Approve {0}"
 
 #: src/pages/exchange/migrate/index.tsx:233
-#: src/pages/exchange/remove/[[...tokens]].tsx:836
+#: src/pages/exchange/remove/[[...tokens]].tsx:839
 #: src/pages/exchange/swap/[[...tokens]].tsx:638
 msgid "Approved"
 msgstr "Approved"
@@ -196,7 +196,7 @@ msgstr "Approved"
 #: src/features/tools/meowshi/MeowshiButton.tsx:118
 #: src/pages/bar/index.tsx:333
 #: src/pages/exchange/migrate/index.tsx:231
-#: src/pages/exchange/remove/[[...tokens]].tsx:834
+#: src/pages/exchange/remove/[[...tokens]].tsx:837
 #: src/pages/user/balances.tsx:212
 msgid "Approving"
 msgstr "Approving"
@@ -206,8 +206,8 @@ msgid "Approving Limit Order"
 msgstr "Approving Limit Order"
 
 #: src/features/limit-orders/LimitOrderButton.tsx:151
-#: src/pages/exchange/add/[[...tokens]].tsx:467
-#: src/pages/exchange/add/[[...tokens]].tsx:484
+#: src/pages/exchange/add/[[...tokens]].tsx:469
+#: src/pages/exchange/add/[[...tokens]].tsx:486
 msgid "Approving {0}"
 msgstr "Approving {0}"
 
@@ -229,7 +229,7 @@ msgstr "Available"
 msgid "Back"
 msgstr "Back"
 
-#: src/pages/open-orders.tsx:22
+#: src/pages/exchange/open-orders/index.tsx:22
 msgid "Back to Limit Orders"
 msgstr "Back to Limit Orders"
 
@@ -322,7 +322,7 @@ msgstr "Borrowing allows you to obtain liquidity without selling. Your borrow li
 msgid "Buy"
 msgstr "Buy"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:352
+#: src/pages/exchange/add/[[...tokens]].tsx:353
 msgid ""
 "By adding liquidity you&apos;ll earn 0.25% of all trades on this pair\n"
 "proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
@@ -364,7 +364,7 @@ msgstr "Cancelled"
 msgid "Chain not supported yet"
 msgstr "Chain not supported yet"
 
-#: src/pages/limit-order/[[...tokens]].tsx:303
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:303
 msgid "Change Recipient"
 msgstr "Change Recipient"
 
@@ -420,11 +420,11 @@ msgstr "Collateral"
 msgid "Community Approval"
 msgstr "Community Approval"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:651
+#: src/pages/exchange/remove/[[...tokens]].tsx:652
 msgid "Confirm"
 msgstr "Confirm"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:503
+#: src/pages/exchange/add/[[...tokens]].tsx:505
 msgid "Confirm Adding Liquidity"
 msgstr "Confirm Adding Liquidity"
 
@@ -441,7 +441,7 @@ msgid "Confirm Swap"
 msgstr "Confirm Swap"
 
 #: src/pages/bar/index.tsx:360
-#: src/pages/exchange/remove/[[...tokens]].tsx:848
+#: src/pages/exchange/remove/[[...tokens]].tsx:851
 msgid "Confirm Withdrawal"
 msgstr "Confirm Withdrawal"
 
@@ -908,7 +908,7 @@ msgstr "Limit"
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Limit <0>Used</0>"
 
-#: src/pages/limit-order/[[...tokens]].tsx:170
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:170
 msgid "Limit order"
 msgstr "Limit order"
 
@@ -1203,7 +1203,7 @@ msgstr "Order Expiration"
 msgid "Order History"
 msgstr "Order History"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:244
+#: src/pages/exchange/add/[[...tokens]].tsx:245
 msgid ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
 "will revert."
@@ -1211,7 +1211,7 @@ msgstr ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
 "will revert."
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:604
+#: src/pages/exchange/remove/[[...tokens]].tsx:605
 msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 msgstr "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 
@@ -1278,7 +1278,7 @@ msgstr "Pool Found!"
 #~ msgid "Pool Rewards"
 #~ msgstr "Pool Rewards"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:241
+#: src/pages/exchange/add/[[...tokens]].tsx:242
 msgid "Pool Tokens"
 msgstr "Pool Tokens"
 
@@ -1330,7 +1330,7 @@ msgid "Rate"
 msgstr "Rate"
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:29
-#: src/pages/exchange/remove/[[...tokens]].tsx:619
+#: src/pages/exchange/remove/[[...tokens]].tsx:620
 msgid "Rates"
 msgstr "Rates"
 
@@ -1363,12 +1363,12 @@ msgstr "Remove recipient"
 #~ msgid "Remove send"
 #~ msgstr "Remove send"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
+#: src/pages/exchange/remove/[[...tokens]].tsx:279
+#: src/pages/exchange/remove/[[...tokens]].tsx:279
 msgid "Remove {0} {1} and {2} {3}"
 msgstr "Remove {0} {1} and {2} {3}"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:658
+#: src/pages/exchange/remove/[[...tokens]].tsx:659
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "Removing {0} {1} and {2} {3}"
 
@@ -1551,7 +1551,7 @@ msgstr "Staking APR"
 msgid "Supply APR"
 msgstr "Supply APR"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:267
+#: src/pages/exchange/add/[[...tokens]].tsx:268
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Supplying {0} {1} and {2} {3}"
 
@@ -1656,7 +1656,7 @@ msgstr "Things you can do with your SUSHI"
 msgid "This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr "This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade."
 
-#: src/pages/limit-order/[[...tokens]].tsx:142
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:142
 msgid "This transaction is below market rate"
 msgstr "This transaction is below market rate"
 
@@ -1668,7 +1668,7 @@ msgstr "This transaction will not succeed due to price movement. Try increasing 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 
-#: src/pages/exchange/add/[[...tokens]].tsx:350
+#: src/pages/exchange/add/[[...tokens]].tsx:351
 #: src/pages/exchange/find/index.tsx:110
 msgid "Tip:"
 msgstr "Tip:"
@@ -1769,7 +1769,7 @@ msgstr "Unstake"
 msgid "Unstaked"
 msgstr "Unstaked"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:443
+#: src/pages/exchange/add/[[...tokens]].tsx:445
 #: src/pages/exchange/swap/[[...tokens]].tsx:608
 msgid "Unsupported Asset"
 msgstr "Unsupported Asset"
@@ -1826,11 +1826,11 @@ msgstr "View Stats"
 #~ msgid "View SushiBar Stats"
 #~ msgstr "View SushiBar Stats"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:327
+#: src/pages/exchange/add/[[...tokens]].tsx:328
 msgid "View Your Liquidity Positions"
 msgstr "View Your Liquidity Positions"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:723
+#: src/pages/exchange/remove/[[...tokens]].tsx:724
 msgid "View Your Liquidity Positions >"
 msgstr "View Your Liquidity Positions >"
 
@@ -1868,7 +1868,7 @@ msgstr "Weekly unlocks from the vesting period."
 #~ msgid "Welcome to Sushi on Polygon (Matic)"
 #~ msgstr "Welcome to Sushi on Polygon (Matic)"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:346
+#: src/pages/exchange/add/[[...tokens]].tsx:347
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 
@@ -1908,7 +1908,7 @@ msgstr "Yesterday's APR"
 #~ msgid "Yield Instruments"
 #~ msgstr "Yield Instruments"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
+#: src/pages/exchange/add/[[...tokens]].tsx:380
 msgid "You are creating a pool"
 msgstr "You are creating a pool"
 
@@ -1924,16 +1924,16 @@ msgstr "You don’t have liquidity in this pool yet"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "You need to first approve LP tokens and then migrate it"
 
-#: src/pages/limit-order/[[...tokens]].tsx:201
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:201
 msgid "You pay"
 msgstr "You pay"
 
-#: src/pages/limit-order/[[...tokens]].tsx:247
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:247
 msgid "You receive:"
 msgstr "You receive:"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
-#: src/pages/exchange/remove/[[...tokens]].tsx:742
+#: src/pages/exchange/add/[[...tokens]].tsx:380
+#: src/pages/exchange/remove/[[...tokens]].tsx:745
 msgid "You will receive"
 msgstr "You will receive"
 
@@ -2027,14 +2027,14 @@ msgstr "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidit
 msgid "Zap"
 msgstr "Zap"
 
-#: src/pages/limit-order/[[...tokens]].tsx:162
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:162
 msgid "above"
 msgstr "above"
 
 #~ msgid "annualized"
 #~ msgstr "annualized"
 
-#: src/pages/limit-order/[[...tokens]].tsx:162
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:162
 msgid "below"
 msgstr "below"
 
@@ -2109,10 +2109,10 @@ msgstr "{0} Strategy"
 msgid "{0} {1} per {2}"
 msgstr "{0} {1} per {2}"
 
-#: src/pages/limit-order/[[...tokens]].tsx:164
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:164
 msgid "{0} {sign} market rate"
 msgstr "{0} {sign} market rate"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:639
+#: src/pages/exchange/remove/[[...tokens]].tsx:640
 msgid "{0}/{1} Burned"
 msgstr "{0}/{1} Burned"

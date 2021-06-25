@@ -40,8 +40,8 @@ const Image = ({ src, width, height, layout = undefined, loader = undefined, ...
         width={width}
         height={height}
         layout={layout}
-        placeholder="blur"
         blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
+        {...(width > 40 && { placeholder: 'blur' })}
         {...rest}
       />
     </div>

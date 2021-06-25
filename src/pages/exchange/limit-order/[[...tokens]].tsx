@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { t } from '@lingui/macro'
 import TokenWarningModal from '../../../components/TokenWarningModal'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/sdk'
 import { useAllTokens, useCurrency } from '../../../hooks/Tokens'
@@ -55,7 +55,8 @@ export default function LimitOrder() {
     useCurrency(loadedUrlParams?.outputCurrencyId),
   ]
 
-  // const { data, mutate }: SWRResponse<any, Error> = useSWR(shouldFetch ? [url, chainId] : null, fetcher)
+  const shouldFetch = url && chainId
+  const { data }: SWRResponse<any, Error> = useSWR(shouldFetch ? [url, chainId] : null, fetcher)
 
   // token warning stuff
   const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
@@ -164,6 +165,47 @@ export default function LimitOrder() {
     return i18n._(t`${formatPercent(pct)} ${sign} market rate`)
   }, [limitPrice, dependentField, currencies, currentPrice, i18n])
 
+  useEffect(() => {
+    if (
+      currencies[Field.INPUT] &&
+      currencies[Field.OUTPUT] &&
+      !data.pairs.find(
+        ({ token0, token1 }) =>
+          token0.address === currencies[Field.INPUT].wrapped.address &&
+          token1.address === currencies[Field.OUTPUT].wrapped.address
+      )
+    ) {
+      setCurrencyInputPanelError('Invalid pair')
+    } else {
+      setCurrencyInputPanelError('')
+    }
+  }, [currencies, data])
+
+  const inputTokenList = useMemo(() => {
+    if (!data || !(data.pairs.length > 0)) return []
+    return data.pairs.reduce((acc, { token0, token1 }) => {
+      acc.push(token0.address)
+      acc.push(token1.address)
+      return acc
+    }, [])
+  }, [data])
+
+  const outputTokenList = useMemo(() => {
+    if (!data || !(data.pairs.length > 0)) return []
+    if (currencies[Field.INPUT]) {
+      return data.pairs.reduce((acc, { token0, token1 }) => {
+        if (currencies[Field.INPUT].wrapped.address === token0.address) acc.push(token1.address)
+        if (currencies[Field.INPUT].wrapped.address === token1.address) acc.push(token0.address)
+        return acc
+      }, [])
+    }
+    return data.pairs.reduce((acc, { token0, token1 }) => {
+      acc.push(token0.address)
+      acc.push(token1.address)
+      return acc
+    }, [])
+  }, [currencies, data])
+
   return (
     <>
       <Head>
@@ -200,10 +242,12 @@ export default function LimitOrder() {
                     otherCurrency={currencies[Field.OUTPUT]}
                     label={i18n._(t`You pay`)}
                     onSelect={handleInputSelect}
+                    currencyList={inputTokenList}
                   />
                 }
                 inputComponent={
                   <CurrencyInput
+                    id="token-amount-input"
                     onMax={handleMaxInput}
                     showMaxButton={!atMaxAmountInput}
                     onUserInput={(value) => onUserInput(Field.INPUT, value)}
@@ -242,14 +286,17 @@ export default function LimitOrder() {
                 id="swap-currency-input"
                 selectComponent={
                   <CurrencySelect
+                    disabled={!currencies[Field.INPUT]}
                     currency={currencies[Field.OUTPUT]}
                     otherCurrency={currencies[Field.INPUT]}
                     label={i18n._(t`You receive:`)}
                     onSelect={handleOutputSelect}
+                    currencyList={outputTokenList}
                   />
                 }
                 inputComponent={
                   <CurrencyInput
+                    id="token-amount-output"
                     showMaxButton={false}
                     onUserInput={(value) => onUserInput(Field.OUTPUT, value)}
                     value={formattedAmounts[Field.OUTPUT]}
@@ -295,7 +342,11 @@ export default function LimitOrder() {
                 </div>
               )}
               {isExpertMode && recipient === null && (
-                <div className="flex flex-1">
+                <div
+                  className={`flex flex-1 ${
+                    currencies[Field.INPUT] && currencies[Field.OUTPUT] ? 'justify-center' : ''
+                  }`}
+                >
                   <div
                     className="flex text-blue underline cursor-pointer items-center text-sm"
                     onClick={() => onChangeRecipient('')}

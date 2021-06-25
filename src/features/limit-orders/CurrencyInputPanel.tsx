@@ -30,8 +30,8 @@ export default function CurrencyInputPanel({
           className
         )}
       >
-        <div className="w-full sm:w-2/5">{selectComponent}</div>
-        {inputComponent}
+        <div className={classNames('w-full', inputComponent ? 'sm:w-2/5' : '')}>{selectComponent}</div>
+        {inputComponent && inputComponent}
       </div>
       {bottomAdornment && bottomAdornment}
 

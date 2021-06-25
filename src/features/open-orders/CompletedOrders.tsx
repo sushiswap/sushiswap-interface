@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { useActiveWeb3React } from '../../hooks'
 import useLimitOrders from '../../hooks/useLimitOrders'
 import Badge from '../../components/Badge'
 import Lottie from 'lottie-react'
@@ -40,9 +39,11 @@ const CompletedOrders: FC = () => {
                   key={index}
                   className="block text-high-emphesis bg-dark-800 overflow-hidden rounded"
                   style={{
-                    background: order.isCanceled
-                      ? 'linear-gradient(90deg, rgba(229, 229, 229, 0.15) 0%, rgba(229, 229, 229, 0) 50%), #202231'
-                      : 'linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231;',
+                    background: order.filled
+                      ? 'linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231'
+                      : order.isCanceled
+                      ? 'linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231'
+                      : 'linear-gradient(90deg, rgba(255, 56, 56, 0.15) 0%, rgba(255, 56, 56, 0) 50%), #202231',
                   }}
                 >
                   <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
@@ -75,8 +76,13 @@ const CompletedOrders: FC = () => {
                     </div>
                     <div className="text-right">
                       <div className="mb-1">
-                        {order.isCanceled && <span className="text-secondary">{i18n._(t`Cancelled`)}</span>}
-                        {order.filled && <span className="text-green">{i18n._(t`Filled`)}</span>}
+                        {order.filled ? (
+                          <span className="text-green">{i18n._(t`Filled`)}</span>
+                        ) : order.isCanceled ? (
+                          <span className="text-secondary">{i18n._(t`Cancelled`)}</span>
+                        ) : (
+                          <span className="text-red">{i18n._(t`Expired`)}</span>
+                        )}
                       </div>
                     </div>
                   </div>

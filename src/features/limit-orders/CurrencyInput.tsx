@@ -6,6 +6,7 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import { useLingui } from '@lingui/react'
 
 interface CurrencyInputProps {
+  id: string
   error?: string
   showMaxButton: boolean
   onMax?: () => void
@@ -14,7 +15,15 @@ interface CurrencyInputProps {
   endAdornment?: ReactNode
 }
 
-const CurrencyInput: FC<CurrencyInputProps> = ({ error, showMaxButton, onUserInput, onMax, value, endAdornment }) => {
+const CurrencyInput: FC<CurrencyInputProps> = ({
+  id,
+  error,
+  showMaxButton,
+  onUserInput,
+  onMax,
+  value,
+  endAdornment,
+}) => {
   const { i18n } = useLingui()
 
   return (
@@ -35,7 +44,7 @@ const CurrencyInput: FC<CurrencyInputProps> = ({ error, showMaxButton, onUserInp
           </Button>
         )}
         <NumericalInput
-          id="token-amount-input"
+          id={id}
           value={value}
           onUserInput={(val) => {
             onUserInput(val)
