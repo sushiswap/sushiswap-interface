@@ -55,8 +55,8 @@ export const bundleFields = gql`
 `
 
 export const ethPriceQuery = gql`
-  query ethPriceQuery($id: Int! = 1) {
-    bundles(id: $id) {
+  query ethPriceQuery($id: Int! = 1, $block: Block_height) {
+    bundles(id: $id, block: $block) {
       ...bundleFields
     }
   }
@@ -227,8 +227,13 @@ export const pairSubsetQuery = gql`
 `
 
 export const pairsQuery = gql`
-  query pairsQuery($first: Int! = 1000, $orderBy: String! = "trackedReserveETH", $orderDirection: String! = "desc") {
-    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query pairsQuery(
+    $first: Int! = 1000
+    $orderBy: String! = "trackedReserveETH"
+    $orderDirection: String! = "desc"
+    $block: Block_height
+  ) {
+    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, block: $block) {
       ...pairFields
     }
   }

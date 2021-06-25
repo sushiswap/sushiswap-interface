@@ -106,6 +106,21 @@ export const formatNumber = (number: any, usd = false) => {
   return parseFloat(String(num)).toPrecision(4)
 }
 
+export function formatNumberScale(number: any, usd = false) {
+  if (isNaN(number) || number === '' || number === undefined) {
+    return usd ? '$0.00' : '0'
+  }
+  const num = parseFloat(number)
+  const wholeNumberLength = String(Math.floor(num)).length
+
+  if (wholeNumberLength >= 13) return (usd ? '$' : '') + (num / Math.pow(10, 12)).toFixed(1) + 'T'
+  if (wholeNumberLength >= 10) return (usd ? '$' : '') + (num / Math.pow(10, 9)).toFixed(1) + 'B'
+  if (wholeNumberLength >= 7) return (usd ? '$' : '') + (num / Math.pow(10, 6)).toFixed(1) + 'M'
+  if (wholeNumberLength >= 4) return (usd ? '$' : '') + (num / Math.pow(10, 3)).toFixed(1) + 'K'
+
+  return (usd ? '$' : '') + num.toFixed(2)
+}
+
 export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }

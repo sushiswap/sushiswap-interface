@@ -8,6 +8,7 @@ import {
   getMaticPrice,
   getSushiPrice,
   getTokenPrice,
+  getTokens,
 } from '../fetchers'
 import { getEthPrice, getPairSubset, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -21,8 +22,8 @@ export function useExchange(query, variables, swrConfig: SWRConfiguration = unde
   return res
 }
 
-export function useEthPrice(swrConfig: SWRConfiguration = undefined) {
-  const res = useSWR('ethPrice', () => getEthPrice(), swrConfig)
+export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const res = useSWR(['ethPrice', JSON.stringify(variables)], () => getEthPrice(variables), swrConfig)
   return res
 }
 
@@ -65,11 +66,14 @@ export function useLiquidityPositionSubset(user, swrConfig: SWRConfiguration = u
   return res
 }
 
-export function usePairs(swrConfig: SWRConfiguration = undefined) {
+export function usePairs(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId
-  const res = useSWR(shouldFetch ? ['pairs', chainId] : null, (_, chainId) => getPairs(chainId), swrConfig)
-
+  const res = useSWR(
+    shouldFetch ? ['pairs', chainId, query, JSON.stringify(variables)] : null,
+    (_, chainId) => getPairs(chainId, query, variables),
+    swrConfig
+  )
   return res
 }
 
@@ -84,5 +88,16 @@ export function usePairSubset(pairAddresses, swrConfig: SWRConfiguration = undef
     swrConfig
   )
 
+  return res
+}
+
+export function useTokens(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const res = useSWR(
+    shouldFetch ? ['tokens', chainId, query, JSON.stringify(variables)] : null,
+    (_, chainId) => getTokens(chainId, query, variables),
+    swrConfig
+  )
   return res
 }

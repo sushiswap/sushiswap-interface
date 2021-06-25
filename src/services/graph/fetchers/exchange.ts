@@ -14,7 +14,7 @@ import { request } from 'graphql-request'
 export const EXCHANGE = {
   [ChainId.MAINNET]: 'sushiswap/exchange',
   [ChainId.XDAI]: 'sushiswap/xdai-exchange',
-  [ChainId.MATIC]: 'sushiswap/matic-exchange',
+  [ChainId.MATIC]: 'medariox/quicksushi',
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
 }
@@ -46,13 +46,9 @@ export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
   return tokens
 }
 
-export const getTokens = async (chainId = ChainId.MAINNET, variables) => {
+export const getTokens = async (chainId = ChainId.MAINNET, query = tokensQuery, variables) => {
   // console.log('getTokens')
-  const { tokens } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    tokensQuery,
-    variables
-  )
+  const { tokens } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
   return tokens
 }
 
@@ -74,9 +70,9 @@ export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables)
   return token?.derivedETH * ethPrice
 }
 
-export const getEthPrice = async () => {
+export const getEthPrice = async (variables = undefined) => {
   // console.log('getEthPrice')
-  const data = await getBundle()
+  const data = await getBundle(undefined, undefined, variables)
   return data?.bundles?.[0]?.ethPrice
 }
 
