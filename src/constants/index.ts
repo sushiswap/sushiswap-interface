@@ -72,7 +72,8 @@ export const MERKLE_ROOT =
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-08/merkle-10959148-11322822.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-09/merkle-10959148-11368459.json'
     //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-10/merkle-10959148-11413917.json'
-    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-11/merkle-10959148-11459483.json'
+    //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-11/merkle-10959148-11459483.json'
+    'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-12/merkle-10959148-11505104.json'
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
