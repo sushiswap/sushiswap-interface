@@ -8,7 +8,7 @@
     "inspect": "NODE_OPTIONS='--inspect' next dev",
     "build": "yarn lingui && next build",
     "start": "next start",
-    "locale": "lingui extract && lingui compile",
+    "lingui": "lingui extract && lingui compile",
     "lokalise": "lokalise2 --config lokalise.yaml file download --format po --unzip-to . --original-filenames=false",
     "circular": "madge --circular src --extensions ts,tsx,js,jsx",
     "unused": "next-unused",
