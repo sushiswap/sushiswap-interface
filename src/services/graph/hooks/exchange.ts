@@ -6,6 +6,7 @@ import {
   getCvxPrice,
   getLiquidityPositionSubset,
   getMaticPrice,
+  getStakePrice,
   getSushiPrice,
   getTokenPrice,
 } from '../fetchers'
@@ -23,6 +24,13 @@ export function useExchange(query, variables, swrConfig: SWRConfiguration = unde
 
 export function useEthPrice(swrConfig: SWRConfiguration = undefined) {
   const res = useSWR('ethPrice', () => getEthPrice(), swrConfig)
+  return res
+}
+
+export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.XDAI
+  const res = useSWR(shouldFetch ? 'stakePrice' : null, () => getStakePrice(), swrConfig)
   return res
 }
 

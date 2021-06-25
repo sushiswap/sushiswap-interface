@@ -11,6 +11,8 @@ import Dots from '../../components/Dots'
 import DoubleLogo from '../../components/DoubleLogo'
 import Image from 'next/image'
 import Link from 'next/link'
+import { MASTERCHEF_V2_ADDRESS } from '../../constants'
+import { MINICHEF_ADDRESS } from '../../constants/addresses'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { getAddress } from '@ethersproject/address'
 import { t } from '@lingui/macro'
@@ -53,15 +55,18 @@ const FarmListItem = ({ farm }) => {
   const reward = usePendingReward(farm)
 
   const APPROVAL_ADDRESSES = {
-    [Chef.MASTERCHEF]: MASTERCHEF_ADDRESS[ChainId.MAINNET],
-    [Chef.MASTERCHEF_V2]: '0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d',
-    [Chef.MINICHEF]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
+    [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
+    [Chef.MASTERCHEF_V2]: { [ChainId.MAINNET]: MASTERCHEF_V2_ADDRESS[ChainId.MAINNET] },
+    [Chef.MINICHEF]: {
+      [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
+      [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
+    },
   }
 
   const typedDepositValue = tryParseAmount(depositValue, liquidityToken)
   const typedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
 
-  const [approvalState, approve] = useApproveCallback(typedDepositValue, APPROVAL_ADDRESSES[farm.chef])
+  const [approvalState, approve] = useApproveCallback(typedDepositValue, APPROVAL_ADDRESSES[farm.chef][chainId])
 
   const { deposit, withdraw, harvest } = useMasterChef(farm.chef)
 

@@ -307,6 +307,10 @@ export default function Add() {
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
+  console.log(
+    { addIsUnsupported, isValid, approvalA, approvalB },
+    approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
+  )
   return (
     <>
       <Head>
@@ -444,8 +448,8 @@ export default function Add() {
               (approvalA === ApprovalState.NOT_APPROVED ||
                 approvalA === ApprovalState.PENDING ||
                 approvalB === ApprovalState.NOT_APPROVED ||
-                approvalB === ApprovalState.PENDING) &&
-              isValid && (
+                approvalB === ApprovalState.PENDING ||
+                isValid) && (
                 <AutoColumn gap={'md'}>
                   {
                     <RowBetween>
@@ -485,6 +489,7 @@ export default function Add() {
                       )}
                     </RowBetween>
                   }
+
                   {approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED && (
                     <ButtonError
                       onClick={() => {
