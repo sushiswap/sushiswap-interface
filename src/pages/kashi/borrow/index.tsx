@@ -1,19 +1,19 @@
-import { Trans, t } from '@lingui/macro'
+import Provider, { useKashiPairs } from '../../../features/lending/context'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
-import AsyncIcon from '../../../components/AsyncIcon'
 import Card from '../../../components/Card'
 import GradientDot from '../../../components/GradientDot'
 import Head from 'next/head'
+import Image from '../../../components/Image'
 import Layout from '../../../layouts/Kashi'
 import Link from 'next/link'
 import ListHeaderWithSort from '../../../components/ListHeaderWithSort'
 import MarketHeader from '../../../components/MarketHeader'
 import React from 'react'
-import Provider, { useKashiPairs } from '../../../features/lending/context'
+import { cloudinaryLoader } from '../../../functions/cloudinary'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSearchAndSort from '../../../hooks/useSearchAndSort'
-import { useRouter } from 'next/router'
 
 function Borrow() {
   const { i18n } = useLingui()
@@ -50,9 +50,9 @@ function Borrow() {
                   sort={positions}
                   sortKey="search"
                 >
-                  <Trans>
-                    <span className="hidden md:inline-block">Your</span> Positions
-                  </Trans>
+                  <>
+                    <span className="hidden md:inline-block">{i18n._(t`Your`)}</span> {i18n._(t`Positions`)}
+                  </>
                 </ListHeaderWithSort>
                 <ListHeaderWithSort
                   className="justify-end"
@@ -76,9 +76,9 @@ function Borrow() {
                   sortKey="health.value"
                   direction="descending"
                 >
-                  <Trans>
-                    Limit <span className="hidden md:inline-block">Used</span>
-                  </Trans>
+                  <>
+                    {i18n._(t`Limit`)} <span className="hidden md:inline-block">{i18n._(t`Used`)}</span>
+                  </>
                 </ListHeaderWithSort>
                 <ListHeaderWithSort
                   className="justify-end"
@@ -97,13 +97,22 @@ function Borrow() {
                         <a className="block text-high-emphesis">
                           <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                             <div className="hidden space-x-2 md:flex">
-                              <AsyncIcon
+                              <Image
+                                loader={cloudinaryLoader}
+                                height={48}
+                                width={48}
                                 src={pair.asset.tokenInfo.logoURI}
-                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                alt={pair.asset.tokenInfo.symbol}
                               />
-                              <AsyncIcon
+
+                              <Image
+                                loader={cloudinaryLoader}
+                                height={48}
+                                width={48}
                                 src={pair.collateral.tokenInfo.logoURI}
-                                className="block w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                alt={pair.collateral.tokenInfo.symbol}
                               />
                             </div>
                             <div className="sm:block md:col-span-1 lg:col-span-2">
@@ -193,13 +202,21 @@ function Borrow() {
                       <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                         <div className="flex flex-col items-start sm:flex-row sm:items-center">
                           <div className="hidden space-x-2 md:flex">
-                            <AsyncIcon
+                            <Image
+                              loader={cloudinaryLoader}
+                              height={48}
+                              width={48}
                               src={pair.asset.tokenInfo.logoURI}
                               className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                              alt={pair.asset.tokenInfo.symbol}
                             />
-                            <AsyncIcon
+                            <Image
+                              loader={cloudinaryLoader}
+                              height={48}
+                              width={48}
                               src={pair.collateral.tokenInfo.logoURI}
                               className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                              alt={pair.collateral.tokenInfo.symbol}
                             />
                           </div>
                           <div className="sm:items-end md:hidden">

@@ -1,12 +1,13 @@
-import { Currency, JSBI, Ether, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Ether, JSBI, Token } from '@sushiswap/sdk'
 import { PairState, useV2Pair } from '../../../hooks/useV2Pairs'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Trans, t } from '@lingui/macro'
+
 import Alert from '../../../components/Alert'
 import { AutoColumn } from '../../../components/Column'
 import { AutoRow } from '../../../components/Row'
 import CurrencySelectPanel from '../../../components/CurrencySelectPanel'
 import Dots from '../../../components/Dots'
+import { ExtendedEther } from '../../../constants'
 import { FindPoolTabs } from '../../../components/NavigationTabs'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -14,11 +15,11 @@ import { MinimalPositionCard } from '../../../components/PositionCard'
 import { Plus } from 'react-feather'
 import Web3Connect from '../../../components/Web3Connect'
 import { currencyId } from '../../../functions/currency'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { usePairAdder } from '../../../state/user/hooks'
 import { useTokenBalance } from '../../../state/wallet/hooks'
-import { ExtendedEther } from '../../../constants'
 
 enum Fields {
   TOKEN0 = 0,
@@ -105,9 +106,10 @@ export default function PoolFinder() {
           <Alert
             showIcon={false}
             message={
-              <Trans>
-                <b>Tip:</b> Use this tool to find pairs that don&apos;t automatically appear in the interface
-              </Trans>
+              <>
+                <b>{i18n._(t`Tip:`)}</b>{' '}
+                {i18n._(t`Use this tool to find pairs that don&apos;t automatically appear in the interface`)}
+              </>
             }
             type="information"
           />

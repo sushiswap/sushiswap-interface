@@ -8,6 +8,7 @@ import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '.
 import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardHeader from '../../../components/CardHeader'
+import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import CurrencySelectPanel from '../../../components/CurrencySelectPanel'
@@ -26,7 +27,6 @@ import { useBentoBoxContract } from '../../../hooks/useContract'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTransactionAdder } from '../../../state/transactions/hooks'
-import Container from '../../../components/Container'
 
 export type ChainlinkToken = {
   symbol: string
@@ -70,7 +70,7 @@ function Create() {
     async (asset: Currency, collateral: Currency) => {
       const oracleData = ''
 
-      const mapping = CHAINLINK_MAPPING[chainId || 1] || {}
+      const mapping = CHAINLINK_MAPPING[chainId]
 
       for (const address in mapping) {
         mapping[address].address = address
@@ -165,7 +165,7 @@ function Create() {
         <meta name="description" content="Create Lending Pair on Kashi by Sushi" />
       </Head>
       <Card
-        className="bg-dark-900"
+        className="h-full bg-dark-900"
         header={
           <CardHeader className="bg-dark-800">
             <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>

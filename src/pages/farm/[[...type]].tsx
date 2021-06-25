@@ -1,6 +1,7 @@
 import { Chef, PairType } from '../../features/farm/enum'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import { useActiveWeb3React, useFuse } from '../../hooks'
 import {
   useAlcxPrice,
   useAverageBlockTime,
@@ -9,6 +10,7 @@ import {
   useExchange,
   useLiquidityPositionSubset,
   useMasterChefV1Farms,
+  useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMasterChefV2Farms,
   useMaticPrice,
@@ -16,13 +18,15 @@ import {
   useOneDayBlock,
   usePairSubset,
   usePairs,
+  useStakePrice,
   useSushiPrice,
 } from '../../services/graph'
 import { useChefContracts, usePositions } from '../../features/farm/hooks'
-import { useMasterChefContract, useMasterChefV2Contract, useMiniChefV2Contract } from '../../hooks/useContract'
+import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks/useContract'
 
 import Card from '../../components/Card'
 import CardHeader from '../../components/CardHeader'
+import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import FarmList from '../../features/farm/FarmList'
@@ -31,13 +35,13 @@ import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
 import concat from 'lodash/concat'
 import { t } from '@lingui/macro'
-import { useFuse } from '../../hooks'
 import { useLendingPairSubset } from '../../services/graph/hooks/bentobox'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 
 export default function Farm(): JSX.Element {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
 
   const router = useRouter()
   const type = router.query.type?.[0]
@@ -50,10 +54,11 @@ export default function Farm(): JSX.Element {
   const { data: ethPrice } = useEthPrice()
   const { data: maticPrice } = useMaticPrice()
   const { data: alcxPrice } = useAlcxPrice()
-
   const { data: cvxPrice } = useCvxPrice()
+  const { data: stakePrice } = useStakePrice()
 
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
+  const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
 
   const { data: masterChefV1Farms } = useMasterChefV1Farms()
   const { data: masterChefV2Farms } = useMasterChefV2Farms()
@@ -75,8 +80,8 @@ export default function Farm(): JSX.Element {
   // Get Contracts
   const masterchefContract = useMasterChefContract()
   const masterchefV2Contract = useMasterChefV2Contract()
-  const minichefContract = useMiniChefV2Contract()
-
+  const minichefContract = useMiniChefContract()
+  // console.log({ miniChefFarms, swapPairs })
   // const chefContracts = useChefContracts()
 
   const masterChefV1Positions = usePositions(masterchefContract)
@@ -94,7 +99,7 @@ export default function Farm(): JSX.Element {
     // !POOL_DENY.includes(pool.id) &&
     return (
       pool.allocPoint !== '0' &&
-      pool.accSushiPerShare !== '0' &&
+      // pool.accSushiPerShare !== '0' &&
       (swapPairs.find((pair) => pair.id === pool.pair) || lendingPairs.find((pair) => pair.id === pool.pair))
     )
   }
@@ -168,9 +173,23 @@ export default function Farm(): JSX.Element {
         const sushiPerSecond = ((pool.allocPoint / 1000) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
-        const maticPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
-        const maticPerBlock = maticPerSecond * averageBlockTime
-        const maticPerDay = maticPerBlock * blocksPerDay
+        const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
+
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+
+        const reward = {
+          [ChainId.MATIC]: {
+            token: 'MATIC',
+            icon: '/images/tokens/polygon-square.jpg',
+            rewardPrice: maticPrice,
+          },
+          [ChainId.XDAI]: {
+            token: 'STAKE',
+            icon: '/images/tokens/stake-square.jpg',
+            rewardPrice: stakePrice,
+          },
+        }
         return [
           {
             ...defaultReward,
@@ -178,11 +197,9 @@ export default function Farm(): JSX.Element {
             rewardPerDay: sushiPerDay,
           },
           {
-            token: 'MATIC',
-            icon: '/images/tokens/polygon-square.jpg',
-            rewardPerBlock: maticPerBlock,
-            rewardPerDay: maticPerDay,
-            rewardPrice: maticPrice,
+            ...reward[chainId],
+            rewardPerBlock: rewardPerBlock,
+            rewardPerDay: rewardPerDay,
           },
         ]
       }
@@ -209,7 +226,7 @@ export default function Farm(): JSX.Element {
     const roiPerMonth = roiPerDay * 30
 
     const roiPerYear = roiPerMonth * 12
-
+    console.log({ roiPerBlock, averageBlockTime, pool })
     return {
       ...pool,
       chef,
@@ -246,6 +263,8 @@ export default function Farm(): JSX.Element {
         })
       : []
   )
+
+  console.log({ farms })
 
   const positions = farms
     ? [

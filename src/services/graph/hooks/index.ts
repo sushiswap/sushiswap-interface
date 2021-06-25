@@ -1,5 +1,6 @@
 import {
   getMasterChefV1Farms,
+  getMasterChefV1SushiPerBlock,
   getMasterChefV1TotalAllocPoint,
   getMasterChefV2Farms,
   getMiniChefFarms,
@@ -23,6 +24,13 @@ export function useMasterChefV1TotalAllocPoint(swrConfig = undefined) {
   return res
 }
 
+export function useMasterChefV1SushiPerBlock(swrConfig = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.MAINNET
+  const res = useSWR(shouldFetch ? 'masterChefV1SushiPerBlock' : null, () => getMasterChefV1SushiPerBlock(), swrConfig)
+  return res
+}
+
 export function useMasterChefV1Farms(swrConfig = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.MAINNET
@@ -39,7 +47,8 @@ export function useMasterChefV2Farms(swrConfig: SWRConfiguration = undefined) {
 
 export function useMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && chainId === ChainId.MATIC
-  const res = useSWR(shouldFetch ? 'miniChefFarms' : null, () => getMiniChefFarms(), swrConfig)
+  console.log({ chainId }, ChainId.XDAI)
+  const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI].includes(chainId)
+  const res = useSWR(shouldFetch ? 'miniChefFarms' : null, () => getMiniChefFarms(chainId), swrConfig)
   return res
 }

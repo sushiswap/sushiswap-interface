@@ -39,6 +39,7 @@ const usePending = (farm) => {
   const contract = {
     [ChainId.MAINNET]: aclxRewarder,
     [ChainId.MATIC]: complexRewarder,
+    [ChainId.XDAI]: complexRewarder,
   }
 
   useEffect(() => {

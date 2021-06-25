@@ -1,84 +1,150 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useMeowshiContract, useSushiBarContract, useSushiContract } from '../hooks/useContract'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMeowshiContract, useSushiBarContract, useSushiContract } from './useContract'
 
 import { BalanceProps } from './useTokenBalance'
 import Fraction from '../entities/Fraction'
 import { ethers } from 'ethers'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { ApprovalState } from './useApproveCallback'
 
 const { BigNumber } = ethers
 
-const useMeowshi = () => {
+const useMeowshi = (sushi: boolean) => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
-  const sushiContract = useSushiContract()
-  const barContract = useSushiBarContract()
-  const meowshiContract = useMeowshiContract()
+  const sushiContract = useSushiContract(true)
+  const barContract = useSushiBarContract(true)
+  const meowshiContract = useMeowshiContract(true)
+  const [pendingApproval, setPendingApproval] = useState(false)
 
   const [allowance, setAllowance] = useState('0')
-
   const fetchAllowance = useCallback(async () => {
     if (account) {
       try {
-        const allowance = await barContract?.allowance(account, meowshiContract?.address)
+        let allowance
+        if (sushi) {
+          allowance = await sushiContract?.allowance(account, meowshiContract?.address)
+        } else {
+          allowance = await barContract?.allowance(account, meowshiContract?.address)
+        }
+
         const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
         setAllowance(formatted)
       } catch (error) {
         setAllowance('0')
-        throw error
       }
     }
-  }, [account, meowshiContract, barContract])
+  }, [account, sushi, sushiContract, meowshiContract?.address, barContract])
 
   useEffect(() => {
-    if (account && meowshiContract && barContract) {
-      fetchAllowance()
+    if (account && meowshiContract) {
+      if ((sushi && sushiContract) || (!sushi && barContract)) {
+        fetchAllowance()
+      }
     }
+
     const refreshInterval = setInterval(fetchAllowance, 10000)
     return () => clearInterval(refreshInterval)
-  }, [account, meowshiContract, fetchAllowance, barContract])
+  }, [account, meowshiContract, fetchAllowance, sushiContract, barContract, sushi])
+
+  const approvalState: ApprovalState = useMemo(() => {
+    if (!account) return ApprovalState.UNKNOWN
+    if (pendingApproval) return ApprovalState.PENDING
+    if (!allowance || Number(allowance) === 0) return ApprovalState.NOT_APPROVED
+
+    return ApprovalState.APPROVED
+  }, [account, allowance, pendingApproval])
 
   const approve = useCallback(async () => {
     try {
-      const tx = await barContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
-      return addTransaction(tx, { summary: 'Approve' })
+      setPendingApproval(true)
+
+      let tx
+      if (sushi) {
+        tx = await sushiContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
+      } else {
+        tx = await barContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
+      }
+
+      addTransaction(tx, { summary: 'Approve' })
+      await tx.wait()
+      return tx
     } catch (e) {
       return e
+    } finally {
+      setPendingApproval(false)
     }
-  }, [addTransaction, meowshiContract, barContract])
+  }, [sushi, addTransaction, sushiContract, meowshiContract?.address, barContract])
 
   const meow = useCallback(
-    // todo: this should be updated with BigNumber as opposed to string
     async (amount: BalanceProps | undefined) => {
       if (amount?.value) {
         try {
           const tx = await meowshiContract?.meow(account, amount?.value)
-          return addTransaction(tx, { summary: 'Enter Meowshi' })
+          addTransaction(tx, { summary: 'Enter Meowshi' })
+          return tx
         } catch (e) {
           return e
         }
       }
     },
-    [addTransaction, meowshiContract]
+    [account, addTransaction, meowshiContract]
   )
 
   const unmeow = useCallback(
-    // todo: this should be updated with BigNumber as opposed to string
     async (amount: BalanceProps | undefined) => {
       if (amount?.value) {
         try {
           const tx = await meowshiContract?.unmeow(account, amount?.value)
-          return addTransaction(tx, { summary: 'Leave Meowshi' })
+          addTransaction(tx, { summary: 'Leave Meowshi' })
+          return tx
         } catch (e) {
           return e
         }
       }
     },
-    [addTransaction, meowshiContract]
+    [account, addTransaction, meowshiContract]
   )
 
-  return { allowance, approve, meow, unmeow }
+  const meowSushi = useCallback(
+    async (amount: BalanceProps | undefined) => {
+      if (amount?.value) {
+        try {
+          const tx = await meowshiContract?.meowSushi(account, amount?.value)
+          addTransaction(tx, { summary: 'Enter Meowshi' })
+          return tx
+        } catch (e) {
+          return e
+        }
+      }
+    },
+    [account, addTransaction, meowshiContract]
+  )
+
+  const unmeowSushi = useCallback(
+    async (amount: BalanceProps | undefined) => {
+      if (amount?.value) {
+        try {
+          const tx = await meowshiContract?.unmeowSushi(account, amount?.value)
+          addTransaction(tx, { summary: 'Leave Meowshi' })
+          return tx
+        } catch (e) {
+          return e
+        }
+      }
+    },
+    [account, addTransaction, meowshiContract]
+  )
+
+  return {
+    approvalState,
+    approve,
+    meow,
+    unmeow,
+    meowSushi,
+    unmeowSushi,
+  }
 }
 
 export default useMeowshi

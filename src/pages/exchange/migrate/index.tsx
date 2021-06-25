@@ -317,7 +317,7 @@ export default function Migrate() {
       <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
 
       <DoubleGlowShadow>
-        <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900">
+        <div className="w-full max-w-lg p-4 space-y-4 rounded bg-dark-900">
           {!account ? (
             <Web3Connect color="blue" className="w-full" />
           ) : state.loading ? (

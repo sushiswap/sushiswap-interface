@@ -60,6 +60,18 @@ module.exports = withBundleAnalyzer(
           destination: '/exchange/swap/:token*',
         },
         {
+          source: '/limit-order',
+          destination: '/exchange/limit-order',
+        },
+        {
+          source: '/limit-order/:token*',
+          destination: '/exchange/limit-order/:token*',
+        },
+        {
+          source: '/open-orders',
+          destination: '/exchange/open-orders',
+        },
+        {
           source: '/migrate',
           destination: '/exchange/migrate',
         },

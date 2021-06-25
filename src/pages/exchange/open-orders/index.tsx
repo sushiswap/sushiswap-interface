@@ -1,9 +1,9 @@
 import Head from 'next/head'
-import DoubleGlowShadow from '../components/DoubleGlowShadow'
-import NavLink from '../components/NavLink'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
+import NavLink from '../../../components/NavLink'
 import { ArrowLeftIcon } from '@heroicons/react/solid'
-import OpenOrders from '../features/open-orders/OpenOrders'
-import CompletedOrders from '../features/open-orders/CompletedOrders'
+import OpenOrders from '../../../features/open-orders/OpenOrders'
+import CompletedOrders from '../../../features/open-orders/CompletedOrders'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 

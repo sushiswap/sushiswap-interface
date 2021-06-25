@@ -1,9 +1,10 @@
 import Card from '../../components/Card'
 import Head from 'next/head'
-import Image from 'next/image'
+import Image from '../../components/Image'
 import Link from 'next/link'
 import React from 'react'
 import Web3Status from '../../components/Web3Status'
+import bentoBoxHero from '../../../public/bentobox-hero.jpg'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
@@ -20,23 +21,24 @@ export default function BenotBox() {
           content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
         />
       </Head>
-      <div className="absolute top-0 left-0 right-0" style={{ maxHeight: 700, zIndex: -1 }}>
+      <div className="absolute top-0 left-0 right-0" style={{ maxHeight: 700 }}>
         <Image
           className="opacity-50"
-          src="/bentobox-hero.jpg"
+          // src="/bentobox-hero.jpg"
+          src={bentoBoxHero}
           alt="BentoBox Hero"
           objectFit="contain"
           objectPosition="top"
           layout="responsive"
-          width="auto"
           height="100%"
+          width="auto"
         />
       </div>
-      <div className="text-center">
+      <div className="z-10 text-center">
         <Image
           src="/bentobox-logo.png"
           alt="BentoBox Logo"
-          className="object-scale-down h-auto m-w-40 md:m-w-60"
+          className="object-scale-down w-40 h-auto md:w-60"
           width="100%"
           height="auto"
         />

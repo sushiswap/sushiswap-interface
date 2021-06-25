@@ -1,6 +1,7 @@
 import { Currency, CurrencyAmount, Percent } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
-import { Trans } from '@lingui/macro'
+
+import { t } from '@lingui/macro'
 import { warningSeverity } from '../../functions/prices'
 
 export function FiatValue({
@@ -22,17 +23,14 @@ export function FiatValue({
   return (
     <div className="flex justify-end text-xs font-medium text-right text-secondary">
       {fiatValue ? (
-        <Trans>
+        <>
           ≈$ <div className="cursor-pointer">{fiatValue?.toSignificant(6, { groupSeparator: ',' })}</div>
-        </Trans>
+        </>
       ) : (
         ''
       )}
       {priceImpact ? (
-        <span style={{ color: priceImpactColor }}>
-          {' '}
-          (<Trans>{priceImpact.multiply(-1).toSignificant(3)}%</Trans>)
-        </span>
+        <span style={{ color: priceImpactColor }}> {priceImpact.multiply(-1).toSignificant(3)}%</span>
       ) : null}
     </div>
   )

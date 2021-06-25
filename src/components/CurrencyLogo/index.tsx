@@ -1,9 +1,11 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
 import React, { FC, useMemo } from 'react'
 
-import Image from 'next/image'
+import Image from '../Image'
 import Logo from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
+import { classNames } from '../../functions'
+import { cloudinaryLoader } from '../../functions/cloudinary'
 import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useHttpLocations from '../../hooks/useHttpLocations'
@@ -65,6 +67,8 @@ interface CurrencyLogoProps {
   squared?: boolean
 }
 
+const unknown = '/images/tokens/unknown.png'
+
 const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, className = '', squared = true }) => {
   const { chainId } = useActiveWeb3React()
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
@@ -73,13 +77,13 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, c
     if (!currency || currency.isNative) return []
 
     if (currency.isToken) {
-      const defaultUrls = currency.chainId === 1 ? [getTokenLogoURL(currency.address, 1)] : []
+      const defaultUrls = currency.chainId === 1 ? [getTokenLogoURL(currency.address, 1), unknown] : [unknown]
       if (currency instanceof WrappedTokenInfo) {
         return [...uriLocations, ...defaultUrls]
       }
       return defaultUrls
     }
-    return []
+    return [unknown]
   }, [currency, uriLocations])
 
   if (currency?.isNative || currency === WNATIVE[chainId]) {
@@ -87,22 +91,25 @@ const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, c
       <Image
         width={size}
         height={size}
-        alt={currency.symbol}
-        className={`${squared ? 'rounded' : 'rounded-full'} ${className}`}
+        alt={currency?.symbol}
+        className={classNames('rounded', className)}
         src={logo[chainId] || `/images/tokens/unknown.png`}
         layout="fixed"
       />
     )
   }
 
+  console.log({ srcs })
+
   return (
     <Logo
       width={size}
       height={size}
-      className={`${squared ? 'rounded' : 'rounded-full'} ${className}`}
-      style={style}
+      alt={currency?.symbol}
+      className={classNames('rounded', className)}
+      // loader={cloudinaryLoader}
       srcs={srcs}
-      alt={`${currency?.symbol ?? 'token'} logo`}
+      // style={style}
     />
   )
 }

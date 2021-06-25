@@ -1,6 +1,6 @@
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
-import Image from 'next/image'
+import Image from '../../components/Image'
 import Link from 'next/link'
 import Main from '../../components/Main'
 import NavLink from '../../components/NavLink'
@@ -8,6 +8,7 @@ import React from 'react'
 import { Zero } from '@ethersproject/constants'
 import { formatNumber } from '../../functions/format'
 import { getCurrency } from '../../functions/currency'
+import kashiLogo from '../../../public/kashi-logo.png'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useBentoBalances } from '../../state/bentobox/hooks'
 import { useRouter } from 'next/router'
@@ -37,7 +38,7 @@ export default function Layout({
               <Link href="/borrow">
                 <a className="flex justify-center xl:justify-start xl:mx-8">
                   <Image
-                    src="/kashi-logo.png"
+                    src={kashiLogo}
                     alt="Kashi"
                     layout="intrinsic"
                     // className="w-1/2 h-16 md:w-1/3 xl:w-full"

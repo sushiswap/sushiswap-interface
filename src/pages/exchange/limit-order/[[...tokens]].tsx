@@ -1,40 +1,40 @@
 import Head from 'next/head'
 import { t } from '@lingui/macro'
-import TokenWarningModal from '../../components/TokenWarningModal'
+import TokenWarningModal from '../../../components/TokenWarningModal'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/sdk'
-import { useAllTokens, useCurrency } from '../../hooks/Tokens'
-import { Field } from '../../state/swap/actions'
-import { useExpertModeManager } from '../../state/user/hooks'
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import { formatPercent, maxAmountSpend, tryParseAmount } from '../../functions'
+import { useAllTokens, useCurrency } from '../../../hooks/Tokens'
+import { Field } from '../../../state/swap/actions'
+import { useExpertModeManager } from '../../../state/user/hooks'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
+import { formatPercent, maxAmountSpend, tryParseAmount } from '../../../functions'
 import Lottie from 'lottie-react'
-import swapArrowsAnimationData from '../../animation/swap-arrows.json'
-import LimitPriceInputPanel from '../../features/limit-orders/LimitPriceInputPanel'
-import ExpertModePanel from '../../components/ExpertModePanel'
-import PriceRatio from '../../features/limit-orders/PriceRatio'
-import OrderExpirationDropdown from '../../features/limit-orders/OrderExpirationDropdown'
-import AddressInputPanel from '../../components/AddressInputPanel'
+import swapArrowsAnimationData from '../../../animation/swap-arrows.json'
+import LimitPriceInputPanel from '../../../features/limit-orders/LimitPriceInputPanel'
+import ExpertModePanel from '../../../components/ExpertModePanel'
+import PriceRatio from '../../../features/limit-orders/PriceRatio'
+import OrderExpirationDropdown from '../../../features/limit-orders/OrderExpirationDropdown'
+import AddressInputPanel from '../../../components/AddressInputPanel'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import {
   useDefaultsFromURLSearch,
   useDerivedLimitOrderInfo,
   useLimitOrderActionHandlers,
   useLimitOrderState,
-} from '../../state/limit-order/hooks'
-import LimitOrderButton from '../../features/limit-orders/LimitOrderButton'
-import BalancePanel from '../../features/limit-orders/BalancePanel'
-import ExchangeHeader from '../../components/ExchangeHeader'
-import CurrencyInputPanel from '../../features/limit-orders/CurrencyInputPanel'
-import CurrencyInput from '../../features/limit-orders/CurrencyInput'
-import CurrencySelect from '../../features/limit-orders/CurrencySelect'
-import Typography from '../../components/Typography'
-import PayFromToggle from '../../features/limit-orders/PayFromToggle'
+} from '../../../state/limit-order/hooks'
+import LimitOrderButton from '../../../features/limit-orders/LimitOrderButton'
+import BalancePanel from '../../../features/limit-orders/BalancePanel'
+import ExchangeHeader from '../../../components/ExchangeHeader'
+import CurrencyInputPanel from '../../../features/limit-orders/CurrencyInputPanel'
+import CurrencyInput from '../../../features/limit-orders/CurrencyInput'
+import CurrencySelect from '../../../features/limit-orders/CurrencySelect'
+import Typography from '../../../components/Typography'
+import PayFromToggle from '../../../features/limit-orders/PayFromToggle'
 import { ExclamationIcon } from '@heroicons/react/solid'
 import useSWR, { SWRResponse } from 'swr'
 import { LAMBDA_URL } from 'limitorderv2-sdk'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../../hooks'
 
 const url = `${LAMBDA_URL}/orders/pairs`
 const fetcher = (url, chainId) =>
@@ -186,7 +186,7 @@ export default function LimitOrder() {
         }}
       >
         <DoubleGlowShadow>
-          <div id="limit-order-page" className="flex flex-col w-full max-w-2xl p-6 rounded bg-dark-900 gap-4">
+          <div id="limit-order-page" className="flex flex-col p-4 rounded bg-dark-900 gap-4">
             <ExchangeHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
             <div className="flex flex-col gap-4">
               <CurrencyInputPanel
