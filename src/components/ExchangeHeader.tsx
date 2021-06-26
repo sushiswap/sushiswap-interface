@@ -1,13 +1,9 @@
 import { ChainId, Percent } from '@sushiswap/sdk'
-import React, { useState } from 'react'
-
+import React from 'react'
 import Gas from './Gas'
-import Lottie from 'lottie-react'
 import NavLink from './NavLink'
 import Settings from './Settings'
 import { currencyId } from '../functions'
-import profileAnimationData from '../animation/wallet.json'
-import settingsAnimationData from '../animation/settings-slider.json'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks'
 import { useLingui } from '@lingui/react'
@@ -35,10 +31,7 @@ export default function ExchangeHeader({
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
-  const [animateSettings, setAnimateSettings] = useState(false)
-  const [animateWallet, setAnimateWallet] = useState(false)
   const isRemove = router.asPath.startsWith('/remove')
-  console.log({ input, output })
   return (
     <div className="flex justify-between mb-4 space-x-3">
       <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
@@ -80,32 +73,6 @@ export default function ExchangeHeader({
               </div>
             </div>
           )}
-
-          {/* <button
-                        onMouseEnter={() => setAnimateSettings(true)}
-                        onMouseLeave={() => setAnimateSettings(false)}
-                        className="flex items-center justify-center w-full h-full p-1 rounded-sm bg-dark-800 hover:bg-dark-700 md:px-2"
-                    >
-                        <Lottie
-                            animationData={settingsAnimationData}
-                            autoplay={animateSettings}
-                            loop={false}
-                            style={{ width: 28, height: 28 }}
-                            className="transform rotate-90"
-                        />
-                    </button> */}
-          {/* <button
-                        onMouseEnter={() => setAnimateWallet(true)}
-                        onMouseLeave={() => setAnimateWallet(false)}
-                        className="items-center justify-center hidden w-full h-full px-2 rounded-sm md:flex bg-dark-800 hover:bg-dark-700"
-                    >
-                        <Lottie
-                            animationData={profileAnimationData}
-                            autoplay={animateWallet}
-                            loop={false}
-                            style={{ width: 24, height: 24 }}
-                        />
-                    </button> */}
           <div className="relative w-full h-full p-1 rounded-sm bg-dark-800 hover:bg-dark-700 md:px-2">
             <Settings placeholderSlippage={allowedSlippage} />
           </div>
