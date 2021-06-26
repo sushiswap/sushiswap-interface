@@ -33,7 +33,7 @@ const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toSt
 
 const Image = ({ src, width, height, layout = undefined, loader = undefined, ...rest }) => {
   return (
-    <div style={{ width, height }} className="rounded">
+    <div style={{ width, height }} className="overflow-hidden rounded">
       <NextImage
         loader={loader}
         src={src}
