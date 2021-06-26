@@ -187,7 +187,7 @@ export function useRouterContract(useArcher = false, withSignerIfPossible?: bool
   const { chainId } = useActiveWeb3React()
 
   const address = useArcher ? ARCHER_ROUTER_ADDRESS[chainId] : ROUTER_ADDRESS[chainId]
-  const abi = useArcher ? ARCHER_ROUTER_ABI[chainId] : ROUTER_ABI
+  const abi = useArcher ? ARCHER_ROUTER_ABI : ROUTER_ABI
 
   return useContract(address, abi, withSignerIfPossible)
 }

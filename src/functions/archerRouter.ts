@@ -65,7 +65,7 @@ export abstract class ArcherRouter {
    * @param options options for the call parameters
    */
   public static swapCallParameters(
-    routerAddress: string,
+    factoryAddress: string,
     trade: Trade<Currency, Currency, TradeType>,
     options: ArcherTradeOptions
   ): ArcherSwapParameters {
@@ -101,31 +101,31 @@ export abstract class ArcherRouter {
     switch (trade.tradeType) {
       case TradeType.EXACT_INPUT:
         if (etherIn) {
-          methodName = 'swapExactETHForTokensWithTipAmount'
-          args = [routerAddress, archerTrade, ethTip]
+          methodName = 'swapExactETHForTokensAndTipAmount'
+          args = [factoryAddress, archerTrade, ethTip]
           value = toHex(amountInCurrency.add(options.ethTip))
         } else if (etherOut) {
           methodName = 'swapExactTokensForETHAndTipAmount'
-          args = [routerAddress, archerTrade]
+          args = [factoryAddress, archerTrade, ethTip]
           value = ethTip
         } else {
-          methodName = 'swapExactTokensForTokensWithTipAmount'
-          args = [routerAddress, archerTrade]
+          methodName = 'swapExactTokensForTokensAndTipAmount'
+          args = [factoryAddress, archerTrade]
           value = ethTip
         }
         break
       case TradeType.EXACT_OUTPUT:
         if (etherIn) {
-          methodName = 'swapETHForExactTokensWithTipAmount'
-          args = [routerAddress, archerTrade, ethTip]
+          methodName = 'swapETHForExactTokensAndTipAmount'
+          args = [factoryAddress, archerTrade, ethTip]
           value = toHex(amountInCurrency.add(options.ethTip))
         } else if (etherOut) {
           methodName = 'swapTokensForExactETHAndTipAmount'
-          args = [routerAddress, archerTrade]
+          args = [factoryAddress, archerTrade, ethTip]
           value = ethTip
         } else {
-          methodName = 'swapTokensForExactTokensWithTipAmount'
-          args = [routerAddress, archerTrade]
+          methodName = 'swapTokensForExactTokensAndTipAmount'
+          args = [factoryAddress, archerTrade]
           value = ethTip
         }
         break

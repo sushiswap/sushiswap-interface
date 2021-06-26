@@ -165,7 +165,7 @@ export default function Transaction({ hash }: { hash: string }): any {
       {archer && (
         <TransactionStateNoLink>
           {`...#${archer.nonce} - Tip ${CurrencyAmount.fromRawAmount(
-            Ether.onChain[ChainId.MAINNET],
+            Ether.onChain(ChainId.MAINNET),
             archer.ethTip
           ).toSignificant(6)} ETH`}
           {pending ? (

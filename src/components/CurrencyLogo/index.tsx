@@ -3,11 +3,8 @@ import React, { FunctionComponent, useMemo } from 'react'
 
 import Logo from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { classNames } from '../../functions'
-import { cloudinaryLoader } from '../../functions/cloudinary'
 import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
 import useHttpLocations from '../../hooks/useHttpLocations'
-import { useState } from 'react'
 
 export const getTokenLogoURL = (address: string, chainId: ChainId) => {
   let imageURL
