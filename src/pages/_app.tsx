@@ -52,7 +52,7 @@ function MyApp({
 }: AppProps & {
   Component: NextComponentType<NextPageContext> & {
     Layout: FC
-    Provider: Provider<ProviderProps<unknown>>
+    Provider: Provider<unknown>
   }
 }) {
   const router = useRouter()
