@@ -3,7 +3,7 @@ import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
 
-import { FC, Provider, ProviderProps } from 'react'
+import { Fragment, FunctionComponent, Provider, ProviderProps } from 'react'
 import { NextComponentType, NextPageContext } from 'next'
 
 import type { AppProps } from 'next/app'
@@ -51,8 +51,8 @@ function MyApp({
   pageProps,
 }: AppProps & {
   Component: NextComponentType<NextPageContext> & {
-    Layout: FC
-    Provider: Provider<unknown>
+    Layout: FunctionComponent
+    Provider: FunctionComponent
   }
 }) {
   const router = useRouter()
@@ -73,7 +73,7 @@ function MyApp({
   }, [locale])
 
   // Allows for conditionally setting a provider to be hoisted per page
-  const Provider = Component.Provider || NOOP
+  const Provider = Component.Provider || Fragment
 
   // Allows for conditionally setting a layout to be hoisted per page
   const Layout = Component.Layout || DefaultLayout
