@@ -1,20 +1,12 @@
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
-
-import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Typography from '../../components/Typography'
-import capitalize from 'lodash/capitalize'
-import { classNames } from '../../functions'
 import useSWR from 'swr'
-import { useState } from 'react'
 
 const getChains = (url = 'https://chainid.network/chains.json') => fetch(url).then((res) => res.json())
 
 export default function Status({ initialData }) {
   const res = useSWR('https://chainid.network/chains.json', getChains, { initialData })
-  const [tabIndex, setTabIndex] = useState(0)
   const { data } = res
-
   return (
     <>
       <Head>
