@@ -1,6 +1,3 @@
-// import React, { memo, useRef } from 'react'
-// import { useModalOpen, useToggleModal } from '../../state/application/hooks'
-
 import { Menu, Transition } from '@headlessui/react'
 
 import { ChevronDownIcon } from '@heroicons/react/solid'
@@ -8,15 +5,9 @@ import { Fragment } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { classNames } from '../../functions'
-import getConfig from 'next/config'
 import { t } from '@lingui/macro'
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
 
-// Use https://onlineunicodetools.com/convert-unicode-to-image to convert
-// Unicode flags (https://emojipedia.org/flags/) to png as Windows does not support Unicode flags
-// Use 24px as unicode characters font size
 const LANGUAGES: {
   [x: string]: { flag: string; language: string; dialect?: string }
 } = {
@@ -85,7 +76,6 @@ export default function LangSwitcher() {
         <>
           <div>
             <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
-              {/* Language */}
               <Image src={LANGUAGES[locale].flag} alt={LANGUAGES[locale].language} width={20} height={20} />
               <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
             </Menu.Button>
@@ -108,7 +98,7 @@ export default function LangSwitcher() {
                   return (
                     <Menu.Item key={locale}>
                       {({ active }) => (
-                        <Menu.Button as={Link} href={route} locale={locale}>
+                        <Link href={route} locale={locale}>
                           <a
                             href="#"
                             className={classNames(
@@ -131,7 +121,7 @@ export default function LangSwitcher() {
                               </sup>
                             )}
                           </a>
-                        </Menu.Button>
+                        </Link>
                       )}
                     </Menu.Item>
                   )
