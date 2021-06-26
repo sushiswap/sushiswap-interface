@@ -3,15 +3,16 @@ import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-tabs/style/react-tabs.css'
 
+import { FC, Provider, ProviderProps } from 'react'
+import { NextComponentType, NextPageContext } from 'next'
+
 import type { AppProps } from 'next/app'
 import ApplicationUpdater from '../state/application/updater'
 import DefaultLayout from '../layouts/Default'
-import { FC } from 'react'
 import Head from 'next/head'
 import { I18nProvider } from '@lingui/react'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
-import { NextComponentType } from 'next'
 import ReactGA from 'react-ga'
 import { Provider as ReduxProvider } from 'react-redux'
 import TransactionUpdater from '../state/transactions/updater'
@@ -49,9 +50,9 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps & {
-  Component: NextComponentType & {
+  Component: NextComponentType<NextPageContext> & {
     Layout: FC
-    Provider: any
+    Provider: Provider<ProviderProps<unknown>>
   }
 }) {
   const router = useRouter()
