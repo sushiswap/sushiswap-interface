@@ -13,6 +13,16 @@ import { useActiveWeb3React } from '../hooks'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 
+const getQuery = (input, output) => {
+  if (!input && !output) return
+
+  if (input && !output) {
+    return { inputCurrency: input.address || 'ETH' }
+  } else if (input && output) {
+    return { inputCurrency: input.address, outputCurrency: output.address }
+  }
+}
+
 export default function ExchangeHeader({
   input,
   output,
@@ -28,15 +38,16 @@ export default function ExchangeHeader({
   const [animateSettings, setAnimateSettings] = useState(false)
   const [animateWallet, setAnimateWallet] = useState(false)
   const isRemove = router.asPath.startsWith('/remove')
+  console.log({ input, output })
   return (
     <div className="flex justify-between mb-4 space-x-3">
       <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
-          as="/swap"
-          href={`/swap?inputCurrency=${input && input.address ? input.address : 'ETH'}${
-            output && output.address ? `&outputCurrency=${output.address}` : ''
-          }`}
+          href={{
+            pathname: '/swap',
+            query: getQuery(input, output),
+          }}
         >
           <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md md:px-10 text-secondary hover:text-high-emphesis">
             {i18n._(t`Swap`)}
