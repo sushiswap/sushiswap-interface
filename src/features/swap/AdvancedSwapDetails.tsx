@@ -95,7 +95,7 @@ export function AdvancedSwapDetails({ trade, allowedSlippage, minerBribe }: Adva
         <RowBetween>
           <RowFixed>
             <div className="text-sm text-secondary">{i18n._(t`Miner Tip`)}</div>
-            <QuestionHelper text={i18n._(t`Slippage tolerance...`)} />
+            <QuestionHelper text={i18n._(t`Tip to encourage miners to select this transaction.`)} />
           </RowFixed>
           <div className="text-sm font-bold text-high-emphesis">
             {CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), minerBribe).toFixed(4)} ETH

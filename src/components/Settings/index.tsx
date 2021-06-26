@@ -14,7 +14,7 @@ import { ApplicationModal } from '../../state/application/actions'
 import Button from '../Button'
 import Modal from '../Modal'
 import ModalHeader from '../ModalHeader'
-import { Percent } from '@sushiswap/sdk'
+import { ChainId, Percent } from '@sushiswap/sdk'
 import QuestionHelper from '../QuestionHelper'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
@@ -22,9 +22,11 @@ import Typography from '../Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { useActiveWeb3React } from '../../hooks'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage: Percent }) {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
 
   const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
@@ -127,19 +129,25 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </RowBetween>
-            <RowBetween align="center">
-              <RowFixed align="center">
-                <Typography variant="sm" className="text-primary">
-                  {i18n._(t`MEV Shield by Archer DAO`)}
-                </Typography>
-                <QuestionHelper
-                  text={i18n._(
-                    t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
-                  )}
+            {chainId == ChainId.MAINNET && (
+              <RowBetween>
+                <RowFixed>
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`MEV Shield by Archer DAO`)}
+                  </Typography>
+                  <QuestionHelper
+                    text={i18n._(
+                      t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
+                    )}
+                  />
+                </RowFixed>
+                <Toggle
+                  id="toggle-use-archer"
+                  isActive={userUseArcher}
+                  toggle={() => setUserUseArcher(!userUseArcher)}
                 />
-              </RowFixed>
-              <Toggle id="toggle-use-archer" isActive={userUseArcher} toggle={() => setUserUseArcher(!userUseArcher)} />
-            </RowBetween>
+              </RowBetween>
+            )}
           </div>
         </div>
       )}

@@ -571,38 +571,15 @@ export default function Swap() {
           <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
         )}
 
-        {/* {showWrap ? null : (
-            <div
-              style={{
-                padding: showWrap ? ".25rem 1rem 0 1rem" : "0px",
-              }}
-            >
-              <div className="px-5 mt-4 space-y-2">
-                {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
-                  <RowBetween align="center">
-                    <Typography
-                      variant="sm"
-                      className="text-secondary"
-                      onClick={toggleSettings}
-                    >
-                      {i18n._(t`Slippage Tolerance`)}
-                    </Typography>
-
-                    <Typography
-                      variant="sm"
-                      className="text-secondary"
-                      onClick={toggleSettings}
-                    >
-                      {allowedSlippage / 100}%
-                    </Typography>
-                  </RowBetween>
-                )}
-              </div>
-              <div className="px-5 mt-1">
-                {doArcher && userHasSpecifiedInputOutput && <MinerTip />}
-              </div>
-            </div>
-          )} */}
+        {showWrap ? null : (
+          <div
+            style={{
+              padding: showWrap ? '.25rem 1rem 0 1rem' : '0px',
+            }}
+          >
+            <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
+          </div>
+        )}
 
         {trade && (
           <div className="p-5 rounded bg-dark-800">
