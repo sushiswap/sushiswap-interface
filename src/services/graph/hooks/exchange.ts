@@ -23,7 +23,12 @@ export function useExchange(query, variables, swrConfig: SWRConfiguration = unde
 }
 
 export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const res = useSWR(['ethPrice', JSON.stringify(variables)], () => getEthPrice(variables), swrConfig)
+  const { chainId } = useActiveWeb3React()
+  const res = useSWR(
+    chainId ? [chainId, 'ethPrice', JSON.stringify(variables)] : null,
+    () => getEthPrice(chainId, variables),
+    swrConfig
+  )
   return res
 }
 
@@ -50,8 +55,13 @@ export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
   return res
 }
 
-export function useBundle(swrConfig: SWRConfiguration = undefined) {
-  const res = useSWR([ChainId.MAINNET, ethPriceQuery], getBundle, swrConfig)
+export function useBundle(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const res = useSWR(
+    chainId ? [chainId, ethPriceQuery, JSON.stringify(variables)] : null,
+    () => getBundle(chainId, undefined, variables),
+    swrConfig
+  )
   return res
 }
 

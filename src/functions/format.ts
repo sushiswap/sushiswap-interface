@@ -43,7 +43,7 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
 
 export function formatPercent(percentString: any) {
   const percent = parseFloat(percentString)
-  if (!percent || percent === 0) {
+  if (!percent || percent === Infinity || percent === 0) {
     return '0%'
   }
   if (percent < 0.0001 && percent > 0) {
@@ -117,6 +117,10 @@ export function formatNumberScale(number: any, usd = false) {
   if (wholeNumberLength >= 10) return (usd ? '$' : '') + (num / Math.pow(10, 9)).toFixed(1) + 'B'
   if (wholeNumberLength >= 7) return (usd ? '$' : '') + (num / Math.pow(10, 6)).toFixed(1) + 'M'
   if (wholeNumberLength >= 4) return (usd ? '$' : '') + (num / Math.pow(10, 3)).toFixed(1) + 'K'
+
+  if (num < 0.0001 && num > 0) {
+    return usd ? '< $0.0001' : '< 0.0001'
+  }
 
   return (usd ? '$' : '') + num.toFixed(2)
 }

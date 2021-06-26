@@ -55,6 +55,7 @@ const Menu = () => {
 
       <NavLink
         href="/analytics/pairs"
+        wildPath={'/analytics/pairs'}
         activeClassName="bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
         <a className="flex items-center px-1 py-3 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">

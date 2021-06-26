@@ -3,16 +3,11 @@ import Container from '../../../components/Container'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import TokenList from '../../../features/analytics/Pairs/TokenList'
 import { useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
-import PairTabs from '../../../features/analytics/Pairs/PairTabs'
-import { useRouter } from 'next/router'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import { tokensTimeTravelQuery } from '../../../services/graph/queries'
 
 export default function Pairs() {
-  const router = useRouter()
-  const type = router.query.type?.[0] ?? 'all'
-
   const oneDayBlock = useOneDayBlock().data?.blocks
   const block1d = oneDayBlock ? Number(oneDayBlock[oneDayBlock.length - 1].number) : undefined
 
@@ -29,7 +24,7 @@ export default function Pairs() {
 
   const tokensFormatted =
     tokens && tokens1d && tokens1w && ethPrice && ethPrice1d && ethPrice1w
-      ? tokens.map((token, i) => {
+      ? tokens.map((token) => {
           const token1d = tokens1d.find((p) => token.id === p.id) ?? token
           const token1w = tokens1w.find((p) => token.id === p.id) ?? token
 

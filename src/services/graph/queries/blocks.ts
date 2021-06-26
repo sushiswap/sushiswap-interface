@@ -18,13 +18,13 @@ export const blockQuery = gql`
 `
 
 export const blocksQuery = gql`
-  query blocksQuery($first: Int! = 1000, $skip: Int! = 0, $start: Int!, $end: Int!) {
+  query blocksQuery($first: Int! = 1, $skip: Int! = 0, $start: Int!, $end: Int!) {
     blocks(
       first: $first
       skip: $skip
       orderBy: number
-      orderDirection: desc
-      where: { timestamp_gt: $start, timestamp_lt: $end, number_gt: 9300000 }
+      orderDirection: asc
+      where: { timestamp_gt: $start, timestamp_lt: $end }
     ) {
       ...blockFields
     }

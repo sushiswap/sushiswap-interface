@@ -34,6 +34,14 @@ export const getOneWeekBlock = async (chainId = ChainId.MAINNET) => {
   return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
 }
 
+export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number) => {
+  const date = startOfMinute(subDays(Date.now(), days))
+  const start = Math.floor(Number(date) / 1000)
+  const end = Math.floor(Number(date) / 1000) + 600
+
+  return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+}
+
 // Grabs the last 1000 blocks and averages
 // the time difference between them
 export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {

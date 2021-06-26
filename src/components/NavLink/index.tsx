@@ -13,7 +13,9 @@ const NavLink = ({ children, activeClassName = 'text-high-emphesis', ...props })
   // pages/[slug].js will be matched via props.as
 
   const className =
-    asPath === props.href || asPath === props.as ? `${childClassName} ${activeClassName}`.trim() : childClassName
+    asPath === props.href || asPath === props.as || asPath.includes(props.wildPath)
+      ? `${childClassName} ${activeClassName}`.trim()
+      : childClassName
 
   return (
     <Link href={props.href} {...props}>

@@ -1,4 +1,4 @@
-import { getAverageBlockTime, getOneDayBlock, getOneWeekBlock } from '../fetchers'
+import { getAverageBlockTime, getOneDayBlock, getOneWeekBlock, getCustomDayBlock } from '../fetchers'
 
 import { useActiveWeb3React } from '../../../hooks'
 import useSWR from 'swr'
@@ -15,6 +15,18 @@ export function useOneWeekBlock(swrConfig = undefined) {
   const { chainId } = useActiveWeb3React()
 
   const res = useSWR(chainId ? ['oneWeekBlock', chainId] : null, (_, chainId) => getOneWeekBlock(chainId), swrConfig)
+
+  return res
+}
+
+export function useCustomDayBlock(days: number, swrConfig = undefined) {
+  const { chainId } = useActiveWeb3React()
+
+  const res = useSWR(
+    chainId ? ['customDayBlock', chainId, days] : null,
+    (_, chainId) => getCustomDayBlock(chainId, days),
+    swrConfig
+  )
 
   return res
 }
