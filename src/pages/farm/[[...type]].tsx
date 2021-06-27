@@ -16,6 +16,7 @@ import {
   useMaticPrice,
   useMiniChefFarms,
   useOneDayBlock,
+  useOnePrice,
   usePairSubset,
   usePairs,
   useStakePrice,
@@ -50,12 +51,15 @@ export default function Farm(): JSX.Element {
 
   const { data: oneDayBlock } = useOneDayBlock()
 
-  const { data: sushiPrice } = useSushiPrice()
-  const { data: ethPrice } = useEthPrice()
-  const { data: maticPrice } = useMaticPrice()
-  const { data: alcxPrice } = useAlcxPrice()
-  const { data: cvxPrice } = useCvxPrice()
-  const { data: stakePrice } = useStakePrice()
+  const [
+    { data: sushiPrice },
+    { data: ethPrice },
+    { data: maticPrice },
+    { data: alcxPrice },
+    { data: cvxPrice },
+    { data: stakePrice },
+    { data: onePrice },
+  ] = [useSushiPrice(), useEthPrice(), useMaticPrice(), useAlcxPrice(), useCvxPrice(), useStakePrice(), useOnePrice()]
 
   const { data: masterChefV1TotalAllocPoint } = useMasterChefV1TotalAllocPoint()
   const { data: masterChefV1SushiPerBlock } = useMasterChefV1SushiPerBlock()
@@ -92,17 +96,18 @@ export default function Farm(): JSX.Element {
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 
-  function filter(pool) {
-    if (!swapPairs || !lendingPairs) {
-      return false
-    }
-    // !POOL_DENY.includes(pool.id) &&
-    return (
-      pool.allocPoint !== '0' &&
-      // pool.accSushiPerShare !== '0' &&
-      (swapPairs.find((pair) => pair.id === pool.pair) || lendingPairs.find((pair) => pair.id === pool.pair))
-    )
-  }
+  const filter = useCallback(
+    (pool) => {
+      // !POOL_DENY.includes(pool.id) &&
+      return (
+        pool.allocPoint !== '0' &&
+        // pool.accSushiPerShare !== '0' &&
+        ((swapPairs && swapPairs.find((pair) => pair.id === pool.pair)) ||
+          (lendingPairs && lendingPairs.find((pair) => pair.id === pool.pair)))
+      )
+    },
+    [lendingPairs, swapPairs]
+  )
 
   function map(pool, chef) {
     // TODO: Account for fees generated in case of swap pairs, and use standard compounding
@@ -132,7 +137,7 @@ export default function Farm(): JSX.Element {
 
       const defaultReward = {
         token: 'SUSHI',
-        icon: '/images/tokens/sushi-square.jpg',
+        icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/sushi.jpg',
         rewardPerBlock,
         rewardPerDay: rewardPerBlock * blocksPerDay,
         rewardPrice: sushiPrice,
@@ -147,21 +152,21 @@ export default function Farm(): JSX.Element {
         const REWARDS = [
           {
             token: 'ALCX',
-            icon: '/images/tokens/alcx-square.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
             rewardPerBlock: 0.217544236043011,
             rewardPerDay: 0.217544236043011 * blocksPerDay,
             rewardPrice: alcxPrice,
           },
           {
             token: 'CVX',
-            icon: '/images/tokens/unknown.png',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
             rewardPerBlock: 0.08336413675376289 * averageBlockTime,
             rewardPerDay: 0.08336413675376289 * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
           },
           {
             token: 'CVX',
-            icon: '/images/tokens/unknown.png',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
             rewardPerBlock: 0.125 * averageBlockTime,
             rewardPerDay: 0.125 * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
@@ -181,13 +186,18 @@ export default function Farm(): JSX.Element {
         const reward = {
           [ChainId.MATIC]: {
             token: 'MATIC',
-            icon: '/images/tokens/polygon-square.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
             rewardPrice: maticPrice,
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
-            icon: '/images/tokens/stake-square.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/stake.jpg',
             rewardPrice: stakePrice,
+          },
+          [ChainId.HARMONY]: {
+            token: 'ONE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
+            rewardPrice: onePrice,
           },
         }
         return [
@@ -226,7 +236,7 @@ export default function Farm(): JSX.Element {
     const roiPerMonth = roiPerDay * 30
 
     const roiPerYear = roiPerMonth * 12
-    console.log({ roiPerBlock, averageBlockTime, pool })
+
     return {
       ...pool,
       chef,
@@ -246,6 +256,7 @@ export default function Farm(): JSX.Element {
     }
   }
 
+  // TODO: Refactor this and positions, it's very messy
   const farms = concat(
     masterChefV1Farms
       ? masterChefV1Farms?.filter?.(filter)?.map((pool) => {
@@ -264,8 +275,6 @@ export default function Farm(): JSX.Element {
       : []
   )
 
-  console.log({ farms })
-
   const positions = farms
     ? [
         ...masterChefV1Positions.map((position) => ({
@@ -282,6 +291,12 @@ export default function Farm(): JSX.Element {
         })),
       ]
     : []
+
+  // const farms = miniChefFarms?.filter(filter).map((pool) => map(pool, Chef.MINICHEF))
+
+  // console.log(miniChefFarms?.filter(filter), swapPairs?.[0])
+  // // console.log(farms?.[0], swapPairs?.[0])
+  // // return null
 
   // //Search Setup
   const options = {
