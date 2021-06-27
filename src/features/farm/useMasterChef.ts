@@ -93,7 +93,7 @@ export default function useMasterChef(chef: Chef) {
         return e
       }
     },
-    [account, contract, sushi]
+    [account, chef, contract, sushi]
   )
 
   return { deposit, withdraw, harvest }
