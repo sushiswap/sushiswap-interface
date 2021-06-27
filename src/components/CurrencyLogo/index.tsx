@@ -1,4 +1,4 @@
-import { ChainId, Currency } from '@sushiswap/sdk'
+import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
 import React, { FunctionComponent, useMemo } from 'react'
 
 import Logo from '../Logo'
@@ -98,8 +98,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
       return [unknown]
     }
 
-    if (currency.isNative) {
-      console.log([logo[currency.chainId]])
+    if (currency.isNative || currency.equals(WNATIVE[currency.chainId])) {
       return [logo[currency.chainId], unknown]
     }
 
