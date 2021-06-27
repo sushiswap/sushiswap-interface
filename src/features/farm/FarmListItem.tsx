@@ -3,6 +3,7 @@ import { Disclosure } from '@headlessui/react'
 import React from 'react'
 import { classNames, formatNumber, formatPercent } from '../../functions'
 import DoubleLogo from '../../components/DoubleLogo'
+import Image from '../../components/Image'
 import { useCurrency } from '../../hooks/Tokens'
 import FarmListItemDetails from './FarmListItemDetails'
 
@@ -21,7 +22,7 @@ const FarmListItem = ({ farm, ...rest }) => {
           >
             <div className="grid grid-cols-4">
               <div className="flex col-span-2 space-x-4 md:col-span-1">
-                {/* <DoubleLogo currency0={token0} currency1={token1} size={40} /> */}
+                <DoubleLogo currency0={token0} currency1={token1} size={40} />
                 <div className="flex flex-col justify-center">
                   <div className="font-bold">
                     {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
@@ -37,7 +38,7 @@ const FarmListItem = ({ farm, ...rest }) => {
               <div className="flex flex-col justify-center font-bold">{formatNumber(farm.tvl, true)}</div>
               <div className="flex-row items-center hidden space-x-4 md:flex">
                 <div className="flex items-center space-x-2">
-                  {/* {farm?.rewards?.map((reward, i) => (
+                  {farm?.rewards?.map((reward, i) => (
                     <div key={i} className="flex items-center">
                       <Image
                         src={reward.icon}
@@ -48,7 +49,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                         alt={reward.token}
                       />
                     </div>
-                  ))} */}
+                  ))}
                 </div>
                 <div className="flex flex-col space-y-1">
                   {farm?.rewards?.map((reward, i) => (
