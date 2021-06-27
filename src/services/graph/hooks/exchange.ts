@@ -6,6 +6,7 @@ import {
   getCvxPrice,
   getLiquidityPositionSubset,
   getMaticPrice,
+  getOnePrice,
   getStakePrice,
   getSushiPrice,
   getTokenPrice,
@@ -31,6 +32,13 @@ export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.XDAI
   const res = useSWR(shouldFetch ? 'stakePrice' : null, () => getStakePrice(), swrConfig)
+  return res
+}
+
+export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.HARMONY
+  const res = useSWR(shouldFetch ? 'onePrice' : null, () => getOnePrice(), swrConfig)
   return res
 }
 

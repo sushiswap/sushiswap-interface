@@ -113,6 +113,12 @@ export const getStakePrice = async () => {
   })
 }
 
+export const getOnePrice = async () => {
+  return getTokenPrice(ChainId.HARMONY, tokenPriceQuery, {
+    id: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
+  })
+}
+
 export const getBundle = async (
   chainId = ChainId.MAINNET,
   query = ethPriceQuery,

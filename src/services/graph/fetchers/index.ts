@@ -12,6 +12,7 @@ import {
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
+import { Chef } from '../../../features/farm/enum'
 import { request } from 'graphql-request'
 
 export * from './blocks'
