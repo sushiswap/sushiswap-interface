@@ -9,7 +9,6 @@ import FarmListItemDetails from './FarmListItemDetails'
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
-
   return (
     <Disclosure as="div" {...rest}>
       {({ open }) => (
@@ -22,7 +21,7 @@ const FarmListItem = ({ farm, ...rest }) => {
           >
             <div className="grid grid-cols-4">
               <div className="flex col-span-2 space-x-4 md:col-span-1">
-                <DoubleLogo currency0={token0} currency1={token1} size={40} />
+                {/* <DoubleLogo currency0={token0} currency1={token1} size={40} /> */}
                 <div className="flex flex-col justify-center">
                   <div className="font-bold">
                     {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}

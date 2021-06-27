@@ -7,6 +7,7 @@ import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } f
 
 import { Contract } from '@ethersproject/contracts'
 import { Zero } from '@ethersproject/constants'
+import { concat } from 'lodash'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import zip from 'lodash/zip'
 
@@ -106,7 +107,7 @@ export function usePendingToken(farm, contract) {
   return useMemo(() => pendingTokens, [pendingTokens])
 }
 
-export function usePositions(contract?: Contract | null, rewarder?: Contract | null) {
+export function useChefPositions(contract?: Contract | null, rewarder?: Contract | null) {
   const { account, chainId } = useActiveWeb3React()
 
   const numberOfPools = useSingleCallResult(contract ? contract : null, 'poolLength', undefined, NEVER_RELOAD)
@@ -155,4 +156,13 @@ export function usePositions(contract?: Contract | null, rewarder?: Contract | n
         return (pendingSushi && !pendingSushi.isZero()) || (amount && !amount.isZero())
       })
   }, [args, getChef, pendingSushi, userInfo])
+}
+
+export function usePositions() {
+  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
+    useChefPositions(useMasterChefContract()),
+    useChefPositions(useMasterChefV2Contract()),
+    useChefPositions(useMiniChefContract()),
+  ]
+  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
 }

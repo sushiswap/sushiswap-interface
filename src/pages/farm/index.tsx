@@ -49,24 +49,21 @@ export default function Farm(): JSX.Element {
 
   const type = router.query.filter as string
 
-  const farms = useFarms()
-
   const pairAddresses = useFarmPairAddresses()
-
-  // console.log({ pairAddresses })
-
-  // const pairAddresses = useMemo(() => farms.map((pool) => pool.pair), [farms])
 
   const swapPairs = usePairSubset(pairAddresses)
 
   const kashiPairs = useKashiPairs(pairAddresses)
 
+  const farms = useFarms()
+
+  const positions = usePositions()
+
   const averageBlockTime = useAverageBlockTime()
 
-  // const oneDayBlock = useOneDayBlock()
-
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
-  // const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
+
+  const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
   // TODO: Obviously need to sort this out but this is fine for time being
   const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice] = [
@@ -78,14 +75,6 @@ export default function Farm(): JSX.Element {
     useStakePrice(),
     useOnePrice(),
   ]
-
-  // TODO: Wrap into a single hook
-  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
-    usePositions(useMasterChefContract()),
-    usePositions(useMasterChefV2Contract()),
-    usePositions(useMiniChefContract()),
-  ]
-  const positions = concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 
@@ -125,7 +114,9 @@ export default function Farm(): JSX.Element {
       function getRewards() {
         // TODO: Some subgraphs give sushiPerBlock & sushiPerSecond, and mcv2 gives nothing
         const sushiPerBlock =
-          pool?.owner?.sushiPerBlock / 1e18 || (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime || 18.6
+          pool?.owner?.sushiPerBlock / 1e18 ||
+          (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
+          masterChefV1SushiPerBlock
 
         const rewardPerBlock = (pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock
 
@@ -259,6 +250,7 @@ export default function Farm(): JSX.Element {
       cvxPrice,
       ethPrice,
       kashiPairs,
+      masterChefV1SushiPerBlock,
       masterChefV1TotalAllocPoint,
       maticPrice,
       onePrice,
@@ -281,14 +273,14 @@ export default function Farm(): JSX.Element {
     options,
   })
 
-  const filterForSection = {
+  const filters = {
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
     sushi: (farm) => farm.pair.type === PairType.SWAP,
     kashi: (farm) => farm.pair.type === PairType.KASHI,
     '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
   }
 
-  const filtered = type ? result?.filter(filterForSection[type]) : result
+  const filtered = type ? result?.filter(filters[type]) : result
 
   return (
     <>

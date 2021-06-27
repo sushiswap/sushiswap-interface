@@ -79,11 +79,9 @@ export function useFarms(swrConfig: SWRConfiguration = undefined) {
   const masterChefV1Farms = useMasterChefV1Farms()
   const masterChefV2Farms = useMasterChefV2Farms()
   const miniChefFarms = useMiniChefFarms()
-
   // useEffect(() => {
   //   console.log('debug', { masterChefV1Farms, masterChefV2Farms, miniChefFarms })
   // }, [masterChefV1Farms, masterChefV2Farms, miniChefFarms])
-
   return useMemo(
     () => concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms).filter((pool) => pool && pool.pair),
     [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
