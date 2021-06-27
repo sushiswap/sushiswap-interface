@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Container from '../../../components/Container'
 import Menu from '../../../features/analytics/AnalyticsMenu'
-import TokenList from '../../../features/analytics/Pairs/TokenList'
+import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'

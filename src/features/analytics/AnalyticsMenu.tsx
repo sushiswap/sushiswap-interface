@@ -8,7 +8,7 @@ const Menu = () => {
   return (
     <div className="space-y-4">
       <NavLink
-        href="/analytics"
+        href="/analytics/dashboard"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
         <a className="flex items-center px-1 py-3 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">

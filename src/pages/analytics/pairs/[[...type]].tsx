@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Typography from '../../../components/Typography'
 import Container from '../../../components/Container'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import PairList from '../../../features/analytics/Pairs/PairList'
@@ -109,7 +108,7 @@ export default function Pairs() {
             <div className="ml-3 font-bold text-2xl text-high-emphesis">Pairs</div>
           </div>
           <Search term={term} search={search} />
-          <PairTabs current={type} />
+          <PairTabs />
           <PairList pairs={pairsSearched} type={type} />
         </div>
       </Container>

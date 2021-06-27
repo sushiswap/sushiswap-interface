@@ -1,9 +1,10 @@
 import _ from 'lodash'
 import React from 'react'
-import { formatNumber, formatNumberScale, formatPercent } from '../../../functions'
+import { classNames, formatNumber, formatNumberScale, formatPercent } from '../../../functions'
 import { useCurrency } from '../../../hooks/Tokens'
-import Table from './Table'
+import Table from '../Table'
 import CurrencyLogo from '../../../components/CurrencyLogo'
+import ColoredNumber from '../../../features/analytics/ColoredNumber'
 
 interface TokenListProps {
   tokens: {
@@ -70,13 +71,13 @@ export default function TokenList({ tokens }: TokenListProps): JSX.Element {
       {
         Header: '24h',
         accessor: 'change1d',
-        Cell: (props) => formatPercent(props.value),
+        Cell: (props) => <ColoredNumber number={props.value} percent={true} />,
         align: 'right',
       },
       {
         Header: '7d',
         accessor: 'change1w',
-        Cell: (props) => formatPercent(props.value),
+        Cell: (props) => <ColoredNumber number={props.value} percent={true} />,
         align: 'right',
       },
     ],

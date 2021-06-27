@@ -67,13 +67,13 @@ export function formatPercent(percentString: any) {
   }
 }
 
-export const formatNumber = (number: any, usd = false) => {
+export const formatNumber = (number: any, usd = false, scale = true) => {
   if (isNaN(number) || number === '' || number === undefined) {
     return usd ? '$0.00' : '0'
   }
   const num = parseFloat(number)
 
-  if (num > 500000000) {
+  if (num > 500000000 && scale) {
     return (usd ? '$' : '') + formatK(num.toFixed(0))
   }
 

@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { useState } from 'react'
 import { useTable, usePagination, useSortBy } from 'react-table'
-import { classNames } from '../../../functions'
+import { classNames } from '../../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 
 export default function Table({ columns, data, columnsHideable = [], defaultSortBy = { id: '', desc: false } }) {
