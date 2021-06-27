@@ -9,7 +9,7 @@ const Menu = () => {
   return (
     <div className="space-y-4">
       <NavLink
-        href="/farm/portfolio"
+        href="/farm?filter=portfolio"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
         <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
@@ -29,7 +29,7 @@ const Menu = () => {
       {chainId === ChainId.MAINNET && (
         <>
           <NavLink
-            href="/farm/km"
+            href="/farm?filter=kashi"
             activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
             <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
@@ -37,7 +37,7 @@ const Menu = () => {
             </a>
           </NavLink>
           <NavLink
-            href="/farm/slp"
+            href="/farm?filter=sushi"
             activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
             <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
@@ -50,7 +50,7 @@ const Menu = () => {
       {chainId === ChainId.MAINNET ||
         (chainId === ChainId.MATIC && (
           <NavLink
-            href="/farm/2x"
+            href="/farm?filter=2x"
             activeClassName="bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
           >
             <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">

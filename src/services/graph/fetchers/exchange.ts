@@ -18,6 +18,7 @@ export const EXCHANGE = {
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
 }
+
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
   request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
@@ -33,6 +34,7 @@ export const getPairSubset = async (chainId = ChainId.MAINNET, variables = undef
     pairSubsetQuery,
     variables
   )
+  // console.log('FETCHER', { pairs })
   return pairs
 }
 
