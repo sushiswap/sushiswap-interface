@@ -5,10 +5,10 @@ import React from 'react'
 import { useActiveWeb3React } from '../../hooks'
 
 const Menu = ({ positionsLength }) => {
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   return (
     <div className="space-y-4">
-      {positionsLength > 0 && (
+      {account && positionsLength > 0 && (
         <NavLink
           href="/farm?filter=portfolio"
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
