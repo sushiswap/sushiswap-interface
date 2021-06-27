@@ -34,6 +34,7 @@ const FarmListItem = ({ farm }) => {
   const [withdrawValue, setWithdrawValue] = useState('')
 
   const addTransaction = useTransactionAdder()
+
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
@@ -60,6 +61,7 @@ const FarmListItem = ({ farm }) => {
     [Chef.MINICHEF]: {
       [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
       [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
+      [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
     },
   }
 
