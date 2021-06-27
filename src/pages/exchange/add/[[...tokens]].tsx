@@ -225,7 +225,7 @@ export default function Add() {
           <div className="text-2xl font-bold text-high-emphesis">
             {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol}
           </div>
-          <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} squared size={48} />
+          <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
         </div>
       </div>
     ) : (
@@ -233,7 +233,7 @@ export default function Add() {
         <div className="flex items-center justify-start gap-3">
           <div className="text-xl font-bold md:text-3xl text-high-emphesis">{liquidityMinted?.toSignificant(6)}</div>
           <div className="grid grid-flow-col gap-2">
-            <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} squared size={48} />
+            <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
           </div>
         </div>
         <div className="text-lg font-medium md:text-2xl text-high-emphesis">

@@ -181,7 +181,7 @@ export function rpcToObj(rpc_obj: any, obj?: any) {
   return rpc_obj
 }
 
-export function KashiProvider({ children }: { children: JSX.Element }) {
+export function KashiProvider({ children }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
   const blockNumber = useBlockNumber()
 

@@ -14,13 +14,16 @@ const NavLink = ({ children, activeClassName = 'text-high-emphesis', ...props })
 
   // console.log({ props, asPath, pathname })
 
+  // const className =
+  //   asPath === props.href ||
+  //   asPath === props.as ||
+  //   asPath.startsWith(props.href) ||
+  //   asPath.startsWith(props.href.pathname)
+  //     ? `${childClassName} ${activeClassName}`.trim()
+  //     : childClassName
+
   const className =
-    asPath === props.href ||
-    asPath === props.as ||
-    asPath.startsWith(props.href) ||
-    asPath.startsWith(props.href.pathname)
-      ? `${childClassName} ${activeClassName}`.trim()
-      : childClassName
+    asPath === props.href || asPath === props.as ? `${childClassName} ${activeClassName}`.trim() : childClassName
 
   return (
     <Link href={props.href} {...props}>

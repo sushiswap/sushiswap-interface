@@ -27,10 +27,10 @@ function getCurrencyLogoUrls(address, chainId = ChainId.MAINNET) {
 
   if (chainId === ChainId.MAINNET) {
     urls.push(
-      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN}/assets/${address}/logo.png`
+      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[chainId]}/assets/${address}/logo.png`
     )
     urls.push(
-      `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN}/assets/${address}/logo.png`
+      `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[chainId]}/assets/${address}/logo.png`
     )
   }
 

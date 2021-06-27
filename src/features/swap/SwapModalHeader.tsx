@@ -45,7 +45,7 @@ export default function SwapModalHeader({
       <div className="grid gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CurrencyLogo currency={trade.inputAmount.currency} squared size={48} />
+            <CurrencyLogo currency={trade.inputAmount.currency} size={48} />
             <div className="overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl text-high-emphesis">
               {trade.inputAmount.toSignificant(6)}
             </div>
@@ -57,7 +57,7 @@ export default function SwapModalHeader({
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CurrencyLogo currency={trade.outputAmount.currency} squared size={48} />
+            <CurrencyLogo currency={trade.outputAmount.currency} size={48} />
             <div
               className={`overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl ${
                 priceImpactSeverity > 2 ? 'text-red' : 'text-high-emphesis'

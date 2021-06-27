@@ -1,12 +1,6 @@
 import Logo from '../Logo'
 import React from 'react'
-import styled from 'styled-components'
 import useHttpLocations from '../../hooks/useHttpLocations'
-
-// const StyledListLogo = styled(Logo)<{ size: string }>`
-//   width: ${({ size }) => size};
-//   height: ${({ size }) => size};
-// `
 
 export default function ListLogo({
   logoURI,
