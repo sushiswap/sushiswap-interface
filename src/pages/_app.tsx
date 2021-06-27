@@ -60,6 +60,21 @@ function MyApp({
   const { pathname, query, locale } = router
 
   useEffect(() => {
+    ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, { testMode: process.env.NODE_ENV === 'development' })
+
+    const errorHandler = (error) => {
+      ReactGA.exception({
+        description: `${error.message} @ ${error.filename}:${error.lineno}:${error.colno}`,
+        fatal: true,
+      })
+    }
+
+    window.addEventListener('error', errorHandler)
+
+    return () => window.removeEventListener('error', errorHandler)
+  }, [])
+
+  useEffect(() => {
     ReactGA.pageview(`${pathname}${query}`)
   }, [pathname, query])
 
