@@ -298,7 +298,7 @@ export default function Farm(): JSX.Element {
       </Head>
       <Container maxWidth="full" className="grid h-full grid-cols-4 mx-auto gap-9">
         <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
-          <Menu />
+          <Menu positionsLength={positions.length} />
         </div>
         <div className="col-span-4 space-y-6 lg:col-span-3">
           <Search

@@ -4,18 +4,20 @@ import NavLink from '../../components/NavLink'
 import React from 'react'
 import { useActiveWeb3React } from '../../hooks'
 
-const Menu = () => {
+const Menu = ({ positionsLength }) => {
   const { chainId } = useActiveWeb3React()
   return (
     <div className="space-y-4">
-      <NavLink
-        href="/farm?filter=portfolio"
-        activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
-      >
-        <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
-          Your Farms
-        </a>
-      </NavLink>
+      {positionsLength > 0 && (
+        <NavLink
+          href="/farm?filter=portfolio"
+          activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
+        >
+          <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
+            Your Farms
+          </a>
+        </NavLink>
+      )}
 
       <NavLink
         href="/farm"
