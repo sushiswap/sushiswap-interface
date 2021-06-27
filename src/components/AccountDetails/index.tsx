@@ -6,10 +6,8 @@ import { AppDispatch } from '../../state'
 import Button from '../Button'
 import Copy from './Copy'
 import ExternalLink from '../ExternalLink'
-import Identicon from '../Identicon'
 import Image from 'next/image'
 import { ExternalLink as LinkIcon } from 'react-feather'
-import LinkStyledButton from '../LinkStyledButton'
 import ModalHeader from '../ModalHeader'
 import { SUPPORTED_WALLETS } from '../../constants'
 import Transaction from './Transaction'
@@ -99,11 +97,7 @@ export default function AccountDetails({
 
   function getStatusIcon() {
     if (connector === injected) {
-      return (
-        <IconWrapper size={16}>
-          <Identicon />
-        </IconWrapper>
-      )
+      return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
     } else if (connector === walletconnect) {
       return (
         <IconWrapper size={16}>

@@ -66,7 +66,7 @@ const OptionCustom = styled(FancyButton)<{
   padding: 0 0.75rem;
   flex: 1;
   min-width: 82px;
-  max-width: 100px;
+  max-width: 102px;
   background: #202231;
   input {
     width: 100%;
@@ -74,20 +74,6 @@ const OptionCustom = styled(FancyButton)<{
     border: 0px;
   }
 `
-
-const SlippageEmojiContainer = styled.span`
-  color: #f3841e;
-  //     ${({ theme }) => theme.mediaWidth.upToSmall`
-//     display: none;  
-//   `}
-`
-
-// export interface SlippageTabsProps {
-//   rawSlippage: number;
-//   setRawSlippage: (rawSlippage: number) => void;
-//   deadline: number;
-//   setDeadline: (deadline: number) => void;
-// }
 
 export interface TransactionSettingsProps {
   placeholderSlippage: Percent // varies according to the context in which the settings dialog is placed
@@ -169,15 +155,13 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             )}
           />
         </RowFixed>
-        <RowFixed align="center" className="space-x-1">
+        <RowFixed align="center" className="space-x-2">
           <OptionCustom active={userSlippageTolerance !== 'auto'} warning={!!slippageError} tabIndex={-1}>
             <RowBetween align="center">
               {tooLow || tooHigh ? (
-                <SlippageEmojiContainer>
-                  <span role="img" aria-label="warning">
-                    ⚠️
-                  </span>
-                </SlippageEmojiContainer>
+                <span className="hidden sm:inline text-yellow" role="img" aria-label="warning">
+                  ⚠️
+                </span>
               ) : null}
               <Input
                 placeholder={placeholderSlippage.toFixed(2)}
