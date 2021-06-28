@@ -1,4 +1,4 @@
-import { ethPriceQuery, liquidityPositionSubsetQuery, pairSubsetQuery, tokenQuery } from '../queries'
+import { ethPriceQuery, liquidityPositionSubsetQuery, pairSubsetQuery, pairsQuery, tokenQuery } from '../queries'
 import {
   exchange,
   getAlcxPrice,

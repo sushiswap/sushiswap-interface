@@ -23,8 +23,7 @@ export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
   request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.MAINNET, query = pairsQuery, variables = undefined) => {
-  // console.log('getPairs')
-  const { pairs } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+  const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }
 
@@ -34,7 +33,6 @@ export const getPairSubset = async (chainId = ChainId.MAINNET, variables = undef
     pairSubsetQuery,
     variables
   )
-  // console.log('FETCHER', { pairs })
   return pairs
 }
 

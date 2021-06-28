@@ -1,45 +1,29 @@
 import { Chef, PairType } from '../../features/farm/enum'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import React, { useCallback, useMemo } from 'react'
 import { useActiveWeb3React, useFuse } from '../../hooks'
 import {
   useAlcxPrice,
   useAverageBlockTime,
   useCvxPrice,
   useEthPrice,
-  useExchange,
-  useLiquidityPositionSubset,
-  useMasterChefV1Farms,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
-  useMasterChefV2Farms,
   useMaticPrice,
-  useMiniChefFarms,
-  useOneDayBlock,
   useOnePrice,
   usePairSubset,
-  usePairs,
   useStakePrice,
   useSushiPrice,
   useFarms,
   useFarmPairAddresses,
 } from '../../services/graph'
-import { useChefContracts, usePositions } from '../../features/farm/hooks'
-import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks/useContract'
-
-import Card from '../../components/Card'
-import CardHeader from '../../components/CardHeader'
+import { usePositions } from '../../features/farm/hooks'
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
-import Dots from '../../components/Dots'
 import FarmList from '../../features/farm/FarmList'
 import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
-import concat from 'lodash/concat'
-import { t } from '@lingui/macro'
 import { useKashiPairs } from '../../services/graph/hooks/bentobox'
-import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 
 export default function Farm(): JSX.Element {
