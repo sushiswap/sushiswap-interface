@@ -14,6 +14,7 @@ import {
   useStakePrice,
   useSushiPrice,
   useFarms,
+  usePairs,
   useFarmPairAddresses,
 } from '../../services/graph'
 import { usePositions } from '../../features/farm/hooks'
@@ -35,7 +36,13 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
-  const swapPairs = usePairSubset(pairAddresses)
+  // const swapPairs = usePairSubset(pairAddresses)
+
+  const swapPairs = usePairs({
+    where: {
+      id_in: pairAddresses,
+    },
+  })
 
   const kashiPairs = useKashiPairs(pairAddresses)
 
@@ -265,6 +272,8 @@ export default function Farm(): JSX.Element {
   }
 
   const filtered = type ? result?.filter(filters[type]) : result
+
+  console.log({ filtered })
 
   return (
     <>

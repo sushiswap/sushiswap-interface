@@ -1,8 +1,8 @@
-import { ARCHER_RELAY_URI, ExtendedEther } from '../../constants'
 import { ChainId, CurrencyAmount, Ether } from '@sushiswap/sdk'
 import { CheckCircle, Triangle, X } from 'react-feather'
 import React, { useCallback, useMemo } from 'react'
 
+import { ARCHER_RELAY_URI } from '../../constants'
 import { AppDispatch } from '../../state'
 import ExternalLink from '../ExternalLink'
 import Loader from '../Loader'

@@ -22,7 +22,7 @@ export const EXCHANGE = {
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
   request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
-export const getPairs = async (chainId = ChainId.MAINNET, query = pairsQuery, variables = undefined) => {
+export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }

@@ -82,10 +82,14 @@ export function useLiquidityPositionSubset(user, swrConfig: SWRConfiguration = u
   return data
 }
 
-export function usePairs(pairAddresses = undefined, swrConfig: SWRConfiguration = undefined) {
+export function usePairs(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId
-  const { data } = useSWR(shouldFetch ? ['pairs', chainId] : null, (_, chainId) => getPairs(chainId), swrConfig)
+  const { data } = useSWR(
+    shouldFetch ? ['pairs', chainId, JSON.stringify(variables)] : null,
+    (_, chainId) => getPairs(chainId, variables),
+    swrConfig
+  )
   return data
 }
 
