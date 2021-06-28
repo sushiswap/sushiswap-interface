@@ -7,10 +7,11 @@ import Badge from '../../components/Badge'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../animation/loading-circle.json'
 import { JSBI, Percent } from '@sushiswap/sdk'
+import Pagination from './Pagination'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
-  const { completed, loading } = useLimitOrders()
+  const { completed } = useLimitOrders()
 
   return (
     <>
@@ -18,12 +19,12 @@ const CompletedOrders: FC = () => {
         {i18n._(t`Order History`)}{' '}
         <span className="inline-flex">
           <Badge color="pink" size="medium">
-            {completed.length}
+            {completed.data.length}
           </Badge>
         </span>
       </div>
       <div className="text-secondary text-center">
-        {completed.length > 0 ? (
+        {completed.data.length > 0 ? (
           <>
             <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Receive`)}</div>
@@ -34,7 +35,7 @@ const CompletedOrders: FC = () => {
               <div className="flex items-center cursor-pointer hover:text-primary justify-end">{i18n._(t`Filled`)}</div>
             </div>
             <div className="flex flex-col-reverse gap-2 md:gap-5">
-              {completed.map((order, index) => (
+              {completed.data.map((order, index) => (
                 <div
                   key={index}
                   className="block text-high-emphesis bg-dark-800 overflow-hidden rounded"
@@ -89,8 +90,14 @@ const CompletedOrders: FC = () => {
                 </div>
               ))}
             </div>
+            <Pagination
+              onChange={completed.setPage}
+              totalPages={completed.maxPages}
+              currentPage={completed.page}
+              pageNeighbours={2}
+            />
           </>
-        ) : loading ? (
+        ) : completed.loading ? (
           <div className="w-8 m-auto">
             <Lottie animationData={loadingCircle} autoplay loop />
           </div>

@@ -68,8 +68,8 @@ module.exports = withBundleAnalyzer(
           destination: '/exchange/limit-order/:token*',
         },
         {
-          source: '/open-orders',
-          destination: '/exchange/open-orders',
+          source: '/open-order',
+          destination: '/exchange/open-order',
         },
         {
           source: '/migrate',

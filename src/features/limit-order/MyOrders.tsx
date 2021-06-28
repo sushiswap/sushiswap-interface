@@ -16,7 +16,7 @@ const MyOrders: FC = () => {
       <a className="text-secondary hover:text-high-emphesis">
         <div className="md:flex hidden gap-3 items-center">
           <div>{i18n._(t`My Orders`)}</div>
-          <Badge color="blue">{pending.length}</Badge>
+          <Badge color="blue">{pending.data.length}</Badge>
         </div>
         <div className="flex md:hidden">
           <HoverLottie animationData={orderHistoryJson} className="w-[32px] h-[32px]" />

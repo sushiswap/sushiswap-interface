@@ -13,10 +13,11 @@ import Lottie from 'lottie-react'
 import loadingCircle from '../../animation/loading-circle.json'
 import TransactionConfirmationModal from '../../components/TransactionConfirmationModal'
 import { JSBI, Percent } from '@sushiswap/sdk'
+import Pagination from './Pagination'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
-  const { pending, loading, mutate } = useLimitOrders()
+  const { pending, mutate } = useLimitOrders()
   const limitOrderContract = useLimitOrderContract(true)
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState('')
@@ -47,12 +48,12 @@ const OpenOrders: FC = () => {
         {i18n._(t`Open Orders`)}{' '}
         <span className="inline-flex">
           <Badge color="blue" size="medium">
-            {pending.length}
+            {pending.data.length}
           </Badge>
         </span>
       </div>
       <div className="text-secondary text-center">
-        {pending.length > 0 ? (
+        {pending.data.length > 0 ? (
           <>
             <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Receive`)}</div>
@@ -63,7 +64,7 @@ const OpenOrders: FC = () => {
               <div className="flex items-center cursor-pointer hover:text-primary justify-end" />
             </div>
             <div className="flex flex-col-reverse gap-2 md:gap-5">
-              {pending.map((order, index) => (
+              {pending.data.map((order, index) => (
                 <div key={index} className="block text-high-emphesis bg-dark-800 overflow-hidden rounded">
                   <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
                     <div className="flex flex-col">
@@ -112,8 +113,14 @@ const OpenOrders: FC = () => {
                 </div>
               ))}
             </div>
+            <Pagination
+              onChange={pending.setPage}
+              totalPages={pending.maxPages}
+              currentPage={pending.page}
+              pageNeighbours={2}
+            />
           </>
-        ) : loading ? (
+        ) : pending.loading ? (
           <div className="w-8 m-auto">
             <Lottie animationData={loadingCircle} autoplay loop />
           </div>
