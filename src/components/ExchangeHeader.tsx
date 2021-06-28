@@ -2,17 +2,15 @@ import { ChainId, Currency, Percent, WNATIVE } from '@sushiswap/sdk'
 import React, { FC, useState } from 'react'
 
 import Gas from './Gas'
-import Lottie from 'lottie-react'
 import NavLink from './NavLink'
 import Settings from './Settings'
 import { currencyId } from '../functions'
 import profileAnimationData from '../animation/wallet.json'
-import settingsAnimationData from '../animation/settings-slider.json'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../hooks'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
-import MyOrders from '../features/limit-orders/MyOrders'
+import MyOrders from '../features/limit-order/MyOrders'
 
 interface ExchangeHeaderProps {
   input?: Currency
@@ -24,7 +22,6 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
-  const [animateSettings, setAnimateSettings] = useState(false)
   const [animateWallet, setAnimateWallet] = useState(false)
   const isRemove = router.asPath.startsWith('/remove')
   const isLimitOrder = router.asPath.startsWith('/limit-order')
@@ -68,7 +65,7 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
       <div className="flex items-center">
         <div className="grid grid-flow-col gap-1">
           {isLimitOrder && (
-            <div className="hidden md:flex items-center h-full w-full cursor-pointer hover:bg-dark-800 rounded px-3 py-1.5">
+            <div className="items-center h-full w-full cursor-pointer hover:bg-dark-800 rounded px-3 py-1.5">
               <MyOrders />
             </div>
           )}
@@ -86,7 +83,7 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
               </div>
             </div>
           )}
-          <div className="relative w-full h-full rounded hover:bg-dark-800">
+          <div className="relative w-full h-full rounded hover:bg-dark-800 flex items-center">
             <Settings placeholderSlippage={allowedSlippage} />
           </div>
         </div>

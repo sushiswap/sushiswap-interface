@@ -126,16 +126,16 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     </>
   )
 
-  if (wrongChain)
-    button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={toggleWalletModal} {...rest}>
-        {i18n._(t`Chain not supported yet`)}
-      </Button>
-    )
-  else if (!account)
+  if (!account)
     button = (
       <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={toggleWalletModal} {...rest}>
         {i18n._(t`Connect Wallet`)}
+      </Button>
+    )
+  else if (wrongChain)
+    button = (
+      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={toggleWalletModal} {...rest}>
+        {i18n._(t`Chain not supported yet`)}
       </Button>
     )
   else if (inputError)

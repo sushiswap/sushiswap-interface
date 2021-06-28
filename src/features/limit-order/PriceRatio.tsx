@@ -1,21 +1,18 @@
-import { FC, useState } from "react";
-import { useDerivedLimitOrderInfo } from "../../state/limit-order/hooks";
+import { FC, useState } from 'react'
+import { useDerivedLimitOrderInfo } from '../../state/limit-order/hooks'
 
 const PriceRatio: FC = () => {
-  const { currencies } = useDerivedLimitOrderInfo();
-  const [inverted, setInverted] = useState(false);
-  const { currentPrice } = useDerivedLimitOrderInfo();
+  const { currencies } = useDerivedLimitOrderInfo()
+  const [inverted, setInverted] = useState(false)
+  const { currentPrice } = useDerivedLimitOrderInfo()
 
   return (
     <div className="flex flex-row font-bold text-sm ">
       <div className="flex divide-x divide-dark-800 hover:divide-dark-700 cursor-pointer rounded border border-dark-800 hover:border-dark-700">
         <div className="py-2 px-4">
           <span className="whitespace-nowrap">
-            1 {inverted ? currencies.OUTPUT?.symbol : currencies.INPUT?.symbol}{" "}
-            ={" "}
-            {inverted
-              ? currentPrice?.invert().toSignificant(6)
-              : currentPrice?.toSignificant(6)}{" "}
+            1 {inverted ? currencies.OUTPUT?.symbol : currencies.INPUT?.symbol} ={' '}
+            {inverted ? currentPrice?.invert().toSignificant(6) : currentPrice?.toSignificant(6)}{' '}
             {inverted ? currencies.INPUT?.symbol : currencies.OUTPUT?.symbol}
           </span>
         </div>
@@ -23,13 +20,7 @@ const PriceRatio: FC = () => {
           className="py-2 w-9 flex items-center justify-center cursor-pointer text-secondary"
           onClick={() => setInverted((prevState) => !prevState)}
         >
-          <svg
-            width="12"
-            height="10"
-            viewBox="0 0 12 10"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
+          <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               fillRule="evenodd"
               clipRule="evenodd"
@@ -40,7 +31,7 @@ const PriceRatio: FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PriceRatio;
+export default PriceRatio
