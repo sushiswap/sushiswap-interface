@@ -97,7 +97,12 @@ const PARAMS: {
       symbol: 'ONE',
       decimals: 18,
     },
-    rpcUrls: ['https://api.s0.t.hmny.io'],
+    rpcUrls: [
+      'https://api.harmony.one',
+      'https://s1.api.harmony.one',
+      'https://s2.api.harmony.one',
+      'https://s3.api.harmony.one',
+    ],
     blockExplorerUrls: ['https://explorer.harmony.one/'],
   },
   [ChainId.AVALANCHE]: {
