@@ -4,6 +4,5 @@
 
 yarn lint
 yarn lint-staged
-yarn lingui:extract
-yarn lingui:compile
+yarn lingui
 # yarn test
