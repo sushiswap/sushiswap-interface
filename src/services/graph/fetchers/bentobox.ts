@@ -23,9 +23,11 @@ export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undef
   )
 
   const tokens = await getTokenSubset(chainId, {
-    tokenAddresses: kashiPairs.reduce(
-      (previousValue, currentValue) => [...previousValue, currentValue.asset.id, currentValue.collateral.id],
-      []
+    tokenAddresses: Array.from(
+      kashiPairs.reduce(
+        (previousValue, currentValue) => previousValue.add(currentValue.asset.id, currentValue.collateral.id),
+        new Set() // use set to avoid duplicates
+      )
     ),
   })
 

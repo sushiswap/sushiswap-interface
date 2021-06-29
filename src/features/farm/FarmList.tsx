@@ -6,7 +6,6 @@ import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSortableData from '../../hooks/useSortableData'
-
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms)
   const { i18n } = useLingui()
@@ -47,11 +46,10 @@ const FarmList = ({ farms, term }) => {
               (sortConfig.direction === 'descending' && <ChevronDownIcon width={12} height={12} />))}
         </div>
       </div>
-
       <div className="flex-col space-y-4">
-        {items.map((farm, i) => {
-          return <FarmListItem key={i} farm={farm} />
-        })}
+        {items.map((farm, index) => (
+          <FarmListItem key={index} farm={farm} />
+        ))}
       </div>
     </>
   ) : (

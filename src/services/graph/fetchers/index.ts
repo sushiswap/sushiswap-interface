@@ -1,6 +1,6 @@
 import {
   ethPriceQuery,
-  liquidityPositionSubsetQuery,
+  liquidityPositionQuery,
   masterChefV1PairAddressesQuery,
   masterChefV1SushiPerBlockQuery,
   masterChefV1TotalAllocPointQuery,

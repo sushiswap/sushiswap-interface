@@ -119,6 +119,8 @@
     "postcss": "^8.3.0",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.3.1",
+    "react-virtualized": "^9.22.3",
+    "react-window-infinite-loader": "^1.0.7",
     "redux": "^4.1.0",
     "serve": "^11.3.2",
     "tailwindcss-border-gradient-radius": "^2.0.0",

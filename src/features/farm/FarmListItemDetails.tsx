@@ -87,9 +87,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
               <NumericalInput
                 className="w-full p-3 pr-20 rounded bg-dark-700 focus:ring focus:ring-blue"
                 value={depositValue}
-                onUserInput={(value) => {
-                  setDepositValue(value)
-                }}
+                onUserInput={setDepositValue}
               />
               {account && (
                 <Button
@@ -144,9 +142,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
               <NumericalInput
                 className="w-full p-3 pr-20 rounded bg-dark-700 focus:ring focus:ring-pink"
                 value={withdrawValue}
-                onUserInput={(value) => {
-                  setWithdrawValue(value)
-                }}
+                onUserInput={setWithdrawValue}
               />
               {account && (
                 <Button

@@ -1,6 +1,6 @@
 import {
   ethPriceQuery,
-  liquidityPositionSubsetQuery,
+  liquidityPositionsQuery,
   pairsQuery,
   tokenPriceQuery,
   tokenSubsetQuery,
@@ -119,7 +119,7 @@ export const getBundle = async (
   return exchange(chainId, query, variables)
 }
 
-export const getLiquidityPositionSubset = async (chainId = ChainId.MAINNET, user) => {
-  const { liquidityPositions } = await exchange(chainId, liquidityPositionSubsetQuery, { user })
+export const getLiquidityPositions = async (chainId = ChainId.MAINNET, variables) => {
+  const { liquidityPositions } = await exchange(chainId, liquidityPositionsQuery, variables)
   return liquidityPositions
 }

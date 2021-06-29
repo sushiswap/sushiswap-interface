@@ -182,9 +182,9 @@ export const pairDayDatasQuery = gql`
   }
 `
 
-export const liquidityPositionSubsetQuery = gql`
-  query liquidityPositionSubsetQuery($first: Int! = 1000, $user: Bytes!) {
-    liquidityPositions(first: $first, where: { user: $user }) {
+export const liquidityPositionsQuery = gql`
+  query liquidityPositionSubsetQuery($first: Int! = 1000, $where: LiquidityPosition_filter) {
+    liquidityPositions(first: $first, where: $where) {
       id
       liquidityTokenBalance
       user {
@@ -204,7 +204,7 @@ export const pairsQuery = gql`
     $where: Pair_filter
     $block: Block_height
     $orderBy: Pair_orderBy = "trackedReserveETH"
-    $orderDirection: Pair_orderDirection = "desc"
+    $orderDirection: OrderDirection = "desc"
   ) {
     pairs(
       skip: $skip

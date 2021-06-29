@@ -111,9 +111,9 @@ module.exports = withBundleAnalyzer(
       locales,
       defaultLocale: sourceLocale,
     },
-    publicRuntimeConfig: {
-      locales,
-    },
+    // publicRuntimeConfig: {
+    //   locales,
+    // },
   })
 )
 

@@ -16,6 +16,7 @@ import { Chef } from '../../../features/farm/enum'
 import concat from 'lodash/concat'
 import useActiveWeb3React from '../../../hooks/useActiveWeb3React'
 
+export * from './bentobox'
 export * from './blocks'
 export * from './exchange'
 
