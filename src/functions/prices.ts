@@ -11,11 +11,10 @@ import { basisPointsToPercent } from './convert'
 
 const THIRTY_BIPS_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
+const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(THIRTY_BIPS_FEE)
 
 const TWENTY_FIVE_BIPS_FEE = new Percent(JSBI.BigInt(25), JSBI.BigInt(10000))
 const FIVE_BIPS_FEE = new Percent(JSBI.BigInt(5), JSBI.BigInt(10000))
-
-const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(THIRTY_BIPS_FEE)
 
 export function formatExecutionPrice(
   trade: Trade<Currency, Currency, TradeType>,

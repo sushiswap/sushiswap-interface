@@ -2282,10 +2282,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.45.1.tgz#7481107622020ae2ad4cf49a217ef97f9b0a3107"
   integrity sha512-Y1h/n+sPsG/aDj+eBTxs3KsXyrx4UjSr+Zqu0MKr7OON+F3M01Cm3jcfbZ/9afqZGdOnZzk+CRKGzk925UPj+A==
 
-"@sushiswap/sdk@5.0.0-canary.22":
-  version "5.0.0-canary.22"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.22.tgz#6d6ba76d816d606164992086117a814a7d7d8aad"
-  integrity sha512-75jVt5u3ToxysZxk3ke7dkriqeOUF1B9PbatWxElwQfuZiBfBkUD/tiS/WhkUqdRsnk2Xia5p8XQdAJzPdZv8w==
+"@sushiswap/sdk@5.0.0-canary.23":
+  version "5.0.0-canary.23"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.23.tgz#f7b9eae939d160832bfff7ddfd4270f588622da1"
+  integrity sha512-SIvrPD+GwCPjmay7ULZU4p8Wm7kA3c5nfKqkGv6YXoXc/4qH1/52nL+TQwvyx0OHMYLG24D6PeTKBBnJWK8QWQ==
   dependencies:
     "@sushiswap/core" "^2.0.0-canary.0"
     big.js "^5.2.2"

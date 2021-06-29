@@ -19,8 +19,6 @@ export default function useMasterChef(chef: Chef) {
       try {
         let tx
 
-        console.log({ contract, pid, amount, account, chef })
-
         if (chef === Chef.MASTERCHEF) {
           tx = await contract?.deposit(pid, amount)
         } else {
@@ -60,8 +58,6 @@ export default function useMasterChef(chef: Chef) {
   const harvest = useCallback(
     async (pid: number) => {
       try {
-        console.log('harvest', { contract, account, pid })
-
         let tx
 
         if (chef === Chef.MASTERCHEF) {

@@ -28,7 +28,9 @@ export function AdvancedSwapDetails({ trade, allowedSlippage, minerBribe }: Adva
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
     const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
+
     const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
+
     return { priceImpact, realizedLPFee }
   }, [trade])
 

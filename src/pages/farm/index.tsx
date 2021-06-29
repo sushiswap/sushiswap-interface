@@ -273,8 +273,6 @@ export default function Farm(): JSX.Element {
 
   const filtered = type ? result?.filter(filters[type]) : result
 
-  console.log({ filtered })
-
   return (
     <>
       <Head>
