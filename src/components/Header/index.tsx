@@ -39,7 +39,7 @@ function AppBar(): JSX.Element {
                   <Image src="/logo.png" alt="Sushi" width="32px" height="32px" />
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
-                      <Buy />
+                      {/* <Buy /> */}
                       <NavLink href="/swap">
                         <a
                           id={`swap-nav-link`}
