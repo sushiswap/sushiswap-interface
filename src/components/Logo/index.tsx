@@ -35,7 +35,6 @@ const Logo: FC<LogoProps> = ({ srcs, width, height, style, alt = '', className, 
         layout="fixed"
         className={classNames('rounded', className)}
         style={style}
-        // style={{ minWidth: width, minHeight: height, ...style }}
         {...rest}
       />
     </div>
