@@ -1,7 +1,6 @@
 import {
   ethPriceQuery,
   liquidityPositionSubsetQuery,
-  pairSubsetQuery,
   pairsQuery,
   tokenPriceQuery,
   tokenSubsetQuery,
@@ -24,15 +23,6 @@ export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
-  return pairs
-}
-
-export const getPairSubset = async (chainId = ChainId.MAINNET, variables = undefined) => {
-  const { pairs } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    pairSubsetQuery,
-    variables
-  )
   return pairs
 }
 

@@ -7,7 +7,6 @@ import {
   masterChefV2PairAddressesQuery,
   miniChefPairAddressesQuery,
   miniChefPoolsQuery,
-  pairSubsetQuery,
   pairsQuery,
   poolsQuery,
   poolsV2Query,

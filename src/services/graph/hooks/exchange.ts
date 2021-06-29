@@ -1,4 +1,4 @@
-import { ethPriceQuery, liquidityPositionSubsetQuery, pairSubsetQuery, pairsQuery, tokenQuery } from '../queries'
+import { ethPriceQuery, liquidityPositionSubsetQuery, pairsQuery, tokenQuery } from '../queries'
 import {
   exchange,
   getAlcxPrice,
@@ -11,8 +11,7 @@ import {
   getSushiPrice,
   getTokenPrice,
 } from '../fetchers'
-import { getEthPrice, getPairSubset, getPairs } from '../fetchers'
-import { useEffect, useMemo } from 'react'
+import { getEthPrice, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -88,20 +87,6 @@ export function usePairs(variables = undefined, swrConfig: SWRConfiguration = un
   const { data } = useSWR(
     shouldFetch ? ['pairs', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getPairs(chainId, variables),
-    swrConfig
-  )
-  return data
-}
-
-export function usePairSubset(pairAddresses, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && pairAddresses && pairAddresses.length
-  // useEffect(() => {
-  //   console.log('debug', { shouldFetch, chainId, pairAddresses })
-  // }, [shouldFetch, chainId, pairAddresses])
-  const { data } = useSWR(
-    shouldFetch ? () => ['sushiPairs', chainId, pairAddresses] : null,
-    (_, chainId, pairAddresses) => getPairSubset(chainId, { pairAddresses }),
     swrConfig
   )
   return data

@@ -10,7 +10,6 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useOnePrice,
-  usePairSubset,
   useStakePrice,
   useSushiPrice,
   useFarms,
