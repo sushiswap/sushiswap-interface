@@ -94,7 +94,13 @@ const useLimitOrders = () => {
   }, [])
 
   useEffect(() => {
-    if (!ordersData || !Array.isArray(ordersData.pendingOrders.orders) || !Array.isArray(ordersData.otherOrders.orders))
+    if (
+      !account ||
+      !chainId ||
+      !ordersData ||
+      !Array.isArray(ordersData.pendingOrders.orders) ||
+      !Array.isArray(ordersData.otherOrders.orders)
+    )
       return
 
     const transform = async (order: any) => {
@@ -107,13 +113,12 @@ const useLimitOrders = () => {
 
       let filledPercent = '0'
       let isCanceled
-      console.log(order)
       if (order.status === OrderStatus.FILLED) {
         isCanceled = false
       } else if (order.status === OrderStatus.PENDING) {
         const filledAmount = await limitOrderContract.orderStatus(order.orderTypeHash)
         filledPercent = filledAmount.mul(BigNumber.from('100')).div(BigNumber.from(order.amountIn)).toString()
-        isCanceled = false
+        isCanceled = await limitOrderContract.cancelledOrder(account, order.orderTypeHash)
       } else {
         isCanceled = true
       }
@@ -141,10 +146,23 @@ const useLimitOrders = () => {
     }
 
     ;(async () => {
-      const openOrders = await Promise.all<OpenOrder>(ordersData.pendingOrders.orders.map((el) => transform(el)))
-      const completedOrders = await Promise.all<OpenOrder>(ordersData.otherOrders.orders.map((el) => transform(el)))
+      const orders = await Promise.all<OpenOrder>(
+        [...ordersData.pendingOrders.orders, ...ordersData.otherOrders.orders].map((el) => transform(el))
+      )
 
-      console.log(openOrders)
+      const [openOrders, completedOrders] = orders.reduce(
+        (acc, cur) => {
+          if (cur.filled || cur.isCanceled || cur.isExpired) {
+            acc[1].push(cur)
+          } else {
+            acc[0].push(cur)
+          }
+
+          return acc
+        },
+        [[], []]
+      )
+
       setState((prevState) => ({
         pending: {
           ...prevState.pending,
@@ -164,8 +182,9 @@ const useLimitOrders = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, chainId, ordersData, limitOrderContract, setPendingPage, setCompletedPage])
 
-  return useMemo(() => {
-    return {
+  return useMemo(
+    () => ({
+      ...state,
       pending: {
         ...state.pending,
         setPage: setPendingPage,
@@ -175,8 +194,9 @@ const useLimitOrders = () => {
         setPage: setCompletedPage,
       },
       mutate,
-    }
-  }, [mutate, setCompletedPage, setPendingPage, state.completed, state.pending])
+    }),
+    [mutate, setCompletedPage, setPendingPage, state]
+  )
 }
 
 export default useLimitOrders
