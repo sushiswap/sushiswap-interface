@@ -1,9 +1,12 @@
 import '../bootstrap'
 import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
+import 'react-virtualized/styles.css'
 import 'react-tabs/style/react-tabs.css'
 
-import { Fragment, FunctionComponent, Provider, ProviderProps } from 'react'
+import * as plurals from 'make-plural/plurals'
+
+import { Fragment, FunctionComponent } from 'react'
 import { NextComponentType, NextPageContext } from 'next'
 
 import type { AppProps } from 'next/app'
@@ -26,6 +29,7 @@ import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
+// const plurals: Record<string, Function> = require('make-plural/plurals');
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
@@ -81,6 +85,7 @@ function MyApp({
   useEffect(() => {
     async function load(locale) {
       const { messages } = await import(`@lingui/loader!./../../locale/${locale}.po`)
+      i18n.loadLocaleData(locale, { plurals: plurals[locale] })
       i18n.load(locale, messages)
       i18n.activate(locale)
     }
