@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { trim } from 'lodash'
 
 const FormGroup = styled.div`
@@ -50,9 +48,9 @@ const InputContainer = styled.input`
 `
 
 const InvalidFeedback = styled.div`
-  width: 100%;
+  width: fit-content;
   margin-top: 0.25rem;
-  font-size: 80%;
+  font-size: 12px;
   color: #cc0044;
 `
 
@@ -77,10 +75,9 @@ interface BaseInputProps {
   rounded?: boolean,
   bgColor?: string[]
   placeholder?: string,
-  min?: string,
-  onInputChange?: (val: string | undefined) => void
-  onInputFocus?: () => void
-  onInputBlur?: () => void
+  onInputChange?: (name: string, val: string) => void
+  onInputFocus?: (type: string) => void
+  onInputBlur?: (name: string, val: string) => void
 }
 
 export default function BaseInput({
@@ -104,7 +101,6 @@ export default function BaseInput({
   rounded,
   bgColor,
   placeholder,
-  min,
   onInputChange,
   onInputFocus,
   onInputBlur
@@ -112,6 +108,17 @@ export default function BaseInput({
   const [focused, setFocused] = useState<boolean>(false)
   const [errormsg, setErrormsg] = useState<string>('')
   const [invalid, setInvalid] = useState<boolean>(false)
+  const [min, setMin] = useState<string>('')
+
+
+  useEffect(() => {
+    const startind = rules.indexOf('min')
+    const endind = rules.indexOf('|', startind)
+    if (endind>-1)
+      setMin(rules.substring(startind+4, endind))
+    else
+    setMin(rules.substring(startind+4))
+  }, [])
 
   function hasIcon() {
     return (
@@ -158,18 +165,18 @@ export default function BaseInput({
 
   function onFocus() {
     setFocused(true)
-    if ( onInputFocus )
-      onInputFocus()
+    if (onInputFocus && name)
+      onInputFocus(name)
   }
 
   function onChange(val: string) {
-    if (trim(val) === '') {
+    if (rules.indexOf('required')>-1 && trim(val) === '') {
       setErrormsg('The ' + name + ' field is required')
       setInvalid(true)
     }
     else {
-      if (type === 'number' && trim(val) === '0') {
-        setErrormsg('The ' + name + ' field must be 1 or more')
+      if (rules.indexOf('required')>-1 && type === 'number' && min && trim(val) < min) {
+        setErrormsg('The ' + name + ' field must be ' + min + ' or more')
         setInvalid(true)
       }
       else {
@@ -177,18 +184,18 @@ export default function BaseInput({
         setInvalid(false)
       }
     }
-    if ( onInputChange )
-      onInputChange(val)
+    if ( name && onInputChange )
+      onInputChange(name, val)
   }
 
   function onBlur(val: string) {
-    if (trim(val) === '') {
+    if (rules.indexOf('required')>-1 && trim(val) === '') {
       setErrormsg('The ' + name + ' field is required')
       setInvalid(true)
     }
     else {
-      if (type === 'number' && trim(val) === '0') {
-        setErrormsg('The ' + name + ' field must be 1 or more')
+      if (rules.indexOf('required')>-1 && type === 'number' && min && trim(val) < min) {
+        setErrormsg('The ' + name + ' field must be ' + min + ' or more')
         setInvalid(true)
       }
       else {
@@ -196,8 +203,8 @@ export default function BaseInput({
         setInvalid(false)
       }
     }
-    if ( onInputBlur )
-      onInputBlur()
+    if ( name && onInputBlur )
+      onInputBlur(name, val)
   }
 
   return (
