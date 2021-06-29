@@ -32,6 +32,8 @@ const shimmer = (w, h) => `
 const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toString('base64') : window.btoa(str))
 
 const Image = ({ src, width, height, layout = undefined, loader = undefined, ...rest }) => {
+  const useBlur = parseInt(String(height), 10) >= 40 && parseInt(String(width), 10) >= 40
+
   return (
     <div style={{ width, height }} className="overflow-hidden rounded">
       <NextImage
@@ -40,8 +42,8 @@ const Image = ({ src, width, height, layout = undefined, loader = undefined, ...
         width={width}
         height={height}
         layout={layout}
-        placeholder="blur"
-        blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
+        placeholder={useBlur ? 'blur' : 'empty'}
+        blurDataURL={useBlur ? `data:image/svg+xml;base64,${toBase64(shimmer(width, height))}` : undefined}
         {...rest}
       />
     </div>
