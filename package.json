@@ -181,6 +181,7 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@lufycz/sushi-data": "^2.0.0-canary-21"
+        "@lufycz/sushi-data": "^2.0.0-canary-21",
+        "sweetalert2": "^11.0.18"
     }
 }

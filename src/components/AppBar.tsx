@@ -120,7 +120,7 @@ function AppBar(): JSX.Element {
                                                     ChainId.KOVAN,
                                                     ChainId.BSC_TESTNET
                                                 ].includes(chainId) && (
-                                                    <NavLink id={`miso-nav-link`} to={'/miso'}>
+                                                    <NavLink id={`miso-nav-link`} to={'/miso/'}>
                                                         {i18n._(t`Miso`)}
                                                     </NavLink>
                                                 )}

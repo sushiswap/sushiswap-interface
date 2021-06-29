@@ -1,0 +1,18 @@
+.notification-show {
+    opacity: 1;
+    transition: all 0.3s ease-in;
+}
+
+.notification-original {
+    opacity: 0;
+    transition: all 0.3s ease-in;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {display: none;}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
