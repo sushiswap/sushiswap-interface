@@ -2,25 +2,24 @@ import Head from 'next/head'
 import Container from '../../../components/Container'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
+import { useBundle, useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import { tokensTimeTravelQuery } from '../../../services/graph/queries'
 
 export default function Pairs() {
-  const oneDayBlock = useOneDayBlock().data?.blocks
-  const block1d = oneDayBlock ? Number(oneDayBlock[oneDayBlock.length - 1].number) : undefined
+  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
+  const block1w = useOneWeekBlock()?.blocks[0]?.number ?? undefined
 
-  const oneWeekBlock = useOneWeekBlock().data?.blocks
-  const block1w = oneWeekBlock ? Number(oneWeekBlock[oneWeekBlock.length - 1].number) : undefined
+  const ethPrice = useEthPrice()
+  const ethPrice1d = useEthPrice({ block: { number: Number(block1d) } })
+  const ethPrice1w = useEthPrice({ block: { number: Number(block1w) } })
 
-  const ethPrice = useEthPrice().data
-  const ethPrice1d = useEthPrice({ block: { number: block1d } }).data
-  const ethPrice1w = useEthPrice({ block: { number: block1w } }).data
+  const tokens = useTokens()
+  const tokens1d = useTokens({ block: { number: Number(block1d) } })
+  const tokens1w = useTokens({ block: { number: Number(block1w) } })
 
-  const tokens = useTokens().data
-  const tokens1d = useTokens({ block: { number: block1d } }, tokensTimeTravelQuery).data
-  const tokens1w = useTokens({ block: { number: block1w } }, tokensTimeTravelQuery).data
+  console.log(tokens, tokens1d)
 
   const tokensFormatted =
     tokens && tokens1d && tokens1w && ethPrice && ethPrice1d && ethPrice1w

@@ -8,7 +8,6 @@ import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import ChartCard from '../../../features/analytics/Dashboard/ChartCard'
 import { useCustomDayBlock, useDayData, useExchange, useOneDayBlock, useOneWeekBlock } from '../../../services/graph'
-import useFarms from '../../../hooks/useFarms'
 
 export default function Dashboard(): JSX.Element {
   const term = ''

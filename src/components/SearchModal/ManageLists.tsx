@@ -161,8 +161,6 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
 
   if (!list) return null
 
-  console.log({ isActive })
-
   return (
     <RowWrapper
       id={listUrlRowHTMLId(listUrl)}

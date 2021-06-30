@@ -1,17 +1,18 @@
 import Provider, { useKashiPairs } from '../../../features/lending/context'
-import { Trans, t } from '@lingui/macro'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
-import AsyncIcon from '../../../components/AsyncIcon'
 import Card from '../../../components/Card'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
 import Head from 'next/head'
+import Image from '../../../components/Image'
 import Layout from '../../../layouts/Kashi'
 import Link from 'next/link'
 import ListHeaderWithSort from '../../../components/ListHeaderWithSort'
 import MarketHeader from '../../../components/MarketHeader'
 import QuestionHelper from '../../../components/QuestionHelper'
 import React from 'react'
+import { cloudinaryLoader } from '../../../functions/cloudinary'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSearchAndSort from '../../../hooks/useSearchAndSort'
 
@@ -29,8 +30,6 @@ function Lend() {
     { key: 'currentSupplyAPR.value', direction: 'descending' }
   )
 
-  console.log({ fullPairs })
-
   return fullPairs ? (
     <>
       <Head>
@@ -40,15 +39,15 @@ function Lend() {
           content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
         />
       </Head>
-      <Card className="bg-dark-900" header={<MarketHeader type="Lending" lists={[pairs, positions]} />}>
+      <Card className="h-full bg-dark-900" header={<MarketHeader type="Lending" lists={[pairs, positions]} />}>
         {positions.items && positions.items.length > 0 && (
           <div className="pb-4">
             <div>
               <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm md:grid-cols-6 lg:grid-cols-7 text-secondary">
                 <ListHeaderWithSort sort={positions} sortKey="search">
-                  <Trans>
-                    <span className="hidden md:inline-block">Your</span> Positions
-                  </Trans>
+                  <>
+                    <span className="hidden md:inline-block">{i18n._(t`Your`)}</span> {i18n._(t`Positions`)}
+                  </>
                 </ListHeaderWithSort>
                 <ListHeaderWithSort className="hidden md:flex" sort={positions} sortKey="asset.tokenInfo.symbol">
                   {i18n._(t`Lending`)}
@@ -93,13 +92,22 @@ function Lend() {
                           <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
                             <div className="flex flex-col items-start sm:flex-row sm:items-center">
                               <div className="hidden space-x-2 md:flex">
-                                <AsyncIcon
+                                <Image
+                                  loader={cloudinaryLoader}
+                                  height={48}
+                                  width={48}
                                   src={pair.asset.tokenInfo.logoURI}
                                   className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                  alt={pair.asset.tokenInfo.symbol}
                                 />
-                                <AsyncIcon
+
+                                <Image
+                                  loader={cloudinaryLoader}
+                                  height={48}
+                                  width={48}
                                   src={pair.collateral.tokenInfo.logoURI}
                                   className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                  alt={pair.collateral.tokenInfo.symbol}
                                 />
                               </div>
                               <div className="sm:items-end md:hidden">
@@ -189,13 +197,22 @@ function Lend() {
                         <div className="grid items-center grid-flow-col grid-cols-3 gap-4 px-4 py-4 text-sm rounded sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
                           <div className="flex flex-col items-start sm:flex-row sm:items-center">
                             <div className="hidden space-x-2 md:flex">
-                              <AsyncIcon
+                              <Image
+                                loader={cloudinaryLoader}
+                                height={48}
+                                width={48}
                                 src={pair.asset.tokenInfo.logoURI}
                                 className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                alt={pair.asset.tokenInfo.symbol}
                               />
-                              <AsyncIcon
+
+                              <Image
+                                loader={cloudinaryLoader}
+                                height={48}
+                                width={48}
                                 src={pair.collateral.tokenInfo.logoURI}
                                 className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                                alt={pair.collateral.tokenInfo.symbol}
                               />
                             </div>
                             <div className="sm:items-end md:hidden">

@@ -73,13 +73,15 @@ export function interestAccrue(pair: any, interest: BigNumber): BigNumber {
 }
 
 export function getUSDValue(amount: BigNumberish, token: any): BigNumber {
-  return BigNumber.from(amount).mul(token.usd).div(e10(token.tokenInfo.decimals))
+  return BigNumber.from(amount)
+    .mul(token.usd)
+    .div(e10(token?.decimals ? token.decimals : token.tokenInfo.decimals))
 }
 
 export function getUSDString(amount: BigNumberish, token: any): string {
   return BigNumber.from(amount)
     .mul(token.usd)
-    .div(e10(token.tokenInfo.decimals))
+    .div(e10(token?.decimals ? token.decimals : token.tokenInfo.decimals))
     .toFixed(getCurrency(token.chainId).decimals)
 }
 
@@ -87,9 +89,10 @@ export function easyAmount(
   amount: BigNumber,
   token: any
 ): { value: BigNumber; string: string; usdValue: BigNumber; usd: string } {
+  // console.log({ token })
   return {
     value: amount,
-    string: amount.toFixed(token.tokenInfo.decimals),
+    string: amount.toFixed(token?.decimals ? token.decimals : token.tokenInfo.decimals),
     usdValue: getUSDValue(amount, token),
     usd: getUSDString(amount, token),
   }

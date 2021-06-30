@@ -40,12 +40,12 @@ export default function ChartCard(props: ChartCardProps): JSX.Element {
 
   const type = types[props.type]
 
-  const block1d = useOneDayBlock().data?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2).data?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
+  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
 
-  const { data: exchange } = useExchange()
-  const { data: exchange1d } = useExchange({ block: { number: Number(block1d) } })
-  const { data: exchange2d } = useExchange({ block: { number: Number(block2d) } })
+  const exchange = useExchange()
+  const exchange1d = useExchange({ block: { number: Number(block1d) } })
+  const exchange2d = useExchange({ block: { number: Number(block2d) } })
 
   const { data: dayData } = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,

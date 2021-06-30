@@ -31,16 +31,12 @@ export default function useMasterChef(chef: Chef) {
         return e
       }
     },
-    [account, contract]
+    [account, chef, contract]
   )
 
   // Withdraw
   const withdraw = useCallback(
     async (pid: number, amount: BigNumber) => {
-      // console.log('withdraw', {
-      //     pid,
-      //     amount,
-      // })
       try {
         let tx
 
@@ -56,14 +52,12 @@ export default function useMasterChef(chef: Chef) {
         return e
       }
     },
-    [account, contract]
+    [account, chef, contract]
   )
 
   const harvest = useCallback(
     async (pid: number) => {
       try {
-        console.log('harvest', { contract, account, pid })
-
         let tx
 
         if (chef === Chef.MASTERCHEF) {
@@ -95,7 +89,7 @@ export default function useMasterChef(chef: Chef) {
         return e
       }
     },
-    [account, contract, sushi]
+    [account, chef, contract, sushi]
   )
 
   return { deposit, withdraw, harvest }

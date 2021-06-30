@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { RowBetween, RowFixed } from '../Row'
 import { StyledMenu, StyledMenuButton } from '../StyledMenu'
-import styled, { ThemeContext } from 'styled-components'
 import {
   useExpertModeManager,
   useUserArcherUseRelay,
@@ -15,31 +14,19 @@ import { ApplicationModal } from '../../state/application/actions'
 import Button from '../Button'
 import Modal from '../Modal'
 import ModalHeader from '../ModalHeader'
+import { ChainId, Percent } from '@sushiswap/sdk'
 import QuestionHelper from '../QuestionHelper'
-import { Settings } from 'react-feather'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
 import Typography from '../Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { Percent } from '@sushiswap/sdk'
-
-const StyledMenuIcon = styled(Settings)`
-  height: 20px;
-  width: 20px;
-
-  > * {
-    stroke: currentColor;
-  }
-
-  :hover {
-    opacity: 0.7;
-  }
-`
+import { useActiveWeb3React } from '../../hooks'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage: Percent }) {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
 
   const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
@@ -85,7 +72,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
         </svg>
       </StyledMenuButton>
       {open && (
-        <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded">
+        <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded w-80">
           <div className="p-8 space-y-4">
             <Typography variant="h3" className="text-high-emphesis">
               {i18n._(t`Transaction Settings`)}
@@ -104,8 +91,8 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               {i18n._(t`Interface Settings`)}
             </Typography>
 
-            <RowBetween>
-              <RowFixed>
+            <RowBetween align="center">
+              <RowFixed align="center">
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Toggle Expert Mode`)}
                 </Typography>
@@ -129,8 +116,8 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 }
               />
             </RowBetween>
-            <RowBetween>
-              <RowFixed>
+            <RowBetween align="center">
+              <RowFixed align="center">
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Disable Multihops`)}
                 </Typography>
@@ -142,19 +129,25 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </RowBetween>
-            <RowBetween>
-              <RowFixed>
-                <Typography variant="sm" className="text-primary">
-                  {i18n._(t`MEV Shield by Archer DAO`)}
-                </Typography>
-                <QuestionHelper
-                  text={i18n._(
-                    t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
-                  )}
+            {chainId == ChainId.MAINNET && (
+              <RowBetween>
+                <RowFixed>
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`MEV Shield by Archer DAO`)}
+                  </Typography>
+                  <QuestionHelper
+                    text={i18n._(
+                      t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
+                    )}
+                  />
+                </RowFixed>
+                <Toggle
+                  id="toggle-use-archer"
+                  isActive={userUseArcher}
+                  toggle={() => setUserUseArcher(!userUseArcher)}
                 />
-              </RowFixed>
-              <Toggle id="toggle-use-archer" isActive={userUseArcher} toggle={() => setUserUseArcher(!userUseArcher)} />
-            </RowBetween>
+              </RowBetween>
+            )}
           </div>
         </div>
       )}

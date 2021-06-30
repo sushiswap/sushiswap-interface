@@ -2,6 +2,7 @@ import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, TradeType, Trade as 
 import { useCallback, useMemo } from 'react'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 
+import { ARCHER_ROUTER_ADDRESS } from '../constants'
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { calculateGasMargin } from '../functions/trade'
@@ -98,7 +99,8 @@ export function useApproveCallback(
 // wraps useApproveCallback in the context of a swap
 export function useApproveCallbackFromTrade(
   trade: V2Trade<Currency, Currency, TradeType> | undefined,
-  allowedSlippage: Percent
+  allowedSlippage: Percent,
+  doArcher: boolean = false
 ) {
   const { chainId } = useActiveWeb3React()
   const amountToApprove = useMemo(
@@ -107,6 +109,12 @@ export function useApproveCallbackFromTrade(
   )
   return useApproveCallback(
     amountToApprove,
-    chainId ? (trade instanceof V2Trade ? ROUTER_ADDRESS[chainId] : undefined) : undefined
+    chainId
+      ? trade instanceof V2Trade
+        ? !doArcher
+          ? ROUTER_ADDRESS[chainId]
+          : ARCHER_ROUTER_ADDRESS[chainId]
+        : undefined
+      : undefined
   )
 }

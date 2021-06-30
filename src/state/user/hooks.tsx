@@ -1,6 +1,6 @@
 import { AppDispatch, AppState } from '..'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
-import { ChainId, JSBI, Pair, Percent, Token } from '@sushiswap/sdk'
+import { ChainId, FACTORY_ADDRESS, JSBI, Pair, Percent, Token, computePairAddress } from '@sushiswap/sdk'
 import {
   SerializedPair,
   SerializedToken,
@@ -49,10 +49,7 @@ function deserializeToken(serializedToken: SerializedToken): Token {
 }
 
 export function useIsDarkMode(): boolean {
-  const { userDarkMode, matchesDarkMode } = useSelector<
-    AppState,
-    { userDarkMode: boolean | null; matchesDarkMode: boolean }
-  >(
+  const { userDarkMode, matchesDarkMode } = useAppSelector(
     ({ user: { matchesDarkMode, userDarkMode } }) => ({
       userDarkMode,
       matchesDarkMode,
@@ -64,7 +61,7 @@ export function useIsDarkMode(): boolean {
 }
 
 export function useDarkModeManager(): [boolean, () => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const darkMode = useIsDarkMode()
 
   const toggleSetDarkMode = useCallback(() => {
@@ -75,11 +72,11 @@ export function useDarkModeManager(): [boolean, () => void] {
 }
 
 export function useIsExpertMode(): boolean {
-  return useSelector<AppState, AppState['user']['userExpertMode']>((state) => state.user.userExpertMode)
+  return useAppSelector((state) => state.user.userExpertMode)
 }
 
 export function useExpertModeManager(): [boolean, () => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const expertMode = useIsExpertMode()
 
   const toggleSetExpertMode = useCallback(() => {
@@ -90,11 +87,9 @@ export function useExpertModeManager(): [boolean, () => void] {
 }
 
 export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
-  const singleHopOnly = useSelector<AppState, AppState['user']['userSingleHopOnly']>(
-    (state) => state.user.userSingleHopOnly
-  )
+  const singleHopOnly = useAppSelector((state) => state.user.userSingleHopOnly)
 
   const setSingleHopOnly = useCallback(
     (newSingleHopOnly: boolean) => {
@@ -173,7 +168,7 @@ export function useAddUserToken(): (token: Token) => void {
 }
 
 export function useRemoveUserAddedToken(): (chainId: number, address: string) => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(
     (chainId: number, address: string) => {
       dispatch(removeSerializedToken({ chainId, address }))
@@ -184,11 +179,11 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 
 export function useUserAddedTokens(): Token[] {
   const { chainId } = useActiveWeb3React()
-  const serializedTokensMap = useSelector<AppState, AppState['user']['tokens']>(({ user: { tokens } }) => tokens)
+  const serializedTokensMap = useAppSelector(({ user: { tokens } }) => tokens)
 
   return useMemo(() => {
     if (!chainId) return []
-    return Object.values(serializedTokensMap[chainId as ChainId] ?? {}).map(deserializeToken)
+    return Object.values(serializedTokensMap?.[chainId] ?? {}).map(deserializeToken)
   }, [serializedTokensMap, chainId])
 }
 
@@ -200,7 +195,7 @@ function serializePair(pair: Pair): SerializedPair {
 }
 
 export function usePairAdder(): (pair: Pair) => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   return useCallback(
     (pair: Pair) => {
@@ -211,11 +206,11 @@ export function usePairAdder(): (pair: Pair) => void {
 }
 
 export function useURLWarningVisible(): boolean {
-  return useSelector((state: AppState) => state.user.URLWarningVisible)
+  return useAppSelector((state: AppState) => state.user.URLWarningVisible)
 }
 
 export function useURLWarningToggle(): () => void {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(toggleURLWarning()), [dispatch])
 }
 
@@ -225,7 +220,17 @@ export function useURLWarningToggle(): () => void {
  * @param tokenB the other token
  */
 export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-  return new Token(tokenA.chainId, Pair.getAddress(tokenA, tokenB), 18, 'UNI-V2', 'Uniswap V2')
+  if (tokenA.chainId !== tokenB.chainId) throw new Error('Not matching chain IDs')
+  if (tokenA.equals(tokenB)) throw new Error('Tokens cannot be equal')
+  if (!FACTORY_ADDRESS[tokenA.chainId]) throw new Error('No V2 factory address on this chain')
+
+  return new Token(
+    tokenA.chainId,
+    computePairAddress({ factoryAddress: FACTORY_ADDRESS[tokenA.chainId], tokenA, tokenB }),
+    18,
+    'UNI-V2',
+    'Uniswap V2'
+  )
 }
 
 /**
@@ -264,7 +269,7 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   )
 
   // pairs saved by users
-  const savedSerializedPairs = useSelector<AppState, AppState['user']['pairs']>(({ user: { pairs } }) => pairs)
+  const savedSerializedPairs = useAppSelector(({ user: { pairs } }) => pairs)
 
   const userPairs: [Token, Token][] = useMemo(() => {
     if (!chainId || !savedSerializedPairs) return []
@@ -296,7 +301,7 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 }
 
 export function useUserArcherUseRelay(): [boolean, (newUseRelay: boolean) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   const useRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
     (state) => state.user.userArcherUseRelay
@@ -313,7 +318,7 @@ export function useUserArcherUseRelay(): [boolean, (newUseRelay: boolean) => voi
 }
 
 export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const userGasPrice = useSelector<AppState, AppState['user']['userArcherGasPrice']>((state) => {
     return state.user.userArcherGasPrice
   })
@@ -329,7 +334,7 @@ export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void]
 }
 
 export function useUserArcherETHTip(): [string, (newETHTip: string) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const userETHTip = useSelector<AppState, AppState['user']['userArcherETHTip']>((state) => {
     return state.user.userArcherETHTip
   })
@@ -345,7 +350,7 @@ export function useUserArcherETHTip(): [string, (newETHTip: string) => void] {
 }
 
 export function useUserArcherGasEstimate(): [string, (newGasEstimate: string) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const userGasEstimate = useSelector<AppState, AppState['user']['userArcherGasEstimate']>((state) => {
     return state.user.userArcherGasEstimate
   })
@@ -365,7 +370,7 @@ export function useUserArcherGasEstimate(): [string, (newGasEstimate: string) =>
 }
 
 export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: boolean) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const userTipManualOverride = useSelector<AppState, AppState['user']['userArcherTipManualOverride']>((state) => {
     return state.user.userArcherTipManualOverride
   })

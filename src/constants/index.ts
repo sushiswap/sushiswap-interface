@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent, Token, WNATIVE } from '@sushiswap/sdk'
-import { fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
+import { binance, fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -139,6 +139,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#315CF5',
     mobile: true,
   },
+  Binance: {
+    connector: binance,
+    name: 'Binance',
+    iconName: 'bsc.jpg',
+    description: 'Login using Binance hosted wallet',
+    href: null,
+    color: '#F0B90B',
+    mobile: true,
+  },
 }
 
 export const NetworkContextName = 'NETWORK'
@@ -214,6 +223,12 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
   [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
   [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
   [ChainId.ARBITRUM]: undefined,
+}
+
+export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
+  [ChainId.ROPSTEN]: 10499401,
+  [ChainId.GÖRLI]: 5062605,
+  [ChainId.RINKEBY]: 8897988,
 }
 
 export * from './routing'

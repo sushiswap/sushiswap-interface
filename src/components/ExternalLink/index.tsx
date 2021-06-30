@@ -3,15 +3,25 @@ import React, { HTMLProps, useCallback } from 'react'
 import ReactGA from 'react-ga'
 import { classNames } from '../../functions'
 
+const COLOR = {
+  default: 'text-primary hover:text-high-emphesis focus:text-high-emphesis',
+  blue: 'text-blue opacity-80 hover:opacity-100 focus:opacity-100',
+}
+
 function ExternalLink({
   target = '_blank',
   href,
   children,
   rel = 'noopener noreferrer',
   className = '',
+  color = 'default',
+  startIcon = undefined,
+  endIcon = undefined,
   ...rest
 }: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & {
   href: string
+  startIcon?: JSX.Element
+  endIcon?: JSX.Element
 }): JSX.Element {
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -38,12 +48,16 @@ function ExternalLink({
       href={href}
       onClick={handleClick}
       className={classNames(
-        'text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis p-2 md:p-3 whitespace-nowrap',
+        'flex items-center justify-center text-baseline whitespace-nowrap',
+        COLOR[color],
+        (startIcon || endIcon) && 'space-x-1',
         className
       )}
       {...rest}
     >
+      {startIcon && startIcon}
       {children}
+      {endIcon && endIcon}
     </a>
   )
 }

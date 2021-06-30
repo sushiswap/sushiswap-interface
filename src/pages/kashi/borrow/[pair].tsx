@@ -1,18 +1,19 @@
 import { Borrow, Repay } from '../../../features/lending'
-import Provider, { KashiContext, useKashiPair } from '../../../features/lending/context'
-import React, { useCallback, useContext, useState } from 'react'
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
+import React, { useCallback, useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
-import AsyncIcon from '../../../components/AsyncIcon'
 import { BorrowCardHeader } from '../../../components/CardHeader'
 import Card from '../../../components/Card'
 import Dots from '../../../components/Dots'
 import GradientDot from '../../../components/GradientDot'
 import Head from 'next/head'
+import Image from '../../../components/Image'
 import { KashiCooker } from '../../../entities'
 import Layout from '../../../layouts/Kashi'
 import QuestionHelper from '../../../components/QuestionHelper'
+import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
@@ -34,7 +35,7 @@ function Pair() {
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
 
-  const info = useContext(KashiContext).state.info
+  const info = useKashiInfo()
 
   const addTransaction = useTransactionAdder()
   const onUpdateExchangeRate = useCallback(async () => {
@@ -64,13 +65,22 @@ function Pair() {
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
                   <>
-                    <AsyncIcon
-                      src={pair?.asset.tokenInfo.logoURI}
+                    <Image
+                      loader={cloudinaryLoader}
+                      height={48}
+                      width={48}
+                      src={pair.asset.tokenInfo.logoURI}
                       className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      alt={pair.asset.tokenInfo.symbol}
                     />
-                    <AsyncIcon
-                      src={pair?.collateral.tokenInfo.logoURI}
+
+                    <Image
+                      loader={cloudinaryLoader}
+                      height={48}
+                      width={48}
+                      src={pair.collateral.tokenInfo.logoURI}
                       className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      alt={pair.collateral.tokenInfo.symbol}
                     />
                   </>
                 )}
@@ -171,13 +181,29 @@ const PairLayout = ({ children }) => {
         <Card className="h-full bg-dark-900">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
-              <div className="text-xl text-high-emphesis">{i18n._(t`Market Info`)}</div>
+              <div className="text-xl text-high-emphesis">{i18n._(t`Market`)}</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{i18n._(t`APR`)}</div>
+              <div className="flex items-center">
+                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentInterestPerYear.string)}</div>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{i18n._(t`LTV`)}</div>
+              <div className="text-lg text-high-emphesis">75%</div>
+            </div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{i18n._(t`Total`)}</div>
+              <div className="text-lg text-high-emphesis">
+                {formatNumber(pair?.currentAllAssets.string)} {pair?.asset.tokenInfo.symbol}
+              </div>
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Available`)}</div>
               <div className="flex items-center">
                 <div className="text-lg text-high-emphesis">
-                  {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.symbol}
+                  {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.tokenInfo.symbol}
                 </div>
               </div>
             </div>
@@ -187,27 +213,21 @@ const PairLayout = ({ children }) => {
                 <div className="text-lg text-high-emphesis">{formatPercent(pair?.utilization.string)}</div>
               </div>
             </div>
-            <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentSupplyAPR.string)}</div>
-              </div>
+
+            <div className="flex justify-between pt-3">
+              <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
             </div>
+
             <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Borrow APR`)}</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentInterestPerYear.string)}</div>
-              </div>
+              <div className="text-lg text-secondary">Name</div>
+              <div className="text-lg text-high-emphesis">{pair?.oracle.name}</div>
             </div>
-            <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Loan to Value`)}</div>
-              <div className="text-lg text-high-emphesis">75%</div>
-            </div>
+
             <div className="flex justify-between pt-3">
               <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
             </div>
             <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`${pair?.collateral.symbol} Strategy`)}</div>
+              <div className="text-lg text-secondary">{i18n._(t`${pair?.collateral.tokenInfo.symbol} Strategy`)}</div>
               <div className="text-lg text-high-emphesis">
                 {i18n._(t`None`)}
                 <QuestionHelper

@@ -2,7 +2,6 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { CurrencyAmount, JSBI, Pair, Percent, Token } from '@sushiswap/sdk'
 import React, { useState } from 'react'
 import { RowBetween, RowFixed } from '../Row'
-import { Trans, t } from '@lingui/macro'
 import { currencyId, unwrappedToken } from '../../functions/currency'
 
 import Alert from '../Alert'
@@ -12,6 +11,7 @@ import Button from '../Button'
 import CurrencyLogo from '../CurrencyLogo'
 import Dots from '../Dots'
 import DoubleCurrencyLogo from '../DoubleLogo'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useColor } from '../../hooks'
 import { useLingui } from '@lingui/react'
@@ -56,8 +56,6 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
           pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
         ]
       : [undefined, undefined]
-
-  console.log({ currency0, currency1 })
 
   return (
     <>
@@ -107,20 +105,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border }: Pos
             </div>
           </AutoColumn>
         </div>
-      ) : (
-        <Alert
-          message={
-            <>
-              <Trans>
-                <b>Tip:</b> By adding liquidity you&apos;ll earn 0.25% of all trades on this pair proportional to your
-                share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
-                your liquidity.
-              </Trans>
-            </>
-          }
-          type="information"
-        />
-      )}
+      ) : null}
     </>
   )
 }

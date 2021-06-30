@@ -6,11 +6,9 @@ import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSortableData from '../../hooks/useSortableData'
-
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms)
   const { i18n } = useLingui()
-
   return items ? (
     <>
       <div className="grid grid-cols-4 text-base font-bold text-primary">
@@ -49,9 +47,9 @@ const FarmList = ({ farms, term }) => {
         </div>
       </div>
       <div className="flex-col space-y-4">
-        {items.map((farm) => {
-          return <FarmListItem key={`${farm.chef}_${farm.id}`} farm={farm} />
-        })}
+        {items.map((farm, index) => (
+          <FarmListItem key={index} farm={farm} />
+        ))}
       </div>
     </>
   ) : (

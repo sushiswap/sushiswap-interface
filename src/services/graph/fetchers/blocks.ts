@@ -1,7 +1,7 @@
-import { blocksQuery, ethPriceQuery, tokenPriceQuery } from '../queries'
 import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHours } from 'date-fns'
 
 import { ChainId } from '@sushiswap/sdk'
+import { blocksQuery } from '../queries'
 import { request } from 'graphql-request'
 
 export const BLOCKS = {
@@ -42,7 +42,7 @@ export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number)
   return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
 }
 
-// Grabs the last 1000 blocks and averages
+// Grabs the last 1000 (a sample statistical) blocks and averages
 // the time difference between them
 export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
   // console.log('getAverageBlockTime')

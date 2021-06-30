@@ -1,3 +1,4 @@
+import { ARCHER_ROUTER_ADDRESS, MINICHEF_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -25,10 +26,10 @@ import {
   SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
 import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
-import { MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
+import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
@@ -51,7 +52,7 @@ import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
 import MASTERCHEF_V2_ABI from '../constants/abis/masterchef-v2.json'
 import MEOWSHI_ABI from '../constants/abis/meowshi.json'
 import MERKLE_DISTRIBUTOR_ABI from '../constants/abis/merkle-distributor.json'
-import MINICHEF_V2_ABI from '../constants/abis/minichef-v2.json'
+import MINICHEF_ABI from '../constants/abis/minichef-v2.json'
 import MULTICALL2_ABI from '../constants/abis/multicall2.json'
 import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
@@ -172,8 +173,9 @@ export function useMasterChefContract(withSignerIfPossible?: boolean): Contract 
 export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d', MASTERCHEF_V2_ABI, withSignerIfPossible)
 }
-export function useMiniChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0x0769fd68dFb93167989C6f7254cd0D766Fb2841F', MINICHEF_V2_ABI, withSignerIfPossible)
+export function useMiniChefContract(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && MINICHEF_ADDRESS[chainId], MINICHEF_ABI, withSignerIfPossible)
 }
 
 export function useFactoryContract(): Contract | null {
@@ -181,9 +183,13 @@ export function useFactoryContract(): Contract | null {
   return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
 }
 
-export function useRouterContract(): Contract | null {
+export function useRouterContract(useArcher = false, withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
+
+  const address = useArcher ? ARCHER_ROUTER_ADDRESS[chainId] : ROUTER_ADDRESS[chainId]
+  const abi = useArcher ? ARCHER_ROUTER_ABI : ROUTER_ABI
+
+  return useContract(address, abi, withSignerIfPossible)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
@@ -228,6 +234,7 @@ export function useChainlinkOracle(): Contract | null {
 export function useSaaveContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0x364762C00b32c4b448f39efaA9CeFC67a25603ff', SAAVE_ABI, withSignerIfPossible)
 }
+
 export function useSwaave(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0xA70e346Ca3825b46EB4c8d0d94Ff204DB76BC289', SAAVE_ABI, withSignerIfPossible)
 }
@@ -446,30 +453,6 @@ export function useDashboardContract(): Contract | null {
     }
   }
   return useContract(address, DASHBOARD_ABI, false)
-}
-
-export function useDashboard2Contract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-        address = '0x1B13fC91c6f976959E7c236Ac1CF17E052d113Fc'
-        break
-      case ChainId.ROPSTEN:
-        address = '0xbB7091524A6a42228E396480C9C43f1C4f6c50e2'
-        break
-      case ChainId.BSC:
-        address = '0x06d149A4a3f4Ac20e992F9321Af571b3B4Da64C4'
-        break
-    }
-  }
-  return useContract(address, DASHBOARD2_ABI, false)
-}
-
-export function useSushiSwapMultiSwapper(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && SUSHISWAP_MULTISWAPPER_ADDRESS[chainId], SUSHISWAP_MULTISWAPPER_ABI)
 }
 
 export function useSushiSwapTWAP0Oracle(): Contract | null {

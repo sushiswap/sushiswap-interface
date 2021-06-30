@@ -17,7 +17,6 @@ export const userIdsQuery = gql`
     }
   }
 `
-
 export const uniswapUserQuery = gql`
   query uniswapUserQuery($id: String!) {
     uniswapUser: user(id: $id) {
@@ -97,17 +96,6 @@ export const dayDatasQuery = gql`
 `
 
 // Pairs...
-
-export const pairTokenFieldsQuery = gql`
-  fragment pairTokenFields on Token {
-    id
-    name
-    symbol
-    totalSupply
-    derivedETH
-  }
-`
-
 export const pairFieldsQuery = gql`
   fragment pairFields on Pair {
     id
@@ -117,10 +105,10 @@ export const pairFieldsQuery = gql`
     untrackedVolumeUSD
     trackedReserveETH
     token0 {
-      ...pairTokenFields
+      ...PairToken
     }
     token1 {
-      ...pairTokenFields
+      ...PairToken
     }
     reserve0
     reserve1
@@ -130,7 +118,13 @@ export const pairFieldsQuery = gql`
     txCount
     timestamp
   }
-  ${pairTokenFieldsQuery}
+  fragment PairToken on Token {
+    id
+    name
+    symbol
+    totalSupply
+    derivedETH
+  }
 `
 
 export const pairQuery = gql`
@@ -189,9 +183,9 @@ export const pairDayDatasQuery = gql`
   }
 `
 
-export const liquidityPositionSubsetQuery = gql`
-  query liquidityPositionSubsetQuery($first: Int! = 1000, $user: Bytes!) {
-    liquidityPositions(first: $first, where: { user: $user }) {
+export const liquidityPositionsQuery = gql`
+  query liquidityPositionSubsetQuery($first: Int! = 1000, $where: LiquidityPosition_filter) {
+    liquidityPositions(first: $first, where: $where) {
       id
       liquidityTokenBalance
       user {
@@ -204,28 +198,23 @@ export const liquidityPositionSubsetQuery = gql`
   }
 `
 
-export const pairSubsetQuery = gql`
-  query pairSubsetQuery(
-    $first: Int! = 1000
-    $pairAddresses: [Bytes]!
-    $orderBy: String! = "trackedReserveETH"
-    $orderDirection: String! = "desc"
-  ) {
-    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, where: { id_in: $pairAddresses }) {
-      ...pairFields
-    }
-  }
-  ${pairFieldsQuery}
-`
-
 export const pairsQuery = gql`
-  query pairsQuery(
-    $first: Int! = 1000
-    $orderBy: String! = "trackedReserveETH"
-    $orderDirection: String! = "desc"
+  query pair(
+    $skip: Int = 0
+    $first: Int = 1000
+    $where: Pair_filter
     $block: Block_height
+    $orderBy: Pair_orderBy = "trackedReserveETH"
+    $orderDirection: OrderDirection = "desc"
   ) {
-    pairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, block: $block) {
+    pairs(
+      skip: $skip
+      first: $first
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      block: $block
+      where: $where
+    ) {
       ...pairFields
     }
   }
@@ -323,8 +312,8 @@ export const tokenPairsQuery = gql`
 `
 
 export const tokensQuery = gql`
-  query tokensQuery($first: Int! = 1000) {
-    tokens(first: $first, orderBy: volumeUSD, orderDirection: desc) {
+  query tokensQuery($first: Int! = 1000, $block: Block_height) {
+    tokens(first: $first, orderBy: volumeUSD, orderDirection: desc, block: $block) {
       ...tokenFields
       dayData(first: 7, skip: 0, orderBy: date, order: asc) {
         id

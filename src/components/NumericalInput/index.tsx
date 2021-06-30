@@ -4,12 +4,14 @@ import React from 'react'
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
+const defaultClassName = 'w-0 p-0 text-2xl bg-transparent'
+
 export const Input = React.memo(
   ({
     value,
     onUserInput,
     placeholder,
-    className = 'w-0 p-0 text-2xl bg-transparent',
+    className = defaultClassName,
     ...rest
   }: {
     value: string | number
@@ -46,7 +48,7 @@ export const Input = React.memo(
         maxLength={79}
         spellCheck="false"
         className={classNames(
-          'relative font-bold outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis',
+          'relative font-bold outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary',
           className
         )}
       />

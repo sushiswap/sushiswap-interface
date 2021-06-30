@@ -3,6 +3,7 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 
 import Fraction from './entities/Fraction'
+import React from 'react'
 import { Zero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
 
@@ -25,4 +26,13 @@ String.prototype.toBigNumber = function (decimals: BigNumberish): BigNumber {
     console.debug(`Failed to parse input amount: "${this}"`, error)
   }
   return BigNumber.from(0)
+}
+
+if (process.env.NODE_ENV === 'development') {
+  if (typeof window !== 'undefined') {
+    const whyDidYouRender = require('@welldone-software/why-did-you-render')
+    whyDidYouRender(React, {
+      trackAllPureComponents: true,
+    })
+  }
 }

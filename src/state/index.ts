@@ -3,6 +3,7 @@ import { load, save } from 'redux-localstorage-simple'
 
 import application from './application/reducer'
 import burn from './burn/reducer'
+import create from './create/reducer'
 import lists from './lists/reducer'
 import mint from './mint/reducer'
 import multicall from './multicall/reducer'
@@ -25,6 +26,7 @@ const store = configureStore({
     multicall,
     lists,
     zap,
+    create,
   },
   middleware: [
     ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),

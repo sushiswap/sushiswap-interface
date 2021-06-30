@@ -152,13 +152,12 @@ export function useDerivedZapInfo(
   const isTradingUnderlying = isTradingCurrency0 || isTradingCurrency1
 
   const liquidityMinted = useMemo(() => {
-    const [tokenAmountA, tokenAmountB] = [currencyZeroOutput.wrapped, currencyZeroOutput.wrapped]
-    if (pair && totalSupply && tokenAmountA && tokenAmountB) {
-      return pair.getLiquidityMinted(totalSupply, tokenAmountA, tokenAmountB)
+    if (pair && totalSupply && currencyZeroOutput && currencyOneOutput) {
+      return pair.getLiquidityMinted(totalSupply, currencyZeroOutput.wrapped, currencyOneOutput.wrapped)
     } else {
       return undefined
     }
-  }, [currencyZeroOutput, pair, totalSupply])
+  }, [currencyZeroOutput, currencyOneOutput, pair, totalSupply])
 
   const poolTokenPercentage = useMemo(() => {
     if (liquidityMinted && totalSupply) {

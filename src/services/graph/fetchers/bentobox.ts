@@ -1,7 +1,7 @@
 import { getEthPrice, getTokenPrices, getTokenSubset, getTokens } from './exchange'
 
 import { ChainId } from '@sushiswap/sdk'
-import { lendingPairSubsetQuery } from '../queries/bentobox'
+import { kashiPairsQuery } from '../queries/bentobox'
 import { request } from 'graphql-request'
 import { tokens } from '@sushiswap/sushi-data/typings/exchange'
 
@@ -15,35 +15,31 @@ export const BENTOBOX = {
 export const bentobox = async (query, chainId = ChainId.MAINNET) =>
   request(`https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`, query)
 
-export const getLendingPairSubset = async (chainId = ChainId.MAINNET, variables = undefined) => {
-  // console.log('getLendingPairSubset')
+export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
   const { kashiPairs } = await request(
     `https://api.thegraph.com/subgraphs/name/${BENTOBOX[chainId]}`,
-    lendingPairSubsetQuery,
+    kashiPairsQuery,
     variables
   )
-  // const ethPrice = await getEthPrice()
 
-  const assets = await getTokenSubset(chainId, {
-    tokenAddresses: kashiPairs.map((pair) => pair.asset.id),
+  const tokens = await getTokenSubset(chainId, {
+    tokenAddresses: Array.from(
+      kashiPairs.reduce(
+        (previousValue, currentValue) => previousValue.add(currentValue.asset.id, currentValue.collateral.id),
+        new Set() // use set to avoid duplicates
+      )
+    ),
   })
-
-  // const prices = await getTokenPrices(
-  //     chainId,
-  //     pairs.map((pair) => pair.asset.id)
-  // )
-
-  // let stakedAmt = assetPool.slpBalance * 1e18;
-  // let balanceUSD = (stakedAmt * asset.derivedETH * results.ethUSD) / (10 ** result.asset.decimals);
 
   return kashiPairs.map((pair) => ({
     ...pair,
     token0: {
       ...pair.asset,
-      ...assets.find((token) => token.id === pair.asset.id),
+      ...tokens.find((token) => token.id === pair.asset.id),
     },
     token1: {
       ...pair.collateral,
+      ...tokens.find((token) => token.id === pair.collateral.id),
     },
   }))
 }

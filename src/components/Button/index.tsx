@@ -6,6 +6,7 @@ const SIZE = {
   sm: 'px-4 py-2 text-base',
   default: 'px-4 py-3 text-base',
   lg: 'px-6 py-4 text-base',
+  none: 'p-0 text-base',
 }
 
 const FILLED = {
@@ -13,7 +14,7 @@ const FILLED = {
   red: 'bg-red bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
   blue: 'bg-blue bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
   pink: 'bg-pink bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
-  gray: 'bg-dark-700 bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
+  gray: 'border rounded shadow-sm focus:ring-2 focus:ring-offset-2 bg-dark-700 bg-opacity-80 w-full text-primary border-dark-800 hover:bg-opacity-100 focus:ring-offset-dark-700 focus:ring-dark-800 disabled:bg-opacity-80',
   green: 'bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
   gradient:
     'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 disabled:bg-opacity-80',
@@ -35,7 +36,7 @@ const EMPTY = {
 }
 
 const LINK = {
-  default: 'p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap',
+  default: 'text-primary hover:text-high-emphesis focus:text-high-emphesis whitespace-nowrap focus:ring-0',
 }
 
 const VARIANT = {
@@ -47,7 +48,7 @@ const VARIANT = {
 
 export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default' | 'red' | 'green'
 
-export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default'
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 
 export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
@@ -72,7 +73,8 @@ function Button({
       className={classNames(
         VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
-        'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
+        'rounded font-medium disabled:cursor-not-allowed focus:outline-none',
+        // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}
       {...rest}

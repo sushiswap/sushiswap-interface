@@ -12,7 +12,7 @@ import React from 'react'
 import Router from 'next/router'
 import Search from '../../components/Search'
 import { useCurrency } from '../../hooks/Tokens'
-import useFarms from '../../hooks/useFarms'
+import useFarms from '../../hooks/useZapperFarms'
 
 const TokenBalance = ({ farm }: any) => {
   const currency0 = useCurrency(farm.liquidityPair.token0.id)
@@ -51,6 +51,7 @@ const TokenBalance = ({ farm }: any) => {
 
 const PoolList = () => {
   const query = useFarms()
+
   const farms = query?.farms
   const userFarms = query?.userFarms
 

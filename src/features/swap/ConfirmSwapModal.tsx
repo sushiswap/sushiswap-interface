@@ -65,6 +65,7 @@ export default function ConfirmSwapModal({
         recipient={recipient}
         showAcceptChanges={showAcceptChanges}
         onAcceptChanges={onAcceptChanges}
+        minerBribe={minerBribe}
       />
     ) : null
   }, [allowedSlippage, onAcceptChanges, recipient, showAcceptChanges, trade])

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-
+import dynamic from 'next/dynamic'
 import Loader from '../Loader'
 import { NetworkContextName } from '../../constants'
 import { network } from '../../connectors'
@@ -16,6 +16,14 @@ const MessageWrapper = styled.div`
   justify-content: center;
   height: 20rem;
 `
+
+const Message = styled.h2`
+  // color: ${({ theme }) => theme.secondary1};
+`
+
+const GnosisManagerNoSSR = dynamic(() => import('./GnosisManager'), {
+  ssr: false,
+})
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {
   const { i18n } = useLingui()
@@ -72,5 +80,10 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
     ) : null
   }
 
-  return children
+  return (
+    <>
+      <GnosisManagerNoSSR />
+      {children}
+    </>
+  )
 }

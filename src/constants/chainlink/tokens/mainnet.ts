@@ -162,6 +162,12 @@ const MAINNET_CHAINLINK_TOKENS = [
     decimals: 18,
   },
   {
+    symbol: 'FEI',
+    name: 'Fei Money',
+    address: '0x956F47F50A910163D8BF957Cf5846D573E7f87CA',
+    decimals: 18,
+  },
+  {
     symbol: 'FRONT',
     name: 'Frontier Token',
     address: '0xf8C3527CC04340b208C854E985240c02F7B7793f',

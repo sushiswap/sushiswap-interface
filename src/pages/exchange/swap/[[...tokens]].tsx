@@ -29,7 +29,7 @@ import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 import AddressInputPanel from '../../../components/AddressInputPanel'
 import { AdvancedSwapDetails } from '../../../features/swap/AdvancedSwapDetails'
 import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDetailsDropdown'
-import { ArrowDown } from 'react-feather'
+import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
 import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
@@ -210,11 +210,7 @@ export default function Swap() {
   const noRoute = !route
 
   // check whether the user has approved the router on the input token
-  const [approvalState, approveCallback] = useApproveCallbackFromTrade(
-    // doArcher ? ARCHER_ROUTER_ADDRESS[chainId ?? 1] : getRouterAddress(chainId),
-    trade,
-    allowedSlippage
-  )
+  const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, doArcher)
 
   const {
     state: signatureState,
@@ -264,7 +260,8 @@ export default function Swap() {
     trade,
     allowedSlippage,
     recipient,
-    signatureData
+    signatureData,
+    doArcher ? ttl : undefined
   )
 
   // // the callback to execute the swap
@@ -499,32 +496,45 @@ export default function Swap() {
             showCommonBases={true}
             id="swap-currency-input"
           />
-          <AutoColumn justify="space-between" className="py-2.5">
+          <AutoColumn justify="space-between" className="py-3">
             <AutoRow justify={isExpertMode ? 'space-between' : 'flex-start'} style={{ padding: '0 1rem' }}>
               <button
-                className="z-10 -mt-6 -mb-6 rounded-full bg-dark-900 p-3px"
+                className="z-10 -mt-6 -mb-6 rounded-full"
                 onClick={() => {
                   setApprovalSubmitted(false) // reset 2 step UI for approvals
                   onSwitchTokens()
                 }}
               >
-                <div
-                  className="p-3 rounded-full bg-dark-800 hover:bg-dark-700"
-                  onMouseEnter={() => setAnimateSwapArrows(true)}
-                  onMouseLeave={() => setAnimateSwapArrows(false)}
-                >
-                  <Lottie
-                    animationData={swapArrowsAnimationData}
-                    autoplay={animateSwapArrows}
-                    loop={false}
-                    style={{ width: 32, height: 32 }}
-                  />
+                <div className="rounded-full bg-dark-900 p-3px">
+                  <div
+                    className="p-3 rounded-full bg-dark-800 hover:bg-dark-700"
+                    onMouseEnter={() => setAnimateSwapArrows(true)}
+                    onMouseLeave={() => setAnimateSwapArrows(false)}
+                  >
+                    <Lottie
+                      animationData={swapArrowsAnimationData}
+                      autoplay={animateSwapArrows}
+                      loop={false}
+                      style={{ width: 32, height: 32 }}
+                    />
+                  </div>
                 </div>
               </button>
-              {recipient === null && !showWrap && isExpertMode ? (
-                <Button variant="link" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
-                  + Add a send (optional)
-                </Button>
+              {isExpertMode ? (
+                recipient === null && !showWrap ? (
+                  <Button variant="link" size="none" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
+                    + Add recipient (optional)
+                  </Button>
+                ) : (
+                  <Button
+                    variant="link"
+                    size="none"
+                    id="remove-recipient-button"
+                    onClick={() => onChangeRecipient(null)}
+                  >
+                    - {i18n._(t`Remove recipient`)}
+                  </Button>
+                )
               ) : null}
             </AutoRow>
           </AutoColumn>
@@ -557,52 +567,19 @@ export default function Swap() {
           </div>
         </div>
 
-        {recipient !== null && !showWrap ? (
-          <>
-            <AutoRow justify="space-between" style={{ padding: '0 1rem' }}>
-              <ArrowWrapper clickable={false}>
-                <ArrowDown size={16} />
-              </ArrowWrapper>
-              <Button variant="link" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
-                - {i18n._(t`Remove send`)}
-              </Button>
-            </AutoRow>
-            <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
-          </>
-        ) : null}
+        {recipient !== null && !showWrap && (
+          <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
+        )}
 
-        {/* {showWrap ? null : (
-            <div
-              style={{
-                padding: showWrap ? ".25rem 1rem 0 1rem" : "0px",
-              }}
-            >
-              <div className="px-5 mt-4 space-y-2">
-                {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
-                  <RowBetween align="center">
-                    <Typography
-                      variant="sm"
-                      className="text-secondary"
-                      onClick={toggleSettings}
-                    >
-                      {i18n._(t`Slippage Tolerance`)}
-                    </Typography>
-
-                    <Typography
-                      variant="sm"
-                      className="text-secondary"
-                      onClick={toggleSettings}
-                    >
-                      {allowedSlippage / 100}%
-                    </Typography>
-                  </RowBetween>
-                )}
-              </div>
-              <div className="px-5 mt-1">
-                {doArcher && userHasSpecifiedInputOutput && <MinerTip />}
-              </div>
-            </div>
-          )} */}
+        {showWrap ? null : (
+          <div
+            style={{
+              padding: showWrap ? '.25rem 1rem 0 1rem' : '0px',
+            }}
+          >
+            <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
+          </div>
+        )}
 
         {trade && (
           <div className="p-5 rounded bg-dark-800">

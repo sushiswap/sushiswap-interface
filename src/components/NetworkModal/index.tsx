@@ -97,7 +97,12 @@ const PARAMS: {
       symbol: 'ONE',
       decimals: 18,
     },
-    rpcUrls: ['https://api.s0.t.hmny.io'],
+    rpcUrls: [
+      'https://api.harmony.one',
+      'https://s1.api.harmony.one',
+      'https://s2.api.harmony.one',
+      'https://s3.api.harmony.one',
+    ],
     blockExplorerUrls: ['https://explorer.harmony.one/'],
   },
   [ChainId.AVALANCHE]: {
@@ -109,7 +114,7 @@ const PARAMS: {
       decimals: 18,
     },
     rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-    blockExplorerUrls: ['https://explorer.avax.network'],
+    blockExplorerUrls: ['https://cchain.explorer.avax.network'],
   },
   [ChainId.OKEX]: {
     chainId: '0x42',
@@ -198,7 +203,11 @@ export default function NetworkModal(): JSX.Element | null {
                 toggleNetworkModal()
                 const params = PARAMS[key]
                 cookie.set('chainId', key)
-                library?.send('wallet_addEthereumChain', [params, account])
+                if (key === ChainId.MAINNET) {
+                  library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
+                } else {
+                  library?.send('wallet_addEthereumChain', [params, account])
+                }
               }}
               className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
             >

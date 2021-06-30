@@ -1,26 +1,27 @@
+import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
-import { Trans, t } from '@lingui/macro'
-import { useClaimCallback, useUserUnclaimedAmount } from '../state/claim/hooks'
-import { useModalOpen, useToggleSelfClaimModal } from '../state/application/hooks'
-import { ApplicationModal } from '../state/application/actions'
+import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
+import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
+
+import { ApplicationModal } from '../../state/application/actions'
 import { BigNumber } from '@ethersproject/bignumber'
-import Button from '../components/Button'
+import Button from '../../components/Button'
 import { ChevronRight } from 'react-feather'
-import Dots from '../components/Dots'
-import ExternalLink from '../components/ExternalLink'
-import Fraction from '../entities/Fraction'
+import Dots from '../../components/Dots'
+import ExternalLink from '../../components/ExternalLink'
+import Fraction from '../../entities/Fraction'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import Loader from '../components/Loader'
-import QuestionHelper from '../components/QuestionHelper'
-import { cloudinaryLoader } from '../functions/cloudinary'
-import { formatNumber } from '../functions'
+import Loader from '../../components/Loader'
+import QuestionHelper from '../../components/QuestionHelper'
+import { cloudinaryLoader } from '../../functions/cloudinary'
+import { formatNumber } from '../../functions/format'
 import { isAddress } from 'ethers/lib/utils'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import { useUserHasSubmittedClaim } from '../state/transactions/hooks'
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 
 export default function Vesting() {
   const { i18n } = useLingui()
@@ -117,24 +118,24 @@ export default function Vesting() {
                   minHeight: '150px',
                 }}
               >
-                <Trans>
-                  Vesting is executed within the guidelines selected by the community in{' '}
+                <>
+                  {i18n._(t`Vesting is executed within the guidelines selected by the community in`)}{' '}
                   <ExternalLink href="https://snapshot.org/#/sushi/proposal/QmPwBGy98NARoEcUfuWPgzMdJdiaZub1gVic67DcSs6NZQ">
                     SIMP3
                   </ExternalLink>
                   .
                   <br />
                   <br />
-                  Please refer to the{' '}
+                  {i18n._(t`Please refer to the`)}{' '}
                   <ExternalLink href="https://forum.sushiswapclassic.org/t/simp-3-vesting-and-the-future-of-sushiswap/1794">
-                    forum discussion
+                    {i18n._(t`forum discussion`)}
                   </ExternalLink>{' '}
-                  for deliberations on additional points.
+                  {i18n._(t`for deliberations on additional points.`)}
                   <br />
                   <br />
-                  Additional records and weekly merkle updates can be found on{' '}
+                  {i18n._(t`Additional records and weekly merkle updates can be found on`)}{' '}
                   <ExternalLink href="https://github.com/sushiswap/sushi-vesting">Github</ExternalLink>
-                </Trans>
+                </>
               </div>
             </div>
           </div>

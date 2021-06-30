@@ -1,8 +1,8 @@
-import { ARCHER_RELAY_URI, ExtendedEther } from '../../constants'
 import { ChainId, CurrencyAmount, Ether } from '@sushiswap/sdk'
 import { CheckCircle, Triangle, X } from 'react-feather'
 import React, { useCallback, useMemo } from 'react'
 
+import { ARCHER_RELAY_URI } from '../../constants'
 import { AppDispatch } from '../../state'
 import ExternalLink from '../ExternalLink'
 import Loader from '../Loader'
@@ -14,8 +14,7 @@ import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTransactions } from '../../state/transactions/hooks'
 import { useDispatch } from 'react-redux'
-
-const TransactionWrapper = styled.div``
+import { classNames } from '../../functions'
 
 const TransactionStatusText = styled.div`
   margin-right: 0.5rem;
@@ -24,21 +23,6 @@ const TransactionStatusText = styled.div`
   :hover {
     text-decoration: underline;
   }
-`
-
-const TransactionState = styled(ExternalLink)<{
-  pending: boolean
-  success?: boolean
-}>`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-decoration: none !important;
-  // border-radius: ${({ theme }) => theme.borderRadius};
-  padding: 0.25rem 0rem;
-  font-weight: 500;
-  font-size: 0.825rem;
-  // color: ${({ theme }) => theme.primary1};
 `
 
 const TransactionStateNoLink = styled.div`
@@ -145,12 +129,16 @@ export default function Transaction({ hash }: { hash: string }): any {
   if (!chainId) return null
 
   return (
-    <TransactionWrapper>
-      <TransactionState href={getExplorerLink(chainId, hash, 'transaction')} pending={pending} success={success}>
+    <div className="flex items-center">
+      <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
         <RowFixed>
           <TransactionStatusText>{summary ?? hash} ↗</TransactionStatusText>
         </RowFixed>
-        <IconWrapper pending={pending} success={success} cancelled={cancelled}>
+        <div
+          className={classNames(
+            pending ? 'text-primary' : success ? 'text-green' : cancelled ? 'text-red' : 'text-red'
+          )}
+        >
           {pending ? (
             <Loader />
           ) : success ? (
@@ -160,12 +148,12 @@ export default function Transaction({ hash }: { hash: string }): any {
           ) : (
             <Triangle size="16" />
           )}
-        </IconWrapper>
-      </TransactionState>
+        </div>
+      </ExternalLink>
       {archer && (
         <TransactionStateNoLink>
           {`...#${archer.nonce} - Tip ${CurrencyAmount.fromRawAmount(
-            Ether.onChain[ChainId.MAINNET],
+            Ether.onChain(ChainId.MAINNET),
             archer.ethTip
           ).toSignificant(6)} ETH`}
           {pending ? (
@@ -186,6 +174,6 @@ export default function Transaction({ hash }: { hash: string }): any {
           )}
         </TransactionStateNoLink>
       )}
-    </TransactionWrapper>
+    </div>
   )
 }

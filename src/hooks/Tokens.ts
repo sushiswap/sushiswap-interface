@@ -55,6 +55,11 @@ export function useAllTokens(): { [address: string]: Token } {
   return useTokensFromMap(allTokens, true)
 }
 
+export function useTokens(): { [address: string]: Token } {
+  const allTokens = useCombinedActiveList()
+  return useTokensFromMap(allTokens, false)
+}
+
 export function useUnsupportedTokens(): { [address: string]: Token } {
   const unsupportedTokensMap = useUnsupportedTokenList()
   return useTokensFromMap(unsupportedTokensMap, false)
@@ -192,11 +197,11 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   // const extendedEther = useMemo(() => (chainId ? ExtendedEther.onChain(chainId) : undefined), [chainId])
   // const weth = chainId ? WETH9_EXTENDED[chainId] : undefined
 
-  const extendedEther = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
+  const native = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
 
-  const weth = chainId ? WNATIVE[chainId] : undefined
+  const wnative = chainId ? WNATIVE[chainId] : undefined
 
-  if (weth?.address?.toLowerCase() === currencyId?.toLowerCase()) return weth
+  if (wnative?.address?.toLowerCase() === currencyId?.toLowerCase()) return wnative
 
-  return useNative ? extendedEther : token
+  return useNative ? native : token
 }

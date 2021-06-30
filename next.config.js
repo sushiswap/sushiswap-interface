@@ -15,7 +15,7 @@ module.exports = withBundleAnalyzer(
       disable: process.env.NODE_ENV === 'development',
     },
     images: {
-      domains: ['assets.sushi.com', 'res.cloudinary.com'],
+      domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com'],
     },
     reactStrictMode: true,
     async redirects() {
@@ -97,15 +97,23 @@ module.exports = withBundleAnalyzer(
         //   source: '/farm/:type*',
         //   destination: '/onsen/:type*',
         // },
+        {
+          source: '/me',
+          destination: '/user',
+        },
+        {
+          source: '/balances',
+          destination: '/user/balances',
+        },
       ]
     },
     i18n: {
       locales,
       defaultLocale: sourceLocale,
     },
-    publicRuntimeConfig: {
-      locales,
-    },
+    // publicRuntimeConfig: {
+    //   locales,
+    // },
   })
 )
 

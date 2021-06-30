@@ -1,7 +1,6 @@
 import {
   ethPriceQuery,
-  liquidityPositionSubsetQuery,
-  pairSubsetQuery,
+  liquidityPositionsQuery,
   pairsQuery,
   tokenPriceQuery,
   tokenSubsetQuery,
@@ -20,24 +19,21 @@ export const EXCHANGE = {
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
 }
-export const getExchange = async (chainId = ChainId.MAINNET, query = factoryQuery, variables = undefined) => {
-  const { factory } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
-  return factory
-}
 
-export const getPairs = async (chainId = ChainId.MAINNET, query = pairsQuery, variables = undefined) => {
-  // console.log('getPairs')
-  const { pairs } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
-  return pairs
-}
+export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
+  request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
-export const getPairSubset = async (chainId = ChainId.MAINNET, variables = undefined) => {
-  const { pairs } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    pairSubsetQuery,
-    variables
-  )
-  return pairs
+export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
+  let pairs
+  try {
+    pairs = await exchange(chainId, query, variables)
+  } catch (err) {
+    console.log(variables, err)
+  }
+
+  console.log('data', pairs)
+
+  return pairs.pairs
 }
 
 export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
@@ -107,6 +103,18 @@ export const getSushiPrice = async () => {
   })
 }
 
+export const getStakePrice = async () => {
+  return getTokenPrice(ChainId.XDAI, tokenPriceQuery, {
+    id: '0xb7d311e2eb55f2f68a9440da38e7989210b9a05e',
+  })
+}
+
+export const getOnePrice = async () => {
+  return getTokenPrice(ChainId.HARMONY, tokenPriceQuery, {
+    id: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
+  })
+}
+
 export const getBundle = async (
   chainId = ChainId.MAINNET,
   query = ethPriceQuery,
@@ -114,11 +122,11 @@ export const getBundle = async (
     id: 1,
   }
 ) => {
-  return getExchange(chainId, query, variables)
+  return exchange(chainId, query, variables)
 }
 
-export const getLiquidityPositionSubset = async (chainId = ChainId.MAINNET, user) => {
-  const { liquidityPositions } = await getExchange(chainId, liquidityPositionSubsetQuery, { user })
+export const getLiquidityPositions = async (chainId = ChainId.MAINNET, variables) => {
+  const { liquidityPositions } = await exchange(chainId, liquidityPositionsQuery, variables)
   return liquidityPositions
 }
 

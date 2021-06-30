@@ -1,27 +1,30 @@
-import { ApprovalState, useApproveCallback } from '../hooks/useApproveCallback'
-import { BentoBalance, useBentoBalance, useBentoBalances } from '../state/bentobox/hooks'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { BentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
+import { CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { useState } from 'react'
-import { Token, CurrencyAmount, WNATIVE } from '@sushiswap/sdk'
-import { useFuse, useSortableData } from '../hooks'
+import { useFuse, useSortableData } from '../../hooks'
 
-import AsyncIcon from '../components/AsyncIcon'
-import { BENTOBOX_ADDRESS } from '../constants/kashi'
-import Back from '../components/Back'
-import Button from '../components/Button'
-import Card from '../components/Card'
-import CardHeader from '../components/CardHeader'
-import Dots from '../components/Dots'
+import { BENTOBOX_ADDRESS } from '../../constants/kashi'
+import Back from '../../components/Back'
+import Button from '../../components/Button'
+import Card from '../../components/Card'
+import CardHeader from '../../components/CardHeader'
+import Dots from '../../components/Dots'
 import Head from 'next/head'
-import Layout from '../layouts/Kashi'
-import { Input as NumericalInput } from '../components/NumericalInput'
-import Paper from '../components/Paper'
-import Search from '../components/Search'
-import { formatNumber } from '../functions/format'
+import Image from '../../components/Image'
+import Layout from '../../layouts/Kashi'
+import { Input as NumericalInput } from '../../components/NumericalInput'
+import Paper from '../../components/Paper'
+import Search from '../../components/Search'
+import { Transition } from '@headlessui/react'
+import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
+import { cloudinaryLoader } from '../../functions/cloudinary'
+import { formatNumber } from '../../functions/format'
 import { t } from '@lingui/macro'
-import useActiveWeb3React from '../hooks/useActiveWeb3React'
-import useBentoBox from '../hooks/useBentoBox'
+import useActiveWeb3React from '../../hooks/useActiveWeb3React'
+import useBentoBox from '../../hooks/useBentoBox'
 import { useLingui } from '@lingui/react'
-import useTokenBalance from '../hooks/useTokenBalance'
+import useTokenBalance from '../../hooks/useTokenBalance'
 
 function Balances() {
   const { i18n } = useLingui()
@@ -33,8 +36,6 @@ function Balances() {
     data: balances && balances.length > 0 ? balances : [],
     options,
   })
-
-  console.log({ balances })
 
   // Sorting Setup
   const { items, requestSort, sortConfig } = useSortableData(result)
@@ -68,9 +69,7 @@ function Balances() {
           </div>
           {items &&
             items.length > 0 &&
-            items.map((balance: BentoBalance, i: number) => {
-              return <TokenBalance key={balance.address + '_' + i} balance={balance} />
-            })}
+            items.map((token, i: number) => <TokenBalance key={token.address + '_' + i} token={token} />)}
         </div>
       </Card>
     </>
@@ -101,52 +100,65 @@ Balances.Layout = BalancesLayout
 
 export default Balances
 
-const TokenBalance = ({ balance }: { balance: any }) => {
+const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => {
   const [expand, setExpand] = useState<boolean>(false)
   return (
-    <Paper className="bg-dark-800 ">
+    <Paper className="space-y-4">
       <div
-        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none "
+        className="grid grid-cols-3 px-4 py-4 text-sm rounded cursor-pointer select-none bg-dark-800"
         onClick={() => setExpand(!expand)}
       >
-        <div className="flex items-center">
-          <AsyncIcon src={balance.tokenInfo.logoURI} className="w-10 mr-4 rounded-lg sm:w-14" />
-          <div>{balance && balance.symbol}</div>
+        <div className="flex items-center space-x-3">
+          <Image
+            loader={cloudinaryLoader}
+            height={56}
+            width={56}
+            src={token.tokenInfo.logoURI}
+            className="w-10 mr-4 rounded-lg sm:w-14"
+            alt={token.tokenInfo.symbol}
+          />
+          <div>{token && token.symbol}</div>
         </div>
         <div className="flex items-center justify-end">
           <div>
-            <div className="text-right">{formatNumber(balance.wallet.string)} </div>
-            <div className="text-right text-secondary">{formatNumber(balance.wallet.usd, true)}</div>
+            <div className="text-right">{formatNumber(token.wallet.string)} </div>
+            <div className="text-right text-secondary">{formatNumber(token.wallet.usd, true)}</div>
           </div>
         </div>
         <div className="flex items-center justify-end">
           <div>
-            <div className="text-right">{formatNumber(balance.bento.string)} </div>
-            <div className="text-right text-secondary">{formatNumber(balance.bento.usd, true)}</div>
+            <div className="text-right">{formatNumber(token.bento.string)} </div>
+            <div className="text-right text-secondary">{formatNumber(token.bento.usd, true)}</div>
           </div>
         </div>
       </div>
-      {expand && (
-        <div className="grid grid-cols-2 gap-4 px-4 pb-4">
-          <div className="col-span-2 text-center md:col-span-1">
-            <Deposit tokenAddress={balance.address} tokenSymbol={balance.symbol} />
+      <Transition
+        show={expand}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
+        <div className="grid grid-cols-2 gap-4 ">
+          <div className="col-span-2 p-4 text-center rounded md:col-span-1 bg-dark-800">
+            <Deposit token={token} />
           </div>
-          <div className="col-span-2 text-center md:col-span-1">
-            <Withdraw tokenAddress={balance.address} tokenSymbol={balance.symbol} />
+          <div className="col-span-2 p-4 text-center rounded md:col-span-1 bg-dark-800">
+            <Withdraw token={token} />
           </div>
         </div>
-      )}
+      </Transition>
     </Paper>
   )
 }
 
-export function Deposit({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSymbol: string }): JSX.Element {
+export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.Element {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
 
   const { deposit } = useBentoBox()
-
-  const balance = useTokenBalance(tokenAddress)
 
   const [value, setValue] = useState('')
 
@@ -154,22 +166,22 @@ export function Deposit({ tokenAddress, tokenSymbol }: { tokenAddress: string; t
 
   const [approvalState, approve] = useApproveCallback(
     CurrencyAmount.fromRawAmount(
-      new Token(chainId || 1, tokenAddress, balance.decimals, tokenSymbol, ''),
-      value.toBigNumber(balance.decimals).toString()
+      new Token(chainId || 1, token.address, token.decimals, token.symbol, token.name),
+      value.toBigNumber(token.decimals).toString()
     ),
     chainId && BENTOBOX_ADDRESS[chainId]
   )
 
   const showApprove =
     chainId &&
-    tokenAddress !== WNATIVE[chainId].address &&
+    token.address !== WNATIVE[chainId].address &&
     (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   return (
     <>
       {account && (
         <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-          {i18n._(t`Wallet Balance`)}: {formatNumber(balance.value.toFixed(balance.decimals))}
+          {i18n._(t`Wallet Balance`)}: {formatNumber(token.balance.toFixed(token.decimals))}
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
@@ -186,7 +198,7 @@ export function Deposit({ tokenAddress, tokenSymbol }: { tokenAddress: string; t
             color="blue"
             size="xs"
             onClick={() => {
-              setValue(balance.value.toFixed(balance.decimals))
+              setValue(token.balance.toFixed(token.decimals))
             }}
             className="absolute right-4 focus:ring focus:ring-blue"
           >
@@ -203,10 +215,10 @@ export function Deposit({ tokenAddress, tokenSymbol }: { tokenAddress: string; t
       {!showApprove && (
         <Button
           color="blue"
-          disabled={pendingTx || !balance || value.toBigNumber(balance.decimals).lte(0)}
+          disabled={pendingTx || !token || token.balance.lte(0)}
           onClick={async () => {
             setPendingTx(true)
-            await deposit(tokenAddress, value.toBigNumber(balance.decimals))
+            await deposit(token.address, token.balance)
             setPendingTx(false)
           }}
         >
@@ -217,13 +229,11 @@ export function Deposit({ tokenAddress, tokenSymbol }: { tokenAddress: string; t
   )
 }
 
-function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSymbol: string }): JSX.Element {
+function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.Element {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
 
   const { withdraw } = useBentoBox()
-
-  const balance = useBentoBalance(tokenAddress)
 
   const [pendingTx, setPendingTx] = useState(false)
 
@@ -233,7 +243,9 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
     <>
       {account && (
         <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-          {i18n._(t`Bento Balance: ${formatNumber(balance ? balance.value.toFixed(balance.decimals) : 0)}`)}
+          {i18n._(
+            t`Bento Balance: ${formatNumber(token.bentoBalance ? token.bentoBalance.toFixed(token.decimals) : 0)}`
+          )}
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
@@ -250,7 +262,7 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
             color="pink"
             size="xs"
             onClick={() => {
-              setValue(balance.value.toFixed(balance.decimals))
+              setValue(token.bentoBalance.toFixed(token.decimals))
             }}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
@@ -260,10 +272,10 @@ function Withdraw({ tokenAddress, tokenSymbol }: { tokenAddress: string; tokenSy
       </div>
       <Button
         color="pink"
-        disabled={pendingTx || !balance || value.toBigNumber(balance.decimals).lte(0)}
+        disabled={pendingTx || !token || token.bentoBalance.lte(0)}
         onClick={async () => {
           setPendingTx(true)
-          await withdraw(tokenAddress, value.toBigNumber(balance.decimals))
+          await withdraw(token.address, token.bentoBalance)
           setPendingTx(false)
         }}
       >

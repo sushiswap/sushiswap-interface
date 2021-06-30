@@ -1,15 +1,16 @@
 import { Deposit, Withdraw } from '../../../features/lending'
-import Provider, { KashiContext, useKashiPair } from '../../../features/lending/context'
-import React, { useContext, useState } from 'react'
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
+import React, { useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
-import AsyncIcon from '../../../components/AsyncIcon'
 import Card from '../../../components/Card'
 import Head from 'next/head'
+import Image from '../../../components/Image'
 import Layout from '../../../layouts/Kashi'
 import { LendCardHeader } from '../../../components/CardHeader'
 import QuestionHelper from '../../../components/QuestionHelper'
+import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
@@ -18,7 +19,8 @@ export default function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
   const [tabIndex, setTabIndex] = useState(0)
-  const info = useContext(KashiContext).state.info
+  const info = useKashiInfo()
+
   const pair = useKashiPair(router.query.pair as string)
 
   if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
@@ -37,10 +39,21 @@ export default function Pair() {
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
                   <>
-                    <AsyncIcon src={pair?.asset.tokenInfo.logoURI} className="w-10 h-10 rounded-lg sm:w-12 sm:h-12" />
-                    <AsyncIcon
-                      src={pair?.collateral.tokenInfo.logoURI}
+                    <Image
+                      loader={cloudinaryLoader}
+                      height={48}
+                      width={48}
+                      src={pair.asset.tokenInfo.logoURI}
                       className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      alt={pair.asset.tokenInfo.symbol}
+                    />
+                    <Image
+                      loader={cloudinaryLoader}
+                      height={48}
+                      width={48}
+                      src={pair.collateral.tokenInfo.logoURI}
+                      className="w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      alt={pair.collateral.tokenInfo.symbol}
                     />
                   </>
                 )}
@@ -129,18 +142,25 @@ const PairLayout = ({ children }) => {
         <Card className="h-full bg-dark-900">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
-              <div className="text-xl text-high-emphesis">{i18n._(t`Market Info`)}</div>
+              <div className="text-xl text-high-emphesis">{i18n._(t`Market`)}</div>
             </div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{i18n._(t`APR`)}</div>
+              <div className="flex items-center">
+                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentSupplyAPR.string)}</div>
+              </div>
+            </div>
+
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Total`)}</div>
               <div className="text-lg text-high-emphesis">
-                {formatNumber(pair?.currentAllAssets.string)} {pair?.asset.symbol}
+                {formatNumber(pair?.currentAllAssets.string)} {pair?.asset.tokenInfo.symbol}
               </div>
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Available`)}</div>
               <div className="text-lg text-high-emphesis">
-                {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.symbol}
+                {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.tokenInfo.symbol}
               </div>
             </div>
             <div className="flex justify-between">
@@ -150,22 +170,10 @@ const PairLayout = ({ children }) => {
               </div>
             </div>
             <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentSupplyAPR.string)}</div>
-              </div>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Borrow APR`)}</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentInterestPerYear.string)}</div>
-              </div>
-            </div>
-            <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
               <div className="flex items-center">
                 <div className="text-lg text-high-emphesis">
-                  {formatNumber(pair?.totalCollateralAmount.string)} {pair?.collateral.symbol}
+                  {formatNumber(pair?.totalCollateralAmount.string)} {pair?.collateral.tokenInfo.symbol}
                 </div>
               </div>
             </div>
@@ -191,7 +199,7 @@ const PairLayout = ({ children }) => {
               <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
             </div>
             <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.symbol} Strategy`)}</div>
+              <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.tokenInfo.symbol} Strategy`)}</div>
               <div className="text-lg text-high-emphesis">
                 {i18n._(t`None`)}
                 <QuestionHelper

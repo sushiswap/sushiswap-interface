@@ -4,7 +4,7 @@ import { classNames, formatNumber, formatNumberScale, formatPercent } from '../.
 import { useCurrency } from '../../../hooks/Tokens'
 import Table from '../Table'
 import CurrencyLogo from '../../../components/CurrencyLogo'
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
+import ColoredNumber from '../ColoredNumber'
 
 interface TokenListProps {
   tokens: {

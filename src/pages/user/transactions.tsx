@@ -1,16 +1,16 @@
 import { ExternalLink, User } from 'react-feather'
 import useSWR, { SWRResponse } from 'swr'
 
-import Dots from '../components/Dots'
+import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
-import TransactionList from '../components/TransactionList'
-import { getExplorerLink } from '../functions/explorer'
-import { shortenAddress } from '../functions/format'
+import TransactionList from '../../components/TransactionList'
+import { getExplorerLink } from '../../functions/explorer'
+import { shortenAddress } from '../../functions/format'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
-import { useETHBalances } from '../state/wallet/hooks'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 
 function Transactions() {

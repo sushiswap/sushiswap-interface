@@ -31,8 +31,8 @@ const RPC = {
   [ChainId.AVALANCHE_TESTNET]: 'https://api.avax-test.network/ext/bc/C/rpc',
   [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
   [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com',
-  [ChainId.HARMONY]: 'https://explorer.harmony.one',
-  [ChainId.HARMONY_TESTNET]: 'https://explorer.pops.one',
+  [ChainId.HARMONY]: 'https://api.harmony.one',
+  [ChainId.HARMONY_TESTNET]: 'https://api.s0.b.hmny.io',
   [ChainId.OKEX]: 'https://exchainrpc.okex.org',
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
@@ -116,4 +116,5 @@ export const torus = new TorusConnector({
   chainId: 1,
 })
 
-export const bsc = new BscConnector({ supportedChainIds: [56] })
+// binance only
+export const binance = new BscConnector({ supportedChainIds: [56] })

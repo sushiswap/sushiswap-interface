@@ -6,54 +6,46 @@ import { POOL_DENY } from '../constants'
 import orderBy from 'lodash/orderBy'
 import range from 'lodash/range'
 import sushiData from '@sushiswap/sushi-data'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
-import { useBoringHelperContract } from '../hooks/useContract'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useBoringHelperContract } from './useContract'
 
 // Todo: Rewrite in terms of web3 as opposed to subgraph
-const useFarms = () => {
+const useZapperFarms = () => {
   const [farms, setFarms] = useState<any | undefined>()
   const { account } = useActiveWeb3React()
   const boringHelperContract = useBoringHelperContract()
 
   const fetchAllFarms = useCallback(async () => {
-    const results = await Promise.all([
-      sushiData.masterchef.pools(),
-      sushiData.exchange_v1.userPositions({
-        user_address: '0xc2edad668740f1aa35e4d8f227fb8e17dca888cd',
-      }),
-      sushiData.utils.getAverageBlockTime(), // results[2]
-      sushiData.sushi.priceUSD(), // results[3]
-      sushiData.bentobox.kashiStakedInfo(), // results[4]
-      sushiData.exchange.pairs(), // results[5]
-      sushiData.masterchef.info(), // results[6]
-    ])
+    let [pools, liquidityPositions, averageBlockTime, sushiPrice, kashiPairs, sushiPairs, masterChef] =
+      await Promise.all([
+        sushiData.masterchef.pools(),
+        sushiData.exchange_v1.userPositions({
+          user_address: '0xc2edad668740f1aa35e4d8f227fb8e17dca888cd',
+        }),
+        sushiData.utils.getAverageBlockTime(), // results[2]
+        sushiData.sushi.priceUSD(), // results[3]
+        sushiData.bentobox.kashiStakedInfo(), // results[4]
+        sushiData.exchange.pairs(), // results[5]
+        sushiData.masterchef.info(), // results[6]
+      ])
 
-    const pools = results[0]
     const pairAddresses = pools
       .map((pool) => {
         return pool.pair
       })
       .sort()
 
-    const liquidityPositions = results[1]
-    const averageBlockTime = results[2]
-    const sushiPrice = results[3]
-    const kashiPairs = results[4].filter((result) => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
-    const pairsQuery = results[5].filter((pair) => pairAddresses.includes(pair.id))
-    const masterchefQuery = results[6]
+    kashiPairs = kashiPairs.filter((result) => result !== undefined) // filter out undefined (not in onsen) from all kashiPairs
+    sushiPairs = sushiPairs.filter((pair) => pairAddresses.includes(pair.id))
 
-    // console.log('kashiPairs:', kashiPairs)
-
-    const pairs = pairsQuery
     const KASHI_PAIRS = range(190, 230, 1) // kashiPair pids 189-229
-    // console.log('kashiPairs:', KASHI_PAIRS, kashiPairs, pools)
 
     const farms = pools
       .filter((pool: any) => {
         // console.log(KASHI_PAIRS.includes(Number(pool.id)), pool, Number(pool.id))
         return (
           !POOL_DENY.includes(pool?.id) &&
-          (pairs.find((pair: any) => pair?.id === pool?.pair) || KASHI_PAIRS.includes(Number(pool?.id)))
+          (sushiPairs.find((pair: any) => pair?.id === pool?.pair) || KASHI_PAIRS.includes(Number(pool?.id)))
         )
       })
       .map((pool) => {
@@ -68,12 +60,12 @@ const useFarms = () => {
             pairAddress: pair?.id,
             pairSymbol: pair?.symbol,
             liquidityPair: {
-              collateral: {
+              token0: {
                 id: pair?.collateral,
                 symbol: pair?.collateralSymbol,
                 decimals: pair?.collateralDecimals,
               },
-              asset: {
+              token1: {
                 id: pair?.asset,
                 symbol: pair?.assetSymbol,
                 decimals: pair?.assetDecimals,
@@ -84,7 +76,7 @@ const useFarms = () => {
             tvl: pair?.balanceUSD ? pair?.balanceUSD : 0,
           }
         } else {
-          const pair = pairs.find((pair) => pair.id === pool.pair)
+          const pair = sushiPairs.find((pair) => pair.id === pool.pair)
           const liquidityPosition = liquidityPositions.find(
             (liquidityPosition: any) => liquidityPosition.pair.id === pair.id
           )
@@ -93,8 +85,7 @@ const useFarms = () => {
           const totalSupply = pair.totalSupply > 0 ? pair.totalSupply : 0.1
           const reserveUSD = pair.reserveUSD > 0 ? pair.reserveUSD : 0.1
           const balanceUSD = (balance / Number(totalSupply)) * Number(reserveUSD)
-          const rewardPerBlock =
-            ((pool.allocPoint / masterchefQuery.totalAllocPoint) * masterchefQuery.sushiPerBlock) / 1e18
+          const rewardPerBlock = ((pool.allocPoint / masterChef.totalAllocPoint) * masterChef.sushiPerBlock) / 1e18
           const roiPerBlock = (rewardPerBlock * sushiPrice) / balanceUSD
           const roiPerHour = roiPerBlock * blocksPerHour
           const roiPerDay = roiPerHour * 24
@@ -185,4 +176,4 @@ const useFarms = () => {
   return farms
 }
 
-export default useFarms
+export default useZapperFarms

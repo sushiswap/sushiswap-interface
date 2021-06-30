@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Container from '../../../components/Container'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import PairList from '../../../features/analytics/Pairs/PairList'
-import { useOneDayBlock, useOneWeekBlock, useCustomDayBlock, usePairs } from '../../../services/graph'
+import { useOneDayBlock, useOneWeekBlock, useCustomDayBlock, useSushiPairs } from '../../../services/graph'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import { useRouter } from 'next/router'
 import Search from '../../../components/Search'
@@ -12,16 +12,16 @@ export default function Pairs() {
   const router = useRouter()
   const type: any = ['all', 'gainers', 'losers'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'all'
 
-  const block1d = useOneDayBlock().data?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2).data?.blocks[0]?.number ?? undefined
-  const block1w = useOneWeekBlock().data?.blocks[0]?.number ?? undefined
-  const block2w = useCustomDayBlock(14).data?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
+  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
+  const block1w = useOneWeekBlock()?.blocks[0]?.number ?? undefined
+  const block2w = useCustomDayBlock(14)?.blocks[0]?.number ?? undefined
 
-  const pairs = usePairs().data
-  const pairs1d = usePairs({ block: { number: Number(block1d) } }).data
-  const pairs2d = usePairs(type !== 'all' ? { block: { number: Number(block2d) } } : undefined).data // No need to fetch if we don't need the data
-  const pairs1w = usePairs({ block: { number: Number(block1w) } }).data
-  const pairs2w = usePairs(type !== 'all' ? { block: { number: Number(block2w) } } : undefined).data
+  const pairs = useSushiPairs()
+  const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })
+  const pairs2d = useSushiPairs(type !== 'all' ? { block: { number: Number(block2d) } } : undefined) // No need to fetch if we don't need the data
+  const pairs1w = useSushiPairs({ block: { number: Number(block1w) } })
+  const pairs2w = useSushiPairs(type !== 'all' ? { block: { number: Number(block2w) } } : undefined)
 
   const pairsFormatted =
     type === 'all'

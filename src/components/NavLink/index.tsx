@@ -3,8 +3,8 @@ import React, { Children } from 'react'
 
 import { useRouter } from 'next/router'
 
-const NavLink = ({ children, activeClassName = 'text-high-emphesis', ...props }) => {
-  const { asPath } = useRouter()
+const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesis', ...props }) => {
+  const { asPath, pathname, route, query, basePath } = useRouter()
   const child = Children.only(children)
   const childClassName = child.props.className || ''
 
@@ -12,10 +12,13 @@ const NavLink = ({ children, activeClassName = 'text-high-emphesis', ...props })
   // pages/about.js will be matched via props.href
   // pages/[slug].js will be matched via props.as
 
-  const className =
-    asPath === props.href || asPath === props.as || asPath.startsWith(props.wildPath)
-      ? `${childClassName} ${activeClassName}`.trim()
-      : childClassName
+  const isActive = exact
+    ? (props.as || props.href.pathname || props.href) === asPath
+    : asPath.startsWith(props.as || props.href.pathname || props.href)
+
+  const className = isActive ? `${childClassName} ${activeClassName}`.trim() : childClassName
+
+  // console.log({ asPath, pathname, route, query })
 
   return (
     <Link href={props.href} {...props}>
