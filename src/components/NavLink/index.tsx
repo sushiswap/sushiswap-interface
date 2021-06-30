@@ -3,7 +3,7 @@ import React, { Children } from 'react'
 
 import { useRouter } from 'next/router'
 
-const NavLink = ({ children, exact, activeClassName = 'text-high-emphesis', ...props }) => {
+const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesis', ...props }) => {
   const { asPath, pathname, route, query, basePath } = useRouter()
   const child = Children.only(children)
   const childClassName = child.props.className || ''
@@ -18,7 +18,7 @@ const NavLink = ({ children, exact, activeClassName = 'text-high-emphesis', ...p
 
   const className = isActive ? `${childClassName} ${activeClassName}`.trim() : childClassName
 
-  console.log({ asPath, pathname, route, query })
+  // console.log({ asPath, pathname, route, query })
 
   return (
     <Link href={props.href} {...props}>
