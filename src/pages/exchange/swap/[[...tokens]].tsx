@@ -506,6 +506,8 @@ export default function Swap() {
     swipeToSlide: true,
   }
 
+  console.log({chainId})
+
   return (
     <>
       <Head>
@@ -522,7 +524,7 @@ export default function Swap() {
       />
       <div
         id="swap-page"
-        className="w-full max-w-2xl p-4 space-y-4 rounded bg-dark-900 shadow-swap"
+        className="w-full max-w-2xl p-4 space-y-4 pb-6 rounded bg-dark-900 shadow-swap"
         style={{ zIndex: 1 }}
       >
         <SwapHeader
@@ -771,44 +773,46 @@ export default function Swap() {
           <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
         )}
 
-        <Slider className="mb-4">
-          <div>
-            <a
-              href="https://miso.sushi.com"
-              className="sm:block w-full cursor-pointer mt-4 py-6 rounded"
-              style={{
-                backgroundImage: '/miso-banner.jpg',
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-              }}
-            >
-              <div className="justify-between flex pl-5 pr-8 items-center gap-6">
-                <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
-                  {i18n._(t`Pour a hot bowl of MISO, the new token launchpad from SUSHI`)}
-                </span>
-                <div style={{ maxWidth: 195 }}>
-                  <img src="/miso-logo.png" style={{ maxWidth: '100%' }} />
-                </div>
-              </div>
-            </a>
-          </div>
-          <div>
-            <div className="sm:block w-full cursor-pointer mt-4 rounded" onClick={() => toggleNetworkModal()}>
-              <DarkCard>
-                <div className="flex justify-between items-center overflow-hidden">
-                  <img src="/matic-logo.png" className="w-24 h-24 absolute top-2" alt="" />
-                  <div className="pl-32">
-                    <div className="text-high-emphesis">{i18n._(t`Check out Sushi on Polygon (Matic)`)}</div>
-                    <div className="text-high-emphesis text-sm">
-                      {i18n._(t`Click here to switch to Polygon using Metamask`)}
-                    </div>
+        {chainId && chainId === ChainId.MAINNET && (
+          <Slider className="mb-4" {...settings}>
+            <div>
+              <a
+                href="https://miso.sushi.com"
+                className="sm:block w-full cursor-pointer mt-4 py-6 rounded"
+                style={{
+                  backgroundImage: '/miso-banner.jpg',
+                  backgroundPosition: 'center',
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              >
+                <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                  <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
+                    {i18n._(t`Pour a hot bowl of MISO, the new token launchpad from SUSHI`)}
+                  </span>
+                  <div style={{ maxWidth: 195 }}>
+                    <img src="/miso-logo.png" style={{ maxWidth: '100%' }} />
                   </div>
                 </div>
-              </DarkCard>
+              </a>
             </div>
-          </div>
-        </Slider>
+            <div>
+              <div className="sm:block w-full cursor-pointer mt-4 rounded" onClick={() => toggleNetworkModal()}>
+                <DarkCard>
+                  <div className="flex justify-between items-center overflow-hidden">
+                    <img src="/matic-logo.png" className="w-24 h-24 absolute top-2" alt="" />
+                    <div className="pl-32">
+                      <div className="text-high-emphesis">{i18n._(t`Check out Sushi on Polygon (Matic)`)}</div>
+                      <div className="text-high-emphesis text-sm">
+                        {i18n._(t`Click here to switch to Polygon using Metamask`)}
+                      </div>
+                    </div>
+                  </div>
+                </DarkCard>
+              </div>
+            </div>
+          </Slider>
+        )}
       </div>
     </>
   )
