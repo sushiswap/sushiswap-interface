@@ -290,7 +290,7 @@ export default function Stake() {
                       inputError ? ' border border-red' : ''
                     }`}
                   >
-                    <div className="flex">
+                    <div className="flex space-x-2 ">
                       {inputError && (
                         <Image
                           className="mr-2 max-w-4 md:max-w-5"
