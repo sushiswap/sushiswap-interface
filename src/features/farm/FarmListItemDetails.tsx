@@ -1,6 +1,6 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { ChainId, MASTERCHEF_ADDRESS, Token, ZERO } from '@sushiswap/sdk'
-import { Chef } from './enum'
+import { Chef, PairType } from './enum'
 import { Disclosure, Transition } from '@headlessui/react'
 import React, { useState } from 'react'
 import { formatNumber } from '../../functions'
@@ -34,7 +34,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
   const liquidityToken = new Token(
     chainId,
     getAddress(farm.pair.id),
-    farm.pair.decimals,
+    farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : farm.pair.decimals,
     farm.pair.symbol,
     farm.pair.name
   )
