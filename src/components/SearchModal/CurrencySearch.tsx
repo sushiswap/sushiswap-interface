@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
+import { NATIVE, ChainId, Currency, Token } from '@sushiswap/sdk'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Row, { RowFixed } from '../Row'
 import { filterTokens, useSortedTokensByQuery } from './filtering'
@@ -7,12 +7,10 @@ import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToke
 import AutoSizer from 'react-virtualized-auto-sizer'
 import Button from '../Button'
 import ButtonText from '../ButtonText'
-import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import Column from '../Column'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
 import { Edit } from 'react-feather'
-import { ExtendedEther } from '../../constants'
 import { FixedSizeList } from 'react-window'
 import IconWrapper from '../IconWrapper'
 import ImportRow from './ImportRow'
@@ -25,9 +23,11 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useDebounce from '../../hooks/useDebounce'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useRouter } from 'next/router'
 import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
+import { ExtendedEther } from '../../constants'
+import { useRouter } from 'next/router'
+import { CHAINLINK_TOKENS } from '../../constants/chainlink'
 
 const ContentWrapper = styled(Column)`
   height: 100%;
@@ -47,6 +47,7 @@ interface CurrencySearchProps {
   showManageView: () => void
   showImportView: () => void
   setImportToken: (token: Token) => void
+  currencyList?: string[]
 }
 
 export function CurrencySearch({
@@ -59,6 +60,7 @@ export function CurrencySearch({
   showManageView,
   showImportView,
   setImportToken,
+  currencyList,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -77,12 +79,17 @@ export function CurrencySearch({
   const router = useRouter()
 
   if (router.asPath.startsWith('/kashi/create')) {
-    allTokens = Object.keys(allTokens)
-      .filter((key) => CHAINLINK_TOKENS[chainId].find((address) => address === key))
-      .reduce((obj, key) => {
-        obj[key] = allTokens[key]
-        return obj
-      }, {})
+    allTokens = Object.keys(allTokens).reduce((obj, key) => {
+      if (CHAINLINK_TOKENS[chainId].find((token) => token.address === key)) obj[key] = allTokens[key]
+      return obj
+    }, {})
+  }
+
+  if (currencyList) {
+    allTokens = Object.keys(allTokens).reduce((obj, key) => {
+      if (currencyList.includes(key)) obj[key] = allTokens[key]
+      return obj
+    }, {})
   }
 
   // if they input an address, use it
@@ -180,19 +187,21 @@ export function CurrencySearch({
   return (
     <ContentWrapper>
       <ModalHeader onClose={onDismiss} title="Select a token" />
-      <div className="mt-3 mb-8">
-        <input
-          type="text"
-          id="token-search-input"
-          placeholder={i18n._(t`Search name or paste address`)}
-          autoComplete="off"
-          value={searchQuery}
-          ref={inputRef as RefObject<HTMLInputElement>}
-          onChange={handleInput}
-          onKeyDown={handleEnter}
-          className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
-        />
-      </div>
+      {!currencyList && (
+        <div className="mt-3 mb-8">
+          <input
+            type="text"
+            id="token-search-input"
+            placeholder={i18n._(t`Search name or paste address`)}
+            autoComplete="off"
+            value={searchQuery}
+            ref={inputRef as RefObject<HTMLInputElement>}
+            onChange={handleInput}
+            onKeyDown={handleEnter}
+            className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
+          />
+        </div>
+      )}
       {showCommonBases && (
         <div className="mb-4">
           <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />

@@ -19,6 +19,7 @@ interface CurrencySearchModalProps {
   onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
   showCommonBases?: boolean
+  currencyList?: string[]
 }
 
 function CurrencySearchModal({
@@ -27,6 +28,7 @@ function CurrencySearchModal({
   onCurrencySelect,
   selectedCurrency,
   otherSelectedCurrency,
+  currencyList,
   showCommonBases = false,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
@@ -72,6 +74,7 @@ function CurrencySearchModal({
           showImportView={() => setModalView(CurrencyModalView.importToken)}
           setImportToken={setImportToken}
           showManageView={() => setModalView(CurrencyModalView.manage)}
+          currencyList={currencyList}
         />
       ) : modalView === CurrencyModalView.importToken && importToken ? (
         <ImportToken
