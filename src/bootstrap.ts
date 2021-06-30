@@ -28,11 +28,14 @@ String.prototype.toBigNumber = function (decimals: BigNumberish): BigNumber {
   return BigNumber.from(0)
 }
 
-if (process.env.NODE_ENV === 'development') {
-  if (typeof window !== 'undefined') {
-    const whyDidYouRender = require('@welldone-software/why-did-you-render')
-    whyDidYouRender(React, {
-      trackAllPureComponents: true,
-    })
-  }
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  const whyDidYouRender = require('@welldone-software/why-did-you-render')
+
+  // See https://github.com/welldone-software/why-did-you-render#options
+  whyDidYouRender(React, {
+    trackAllPureComponents: true,
+    trackHooks: true,
+    logOwnerReasons: true,
+    collapseGroups: true,
+  })
 }
