@@ -22,15 +22,30 @@ const BLOCKCHAIN = {
   [ChainId.MAINNET]: 'ethereum',
 }
 
-function getCurrencyLogoUrls(address, chainId = ChainId.MAINNET) {
+function getCurrencySymbol(currency) {
+  if (currency.symbol === 'WBTC') {
+    return 'btc'
+  }
+  if (currency.symbol === 'WETH') {
+    return 'eth'
+  }
+  return currency.symbol.toLowerCase()
+}
+
+function getCurrencyLogoUrls(currency) {
   const urls = []
 
-  if (chainId === ChainId.MAINNET) {
+  if (currency.chainId === ChainId.MAINNET) {
+    urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
     urls.push(
-      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[chainId]}/assets/${address}/logo.png`
+      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
+        currency.address
+      }/logo.png`
     )
     urls.push(
-      `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[chainId]}/assets/${address}/logo.png`
+      `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
+        currency.address
+      }/logo.png`
     )
   }
 
@@ -103,7 +118,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     }
 
     if (currency.isToken) {
-      const defaultUrls = [...getCurrencyLogoUrls(currency.address, currency.chainId)]
+      const defaultUrls = [...getCurrencyLogoUrls(currency)]
       if (currency instanceof WrappedTokenInfo) {
         return [...uriLocations, ...defaultUrls, unknown]
       }
