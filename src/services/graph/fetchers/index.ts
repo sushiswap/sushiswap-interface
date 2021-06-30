@@ -43,13 +43,17 @@ export const masterChefV1 = async (query, chainId = ChainId.MAINNET) =>
   request(`https://api.thegraph.com/subgraphs/name/${MASTERCHEF_V1[chainId]}`, query)
 
 export const getMasterChefV1TotalAllocPoint = async () => {
-  const { masterChef } = await masterChefV1(masterChefV1TotalAllocPointQuery)
-  return masterChef?.totalAllocPoint / 1e18
+  const {
+    masterChef: { totalAllocPoint },
+  } = await masterChefV1(masterChefV1TotalAllocPointQuery)
+  return totalAllocPoint
 }
 
 export const getMasterChefV1SushiPerBlock = async () => {
-  const { masterChef } = await masterChefV1(masterChefV1SushiPerBlockQuery)
-  return masterChef?.sushiPerBlock
+  const {
+    masterChef: { sushiPerBlock },
+  } = await masterChefV1(masterChefV1SushiPerBlockQuery)
+  return sushiPerBlock / 1e18
 }
 
 export const getMasterChefV1Farms = async () => {
