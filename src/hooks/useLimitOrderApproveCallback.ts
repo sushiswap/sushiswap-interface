@@ -170,6 +170,7 @@ const useLimitOrderApproveCallback = () => {
       }
     }
 
+    console.log(`Account: ${account}\nAmount: ${amount}, BatchData: ${batch}`)
     const tx = await bentoBoxContract?.batch(batch, true, {
       value: token.isNative ? amount : ZERO,
     })
