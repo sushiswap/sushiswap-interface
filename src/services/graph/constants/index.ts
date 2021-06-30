@@ -7,6 +7,6 @@ export const GRAPH_HOST = {
   [ChainId.MATIC]: THE_GRAPH,
   [ChainId.FANTOM]: THE_GRAPH,
   [ChainId.BSC]: THE_GRAPH,
-  [ChainId.HARMONY]: 'https://sushi.graph.t.hmny.io:8001',
+  [ChainId.HARMONY]: 'https://sushi.graph.t.hmny.io',
   [ChainId.OKEX]: '',
 }

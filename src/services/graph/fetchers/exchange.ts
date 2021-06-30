@@ -17,7 +17,7 @@ export const EXCHANGE = {
   [ChainId.MATIC]: 'sushiswap/matic-exchange',
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
-  [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
+  [ChainId.HARMONY]: 'sushiswap/harmony-exchange-fs',
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
 }
 

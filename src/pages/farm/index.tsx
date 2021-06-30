@@ -25,6 +25,7 @@ import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
 import { useRouter } from 'next/router'
+import { classNames } from '../../functions'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -283,10 +284,15 @@ export default function Farm(): JSX.Element {
         <meta name="description" content="Farm SUSHI" />
       </Head>
       <Container maxWidth="full" className="grid h-full grid-cols-4 mx-auto gap-9">
-        <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
+        <div
+          className={classNames('sticky top-0 hidden', chainId === ChainId.MAINNET && 'lg:block md:col-span-1')}
+          style={{ maxHeight: '40rem' }}
+        >
           <Menu positionsLength={positions.length} />
         </div>
-        <div className="col-span-4 space-y-6 lg:col-span-3">
+        <div
+          className={classNames('space-y-6 ', chainId === ChainId.MAINNET ? 'col-span-4 lg:col-span-3' : 'col-span-4')}
+        >
           <Search
             search={search}
             term={term}
