@@ -213,6 +213,16 @@ const PairLayout = ({ children }) => {
               <div className="text-lg text-secondary">{i18n._(t`Loan to Value`)}</div>
               <div className="text-lg text-high-emphesis">75%</div>
             </div>
+
+            <div className="flex justify-between pt-3">
+              <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
+            </div>
+
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">Name</div>
+              <div className="text-lg text-high-emphesis">{pair?.oracle.name}</div>
+            </div>
+
             <div className="flex justify-between pt-3">
               <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
             </div>
