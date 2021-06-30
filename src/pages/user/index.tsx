@@ -8,18 +8,45 @@ import { ExternalLink, User } from 'react-feather'
 import useSWR, { SWRResponse } from 'swr'
 import Dots from '../../components/Dots'
 import Button from '../../components/Button'
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import TransactionList from '../../components/TransactionList'
 import { getExplorerLink } from '../../functions/explorer'
 import { shortenAddress } from '../../functions/format'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { NETWORK_LABEL } from '../../constants/networks'
+import { clearAllTransactions } from '../../state/transactions/actions'
+import { useAppDispatch } from '../../state/hooks'
+import useENSName from '../../hooks/useENSName'
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
+import { TransactionDetails } from '../../state/transactions/reducer'
+
+// we want the latest one to come first, so return negative if a is after b
+function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
+  return b.addedTime - a.addedTime
+}
 
 export default function Me() {
   const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+  const dispatch = useAppDispatch()
+
+  const { ENSName } = useENSName(account ?? undefined)
+
+  const allTransactions = useAllTransactions()
+
+  const sortedRecentTransactions = useMemo(() => {
+    const txs = Object.values(allTransactions)
+    return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
+  }, [allTransactions])
+
+  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
+  const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash)
+
+  const clearAllTransactionsCallback = useCallback(() => {
+    if (chainId) dispatch(clearAllTransactions({ chainId }))
+  }, [dispatch, chainId])
 
   const { data, error }: SWRResponse<any, Error> = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/address/${account}/stacks/sushiswap/acts/?&key=ckey_cba3674f2ce5450f9d5dd290589&swaps=true&quote-currency=usd`,
@@ -97,12 +124,15 @@ export default function Me() {
             <Typography component="h2" variant="lg" className="font-medium text-high-emphesis">
               {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId]}`)}
             </Typography>
-            {/* <Button variant="link">
+            <Button variant="link" onClick={clearAllTransactionsCallback}>
               <span className="text-sm">{i18n._(t`Clear History`)}</span>
-            </Button> */}
+            </Button>
           </div>
 
+          {/* TODO: KEEP THIS STYLE BUT FEED WITH AGNOSTIC TX DATA */}
           <TransactionList transactions={data.items} />
+
+          {/* <TransactionList transactions={data.items} /> */}
         </div>
       </Container>
     </>
