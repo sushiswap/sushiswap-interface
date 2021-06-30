@@ -21,11 +21,4 @@ export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration
   )
 
   return data
-
-  // console.log('kashi pairs data', { data })
-
-  // return useMemo(() => {
-  //   if (!data) return []
-  //   return data
-  // }, [data])
 }
