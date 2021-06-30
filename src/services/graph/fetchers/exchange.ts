@@ -6,6 +6,8 @@ import {
   tokenPriceQuery,
   tokenSubsetQuery,
   tokensQuery,
+  factoryQuery,
+  dayDatasQuery,
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -18,8 +20,10 @@ export const EXCHANGE = {
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
 }
-export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
-  request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+export const getExchange = async (chainId = ChainId.MAINNET, query = factoryQuery, variables = undefined) => {
+  const { factory } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+  return factory
+}
 
 export const getPairs = async (chainId = ChainId.MAINNET, query = pairsQuery, variables = undefined) => {
   // console.log('getPairs')
@@ -110,10 +114,15 @@ export const getBundle = async (
     id: 1,
   }
 ) => {
-  return exchange(chainId, query, variables)
+  return getExchange(chainId, query, variables)
 }
 
 export const getLiquidityPositionSubset = async (chainId = ChainId.MAINNET, user) => {
-  const { liquidityPositions } = await exchange(chainId, liquidityPositionSubsetQuery, { user })
+  const { liquidityPositions } = await getExchange(chainId, liquidityPositionSubsetQuery, { user })
   return liquidityPositions
+}
+
+export const getDayData = async (chainId = ChainId.MAINNET, query = dayDatasQuery, variables = undefined) => {
+  const { dayDatas } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+  return dayDatas
 }

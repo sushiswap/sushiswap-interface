@@ -1,6 +1,6 @@
 import { ethPriceQuery, liquidityPositionSubsetQuery, pairSubsetQuery, tokenQuery } from '../queries'
 import {
-  exchange,
+  getExchange,
   getAlcxPrice,
   getBundle,
   getCvxPrice,
@@ -9,6 +9,7 @@ import {
   getSushiPrice,
   getTokenPrice,
   getTokens,
+  getDayData,
 } from '../fetchers'
 import { getEthPrice, getPairSubset, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -16,9 +17,13 @@ import useSWR, { SWRConfiguration } from 'swr'
 import { ChainId } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../../../hooks'
 
-export function useExchange(query, variables, swrConfig: SWRConfiguration = undefined) {
+export function useExchange(variables = {}, query = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const res = useSWR([chainId, query, variables], exchange, swrConfig)
+  const res = useSWR(
+    chainId ? [chainId, 'exchange', query, JSON.stringify(variables)] : null,
+    () => getExchange(chainId, query, variables),
+    swrConfig
+  )
   return res
 }
 
@@ -107,6 +112,17 @@ export function useTokens(variables = undefined, query = undefined, swrConfig: S
   const res = useSWR(
     shouldFetch ? ['tokens', chainId, query, JSON.stringify(variables)] : null,
     (_, chainId) => getTokens(chainId, query, variables),
+    swrConfig
+  )
+  return res
+}
+
+export function useDayData(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const res = useSWR(
+    shouldFetch ? ['dayData', chainId, query, JSON.stringify(variables)] : null,
+    (_, chainId) => getDayData(chainId, query, variables),
     swrConfig
   )
   return res

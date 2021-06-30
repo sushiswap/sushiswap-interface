@@ -107,7 +107,13 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
                           'h-16 text-high-emphesis text-sm font-bold bg-dark-900 flex items-center'
                         )}
                       >
-                        <div className={classNames(cell.column.align && `text-${cell.column.align}`, 'w-full')}>
+                        <div
+                          className={classNames(
+                            cell.column.align === 'rigth' && `text-right`,
+                            cell.column.align === 'left' && 'text-left',
+                            'w-full'
+                          )}
+                        >
                           {cell.render('Cell')}
                         </div>
                       </div>

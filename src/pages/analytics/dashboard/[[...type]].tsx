@@ -1,10 +1,14 @@
+import { useState, useMemo } from 'react'
+
 import Head from 'next/head'
 import Container from '../../../components/Container'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
 import Menu from '../../../features/analytics/AnalyticsMenu'
-import Chart from '../../../features/analytics/Dashboard/Chart'
+import ChartCard from '../../../features/analytics/Dashboard/ChartCard'
+import { useCustomDayBlock, useDayData, useExchange, useOneDayBlock, useOneWeekBlock } from '../../../services/graph'
+import useFarms from '../../../hooks/useFarms'
 
 export default function Dashboard(): JSX.Element {
   const term = ''
@@ -23,8 +27,8 @@ export default function Dashboard(): JSX.Element {
         </div>
         <div className="col-span-5 space-y-6 lg:col-span-4">
           <div className="flex flex-row space-x-4">
-            <Chart header="Liquidity" data={{ figure: 4800000000, change: 25.69, chart: '' }} />
-            <Chart header="Volume" data={{ figure: 2300000, change: 69.69, chart: '' }} />
+            <ChartCard type="liquidity" />
+            <ChartCard type="volume" />
           </div>
           <div className="flex flex-row items-center">
             <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">

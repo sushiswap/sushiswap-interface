@@ -1,19 +1,11 @@
 import gql from 'graphql-tag'
 
 export const factoryQuery = gql`
-  query factoryQuery($id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac") {
-    factory(id: $id) {
-      id
-      volumeUSD
-    }
-  }
-`
-
-export const factoryTimeTravelQuery = gql`
-  query factoryTimeTravelQuery($id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac", $block: Block_height!) {
+  query factoryQuery($id: String! = "0xc0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac", $block: Block_height) {
     factory(id: $id, block: $block) {
       id
       volumeUSD
+      liquidityUSD
     }
   }
 `
@@ -96,8 +88,8 @@ export const dayDataFieldsQuery = gql`
 
 // Dashboard...
 export const dayDatasQuery = gql`
-  query dayDatasQuery($first: Int! = 1000, $date: Int! = 0) {
-    dayDatas(first: $first, orderBy: date, orderDirection: desc) {
+  query dayDatasQuery($first: Int! = 1000, $date: Int! = 0, $where: DayData_filter) {
+    dayDatas(first: $first, orderBy: date, orderDirection: desc, where: $where) {
       ...dayDataFields
     }
   }

@@ -44,8 +44,8 @@ const tabs = [
             y2="6.62764"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0993EC" />
-            <stop offset="1" stop-color="#F338C3" />
+            <stop stopColor="#0993EC" />
+            <stop offset="1" stopColor="#F338C3" />
           </linearGradient>
         </defs>
       </svg>
@@ -72,8 +72,8 @@ const tabs = [
             y2="7.01484"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0993EC" />
-            <stop offset="1" stop-color="#F338C3" />
+            <stop stopColor="#0993EC" />
+            <stop offset="1" stopColor="#F338C3" />
           </linearGradient>
         </defs>
       </svg>
