@@ -69,7 +69,7 @@ const LANGUAGES: {
 }
 
 export default function LangSwitcher() {
-  const { locale, locales, route } = useRouter()
+  const { locale, locales, asPath } = useRouter()
   return (
     <Menu as="div" className="relative inline-block text-right">
       {({ open }) => (
@@ -98,7 +98,7 @@ export default function LangSwitcher() {
                   return (
                     <Menu.Item key={locale}>
                       {({ active }) => (
-                        <Link href={route} locale={locale}>
+                        <Link href={asPath} locale={locale}>
                           <a
                             href="#"
                             className={classNames(
