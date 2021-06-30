@@ -1,6 +1,6 @@
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useBentoBoxContract } from './useContract'
+import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { ethers } from 'ethers'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
@@ -55,12 +55,14 @@ const useLimitOrderApproveCallback = () => {
   }, [masterContract, currentAllowed, pendingApproval])
 
   const bentoBoxContract = useBentoBoxContract()
+  const limitOrderHelperContract = useLimitOrderHelperContract()
 
   const approve = useCallback(async () => {
     if (approvalState !== BentoApprovalState.NOT_APPROVED) {
       console.error('approve was called unnecessarily')
       return { outcome: BentoApproveOutcome.NOT_READY }
     }
+
     if (!masterContract) {
       console.error('no token')
       return { outcome: BentoApproveOutcome.NOT_READY }
@@ -75,6 +77,7 @@ const useLimitOrderApproveCallback = () => {
       console.error('no account')
       return { outcome: BentoApproveOutcome.NOT_READY }
     }
+
     if (!library) {
       console.error('no library')
       return { outcome: BentoApproveOutcome.NOT_READY }
@@ -96,6 +99,7 @@ const useLimitOrderApproveCallback = () => {
 
       return {
         outcome: BentoApproveOutcome.SUCCESS,
+        signature: { v, r, s },
         data: bentoBoxContract?.interface?.encodeFunctionData('setMasterContractApproval', [
           account,
           masterContract,
@@ -127,9 +131,9 @@ const useLimitOrderApproveCallback = () => {
       await tx.wait()
       dispatch(setLimitOrderApprovalPending(''))
     } else {
-      const result = await approve()
+      const { outcome, signature, data } = await approve()
 
-      if (result.outcome === BentoApproveOutcome.SUCCESS) setLimitOrderPermit(result.data)
+      if (outcome === BentoApproveOutcome.SUCCESS) setLimitOrderPermit({ signature, data })
       else setFallback(true)
     }
   }
@@ -137,14 +141,29 @@ const useLimitOrderApproveCallback = () => {
   const execute = async function (token: Token) {
     const summary = []
     const batch = []
+    const amount = parsedAmounts[Field.INPUT].quotient.toString()
+
+    // Since the setMasterContractApproval is not payable, we can't batch native deposit and approve
+    // For this case, we setup a helper contract
+    if (token.isNative && approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit && !fromBentoBalance) {
+      summary.push(`Approve Limit Order and Deposit ${token.symbol} into BentoBox`)
+      const {
+        signature: { v, r, s },
+      } = limitOrderPermit
+      const tx = await limitOrderHelperContract?.depositAndApprove(account, masterContract, true, v, r, s, {
+        value: amount,
+      })
+      addTransaction(tx, { summary: summary.join('') })
+      setLimitOrderPermit(undefined)
+      return tx
+    }
 
     // If bento is not yet approved but we do have the permit, add the permit to the batch
     if (approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit) {
-      batch.push(limitOrderPermit)
+      batch.push(limitOrderPermit.data)
       summary.push('Approve Limit Order')
     }
 
-    const amount = parsedAmounts[Field.INPUT].quotient.toString()
     if (!fromBentoBalance) {
       summary.push(`Deposit ${token.symbol} into BentoBox`)
       if (token.isNative) {
@@ -170,7 +189,6 @@ const useLimitOrderApproveCallback = () => {
       }
     }
 
-    console.log(`Account: ${account}\nAmount: ${amount}, BatchData: ${batch}`)
     const tx = await bentoBoxContract?.batch(batch, true, {
       value: token.isNative ? amount : ZERO,
     })

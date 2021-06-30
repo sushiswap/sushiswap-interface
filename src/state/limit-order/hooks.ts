@@ -90,28 +90,30 @@ export function useDerivedLimitOrderInfo(): {
   const to: string | null = (recipient === null ? account : recipientLookup.address) ?? null
 
   const isExactIn: boolean = independentField === Field.INPUT
-  const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+  const parsedInputAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
   const parsedRate = tryParseAmount(limitPrice, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
   const parsedOutputAmount =
-    outputCurrency && parsedRate && parsedAmount
+    outputCurrency && parsedRate && parsedInputAmount
       ? isExactIn
         ? CurrencyAmount.fromRawAmount(
             outputCurrency,
-            new Percent(parsedRate.quotient, denominator(outputCurrency.decimals)).multiply(parsedAmount).quotient
+            new Percent(parsedRate.quotient, denominator(inputCurrency.decimals))
+              .multiply(new Percent(parsedInputAmount.quotient, denominator(inputCurrency.decimals)))
+              .multiply(denominator(outputCurrency.decimals)).quotient
           )
         : CurrencyAmount.fromRawAmount(
             inputCurrency,
-            new Percent(parsedAmount.quotient, parsedRate.quotient).multiply(denominator(inputCurrency.decimals))
+            new Percent(parsedInputAmount.quotient, parsedRate.quotient).multiply(denominator(inputCurrency.decimals))
               .quotient
           )
       : undefined
 
-  const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined, {
+  const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedInputAmount : undefined, outputCurrency ?? undefined, {
     maxHops: singleHopOnly ? 1 : undefined,
   })
 
-  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedAmount : undefined, {
+  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedInputAmount : undefined, {
     maxHops: singleHopOnly ? 1 : undefined,
   })
 
@@ -144,8 +146,8 @@ export function useDerivedLimitOrderInfo(): {
   }
 
   const parsedAmounts = {
-    [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : parsedOutputAmount,
-    [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : parsedOutputAmount,
+    [Field.INPUT]: independentField === Field.INPUT ? parsedInputAmount : parsedOutputAmount,
+    [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedInputAmount : parsedOutputAmount,
   }
 
   const currencies: { [field in Field]?: Currency } = {
@@ -158,7 +160,7 @@ export function useDerivedLimitOrderInfo(): {
     inputError = 'Connect Wallet'
   }
 
-  if (!parsedAmount || !parsedOutputAmount) {
+  if (!parsedInputAmount || !parsedOutputAmount) {
     inputError = inputError ?? i18n._(t`Enter an amount`)
   }
 

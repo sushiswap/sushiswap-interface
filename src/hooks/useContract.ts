@@ -65,10 +65,12 @@ import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
+import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json'
+import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json'
 import { getContract } from '../functions/contract'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
-import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json'
+
 import { getVerifyingContract } from 'limitorderv2-sdk'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
@@ -647,4 +649,8 @@ export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | n
 export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(getVerifyingContract(chainId), LIMIT_ORDER_ABI, withSignerIfPossibe)
+}
+
+export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0xe2f736B7d1f6071124CBb5FC23E93d141CD24E12', LIMIT_ORDER_HELPER_ABI, withSignerIfPossible)
 }

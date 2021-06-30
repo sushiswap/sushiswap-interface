@@ -343,11 +343,11 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "跳過確認、接受交易高滑點。使用時風險自擔。"
 
-#: src/features/open-order/OpenOrders.tsx:108
+#: src/features/open-order/OpenOrders.tsx:112
 msgid "Cancel Order"
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:83
+#: src/features/open-order/CompletedOrders.tsx:89
 msgid "Cancelled"
 msgstr ""
 
@@ -633,7 +633,7 @@ msgstr "專家模式關閉確認交易彈出、允許高交易滑點經常會導
 msgid "Expiration is the time at which the order will become invalid"
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:85
+#: src/features/open-order/CompletedOrders.tsx:91
 msgid "Expired"
 msgstr ""
 
@@ -647,9 +647,9 @@ msgstr ""
 #~ msgid "Fetching Instruments"
 #~ msgstr "提取工具"
 
-#: src/features/open-order/CompletedOrders.tsx:35
-#: src/features/open-order/CompletedOrders.tsx:81
-#: src/features/open-order/OpenOrders.tsx:99
+#: src/features/open-order/CompletedOrders.tsx:40
+#: src/features/open-order/CompletedOrders.tsx:87
+#: src/features/open-order/OpenOrders.tsx:103
 msgid "Filled"
 msgstr ""
 
@@ -1098,7 +1098,7 @@ msgstr "沒有發現流動性可以互換"
 msgid "No liquidity was found."
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:105
+#: src/features/open-order/CompletedOrders.tsx:107
 msgid "No order history"
 msgstr ""
 
@@ -1156,7 +1156,7 @@ msgstr "預言機"
 msgid "Order Expiration"
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:19
+#: src/features/open-order/CompletedOrders.tsx:20
 msgid "Order History"
 msgstr ""
 
@@ -1186,8 +1186,8 @@ msgstr ""
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "輸出將發送到<0> {0} </0>"
 
-#: src/features/open-order/CompletedOrders.tsx:31
-#: src/features/open-order/OpenOrders.tsx:60
+#: src/features/open-order/CompletedOrders.tsx:36
+#: src/features/open-order/OpenOrders.tsx:64
 msgid "Pay"
 msgstr ""
 
@@ -1278,8 +1278,8 @@ msgid "Price Updated"
 msgstr "價格更新"
 
 #: src/features/limit-order/LimitPriceInputPanel.tsx:36
-#: src/features/open-order/CompletedOrders.tsx:33
-#: src/features/open-order/OpenOrders.tsx:62
+#: src/features/open-order/CompletedOrders.tsx:38
+#: src/features/open-order/OpenOrders.tsx:66
 msgid "Rate"
 msgstr ""
 
@@ -1296,8 +1296,8 @@ msgstr "費率"
 #~ msgid "Read the contract"
 #~ msgstr "閱讀合約"
 
-#: src/features/open-order/CompletedOrders.tsx:30
-#: src/features/open-order/OpenOrders.tsx:59
+#: src/features/open-order/CompletedOrders.tsx:35
+#: src/features/open-order/OpenOrders.tsx:63
 msgid "Receive"
 msgstr ""
 

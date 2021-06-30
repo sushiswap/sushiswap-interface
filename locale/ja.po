@@ -345,11 +345,11 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "確認モーダルを無視すると、高スリッページの取引が可能になります。ご自身の責任でご利用ください。"
 
-#: src/features/open-order/OpenOrders.tsx:108
+#: src/features/open-order/OpenOrders.tsx:112
 msgid "Cancel Order"
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:83
+#: src/features/open-order/CompletedOrders.tsx:89
 msgid "Cancelled"
 msgstr ""
 
@@ -639,7 +639,7 @@ msgstr ""
 msgid "Expiration is the time at which the order will become invalid"
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:85
+#: src/features/open-order/CompletedOrders.tsx:91
 msgid "Expired"
 msgstr ""
 
@@ -653,9 +653,9 @@ msgstr ""
 #~ msgid "Fetching Instruments"
 #~ msgstr "手段を取得しています"
 
-#: src/features/open-order/CompletedOrders.tsx:35
-#: src/features/open-order/CompletedOrders.tsx:81
-#: src/features/open-order/OpenOrders.tsx:99
+#: src/features/open-order/CompletedOrders.tsx:40
+#: src/features/open-order/CompletedOrders.tsx:87
+#: src/features/open-order/OpenOrders.tsx:103
 msgid "Filled"
 msgstr ""
 
@@ -1121,7 +1121,7 @@ msgstr "スワップを行う流動性は見つかりません"
 msgid "No liquidity was found."
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:105
+#: src/features/open-order/CompletedOrders.tsx:107
 msgid "No order history"
 msgstr ""
 
@@ -1179,7 +1179,7 @@ msgstr "オラクル"
 msgid "Order Expiration"
 msgstr ""
 
-#: src/features/open-order/CompletedOrders.tsx:19
+#: src/features/open-order/CompletedOrders.tsx:20
 msgid "Order History"
 msgstr ""
 
@@ -1209,8 +1209,8 @@ msgstr ""
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "出力は<0>{0}</0>に送信されます。"
 
-#: src/features/open-order/CompletedOrders.tsx:31
-#: src/features/open-order/OpenOrders.tsx:60
+#: src/features/open-order/CompletedOrders.tsx:36
+#: src/features/open-order/OpenOrders.tsx:64
 msgid "Pay"
 msgstr ""
 
@@ -1302,8 +1302,8 @@ msgid "Price Updated"
 msgstr "価格が更新されました"
 
 #: src/features/limit-order/LimitPriceInputPanel.tsx:36
-#: src/features/open-order/CompletedOrders.tsx:33
-#: src/features/open-order/OpenOrders.tsx:62
+#: src/features/open-order/CompletedOrders.tsx:38
+#: src/features/open-order/OpenOrders.tsx:66
 msgid "Rate"
 msgstr ""
 
@@ -1320,8 +1320,8 @@ msgstr "レート"
 #~ msgid "Read the contract"
 #~ msgstr "契約書を読む"
 
-#: src/features/open-order/CompletedOrders.tsx:30
-#: src/features/open-order/OpenOrders.tsx:59
+#: src/features/open-order/CompletedOrders.tsx:35
+#: src/features/open-order/OpenOrders.tsx:63
 msgid "Receive"
 msgstr ""
 

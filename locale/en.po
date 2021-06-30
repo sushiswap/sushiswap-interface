@@ -352,11 +352,11 @@ msgstr ""
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 
-#: src/features/open-order/OpenOrders.tsx:108
+#: src/features/open-order/OpenOrders.tsx:112
 msgid "Cancel Order"
 msgstr "Cancel Order"
 
-#: src/features/open-order/CompletedOrders.tsx:83
+#: src/features/open-order/CompletedOrders.tsx:89
 msgid "Cancelled"
 msgstr "Cancelled"
 
@@ -650,7 +650,7 @@ msgstr ""
 msgid "Expiration is the time at which the order will become invalid"
 msgstr "Expiration is the time at which the order will become invalid"
 
-#: src/features/open-order/CompletedOrders.tsx:85
+#: src/features/open-order/CompletedOrders.tsx:91
 msgid "Expired"
 msgstr "Expired"
 
@@ -664,9 +664,9 @@ msgstr "Farm"
 #~ msgid "Fetching Instruments"
 #~ msgstr "Fetching Instruments"
 
-#: src/features/open-order/CompletedOrders.tsx:35
-#: src/features/open-order/CompletedOrders.tsx:81
-#: src/features/open-order/OpenOrders.tsx:99
+#: src/features/open-order/CompletedOrders.tsx:40
+#: src/features/open-order/CompletedOrders.tsx:87
+#: src/features/open-order/OpenOrders.tsx:103
 msgid "Filled"
 msgstr "Filled"
 
@@ -1144,7 +1144,7 @@ msgstr "No liquidity found to do swap"
 msgid "No liquidity was found."
 msgstr "No liquidity was found."
 
-#: src/features/open-order/CompletedOrders.tsx:105
+#: src/features/open-order/CompletedOrders.tsx:107
 msgid "No order history"
 msgstr "No order history"
 
@@ -1202,7 +1202,7 @@ msgstr "Oracle"
 msgid "Order Expiration"
 msgstr "Order Expiration"
 
-#: src/features/open-order/CompletedOrders.tsx:19
+#: src/features/open-order/CompletedOrders.tsx:20
 msgid "Order History"
 msgstr "Order History"
 
@@ -1234,8 +1234,8 @@ msgstr "Output will be sent to"
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Output will be sent to <0>{0}</0>"
 
-#: src/features/open-order/CompletedOrders.tsx:31
-#: src/features/open-order/OpenOrders.tsx:60
+#: src/features/open-order/CompletedOrders.tsx:36
+#: src/features/open-order/OpenOrders.tsx:64
 msgid "Pay"
 msgstr "Pay"
 
@@ -1327,8 +1327,8 @@ msgid "Price Updated"
 msgstr "Price Updated"
 
 #: src/features/limit-order/LimitPriceInputPanel.tsx:36
-#: src/features/open-order/CompletedOrders.tsx:33
-#: src/features/open-order/OpenOrders.tsx:62
+#: src/features/open-order/CompletedOrders.tsx:38
+#: src/features/open-order/OpenOrders.tsx:66
 msgid "Rate"
 msgstr "Rate"
 
@@ -1345,8 +1345,8 @@ msgstr "Rates"
 #~ msgid "Read the contract"
 #~ msgstr "Read the contract"
 
-#: src/features/open-order/CompletedOrders.tsx:30
-#: src/features/open-order/OpenOrders.tsx:59
+#: src/features/open-order/CompletedOrders.tsx:35
+#: src/features/open-order/OpenOrders.tsx:63
 msgid "Receive"
 msgstr "Receive"
 

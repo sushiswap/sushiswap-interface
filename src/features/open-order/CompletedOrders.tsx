@@ -6,14 +6,13 @@ import useLimitOrders from '../../hooks/useLimitOrders'
 import Badge from '../../components/Badge'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../animation/loading-circle.json'
-import { JSBI, Percent } from '@sushiswap/sdk'
 import Pagination from './Pagination'
 import { OrderStatus } from 'limitorderv2-sdk'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
   const { completed } = useLimitOrders()
-  console.log(completed)
+
   return (
     <>
       <div className="text-xl text-high-emphesis flex items-center gap-2 border-b border-dark-800 pb-4">
@@ -72,11 +71,7 @@ const CompletedOrders: FC = () => {
                       </div>
                     </div>
                     <div className="hidden md:block text-left font-bold">
-                      <div>
-                        {new Percent(order.limitOrder.amountOut.quotient, order.limitOrder.amountIn.quotient)
-                          .divide(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(0)))
-                          .toSignificant(6)}
-                      </div>
+                      <div>{order.rate}</div>
                       <div className="text-xs text-secondary">
                         {order.tokenOut.symbol} per {order.tokenIn.symbol}
                       </div>

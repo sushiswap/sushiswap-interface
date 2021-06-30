@@ -32,18 +32,20 @@ import CurrencySelect from '../../../features/limit-order/CurrencySelect'
 import Typography from '../../../components/Typography'
 import PayFromToggle from '../../../features/limit-order/PayFromToggle'
 import { ExclamationIcon } from '@heroicons/react/solid'
-import useSWR, { SWRResponse } from 'swr'
-import { LAMBDA_URL } from 'limitorderv2-sdk'
 import { useActiveWeb3React } from '../../../hooks'
+import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
 
-const url = `${LAMBDA_URL}/orders/pairs`
-const fetcher = (url, chainId) =>
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({ chainId }),
-  })
-    .then((r) => r.json())
-    .then((j) => j.data)
+const areEqual = (first, second) => {
+  if (first.length !== second.length) {
+    return false
+  }
+  for (let i = 0; i < first.length; i++) {
+    if (!second.includes(first[i])) {
+      return false
+    }
+  }
+  return true
+}
 
 export default function LimitOrder() {
   const { i18n } = useLingui()
@@ -55,8 +57,7 @@ export default function LimitOrder() {
     useCurrency(loadedUrlParams?.outputCurrencyId),
   ]
 
-  const shouldFetch = url && chainId
-  const { data }: SWRResponse<any, Error> = useSWR(shouldFetch ? [url, chainId] : null, fetcher)
+  const pairs = limitOrderPairList.pairs[chainId].map(([token0, token1]) => [token0.address, token1.address]) || []
 
   // token warning stuff
   const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
@@ -167,45 +168,43 @@ export default function LimitOrder() {
 
   useEffect(() => {
     if (
-      data &&
+      pairs &&
       currencies[Field.INPUT] &&
       currencies[Field.OUTPUT] &&
-      !data.pairs.find(
-        ({ token0, token1 }) =>
-          token0.address === currencies[Field.INPUT].wrapped.address &&
-          token1.address === currencies[Field.OUTPUT].wrapped.address
+      !pairs.find((el) =>
+        areEqual(el, [currencies[Field.INPUT].wrapped.address, currencies[Field.OUTPUT].wrapped.address])
       )
     ) {
       setCurrencyInputPanelError('Invalid pair')
     } else {
       setCurrencyInputPanelError('')
     }
-  }, [currencies, data])
+  }, [currencies, pairs])
 
   const inputTokenList = useMemo(() => {
-    if (!data || !data.pairs || !(data.pairs.length > 0)) return []
-    return data.pairs.reduce((acc, { token0, token1 }) => {
-      acc.push(token0.address)
-      acc.push(token1.address)
+    if (pairs.length === 0) return []
+    return pairs.reduce((acc, [token0, token1]) => {
+      acc.push(token0)
+      acc.push(token1)
       return acc
     }, [])
-  }, [data])
+  }, [pairs])
 
   const outputTokenList = useMemo(() => {
-    if (!data || !data.pairs || !(data.pairs.length > 0)) return []
+    if (pairs.length === 0) return []
     if (currencies[Field.INPUT]) {
-      return data.pairs.reduce((acc, { token0, token1 }) => {
-        if (currencies[Field.INPUT].wrapped.address === token0.address) acc.push(token1.address)
-        if (currencies[Field.INPUT].wrapped.address === token1.address) acc.push(token0.address)
+      return pairs.reduce((acc, [token0, token1]) => {
+        if (currencies[Field.INPUT].wrapped.address === token0) acc.push(token1)
+        if (currencies[Field.INPUT].wrapped.address === token1) acc.push(token0)
         return acc
       }, [])
     }
-    return data.pairs.reduce((acc, { token0, token1 }) => {
-      acc.push(token0.address)
-      acc.push(token1.address)
+    return pairs.reduce((acc, [token0, token1]) => {
+      acc.push(token0)
+      acc.push(token1)
       return acc
     }, [])
-  }, [currencies, data])
+  }, [currencies, pairs])
 
   return (
     <>

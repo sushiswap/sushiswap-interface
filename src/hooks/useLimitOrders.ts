@@ -3,7 +3,7 @@ import useSWR, { SWRResponse } from 'swr'
 import { LAMBDA_URL, LimitOrder, OrderStatus } from 'limitorderv2-sdk'
 import { BigNumber } from 'ethers'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Token } from '@sushiswap/sdk'
+import { JSBI, Percent, Token } from '@sushiswap/sdk'
 import { useAllTokens } from './Tokens'
 
 interface State {
@@ -29,7 +29,10 @@ interface OpenOrder {
   filledPercent: string
   limitOrder: LimitOrder
   status: OrderStatus
+  rate: string
 }
+
+const denominator = (decimals: number = 18) => JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals))
 
 const viewUrl = `${LAMBDA_URL}/orders/view`
 const viewFetcher = (url, account, chainId, pendingPage, page) => {
@@ -98,6 +101,8 @@ const useLimitOrders = () => {
       !account ||
       !chainId ||
       !ordersData ||
+      !ordersData.pendingOrders ||
+      !ordersData.otherOrders ||
       !Array.isArray(ordersData.pendingOrders.orders) ||
       !Array.isArray(ordersData.otherOrders.orders)
     )
@@ -126,6 +131,9 @@ const useLimitOrders = () => {
           ? order.filledAmount.mul(BigNumber.from('100')).div(BigNumber.from(order.amountIn)).toString()
           : '0',
         status: order.status,
+        rate: new Percent(limitOrder.amountIn.quotient, denominator(tokenIn.decimals))
+          .divide(new Percent(limitOrder.amountOut.quotient, denominator(tokenOut.decimals)))
+          .toSignificant(6),
       }
 
       return openOrder as OpenOrder

@@ -89,11 +89,7 @@ const OpenOrders: FC = () => {
                       </div>
                     </div>
                     <div className="text-left font-bold hidden md:block">
-                      <div>
-                        {new Percent(order.limitOrder.amountOut.quotient, order.limitOrder.amountIn.quotient)
-                          .divide(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(0)))
-                          .toSignificant(6)}
-                      </div>
+                      <div>{order.rate}</div>
                       <div className="text-xs text-secondary">
                         {order.tokenOut.symbol} per {order.tokenIn.symbol}
                       </div>
