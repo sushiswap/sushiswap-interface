@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent, Token, WNATIVE } from '@sushiswap/sdk'
-import { fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
+import { binance, fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -137,6 +137,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Login using Torus hosted wallet',
     href: null,
     color: '#315CF5',
+    mobile: true,
+  },
+  Binance: {
+    connector: binance,
+    name: 'Binance',
+    iconName: 'bsc.jpg',
+    description: 'Login using Binance hosted wallet',
+    href: null,
+    color: '#F0B90B',
     mobile: true,
   },
 }
