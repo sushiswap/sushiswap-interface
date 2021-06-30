@@ -8,23 +8,28 @@ import Lottie from 'lottie-react'
 import loadingCircle from '../../animation/loading-circle.json'
 import { JSBI, Percent } from '@sushiswap/sdk'
 import Pagination from './Pagination'
+import { OrderStatus } from 'limitorderv2-sdk'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
   const { completed } = useLimitOrders()
-
+  console.log(completed)
   return (
     <>
       <div className="text-xl text-high-emphesis flex items-center gap-2 border-b border-dark-800 pb-4">
         {i18n._(t`Order History`)}{' '}
         <span className="inline-flex">
           <Badge color="pink" size="medium">
-            {completed.data.length}
+            {completed.totalOrders}
           </Badge>
         </span>
       </div>
       <div className="text-secondary text-center">
-        {completed.data.length > 0 ? (
+        {completed.loading ? (
+          <div className="w-8 m-auto">
+            <Lottie animationData={loadingCircle} autoplay loop />
+          </div>
+        ) : completed.data.length > 0 ? (
           <>
             <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Receive`)}</div>
@@ -40,11 +45,12 @@ const CompletedOrders: FC = () => {
                   key={index}
                   className="block text-high-emphesis bg-dark-800 overflow-hidden rounded"
                   style={{
-                    background: order.filled
-                      ? 'linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231'
-                      : order.isCanceled
-                      ? 'linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231'
-                      : 'linear-gradient(90deg, rgba(255, 56, 56, 0.15) 0%, rgba(255, 56, 56, 0) 50%), #202231',
+                    background:
+                      order.status === OrderStatus.FILLED
+                        ? 'linear-gradient(90deg, rgba(0, 255, 79, 0.075) 0%, rgba(0, 255, 79, 0) 50%), #202231'
+                        : order.status === OrderStatus.CANCELLED
+                        ? 'linear-gradient(90deg, rgba(200, 200, 200, 0.075) 0%, rgba(200, 200, 200, 0) 50%), #202231'
+                        : 'linear-gradient(90deg, rgba(255, 56, 56, 0.15) 0%, rgba(255, 56, 56, 0) 50%), #202231',
                   }}
                 >
                   <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
@@ -77,9 +83,9 @@ const CompletedOrders: FC = () => {
                     </div>
                     <div className="text-right">
                       <div className="mb-1">
-                        {order.filled ? (
+                        {order.status === OrderStatus.FILLED ? (
                           <span className="text-green">{i18n._(t`Filled`)}</span>
-                        ) : order.isCanceled ? (
+                        ) : order.status === OrderStatus.CANCELLED ? (
                           <span className="text-secondary">{i18n._(t`Cancelled`)}</span>
                         ) : (
                           <span className="text-red">{i18n._(t`Expired`)}</span>
@@ -97,10 +103,6 @@ const CompletedOrders: FC = () => {
               pageNeighbours={2}
             />
           </>
-        ) : completed.loading ? (
-          <div className="w-8 m-auto">
-            <Lottie animationData={loadingCircle} autoplay loop />
-          </div>
         ) : (
           <span>{i18n._(t`No order history`)}</span>
         )}

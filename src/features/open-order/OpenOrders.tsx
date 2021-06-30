@@ -48,12 +48,16 @@ const OpenOrders: FC = () => {
         {i18n._(t`Open Orders`)}{' '}
         <span className="inline-flex">
           <Badge color="blue" size="medium">
-            {pending.data.length}
+            {pending.totalOrders}
           </Badge>
         </span>
       </div>
       <div className="text-secondary text-center">
-        {pending.data.length > 0 ? (
+        {pending.loading ? (
+          <div className="w-8 m-auto">
+            <Lottie animationData={loadingCircle} autoplay loop />
+          </div>
+        ) : pending.data.length > 0 ? (
           <>
             <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Receive`)}</div>
@@ -63,7 +67,7 @@ const OpenOrders: FC = () => {
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary justify-end" />
             </div>
-            <div className="flex flex-col-reverse gap-2 md:gap-5">
+            <div className="flex flex-col gap-2 md:gap-5">
               {pending.data.map((order, index) => (
                 <div key={index} className="block text-high-emphesis bg-dark-800 overflow-hidden rounded">
                   <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
@@ -120,10 +124,6 @@ const OpenOrders: FC = () => {
               pageNeighbours={2}
             />
           </>
-        ) : pending.loading ? (
-          <div className="w-8 m-auto">
-            <Lottie animationData={loadingCircle} autoplay loop />
-          </div>
         ) : (
           <span>
             No open limit orders. Why not{' '}

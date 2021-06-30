@@ -12,25 +12,23 @@ interface State {
     maxPages: null
     data: OpenOrder[]
     loading: boolean
+    totalOrders: number
   }
   completed: {
     page: number
     maxPages: null
     data: OpenOrder[]
     loading: boolean
+    totalOrders: number
   }
 }
 
 interface OpenOrder {
   tokenIn: Token
   tokenOut: Token
-  filled: boolean
   filledPercent: string
-  inRaw: string
-  isCanceled: boolean
-  isExpired: boolean
   limitOrder: LimitOrder
-  minOutRaw: string
+  status: OrderStatus
 }
 
 const viewUrl = `${LAMBDA_URL}/orders/view`
@@ -54,12 +52,14 @@ const useLimitOrders = () => {
       maxPages: null,
       data: [],
       loading: true,
+      totalOrders: 0,
     },
     completed: {
       page: 1,
       maxPages: null,
       data: [],
       loading: true,
+      totalOrders: 0,
     },
   })
 
@@ -111,18 +111,6 @@ const useLimitOrders = () => {
         tokenOutDecimals: +order.tokenOutDecimals || 18,
       })
 
-      let filledPercent = '0'
-      let isCanceled
-      if (order.status === OrderStatus.FILLED) {
-        isCanceled = false
-      } else if (order.status === OrderStatus.PENDING) {
-        const filledAmount = await limitOrderContract.orderStatus(order.orderTypeHash)
-        filledPercent = filledAmount.mul(BigNumber.from('100')).div(BigNumber.from(order.amountIn)).toString()
-        isCanceled = await limitOrderContract.cancelledOrder(account, order.orderTypeHash)
-      } else {
-        isCanceled = true
-      }
-
       const tokenIn = limitOrder.amountIn.currency
       const tokenOut = limitOrder.amountOut.currency
 
@@ -134,34 +122,18 @@ const useLimitOrders = () => {
           tokens[tokenOut.address] ||
           new Token(chainId, tokenOut.address.toLowerCase(), tokenOut.decimals, tokenOut.symbol),
         limitOrder,
-        filledPercent,
-        isCanceled,
-        isExpired: Number(limitOrder.endTime) < Math.floor(Date.now() / 1000),
-        filled: order.status === OrderStatus.FILLED,
-        inRaw: limitOrder.amountInRaw,
-        minOutRaw: limitOrder.amountOutRaw,
+        filledPercent: order.filledAmount
+          ? order.filledAmount.mul(BigNumber.from('100')).div(BigNumber.from(order.amountIn)).toString()
+          : '0',
+        status: order.status,
       }
 
       return openOrder as OpenOrder
     }
 
     ;(async () => {
-      const orders = await Promise.all<OpenOrder>(
-        [...ordersData.pendingOrders.orders, ...ordersData.otherOrders.orders].map((el) => transform(el))
-      )
-
-      const [openOrders, completedOrders] = orders.reduce(
-        (acc, cur) => {
-          if (cur.filled || cur.isCanceled || cur.isExpired) {
-            acc[1].push(cur)
-          } else {
-            acc[0].push(cur)
-          }
-
-          return acc
-        },
-        [[], []]
-      )
+      const openOrders = await Promise.all<OpenOrder>(ordersData.pendingOrders.orders.map((el) => transform(el)))
+      const completedOrders = await Promise.all<OpenOrder>(ordersData.otherOrders.orders.map((el) => transform(el)))
 
       setState((prevState) => ({
         pending: {
@@ -169,12 +141,14 @@ const useLimitOrders = () => {
           data: openOrders,
           maxPages: ordersData.pendingOrders.pendingOrderMaxPage,
           loading: false,
+          totalOrders: ordersData.pendingOrders.totalPendingOrders,
         },
         completed: {
           ...prevState.completed,
           data: completedOrders,
           maxPages: ordersData.otherOrders.maxPage,
           loading: false,
+          totalOrders: ordersData.otherOrders.totalOrders,
         },
       }))
     })()
