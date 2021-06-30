@@ -118,7 +118,7 @@ export default function Remove() {
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) throw new Error('missing liquidity amount')
 
-    if (gatherPermitSignature) {
+    if (chainId !== ChainId.HARMONY && gatherPermitSignature) {
       try {
         await gatherPermitSignature()
       } catch (error) {
