@@ -132,22 +132,22 @@ export default function Farm(): JSX.Element {
             {
               token: 'ALCX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
-              rewardPerBlock: 0.217544236043011,
-              rewardPerDay: 0.217544236043011 * blocksPerDay,
+              rewardPerBlock: 0.207612642693047,
+              rewardPerDay: 0.207612642693047 * blocksPerDay,
               rewardPrice: alcxPrice,
             },
             {
               token: 'CVX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-              rewardPerBlock: 0.08336413675376289 * averageBlockTime,
-              rewardPerDay: 0.08336413675376289 * averageBlockTime * blocksPerDay,
+              rewardPerBlock: 0.08484991277247728 * averageBlockTime,
+              rewardPerDay: 0.08484991277247728 * averageBlockTime * blocksPerDay,
               rewardPrice: cvxPrice,
             },
             {
               token: 'CVX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-              rewardPerBlock: 0.125 * averageBlockTime,
-              rewardPerDay: 0.125 * averageBlockTime * blocksPerDay,
+              rewardPerBlock: 0.12729989473284398 * averageBlockTime,
+              rewardPerDay: 0.12729989473284398 * averageBlockTime * blocksPerDay,
               rewardPrice: cvxPrice,
             },
           ]
