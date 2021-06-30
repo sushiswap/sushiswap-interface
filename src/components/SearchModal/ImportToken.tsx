@@ -15,17 +15,11 @@ import Typography from '../Typography'
 import { getExplorerLink } from '../../functions/explorer'
 import { shortenAddress } from '../../functions'
 import styled from 'styled-components'
-import { t } from '@lingui/macro'
+import { t, plural } from '@lingui/macro'
 import { transparentize } from 'polished'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAddUserToken } from '../../state/user/hooks'
 import { useLingui } from '@lingui/react'
-
-const WarningWrapper = styled(Card)<{ highWarning: boolean }>`
-  // background-color: ${({ theme, highWarning }) =>
-    highWarning ? transparentize(0.8, theme.red1) : transparentize(0.8, theme.yellow2)};
-  width: fit-content;
-`
 
 interface ImportProps {
   tokens: Token[]
@@ -42,15 +36,19 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
   const addToken = useAddUserToken()
   return (
     <div className="relative w-full space-y-3 overflow-auto">
-      <ModalHeader onBack={onBack} onClose={onDismiss} title={`Import ${tokens.length > 1 ? 'Tokens' : 'Token'}`} />
+      <ModalHeader
+        onBack={onBack}
+        onClose={onDismiss}
+        title={`Import ${plural(tokens.length, { one: 'Token', many: 'Tokens' })}`}
+      />
       <Typography className="text-center">
         {i18n._(
-          t`This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade.`
+          t`This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade.`
         )}
       </Typography>
       {tokens.map((token) => {
         return (
-          <div key={'import' + token.address} className=".token-warning-container bg-dark-800 rounded p-5">
+          <div key={'import' + token.address} className=".token-warning-container rounded p-5">
             <AutoColumn gap="10px" justify="center">
               <CurrencyLogo currency={token} size={'32px'} />
               <AutoColumn gap="4px" justify="center">
@@ -68,12 +66,12 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
                   <div className="ml-2 text-sm text-secondary">via {list.name}</div>
                 </RowFixed>
               ) : (
-                <WarningWrapper borderRadius="4px" padding="4px" highWarning={true}>
-                  <RowFixed>
-                    <AlertTriangle className="stroke-current text-red" size="10px" />
+                <div>
+                  <RowFixed align="center">
+                    <AlertTriangle className="stroke-current text-red" size={24} />
                     <div className="ml-1 text-xs font-semibold text-red">Unknown Source</div>
                   </RowFixed>
-                </WarningWrapper>
+                </div>
               )}
             </AutoColumn>
           </div>
