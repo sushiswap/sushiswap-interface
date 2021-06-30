@@ -1,6 +1,7 @@
 import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHours } from 'date-fns'
 
 import { ChainId } from '@sushiswap/sdk'
+import { GRAPH_HOST } from '../constants'
 import { blocksQuery } from '../queries'
 import { request } from 'graphql-request'
 
@@ -10,10 +11,14 @@ export const BLOCKS = {
   [ChainId.MATIC]: 'matthewlilley/polygon-blocks',
   [ChainId.FANTOM]: 'matthewlilley/fantom-blocks',
   [ChainId.BSC]: 'matthewlilley/bsc-blocks',
+  [ChainId.HARMONY]: 'sushiswap/harmony-blocks',
 }
 
+export const fetcher = async (chainId = ChainId.MAINNET, query, variables) =>
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
+
 export const getBlocks = async (chainId = ChainId.MAINNET, start, end) => {
-  const { blocks } = await request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, {
+  const { blocks } = await fetcher(chainId, blocksQuery, {
     start,
     end,
   })
@@ -24,7 +29,7 @@ export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
   const date = startOfMinute(subDays(Date.now(), 1))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-  return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+  return fetcher(chainId, blocksQuery, { start, end })
 }
 
 // Grabs the last 1000 (a sample statistical) blocks and averages
