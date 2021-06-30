@@ -24,8 +24,8 @@ export default function ExchangeHeader({
   output,
   allowedSlippage,
 }: {
-  input: any
-  output: any
+  input?: any
+  output?: any
   allowedSlippage: Percent
 }) {
   const { i18n } = useLingui()
@@ -37,6 +37,9 @@ export default function ExchangeHeader({
       <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
         <NavLink
           activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent md:border-gradient-r-blue-pink-dark-800"
+          // href={`/swap?inputCurrency=${encodeURIComponent(input.address || 'ETH')}&outputCurrency=${encodeURIComponent(
+          //   output?.address
+          // )}`}
           href={{
             pathname: '/swap',
             query: getQuery(input, output),

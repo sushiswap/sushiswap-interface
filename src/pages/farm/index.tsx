@@ -274,7 +274,7 @@ export default function Farm(): JSX.Element {
     '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
   }
 
-  const filtered = type ? result?.filter(filters[type]) : result
+  const filtered = !type || type === 'all' ? result : result?.filter(filters[type])
 
   return (
     <>
