@@ -317,7 +317,7 @@ function AppBar(): JSX.Element {
                   </a>
                 </Link>
 
-                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                {chainId && [ChainId.MAINNET, ChainId.MATIC, ChainId.HARMONY, ChainId.XDAI].includes(chainId) && (
                   <Link href={'/farm'}>
                     <a
                       id={`farm-nav-link`}
