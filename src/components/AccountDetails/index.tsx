@@ -1,6 +1,6 @@
-import React, { useCallback, useContext } from 'react'
-import { fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
-import styled, { ThemeContext } from 'styled-components'
+import React, { useCallback } from 'react'
+import { fortmatic, injected, portis, torus, walletconnect, binance, walletlink } from '../../connectors'
+import styled from 'styled-components'
 
 import { AppDispatch } from '../../state'
 import Button from '../Button'
@@ -16,17 +16,6 @@ import { getExplorerLink } from '../../functions/explorer'
 import { shortenAddress } from '../../functions/format'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
-
-const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
-  font-size: 0.825rem;
-  // color: ${({ theme }) => theme.text3};
-  margin-left: 1rem;
-  font-size: 0.825rem;
-  display: flex;
-  :hover {
-    // color: ${({ theme }) => theme.text2};
-  }
-`
 
 const IconWrapper = styled.div<{ size?: number }>`
   display: flex;
@@ -71,7 +60,6 @@ export default function AccountDetails({
   openOptions,
 }: AccountDetailsProps): any {
   const { chainId, account, connector } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
   const dispatch = useDispatch<AppDispatch>()
 
   function formatConnectorName() {
@@ -88,7 +76,8 @@ export default function AccountDetails({
 
   function getStatusIcon() {
     if (connector === injected) {
-      return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
+      return null
+      // return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
     } else if (connector === walletconnect) {
       return (
         <IconWrapper size={16}>
@@ -143,8 +132,8 @@ export default function AccountDetails({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             {formatConnectorName()}
-            <div className="space-x-3">
-              {connector !== injected && connector !== walletlink && (
+            <div className="flex space-x-3">
+              {connector !== injected && connector !== walletlink && connector !== binance && (
                 <Button
                   variant="filled"
                   color="gray"
@@ -171,12 +160,12 @@ export default function AccountDetails({
           <div id="web3-account-identifier-row" className="flex flex-col justify-center space-y-3">
             {ENSName ? (
               <>
-                {/* {getStatusIcon()} */}
+                {getStatusIcon()}
                 <p className=" text-primary"> {ENSName}</p>
               </>
             ) : (
               <>
-                {/* {getStatusIcon()} */}
+                {getStatusIcon()}
                 <p className="text-primary"> {account && shortenAddress(account)}</p>
               </>
             )}
