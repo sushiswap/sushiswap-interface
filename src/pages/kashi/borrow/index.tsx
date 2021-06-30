@@ -93,7 +93,7 @@ function Borrow() {
                 {positions.items.map((pair: any) => {
                   return (
                     <div key={pair.address}>
-                      <Link href={'/bento/kashi/borrow/' + pair.address}>
+                      <Link href={'/borrow/' + pair.address}>
                         <a className="block text-high-emphesis">
                           <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                             <div className="hidden space-x-2 md:flex">
