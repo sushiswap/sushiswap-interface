@@ -43,7 +43,6 @@ export default function useMasterChef(chef: Chef) {
         if (chef === Chef.MASTERCHEF) {
           tx = await contract?.withdraw(pid, amount)
         } else {
-          console.log({ pid, amount, account })
           tx = await contract?.withdraw(pid, amount, account)
         }
 

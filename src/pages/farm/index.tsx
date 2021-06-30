@@ -48,7 +48,7 @@ export default function Farm(): JSX.Element {
     },
   })
 
-  console.log({ pairAddresses, swapPairs })
+  // console.log({ pairAddresses, swapPairs })
 
   const farms = useFarms()
 
