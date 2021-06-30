@@ -147,7 +147,7 @@ export default function AccountDetails({
               {connector !== injected && connector !== walletlink && (
                 <Button
                   variant="filled"
-                  color="pink"
+                  color="gray"
                   size="xs"
                   onClick={() => {
                     ;(connector as any).close()
@@ -158,7 +158,7 @@ export default function AccountDetails({
               )}
               <Button
                 variant="filled"
-                color="blue"
+                color="gray"
                 size="xs"
                 onClick={() => {
                   openOptions()
@@ -224,7 +224,7 @@ export default function AccountDetails({
           <div className="flex items-center justify-between">
             <div>Recent Transactions</div>
             <div>
-              <Button variant="filled" color="blue" size="xs" onClick={clearAllTransactionsCallback}>
+              <Button variant="filled" color="gray" size="xs" onClick={clearAllTransactionsCallback}>
                 Clear all
               </Button>
             </div>
