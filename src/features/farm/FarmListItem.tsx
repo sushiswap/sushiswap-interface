@@ -11,7 +11,6 @@ const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
-  console.log({ rewards: farm?.rewards })
   return (
     <Disclosure {...rest}>
       {({ open }) => (

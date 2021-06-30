@@ -133,22 +133,22 @@ export default function Farm(): JSX.Element {
             {
               token: 'ALCX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
-              rewardPerBlock: 0.207612642693047,
-              rewardPerDay: 0.207612642693047 * blocksPerDay,
+              rewardPerBlock: pool.rewarder.rewardPerBlock / 1e18,
+              rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * blocksPerDay,
               rewardPrice: alcxPrice,
             },
             {
               token: 'CVX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-              rewardPerBlock: 0.08484991277247728 * averageBlockTime,
-              rewardPerDay: 0.08484991277247728 * averageBlockTime * blocksPerDay,
+              rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
+              rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
               rewardPrice: cvxPrice,
             },
             {
               token: 'CVX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-              rewardPerBlock: 0.12729989473284398 * averageBlockTime,
-              rewardPerDay: 0.12729989473284398 * averageBlockTime * blocksPerDay,
+              rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
+              rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
               rewardPrice: cvxPrice,
             },
           ]
@@ -159,8 +159,6 @@ export default function Farm(): JSX.Element {
           const sushiPerBlock = sushiPerSecond * averageBlockTime
           const sushiPerDay = sushiPerBlock * blocksPerDay
           const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
-
-          console.log({ pool })
 
           const rewardPerBlock = rewardPerSecond * averageBlockTime
           const rewardPerDay = rewardPerBlock * blocksPerDay
@@ -278,8 +276,6 @@ export default function Farm(): JSX.Element {
   }
 
   const filtered = !type || type === 'all' ? result : result?.filter(filters[type])
-
-  console.log({ data })
 
   return (
     <>
