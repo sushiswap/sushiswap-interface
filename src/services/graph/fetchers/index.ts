@@ -44,7 +44,7 @@ export const masterChefV1 = async (query, chainId = ChainId.MAINNET) =>
 
 export const getMasterChefV1TotalAllocPoint = async () => {
   const { masterChef } = await masterChefV1(masterChefV1TotalAllocPointQuery)
-  return masterChef?.totalAllocPoint
+  return masterChef?.totalAllocPoint / 1e18
 }
 
 export const getMasterChefV1SushiPerBlock = async () => {
