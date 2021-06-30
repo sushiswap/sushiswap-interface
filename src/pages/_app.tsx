@@ -29,26 +29,11 @@ import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-// const plurals: Record<string, Function> = require('make-plural/plurals');
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
-
-function Updaters() {
-  return (
-    <>
-      <ListsUpdater />
-      <UserUpdater />
-      <ApplicationUpdater />
-      <TransactionUpdater />
-      <MulticallUpdater />
-    </>
-  )
-}
-
-const NOOP = ({ children }) => children
 
 function MyApp({
   Component,
@@ -113,7 +98,13 @@ function MyApp({
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
-                <Updaters />
+                <>
+                  <ListsUpdater />
+                  <UserUpdater />
+                  <ApplicationUpdater />
+                  <TransactionUpdater />
+                  <MulticallUpdater />
+                </>
                 <Provider>
                   <Layout>
                     <Component {...pageProps} />
