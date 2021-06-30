@@ -34,7 +34,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
   const liquidityToken = new Token(
     chainId,
     getAddress(farm.pair.id),
-    farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : farm.pair.decimals,
+    farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
     farm.pair.symbol,
     farm.pair.name
   )
@@ -44,6 +44,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
 
   // TODO: Replace these
   const amount = useUserInfo(farm, liquidityToken)
+
   const pendingSushi = usePendingSushi(farm)
 
   const reward = usePendingReward(farm)
@@ -142,7 +143,9 @@ const FarmListItem = ({ farm, open, ...rest }) => {
               <NumericalInput
                 className="w-full p-3 pr-20 rounded bg-dark-700 focus:ring focus:ring-pink"
                 value={withdrawValue}
-                onUserInput={setWithdrawValue}
+                onUserInput={(value) => {
+                  setWithdrawValue(value)
+                }}
               />
               {account && (
                 <Button
