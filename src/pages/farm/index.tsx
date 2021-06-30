@@ -78,7 +78,7 @@ export default function Farm(): JSX.Element {
       // !POOL_DENY.includes(pool.id) &&
       return (
         pool.allocPoint !== '0' &&
-        pool.accSushiPerShare !== '0' &&
+        // pool.accSushiPerShare !== '0' &&
         ((swapPairs && swapPairs.find((pair) => pair.id === pool.pair)) ||
           (kashiPairs && kashiPairs.find((pair) => pair.id === pool.pair)))
       )
@@ -159,6 +159,8 @@ export default function Farm(): JSX.Element {
           const sushiPerBlock = sushiPerSecond * averageBlockTime
           const sushiPerDay = sushiPerBlock * blocksPerDay
           const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
+
+          console.log({ pool })
 
           const rewardPerBlock = rewardPerSecond * averageBlockTime
           const rewardPerDay = rewardPerBlock * blocksPerDay
@@ -277,6 +279,8 @@ export default function Farm(): JSX.Element {
 
   const filtered = !type || type === 'all' ? result : result?.filter(filters[type])
 
+  console.log({ data })
+
   return (
     <>
       <Head>
@@ -284,15 +288,10 @@ export default function Farm(): JSX.Element {
         <meta name="description" content="Farm SUSHI" />
       </Head>
       <Container maxWidth="full" className="grid h-full grid-cols-4 mx-auto gap-9">
-        <div
-          className={classNames('sticky top-0 hidden', chainId === ChainId.MAINNET && 'lg:block md:col-span-1')}
-          style={{ maxHeight: '40rem' }}
-        >
+        <div className={classNames('sticky top-0 hidden lg:block md:col-span-1')} style={{ maxHeight: '40rem' }}>
           <Menu positionsLength={positions.length} />
         </div>
-        <div
-          className={classNames('space-y-6 ', chainId === ChainId.MAINNET ? 'col-span-4 lg:col-span-3' : 'col-span-4')}
-        >
+        <div className={classNames('space-y-6 col-span-4 lg:col-span-3')}>
           <Search
             search={search}
             term={term}
