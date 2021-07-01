@@ -1,7 +1,7 @@
 import { ChainId, Currency } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import Logo from '../assets/images/logo.png'
+import Logo from '../assets/images/ninja-logo.png'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useETHBalances } from '../state/wallet/hooks'
 import { ReactComponent as Burger } from '../assets/images/burger.svg'
@@ -51,7 +51,7 @@ function AppBar(): JSX.Element {
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
                                             <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                                {i18n._(t`Swap`)}
+                                                {i18n._(t`Trade`)}
                                             </NavLink>
                                             <NavLink
                                                 id={`pool-nav-link`}
@@ -249,31 +249,25 @@ function AppBar(): JSX.Element {
                                             library &&
                                             library.provider.isMetaMask && (
                                                 <>
-                                                    <QuestionHelper text={i18n._(t`Add Sushi to your Metamask wallet`)}>
+                                                    <QuestionHelper text={i18n._(t`Add ROS to your Metamask wallet`)}>
                                                         <div
                                                             className="hidden sm:inline-block rounded-md bg-dark-900 hover:bg-dark-800 cursor-pointer"
                                                             onClick={() => {
                                                                 let address: string | undefined
                                                                 switch (chainId) {
-                                                                    case ChainId.MAINNET:
-                                                                        address =
-                                                                            '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
-                                                                        break
+                                                                   
                                                                     case ChainId.BSC:
                                                                         address =
-                                                                            '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
+                                                                            '0x7D7D2c3d2B2FAD2D3d68eb66510fF3f3c44dbA78'
                                                                         break
-                                                                    case ChainId.MATIC:
-                                                                        address =
-                                                                            '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
-                                                                        break
+                                                                    
                                                                 }
                                                                 const params: any = {
-                                                                    type: 'ERC20',
+                                                                    type: 'BEP20',
                                                                     options: {
                                                                         address: address,
-                                                                        symbol: 'SUSHI',
-                                                                        decimals: 18,
+                                                                        symbol: 'ROS',
+                                                                        decimals: 9,
                                                                         image:
                                                                             'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
                                                                     }
@@ -292,7 +286,7 @@ function AppBar(): JSX.Element {
                                                                         .then(success => {
                                                                             if (success) {
                                                                                 console.log(
-                                                                                    'Successfully added SUSHI to MetaMask'
+                                                                                    'Successfully added ROS to MetaMask'
                                                                                 )
                                                                             } else {
                                                                                 throw new Error('Something went wrong.')
@@ -303,7 +297,7 @@ function AppBar(): JSX.Element {
                                                             }}
                                                         >
                                                             <img
-                                                                src={`${process.env.PUBLIC_URL}/images/tokens/sushi-square.jpg`}
+                                                                src={`${process.env.PUBLIC_URL}/images/tokens/shinobi-square.jpg`}
                                                                 alt="Switch Network"
                                                                 style={{
                                                                     minWidth: 36,
