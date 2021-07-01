@@ -114,7 +114,7 @@ function AppBar(): JSX.Element {
                                                         id={`analytics-nav-link`}
                                                         href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                                     >
-                                                        {i18n._(t`Analytics`)}
+                                                        {i18n._(t``)}
                                                     </ExternalLink>
                                                 )}
                                         </div>
