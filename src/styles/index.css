@@ -35,7 +35,7 @@ input:focus {
   width: 25px;
   height: 25px;
   border-radius: 25px;
-  background: #FA52A0;
+  background: rgb(248, 2, 2);
   cursor: pointer;
 }
 
@@ -43,6 +43,6 @@ input:focus {
   width: 25px;
   height: 25px;
   border-radius: 25px;
-  background: #FA52A0;
+  background: rgb(245, 48, 42);
   cursor: pointer;
 }
