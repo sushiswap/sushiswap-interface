@@ -81,7 +81,7 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                                        {i18n._(t`DUdz`)}
+                                                        {i18n._(t`Lend`)}
                                                     </NavLink>
                                                 )}
                                             {chainId &&

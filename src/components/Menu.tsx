@@ -10,29 +10,29 @@ import { useLingui } from '@lingui/react'
 
 const items = (i18n: I18n) => [
     {
-        name: i18n._(t`Docs`),
-        description: i18n._(t`Documentation for users of Sushi.`),
-        href: 'https://docs.sushi.com'
+        name: i18n._(t`Whitepaper`),
+        description: i18n._(t`Documentation for community of ROS.`),
+        href: 'https://riseofshinobi.net/wp-content/uploads/2021/06/Rise-of-Shinobi-Whitepaper.pdf'
     },
     {
-        name: i18n._(t`Dev`),
-        description: i18n._(t`Documentation for developers of Sushi.`),
-        href: 'https://dev.sushi.com'
+        name: i18n._(t`Telegram`),
+        description: i18n._(t`Community for Shinobi.`),
+        href: 'https://t.me/riseofshinobi'
     },
     {
-        name: i18n._(t`Open Source`),
-        description: i18n._(t`Sushi is a supporter of Open Source.`),
-        href: 'https://github.com/sushiswap'
+        name: i18n._(t`Twitter`),
+        description: i18n._(t`Offical Twitter for ROS`),
+        href: 'https://twitter.com/riseofshinobi'
     },
     {
-        name: i18n._(t`Tools`),
-        description: i18n._(t`Tools to optimize your workflow.`),
-        href: '/tools'
+        name: i18n._(t`Medium`),
+        description: i18n._(t`Updates and news for Rise of Shinobi`),
+        href: 'https://riseofshinobi.medium.com'
     },
     {
-        name: i18n._(t`Discord`),
-        description: i18n._(t`Join the community on Discord.`),
-        href: 'https://discord.gg/NVPXN4e'
+        name: i18n._(t`CLAIM ARDROP`),
+        description: i18n._(t`Claim 1,000,000 ROS Tokens`),
+        href: 'https://docs.google.com/forms/d/e/1FAIpQLSeNnQu6rGVsx6sArowdWwc0EpGv4BKQkx7iTb-GlEyfmmL2ag/viewform'
     }
 ]
 
