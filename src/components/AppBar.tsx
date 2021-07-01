@@ -51,7 +51,7 @@ function AppBar(): JSX.Element {
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
                                             <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                                {i18n._(t`Trade`)}
+                                                {i18n._(t`Shinobi Exchange`)}
                                             </NavLink>
                                             <NavLink
                                                 id={`pool-nav-link`}
@@ -64,16 +64,16 @@ function AppBar(): JSX.Element {
                                                     pathname.startsWith('/find')
                                                 }
                                             >
-                                                {i18n._(t`Pool`)}
+                                                {i18n._(t``)}
                                             </NavLink>
                                             {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                                    {i18n._(t`Yield`)}
+                                                    {i18n._(t``)}
                                                 </NavLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`sushibar-nav-link`} to={'/sushibar'}>
-                                                    {i18n._(t`SushiBar`)}
+                                                    {i18n._(t``)}
                                                 </NavLink>
                                             )}
                                             {chainId &&
@@ -81,7 +81,7 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                                        {i18n._(t`Lend`)}
+                                                        {i18n._(t``)}
                                                     </NavLink>
                                                 )}
                                             {chainId &&
@@ -89,17 +89,17 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        {i18n._(t`BentoBox`)}
+                                                        {i18n._(t``)}
                                                     </NavLink>
                                                 )}
                                             {chainId === ChainId.MAINNET && (
                                                 <ExternalLink id={`stake-nav-link`} href={'https://miso.sushi.com'}>
-                                                    {i18n._(t`Miso`)}
+                                                    {i18n._(t``)}
                                                 </ExternalLink>
                                             )}
                                             {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                                    {i18n._(t`Vesting`)}
+                                                    {i18n._(t``)}
                                                 </NavLink>
                                             )}
                                             {chainId &&
