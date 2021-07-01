@@ -1,5 +1,5 @@
 import { useAlcxRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
@@ -36,11 +36,15 @@ const usePending = (farm) => {
 
   const complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
 
-  const contract = {
-    [ChainId.MAINNET]: aclxRewarder,
-    [ChainId.MATIC]: complexRewarder,
-    [ChainId.XDAI]: complexRewarder,
-  }
+  const contract = useMemo(
+    () => ({
+      [ChainId.MAINNET]: aclxRewarder,
+      [ChainId.MATIC]: complexRewarder,
+      [ChainId.XDAI]: complexRewarder,
+      [ChainId.HARMONY]: complexRewarder,
+    }),
+    [complexRewarder, aclxRewarder]
+  )
 
   useEffect(() => {
     async function fetchPendingReward() {
@@ -65,7 +69,7 @@ const usePending = (farm) => {
     ) {
       fetchPendingReward()
     }
-  }, [account, currentBlockNumber, aclxRewarder, complexRewarder, farm, library])
+  }, [account, currentBlockNumber, aclxRewarder, complexRewarder, farm, library, contract, chainId])
 
   return balance
 }

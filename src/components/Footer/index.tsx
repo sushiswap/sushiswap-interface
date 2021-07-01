@@ -13,7 +13,7 @@ const Footer = () => {
     // <footer className="absolute bottom-0 flex items-center justify-between w-screen h-20 p-4 mx-auto text-center text-low-emphesis">
     <footer className="flex-shrink-0">
       <div className="flex items-center justify-between w-screen h-20 px-4">
-        {chainId && [ChainId.MAINNET, ChainId.BSC, ChainId.XDAI, ChainId.FANTOM, ChainId.MATIC].includes(chainId) && (
+        {chainId && chainId in ANALYTICS_URL && (
           <ExternalLink
             id={`analytics-nav-link`}
             href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
@@ -40,6 +40,15 @@ const Footer = () => {
             className="text-low-emphesis"
           >
             {i18n._(t`Matic Bridge`)}
+          </ExternalLink>
+        )}
+        {chainId && chainId === ChainId.HARMONY && (
+          <ExternalLink
+            id={`harmony-bridge-link`}
+            href=" https://bridge.harmony.one/tokens"
+            className="text-low-emphesis"
+          >
+            {i18n._(t`Harmony Bridge`)}
           </ExternalLink>
         )}
         <Polling />

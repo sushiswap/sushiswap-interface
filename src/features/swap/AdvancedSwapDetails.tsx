@@ -28,7 +28,9 @@ export function AdvancedSwapDetails({ trade, allowedSlippage, minerBribe }: Adva
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
     const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
+
     const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
+
     return { priceImpact, realizedLPFee }
   }, [trade])
 
@@ -79,7 +81,21 @@ export function AdvancedSwapDetails({ trade, allowedSlippage, minerBribe }: Adva
           />
         </RowFixed>
         <div className="text-sm font-bold text-high-emphesis">
-          {realizedLPFee ? `${realizedLPFee.toSignificant(4)} ${realizedLPFee.currency.symbol}` : '-'}
+          {realizedLPFee
+            ? `${realizedLPFee.divide(6).multiply(5).toSignificant(4)} ${realizedLPFee.currency.symbol}`
+            : '-'}
+        </div>
+      </RowBetween>
+
+      <RowBetween>
+        <RowFixed>
+          <div className="text-sm text-secondary">{i18n._(t`xSUSHI Fee`)}</div>
+          <QuestionHelper
+            text={i18n._(t`A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive.`)}
+          />
+        </RowFixed>
+        <div className="text-sm font-bold text-high-emphesis">
+          {realizedLPFee ? `${realizedLPFee.divide(6).toSignificant(4)} ${realizedLPFee.currency.symbol}` : '-'}
         </div>
       </RowBetween>
 
@@ -95,7 +111,7 @@ export function AdvancedSwapDetails({ trade, allowedSlippage, minerBribe }: Adva
         <RowBetween>
           <RowFixed>
             <div className="text-sm text-secondary">{i18n._(t`Miner Tip`)}</div>
-            <QuestionHelper text={i18n._(t`Slippage tolerance...`)} />
+            <QuestionHelper text={i18n._(t`Tip to encourage miners to select this transaction.`)} />
           </RowFixed>
           <div className="text-sm font-bold text-high-emphesis">
             {CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), minerBribe).toFixed(4)} ETH

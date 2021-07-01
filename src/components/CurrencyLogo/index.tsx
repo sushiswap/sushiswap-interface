@@ -1,26 +1,10 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
-import React, { FC, useMemo } from 'react'
+import React, { FunctionComponent, useMemo } from 'react'
 
-import Image from '../Image'
 import Logo from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { classNames } from '../../functions'
-import { cloudinaryLoader } from '../../functions/cloudinary'
 import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useHttpLocations from '../../hooks/useHttpLocations'
-
-const AvalancheLogo = '/images/tokens/avax-sqaure.jpg'
-const BinanceCoinLogo = '/images/tokens/bnb-square.jpg'
-const EthereumLogo = '/images/tokens/eth-square.jpg'
-const FantomLogo = '/images/tokens/ftm-square.jpg'
-const HarmonyLogo = '/images/native-tokens/one.png'
-const HecoLogo = '/images/tokens/heco-square.jpg'
-const MaticLogo = '/images/tokens/polygon-square.jpg'
-const MoonbeamLogo = '/images/tokens/eth-square.jpg'
-const OKExLogo = '/images/native-tokens/okt.png'
-const xDaiLogo = '/images/native-tokens/xdai.png'
-const CeloLogo = '/images/tokens/celo-square.jpg'
 
 export const getTokenLogoURL = (address: string, chainId: ChainId) => {
   let imageURL
@@ -30,11 +14,55 @@ export const getTokenLogoURL = (address: string, chainId: ChainId) => {
     imageURL = `https://v1exchange.pancakeswap.finance/images/coins/${address}.png`
   } else if (chainId === ChainId.MATIC) {
     imageURL = getMaticTokenLogoURL(address)
-  } else {
-    imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
   }
   return imageURL
 }
+
+const BLOCKCHAIN = {
+  [ChainId.MAINNET]: 'ethereum',
+}
+
+function getCurrencySymbol(currency) {
+  if (currency.symbol === 'WBTC') {
+    return 'btc'
+  }
+  if (currency.symbol === 'WETH') {
+    return 'eth'
+  }
+  return currency.symbol.toLowerCase()
+}
+
+function getCurrencyLogoUrls(currency) {
+  const urls = []
+
+  if (currency.chainId === ChainId.MAINNET) {
+    urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
+    urls.push(
+      `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
+        currency.address
+      }/logo.png`
+    )
+    urls.push(
+      `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
+        currency.address
+      }/logo.png`
+    )
+  }
+
+  return urls
+}
+
+const AvalancheLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/avax.jpg'
+const BinanceCoinLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/bnb.jpg'
+const EthereumLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
+const FantomLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/ftm.jpg'
+const HarmonyLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg'
+const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/heco.jpg'
+const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg'
+const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
+const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.png'
+const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/xdai.png'
+const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
 
 const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: EthereumLogo,
@@ -67,49 +95,38 @@ interface CurrencyLogoProps {
   squared?: boolean
 }
 
-const unknown = '/images/tokens/unknown.png'
+const unknown = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'
 
-const CurrencyLogo: FC<CurrencyLogoProps> = ({ currency, size = '24px', style, className = '', squared = true }) => {
-  const { chainId } = useActiveWeb3React()
-  const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
+const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
+  currency,
+  size = '24px',
+  style,
+  className = '',
+  ...rest
+}) => {
+  const uriLocations = useHttpLocations(
+    currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
+  )
 
-  const srcs: string[] = useMemo(() => {
-    if (!currency || currency.isNative) return []
+  const srcs = useMemo(() => {
+    if (!currency) {
+      return [unknown]
+    }
+
+    if (currency.isNative || currency.equals(WNATIVE[currency.chainId])) {
+      return [logo[currency.chainId], unknown]
+    }
 
     if (currency.isToken) {
-      const defaultUrls = currency.chainId === 1 ? [getTokenLogoURL(currency.address, 1), unknown] : [unknown]
+      const defaultUrls = [...getCurrencyLogoUrls(currency)]
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, ...defaultUrls]
+        return [...uriLocations, ...defaultUrls, unknown]
       }
       return defaultUrls
     }
-    return [unknown]
   }, [currency, uriLocations])
 
-  if (currency?.isNative || currency === WNATIVE[chainId]) {
-    return (
-      <Image
-        width={size}
-        height={size}
-        alt={currency?.symbol}
-        className={classNames('rounded', className)}
-        src={logo[chainId] || `/images/tokens/unknown.png`}
-        layout="fixed"
-      />
-    )
-  }
-
-  return (
-    <Logo
-      width={size}
-      height={size}
-      alt={currency?.symbol}
-      className={classNames('rounded', className)}
-      // loader={cloudinaryLoader}
-      srcs={srcs}
-      // style={style}
-    />
-  )
+  return <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} {...rest} />
 }
 
 export default CurrencyLogo

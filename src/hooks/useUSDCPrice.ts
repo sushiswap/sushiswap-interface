@@ -32,6 +32,7 @@ const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
   [ChainId.HECO]: CurrencyAmount.fromRawAmount(USDC[ChainId.HECO], 100_000e6),
   [ChainId.OKEX]: CurrencyAmount.fromRawAmount(USDC[ChainId.OKEX], 100_000e6),
   [ChainId.XDAI]: CurrencyAmount.fromRawAmount(USDC[ChainId.XDAI], 100_000e6),
+  [ChainId.CELO]: undefined,
 }
 
 /**
@@ -45,7 +46,7 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   const stablecoin = amountOut?.currency
 
   const v2USDCTrade = useV2TradeExactOut(currency, amountOut, {
-    maxHops: 2,
+    maxHops: 3,
   })
 
   return useMemo(() => {
@@ -58,7 +59,7 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
       return new Price(stablecoin, stablecoin, '1', '1')
     }
 
-    // use v2 price if available, v3 as fallback
+    // use v2 price if available
     if (v2USDCTrade) {
       const { numerator, denominator } = v2USDCTrade.route.midPrice
       return new Price(currency, stablecoin, denominator, numerator)

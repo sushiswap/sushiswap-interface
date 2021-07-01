@@ -1,18 +1,24 @@
+import { useEffect, useMemo } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
-import { getLendingPairSubset } from '../fetchers/bentobox'
+import { ChainId } from '@sushiswap/sdk'
+import { getKashiPairs } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
 
-export function useLendingPairSubset(pairAddresses, swrConfig: SWRConfiguration = undefined) {
+export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
 
-  const shouldFetch = chainId && pairAddresses && pairAddresses.length
+  const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.MATIC)
 
-  const res = useSWR(
-    shouldFetch ? ['lendingPairSubset', chainId, pairAddresses] : null,
-    (_, chainId, pairAddresses) => getLendingPairSubset(chainId, { pairAddresses }),
+  // useEffect(() => {
+  //   console.log('debug', { shouldFetch, chainId, pairAddresses })
+  // }, [shouldFetch, chainId, pairAddresses])
+
+  const { data } = useSWR(
+    shouldFetch ? () => ['kashiPairs', chainId, JSON.stringify(variables)] : null,
+    (_, chainId) => getKashiPairs(chainId, variables),
     swrConfig
   )
 
-  return res
+  return data
 }

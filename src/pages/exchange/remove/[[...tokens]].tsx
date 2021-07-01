@@ -119,7 +119,7 @@ export default function Remove() {
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
     if (!liquidityAmount) throw new Error('missing liquidity amount')
 
-    if (gatherPermitSignature) {
+    if (chainId !== ChainId.HARMONY && gatherPermitSignature) {
       try {
         await gatherPermitSignature()
       } catch (error) {
@@ -581,7 +581,7 @@ export default function Remove() {
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <CurrencyLogo currency={currencyA} squared size={48} />
+              <CurrencyLogo currency={currencyA} size={48} />
               <div className="text-2xl font-bold text-high-emphesis">
                 {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
               </div>
@@ -593,7 +593,7 @@ export default function Remove() {
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <CurrencyLogo currency={currencyB} squared size={48} />
+              <CurrencyLogo currency={currencyB} size={48} />
               <div className="text-2xl font-bold text-high-emphesis">
                 {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
               </div>

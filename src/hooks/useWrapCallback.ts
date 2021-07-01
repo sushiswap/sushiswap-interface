@@ -1,4 +1,5 @@
-import { Currency } from '@sushiswap/sdk'
+import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
+
 import { WETH9_EXTENDED } from '../constants/tokens'
 import { tryParseAmount } from '../functions/parse'
 import { useActiveWeb3React } from './useActiveWeb3React'
@@ -37,8 +38,9 @@ export default function useWrapCallback(
   const addTransaction = useTransactionAdder()
 
   return useMemo(() => {
-    if (!wethContract || !chainId || !inputCurrency || !outputCurrency) return NOT_APPLICABLE
-    const weth = WETH9_EXTENDED[chainId]
+    if (!wethContract || !chainId || !inputCurrency || !outputCurrency || chainId === ChainId.CELO)
+      return NOT_APPLICABLE
+    const weth = WNATIVE[chainId]
     if (!weth) return NOT_APPLICABLE
 
     const hasInputAmount = Boolean(inputAmount?.greaterThan('0'))

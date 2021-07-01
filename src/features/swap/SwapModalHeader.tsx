@@ -22,12 +22,14 @@ export default function SwapModalHeader({
   recipient,
   showAcceptChanges,
   onAcceptChanges,
+  minerBribe,
 }: {
   trade: V2Trade<Currency, Currency, TradeType>
   allowedSlippage: Percent
   recipient: string | null
   showAcceptChanges: boolean
   onAcceptChanges: () => void
+  minerBribe?: string
 }) {
   const { i18n } = useLingui()
 
@@ -43,7 +45,7 @@ export default function SwapModalHeader({
       <div className="grid gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CurrencyLogo currency={trade.inputAmount.currency} squared size={48} />
+            <CurrencyLogo currency={trade.inputAmount.currency} size={48} />
             <div className="overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl text-high-emphesis">
               {trade.inputAmount.toSignificant(6)}
             </div>
@@ -55,7 +57,7 @@ export default function SwapModalHeader({
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <CurrencyLogo currency={trade.outputAmount.currency} squared size={48} />
+            <CurrencyLogo currency={trade.outputAmount.currency} size={48} />
             <div
               className={`overflow-ellipsis w-[220px] overflow-hidden font-bold text-2xl ${
                 priceImpactSeverity > 2 ? 'text-red' : 'text-high-emphesis'
@@ -75,7 +77,7 @@ export default function SwapModalHeader({
         className="px-0"
       />
 
-      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
+      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} minerBribe={minerBribe} />
 
       {showAcceptChanges ? (
         <div className="flex items-center justify-between p-2 px-3 border border-gray-800 rounded">

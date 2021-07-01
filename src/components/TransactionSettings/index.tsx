@@ -34,7 +34,6 @@ const FancyButton = styled.button`
 `
 
 const Option = styled(FancyButton)<{ active: boolean }>`
-  margin-right: 8px;
   :hover {
     cursor: pointer;
   }
@@ -67,6 +66,7 @@ const OptionCustom = styled(FancyButton)<{
   padding: 0 0.75rem;
   flex: 1;
   min-width: 82px;
+  max-width: 102px;
   background: #202231;
   input {
     width: 100%;
@@ -74,20 +74,6 @@ const OptionCustom = styled(FancyButton)<{
     border: 0px;
   }
 `
-
-const SlippageEmojiContainer = styled.span`
-  color: #f3841e;
-  //     ${({ theme }) => theme.mediaWidth.upToSmall`
-//     display: none;  
-//   `}
-`
-
-// export interface SlippageTabsProps {
-//   rawSlippage: number;
-//   setRawSlippage: (rawSlippage: number) => void;
-//   deadline: number;
-//   setDeadline: (deadline: number) => void;
-// }
 
 export interface TransactionSettingsProps {
   placeholderSlippage?: Percent // varies according to the context in which the settings dialog is placed
@@ -158,7 +144,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
   return (
     <AutoColumn gap="md">
       <AutoColumn gap="sm">
-        <RowFixed>
+        <RowFixed align="center">
           <Typography variant="lg" className="text-high-emphesis">
             {i18n._(t`Slippage tolerance`)}
           </Typography>
@@ -169,24 +155,13 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             )}
           />
         </RowFixed>
-        <RowBetween>
-          <Option
-            onClick={() => {
-              parseSlippageInput('')
-            }}
-            active={userSlippageTolerance === 'auto'}
-          >
-            {i18n._(t`Auto`)}
-          </Option>
-
+        <RowFixed align="center" className="space-x-2">
           <OptionCustom active={userSlippageTolerance !== 'auto'} warning={!!slippageError} tabIndex={-1}>
-            <RowBetween>
+            <RowBetween align="center">
               {tooLow || tooHigh ? (
-                <SlippageEmojiContainer>
-                  <span role="img" aria-label="warning">
-                    ⚠️
-                  </span>
-                </SlippageEmojiContainer>
+                <span className="hidden sm:inline text-yellow" role="img" aria-label="warning">
+                  ⚠️
+                </span>
               ) : null}
               <Input
                 placeholder={placeholderSlippage?.toFixed(2)}
@@ -207,7 +182,15 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
               %
             </RowBetween>
           </OptionCustom>
-        </RowBetween>
+          <Option
+            onClick={() => {
+              parseSlippageInput('')
+            }}
+            active={userSlippageTolerance === 'auto'}
+          >
+            {i18n._(t`Auto`)}
+          </Option>
+        </RowFixed>
         {slippageError || tooLow || tooHigh ? (
           <Typography
             className={classNames(
@@ -228,14 +211,14 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
       </AutoColumn>
 
       <AutoColumn gap="sm">
-        <RowFixed>
+        <RowFixed align="center">
           <Typography variant="lg" className="text-high-emphesis">
             {i18n._(t`Transaction deadline`)}
           </Typography>
 
           <QuestionHelper text={i18n._(t`Your transaction will revert if it is pending for more than this long.`)} />
         </RowFixed>
-        <RowFixed>
+        <RowFixed align="center">
           <OptionCustom style={{ maxWidth: '40px', marginRight: '8px' }} tabIndex={-1}>
             <Input
               placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}

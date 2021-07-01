@@ -1,13 +1,14 @@
-import { ChainId, CurrencyAmount, JSBI } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, MASTERCHEF_ADDRESS } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
+import { MASTERCHEF_V2_ADDRESS, MINICHEF_ADDRESS, SUSHI } from '../../constants'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
+import { useCallback, useMemo } from 'react'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks'
 
 import { Contract } from '@ethersproject/contracts'
-import { SUSHI } from '../../constants'
 import { Zero } from '@ethersproject/constants'
+import { concat } from 'lodash'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useMemo } from 'react'
 import zip from 'lodash/zip'
 
 export function useChefContract(chef: Chef) {
@@ -106,8 +107,8 @@ export function usePendingToken(farm, contract) {
   return useMemo(() => pendingTokens, [pendingTokens])
 }
 
-export function usePositions(contract?: Contract | null, rewarder?: Contract | null) {
-  const { chainId, account } = useActiveWeb3React()
+export function useChefPositions(contract?: Contract | null, rewarder?: Contract | null) {
+  const { account, chainId } = useActiveWeb3React()
 
   const numberOfPools = useSingleCallResult(contract ? contract : null, 'poolLength', undefined, NEVER_RELOAD)
     ?.result?.[0]
@@ -129,18 +130,39 @@ export function usePositions(contract?: Contract | null, rewarder?: Contract | n
   //     args.map((arg) => [...arg, '0'])
   // )
 
-  return useMemo(
-    () =>
-      zip(pendingSushi, userInfo)
-        .map((data, i) => ({
-          id: args[i][0],
-          pendingSushi: data[0].result?.[0] || Zero,
-          amount: data[1].result?.[0] || Zero,
-          // pendingTokens: data?.[2]?.result,
-        }))
-        .filter(({ pendingSushi, amount }) => {
-          return (pendingSushi && !pendingSushi.isZero()) || (amount && !amount.isZero())
-        }),
-    [args, pendingSushi, userInfo]
-  )
+  const getChef = useCallback(() => {
+    if (MASTERCHEF_ADDRESS[chainId] === contract.address) {
+      return Chef.MASTERCHEF
+    } else if (MASTERCHEF_V2_ADDRESS[chainId] === contract.address) {
+      return Chef.MASTERCHEF_V2
+    } else if (MINICHEF_ADDRESS[chainId] === contract.address) {
+      return Chef.MINICHEF
+    }
+  }, [chainId, contract])
+
+  return useMemo(() => {
+    if (!pendingSushi || !userInfo) {
+      return []
+    }
+    return zip(pendingSushi, userInfo)
+      .map((data, i) => ({
+        id: args[i][0],
+        pendingSushi: data[0].result?.[0] || Zero,
+        amount: data[1].result?.[0] || Zero,
+        chef: getChef(),
+        // pendingTokens: data?.[2]?.result,
+      }))
+      .filter(({ pendingSushi, amount }) => {
+        return (pendingSushi && !pendingSushi.isZero()) || (amount && !amount.isZero())
+      })
+  }, [args, getChef, pendingSushi, userInfo])
+}
+
+export function usePositions() {
+  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
+    useChefPositions(useMasterChefContract()),
+    useChefPositions(useMasterChefV2Contract()),
+    useChefPositions(useMiniChefContract()),
+  ]
+  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
 }

@@ -14,8 +14,8 @@ export const bentoTokenFieldsQuery = gql`
   }
 `
 
-export const lendingPairFields = gql`
-  fragment lendingPairFields on KashiPair {
+export const kashiPairFieldsQuery = gql`
+  fragment kashiPairFields on KashiPair {
     id
     # bentoBox
     type
@@ -52,16 +52,25 @@ export const lendingPairFields = gql`
   ${bentoTokenFieldsQuery}
 `
 
-export const lendingPairSubsetQuery = gql`
-  query lendingPairSubsetQuery(
-    $first: Int! = 1000
-    $pairAddresses: [Bytes]!
-    $orderBy: String! = "utilization"
-    $orderDirection: String! = "desc"
+export const kashiPairsQuery = gql`
+  query kashiPairs(
+    $skip: Int = 0
+    $first: Int = 1000
+    $where: KashiPair_filter
+    $block: Block_height
+    $orderBy: KashiPair_orderBy = "utilization"
+    $orderDirection: OrderDirection! = "desc"
   ) {
-    kashiPairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, where: { id_in: $pairAddresses }) {
-      ...lendingPairFields
+    kashiPairs(
+      skip: $skip
+      first: $first
+      where: $where
+      block: $block
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...kashiPairFields
     }
   }
-  ${lendingPairFields}
+  ${kashiPairFieldsQuery}
 `

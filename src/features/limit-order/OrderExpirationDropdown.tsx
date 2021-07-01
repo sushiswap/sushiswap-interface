@@ -7,7 +7,7 @@ import { AppDispatch } from '../../state'
 import { setOrderExpiration } from '../../state/limit-order/actions'
 import { useLimitOrderState } from '../../state/limit-order/hooks'
 import { OrderExpiration } from '../../state/limit-order/reducer'
-import NeonSelect, { NeonSelectItem } from '../../components/Neon/Select'
+import NeonSelect, { NeonSelectItem } from '../../components/Select'
 
 const OrderExpirationDropdown: FC = () => {
   const { i18n } = useLingui()

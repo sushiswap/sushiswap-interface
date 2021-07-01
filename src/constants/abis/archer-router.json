@@ -3,7 +3,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_tipJar",
+        "name": "_uniV3Factory",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_WETH",
         "type": "address"
       }
     ],
@@ -11,121 +16,96 @@
     "type": "constructor"
   },
   {
-    "stateMutability": "payable",
-    "type": "fallback"
+    "inputs": [],
+    "name": "WETH",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "components": [
           {
-            "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
+            "internalType": "bytes",
+            "name": "path",
+            "type": "bytes"
           },
           {
             "internalType": "address",
-            "name": "tokenB",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountADesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBDesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
+            "name": "recipient",
             "type": "address"
           },
           {
             "internalType": "uint256",
             "name": "deadline",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOutMinimum",
+            "type": "uint256"
           }
         ],
-        "internalType": "struct ArcherSwapRouter.AddLiquidity",
-        "name": "liquidity",
+        "internalType": "struct IUniV3Router.ExactInputParams",
+        "name": "params",
         "type": "tuple"
       }
     ],
-    "name": "addLiquidityAndTipAmount",
-    "outputs": [],
+    "name": "exactInput",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "components": [
           {
-            "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
+            "internalType": "bytes",
+            "name": "path",
+            "type": "bytes"
           },
           {
             "internalType": "address",
-            "name": "tokenB",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountADesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBDesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
+            "name": "recipient",
             "type": "address"
           },
           {
             "internalType": "uint256",
             "name": "deadline",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOutMinimum",
+            "type": "uint256"
           }
         ],
-        "internalType": "struct ArcherSwapRouter.AddLiquidity",
-        "name": "liquidity",
+        "internalType": "struct IUniV3Router.ExactInputParams",
+        "name": "params",
         "type": "tuple"
       },
       {
@@ -134,76 +114,101 @@
         "type": "uint256"
       }
     ],
-    "name": "addLiquidityETHAndTipAmount",
-    "outputs": [],
+    "name": "exactInputAndTipAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "components": [
           {
             "internalType": "address",
-            "name": "tokenA",
+            "name": "tokenIn",
             "type": "address"
           },
           {
             "internalType": "address",
-            "name": "tokenB",
+            "name": "tokenOut",
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "amountADesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBDesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
+            "internalType": "uint24",
+            "name": "fee",
+            "type": "uint24"
           },
           {
             "internalType": "address",
-            "name": "to",
+            "name": "recipient",
             "type": "address"
           },
           {
             "internalType": "uint256",
             "name": "deadline",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOutMinimum",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint160",
+            "name": "sqrtPriceLimitX96",
+            "type": "uint160"
           }
         ],
-        "internalType": "struct ArcherSwapRouter.AddLiquidity",
-        "name": "liquidity",
+        "internalType": "struct IUniV3Router.ExactInputSingleParams",
+        "name": "params",
         "type": "tuple"
-      },
+      }
+    ],
+    "name": "exactInputSingle",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "components": [
           {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
+            "internalType": "address",
+            "name": "tokenIn",
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
+            "internalType": "address",
+            "name": "tokenOut",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "fee",
+            "type": "uint24"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
           },
           {
             "internalType": "uint256",
@@ -211,23 +216,23 @@
             "type": "uint256"
           },
           {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
           },
           {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
+            "internalType": "uint256",
+            "name": "amountOutMinimum",
+            "type": "uint256"
           },
           {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
+            "internalType": "uint160",
+            "name": "sqrtPriceLimitX96",
+            "type": "uint160"
           }
         ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
+        "internalType": "struct IUniV3Router.ExactInputSingleParams",
+        "name": "params",
         "type": "tuple"
       },
       {
@@ -236,76 +241,30 @@
         "type": "uint256"
       }
     ],
-    "name": "addLiquidityETHWithPermitAndTipAmount",
-    "outputs": [],
+    "name": "exactInputSingleAndTipAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountOut",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "components": [
           {
-            "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
+            "internalType": "bytes",
+            "name": "path",
+            "type": "bytes"
           },
           {
             "internalType": "address",
-            "name": "tokenB",
+            "name": "recipient",
             "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountADesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBDesired",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.AddLiquidity",
-        "name": "liquidity",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -313,124 +272,232 @@
             "type": "uint256"
           },
           {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permitA",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
             "internalType": "uint256",
-            "name": "amount",
+            "name": "amountOut",
             "type": "uint256"
           },
           {
             "internalType": "uint256",
-            "name": "deadline",
+            "name": "amountInMaximum",
             "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
           }
         ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permitB",
+        "internalType": "struct IUniV3Router.ExactOutputParams",
+        "name": "params",
         "type": "tuple"
       }
     ],
-    "name": "addLiquidityWithPermitAndTipAmount",
-    "outputs": [],
+    "name": "exactOutput",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
         "components": [
           {
-            "internalType": "contract IERC20Extended",
-            "name": "lpToken",
-            "type": "address"
+            "internalType": "bytes",
+            "name": "path",
+            "type": "bytes"
           },
           {
             "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenB",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "liquidity",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
+            "name": "recipient",
             "type": "address"
           },
           {
             "internalType": "uint256",
             "name": "deadline",
             "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOut",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountInMaximum",
+            "type": "uint256"
           }
         ],
-        "internalType": "struct ArcherSwapRouter.RemoveLiquidity",
-        "name": "liquidity",
+        "internalType": "struct IUniV3Router.ExactOutputParams",
+        "name": "params",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tipAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "exactOutputAndTipAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tokenIn",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenOut",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "fee",
+            "type": "uint24"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOut",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountInMaximum",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint160",
+            "name": "sqrtPriceLimitX96",
+            "type": "uint160"
+          }
+        ],
+        "internalType": "struct IUniV3Router.ExactOutputSingleParams",
+        "name": "params",
         "type": "tuple"
       }
     ],
-    "name": "removeLiquidityAndTipAmount",
+    "name": "exactOutputSingle",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tokenIn",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenOut",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "fee",
+            "type": "uint24"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOut",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountInMaximum",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint160",
+            "name": "sqrtPriceLimitX96",
+            "type": "uint160"
+          }
+        ],
+        "internalType": "struct IUniV3Router.ExactOutputSingleParams",
+        "name": "params",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tipAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "exactOutputSingleAndTipAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountIn",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "data",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "multicall",
+    "outputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "results",
+        "type": "bytes[]"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "refundETH",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -438,59 +505,37 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "token",
         "type": "address"
       },
       {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "lpToken",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenB",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "liquidity",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.RemoveLiquidity",
-        "name": "liquidity",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
       }
     ],
-    "name": "removeLiquidityETHAndTipAmount",
+    "name": "selfPermit",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -498,96 +543,37 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "token",
         "type": "address"
       },
       {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "lpToken",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenB",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "liquidity",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.RemoveLiquidity",
-        "name": "liquidity",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
       },
       {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "expiry",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
       }
     ],
-    "name": "removeLiquidityETHWithPermitAndTipAmount",
+    "name": "selfPermitAllowed",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -595,96 +581,37 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "token",
         "type": "address"
       },
       {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "lpToken",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenA",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "tokenB",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "liquidity",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountBMin",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.RemoveLiquidity",
-        "name": "liquidity",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
       },
       {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "expiry",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
       }
     ],
-    "name": "removeLiquidityWithPermitAndTipAmount",
+    "name": "selfPermitAllowedIfNecessary",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -692,8 +619,46 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "selfPermitIfNecessary",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -734,7 +699,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapETHForExactTokensWithTipAmount",
+    "name": "swapETHForExactTokensAndTipAmount",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -742,58 +707,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapETHForExactTokensWithTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -834,7 +749,7 @@
         "type": "uint256"
       }
     ],
-    "name": "swapExactETHForTokensWithTipAmount",
+    "name": "swapExactETHForTokensAndTipAmount",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -842,8 +757,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -879,54 +794,9 @@
         "type": "tuple"
       },
       {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapExactETHForTokensWithTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
+        "internalType": "uint256",
+        "name": "tipAmount",
+        "type": "uint256"
       }
     ],
     "name": "swapExactTokensForETHAndTipAmount",
@@ -937,406 +807,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapExactTokensForETHAndTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      }
-    ],
-    "name": "swapExactTokensForETHWithPermitAndTipAmount",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapExactTokensForETHWithPermitAndTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      }
-    ],
-    "name": "swapExactTokensForTokensWithPermitAndTipAmount",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      },
-      {
-        "internalType": "address[]",
-        "name": "pathToEth",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minEth",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapExactTokensForTokensWithPermitAndTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -1372,7 +844,7 @@
         "type": "tuple"
       }
     ],
-    "name": "swapExactTokensForTokensWithTipAmount",
+    "name": "swapExactTokensForTokensAndTipAmount",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -1380,8 +852,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -1422,17 +894,12 @@
         "type": "address[]"
       },
       {
-        "internalType": "uint256",
-        "name": "minEth",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint32",
         "name": "tipPct",
         "type": "uint32"
       }
     ],
-    "name": "swapExactTokensForTokensWithTipPct",
+    "name": "swapExactTokensForTokensAndTipPct",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -1440,8 +907,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -1475,6 +942,11 @@
         "internalType": "struct ArcherSwapRouter.Trade",
         "name": "trade",
         "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tipAmount",
+        "type": "uint256"
       }
     ],
     "name": "swapTokensForExactETHAndTipAmount",
@@ -1485,406 +957,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapTokensForExactETHAndTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      }
-    ],
-    "name": "swapTokensForExactETHWithPermitAndTipAmount",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapTokensForExactETHWithPermitAndTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      }
-    ],
-    "name": "swapTokensForExactTokensWithPermitAndTipAmount",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
-        "type": "address"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "path",
-            "type": "address[]"
-          },
-          {
-            "internalType": "address payable",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Trade",
-        "name": "trade",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20Extended",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "deadline",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint8",
-            "name": "v",
-            "type": "uint8"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "r",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "s",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct ArcherSwapRouter.Permit",
-        "name": "permit",
-        "type": "tuple"
-      },
-      {
-        "internalType": "address[]",
-        "name": "pathToEth",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minEth",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "tipPct",
-        "type": "uint32"
-      }
-    ],
-    "name": "swapTokensForExactTokensWithPermitAndTipPct",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -1920,7 +994,7 @@
         "type": "tuple"
       }
     ],
-    "name": "swapTokensForExactTokensWithTipAmount",
+    "name": "swapTokensForExactTokensAndTipAmount",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -1928,8 +1002,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IUniRouter",
-        "name": "router",
+        "internalType": "address",
+        "name": "factory",
         "type": "address"
       },
       {
@@ -1970,32 +1044,207 @@
         "type": "address[]"
       },
       {
-        "internalType": "uint256",
-        "name": "minEth",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint32",
         "name": "tipPct",
         "type": "uint32"
       }
     ],
-    "name": "swapTokensForExactTokensWithTipPct",
+    "name": "swapTokensForExactTokensAndTipPct",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountMinimum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
+    ],
+    "name": "sweepToken",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountMinimum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "feeBips",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "feeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "sweepTokenWithFee",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tipAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "tip",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "tipJar",
+    "name": "uniV3Factory",
     "outputs": [
       {
-        "internalType": "contract ITipJar",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "amount0Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "amount1Delta",
+        "type": "int256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "name": "uniswapV3SwapCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountMinimum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
+    ],
+    "name": "unwrapWETH",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tipAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountMinimum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
+    ],
+    "name": "unwrapWETHAndTip",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountMinimum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "feeBips",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "feeRecipient",
+        "type": "address"
+      }
+    ],
+    "name": "unwrapWETHWithFee",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amountMinimum",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawWETH",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "balanceWETH",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

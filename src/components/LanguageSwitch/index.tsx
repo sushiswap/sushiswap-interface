@@ -1,126 +1,136 @@
-import React, { memo, useRef } from 'react'
-import { useModalOpen, useToggleModal } from '../../state/application/hooks'
+import { Menu, Transition } from '@headlessui/react'
 
-import { ApplicationModal } from '../../state/application/actions'
+import { ChevronDownIcon } from '@heroicons/react/solid'
+import { Fragment } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { StyledMenu } from '../StyledMenu'
-import getConfig from 'next/config'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { classNames } from '../../functions'
+import { t } from '@lingui/macro'
 import { useRouter } from 'next/router'
 
-const { publicRuntimeConfig } = getConfig()
-const { locales } = publicRuntimeConfig
-
-// Use https://onlineunicodetools.com/convert-unicode-to-image to convert
-// Unicode flags (https://emojipedia.org/flags/) to png as Windows does not support Unicode flags
-// Use 24px as unicode characters font size
 const LANGUAGES: {
   [x: string]: { flag: string; language: string; dialect?: string }
 } = {
   en: {
     flag: '/images/flags/en-flag.png',
-    language: 'English',
+    language: t`English`,
   },
   de: {
     flag: '/images/flags/de-flag.png',
-    language: 'German',
+    language: t`German`,
   },
   it: {
     flag: '/images/flags/it-flag.png',
-    language: 'Italian',
+    language: t`Italian`,
   },
   ru: {
     flag: '/images/flags/ru-flag.png',
-    language: 'Russian',
+    language: t`Russian`,
   },
   ro: {
     flag: '/images/flags/ro-flag.png',
-    language: 'Romanian',
+    language: t`Romanian`,
   },
   vi: {
     flag: '/images/flags/vi-flag.png',
-    language: 'Vietnamese',
+    language: t`Vietnamese`,
   },
   'zh-CN': {
     flag: '/images/flags/ch-flag.png',
-    language: 'Chinese',
+    language: t`Chinese`,
     dialect: '简',
   },
   'zh-TW': {
     flag: '/images/flags/ch-flag.png',
-    language: 'Chinese',
+    language: t`Chinese`,
     dialect: '繁',
   },
   es: {
     flag: '/images/flags/es-flag.png',
-    language: 'Spanish',
+    language: t`Spanish`,
   },
   'es-AR': {
     flag: '/images/flags/es-flag.png',
-    language: 'Spanish',
+    language: t`Spanish`,
     dialect: 'AR',
   },
   ko: {
     flag: '/images/flags/ko-flag.png',
-    language: 'Korean',
+    language: t`Korean`,
   },
   ja: {
     flag: '/images/flags/ja-flag.png',
-    language: 'Japanese',
+    language: t`Japanese`,
   },
   fr: {
     flag: '/images/flags/fr-flag.png',
-    language: 'French',
+    language: t`French`,
   },
 }
 
-function LanguageSwitch() {
-  const { locale, pathname } = useRouter()
-  const node = useRef<HTMLDivElement>(null)
-  const open = useModalOpen(ApplicationModal.LANGUAGE)
-  const toggle = useToggleModal(ApplicationModal.LANGUAGE)
-  useOnClickOutside(node, open ? toggle : undefined)
-
+export default function LangSwitcher() {
+  const { locale, locales, asPath } = useRouter()
   return (
-    <StyledMenu ref={node}>
-      <div
-        className="cursor-pointer flex items-center justify-center border-2 rounded border-dark-850 hover:border-dark-700 h-[40px] w-[40px]"
-        onClick={toggle}
-      >
-        <Image src={LANGUAGES[locale].flag} alt={LANGUAGES[locale].language} width={22} height={22} />
-      </div>
-      {open && (
-        <div className="min-w-[10rem] max-h-[232px] md:max-h-[unset] absolute flex flex-col z-50 bg-dark-850 shadow-sm rounded md:top-[3rem] right-0 md:overflow-hidden overflow-scroll top-[-15.5rem]">
-          {locales.map((key) => {
-            const { flag, language, dialect } = LANGUAGES[key]
-            return (
-              <Link href={pathname} locale={key} key={key}>
-                <a
-                  className="cursor-pointer flex items-center px-3 py-1.5 hover:bg-dark-800 hover:text-high-emphesis font-bold"
-                  onClick={toggle}
-                >
-                  <Image
-                    className="inline w-3 h-3 mr-1 align-middle"
-                    src={flag}
-                    width={20}
-                    height={20}
-                    alt={language}
-                  />
-                  <span className="ml-4">{language}</span>
-                  {dialect && (
-                    <sup>
-                      <small>{dialect}</small>
-                    </sup>
-                  )}
-                </a>
-              </Link>
-            )
-          })}
-        </div>
+    <Menu as="div" className="relative inline-block text-right">
+      {({ open }) => (
+        <>
+          <div>
+            <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
+              <Image src={LANGUAGES[locale].flag} alt={LANGUAGES[locale].language} width={20} height={20} />
+              <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
+            </Menu.Button>
+          </div>
+
+          <Transition
+            show={open}
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            <Menu.Items className="absolute right-0 w-[161px] mt-2 origin-top-right divide-y divide-dark-600 rounded shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className="p-2 space-y-2">
+                {locales.map((locale) => {
+                  const { flag, language, dialect } = LANGUAGES[locale]
+                  return (
+                    <Menu.Item key={locale}>
+                      {({ active }) => (
+                        <Link href={asPath} locale={locale}>
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? 'bg-dark-700 text-high-emphesis' : 'text-primary',
+                              'group flex items-center px-4 py-2 text-sm hover:bg-dark-700 focus:bg-dark-700 rounded'
+                            )}
+                          >
+                            <Image
+                              className="inline w-3 h-3 mr-1 align-middle"
+                              src={flag}
+                              width={20}
+                              height={20}
+                              alt={language}
+                              aria-hidden="true"
+                            />
+                            <span className="ml-4">{language}</span>
+                            {dialect && (
+                              <sup>
+                                <small>{dialect}</small>
+                              </sup>
+                            )}
+                          </a>
+                        </Link>
+                      )}
+                    </Menu.Item>
+                  )
+                })}
+              </div>
+            </Menu.Items>
+          </Transition>
+        </>
       )}
-    </StyledMenu>
+    </Menu>
   )
 }
-
-export default memo(LanguageSwitch)

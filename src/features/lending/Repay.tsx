@@ -112,7 +112,10 @@ export default function Repay({ pair }: RepayProps) {
   //   : ZERO;
 
   const maxAmountIn = swap
-    ? trade.maximumAmountIn(allowedSlippage).toSignificant(pair.collateral.tokenInfo.decimals)
+    ? trade
+        .maximumAmountIn(allowedSlippage)
+        .toFixed(pair.collateral.tokenInfo.decimals)
+        .toBigNumber(pair.collateral.tokenInfo.decimals)
     : ZERO
 
   // const nextUserCollateralValue = pair.userCollateralAmount.value.add(collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals)).add(extraCollateral)

@@ -15,7 +15,7 @@ module.exports = withBundleAnalyzer(
       disable: process.env.NODE_ENV === 'development',
     },
     images: {
-      domains: ['assets.sushi.com', 'res.cloudinary.com'],
+      domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
     },
     reactStrictMode: true,
     async redirects() {
@@ -123,9 +123,9 @@ module.exports = withBundleAnalyzer(
       locales,
       defaultLocale: sourceLocale,
     },
-    publicRuntimeConfig: {
-      locales,
-    },
+    // publicRuntimeConfig: {
+    //   locales,
+    // },
   })
 )
 

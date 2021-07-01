@@ -1,12 +1,12 @@
-import { ARCHER_RELAY_URI } from '../../../constants'
+import { ARCHER_RELAY_URI, ARCHER_ROUTER_ADDRESS, INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
-import { BottomGrouping, SwapCallbackError } from '../../../features/swap/styleds'
-import { AutoRow, RowBetween } from '../../../components/Row'
-import Button, { ButtonConfirmed, ButtonError } from '../../../components/Button'
-import { ChainId, Currency, CurrencyAmount, JSBI, Token, Trade as V2Trade, TradeType } from '@sushiswap/sdk'
+import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/swap/styleds'
+import { AutoRow, RowBetween, RowFixed } from '../../../components/Row'
+import { ButtonConfirmed, ButtonError } from '../../../components/Button'
+import { ChainId, Currency, CurrencyAmount, JSBI, Token, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
 import Column, { AutoColumn } from '../../../components/Column'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useERC20PermitFromTrade, UseERC20PermitState } from '../../../hooks/useERC20Permit'
+import { UseERC20PermitState, useERC20PermitFromTrade } from '../../../hooks/useERC20Permit'
 import { useAllTokens, useCurrency } from '../../../hooks/Tokens'
 import {
   useDefaultsFromURLSearch,
@@ -20,6 +20,7 @@ import {
   useUserArcherGasPrice,
   useUserArcherUseRelay,
   useUserSingleHopOnly,
+  useUserSlippageTolerance,
   useUserTransactionTTL,
 } from '../../../state/user/hooks'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../../../state/application/hooks'
@@ -27,17 +28,22 @@ import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 
 import AddressInputPanel from '../../../components/AddressInputPanel'
 import { AdvancedSwapDetails } from '../../../features/swap/AdvancedSwapDetails'
+import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDetailsDropdown'
+import { ArrowDownIcon } from '@heroicons/react/outline'
+import Button from '../../../components/Button'
 import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import { Field } from '../../../state/swap/actions'
 import Head from 'next/head'
 import Loader from '../../../components/Loader'
 import Lottie from 'lottie-react'
+import MinerTip from '../../../components/MinerTip'
 import ProgressSteps from '../../../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../../../components/ExchangeHeader'
 import TokenWarningModal from '../../../components/TokenWarningModal'
 import TradePrice from '../../../features/swap/TradePrice'
+import Typography from '../../../components/Typography'
 import UnsupportedCurrencyFooter from '../../../features/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../../components/Web3Connect'
 import { computeFiatValuePriceImpact } from '../../../functions/trade'
@@ -563,38 +569,15 @@ export default function Swap() {
             <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
           )}
 
-          {/* {showWrap ? null : (
+          {showWrap ? null : (
             <div
               style={{
-                padding: showWrap ? ".25rem 1rem 0 1rem" : "0px",
+                padding: showWrap ? '.25rem 1rem 0 1rem' : '0px',
               }}
             >
-              <div className="px-5 mt-4 space-y-2">
-                {allowedSlippage !== INITIAL_ALLOWED_SLIPPAGE && (
-                  <RowBetween align="center">
-                    <Typography
-                      variant="sm"
-                      className="text-secondary"
-                      onClick={toggleSettings}
-                    >
-                      {i18n._(t`Slippage Tolerance`)}
-                    </Typography>
-
-                    <Typography
-                      variant="sm"
-                      className="text-secondary"
-                      onClick={toggleSettings}
-                    >
-                      {allowedSlippage / 100}%
-                    </Typography>
-                  </RowBetween>
-                )}
-              </div>
-              <div className="px-5 mt-1">
-                {doArcher && userHasSpecifiedInputOutput && <MinerTip />}
-              </div>
+              <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
             </div>
-          )} */}
+          )}
 
           {trade && (
             <div className="p-5 rounded bg-dark-800">

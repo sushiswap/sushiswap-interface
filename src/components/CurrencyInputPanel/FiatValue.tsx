@@ -11,7 +11,7 @@ export function FiatValue({
   fiatValue: CurrencyAmount<Currency> | null | undefined
   priceImpact?: Percent
 }) {
-  const priceImpactColor = useMemo(() => {
+  const priceImpactClassName = useMemo(() => {
     if (!priceImpact) return undefined
     if (priceImpact.lessThan('0')) return 'text-green'
     const severity = warningSeverity(priceImpact)
@@ -21,7 +21,7 @@ export function FiatValue({
   }, [priceImpact])
 
   return (
-    <div className="flex justify-end text-xs font-medium text-right text-secondary">
+    <div className="flex justify-end space-x-1 text-xs font-medium text-right text-secondary">
       {fiatValue ? (
         <>
           ≈$ <div className="cursor-pointer">{fiatValue?.toSignificant(6, { groupSeparator: ',' })}</div>
@@ -29,9 +29,7 @@ export function FiatValue({
       ) : (
         ''
       )}
-      {priceImpact ? (
-        <span style={{ color: priceImpactColor }}> {priceImpact.multiply(-1).toSignificant(3)}%</span>
-      ) : null}
+      {priceImpact ? <span className={priceImpactClassName}>{priceImpact.multiply(-1).toSignificant(3)}%</span> : null}
     </div>
   )
 }

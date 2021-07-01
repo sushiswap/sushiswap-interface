@@ -2,6 +2,8 @@ import { ChainId } from '@sushiswap/sdk'
 
 // CLASS A
 
+const fetcher = (url) => fetch(`${url}?key=ckey_cba3674f2ce5450f9d5dd29058`).then((res) => res.json())
+
 export const getTokenBalances = (chainId = ChainId.MAINNET, address) =>
   fetch(`https://api.covalenthq.com/v1/${chainId}/address/${address}/balances_v2/`).then((res) => res.json())
 

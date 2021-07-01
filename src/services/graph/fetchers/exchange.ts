@@ -1,7 +1,6 @@
 import {
   ethPriceQuery,
-  liquidityPositionSubsetQuery,
-  pairSubsetQuery,
+  liquidityPositionsQuery,
   pairsQuery,
   tokenPriceQuery,
   tokenSubsetQuery,
@@ -9,6 +8,7 @@ import {
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
+import { GRAPH_HOST } from '../constants'
 import { request } from 'graphql-request'
 
 export const EXCHANGE = {
@@ -17,52 +17,33 @@ export const EXCHANGE = {
   [ChainId.MATIC]: 'sushiswap/matic-exchange',
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
+  [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
+  [ChainId.OKEX]: 'sushiswap/okex-exchange',
 }
+
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
-  request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
-export const getPairs = async (chainId = ChainId.MAINNET, query = pairsQuery, variables = undefined) => {
-  // console.log('getPairs')
-  const { pairs } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
-  return pairs
-}
-
-export const getPairSubset = async (chainId = ChainId.MAINNET, variables = undefined) => {
-  const { pairs } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    pairSubsetQuery,
-    variables
-  )
+export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
+  const { pairs } = await exchange(chainId, query, variables)
   return pairs
 }
 
 export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
   // console.log('getTokenSubset')
-  const { tokens } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    tokenSubsetQuery,
-    variables
-  )
+  const { tokens } = await exchange(chainId, tokenSubsetQuery, variables)
   return tokens
 }
 
 export const getTokens = async (chainId = ChainId.MAINNET, variables) => {
   // console.log('getTokens')
-  const { tokens } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    tokensQuery,
-    variables
-  )
+  const { tokens } = await exchange(chainId, tokensQuery, variables)
   return tokens
 }
 
 export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
   // console.log('getTokenPrice')
-  const { tokens } = await request(
-    `https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`,
-    tokensQuery,
-    variables
-  )
+  const { tokens } = await exchange(chainId, tokensQuery, variables)
   return tokens.map((token) => token?.derivedETH)
 }
 
@@ -70,7 +51,7 @@ export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables)
   // console.log('getTokenPrice')
   const ethPrice = await getEthPrice()
 
-  const { token } = await request(`https://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+  const { token } = await exchange(chainId, query, variables)
   return token?.derivedETH * ethPrice
 }
 
@@ -113,6 +94,12 @@ export const getStakePrice = async () => {
   })
 }
 
+export const getOnePrice = async () => {
+  return getTokenPrice(ChainId.HARMONY, tokenPriceQuery, {
+    id: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
+  })
+}
+
 export const getBundle = async (
   chainId = ChainId.MAINNET,
   query = ethPriceQuery,
@@ -123,7 +110,7 @@ export const getBundle = async (
   return exchange(chainId, query, variables)
 }
 
-export const getLiquidityPositionSubset = async (chainId = ChainId.MAINNET, user) => {
-  const { liquidityPositions } = await exchange(chainId, liquidityPositionSubsetQuery, { user })
+export const getLiquidityPositions = async (chainId = ChainId.MAINNET, variables) => {
+  const { liquidityPositions } = await exchange(chainId, liquidityPositionsQuery, variables)
   return liquidityPositions
 }

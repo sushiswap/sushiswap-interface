@@ -167,6 +167,8 @@ export const ADDITIONAL_BASES: {
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
     [MATIC.FXS.address]: [MATIC.FRAX],
+    [MATIC.DRAX.address]: [MATIC.DMAGIC],
+    [MATIC.DMAGIC.address]: [MATIC.DRAX],
   },
 }
 
