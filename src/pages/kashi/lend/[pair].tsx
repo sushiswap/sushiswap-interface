@@ -142,18 +142,25 @@ const PairLayout = ({ children }) => {
         <Card className="h-full bg-dark-900">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
-              <div className="text-xl text-high-emphesis">{i18n._(t`Market Info`)}</div>
+              <div className="text-xl text-high-emphesis">{i18n._(t`Market`)}</div>
             </div>
+            <div className="flex justify-between">
+              <div className="text-lg text-secondary">{i18n._(t`APR`)}</div>
+              <div className="flex items-center">
+                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentSupplyAPR.string)}</div>
+              </div>
+            </div>
+
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Total`)}</div>
               <div className="text-lg text-high-emphesis">
-                {formatNumber(pair?.currentAllAssets.string)} {pair?.asset.symbol}
+                {formatNumber(pair?.currentAllAssets.string)} {pair?.asset.tokenInfo.symbol}
               </div>
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Available`)}</div>
               <div className="text-lg text-high-emphesis">
-                {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.symbol}
+                {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.tokenInfo.symbol}
               </div>
             </div>
             <div className="flex justify-between">
@@ -163,22 +170,10 @@ const PairLayout = ({ children }) => {
               </div>
             </div>
             <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentSupplyAPR.string)}</div>
-              </div>
-            </div>
-            <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`Borrow APR`)}</div>
-              <div className="flex items-center">
-                <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentInterestPerYear.string)}</div>
-              </div>
-            </div>
-            <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
               <div className="flex items-center">
                 <div className="text-lg text-high-emphesis">
-                  {formatNumber(pair?.totalCollateralAmount.string)} {pair?.collateral.symbol}
+                  {formatNumber(pair?.totalCollateralAmount.string)} {pair?.collateral.tokenInfo.symbol}
                 </div>
               </div>
             </div>
@@ -204,7 +199,7 @@ const PairLayout = ({ children }) => {
               <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
             </div>
             <div className="flex justify-between">
-              <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.symbol} Strategy`)}</div>
+              <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.tokenInfo.symbol} Strategy`)}</div>
               <div className="text-lg text-high-emphesis">
                 {i18n._(t`None`)}
                 <QuestionHelper

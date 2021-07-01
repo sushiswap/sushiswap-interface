@@ -293,25 +293,14 @@ export default function WalletModal({
       )
     }
     return (
-      <>
+      <div className="flex flex-col space-y-4">
         <ModalHeader title="Select a Wallet" onClose={toggleWalletModal} />
-        {walletView !== WALLET_VIEWS.ACCOUNT ? (
-          <HeaderRow>
-            <HoverText
-              onClick={() => {
-                setPendingError(false)
-                setWalletView(WALLET_VIEWS.ACCOUNT)
-              }}
-            >
-              {i18n._(t`Back`)}
-            </HoverText>
-          </HeaderRow>
-        ) : (
+        {walletView === WALLET_VIEWS.ACCOUNT && (
           <HeaderRow>
             <HoverText>{i18n._(t`Connect to a wallet`)}</HoverText>
           </HeaderRow>
         )}
-        <div>
+        <div className="flex flex-col space-y-6">
           {walletView === WALLET_VIEWS.PENDING ? (
             <PendingView
               connector={pendingWallet}
@@ -323,13 +312,15 @@ export default function WalletModal({
             <div className="flex flex-col space-y-5 overflow-y-auto">{getOptions()}</div>
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
-            <div className="flex flex-col mt-8 text-center">
-              <div>{i18n._(t`New to Ethereum?`)}</div>
-              <ExternalLink href="https://ethereum.org/wallets/">{i18n._(t`Learn more about wallets`)}</ExternalLink>
+            <div className="flex flex-col text-center">
+              <div className="text-secondary">{i18n._(t`New to Ethereum?`)}</div>
+              <ExternalLink href="https://ethereum.org/wallets/" color="blue">
+                {i18n._(t`Learn more about wallets`)}
+              </ExternalLink>
             </div>
           )}
         </div>
-      </>
+      </div>
     )
   }
 

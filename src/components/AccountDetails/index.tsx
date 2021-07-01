@@ -1,6 +1,6 @@
-import React, { useCallback, useContext } from 'react'
-import { fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
-import styled, { ThemeContext } from 'styled-components'
+import React, { useCallback } from 'react'
+import { fortmatic, injected, portis, torus, walletconnect, binance, walletlink } from '../../connectors'
+import styled from 'styled-components'
 
 import { AppDispatch } from '../../state'
 import Button from '../Button'
@@ -17,26 +17,10 @@ import { shortenAddress } from '../../functions/format'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
 
-const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
-  font-size: 0.825rem;
-  // color: ${({ theme }) => theme.text3};
-  margin-left: 1rem;
-  font-size: 0.825rem;
-  display: flex;
-  :hover {
-    // color: ${({ theme }) => theme.text2};
-  }
-`
-
-const WalletName = styled.div`
-  width: initial;
-  font-size: 0.825rem;
-  font-weight: 500;
-  // color: ${({ theme }) => theme.text3};
-`
-
 const IconWrapper = styled.div<{ size?: number }>`
-  // ${({ theme }) => theme.flexColumnNoWrap};
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   margin-right: 8px;
@@ -50,17 +34,13 @@ const IconWrapper = styled.div<{ size?: number }>`
   `};
 `
 
-const TransactionListWrapper = styled.div`
-  ${({ theme }) => theme.flexColumnNoWrap};
-`
-
 function renderTransactions(transactions: string[]) {
   return (
-    <TransactionListWrapper>
+    <div className="flex flex-col flex-nowrap">
       {transactions.map((hash, i) => {
         return <Transaction key={i} hash={hash} />
       })}
-    </TransactionListWrapper>
+    </div>
   )
 }
 
@@ -80,7 +60,6 @@ export default function AccountDetails({
   openOptions,
 }: AccountDetailsProps): any {
   const { chainId, account, connector } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
   const dispatch = useDispatch<AppDispatch>()
 
   function formatConnectorName() {
@@ -92,12 +71,13 @@ export default function AccountDetails({
           SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
       )
       .map((k) => SUPPORTED_WALLETS[k].name)[0]
-    return <WalletName>Connected with {name}</WalletName>
+    return <div className="font-medium text-baseline text-secondary">Connected with {name}</div>
   }
 
   function getStatusIcon() {
     if (connector === injected) {
-      return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
+      return null
+      // return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
     } else if (connector === walletconnect) {
       return (
         <IconWrapper size={16}>
@@ -152,12 +132,12 @@ export default function AccountDetails({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             {formatConnectorName()}
-            <div className="space-x-3">
-              {connector !== injected && connector !== walletlink && (
+            <div className="flex space-x-3">
+              {connector !== injected && connector !== walletlink && connector !== binance && (
                 <Button
                   variant="filled"
-                  color="pink"
-                  size="sm"
+                  color="gray"
+                  size="xs"
                   onClick={() => {
                     ;(connector as any).close()
                   }}
@@ -167,8 +147,8 @@ export default function AccountDetails({
               )}
               <Button
                 variant="filled"
-                color="blue"
-                size="sm"
+                color="gray"
+                size="xs"
                 onClick={() => {
                   openOptions()
                 }}
@@ -177,71 +157,72 @@ export default function AccountDetails({
               </Button>
             </div>
           </div>
-          <div id="web3-account-identifier-row" className="flex items-center space-x-3">
+          <div id="web3-account-identifier-row" className="flex flex-col justify-center space-y-3">
             {ENSName ? (
               <>
                 {getStatusIcon()}
-                <p className="text-primary"> {ENSName}</p>
+                <p className=" text-primary"> {ENSName}</p>
               </>
             ) : (
               <>
                 {getStatusIcon()}
-                <p> {account && shortenAddress(account)}</p>
+                <p className="text-primary"> {account && shortenAddress(account)}</p>
               </>
             )}
-          </div>
-          <div>
+
             {ENSName ? (
-              <>
-                <div className="flex items-center space-x-3">
-                  {account && (
-                    <Copy toCopy={account}>
-                      <span style={{ marginLeft: '4px' }}>Copy Address</span>
-                    </Copy>
-                  )}
-                  {chainId && account && (
-                    <AddressLink
-                      hasENS={!!ENSName}
-                      isENS={true}
-                      href={chainId && getExplorerLink(chainId, ENSName, 'address')}
-                    >
-                      <LinkIcon size={16} />
-                      <span style={{ marginLeft: '4px' }}>View on explorer</span>
-                    </AddressLink>
-                  )}
-                </div>
-              </>
+              <div className="flex items-center space-x-3">
+                {chainId && account && (
+                  <ExternalLink
+                    color="blue"
+                    startIcon={<LinkIcon size={16} />}
+                    href={chainId && getExplorerLink(chainId, ENSName, 'address')}
+                  >
+                    <span>View on explorer</span>
+                  </ExternalLink>
+                )}
+                {account && (
+                  <Copy toCopy={account}>
+                    <span className="ml-1">Copy Address</span>
+                  </Copy>
+                )}
+              </div>
             ) : (
-              <>
-                <div className="flex items-center space-x-3">
-                  {account && (
-                    <Copy toCopy={account}>
-                      <span className="ml-1">Copy Address</span>
-                    </Copy>
-                  )}
-                  {chainId && account && (
-                    <AddressLink hasENS={!!ENSName} isENS={false} href={getExplorerLink(chainId, account, 'address')}>
-                      <LinkIcon size={16} />
-                      <span className="ml-1">View on explorer</span>
-                    </AddressLink>
-                  )}
-                </div>
-              </>
+              <div className="flex items-center space-x-3">
+                {chainId && account && (
+                  <ExternalLink
+                    color="blue"
+                    endIcon={<LinkIcon size={16} />}
+                    href={chainId && getExplorerLink(chainId, account, 'address')}
+                  >
+                    View on explorer
+                  </ExternalLink>
+                )}
+                {account && (
+                  <Copy toCopy={account}>
+                    <span className="ml-1">Copy Address</span>
+                  </Copy>
+                )}
+              </div>
             )}
           </div>
         </div>
       </div>
       {!!pendingTransactions.length || !!confirmedTransactions.length ? (
-        <div>
-          <div className="grid grid-flow-row">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
             <div>Recent Transactions</div>
-            <Button onClick={clearAllTransactionsCallback}>(clear all)</Button>
+            <div>
+              <Button variant="filled" color="gray" size="xs" onClick={clearAllTransactionsCallback}>
+                Clear all
+              </Button>
+            </div>
           </div>
           {renderTransactions(pendingTransactions)}
           {renderTransactions(confirmedTransactions)}
         </div>
       ) : (
-        <div>Your transactions will appear here...</div>
+        <div className="text-baseline text-secondary">Your transactions will appear here...</div>
       )}
     </div>
   )

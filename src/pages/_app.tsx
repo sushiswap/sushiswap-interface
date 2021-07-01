@@ -1,9 +1,12 @@
 import '../bootstrap'
 import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
+import 'react-virtualized/styles.css'
 import 'react-tabs/style/react-tabs.css'
 
-import { Fragment, FunctionComponent, Provider, ProviderProps } from 'react'
+import * as plurals from 'make-plural/plurals'
+
+import { Fragment, FunctionComponent } from 'react'
 import { NextComponentType, NextPageContext } from 'next'
 
 import type { AppProps } from 'next/app'
@@ -31,20 +34,6 @@ const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetw
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
-
-function Updaters() {
-  return (
-    <>
-      <ListsUpdater />
-      <UserUpdater />
-      <ApplicationUpdater />
-      <TransactionUpdater />
-      <MulticallUpdater />
-    </>
-  )
-}
-
-const NOOP = ({ children }) => children
 
 function MyApp({
   Component,
@@ -81,6 +70,7 @@ function MyApp({
   useEffect(() => {
     async function load(locale) {
       const { messages } = await import(`@lingui/loader!./../../locale/${locale}.po`)
+      i18n.loadLocaleData(locale, { plurals: plurals[locale] })
       i18n.load(locale, messages)
       i18n.activate(locale)
     }
@@ -108,7 +98,13 @@ function MyApp({
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
-                <Updaters />
+                <>
+                  <ListsUpdater />
+                  <UserUpdater />
+                  <ApplicationUpdater />
+                  <TransactionUpdater />
+                  <MulticallUpdater />
+                </>
                 <Provider>
                   <Layout>
                     <Component {...pageProps} />

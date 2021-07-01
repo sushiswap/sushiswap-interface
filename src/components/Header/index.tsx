@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, SUSHI_ADDRESS } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
 
 import { ANALYTICS_URL } from '../../constants'
@@ -66,7 +66,7 @@ function AppBar(): JSX.Element {
                           </a>
                         </NavLink>
                       )}
-                      {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                      {chainId && [ChainId.MAINNET, ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY].includes(chainId) && (
                         <NavLink href={'/farm'}>
                           <a
                             id={`farm-nav-link`}
@@ -126,18 +126,17 @@ function AppBar(): JSX.Element {
                           <div
                             className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
                             onClick={() => {
-                              const params: any = {
-                                type: 'ERC20',
-                                options: {
-                                  address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
-                                  symbol: 'XSUSHI',
-                                  decimals: 18,
-                                  image:
-                                    'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
-                                },
-                              }
-
                               if (library && library.provider.isMetaMask && library.provider.request) {
+                                const params: any = {
+                                  type: 'ERC20',
+                                  options: {
+                                    address: '0x8798249c2e607446efb7ad49ec89dd1865ff4272',
+                                    symbol: 'XSUSHI',
+                                    decimals: 18,
+                                    image:
+                                      'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
+                                  },
+                                }
                                 library.provider
                                   .request({
                                     method: 'wallet_watchAsset',
@@ -167,67 +166,51 @@ function AppBar(): JSX.Element {
                       </>
                     )}
 
-                    {chainId &&
-                      [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC].includes(chainId) &&
-                      library &&
-                      library.provider.isMetaMask && (
-                        <>
-                          <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>
-                            <div
-                              className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"
-                              onClick={() => {
-                                let address: string | undefined
-                                switch (chainId) {
-                                  case ChainId.MAINNET:
-                                    address = '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2'
-                                    break
-                                  case ChainId.BSC:
-                                    address = '0x947950BcC74888a40Ffa2593C5798F11Fc9124C4'
-                                    break
-                                  case ChainId.MATIC:
-                                    address = '0x0b3F868E0BE5597D5DB7fEB59E1CADBb0fdDa50a'
-                                    break
-                                }
-                                const params: any = {
-                                  type: 'ERC20',
-                                  options: {
-                                    address: address,
-                                    symbol: 'SUSHI',
-                                    decimals: 18,
-                                    image:
-                                      'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
-                                  },
-                                }
-
-                                if (library && library.provider.isMetaMask && library.provider.request) {
-                                  library.provider
-                                    .request({
-                                      method: 'wallet_watchAsset',
-                                      params,
-                                    })
-                                    .then((success) => {
-                                      if (success) {
-                                        console.log('Successfully added SUSHI to MetaMask')
-                                      } else {
-                                        throw new Error('Something went wrong.')
-                                      }
-                                    })
-                                    .catch(console.error)
-                                }
-                              }}
-                            >
-                              <Image
-                                src="/images/tokens/sushi-square.jpg"
-                                alt="SUSHI"
-                                width="38px"
-                                height="38px"
-                                objectFit="contain"
-                                className="rounded-md"
-                              />
-                            </div>
-                          </QuestionHelper>
-                        </>
-                      )}
+                    {chainId && chainId in SUSHI_ADDRESS && library && library.provider.isMetaMask && (
+                      <>
+                        <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>
+                          <div
+                            className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"
+                            onClick={() => {
+                              const params: any = {
+                                type: 'ERC20',
+                                options: {
+                                  address: SUSHI_ADDRESS[chainId],
+                                  symbol: 'SUSHI',
+                                  decimals: 18,
+                                  image:
+                                    'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
+                                },
+                              }
+                              if (library && library.provider.isMetaMask && library.provider.request) {
+                                library.provider
+                                  .request({
+                                    method: 'wallet_watchAsset',
+                                    params,
+                                  })
+                                  .then((success) => {
+                                    if (success) {
+                                      console.log('Successfully added SUSHI to MetaMask')
+                                    } else {
+                                      throw new Error('Something went wrong.')
+                                    }
+                                  })
+                                  .catch(console.error)
+                              }
+                            }}
+                          >
+                            <Image
+                              src="/images/tokens/sushi-square.jpg"
+                              alt="SUSHI"
+                              width="38px"
+                              height="38px"
+                              objectFit="contain"
+                              className="rounded-md"
+                            />
+                          </div>
+                        </QuestionHelper>
+                      </>
+                    )}
 
                     {library && library.provider.isMetaMask && (
                       <div className="hidden sm:inline-block">
@@ -317,7 +300,7 @@ function AppBar(): JSX.Element {
                   </a>
                 </Link>
 
-                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                {chainId && [ChainId.MAINNET, ChainId.MATIC, ChainId.HARMONY, ChainId.XDAI].includes(chainId) && (
                   <Link href={'/farm'}>
                     <a
                       id={`farm-nav-link`}

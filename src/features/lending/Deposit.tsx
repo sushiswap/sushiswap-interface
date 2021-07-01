@@ -19,6 +19,8 @@ export default function Deposit({ pair }: any): JSX.Element {
   const { chainId } = useActiveWeb3React()
   const assetToken = useCurrency(pair.asset.address) || undefined
 
+  console.log({ pair })
+
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')

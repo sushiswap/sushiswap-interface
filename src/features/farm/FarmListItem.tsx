@@ -10,8 +10,9 @@ import FarmListItemDetails from './FarmListItemDetails'
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
+
   return (
-    <Disclosure as="div" {...rest}>
+    <Disclosure {...rest}>
       {({ open }) => (
         <>
           <Disclosure.Button
@@ -24,8 +25,11 @@ const FarmListItem = ({ farm, ...rest }) => {
               <div className="flex col-span-2 space-x-4 md:col-span-1">
                 <DoubleLogo currency0={token0} currency1={token1} size={40} />
                 <div className="flex flex-col justify-center">
-                  <div className="font-bold">
-                    {farm?.pair?.token0?.symbol}/{farm?.pair?.token1?.symbol}
+                  <div>
+                    <span className="font-bold">{farm?.pair?.token0?.symbol}</span>/
+                    <span className={farm?.pair?.type === PairType.KASHI ? 'font-thin' : 'font-bold'}>
+                      {farm?.pair?.token1?.symbol}
+                    </span>
                   </div>
                   {farm?.pair?.type === PairType.SWAP && (
                     <div className="text-xs md:text-base text-secondary">SushiSwap Farm</div>

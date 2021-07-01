@@ -91,7 +91,7 @@ const PARAMS: {
   },
   [ChainId.HARMONY]: {
     chainId: '0x63564C40',
-    chainName: 'Harmony One',
+    chainName: 'Harmony',
     nativeCurrency: {
       name: 'One Token',
       symbol: 'ONE',

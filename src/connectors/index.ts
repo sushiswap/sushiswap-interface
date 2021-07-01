@@ -116,4 +116,5 @@ export const torus = new TorusConnector({
   chainId: 1,
 })
 
-export const bsc = new BscConnector({ supportedChainIds: [56] })
+// binance only
+export const binance = new BscConnector({ supportedChainIds: [56] })

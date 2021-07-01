@@ -13,8 +13,9 @@ import {
   useStakePrice,
   useSushiPrice,
   useFarms,
-  usePairs,
+  useSushiPairs,
   useFarmPairAddresses,
+  useKashiPairs,
 } from '../../services/graph'
 import { usePositions } from '../../features/farm/hooks'
 import { ChainId } from '@sushiswap/sdk'
@@ -23,8 +24,8 @@ import FarmList from '../../features/farm/FarmList'
 import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
-import { useKashiPairs } from '../../services/graph/hooks/bentobox'
 import { useRouter } from 'next/router'
+import { classNames } from '../../functions'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -35,15 +36,19 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
-  // const swapPairs = usePairSubset(pairAddresses)
-
-  const swapPairs = usePairs({
+  const swapPairs = useSushiPairs({
     where: {
       id_in: pairAddresses,
     },
   })
 
-  const kashiPairs = useKashiPairs(pairAddresses)
+  const kashiPairs = useKashiPairs({
+    where: {
+      id_in: pairAddresses,
+    },
+  })
+
+  // console.log({ pairAddresses, swapPairs })
 
   const farms = useFarms()
 
@@ -73,7 +78,7 @@ export default function Farm(): JSX.Element {
       // !POOL_DENY.includes(pool.id) &&
       return (
         pool.allocPoint !== '0' &&
-        pool.accSushiPerShare !== '0' &&
+        // pool.accSushiPerShare !== '0' &&
         ((swapPairs && swapPairs.find((pair) => pair.id === pool.pair)) ||
           (kashiPairs && kashiPairs.find((pair) => pair.id === pool.pair)))
       )
@@ -128,22 +133,22 @@ export default function Farm(): JSX.Element {
             {
               token: 'ALCX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
-              rewardPerBlock: 0.217544236043011,
-              rewardPerDay: 0.217544236043011 * blocksPerDay,
+              rewardPerBlock: pool.rewarder.rewardPerBlock / 1e18,
+              rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * blocksPerDay,
               rewardPrice: alcxPrice,
             },
             {
               token: 'CVX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-              rewardPerBlock: 0.08336413675376289 * averageBlockTime,
-              rewardPerDay: 0.08336413675376289 * averageBlockTime * blocksPerDay,
+              rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
+              rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
               rewardPrice: cvxPrice,
             },
             {
               token: 'CVX',
               icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-              rewardPerBlock: 0.125 * averageBlockTime,
-              rewardPerDay: 0.125 * averageBlockTime * blocksPerDay,
+              rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
+              rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
               rewardPrice: cvxPrice,
             },
           ]
@@ -254,7 +259,7 @@ export default function Farm(): JSX.Element {
   const data = useMemo(() => farms.filter(filter).map(map), [farms, filter, map])
 
   const options = {
-    keys: ['id', 'pair.id', 'pair.token0.symbol', 'pair.token1.symbol', 'pair.token0.name', 'pair.token1.name'],
+    keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol', 'pair.token0.name', 'pair.token1.name'],
     threshold: 0.4,
   }
 
@@ -270,7 +275,7 @@ export default function Farm(): JSX.Element {
     '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
   }
 
-  const filtered = type ? result?.filter(filters[type]) : result
+  const filtered = !type || type === 'all' ? result : result?.filter(filters[type])
 
   return (
     <>
@@ -279,10 +284,10 @@ export default function Farm(): JSX.Element {
         <meta name="description" content="Farm SUSHI" />
       </Head>
       <Container maxWidth="full" className="grid h-full grid-cols-4 mx-auto gap-9">
-        <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
+        <div className={classNames('sticky top-0 hidden lg:block md:col-span-1')} style={{ maxHeight: '40rem' }}>
           <Menu positionsLength={positions.length} />
         </div>
-        <div className="col-span-4 space-y-6 lg:col-span-3">
+        <div className={classNames('space-y-6 col-span-4 lg:col-span-3')}>
           <Search
             search={search}
             term={term}
@@ -293,7 +298,7 @@ export default function Farm(): JSX.Element {
           />
 
           {/* <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
-            Ready to Stake{" "}
+            Ready to Stake{' '}
             <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
           </div>
           <FarmList farms={filtered} term={term} /> */}
@@ -302,6 +307,7 @@ export default function Farm(): JSX.Element {
             Farms{' '}
             <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
           </div>
+
           <FarmList farms={filtered} term={term} />
         </div>
       </Container>

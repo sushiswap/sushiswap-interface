@@ -54,12 +54,21 @@ export const kashiPairFieldsQuery = gql`
 
 export const kashiPairsQuery = gql`
   query kashiPairs(
-    $first: Int! = 1000
-    $pairAddresses: [Bytes]!
-    $orderBy: String! = "utilization"
-    $orderDirection: String! = "desc"
+    $skip: Int = 0
+    $first: Int = 1000
+    $where: KashiPair_filter
+    $block: Block_height
+    $orderBy: KashiPair_orderBy = "utilization"
+    $orderDirection: OrderDirection! = "desc"
   ) {
-    kashiPairs(first: $first, orderBy: $orderBy, orderDirection: $orderDirection, where: { id_in: $pairAddresses }) {
+    kashiPairs(
+      skip: $skip
+      first: $first
+      where: $where
+      block: $block
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
       ...kashiPairFields
     }
   }
