@@ -57,7 +57,7 @@ export default function LimitOrder() {
     useCurrency(loadedUrlParams?.outputCurrencyId),
   ]
 
-  const pairs = limitOrderPairList.pairs[chainId].map(([token0, token1]) => [token0.address, token1.address]) || []
+  const pairs = (limitOrderPairList.pairs[chainId] || []).map(([token0, token1]) => [token0.address, token1.address])
 
   // token warning stuff
   const [dismissTokenWarning, setDismissTokenWarning] = useState<boolean>(false)
