@@ -68,6 +68,10 @@ export const Input = React.memo(
         {...rest}
         value={value}
         onChange={(event) => {
+          if (+event.target.value > 100) {
+            return
+          }
+
           // replace commas with periods, because uniswap exclusively uses period as the decimal separator
           enforcer(event.target.value.replace(/,/g, '.').replace(/%/g, ''))
         }}
