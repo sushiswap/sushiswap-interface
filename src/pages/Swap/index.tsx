@@ -306,10 +306,10 @@ export default function Swap() {
     return (
         <>
             <Helmet>
-                <title>{i18n._(t`Swap`)} | Sushi</title>
+                <title>{i18n._(t`Swap`)} | ROS</title>
                 <meta
                     name="description"
-                    content="Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
+                    content="Rise of Shinobi exchange allows a user to trade BEP20 compatible tokens on Binance Smart Chain network"
                 />
             </Helmet>
             <TokenWarningModal
@@ -339,8 +339,8 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">New Yield Farms: ibBTC, BIFI, dTOP </div>
-                                        <div className="text-purple text-sm">Add liquidity and stake now</div>
+                                        <div className="text-white"> </div>
+                                        <div className="text-purple text-sm"></div>
                                     </div>
                                     <div className=""></div>
                                     <Link
