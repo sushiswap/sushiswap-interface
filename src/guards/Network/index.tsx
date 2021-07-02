@@ -8,12 +8,15 @@ import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
 import { SUPPORTED_NETWORKS } from '../../components/NetworkModal'
 import cookie from 'cookie-cutter'
 import { classNames } from '../../functions'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
 
 interface NetworkGuardProps {
   networks: ChainId[]
 }
 
 const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
+  const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
 
   if (networks.includes(chainId)) return <>{children}</>
@@ -23,8 +26,10 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
       <div className="flex flex-col gap-5">
         <div className="flex gap-5">
           <div className="flex flex-col gap-3">
-            <Typography variant="h3">Unsupported network</Typography>
-            <Typography>Please switch to one of the following supported networks to view this page</Typography>
+            <Typography variant="h3">{i18n._(t`Unsupported network`)}</Typography>
+            <Typography>
+              {i18n._(t`Please switch to one of the following supported networks to view this page`)}
+            </Typography>
           </div>
         </div>
         <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
