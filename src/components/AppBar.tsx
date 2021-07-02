@@ -64,7 +64,7 @@ function AppBar(): JSX.Element {
                                                     pathname.startsWith('/find')
                                                 }
                                             >
-                                                {i18n._(t`Pool`)}
+                                                {i18n._(t`Add Liquidity`)}
                                             </NavLink>
                                             {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
