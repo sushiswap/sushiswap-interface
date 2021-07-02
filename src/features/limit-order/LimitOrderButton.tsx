@@ -80,7 +80,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
       parsedAmounts[Field.INPUT].wrapped,
       parsedAmounts[Field.OUTPUT].wrapped,
       recipient ? recipient : account,
-      0,
+      '0',
       endTime.toString()
     )
 
