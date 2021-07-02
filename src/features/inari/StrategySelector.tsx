@@ -1,27 +1,29 @@
 import React, { FC } from 'react'
-import { InaryStrategy } from '../../pages/inari'
 import { classNames } from '../../functions'
+import { useAppDispatch } from '../../state/hooks'
+import { setStrategy } from '../../state/inari/actions'
+import { INARI_STRATEGIES } from '../../state/inari/constants'
+import { useInariState } from '../../state/inari/hooks'
 
-interface StrategySelectorProps {
-  strategy: number
-  strategies: InaryStrategy[]
-  setStrategy: (x: number) => void
-}
+interface StrategySelectorProps {}
 
-const StrategySelector: FC<StrategySelectorProps> = ({ strategies, strategy, setStrategy }) => {
+const StrategySelector: FC<StrategySelectorProps> = () => {
+  const { strategy } = useInariState()
+  const dispatch = useAppDispatch()
+
   return (
     <div className="flex flex-col gap-4 z-10 relative">
-      {strategies.map((el, index) => {
+      {Object.entries(INARI_STRATEGIES).map(([k, v]) => {
         return (
           <div
-            key={index}
-            onClick={() => setStrategy(index)}
+            key={k}
+            onClick={() => dispatch(setStrategy(k))}
             className={classNames(
-              strategy === index ? 'border-gradient-r-blue-pink-dark-800' : 'bg-dark-900',
-              'cursor-pointer border border-transparent pl-5 py-2 rounded whitespace-nowrap w-full font-bold h-[48px] flex items-center'
+              k === strategy ? 'border-gradient-r-blue-pink-dark-800' : 'bg-dark-900',
+              'cursor-pointer border border-transparent pl-5 py-2 rounded whitespace-nowrap w-full font-bold h-[48px] flex items-center text-sm'
             )}
           >
-            {el.name}
+            {v.name}
           </div>
         )
       })}

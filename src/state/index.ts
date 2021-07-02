@@ -12,6 +12,7 @@ import transactions from './transactions/reducer'
 import { updateVersion } from './global/actions'
 import user from './user/reducer'
 import zap from './zap/reducer'
+import inari from './inari/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
@@ -27,6 +28,7 @@ const store = configureStore({
     lists,
     zap,
     create,
+    inari,
   },
   middleware: [
     ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),

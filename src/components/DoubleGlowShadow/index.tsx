@@ -1,6 +1,13 @@
-const DoubleGlowShadow = ({ children }) => {
+import { FC } from 'react'
+import { classNames } from '../../functions'
+
+interface DoubleGlowShadowProps {
+  className: string
+}
+
+const DoubleGlowShadow: FC<DoubleGlowShadowProps> = ({ children, className }) => {
   return (
-    <div className="relative w-full max-w-2xl">
+    <div className={classNames(className, 'relative w-full max-w-2xl')}>
       <div
         style={{ filter: 'blur(150px)' }}
         className="absolute top-1/4 -left-10 bg-blue bottom-4 w-3/5 rounded-full z-0"

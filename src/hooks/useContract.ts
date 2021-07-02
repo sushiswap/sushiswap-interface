@@ -12,7 +12,6 @@ import {
   ROUTER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
-  WETH9,
   WNATIVE,
 } from '@sushiswap/sdk'
 import {
@@ -20,12 +19,11 @@ import {
   BORING_HELPER_ADDRESS,
   CHAINLINK_ORACLE_ADDRESS,
   KASHI_ADDRESS,
-  SUSHISWAP_MULTISWAPPER_ADDRESS,
   SUSHISWAP_SWAPPER_ADDRESS,
   SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
   SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
-import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
+import { MERKLE_DISTRIBUTOR_ADDRESS } from '../constants'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
@@ -37,7 +35,6 @@ import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
 import COMPLEX_REWARDER_ABI from '../constants/abis/complex-rewarder.json'
 import { Contract } from '@ethersproject/contracts'
-import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
 import DASHBOARD_ABI from '../constants/abis/dashboard.json'
 import EIP_2612_ABI from '../constants/abis/eip-2612.json'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
@@ -45,6 +42,7 @@ import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
 import ERC20_ABI from '../constants/abis/erc20.json'
 import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
 import FACTORY_ABI from '../constants/abis/factory.json'
+import INARI_ABI from '../constants/abis/inari.json'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import MAKER_ABI from '../constants/abis/maker.json'
@@ -58,14 +56,13 @@ import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
 import SUSHIROLL_ABI from '@sushiswap/core/abi/SushiRoll.json'
-import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
 import SUSHISWAP_TWAP_ORACLE_ABI from '../constants/abis/sushiswap-slp-oracle.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
-import { getContract } from '../functions/contract'
+import { getContract } from '../functions'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 
@@ -640,4 +637,8 @@ export function useAlcxRewarderContract(withSignerIfPossible?: boolean): Contrac
 
 export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D', MEOWSHI_ABI, withSignerIfPossible)
+}
+
+export function useInariContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0x99B4019705444eB0F21aa6CcB71B996a0A4e8764', INARI_ABI, withSignerIfPossible)
 }
