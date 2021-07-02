@@ -183,11 +183,11 @@ msgstr "Approva"
 msgid "Approve Kashi"
 msgstr "Approva Kashi"
 
-#: src/features/limit-order/LimitOrderButton.tsx:178
+#: src/features/limit-order/LimitOrderButton.tsx:169
 msgid "Approve Limit Order"
 msgstr ""
 
-#: src/features/limit-order/LimitOrderButton.tsx:168
+#: src/features/limit-order/LimitOrderButton.tsx:159
 #: src/pages/exchange/add/[[...tokens]].tsx:471
 #: src/pages/exchange/add/[[...tokens]].tsx:488
 #: src/pages/exchange/swap/[[...tokens]].tsx:623
@@ -208,11 +208,11 @@ msgstr "Approvato"
 msgid "Approving"
 msgstr "Approvazione"
 
-#: src/features/limit-order/LimitOrderButton.tsx:176
+#: src/features/limit-order/LimitOrderButton.tsx:167
 msgid "Approving Limit Order"
 msgstr ""
 
-#: src/features/limit-order/LimitOrderButton.tsx:166
+#: src/features/limit-order/LimitOrderButton.tsx:157
 #: src/pages/exchange/add/[[...tokens]].tsx:469
 #: src/pages/exchange/add/[[...tokens]].tsx:486
 msgid "Approving {0}"
@@ -361,10 +361,10 @@ msgid "Cancelled"
 msgstr ""
 
 #: src/features/limit-order/LimitOrderButton.tsx:153
-msgid "Chain not supported yet"
-msgstr ""
+#~ msgid "Chain not supported yet"
+#~ msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:354
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:355
 msgid "Change Recipient"
 msgstr ""
 
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/features/limit-order/LimitOrderButton.tsx:147
+#: src/features/limit-order/LimitOrderButton.tsx:144
 #: src/pages/bar/index.tsx:353
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
@@ -528,7 +528,7 @@ msgstr "Deposita SUSHI in BentoBox"
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Deposita token in BentoBox per tutti i rendimenti"
 
-#: src/features/limit-order/LimitOrderButton.tsx:188
+#: src/features/limit-order/LimitOrderButton.tsx:179
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
@@ -537,7 +537,7 @@ msgstr ""
 #~ msgid "Deposited"
 #~ msgstr "Depositati"
 
-#: src/features/limit-order/LimitOrderButton.tsx:141
+#: src/features/limit-order/LimitOrderButton.tsx:138
 msgid "Depositing {0} into BentoBox"
 msgstr ""
 
@@ -949,7 +949,7 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Limite <0>usato</0>"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:212
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:213
 msgid "Limit order"
 msgstr ""
 
@@ -1298,6 +1298,10 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
+#: src/guards/Network/index.tsx:31
+msgid "Please switch to one of the following supported networks to view this page"
+msgstr ""
+
 #: src/components/Settings/index.tsx:149
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Digita \"conferma\" per attivare la modalità esperto."
@@ -1423,7 +1427,7 @@ msgstr "Rimborsa"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Limita gli scambi solo alle coppie dirette."
 
-#: src/features/limit-order/LimitOrderButton.tsx:133
+#: src/features/limit-order/LimitOrderButton.tsx:130
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1535,7 +1539,7 @@ msgid "Slippage tolerance..."
 msgstr ""
 
 #: src/features/lending/Button.tsx:28
-#: src/features/limit-order/LimitOrderButton.tsx:197
+#: src/features/limit-order/LimitOrderButton.tsx:188
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Qualcosa è andato storto durante la firma dell'approvazione. Questo è previsto per gli hardware wallet, come Trezor e Ledger. Clicca di nuovo per usare il metodo alternativo"
 
@@ -1712,7 +1716,7 @@ msgstr "Cose che puoi fare con i tuoi SUSHI"
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:144
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:145
 msgid "This transaction is below market rate"
 msgstr ""
 
@@ -1836,6 +1840,10 @@ msgstr "Tolto dallo staking"
 #: src/pages/exchange/swap/[[...tokens]].tsx:591
 msgid "Unsupported Asset"
 msgstr "Asset non supportato"
+
+#: src/guards/Network/index.tsx:29
+msgid "Unsupported network"
+msgstr ""
 
 #: src/pages/exchange/swap/[[...tokens]].tsx:601
 msgid "Unwrap"
@@ -1991,11 +1999,11 @@ msgstr "Non hai ancora liquidità in questo pool"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Devi prima approvare i token LP e poi migrarli"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:243
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:244
 msgid "You pay"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:292
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
 msgid "You receive:"
 msgstr ""
 
@@ -2094,14 +2102,14 @@ msgstr "La tua liquidità in {0}/{1} su {exchange} diventerà liquidità in {2}/
 msgid "Zap"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:164
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:165
 msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "annualizzato"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:164
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:165
 msgid "below"
 msgstr ""
 
@@ -2180,7 +2188,7 @@ msgstr "Strategia {0}"
 msgid "{0} {1} per {2}"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:166
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:167
 msgid "{0} {sign} market rate"
 msgstr ""
 
