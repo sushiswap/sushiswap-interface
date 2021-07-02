@@ -1,12 +1,14 @@
 import { useEffect, useMemo } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
+import { ChainId } from '@sushiswap/sdk'
 import { getKashiPairs } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
 
 export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
+
+  const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.MATIC)
 
   // useEffect(() => {
   //   console.log('debug', { shouldFetch, chainId, pairAddresses })
@@ -19,11 +21,4 @@ export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration
   )
 
   return data
-
-  // console.log('kashi pairs data', { data })
-
-  // return useMemo(() => {
-  //   if (!data) return []
-  //   return data
-  // }, [data])
 }

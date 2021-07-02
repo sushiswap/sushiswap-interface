@@ -222,6 +222,7 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
   [ChainId.FANTOM]: 'https://analytics-ftm.sushi.com',
   [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
   [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
+  [ChainId.HARMONY]: 'https://analytics-harmony.sushi.com',
   [ChainId.ARBITRUM]: undefined,
 }
 

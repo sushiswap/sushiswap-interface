@@ -12,9 +12,14 @@ export const poolsV2Query = gql`
       pair
       allocPoint
       slpBalance
-      rewarder
       masterChef {
+        id
         totalAllocPoint
+      }
+      rewarder {
+        id
+        rewardToken
+        rewardPerBlock
       }
     }
   }

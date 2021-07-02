@@ -1,7 +1,7 @@
 export enum Chef {
-  MASTERCHEF = 'MasterChef',
-  MASTERCHEF_V2 = 'MasterChef V2',
-  MINICHEF = 'MiniChef',
+  MASTERCHEF,
+  MASTERCHEF_V2,
+  MINICHEF,
 }
 
 export enum Rewarder {
