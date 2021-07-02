@@ -3,7 +3,7 @@ import { t } from '@lingui/macro'
 import TokenWarningModal from '../../../components/TokenWarningModal'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/sdk'
+import { ChainId, Token } from '@sushiswap/sdk'
 import { useAllTokens, useCurrency } from '../../../hooks/Tokens'
 import { Field } from '../../../state/swap/actions'
 import { useExpertModeManager } from '../../../state/user/hooks'
@@ -34,6 +34,7 @@ import PayFromToggle from '../../../features/limit-order/PayFromToggle'
 import { ExclamationIcon } from '@heroicons/react/solid'
 import { useActiveWeb3React } from '../../../hooks'
 import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
+import NetworkGuard from '../../../guards/Network'
 
 const areEqual = (first, second) => {
   if (first.length !== second.length) {
@@ -47,7 +48,7 @@ const areEqual = (first, second) => {
   return true
 }
 
-export default function LimitOrder() {
+function LimitOrder() {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
@@ -371,3 +372,7 @@ export default function LimitOrder() {
     </>
   )
 }
+
+LimitOrder.Guard = NetworkGuard([ChainId.MATIC])
+
+export default LimitOrder

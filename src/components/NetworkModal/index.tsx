@@ -10,7 +10,7 @@ import React from 'react'
 import cookie from 'cookie-cutter'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
-const PARAMS: {
+export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
     chainId: string
     chainName: string
@@ -201,7 +201,7 @@ export default function NetworkModal(): JSX.Element | null {
               key={i}
               onClick={() => {
                 toggleNetworkModal()
-                const params = PARAMS[key]
+                const params = SUPPORTED_NETWORKS[key]
                 cookie.set('chainId', key)
                 if (key === ChainId.MAINNET) {
                   library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])

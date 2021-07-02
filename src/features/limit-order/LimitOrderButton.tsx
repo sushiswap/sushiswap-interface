@@ -38,8 +38,6 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
   const [approvalState, fallback, permit, onApprove, execute] = useLimitOrderApproveCallback()
   const { mutate } = useLimitOrders()
 
-  const wrongChain = ![ChainId.MATIC].includes(chainId)
-
   const [tokenApprovalState, tokenApprove] = useApproveCallback(
     parsedAmounts[Field.INPUT],
     chainId && BENTOBOX_ADDRESS[chainId]
@@ -56,7 +54,6 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     (tokenApprovalState === ApprovalState.NOT_APPROVED || tokenApprovalState === ApprovalState.PENDING)
 
   const disabled =
-    wrongChain ||
     !!inputError ||
     approvalState === BentoApprovalState.PENDING ||
     depositPending ||
@@ -126,7 +123,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
       />
       <Button
         disabled={disabled}
-        color={disabled ? 'gray' : color}
+        color={disabled ? 'gray' : 'blue'}
         onClick={() => setOpenConfirmationModal(true)}
         {...rest}
       >
@@ -143,25 +140,19 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     )
   else if (!account)
     button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={toggleWalletModal} {...rest}>
+      <Button disabled={disabled} color="pink" onClick={toggleWalletModal} {...rest}>
         {i18n._(t`Connect Wallet`)}
-      </Button>
-    )
-  else if (wrongChain)
-    button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={toggleWalletModal} {...rest}>
-        {i18n._(t`Chain not supported yet`)}
       </Button>
     )
   else if (inputError)
     button = (
-      <Button color={'gray'} disabled={true} {...rest}>
+      <Button disabled={true} color="gray" {...rest}>
         {inputError}
       </Button>
     )
   else if (showTokenApprove)
     button = (
-      <Button disabled={disabled} onClick={tokenApprove} color={disabled ? 'gray' : color} className="mb-4" {...rest}>
+      <Button disabled={disabled} onClick={tokenApprove} color={disabled ? 'gray' : 'pink'} className="mb-4" {...rest}>
         {tokenApprovalState === ApprovalState.PENDING ? (
           <Dots>{i18n._(t`Approving ${currency.symbol}`)}</Dots>
         ) : (
@@ -171,7 +162,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     )
   else if (showLimitApprove)
     button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={onApprove} {...rest}>
+      <Button disabled={disabled} color={disabled ? 'gray' : 'pink'} onClick={onApprove} {...rest}>
         {approvalState === BentoApprovalState.PENDING ? (
           <Dots>{i18n._(t`Approving Limit Order`)}</Dots>
         ) : (
