@@ -18,13 +18,13 @@ module.exports = {
                 tl: 'to top left'
             },
             colors: {
-                'blue-pink': ['#27B0E6', '#FA52A0'],
-                'pink-red-light-brown': ['#FE5A75', '#FEC464']
+                'blue-pink': ['#b30000', '#b30000'],
+                'pink-red-light-brown': ['#9c0008', '#9c0008']
             },
             background: {
-                'dark-1000': '#0D0415',
-                'dark-900': '#161522',
-                'dark-800': '#202231',
+                'dark-1000': '#9c0008',
+                'dark-900': '#000000',
+                'dark-800': '#000000',
                 'dark-pink-red': '#4e3034'
             },
             border: {
@@ -36,34 +36,34 @@ module.exports = {
         },
         colors: {
             ...defaultTheme.colors,
-            red: '#FF3838',
-            blue: '#27B0E6',
-            pink: '#FA52A0',
-            purple: '#A755DD',
-            green: '#7CFF6B',
+            red: '#b30000',
+            blue: '#b30000',
+            pink: '#b30000',
+            purple: '#b30000',
+            green: '#b30000',
 
             'pink-red': '#FE5A75',
             'light-brown': '#FEC464',
             'light-yellow': '#FFD166',
-            'cyan-blue': '#0993EC',
-            pink: '#F338C3',
+            'cyan-blue': '#9c0008',
+            pink: '#b30000',
 
             'dark-pink': '#221825',
-            'dark-blue': '#0F182A',
-            'dark-1000': '#0D0415',
+            'dark-blue': '#000000',
+            'dark-1000': '#5c0101',
             'dark-950': '#0d0d1f',
-            'dark-900': '#161522',
+            'dark-900': '#000000',
             'dark-850': '#1d1e2c',
-            'dark-800': '#202231',
-            'dark-700': '#2E3348',
+            'dark-800': '#5c0101',
+            'dark-700': '#5c0101',
             'dark-600': '#1C2D49',
             'dark-500': '#223D5E',
 
             // TODO: bad... these are causing issues with text colors
             // 'high-emphesis': '#E3E3E3',
-            primary: '#BFBFBF',
-            secondary: '#7F7F7F',
-            'low-emphesis': '#575757'
+            primary: '#b30000',
+            secondary: '#b30000',
+            'low-emphesis': '#b30000'
         },
         screens: {
             sm: '480px',
@@ -163,24 +163,24 @@ module.exports = {
             },
             textColor: {
                 ...defaultTheme.textColor,
-                'low-emphesis': '#575757',
-                primary: '#BFBFBF',
-                secondary: '#7F7F7F',
-                'high-emphesis': '#E3E3E3'
+                'low-emphesis': '#b30000',
+                primary: '#ffffff',
+                secondary: '#ffffff',
+                'high-emphesis': '#b30000'
             },
             backgroundColor: {
                 ...defaultTheme.backgroundColor,
-                input: '#2E3348'
+                input: '#b30000'
             },
             boxShadow: {
                 ...defaultTheme.boxShadow,
                 'pink-glow': '0px 57px 90px -47px rgba(250, 82, 160, 0.15)',
-                'blue-glow': '0px 57px 90px -47px rgba(39, 176, 230, 0.17)',
-                'pink-glow-hovered': '0px 57px 90px -47px rgba(250, 82, 160, 0.30)',
+                'blue-glow': '0px 57px 90px -47px rgba(0, 0, 0, 250)',
+                'pink-glow-hovered': '0px 57px 90px -47px rgba(0, 0, 0, 250)',
                 'blue-glow-hovered': '0px 57px 90px -47px rgba(39, 176, 230, 0.34)',
 
-                'swap-blue-glow': '0px 50px 250px -47px rgba(39, 176, 230, 0.29)',
-                'liquidity-purple-glow': '0px 50px 250px -47px rgba(123, 97, 255, 0.23);'
+                'swap-blue-glow': '0px 50px 250px -47px rgba(0, 0, 0, 250)',
+                'liquidity-purple-glow': '0px 50px 250px -47px rgba(0, 0, 0, 250);'
             },
             ringWidth: {
                 ...defaultTheme.ringWidth,
@@ -193,7 +193,7 @@ module.exports = {
             },
             outline: {
                 ...defaultTheme.outline,
-                'low-emphesis': '#575757'
+                'low-emphesis': '#b30000'
             },
             animation: {
                 ellipsis: ' ellipsis 1.25s infinite'
@@ -246,7 +246,7 @@ module.exports = {
                         border: 'double 1px transparent',
                         borderRadius: '0.375rem',
                         backgroundImage:
-                            'linear-gradient(#202231, #202231), linear-gradient(to right, #0993EC, #F338C3)',
+                            'linear-gradient(#0f0f0f, #0f0f0f), linear-gradient(to right, #b30000, #b30000)',
                         backgroundOrigin: 'border-box',
                         backgroundClip: 'padding-box, border-box'
                     }

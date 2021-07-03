@@ -71,37 +71,6 @@ function AppBar(): JSX.Element {
                                                     {i18n._(t``)}
                                                 </NavLink>
                                             )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`sushibar-nav-link`} to={'/sushibar'}>
-                                                    {i18n._(t``)}
-                                                </NavLink>
-                                            )}
-                                            {chainId &&
-                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
-                                                    chainId
-                                                ) && (
-                                                    <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                                        {i18n._(t``)}
-                                                    </NavLink>
-                                                )}
-                                            {chainId &&
-                                                [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
-                                                    chainId
-                                                ) && (
-                                                    <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        {i18n._(t``)}
-                                                    </NavLink>
-                                                )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <ExternalLink id={`stake-nav-link`} href={'https://miso.sushi.com'}>
-                                                    {i18n._(t``)}
-                                                </ExternalLink>
-                                            )}
-                                            {chainId === ChainId.MAINNET && (
-                                                <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                                    {i18n._(t``)}
-                                                </NavLink>
-                                            )}
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
@@ -114,7 +83,7 @@ function AppBar(): JSX.Element {
                                                         id={`analytics-nav-link`}
                                                         href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                                     >
-                                                        {i18n._(t``)}
+                                                        {i18n._(t`Analytics`)}
                                                     </ExternalLink>
                                                 )}
                                         </div>
@@ -263,7 +232,7 @@ function AppBar(): JSX.Element {
                                                                     
                                                                 }
                                                                 const params: any = {
-                                                                    type: 'BEP20',
+                                                                    type: 'ERC20',
                                                                     options: {
                                                                         address: address,
                                                                         symbol: 'ROS',
@@ -342,7 +311,6 @@ function AppBar(): JSX.Element {
                                             )}
                                             <Web3Status />
                                         </div>
-                                        <LanguageSwitch />
 
                                         {chainId &&
                                             [ChainId.GÖRLI, ChainId.KOVAN, ChainId.RINKEBY, ChainId.ROPSTEN].includes(
@@ -375,56 +343,6 @@ function AppBar(): JSX.Element {
                             >
                                 Dashboard
                             </a> */}
-
-                                <NavLink id={`swap-nav-link`} to={'/swap'}>
-                                    {i18n._(t`Trade`)}
-                                </NavLink>
-                                <NavLink
-                                    id={`pool-nav-link`}
-                                    to={'/pool'}
-                                    isActive={(match, { pathname }) =>
-                                        Boolean(match) ||
-                                        pathname.startsWith('/add') ||
-                                        pathname.startsWith('/remove') ||
-                                        pathname.startsWith('/create') ||
-                                        pathname.startsWith('/find')
-                                    }
-                                >
-                                    {i18n._(t`Pool`)}
-                                </NavLink>
-
-                                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
-                                    <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                        {i18n._(t``)}
-                                    </NavLink>
-                                )}
-                                {chainId &&
-                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                                        <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                            {i18n._(t``)}
-                                        </NavLink>
-                                    )}
-                                {chainId &&
-                                    [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                                        <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                            {i18n._(t``)}
-                                        </NavLink>
-                                    )}
-                                {chainId === ChainId.MAINNET && (
-                                    <NavLink id={`stake-nav-link`} to={'/sushibar'}>
-                                        {i18n._(t``)}
-                                    </NavLink>
-                                )}
-                                {chainId === ChainId.MAINNET && (
-                                    <ExternalLink id={`stake-nav-link`} href={'https://miso.sushi.com'}>
-                                        {i18n._(t``)}
-                                    </ExternalLink>
-                                )}
-                                {chainId === ChainId.MAINNET && (
-                                    <NavLink id={`vesting-nav-link`} to={'/vesting'}>
-                                        {i18n._(t``)}
-                                    </NavLink>
-                                )}
                                 {chainId &&
                                     [
                                         ChainId.MAINNET,
@@ -437,7 +355,7 @@ function AppBar(): JSX.Element {
                                             id={`analytics-nav-link`}
                                             href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                         >
-                                            {i18n._(t``)}
+                                            {i18n._(t`Analytics`)}
                                         </ExternalLink>
                                     )}
                             </div>

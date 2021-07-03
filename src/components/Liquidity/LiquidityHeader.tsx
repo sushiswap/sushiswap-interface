@@ -7,7 +7,7 @@ export default function LiquidityHeader({ input = undefined, output = undefined 
             <NavLink
                 className="flex items-center justify-center px-4 py-3 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
                 activeClassName="font-bold text-high-emphesis bg-dark-900"
-                to={`/add/${input && input.address ? input.address : 'ETH'}${
+                to={`/add/${input && input.address ? input.address : 'BNB'}${
                     output && output.address ? `/${output.address}` : ''
                 }`}
             >
@@ -19,8 +19,8 @@ export default function LiquidityHeader({ input = undefined, output = undefined 
                 }}
                 className="flex items-center justify-center px-4 py-3 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
                 activeClassName="text-high-emphesis font-bold bg-dark-900"
-                to={`/remove/${input && input.address ? input.address : 'ETH'}${
-                    output && output.address ? `/${output.address}` : `${input.address ? '/ETH' : ''}`
+                to={`/remove/${input && input.address ? input.address : 'BNB'}${
+                    output && output.address ? `/${output.address}` : `${input.address ? '/BNB' : ''}`
                 }`}
             >
                 Remove
