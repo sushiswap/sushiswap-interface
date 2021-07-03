@@ -46,7 +46,7 @@ function AppBar(): JSX.Element {
                             <div className="flex items-center justify-between h-16">
                                 <div className="flex items-center">
                                     <div className="flex-shrink-0">
-                                        <img src={Logo} alt="Sushi" className="h-10 w-auto" />
+                                        <img src={Logo} alt="Shinobi" className="h-10 w-auto" />
                                     </div>
                                     <div className="hidden sm:block sm:ml-4">
                                         <div className="flex space-x-2">
@@ -66,11 +66,6 @@ function AppBar(): JSX.Element {
                                             >
                                                 {i18n._(t`Add Liquidity`)}
                                             </NavLink>
-                                            {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
-                                                <NavLink id={`yield-nav-link`} to={'/yield'}>
-                                                    {i18n._(t``)}
-                                                </NavLink>
-                                            )}
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
@@ -238,7 +233,7 @@ function AppBar(): JSX.Element {
                                                                         symbol: 'ROS',
                                                                         decimals: 9,
                                                                         image:
-                                                                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png'
+                                                                            'https://github.com/riseofshinobi/shinobi-exchange/blob/master/public/images/ninja-favicon.png'
                                                                     }
                                                                 }
 
