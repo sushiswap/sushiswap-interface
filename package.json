@@ -181,4 +181,5 @@
         "@lufycz/sushi-data": "^2.0.0-canary-21",
         "react-router": "^5.2.0"
     }
+    
 }
