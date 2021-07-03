@@ -12,7 +12,7 @@ export default function TradeLayout() {
                 <title>{i18n._(t`Trade`)} | Sushi</title>
                 <meta
                     name="description"
-                    content={i18n._(t`Sushi allows for swapping of ERC20 compatible tokens across multiple networks`)}
+                    content={i18n._(t`ROS allows for swapping of BEP20 compatible tokens across multiple networks`)}
                 />
             </Helmet>
             <div className="w-full">
