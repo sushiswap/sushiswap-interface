@@ -1,6 +1,6 @@
 {
     "name": "@sushiswap/interface",
-    "description": "SushiSwap Interface",
+    "description": "Shinobiswap Interface",
     "homepage": "https://exchange.riseofshinobi.net/swap",
     "private": true,
     "lint-staged": {
