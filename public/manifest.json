@@ -1,6 +1,6 @@
 {
-  "short_name": "SushiSwap",
-  "name": "SushiSwap",
+  "short_name": "Shinobiswap",
+  "name": "Shinobiswap",
   "icons": [
     {
       "src": "./images/logo-192x192.png",
@@ -19,5 +19,5 @@
   "display": "standalone",
   "theme_color": "#ff007a",
   "background_color": "#fff",
-  "start_url": "/"
+  "start_url": "/swap"
 }
