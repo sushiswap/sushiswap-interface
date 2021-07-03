@@ -64,7 +64,7 @@ function AppBar(): JSX.Element {
                                                     pathname.startsWith('/find')
                                                 }
                                             >
-                                                {i18n._(t`Add Liquidity`)}
+                                                {i18n._(t`Liquidity`)}
                                             </NavLink>
                                             {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
@@ -81,7 +81,7 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
-                                                        {i18n._(t``)}
+                                                        {i18n._(t`kashi`)}
                                                     </NavLink>
                                                 )}
                                             {chainId &&
@@ -89,7 +89,7 @@ function AppBar(): JSX.Element {
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
-                                                        {i18n._(t``)}
+                                                        {i18n._(t`bento`)}
                                                     </NavLink>
                                                 )}
                                             {chainId === ChainId.MAINNET && (
@@ -114,7 +114,7 @@ function AppBar(): JSX.Element {
                                                         id={`analytics-nav-link`}
                                                         href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
                                                     >
-                                                        {i18n._(t``)}
+                                                        {i18n._(t`Analytics`)}
                                                     </ExternalLink>
                                                 )}
                                         </div>
