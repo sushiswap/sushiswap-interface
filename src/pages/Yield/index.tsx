@@ -146,7 +146,7 @@ export default function Yield(): JSX.Element {
                                 <div className="container block pt-6 lg:hidden">
                                     <Menu section={section} setSection={setSection} />
                                 </div>
-                                {chainId === ChainId.MATIC && (
+                                {/* {chainId === ChainId.MATIC && (
                                     <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
                                         <div className="flex">
                                             <div className="ml-3">
@@ -158,7 +158,7 @@ export default function Yield(): JSX.Element {
                                             </div>
                                         </div>
                                     </div>
-                                )}
+                                )} */}
                             </CardHeader>
                         }
                     >
