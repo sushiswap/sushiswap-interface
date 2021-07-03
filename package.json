@@ -1,7 +1,12 @@
 {
     "name": "@sushiswap/interface",
+<<<<<<< HEAD
     "description": "SushiSwap Interface",
     "homepage": "https://exchange.riseofshinobi.net",
+=======
+    "description": "Shinobiswap Interface",
+    "homepage": "https://exchange.riseofshinobi.net/swap",
+>>>>>>> 93e4993ed95a02e4e4430f34c0ac907c273b2fc0
     "private": true,
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": [
@@ -181,4 +186,5 @@
         "@lufycz/sushi-data": "^2.0.0-canary-21",
         "react-router": "^5.2.0"
     }
+    
 }
