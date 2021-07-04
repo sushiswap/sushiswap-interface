@@ -1,10 +1,9 @@
-import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from '@ethersproject/providers'
+import { Web3Provider } from '@ethersproject/providers'
 
 import { BscConnector } from '@binance-chain/bsc-connector'
 import { ChainId } from '@sushiswap/sdk'
 import { FortmaticConnector } from './Fortmatic'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { LatticeConnector } from '@web3-react/lattice-connector'
 import { NetworkConnector } from './NetworkConnector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
@@ -83,13 +82,6 @@ export const walletconnect = new WalletConnectConnector({
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: 15000,
-})
-
-// mainnet only
-export const lattice = new LatticeConnector({
-  chainId: 1,
-  url: RPC[ChainId.MAINNET],
-  appName: 'SushiSwap',
 })
 
 // mainnet only

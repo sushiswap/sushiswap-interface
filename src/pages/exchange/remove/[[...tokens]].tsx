@@ -4,9 +4,7 @@ import { AutoRow, RowBetween } from '../../../components/Row'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
 import { ChainId, Currency, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
-import TransactionConfirmationModal, {
-  ConfirmationModalContent,
-} from '../../../components/TransactionConfirmationModal'
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../../state/burn/hooks'
 import { usePairContract, useRouterContract } from '../../../hooks/useContract'

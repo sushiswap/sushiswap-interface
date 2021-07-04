@@ -2,9 +2,7 @@ import { ApprovalState, useActiveWeb3React } from '../../hooks'
 import { Field, MeowshiState } from '../../pages/tools/meowshi'
 import React, { FC, useMemo, useState } from 'react'
 import { SUSHI, XSUSHI } from '../../constants'
-import TransactionConfirmationModal, {
-  ConfirmationModalContent,
-} from '../../components/TransactionConfirmationModal'
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
 
 import Button from '../../components/Button'
 import { ChainId } from '@sushiswap/sdk'
