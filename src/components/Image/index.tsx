@@ -31,21 +31,32 @@ const shimmer = (w, h) => `
 
 const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toString('base64') : window.btoa(str))
 
-const Image = ({ src, width, height, layout = undefined, loader = undefined, ...rest }) => {
+const Image = ({ src, width = undefined, height = undefined, layout = undefined, loader = undefined, ...rest }) => {
   const useBlur = parseInt(String(height), 10) >= 40 && parseInt(String(width), 10) >= 40
   return (
     <div style={{ width, height }} className="overflow-hidden rounded">
-      <NextImage
-        loader={loader}
-        src={src}
-        width={width}
-        height={height}
-        layout={layout}
-        // next image seems to have a typing bug which means this hack is neccasary for compilation for the time being
-        placeholder={useBlur ? 'blur' : ('empty' as 'blur')}
-        blurDataURL={useBlur ? `data:image/svg+xml;base64,${toBase64(shimmer(width, height))}` : undefined}
-        {...rest}
-      />
+      {useBlur ? (
+        <NextImage
+          loader={loader}
+          src={src}
+          width={width}
+          height={height}
+          layout={layout}
+          placeholder={useBlur ? 'blur' : ('empty' as 'blur')}
+          blurDataURL={useBlur ? `data:image/svg+xml;base64,${toBase64(shimmer(width, height))}` : undefined}
+          {...rest}
+        />
+      ) : (
+        <NextImage
+          loader={loader}
+          src={src}
+          width={width}
+          height={height}
+          layout={layout}
+          placeholder="empty"
+          {...rest}
+        />
+      )}
     </div>
   )
 }
