@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Ether, JSBI, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Ether, JSBI, NATIVE, Token } from '@sushiswap/sdk'
 import { PairState, useV2Pair } from '../../../hooks/useV2Pairs'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -20,6 +20,9 @@ import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { usePairAdder } from '../../../state/user/hooks'
 import { useTokenBalance } from '../../../state/wallet/hooks'
+import Container from '../../../components/Container'
+import Back from '../../../components/Back'
+import Typography from '../../../components/Typography'
 
 enum Fields {
   TOKEN0 = 0,
@@ -33,7 +36,7 @@ export default function PoolFinder() {
   const [showSearch, setShowSearch] = useState<boolean>(false)
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
-  const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? ExtendedEther.onChain(chainId) : null))
+  const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? NATIVE[chainId] : null))
   const [currency1, setCurrency1] = useState<Currency | null>(null)
 
   const [pairState, pair] = useV2Pair(currency0 ?? undefined, currency1 ?? undefined)
@@ -100,20 +103,27 @@ export default function PoolFinder() {
         <title>{i18n._(t`Find Pool`)} | Sushi</title>
         <meta name="description" content="Find pool" />
       </Head>
-      <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity">
-        <FindPoolTabs />
-        <div className="p-4 space-y-6">
-          <Alert
-            showIcon={false}
-            message={
-              <>
-                <b>{i18n._(t`Tip:`)}</b>{' '}
-                {i18n._(t`Use this tool to find pairs that don&apos;t automatically appear in the interface`)}
-              </>
-            }
-            type="information"
-          />
 
+      <Container maxWidth="2xl" className="space-y-6">
+        <div className="p-4 mb-3 space-y-3">
+          <Back />
+
+          <Typography component="h1" variant="h2">
+            {i18n._(t`Import Pool`)}
+          </Typography>
+        </div>
+        <Alert
+          showIcon={false}
+          message={
+            <>
+              <b>{i18n._(t`Tip:`)}</b>{' '}
+              {i18n._(t`Use this tool to find pairs that don&apos;t automatically appear in the interface`)}
+            </>
+          }
+          type="information"
+        />
+
+        <div className="relative p-4 space-y-4 rounded bg-dark-900 shadow-liquidity">
           <AutoColumn gap={'md'}>
             <CurrencySelectPanel
               currency={currency0}
@@ -196,7 +206,7 @@ export default function PoolFinder() {
             prerequisiteMessage
           )}
         </div>
-      </div>
+      </Container>
     </>
   )
 }
