@@ -114,8 +114,6 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
   )
 
-  console.log({ currency })
-
   const srcs = useMemo(() => {
     if (!currency) {
       return [unknown]
