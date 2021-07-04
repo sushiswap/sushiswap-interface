@@ -61,7 +61,7 @@ const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token
 const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg'
 const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
 const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.png'
-const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/xdai.png'
+const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg'
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
 
 const logo: { readonly [chainId in ChainId]?: string } = {
