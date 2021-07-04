@@ -73,7 +73,8 @@ export default function Table({
                     <div className={classNames('text-secondary font-bold text-sm flex flex-row')}>
                       <div
                         className={classNames(
-                          column.align && `text-${column.align}`,
+                          column.align === 'right' && `justify-end`,
+                          column.align === 'left' && 'justify-start',
                           i === 0 && 'flex-row-reverse',
                           // i === headerGroup.headers.length - 1 && '!justify-start',
                           'justify-end w-full flex'
