@@ -24,7 +24,7 @@ export const Row: FC<React.HTMLAttributes<HTMLDivElement> & RowProps> = ({
   ...rest
 }) => (
   <div
-    className={classNames('w-full flex', className)}
+    className={classNames('w-full flex p-0', className)}
     style={{
       width,
       alignItems: align,

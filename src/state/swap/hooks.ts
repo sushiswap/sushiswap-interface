@@ -1,5 +1,5 @@
 import { AppDispatch, AppState } from '../index'
-import { ChainId, Currency, CurrencyAmount, JSBI, Percent, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, Percent, TradeType, Trade as V2Trade, WNATIVE } from '@sushiswap/sdk'
 import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
 // import {
 //   EstimatedSwapCall,
@@ -49,7 +49,11 @@ export function useSwapActionHandlers(): {
       dispatch(
         selectCurrency({
           field,
-          currencyId: currency.isToken ? currency.address : currency.isNative ? 'ETH' : '',
+          currencyId: currency.isToken
+            ? currency.address
+            : currency.isNative && currency.chainId !== ChainId.CELO
+            ? 'ETH'
+            : '',
         })
       )
     },
@@ -236,12 +240,16 @@ function validatedRecipient(recipient: any): string | null {
   if (ADDRESS_REGEX.test(recipient)) return recipient
   return null
 }
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
+export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.MAINNET): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
   if (inputCurrency === '' && outputCurrency === '') {
-    // default to ETH input
-    inputCurrency = 'ETH'
+    if (chainId === ChainId.CELO) {
+      inputCurrency = WNATIVE[chainId].address
+    } else {
+      // default to ETH input
+      inputCurrency = 'ETH'
+    }
   } else if (inputCurrency === outputCurrency) {
     // clear output if identical
     outputCurrency = ''
@@ -282,7 +290,7 @@ export function useDefaultsFromURLSearch():
 
   useEffect(() => {
     if (!chainId) return
-    const parsed = queryParametersToSwapState(parsedQs)
+    const parsed = queryParametersToSwapState(parsedQs, chainId)
 
     dispatch(
       replaceSwapState({
