@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { useState } from 'react'
 import { useTable, usePagination, useSortBy } from 'react-table'
-import { classNames } from '../../functions'
+import { classNames } from '../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 
 export default function Table({ columns, data, columnsHideable = [], defaultSortBy = { id: '', desc: false } }) {
@@ -54,9 +54,9 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
       <table className="w-full overflow-hidden border-collapse" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr key="tr" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
                   <div className={classNames(i === 0 && 'pl-2', i === headerGroup.headers.length - 1 && 'pr-2')}>
                     <div className={classNames('text-secondary font-bold text-sm flex flex-row')}>
                       <div className={classNames(column.align && `text-${column.align}`, 'w-full')}>
@@ -96,10 +96,10 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
           {page.map((row, i) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr key={i} {...row.getRowProps()}>
                 {row.cells.map((cell, cI) => {
                   return (
-                    <td className="pl-0 pr-0 pb-3" {...cell.getCellProps()}>
+                    <td key={cI} className="pl-0 pr-0 pb-3" {...cell.getCellProps()}>
                       <div
                         className={classNames(
                           cI === 0 && 'rounded-l pl-4',
@@ -125,39 +125,41 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
           })}
         </tbody>
       </table>
-      <div className="flex justify-between">
-        <div className="flex font-bold text-sm text-secondary">
-          <div>Rows per page: </div>
-          <select
-            value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
-            className="ml-1 bg-transparent"
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option className="bg-dark-1000" key={pageSize} value={pageSize}>
-                {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex">
-          <div className="text-sm text-secondary">
-            {`${pageSize * pageIndex + 1}-${pageSize * (pageIndex + 1)} of ${rows.length}`}
+      {data?.length > 10 && (
+        <div className="flex justify-between">
+          <div className="flex font-bold text-sm text-secondary">
+            <div>Rows per page: </div>
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="ml-1 bg-transparent"
+            >
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <option className="bg-dark-1000" key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
           </div>
-          <button
-            onClick={() => previousPage()}
-            className={classNames(!canPreviousPage ? 'opacity-50 hover:cursor-default' : '', 'ml-3')}
-          >
-            <ArrowLeftIcon width={16} height={16} />
-          </button>
-          <button
-            onClick={() => nextPage()}
-            className={classNames(!canNextPage ? 'opacity-50 hover:cursor-default' : '', 'ml-3')}
-          >
-            <ArrowRightIcon width={16} height={16} />
-          </button>
+          <div className="flex">
+            <div className="text-sm text-secondary">
+              {`${pageSize * pageIndex + 1}-${pageSize * (pageIndex + 1)} of ${rows.length}`}
+            </div>
+            <button
+              onClick={() => previousPage()}
+              className={classNames(!canPreviousPage ? 'opacity-50 hover:cursor-default' : '', 'ml-3')}
+            >
+              <ArrowLeftIcon width={16} height={16} />
+            </button>
+            <button
+              onClick={() => nextPage()}
+              className={classNames(!canNextPage ? 'opacity-50 hover:cursor-default' : '', 'ml-3')}
+            >
+              <ArrowRightIcon width={16} height={16} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   )
 }

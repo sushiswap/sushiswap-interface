@@ -43,6 +43,7 @@
     "@sushiswap/sushi-data": "^1.0.24",
     "@transak/transak-sdk": "^1.0.28",
     "@uniswap/token-lists": "1.0.0-beta.24",
+    "@visx/gradient": "^1.7.0",
     "@visx/scale": "^1.14.0",
     "@visx/shape": "^1.14.0",
     "@web3-react/core": "^6.1.9",

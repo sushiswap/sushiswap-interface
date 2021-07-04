@@ -7,9 +7,22 @@ import { useFuse } from '../../../hooks'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import ChartCard from '../../../features/analytics/Dashboard/ChartCard'
-import { useCustomDayBlock, useDayData, useExchange, useOneDayBlock, useOneWeekBlock } from '../../../services/graph'
+import {
+  useCustomDayBlock,
+  useDayData,
+  useExchange,
+  useFarms,
+  useOneDayBlock,
+  useOneWeekBlock,
+} from '../../../services/graph'
+import { useRouter } from 'next/router'
 
 export default function Dashboard(): JSX.Element {
+  const router = useRouter()
+  const type: any = ['pools', 'pairs', 'tokens'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'pools'
+
+  const farms = useFarms()
+
   const term = ''
   const search = () => {}
 

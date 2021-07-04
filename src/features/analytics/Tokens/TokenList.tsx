@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React from 'react'
 import { classNames, formatNumber, formatNumberScale, formatPercent } from '../../../functions'
 import { useCurrency } from '../../../hooks/Tokens'
-import Table from '../Table'
+import Table from '../../../components/Table'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import ColoredNumber from '../ColoredNumber'
 

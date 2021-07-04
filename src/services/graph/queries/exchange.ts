@@ -258,8 +258,8 @@ export const tokenFieldsQuery = gql`
 `
 
 export const tokenQuery = gql`
-  query tokenQuery($id: String!) {
-    token(id: $id) {
+  query tokenQuery($id: String!, $block: Block_height) {
+    token(id: $id, block: $block) {
       ...tokenFields
     }
   }

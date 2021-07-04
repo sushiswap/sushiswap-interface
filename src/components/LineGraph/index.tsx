@@ -4,13 +4,23 @@ import { scaleLinear } from '@visx/scale'
 import { LinePath } from '@visx/shape'
 
 import { minBy, maxBy } from 'lodash'
+import { LinearGradient } from '@visx/gradient'
 
 interface LineGraphProps {
   data: {
     x: number
     y: number
   }[]
-  stroke?: string
+  stroke?:
+    | {
+        solid: string
+      }
+    | {
+        gradient: {
+          from: string
+          to: string
+        }
+      }
 }
 
 interface GraphProps extends LineGraphProps {
@@ -39,14 +49,29 @@ function Graph({ data, stroke, width, height }: GraphProps): JSX.Element {
   return (
     <div className="w-full h-full">
       <svg width={width} height={height}>
-        <LinePath data={data} x={(d) => xScale(d.x) ?? 0} y={(d) => yScale(d.y) ?? 0} stroke={stroke} strokeWidth={2} />
+        {'gradient' in stroke && (
+          <LinearGradient id="gradient" from={stroke.gradient.from} to={stroke.gradient.to} vertical={false} />
+        )}
+        <LinePath
+          data={data}
+          x={(d) => xScale(d.x) ?? 0}
+          y={(d) => yScale(d.y) ?? 0}
+          stroke={'solid' in stroke ? stroke.solid : "url('#gradient')"}
+          strokeWidth={2}
+        />
       </svg>
     </div>
   )
 }
 
-export default function LineGraph({ data, stroke = '#0993EC' }: LineGraphProps): JSX.Element {
+export default function LineGraph({ data, stroke = { solid: '#0993EC' } }: LineGraphProps): JSX.Element {
   return (
-    <AutoSizer>{({ width, height }) => <Graph data={data} stroke={stroke} width={width} height={height} />}</AutoSizer>
+    <>
+      {data && (
+        <AutoSizer>
+          {({ width, height }) => <Graph data={data} stroke={stroke} width={width} height={height} />}
+        </AutoSizer>
+      )}
+    </>
   )
 }

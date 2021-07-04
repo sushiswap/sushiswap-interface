@@ -2,7 +2,14 @@ import LineGraph from '../../../components/LineGraph'
 import { classNames, formatNumber, formatPercent } from '../../../functions'
 import ColoredNumber from '../ColoredNumber'
 import { useState, useMemo } from 'react'
-import { useCustomDayBlock, useDayData, useExchange, useOneDayBlock } from '../../../services/graph'
+import {
+  useCustomDayBlock,
+  useDayData,
+  useExchange,
+  useFactory,
+  useFarms,
+  useOneDayBlock,
+} from '../../../services/graph'
 
 interface ChartCardProps {
   type: 'liquidity' | 'volume'
@@ -43,11 +50,11 @@ export default function ChartCard(props: ChartCardProps): JSX.Element {
   const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
   const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
 
-  const exchange = useExchange()
-  const exchange1d = useExchange({ block: { number: Number(block1d) } })
-  const exchange2d = useExchange({ block: { number: Number(block2d) } })
+  const exchange = useFactory()
+  const exchange1d = useFactory({ block: { number: Number(block1d) } })
+  const exchange2d = useFactory({ block: { number: Number(block2d) } })
 
-  const { data: dayData } = useDayData({
+  const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
   })
 
