@@ -1,5 +1,5 @@
 import React from 'react'
-import { RowFixed } from '../Row'
+import { RowFixed } from '../../components/Row'
 import styled from 'styled-components'
 
 export const FilterWrapper = styled(RowFixed)`
