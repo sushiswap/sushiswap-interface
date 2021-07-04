@@ -16,14 +16,14 @@ export default function CopyHelper(props: { className?: string; toCopy: string; 
     >
       {isCopied && (
         <div className="flex items-center space-x-1 whitespace-nowrap">
-          <CheckCircle size={'16'} />
           <div>Copied</div>
+          <CheckCircle size={'16'} />
         </div>
       )}
       {!isCopied && (
         <>
-          <Copy size={'16'} />
           {props.children}
+          <Copy size={'16'} />
         </>
       )}
     </div>

@@ -48,9 +48,9 @@ function ExternalLink({
       href={href}
       onClick={handleClick}
       className={classNames(
-        'flex items-center justify-center text-baseline whitespace-nowrap',
+        'text-baseline whitespace-nowrap',
         COLOR[color],
-        (startIcon || endIcon) && 'space-x-1',
+        (startIcon || endIcon) && 'space-x-1 flex items-center justify-center',
         className
       )}
       {...rest}

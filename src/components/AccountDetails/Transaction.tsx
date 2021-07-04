@@ -130,7 +130,7 @@ export default function Transaction({ hash }: { hash: string }): any {
 
   return (
     <div className="flex items-center">
-      <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
+      <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} className="flex items-center">
         <RowFixed>
           <TransactionStatusText>{summary ?? hash} ↗</TransactionStatusText>
         </RowFixed>
