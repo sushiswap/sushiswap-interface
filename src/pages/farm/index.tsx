@@ -159,7 +159,7 @@ export default function Farm(): JSX.Element {
           const sushiPerBlock = sushiPerSecond * averageBlockTime
           const sushiPerDay = sushiPerBlock * blocksPerDay
           const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
-
+          console.log({ rewardPerSecond, averageBlockTime })
           const rewardPerBlock = rewardPerSecond * averageBlockTime
           const rewardPerDay = rewardPerBlock * blocksPerDay
 

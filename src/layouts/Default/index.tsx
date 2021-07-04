@@ -5,11 +5,11 @@ import Main from '../../components/Main'
 
 const Layout = ({ children }) => {
   return (
-    <div className="z-0 flex flex-col items-center h-screen overflow-x-hidden overflow-y-auto">
+    <div className="z-0 flex flex-col items-center w-full h-screen">
       {/* <Banner /> */}
       <Header />
       <Main>{children}</Main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }

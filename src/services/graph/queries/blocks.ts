@@ -18,7 +18,7 @@ export const blockQuery = gql`
 `
 
 export const blocksQuery = gql`
-  query blocksQuery($first: Int! = 1, $skip: Int! = 0, $start: Int!, $end: Int!) {
+  query blocksQuery($first: Int! = 1000, $skip: Int! = 0, $start: Int!, $end: Int!) {
     blocks(
       first: $first
       skip: $skip
