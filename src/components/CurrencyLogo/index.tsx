@@ -20,6 +20,12 @@ export const getTokenLogoURL = (address: string, chainId: ChainId) => {
 
 const BLOCKCHAIN = {
   [ChainId.MAINNET]: 'ethereum',
+  [ChainId.BSC]: 'binanace',
+  [ChainId.CELO]: 'celo',
+  [ChainId.FANTOM]: 'fantom',
+  [ChainId.HARMONY]: 'harmony',
+  [ChainId.MATIC]: 'polygon',
+  [ChainId.XDAI]: 'xdai',
 }
 
 function getCurrencySymbol(currency) {
@@ -35,8 +41,8 @@ function getCurrencySymbol(currency) {
 function getCurrencyLogoUrls(currency) {
   const urls = []
 
-  if (currency.chainId === ChainId.MAINNET) {
-    urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
+  urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
+  if (currency.chainId in BLOCKCHAIN) {
     urls.push(
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
@@ -107,6 +113,8 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
   const uriLocations = useHttpLocations(
     currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
   )
+
+  console.log({ currency })
 
   const srcs = useMemo(() => {
     if (!currency) {
