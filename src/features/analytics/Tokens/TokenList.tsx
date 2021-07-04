@@ -34,7 +34,7 @@ function TokenListName({ token }: TokenListNameProps): JSX.Element {
     <>
       <div className="flex items-center">
         <CurrencyLogo currency={currency} size={28} />
-        <div className="text-high-emphesis font-bold ml-3">{token.symbol}</div>
+        <div className="ml-3 font-bold text-high-emphesis">{token.symbol}</div>
       </div>
     </>
   )

@@ -26,7 +26,7 @@ export const getBlocks = async (chainId = ChainId.MAINNET, start, end) => {
 }
 
 export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfSecond(startOfMinute(subDays(Date.now(), 1)))
+  const date = startOfHour(subDays(Date.now(), 1))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
   const response = await fetcher(chainId, blocksQuery, { start, end })
@@ -34,7 +34,7 @@ export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
 }
 
 export const getOneWeekBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfSecond(startOfMinute(subDays(Date.now(), 7)))
+  const date = startOfHour(subDays(Date.now(), 7))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
   const response = await fetcher(chainId, blocksQuery, { start, end })
@@ -42,7 +42,7 @@ export const getOneWeekBlock = async (chainId = ChainId.MAINNET) => {
 }
 
 export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number) => {
-  const date = startOfSecond(startOfMinute(subDays(Date.now(), days)))
+  const date = startOfHour(subDays(Date.now(), days))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
   const response = await request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, {
@@ -56,7 +56,7 @@ export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number)
 // the time difference between them
 export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
   // console.log('getAverageBlockTime')
-  const now = startOfSecond(startOfMinute(startOfHour(Date.now())))
+  const now = startOfHour(Date.now())
   const start = getUnixTime(subHours(now, 6))
   const end = getUnixTime(now)
   const blocks = await getBlocks(chainId, start, end)

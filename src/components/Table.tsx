@@ -4,7 +4,13 @@ import { useTable, usePagination, useSortBy } from 'react-table'
 import { classNames } from '../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 
-export default function Table({ columns, data, columnsHideable = [], defaultSortBy = { id: '', desc: false } }) {
+export default function Table({
+  columns,
+  data,
+  columnsHideable = [],
+  defaultSortBy = { id: '', desc: false },
+  loading = true,
+}) {
   const [isHidden, setHidden] = useState(columnsHideable.length === 0 ? false : true)
 
   const {
@@ -68,7 +74,7 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
                         )}
                       </div>
                       {column.isSorted && (
-                        <span className="ml-1 flex items-center">
+                        <span className="flex items-center ml-1">
                           <div
                             className={classNames(
                               'fill-current text-secondary',
@@ -99,7 +105,7 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
               <tr key={i} {...row.getRowProps()}>
                 {row.cells.map((cell, cI) => {
                   return (
-                    <td key={cI} className="pl-0 pr-0 pb-3" {...cell.getCellProps()}>
+                    <td key={cI} className="pb-3 pl-0 pr-0" {...cell.getCellProps()}>
                       <div
                         className={classNames(
                           cI === 0 && 'rounded-l pl-4',
@@ -127,7 +133,7 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
       </table>
       {data?.length > 10 && (
         <div className="flex justify-between">
-          <div className="flex font-bold text-sm text-secondary">
+          <div className="flex text-sm font-bold text-secondary">
             <div>Rows per page: </div>
             <select
               value={pageSize}
