@@ -27,7 +27,6 @@ import { useFetchListCallback } from '../../hooks/useFetchListCallback'
 import { useListColor } from '../../hooks/useColor'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { usePopper } from 'react-popper'
-import useTheme from '../../hooks/useTheme'
 import useToggle from '../../hooks/useToggle'
 
 const Wrapper = styled(Column)`
@@ -98,7 +97,6 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
   const dispatch = useDispatch<AppDispatch>()
   const { current: list, pendingUpdate: pending } = listsByUrl[listUrl]
 
-  const theme = useTheme()
   const listColor = useListColor(list?.logoURI)
   const isActive = useIsListActive(listUrl)
 

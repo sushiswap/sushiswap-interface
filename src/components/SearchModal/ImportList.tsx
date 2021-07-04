@@ -18,7 +18,6 @@ import styled from 'styled-components'
 import { useAllLists } from '../../state/lists/hooks'
 import { useDispatch } from 'react-redux'
 import { useFetchListCallback } from '../../hooks/useFetchListCallback'
-import useTheme from '../../hooks/useTheme'
 
 const Wrapper = styled.div`
   position: relative;
@@ -34,7 +33,6 @@ interface ImportProps {
 }
 
 function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
-  const theme = useTheme()
   const dispatch = useDispatch<AppDispatch>()
 
   // user must accept
