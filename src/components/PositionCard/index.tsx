@@ -18,6 +18,8 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTotalSupply } from '../../hooks/useTotalSupply'
+import { classNames } from '../../functions'
+import { Transition } from '@headlessui/react'
 
 interface PositionCardProps {
   pair: Pair
@@ -155,7 +157,10 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
     >
       <Button
         variant="empty"
-        className="flex items-center justify-between w-full px-4 py-6 cursor-pointer bg-dark-800 hover:bg-dark-700"
+        className={classNames(
+          'flex items-center justify-between w-full px-4 py-6 cursor-pointer bg-dark-800 hover:bg-dark-700',
+          showMore && '!bg-dark-700'
+        )}
         style={{ boxShadow: 'none' }}
         onClick={() => setShowMore(!showMore)}
       >
@@ -175,7 +180,15 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
         </div>
       </Button>
 
-      {showMore && (
+      <Transition
+        show={showMore}
+        enter="transition-opacity duration-75"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-150"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+      >
         <div className="p-4 space-y-4">
           <div className="px-4 py-4 space-y-1 text-sm rounded text-high-emphesis bg-dark-900">
             <div className="flex items-center justify-between">
@@ -242,7 +255,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
             </div>
           )}
         </div>
-      )}
+      </Transition>
     </div>
   )
 }
