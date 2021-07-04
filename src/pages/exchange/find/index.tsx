@@ -33,7 +33,6 @@ export default function PoolFinder() {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
 
-  const [showSearch, setShowSearch] = useState<boolean>(false)
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
   const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? NATIVE[chainId] : null))
@@ -60,24 +59,6 @@ export default function PoolFinder() {
 
   const hasPosition = Boolean(position && JSBI.greaterThan(position.quotient, JSBI.BigInt(0)))
 
-  // const switchTokens = useCallback(() => {
-  //   setCurrency0(currency1);
-  //   setCurrency1(currency0);
-  // }, [currency0, currency1]);
-
-  // const handleCurrencySelect = useCallback(
-  //   (currency: Currency) => {
-  //     if (activeField === Fields.TOKEN0) {
-  //       if (currency === currency1) switchTokens();
-  //       else setCurrency0(currency);
-  //     } else {
-  //       if (currency === currency0) switchTokens();
-  //       else setCurrency1(currency);
-  //     }
-  //   },
-  //   [activeField, currency0, currency1, switchTokens]
-  // );
-
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
       if (activeField === Fields.TOKEN0) {
@@ -88,10 +69,6 @@ export default function PoolFinder() {
     },
     [activeField]
   )
-
-  const handleSearchDismiss = useCallback(() => {
-    setShowSearch(false)
-  }, [setShowSearch])
 
   const prerequisiteMessage = (
     <div className="p-5 text-center rounded bg-dark-800">{i18n._(t`Select a token to find your liquidity`)}</div>
@@ -113,7 +90,6 @@ export default function PoolFinder() {
           </Typography>
         </div>
         <Alert
-          showIcon={false}
           message={
             <>
               <b>{i18n._(t`Tip:`)}</b>{' '}
