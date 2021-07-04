@@ -717,8 +717,17 @@ export default function Remove() {
       <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-4">
         <div className="px-4 mb-5">
           <NavLink href="/pool">
-            <a className="text-base font-medium text-center text-secondary hover:text-high-emphesis">
-              {i18n._(t`View Your Liquidity Positions >`)}
+            <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
+              <span>{i18n._(t`View Liquidity Positions`)}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
             </a>
           </NavLink>
         </div>
