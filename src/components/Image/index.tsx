@@ -42,8 +42,8 @@ const Image = ({ src, width = undefined, height = undefined, layout = undefined,
           width={width}
           height={height}
           layout={layout}
-          placeholder={useBlur ? 'blur' : ('empty' as 'blur')}
-          blurDataURL={useBlur ? `data:image/svg+xml;base64,${toBase64(shimmer(width, height))}` : undefined}
+          placeholder="blur"
+          blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(width, height))}`}
           {...rest}
         />
       ) : (
