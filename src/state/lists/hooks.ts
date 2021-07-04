@@ -30,9 +30,9 @@ export class WrappedTokenInfo extends Token {
     }
 }
 
-export type TokenAddressMap = Readonly<
-    { [chainId in ChainId]: Readonly<{ [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList } }> }
->
+export type TokenAddressMap = Readonly<{
+    [chainId: string]: Readonly<{ [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList } }>
+}>
 
 /**
  * An empty result, useful as a default.
@@ -59,7 +59,8 @@ const EMPTY_LIST: TokenAddressMap = {
     [ChainId.HARMONY]: {},
     [ChainId.HARMONY_TESTNET]: {},
     [ChainId.OKEX]: {},
-    [ChainId.OKEX_TESTNET]: {}
+    [ChainId.OKEX_TESTNET]: {},
+    42220: {},
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -73,22 +74,22 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
         (tokenMap, tokenInfo) => {
             const tags: TagInfo[] =
                 tokenInfo.tags
-                    ?.map(tagId => {
+                    ?.map((tagId) => {
                         if (!list.tags?.[tagId]) return undefined
                         return { ...list.tags[tagId], id: tagId }
                     })
                     ?.filter((x): x is TagInfo => Boolean(x)) ?? []
             const token = new WrappedTokenInfo(tokenInfo, tags)
-            if (tokenMap[token.chainId][token.address] !== undefined) throw Error('Duplicate tokens.')
+            if (tokenMap?.[token.chainId]?.[token.address] !== undefined) throw Error('Duplicate tokens.')
             return {
                 ...tokenMap,
                 [token.chainId]: {
                     ...tokenMap[token.chainId],
                     [token.address]: {
                         token,
-                        list: list
-                    }
-                }
+                        list: list,
+                    },
+                },
             }
         },
         { ...EMPTY_LIST }
@@ -105,7 +106,7 @@ export function useAllLists(): {
         readonly error: string | null
     }
 } {
-    return useSelector<AppState, AppState['lists']['byUrl']>(state => state.lists.byUrl)
+    return useSelector<AppState, AppState['lists']['byUrl']>((state) => state.lists.byUrl)
 }
 
 function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddressMap {
@@ -131,7 +132,9 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
         1666600000: { ...map1[1666600000], ...map2[1666600000] }, // harmony
         1666700000: { ...map1[1666700000], ...map2[1666700000] }, // harmony testnet
         66: { ...map1[66], ...map2[66] }, // okex
-        65: { ...map1[65], ...map2[65] } // okex testnet
+        65: { ...map1[65], ...map2[65] }, // okex testnet
+        42220: { ...map1[42220], ...map2[42220] }, // celo
+        42161: { ...map1[42161], ...map2[42161] }, // arbitrum
     }
 }
 
@@ -164,15 +167,15 @@ function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMa
 
 // filter out unsupported lists
 export function useActiveListUrls(): string[] | undefined {
-    return useSelector<AppState, AppState['lists']['activeListUrls']>(state => state.lists.activeListUrls)?.filter(
-        url => !UNSUPPORTED_LIST_URLS.includes(url)
+    return useSelector<AppState, AppState['lists']['activeListUrls']>((state) => state.lists.activeListUrls)?.filter(
+        (url) => !UNSUPPORTED_LIST_URLS.includes(url)
     )
 }
 
 export function useInactiveListUrls(): string[] {
     const lists = useAllLists()
     const allActiveListUrls = useActiveListUrls()
-    return Object.keys(lists).filter(url => !allActiveListUrls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url))
+    return Object.keys(lists).filter((url) => !allActiveListUrls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url))
 }
 
 // get all the tokens from active lists, combine with local default tokens
