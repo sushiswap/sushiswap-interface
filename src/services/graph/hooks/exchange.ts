@@ -61,6 +61,7 @@ export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
 }
 
 export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
+  
   const { data } = useSWR('sushiPrice', () => getSushiPrice(), swrConfig)
   return data
 }
