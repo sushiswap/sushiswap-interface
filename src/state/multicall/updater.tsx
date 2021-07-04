@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef } from 'react'
 
 import { AppState } from '../index'
 import { Contract } from 'ethers'
-import chunkArray from '../../functions/array/chunkArray'
+import { chunkArray } from '../../functions/array'
 import { updateBlockNumber } from '../application/actions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../application/hooks'

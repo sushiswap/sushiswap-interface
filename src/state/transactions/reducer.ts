@@ -20,6 +20,12 @@ export interface TransactionDetails {
   addedTime: number
   confirmedTime?: number
   from: string
+  archer?: {
+    deadline: number
+    rawTransaction: string
+    nonce: number
+    ethTip: string
+  }
 }
 
 export interface TransactionState {
@@ -32,12 +38,20 @@ export const initialState: TransactionState = {}
 
 export default createReducer(initialState, (builder) =>
   builder
-    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, approval, summary, claim } }) => {
+    .addCase(addTransaction, (transactions, { payload: { chainId, from, hash, approval, summary, claim, archer } }) => {
       if (transactions[chainId]?.[hash]) {
         throw Error('Attempted to add existing transaction.')
       }
       const txs = transactions[chainId] ?? {}
-      txs[hash] = { hash, approval, summary, claim, from, addedTime: now() }
+      txs[hash] = {
+        hash,
+        approval,
+        summary,
+        claim,
+        from,
+        addedTime: now(),
+        archer,
+      }
       transactions[chainId] = txs
     })
     .addCase(clearAllTransactions, (transactions, { payload: { chainId } }) => {
