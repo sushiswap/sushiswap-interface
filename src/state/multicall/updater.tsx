@@ -175,8 +175,6 @@ export default function Updater(): null {
 
             const slice = outdatedCallKeys.slice(firstCallKeyIndex, lastCallKeyIndex)
 
-            console.log({ returnData })
-
             // split the returned slice into errors and success
             const { erroredCalls, results } = slice.reduce<{
               erroredCalls: Call[]

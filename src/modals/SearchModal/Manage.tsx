@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 
-import Column from '../Column'
+import Column from '../../components/Column'
 import CurrencyModalView from './CurrencyModalView'
 import ManageLists from './ManageLists'
 import ManageTokens from './ManageTokens'
-import ModalHeader from '../ModalHeader'
+import ModalHeader from '../../components/ModalHeader'
 import { Token } from '@sushiswap/sdk'
 import { TokenList } from '@uniswap/token-lists'
 import styled from 'styled-components'

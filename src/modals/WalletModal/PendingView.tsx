@@ -1,5 +1,5 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import Loader from '../Loader'
+import Loader from '../../components/Loader'
 import Option from './Option'
 import React from 'react'
 import { SUPPORTED_WALLETS } from '../../constants'

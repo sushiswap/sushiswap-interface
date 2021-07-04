@@ -1,6 +1,6 @@
-import { RowBetween, RowFixed } from '../Row'
+import { RowBetween, RowFixed } from '../../components/Row'
 
-import { AutoColumn } from '../Column'
+import { AutoColumn } from '../../components/Column'
 import styled from 'styled-components'
 
 export const ModalInfo = styled.div`

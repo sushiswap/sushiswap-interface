@@ -4,7 +4,7 @@ import { fortmatic, injected, portis } from '../../connectors'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import AccountDetails from '../AccountDetails'
+import AccountDetails from '../../components/AccountDetails'
 import { ApplicationModal } from '../../state/application/actions'
 import ExternalLink from '../../components/ExternalLink'
 // import MetamaskIcon from '../../assets/images/metamask.png'

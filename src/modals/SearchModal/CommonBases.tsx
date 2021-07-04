@@ -1,13 +1,13 @@
 import { ChainId, Currency, Token, currencyEquals } from '@sushiswap/sdk'
 
-import { AutoColumn } from '../Column'
-import { AutoRow } from '../Row'
-import Button from '../Button'
+import { AutoColumn } from '../../components/Column'
+import { AutoRow } from '../../components/Row'
+import Button from '../../components/Button'
 import { COMMON_BASES } from '../../constants/routing'
-import CurrencyLogo from '../CurrencyLogo'
-import QuestionHelper from '../QuestionHelper'
+import CurrencyLogo from '../../components/CurrencyLogo'
+import QuestionHelper from '../../components/QuestionHelper'
 import React from 'react'
-import Typography from '../Typography'
+import Typography from '../../components/Typography'
 import { currencyId } from '../../functions'
 
 export default function CommonBases({
