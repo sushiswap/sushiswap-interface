@@ -26,25 +26,30 @@ export const getBlocks = async (chainId = ChainId.MAINNET, start, end) => {
 }
 
 export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfMinute(subDays(Date.now(), 1))
+  const date = startOfSecond(startOfMinute(subDays(Date.now(), 1)))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-  return fetcher(chainId, blocksQuery, { start, end })
+  const response = await fetcher(chainId, blocksQuery, { start, end })
+  return response?.blocks?.[0]?.number
 }
 
 export const getOneWeekBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfMinute(subDays(Date.now(), 7))
+  const date = startOfSecond(startOfMinute(subDays(Date.now(), 7)))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-  return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+  const response = await fetcher(chainId, blocksQuery, { start, end })
+  return response?.blocks?.[0]?.number
 }
 
 export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number) => {
-  const date = startOfMinute(subDays(Date.now(), days))
+  const date = startOfSecond(startOfMinute(subDays(Date.now(), days)))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-
-  return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+  const response = await request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, {
+    start,
+    end,
+  })
+  return response?.blocks?.[0]?.number
 }
 
 // Grabs the last 1000 (a sample statistical) blocks and averages

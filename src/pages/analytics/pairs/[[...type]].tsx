@@ -7,15 +7,20 @@ import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import { useRouter } from 'next/router'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
+import { useEffect } from 'react'
 
 export default function Pairs() {
   const router = useRouter()
   const type: any = ['all', 'gainers', 'losers'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'all'
 
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
-  const block1w = useOneWeekBlock()?.blocks[0]?.number ?? undefined
-  const block2w = useCustomDayBlock(14)?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()
+  const block2d = useCustomDayBlock(2)
+  const block1w = useOneWeekBlock()
+  const block2w = useCustomDayBlock(14)
+
+  useEffect(() => {
+    console.log('debug', { block1d, block2d, block1w, block2w })
+  }, [block1d, block2d, block1w, block2w])
 
   const pairs = useSushiPairs()
   const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })
@@ -99,13 +104,13 @@ export default function Pairs() {
         <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
       </Head>
 
-      <Container maxWidth="full" className="grid h-full grid-cols-5 mx-auto gap-9 grid-flow-col">
+      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-5 mx-auto gap-9">
         <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
           <Menu />
         </div>
         <div className="col-span-5 space-y-6 lg:col-span-4">
           <div className="flex flex-row items-center">
-            <div className="ml-3 font-bold text-2xl text-high-emphesis">Pairs</div>
+            <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
           </div>
           <Search term={term} search={search} />
           <PairTabs />

@@ -76,8 +76,8 @@ export default function Token(): JSX.Element {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
 
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()
+  const block2d = useCustomDayBlock(2)
 
   // General data (volume, liquidity)
   const ethPrice = useEthPrice()
@@ -185,7 +185,7 @@ export default function Token(): JSX.Element {
 
   return (
     <>
-      <Container maxWidth="full" className="grid h-full grid-cols-10 mx-auto grid-flow-col">
+      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 mx-auto">
         <div className="col-start-2">
           <button onClick={() => router.back()} className="font-bold">
             {'<'} Go Back
@@ -194,7 +194,7 @@ export default function Token(): JSX.Element {
         <div className="col-span-6 space-y-10">
           <div className="flex flex-row">
             <div>
-              <button onClick={() => router.back()} className="text-purple font-bold">
+              <button onClick={() => router.back()} className="font-bold text-purple">
                 Tokens
               </button>
             </div>
@@ -203,10 +203,10 @@ export default function Token(): JSX.Element {
           <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center space-x-4">
               <CurrencyLogo currency={currency} size={53} />
-              <div className="font-bold text-4xl">{token?.symbol}</div>
+              <div className="text-4xl font-bold">{token?.symbol}</div>
             </div>
             <div className="flex flex-row items-center space-x-4">
-              <div className="font-bold text-4xl">{formatNumber(data.price, true)}</div>
+              <div className="text-4xl font-bold">{formatNumber(data.price, true)}</div>
               <div>
                 <ColoredNumber number={data.priceChange} percent={true} />
               </div>
@@ -215,7 +215,7 @@ export default function Token(): JSX.Element {
           <div className="w-full h-52">
             <LineGraph data={data.chart} stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }} />
           </div>
-          <div className="flex flex-row justify-end space-x-2 pb-4 pr-4">
+          <div className="flex flex-row justify-end pb-4 pr-4 space-x-2">
             {chartTimespans.map((timespan, i) => (
               <button
                 key={i}
@@ -229,7 +229,7 @@ export default function Token(): JSX.Element {
               </button>
             ))}
           </div>
-          <div className="flex flex-row space-x-6 justify-between">
+          <div className="flex flex-row justify-between space-x-6">
             <InfoCard text="Liquidity (24H)" number={data.liquidity} percent={data.liquidityChange} />
             <InfoCard text="Volume (24H)" number={data.volume1d} percent={data.volume1dChange} />
             <InfoCard text="Fees (24H)" number={data.volume1d * 0.003} percent={data.volume1dChange} />
@@ -237,13 +237,13 @@ export default function Token(): JSX.Element {
           <div>
             <div className="space-y-4">
               <div className="flex flex-row justify-between">
-                <div className="text-high-emphesis text-2xl font-bold">About {token?.symbol}</div>
+                <div className="text-2xl font-bold text-high-emphesis">About {token?.symbol}</div>
                 <div>
                   <a
                     href={`https://etherscan.io/token/${token?.id}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm flex flex-row items-center"
+                    className="flex flex-row items-center text-sm"
                   >
                     View Contract &nbsp;
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -255,7 +255,7 @@ export default function Token(): JSX.Element {
                   </a>
                 </div>
               </div>
-              <div className="text-high-emphesis text-lg">
+              <div className="text-lg text-high-emphesis">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis alias corrupti totam sed nihil.
                 Temporibus, distinctio pariatur odio vitae voluptate sapiente libero, rerum nihil, ullam laboriosam
                 provident asperiores! Inventore aspernatur unde quas eveniet praesentium vel, quae numquam, ducimus
@@ -271,7 +271,7 @@ export default function Token(): JSX.Element {
             </div>
           </div>
           <div>
-            <div className="text-high-emphesis text-2xl font-bold mb-5">Top Moving Pairs</div>
+            <div className="mb-5 text-2xl font-bold text-high-emphesis">Top Moving Pairs</div>
             <div className="grid grid-cols-4 grid-rows-2 gap-5">
               {times(8, (i) => (
                 <div key={i} className="flex items-center justify-center">
@@ -281,7 +281,7 @@ export default function Token(): JSX.Element {
             </div>
           </div>
           <div>
-            <div className="text-high-emphesis text-2xl font-bold mb-5">Top Farms</div>
+            <div className="mb-5 text-2xl font-bold text-high-emphesis">Top Farms</div>
             <div>
               <TopFarmsList farms={farmsFormatted} />
             </div>
