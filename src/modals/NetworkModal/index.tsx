@@ -159,7 +159,7 @@ export default function NetworkModal(): JSX.Element | null {
   if (!chainId) return null
 
   return (
-    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} maxWidth={768}>
+    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} maxWidth={672}>
       <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
       <div className="mb-6 text-lg text-primary">
         You are currently browsing <span className="font-bold text-pink">SUSHI</span>
@@ -171,7 +171,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.MAINNET,
           ChainId.MATIC,
           ChainId.FANTOM,
-          ChainId.ARBITRUM,
+          // ChainId.ARBITRUM,
           ChainId.OKEX,
           ChainId.HECO,
           ChainId.BSC,
@@ -186,7 +186,7 @@ export default function NetworkModal(): JSX.Element | null {
                 <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
                   <Image
                     src={NETWORK_ICON[key]}
-                    alt="Switch Network"
+                    alt={`Switch to ${NETWORK_LABEL[key]} Network`}
                     className="rounded-md"
                     width="32px"
                     height="32px"
@@ -216,6 +216,21 @@ export default function NetworkModal(): JSX.Element | null {
             </button>
           )
         })}
+        {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
+          <button
+            key={i}
+            className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+          >
+            <Image
+              src="/images/tokens/unknown.png"
+              alt="Switch Network"
+              className="rounded-md"
+              width="32px"
+              height="32px"
+            />
+            <div className="font-bold text-primary">{network} (Coming Soon)</div>
+          </button>
+        ))} */}
       </div>
     </Modal>
   )
