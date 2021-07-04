@@ -43,7 +43,7 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
 
 export function formatPercent(percentString: any) {
   const percent = parseFloat(percentString)
-  if (!percent || percent === 0) {
+  if (!percent || percent === Infinity || percent === 0) {
     return '0%'
   }
   if (percent < 0.0001 && percent > 0) {
@@ -67,13 +67,13 @@ export function formatPercent(percentString: any) {
   }
 }
 
-export const formatNumber = (number: any, usd = false) => {
+export const formatNumber = (number: any, usd = false, scale = true) => {
   if (isNaN(number) || number === '' || number === undefined) {
     return usd ? '$0.00' : '0'
   }
   const num = parseFloat(number)
 
-  if (num > 500000000) {
+  if (num > 500000000 && scale) {
     return (usd ? '$' : '') + formatK(num.toFixed(0))
   }
 
@@ -104,6 +104,25 @@ export const formatNumber = (number: any, usd = false) => {
   }
 
   return parseFloat(String(num)).toPrecision(4)
+}
+
+export function formatNumberScale(number: any, usd = false) {
+  if (isNaN(number) || number === '' || number === undefined) {
+    return usd ? '$0.00' : '0'
+  }
+  const num = parseFloat(number)
+  const wholeNumberLength = String(Math.floor(num)).length
+
+  if (wholeNumberLength >= 13) return (usd ? '$' : '') + (num / Math.pow(10, 12)).toFixed(1) + 'T'
+  if (wholeNumberLength >= 10) return (usd ? '$' : '') + (num / Math.pow(10, 9)).toFixed(1) + 'B'
+  if (wholeNumberLength >= 7) return (usd ? '$' : '') + (num / Math.pow(10, 6)).toFixed(1) + 'M'
+  if (wholeNumberLength >= 4) return (usd ? '$' : '') + (num / Math.pow(10, 3)).toFixed(1) + 'K'
+
+  if (num < 0.0001 && num > 0) {
+    return usd ? '< $0.0001' : '< 0.0001'
+  }
+
+  return (usd ? '$' : '') + num.toFixed(2)
 }
 
 export function escapeRegExp(string: string): string {
@@ -147,4 +166,18 @@ export function formatPrice(price: Price<Currency, Currency> | undefined, sigFig
   }
 
   return price.toSignificant(sigFigs)
+}
+
+export function formatDateAgo(date: Date) {
+  const currentDate = new Date()
+  const secondsAgo = Math.floor((currentDate.getTime() - date.getTime()) / 1000)
+
+  if (secondsAgo < 60) return `${secondsAgo} Second${secondsAgo === 1 ? '' : 's'} Ago`
+  if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} Minute${secondsAgo / 120 >= 1 ? 's' : ''} Ago`
+  if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)} Hour${secondsAgo / 7200 >= 1 ? 's' : ''} Ago`
+  if (secondsAgo < 2592000) return `${Math.floor(secondsAgo / 86400)} Day${secondsAgo / 172800 >= 1 ? 's' : ''} Ago`
+  if (secondsAgo < 31536000)
+    return `${Math.floor(secondsAgo / 2592000)} Month${secondsAgo / 5184000 >= 1 ? 's' : ''} Ago`
+
+  return `${Math.floor(secondsAgo / 31536000)} Year${secondsAgo / 63072000 >= 1 ? 's' : ''} Ago`
 }
