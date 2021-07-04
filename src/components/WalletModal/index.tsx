@@ -216,7 +216,7 @@ export default function WalletModal({
                 header={'Install Metamask'}
                 subheader={null}
                 link={'https://metamask.io/'}
-                icon="/metamask.png"
+                icon="/images/wallets/metamask.png"
               />
             )
           } else {
