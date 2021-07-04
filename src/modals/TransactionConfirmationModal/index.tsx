@@ -1,4 +1,4 @@
-import { AlertTriangle, ArrowUpCircle } from 'react-feather'
+import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
 import React, { FC } from 'react'
 
 import Button from '../../components/Button'
@@ -10,10 +10,12 @@ import Modal from '../../components/Modal'
 import ModalHeader from '../../components/ModalHeader'
 import { getExplorerLink } from '../../functions/explorer'
 import loadingRollingCircle from '../../animation/loading-rolling-circle.json'
-import { t } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask'
+import { RowFixed } from '../../components/Row'
+import Image from '../../components/Image'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
@@ -60,6 +62,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   currencyToAdd,
 }) => {
   const { i18n } = useLingui()
+  const { library } = useActiveWeb3React()
   const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
   return (
     <div>
@@ -76,9 +79,32 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
             <div className="font-bold text-blue">View on explorer</div>
           </ExternalLink>
         )}
-        <Button color="gradient" onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
+        {currencyToAdd && library?.provider?.isMetaMask && (
+          <Button color="gradient" onClick={addToken} className="w-auto mt-4">
+            {!success ? (
+              <RowFixed className="mx-auto space-x-2">
+                <Trans>
+                  <span>Add {currencyToAdd.symbol} to MetaMask </span>
+                  <Image
+                    src="/images/wallets/metamask.png"
+                    alt="Add to MetaMask"
+                    width={24}
+                    height={24}
+                    className="ml-1"
+                  />
+                </Trans>
+              </RowFixed>
+            ) : (
+              <RowFixed>
+                <Trans>Added {currencyToAdd.symbol} </Trans>
+                <CheckCircle className="ml-1.5 text-2xl text-green" size="16px" />
+              </RowFixed>
+            )}
+          </Button>
+        )}
+        {/* <Button color="gradient" onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
           Close
-        </Button>
+        </Button> */}
       </div>
     </div>
   )
