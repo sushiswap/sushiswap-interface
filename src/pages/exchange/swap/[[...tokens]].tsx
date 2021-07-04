@@ -562,12 +562,12 @@ export default function Swap() {
             <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
           </div>
         )}
-
+        {/* 
         {trade && (
           <div className="p-5 rounded bg-dark-800">
             <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
           </div>
-        )}
+        )} */}
 
         <BottomGrouping>
           {swapIsUnsupported ? (
