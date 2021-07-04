@@ -1,8 +1,9 @@
 import React, { FC } from 'react'
-import { MeowshiState } from '../../../pages/tools/meowshi'
-import Typography from '../../../components/Typography'
+
+import { MeowshiState } from '../../pages/tools/meowshi'
 import { RadioGroup } from '@headlessui/react'
-import { classNames } from '../../../functions'
+import Typography from '../../components/Typography'
+import { classNames } from '../../functions'
 
 interface HeaderToggleProps {
   meowshiState: MeowshiState

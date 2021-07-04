@@ -1,16 +1,17 @@
+import { Field, MeowshiState } from '../../pages/tools/meowshi'
 import React, { FC } from 'react'
-import Image from 'next/image'
-import { Field, MeowshiState } from '../../../pages/tools/meowshi'
-import Typography from '../../../components/Typography'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import { Input as NumericalInput } from '../../../components/NumericalInput'
+import { SUSHI, XSUSHI } from '../../constants'
+
 import { ChainId } from '@sushiswap/sdk'
-import { SUSHI, XSUSHI } from '../../../constants'
-import { useTokenBalance } from '../../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../../hooks'
-import { useUSDCValue } from '../../../hooks/useUSDCPrice'
-import { tryParseAmount } from '../../../functions'
+import Image from 'next/image'
+import { Input as NumericalInput } from '../../components/NumericalInput'
+import Typography from '../../components/Typography'
+import { t } from '@lingui/macro'
+import { tryParseAmount } from '../../functions'
+import { useActiveWeb3React } from '../../hooks'
+import { useLingui } from '@lingui/react'
+import { useTokenBalance } from '../../state/wallet/hooks'
+import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
 interface CurrencyInputPanelProps {
   field: Field

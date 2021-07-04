@@ -1,19 +1,20 @@
+import { ApprovalState, useActiveWeb3React } from '../../hooks'
+import { Field, MeowshiState } from '../../pages/tools/meowshi'
 import React, { FC, useMemo, useState } from 'react'
-import { ApprovalState, useActiveWeb3React } from '../../../hooks'
-import Button from '../../../components/Button'
-import Dots from '../../../components/Dots'
-import useMeowshi from '../../../hooks/useMeowshi'
-import { useTokenBalance } from '../../../state/wallet/hooks'
-import { SUSHI, XSUSHI } from '../../../constants'
-import { ChainId } from '@sushiswap/sdk'
-import { Field, MeowshiState } from '../../../pages/tools/meowshi'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../../functions'
-import { ethers } from 'ethers'
+import { SUSHI, XSUSHI } from '../../constants'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
-} from '../../../components/TransactionConfirmationModal'
+} from '../../components/TransactionConfirmationModal'
+
+import Button from '../../components/Button'
+import { ChainId } from '@sushiswap/sdk'
+import Dots from '../../components/Dots'
+import { ethers } from 'ethers'
+import { t } from '@lingui/macro'
+import { tryParseAmount } from '../../functions'
+import { useLingui } from '@lingui/react'
+import useMeowshi from '../../hooks/useMeowshi'
+import { useTokenBalance } from '../../state/wallet/hooks'
 
 interface MeowshiButtonProps {
   meowshiState: MeowshiState
