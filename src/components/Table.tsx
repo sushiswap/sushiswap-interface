@@ -63,7 +63,13 @@ export default function Table({
             <tr key="tr" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
                 <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  <div className={classNames(i === 0 && 'pl-2', i === headerGroup.headers.length - 1 && 'pr-2')}>
+                  <div
+                    className={classNames(
+                      i === 0 && 'pl-2',
+                      i === headerGroup.headers.length - 1 && 'pr-2',
+                      'select-none'
+                    )}
+                  >
                     <div className={classNames('text-secondary font-bold text-sm flex flex-row')}>
                       <div className={classNames(column.align && `text-${column.align}`, 'w-full')}>
                         {column.render('Header')}
