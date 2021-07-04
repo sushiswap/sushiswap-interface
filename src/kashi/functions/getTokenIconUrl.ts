@@ -182,7 +182,15 @@ const TOKEN_ICONS: { [chainId in ChainId]?: any } = {
         [String('0xD0660cD418a64a1d44E9214ad8e459324D8157f1').toLowerCase()]: 'WOOFY-square',
         [String('0x5fe2B58c013d7601147DcdD68C143A77499f5531').toLowerCase()]: 'GRT-square',
         [String('0x104592a158490a9228070E0A8e5343B499e125D0').toLowerCase()]: 'FRAX-square',
-        [String('0x3e121107f6f22da4911079845a470757af4e1a1b').toLowerCase()]: 'FXS-square'
+        [String('0x3e121107f6f22da4911079845a470757af4e1a1b').toLowerCase()]: 'FXS-square',
+        [String('0xc3FdbadC7c795EF1D6Ba111e06fF8F16A20Ea539').toLowerCase()]: 'ADDY-square',
+        [String('0x8C92e38eCA8210f4fcBf17F0951b198Dd7668292').toLowerCase()]: 'DHT-square',
+        [String('0xD86b5923F3AD7b585eD81B448170ae026c65ae9a').toLowerCase()]: 'IRON-square',
+        [String('0xEde1B77C0Ccc45BFa949636757cd2cA7eF30137F').toLowerCase()]: 'WFIL-square',
+        [String('0x7f426f6dc648e50464a0392e60e1bb465a67e9cf').toLowerCase()]: 'AUTO-square',
+        [String('0x4eac4c4e9050464067d673102f8e24b2fcceb350').toLowerCase()]: 'ibBTC-square',
+        [String('0xfbdd194376de19a88118e84e279b977f165d01b8').toLowerCase()]: 'BIFI-square',
+        [String('0x0361bdeab89df6bbcc52c43589fabba5143d19dd').toLowerCase()]: 'dTOP-square'
     },
     [ChainId.HECO]: {
         [String('0x202b4936fE1a82A4965220860aE46d7d3939Bb25').toLowerCase()]: 'AAVE-square',

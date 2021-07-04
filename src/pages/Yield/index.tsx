@@ -146,6 +146,19 @@ export default function Yield(): JSX.Element {
                                 <div className="container block pt-6 lg:hidden">
                                     <Menu section={section} setSection={setSection} />
                                 </div>
+                                {/* {chainId === ChainId.MATIC && (
+                                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                                        <div className="flex">
+                                            <div className="ml-3">
+                                                <p className="text-sm text-yellow-700">
+                                                    Polygon subgraphs are currently experiencing high loads. The APY
+                                                    displayed are based on lagging fees. Funds are safe, we are working
+                                                    on resolving and providing accurate consolidated APY information.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )} */}
                             </CardHeader>
                         }
                     >

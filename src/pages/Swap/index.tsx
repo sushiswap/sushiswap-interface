@@ -339,7 +339,7 @@ export default function Swap() {
                             <DarkCard>
                                 <div className="flex justify-between items-center">
                                     <div>
-                                        <div className="text-white">New Yield Farms! WOOFY, GRT, FRAX, FXS </div>
+                                        <div className="text-white">New Yield Farms: ibBTC, BIFI, dTOP </div>
                                         <div className="text-purple text-sm">Add liquidity and stake now</div>
                                     </div>
                                     <div className=""></div>
@@ -628,7 +628,8 @@ export default function Swap() {
                     {/*        </DarkCard>*/}
                     {/*    </div>*/}
                     {/*)}*/}
-                    <a
+                    {/* Banner */}
+                    {/* <a
                         href={
                             'https://app.sushi.com/swap?inputCurrency=0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48&outputCurrency=0xe9f84de264e91529af07fa2c746e934397810334'
                         }
@@ -659,7 +660,7 @@ export default function Swap() {
                                 </div>
                             </div>
                         </div>
-                        {/* <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                        <div className="justify-between flex pl-5 pr-8 items-center gap-6">
                             <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
                                 <Trans>
                                     Pour a hot bowl of MISO, the new <span className="font-bold">token launchpad</span>{' '}
@@ -669,8 +670,8 @@ export default function Swap() {
                             <div style={{ maxWidth: 195 }}>
                                 <img src={MisoLogo} style={{ maxWidth: '100%' }} />
                             </div>
-                        </div> */}
-                    </a>
+                        </div>
+                    </a> */}
                 </Wrapper>
             </div>
             {!swapIsUnsupported ? (
