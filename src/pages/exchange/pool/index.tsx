@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, JSBI, Pair } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, NATIVE, Pair } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../../state/user/hooks'
 
@@ -25,6 +25,7 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hooks'
 import { useV2Pairs } from '../../../hooks/useV2Pairs'
+import { currencyId } from '../../../functions'
 
 export default function Pool() {
   const { i18n } = useLingui()
@@ -146,7 +147,7 @@ export default function Pool() {
                 id="add-pool-button"
                 color="gradient"
                 className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
-                onClick={() => router.push(`/add/ETH`)}
+                onClick={() => router.push(`/add/${currencyId(NATIVE[chainId])}`)}
               >
                 {i18n._(t`Add`)}
               </Button>
