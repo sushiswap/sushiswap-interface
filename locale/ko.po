@@ -36,6 +36,22 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- 제거 요청하기"
 
+#: src/features/limit-order/OrderExpirationDropdown.tsx:18
+msgid "1 Hour"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:20
+msgid "1 Week"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:19
+msgid "24 Hours"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:21
+msgid "30 Days"
+msgstr ""
+
 #~ msgid "300M+ TVL on Polygon! Optimized routing enabled"
 #~ msgstr "Polygon에 예치된 300M 이상의 TVL! 최적화된 라우팅 적용"
 
@@ -97,8 +113,8 @@ msgstr ""
 msgid "Accept"
 msgstr "동의"
 
-#: src/components/PositionCard/index.tsx:232
-#: src/pages/exchange/pool/index.tsx:151
+#: src/components/PositionCard/index.tsx:245
+#: src/pages/exchange/pool/index.tsx:153
 msgid "Add"
 msgstr "추가"
 
@@ -118,7 +134,7 @@ msgstr ""
 msgid "Add collateral in order to borrow assets"
 msgstr "자산을 빌리려면 담보를 추가하세요"
 
-#: src/pages/exchange/find/index.tsx:171
+#: src/pages/exchange/find/index.tsx:157
 msgid "Add liquidity"
 msgstr "유동성 추가"
 
@@ -130,8 +146,8 @@ msgstr ""
 #~ msgid "Add xSushi to your Metamask wallet"
 #~ msgstr "Metamask 지갑에 xSushi 추가"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:197
-#: src/pages/exchange/add/[[...tokens]].tsx:197
+#: src/pages/exchange/add/[[...tokens]].tsx:196
+#: src/pages/exchange/add/[[...tokens]].tsx:196
 msgid "Add {0} {1} and {2} {3}"
 msgstr ""
 
@@ -139,7 +155,7 @@ msgstr ""
 msgid "Additional records and weekly merkle updates can be found on"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:69
+#: src/pages/exchange/migrate/index.tsx:70
 msgid "Amount of Tokens"
 msgstr "토큰 양"
 
@@ -153,10 +169,10 @@ msgid "Analytics"
 msgstr "애널리틱스"
 
 #: src/features/lending/Button.tsx:64
-#: src/features/tools/meowshi/MeowshiButton.tsx:125
-#: src/pages/bar/index.tsx:335
-#: src/pages/exchange/migrate/index.tsx:234
-#: src/pages/exchange/remove/[[...tokens]].tsx:838
+#: src/features/meowshi/MeowshiButton.tsx:124
+#: src/pages/bar/index.tsx:334
+#: src/pages/exchange/migrate/index.tsx:235
+#: src/pages/exchange/remove/[[...tokens]].tsx:848
 #: src/pages/user/balances.tsx:212
 msgid "Approve"
 msgstr "승인"
@@ -165,32 +181,42 @@ msgstr "승인"
 msgid "Approve Kashi"
 msgstr "카시 허용"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:469
-#: src/pages/exchange/add/[[...tokens]].tsx:486
-#: src/pages/exchange/swap/[[...tokens]].tsx:607
+#: src/features/limit-order/LimitOrderButton.tsx:169
+msgid "Approve Limit Order"
+msgstr ""
+
+#: src/features/limit-order/LimitOrderButton.tsx:159
+#: src/pages/exchange/add/[[...tokens]].tsx:480
+#: src/pages/exchange/add/[[...tokens]].tsx:497
+#: src/pages/exchange/swap/[[...tokens]].tsx:605
 msgid "Approve {0}"
 msgstr "{0} 승인하기"
 
-#: src/pages/exchange/migrate/index.tsx:232
-#: src/pages/exchange/remove/[[...tokens]].tsx:836
-#: src/pages/exchange/swap/[[...tokens]].tsx:605
+#: src/pages/exchange/migrate/index.tsx:233
+#: src/pages/exchange/remove/[[...tokens]].tsx:846
+#: src/pages/exchange/swap/[[...tokens]].tsx:603
 msgid "Approved"
 msgstr "승인됨"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:118
-#: src/pages/bar/index.tsx:333
-#: src/pages/exchange/migrate/index.tsx:230
-#: src/pages/exchange/remove/[[...tokens]].tsx:834
+#: src/features/meowshi/MeowshiButton.tsx:117
+#: src/pages/bar/index.tsx:332
+#: src/pages/exchange/migrate/index.tsx:231
+#: src/pages/exchange/remove/[[...tokens]].tsx:844
 #: src/pages/user/balances.tsx:212
 msgid "Approving"
 msgstr "승인"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:467
-#: src/pages/exchange/add/[[...tokens]].tsx:484
+#: src/features/limit-order/LimitOrderButton.tsx:167
+msgid "Approving Limit Order"
+msgstr ""
+
+#: src/features/limit-order/LimitOrderButton.tsx:157
+#: src/pages/exchange/add/[[...tokens]].tsx:478
+#: src/pages/exchange/add/[[...tokens]].tsx:495
 msgid "Approving {0}"
 msgstr "{0} 승인"
 
-#: src/components/Settings/index.tsx:157
+#: src/components/Settings/index.tsx:137
 msgid "Are you sure?"
 msgstr "확실합니까?"
 
@@ -208,9 +234,13 @@ msgstr "유효"
 #~ msgid "Back"
 #~ msgstr ""
 
-#: src/pages/bar/index.tsx:313
-#: src/pages/bar/index.tsx:371
-#: src/pages/exchange/migrate/index.tsx:219
+#: src/pages/exchange/open-order/index.tsx:22
+msgid "Back to Limit Orders"
+msgstr ""
+
+#: src/pages/bar/index.tsx:312
+#: src/pages/bar/index.tsx:370
+#: src/pages/exchange/migrate/index.tsx:220
 msgid "Balance"
 msgstr "잔액"
 
@@ -296,7 +326,7 @@ msgstr "대출을 통해 자산 매도 없이 유동성을 얻을 수 있습니�
 msgid "Buy"
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:352
+#: src/pages/exchange/add/[[...tokens]].tsx:362
 msgid ""
 "By adding liquidity you&apos;ll earn 0.25% of all trades on this pair\n"
 "proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
@@ -316,9 +346,21 @@ msgstr ""
 #~ msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your shareof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawingyour liquidity."
 #~ msgstr "유동성 공급 시 귀하는 해당 거래쌍에 대해 풀의 지분에 따라 0.25%의 거래수수료의 일부를 받게 됩니다. 수수료는 풀에 추가되고 실시간으로 발생하며 유동성 출금 시 원금과 함께 수령하게 됩니다."
 
-#: src/components/Settings/index.tsx:100
+#: src/components/Settings/index.tsx:80
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "확인 양식을 우회하고 높은 슬리피지 거래를 허용합니다. 위험을 감수하고 사용하세요."
+
+#: src/features/open-order/OpenOrders.tsx:108
+msgid "Cancel Order"
+msgstr ""
+
+#: src/features/open-order/CompletedOrders.tsx:84
+msgid "Cancelled"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:355
+msgid "Change Recipient"
+msgstr ""
 
 #: src/pages/Swap/index.tsx:399
 #~ msgid "Check out Sushi on Polygon (Matic)"
@@ -350,7 +392,7 @@ msgstr "기록 지우기"
 #~ msgid "Click here to switch to Polygon using Metamask"
 #~ msgstr "Metamask를 사용하여 Polygon으로 전환하려면 여기를 클릭"
 
-#: src/pages/exchange/migrate/index.tsx:333
+#: src/pages/exchange/migrate/index.tsx:335
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
@@ -375,15 +417,15 @@ msgstr "담보"
 msgid "Community Approval"
 msgstr "커뮤니티 승인"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:651
+#: src/pages/exchange/remove/[[...tokens]].tsx:650
 msgid "Confirm"
 msgstr "확인"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:503
+#: src/pages/exchange/add/[[...tokens]].tsx:514
 msgid "Confirm Adding Liquidity"
 msgstr "유동성 추가 확인"
 
-#: src/pages/bar/index.tsx:359
+#: src/pages/bar/index.tsx:358
 msgid "Confirm Staking"
 msgstr "스테이킹 확인"
 
@@ -395,27 +437,28 @@ msgstr "공급 확인"
 msgid "Confirm Swap"
 msgstr "스왑 확인"
 
-#: src/pages/bar/index.tsx:360
-#: src/pages/exchange/remove/[[...tokens]].tsx:848
+#: src/pages/bar/index.tsx:359
+#: src/pages/exchange/remove/[[...tokens]].tsx:858
 msgid "Confirm Withdrawal"
 msgstr "출금 확인"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:139
+#: src/features/meowshi/MeowshiButton.tsx:138
 msgid "Confirm convert"
 msgstr ""
 
 #: src/components/TransactionConfirmationModal/index.tsx:42
-msgid "Confirm this transaction in your wallet"
-msgstr ""
+#~ msgid "Confirm this transaction in your wallet"
+#~ msgstr ""
 
-#: src/pages/bar/index.tsx:353
+#: src/features/limit-order/LimitOrderButton.tsx:144
+#: src/pages/bar/index.tsx:352
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
 msgid "Connect Wallet"
 msgstr "지갑 연결"
 
-#: src/components/WalletModal/index.tsx:300
 #: src/components/Web3Connect/index.tsx:40
+#: src/modals/WalletModal/index.tsx:300
 msgid "Connect to a wallet"
 msgstr "지갑에 연결"
 
@@ -429,15 +472,15 @@ msgstr "지갑에 연결"
 #~ msgid "Connect to a wallet to view your liquidity"
 #~ msgstr "유동성을 보려면 지갑에 연결하세요."
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:104
+#: src/features/meowshi/MeowshiButton.tsx:103
 msgid "Connect to wallet"
 msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:154
+#: src/features/meowshi/MeowshiButton.tsx:153
 msgid "Convert"
 msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:146
+#: src/features/meowshi/MeowshiButton.tsx:145
 msgid "Converting {0} {1} for {2} {3}"
 msgstr ""
 
@@ -457,9 +500,13 @@ msgstr ""
 msgid "Create a pair"
 msgstr "쌍 만들기"
 
-#: src/pages/exchange/find/index.tsx:182
+#: src/pages/exchange/find/index.tsx:168
 msgid "Create pool"
 msgstr "풀 만들기"
+
+#: src/features/limit-order/LimitPriceInputPanel.tsx:43
+msgid "Current"
+msgstr ""
 
 #: src/pages/user/balances.tsx:225
 msgid "Deposit"
@@ -473,21 +520,29 @@ msgstr "BentoBox에 SUSHI 입금"
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "모든 수익에 대한 토큰을 BentoBox에 입금하세요"
 
+#: src/features/limit-order/LimitOrderButton.tsx:179
+msgid "Deposit {0} into BentoBox"
+msgstr ""
+
 #: src/pages/Yield/masterchefv1/index.tsx:52
 #: src/pages/Yield/minichefv2/index.tsx:58
 #~ msgid "Deposited"
 #~ msgstr "입금됨"
+
+#: src/features/limit-order/LimitOrderButton.tsx:138
+msgid "Depositing {0} into BentoBox"
+msgstr ""
 
 #: src/components/Header/More.tsx:18
 #: src/components/Menu.tsx:18
 msgid "Dev"
 msgstr "개발자"
 
-#: src/components/Settings/index.tsx:122
+#: src/components/Settings/index.tsx:102
 msgid "Disable Multihops"
 msgstr "멀티 홉 비활성화"
 
-#: src/components/WalletModal/index.tsx:278
+#: src/modals/WalletModal/index.tsx:278
 msgid "Disconnect"
 msgstr ""
 
@@ -534,11 +589,12 @@ msgstr ""
 msgid "Enter"
 msgstr "입력"
 
-#: src/pages/bar/index.tsx:355
+#: src/pages/bar/index.tsx:354
 msgid "Enter Amount"
 msgstr "금액 입력"
 
-#: src/state/swap/hooks.ts:182
+#: src/state/limit-order/hooks.ts:188
+#: src/state/swap/hooks.ts:186
 msgid "Enter a recipient"
 msgstr "수신자 입력"
 
@@ -547,21 +603,21 @@ msgid "Enter a valid slippage percentage"
 msgstr "유효한 슬리피지 비율 입력"
 
 #: src/state/burn/hooks.ts:138
+#: src/state/limit-order/hooks.ts:179
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:173
+#: src/state/swap/hooks.ts:177
 msgid "Enter an amount"
 msgstr "금액 입력"
 
-#: src/components/TransactionConfirmationModal/index.tsx:121
 #: src/components/Web3Connect/index.tsx:28
 msgid "Error"
 msgstr "오류"
 
-#: src/components/WalletModal/index.tsx:268
+#: src/modals/WalletModal/index.tsx:268
 msgid "Error connecting"
 msgstr ""
 
-#: src/components/WalletModal/index.tsx:274
+#: src/modals/WalletModal/index.tsx:274
 msgid "Error connecting. Try refreshing the page."
 msgstr ""
 
@@ -569,11 +625,15 @@ msgstr ""
 msgid "Exchange Rate"
 msgstr ""
 
-#: src/components/SearchModal/CurrencyList.tsx:161
+#: src/modals/SearchModal/CurrencyList.tsx:161
 msgid "Expanded results from inactive Token Lists"
 msgstr ""
 
-#: src/components/Settings/index.tsx:159
+#: src/components/ExpertModePanel/index.tsx:24
+msgid "Expert Mode"
+msgstr ""
+
+#: src/components/Settings/index.tsx:139
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
@@ -583,6 +643,14 @@ msgstr ""
 
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "전문가 모드는 거래 확인 알림은 비활성화하며 손실금을 초래할 수 있는 하이 슬리피지 거래를 활성화합니다."
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:41
+msgid "Expiration is the time at which the order will become invalid"
+msgstr ""
+
+#: src/features/open-order/CompletedOrders.tsx:86
+msgid "Expired"
+msgstr ""
 
 #: src/components/Header/index.tsx:75
 #: src/components/Header/index.tsx:310
@@ -594,11 +662,17 @@ msgstr ""
 #~ msgid "Fetching Instruments"
 #~ msgstr "도구 가져오기"
 
-#: src/pages/exchange/find/index.tsx:100
+#: src/features/open-order/CompletedOrders.tsx:39
+#: src/features/open-order/CompletedOrders.tsx:82
+#: src/features/open-order/OpenOrders.tsx:99
+msgid "Filled"
+msgstr ""
+
+#: src/pages/exchange/find/index.tsx:80
 msgid "Find Pool"
 msgstr "풀 찾기"
 
-#: src/pages/bar/index.tsx:182
+#: src/pages/bar/index.tsx:181
 msgid ""
 "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
 "proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
@@ -652,7 +726,7 @@ msgstr ""
 msgid "Go Back"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:134
+#: src/pages/exchange/migrate/index.tsx:135
 msgid "Hardware Wallet"
 msgstr "하드웨어 지갑"
 
@@ -712,17 +786,26 @@ msgstr "잠긴 기록 합계: {0} SUSHI"
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
 
-#: src/components/SearchModal/ImportToken.tsx:88
-#: src/pages/exchange/pool/index.tsx:154
+#: src/modals/SearchModal/ImportToken.tsx:88
+#: src/pages/exchange/pool/index.tsx:156
 msgid "Import"
 msgstr ""
 
 #: src/components/NavigationTabs/index.tsx:32
+#: src/pages/exchange/find/index.tsx:89
 msgid "Import Pool"
 msgstr "풀 가져오기"
 
 #~ msgid "Import it"
 #~ msgstr "가져오기"
+
+#: src/features/limit-order/BalancePanel.tsx:36
+msgid "In Bento:"
+msgstr ""
+
+#: src/features/limit-order/BalancePanel.tsx:44
+msgid "In Wallet:"
+msgstr ""
 
 #: src/features/swap/SwapModalHeader.tsx:106
 msgid "Input is estimated. You will sell at most"
@@ -737,9 +820,9 @@ msgstr ""
 #~ msgid "Instruments"
 #~ msgstr "도구"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:96
-#: src/pages/bar/index.tsx:357
-#: src/pages/exchange/migrate/index.tsx:212
+#: src/features/meowshi/MeowshiButton.tsx:95
+#: src/pages/bar/index.tsx:356
+#: src/pages/exchange/migrate/index.tsx:213
 msgid "Insufficient Balance"
 msgstr "잔액 부족"
 
@@ -747,26 +830,27 @@ msgstr "잔액 부족"
 #~ msgid "Insufficient WETH balance"
 #~ msgstr "WETH 잔액 부족"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:590
+#: src/pages/exchange/swap/[[...tokens]].tsx:588
 msgid "Insufficient liquidity for this trade"
 msgstr "이 거래를 위한 유동성 부족"
 
+#: src/state/limit-order/hooks.ts:210
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:203
 msgid "Insufficient {0} balance"
 msgstr "{0} 잔액 부족"
 
-#: src/components/Settings/index.tsx:91
+#: src/components/Settings/index.tsx:71
 msgid "Interface Settings"
 msgstr "인터페이스 설정"
 
-#: src/pages/exchange/find/index.tsx:187
+#: src/pages/exchange/find/index.tsx:173
 #: src/state/mint/hooks.ts:198
 msgid "Invalid pair"
 msgstr "잘못된 쌍"
 
-#: src/state/swap/hooks.ts:189
+#: src/state/swap/hooks.ts:193
 msgid "Invalid recipient"
 msgstr "잘못된 수신자"
 
@@ -802,7 +886,7 @@ msgstr ""
 msgid "LTV"
 msgstr ""
 
-#: src/components/WalletModal/index.tsx:318
+#: src/modals/WalletModal/index.tsx:318
 msgid "Learn more about wallets"
 msgstr ""
 
@@ -832,6 +916,7 @@ msgstr "대출"
 msgid "Lent"
 msgstr "차용"
 
+#: src/components/ExchangeHeader.tsx:60
 #: src/pages/kashi/borrow/index.tsx:80
 msgid "Limit"
 msgstr ""
@@ -840,7 +925,11 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "한도 <0>사용됨</0>"
 
-#: src/components/ExchangeHeader.tsx:59
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:213
+msgid "Limit order"
+msgstr ""
+
+#: src/components/ExchangeHeader.tsx:70
 msgid "Liquidity"
 msgstr "유동성"
 
@@ -852,11 +941,11 @@ msgstr "유동성"
 msgid "Liquidity Provider Fee"
 msgstr "유동성 제공자 수수료"
 
-#: src/pages/exchange/pool/index.tsx:107
+#: src/pages/exchange/pool/index.tsx:109
 msgid "Liquidity Provider Rewards"
 msgstr "유동성 제공자 보상"
 
-#: src/pages/exchange/pool/index.tsx:108
+#: src/pages/exchange/pool/index.tsx:110
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
@@ -869,28 +958,32 @@ msgstr ""
 #~ msgid "Liquidity providers earn a 0.25% fee on all trades proportional to their share ofthe pool. Fees are added to the pool, accrue in real time and can be claimed bywithdrawing your liquidity"
 #~ msgstr "유동성 공급자들은 풀에 대한 지분에 따라 거래시 발생하는 0.25%의 수수료의 일부를 받게 됩니다. 수수료는 풀에 포함되며 실시간으로 발생하고 유동성 출금 시에 받게 됩니다."
 
-#: src/components/SearchModal/Manage.tsx:58
+#: src/modals/SearchModal/Manage.tsx:58
 msgid "Lists"
 msgstr "리스트"
 
-#: src/components/PositionCard/index.tsx:165
+#: src/components/PositionCard/index.tsx:170
 #: src/components/TransactionList.tsx:40
-#: src/pages/exchange/find/index.tsx:190
-#: src/pages/exchange/migrate/index.tsx:214
-#: src/pages/exchange/pool/index.tsx:120
+#: src/pages/exchange/find/index.tsx:176
+#: src/pages/exchange/migrate/index.tsx:215
+#: src/pages/exchange/pool/index.tsx:122
 #: src/pages/user/index.tsx:92
 msgid "Loading"
 msgstr "로드 중"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:95
+#: src/features/meowshi/MeowshiButton.tsx:94
 msgid "Loading Balance"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:323
+#: src/state/limit-order/hooks.ts:206
+msgid "Loading balance"
+msgstr ""
+
+#: src/pages/exchange/migrate/index.tsx:325
 msgid "Loading your {exchange} liquidity positions"
 msgstr "{exchange} 유동성 포지션 로드 중"
 
-#: src/pages/bar/index.tsx:232
+#: src/pages/bar/index.tsx:231
 msgid "Loading..."
 msgstr "로드 중..."
 
@@ -900,8 +993,8 @@ msgstr "로드 중..."
 
 #: src/features/farm/FarmListItemDetails.tsx:105
 #: src/features/farm/FarmListItemDetails.tsx:162
-#: src/pages/bar/index.tsx:320
-#: src/pages/exchange/migrate/index.tsx:85
+#: src/pages/bar/index.tsx:319
+#: src/pages/exchange/migrate/index.tsx:86
 #: src/pages/user/balances.tsx:205
 #: src/pages/user/balances.tsx:269
 msgid "MAX"
@@ -913,12 +1006,12 @@ msgid ""
 "used to vote in special MEOW governor contracts."
 msgstr ""
 
-#: src/components/Settings/index.tsx:136
+#: src/components/Settings/index.tsx:116
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
-#: src/components/PositionCard/index.tsx:169
-#: src/components/SearchModal/Manage.tsx:44
+#: src/components/PositionCard/index.tsx:174
+#: src/modals/SearchModal/Manage.tsx:44
 msgid "Manage"
 msgstr "관리"
 
@@ -926,11 +1019,11 @@ msgstr "관리"
 #~ msgid "Manage Liquidity in Rewards Pool"
 #~ msgstr "보상 풀 내 유동성 관리"
 
-#: src/components/SearchModal/CurrencySearch.tsx:231
+#: src/modals/SearchModal/CurrencySearch.tsx:240
 msgid "Manage Token Lists"
 msgstr ""
 
-#: src/pages/exchange/find/index.tsx:156
+#: src/pages/exchange/find/index.tsx:142
 msgid "Manage this pool"
 msgstr "이 풀 관리"
 
@@ -958,11 +1051,12 @@ msgid "Matic Bridge"
 msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:149
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:89
+#: src/features/limit-order/CurrencyInput.tsx:43
+#: src/features/meowshi/CurrencyInputPanel.tsx:90
 msgid "Max"
 msgstr "최대"
 
-#: src/pages/bar/index.tsx:175
+#: src/pages/bar/index.tsx:174
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "xSUSHI에 대한 SUSHI 스테이킹으로 수익 극대화"
 
@@ -977,8 +1071,8 @@ msgstr ""
 
 #: src/components/Header/index.tsx:65
 #: src/components/Header/index.tsx:299
-#: src/pages/exchange/migrate/index.tsx:243
-#: src/pages/exchange/pool/index.tsx:157
+#: src/pages/exchange/migrate/index.tsx:244
+#: src/pages/exchange/pool/index.tsx:161
 msgid "Migrate"
 msgstr "마이그레이션"
 
@@ -986,15 +1080,15 @@ msgstr "마이그레이션"
 #~ msgid "Migrate Now"
 #~ msgstr "지금 마이그레이션하기"
 
-#: src/pages/exchange/migrate/index.tsx:316
+#: src/pages/exchange/migrate/index.tsx:317
 msgid "Migrate {exchange} Liquidity"
 msgstr "{exchange} 유동성 마이그레이션"
 
-#: src/pages/exchange/migrate/index.tsx:243
+#: src/pages/exchange/migrate/index.tsx:244
 msgid "Migrating"
 msgstr "마이그레이션"
 
-#: src/pages/exchange/migrate/index.tsx:130
+#: src/pages/exchange/migrate/index.tsx:131
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "귀하의 서명(허가)과  한 번의 클릭으로 마이그레이션이 수행됩니다"
 
@@ -1011,27 +1105,36 @@ msgstr "최소 수령"
 #~ msgid "Missed the Auction?"
 #~ msgstr ""
 
-#: src/pages/exchange/pool/index.tsx:102
+#: src/pages/exchange/pool/index.tsx:104
 msgid "My Liquidity Positions"
+msgstr ""
+
+#: src/features/limit-order/MyOrders.tsx:18
+msgid "My Orders"
 msgstr ""
 
 #: src/pages/user/index.tsx:74
 msgid "My SUSHI"
 msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:111
+#: src/features/meowshi/MeowshiButton.tsx:110
 msgid "Network not supported yet"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:17
+#: src/state/limit-order/hooks.ts:286
+msgid "Never"
 msgstr ""
 
 #: src/pages/Swap/index.tsx:257
 #~ msgid "New network, new features"
 #~ msgstr "새로운 네트워크, 새로운 기능"
 
-#: src/components/WalletModal/index.tsx:316
+#: src/modals/WalletModal/index.tsx:316
 msgid "New to Ethereum?"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:271
+#: src/pages/exchange/migrate/index.tsx:272
 msgid "No Liquidity found"
 msgstr "유동성 없음"
 
@@ -1052,19 +1155,23 @@ msgstr "스왑할 유동성 없음"
 #~ msgid "No liquidity positions found"
 #~ msgstr "유동성 포지션 없음"
 
-#: src/pages/exchange/pool/index.tsx:141
+#: src/pages/exchange/pool/index.tsx:143
 msgid "No liquidity was found."
 msgstr ""
 
-#: src/pages/exchange/find/index.tsx:180
+#: src/features/open-order/CompletedOrders.tsx:102
+msgid "No order history"
+msgstr ""
+
+#: src/pages/exchange/find/index.tsx:166
 msgid "No pool found"
 msgstr "풀 없음"
 
-#: src/components/SearchModal/CurrencySearch.tsx:226
+#: src/modals/SearchModal/CurrencySearch.tsx:235
 msgid "No results found"
 msgstr "검색 결과가 없습니다"
 
-#: src/pages/exchange/migrate/index.tsx:129
+#: src/pages/exchange/migrate/index.tsx:130
 msgid "Non-hardware Wallet"
 msgstr "비-하드웨어 지갑"
 
@@ -1073,7 +1180,7 @@ msgstr "비-하드웨어 지갑"
 msgid "None"
 msgstr "없음"
 
-#: src/components/Settings/index.tsx:163
+#: src/components/Settings/index.tsx:143
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 
@@ -1084,6 +1191,10 @@ msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 #: src/components/Web3ReactManager/index.tsx:68
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "이런! 알 수 없는 오류가 발생했습니다. 페이지를 새로 고침하거나 다른 브라우저 또는 기기에서 방문하세요."
+
+#: src/features/open-order/OpenOrders.tsx:48
+msgid "Open Orders"
+msgstr ""
 
 #: src/components/Header/More.tsx:23
 #: src/components/Menu.tsx:23
@@ -1103,13 +1214,21 @@ msgstr "메인 메뉴 열기"
 msgid "Oracle"
 msgstr "오라클"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:244
+#: src/features/limit-order/OrderExpirationDropdown.tsx:40
+msgid "Order Expiration"
+msgstr ""
+
+#: src/features/open-order/CompletedOrders.tsx:19
+msgid "Order History"
+msgstr ""
+
+#: src/pages/exchange/add/[[...tokens]].tsx:243
 msgid ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
 "will revert."
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:604
+#: src/pages/exchange/remove/[[...tokens]].tsx:603
 msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 msgstr "결과는 예상치입니다. 가격이 {0}% 이상 변동하면 거래가 취소됩니다."
 
@@ -1129,6 +1248,15 @@ msgstr ""
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "결과는 <0>{0} </0> 로 전송됩니다"
 
+#: src/features/open-order/CompletedOrders.tsx:35
+#: src/features/open-order/OpenOrders.tsx:64
+msgid "Pay"
+msgstr ""
+
+#: src/features/limit-order/PayFromToggle.tsx:23
+msgid "Pay from:"
+msgstr ""
+
 #: src/components/Web3Status/index.tsx:120
 msgid "Pending"
 msgstr "보류 중"
@@ -1137,11 +1265,11 @@ msgstr "보류 중"
 msgid "Pending Treasury Transfer"
 msgstr "보류 중인 자금 이체"
 
-#: src/components/WalletModal/index.tsx:272
+#: src/modals/WalletModal/index.tsx:272
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:97
+#: src/features/meowshi/MeowshiButton.tsx:96
 msgid "Please enter an amount"
 msgstr ""
 
@@ -1149,7 +1277,11 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-#: src/components/Settings/index.tsx:169
+#: src/guards/Network/index.tsx:31
+msgid "Please switch to one of the following supported networks to view this page"
+msgstr ""
+
+#: src/components/Settings/index.tsx:149
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입력하세요."
 
@@ -1159,7 +1291,7 @@ msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입�
 msgid "Pool"
 msgstr "풀"
 
-#: src/pages/exchange/find/index.tsx:154
+#: src/pages/exchange/find/index.tsx:140
 msgid "Pool Found!"
 msgstr "풀을 찾았습니다!"
 
@@ -1167,16 +1299,16 @@ msgstr "풀을 찾았습니다!"
 #~ msgid "Pool Rewards"
 #~ msgstr "풀 보상"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:241
+#: src/pages/exchange/add/[[...tokens]].tsx:240
 msgid "Pool Tokens"
 msgstr "풀 토큰"
 
-#: src/components/PositionCard/index.tsx:187
+#: src/components/PositionCard/index.tsx:200
 msgid "Pool tokens in rewards pool"
 msgstr "보상 풀의 풀 토큰"
 
-#: src/components/PositionCard/index.tsx:192
-#: src/components/PositionCard/index.tsx:204
+#: src/components/PositionCard/index.tsx:205
+#: src/components/PositionCard/index.tsx:217
 msgid "Pooled {0}"
 msgstr "{0} 풀에 추가됨"
 
@@ -1200,11 +1332,11 @@ msgstr "포지션"
 msgid "Price Impact"
 msgstr "가격 영향"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:635
+#: src/pages/exchange/swap/[[...tokens]].tsx:633
 msgid "Price Impact High"
 msgstr "가격 영향 높음"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:664
+#: src/pages/exchange/swap/[[...tokens]].tsx:662
 msgid "Price Impact Too High"
 msgstr "가격 영향이 너무 높음"
 
@@ -1212,8 +1344,14 @@ msgstr "가격 영향이 너무 높음"
 msgid "Price Updated"
 msgstr "가격이 업데이트되었습니다"
 
+#: src/features/limit-order/LimitPriceInputPanel.tsx:36
+#: src/features/open-order/CompletedOrders.tsx:37
+#: src/features/open-order/OpenOrders.tsx:66
+msgid "Rate"
+msgstr ""
+
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:29
-#: src/pages/exchange/remove/[[...tokens]].tsx:619
+#: src/pages/exchange/remove/[[...tokens]].tsx:618
 msgid "Rates"
 msgstr "요금"
 
@@ -1225,7 +1363,13 @@ msgstr "요금"
 #~ msgid "Read the contract"
 #~ msgstr "계약서 읽기"
 
-#: src/components/PositionCard/index.tsx:240
+#: src/features/open-order/CompletedOrders.tsx:34
+#: src/features/open-order/OpenOrders.tsx:63
+msgid "Receive"
+msgstr ""
+
+#: src/components/AddressInputPanel/index.tsx:37
+#: src/components/PositionCard/index.tsx:253
 msgid "Remove"
 msgstr "제거"
 
@@ -1233,7 +1377,7 @@ msgstr "제거"
 msgid "Remove Liquidity"
 msgstr "유동성 제거"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:517
+#: src/pages/exchange/swap/[[...tokens]].tsx:515
 msgid "Remove recipient"
 msgstr ""
 
@@ -1241,12 +1385,12 @@ msgstr ""
 #~ msgid "Remove send"
 #~ msgstr "보내기 제거"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
+#: src/pages/exchange/remove/[[...tokens]].tsx:277
+#: src/pages/exchange/remove/[[...tokens]].tsx:277
 msgid "Remove {0} {1} and {2} {3}"
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:658
+#: src/pages/exchange/remove/[[...tokens]].tsx:657
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "{0} {1} 및 {2} {3} 제거 중"
 
@@ -1258,9 +1402,13 @@ msgstr "상환"
 #~ msgid "Request Tool"
 #~ msgstr "도구 요청"
 
-#: src/components/Settings/index.tsx:124
+#: src/components/Settings/index.tsx:104
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
+
+#: src/features/limit-order/LimitOrderButton.tsx:130
+msgid "Review Limit Order"
+msgstr ""
 
 #: src/features/farm/FarmList.tsx:36
 msgid "Rewards"
@@ -1307,7 +1455,7 @@ msgstr ""
 #~ msgid "Search by name, symbol, address"
 #~ msgstr "이름, 심볼, 주소로 검색"
 
-#: src/components/SearchModal/CurrencySearch.tsx:187
+#: src/modals/SearchModal/CurrencySearch.tsx:195
 msgid "Search name or paste address"
 msgstr "이름 검색 또는 주소 붙여넣기"
 
@@ -1319,17 +1467,31 @@ msgstr ""
 msgid "Select a collateral token"
 msgstr ""
 
+#: src/state/limit-order/hooks.ts:192
+msgid "Select a rate"
+msgstr ""
+
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:177
+#: src/features/limit-order/CurrencySelect.tsx:70
+#: src/state/limit-order/hooks.ts:183
+#: src/state/swap/hooks.ts:181
 msgid "Select a token"
 msgstr "토큰 선택"
 
-#: src/pages/exchange/find/index.tsx:94
+#: src/pages/exchange/find/index.tsx:74
 msgid "Select a token to find your liquidity"
 msgstr "토큰을 선택하여 유동성 찾기"
 
-#: src/components/Settings/index.tsx:140
+#: src/state/limit-order/hooks.ts:196
+msgid "Select an order expiration"
+msgstr ""
+
+#: src/components/AddressInputPanel/index.tsx:35
+msgid "Send to:"
+msgstr ""
+
+#: src/components/Settings/index.tsx:120
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
 msgstr ""
 
@@ -1356,6 +1518,7 @@ msgid "Slippage tolerance..."
 msgstr ""
 
 #: src/features/lending/Button.tsx:28
+#: src/features/limit-order/LimitOrderButton.tsx:188
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "허가에 서명하는 동안 문제가 발생했습니다. 이는 Trezor 및 Ledger와 같은 하드웨어 지갑에서 발생된 것으로 예상됩니다. 다시 클릭하면 대체 방법이 사용됩니다."
 
@@ -1374,8 +1537,8 @@ msgstr "SAAVE로 수익을 쌓으세요"
 msgid "Stake"
 msgstr "스테이킹"
 
-#: src/pages/bar/index.tsx:252
-#: src/pages/bar/index.tsx:270
+#: src/pages/bar/index.tsx:251
+#: src/pages/bar/index.tsx:269
 msgid "Stake SUSHI"
 msgstr "SUSHI 스테이킹"
 
@@ -1409,7 +1572,7 @@ msgstr ""
 #~ msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.Continuously compounding."
 #~ msgstr "SUSHI를 ~5 % APY에 달하는 xSUSHI에 스테이킹하세요. 비영구적인 손실이 없고 거버넌스 권한도 계속 유지할 수 있습니다. 수익률은 복리입니다."
 
-#: src/pages/bar/index.tsx:212
+#: src/pages/bar/index.tsx:211
 msgid "Staking APR"
 msgstr "APR 스테이킹"
 
@@ -1422,7 +1585,7 @@ msgstr "APR 스테이킹"
 #~ msgid "Supply APR"
 #~ msgstr "공급 APR"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:267
+#: src/pages/exchange/add/[[...tokens]].tsx:266
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "{0} {1} 및 {2} {3} 공급 중"
 
@@ -1442,36 +1605,36 @@ msgstr "스시는 오픈 소스를 지지합니다."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: 자면서도 SUSHI를 벌 수 있는 방법"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:428
+#: src/pages/exchange/swap/[[...tokens]].tsx:429
 msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:49
 #: src/components/Header/index.tsx:48
 #: src/components/Header/index.tsx:282
-#: src/pages/exchange/swap/[[...tokens]].tsx:638
-#: src/pages/exchange/swap/[[...tokens]].tsx:667
+#: src/pages/exchange/swap/[[...tokens]].tsx:636
+#: src/pages/exchange/swap/[[...tokens]].tsx:665
 msgid "Swap"
 msgstr "스왑"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:637
-#: src/pages/exchange/swap/[[...tokens]].tsx:666
+#: src/pages/exchange/swap/[[...tokens]].tsx:635
+#: src/pages/exchange/swap/[[...tokens]].tsx:664
 msgid "Swap Anyway"
 msgstr "바로 스왑"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:468
+#: src/pages/exchange/swap/[[...tokens]].tsx:466
 msgid "Swap From (est.):"
 msgstr "다음에서 스왑(예상):"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:468
+#: src/pages/exchange/swap/[[...tokens]].tsx:466
 msgid "Swap From:"
 msgstr "다음에서 스왑:"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:528
+#: src/pages/exchange/swap/[[...tokens]].tsx:526
 msgid "Swap To (est.):"
 msgstr "다음으로 스왑(예상):"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:528
+#: src/pages/exchange/swap/[[...tokens]].tsx:526
 msgid "Swap To:"
 msgstr "다음으로 스왑:"
 
@@ -1526,8 +1689,12 @@ msgstr "SUSHI로 할 수 있는 것들"
 #~ msgid "This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade."
 #~ msgstr ""
 
-#: src/components/SearchModal/ImportToken.tsx:46
+#: src/modals/SearchModal/ImportToken.tsx:46
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:145
+msgid "This transaction is below market rate"
 msgstr ""
 
 #: src/hooks/useSwapCallback.ts:199
@@ -1542,8 +1709,8 @@ msgstr "이 거래는 가격 변동이나 이체 수수료 문제로 불가능�
 msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:350
-#: src/pages/exchange/find/index.tsx:110
+#: src/pages/exchange/add/[[...tokens]].tsx:360
+#: src/pages/exchange/find/index.tsx:95
 msgid "Tip:"
 msgstr ""
 
@@ -1559,7 +1726,7 @@ msgstr ""
 #~ msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
 #~ msgstr "SUSHI로 출금하려면 Aave에서 axSUSHI를 담보로 제거한 다음 SushiBar로 이동하여 지분을 제거하세요. 곧 풀릴 수 있습니다."
 
-#: src/components/Settings/index.tsx:97
+#: src/components/Settings/index.tsx:77
 msgid "Toggle Expert Mode"
 msgstr "전문가 모드 전환"
 
@@ -1567,11 +1734,11 @@ msgstr "전문가 모드 전환"
 msgid "Token"
 msgstr "토큰"
 
-#: src/components/SearchModal/Manage.tsx:64
+#: src/modals/SearchModal/Manage.tsx:64
 msgid "Tokens"
 msgstr "토큰"
 
-#: src/components/SearchModal/CurrencyList.tsx:165
+#: src/modals/SearchModal/CurrencyList.tsx:165
 msgid ""
 "Tokens from inactive lists. Import specific tokens below or\n"
 "click Manage to activate more lists."
@@ -1605,13 +1772,13 @@ msgstr "합계"
 msgid "Transaction History {0}"
 msgstr ""
 
-#: src/components/Settings/index.tsx:78
+#: src/components/Settings/index.tsx:58
 msgid "Transaction Settings"
 msgstr "거래 설정"
 
 #: src/components/TransactionConfirmationModal/index.tsx:73
-msgid "Transaction Submitted"
-msgstr ""
+#~ msgid "Transaction Submitted"
+#~ msgstr ""
 
 #: src/components/TransactionSettings/index.tsx:216
 msgid "Transaction deadline"
@@ -1621,11 +1788,11 @@ msgstr "거래 제한시간"
 #~ msgid "Transactions"
 #~ msgstr "거래"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:591
+#: src/pages/exchange/swap/[[...tokens]].tsx:589
 msgid "Try enabling multi-hop trades"
 msgstr "멀티홉 거래 활성화하기"
 
-#: src/components/Settings/index.tsx:176
+#: src/components/Settings/index.tsx:156
 msgid "Turn On Expert Mode"
 msgstr "전문가 모드 켜기"
 
@@ -1637,21 +1804,25 @@ msgid "Unknown error{0}. Try increasing your slippage tolerance."
 msgstr ""
 
 #: src/features/farm/FarmListItemDetails.tsx:185
-#: src/pages/bar/index.tsx:263
-#: src/pages/bar/index.tsx:270
+#: src/pages/bar/index.tsx:262
+#: src/pages/bar/index.tsx:269
 msgid "Unstake"
 msgstr "언스테이크"
 
-#: src/pages/bar/index.tsx:393
+#: src/pages/bar/index.tsx:392
 msgid "Unstaked"
 msgstr "지분 없음"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:443
-#: src/pages/exchange/swap/[[...tokens]].tsx:575
+#: src/pages/exchange/add/[[...tokens]].tsx:454
+#: src/pages/exchange/swap/[[...tokens]].tsx:573
 msgid "Unsupported Asset"
 msgstr "지원되지 않는 자산"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:585
+#: src/guards/Network/index.tsx:29
+msgid "Unsupported network"
+msgstr ""
+
+#: src/pages/exchange/swap/[[...tokens]].tsx:583
 msgid "Unwrap"
 msgstr "언랩"
 
@@ -1659,7 +1830,7 @@ msgstr "언랩"
 #~ msgid "Unwrap {0} W{1} to {2}"
 #~ msgstr "{0}W{1}을 {2}로 언랩"
 
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:61
+#: src/features/meowshi/CurrencyInputPanel.tsx:62
 msgid "Use SUSHI"
 msgstr ""
 
@@ -1667,11 +1838,11 @@ msgstr ""
 #~ msgid "Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned."
 #~ msgstr "아래 도구를 사용하여 워크플로우를 최적화하세요. 일부 도구는 실험적이므로 신중하게 사용해야 합니다. 도구와 관련된 스마트 계약이 있는 경우 코드를 읽고 키가 구워졌는지 확인하세요."
 
-#: src/pages/exchange/find/index.tsx:111
+#: src/pages/exchange/find/index.tsx:96
 msgid "Use this tool to find pairs that don&apos;t automatically appear in the interface"
 msgstr ""
 
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:61
+#: src/features/meowshi/CurrencyInputPanel.tsx:62
 msgid "Use xSUSHI"
 msgstr ""
 
@@ -1699,7 +1870,12 @@ msgstr ""
 msgid "Vietnamese"
 msgstr ""
 
-#: src/pages/bar/index.tsx:226
+#: src/pages/exchange/add/[[...tokens]].tsx:327
+#: src/pages/exchange/remove/[[...tokens]].tsx:722
+msgid "View Liquidity Positions"
+msgstr ""
+
+#: src/pages/bar/index.tsx:225
 msgid "View Stats"
 msgstr "통계 보기"
 
@@ -1708,12 +1884,12 @@ msgstr "통계 보기"
 #~ msgstr "SushiBar 통계 보기"
 
 #: src/pages/exchange/add/[[...tokens]].tsx:327
-msgid "View Your Liquidity Positions"
-msgstr "유동성 포지션 보기"
+#~ msgid "View Your Liquidity Positions"
+#~ msgstr "유동성 포지션 보기"
 
 #: src/pages/exchange/remove/[[...tokens]].tsx:723
-msgid "View Your Liquidity Positions >"
-msgstr "유동성 포지션 보기 〉"
+#~ msgid "View Your Liquidity Positions >"
+#~ msgstr "유동성 포지션 보기 〉"
 
 #: src/pages/user/index.tsx:110
 msgid "View on explorer"
@@ -1728,9 +1904,10 @@ msgstr "탐색기에서 보기"
 #~ msgstr "SushiBar 포트폴리오 보기"
 
 #: src/components/TransactionConfirmationModal/index.tsx:39
-msgid "Waiting for Confirmation"
-msgstr ""
+#~ msgid "Waiting for Confirmation"
+#~ msgstr ""
 
+#: src/features/limit-order/PayFromToggle.tsx:45
 #: src/pages/user/balances.tsx:67
 msgid "Wallet"
 msgstr "지갑"
@@ -1748,7 +1925,7 @@ msgstr ""
 #~ msgid "Welcome to Sushi on Polygon (Matic)"
 #~ msgstr "Polygon(Matic)의 Sushi에 오신 것을 환영합니다."
 
-#: src/pages/exchange/add/[[...tokens]].tsx:346
+#: src/pages/exchange/add/[[...tokens]].tsx:356
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "쌍을 만들 때 귀하는 최초의 유동성 공급자입니다. 추가하는 토큰의 비율이이 풀의 가격을 설정합니다. 요금에 만족하면 공급을 클릭하여 검토하세요."
 
@@ -1760,15 +1937,15 @@ msgstr "인출"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "{assetSymbol} 인출하기"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:583
+#: src/pages/exchange/swap/[[...tokens]].tsx:581
 msgid "Wrap"
 msgstr "랩"
 
-#: src/components/WalletModal/index.tsx:268
+#: src/modals/WalletModal/index.tsx:268
 msgid "Wrong Network"
 msgstr "잘못된 네트워크"
 
-#: src/pages/bar/index.tsx:235
+#: src/pages/bar/index.tsx:234
 msgid "Yesterday's APR"
 msgstr "어제의 APR"
 
@@ -1788,7 +1965,7 @@ msgstr "어제의 APR"
 #~ msgid "Yield Instruments"
 #~ msgstr "수익 도구"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
+#: src/pages/exchange/add/[[...tokens]].tsx:389
 msgid "You are creating a pool"
 msgstr "풀 생성 중"
 
@@ -1796,16 +1973,24 @@ msgstr "풀 생성 중"
 msgid "You are on the wrong network"
 msgstr "잘못된 네트워크에 있습니다."
 
-#: src/pages/exchange/find/index.tsx:168
+#: src/pages/exchange/find/index.tsx:154
 msgid "You don’t have liquidity in this pool yet"
 msgstr "아직 이 풀에 유동성이 없습니다"
 
-#: src/pages/exchange/migrate/index.tsx:135
+#: src/pages/exchange/migrate/index.tsx:136
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
-#: src/pages/exchange/remove/[[...tokens]].tsx:742
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:244
+msgid "You pay"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
+msgid "You receive:"
+msgstr ""
+
+#: src/pages/exchange/add/[[...tokens]].tsx:389
+#: src/pages/exchange/remove/[[...tokens]].tsx:752
 msgid "You will receive"
 msgstr "예상 수령"
 
@@ -1818,7 +2003,7 @@ msgstr ""
 msgid "Your Claimable SUSHI this Week"
 msgstr "이번 주에 출금가능한 SUSHI"
 
-#: src/pages/exchange/migrate/index.tsx:331
+#: src/pages/exchange/migrate/index.tsx:333
 msgid "Your Liquidity"
 msgstr "내 유동성"
 
@@ -1840,7 +2025,7 @@ msgstr "내 유동성"
 msgid "Your Staked"
 msgstr "귀하의 지분"
 
-#: src/pages/bar/index.tsx:437
+#: src/pages/bar/index.tsx:436
 msgid "Your SushiBar Stats"
 msgstr "내 SushiBar 통계"
 
@@ -1852,7 +2037,7 @@ msgstr "내 SushiBar 통계"
 #~ msgid "Your Transaction History on {0}"
 #~ msgstr "{0}의 거래 내역"
 
-#: src/pages/exchange/migrate/index.tsx:327
+#: src/pages/exchange/migrate/index.tsx:329
 msgid "Your Wallet"
 msgstr "내 지갑"
 
@@ -1861,12 +2046,12 @@ msgstr "내 지갑"
 #~ msgid "Your Yields"
 #~ msgstr "내 수익"
 
-#: src/components/PositionCard/index.tsx:80
-#: src/components/PositionCard/index.tsx:216
+#: src/components/PositionCard/index.tsx:82
+#: src/components/PositionCard/index.tsx:229
 msgid "Your pool share"
 msgstr "풀 점유율"
 
-#: src/components/PositionCard/index.tsx:182
+#: src/components/PositionCard/index.tsx:195
 msgid "Your total pool tokens"
 msgstr "보유 중인 전체 풀 토큰"
 
@@ -1891,16 +2076,24 @@ msgstr "가격이 해당 퍼센티지 이상으로 불리하게 변경되면 거
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
 msgstr "거래가 확인되기 전에 크게 불리한 가격 변동이 있는 경우 거래가 취소됩니다."
 
-#: src/pages/exchange/migrate/index.tsx:251
+#: src/pages/exchange/migrate/index.tsx:252
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변환됩니다."
 
-#: src/pages/zap/index.tsx:261
+#: src/pages/zap/index.tsx:262
 msgid "Zap"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:165
+msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "연단위 환산"
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:165
+msgid "below"
+msgstr ""
 
 #: src/components/Gas/index.tsx:14
 #: src/pages/user/index.tsx:59
@@ -1955,7 +2148,7 @@ msgstr ""
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI는 귀하의 SushiBar 지분에 따라 수수료(멀티 체인 스왑을 포함한 모든 스왑의 0.05 %)를 자동으로 받습니다."
 
-#: src/components/SearchModal/ImportToken.tsx:42
+#: src/modals/SearchModal/ImportToken.tsx:42
 msgid "{0, plural, one {Token} many {Tokens}}"
 msgstr ""
 
@@ -1979,6 +2172,10 @@ msgstr "{0} 전략"
 msgid "{0} {1} per {2}"
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:639
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:167
+msgid "{0} {sign} market rate"
+msgstr ""
+
+#: src/pages/exchange/remove/[[...tokens]].tsx:638
 msgid "{0}/{1} Burned"
 msgstr ""

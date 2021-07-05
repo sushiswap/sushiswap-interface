@@ -6,7 +6,7 @@ import { t } from '@lingui/macro'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Currency } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
-import CurrencySearchModal from '../../components/SearchModal/CurrencySearchModal'
+import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
 import CurrencyLogo from '../../components/CurrencyLogo'
 
 interface CurrencySelectProps {

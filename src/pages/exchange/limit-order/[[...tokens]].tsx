@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { t } from '@lingui/macro'
-import TokenWarningModal from '../../../components/TokenWarningModal'
+import TokenWarningModal from '../../../modals/TokenWarningModal'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLingui } from '@lingui/react'
 import { ChainId, Token } from '@sushiswap/sdk'

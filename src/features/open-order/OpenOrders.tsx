@@ -11,8 +11,7 @@ import Badge from '../../components/Badge'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../animation/loading-circle.json'
-import TransactionConfirmationModal from '../../components/TransactionConfirmationModal'
-import { JSBI, Percent } from '@sushiswap/sdk'
+import TransactionConfirmationModal from '../../modals/TransactionConfirmationModal'
 import Pagination from './Pagination'
 
 const OpenOrders: FC = () => {
