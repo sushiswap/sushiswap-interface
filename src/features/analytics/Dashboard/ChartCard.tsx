@@ -31,7 +31,7 @@ const types = {
     getData: (exchange, exchange1d, exchange2d, dayData) => ({
       figure: exchange && exchange1d ? exchange.volumeUSD - exchange1d.volumeUSD : 0,
       change:
-        exchange1d && exchange2d
+        exchange && exchange1d && exchange2d
           ? ((exchange.volumeUSD - exchange1d.volumeUSD) / (exchange1d.volumeUSD - exchange2d.volumeUSD)) * 100 - 100
           : 0,
       chart: dayData
@@ -64,17 +64,17 @@ export default function ChartCard(props: ChartCardProps): JSX.Element {
   )
 
   return (
-    <div className="rounded bg-dark-900 w-full font-bold">
+    <div className="w-full font-bold rounded bg-dark-900">
       <div className="p-4">
-        <div className="text-primary text-lg">{type.header}</div>
-        <div className="text-high-emphesis text-2xl">{formatNumber(data.figure, true, false)}</div>
+        <div className="text-lg text-primary">{type.header}</div>
+        <div className="text-2xl text-high-emphesis">{formatNumber(data.figure, true, false)}</div>
         <div className="flex flex-row items-center">
           <ColoredNumber number={data.change} percent={true} />
-          <div className="text-secondary text-sm ml-3">Last 24 Hours</div>
+          <div className="ml-3 text-sm text-secondary">Last 24 Hours</div>
         </div>
       </div>
       <div className="h-36">{data.chart && <LineGraph data={data.chart} />}</div>
-      <div className="flex flex-row justify-end space-x-2 pb-4 pr-4">
+      <div className="flex flex-row justify-end pb-4 pr-4 space-x-2">
         {chartTimespans.map((timespan) => (
           <button
             className={classNames(timespan === chartTimespan ? 'text-high-emphesis' : 'text-secondary', 'font-bold')}

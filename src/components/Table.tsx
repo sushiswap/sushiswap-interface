@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useTable, usePagination, useSortBy } from 'react-table'
 import { classNames } from '../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface TableProps {
   columns: any[]
@@ -27,6 +27,7 @@ export default function Table({
   link,
 }: TableProps) {
   const [isHidden, setHidden] = useState(columnsHideable.length === 0 ? false : true)
+  const router = useRouter()
 
   const {
     getTableProps,
@@ -70,6 +71,28 @@ export default function Table({
     e.stopPropagation()
   }
 
+  const getProperty = (obj, prop) => {
+    var parts = prop.split('.')
+
+    if (Array.isArray(parts)) {
+      var last = parts.pop(),
+        l = parts.length,
+        i = 1,
+        current = parts[0]
+
+      while ((obj = obj[current]) && i < l) {
+        current = parts[i]
+        i++
+      }
+
+      if (obj) {
+        return obj[last]
+      }
+    } else {
+      throw 'parts is not valid array'
+    }
+  }
+
   return (
     <>
       <table className="w-full overflow-hidden border-collapse" {...getTableProps()}>
@@ -89,7 +112,7 @@ export default function Table({
                         )}
                       </div>
                       {column.isSorted && (
-                        <span className="ml-1 flex items-center">
+                        <span className="flex items-center ml-1">
                           <div
                             className={classNames(
                               'fill-current text-secondary',
@@ -120,8 +143,10 @@ export default function Table({
               <tr key={i} {...row.getRowProps()}>
                 {row.cells.map((cell, cI) => {
                   return (
-                    <td key={cI} className="pl-0 pr-0 pb-3" {...cell.getCellProps()}>
-                      <Link href={link ? link.href + eval('cell.row.values.' + link.id) : ''}>
+                    <td key={cI} className="pb-3 pl-0 pr-0" {...cell.getCellProps()}>
+                      <div
+                        onClick={link ? () => router.push(link.href + getProperty(cell.row.values, link.id)) : () => {}}
+                      >
                         <div
                           className={classNames(
                             cI === 0 && 'rounded-l pl-4',
@@ -140,7 +165,7 @@ export default function Table({
                             {cell.render('Cell')}
                           </div>
                         </div>
-                      </Link>
+                      </div>
                     </td>
                   )
                 })}
@@ -151,7 +176,7 @@ export default function Table({
       </table>
       {data?.length > 10 && (
         <div className="flex justify-between">
-          <div className="flex font-bold text-sm text-secondary">
+          <div className="flex text-sm font-bold text-secondary">
             <div>Rows per page: </div>
             <select
               value={pageSize}

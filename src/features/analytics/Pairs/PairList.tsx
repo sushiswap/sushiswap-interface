@@ -37,8 +37,8 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
   return (
     <>
       <div className="flex items-center">
-        <DoubleCurrencyLogo currency0={token0} currency1={token1} size={28} />
-        <div className="text-high-emphesis font-bold ml-3">
+        <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} />
+        <div className="ml-3 font-bold text-high-emphesis">
           {pair.symbol0}-{pair.symbol1}
         </div>
       </div>

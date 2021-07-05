@@ -33,8 +33,8 @@ function TokenListName({ token }: TokenListNameProps): JSX.Element {
   return (
     <>
       <div className="flex items-center">
-        <CurrencyLogo currency={currency} size={28} />
-        <div className="text-high-emphesis font-bold ml-3">{token.symbol}</div>
+        <CurrencyLogo currency={currency} size={32} />
+        <div className="ml-3 font-bold text-high-emphesis">{token.symbol}</div>
       </div>
     </>
   )

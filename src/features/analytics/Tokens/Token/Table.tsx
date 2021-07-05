@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { useState } from 'react'
 import { useTable, usePagination, useSortBy } from 'react-table'
-import { classNames } from '../../../functions'
+import { classNames } from '../../../../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 
 export default function Table({ columns, data }) {
@@ -31,7 +31,7 @@ export default function Table({ columns, data }) {
   return (
     <div className="w-full">
       <table className="w-full overflow-hidden border-collapse" {...getTableProps()}>
-        <thead className="w-full border-b border-gray-800 h-12">
+        <thead className="w-full h-12 border-b border-gray-800">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
@@ -48,7 +48,7 @@ export default function Table({ columns, data }) {
             </tr>
           ))}
         </thead>
-        <tbody className="w-full border-b border-t border-gray-800" {...getTableBodyProps()}>
+        <tbody className="w-full border-t border-b border-gray-800" {...getTableBodyProps()}>
           {page.map((row, i) => {
             prepareRow(row)
             return (
@@ -56,7 +56,7 @@ export default function Table({ columns, data }) {
                 {row.cells.map((cell) => {
                   return (
                     <td className={classNames(i === 0 && 'pt-4', 'pl-0 pr-0 pb-4')} {...cell.getCellProps()}>
-                      <div className="text-secondary flex items-center">
+                      <div className="flex items-center text-secondary">
                         <div
                           className={classNames(
                             cell.column.align === 'right' && `text-right`,
