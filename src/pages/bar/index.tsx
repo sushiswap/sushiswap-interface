@@ -21,6 +21,7 @@ import useSWR from 'swr'
 import useSushiBar from '../../hooks/useSushiBar'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import { useSushiPrice } from '../../services/graph'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -61,9 +62,11 @@ export default function Stake() {
   const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.MAINNET])
   const xSushiBalance = useTokenBalance(account ?? undefined, XSUSHI)
 
+  const sushiPrice = useSushiPrice()
+
   const { enter, leave } = useSushiBar()
 
-  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio}}`, fetcher)
+  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher)
 
   const xSushiPerSushi = parseFloat(data?.bar?.ratio)
 
@@ -146,17 +149,13 @@ export default function Stake() {
   // TODO: DROP AND USE SWR HOOKS INSTEAD
   useEffect(() => {
     const fetchData = async () => {
-      const results = await Promise.all([
-        sushiData.bar.info(),
-        sushiData.exchange.dayData(),
-        sushiData.sushi.priceUSD(),
-      ])
-      const apr = (((results[1][1].volumeUSD * 0.05) / results[0].totalSupply) * 365) / (results[0].ratio * results[2])
+      const results = await sushiData.exchange.dayData()
+      const apr = (((results[1].volumeUSD * 0.05) / data?.bar?.totalSupply) * 365) / (data?.bar?.ratio * sushiPrice)
 
       setApr(apr)
     }
     fetchData()
-  }, [])
+  }, [data?.bar?.ratio, data?.bar?.totalSupply, sushiPrice])
 
   return (
     <>

@@ -26,6 +26,7 @@ html {
     ensure that it always reamins as the defualt which is visible.
   */
   overflow: visible !important;
+
 }
 
 html,
@@ -42,6 +43,7 @@ body {
   position: relative;
   min-height: 100%;
   margin: 0;
+  overflow-y: scroll;
 }
 
 a {

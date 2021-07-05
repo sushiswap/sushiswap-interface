@@ -7,7 +7,7 @@ import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } f
 
 import { Contract } from '@ethersproject/contracts'
 import { Zero } from '@ethersproject/constants'
-import { concat } from 'lodash'
+import concat from 'lodash/concat'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import zip from 'lodash/zip'
 

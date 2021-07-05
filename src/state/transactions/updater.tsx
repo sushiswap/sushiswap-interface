@@ -1,15 +1,21 @@
 import { AppDispatch, AppState } from '../index'
+import { RetryOptions, RetryableError, retry } from '../../functions/retry'
 import { checkedTransaction, finalizeTransaction } from './actions'
 import { useAddPopup, useBlockNumber } from '../application/hooks'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../hooks'
+import { useCallback, useEffect, useMemo } from 'react'
 
+import { ChainId } from '@sushiswap/sdk'
+import { updateBlockNumber } from '../application/actions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useEffect } from 'react'
 
-export function shouldCheck(
-  lastBlockNumber: number,
-  tx: { addedTime: number; receipt?: unknown; lastCheckedBlockNumber?: number }
-): boolean {
+interface TxInterface {
+  addedTime: number
+  receipt?: Record<string, any>
+  lastCheckedBlockNumber?: number
+}
+
+export function shouldCheck(lastBlockNumber: number, tx: TxInterface): boolean {
   if (tx.receipt) return false
   if (!tx.lastCheckedBlockNumber) return true
   const blocksSinceCheck = lastBlockNumber - tx.lastCheckedBlockNumber
@@ -27,27 +33,52 @@ export function shouldCheck(
   }
 }
 
+const RETRY_OPTIONS_BY_CHAIN_ID: { [chainId: number]: RetryOptions } = {
+  [ChainId.HARMONY]: { n: 10, minWait: 250, maxWait: 1000 },
+  [ChainId.ARBITRUM]: { n: 10, minWait: 250, maxWait: 1000 },
+}
+const DEFAULT_RETRY_OPTIONS: RetryOptions = { n: 3, minWait: 1000, maxWait: 3000 }
+
 export default function Updater(): null {
   const { chainId, library } = useActiveWeb3React()
 
   const lastBlockNumber = useBlockNumber()
 
-  const dispatch = useDispatch<AppDispatch>()
-  const state = useSelector<AppState, AppState['transactions']>((state) => state.transactions)
+  const dispatch = useAppDispatch()
+  const state = useAppSelector((state) => state.transactions)
 
-  const transactions = chainId ? state[chainId] ?? {} : {}
+  const transactions = useMemo(() => (chainId ? state[chainId] ?? {} : {}), [chainId, state])
 
   // show popup on confirm
   const addPopup = useAddPopup()
 
+  const getReceipt = useCallback(
+    (hash: string) => {
+      if (!library || !chainId) throw new Error('No library or chainId')
+      const retryOptions = RETRY_OPTIONS_BY_CHAIN_ID[chainId] ?? DEFAULT_RETRY_OPTIONS
+      return retry(
+        () =>
+          library.getTransactionReceipt(hash).then((receipt) => {
+            if (receipt === null) {
+              console.debug('Retrying for hash', hash)
+              throw new RetryableError()
+            }
+            return receipt
+          }),
+        retryOptions
+      )
+    },
+    [chainId, library]
+  )
+
   useEffect(() => {
     if (!chainId || !library || !lastBlockNumber) return
 
-    Object.keys(transactions)
+    const cancels = Object.keys(transactions)
       .filter((hash) => shouldCheck(lastBlockNumber, transactions[hash]))
-      .forEach((hash) => {
-        library
-          .getTransactionReceipt(hash)
+      .map((hash) => {
+        const { promise, cancel } = getReceipt(hash)
+        promise
           .then((receipt) => {
             if (receipt) {
               dispatch(
@@ -77,21 +108,27 @@ export default function Updater(): null {
                 },
                 hash
               )
+
+              // the receipt was fetched before the block, fast forward to that block to trigger balance updates
+              if (receipt.blockNumber > lastBlockNumber) {
+                dispatch(updateBlockNumber({ chainId, blockNumber: receipt.blockNumber }))
+              }
             } else {
-              dispatch(
-                checkedTransaction({
-                  chainId,
-                  hash,
-                  blockNumber: lastBlockNumber,
-                })
-              )
+              dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }))
             }
           })
           .catch((error) => {
-            console.error(`failed to check transaction hash: ${hash}`, error)
+            if (!error.isCancelledError) {
+              console.error(`Failed to check transaction hash: ${hash}`, error)
+            }
           })
+        return cancel
       })
-  }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup])
+
+    return () => {
+      cancels.forEach((cancel) => cancel())
+    }
+  }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup, getReceipt])
 
   return null
 }

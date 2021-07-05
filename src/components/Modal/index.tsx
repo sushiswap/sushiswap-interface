@@ -33,7 +33,8 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, maxWidth, mobile, is
 )).attrs({
   'aria-label': 'dialog',
 })`
-  overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
+  // overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
+  overflow-y: auto;
 
   &[data-reach-dialog-content] {
     display: flex;
@@ -45,7 +46,8 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, maxWidth, mobile, is
 
     width: 100vw;
     border-radius: 10px;
-    overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
+    // overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
+    overflow-y: auto;
     overflow-x: hidden;
 
     ${({ maxWidth }) =>

@@ -4,9 +4,7 @@ import Button, { ButtonError } from '../../../components/Button'
 import { Currency, CurrencyAmount, Percent, WNATIVE, currencyEquals } from '@sushiswap/sdk'
 import { ONE_BIPS, ZERO_PERCENT } from '../../../constants'
 import React, { useCallback, useState } from 'react'
-import TransactionConfirmationModal, {
-  ConfirmationModalContent,
-} from '../../../components/TransactionConfirmationModal'
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
 import { currencyId, maxAmountSpend } from '../../../functions/currency'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../../state/mint/hooks'
@@ -324,8 +322,19 @@ export default function Add() {
 
       <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-6">
         <div className="flex items-center justify-between px-4 mb-5">
-          <NavLink className="text-base font-medium text-center text-secondary hover:text-high-emphesis" href={'/pool'}>
-            <a>{i18n._(t`View Your Liquidity Positions`)} &gt;</a>
+          <NavLink href="/pool">
+            <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
+              <span>{i18n._(t`View Liquidity Positions`)}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
           </NavLink>
           {/* <button
             style={{

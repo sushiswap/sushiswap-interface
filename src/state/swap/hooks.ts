@@ -1,12 +1,11 @@
 import { AppDispatch, AppState } from '../index'
-import { ChainId, Currency, CurrencyAmount, JSBI, Percent, TradeType, Trade as V2Trade, Trade } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, Percent, TradeType, Trade as V2Trade, WNATIVE } from '@sushiswap/sdk'
 import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
-import {
-  EstimatedSwapCall,
-  SuccessfulCall,
-  swapErrorToUserReadableMessage,
-  useSwapCallArguments,
-} from '../../hooks/useSwapCallback'
+// import {
+//   EstimatedSwapCall,
+//   SuccessfulCall,
+//   useSwapCallArguments,
+// } from "../../hooks/useSwapCallback";
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { isAddress, isZero } from '../../functions/validate'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -50,7 +49,11 @@ export function useSwapActionHandlers(): {
       dispatch(
         selectCurrency({
           field,
-          currencyId: currency.isToken ? currency.address : currency.isNative ? 'ETH' : '',
+          currencyId: currency.isToken
+            ? currency.address
+            : currency.isNative && currency.chainId !== ChainId.CELO
+            ? 'ETH'
+            : '',
         })
       )
     },
@@ -84,10 +87,11 @@ export function useSwapActionHandlers(): {
 }
 
 // TODO: Swtich for ours...
-const BAD_RECIPIENT_ADDRESSES: { [address: string]: true } = {
-  '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f': true, // v2 factory
-  '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a': true, // v2 router 01
-  '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D': true, // v2 router 02
+const BAD_RECIPIENT_ADDRESSES: { [chainId: string]: { [address: string]: true } } = {
+  [ChainId.MAINNET]: {
+    '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac': true, // v2 factory
+    '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': true, // v2 router 02
+  },
 }
 
 /**
@@ -116,7 +120,7 @@ export function useDerivedSwapInfo(doArcher = false): {
 } {
   const { i18n } = useLingui()
 
-  const { account, chainId, library } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const [singleHopOnly] = useUserSingleHopOnly()
 
@@ -182,7 +186,7 @@ export function useDerivedSwapInfo(doArcher = false): {
     inputError = inputError ?? i18n._(t`Enter a recipient`)
   } else {
     if (
-      BAD_RECIPIENT_ADDRESSES[formattedTo] ||
+      BAD_RECIPIENT_ADDRESSES?.[chainId]?.[formattedTo] ||
       (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
       (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
     ) {
@@ -198,89 +202,6 @@ export function useDerivedSwapInfo(doArcher = false): {
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
     inputError = i18n._(t`Insufficient ${amountIn.currency.symbol} balance`)
   }
-
-  const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, to, undefined, doArcher)
-
-  const [, setUserETHTip] = useUserArcherETHTip()
-  const [userGasEstimate, setUserGasEstimate] = useUserArcherGasEstimate()
-  const [userGasPrice] = useUserArcherGasPrice()
-  const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
-
-  useEffect(() => {
-    if (doArcher) {
-      setUserTipManualOverride(false)
-      setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
-      setUserGasEstimate(DEFAULT_ARCHER_GAS_ESTIMATE.toString())
-    }
-  }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
-
-  useEffect(() => {
-    if (doArcher && !userTipManualOverride) {
-      setUserETHTip(JSBI.multiply(JSBI.BigInt(userGasEstimate), JSBI.BigInt(userGasPrice)).toString())
-    }
-  }, [doArcher, userGasEstimate, userGasPrice, userTipManualOverride, setUserETHTip])
-
-  useEffect(() => {
-    async function estimateGas() {
-      const estimatedCalls: EstimatedSwapCall[] = await Promise.all(
-        swapCalls.map((call) => {
-          const { address, calldata, value } = call
-
-          const tx =
-            !value || isZero(value)
-              ? { from: account, to: address, data: calldata }
-              : {
-                  from: account,
-                  to: address,
-                  data: calldata,
-                  value,
-                }
-
-          return library
-            .estimateGas(tx)
-            .then((gasEstimate) => {
-              return {
-                call,
-                gasEstimate,
-              }
-            })
-            .catch((gasError) => {
-              console.debug('Gas estimate failed, trying eth_call to extract error', call)
-
-              return library
-                .call(tx)
-                .then((result) => {
-                  console.debug('Unexpected successful call after failed estimate gas', call, gasError, result)
-                  return {
-                    call,
-                    error: new Error('Unexpected issue with estimating the gas. Please try again.'),
-                  }
-                })
-                .catch((callError) => {
-                  console.debug('Call threw error', call, callError)
-                  return {
-                    call,
-                    error: new Error(swapErrorToUserReadableMessage(callError)),
-                  }
-                })
-            })
-        })
-      )
-
-      // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
-      const successfulEstimation = estimatedCalls.find(
-        (el, ix, list): el is SuccessfulCall =>
-          'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
-      )
-
-      if (successfulEstimation) {
-        setUserGasEstimate(successfulEstimation.gasEstimate.toString())
-      }
-    }
-    if (doArcher && v2Trade && swapCalls && !userTipManualOverride) {
-      estimateGas()
-    }
-  }, [doArcher, v2Trade, swapCalls, userTipManualOverride, library, setUserGasEstimate])
 
   return {
     currencies,
@@ -319,12 +240,16 @@ function validatedRecipient(recipient: any): string | null {
   if (ADDRESS_REGEX.test(recipient)) return recipient
   return null
 }
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
+export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.MAINNET): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
   if (inputCurrency === '' && outputCurrency === '') {
-    // default to ETH input
-    inputCurrency = 'ETH'
+    if (chainId === ChainId.CELO) {
+      inputCurrency = WNATIVE[chainId].address
+    } else {
+      // default to ETH input
+      inputCurrency = 'ETH'
+    }
   } else if (inputCurrency === outputCurrency) {
     // clear output if identical
     outputCurrency = ''
@@ -365,7 +290,7 @@ export function useDefaultsFromURLSearch():
 
   useEffect(() => {
     if (!chainId) return
-    const parsed = queryParametersToSwapState(parsedQs)
+    const parsed = queryParametersToSwapState(parsedQs, chainId)
 
     dispatch(
       replaceSwapState({

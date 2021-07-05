@@ -1,19 +1,19 @@
-import { MEOW, SUSHI } from '../../constants'
-
-import Head from 'next/head'
-import { useLingui } from '@lingui/react'
-import React, { useCallback, useMemo, useState } from 'react'
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
-import CurrencyInputPanel from '../../features/tools/meowshi/CurrencyInputPanel'
-import HeaderToggle from '../../features/tools/meowshi/HeaderToggle'
-import { tryParseAmount } from '../../functions'
-import useSWR from 'swr'
-import { request } from 'graphql-request'
-import MeowshiButton from '../../features/tools/meowshi/MeowshiButton'
-import Image from 'next/image'
-import Typography from '../../components/Typography'
 import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid'
+import { ChainId, Currency, Token } from '@sushiswap/sdk'
+import { MEOW, SUSHI } from '../../constants'
+import React, { useCallback, useMemo, useState } from 'react'
+
+import CurrencyInputPanel from '../../features/meowshi/CurrencyInputPanel'
+import Head from 'next/head'
+import HeaderToggle from '../../features/meowshi/HeaderToggle'
+import Image from 'next/image'
+import MeowshiButton from '../../features/meowshi/MeowshiButton'
+import Typography from '../../components/Typography'
+import { request } from 'graphql-request'
 import { t } from '@lingui/macro'
+import { tryParseAmount } from '../../functions'
+import { useLingui } from '@lingui/react'
+import useSWR from 'swr'
 
 const QUERY = `{
     bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {
@@ -140,12 +140,12 @@ export default function Meowshi() {
             </Typography>
           </div>
         </div>
-        <div className="z-1 p-4 relative rounded bg-dark-900 shadow-swap grid gap-4 border-dark-800 border-2">
+        <div className="relative grid gap-4 p-4 border-2 rounded z-1 bg-dark-900 shadow-swap border-dark-800">
           <HeaderToggle meowshiState={meowshiState} />
           <CurrencyInputPanel field={Field.INPUT} showMax={true} meowshiState={meowshiState} />
           <div className="relative mt-[-24px] mb-[-24px] ml-[28px] flex items-center">
             <div
-              className="inline-flex rounded-full border-dark-900 border-2 bg-dark-800 p-2 cursor-pointer"
+              className="inline-flex p-2 border-2 rounded-full cursor-pointer border-dark-900 bg-dark-800"
               onClick={switchCurrencies}
             >
               <ArrowDownIcon width={24} height={24} />

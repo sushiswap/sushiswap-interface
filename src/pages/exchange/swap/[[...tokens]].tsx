@@ -41,7 +41,7 @@ import MinerTip from '../../../components/MinerTip'
 import ProgressSteps from '../../../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../../../components/ExchangeHeader'
-import TokenWarningModal from '../../../components/TokenWarningModal'
+import TokenWarningModal from '../../../modals/TokenWarningModal'
 import TradePrice from '../../../features/swap/TradePrice'
 import Typography from '../../../components/Typography'
 import UnsupportedCurrencyFooter from '../../../features/swap/UnsupportedCurrencyFooter'
@@ -206,33 +206,34 @@ export default function Swap() {
   )
 
   const routeNotFound = !trade?.route
-  const route = trade?.route
-
-  const noRoute = !route
 
   // check whether the user has approved the router on the input token
   const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, doArcher)
 
-  const {
-    state: signatureState,
-    signatureData,
-    gatherPermitSignature,
-  } = useERC20PermitFromTrade(trade, allowedSlippage)
+  const signatureData = undefined
+
+  // const {
+  //   state: signatureState,
+  //   signatureData,
+  //   gatherPermitSignature,
+  // } = useERC20PermitFromTrade(trade, allowedSlippage)
 
   const handleApprove = useCallback(async () => {
-    if (signatureState === UseERC20PermitState.NOT_SIGNED && gatherPermitSignature) {
-      try {
-        await gatherPermitSignature()
-      } catch (error) {
-        // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
-        if (error?.code !== 4001) {
-          await approveCallback()
-        }
-      }
-    } else {
-      await approveCallback()
-    }
-  }, [approveCallback, gatherPermitSignature, signatureState])
+    await approveCallback()
+    // if (signatureState === UseERC20PermitState.NOT_SIGNED && gatherPermitSignature) {
+    //   try {
+    //     await gatherPermitSignature()
+    //   } catch (error) {
+    //     // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
+    //     if (error?.code !== 4001) {
+    //       await approveCallback()
+    //     }
+    //   }
+    // } else {
+    //   await approveCallback()
+    // }
+  }, [approveCallback])
+  // }, [approveCallback, gatherPermitSignature, signatureState])
 
   // check if user has gone through approval process, used to show two step buttons, reset on token change
   const [approvalSubmitted, setApprovalSubmitted] = useState<boolean>(false)
@@ -243,15 +244,6 @@ export default function Swap() {
       setApprovalSubmitted(true)
     }
   }, [approvalState, approvalSubmitted])
-
-  // const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(
-  //   currencyBalances[Field.INPUT],
-  //   doArcher ? archerETHTip : undefined,
-  //   chainId
-  // );
-  // const atMaxAmountInput = Boolean(
-  //   maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
-  // );
 
   const maxInputAmount: CurrencyAmount<Currency> | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const showMaxButton = Boolean(maxInputAmount?.greaterThan(0) && !parsedAmounts[Field.INPUT]?.equalTo(maxInputAmount))
@@ -265,17 +257,7 @@ export default function Swap() {
     doArcher ? ttl : undefined
   )
 
-  // // the callback to execute the swap
-  // const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
-  //   trade,
-  //   allowedSlippage,
-  //   recipient,
-  //   doArcher ? ttl : undefined
-  // );
-
   const [singleHopOnly] = useUserSingleHopOnly()
-
-  // const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade);
 
   const handleSwap = useCallback(() => {
     if (!swapCallback) {
@@ -578,12 +560,12 @@ export default function Swap() {
               <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
             </div>
           )}
-
+          {/*
           {trade && (
             <div className="p-5 rounded bg-dark-800">
               <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
             </div>
-          )}
+          )} */}
 
           <BottomGrouping>
             {swapIsUnsupported ? (
@@ -601,7 +583,7 @@ export default function Swap() {
                     ? i18n._(t`Unwrap`)
                     : null)}
               </Button>
-            ) : noRoute && userHasSpecifiedInputOutput ? (
+            ) : routeNotFound && userHasSpecifiedInputOutput ? (
               <div style={{ textAlign: 'center' }}>
                 <div className="mb-1">{i18n._(t`Insufficient liquidity for this trade`)}</div>
                 {singleHopOnly && <div className="mb-1">{i18n._(t`Try enabling multi-hop trades`)}</div>}

@@ -20,6 +20,12 @@ export const getTokenLogoURL = (address: string, chainId: ChainId) => {
 
 const BLOCKCHAIN = {
   [ChainId.MAINNET]: 'ethereum',
+  [ChainId.BSC]: 'binanace',
+  [ChainId.CELO]: 'celo',
+  [ChainId.FANTOM]: 'fantom',
+  [ChainId.HARMONY]: 'harmony',
+  [ChainId.MATIC]: 'polygon',
+  [ChainId.XDAI]: 'xdai',
 }
 
 function getCurrencySymbol(currency) {
@@ -35,8 +41,8 @@ function getCurrencySymbol(currency) {
 function getCurrencyLogoUrls(currency) {
   const urls = []
 
-  if (currency.chainId === ChainId.MAINNET) {
-    urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
+  urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
+  if (currency.chainId in BLOCKCHAIN) {
     urls.push(
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
@@ -61,7 +67,7 @@ const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token
 const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg'
 const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
 const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.png'
-const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/xdai.png'
+const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg'
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
 
 const logo: { readonly [chainId in ChainId]?: string } = {
