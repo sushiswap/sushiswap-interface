@@ -300,11 +300,11 @@ export const tokenDayDatasQuery = gql`
 `
 
 export const tokenPairsQuery = gql`
-  query tokenPairsQuery($id: String!) {
-    pairs0: pairs(first: 1000, orderBy: reserveUSD, orderDirection: desc, where: { token0: $id }) {
+  query tokenPairsQuery($id: String!, $block: Block_height) {
+    pairs0: pairs(first: 1000, orderBy: reserveUSD, orderDirection: desc, where: { token0: $id }, block: $block) {
       ...pairFields
     }
-    pairs1: pairs(first: 1000, orderBy: reserveUSD, orderDirection: desc, where: { token1: $id }) {
+    pairs1: pairs(first: 1000, orderBy: reserveUSD, orderDirection: desc, where: { token1: $id }, block: $block) {
       ...pairFields
     }
   }

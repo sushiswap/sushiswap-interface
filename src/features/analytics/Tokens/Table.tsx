@@ -31,7 +31,7 @@ export default function Table({ columns, data }) {
   return (
     <div className="w-full">
       <table className="w-full overflow-hidden border-collapse" {...getTableProps()}>
-        <thead className="w-full border-b border-gray-800 h-10">
+        <thead className="w-full border-b border-gray-800 h-12">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
@@ -48,15 +48,14 @@ export default function Table({ columns, data }) {
             </tr>
           ))}
         </thead>
-        <div className="h-6" />
-        <tbody className="w-full border-b border-gray-800" {...getTableBodyProps()}>
+        <tbody className="w-full border-b border-t border-gray-800" {...getTableBodyProps()}>
           {page.map((row, i) => {
             prepareRow(row)
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map((cell, cI) => {
+                {row.cells.map((cell) => {
                   return (
-                    <td className="pl-0 pr-0 pb-4" {...cell.getCellProps()}>
+                    <td className={classNames(i === 0 && 'pt-4', 'pl-0 pr-0 pb-4')} {...cell.getCellProps()}>
                       <div className="text-secondary flex items-center">
                         <div
                           className={classNames(

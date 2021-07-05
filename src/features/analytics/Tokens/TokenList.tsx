@@ -84,5 +84,16 @@ export default function TokenList({ tokens }: TokenListProps): JSX.Element {
     []
   )
 
-  return <>{tokens && <Table columns={columns} data={tokens} defaultSortBy={{ id: 'liquidity', desc: true }} />}</>
+  return (
+    <>
+      {tokens && (
+        <Table
+          columns={columns}
+          data={tokens}
+          defaultSortBy={{ id: 'liquidity', desc: true }}
+          link={{ href: '/analytics/tokens/', id: 'token.address' }}
+        />
+      )}
+    </>
+  )
 }

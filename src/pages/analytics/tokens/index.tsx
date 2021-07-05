@@ -19,8 +19,6 @@ export default function Pairs() {
   const tokens1d = useTokens({ block: { number: Number(block1d) } })
   const tokens1w = useTokens({ block: { number: Number(block1w) } })
 
-  console.log(tokens, tokens1d)
-
   const tokensFormatted =
     tokens && tokens1d && tokens1w && ethPrice && ethPrice1d && ethPrice1w
       ? tokens.map((token) => {

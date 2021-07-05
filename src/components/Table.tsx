@@ -3,8 +3,29 @@ import React, { useState } from 'react'
 import { useTable, usePagination, useSortBy } from 'react-table'
 import { classNames } from '../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
+import Link from 'next/link'
 
-export default function Table({ columns, data, columnsHideable = [], defaultSortBy = { id: '', desc: false } }) {
+interface TableProps {
+  columns: any[]
+  data: any[]
+  columnsHideable?: string[]
+  defaultSortBy: {
+    id: string
+    desc: boolean
+  }
+  link?: {
+    href: string
+    id: string
+  }
+}
+
+export default function Table({
+  columns,
+  data,
+  columnsHideable = [],
+  defaultSortBy = { id: '', desc: false },
+  link,
+}: TableProps) {
   const [isHidden, setHidden] = useState(columnsHideable.length === 0 ? false : true)
 
   const {
@@ -100,23 +121,26 @@ export default function Table({ columns, data, columnsHideable = [], defaultSort
                 {row.cells.map((cell, cI) => {
                   return (
                     <td key={cI} className="pl-0 pr-0 pb-3" {...cell.getCellProps()}>
-                      <div
-                        className={classNames(
-                          cI === 0 && 'rounded-l pl-4',
-                          cI === row.cells.length - 1 && 'rounded-r pr-4',
-                          'h-16 text-high-emphesis text-sm font-bold bg-dark-900 flex items-center'
-                        )}
-                      >
+                      <Link href={link ? link.href + eval('cell.row.values.' + link.id) : ''}>
                         <div
                           className={classNames(
-                            cell.column.align === 'right' && `text-right`,
-                            cell.column.align === 'left' && 'text-left',
-                            'w-full'
+                            cI === 0 && 'rounded-l pl-4',
+                            cI === row.cells.length - 1 && 'rounded-r pr-4',
+                            link && 'cursor-pointer',
+                            'h-16 text-high-emphesis text-sm font-bold bg-dark-900 flex items-center'
                           )}
                         >
-                          {cell.render('Cell')}
+                          <div
+                            className={classNames(
+                              cell.column.align === 'right' && `text-right`,
+                              cell.column.align === 'left' && 'text-left',
+                              'w-full'
+                            )}
+                          >
+                            {cell.render('Cell')}
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                   )
                 })}

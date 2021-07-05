@@ -1,6 +1,7 @@
 import { times } from 'lodash'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import Container from '../../../components/Container'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import LineGraph from '../../../components/LineGraph'
@@ -67,7 +68,6 @@ const socialsPlaceholder = [
 
 // TODO: Description, socials
 // TODO: Farms: Rewards, ROI
-// TODO: Top Moving: Fetch by?
 
 export default function Token(): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1W')
@@ -99,60 +99,83 @@ export default function Token(): JSX.Element {
   // For Top Farms
   const farms = useFarms()
   const farmPairs = useSushiPairs({ where: { id_in: farms.map((farm) => farm.pair) } })
-  const farmsFormatted = farmPairs
-    ? farmPairs
-        .filter((farm) => farm.token0.id === id || farm.token1.id === id)
-        .map((farm, i) => ({
-          pair: {
-            token0: {
-              id: farm.token0.id,
-              symbol: farm.token0.symbol,
+  const farmsFormatted = useMemo(() => {
+    return farmPairs
+      ? farmPairs
+          .filter((farm) => farm.token0.id === id || farm.token1.id === id)
+          .map((farm, i) => ({
+            pair: {
+              token0: {
+                id: farm.token0.id,
+                symbol: farm.token0.symbol,
+              },
+              token1: {
+                id: farm.token1.id,
+                symbol: farm.token1.symbol,
+              },
             },
-            token1: {
-              id: farm.token1.id,
-              symbol: farm.token1.symbol,
-            },
-          },
-          roi: 10,
-          rewards: [<div key={i}></div>],
-        }))
-        .slice(0, 5)
-    : []
+            roi: 10,
+            rewards: [<div key={i}></div>],
+          }))
+          .slice(0, 5)
+      : []
+  }, [farmPairs])
 
   // For Transactions
   const tokenPairs = useTokenPairs({ id: id })
   const transactions = useTransactions({ pairAddresses: tokenPairs?.map((pair) => pair.id) })
-  const transactionsFormatted = transactions
-    ? transactions.map((tx) => {
-        const base = {
-          value: tx.amountUSD,
-          address: tx.to,
-          time: new Date(Number(tx.timestamp) * 1000),
-        }
+  const transactionsFormatted = useMemo(() => {
+    return transactions
+      ? transactions.map((tx) => {
+          const base = {
+            value: tx.amountUSD,
+            address: tx.to,
+            time: new Date(Number(tx.timestamp) * 1000),
+          }
 
-        if (tx.amount0In === '0') {
-          return {
-            symbols: {
-              incoming: tx.pair.token1.symbol,
-              outgoing: tx.pair.token0.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-            ...base,
+          if (tx.amount0In === '0') {
+            return {
+              symbols: {
+                incoming: tx.pair.token1.symbol,
+                outgoing: tx.pair.token0.symbol,
+              },
+              incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
+              outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
+              ...base,
+            }
+          } else {
+            return {
+              symbols: {
+                incoming: tx.pair.token0.symbol,
+                outgoing: tx.pair.token1.symbol,
+              },
+              incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
+              outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
+              ...base,
+            }
           }
-        } else {
-          return {
-            symbols: {
-              incoming: tx.pair.token0.symbol,
-              outgoing: tx.pair.token1.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-            ...base,
-          }
-        }
-      })
-    : undefined
+        })
+      : undefined
+  }, [transactions])
+
+  // For Top Moving
+  const tokenPairs1d = useTokenPairs({ id: id, block: { number: Number(block1d) } })
+  const tokenPairsFormatted = useMemo(() => {
+    return token && tokenPairs && tokenPairs1d
+      ? tokenPairs
+          .map((pair) => {
+            const pair1d = tokenPairs1d.find((p) => pair.id === p.id) ?? pair
+
+            return {
+              id: pair.token0.id === token.id ? pair.token1.id : pair.token0.id,
+              symbol: pair.token0.symbol === token.symbol ? pair.token1.symbol : pair.token0.symbol,
+              volume1d: pair.volumeUSD - pair1d.volumeUSD,
+            }
+          })
+          .sort((a, b) => b.volume1d - a.volume1d)
+          .slice(0, 8)
+      : []
+  }, [token, tokenPairs, tokenPairs1d])
 
   // For the logo
   const currency = useCurrency(token?.id)
@@ -185,7 +208,7 @@ export default function Token(): JSX.Element {
 
   return (
     <>
-      <Container maxWidth="full" className="grid h-full grid-cols-10 mx-auto grid-flow-col">
+      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 mx-auto">
         <div className="col-start-2">
           <button onClick={() => router.back()} className="font-bold">
             {'<'} Go Back
@@ -194,19 +217,19 @@ export default function Token(): JSX.Element {
         <div className="col-span-6 space-y-10">
           <div className="flex flex-row">
             <div>
-              <button onClick={() => router.back()} className="text-purple font-bold">
-                Tokens
-              </button>
+              <Link href="/analytics/tokens">
+                <button className="font-bold text-purple">Tokens</button>
+              </Link>
             </div>
             <div className="font-bold">&nbsp;{`> ${token?.symbol}`}</div>
           </div>
           <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center space-x-4">
               <CurrencyLogo currency={currency} size={53} />
-              <div className="font-bold text-4xl">{token?.symbol}</div>
+              <div className="text-4xl font-bold">{token?.symbol}</div>
             </div>
             <div className="flex flex-row items-center space-x-4">
-              <div className="font-bold text-4xl">{formatNumber(data.price, true)}</div>
+              <div className="text-4xl font-bold">{formatNumber(data.price, true)}</div>
               <div>
                 <ColoredNumber number={data.priceChange} percent={true} />
               </div>
@@ -215,7 +238,7 @@ export default function Token(): JSX.Element {
           <div className="w-full h-52">
             <LineGraph data={data.chart} stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }} />
           </div>
-          <div className="flex flex-row justify-end space-x-2 pb-4 pr-4">
+          <div className="flex flex-row justify-end pb-4 pr-4 space-x-2">
             {chartTimespans.map((timespan, i) => (
               <button
                 key={i}
@@ -229,7 +252,7 @@ export default function Token(): JSX.Element {
               </button>
             ))}
           </div>
-          <div className="flex flex-row space-x-6 justify-between">
+          <div className="flex flex-row justify-between space-x-6">
             <InfoCard text="Liquidity (24H)" number={data.liquidity} percent={data.liquidityChange} />
             <InfoCard text="Volume (24H)" number={data.volume1d} percent={data.volume1dChange} />
             <InfoCard text="Fees (24H)" number={data.volume1d * 0.003} percent={data.volume1dChange} />
@@ -237,13 +260,13 @@ export default function Token(): JSX.Element {
           <div>
             <div className="space-y-4">
               <div className="flex flex-row justify-between">
-                <div className="text-high-emphesis text-2xl font-bold">About {token?.symbol}</div>
+                <div className="text-2xl font-bold text-high-emphesis">About {token?.symbol}</div>
                 <div>
                   <a
                     href={`https://etherscan.io/token/${token?.id}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm flex flex-row items-center"
+                    className="flex flex-row items-center text-sm"
                   >
                     View Contract &nbsp;
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -255,7 +278,7 @@ export default function Token(): JSX.Element {
                   </a>
                 </div>
               </div>
-              <div className="text-high-emphesis text-lg">
+              <div className="text-lg text-high-emphesis">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis alias corrupti totam sed nihil.
                 Temporibus, distinctio pariatur odio vitae voluptate sapiente libero, rerum nihil, ullam laboriosam
                 provident asperiores! Inventore aspernatur unde quas eveniet praesentium vel, quae numquam, ducimus
@@ -271,17 +294,17 @@ export default function Token(): JSX.Element {
             </div>
           </div>
           <div>
-            <div className="text-high-emphesis text-2xl font-bold mb-5">Top Moving Pairs</div>
+            <div className="mb-5 text-2xl font-bold text-high-emphesis">Top Moving Pairs</div>
             <div className="grid grid-cols-4 grid-rows-2 gap-5">
-              {times(8, (i) => (
+              {tokenPairsFormatted.map((pair, i) => (
                 <div key={i} className="flex items-center justify-center">
-                  <CurrencyCard token="0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" symbol="ETH" />
+                  <CurrencyCard token={pair.id} symbol={pair.symbol} />
                 </div>
               ))}
             </div>
           </div>
           <div>
-            <div className="text-high-emphesis text-2xl font-bold mb-5">Top Farms</div>
+            <div className="mb-5 text-2xl font-bold text-high-emphesis">Top Farms</div>
             <div>
               <TopFarmsList farms={farmsFormatted} />
             </div>
