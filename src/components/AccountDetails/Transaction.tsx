@@ -1,70 +1,21 @@
 import { ChainId, CurrencyAmount, Ether } from '@sushiswap/sdk'
-import { CheckCircle, Triangle, X } from 'react-feather'
-import React, { useCallback, useMemo } from 'react'
+import { CheckCircleIcon, ExclamationIcon, XCircleIcon } from '@heroicons/react/outline'
+import React, { FC, useCallback, useMemo } from 'react'
 
 import { ARCHER_RELAY_URI } from '../../constants'
 import { AppDispatch } from '../../state'
 import ExternalLink from '../ExternalLink'
 import Loader from '../Loader'
-import { RowFixed } from '../Row'
 import { TransactionDetails } from '../../state/transactions/reducer'
 import { finalizeTransaction } from '../../state/transactions/actions'
 import { getExplorerLink } from '../../functions/explorer'
-import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTransactions } from '../../state/transactions/hooks'
 import { useDispatch } from 'react-redux'
 import { classNames } from '../../functions'
-
-const TransactionStatusText = styled.div`
-  margin-right: 0.5rem;
-  display: flex;
-  align-items: center;
-  :hover {
-    text-decoration: underline;
-  }
-`
-
-const TransactionStateNoLink = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-decoration: none !important;
-  padding-bottom: 0.25rem;
-  font-weight: 500;
-  font-size: 0.825rem;
-  // color: ${({ theme }) => theme.primary1};
-`
-
-const TransactionCancel = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  :hover {
-    text-decoration: underline;
-  }
-`
-
-const TransactionExpiredBadge = styled.span`
-  // color:  ${({ theme }) => theme.red1};
-`
-
-const TransactionCancelledBadge = styled.span`
-  // color:  ${({ theme }) => theme.red3};
-`
-
-const TransactionRemainingTimeBadge = styled.span`
-  // color:  ${({ theme }) => theme.primary1};
-`
-
-const IconWrapper = styled.div<{
-  pending: boolean
-  success?: boolean
-  cancelled?: boolean
-}>`
-  // color: ${({ pending, success, cancelled, theme }) =>
-    pending ? theme.primary1 : success ? theme.green1 : cancelled ? theme.red3 : theme.red1};
-`
+import Typography from '../Typography'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
 
 const calculateSecondsUntilDeadline = (tx: TransactionDetails): number => {
   if (tx?.archer?.deadline && tx?.addedTime) {
@@ -74,7 +25,8 @@ const calculateSecondsUntilDeadline = (tx: TransactionDetails): number => {
   return -1
 }
 
-export default function Transaction({ hash }: { hash: string }): any {
+const Transaction: FC<{ hash: string }> = ({ hash }) => {
+  const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
   const dispatch = useDispatch<AppDispatch>()
@@ -129,11 +81,11 @@ export default function Transaction({ hash }: { hash: string }): any {
   if (!chainId) return null
 
   return (
-    <div className="flex items-center">
-      <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} className="flex items-center">
-        <RowFixed>
-          <TransactionStatusText>{summary ?? hash} ↗</TransactionStatusText>
-        </RowFixed>
+    <div className="flex flex-col gap-2 bg-dark-800 rounded py-1 px-3 w-full">
+      <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} className="flex items-center gap-2">
+        <Typography variant="sm" className="flex items-center hover:underline py-0.5">
+          {summary ?? hash} ↗
+        </Typography>
         <div
           className={classNames(
             pending ? 'text-primary' : success ? 'text-green' : cancelled ? 'text-red' : 'text-red'
@@ -142,38 +94,40 @@ export default function Transaction({ hash }: { hash: string }): any {
           {pending ? (
             <Loader />
           ) : success ? (
-            <CheckCircle size="16" />
+            <CheckCircleIcon width={16} height={16} />
           ) : cancelled ? (
-            <X size="16" />
+            <XCircleIcon width={16} height={16} />
           ) : (
-            <Triangle size="16" />
+            <ExclamationIcon width={16} height={16} />
           )}
         </div>
       </ExternalLink>
       {archer && (
-        <TransactionStateNoLink>
-          {`...#${archer.nonce} - Tip ${CurrencyAmount.fromRawAmount(
+        <Typography variant="sm" weight={400} className="flex justify-between items-center text-decoration-none pb-1">
+          {`#${archer.nonce} - Tip ${CurrencyAmount.fromRawAmount(
             Ether.onChain(ChainId.MAINNET),
             archer.ethTip
           ).toSignificant(6)} ETH`}
           {pending ? (
             <>
               {secondsUntilDeadline >= 60 ? (
-                <TransactionRemainingTimeBadge>
-                  &#128337; {`${Math.ceil(secondsUntilDeadline / 60)} mins`}{' '}
-                </TransactionRemainingTimeBadge>
+                <span className="text-high-emphesis">&#128337; {`${Math.ceil(secondsUntilDeadline / 60)} mins`} </span>
               ) : (
-                <TransactionRemainingTimeBadge>&#128337; {`<1 min`} </TransactionRemainingTimeBadge>
+                <span className="text-high-emphesis">&#128337; {`<1 min`} </span>
               )}
-              <TransactionCancel onClick={cancelPending}>Cancel</TransactionCancel>
+              <div className="cursor-pointer flex items-center" onClick={cancelPending}>
+                {i18n._(t`Cancel`)}
+              </div>
             </>
           ) : cancelled ? (
-            <TransactionCancelledBadge>Cancelled</TransactionCancelledBadge>
+            <span className="text-red">{i18n._(t`Cancelled`)}</span>
           ) : (
-            !mined && expired && <TransactionExpiredBadge>Expired</TransactionExpiredBadge>
+            !mined && expired && <span className="text-red">{i18n._(t`Expired`)}</span>
           )}
-        </TransactionStateNoLink>
+        </Typography>
       )}
     </div>
   )
 }
+
+export default Transaction
