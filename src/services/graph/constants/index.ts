@@ -7,6 +7,8 @@ export const GRAPH_HOST = {
   [ChainId.MATIC]: THE_GRAPH,
   [ChainId.FANTOM]: THE_GRAPH,
   [ChainId.BSC]: THE_GRAPH,
+  [ChainId.AVALANCHE]: THE_GRAPH,
+  [ChainId.CELO]: THE_GRAPH,
   [ChainId.HARMONY]: 'https://sushi.graph.t.hmny.io',
-  [ChainId.OKEX]: '',
+  [ChainId.OKEX]: 'https://graph.kkt.one/node',
 }

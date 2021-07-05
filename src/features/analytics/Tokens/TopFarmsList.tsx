@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import { formatPercent } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
-import { useSushiPairs } from '../../../services/graph'
-import { pairQuery } from '../../../services/graph/queries'
 import Table from '../../../components/Table'
+import { formatPercent } from '../../../functions'
+import { pairQuery } from '../../../services/graph/queries'
+import { useCurrency } from '../../../hooks/Tokens'
+import { useMemo } from 'react'
+import { useSushiPairs } from '../../../services/graph'
 
 interface TopFarmsListProps {
   farms: {
@@ -45,7 +45,7 @@ function FarmListname({ pair }: FarmListNameProps): JSX.Element {
   return (
     <div className="flex items-center">
       <DoubleCurrencyLogo currency0={token0} currency1={token1} size={28} />
-      <div className="text-high-emphesis font-bold ml-3">
+      <div className="ml-3 font-bold text-high-emphesis">
         {pair.token0.symbol}-{pair.token1.symbol}
       </div>
     </div>

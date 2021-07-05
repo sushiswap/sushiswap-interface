@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
 import { formatDateAgo, formatNumber, shortenAddress } from '../../../functions'
+
 import Table from './Table'
+import { useMemo } from 'react'
 
 interface TransactionListProps {
   transactions: {
@@ -59,9 +60,9 @@ export default function TransactionList({ transactions }: TransactionListProps):
   return (
     <>
       {transactions && (
-        <div className="w-screen bg-dark-900 grid grid-cols-10 py-8">
-          <div className="col-start-2 col-span-8 space-y-6">
-            <div className="text-high-emphesis text-2xl font-bold">Transactions</div>
+        <div className="grid w-screen grid-cols-10 py-8 bg-dark-900">
+          <div className="col-span-8 col-start-2 space-y-6">
+            <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
             <Table columns={columns} data={transactions} />
           </div>
         </div>

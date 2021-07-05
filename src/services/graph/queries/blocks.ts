@@ -23,7 +23,7 @@ export const blocksQuery = gql`
       first: $first
       skip: $skip
       orderBy: number
-      orderDirection: asc
+      orderDirection: desc
       where: { timestamp_gt: $start, timestamp_lt: $end }
     ) {
       ...blockFields

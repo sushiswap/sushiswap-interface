@@ -6,26 +6,27 @@ import {
   useAverageBlockTime,
   useCvxPrice,
   useEthPrice,
+  useFarmPairAddresses,
+  useFarms,
+  useKashiPairs,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useOnePrice,
   useStakePrice,
-  useSushiPrice,
-  useFarms,
   useSushiPairs,
-  useFarmPairAddresses,
-  useKashiPairs,
+  useSushiPrice,
 } from '../../services/graph'
-import { usePositions } from '../../features/farm/hooks'
+
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
 import FarmList from '../../features/farm/FarmList'
 import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
-import { useRouter } from 'next/router'
 import { classNames } from '../../functions'
+import { usePositions } from '../../features/farm/hooks'
+import { useRouter } from 'next/router'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -55,6 +56,8 @@ export default function Farm(): JSX.Element {
   const positions = usePositions()
 
   const averageBlockTime = useAverageBlockTime()
+
+  console.log({ averageBlockTime })
 
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
 
@@ -159,7 +162,6 @@ export default function Farm(): JSX.Element {
           const sushiPerBlock = sushiPerSecond * averageBlockTime
           const sushiPerDay = sushiPerBlock * blocksPerDay
           const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
-          console.log({ rewardPerSecond, averageBlockTime })
           const rewardPerBlock = rewardPerSecond * averageBlockTime
           const rewardPerDay = rewardPerBlock * blocksPerDay
 

@@ -1,7 +1,4 @@
-import LineGraph from '../../../components/LineGraph'
 import { classNames, formatNumber, formatPercent } from '../../../functions'
-import ColoredNumber from '../ColoredNumber'
-import { useState, useMemo } from 'react'
 import {
   useCustomDayBlock,
   useDayData,
@@ -10,6 +7,10 @@ import {
   useFarms,
   useOneDayBlock,
 } from '../../../services/graph'
+import { useMemo, useState } from 'react'
+
+import ColoredNumber from '../ColoredNumber'
+import LineGraph from '../../../components/LineGraph'
 
 interface ChartCardProps {
   type: 'liquidity' | 'volume'
@@ -47,8 +48,8 @@ export default function ChartCard(props: ChartCardProps): JSX.Element {
 
   const type = types[props.type]
 
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()
+  const block2d = useCustomDayBlock(2)
 
   const exchange = useFactory()
   const exchange1d = useFactory({ block: { number: Number(block1d) } })
@@ -64,19 +65,20 @@ export default function ChartCard(props: ChartCardProps): JSX.Element {
   )
 
   return (
-    <div className="rounded bg-dark-900 w-full font-bold">
+    <div className="w-full font-bold rounded bg-dark-900">
       <div className="p-4">
-        <div className="text-primary text-lg">{type.header}</div>
-        <div className="text-high-emphesis text-2xl">{formatNumber(data.figure, true, false)}</div>
+        <div className="text-lg text-primary">{type.header}</div>
+        <div className="text-2xl text-high-emphesis">{formatNumber(data.figure, true, false)}</div>
         <div className="flex flex-row items-center">
           <ColoredNumber number={data.change} percent={true} />
-          <div className="text-secondary text-sm ml-3">Last 24 Hours</div>
+          <div className="ml-3 text-sm text-secondary">Last 24 Hours</div>
         </div>
       </div>
       <div className="h-36">{data.chart && <LineGraph data={data.chart} />}</div>
-      <div className="flex flex-row justify-end space-x-2 pb-4 pr-4">
-        {chartTimespans.map((timespan) => (
+      <div className="flex flex-row justify-end pb-4 pr-4 space-x-2">
+        {chartTimespans.map((timespan, i) => (
           <button
+            key={i}
             className={classNames(timespan === chartTimespan ? 'text-high-emphesis' : 'text-secondary', 'font-bold')}
             onClick={() => setChartTimespan(timespan)}
           >

@@ -1,8 +1,9 @@
-import _ from 'lodash'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import React, { useState } from 'react'
-import { useTable, usePagination, useSortBy } from 'react-table'
+import { usePagination, useSortBy, useTable } from 'react-table'
+
+import _ from 'lodash'
 import { classNames } from '../../../functions'
-import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 
 export default function Table({ columns, data }) {
   const {
@@ -31,11 +32,11 @@ export default function Table({ columns, data }) {
   return (
     <div className="w-full">
       <table className="w-full overflow-hidden border-collapse" {...getTableProps()}>
-        <thead className="w-full border-b border-gray-800 h-10">
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+        <thead className="w-full h-10 border-b border-gray-800">
+          {headerGroups.map((headerGroup, i) => (
+            <tr {...headerGroup.getHeaderGroupProps()} key={i}>
               {headerGroup.headers.map((column, i) => (
-                <th {...column.getHeaderProps()}>
+                <th {...column.getHeaderProps()} key={i}>
                   <div className={classNames(i === 0 && 'pl-2', i === headerGroup.headers.length - 1 && 'pr-2')}>
                     <div className={classNames('font-bold flex flex-row')}>
                       <div className={classNames(column.align && `text-${column.align}`, 'w-full')}>
@@ -53,11 +54,11 @@ export default function Table({ columns, data }) {
           {page.map((row, i) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell, cI) => {
+              <tr {...row.getRowProps()} key={i}>
+                {row.cells.map((cell, i) => {
                   return (
-                    <td className="pl-0 pr-0 pb-4" {...cell.getCellProps()}>
-                      <div className="text-secondary flex items-center">
+                    <td className="pb-4 pl-0 pr-0" {...cell.getCellProps()} key={i}>
+                      <div className="flex items-center text-secondary">
                         <div
                           className={classNames(
                             cell.column.align === 'right' && `text-right`,
