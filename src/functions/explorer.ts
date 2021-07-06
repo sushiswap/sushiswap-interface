@@ -113,7 +113,7 @@ const builders = {
   },
 
   harmony: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = 'https://explorer.harmony.one/#'
+    const prefix = 'https://beta.explorer.harmony.one/#'
     switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
