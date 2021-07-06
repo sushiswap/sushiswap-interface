@@ -13,6 +13,8 @@ import { useActiveWeb3React } from './useActiveWeb3React'
 import { useCombinedActiveList } from '../state/lists/hooks'
 import { useMemo } from 'react'
 import { useUserAddedTokens } from '../state/user/hooks'
+import { useUserManifoldFinanceRelay } from '../state/user/hooks'
+import MANIFOLD_TOKENS_ALLOW_LIST from '../constants/tokens/sushiswap-manifoldfinance.allowlist.json'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
 function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean): { [address: string]: Token } {
@@ -52,7 +54,24 @@ function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean):
 
 export function useAllTokens(): { [address: string]: Token } {
   const allTokens = useCombinedActiveList()
-  return useTokensFromMap(allTokens, true)
+  const tokensFromMap = useTokensFromMap(allTokens, true)
+
+  const { chainId } = useActiveWeb3React()
+  const [useManifoldFinance] = useUserManifoldFinanceRelay()
+
+  return useMemo(() => {
+    if (!chainId) return {}
+
+    if (!useManifoldFinance) return tokensFromMap
+
+    // Filter only by tokens we actively support
+    return Object.keys(tokensFromMap)
+      .filter((key) => MANIFOLD_TOKENS_ALLOW_LIST[chainId].find((address) => address === key))
+      .reduce((obj, key) => {
+        obj[key] = tokensFromMap[key]
+        return obj
+      }, {})
+  }, [allTokens, tokensFromMap, chainId, useManifoldFinance])
 }
 
 export function useTokens(): { [address: string]: Token } {

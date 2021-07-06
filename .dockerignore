@@ -1,0 +1,7 @@
+.dockerignore
+build
+env
+docs
+Dockerfile
+node_modules
+nix

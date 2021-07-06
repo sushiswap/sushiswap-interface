@@ -1,4 +1,4 @@
-import { ARCHER_RELAY_URI, BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
+import { ARCHER_RELAY_URI, BIPS_BASE, EIP_1559_ACTIVATION_BLOCK, MANIFOLD_FINANCE_URI } from '../constants'
 import {
   ChainId,
   Currency,
@@ -215,7 +215,9 @@ export function useSwapCallback(
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | undefined | null,
-  archerRelayDeadline?: number // deadline to use for archer relay -- set to undefined for no relay
+  useArcher: boolean,
+  useManifold: boolean,
+  archerRelayDeadline?: number // deadline to use for archer / manifold relay -- set to undefined for no relay
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
@@ -227,8 +229,6 @@ export function useSwapCallback(
 
   const eip1559 =
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
-
-  const useArcher = archerRelayDeadline !== undefined
 
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useArcher)
 
@@ -341,8 +341,8 @@ export function useSwapCallback(
 
         // console.log({ bestCallOption })
 
-        if (!useArcher) {
-          console.log('SWAP WITHOUT ARCHER')
+        if (!useArcher && !useManifold) {
+          console.log('SWAP WITHOUT ARCHER / MANIFOLD')
           console.log(
             'gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}
           )
@@ -391,7 +391,7 @@ export function useSwapCallback(
               }
             })
         } else {
-          const postToRelay = (rawTransaction: string, deadline: number) => {
+          const postToArcherRelay = (rawTransaction: string, deadline: number) => {
             // as a wise man on the critically acclaimed hit TV series "MTV's Cribs" once said:
             // "this is where the magic happens"
             const relayURI = chainId ? ARCHER_RELAY_URI[chainId] : undefined
@@ -409,6 +409,51 @@ export function useSwapCallback(
                 'Content-Type': 'application/json',
               },
             }).then((res) => {
+              if (res.status !== 200) throw Error(res.statusText)
+            })
+          }
+
+          const postToManifoldRelay = async (signedTx: string, isMetamask: boolean) => {
+            const relayURI = chainId ? MANIFOLD_FINANCE_URI[chainId] : undefined
+            if (!relayURI) throw new Error('Could not determine relay URI for this network')
+
+            const body = JSON.stringify({
+              jsonrpc: '2.0',
+              id: new Date().getTime(),
+              method: 'manifold_sendTransaction',
+              params: [signedTx],
+            })
+
+            console.log(`Body to sign:`, body)
+
+            // For signing the message we restore proper behavior if on MetaMask
+            // ethers will change eth_sign to personal_sign if it detects metamask
+            // https://github.com/ethers-io/ethers.js/blob/2a7dbf05718e29e550f7a208d35a095547b9ccc2/packages/providers/src.ts/web3-provider.ts#L33
+            if (isMetamask) library.provider.isMetaMask = true
+
+            const signer = await library.getSigner().getAddress()
+            const signedPayload = await library.getSigner().signMessage(ethers.utils.id(body))
+
+            // Restore back behavior
+            if (isMetamask) library.provider.isMetaMask = false
+
+            console.log(`Sending to URI: ${relayURI} with X-Manifold-Signature: ${signer}:${signedPayload}`)
+
+            return fetch(relayURI, {
+              method: 'POST',
+              body,
+              headers: {
+                'X-Manifold-Signature': `${signer}:${signedPayload}`,
+                'Content-Type': 'application/json',
+              },
+            }).then(async (res) => {
+              // Handle specific error cases
+              if (res.status === 200) {
+                const json = await res.json()
+                if (json.error) throw Error(`${json.error.message}`)
+              }
+
+              // Generic error
               if (res.status !== 200) throw Error(res.statusText)
             })
           }
@@ -507,7 +552,7 @@ export function useSwapCallback(
           }
 
           return signedTxPromise
-            .then(({ signedTx, fullTx }) => {
+            .then(async ({ signedTx, fullTx }) => {
               const hash = ethers.utils.keccak256(signedTx)
               const inputSymbol = trade.inputAmount.currency.symbol
               const outputSymbol = trade.outputAmount.currency.symbol
@@ -531,15 +576,31 @@ export function useSwapCallback(
                       ethTip: archerETHTip,
                     }
                   : undefined
-              // console.log('archer', archer)
+              const manifold = useManifold
+                ? {
+                    signedTx,
+                    deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
+                  }
+                : undefined
+
+              if (archer) {
+                console.log('archer', archer)
+                await postToArcherRelay(archer.rawTransaction, archer.deadline)
+              } else if (manifold) {
+                console.log('manifold', manifold)
+                await postToManifoldRelay(manifold.signedTx, isMetamask)
+              }
+
               addTransaction(
                 { hash },
                 {
                   summary: withRecipient,
                   archer,
+                  manifold,
                 }
               )
-              return archer ? postToRelay(archer.rawTransaction, archer.deadline).then(() => hash) : hash
+
+              return hash
             })
             .catch((error: any) => {
               // if the user rejected the tx, pass this along
@@ -558,5 +619,16 @@ export function useSwapCallback(
       },
       error: null,
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, useArcher, addTransaction])
+  }, [
+    trade,
+    library,
+    account,
+    chainId,
+    recipient,
+    recipientAddressOrName,
+    swapCalls,
+    useArcher,
+    useManifold,
+    addTransaction,
+  ])
 }

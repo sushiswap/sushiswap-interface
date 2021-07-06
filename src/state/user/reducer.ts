@@ -22,6 +22,7 @@ import {
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
+  updateUserManifoldFinanceUseRelay,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
 } from './actions'
@@ -69,6 +70,8 @@ export interface UserState {
   userArcherETHTip: string // ETH tip for relay, as full BigInt string
   userArcherGasEstimate: string // Gas estimate for trade
   userArcherTipManualOverride: boolean // is user manually entering tip
+
+  userManifoldFinanceUseRelay: boolean
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -91,6 +94,7 @@ export const initialState: UserState = {
   userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
   userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
   userArcherTipManualOverride: false,
+  userManifoldFinanceUseRelay: true,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -179,5 +183,8 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(updateUserArcherTipManualOverride, (state, action) => {
       state.userArcherTipManualOverride = action.payload.userArcherTipManualOverride
+    })
+    .addCase(updateUserManifoldFinanceUseRelay, (state, action) => {
+      state.userManifoldFinanceUseRelay = action.payload.userManifoldFinanceUseRelay
     })
 )

@@ -18,6 +18,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserManifoldFinanceUseRelay,
 } from './actions'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -387,6 +388,23 @@ export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: 
   )
 
   return [userTipManualOverride, setUserTipManualOverride]
+}
+
+export function useUserManifoldFinanceRelay(): [boolean, (newUseRelay: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  const useRelay = useSelector<AppState, AppState['user']['userManifoldFinanceUseRelay']>(
+    (state) => state.user.userManifoldFinanceUseRelay
+  )
+
+  const setUseRelay = useCallback(
+    (newUseRelay: boolean) => {
+      dispatch(updateUserManifoldFinanceUseRelay({ userManifoldFinanceUseRelay: newUseRelay }))
+    },
+    [dispatch]
+  )
+
+  return [useRelay, setUseRelay]
 }
 
 /**

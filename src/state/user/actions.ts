@@ -54,3 +54,6 @@ export const updateUserArcherGasEstimate = createAction<{
 export const updateUserArcherTipManualOverride = createAction<{
   userArcherTipManualOverride: boolean
 }>('user/updateUserArcherTipManualOverride')
+export const updateUserManifoldFinanceUseRelay = createAction<{
+  userManifoldFinanceUseRelay: boolean
+}>('user/updateUserManifoldFinanceUseRelay')
