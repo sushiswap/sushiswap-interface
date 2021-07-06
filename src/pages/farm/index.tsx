@@ -57,8 +57,6 @@ export default function Farm(): JSX.Element {
 
   const averageBlockTime = useAverageBlockTime()
 
-  console.log({ averageBlockTime })
-
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
 
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()

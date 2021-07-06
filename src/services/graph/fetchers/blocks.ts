@@ -62,7 +62,6 @@ export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
   const start = getUnixTime(subHours(now, 6))
   const end = getUnixTime(now)
   const blocks = await getBlocks(chainId, start, end)
-  console.log({ blocks })
   const averageBlockTime = blocks?.reduce(
     (previousValue, currentValue, currentIndex) => {
       if (previousValue.timestamp) {
