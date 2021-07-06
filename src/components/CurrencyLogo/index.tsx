@@ -26,6 +26,7 @@ const BLOCKCHAIN = {
   [ChainId.HARMONY]: 'harmony',
   [ChainId.MATIC]: 'polygon',
   [ChainId.XDAI]: 'xdai',
+  // [ChainId.OKEX]: 'okex',
 }
 
 function getCurrencySymbol(currency) {
@@ -66,7 +67,7 @@ const HarmonyLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/to
 const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/heco.jpg'
 const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg'
 const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
-const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.png'
+const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.jpg'
 const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg'
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
 
