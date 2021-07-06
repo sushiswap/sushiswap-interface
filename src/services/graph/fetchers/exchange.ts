@@ -142,6 +142,6 @@ export const getTransactions = async (chainId = ChainId.MAINNET, query = transac
 }
 
 export const getTokenPairs = async (chainId = ChainId.MAINNET, query = tokenPairsQuery, variables = undefined) => {
-  const { pairs1, pairs2 } = await exchange(chainId, query, variables)
-  return pairs1 || pairs2 ? [...(pairs1 ? pairs1 : []), ...(pairs2 ? pairs2 : [])] : undefined
+  const { pairs0, pairs1 } = await exchange(chainId, query, variables)
+  return pairs0 || pairs1 ? [...(pairs0 ? pairs0 : []), ...(pairs1 ? pairs1 : [])] : undefined
 }

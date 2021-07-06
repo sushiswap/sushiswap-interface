@@ -123,6 +123,7 @@ export default function Token(): JSX.Element {
 
   // For Transactions
   const tokenPairs = useTokenPairs({ id: id })
+  console.log(tokenPairs)
   const transactions = useTransactions({ pairAddresses: tokenPairs?.map((pair) => pair.id) })
   const transactionsFormatted = useMemo(() => {
     return transactions
@@ -208,7 +209,7 @@ export default function Token(): JSX.Element {
 
   return (
     <>
-      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 mx-auto">
+      <Container maxWidth="full" className="h-full grid-flow-col grid-cols-10 mx-auto md:grid">
         <div className="col-start-2">
           <button onClick={() => router.back()} className="font-bold">
             {'<'} Go Back
@@ -226,7 +227,11 @@ export default function Token(): JSX.Element {
           <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center space-x-4">
               <CurrencyLogo currency={currency} size={53} />
-              <div className="text-4xl font-bold">{token?.symbol}</div>
+              {token?.symbol.length <= 6 ? (
+                <div className="text-4xl font-bold">{token?.symbol}</div>
+              ) : (
+                <div className="hidden text-4xl font-bold sm:block">{token?.symbol}</div>
+              )}
             </div>
             <div className="flex flex-row items-center space-x-4">
               <div className="text-4xl font-bold">{formatNumber(data.price, true)}</div>
@@ -252,7 +257,7 @@ export default function Token(): JSX.Element {
               </button>
             ))}
           </div>
-          <div className="flex flex-row justify-between space-x-6">
+          <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
             <InfoCard text="Liquidity (24H)" number={data.liquidity} percent={data.liquidityChange} />
             <InfoCard text="Volume (24H)" number={data.volume1d} percent={data.volume1dChange} />
             <InfoCard text="Fees (24H)" number={data.volume1d * 0.003} percent={data.volume1dChange} />

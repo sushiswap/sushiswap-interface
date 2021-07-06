@@ -173,7 +173,7 @@ export default function Dashboard(): JSX.Element {
           <Menu />
         </div>
         <div className="col-span-5 space-y-6 lg:col-span-4">
-          <div className="flex flex-row space-x-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <ChartCard type="liquidity" />
             <ChartCard type="volume" />
           </div>

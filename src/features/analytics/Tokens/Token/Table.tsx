@@ -29,52 +29,64 @@ export default function Table({ columns, data }) {
   )
 
   return (
-    <div className="w-full">
-      <table className="w-full overflow-hidden border-collapse" {...getTableProps()}>
-        <thead className="w-full h-12 border-b border-gray-800">
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column, i) => (
-                <th {...column.getHeaderProps()}>
-                  <div className={classNames(i === 0 && 'pl-2', i === headerGroup.headers.length - 1 && 'pr-2')}>
-                    <div className={classNames('font-bold flex flex-row')}>
-                      <div className={classNames(column.align && `text-${column.align}`, 'w-full')}>
-                        {column.render('Header')}
-                      </div>
-                    </div>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody className="w-full border-t border-b border-gray-800" {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td className={classNames(i === 0 && 'pt-4', 'pl-0 pr-0 pb-4')} {...cell.getCellProps()}>
-                      <div className="flex items-center text-secondary">
+    <div>
+      <div className="w-full overflow-x-auto">
+        <table className="w-auto min-w-full border-collapse table-fixed" {...getTableProps()}>
+          <thead className="w-full h-12 border-b border-gray-800">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column, i) => (
+                  <th {...column.getHeaderProps()}>
+                    <div className={classNames(i === 0 && 'pl-2', i === headerGroup.headers.length - 1 && 'pr-2')}>
+                      <div className={classNames('w-full font-bold')}>
                         <div
                           className={classNames(
-                            cell.column.align === 'right' && `text-right`,
-                            cell.column.align === 'left' && 'text-left',
-                            'w-full'
+                            column.align === 'right' && `justify-end`,
+                            column.align === 'left' && 'justify-start',
+                            i !== 0 && 'ml-2',
+                            i !== columns.length - 1 && 'mr-2',
+                            'whitespace-nowrap flex flex-row xl:mx-auto'
                           )}
                         >
-                          {cell.render('Cell')}
+                          {column.render('Header')}
                         </div>
                       </div>
-                    </td>
-                  )
-                })}
+                    </div>
+                  </th>
+                ))}
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody className="w-full border-t border-b border-gray-800" {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row)
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell, cI) => {
+                    return (
+                      <td className={classNames(i === 0 && 'pt-4', 'pl-0 pr-0 pb-4')} {...cell.getCellProps()}>
+                        <div className="flex items-center text-secondary">
+                          <div
+                            className={classNames(
+                              cell.column.align === 'right' && `text-right`,
+                              cell.column.align === 'left' && 'text-left',
+                              cI !== 0 && 'ml-2',
+                              cI !== row.cells.length - 1 && 'mr-2',
+                              'w-full xl:mx-auto whitespace-nowrap'
+                            )}
+                          >
+                            {cell.render('Cell')}
+                          </div>
+                        </div>
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
       <div className="flex justify-between mt-5">
         <div />
         <div className="flex">

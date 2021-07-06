@@ -42,7 +42,7 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
     <>
       <div className="flex items-center">
         <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} />
-        <div className="ml-3 font-bold text-high-emphesis">{pair.symbol}</div>
+        <div className="ml-3 font-bold whitespace-nowrap text-high-emphesis">{pair.symbol}</div>
       </div>
     </>
   )
@@ -68,7 +68,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
               <CurrencyLogo currency={currencies[i]} size={size} />
             </td>
             <td>
-              <div className="ml-2">{`${reward.amount.toFixed(3)} ${reward.symbol} / day`}</div>
+              <div className="ml-2 whitespace-nowrap">{`${reward.amount.toFixed(3)} ${reward.symbol} / day`}</div>
             </td>
           </tr>
         ))}

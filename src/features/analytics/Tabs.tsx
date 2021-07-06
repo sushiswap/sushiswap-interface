@@ -9,7 +9,7 @@ export default function PairTabs({ tabs }: { tabs: any[] }): JSX.Element {
   return (
     <>
       <div className="border-b border-gray-700">
-        <nav className="-mb-px flex space-x-4" aria-label="Tabs">
+        <nav className="flex -mb-px space-x-4 overflow-x-auto whitespace-nowrap" aria-label="Tabs">
           {tabs.map((tab) => (
             <div>
               <Link href={tab.href}>
