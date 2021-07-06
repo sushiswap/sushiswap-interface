@@ -592,21 +592,21 @@ export default function Swap() {
             </div>
           ) : showApproveFlow ? (
             <RowBetween>
-              <ButtonConfirmed
-                onClick={handleApprove}
-                disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
-                confirmed={approvalState === ApprovalState.APPROVED}
-              >
-                {approvalState === ApprovalState.PENDING ? (
-                  <AutoRow gap="6px" justify="center">
-                    Approving <Loader stroke="white" />
-                  </AutoRow>
-                ) : approvalSubmitted && approvalState === ApprovalState.APPROVED ? (
-                  i18n._(t`Approved`)
-                ) : (
-                  i18n._(t`Approve ${currencies[Field.INPUT]?.symbol}`)
-                )}
-              </ButtonConfirmed>
+              {approvalState !== ApprovalState.APPROVED && (
+                <ButtonConfirmed
+                  onClick={handleApprove}
+                  disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                >
+                  {approvalState === ApprovalState.PENDING ? (
+                    <AutoRow gap="6px" justify="center">
+                      Approving <Loader stroke="white" />
+                    </AutoRow>
+                  ) : (
+                    i18n._(t`Approve ${currencies[Field.INPUT]?.symbol}`)
+                  )}
+                </ButtonConfirmed>
+              )}
+
               {approvalState === ApprovalState.APPROVED && (
                 <ButtonError
                   onClick={() => {
