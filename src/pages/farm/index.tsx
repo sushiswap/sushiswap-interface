@@ -163,7 +163,8 @@ export default function Farm(): JSX.Element {
           const rewardPerSecond =
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
           const rewardPerBlock = rewardPerSecond * averageBlockTime
-          const rewardPerDay = rewardPerBlock * blocksPerDay
+          //const rewardPerDay = rewardPerBlock * blocksPerDay
+          const rewardPerDay = rewardPerSecond * 86400
 
           const reward = {
             [ChainId.MATIC]: {
