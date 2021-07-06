@@ -52,6 +52,6 @@ export const MULTICALL2_ADDRESS: AddressMap = {
   [ChainId.HECO_TESTNET]: '',
   [ChainId.HARMONY]: '0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3',
   [ChainId.HARMONY_TESTNET]: '',
-  [ChainId.OKEX]: '',
+  [ChainId.OKEX]: '0xF4d73326C13a4Fc5FD7A064217e12780e9Bd62c3',
   [ChainId.OKEX_TESTNET]: '',
 }
