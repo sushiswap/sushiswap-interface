@@ -20,13 +20,16 @@ import {
 
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
-import FarmList from '../../features/farm/FarmList'
 import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
 import { classNames } from '../../functions'
 import { usePositions } from '../../features/farm/hooks'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
+import Dots from '../../components/Dots'
+
+const FarmList = dynamic(() => import('../../features/farm/FarmList'))
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -61,7 +64,8 @@ export default function Farm(): JSX.Element {
 
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  // TODO: Obviously need to sort this out but this is fine for time being
+  // TODO: Obviously need to sort this out but this is fine for time being,
+  // prices are only loaded when needed for a specific network
   const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice] = [
     useSushiPrice(),
     useEthPrice(),
