@@ -43,7 +43,7 @@ body {
   position: relative;
   min-height: 100%;
   margin: 0;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 
 a {
