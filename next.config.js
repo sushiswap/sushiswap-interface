@@ -30,6 +30,11 @@ module.exports = withBundleAnalyzer(
           destination: '/',
           permanent: true,
         },
+        {
+          source: '/yield',
+          destination: '/farm',
+          permanent: true,
+        },
       ]
     },
     async rewrites() {
