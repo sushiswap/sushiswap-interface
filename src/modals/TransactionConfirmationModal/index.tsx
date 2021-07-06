@@ -83,16 +83,14 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
           <Button color="gradient" onClick={addToken} className="w-auto mt-4">
             {!success ? (
               <RowFixed className="mx-auto space-x-2">
-                <Trans>
-                  <span>Add {currencyToAdd.symbol} to MetaMask </span>
-                  <Image
-                    src="/images/wallets/metamask.png"
-                    alt="Add to MetaMask"
-                    width={24}
-                    height={24}
-                    className="ml-1"
-                  />
-                </Trans>
+                <span>{i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)}</span>
+                <Image
+                  src="/images/wallets/metamask.png"
+                  alt={i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)}
+                  width={24}
+                  height={24}
+                  className="ml-1"
+                />
               </RowFixed>
             ) : (
               <RowFixed>
