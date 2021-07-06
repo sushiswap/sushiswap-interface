@@ -6,6 +6,7 @@ import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useSortableData from '../../hooks/useSortableData'
+
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms)
   const { i18n } = useLingui()
@@ -39,7 +40,7 @@ const FarmList = ({ farms, term }) => {
           className="flex items-center justify-end px-4 cursor-pointer hover:text-high-emphesis"
           onClick={() => requestSort('roiPerYear')}
         >
-          {i18n._(t`APY`)}
+          {i18n._(t`APR`)}
           {sortConfig &&
             sortConfig.key === 'roiPerYear' &&
             ((sortConfig.direction === 'ascending' && <ChevronUpIcon width={12} height={12} />) ||
