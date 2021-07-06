@@ -156,10 +156,12 @@ export default function Farm(): JSX.Element {
 
           return [...defaultRewards, REWARDS[pool.id]]
         } else if (pool.chef === Chef.MINICHEF) {
-          const sushiPerSecond = ((pool.allocPoint / 1000) * pool.miniChef.sushiPerSecond) / 1e18
+          const sushiPerSecond =
+            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
           const sushiPerBlock = sushiPerSecond * averageBlockTime
           const sushiPerDay = sushiPerBlock * blocksPerDay
-          const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
+          const rewardPerSecond =
+            ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
           const rewardPerBlock = rewardPerSecond * averageBlockTime
           const rewardPerDay = rewardPerBlock * blocksPerDay
 
@@ -180,6 +182,7 @@ export default function Farm(): JSX.Element {
               rewardPrice: onePrice,
             },
           }
+
           return [
             {
               ...defaultReward,
@@ -217,7 +220,29 @@ export default function Farm(): JSX.Element {
 
       const roiPerYear = roiPerMonth * 12
 
+      // console.log({ balance, tvl, roiPerBlock, roiPerYear })
+
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
+
+      if (pool.pair === '0x0c51171b913db10ade3fd625548e69c9c63afb96') {
+        console.log({
+          ...pool,
+          ...position,
+          pair: {
+            ...pair,
+            decimals: pair.type === PairType.KASHI ? Number(pair.asset.tokenInfo.decimals) : 18,
+            type,
+          },
+          balance,
+          roiPerBlock,
+          roiPerHour,
+          roiPerDay,
+          roiPerMonth,
+          roiPerYear,
+          rewards,
+          tvl,
+        })
+      }
 
       return {
         ...pool,

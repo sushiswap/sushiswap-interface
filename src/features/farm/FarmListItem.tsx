@@ -52,7 +52,6 @@ const FarmListItem = ({ farm, ...rest }) => {
                         className="rounded-md"
                         layout="fixed"
                         alt={reward.token}
-                        
                       />
                     </div>
                   ))}
@@ -67,7 +66,8 @@ const FarmListItem = ({ farm, ...rest }) => {
               </div>
               <div className="flex flex-col items-end justify-center">
                 <div className="font-bold text-righttext-high-emphesis">
-                  {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)}
+                  {formatPercent(farm?.roiPerYear * 100)}
+                  {/* {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)} */}
                 </div>
                 <div className="text-xs text-right md:text-base text-secondary">annualized</div>
               </div>
