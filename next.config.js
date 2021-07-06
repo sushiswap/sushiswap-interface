@@ -35,6 +35,16 @@ module.exports = withBundleAnalyzer(
           destination: '/farm',
           permanent: true,
         },
+        {
+          source: '/bento',
+          destination: '/bentobox',
+          permanent: true,
+        },
+        {
+          source: '/bento/kashi',
+          destination: '/lend',
+          permanent: true,
+        },
       ]
     },
     async rewrites() {
