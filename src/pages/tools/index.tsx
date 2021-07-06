@@ -10,18 +10,18 @@ const tools = [
     description: 'Redonominate xSUSHI into MEOWSHI',
     href: '/tools/meowshi',
   },
-  {
-    id: 2,
-    name: 'SAAVE',
-    description: '...',
-    href: '/tools/saave',
-  },
-  {
-    id: 3,
-    name: 'LP ZAP',
-    description: 'Zap into an LP position for any pool using any asset',
-    href: '/zap',
-  },
+  // {
+  //   id: 2,
+  //   name: 'SAAVE',
+  //   description: '...',
+  //   href: '/tools/saave',
+  // },
+  // {
+  //   id: 3,
+  //   name: 'LP ZAP',
+  //   description: 'Zap into an LP position for any pool using any asset',
+  //   href: '/zap',
+  // },
 ]
 
 export default function Tools() {
