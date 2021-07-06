@@ -5,6 +5,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Alert from '../../../components/Alert'
 import { AutoColumn } from '../../../components/Column'
 import { AutoRow } from '../../../components/Row'
+import Back from '../../../components/Back'
+import Container from '../../../components/Container'
 import CurrencySelectPanel from '../../../components/CurrencySelectPanel'
 import Dots from '../../../components/Dots'
 import { ExtendedEther } from '../../../constants'
@@ -13,6 +15,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { MinimalPositionCard } from '../../../components/PositionCard'
 import { Plus } from 'react-feather'
+import Typography from '../../../components/Typography'
 import Web3Connect from '../../../components/Web3Connect'
 import { currencyId } from '../../../functions/currency'
 import { t } from '@lingui/macro'
@@ -20,9 +23,6 @@ import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { usePairAdder } from '../../../state/user/hooks'
 import { useTokenBalance } from '../../../state/wallet/hooks'
-import Container from '../../../components/Container'
-import Back from '../../../components/Back'
-import Typography from '../../../components/Typography'
 
 enum Fields {
   TOKEN0 = 0,
@@ -93,7 +93,7 @@ export default function PoolFinder() {
           message={
             <>
               <b>{i18n._(t`Tip:`)}</b>{' '}
-              {i18n._(t`Use this tool to find pairs that don&apos;t automatically appear in the interface`)}
+              {i18n._(t`Use this tool to find pairs that don't automatically appear in the interface`)}
             </>
           }
           type="information"
