@@ -315,33 +315,18 @@
    "The onchain oracle that tracks the pricing for this pair":["इस जोड़ी के लिए मूल्य निर्धारण पर नज़र रखने वाला ऑनचेन ओरेकल"],
    "Total":["संपूर्ण"],
    "{0} Strategy":["{0} रणनीति"],
-   "(COMING SOON) Accrue automatic yield through flash loans and
-SUSHI strategies":["(जल्दी आ रहा है) फ्लैश ऋण और सुशी रणनीतियों के माध्यम से स्वचालित लाभ पाएं"],
-   "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share
-of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing
-your liquidity.":["नकदी को जोड़कर आप अपने पूल के हिस्से के अनुपात में इस जोड़ी के सभी व्यपारों  का 0.25% अर्जित करेंगे। शुल्क वास्तविक समय में अर्जित करके पूल में डाला जाता है, और अपनी नकदी वापस लेने के समय इसका दावा किया जा सकता है।"],
-   "Click on a pool below, input the amount you wish to migrate or select max, and click
-migrate":["नीचे दिए गए एक पूल पर क्लिक करें, उस राशि को भरें जिसे आप विस्थापित करना चाहते हैं या अधिकतम का चयन करें\n माइग्रेट पर क्लिक करें"],
-   "Expert mode turns off the confirm transaction prompt and allows high slippage trades
-that often result in bad rates and lost funds.":["विशेषज्ञ मोड पुष्टि लेन-देन अनुस्मारक को बंद कर देता है और त्वरित और ज्यादा गिरावट वाले व्यापार की अनुमति देता है जिस कारण अक्सर खराब दरें मिलती हैं या फिर पैसे का नुकसान हो जाता है।"],
-   "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve
-xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
-Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
-SUSHI and any additional from fees.":["एक्सचेंज के हर चेन पर हर लेन-देन  के लिए, सुशिबर के आपके हिस्से के अनुपात में आप 0.0५ % लेन-देन शुल्क प्राप्त करते हैं। \nजब आपका SUSHI SushiBar में स्टेक करता है, तो आप वोटिंग अधिकार और एक पूरी तरह से कंपोजिट टोकन के बदले में xSUSHI प्राप्त करते हैं जो \nअन्य प्रोटोकॉल के साथ बातचीत कर सकता है। आपका xSUSHI लगातार कंपाउंडिंग कर रहा है, जब आप अनस्टेक हो जाते हैं तो आपको सभी मूल रूप \nसे जमा SUSHI और फीस में से कुछ अतिरिक्त मिलेगा।"],
-   "Gain governance rights with xSUSHI and earn 5% APR (0.05% of
-all swaps from all chains)":["एक्स सुशी के साथ नियंत्रण के अधिकार प्राप्त करें और ५% ब्याज (सभी चेन से सभी लेन - देन का 0.0५ %) अर्जित करें"],
+   "(COMING SOON) Accrue automatic yield through flash loans and SUSHI strategies":["(जल्दी आ रहा है) फ्लैश ऋण और सुशी रणनीतियों के माध्यम से स्वचालित लाभ पाएं"],
+   "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity.":["नकदी को जोड़कर आप अपने पूल के हिस्से के अनुपात में इस जोड़ी के सभी व्यपारों  का 0.25% अर्जित करेंगे। शुल्क वास्तविक समय में अर्जित करके पूल में डाला जाता है, और अपनी नकदी वापस लेने के समय इसका दावा किया जा सकता है।"],
+   "Click on a pool below, input the amount you wish to migrate or select max, and click migrate":["नीचे दिए गए एक पूल पर क्लिक करें, उस राशि को भरें जिसे आप विस्थापित करना चाहते हैं या अधिकतम का चयन करें\n माइग्रेट पर क्लिक करें"],
+   "Expert mode turns off the confirm transaction prompt and allows high slippage trades that often result in bad rates and lost funds.":["विशेषज्ञ मोड पुष्टि लेन-देन अनुस्मारक को बंद कर देता है और त्वरित और ज्यादा गिरावट वाले व्यापार की अनुमति देता है जिस कारण अक्सर खराब दरें मिलती हैं या फिर पैसे का नुकसान हो जाता है।"],
+   "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve xSUSHI in return for voting rights and a fully composable token that can interact with other protocols. Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited SUSHI and any additional from fees.":["एक्सचेंज के हर चेन पर हर लेन-देन  के लिए, सुशिबर के आपके हिस्से के अनुपात में आप 0.0५ % लेन-देन शुल्क प्राप्त करते हैं। \nजब आपका SUSHI SushiBar में स्टेक करता है, तो आप वोटिंग अधिकार और एक पूरी तरह से कंपोजिट टोकन के बदले में xSUSHI प्राप्त करते हैं जो \nअन्य प्रोटोकॉल के साथ बातचीत कर सकता है। आपका xSUSHI लगातार कंपाउंडिंग कर रहा है, जब आप अनस्टेक हो जाते हैं तो आपको सभी मूल रूप \nसे जमा SUSHI और फीस में से कुछ अतिरिक्त मिलेगा।"],
+   "Gain governance rights with xSUSHI and earn 5% APR (0.05% of all swaps from all chains)":["एक्स सुशी के साथ नियंत्रण के अधिकार प्राप्त करें और ५% ब्याज (सभी चेन से सभी लेन - देन का 0.0५ %) अर्जित करें"],
    "Import it":["इसे आयात करें"],
    "Liquidity":["नकदी"],
-   "Liquidity providers earn a 0.25% fee on all trades proportional to their share of
-the pool. Fees are added to the pool, accrue in real time and can be claimed by
-withdrawing your liquidity":["नकदी प्रदाता पूल के अपने हिस्से के अनुपात में सभी ट्रेडों पर 0.२५ % शुल्क कमाते हैं। शुल्क वास्तविक समय में अर्जित करके पूल में डाला जाता है, और अपनी नकदी वापस लेने के समय इसका दावा किया जा सकता है"],
-   "Stake into xSUSHI add collateral as axSUSHI on Aave all in
-one click":["एक्स सुशी दाव पर लगाएं , सिर्फ एक क्लिक में आवे पर ऐ एक्स सुशी  के रूप में संपार्श्विक जोड़ें"],
-   "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.
-Continuously compounding.":["~५ % ब्याज में अपनी सुशी को एक्स सुशी में दाव पर लगाएं। कोई स्थायी नुकसान नहीं होगा, नियंत्रण के अधिकारों का कोई नुकसान नहीं होगा। \n निरंतर कंपाउंडिंग होती रहेगी।"],
-   "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional
-to your share of the SushiBar.":["एक्स सुशी I स्वचालित रूप से (मल्टीचैन लेन - देन  सहित सभी लेन - देन  का 0.0५ %) शुल्क कमाती है जो कि आनुपातिक रूप से सुशिबर के आपके हिस्से के बराबर होती है।"],
+   "Liquidity providers earn a 0.25% fee on all trades proportional to their share of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing your liquidity":["नकदी प्रदाता पूल के अपने हिस्से के अनुपात में सभी ट्रेडों पर 0.२५ % शुल्क कमाते हैं। शुल्क वास्तविक समय में अर्जित करके पूल में डाला जाता है, और अपनी नकदी वापस लेने के समय इसका दावा किया जा सकता है"],
+   "Stake into xSUSHI add collateral as axSUSHI on Aave all in one click":["एक्स सुशी दाव पर लगाएं , सिर्फ एक क्लिक में आवे पर ऐ एक्स सुशी  के रूप में संपार्श्विक जोड़ें"],
+   "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights. Continuously compounding.":["~५ % ब्याज में अपनी सुशी को एक्स सुशी में दाव पर लगाएं। कोई स्थायी नुकसान नहीं होगा, नियंत्रण के अधिकारों का कोई नुकसान नहीं होगा। \n निरंतर कंपाउंडिंग होती रहेगी।"],
+   "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional to your share of the SushiBar.":["एक्स सुशी I स्वचालित रूप से (मल्टीचैन लेन - देन  सहित सभी लेन - देन  का 0.0५ %) शुल्क कमाती है जो कि आनुपातिक रूप से सुशिबर के आपके हिस्से के बराबर होती है।"],
    "300M+ TVL on Polygon! Optimized routing enabled":["बहुभुज पर ३०० दस लाख+ कुल मूल्य बंद! अनुकूलित रूटिंग सक्षम की गई"],
    "APR (incl. Fees)":["ब्याज(शुल्क सहित)"],
    "Enjoy the lowest slippage on Polygon":["बहुभुज पर सबसे कम गिरावट का आनंद लें"],
@@ -349,11 +334,7 @@ to your share of the SushiBar.":["एक्स सुशी I स्वचाल
    "annualized":["वार्षिक"],
    "APY (incl. Fees)":["ब्याज(शुल्क सहित)"],
    "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive your rewards at any time.":["<0> टिप: </0> इनाम अर्जित करना शुरू करने के लिए, आपको पहले निर्दिष्ट जोड़ी में नकदी जोड़कर या मौजूदा नकदी को <1>विस्थापित करके कुछ SLP प्राप्त करना होंगे। <1>SLP प्राप्त होने के बाद आप इनाम अर्जित करने के लिए इसे ब्याज खेत में दाव पर लगसकते हैं। कभी भी दाव से हटायें और फिर आप नकदी हटाएं पर क्लिक करके अपने SLP को फिर से बेस टोकन में बदल सकते हैं। किसी भी समय अपने इनाम को प्राप्त करने के लिए हार्वेस्ट/उपज पर क्लिक करें।"],
-   "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
-xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
-Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
-SUSHI and any additional from fees.":["एक्सचेंज पर हर चेन पर हर स्वैप के लिए, सुशी बार  के आपके हिस्से के अनुपात में आप ०.०५ % स्वैप शुल्क प्राप्त करते हैं। \nजब आपका सुशी, SushiBar में स्टेक करता है, तो आप वोटिंग अधिकार और एक पूरी तरह से कंपोजिट टोकन के बदले में एक्स सुशी  प्राप्त करते हैं जो \nअन्य प्रोटोकॉल के साथ बातचीत कर सकता है। आपका एक्स सुशी लगातार कंपाउंडिंग कर रहा है, जब आप अनस्टेक हो जाते हैं तो आपको सभी मूल रूप \nसे जमा सुशी और फीस में से कुछ अतिरिक्त मिलेगा।"],
+   "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive xSUSHI in return for voting rights and a fully composable token that can interact with other protocols. Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited SUSHI and any additional from fees.":["एक्सचेंज पर हर चेन पर हर स्वैप के लिए, सुशी बार  के आपके हिस्से के अनुपात में आप ०.०५ % स्वैप शुल्क प्राप्त करते हैं। \nजब आपका सुशी, SushiBar में स्टेक करता है, तो आप वोटिंग अधिकार और एक पूरी तरह से कंपोजिट टोकन के बदले में एक्स सुशी  प्राप्त करते हैं जो \nअन्य प्रोटोकॉल के साथ बातचीत कर सकता है। आपका एक्स सुशी लगातार कंपाउंडिंग कर रहा है, जब आप अनस्टेक हो जाते हैं तो आपको सभी मूल रूप \nसे जमा सुशी और फीस में से कुछ अतिरिक्त मिलेगा।"],
    "Harvest {0} SUSHI & {1} ALCX":[""],
    "Missed the Auction?":[""],
    "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI":[""],
