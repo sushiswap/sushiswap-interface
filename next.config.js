@@ -40,10 +40,10 @@ module.exports = withBundleAnalyzer(
     async rewrites() {
       return [
         // Bar
-        // {
-        //   source: '/stake',
-        //   destination: '/bar',
-        // },
+        {
+          source: '/stake',
+          destination: '/bar',
+        },
         // Exchange
         // {
         //   source: '/',

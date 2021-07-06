@@ -1,11 +1,12 @@
-import { PairType } from './enum'
-import { Disclosure } from '@headlessui/react'
-import React from 'react'
 import { classNames, formatNumber, formatPercent } from '../../functions'
+
+import { Disclosure } from '@headlessui/react'
 import DoubleLogo from '../../components/DoubleLogo'
-import Image from '../../components/Image'
-import { useCurrency } from '../../hooks/Tokens'
 import FarmListItemDetails from './FarmListItemDetails'
+import Image from '../../components/Image'
+import { PairType } from './enum'
+import React from 'react'
+import { useCurrency } from '../../hooks/Tokens'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
@@ -51,6 +52,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                         className="rounded-md"
                         layout="fixed"
                         alt={reward.token}
+                        
                       />
                     </div>
                   ))}
