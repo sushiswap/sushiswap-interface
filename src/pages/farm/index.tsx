@@ -156,12 +156,16 @@ export default function Farm(): JSX.Element {
 
           return [...defaultRewards, REWARDS[pool.id]]
         } else if (pool.chef === Chef.MINICHEF) {
-          const sushiPerSecond = ((pool.allocPoint / 1000) * pool.miniChef.sushiPerSecond) / 1e18
+          const totalAllocPoint = chainId === ChainId.HARMONY ? 10000 : 1000
+
+          const sushiPerSecond = ((pool.allocPoint / totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
           const sushiPerBlock = sushiPerSecond * averageBlockTime
-          const sushiPerDay = sushiPerBlock * blocksPerDay
-          const rewardPerSecond = ((pool.allocPoint / 1000) * pool.rewarder.rewardPerSecond) / 1e18
+          //const sushiPerDay = sushiPerBlock * blocksPerDay
+          const sushiPerDay = sushiPerSecond * 86400
+          const rewardPerSecond = ((pool.allocPoint / totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
           const rewardPerBlock = rewardPerSecond * averageBlockTime
-          const rewardPerDay = rewardPerBlock * blocksPerDay
+          //const rewardPerDay = rewardPerBlock * blocksPerDay
+          const rewardPerDay = rewardPerSecond * 86400
 
           const reward = {
             [ChainId.MATIC]: {
