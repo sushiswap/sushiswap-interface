@@ -69,7 +69,7 @@ export default function Vesting() {
   useEffect(() => {
     const fetchLockup = async () => {
       if (account) {
-        fetch('https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/amounts-10959148-12171394.json')
+        fetch('https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/amounts-10959148-11550728.json')
           .then((response) => response.json())
           .then((data) => {
             // console.log('vesting:', data)
