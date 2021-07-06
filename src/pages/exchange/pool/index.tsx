@@ -1,5 +1,6 @@
 import { ChainId, CurrencyAmount, JSBI, NATIVE, Pair } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
+import { classNames, currencyId } from '../../../functions'
 import { toV2LiquidityToken, useTrackedTokenPairs } from '../../../state/user/hooks'
 
 import Alert from '../../../components/Alert'
@@ -16,6 +17,7 @@ import FullPositionCard from '../../../components/PositionCard'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import { MigrationSupported } from '../../../features/migration'
 import Typography from '../../../components/Typography'
 import Web3Connect from '../../../components/Web3Connect'
 import { t } from '@lingui/macro'
@@ -25,8 +27,6 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hooks'
 import { useV2Pairs } from '../../../hooks/useV2Pairs'
-import { classNames, currencyId } from '../../../functions'
-import { MigrationSupported } from '../../../features/migration'
 
 export default function Pool() {
   const { i18n } = useLingui()
@@ -157,7 +157,7 @@ export default function Pool() {
               </Button>
 
               {migrationSupported && (
-                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/add/migrate`)}>
+                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/migrate`)}>
                   {i18n._(t`Migrate`)}
                 </Button>
               )}
