@@ -1,12 +1,13 @@
 import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
+import Button, { ButtonConfirmed } from '../../../components/Button'
 import { ChainId, JSBI } from '@sushiswap/sdk'
 import { ChevronDownIcon, XIcon } from '@heroicons/react/outline'
 import React, { useCallback, useEffect, useState } from 'react'
 import { formatUnits, parseUnits } from '@ethersproject/units'
 import useMigrateState, { MigrateState } from '../../../hooks/useMigrateState'
+
 import { AddressZero } from '@ethersproject/constants'
 import Badge from '../../../components/Badge'
-import Button, { ButtonConfirmed } from '../../../components/Button'
 import Dots from '../../../components/Dots'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
 import Empty from '../../../components/Empty'
@@ -172,12 +173,12 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
   const sushiRollContract = useSushiRollContract(
     state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
   )
-  console.log(
-    'sushiRollContract address',
-    sushiRollContract?.address,
-    state.selectedLPToken?.balance,
-    state.selectedLPToken?.version
-  )
+  // console.log(
+  //   'sushiRollContract address',
+  //   sushiRollContract?.address,
+  //   state.selectedLPToken?.balance,
+  //   state.selectedLPToken?.version
+  // )
 
   const [approval, approve] = useApproveCallback(state.selectedLPToken?.balance, sushiRollContract?.address)
   const noLiquidityTokens = !!state.selectedLPToken?.balance && state.selectedLPToken?.balance.equalTo(ZERO)

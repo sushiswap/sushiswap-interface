@@ -163,7 +163,7 @@ const PairLayout = ({ children }) => {
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
   const assetPrice = useUSDCPrice(asset)
   const collateralPrice = useUSDCPrice(collateral)
-  console.log('render borrow pair layout', { pair })
+  // console.log('render borrow pair layout', { pair })
 
   return pair ? (
     <Layout

@@ -283,9 +283,9 @@ export function useSwapCallback(
                     value,
                   }
 
-            console.log('Estimate gas for valid swap')
+            // console.log('Estimate gas for valid swap')
 
-            library.getGasPrice().then((gasPrice) => console.log({ gasPrice }))
+            // library.getGasPrice().then((gasPrice) => console.log({ gasPrice }))
 
             return library
               .estimateGas(tx)
@@ -339,7 +339,7 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
-        console.log({ bestCallOption })
+        // console.log({ bestCallOption })
 
         if (!useArcher) {
           console.log('SWAP WITHOUT ARCHER')
@@ -475,7 +475,7 @@ export function useSwapCallback(
                 common,
               })
               const unsignedTx = tx.getMessageToSign()
-              console.log('unsignedTx', unsignedTx)
+              // console.log('unsignedTx', unsignedTx)
 
               return library.provider
                 .request({ method: 'eth_sign', params: [account, ethers.utils.hexlify(unsignedTx)] })
@@ -531,7 +531,7 @@ export function useSwapCallback(
                       ethTip: archerETHTip,
                     }
                   : undefined
-              console.log('archer', archer)
+              // console.log('archer', archer)
               addTransaction(
                 { hash },
                 {

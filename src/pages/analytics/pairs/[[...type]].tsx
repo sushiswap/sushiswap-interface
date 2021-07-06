@@ -1,13 +1,14 @@
-import Head from 'next/head'
+import { useCustomDayBlock, useOneDayBlock, useOneWeekBlock, useSushiPairs } from '../../../services/graph'
+
 import Container from '../../../components/Container'
+import Head from 'next/head'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import PairList from '../../../features/analytics/Pairs/PairList'
-import { useOneDayBlock, useOneWeekBlock, useCustomDayBlock, useSushiPairs } from '../../../services/graph'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
-import { useRouter } from 'next/router'
 import Search from '../../../components/Search'
-import { useFuse } from '../../../hooks'
 import { useEffect } from 'react'
+import { useFuse } from '../../../hooks'
+import { useRouter } from 'next/router'
 
 export default function Pairs() {
   const router = useRouter()
@@ -18,9 +19,9 @@ export default function Pairs() {
   const block1w = useOneWeekBlock()
   const block2w = useCustomDayBlock(14)
 
-  useEffect(() => {
-    console.log('debug', { block1d, block2d, block1w, block2w })
-  }, [block1d, block2d, block1w, block2w])
+  // useEffect(() => {
+  //   console.log('debug', { block1d, block2d, block1w, block2w })
+  // }, [block1d, block2d, block1w, block2w])
 
   const pairs = useSushiPairs()
   const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })

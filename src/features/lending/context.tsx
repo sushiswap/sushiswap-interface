@@ -274,7 +274,6 @@ export function KashiProvider({ children }) {
         token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency.address].rate, token.rate)
       })
-      console.log('here!')
 
       dispatch({
         type: ActionType.UPDATE,

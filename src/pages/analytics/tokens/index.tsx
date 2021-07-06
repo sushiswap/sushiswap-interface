@@ -1,11 +1,12 @@
-import Head from 'next/head'
-import Container from '../../../components/Container'
-import Menu from '../../../features/analytics/AnalyticsMenu'
-import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { useBundle, useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
+
+import Container from '../../../components/Container'
+import Head from 'next/head'
+import Menu from '../../../features/analytics/AnalyticsMenu'
 import Search from '../../../components/Search'
-import { useFuse } from '../../../hooks'
+import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { tokensTimeTravelQuery } from '../../../services/graph/queries'
+import { useFuse } from '../../../hooks'
 
 export default function Tokens() {
   const block1d = useOneDayBlock()
@@ -19,7 +20,7 @@ export default function Tokens() {
   const tokens1d = useTokens({ block: { number: Number(block1d) } })
   const tokens1w = useTokens({ block: { number: Number(block1w) } })
 
-  console.log(tokens, tokens1d)
+  // console.log(tokens, tokens1d)
 
   const tokensFormatted =
     tokens && tokens1d && tokens1w && ethPrice && ethPrice1d && ethPrice1w

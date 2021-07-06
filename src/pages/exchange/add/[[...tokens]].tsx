@@ -305,10 +305,10 @@ export default function Add() {
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
-  console.log(
-    { addIsUnsupported, isValid, approvalA, approvalB },
-    approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
-  )
+  // console.log(
+  //   { addIsUnsupported, isValid, approvalA, approvalB },
+  //   approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
+  // )
   return (
     <>
       <Head>
