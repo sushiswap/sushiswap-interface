@@ -1,4 +1,4 @@
-import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/sdk'
 
 import { WETH9_EXTENDED } from '../constants/tokens'
 import { tryParseAmount } from '../functions/parse'
@@ -57,7 +57,7 @@ export default function useWrapCallback(
                     value: `0x${inputAmount.quotient.toString(16)}`,
                   })
                   addTransaction(txReceipt, {
-                    summary: `Wrap ${inputAmount.toSignificant(6)} ETH to WETH`,
+                    summary: `Wrap ${inputAmount.toSignificant(6)} ${NATIVE[chainId].symbol} to ${WNATIVE[chainId].symbol}`,
                   })
                 } catch (error) {
                   console.error('Could not deposit', error)
@@ -75,7 +75,7 @@ export default function useWrapCallback(
                 try {
                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.quotient.toString(16)}`)
                   addTransaction(txReceipt, {
-                    summary: `Unwrap ${inputAmount.toSignificant(6)} WETH to ETH`,
+                    summary: `Unwrap ${inputAmount.toSignificant(6)} ${WNATIVE[chainId].symbol} to ${NATIVE[chainId].symbol}`,
                   })
                 } catch (error) {
                   console.error('Could not withdraw', error)
