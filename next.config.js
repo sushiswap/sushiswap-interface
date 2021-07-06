@@ -25,6 +25,11 @@ module.exports = withBundleAnalyzer(
           destination: '/swap',
           permanent: true,
         },
+        {
+          source: '/zap',
+          destination: '/',
+          permanent: true,
+        },
       ]
     },
     async rewrites() {
