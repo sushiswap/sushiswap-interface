@@ -48,7 +48,6 @@ export function useMasterChefV1Farms(swrConfig = undefined) {
   const { data } = useSWR(shouldFetch ? 'masterChefV1Farms' : null, () => getMasterChefV1Farms(), swrConfig)
   return useMemo(() => {
     if (!data) return []
-
     return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF }))
   }, [data])
 }

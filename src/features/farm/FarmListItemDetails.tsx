@@ -21,7 +21,7 @@ import usePendingReward from './usePendingReward'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 
-const FarmListItem = ({ farm, open, ...rest }) => {
+const FarmListItem = ({ farm }) => {
   const { i18n } = useLingui()
 
   const { account, chainId } = useActiveWeb3React()
@@ -43,11 +43,11 @@ const FarmListItem = ({ farm, open, ...rest }) => {
   const balance = useTokenBalance(account, liquidityToken)
 
   // TODO: Replace these
-  const amount = useUserInfo(open ? farm : null, liquidityToken)
+  const amount = useUserInfo(farm, liquidityToken)
 
-  const pendingSushi = usePendingSushi(open ? farm : null)
+  const pendingSushi = usePendingSushi(farm)
 
-  const reward = usePendingReward(open ? farm : null)
+  const reward = usePendingReward(farm)
 
   const APPROVAL_ADDRESSES = {
     [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
@@ -68,7 +68,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
 
   return (
     <Transition
-      show={open}
+      show={true}
       enter="transition-opacity duration-75"
       enterFrom="opacity-0"
       enterTo="opacity-100"

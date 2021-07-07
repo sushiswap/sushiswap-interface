@@ -29,13 +29,6 @@ import dynamic from 'next/dynamic'
 import { usePositions } from '../../features/farm/hooks'
 import { useRouter } from 'next/router'
 
-const PAGE_FILTER = {
-  portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
-  sushi: (farm) => farm.pair.type === PairType.SWAP,
-  kashi: (farm) => farm.pair.type === PairType.KASHI,
-  '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
-}
-
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
@@ -44,6 +37,8 @@ export default function Farm(): JSX.Element {
   const type = router.query.filter as string
 
   const pairAddresses = useFarmPairAddresses()
+
+  console.log({ pairAddresses })
 
   const swapPairs = useSushiPairs({
     where: {
@@ -233,15 +228,28 @@ export default function Farm(): JSX.Element {
     }
   }
 
+  const FILTER = {
+    portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
+    sushi: (farm) => farm.pair.type === PairType.SWAP,
+    kashi: (farm) => farm.pair.type === PairType.KASHI,
+    '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
+  }
+
+  farms.forEach((farm) => console.log(farm?.amount, !farm?.amount?.isZero()))
+
   const data = farms
     .filter((farm) => {
       return (
-        (type in PAGE_FILTER ? PAGE_FILTER[type](farm) : true) &&
-        ((swapPairs && swapPairs.find((pair) => pair.id === farm.pair)) ||
-          (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair)))
+        (swapPairs && swapPairs.find((pair) => pair.id === farm.pair)) ||
+        (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair))
       )
     })
     .map(map)
+    .filter((farm) => {
+      return type in FILTER ? FILTER[type](farm) : true
+    })
+
+  // console.log({ data })
 
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
