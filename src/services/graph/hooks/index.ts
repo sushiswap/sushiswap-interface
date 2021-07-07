@@ -98,8 +98,7 @@ export function useMasterChefV1PairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
-
-    return data.filter(data => data.allocPoint !== '0' && data.accSushiPerShare !== '0').map((data) => data.pair)
+    return data.map((data) => data.pair)
   }, [data])
 }
 
@@ -111,8 +110,7 @@ export function useMasterChefV2PairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
-
-    return data.filter(data => data.allocPoint !== '0' && data.accSushiPerShare !== '0').map((data) => data.pair)
+    return data.map((data) => data.pair)
   }, [data])
 }
 
@@ -124,8 +122,7 @@ export function useMiniChefPairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
-
-    return data.filter(data => data.allocPoint !== '0' && data.accSushiPerShare !== '0').map((data) => data.pair)
+    return data.map((data) => data.pair)
   }, [data])
 }
 
