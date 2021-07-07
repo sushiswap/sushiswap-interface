@@ -157,8 +157,6 @@ export default class MyDocument extends Document {
           <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
           <meta key="twitter:creator" name="twitter:creator" content="@SushiSwap" />
           <meta key="og:type" property="og:type" content="website" />
-          <meta key="og:title" property="og:title" content="SUSHI App" />
-
           <meta key="og:site_name" property="og:site_name" content="SUSHI App" />
           <meta key="og:url" property="og:url" content="https://sushi.com" />
           <meta key="og:image" property="og:image" content="https://app.sushi.com/apple-touch-icon.png" />

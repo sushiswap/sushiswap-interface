@@ -89,9 +89,37 @@ function MyApp({
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+
         <meta
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+        />
+        <title>SUSHI</title>
+        <meta
+          name="description"
+          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
+        />
+
+        <meta name="application-name" content="SUSHI App" />
+        <meta name="apple-mobile-web-app-title" content="SUSHI App" />
+
+        <meta key="twitter:url" name="twitter:url" content="https://sushi.com" />
+        <meta key="twitter:title" name="twitter:title" content="SUSHI App" />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
+        />
+        <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
+
+        <meta key="og:title" property="og:title" content="SUSHI App" />
+        <meta key="og:site_name" property="og:site_name" content="SUSHI App" />
+        <meta key="og:url" property="og:url" content="https://sushi.com" />
+        <meta key="og:image" property="og:image" content="https://app.sushi.com/apple-touch-icon.png" />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
         />
       </Head>
       <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
