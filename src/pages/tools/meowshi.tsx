@@ -123,7 +123,7 @@ export default function Meowshi() {
     <>
       <Head>
         <title>Meowshi | Sushi</title>
-        <meta name="description" content="SushiSwap Meowshi..." />
+        <meta key="description" name="description" content="SushiSwap Meowshi..." />
       </Head>
 
       <div className="w-full max-w-2xl">

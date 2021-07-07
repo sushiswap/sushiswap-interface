@@ -35,6 +35,7 @@ function Lend() {
       <Head>
         <title>Lend | Sushi</title>
         <meta
+          key="description"
           name="description"
           content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
         />

@@ -29,7 +29,7 @@ export default function Tools() {
     <>
       <Head>
         <title>Tools | Sushi</title>
-        <meta name="description" content="SushiSwap tools..." />
+        <meta key="description" name="description" content="SushiSwap tools..." />
       </Head>
       <div className="w-screen max-w-xl space-y-4">
         <Typography variant="h1" component="h1">

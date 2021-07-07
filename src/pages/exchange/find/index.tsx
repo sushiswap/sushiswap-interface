@@ -78,7 +78,7 @@ export default function PoolFinder() {
     <>
       <Head>
         <title>{i18n._(t`Find Pool`)} | Sushi</title>
-        <meta name="description" content="Find pool" />
+        <meta key="description" name="description" content="Find pool" />
       </Head>
 
       <Container maxWidth="2xl" className="space-y-6">

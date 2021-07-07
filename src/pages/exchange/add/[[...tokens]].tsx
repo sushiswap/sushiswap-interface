@@ -314,6 +314,7 @@ export default function Add() {
       <Head>
         <title>Add Liquidity | Sushi</title>
         <meta
+          key="description"
           name="description"
           content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
         />

@@ -7,7 +7,7 @@ export default function Saave() {
     <>
       <Head>
         <title>Saave | Sushi</title>
-        <meta name="description" content="SushiSwap Saave..." />
+        <meta key="description" name="description" content="SushiSwap Saave..." />
       </Head>
 
       <Container className="text-center">

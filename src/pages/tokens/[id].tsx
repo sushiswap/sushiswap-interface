@@ -8,7 +8,7 @@ export default function Token() {
     <>
       <Head>
         <title>Token {id} | Sushi</title>
-        <meta name="description" content="SushiSwap tokens." />
+        <meta key="description" name="description" content="SushiSwap tokens." />
       </Head>
     </>
   )

@@ -91,6 +91,7 @@ export default function Pool() {
       <Head>
         <title>Pool | Sushi</title>
         <meta
+          key="description"
           name="description"
           content="SushiSwap liquidity pools are markets for trades between the two tokens, you can provide these tokens and become a liquidity provider to earn 0.25% of fees from trades."
         />

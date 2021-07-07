@@ -711,7 +711,7 @@ export default function Remove() {
     <>
       <Head>
         <title>Remove Liquidity | Sushi</title>
-        <meta name="description" content="Remove liquidity from the SushiSwap AMM" />
+        <meta key="description" name="description" content="Remove liquidity from the SushiSwap AMM" />
       </Head>
 
       <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-4">

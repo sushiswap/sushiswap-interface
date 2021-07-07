@@ -427,6 +427,7 @@ export default function Swap() {
       <Head>
         <title>{i18n._(t`SushiSwap`)} | Sushi</title>
         <meta
+          key="description"
           name="description"
           content="SushiSwap allows for swapping of ERC20 compatible tokens across multiple networks"
         />

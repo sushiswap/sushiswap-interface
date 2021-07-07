@@ -311,7 +311,7 @@ export default function Migrate() {
     <>
       <Head>
         <title>Migrate | Sushi</title>
-        <meta name="description" content="Migrate your liquidity to SushiSwap." />
+        <meta key="description" name="description" content="Migrate your liquidity to SushiSwap." />
       </Head>
 
       <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
