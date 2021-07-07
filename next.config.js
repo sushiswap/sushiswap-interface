@@ -1,6 +1,8 @@
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
+
 const linguiConfig = require('./lingui.config.js')
+
 const { locales, sourceLocale } = linguiConfig
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -54,11 +56,6 @@ module.exports = withBundleAnalyzer(
           source: '/stake',
           destination: '/bar',
         },
-        // Exchange
-        // {
-        //   source: '/',
-        //   destination: '/swap',
-        // },
         {
           source: '/add/:token*',
           destination: '/exchange/add/:token*',
@@ -131,9 +128,6 @@ module.exports = withBundleAnalyzer(
       locales,
       defaultLocale: sourceLocale,
     },
-    // publicRuntimeConfig: {
-    //   locales,
-    // },
   })
 )
 
