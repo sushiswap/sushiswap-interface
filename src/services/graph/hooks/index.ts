@@ -48,6 +48,7 @@ export function useMasterChefV1Farms(swrConfig = undefined) {
   const { data } = useSWR(shouldFetch ? 'masterChefV1Farms' : null, () => getMasterChefV1Farms(), swrConfig)
   return useMemo(() => {
     if (!data) return []
+
     return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF }))
   }, [data])
 }
@@ -97,6 +98,7 @@ export function useMasterChefV1PairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
+
     return data.map((data) => data.pair)
   }, [data])
 }
@@ -109,6 +111,7 @@ export function useMasterChefV2PairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
+
     return data.map((data) => data.pair)
   }, [data])
 }
@@ -116,11 +119,13 @@ export function useMasterChefV2PairAddresses() {
 export function useMiniChefPairAddresses() {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY].includes(chainId)
+  console.log("useMiniChefPairAddresses", { shouldFetch})
   const { data } = useSWR(shouldFetch ? ['miniChefPairAddresses', chainId] : null, (_, chainId) =>
     getMiniChefPairAddreses(chainId)
   )
   return useMemo(() => {
     if (!data) return []
+
     return data.map((data) => data.pair)
   }, [data])
 }
@@ -129,6 +134,13 @@ export function useFarmPairAddresses() {
   const masterChefV1PairAddresses = useMasterChefV1PairAddresses()
   const masterChefV2PairAddresses = useMasterChefV2PairAddresses()
   const miniChefPairAddresses = useMiniChefPairAddresses()
+  console.log("useFarmPairAddresses")
+  // const addresses = concat(masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses)
+  console.log({
+    masterChefV1PairAddresses,
+    masterChefV2PairAddresses,
+    miniChefPairAddresses
+  })
   return useMemo(
     () => concat(masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses),
     [masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses]

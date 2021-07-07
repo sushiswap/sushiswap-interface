@@ -4,7 +4,7 @@ export const poolsQuery = gql`
   query poolsQuery(
     $first: Int! = 1000
     $skip: Int! = 0
-    $orderBy: String! = "timestamp"
+    $orderBy: String! = "id"
     $orderDirection: String! = "desc"
   ) {
     pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
@@ -28,7 +28,7 @@ export const masterChefV1PairAddressesQuery = gql`
   query masterChefV1PairAddresses(
     $first: Int! = 1000
     $skip: Int! = 0
-    $orderBy: String! = "timestamp"
+    $orderBy: String! = "id"
     $orderDirection: String! = "desc"
   ) {
     pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {

@@ -3,7 +3,6 @@ import { ChainId, MASTERCHEF_ADDRESS, Token, ZERO } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
 import { Disclosure, Transition } from '@headlessui/react'
 import React, { useState } from 'react'
-import { formatNumber } from '../../functions'
 import { usePendingSushi, useUserInfo } from './hooks'
 
 import Button from '../../components/Button'
@@ -11,6 +10,7 @@ import Dots from '../../components/Dots'
 import { MASTERCHEF_V2_ADDRESS } from '../../constants'
 import { MINICHEF_ADDRESS } from '../../constants/addresses'
 import { Input as NumericalInput } from '../../components/NumericalInput'
+import { formatNumber } from '../../functions'
 import { getAddress } from '@ethersproject/address'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions/parse'
@@ -43,11 +43,11 @@ const FarmListItem = ({ farm, open, ...rest }) => {
   const balance = useTokenBalance(account, liquidityToken)
 
   // TODO: Replace these
-  const amount = useUserInfo(farm, liquidityToken)
+  const amount = useUserInfo(open ? farm : null, liquidityToken)
 
-  const pendingSushi = usePendingSushi(farm)
+  const pendingSushi = usePendingSushi(open ? farm : null)
 
-  const reward = usePendingReward(farm)
+  const reward = usePendingReward(open ? farm : null)
 
   const APPROVAL_ADDRESSES = {
     [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },

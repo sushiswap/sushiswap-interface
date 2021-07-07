@@ -1,5 +1,5 @@
 import { Chef, PairType } from '../../features/farm/enum'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useActiveWeb3React, useFuse } from '../../hooks'
 import {
   useAlcxPrice,
@@ -27,7 +27,9 @@ import Search from '../../components/Search'
 import { classNames } from '../../functions'
 import dynamic from 'next/dynamic'
 import { usePositions } from '../../features/farm/hooks'
+import usePrevious from '../../hooks/usePrevious'
 import { useRouter } from 'next/router'
+import useStickyData from '../../hooks/useStickyData'
 
 const FarmList = dynamic(() => import('../../features/farm/FarmList'))
 
@@ -40,6 +42,8 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
+  console.log({ pairAddresses })
+
   const swapPairs = useSushiPairs({
     where: {
       id_in: pairAddresses,
@@ -51,8 +55,6 @@ export default function Farm(): JSX.Element {
       id_in: pairAddresses,
     },
   })
-
-  // console.log({ pairAddresses, swapPairs })
 
   const farms = useFarms()
 
@@ -90,6 +92,42 @@ export default function Farm(): JSX.Element {
     },
     [kashiPairs, swapPairs]
   )
+
+  useEffect(() => {
+    console.log({
+      alcxPrice,
+      averageBlockTime,
+      blocksPerDay,
+      chainId,
+      cvxPrice,
+      ethPrice,
+      kashiPairs,
+      masterChefV1SushiPerBlock,
+      masterChefV1TotalAllocPoint,
+      maticPrice,
+      onePrice,
+      positions,
+      stakePrice,
+      sushiPrice,
+      swapPairs,
+    })
+  }, [
+    alcxPrice,
+    averageBlockTime,
+    blocksPerDay,
+    chainId,
+    cvxPrice,
+    ethPrice,
+    kashiPairs,
+    masterChefV1SushiPerBlock,
+    masterChefV1TotalAllocPoint,
+    maticPrice,
+    onePrice,
+    positions,
+    stakePrice,
+    sushiPrice,
+    swapPairs,
+  ])
 
   const map = useCallback(
     (pool) => {
@@ -224,29 +262,7 @@ export default function Farm(): JSX.Element {
 
       const roiPerYear = roiPerMonth * 12
 
-      // console.log({ balance, tvl, roiPerBlock, roiPerYear })
-
       const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
-
-      if (pool.pair === '0x0c51171b913db10ade3fd625548e69c9c63afb96') {
-        console.log({
-          ...pool,
-          ...position,
-          pair: {
-            ...pair,
-            decimals: pair.type === PairType.KASHI ? Number(pair.asset.tokenInfo.decimals) : 18,
-            type,
-          },
-          balance,
-          roiPerBlock,
-          roiPerHour,
-          roiPerDay,
-          roiPerMonth,
-          roiPerYear,
-          rewards,
-          tvl,
-        })
-      }
 
       return {
         ...pool,

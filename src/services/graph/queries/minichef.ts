@@ -4,7 +4,7 @@ export const miniChefPoolsQuery = gql`
   query miniChefPoolsQuery(
     $first: Int! = 1000
     $skip: Int! = 0
-    $orderBy: String! = "timestamp"
+    $orderBy: String! = "id"
     $orderDirection: String! = "desc"
   ) {
     pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
@@ -33,7 +33,7 @@ export const miniChefPairAddressesQuery = gql`
   query miniChefPairAddresses(
     $first: Int! = 1000
     $skip: Int! = 0
-    $orderBy: String! = "timestamp"
+    $orderBy: String! = "id"
     $orderDirection: String! = "desc"
   ) {
     pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
