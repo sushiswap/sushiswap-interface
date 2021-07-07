@@ -94,7 +94,7 @@ function MyApp({
           name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
         />
-        <title>SUSHI</title>
+        <title key="title">SUSHI</title>
         <meta
           name="description"
           content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
@@ -103,14 +103,13 @@ function MyApp({
         <meta name="application-name" content="SUSHI App" />
         <meta name="apple-mobile-web-app-title" content="SUSHI App" />
 
-        <meta key="twitter:url" name="twitter:url" content="https://sushi.com" />
-        <meta key="twitter:title" name="twitter:title" content="SUSHI App" />
+        <meta name="twitter:url" content="https://sushi.com" />
+        <meta name="twitter:title" content="SUSHI App" />
         <meta
-          key="twitter:description"
           name="twitter:description"
           content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
         />
-        <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
+        <meta name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
 
         <meta key="og:title" property="og:title" content="SUSHI App" />
         <meta key="og:site_name" property="og:site_name" content="SUSHI App" />

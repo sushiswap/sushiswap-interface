@@ -146,7 +146,7 @@ export default class MyDocument extends Document {
 
           {/* <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' /> */}
 
-          <meta key="twitter:card" name="twitter:card" content="app" />
+          <meta name="twitter:card" content="app" />
           {/* <meta key="twitter:url" name="twitter:url" content="https://sushi.com" /> */}
           {/* <meta key="twitter:title" name="twitter:title" content="SUSHI App" /> */}
           {/* <meta
