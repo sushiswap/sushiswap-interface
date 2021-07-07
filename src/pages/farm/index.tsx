@@ -20,14 +20,14 @@ import {
 
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
+import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import Search from '../../components/Search'
 import { classNames } from '../../functions'
+import dynamic from 'next/dynamic'
 import { usePositions } from '../../features/farm/hooks'
 import { useRouter } from 'next/router'
-import dynamic from 'next/dynamic'
-import Dots from '../../components/Dots'
 
 const FarmList = dynamic(() => import('../../features/farm/FarmList'))
 
@@ -167,8 +167,7 @@ export default function Farm(): JSX.Element {
           const rewardPerSecond =
             ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
           const rewardPerBlock = rewardPerSecond * averageBlockTime
-          //const rewardPerDay = rewardPerBlock * blocksPerDay
-          const rewardPerDay = rewardPerSecond * 86400
+          const rewardPerDay = rewardPerBlock * blocksPerDay
 
           const reward = {
             [ChainId.MATIC]: {
