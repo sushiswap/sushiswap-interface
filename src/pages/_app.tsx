@@ -114,13 +114,6 @@ function MyApp({
         <meta name="theme-color" content="#F338C3" />
 
         <meta key="twitter:card" name="twitter:card" content="app" />
-        <meta key="twitter:url" name="twitter:url" content="https://app.sushi.com" />
-        <meta key="twitter:title" name="twitter:title" content="SUSHI App" />
-        <meta
-          key="twitter:description"
-          name="twitter:description"
-          content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
-        />
         <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
         <meta key="twitter:creator" name="twitter:creator" content="@SushiSwap" />
         <meta key="og:type" property="og:type" content="website" />
