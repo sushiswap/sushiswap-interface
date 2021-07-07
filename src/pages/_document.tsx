@@ -32,20 +32,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en" dir="ltr">
         <Head>
-          <meta name="application-name" content="SUSHI App" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-          <meta name="apple-mobile-web-app-title" content="SUSHI App" />
-          {/* <meta
-            name="description"
-            content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
-          /> */}
-          <meta name="format-detection" content="telephone=no" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="msapplication-config" content="/browserconfig.xml" />
-          <meta name="msapplication-tap-highlight" content="no" />
-          <meta name="theme-color" content="#F338C3" />
-
           <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
           <link rel="manifest" href="/site.webmanifest" />
@@ -143,37 +129,6 @@ export default class MyDocument extends Document {
           <link rel="shortcut icon" href="/favicon.ico" />
 
           <link rel="manifest" href="/manifest.json" />
-
-          {/* <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' /> */}
-
-          <meta name="twitter:card" content="app" />
-          {/* <meta key="twitter:url" name="twitter:url" content="https://app.sushi.com" /> */}
-          {/* <meta key="twitter:title" name="twitter:title" content="SUSHI App" /> */}
-          {/* <meta
-            key="twitter:description"
-            name="twitter:description"
-            content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
-          /> */}
-          {/* <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" /> */}
-          <meta key="twitter:creator" name="twitter:creator" content="@SushiSwap" />
-          {/* <meta key="og:type" property="og:type" content="website" /> */}
-          <meta key="og:site_name" property="og:site_name" content="SUSHI App" />
-          {/* <meta key="og:url" property="og:url" content="https://app.sushi.com" />
-          <meta key="og:image" property="og:image" content="https://app.sushi.com/apple-touch-icon.png" />
-          <meta
-            key="og:description"
-            property="og:description"
-            content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
-          /> */}
-
-          {/* apple splash screen images */}
-          {/* <link rel="apple-touch-startup-image" href="/images/apple_splash_2048.png" sizes="2048x2732" />
-          <link rel="apple-touch-startup-image" href="/images/apple_splash_1668.png" sizes="1668x2224" />
-          <link rel="apple-touch-startup-image" href="/images/apple_splash_1536.png" sizes="1536x2048" />
-          <link rel="apple-touch-startup-image" href="/images/apple_splash_1125.png" sizes="1125x2436" />
-          <link rel="apple-touch-startup-image" href="/images/apple_splash_1242.png" sizes="1242x2208" />
-          <link rel="apple-touch-startup-image" href="/images/apple_splash_750.png" sizes="750x1334" />
-          <link rel="apple-touch-startup-image" href="/images/apple_splash_640.png" sizes="640x1136" /> */}
         </Head>
         <body>
           <Main />
