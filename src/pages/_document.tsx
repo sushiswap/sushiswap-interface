@@ -146,22 +146,23 @@ export default class MyDocument extends Document {
 
           {/* <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500' /> */}
 
-          <meta name="twitter:card" content="summary" />
+          <meta name="twitter:card" content="app" />
           <meta name="twitter:url" content="https://sushi.com" />
           <meta name="twitter:title" content="SUSHI App" />
           <meta
             name="twitter:description"
             content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
           />
-          <meta name="twitter:image" content="https://sushi.com/icons/icon-192x192.png" />
+          <meta name="twitter:image" content="https://app.sushi.com/icons/icon-192x192.png" />
           <meta name="twitter:creator" content="@SushiSwap" />
           <meta property="og:type" content="website" />
           <meta property="og:title" content="SUSHI App" />
 
           <meta property="og:site_name" content="SUSHI App" />
           <meta property="og:url" content="https://sushi.com" />
-          <meta property="og:image" content="https://sushi.com/apple-touch-icon.png" />
+          <meta property="og:image" content="https://app.sushi.com/apple-touch-icon.png" />
           <meta
+            key="og:description"
             property="og:description"
             content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
           />
