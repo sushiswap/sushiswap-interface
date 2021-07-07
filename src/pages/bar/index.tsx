@@ -174,7 +174,7 @@ export default function Stake() {
         <meta name="twitter:image" content="https://app.sushi.com/xsushi-sign.png" />
 
         <meta key="og:title" property="og:title" content="STAKE SUSHI" />
-        <meta key="og:url" property="og:url" content="https://sushi.com/stake" />
+        <meta key="og:url" property="og:url" content="https://app.sushi.com/stake" />
         <meta key="og:image" property="og:image" content="https://app.sushi.com/xsushi-sign.png" />
         <meta
           key="og:description"
