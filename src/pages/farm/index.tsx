@@ -38,8 +38,6 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
-  console.log({ pairAddresses })
-
   const swapPairs = useSushiPairs({
     where: {
       id_in: pairAddresses,
@@ -235,8 +233,6 @@ export default function Farm(): JSX.Element {
     '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
   }
 
-  farms.forEach((farm) => console.log(farm?.amount, !farm?.amount?.isZero()))
-
   const data = farms
     .filter((farm) => {
       return (
@@ -248,8 +244,6 @@ export default function Farm(): JSX.Element {
     .filter((farm) => {
       return type in FILTER ? FILTER[type](farm) : true
     })
-
-  // console.log({ data })
 
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
