@@ -105,12 +105,12 @@ function AppBar(): JSX.Element {
                         </>
                       )}
                       {chainId === ChainId.MAINNET && (
-                        <NavLink href={'/bar'}>
+                        <NavLink href={'/stake'}>
                           <a
                             id={`stake-nav-link`}
                             className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                           >
-                            {i18n._(t`Bar`)}
+                            {i18n._(t`Stake`)}
                           </a>
                         </NavLink>
                       )}
