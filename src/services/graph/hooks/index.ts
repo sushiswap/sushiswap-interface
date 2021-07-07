@@ -99,7 +99,7 @@ export function useMasterChefV1PairAddresses() {
   return useMemo(() => {
     if (!data) return []
 
-    return data.map((data) => data.pair)
+    return data.filter(data => data.allocPoint !== '0' && data.accSushiPerShare !== '0').map((data) => data.pair)
   }, [data])
 }
 
@@ -112,7 +112,7 @@ export function useMasterChefV2PairAddresses() {
   return useMemo(() => {
     if (!data) return []
 
-    return data.map((data) => data.pair)
+    return data.filter(data => data.allocPoint !== '0' && data.accSushiPerShare !== '0').map((data) => data.pair)
   }, [data])
 }
 
@@ -125,7 +125,7 @@ export function useMiniChefPairAddresses() {
   return useMemo(() => {
     if (!data) return []
 
-    return data.map((data) => data.pair)
+    return data.filter(data => data.allocPoint !== '0' && data.accSushiPerShare !== '0').map((data) => data.pair)
   }, [data])
 }
 
@@ -133,13 +133,6 @@ export function useFarmPairAddresses() {
   const masterChefV1PairAddresses = useMasterChefV1PairAddresses()
   const masterChefV2PairAddresses = useMasterChefV2PairAddresses()
   const miniChefPairAddresses = useMiniChefPairAddresses()
-  console.log("useFarmPairAddresses")
-  // const addresses = concat(masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses)
-  console.log({
-    masterChefV1PairAddresses,
-    masterChefV2PairAddresses,
-    miniChefPairAddresses
-  })
   return useMemo(
     () => concat(masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses),
     [masterChefV1PairAddresses, masterChefV2PairAddresses, miniChefPairAddresses]

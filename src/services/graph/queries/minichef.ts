@@ -6,8 +6,9 @@ export const miniChefPoolsQuery = gql`
     $skip: Int! = 0
     $orderBy: String! = "id"
     $orderDirection: String! = "desc"
+    $where: Pool_filter! = { allocPoint_gt: 0, accSushiPerShare_gt: 0 }
   ) {
-    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
       id
       pair
       rewarder {
@@ -35,8 +36,9 @@ export const miniChefPairAddressesQuery = gql`
     $skip: Int! = 0
     $orderBy: String! = "id"
     $orderDirection: String! = "desc"
+    $where: Pool_filter! = { allocPoint_gt: 0, accSushiPerShare_gt: 0 }
   ) {
-    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
       id
       pair {
         id
