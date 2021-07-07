@@ -42,8 +42,6 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
-  console.log({ pairAddresses })
-
   const swapPairs = useSushiPairs({
     where: {
       id_in: pairAddresses,
@@ -92,42 +90,6 @@ export default function Farm(): JSX.Element {
     },
     [kashiPairs, swapPairs]
   )
-
-  useEffect(() => {
-    console.log({
-      alcxPrice,
-      averageBlockTime,
-      blocksPerDay,
-      chainId,
-      cvxPrice,
-      ethPrice,
-      kashiPairs,
-      masterChefV1SushiPerBlock,
-      masterChefV1TotalAllocPoint,
-      maticPrice,
-      onePrice,
-      positions,
-      stakePrice,
-      sushiPrice,
-      swapPairs,
-    })
-  }, [
-    alcxPrice,
-    averageBlockTime,
-    blocksPerDay,
-    chainId,
-    cvxPrice,
-    ethPrice,
-    kashiPairs,
-    masterChefV1SushiPerBlock,
-    masterChefV1TotalAllocPoint,
-    maticPrice,
-    onePrice,
-    positions,
-    stakePrice,
-    sushiPrice,
-    swapPairs,
-  ])
 
   const map = useCallback(
     (pool) => {

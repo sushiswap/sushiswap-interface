@@ -119,7 +119,6 @@ export function useMasterChefV2PairAddresses() {
 export function useMiniChefPairAddresses() {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY].includes(chainId)
-  console.log("useMiniChefPairAddresses", { shouldFetch})
   const { data } = useSWR(shouldFetch ? ['miniChefPairAddresses', chainId] : null, (_, chainId) =>
     getMiniChefPairAddreses(chainId)
   )
