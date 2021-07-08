@@ -19,7 +19,7 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
 
-  if (networks.includes(chainId)) return <>{children}</>
+  if (!chainId || (chainId && networks.includes(chainId))) return <>{children}</>
 
   return (
     <Modal isOpen={true} onDismiss={() => null} maxWidth={768}>

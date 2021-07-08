@@ -190,11 +190,11 @@ msgstr "Approuver"
 msgid "Approve Kashi"
 msgstr "Approuver Kashi"
 
-#: src/features/limit-order/LimitOrderButton.tsx:169
+#: src/features/limit-order/LimitOrderButton.tsx:170
 msgid "Approve Limit Order"
 msgstr ""
 
-#: src/features/limit-order/LimitOrderButton.tsx:159
+#: src/features/limit-order/LimitOrderButton.tsx:160
 #: src/pages/exchange/add/[[...tokens]].tsx:481
 #: src/pages/exchange/add/[[...tokens]].tsx:498
 #: src/pages/exchange/swap/[[...tokens]].tsx:604
@@ -214,11 +214,11 @@ msgstr "Approuvé"
 msgid "Approving"
 msgstr "Approbation en cours"
 
-#: src/features/limit-order/LimitOrderButton.tsx:167
+#: src/features/limit-order/LimitOrderButton.tsx:168
 msgid "Approving Limit Order"
 msgstr ""
 
-#: src/features/limit-order/LimitOrderButton.tsx:157
+#: src/features/limit-order/LimitOrderButton.tsx:158
 #: src/pages/exchange/add/[[...tokens]].tsx:479
 #: src/pages/exchange/add/[[...tokens]].tsx:496
 msgid "Approving {0}"
@@ -459,7 +459,7 @@ msgstr ""
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
-#: src/features/limit-order/LimitOrderButton.tsx:144
+#: src/features/limit-order/LimitOrderButton.tsx:145
 #: src/pages/bar/index.tsx:361
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
@@ -529,7 +529,7 @@ msgstr "Déposer SUSHI dans BentoBox"
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Déposez des tokens dans BentoBox pour tous les rendements"
 
-#: src/features/limit-order/LimitOrderButton.tsx:179
+#: src/features/limit-order/LimitOrderButton.tsx:180
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
@@ -538,7 +538,7 @@ msgstr ""
 #~ msgid "Deposited"
 #~ msgstr "Déposé"
 
-#: src/features/limit-order/LimitOrderButton.tsx:138
+#: src/features/limit-order/LimitOrderButton.tsx:139
 msgid "Depositing {0} into BentoBox"
 msgstr ""
 
@@ -1437,7 +1437,7 @@ msgstr "Rembourser"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Limiter les swaps aux seules paires directes."
 
-#: src/features/limit-order/LimitOrderButton.tsx:130
+#: src/features/limit-order/LimitOrderButton.tsx:131
 msgid "Review Limit Order"
 msgstr ""
 
@@ -1549,7 +1549,7 @@ msgid "Slippage tolerance..."
 msgstr ""
 
 #: src/features/lending/Button.tsx:28
-#: src/features/limit-order/LimitOrderButton.tsx:188
+#: src/features/limit-order/LimitOrderButton.tsx:189
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Une erreur s'est produite lors de la signature de l'approbation. Cela peut arriver lors de l'utilisation de portefeuilles \"hardware\", tels que Trezor et Ledger. Cliquez à nouveau et la méthode de récupération sera utilisée"
 
