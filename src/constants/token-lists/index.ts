@@ -7,7 +7,8 @@ export const UNSUPPORTED_LIST_URLS: string[] = []
 const YEARN_LIST = 'https://yearn.science/static/tokenlist.json'
 const COMPOUND_LIST = 'https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
-const NFTX_LIST = 'https://nftx.ethereumdb.com/v1/tokenlist/'
+const NFTX_LIST_V1 = 'https://nftx.ethereumdb.com/v1/tokenlist/'
+const NFTX_LIST_V2 = 'https://nftx.ethereumdb.com/v2/tokenlist/'
 const AAVE_LIST = 'tokenlist.aave.eth'
 const SYNTHETIX_LIST = 'synths.snx.eth'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
@@ -39,10 +40,12 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   // KLEROS_LIST,
   // GEMINI_LIST,
   // QUICK_SWAP,
+  NFTX_LIST_V1,
+  NFTX_LIST_V2,
   ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
 ]
 
 // default lists to be 'active' aka searched across
 // export const DEFAULT_ACTIVE_LIST_URLS: string[] = [YEARN_LIST, NFTX_LIST] //[GEMINI_LIST]
 
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = []
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [NFTX_LIST_V1, NFTX_LIST_V2]
