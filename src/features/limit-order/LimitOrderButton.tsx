@@ -47,6 +47,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     (approvalState === BentoApprovalState.NOT_APPROVED || approvalState === BentoApprovalState.PENDING) && !permit
 
   const showTokenApprove =
+    !fromBentoBalance &&
     chainId &&
     currency &&
     !currency.isNative &&
