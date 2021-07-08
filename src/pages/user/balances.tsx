@@ -44,7 +44,7 @@ function Balances() {
     <>
       <Head>
         <title>Balances | Sushi</title>
-        <meta name="description" content="" />
+        <meta key="description" name="description" content="" />
       </Head>
       <Card
         className="h-full bg-dark-900"

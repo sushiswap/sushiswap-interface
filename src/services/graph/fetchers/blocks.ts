@@ -12,6 +12,8 @@ export const BLOCKS = {
   [ChainId.FANTOM]: 'matthewlilley/fantom-blocks',
   [ChainId.BSC]: 'matthewlilley/bsc-blocks',
   [ChainId.HARMONY]: 'sushiswap/harmony-blocks',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-blocks',
+  [ChainId.CELO]: 'sushiswap/celo-blocks',
 }
 
 export const fetcher = async (chainId = ChainId.MAINNET, query, variables) =>
@@ -60,7 +62,6 @@ export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
   const start = getUnixTime(subHours(now, 6))
   const end = getUnixTime(now)
   const blocks = await getBlocks(chainId, start, end)
-  console.log({ blocks })
   const averageBlockTime = blocks?.reduce(
     (previousValue, currentValue, currentIndex) => {
       if (previousValue.timestamp) {

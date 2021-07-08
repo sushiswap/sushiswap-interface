@@ -306,15 +306,16 @@ export default function Add() {
 
   const addIsUnsupported = useIsSwapUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
-  console.log(
-    { addIsUnsupported, isValid, approvalA, approvalB },
-    approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
-  )
+  // console.log(
+  //   { addIsUnsupported, isValid, approvalA, approvalB },
+  //   approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED
+  // )
   return (
     <>
       <Head>
         <title>Add Liquidity | Sushi</title>
         <meta
+          key="description"
           name="description"
           content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
         />
@@ -359,7 +360,7 @@ export default function Add() {
               <>
                 <b>{i18n._(t`Tip:`)}</b>{' '}
                 {i18n._(
-                  t`By adding liquidity you&apos;ll earn 0.25% of all trades on this pair
+                  t`By adding liquidity you'll earn 0.25% of all trades on this pair
                 proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be
                 claimed by withdrawing your liquidity.`
                 )}

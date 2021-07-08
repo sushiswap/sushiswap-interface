@@ -155,7 +155,7 @@ function Create() {
     <>
       <Head>
         <title>Create Lending Pair | Kashi by Sushi</title>
-        <meta name="description" content="Create Lending Pair on Kashi by Sushi" />
+        <meta key="description" name="description" content="Create Lending Pair on Kashi by Sushi" />
       </Head>
       <Card
         className="h-full bg-dark-900"

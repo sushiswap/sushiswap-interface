@@ -1,21 +1,21 @@
 import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
+import { ChainId, Currency } from '@sushiswap/sdk'
 import React, { FC } from 'react'
+import { Trans, t } from '@lingui/macro'
 
 import Button from '../../components/Button'
-import { ChainId, Currency } from '@sushiswap/sdk'
 import CloseIcon from '../../components/CloseIcon'
 import ExternalLink from '../../components/ExternalLink'
+import Image from '../../components/Image'
 import Lottie from 'lottie-react'
 import Modal from '../../components/Modal'
 import ModalHeader from '../../components/ModalHeader'
+import { RowFixed } from '../../components/Row'
 import { getExplorerLink } from '../../functions/explorer'
 import loadingRollingCircle from '../../animation/loading-rolling-circle.json'
-import { t, Trans } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
 import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask'
-import { RowFixed } from '../../components/Row'
-import Image from '../../components/Image'
+import { useLingui } from '@lingui/react'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
@@ -83,21 +83,19 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
           <Button color="gradient" onClick={addToken} className="w-auto mt-4">
             {!success ? (
               <RowFixed className="mx-auto space-x-2">
-                <Trans>
-                  <span>Add {currencyToAdd.symbol} to MetaMask </span>
-                  <Image
-                    src="/images/wallets/metamask.png"
-                    alt="Add to MetaMask"
-                    width={24}
-                    height={24}
-                    className="ml-1"
-                  />
-                </Trans>
+                <span>{i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)}</span>
+                <Image
+                  src="/images/wallets/metamask.png"
+                  alt={i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)}
+                  width={24}
+                  height={24}
+                  className="ml-1"
+                />
               </RowFixed>
             ) : (
               <RowFixed>
-                <Trans>Added {currencyToAdd.symbol} </Trans>
-                <CheckCircle className="ml-1.5 text-2xl text-green" size="16px" />
+                {i18n._(t`Added`)} {currencyToAdd.symbol}
+                {/* <CheckCircle className="ml-1.5 text-2xl text-green" size="16px" /> */}
               </RowFixed>
             )}
           </Button>

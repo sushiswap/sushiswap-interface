@@ -1,15 +1,15 @@
 import {
+  dayDatasQuery,
   ethPriceQuery,
+  factoryQuery,
   liquidityPositionsQuery,
   pairsQuery,
-  tokenQuery,
+  tokenPairsQuery,
   tokenPriceQuery,
+  tokenQuery,
   tokenSubsetQuery,
   tokensQuery,
-  factoryQuery,
-  dayDatasQuery,
   transactionsQuery,
-  tokenPairsQuery,
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -24,14 +24,16 @@ export const EXCHANGE = {
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
+  [ChainId.CELO]: 'sushiswap/celo-exchange',
 }
 
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
-  const data = await exchange(chainId, query, variables)
-  return Object.values(data)[0] as any
+  const { pairs } = await exchange(chainId, query, variables)
+  return pairs
 }
 
 export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
@@ -48,8 +50,8 @@ export const getTokens = async (chainId = ChainId.MAINNET, query = tokensQuery, 
 
 export const getToken = async (chainId = ChainId.MAINNET, query = tokenQuery, variables) => {
   // console.log('getTokens')
-  const data = await exchange(chainId, query, variables)
-  return Object.values(data)[0] as any
+  const { token } = await exchange(chainId, query, variables)
+  return token
 }
 
 export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
@@ -60,7 +62,7 @@ export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
 
 export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables) => {
   // console.log('getTokenPrice')
-  const ethPrice = await getEthPrice()
+  const ethPrice = await getEthPrice(chainId)
 
   const { token } = await exchange(chainId, query, variables)
   return token?.derivedETH * ethPrice

@@ -55,7 +55,7 @@
     "@reduxjs/toolkit": "^1.6.0",
     "@sushiswap/chainlink-whitelist": "^0.1.0",
     "@sushiswap/core": "2.0.0-canary.0",
-    "@sushiswap/default-token-list": "6.52.0",
+    "@sushiswap/default-token-list": "6.57.0",
     "@sushiswap/limit-order-pair-list": "^0.1.0",
     "@sushiswap/sdk": "5.0.0-canary.23",
     "@sushiswap/sushi-data": "^1.0.24",

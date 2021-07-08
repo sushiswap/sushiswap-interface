@@ -94,13 +94,13 @@ export const lattice = new LatticeConnector({
 
 // mainnet only
 export const fortmatic = new FortmaticConnector({
-  apiKey: process.env.REACT_APP_FORTMATIC_API_KEY ?? '',
+  apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
   chainId: 1,
 })
 
 // mainnet only
 export const portis = new PortisConnector({
-  dAppId: process.env.REACT_APP_PORTIS_ID ?? '',
+  dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
   networks: [1],
 })
 

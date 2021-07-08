@@ -1,25 +1,26 @@
-import Back from '../../components/Back'
-import Container from '../../components/Container'
-import Head from 'next/head'
-import Typography from '../../components/Typography'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
 import { ExternalLink, User } from 'react-feather'
-import useSWR, { SWRResponse } from 'swr'
-import Dots from '../../components/Dots'
-import Button from '../../components/Button'
 import React, { useCallback, useMemo } from 'react'
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
+import useSWR, { SWRResponse } from 'swr'
+
+import Back from '../../components/Back'
+import Button from '../../components/Button'
+import Container from '../../components/Container'
+import Dots from '../../components/Dots'
+import Head from 'next/head'
+import { NETWORK_LABEL } from '../../constants/networks'
+import { TransactionDetails } from '../../state/transactions/reducer'
 import TransactionList from '../../components/TransactionList'
+import Typography from '../../components/Typography'
+import { clearAllTransactions } from '../../state/transactions/actions'
 import { getExplorerLink } from '../../functions/explorer'
 import { shortenAddress } from '../../functions/format'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useETHBalances } from '../../state/wallet/hooks'
-import { NETWORK_LABEL } from '../../constants/networks'
-import { clearAllTransactions } from '../../state/transactions/actions'
 import { useAppDispatch } from '../../state/hooks'
 import useENSName from '../../hooks/useENSName'
-import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
-import { TransactionDetails } from '../../state/transactions/reducer'
+import { useETHBalances } from '../../state/wallet/hooks'
+import { useLingui } from '@lingui/react'
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
@@ -63,7 +64,7 @@ export default function Me() {
     <>
       <Head>
         <title>My SUSHI | Sushi</title>
-        <meta name="description" content="My SUSHI" />
+        <meta key="description" name="description" content="My SUSHI" />
       </Head>
 
       <Container maxWidth="2xl" className="p-4 space-y-3">
