@@ -1,11 +1,8 @@
-import Head from 'next/head'
-import Container from '../../../components/Container'
-import Menu from '../../../features/analytics/AnalyticsMenu'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useBundle, useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
+import { useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
-import { tokensTimeTravelQuery } from '../../../services/graph/queries'
+import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 
 export default function Pairs() {
   const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
@@ -55,24 +52,12 @@ export default function Pairs() {
   })
 
   return (
-    <>
-      <Head>
-        <title>SushiSwap Liquidity Pair (SLP) Analytics | Sushi</title>
-        <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
-      </Head>
-
-      <Container maxWidth="full" className="grid h-full grid-cols-5 mx-auto gap-9 grid-flow-col">
-        <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
-          <Menu />
-        </div>
-        <div className="col-span-5 space-y-6 lg:col-span-4">
-          <div className="flex flex-row items-center">
-            <div className="ml-3 font-bold text-2xl text-high-emphesis">Tokens</div>
-          </div>
-          <Search term={term} search={search} />
-          <TokenList tokens={tokensSearched} />
-        </div>
-      </Container>
-    </>
+    <AnalyticsContainer>
+      <div className="flex flex-row items-center">
+        <div className="ml-3 text-2xl font-bold text-high-emphesis">Tokens</div>
+      </div>
+      <Search term={term} search={search} />
+      <TokenList tokens={tokensSearched} />
+    </AnalyticsContainer>
   )
 }

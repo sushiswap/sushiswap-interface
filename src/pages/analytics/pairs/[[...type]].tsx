@@ -1,6 +1,3 @@
-import Head from 'next/head'
-import Container from '../../../components/Container'
-import Menu from '../../../features/analytics/AnalyticsMenu'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import { useOneDayBlock, useOneWeekBlock, useCustomDayBlock, useSushiPairs } from '../../../services/graph'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
@@ -8,6 +5,7 @@ import { useRouter } from 'next/router'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import { useMemo } from 'react'
+import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 
 export default function Pairs() {
   const router = useRouter()
@@ -98,25 +96,13 @@ export default function Pairs() {
   })
 
   return (
-    <>
-      <Head>
-        <title>SushiSwap Liquidity Pair (SLP) Analytics | Sushi</title>
-        <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
-      </Head>
-
-      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-5 mx-auto gap-9">
-        <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
-          <Menu />
-        </div>
-        <div className="col-span-5 space-y-6 lg:col-span-4">
-          <div className="flex flex-row items-center">
-            <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
-          </div>
-          <Search term={term} search={search} />
-          <PairTabs />
-          <PairList pairs={pairsSearched} type={type} />
-        </div>
-      </Container>
-    </>
+    <AnalyticsContainer>
+      <div className="flex flex-row items-center">
+        <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
+      </div>
+      <Search term={term} search={search} />
+      <PairTabs />
+      <PairList pairs={pairsSearched} type={type} />
+    </AnalyticsContainer>
   )
 }

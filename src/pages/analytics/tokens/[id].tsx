@@ -210,12 +210,12 @@ export default function Token(): JSX.Element {
   return (
     <>
       <Container maxWidth="full" className="h-full grid-flow-col grid-cols-10 mx-auto md:grid">
-        <div className="col-start-2">
+        <div className="col-start-2 2xl:col-start-3">
           <button onClick={() => router.back()} className="font-bold">
             {'<'} Go Back
           </button>
         </div>
-        <div className="col-span-6 space-y-10">
+        <div className="col-span-6 space-y-10 2xl:col-span-4">
           <div className="flex flex-row">
             <div>
               <Link href="/analytics/tokens">

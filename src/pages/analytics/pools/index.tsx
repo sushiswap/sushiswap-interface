@@ -1,8 +1,6 @@
-import Head from 'next/head'
 import { useMemo } from 'react'
-import Container from '../../../components/Container'
 import Search from '../../../components/Search'
-import Menu from '../../../features/analytics/AnalyticsMenu'
+import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import PoolList from '../../../features/analytics/Pools/PoolsList'
 import { useFuse } from '../../../hooks'
 import { useFarms, useKashiPairs, useSushiPairs } from '../../../services/graph'
@@ -56,22 +54,10 @@ export default function Pools(): JSX.Element {
   })
 
   return (
-    <>
-      <Head>
-        <title>SushiSwap Liquidity Pair (SLP) Analytics | Sushi</title>
-        <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
-      </Head>
-
-      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-5 mx-auto gap-9">
-        <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
-          <Menu />
-        </div>
-        <div className="col-span-5 space-y-6 lg:col-span-4">
-          <div className="ml-3 text-2xl font-bold text-high-emphesis">Pools</div>
-          <Search term={term} search={search} />
-          <PoolList pools={poolsSearched} />
-        </div>
-      </Container>
-    </>
+    <AnalyticsContainer>
+      <div className="ml-3 text-2xl font-bold text-high-emphesis">Pools</div>
+      <Search term={term} search={search} />
+      <PoolList pools={poolsSearched} />
+    </AnalyticsContainer>
   )
 }
