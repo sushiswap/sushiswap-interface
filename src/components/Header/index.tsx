@@ -120,6 +120,34 @@ function AppBar(): JSX.Element {
 
                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
+                    {library && library.provider.isMetaMask && (
+                      <>
+                        <QuestionHelper text={i18n._(t`Add funds to your MetaMask wallet with FTX Pay`)}>
+                          <div
+                            className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
+                            onClick={() => {
+                              if (library && library.provider.isMetaMask && library.provider.request) {
+                                window.open(
+                                  `https://ftx.us/pay/request?address=${account}&tag=&wallet=erc20&notes=SUSHISWAP&memoIsRequired=false&memo=`,
+                                  '_blank',
+                                  'resizable,width=700,height=900'
+                                )
+                              }
+                            }}
+                          >
+                            <Image
+                              src="/images/wallets/ftxpay.png"
+                              alt="FTX Pay"
+                              width="38px"
+                              height="38px"
+                              objectFit="contain"
+                              className="rounded-md"
+                            />
+                          </div>
+                        </QuestionHelper>
+                      </>
+                    )}
+
                     {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
                       <>
                         <QuestionHelper text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}>
