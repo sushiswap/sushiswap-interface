@@ -15,14 +15,14 @@ const MATIC_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
-  // BTC / USD
-  '0xc907E116054Ad103354f2D350FD2514433D57F6f': {
+  // renBTC / USD
+  /*'0xc907E116054Ad103354f2D350FD2514433D57F6f': {
     from: '0xD6C23852b94FEde6AB571e4b4cFdb745b49Dc9EB',
     to: '0x0000000000000000000000000000000000000001',
     decimals: 8,
     fromDecimals: 18,
     toDecimals: 8,
-  },
+  },*/
   // BZRX / USD
   '0x6b7D436583e5fE0874B7310b74D29A13af816860': {
     from: '0x54cFe73f2c7d0c4b62Ab869B473F5512Dc0944D2',
