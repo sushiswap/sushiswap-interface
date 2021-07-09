@@ -1247,7 +1247,7 @@ const MAINNET_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
-  // sUSD / USD
+  // SUSD / USD
   '0xad35Bd71b9aFE6e4bDc266B345c198eaDEf9Ad94': {
     from: '0x57Ab1ec28D129707052df4dF418D58a2D46d5f51',
     to: '0x0000000000000000000000000000000000000001',
