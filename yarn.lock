@@ -2283,10 +2283,10 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
-"@sushiswap/chainlink-whitelist@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.1.0.tgz#d1bd7d1695f251314b80fe532a698e788ac4a7cf"
-  integrity sha512-9yWEOreCkKX2wouTik6M40tcjK+Xj3ZnB6gsQzRqRgrbrjXMXDu+/LXjWYDT4YPJw0Nl0NXa9nShFxs4PexIfg==
+"@sushiswap/chainlink-whitelist@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.2.tgz#759e4885fd745788f9bc8575b4f6bbff20db732a"
+  integrity sha512-B9SVQDrI/qzmra9xK9Vb85u2lC4OPOLD5pduU0zFo62AOfTw+GyyXKfvQa20+TJj4RKkTLZc4nnTAxevzPu46Q==
 
 "@sushiswap/core@2.0.0-canary.0":
   version "2.0.0-canary.0"
@@ -2298,10 +2298,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@6.57.0":
-  version "6.57.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-6.57.0.tgz#1ebd24398a8f2111045d46238d0dfd28a2060fd8"
-  integrity sha512-pjKi+Cd8Av/482SNb3IySbN5tpsme8N1eCqbt61GXKfANt5J72c9TU+Bjxq/FeUk4+MAUJH8FJ6GFrjF8Uw8gA==
+"@sushiswap/default-token-list@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-7.0.1.tgz#7620f04ec436a60222a60f8c1512240046f63442"
+  integrity sha512-aTlGx0gsqWm8HH3I69CHOjSnWPq1pAqbHbFQjXMSCUWZxktsaODFGtK5Ee/pkO3YW71BjyO+rFOqiOJCcTQSLA==
 
 "@sushiswap/sdk@5.0.0-canary.23":
   version "5.0.0-canary.23"
