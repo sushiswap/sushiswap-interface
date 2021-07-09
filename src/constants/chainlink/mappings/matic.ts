@@ -224,11 +224,11 @@ const MATIC_CHAINLINK_MAPPING = {
     toDecimals: 18,
   },
   // WBTC / USD
-  '0xDE31F8bFBD8c84b5360CFACCa3539B938dd78ae6': {
-    from: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+  '0xc907E116054Ad103354f2D350FD2514433D57F6f': {
+    from: '0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6',
     to: '0x0000000000000000000000000000000000000001',
     decimals: 8,
-    fromDecimals: 8,
+    fromDecimals: 18,
     toDecimals: 8,
   },
   // YFI / ETH
