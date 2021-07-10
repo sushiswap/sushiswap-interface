@@ -1,19 +1,21 @@
 import { ChevronLeftIcon, XIcon } from '@heroicons/react/outline'
 
-import React from 'react'
+import React, { FC } from 'react'
 import Typography from '../Typography'
 
-function ModalHeader({
-  title = undefined,
-  onClose = undefined,
-  className = '',
-  onBack = undefined,
-}: {
+interface ModalHeaderProps {
   title?: string
   className?: string
   onClose?: () => void
   onBack?: () => void
-}): JSX.Element {
+}
+
+const ModalHeader: FC<ModalHeaderProps> = ({
+  title = undefined,
+  onClose = undefined,
+  className = '',
+  onBack = undefined,
+}) => {
   return (
     <div className={`flex items-center justify-between mb-4 ${className}`}>
       {onBack && <ChevronLeftIcon onClick={onBack} width={24} height={24} className="cursor-pointer" />}
