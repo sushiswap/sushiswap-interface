@@ -1,4 +1,5 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import Dots from '../../components/Dots'
 import Loader from '../../components/Loader'
 import Option from './Option'
 import React from 'react'
@@ -93,10 +94,7 @@ export default function PendingView({
               </ErrorButton>
             </ErrorGroup>
           ) : (
-            <>
-              <StyledLoader />
-              Initializing...
-            </>
+            <Dots>Initializing</Dots>
           )}
         </LoadingWrapper>
       </LoadingMessage>
