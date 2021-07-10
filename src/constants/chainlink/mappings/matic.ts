@@ -15,9 +15,9 @@ const MATIC_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
-  // renBTC / USD
+  // BTC / USD
   /*'0xc907E116054Ad103354f2D350FD2514433D57F6f': {
-    from: '0xD6C23852b94FEde6AB571e4b4cFdb745b49Dc9EB',
+    from: '',
     to: '0x0000000000000000000000000000000000000001',
     decimals: 8,
     fromDecimals: 18,
@@ -217,7 +217,7 @@ const MATIC_CHAINLINK_MAPPING = {
   },
   // WBTC / ETH
   '0xA338e0492B2F944E9F8C0653D3AD1484f2657a37': {
-    from: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+    from: '0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6',
     to: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
     decimals: 8,
     fromDecimals: 8,
