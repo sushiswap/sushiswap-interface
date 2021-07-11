@@ -1,8 +1,5 @@
-import Badge from '../../components/Badge'
-import { ChainId } from '@sushiswap/sdk'
 import NavLink from '../../components/NavLink'
 import React from 'react'
-import { useActiveWeb3React } from '../../hooks'
 
 const Menu = () => {
   return (
@@ -20,7 +17,7 @@ const Menu = () => {
       </NavLink>
 
       <NavLink
-        href="/portfolio"
+        href="/analytics/portfolio"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
         <a className="flex items-center px-1 py-3 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">

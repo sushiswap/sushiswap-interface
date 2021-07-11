@@ -19,8 +19,6 @@ export default function Pools(): JSX.Element {
 
             if (!pair) return undefined
 
-            if (pair.asset) console.log(pair)
-
             return {
               pair: {
                 address0: pair.token0.id,

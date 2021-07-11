@@ -123,7 +123,6 @@ export default function Token(): JSX.Element {
 
   // For Transactions
   const tokenPairs = useTokenPairs({ id: id })
-  console.log(tokenPairs)
   const transactions = useTransactions({ pairAddresses: tokenPairs?.map((pair) => pair.id) })
   const transactionsFormatted = useMemo(() => {
     return transactions

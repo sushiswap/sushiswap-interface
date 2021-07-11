@@ -26,12 +26,32 @@ export const EXCHANGE = {
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
 }
 
-export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+export const exchange = async (chainId = ChainId.MAINNET, query, variables = {}) => {
+  let data: any = {}
+  let skip = 0
+  let flag = true
+  while (flag) {
+    flag = false
+    const req = await request(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
+    Object.keys(req).forEach((key) => {
+      data[key] = data[key] ? [...data[key], ...req[key]] : req[key]
+    })
+
+    Object.values(req).forEach((entry: any) => {
+      if (entry.length === 1000) flag = true
+    })
+
+    if ('first' in Object.keys(variables)) break
+
+    skip += 1000
+    variables = { ...variables, skip }
+  }
+  return data
+}
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
-  const data = await exchange(chainId, query, variables)
-  return Object.values(data)[0] as any
+  const { pairs } = await exchange(chainId, query, variables)
+  return pairs
 }
 
 export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
@@ -63,13 +83,13 @@ export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables)
   const ethPrice = await getEthPrice()
 
   const { token } = await exchange(chainId, query, variables)
-  return token?.derivedETH * ethPrice
+  return token[0]?.derivedETH * ethPrice
 }
 
 export const getEthPrice = async (chainId = ChainId.MAINNET, variables = undefined) => {
   // console.log('getEthPrice')
   const data = await getBundle(chainId, undefined, variables)
-  return data?.bundles?.[0]?.ethPrice
+  return data?.bundles[0]?.ethPrice
 }
 
 export const getCvxPrice = async () => {

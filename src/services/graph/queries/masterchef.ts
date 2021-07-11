@@ -6,8 +6,9 @@ export const poolsQuery = gql`
     $skip: Int! = 0
     $orderBy: String! = "timestamp"
     $orderDirection: String! = "desc"
+    $block: Block_height
   ) {
-    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, block: $block) {
       id
       pair
       allocPoint

@@ -2,7 +2,7 @@ import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHou
 
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
-import { blocksQuery } from '../queries'
+import { blocksQuery, massBlocksQuery } from '../queries'
 import { request } from 'graphql-request'
 
 export const BLOCKS = {
@@ -45,6 +45,14 @@ export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number)
   const end = Math.floor(Number(date) / 1000) + 600
 
   return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+}
+
+export const getMassBlocks = async (chainId = ChainId.MAINNET, timestamps) => {
+  const data = await request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, massBlocksQuery(timestamps))
+  return Object.values(data).map((entry) => ({
+    number: Number(entry[0].number),
+    timestamp: Number(entry[0].timestamp),
+  }))
 }
 
 // Grabs the last 1000 (a sample statistical) blocks and averages

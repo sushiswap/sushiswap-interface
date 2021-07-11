@@ -17,7 +17,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
         >
           <AnalyticsMenu />
         </div>
-        <div className="col-span-10 space-y-6 lg:col-span-8 2xl:col-span-7">{children}</div>
+        <div className="col-span-10 space-y-4 lg:col-span-8 2xl:col-span-7">{children}</div>
       </Container>
     </>
   )

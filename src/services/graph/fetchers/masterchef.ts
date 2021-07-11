@@ -19,22 +19,22 @@ export const MINICHEF = {
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
 }
 
-export const miniChef = async (query, chainId = ChainId.MAINNET) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query)
+export const miniChef = async (query, chainId = ChainId.MAINNET, variables = undefined) =>
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query, variables)
 
 export const MASTERCHEF_V2 = {
   [ChainId.MAINNET]: 'jiro-ono/sushitestsubgraph',
 }
 
-export const masterChefV2 = async (query, chainId = ChainId.MAINNET) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V2[chainId]}`, query)
+export const masterChefV2 = async (query, chainId = ChainId.MAINNET, variables = undefined) =>
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V2[chainId]}`, query, variables)
 
 export const MASTERCHEF_V1 = {
   [ChainId.MAINNET]: 'sushiswap/master-chef',
 }
 
-export const masterChefV1 = async (query, chainId = ChainId.MAINNET) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V1[chainId]}`, query)
+export const masterChefV1 = async (query, chainId = ChainId.MAINNET, variables = undefined) =>
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MASTERCHEF_V1[chainId]}`, query, variables)
 
 export const getMasterChefV1TotalAllocPoint = async () => {
   const {
@@ -50,8 +50,8 @@ export const getMasterChefV1SushiPerBlock = async () => {
   return sushiPerBlock / 1e18
 }
 
-export const getMasterChefV1Farms = async () => {
-  const { pools } = await masterChefV1(poolsQuery)
+export const getMasterChefV1Farms = async (variables = undefined) => {
+  const { pools } = await masterChefV1(poolsQuery, undefined, variables)
   return pools
 }
 
@@ -60,8 +60,8 @@ export const getMasterChefV1PairAddreses = async () => {
   return pools
 }
 
-export const getMasterChefV2Farms = async () => {
-  const { pools } = await masterChefV2(poolsV2Query)
+export const getMasterChefV2Farms = async (variables = undefined) => {
+  const { pools } = await masterChefV2(poolsV2Query, undefined, variables)
   return pools
 }
 
@@ -70,8 +70,8 @@ export const getMasterChefV2PairAddreses = async () => {
   return pools
 }
 
-export const getMiniChefFarms = async (chainId = ChainId.MAINNET) => {
-  const { pools } = await miniChef(miniChefPoolsQuery, chainId)
+export const getMiniChefFarms = async (chainId = ChainId.MAINNET, variables = undefined) => {
+  const { pools } = await miniChef(miniChefPoolsQuery, chainId, variables)
   return pools
 }
 
