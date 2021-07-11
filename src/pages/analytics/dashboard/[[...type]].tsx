@@ -8,10 +8,7 @@ import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
 import Menu from '../../../features/analytics/AnalyticsMenu'
 import ChartCard from '../../../features/analytics/Dashboard/ChartCard'
 import {
-  useCustomDayBlock,
-  useDayData,
   useEthPrice,
-  useExchange,
   useFarms,
   useOneDayBlock,
   useOneWeekBlock,
@@ -30,8 +27,8 @@ export default function Dashboard(): JSX.Element {
   const router = useRouter()
   const type: any = ['pools', 'pairs', 'tokens'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'pools'
 
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block1w = useOneWeekBlock()?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()
+  const block1w = useOneWeekBlock()
 
   // For Top Pairs
   const pairs = useSushiPairs()

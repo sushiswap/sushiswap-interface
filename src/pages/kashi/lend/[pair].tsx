@@ -29,7 +29,7 @@ export default function Pair() {
     <>
       <Head>
         <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
-        <meta name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
+        <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
       </Head>
       <Card
         className="h-full bg-dark-900"

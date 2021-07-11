@@ -53,6 +53,7 @@ function Pair() {
       <Head>
         <title>{i18n._(t`Borrow ${pair?.asset?.symbol}-${pair?.collateral?.symbol}`)} | Sushi</title>
         <meta
+          key="description"
           name="description"
           content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
         />
@@ -163,7 +164,7 @@ const PairLayout = ({ children }) => {
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
   const assetPrice = useUSDCPrice(asset)
   const collateralPrice = useUSDCPrice(collateral)
-  console.log('render borrow pair layout', { pair })
+  // console.log('render borrow pair layout', { pair })
 
   return pair ? (
     <Layout

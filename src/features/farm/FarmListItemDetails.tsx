@@ -3,7 +3,6 @@ import { ChainId, MASTERCHEF_ADDRESS, Token, ZERO } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
 import { Disclosure, Transition } from '@headlessui/react'
 import React, { useState } from 'react'
-import { formatNumber } from '../../functions'
 import { usePendingSushi, useUserInfo } from './hooks'
 
 import Button from '../../components/Button'
@@ -11,6 +10,7 @@ import Dots from '../../components/Dots'
 import { MASTERCHEF_V2_ADDRESS } from '../../constants'
 import { MINICHEF_ADDRESS } from '../../constants/addresses'
 import { Input as NumericalInput } from '../../components/NumericalInput'
+import { formatNumber } from '../../functions'
 import { getAddress } from '@ethersproject/address'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions/parse'
@@ -21,7 +21,7 @@ import usePendingReward from './usePendingReward'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 
-const FarmListItem = ({ farm, open, ...rest }) => {
+const FarmListItem = ({ farm }) => {
   const { i18n } = useLingui()
 
   const { account, chainId } = useActiveWeb3React()
@@ -68,7 +68,7 @@ const FarmListItem = ({ farm, open, ...rest }) => {
 
   return (
     <Transition
-      show={open}
+      show={true}
       enter="transition-opacity duration-75"
       enterFrom="opacity-0"
       enterTo="opacity-100"

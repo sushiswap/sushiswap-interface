@@ -14,6 +14,7 @@ import {
   getToken,
   getTokenPairs,
   getTransactions,
+  getTokenDayData,
 } from '../fetchers'
 import { getEthPrice, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -138,6 +139,17 @@ export function useToken(variables, query = undefined, swrConfig: SWRConfigurati
   const { data } = useSWR(
     shouldFetch ? ['token', chainId, query, JSON.stringify(variables)] : null,
     (_, chainId) => getToken(chainId, query, variables),
+    swrConfig
+  )
+  return data
+}
+
+export function useTokenDayData(variables, query = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(
+    shouldFetch ? ['tokenDayDaya', chainId, query, JSON.stringify(variables)] : null,
+    (_, chainId) => getTokenDayData(chainId, query, variables),
     swrConfig
   )
   return data

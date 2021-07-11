@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-
 import { classNames } from '../../functions'
+import { useRouter } from 'next/router'
 
 export default function PairTabs({ tabs }: { tabs: any[] }): JSX.Element {
   const router = useRouter()
@@ -11,10 +10,9 @@ export default function PairTabs({ tabs }: { tabs: any[] }): JSX.Element {
       <div className="border-b border-gray-700">
         <nav className="flex -mb-px space-x-4 overflow-x-auto whitespace-nowrap" aria-label="Tabs">
           {tabs.map((tab) => (
-            <div>
+            <div key={tab.name}>
               <Link href={tab.href}>
                 <a
-                  key={tab.name}
                   className={classNames(
                     router.asPath === tab.href
                       ? tab.customCurrent ?? 'bg-gradient-to-r from-blue to-pink text-transparent bg-clip-text'

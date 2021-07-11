@@ -1,20 +1,21 @@
 import {
+  dayDatasQuery,
   ethPriceQuery,
+  factoryQuery,
   liquidityPositionsQuery,
   pairsQuery,
-  tokenQuery,
+  tokenPairsQuery,
   tokenPriceQuery,
+  tokenQuery,
   tokenSubsetQuery,
   tokensQuery,
-  factoryQuery,
-  dayDatasQuery,
   transactionsQuery,
-  tokenPairsQuery,
+  tokenDayDatasQuery,
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
-import { request } from 'graphql-request'
+import { pager } from './'
 
 export const EXCHANGE = {
   [ChainId.MAINNET]: 'sushiswap/exchange',
@@ -24,30 +25,12 @@ export const EXCHANGE = {
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
+  [ChainId.CELO]: 'sushiswap/celo-exchange',
 }
 
-export const exchange = async (chainId = ChainId.MAINNET, query, variables = {}) => {
-  let data: any = {}
-  let skip = 0
-  let flag = true
-  while (flag) {
-    flag = false
-    const req = await request(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
-    Object.keys(req).forEach((key) => {
-      data[key] = data[key] ? [...data[key], ...req[key]] : req[key]
-    })
-
-    Object.values(req).forEach((entry: any) => {
-      if (entry.length === 1000) flag = true
-    })
-
-    if ('first' in Object.keys(variables)) break
-
-    skip += 1000
-    variables = { ...variables, skip }
-  }
-  return data
-}
+export const exchange = async (chainId = ChainId.MAINNET, query, variables = {}) =>
+  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
@@ -68,8 +51,14 @@ export const getTokens = async (chainId = ChainId.MAINNET, query = tokensQuery, 
 
 export const getToken = async (chainId = ChainId.MAINNET, query = tokenQuery, variables) => {
   // console.log('getTokens')
-  const data = await exchange(chainId, query, variables)
-  return Object.values(data)[0] as any
+  const { token } = await exchange(chainId, query, variables)
+  return token
+}
+
+export const getTokenDayData = async (chainId = ChainId.MAINNET, query = tokenDayDatasQuery, variables) => {
+  // console.log('getTokens')
+  const { tokenDayDatas } = await exchange(chainId, query, variables)
+  return tokenDayDatas
 }
 
 export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
@@ -80,7 +69,7 @@ export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
 
 export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables) => {
   // console.log('getTokenPrice')
-  const ethPrice = await getEthPrice()
+  const ethPrice = await getEthPrice(chainId)
 
   const { token } = await exchange(chainId, query, variables)
   return token[0]?.derivedETH * ethPrice

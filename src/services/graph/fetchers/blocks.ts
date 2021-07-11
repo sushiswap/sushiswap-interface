@@ -11,7 +11,9 @@ export const BLOCKS = {
   [ChainId.MATIC]: 'matthewlilley/polygon-blocks',
   [ChainId.FANTOM]: 'matthewlilley/fantom-blocks',
   [ChainId.BSC]: 'matthewlilley/bsc-blocks',
-  [ChainId.HARMONY]: 'sushiswap/harmony-blocks-fs',
+  [ChainId.HARMONY]: 'sushiswap/harmony-blocks',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-blocks',
+  [ChainId.CELO]: 'sushiswap/celo-blocks',
 }
 
 export const fetcher = async (chainId = ChainId.MAINNET, query, variables) =>
@@ -26,25 +28,30 @@ export const getBlocks = async (chainId = ChainId.MAINNET, start, end) => {
 }
 
 export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfMinute(subDays(Date.now(), 1))
+  const date = startOfHour(subDays(Date.now(), 1))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-  return fetcher(chainId, blocksQuery, { start, end })
+  const { blocks } = await fetcher(chainId, blocksQuery, { start, end })
+  return blocks?.[0]?.number
 }
 
 export const getOneWeekBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfMinute(subDays(Date.now(), 7))
+  const date = startOfHour(subDays(Date.now(), 7))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-  return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+  const { blocks } = await fetcher(chainId, blocksQuery, { start, end })
+  return blocks?.[0]?.number
 }
 
 export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number) => {
-  const date = startOfMinute(subDays(Date.now(), days))
+  const date = startOfHour(subDays(Date.now(), days))
   const start = Math.floor(Number(date) / 1000)
   const end = Math.floor(Number(date) / 1000) + 600
-
-  return request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, { start, end })
+  const { blocks } = await request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, {
+    start,
+    end,
+  })
+  return blocks?.[0]?.number
 }
 
 export const getMassBlocks = async (chainId = ChainId.MAINNET, timestamps) => {
@@ -59,7 +66,7 @@ export const getMassBlocks = async (chainId = ChainId.MAINNET, timestamps) => {
 // the time difference between them
 export const getAverageBlockTime = async (chainId = ChainId.MAINNET) => {
   // console.log('getAverageBlockTime')
-  const now = startOfSecond(startOfMinute(startOfHour(Date.now())))
+  const now = startOfHour(Date.now())
   const start = getUnixTime(subHours(now, 6))
   const end = getUnixTime(now)
   const blocks = await getBlocks(chainId, start, end)

@@ -1,8 +1,8 @@
+import { useCustomDayBlock, useOneDayBlock, useOneWeekBlock, useSushiPairs } from '../../../services/graph'
 import PairList from '../../../features/analytics/Pairs/PairList'
-import { useOneDayBlock, useOneWeekBlock, useCustomDayBlock, useSushiPairs } from '../../../services/graph'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
-import { useRouter } from 'next/router'
 import Search from '../../../components/Search'
+import { useRouter } from 'next/router'
 import { useFuse } from '../../../hooks'
 import { useMemo } from 'react'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
@@ -11,10 +11,14 @@ export default function Pairs() {
   const router = useRouter()
   const type: any = ['all', 'gainers', 'losers'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'all'
 
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
-  const block1w = useOneWeekBlock()?.blocks[0]?.number ?? undefined
-  const block2w = useCustomDayBlock(14)?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()
+  const block2d = useCustomDayBlock(2)
+  const block1w = useOneWeekBlock()
+  const block2w = useCustomDayBlock(14)
+
+  // useEffect(() => {
+  //   console.log('debug', { block1d, block2d, block1w, block2w })
+  // }, [block1d, block2d, block1w, block2w])
 
   const pairs = useSushiPairs()
   const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })

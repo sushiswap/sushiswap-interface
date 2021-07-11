@@ -2,7 +2,7 @@ import { ChainId, Currency, NATIVE, Token, WNATIVE, currencyEquals } from '@sush
 import { ExtendedEther, WETH9_EXTENDED } from '../constants'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
-import { createTokenFilterFunction, filterTokens } from '../components/SearchModal/filtering'
+import { createTokenFilterFunction, filterTokens } from '../functions/filtering'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 
 import { WrappedTokenInfo } from './../state/lists/wrappedTokenInfo'

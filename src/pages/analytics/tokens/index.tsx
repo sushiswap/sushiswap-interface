@@ -4,9 +4,9 @@ import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 
-export default function Pairs() {
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block1w = useOneWeekBlock()?.blocks[0]?.number ?? undefined
+export default function Tokens() {
+  const block1d = useOneDayBlock()
+  const block1w = useOneWeekBlock()
 
   const ethPrice = useEthPrice()
   const ethPrice1d = useEthPrice({ block: { number: Number(block1d) } })

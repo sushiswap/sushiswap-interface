@@ -51,7 +51,6 @@ const allColumns = [
     Header: 'Pair',
     accessor: 'pair',
     Cell: (props) => <PairListName pair={props.value} />,
-    disableSortBy: true,
     align: 'left',
   },
   {
@@ -82,13 +81,11 @@ const allColumns = [
   {
     Header: 'Fees (7d)',
     accessor: (row) => formatNumber(row.volume1w * 0.003, true),
-    disableSortBy: true,
     align: 'right',
   },
   {
     Header: 'Fees (Yearly)',
     accessor: (row) => formatPercent((((row.volume1w / 7) * 365) / row.liquidity) * 100 * 0.03),
-    disableSortBy: true,
     align: 'right',
   },
 ]

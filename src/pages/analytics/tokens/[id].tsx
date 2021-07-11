@@ -19,6 +19,7 @@ import {
   useOneDayBlock,
   useSushiPairs,
   useToken,
+  useTokenDayData,
   useTokenPairs,
   useTransactions,
 } from '../../../services/graph'
@@ -76,8 +77,8 @@ export default function Token(): JSX.Element {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
 
-  const block1d = useOneDayBlock()?.blocks[0]?.number ?? undefined
-  const block2d = useCustomDayBlock(2)?.blocks[0]?.number ?? undefined
+  const block1d = useOneDayBlock()
+  const block2d = useCustomDayBlock(2)
 
   // General data (volume, liquidity)
   const ethPrice = useEthPrice()
@@ -88,13 +89,10 @@ export default function Token(): JSX.Element {
   const token2d = useToken({ id: id, block: { number: Number(block2d) } })
 
   // For the graph
-  const tokenDayData = useToken(
-    {
-      first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
-      tokens: [id],
-    },
-    tokenDayDatasQuery
-  )
+  const tokenDayData = useTokenDayData({
+    first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
+    tokens: [id],
+  })
 
   // For Top Farms
   const farms = useFarms()

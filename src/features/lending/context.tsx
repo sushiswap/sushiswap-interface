@@ -242,7 +242,7 @@ export function KashiProvider({ children }) {
 
       pairTokens.add(currency.address)
 
-      pairs.forEach((pair: any, i: number) => {
+      pairs.forEach((pair, i: number) => {
         pair.address = allPairAddresses[i]
         pair.collateral = pairTokens.add(pair.collateral)
         pair.asset = pairTokens.add(pair.asset)
@@ -252,9 +252,9 @@ export function KashiProvider({ children }) {
       const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
       const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
 
-      const missingTokens: any[] = []
+      const missingTokens = []
 
-      balances.forEach((balance: any, i: number) => {
+      balances.forEach((balance, i: number) => {
         if (tokens[balance.token]) {
           Object.assign(pairTokens[balance.token], tokens[balance.token])
         } else {
@@ -270,11 +270,10 @@ export function KashiProvider({ children }) {
       }
 
       // Calculate the USD price for each token
-      Object.values(pairTokens).forEach((token: any) => {
-        token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.symbol
+      Object.values(pairTokens).forEach((token) => {
+        token.symbol = token.address === weth.address ? WNATIVE[chainId].symbol : token.tokenInfo.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency.address].rate, token.rate)
       })
-      console.log('here!')
 
       dispatch({
         type: ActionType.UPDATE,
@@ -373,6 +372,7 @@ export function KashiProvider({ children }) {
                 spot: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.spotExchangeRate),
                 stored: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.currentExchangeRate),
               }
+
               pair.maxBorrowable.minimum = minimum(
                 pair.maxBorrowable.oracle,
                 pair.maxBorrowable.spot,

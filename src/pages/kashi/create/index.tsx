@@ -71,11 +71,13 @@ function Create() {
 
       let multiply = ethers.constants.AddressZero
       let divide = ethers.constants.AddressZero
+
       const multiplyMatches = Object.values(mapping).filter(
         (m) => m.from === asset.wrapped.address && m.to === collateral.wrapped.address
       )
 
       let decimals = 0
+
       if (multiplyMatches.length) {
         const match = multiplyMatches[0]
         multiply = match.address!
@@ -155,7 +157,7 @@ function Create() {
     <>
       <Head>
         <title>Create Lending Pair | Kashi by Sushi</title>
-        <meta name="description" content="Create Lending Pair on Kashi by Sushi" />
+        <meta key="description" name="description" content="Create Lending Pair on Kashi by Sushi" />
       </Head>
       <Card
         className="h-full bg-dark-900"

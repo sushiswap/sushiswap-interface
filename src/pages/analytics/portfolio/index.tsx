@@ -8,7 +8,7 @@ import { useActiveWeb3React } from '../../../hooks'
 import { useFarms, useLiquidityPositions, useMassBlocks, useSushiPairs, useToken } from '../../../services/graph'
 import { massBlocksQuery, tokenQuery } from '../../../services/graph/queries'
 import { useTrackedTokenPairs } from '../../../state/user/hooks'
-import { useUserFarms, useUserPairs } from './hooks'
+import { useUserFarms, useUserPairs } from './../../../features/analytics/Portfolio/hooks'
 
 export default function Portfolio() {
   const [chartTimespan, setChartTimespan] = useState('1M')

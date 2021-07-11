@@ -76,6 +76,7 @@ export const getMiniChefFarms = async (chainId = ChainId.MAINNET, variables = un
 }
 
 export const getMiniChefPairAddreses = async (chainId = ChainId.MAINNET) => {
+  console.debug('getMiniChefPairAddreses')
   const { pools } = await miniChef(miniChefPairAddressesQuery, chainId)
   return pools
 }

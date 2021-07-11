@@ -103,7 +103,7 @@ export default function Vesting() {
     <>
       <Head>
         <title>Vesting | Sushi</title>
-        <meta name="description" content="SushiSwap vesting..." />
+        <meta key="description" name="description" content="SushiSwap vesting..." />
       </Head>
       <div className="w-full max-w-[900px] m-auto">
         <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">

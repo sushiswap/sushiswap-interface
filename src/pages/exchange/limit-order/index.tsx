@@ -5,7 +5,7 @@ export default function LimitOrder() {
     <>
       <Head>
         <title>Limit Order | Sushi</title>
-        <meta name="description" content="Limit order" />
+        <meta key="description" name="description" content="Limit order" />
       </Head>
     </>
   )

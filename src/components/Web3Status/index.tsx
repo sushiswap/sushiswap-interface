@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { fortmatic, injected, lattice, portis, walletconnect, walletlink } from '../../connectors'
+import { fortmatic, injected, portis, walletconnect, walletlink } from '../../connectors'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -7,7 +7,7 @@ import Image from 'next/image'
 import Loader from '../Loader'
 import { NetworkContextName } from '../../constants'
 import { TransactionDetails } from '../../state/transactions/reducer'
-import WalletModal from '../WalletModal'
+import WalletModal from '../../modals/WalletModal'
 import Web3Connect from '../Web3Connect'
 import { shortenAddress } from '../../functions/format'
 import styled from 'styled-components'
@@ -50,7 +50,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
       </IconWrapper>
     )
-  } else if (connector === lattice) {
+  } else if (connector.constructor.name === 'LatticeConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />

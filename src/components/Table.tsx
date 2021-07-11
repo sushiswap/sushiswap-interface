@@ -16,6 +16,7 @@ interface TableProps {
     href: string
     id: string
   }
+  loading?: boolean
 }
 
 export default function Table({
@@ -24,6 +25,7 @@ export default function Table({
   columnsHideable = [],
   defaultSortBy = { id: '', desc: false },
   link,
+  loading = true,
 }: TableProps) {
   const [isHidden, setHidden] = useState(columnsHideable.length === 0 ? false : true)
   const router = useRouter()
@@ -105,42 +107,48 @@ export default function Table({
                       className={classNames(
                         i === 0 && 'pl-2',
                         i === headerGroup.headers.length - 1 && 'pr-2',
-                        'w-full'
+                        'select-none w-full'
                       )}
                     >
-                      <div className={classNames('w-full text-secondary font-bold text-sm')}>
+                      <div className={classNames('text-secondary font-bold text-sm flex flex-row')}>
                         <div
                           className={classNames(
-                            column.align === 'right' && `justify-end`,
-                            column.align === 'left' && 'justify-start',
+                            i !== 0 && column.align === 'right' && `justify-end`,
+                            i !== 0 && column.align === 'left' && 'justify-start',
+                            !column.align && (i !== 0 ? 'justify-start' : 'justify-end'),
                             i !== 0 && 'ml-2',
                             i !== columns.length - 1 && 'mr-2',
-                            'whitespace-nowrap flex flex-row xl:mx-auto'
+                            i === 0 && 'flex-row-reverse',
+                            i === 0 && column.align === 'right' ? 'justify-start' : 'justify-end',
+                            'w-full flex whitespace-nowrap xl:mx-auto'
                           )}
                         >
+                          <span className={classNames('flex items-center', column.isSorted ? 'block' : 'hidden')}>
+                            <div
+                              className={classNames(
+                                'fill-current text-secondary',
+                                !column.isSortedDesc && 'rotate-180 transform'
+                              )}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-5 h-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                          </span>
                           {column.render('Header')}
                           {column.HideHeader && isHidden && (
                             <button onClick={(e) => toggleHide(e)} className="ml-1 text-dark-700">
                               {column.render('HideHeader')}
                             </button>
-                          )}
-                          {column.isSorted && (
-                            <span className="flex items-center ml-1">
-                              <div
-                                className={classNames(
-                                  'fill-current text-secondary',
-                                  column.isSortedDesc && 'rotate-180 transform'
-                                )}
-                              >
-                                <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                                  <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M8.00002 15C8.13263 15 8.25981 14.9473 8.35357 14.8535C8.44734 14.7598 8.50002 14.6326 8.50002 14.5V2.70698L11.646 5.85398C11.7399 5.94786 11.8672 6.00061 12 6.00061C12.1328 6.00061 12.2601 5.94786 12.354 5.85398C12.4479 5.76009 12.5007 5.63275 12.5007 5.49998C12.5007 5.3672 12.4479 5.23986 12.354 5.14598L8.35402 1.14598C8.30758 1.09942 8.2524 1.06247 8.19165 1.03727C8.13091 1.01206 8.06579 0.999084 8.00002 0.999084C7.93425 0.999084 7.86913 1.01206 7.80839 1.03727C7.74764 1.06247 7.69247 1.09942 7.64602 1.14598L3.64602 5.14598C3.59953 5.19247 3.56266 5.24766 3.5375 5.30839C3.51234 5.36913 3.49939 5.43423 3.49939 5.49998C3.49939 5.63275 3.55213 5.76009 3.64602 5.85398C3.73991 5.94786 3.86725 6.00061 4.00002 6.00061C4.1328 6.00061 4.26013 5.94786 4.35402 5.85398L7.50002 2.70698V14.5C7.50002 14.6326 7.5527 14.7598 7.64647 14.8535C7.74024 14.9473 7.86741 15 8.00002 15Z"
-                                  />
-                                </svg>
-                              </div>
-                            </span>
                           )}
                         </div>
                       </div>

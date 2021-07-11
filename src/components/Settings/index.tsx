@@ -1,11 +1,8 @@
 import React, { useRef, useState } from 'react'
-import { RowBetween, RowFixed } from '../Row'
-import { StyledMenu, StyledMenuButton } from '../StyledMenu'
 import {
   useExpertModeManager,
   useUserArcherUseRelay,
   useUserSingleHopOnly,
-  useUserSlippageTolerance,
   useUserTransactionTTL,
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
@@ -46,16 +43,12 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
   const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
 
   return (
-    <StyledMenu ref={node}>
-      <StyledMenuButton onClick={toggle} id="open-settings-dialog-button">
-        {/* <StyledMenuIcon /> */}
-        {/* {expertMode ? (
-                    <EmojiWrapper>
-                        <span role="img" aria-label="wizard-icon">
-                            🧙
-                        </span>
-                    </EmojiWrapper>
-                ) : null} */}
+    <div className="flex relative" ref={node}>
+      <div
+        className="rounded h-8 w-8 flex items-center justify-center cursor-pointer"
+        onClick={toggle}
+        id="open-settings-dialog-button"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-5 h-5 transform rotate-90"
@@ -70,36 +63,29 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
             d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
           />
         </svg>
-      </StyledMenuButton>
+      </div>
       {open && (
-        <div className="absolute top-12 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 rounded w-80">
-          <div className="p-8 space-y-4">
-            <Typography variant="h3" className="text-high-emphesis">
+        <div className="absolute top-14 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 border-2 border-dark-800 rounded w-80 shadow-lg">
+          <div className="p-4 space-y-4">
+            <Typography weight={700} className="text-high-emphesis">
               {i18n._(t`Transaction Settings`)}
             </Typography>
 
             <TransactionSettings placeholderSlippage={placeholderSlippage} />
 
-            {/* <TransactionSettings
-              rawSlippage={userSlippageTolerance}
-              setRawSlippage={setUserslippageTolerance}
-              deadline={ttl}
-              setDeadline={setTtl}
-            /> */}
-
-            <Typography variant="lg" className="text-high-emphesis">
+            <Typography className="text-high-emphesis" weight={700}>
               {i18n._(t`Interface Settings`)}
             </Typography>
 
-            <RowBetween align="center">
-              <RowFixed align="center">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Toggle Expert Mode`)}
                 </Typography>
                 <QuestionHelper
                   text={i18n._(t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`)}
                 />
-              </RowFixed>
+              </div>
               <Toggle
                 id="toggle-expert-mode-button"
                 isActive={expertMode}
@@ -115,23 +101,23 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                       }
                 }
               />
-            </RowBetween>
-            <RowBetween align="center">
-              <RowFixed align="center">
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Disable Multihops`)}
                 </Typography>
                 <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
-              </RowFixed>
+              </div>
               <Toggle
                 id="toggle-disable-multihop-button"
                 isActive={singleHopOnly}
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
-            </RowBetween>
+            </div>
             {chainId == ChainId.MAINNET && (
-              <RowBetween>
-                <RowFixed>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
                     {i18n._(t`MEV Shield by Archer DAO`)}
                   </Typography>
@@ -140,13 +126,13 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                       t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
                     )}
                   />
-                </RowFixed>
+                </div>
                 <Toggle
                   id="toggle-use-archer"
                   isActive={userUseArcher}
                   toggle={() => setUserUseArcher(!userUseArcher)}
                 />
-              </RowBetween>
+              </div>
             )}
           </div>
         </div>
@@ -178,6 +164,6 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
           </Button>
         </div>
       </Modal>
-    </StyledMenu>
+    </div>
   )
 }

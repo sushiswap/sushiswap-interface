@@ -5,7 +5,7 @@ export default function MISO() {
     <>
       <Head>
         <title>MISO | Sushi</title>
-        <meta name="description" content="MISO by Sushi, an initial Sushi offering on steroids ..." />
+        <meta key="description" name="description" content="MISO by Sushi, an initial Sushi offering on steroids ..." />
       </Head>
     </>
   )

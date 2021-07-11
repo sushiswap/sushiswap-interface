@@ -1,4 +1,4 @@
-import React, { HTMLProps, useCallback } from 'react'
+import React, { FC, HTMLProps, useCallback } from 'react'
 
 import ReactGA from 'react-ga'
 import { classNames } from '../../functions'
@@ -8,7 +8,13 @@ const COLOR = {
   blue: 'text-blue opacity-80 hover:opacity-100 focus:opacity-100',
 }
 
-function ExternalLink({
+interface ExternalLinkProps extends Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> {
+  href: string
+  startIcon?: JSX.Element
+  endIcon?: JSX.Element
+}
+
+const ExternalLink: FC<ExternalLinkProps> = ({
   target = '_blank',
   href,
   children,
@@ -18,11 +24,7 @@ function ExternalLink({
   startIcon = undefined,
   endIcon = undefined,
   ...rest
-}: Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> & {
-  href: string
-  startIcon?: JSX.Element
-  endIcon?: JSX.Element
-}): JSX.Element {
+}) => {
   const handleClick = useCallback(
     (event: React.MouseEvent<HTMLAnchorElement>) => {
       // don't prevent default, don't redirect if it's a new tab
@@ -48,9 +50,9 @@ function ExternalLink({
       href={href}
       onClick={handleClick}
       className={classNames(
-        'flex items-center justify-center text-baseline whitespace-nowrap',
+        'text-baseline whitespace-nowrap',
         COLOR[color],
-        (startIcon || endIcon) && 'space-x-1',
+        (startIcon || endIcon) && 'space-x-1 flex items-center justify-center',
         className
       )}
       {...rest}

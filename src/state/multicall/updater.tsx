@@ -1,56 +1,53 @@
-import { AppDispatch, AppState } from '..'
-import {
-  Call,
-  errorFetchingMulticallResults,
-  fetchingMulticallResults,
-  parseCallKey,
-  updateMulticallResults,
-} from './actions'
-import { CancelledError, RetryableError, retry } from '../../functions/retry'
-import { useDispatch, useSelector } from 'react-redux'
+import { Call, parseCallKey } from './utils'
+import { RetryableError, retry } from '../../functions/retry'
+import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
+import { useAppDispatch, useAppSelector } from '../hooks'
 import { useEffect, useMemo, useRef } from 'react'
 
-import { Contract } from '@ethersproject/contracts'
+import { AppState } from '../index'
+import { Contract } from 'ethers'
 import { chunkArray } from '../../functions/array'
+import { updateBlockNumber } from '../application/actions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../application/hooks'
 import useDebounce from '../../hooks/useDebounce'
-import { useMulticallContract } from '../../hooks/useContract'
-
-// chunk calls so we do not exceed the gas limit
-const CALL_CHUNK_SIZE = 500
+import { useMulticall2Contract } from '../../hooks/useContract'
 
 /**
  * Fetches a chunk of calls, enforcing a minimum block number constraint
- * @param multicallContract multicall contract to fetch against
+ * @param multicall multicall contract to fetch against
  * @param chunk chunk of calls to make
  * @param minBlockNumber minimum block number of the result set
  */
 async function fetchChunk(
-  multicallContract: Contract,
+  multicall: Contract,
   chunk: Call[],
   minBlockNumber: number
-): Promise<{ results: string[]; blockNumber: number }> {
-  console.debug('Fetching chunk', multicallContract, chunk, minBlockNumber)
-  let resultsBlockNumber
-  let returnData
+): Promise<{
+  results: { success: boolean; returnData: string }[]
+  blockNumber: number
+}> {
+  console.debug('Fetching chunk', chunk, minBlockNumber)
+  let resultsBlockNumber: number
+  let results: { success: boolean; returnData: string }[]
   try {
-    // console.log({ calls: chunk.map((obj) => [obj.address, obj.callData])});
-    ;[resultsBlockNumber, returnData] = await multicallContract.aggregate(
-      chunk.map((obj) => [obj.address, obj.callData])
+    const { blockNumber, returnData } = await multicall.callStatic.tryBlockAndAggregate(
+      false,
+      chunk.map((obj) => ({ target: obj.address, callData: obj.callData, gasLimit: obj.gasRequired ?? 1_000_000 })),
+      { blockTag: minBlockNumber }
     )
+    resultsBlockNumber = blockNumber.toNumber()
+    results = returnData
   } catch (error) {
-    console.debug('Failed to fetch chunk inside retry', error)
+    console.debug('Failed to fetch chunk', error)
     throw error
   }
-  if (resultsBlockNumber.toNumber() < minBlockNumber) {
-    console.debug(`Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`)
-    throw new RetryableError('Fetched for old block number')
+  if (resultsBlockNumber < minBlockNumber) {
+    const retryMessage = `Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`
+    console.debug(retryMessage)
+    throw new RetryableError(retryMessage)
   }
-
-  // console.log({ results: returnData, blockNumber: resultsBlockNumber.toNumber() })
-
-  return { results: returnData, blockNumber: resultsBlockNumber.toNumber() }
+  return { results, blockNumber: resultsBlockNumber }
 }
 
 /**
@@ -119,13 +116,13 @@ export function outdatedListeningKeys(
 }
 
 export default function Updater(): null {
-  const dispatch = useDispatch<AppDispatch>()
-  const state = useSelector<AppState, AppState['multicall']>((state) => state.multicall)
+  const dispatch = useAppDispatch()
+  const state = useAppSelector((state) => state.multicall)
   // wait for listeners to settle before triggering updates
   const debouncedListeners = useDebounce(state.callListeners, 100)
   const latestBlockNumber = useBlockNumber()
   const { chainId } = useActiveWeb3React()
-  const multicallContract = useMulticallContract()
+  const multicall2Contract = useMulticall2Contract()
   const cancellations = useRef<{ blockNumber: number; cancellations: (() => void)[] }>()
 
   const listeningKeys: { [callKey: string]: number } = useMemo(() => {
@@ -142,16 +139,16 @@ export default function Updater(): null {
   )
 
   useEffect(() => {
-    if (!latestBlockNumber || !chainId || !multicallContract) return
+    if (!latestBlockNumber || !chainId || !multicall2Contract) return
 
     const outdatedCallKeys: string[] = JSON.parse(serializedOutdatedCallKeys)
     if (outdatedCallKeys.length === 0) return
     const calls = outdatedCallKeys.map((key) => parseCallKey(key))
 
-    const chunkedCalls = chunkArray(calls, CALL_CHUNK_SIZE)
+    const chunkedCalls = chunkArray(calls)
 
-    if (cancellations.current?.blockNumber !== latestBlockNumber) {
-      cancellations.current?.cancellations?.forEach((c) => c())
+    if (cancellations.current && cancellations.current.blockNumber !== latestBlockNumber) {
+      cancellations.current.cancellations.forEach((c) => c())
     }
 
     dispatch(
@@ -165,38 +162,64 @@ export default function Updater(): null {
     cancellations.current = {
       blockNumber: latestBlockNumber,
       cancellations: chunkedCalls.map((chunk, index) => {
-        const { cancel, promise } = retry(() => fetchChunk(multicallContract, chunk, latestBlockNumber), {
+        const { cancel, promise } = retry(() => fetchChunk(multicall2Contract, chunk, latestBlockNumber), {
           n: Infinity,
-          minWait: 2500,
-          maxWait: 3500,
+          minWait: 1000,
+          maxWait: 2500,
         })
         promise
           .then(({ results: returnData, blockNumber: fetchBlockNumber }) => {
-            cancellations.current = {
-              cancellations: [],
-              blockNumber: latestBlockNumber,
-            }
-
             // accumulates the length of all previous indices
             const firstCallKeyIndex = chunkedCalls.slice(0, index).reduce<number>((memo, curr) => memo + curr.length, 0)
             const lastCallKeyIndex = firstCallKeyIndex + returnData.length
 
-            dispatch(
-              updateMulticallResults({
-                chainId,
-                results: outdatedCallKeys.slice(firstCallKeyIndex, lastCallKeyIndex).reduce<{
-                  [callKey: string]: string | null
-                }>((memo, callKey, i) => {
-                  memo[callKey] = returnData[i] ?? null
-                  return memo
-                }, {}),
-                blockNumber: fetchBlockNumber,
-              })
+            const slice = outdatedCallKeys.slice(firstCallKeyIndex, lastCallKeyIndex)
+
+            // split the returned slice into errors and success
+            const { erroredCalls, results } = slice.reduce<{
+              erroredCalls: Call[]
+              results: { [callKey: string]: string | null }
+            }>(
+              (memo, callKey, i) => {
+                if (returnData[i].success) {
+                  memo.results[callKey] = returnData[i].returnData ?? null
+                } else {
+                  memo.erroredCalls.push(parseCallKey(callKey))
+                }
+                return memo
+              },
+              { erroredCalls: [], results: {} }
             )
+
+            // dispatch any new results
+            if (Object.keys(results).length > 0)
+              dispatch(
+                updateMulticallResults({
+                  chainId,
+                  results,
+                  blockNumber: fetchBlockNumber,
+                })
+              )
+
+            // dispatch any errored calls
+            if (erroredCalls.length > 0) {
+              console.debug('Calls errored in fetch', erroredCalls)
+              dispatch(
+                errorFetchingMulticallResults({
+                  calls: erroredCalls,
+                  chainId,
+                  fetchingBlockNumber: fetchBlockNumber,
+                })
+              )
+            }
+
+            if (fetchBlockNumber > latestBlockNumber) {
+              dispatch(updateBlockNumber({ chainId, blockNumber: fetchBlockNumber }))
+            }
           })
           .catch((error: any) => {
-            if (error instanceof CancelledError) {
-              console.debug('Cancelled fetch for blockNumber', latestBlockNumber)
+            if (error.isCancelledError) {
+              console.debug('Cancelled fetch for blockNumber', latestBlockNumber, chunk, chainId)
               return
             }
             console.error('Failed to fetch multicall chunk', chunk, chainId, error)
@@ -211,7 +234,7 @@ export default function Updater(): null {
         return cancel
       }),
     }
-  }, [chainId, multicallContract, dispatch, serializedOutdatedCallKeys, latestBlockNumber])
+  }, [chainId, multicall2Contract, dispatch, serializedOutdatedCallKeys, latestBlockNumber])
 
   return null
 }
