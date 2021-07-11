@@ -8,6 +8,7 @@ import {
   getOnePrice,
   getStakePrice,
   getSushiPrice,
+  getAvaxPrice,
   getTokens,
   getDayData,
   getFactory,
@@ -43,50 +44,91 @@ export function useFactory(variables = undefined, swrConfig: SWRConfiguration = 
   return data
 }
 
+export function useNativePrice(variables = undefined, chainId = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
+
+  // TODO: Check if all chains have correct native tokens (OKEX, FANTOM, CELO)
+  const map = {
+    [ChainId.MAINNET]: getEthPrice,
+    [ChainId.XDAI]: getStakePrice,
+    [ChainId.MATIC]: getEthPrice,
+    [ChainId.FANTOM]: getEthPrice,
+    [ChainId.BSC]: getEthPrice,
+    [ChainId.HARMONY]: getOnePrice,
+    [ChainId.OKEX]: getEthPrice,
+    [ChainId.AVALANCHE]: getAvaxPrice,
+    [ChainId.CELO]: getEthPrice,
+  }
+
+  const fetcher = map[chainId] ?? getEthPrice
+
+  const { data } = useSWR([fetcher.name, JSON.stringify(variables)], () => fetcher(variables), swrConfig)
+
+  return data
+}
+
 export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['ethPrice', JSON.stringify(variables)], () => getEthPrice(variables), swrConfig)
+  return data
+}
+
+export function useStakePrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['stakePrice', JSON.stringify(variables)], () => getStakePrice(variables), swrConfig)
+  return data
+}
+
+export function useOnePrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['onePrice', JSON.stringify(variables)], () => getOnePrice(variables), swrConfig)
+  return data
+}
+
+export function useAlcxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.MAINNET
   const { data } = useSWR(
-    chainId ? ['ethPrice', JSON.stringify(variables)] : null,
-    () => getEthPrice(chainId, variables),
+    shouldFetch ? ['aclxPrice', JSON.stringify(variables)] : null,
+    () => getAlcxPrice(variables),
     swrConfig
   )
   return data
 }
 
-export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
+export function useCvxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && chainId === ChainId.XDAI
-  const { data } = useSWR(shouldFetch ? 'stakePrice' : null, () => getStakePrice(), swrConfig)
+  const shouldFetch = chainId && chainId === ChainId.MAINNET
+  const { data } = useSWR(
+    shouldFetch ? ['cvxPrice', JSON.stringify(variables)] : null,
+    () => getCvxPrice(variables),
+    swrConfig
+  )
   return data
 }
 
-export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
+export function useMaticPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && chainId === ChainId.HARMONY
-  const { data } = useSWR(shouldFetch ? 'onePrice' : null, () => getOnePrice(), swrConfig)
+  const shouldFetch = chainId && chainId === ChainId.MATIC
+  const { data } = useSWR(
+    shouldFetch ? ['maticPrice', JSON.stringify(variables)] : null,
+    () => getMaticPrice(variables),
+    swrConfig
+  )
   return data
 }
 
-export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
+export function useAvaxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'aclxPrice' : null, () => getAlcxPrice(), swrConfig)
+  const shouldFetch = chainId && chainId === ChainId.AVALANCHE
+  const { data } = useSWR(
+    shouldFetch ? ['avaxPrice', JSON.stringify(variables)] : null,
+    () => getAvaxPrice(variables),
+    swrConfig
+  )
   return data
 }
 
-export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'cvxPrice' : null, () => getCvxPrice(), swrConfig)
-  return data
-}
-
-export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(chainId && chainId === ChainId.MATIC ? 'maticPrice' : null, () => getMaticPrice(), swrConfig)
-  return data
-}
-
-export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR('sushiPrice', () => getSushiPrice(), swrConfig)
+export function useSushiPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['sushiPrice', JSON.stringify(variables)], () => getSushiPrice(variables), swrConfig)
   return data
 }
 
@@ -100,8 +142,13 @@ export function useBundle(variables = undefined, swrConfig: SWRConfiguration = u
   return data
 }
 
-export function useLiquidityPositions(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useLiquidityPositions(
+  variables = undefined,
+  chainId = undefined,
+  swrConfig: SWRConfiguration = undefined
+) {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
   const shouldFetch = chainId
   const { data } = useSWR(
     shouldFetch ? ['liquidityPositions', chainId, JSON.stringify(variables)] : null,
@@ -111,8 +158,14 @@ export function useLiquidityPositions(variables = undefined, swrConfig: SWRConfi
   return data
 }
 
-export function useSushiPairs(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useSushiPairs(
+  variables = undefined,
+  query = undefined,
+  chainId = undefined,
+  swrConfig: SWRConfiguration = undefined
+) {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
   const shouldFetch = chainId
   const { data } = useSWR(
     shouldFetch ? ['sushiPairs', chainId, JSON.stringify(variables)] : null,

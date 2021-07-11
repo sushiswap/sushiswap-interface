@@ -5,8 +5,9 @@ import { ChainId } from '@sushiswap/sdk'
 import { getKashiPairs } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
 
-export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useKashiPairs(variables = undefined, chainId = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
 
   const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.MATIC)
 

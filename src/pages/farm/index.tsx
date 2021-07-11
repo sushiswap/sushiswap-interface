@@ -11,6 +11,7 @@ import {
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
+  useNativePrice,
   useOnePrice,
   useStakePrice,
   useSushiPairs,
@@ -62,14 +63,11 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice] = [
+  const [sushiPrice, nativePrice, alcxPrice, cvxPrice] = [
     useSushiPrice(),
-    useEthPrice(),
-    useMaticPrice(),
+    useNativePrice(),
     useAlcxPrice(),
     useCvxPrice(),
-    useStakePrice(),
-    useOnePrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -154,17 +152,17 @@ export default function Farm(): JSX.Element {
           [ChainId.MATIC]: {
             token: 'MATIC',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
-            rewardPrice: maticPrice,
+            rewardPrice: nativePrice,
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/stake.jpg',
-            rewardPrice: stakePrice,
+            rewardPrice: nativePrice,
           },
           [ChainId.HARMONY]: {
             token: 'ONE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
-            rewardPrice: onePrice,
+            rewardPrice: nativePrice,
           },
         }
 
@@ -185,12 +183,11 @@ export default function Farm(): JSX.Element {
     }
 
     const rewards = getRewards()
-
     const balance = swapPair ? Number(pool.balance / 1e18) : pool.balance / 10 ** kashiPair.token0.decimals
 
     const tvl = swapPair
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-      : balance * kashiPair.token0.derivedETH * ethPrice
+      : balance * kashiPair.token0.derivedETH * nativePrice
 
     const roiPerBlock =
       rewards.reduce((previousValue, currentValue) => {

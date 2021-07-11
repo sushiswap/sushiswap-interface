@@ -75,49 +75,57 @@ export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables)
   return token[0]?.derivedETH * ethPrice
 }
 
-export const getEthPrice = async (chainId = ChainId.MAINNET, variables = undefined) => {
+export const getNativePrice = async (chainId = ChainId.MAINNET, variables = undefined) => {
   // console.log('getEthPrice')
   const data = await getBundle(chainId, undefined, variables)
   return data?.bundles[0]?.ethPrice
 }
 
-export const getCvxPrice = async () => {
+export const getEthPrice = async (variables = undefined) => {
+  return getNativePrice(ChainId.MAINNET, variables)
+}
+
+export const getCvxPrice = async (variables = {}) => {
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b',
+    ...variables,
   })
 }
 
-export const getMaticPrice = async () => {
+export const getMaticPrice = async (variables = {}) => {
   // console.log('getMaticPrice')
   return getTokenPrice(ChainId.MATIC, tokenPriceQuery, {
     id: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    ...variables,
   })
 }
 
-export const getAlcxPrice = async () => {
+export const getAlcxPrice = async (variables = {}) => {
   // console.log('getAlcxPrice')
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+    ...variables,
   })
 }
 
-export const getSushiPrice = async () => {
+export const getSushiPrice = async (variables = {}) => {
   // console.log('getSushiPrice')
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
+    ...variables,
   })
 }
 
-export const getStakePrice = async () => {
-  return getTokenPrice(ChainId.XDAI, tokenPriceQuery, {
-    id: '0xb7d311e2eb55f2f68a9440da38e7989210b9a05e',
-  })
+export const getStakePrice = async (variables = undefined) => {
+  return getNativePrice(ChainId.XDAI, variables)
 }
 
-export const getOnePrice = async () => {
-  return getTokenPrice(ChainId.HARMONY, tokenPriceQuery, {
-    id: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
-  })
+export const getOnePrice = async (variables = undefined) => {
+  return getNativePrice(ChainId.HARMONY, variables)
+}
+
+export const getAvaxPrice = async (variables = undefined) => {
+  return getNativePrice(ChainId.AVALANCHE, variables)
 }
 
 export const getBundle = async (
