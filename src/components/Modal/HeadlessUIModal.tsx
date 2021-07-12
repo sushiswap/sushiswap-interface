@@ -8,7 +8,7 @@ interface ModalProps {
   children?: React.ReactNode
 }
 
-const HeadlesssUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
+const HeadlessUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
   return (
     <Transition.Root appear show={isOpen} as={Fragment}>
       <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={isOpen} onClose={onDismiss}>
@@ -52,4 +52,4 @@ const HeadlesssUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
   )
 }
 
-export default HeadlesssUIModal
+export default HeadlessUIModal

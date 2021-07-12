@@ -8,7 +8,7 @@ import { SUPPORTED_NETWORKS } from '../../modals/NetworkModal'
 import cookie from 'cookie-cutter'
 import { useLingui, Trans } from '@lingui/react'
 import { t } from '@lingui/macro'
-import HeadlesssUIModal from '../../components/Modal/HeadlesssUIModal'
+import HeadlessUIModal from '../../components/Modal/HeadlessUIModal'
 import NavLink from '../../components/NavLink'
 
 interface NetworkGuardProps {
@@ -27,7 +27,7 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
 
   return (
     <>
-      <HeadlesssUIModal isOpen={account && !networks.includes(chainId)} onDismiss={() => null}>
+      <HeadlessUIModal isOpen={account && !networks.includes(chainId)} onDismiss={() => null}>
         <div className="flex flex-col gap-7 justify-center">
           <Typography variant="h1" className="max-w-2xl text-white text-center" weight={700}>
             {i18n._(t`Roll it back - this feature is not yet supported on ${NETWORK_LABEL[chainId]}.`)}
@@ -76,7 +76,7 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
             ))}
           </div>
         </div>
-      </HeadlesssUIModal>
+      </HeadlessUIModal>
       {children}
     </>
   )
