@@ -424,8 +424,6 @@ export function useSwapCallback(
               params: [signedTx],
             })
 
-            console.log(`Body to sign:`, body)
-
             // For signing the message we restore proper behavior if on MetaMask
             // ethers will change eth_sign to personal_sign if it detects metamask
             // https://github.com/ethers-io/ethers.js/blob/2a7dbf05718e29e550f7a208d35a095547b9ccc2/packages/providers/src.ts/web3-provider.ts#L33
@@ -437,7 +435,10 @@ export function useSwapCallback(
             // Restore back behavior
             if (isMetamask) library.provider.isMetaMask = false
 
+            console.group(`postToManifoldRelay`)
             console.log(`Sending to URI: ${relayURI} with X-Manifold-Signature: ${signer}:${signedPayload}`)
+            console.log(`Body:`, body)
+            console.groupEnd()
 
             return fetch(relayURI, {
               method: 'POST',
@@ -584,10 +585,8 @@ export function useSwapCallback(
                 : undefined
 
               if (archer) {
-                console.log('archer', archer)
                 await postToArcherRelay(archer.rawTransaction, archer.deadline)
               } else if (manifold) {
-                console.log('manifold', manifold)
                 await postToManifoldRelay(manifold.signedTx, isMetamask)
               }
 
