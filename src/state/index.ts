@@ -2,8 +2,10 @@ import { Action, ThunkAction, combineReducers, configureStore, getDefaultMiddlew
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist'
 
 import application from './application/reducer'
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import burn from './burn/reducer'
 import create from './create/reducer'
+import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
 import lists from './lists/reducer'
 import mint from './mint/reducer'
 import multicall from './multicall/reducer'
@@ -14,14 +16,16 @@ import { updateVersion } from './global/actions'
 import user from './user/reducer'
 import zap from './zap/reducer'
 
-const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
+// const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
+const PERSISTED_KEYS: string[] = ['user', 'transactions']
 
 const persistConfig = {
   key: 'root',
-  version: 1,
+  // version: 1,
   whitelist: PERSISTED_KEYS,
   throttle: 1000,
   storage,
+  debug: process.env.NODE_ENV === 'development',
 }
 
 const reducer = combineReducers({

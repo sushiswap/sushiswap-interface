@@ -26,23 +26,22 @@ const WRAPPED_LIST = 'wrapped.tokensoft.eth'
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] = [
-  OPYN_LIST,
-  NFTX_LIST_V1,
-  NFTX_LIST_V2,
   COMPOUND_LIST,
-  YEARN_LIST,
   AAVE_LIST,
-  OPTIMISM_LIST,
   CMC_ALL_LIST,
   CMC_STABLECOIN,
-  UMA_LIST,
   WRAPPED_LIST,
+  YEARN_LIST,
+  UMA_LIST,
+  SYNTHETIX_LIST,
+  NFTX_LIST_V1,
+  NFTX_LIST_V2,
   SET_LIST,
   ROLL_LIST,
   COINGECKO_LIST,
   KLEROS_LIST,
   GEMINI_LIST,
-  SYNTHETIX_LIST,
+  OPYN_LIST,
   ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
 ]
 
