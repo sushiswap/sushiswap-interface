@@ -1,75 +1,118 @@
-import { ArrowLeftIcon } from '@heroicons/react/solid'
-import HistoryLink from 'next/link'
-import { Percent } from '@sushiswap/sdk'
+import { darken } from 'polished'
 import React from 'react'
-import { RowBetween } from '../Row'
-import SettingsTab from '../Settings'
-import { resetMintState } from '../../state/mint/actions'
-import styled from 'styled-components'
+import { ArrowLeft } from 'react-feather'
 import { t } from '@lingui/macro'
-import { useAppDispatch } from '../../state/hooks'
+import { useDispatch } from 'react-redux'
+import { Link as HistoryLink, NavLink } from 'react-router-dom'
+import { AppDispatch } from 'state'
+import { resetMintState } from 'state/mint/actions'
+import styled from 'styled-components'
+import { RowBetween } from '../Row'
+import Settings from '../Settings'
 import { useLingui } from '@lingui/react'
 
 const Tabs = styled.div`
-  display: flex;
-  flex-wrap: no-wrap;
-  align-items: center;
-  border-radius: 3rem;
-  justify-content: space-evenly;
+    ${({ theme }) => theme.flexRowNoWrap}
+    align-items: center;
+    border-radius: 3rem;
+    justify-content: space-evenly;
 `
 
-export function FindPoolTabs() {
-  const { i18n } = useLingui()
+const activeClassName = 'ACTIVE'
 
-  return (
-    <Tabs>
-      <RowBetween className="items-center text-xl">
-        <HistoryLink href="/pool">
-          <a>
-            <ArrowLeftIcon width="1em" height="1em" />
-          </a>
-        </HistoryLink>
-        <div className="font-semibold">{i18n._(t`Import Pool`)}</div>
-      </RowBetween>
-    </Tabs>
-  )
+const StyledNavLink = styled(NavLink).attrs({
+    activeClassName
+})`
+    ${({ theme }) => theme.flexRowNoWrap}
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    border-radius: 3rem;
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    color: ${({ theme }) => theme.text3};
+    font-size: 20px;
+
+    &.${activeClassName} {
+        border-radius: ${({ theme }) => theme.borderRadius};
+        font-weight: 500;
+        color: ${({ theme }) => theme.text1};
+    }
+
+    :hover,
+    :focus {
+        color: ${({ theme }) => darken(0.1, theme.text1)};
+    }
+`
+
+const ActiveText = styled.div`
+    font-weight: 500;
+    font-size: 20px;
+`
+
+const StyledArrowLeft = styled(ArrowLeft)`
+    color: ${({ theme }) => theme.text1};
+`
+
+// This seems to be legacy code, should we remove this? Notice the display: 'none'
+export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
+    const { i18n } = useLingui()
+
+    return (
+        <Tabs style={{ marginBottom: '20px', display: 'none' }}>
+            <StyledNavLink id={`swap-nav-link`} to={'/swap'} isActive={() => active === 'swap'}>
+                {i18n._(t`Swap`)}
+            </StyledNavLink>
+            <StyledNavLink id={`pool-nav-link`} to={'/pool'} isActive={() => active === 'pool'}>
+                {i18n._(t`Pool`)}
+            </StyledNavLink>
+        </Tabs>
+    )
 }
 
-export function AddRemoveTabs({
-  adding,
-  creating,
-  defaultSlippage,
-}: {
-  adding: boolean
-  creating: boolean
-  defaultSlippage: Percent
-}) {
-  const { i18n } = useLingui()
+export function FindPoolTabs() {
+    const { i18n } = useLingui()
 
-  // reset states on back
-  const dispatch = useAppDispatch()
+    return (
+        <Tabs>
+            <RowBetween style={{ padding: '1rem 1rem 0 1rem' }}>
+                <HistoryLink to="/pool">
+                    <StyledArrowLeft />
+                </HistoryLink>
+                <ActiveText>{i18n._(t`Import Pool`)}</ActiveText>
+                <Settings />
+            </RowBetween>
+        </Tabs>
+    )
+}
 
-  return (
-    <Tabs>
-      <RowBetween className="items-center text-xl">
-        <HistoryLink href="/add">
-          <a
-            onClick={() => {
-              if (adding) {
-                // not 100% sure both of these are needed
-                dispatch(resetMintState())
-              }
-            }}
-            className="flex items-center"
-          >
-            <ArrowLeftIcon width="1em" height="1em" />
-          </a>
-        </HistoryLink>
-        <div className="font-semibold">
-          {creating ? i18n._(t`Create a pair`) : adding ? i18n._(t`Add Liquidity`) : i18n._(t`Remove Liquidity`)}
-        </div>
-        <SettingsTab placeholderSlippage={defaultSlippage} />
-      </RowBetween>
-    </Tabs>
-  )
+export function AddRemoveTabs({ adding, creating }: { adding: boolean; creating: boolean }) {
+    const { i18n } = useLingui()
+
+    // reset states on back
+    const dispatch = useDispatch<AppDispatch>()
+
+    return (
+        <Tabs>
+            <RowBetween style={{ padding: '1rem 1rem 0 1rem' }}>
+                <HistoryLink
+                    to="/pool"
+                    onClick={() => {
+                        adding && dispatch(resetMintState())
+                    }}
+                >
+                    <StyledArrowLeft />
+                </HistoryLink>
+                <ActiveText>
+                    {creating
+                        ? i18n._(t`Create a pair`)
+                        : adding
+                        ? i18n._(t`Add Liquidity`)
+                        : i18n._(t`Remove Liquidity`)}
+                </ActiveText>
+                <Settings />
+            </RowBetween>
+        </Tabs>
+    )
 }

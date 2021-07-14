@@ -1,136 +1,159 @@
-import { Menu, Transition } from '@headlessui/react'
+import { MenuFlyout, StyledMenu, StyledMenuButton } from 'components/StyledMenu'
+import React, { memo, useRef } from 'react'
+import styled from 'styled-components'
+import ChFlag from '../../assets/images/ch-flag.png'
+import DeFlag from '../../assets/images/de-flag.png'
+import EnFlag from '../../assets/images/en-flag.png'
+import EsFlag from '../../assets/images/es-flag.png'
+import ItFlag from '../../assets/images/it-flag.png'
+import HeFlag from '../../assets/images/he-flag.png'
+import RoFlag from '../../assets/images/ro-flag.png'
+import RuFlag from '../../assets/images/ru-flag.png'
+import ViFlag from '../../assets/images/vi-flag.png'
+import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { ApplicationModal } from '../../state/application/actions'
+import { useModalOpen, useToggleModal } from '../../state/application/hooks'
+import { useLanguageData } from '../../language/hooks'
 
-import { ChevronDownIcon } from '@heroicons/react/solid'
-import { Fragment } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { classNames } from '../../functions'
-import { t } from '@lingui/macro'
-import { useRouter } from 'next/router'
+const ExtendedStyledMenuButton = styled(StyledMenuButton)`
+    border: 2px solid rgb(23, 21, 34);
+    border-radius: 10px;
+    font-size: 1.25rem;
+    height: 40px;
 
-const LANGUAGES: {
-  [x: string]: { flag: string; language: string; dialect?: string }
-} = {
-  en: {
-    flag: '/images/flags/en-flag.png',
-    language: t`English`,
-  },
-  de: {
-    flag: '/images/flags/de-flag.png',
-    language: t`German`,
-  },
-  it: {
-    flag: '/images/flags/it-flag.png',
-    language: t`Italian`,
-  },
-  ru: {
-    flag: '/images/flags/ru-flag.png',
-    language: t`Russian`,
-  },
-  ro: {
-    flag: '/images/flags/ro-flag.png',
-    language: t`Romanian`,
-  },
-  vi: {
-    flag: '/images/flags/vi-flag.png',
-    language: t`Vietnamese`,
-  },
-  'zh-CN': {
-    flag: '/images/flags/ch-flag.png',
-    language: t`Chinese`,
-    dialect: '简',
-  },
-  'zh-TW': {
-    flag: '/images/flags/ch-flag.png',
-    language: t`Chinese`,
-    dialect: '繁',
-  },
-  es: {
-    flag: '/images/flags/es-flag.png',
-    language: t`Spanish`,
-  },
-  'es-AR': {
-    flag: '/images/flags/es-flag.png',
-    language: t`Spanish`,
-    dialect: 'AR',
-  },
-  ko: {
-    flag: '/images/flags/ko-flag.png',
-    language: t`Korean`,
-  },
-  ja: {
-    flag: '/images/flags/ja-flag.png',
-    language: t`Japanese`,
-  },
-  fr: {
-    flag: '/images/flags/fr-flag.png',
-    language: t`French`,
-  },
+    &:hover {
+        border-color: rgb(33, 34, 49);
+    }
+`
+
+const ExtendedMenuFlyout = styled(MenuFlyout)`
+    min-width: 10rem;
+    ${({ theme }) => theme.mediaWidth.upToMedium`
+    max-height: 232px;
+    overflow: auto;
+    min-width: 11rem;
+    top: -16.5rem;
+  `};
+`
+
+const MenuItem = styled.span`
+    align-items: center;
+    flex: 1;
+    //display: flex;
+    padding: 0.5rem 0.5rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.text2};
+    :hover {
+        color: ${({ theme }) => theme.text1};
+        cursor: pointer;
+        text-decoration: none;
+    }
+    > svg {
+        margin-right: 8px;
+    }
+`
+
+const MenuItemFlag = styled.img`
+    display: inline;
+    margin-right: 0.625rem;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+`
+
+const MenuButtonFlag = styled.img`
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+`
+
+// Use https://onlineunicodetools.com/convert-unicode-to-image to convert
+// Unicode flags to png as Windows does not support Unicode flags
+// Use 24px as unicode characters font size
+const LANGUAGES: { [x: string]: { flag: string; language: string; dialect?: string } } = {
+    en: {
+        flag: EnFlag,
+        language: 'English'
+    },
+    de: {
+        flag: DeFlag,
+        language: 'German'
+    },
+    it: {
+        flag: ItFlag,
+        language: 'Italian'
+    },
+    he: {
+        flag: HeFlag,
+        language: 'Hebrew'
+    },
+    ru: {
+        flag: RuFlag,
+        language: 'Russian'
+    },
+    ro: {
+        flag: RoFlag,
+        language: 'Romanian'
+    },
+    vi: {
+        flag: ViFlag,
+        language: 'Vietnamese'
+    },
+    'zh-CN': {
+        flag: ChFlag,
+        language: 'Chinese',
+        dialect: '简'
+    },
+    'zh-TW': {
+        flag: ChFlag,
+        language: 'Chinese',
+        dialect: '繁'
+    },
+    es: {
+        flag: EsFlag,
+        language: 'Spanish'
+    },
+    'es-AR': {
+        flag: EsFlag,
+        language: 'Spanish',
+        dialect: 'AR'
+    }
 }
 
-export default function LangSwitcher() {
-  const { locale, locales, asPath } = useRouter()
-  return (
-    <Menu as="div" className="relative inline-block text-right">
-      {({ open }) => (
-        <>
-          <div>
-            <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
-              <Image src={LANGUAGES[locale].flag} alt={LANGUAGES[locale].language} width={20} height={20} />
-              <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
-            </Menu.Button>
-          </div>
+function LanguageSwitch() {
+    const node = useRef<HTMLDivElement>(null)
+    const open = useModalOpen(ApplicationModal.LANGUAGE)
+    const toggle = useToggleModal(ApplicationModal.LANGUAGE)
+    useOnClickOutside(node, open ? toggle : undefined)
+    const { language, setLanguage } = useLanguageData()
 
-          <Transition
-            show={open}
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="absolute right-0 w-[161px] mt-2 origin-top-right divide-y divide-dark-600 rounded shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="p-2 space-y-2">
-                {locales.map((locale) => {
-                  const { flag, language, dialect } = LANGUAGES[locale]
-                  return (
-                    <Menu.Item key={locale}>
-                      {({ active }) => (
-                        <Link href={asPath} locale={locale}>
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? 'bg-dark-700 text-high-emphesis' : 'text-primary',
-                              'group flex items-center px-4 py-2 text-sm hover:bg-dark-700 focus:bg-dark-700 rounded'
-                            )}
-                          >
-                            <Image
-                              className="inline w-3 h-3 mr-1 align-middle"
-                              src={flag}
-                              width={20}
-                              height={20}
-                              alt={language}
-                              aria-hidden="true"
-                            />
-                            <span className="ml-4">{language}</span>
+    const onClick = (key: string) => {
+        setLanguage(key)
+        toggle()
+    }
+
+    return (
+        <StyledMenu ref={node}>
+            <ExtendedStyledMenuButton onClick={toggle}>
+                <MenuButtonFlag src={LANGUAGES[language]?.flag} alt={LANGUAGES[language]?.language} />
+            </ExtendedStyledMenuButton>
+            {open && (
+                <ExtendedMenuFlyout>
+                    {Object.entries(LANGUAGES).map(([key, { flag, language, dialect }]) => (
+                        <MenuItem onClick={() => onClick(key)} key={key}>
+                            <MenuItemFlag src={flag} alt={language} />
+                            {language}{' '}
                             {dialect && (
-                              <sup>
-                                <small>{dialect}</small>
-                              </sup>
+                                <sup>
+                                    <small>{dialect}</small>
+                                </sup>
                             )}
-                          </a>
-                        </Link>
-                      )}
-                    </Menu.Item>
-                  )
-                })}
-              </div>
-            </Menu.Items>
-          </Transition>
-        </>
-      )}
-    </Menu>
-  )
+                        </MenuItem>
+                    ))}
+                </ExtendedMenuFlyout>
+            )}
+        </StyledMenu>
+    )
 }
+
+export default memo(LanguageSwitch)

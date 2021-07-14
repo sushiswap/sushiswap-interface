@@ -1,44 +1,34 @@
-import { IconProps } from 'react-feather'
-import React, { FC, useState } from 'react'
-
-import Image from '../Image'
-import { classNames } from '../../functions'
-import { cloudinaryLoader } from '../../functions/cloudinary'
+import React, { useState } from 'react'
+import { HelpCircle } from 'react-feather'
+import { ImageProps } from 'rebass'
 
 const BAD_SRCS: { [tokenAddress: string]: true } = {}
 
-export type LogoProps = {
-  srcs: string[]
-  width: string | number
-  height: string | number
-  alt?: string
-} & IconProps
+export interface LogoProps extends Pick<ImageProps, 'style' | 'alt' | 'className'> {
+    srcs: string[]
+}
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
-const Logo: FC<LogoProps> = ({ srcs, width, height, style, alt = '', className, ...rest }) => {
-  const [, refresh] = useState<number>(0)
-  const src = srcs.find((src) => !BAD_SRCS[src])
-  return (
-    <div className="rounded" style={{ width, height }}>
-      <Image
-        src={src || 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'}
-        loader={cloudinaryLoader}
-        onError={() => {
-          if (src) BAD_SRCS[src] = true
-          refresh((i) => i + 1)
-        }}
-        width={width}
-        height={height}
-        alt={alt}
-        layout="fixed"
-        className={classNames('rounded', className)}
-        style={style}
-        {...rest}
-      />
-    </div>
-  )
-}
+export default function Logo({ srcs, alt, ...rest }: LogoProps) {
+    const [, refresh] = useState<number>(0)
 
-export default Logo
+    const src: string | undefined = srcs.find(src => !BAD_SRCS[src])
+
+    if (src) {
+        return (
+            <img
+                {...rest}
+                alt={alt}
+                src={src}
+                onError={() => {
+                    if (src) BAD_SRCS[src] = true
+                    refresh(i => i + 1)
+                }}
+            />
+        )
+    }
+
+    return <HelpCircle {...rest} />
+}

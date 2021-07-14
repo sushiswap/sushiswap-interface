@@ -1,42 +1,83 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
-
-import { useCallback } from 'react'
-import { useSushiBarContract } from '../hooks/useContract'
+import { ethers } from 'ethers'
+import { useCallback, useEffect, useState } from 'react'
+import Fraction from '../entities/Fraction'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useSushiBarContract, useSushiContract } from '../hooks/useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { BalanceProps } from './useTokenBalance'
+
+const { BigNumber } = ethers
 
 const useSushiBar = () => {
-  const addTransaction = useTransactionAdder()
-  const barContract = useSushiBarContract()
+    const { account } = useActiveWeb3React()
+    const addTransaction = useTransactionAdder()
+    const sushiContract = useSushiContract(true) // withSigner
+    const barContract = useSushiBarContract(true) // withSigner
 
-  const enter = useCallback(
-    async (amount: CurrencyAmount<Token> | undefined) => {
-      if (amount?.quotient) {
-        try {
-          const tx = await barContract?.enter(amount?.quotient.toString())
-          return addTransaction(tx, { summary: 'Enter SushiBar' })
-        } catch (e) {
-          return e
+    const [allowance, setAllowance] = useState('0')
+
+    const fetchAllowance = useCallback(async () => {
+        if (account) {
+            try {
+                const allowance = await sushiContract?.allowance(account, barContract?.address)
+                const formatted = Fraction.from(BigNumber.from(allowance), BigNumber.from(10).pow(18)).toString()
+                setAllowance(formatted)
+            } catch (error) {
+                setAllowance('0')
+                throw error
+            }
         }
-      }
-    },
-    [addTransaction, barContract]
-  )
+    }, [account, barContract, sushiContract])
 
-  const leave = useCallback(
-    async (amount: CurrencyAmount<Token> | undefined) => {
-      if (amount?.quotient) {
-        try {
-          const tx = await barContract?.leave(amount?.quotient.toString())
-          return addTransaction(tx, { summary: 'Leave SushiBar' })
-        } catch (e) {
-          return e
+    useEffect(() => {
+        if (account && barContract && sushiContract) {
+            fetchAllowance()
         }
-      }
-    },
-    [addTransaction, barContract]
-  )
+        const refreshInterval = setInterval(fetchAllowance, 10000)
+        return () => clearInterval(refreshInterval)
+    }, [account, barContract, fetchAllowance, sushiContract])
 
-  return { enter, leave }
+    const approve = useCallback(async () => {
+        try {
+            const tx = await sushiContract?.approve(barContract?.address, ethers.constants.MaxUint256.toString())
+            return addTransaction(tx, { summary: 'Approve' })
+        } catch (e) {
+            return e
+        }
+    }, [addTransaction, barContract, sushiContract])
+
+    const enter = useCallback(
+        // todo: this should be updated with BigNumber as opposed to string
+        async (amount: BalanceProps | undefined) => {
+            if (amount?.value) {
+                try {
+                    const tx = await barContract?.enter(amount?.value)
+                    return addTransaction(tx, { summary: 'Enter SushiBar' })
+                } catch (e) {
+                    return e
+                }
+            }
+        },
+        [addTransaction, barContract]
+    )
+
+    const leave = useCallback(
+        // todo: this should be updated with BigNumber as opposed to string
+        async (amount: BalanceProps | undefined) => {
+            if (amount?.value) {
+                try {
+                    const tx = await barContract?.leave(amount?.value)
+                    //const tx = await barContract?.leave(ethers.utils.parseUnits(amount)) // where amount is string
+                    return addTransaction(tx, { summary: 'Leave SushiBar' })
+                } catch (e) {
+                    return e
+                }
+            }
+        },
+        [addTransaction, barContract]
+    )
+
+    return { allowance, approve, enter, leave }
 }
 
 export default useSushiBar
