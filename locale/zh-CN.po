@@ -575,7 +575,7 @@ msgstr "进入"
 msgid "Enter Amount"
 msgstr "输入金额"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "输入接收人"
 
@@ -585,7 +585,7 @@ msgstr "输入有效的滑点百分比"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "输入金额"
 
@@ -786,7 +786,7 @@ msgstr "该交易的流动性不足"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "代币{0}余额不足"
 
@@ -799,7 +799,7 @@ msgstr "交互设置"
 msgid "Invalid pair"
 msgstr "无效的代币对"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "无效接收人"
 
@@ -1357,7 +1357,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "选择通证"
 

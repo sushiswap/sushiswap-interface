@@ -579,7 +579,7 @@ msgstr "入力"
 msgid "Enter Amount"
 msgstr "金額を入力"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "受領者を入力"
 
@@ -589,7 +589,7 @@ msgstr "有効なスリッページの割合を入力"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "金額を入力"
 
@@ -805,7 +805,7 @@ msgstr "この取引の流動性が不足しています"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "{0}の残高が不足しています"
 
@@ -818,7 +818,7 @@ msgstr "インターフェース設定"
 msgid "Invalid pair"
 msgstr "ペアが無効です"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "受領者が無効です"
 
@@ -1381,7 +1381,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "トークンを選択"
 

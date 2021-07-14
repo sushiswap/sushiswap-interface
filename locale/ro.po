@@ -586,7 +586,7 @@ msgstr "Introduceți"
 msgid "Enter Amount"
 msgstr "Introduceți suma"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "Introduceți un destinatar"
 
@@ -596,7 +596,7 @@ msgstr "Introduceți un procent de derapaj valid"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "Introduceți o sumă"
 
@@ -822,7 +822,7 @@ msgstr "Lichidități insuficiente pentru această tranzacție"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "Sold {0} insuficient"
 
@@ -835,7 +835,7 @@ msgstr "Setări interfață"
 msgid "Invalid pair"
 msgstr "Pereche nevalidă"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "Destinatar nevalid"
 
@@ -1386,7 +1386,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr ""
 

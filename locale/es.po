@@ -582,7 +582,7 @@ msgstr "Introducir"
 msgid "Enter Amount"
 msgstr "Introduzca la cantidad"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "Introduzca un destinatario"
 
@@ -592,7 +592,7 @@ msgstr "Introduzca un porcentaje de deslizamiento válido"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "Introduzca una cantidad"
 
@@ -808,7 +808,7 @@ msgstr "Liquidez insuficiente para esta operación"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "Saldo {0} insuficiente"
 
@@ -821,7 +821,7 @@ msgstr "Configuración de la interfaz"
 msgid "Invalid pair"
 msgstr "Par inválido"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "Destinatario no válido"
 
@@ -1384,7 +1384,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "Seleccione un token"
 

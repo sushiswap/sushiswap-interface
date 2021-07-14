@@ -582,7 +582,7 @@ msgstr "Nhập"
 msgid "Enter Amount"
 msgstr "Nhập số tiền"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "Nhập người nhận"
 
@@ -592,7 +592,7 @@ msgstr "Nhập phần trăm trượt giá hợp lệ"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "Nhập số tiền"
 
@@ -814,7 +814,7 @@ msgstr "Không đủ thanh khoản cho giao dịch này"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "Số dư {0} không đủ"
 
@@ -827,7 +827,7 @@ msgstr "Cài đặt giao diện"
 msgid "Invalid pair"
 msgstr "Cặp không hợp lệ"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "Người nhận không hợp lệ"
 
@@ -1393,7 +1393,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "Chọn một token"
 

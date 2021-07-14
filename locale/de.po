@@ -579,7 +579,7 @@ msgstr "Eingeben"
 msgid "Enter Amount"
 msgstr "Menge eingeben"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "Geben Sie einen Empfänger ein"
 
@@ -589,7 +589,7 @@ msgstr "Geben Sie einen gültigen Slippage-Prozentsatz ein"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "Geben Sie einen Betrag ein"
 
@@ -809,7 +809,7 @@ msgstr "Unzureichende Liquidität für diesen Trade"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "Zu wenig {0} Guthaben"
 
@@ -822,7 +822,7 @@ msgstr "Schnittstelleneinstellungen"
 msgid "Invalid pair"
 msgstr "Ungültiges Paar"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "Ungültiger Empfänger"
 
@@ -1385,7 +1385,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "Wählen Sie einen Token aus"
 

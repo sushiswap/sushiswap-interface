@@ -579,7 +579,7 @@ msgstr "입력"
 msgid "Enter Amount"
 msgstr "금액 입력"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "수신자 입력"
 
@@ -589,7 +589,7 @@ msgstr "유효한 슬리피지 비율 입력"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "금액 입력"
 
@@ -799,7 +799,7 @@ msgstr "이 거래를 위한 유동성 부족"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "{0} 잔액 부족"
 
@@ -812,7 +812,7 @@ msgstr "인터페이스 설정"
 msgid "Invalid pair"
 msgstr "잘못된 쌍"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "잘못된 수신자"
 
@@ -1375,7 +1375,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "토큰 선택"
 

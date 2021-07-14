@@ -591,7 +591,7 @@ msgstr "Enter"
 msgid "Enter Amount"
 msgstr "Enter Amount"
 
-#: src/state/swap/hooks.ts:192
+#: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "Enter a recipient"
 
@@ -601,7 +601,7 @@ msgstr "Enter a valid slippage percentage"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:183
+#: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
 msgstr "Enter an amount"
 
@@ -826,7 +826,7 @@ msgstr "Insufficient liquidity for this trade"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:209
+#: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "Insufficient {0} balance"
 
@@ -839,7 +839,7 @@ msgstr "Interface Settings"
 msgid "Invalid pair"
 msgstr "Invalid pair"
 
-#: src/state/swap/hooks.ts:199
+#: src/state/swap/hooks.ts:202
 msgid "Invalid recipient"
 msgstr "Invalid recipient"
 
@@ -1409,7 +1409,7 @@ msgstr "Select a collateral token"
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/state/swap/hooks.ts:187
+#: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "Select a token"
 

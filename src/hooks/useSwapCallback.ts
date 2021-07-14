@@ -476,7 +476,7 @@ export function useSwapCallback(
               // let the wallet try if we can't estimate the gas
               ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
               ...(value && !isZero(value) ? { value } : {}),
-              ...(archerRelayDeadline && !eip1559 ? { gasPrice: 0 } : {}),
+              ...(!useManifold && !archerRelayDeadline && !eip1559 ? { gasPrice: 0 } : {}),
             })
           })
 
