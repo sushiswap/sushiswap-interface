@@ -48,6 +48,7 @@ interface CurrencySearchProps {
   showImportView: () => void
   setImportToken: (token: Token) => void
   currencyList?: string[]
+  includeNativeCurrency?: boolean
 }
 
 export function CurrencySearch({
@@ -61,6 +62,7 @@ export function CurrencySearch({
   showImportView,
   setImportToken,
   currencyList,
+  includeNativeCurrency = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -218,7 +220,7 @@ export function CurrencySearch({
             {({ height }) => (
               <CurrencyList
                 height={height}
-                currencies={filteredSortedTokensWithETH}
+                currencies={includeNativeCurrency ? filteredSortedTokensWithETH : filteredSortedTokens}
                 otherListTokens={filteredInactiveTokens}
                 onCurrencySelect={handleCurrencySelect}
                 otherCurrency={otherSelectedCurrency}

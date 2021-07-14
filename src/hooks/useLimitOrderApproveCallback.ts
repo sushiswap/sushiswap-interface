@@ -10,7 +10,8 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { Token } from '@sushiswap/sdk'
 import { getSignatureWithProviderBentobox, getVerifyingContract } from 'limitorderv2-sdk'
 import { Field } from '../state/swap/actions'
-import { ZERO } from '../functions'
+import { calculateGasMargin, ZERO } from '../functions'
+import { MaxUint256 } from '@ethersproject/constants'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -150,9 +151,24 @@ const useLimitOrderApproveCallback = () => {
       const {
         signature: { v, r, s },
       } = limitOrderPermit
+
+      const estimatedGas = await limitOrderHelperContract?.estimateGas.depositAndApprove(
+        account,
+        masterContract,
+        true,
+        v,
+        r,
+        s,
+        {
+          value: amount,
+        }
+      )
+
       const tx = await limitOrderHelperContract?.depositAndApprove(account, masterContract, true, v, r, s, {
         value: amount,
+        gasLimit: calculateGasMargin(estimatedGas),
       })
+
       addTransaction(tx, { summary: summary.join('') })
       setLimitOrderPermit(undefined)
       return tx

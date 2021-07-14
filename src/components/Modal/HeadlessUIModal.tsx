@@ -15,10 +15,10 @@ const HeadlessUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
         <div className="relative flex items-center justify-center min-h-screen text-center block">
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-300"
+            enter="ease-out duration-100"
             enterFrom="opacity-0"
             enterTo="opacity-40"
-            leave="ease-in duration-200"
+            leave="ease-in duration-100"
             leaveFrom="opacity-40"
             leaveTo="opacity-0"
           >
@@ -35,10 +35,10 @@ const HeadlessUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
 
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-300"
+            enter="ease-out duration-100"
             enterFrom="opacity-0"
             enterTo="opacity-40"
-            leave="ease-in duration-200"
+            leave="ease-in duration-100"
             leaveFrom="opacity-40"
             leaveTo="opacity-0"
           >

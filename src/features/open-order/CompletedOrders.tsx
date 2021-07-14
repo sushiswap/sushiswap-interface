@@ -38,7 +38,7 @@ const CompletedOrders: FC = () => {
               </div>
               <div className="flex items-center cursor-pointer hover:text-primary justify-end">{i18n._(t`Filled`)}</div>
             </div>
-            <div className="flex flex-col-reverse gap-2 md:gap-5">
+            <div className="flex flex-col gap-2 md:gap-5">
               {completed.data.map((order, index) => (
                 <div
                   key={index}

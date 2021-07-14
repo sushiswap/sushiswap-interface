@@ -141,7 +141,7 @@ function LimitOrder() {
         (dependentField === Field.INPUT ? currencies[Field.INPUT] : currencies[Field.OUTPUT]) ?? undefined
       )
 
-      if (parsedLimitPrice?.lessThan(parsedCurrentPrice?.quotient)) {
+      if (parsedLimitPrice?.lessThan(parsedCurrentPrice)) {
         setCurrencyInputPanelError(i18n._(t`This transaction is below market rate`))
       } else {
         setCurrencyInputPanelError('')
@@ -207,6 +207,7 @@ function LimitOrder() {
     }, [])
   }, [currencies, pairs])
 
+  console.log(currencyInputPanelError)
   return (
     <>
       <Head>
@@ -280,7 +281,7 @@ function LimitOrder() {
                     </div>
                   </button>
                 </div>
-                <LimitPriceInputPanel onBlur={checkLimitPrice} />
+                <LimitPriceInputPanel onBlur={(val) => checkLimitPrice(val)} />
               </div>
               <CurrencyInputPanel
                 className="relative z-1 rounded"
@@ -293,6 +294,7 @@ function LimitOrder() {
                     label={i18n._(t`You receive:`)}
                     onSelect={handleOutputSelect}
                     currencyList={outputTokenList}
+                    includeNativeCurrency={false}
                   />
                 }
                 inputComponent={

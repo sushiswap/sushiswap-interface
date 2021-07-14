@@ -29,8 +29,8 @@ const CurrencyInput: FC<CurrencyInputProps> = ({
   return (
     <div
       className={classNames(
-        error ? 'border-red border-opacity-40 hover:border-opacity-100' : '',
-        'border border-transparent flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 px-3 sm:w-3/5'
+        error ? 'border-red border-opacity-40 hover:border-opacity-100' : 'border-transparent',
+        'border flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 px-3 sm:w-3/5'
       )}
     >
       <>

@@ -112,8 +112,8 @@ const useLimitOrders = () => {
       const limitOrder = LimitOrder.getLimitOrder({
         ...order,
         chainId: +order.chainId,
-        tokenInDecimals: +order.tokenInDecimals || 18,
-        tokenOutDecimals: +order.tokenOutDecimals || 18,
+        tokenInDecimals: +order.tokenInDecimals,
+        tokenOutDecimals: +order.tokenOutDecimals,
       })
 
       const tokenIn = limitOrder.amountIn.currency
@@ -131,8 +131,9 @@ const useLimitOrders = () => {
           ? order.filledAmount.mul(BigNumber.from('100')).div(BigNumber.from(order.amountIn)).toString()
           : '0',
         status: order.status,
-        rate: new Percent(limitOrder.amountIn.quotient, denominator(tokenIn.decimals))
-          .divide(new Percent(limitOrder.amountOut.quotient, denominator(tokenOut.decimals)))
+        rate: new Percent(limitOrder.amountOut.quotient, denominator(tokenOut.decimals))
+          .divide(new Percent(limitOrder.amountIn.quotient, denominator(tokenIn.decimals)))
+          .divide(denominator(2))
           .toSignificant(6),
       }
 
