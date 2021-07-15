@@ -8,7 +8,6 @@ import * as plurals from 'make-plural/plurals'
 
 import { Fragment, FunctionComponent } from 'react'
 import { NextComponentType, NextPageContext } from 'next'
-import store, { persistor } from '../state'
 
 import type { AppProps } from 'next/app'
 import ApplicationUpdater from '../state/application/updater'
@@ -27,6 +26,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import dynamic from 'next/dynamic'
 import getLibrary from '../functions/getLibrary'
 import { i18n } from '@lingui/core'
+import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
