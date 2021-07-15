@@ -28,11 +28,11 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
 
   return (
     <div
-      className={`flex bg-dark-800 w-full rounded overflow-hidden h-[68px] ${
+      className={`flex-col md:flex-row flex bg-dark-800 w-full rounded overflow-hidden h-[110px] md:h-[68px] ${
         disabled ? 'opacity-40 cursor-default' : ''
       }`}
     >
-      <div className="flex w-[220px] p-4 gap-4 items-center">
+      <div className="flex w-full md:w-[220px] p-4 gap-4 items-center">
         <span className="font-bold text-secondary">{i18n._(t`Rate`)}:</span>
         <span
           className={`uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-0.5 px-1.5 text-xs rounded-3xl flex items-center justify-center ${
@@ -43,11 +43,11 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
           {i18n._(t`Current`)}
         </span>
       </div>
-      <div className="flex bg-dark-900 pl-4 pr-5 w-full border-2 border-dark-800 rounded-r items-center gap-3">
+      <div className="flex bg-dark-900 pl-4 pr-5 w-full h-full border-2 border-dark-800 rounded md:rounded-r items-center gap-3">
         <NumericalInput
           disabled={disabled}
           className="w-full bg-transparent font-medium text-2xl"
-          placeholder={currentPrice?.toSignificant(6)}
+          placeholder={currentPrice ? currentPrice.toSignificant(6) : '0.0'}
           id="limit-price-input"
           value={limitPrice || ''}
           onUserInput={handleInput}

@@ -71,7 +71,7 @@ export function useDerivedLimitOrderInfo(): {
   inputError?: string
   currentPrice: Price<Currency, Currency>
 } {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [singleHopOnly] = useUserSingleHopOnly()
   const {
     [Field.INPUT]: { currencyId: inputCurrencyId },
@@ -91,21 +91,25 @@ export function useDerivedLimitOrderInfo(): {
 
   const isExactIn: boolean = independentField === Field.INPUT
   const parsedInputAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
-  const parsedRate = tryParseAmount(limitPrice, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+  let parsedRate = limitPrice ? tryParseAmount(limitPrice, WNATIVE[chainId]) : undefined
 
   const parsedOutputAmount =
     outputCurrency && parsedRate && parsedInputAmount
       ? isExactIn
         ? CurrencyAmount.fromRawAmount(
             outputCurrency,
-            new Percent(parsedRate.quotient, denominator(inputCurrency.decimals))
+            new Percent(parsedRate.numerator, denominator(WNATIVE[chainId].decimals))
               .multiply(new Percent(parsedInputAmount.quotient, denominator(inputCurrency.decimals)))
               .multiply(denominator(outputCurrency.decimals)).quotient
           )
         : CurrencyAmount.fromRawAmount(
             inputCurrency,
-            new Percent(parsedInputAmount.quotient, parsedRate.quotient).multiply(denominator(inputCurrency.decimals))
-              .quotient
+            new Percent(
+              parsedInputAmount
+                .multiply(denominator(inputCurrency.decimals))
+                .multiply(denominator(WNATIVE[chainId].decimals - outputCurrency.decimals)).quotient,
+              parsedRate.quotient
+            ).quotient
           )
       : undefined
 

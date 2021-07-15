@@ -177,10 +177,10 @@ function LimitOrder() {
       )
     ) {
       setCurrencyInputPanelError('Invalid pair')
-    } else {
+    } else if (currencyInputPanelError === 'Invalid pair') {
       setCurrencyInputPanelError('')
     }
-  }, [currencies, pairs])
+  }, [currencies, currencyInputPanelError, pairs])
 
   const inputTokenList = useMemo(() => {
     if (pairs.length === 0) return []
@@ -207,7 +207,6 @@ function LimitOrder() {
     }, [])
   }, [currencies, pairs])
 
-  console.log(currencyInputPanelError)
   return (
     <>
       <Head>
@@ -338,7 +337,7 @@ function LimitOrder() {
               ) : null}
             </div>
 
-            <div className="flex justify-between gap-4 items-center w-full">
+            <div className="flex flex-col md:flex-row justify-between gap-4 items-end md:items-center w-full">
               {currencies[Field.INPUT] && currencies[Field.OUTPUT] && (
                 <div className="flex flex-1">
                   <PriceRatio />
@@ -366,7 +365,7 @@ function LimitOrder() {
             </div>
 
             <div className="flex">
-              <LimitOrderButton color="gradient" size="lg" currency={currencies[Field.INPUT]} />
+              <LimitOrderButton color="gradient" currency={currencies[Field.INPUT]} />
             </div>
           </div>
         </DoubleGlowShadow>

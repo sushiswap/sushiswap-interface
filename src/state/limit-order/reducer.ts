@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from '@reduxjs/toolkit'
 import {
   Field,
   replaceLimitOrderState,
@@ -10,54 +10,54 @@ import {
   setRecipient,
   switchCurrencies,
   typeInput,
-} from "./actions";
+} from './actions'
 
 export enum OrderExpiration {
-  never = "never",
-  hour = "hour",
-  day = "day",
-  week = "week",
-  month = "month",
+  never = 'never',
+  hour = 'hour',
+  day = 'day',
+  week = 'week',
+  month = 'month',
 }
 
 export interface LimitOrderState {
-  readonly independentField: Field;
-  readonly typedValue: string;
-  readonly limitPrice: string;
+  readonly independentField: Field
+  readonly typedValue: string
+  readonly limitPrice: string
   readonly [Field.INPUT]: {
-    readonly currencyId: string | undefined;
-  };
+    readonly currencyId: string | undefined
+  }
   readonly [Field.OUTPUT]: {
-    readonly currencyId: string | undefined;
-  };
+    readonly currencyId: string | undefined
+  }
   // the typed recipient address or ENS name, or null if swap should go to sender
-  readonly recipient: string | null;
-  readonly fromBentoBalance: boolean;
-  readonly limitOrderApprovalPending: string;
+  readonly recipient: string | null
+  readonly fromBentoBalance: boolean
+  readonly limitOrderApprovalPending: string
   readonly orderExpiration: {
-    value: OrderExpiration | string;
-    label: string;
-  };
+    value: OrderExpiration | string
+    label: string
+  }
 }
 
 const initialState: LimitOrderState = {
   independentField: Field.INPUT,
-  typedValue: "",
-  limitPrice: "",
+  typedValue: '',
+  limitPrice: '',
   [Field.INPUT]: {
-    currencyId: "",
+    currencyId: '',
   },
   [Field.OUTPUT]: {
-    currencyId: "",
+    currencyId: '',
   },
   recipient: null,
   fromBentoBalance: false,
-  limitOrderApprovalPending: "",
+  limitOrderApprovalPending: '',
   orderExpiration: {
-    value: "",
-    label: "",
+    value: '',
+    label: '',
   },
-};
+}
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
   builder
@@ -94,57 +94,52 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
       })
     )
     .addCase(setLimitPrice, (state, { payload: limitPrice }) => {
-      state.limitPrice = limitPrice;
+      state.limitPrice = limitPrice
     })
-    .addCase(
-      setLimitOrderApprovalPending,
-      (state, { payload: limitOrderApprovalPending }) => {
-        state.limitOrderApprovalPending = limitOrderApprovalPending;
-      }
-    )
+    .addCase(setLimitOrderApprovalPending, (state, { payload: limitOrderApprovalPending }) => {
+      state.limitOrderApprovalPending = limitOrderApprovalPending
+    })
     .addCase(setOrderExpiration, (state, { payload: orderExpiration }) => {
-      state.orderExpiration = orderExpiration;
+      state.orderExpiration = orderExpiration
     })
     .addCase(setFromBentoBalance, (state, { payload: fromBentoBalance }) => {
-      state.fromBentoBalance = fromBentoBalance;
+      state.fromBentoBalance = fromBentoBalance
     })
     .addCase(selectCurrency, (state, { payload: { currencyId, field } }) => {
-      const otherField = field === Field.INPUT ? Field.OUTPUT : Field.INPUT;
+      const otherField = field === Field.INPUT ? Field.OUTPUT : Field.INPUT
       if (currencyId === state[otherField].currencyId) {
         // the case where we have to swap the order
         return {
           ...state,
-          independentField:
-            state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
+          independentField: state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
           [field]: { currencyId: currencyId },
           [otherField]: { currencyId: state[field].currencyId },
-        };
+        }
       } else {
         // the normal case
         return {
           ...state,
           [field]: { currencyId: currencyId },
-        };
+        }
       }
     })
     .addCase(switchCurrencies, (state) => {
       return {
         ...state,
-        limitPrice: (1 / +state.limitPrice).toString(),
-        independentField:
-          state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
+        limitPrice: +state.limitPrice > 0 ? (1 / +state.limitPrice).toString() : '0.0',
+        independentField: state.independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT,
         [Field.INPUT]: { currencyId: state[Field.OUTPUT].currencyId },
         [Field.OUTPUT]: { currencyId: state[Field.INPUT].currencyId },
-      };
+      }
     })
     .addCase(typeInput, (state, { payload: { field, typedValue } }) => {
       return {
         ...state,
         independentField: field,
         typedValue,
-      };
+      }
     })
     .addCase(setRecipient, (state, { payload: { recipient } }) => {
-      state.recipient = recipient;
+      state.recipient = recipient
     })
-);
+)

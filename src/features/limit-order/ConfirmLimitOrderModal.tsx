@@ -3,7 +3,8 @@ import { USDC, useActiveWeb3React, useUSDCPrice } from '../../hooks'
 import { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
 import { useLingui } from '@lingui/react'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { t, Trans } from '@lingui/macro'
+import { t } from '@lingui/macro'
+import { Trans } from '@lingui/react'
 import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../state/limit-order/hooks'
 import { Field } from '../../state/limit-order/actions'
 import Button from '../../components/Button'
@@ -69,10 +70,11 @@ const ConfirmLimitOrderTopContent = () => {
         </div>
         <div className="flex flex-col gap-3">
           <div className="text-white text-xl font-bold gap-2 flex">
-            <Trans>
-              You receive
-              <span className="font-normal text-secondary">(at least):</span>
-            </Trans>
+            <Trans
+              id="You receive <0>(at least):</0>"
+              components={[<span key={0} className="font-normal text-secondary" />]}
+              values={{}}
+            />
           </div>
           <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">

@@ -283,7 +283,7 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:355
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:357
 msgid "Change Recipient"
 msgstr ""
 
@@ -330,6 +330,10 @@ msgstr ""
 
 #: src/pages/exchange/add/[[...tokens]].tsx:515
 msgid "Confirm Adding Liquidity"
+msgstr ""
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:123
+msgid "Confirm Limit Order"
 msgstr ""
 
 #: src/pages/bar/index.tsx:367
@@ -719,7 +723,7 @@ msgstr ""
 msgid "Limit"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:213
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:214
 msgid "Limit order"
 msgstr ""
 
@@ -795,7 +799,7 @@ msgstr ""
 msgid "Manage"
 msgstr ""
 
-#: src/modals/SearchModal/CurrencySearch.tsx:240
+#: src/modals/SearchModal/CurrencySearch.tsx:242
 msgid "Manage Token Lists"
 msgstr ""
 
@@ -854,6 +858,10 @@ msgstr ""
 msgid "Miner Tip"
 msgstr ""
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
+msgid "Minimum Received"
+msgstr ""
+
 #: src/features/lending/TradeReview.tsx:45
 #: src/features/swap/AdvancedSwapDetails.tsx:50
 msgid "Minimum received"
@@ -904,7 +912,7 @@ msgstr ""
 msgid "No pool found"
 msgstr ""
 
-#: src/modals/SearchModal/CurrencySearch.tsx:235
+#: src/modals/SearchModal/CurrencySearch.tsx:237
 msgid "No results found"
 msgstr ""
 
@@ -947,6 +955,7 @@ msgstr ""
 msgid "Oracle"
 msgstr ""
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:112
 #: src/features/limit-order/OrderExpirationDropdown.tsx:40
 msgid "Order Expiration"
 msgstr ""
@@ -1051,6 +1060,7 @@ msgstr ""
 msgid "Price Updated"
 msgstr ""
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:66
 #: src/features/limit-order/LimitPriceInputPanel.tsx:36
 #: src/features/open-order/CompletedOrders.tsx:37
 #: src/features/open-order/OpenOrders.tsx:65
@@ -1065,6 +1075,10 @@ msgstr ""
 #: src/features/open-order/CompletedOrders.tsx:34
 #: src/features/open-order/OpenOrders.tsx:62
 msgid "Receive"
+msgstr ""
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
+msgid "Recipient"
 msgstr ""
 
 #: src/components/AddressInputPanel/index.tsx:37
@@ -1131,7 +1145,7 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
-#: src/modals/SearchModal/CurrencySearch.tsx:195
+#: src/modals/SearchModal/CurrencySearch.tsx:197
 msgid "Search name or paste address"
 msgstr ""
 
@@ -1149,7 +1163,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:70
+#: src/features/limit-order/CurrencySelect.tsx:72
 #: src/state/limit-order/hooks.ts:168
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
@@ -1488,6 +1502,10 @@ msgstr ""
 msgid "Yesterday's APR"
 msgstr ""
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:55
+msgid "You Pay:"
+msgstr ""
+
 #: src/pages/exchange/add/[[...tokens]].tsx:390
 msgid "You are creating a pool"
 msgstr ""
@@ -1504,11 +1522,15 @@ msgstr ""
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:244
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:245
 msgid "You pay"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
+msgid "You receive <0>(at least):</0>"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:294
 msgid "You receive:"
 msgstr ""
 

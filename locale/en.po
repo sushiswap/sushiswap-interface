@@ -288,7 +288,7 @@ msgstr "Cancel Order"
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:355
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:357
 msgid "Change Recipient"
 msgstr "Change Recipient"
 
@@ -338,6 +338,10 @@ msgstr "Confirm"
 #: src/pages/exchange/add/[[...tokens]].tsx:515
 msgid "Confirm Adding Liquidity"
 msgstr "Confirm Adding Liquidity"
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:123
+msgid "Confirm Limit Order"
+msgstr "Confirm Limit Order"
 
 #: src/pages/bar/index.tsx:367
 msgid "Confirm Staking"
@@ -735,7 +739,7 @@ msgstr "Lent"
 msgid "Limit"
 msgstr "Limit"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:213
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:214
 msgid "Limit order"
 msgstr "Limit order"
 
@@ -816,7 +820,7 @@ msgstr "MEV Shield by Archer DAO"
 msgid "Manage"
 msgstr "Manage"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:240
+#: src/modals/SearchModal/CurrencySearch.tsx:242
 msgid "Manage Token Lists"
 msgstr "Manage Token Lists"
 
@@ -875,6 +879,10 @@ msgstr "Migration is done in one-click using your signature (permit)"
 msgid "Miner Tip"
 msgstr "Miner Tip"
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
+msgid "Minimum Received"
+msgstr "Minimum Received"
+
 #: src/features/lending/TradeReview.tsx:45
 #: src/features/swap/AdvancedSwapDetails.tsx:50
 msgid "Minimum received"
@@ -925,7 +933,7 @@ msgstr "No order history"
 msgid "No pool found"
 msgstr "No pool found"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:235
+#: src/modals/SearchModal/CurrencySearch.tsx:237
 msgid "No results found"
 msgstr "No results found"
 
@@ -968,6 +976,7 @@ msgstr "Open main menu"
 msgid "Oracle"
 msgstr "Oracle"
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:112
 #: src/features/limit-order/OrderExpirationDropdown.tsx:40
 msgid "Order Expiration"
 msgstr "Order Expiration"
@@ -1074,6 +1083,7 @@ msgstr "Price Impact Too High"
 msgid "Price Updated"
 msgstr "Price Updated"
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:66
 #: src/features/limit-order/LimitPriceInputPanel.tsx:36
 #: src/features/open-order/CompletedOrders.tsx:37
 #: src/features/open-order/OpenOrders.tsx:65
@@ -1089,6 +1099,10 @@ msgstr "Rates"
 #: src/features/open-order/OpenOrders.tsx:62
 msgid "Receive"
 msgstr "Receive"
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
+msgid "Recipient"
+msgstr "Recipient"
 
 #: src/components/AddressInputPanel/index.tsx:37
 #: src/components/PositionCard/index.tsx:253
@@ -1154,7 +1168,7 @@ msgstr "Russian"
 msgid "SLP"
 msgstr "SLP"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:195
+#: src/modals/SearchModal/CurrencySearch.tsx:197
 msgid "Search name or paste address"
 msgstr "Search name or paste address"
 
@@ -1172,7 +1186,7 @@ msgstr "Select a rate"
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:70
+#: src/features/limit-order/CurrencySelect.tsx:72
 #: src/state/limit-order/hooks.ts:168
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
@@ -1515,6 +1529,10 @@ msgstr "Wrong Network"
 msgid "Yesterday's APR"
 msgstr "Yesterday's APR"
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:55
+msgid "You Pay:"
+msgstr "You Pay:"
+
 #: src/pages/exchange/add/[[...tokens]].tsx:390
 msgid "You are creating a pool"
 msgstr "You are creating a pool"
@@ -1531,11 +1549,15 @@ msgstr "You don’t have liquidity in this pool yet"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "You need to first approve LP tokens and then migrate it"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:244
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:245
 msgid "You pay"
 msgstr "You pay"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
+msgid "You receive <0>(at least):</0>"
+msgstr "You receive <0>(at least):</0>"
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:294
 msgid "You receive:"
 msgstr "You receive:"
 
