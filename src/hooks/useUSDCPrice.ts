@@ -27,10 +27,10 @@ const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
   [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USDC[ChainId.KOVAN], 100_000e6),
   [ChainId.MATIC]: CurrencyAmount.fromRawAmount(USDC[ChainId.MATIC], 100_000e6),
   [ChainId.FANTOM]: CurrencyAmount.fromRawAmount(USDC[ChainId.FANTOM], 100_000e6),
-  [ChainId.BSC]: CurrencyAmount.fromRawAmount(USDC[ChainId.BSC], 100_000e6),
+  [ChainId.BSC]: CurrencyAmount.fromRawAmount(USDC[ChainId.BSC], 100_000e18),
   [ChainId.HARMONY]: CurrencyAmount.fromRawAmount(USDC[ChainId.HARMONY], 100_000e6),
   [ChainId.HECO]: CurrencyAmount.fromRawAmount(USDC[ChainId.HECO], 100_000e6),
-  [ChainId.OKEX]: CurrencyAmount.fromRawAmount(USDC[ChainId.OKEX], 100_000e6),
+  [ChainId.OKEX]: CurrencyAmount.fromRawAmount(USDC[ChainId.OKEX], 100_000e18),
   [ChainId.XDAI]: CurrencyAmount.fromRawAmount(USDC[ChainId.XDAI], 100_000e6),
   [ChainId.CELO]: undefined,
 }
