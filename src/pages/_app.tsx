@@ -16,7 +16,6 @@ import Head from 'next/head'
 import { I18nProvider } from '@lingui/react'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
-import { PersistGate } from 'redux-persist/integration/react'
 import ReactGA from 'react-ga'
 import { Provider as ReduxProvider } from 'react-redux'
 import TransactionUpdater from '../state/transactions/updater'
@@ -87,6 +86,11 @@ function MyApp({
 
   // Allows for conditionally setting a guard to be hoisted per page
   const Guard = Component.Guard || Fragment
+
+  // temporarily force redux persist clear
+  if (localStorage.getItem('persist:root')) {
+    localStorage.removeItem('persist:root')
+  }
 
   return (
     <Fragment>

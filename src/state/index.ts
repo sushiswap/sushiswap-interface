@@ -32,7 +32,6 @@ const reducer = combineReducers({
 
 const store = configureStore({
   reducer,
-  // reducer: persistReducer(persistConfig, reducer),
   middleware: getDefaultMiddleware({
     thunk: true,
     immutableCheck: true,
