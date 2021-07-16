@@ -41,6 +41,7 @@ const store = configureStore({
     multicall,
     lists,
     zap,
+    limitOrder,
     create,
   },
   middleware: [
