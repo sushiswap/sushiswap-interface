@@ -57,14 +57,20 @@ export default function useWrapCallback(
                     value: `0x${inputAmount.quotient.toString(16)}`,
                   })
                   addTransaction(txReceipt, {
-                    summary: `Wrap ${inputAmount.toSignificant(6)} ${NATIVE[chainId].symbol} to ${WNATIVE[chainId].symbol}`,
+                    summary: `Wrap ${inputAmount.toSignificant(6)} ${NATIVE[chainId].symbol} to ${
+                      WNATIVE[chainId].symbol
+                    }`,
                   })
                 } catch (error) {
                   console.error('Could not deposit', error)
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : hasInputAmount ? `Insufficient ${NATIVE[chainId].symbol} balance` : `Enter ${NATIVE[chainId].symbol} amount`,
+        inputError: sufficientBalance
+          ? undefined
+          : hasInputAmount
+          ? `Insufficient ${NATIVE[chainId].symbol} balance`
+          : `Enter ${NATIVE[chainId].symbol} amount`,
       }
     } else if (weth.equals(inputCurrency) && outputCurrency.isNative) {
       return {
@@ -75,14 +81,20 @@ export default function useWrapCallback(
                 try {
                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.quotient.toString(16)}`)
                   addTransaction(txReceipt, {
-                    summary: `Unwrap ${inputAmount.toSignificant(6)} ${WNATIVE[chainId].symbol} to ${NATIVE[chainId].symbol}`,
+                    summary: `Unwrap ${inputAmount.toSignificant(6)} ${WNATIVE[chainId].symbol} to ${
+                      NATIVE[chainId].symbol
+                    }`,
                   })
                 } catch (error) {
                   console.error('Could not withdraw', error)
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : hasInputAmount ? `Insufficient ${WNATIVE[chainId].symbol} balance` : `Enter ${WNATIVE[chainId].symbol} amount`,
+        inputError: sufficientBalance
+          ? undefined
+          : hasInputAmount
+          ? `Insufficient ${WNATIVE[chainId].symbol} balance`
+          : `Enter ${WNATIVE[chainId].symbol} amount`,
       }
     } else {
       return NOT_APPLICABLE

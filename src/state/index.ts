@@ -6,6 +6,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import burn from './burn/reducer'
 import create from './create/reducer'
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
+import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
 import mint from './mint/reducer'
 import multicall from './multicall/reducer'
@@ -38,6 +39,7 @@ const reducer = combineReducers({
   multicall,
   lists,
   zap,
+  limitOrder,
   create,
 })
 

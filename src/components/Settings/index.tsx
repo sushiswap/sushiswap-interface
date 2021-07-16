@@ -20,8 +20,10 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { useActiveWeb3React } from '../../hooks'
+import settings from '../../animation/settings-slider.json'
+import HoverLottie from '../HoverLottie'
 
-export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage: Percent }) {
+export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
@@ -49,20 +51,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
         onClick={toggle}
         id="open-settings-dialog-button"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5 transform rotate-90"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-          />
-        </svg>
+        <HoverLottie animationData={settings} className="w-[32px] h-[32px] transform rotate-90" />
       </div>
       {open && (
         <div className="absolute top-14 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 border-2 border-dark-800 rounded w-80 shadow-lg">
