@@ -1,8 +1,35 @@
-import { ChainId, JSBI, Percent, Token, WNATIVE } from '@sushiswap/sdk'
-import { binance, fortmatic, injected, lattice, portis, torus, walletconnect, walletlink } from '../connectors'
+import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
+import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
+
+export const RPC = {
+  [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
+  [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
+  [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
+  [ChainId.GÖRLI]: 'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
+  [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
+  [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
+  [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
+  [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
+  // [ChainId.MATIC]:
+  //     'https://apis.ankr.com/e22bfa5f5a124b9aa1f911b742f6adfe/c06bb163c3c2a10a4028959f4d82836d/polygon/full/main',
+  [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
+  [ChainId.XDAI]: 'https://rpc.xdaichain.com',
+  [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
+  [ChainId.BSC_TESTNET]: 'https://data-seed-prebsc-2-s3.binance.org:8545',
+  [ChainId.MOONBEAM_TESTNET]: 'https://rpc.testnet.moonbeam.network',
+  [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
+  [ChainId.AVALANCHE_TESTNET]: 'https://api.avax-test.network/ext/bc/C/rpc',
+  [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
+  [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com',
+  [ChainId.HARMONY]: 'https://api.harmony.one',
+  [ChainId.HARMONY_TESTNET]: 'https://api.s0.b.hmny.io',
+  [ChainId.OKEX]: 'https://exchainrpc.okex.org',
+  [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
+  [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+}
 
 export const POOL_DENY = ['14', '29', '45', '30']
 
@@ -24,7 +51,8 @@ export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
 
 // TODO: update weekly with new constant
 export const MERKLE_ROOT =
-  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
+  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
+  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-14/merkle-10959148-11596364.json'
 
 // /**
 //  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -48,7 +76,7 @@ export const MERKLE_ROOT =
 // }
 
 export interface WalletInfo {
-  connector?: AbstractConnector
+  connector?: (() => Promise<AbstractConnector>) | AbstractConnector
   name: string
   iconName: string
   description: string
@@ -87,7 +115,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   LATTICE: {
-    connector: lattice,
+    connector: async () => {
+      const LatticeConnector = (await import('@web3-react/lattice-connector')).LatticeConnector
+      return new LatticeConnector({
+        chainId: 1,
+        url: RPC[ChainId.MAINNET],
+        appName: 'SushiSwap',
+      })
+    },
     name: 'Lattice',
     iconName: 'lattice.png',
     description: 'Connect to GridPlus Wallet.',

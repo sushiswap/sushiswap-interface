@@ -132,8 +132,10 @@ export default function WalletModal({
     }
   }, [setWalletView, active, error, connector, walletModalOpen, activePrevious, connectorPrevious])
 
-  const tryActivation = async (connector: AbstractConnector | undefined) => {
+  const tryActivation = async (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined) => {
     let name = ''
+    let conn = typeof connector === 'function' ? await connector() : connector
+
     Object.keys(SUPPORTED_WALLETS).map((key) => {
       if (connector === SUPPORTED_WALLETS[key].connector) {
         return (name = SUPPORTED_WALLETS[key].name)
@@ -146,18 +148,18 @@ export default function WalletModal({
       action: 'Change Wallet',
       label: name,
     })
-    setPendingWallet(connector) // set wallet for pending view
+    setPendingWallet(conn) // set wallet for pending view
     setWalletView(WALLET_VIEWS.PENDING)
 
     // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
-    if (connector instanceof WalletConnectConnector && connector.walletConnectProvider?.wc?.uri) {
-      connector.walletConnectProvider = undefined
+    if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.wc?.uri) {
+      conn.walletConnectProvider = undefined
     }
 
-    connector &&
-      activate(connector, undefined, true).catch((error) => {
+    conn &&
+      activate(conn, undefined, true).catch((error) => {
         if (error instanceof UnsupportedChainIdError) {
-          activate(connector) // a little janky...can't use setError because the connector isn't set
+          activate(conn) // a little janky...can't use setError because the connector isn't set
         } else {
           setPendingError(true)
         }

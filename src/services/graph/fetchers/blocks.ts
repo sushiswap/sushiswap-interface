@@ -12,7 +12,7 @@ export const BLOCKS = {
   [ChainId.FANTOM]: 'matthewlilley/fantom-blocks',
   [ChainId.BSC]: 'matthewlilley/bsc-blocks',
   [ChainId.HARMONY]: 'sushiswap/harmony-blocks',
-  [ChainId.AVALANCHE]: 'sushiswap/avalanche-blocks',
+  [ChainId.AVALANCHE]: 'matthewlilley/avalanche-blocks',
   [ChainId.CELO]: 'sushiswap/celo-blocks',
 }
 

@@ -4,6 +4,7 @@ import HECO from './heco'
 import KOVAN from './kovan'
 import MAINNET from './mainnet'
 import MATIC from './matic'
+import XDAI from './xdai'
 
 export type ChainlinkMappingList = {
   readonly [address: string]: {
@@ -25,4 +26,5 @@ export const CHAINLINK_MAPPING: {
   [ChainId.BSC]: BSC,
   [ChainId.HECO]: HECO,
   [ChainId.MATIC]: MATIC,
+  [ChainId.XDAI]: XDAI,
 }

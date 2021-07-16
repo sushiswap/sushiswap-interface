@@ -82,14 +82,13 @@ export function getUSDString(amount: BigNumberish, token: any): string {
   return BigNumber.from(amount)
     .mul(token.usd)
     .div(e10(token?.decimals ? token.decimals : token.tokenInfo.decimals))
-    .toFixed(getCurrency(token.chainId).decimals)
+    .toFixed(getCurrency(token.tokenInfo.chainId).decimals)
 }
 
 export function easyAmount(
   amount: BigNumber,
   token: any
 ): { value: BigNumber; string: string; usdValue: BigNumber; usd: string } {
-  // console.log({ token })
   return {
     value: amount,
     string: amount.toFixed(token?.decimals ? token.decimals : token.tokenInfo.decimals),

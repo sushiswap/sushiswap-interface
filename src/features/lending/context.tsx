@@ -196,26 +196,34 @@ export function KashiProvider({ children }) {
 
   const tokens = useAllTokens()
 
-  const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
-    account,
-    [],
-    USDC[chainId].address,
-    [KASHI_ADDRESS[chainId]],
-  ])?.result?.[0]
+  // const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
+  //   account,
+  //   [],
+  //   USDC[chainId].address,
+  //   [KASHI_ADDRESS[chainId]],
+  // ])?.result?.[0]
+
+  // console.log({ info })
 
   const updatePairs = useCallback(async () => {
-    if (!account || !chainId || ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId)) {
+    console.log('update pairs')
+    if (
+      !account ||
+      !chainId ||
+      ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(chainId)
+    ) {
       return
     }
 
     if (boringHelperContract && bentoBoxContract) {
       // // console.log('READY TO RUMBLE')
-      // const info = rpcToObj(
-      //   await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
-      // )
+      const info = rpcToObj(
+        await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
+      )
 
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
+      // console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 
@@ -242,19 +250,19 @@ export function KashiProvider({ children }) {
 
       pairTokens.add(currency.address)
 
-      pairs.forEach((pair: any, i: number) => {
+      pairs.forEach((pair, i: number) => {
         pair.address = allPairAddresses[i]
         pair.collateral = pairTokens.add(pair.collateral)
         pair.asset = pairTokens.add(pair.asset)
       })
 
       // Get balances, bentobox info and allowences for the tokens
-      const pairAddresses = Object.values(pairTokens).map((token: any) => token.address)
+      const pairAddresses = Object.values(pairTokens).map((token) => token.address)
       const balances = rpcToObj(await boringHelperContract.getBalances(account, pairAddresses))
 
-      const missingTokens: any[] = []
+      const missingTokens = []
 
-      balances.forEach((balance: any, i: number) => {
+      balances.forEach((balance, i: number) => {
         if (tokens[balance.token]) {
           Object.assign(pairTokens[balance.token], tokens[balance.token])
         } else {
@@ -270,8 +278,8 @@ export function KashiProvider({ children }) {
       }
 
       // Calculate the USD price for each token
-      Object.values(pairTokens).forEach((token: any) => {
-        token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.symbol
+      Object.values(pairTokens).forEach((token) => {
+        token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.tokenInfo.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency.address].rate, token.rate)
       })
 
@@ -280,8 +288,8 @@ export function KashiProvider({ children }) {
         payload: {
           info,
           pairs: pairs
-            .filter((pair: any) => pair.asset !== pair.collateral)
-            .map((pair: any, i: number) => {
+            .filter((pair) => pair.asset !== pair.collateral)
+            .map((pair, i: number) => {
               pair.elapsedSeconds = BigNumber.from(Date.now()).div('1000').sub(pair.accrueInfo.lastAccrued)
 
               // Interest per year at last accrue, this will apply during the next accrue
@@ -372,6 +380,7 @@ export function KashiProvider({ children }) {
                 spot: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.spotExchangeRate),
                 stored: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.currentExchangeRate),
               }
+
               pair.maxBorrowable.minimum = minimum(
                 pair.maxBorrowable.oracle,
                 pair.maxBorrowable.spot,
@@ -438,7 +447,7 @@ export function KashiProvider({ children }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency.address, info, tokens, weth.address])
+  }, [account, chainId, boringHelperContract, bentoBoxContract, currency.address, tokens, weth.address])
 
   const previousBlockNumber = usePrevious(blockNumber)
 
@@ -479,7 +488,7 @@ export function useKashiPair(address: string) {
   if (context === undefined) {
     throw new Error('useKashiPair must be used within a KashiProvider')
   }
-  return context.state.pairs.find((pair: any) => {
+  return context.state.pairs.find((pair) => {
     return ethers.utils.getAddress(pair.address) === ethers.utils.getAddress(address)
   })
 }

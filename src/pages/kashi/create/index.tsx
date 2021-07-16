@@ -71,11 +71,13 @@ function Create() {
 
       let multiply = ethers.constants.AddressZero
       let divide = ethers.constants.AddressZero
+
       const multiplyMatches = Object.values(mapping).filter(
         (m) => m.from === asset.wrapped.address && m.to === collateral.wrapped.address
       )
 
       let decimals = 0
+
       if (multiplyMatches.length) {
         const match = multiplyMatches[0]
         multiply = match.address!
@@ -141,7 +143,9 @@ function Create() {
         oracleData,
       ])
 
-      addTransaction(await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true), {
+      const tx = await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true)
+
+      addTransaction(tx, {
         summary: `Add Kashi market ${currencies[Field.ASSET].symbol}/${currencies[Field.COLLATERAL].symbol} Chainlink`,
       })
 

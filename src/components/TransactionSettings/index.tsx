@@ -1,16 +1,14 @@
 import React, { useRef, useState } from 'react'
-import { RowBetween, RowFixed } from '../Row'
 import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
 
-import { AutoColumn } from '../Column'
 import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
 import { Percent } from '@sushiswap/sdk'
 import QuestionHelper from '../QuestionHelper'
 import Typography from '../Typography'
 import { classNames } from '../../functions'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from '../Button'
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
@@ -21,59 +19,6 @@ enum SlippageError {
 enum DeadlineError {
   InvalidInput = 'InvalidInput',
 }
-
-const FancyButton = styled.button`
-  color: #bfbfbf;
-  align-items: center;
-  height: 2rem;
-  border-radius: 10px;
-  font-size: 1rem;
-  width: auto;
-  min-width: 3.5rem;
-  outline: none;
-`
-
-const Option = styled(FancyButton)<{ active: boolean }>`
-  :hover {
-    cursor: pointer;
-  }
-  background-color: ${({ active }) => (active ? '#0D0415' : '#202231')};
-  color: ${({ active }) => (active ? '#E3E3E3' : '#BFBFBF')};
-`
-
-const Input = styled.input`
-  background: transparent;
-  font-size: 16px;
-  width: auto;
-  outline: none;
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  color: ${({ color }) => (color === 'red' ? '#FF3838' : '#BFBFBF')};
-  text-align: left;
-  ::placeholder {
-    color: ${({ value }) => (value !== '' ? 'transparent' : 'currentColor')};
-  }
-`
-
-const OptionCustom = styled(FancyButton)<{
-  active?: boolean
-  warning?: boolean
-}>`
-  height: 2rem;
-  position: relative;
-  padding: 0 0.75rem;
-  flex: 1;
-  min-width: 82px;
-  max-width: 102px;
-  background: #202231;
-  input {
-    width: 100%;
-    height: 100%;
-    border: 0px;
-  }
-`
 
 export interface TransactionSettingsProps {
   placeholderSlippage?: Percent // varies according to the context in which the settings dialog is placed
@@ -142,28 +87,41 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
   }
 
   return (
-    <AutoColumn gap="md">
-      <AutoColumn gap="sm">
-        <RowFixed align="center">
-          <Typography variant="lg" className="text-high-emphesis">
+    <div className="grid gap-4">
+      <div className="grid gap-2">
+        <div className="flex items-center">
+          <Typography variant="sm" className="text-high-emphesis">
             {i18n._(t`Slippage tolerance`)}
           </Typography>
 
           <QuestionHelper
             text={i18n._(
-              t`Your transaction will revert if the price changes unfavorably by more than this percentage.`
+              t`Your transaction will revert 23if the price changes unfavorably by more than this percentage.`
             )}
           />
-        </RowFixed>
-        <RowFixed align="center" className="space-x-2">
-          <OptionCustom active={userSlippageTolerance !== 'auto'} warning={!!slippageError} tabIndex={-1}>
-            <RowBetween align="center">
+        </div>
+        <div className="flex items-center space-x-2">
+          <div
+            className={classNames(
+              !!slippageError
+                ? 'border-red'
+                : tooLow || tooHigh
+                ? 'border-yellow'
+                : userSlippageTolerance !== 'auto'
+                ? 'border-blue'
+                : 'border-transparent',
+              'border p-2 rounded bg-dark-800'
+            )}
+            tabIndex={-1}
+          >
+            <div className="flex justify-between items-center gap-1">
               {tooLow || tooHigh ? (
                 <span className="hidden sm:inline text-yellow" role="img" aria-label="warning">
                   ⚠️
                 </span>
               ) : null}
-              <Input
+              <input
+                className={classNames(slippageError ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis')}
                 placeholder={placeholderSlippage?.toFixed(2)}
                 value={
                   slippageInput.length > 0
@@ -180,17 +138,19 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
                 color={slippageError ? 'red' : ''}
               />
               %
-            </RowBetween>
-          </OptionCustom>
-          <Option
+            </div>
+          </div>
+          <Button
+            size="sm"
+            color={userSlippageTolerance === 'auto' ? 'blue' : 'gray'}
+            variant={userSlippageTolerance === 'auto' ? 'filled' : 'outlined'}
             onClick={() => {
               parseSlippageInput('')
             }}
-            active={userSlippageTolerance === 'auto'}
           >
             {i18n._(t`Auto`)}
-          </Option>
-        </RowFixed>
+          </Button>
+        </div>
         {slippageError || tooLow || tooHigh ? (
           <Typography
             className={classNames(
@@ -208,19 +168,24 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             </div>
           </Typography>
         ) : null}
-      </AutoColumn>
+      </div>
 
-      <AutoColumn gap="sm">
-        <RowFixed align="center">
-          <Typography variant="lg" className="text-high-emphesis">
+      <div className="grid gap-2">
+        <div className="flex items-center">
+          <Typography variant="sm" className="text-high-emphesis">
             {i18n._(t`Transaction deadline`)}
           </Typography>
 
           <QuestionHelper text={i18n._(t`Your transaction will revert if it is pending for more than this long.`)} />
-        </RowFixed>
-        <RowFixed align="center">
-          <OptionCustom style={{ maxWidth: '40px', marginRight: '8px' }} tabIndex={-1}>
-            <Input
+        </div>
+        <div className="flex items-center">
+          <div
+            className="p-2 rounded bg-dark-800 min-w-[82px] max-w-[102px]"
+            style={{ maxWidth: '40px', marginRight: '8px' }}
+            tabIndex={-1}
+          >
+            <input
+              className={classNames(deadlineError ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis')}
               placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}
               value={
                 deadlineInput.length > 0
@@ -236,10 +201,10 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
               }}
               color={deadlineError ? 'red' : ''}
             />
-          </OptionCustom>
+          </div>
           <Typography variant="sm">{i18n._(t`minutes`)}</Typography>
-        </RowFixed>
-      </AutoColumn>
-    </AutoColumn>
+        </div>
+      </div>
+    </div>
   )
 }
