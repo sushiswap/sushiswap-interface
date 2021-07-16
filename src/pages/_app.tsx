@@ -87,11 +87,6 @@ function MyApp({
   // Allows for conditionally setting a guard to be hoisted per page
   const Guard = Component.Guard || Fragment
 
-  // temporarily force redux persist clear
-  if (typeof localStorage !== 'undefined' && localStorage.getItem('persist:root')) {
-    localStorage.removeItem('persist:root')
-  }
-
   return (
     <Fragment>
       <Head>

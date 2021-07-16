@@ -16,28 +16,45 @@ import zap from './zap/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
-const reducer = combineReducers({
-  application,
-  user,
-  transactions,
-  swap,
-  mint,
-  burn,
-  multicall,
-  lists,
-  zap,
-  limitOrder,
-  create,
-})
+// const reducer = combineReducers({
+//   application,
+//   user,
+//   transactions,
+//   swap,
+//   mint,
+//   burn,
+//   multicall,
+//   lists,
+//   zap,
+//   limitOrder,
+//   create,
+// })
 
 const store = configureStore({
-  reducer,
-  middleware: getDefaultMiddleware({
-    thunk: true,
-    immutableCheck: true,
-  }).concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
+  reducer: {
+    application,
+    user,
+    transactions,
+    swap,
+    mint,
+    burn,
+    multicall,
+    lists,
+    zap,
+    create,
+  },
+  middleware: [
+    ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),
+    ...(typeof localStorage !== 'undefined' ? [save({ states: PERSISTED_KEYS })] : []),
+  ],
+  preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {},
   devTools: process.env.NODE_ENV === 'development',
-  preloadedState: load({ states: PERSISTED_KEYS }),
+  // middleware: getDefaultMiddleware({
+  //   thunk: true,
+  //   immutableCheck: true,
+  // }).concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
+  // devTools: process.env.NODE_ENV === 'development',
+  // preloadedState: load({ states: PERSISTED_KEYS }),
 })
 
 store.dispatch(updateVersion())
