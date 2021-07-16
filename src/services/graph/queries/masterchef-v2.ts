@@ -37,9 +37,9 @@ export const masterChefV2PairAddressesQuery = gql`
     pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
       id
       allocPoint
-      accSushiPerShare    
+      accSushiPerShare
       pair {
-        id    
+        id
       }
     }
   }

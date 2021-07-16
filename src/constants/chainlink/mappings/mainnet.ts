@@ -103,7 +103,7 @@ const MAINNET_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
-  // BADGER / ETH  
+  // BADGER / ETH
   '0x58921Ac140522867bf50b9E009599Da0CA4A2379': {
     from: '0x3472A5A71965499acd81997a54BBA8D852C6E53d',
     to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -1262,6 +1262,54 @@ const MAINNET_CHAINLINK_MAPPING = {
     decimals: 18,
     fromDecimals: 18,
     toDecimals: 18,
+  },
+  // AMZN / USD
+  '0x8994115d287207144236c13Be5E2bDbf6357D9Fd': {
+    from: '0x0cae9e4d663793c2a2A0b211c1Cf4bBca2B9cAa7',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // GOOGL / USD
+  '0x36D39936BeA501755921beB5A382a88179070219': {
+    from: '0x59A921Db27Dd6d4d974745B7FfC5c33932653442',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // MSFT / USD
+  '0x021Fb44bfeafA0999C7b07C4791cf4B859C3b431': {
+    from: '0x41BbEDd7286dAab5910a1f15d12CBda839852BD7',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // NFLX / USD
+  '0x67C2e69c5272B94AF3C90683a9947C39Dc605ddE': {
+    from: '0xC8d674114bac90148d11D3C1d33C61835a0F9DCD',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // TSLA / USD
+  '0x1ceDaaB50936881B3e449e47e40A2cDAF5576A4a': {
+    from: '0x21cA39943E91d704678F5D00b6616650F066fD63',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // FB / USD
+  '0xCe1051646393087e706288C1B57Fd26446657A7f': {
+    from: '0x0e99cC0535BB6251F6679Fa6E65d6d3b430e840B',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
   },
 }
 

@@ -36,6 +36,22 @@ msgstr ""
 #~ msgid "- Remove send"
 #~ msgstr "- Send entfernen"
 
+#: src/features/limit-order/OrderExpirationDropdown.tsx:18
+msgid "1 Hour"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:20
+msgid "1 Week"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:19
+msgid "24 Hours"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:21
+msgid "30 Days"
+msgstr ""
+
 #~ msgid "300M+ TVL on Polygon! Optimized routing enabled"
 #~ msgstr "300M+ TVL auf Polygon! Optimiertes Routing aktiviert."
 
@@ -136,8 +152,8 @@ msgstr ""
 msgid "Add {0} to MetaMask"
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:195
-#: src/pages/exchange/add/[[...tokens]].tsx:195
+#: src/pages/exchange/add/[[...tokens]].tsx:196
+#: src/pages/exchange/add/[[...tokens]].tsx:196
 msgid "Add {0} {1} and {2} {3}"
 msgstr ""
 
@@ -149,7 +165,7 @@ msgstr ""
 msgid "Additional records and weekly merkle updates can be found on"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:70
+#: src/pages/exchange/migrate/index.tsx:71
 msgid "Amount of Tokens"
 msgstr "Anzahl der Token"
 
@@ -165,8 +181,8 @@ msgstr "Analysen"
 #: src/features/lending/Button.tsx:64
 #: src/features/meowshi/MeowshiButton.tsx:124
 #: src/pages/bar/index.tsx:351
-#: src/pages/exchange/migrate/index.tsx:235
-#: src/pages/exchange/remove/[[...tokens]].tsx:845
+#: src/pages/exchange/migrate/index.tsx:236
+#: src/pages/exchange/remove/[[...tokens]].tsx:848
 #: src/pages/user/balances.tsx:212
 msgid "Approve"
 msgstr "Genehmigen"
@@ -175,31 +191,41 @@ msgstr "Genehmigen"
 msgid "Approve Kashi"
 msgstr "Genehmige Kashi"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:479
-#: src/pages/exchange/add/[[...tokens]].tsx:496
-#: src/pages/exchange/swap/[[...tokens]].tsx:615
+#: src/features/limit-order/LimitOrderButton.tsx:170
+msgid "Approve Limit Order"
+msgstr ""
+
+#: src/features/limit-order/LimitOrderButton.tsx:160
+#: src/pages/exchange/add/[[...tokens]].tsx:481
+#: src/pages/exchange/add/[[...tokens]].tsx:498
+#: src/pages/exchange/swap/[[...tokens]].tsx:614
 msgid "Approve {0}"
 msgstr "Genehmige {0}"
 
-#: src/pages/exchange/migrate/index.tsx:233
-#: src/pages/exchange/remove/[[...tokens]].tsx:843
+#: src/pages/exchange/migrate/index.tsx:234
+#: src/pages/exchange/remove/[[...tokens]].tsx:846
 msgid "Approved"
 msgstr "Genehmigt"
 
 #: src/features/meowshi/MeowshiButton.tsx:117
 #: src/pages/bar/index.tsx:349
-#: src/pages/exchange/migrate/index.tsx:231
-#: src/pages/exchange/remove/[[...tokens]].tsx:841
+#: src/pages/exchange/migrate/index.tsx:232
+#: src/pages/exchange/remove/[[...tokens]].tsx:844
 #: src/pages/user/balances.tsx:212
 msgid "Approving"
 msgstr "Genehmigen"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:477
-#: src/pages/exchange/add/[[...tokens]].tsx:494
+#: src/features/limit-order/LimitOrderButton.tsx:168
+msgid "Approving Limit Order"
+msgstr ""
+
+#: src/features/limit-order/LimitOrderButton.tsx:158
+#: src/pages/exchange/add/[[...tokens]].tsx:479
+#: src/pages/exchange/add/[[...tokens]].tsx:496
 msgid "Approving {0}"
 msgstr "Genehmigen von {0}"
 
-#: src/components/Settings/index.tsx:169
+#: src/components/Settings/index.tsx:158
 msgid "Are you sure?"
 msgstr "Sind Sie sicher?"
 
@@ -213,13 +239,21 @@ msgstr ""
 msgid "Available"
 msgstr "Verfügbar"
 
+#: src/guards/Network/index.tsx:43
+msgid "Available Networks"
+msgstr ""
+
 #: src/components/WalletModal/index.tsx:306
 #~ msgid "Back"
 #~ msgstr ""
 
+#: src/pages/exchange/open-order/index.tsx:360
+msgid "Back to Limit Orders"
+msgstr ""
+
 #: src/pages/bar/index.tsx:329
 #: src/pages/bar/index.tsx:387
-#: src/pages/exchange/migrate/index.tsx:220
+#: src/pages/exchange/migrate/index.tsx:221
 msgid "Balance"
 msgstr "Guthaben"
 
@@ -312,7 +346,7 @@ msgstr ""
 #~ "claimed by withdrawing your liquidity."
 #~ msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:362
+#: src/pages/exchange/add/[[...tokens]].tsx:363
 msgid ""
 "By adding liquidity you'll earn 0.25% of all trades on this pair\n"
 "proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
@@ -332,7 +366,7 @@ msgstr ""
 #~ msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your shareof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawingyour liquidity."
 #~ msgstr "Durch Hinzufügen von Liquidität werden Sie 0,25 % aller Trades auf diesem Paar proportional zu Ihrem Anteil des Pools verdienen. Gebühren werden dem Pool hinzugefügt, fallen in Echtzeit an und können durch Abziehen Ihrer Liquidität eingefordert werden."
 
-#: src/components/Settings/index.tsx:89
+#: src/components/Settings/index.tsx:78
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Umgeht Bestätigungsmodalitäten und ermöglicht hohe Slippage-Trades. Die Verwendung erfolgt auf eigene Gefahr."
 
@@ -340,12 +374,21 @@ msgstr "Umgeht Bestätigungsmodalitäten und ermöglicht hohe Slippage-Trades. D
 msgid "Cancel"
 msgstr ""
 
+#: src/features/open-order/OpenOrders.tsx:107
+msgid "Cancel Order"
+msgstr ""
+
 #: src/components/AccountDetails/Transaction.tsx:123
+#: src/features/open-order/CompletedOrders.tsx:84
 msgid "Cancelled"
 msgstr ""
 
 #: src/components/AccountDetails/index.tsx:132
 msgid "Change"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:358
+msgid "Change Recipient"
 msgstr ""
 
 #: src/pages/Swap/index.tsx:399
@@ -382,7 +425,7 @@ msgstr ""
 #~ msgid "Click here to switch to Polygon using Metamask"
 #~ msgstr "Klicken Sie hier, um mit Metamask zu Polygon zu wechseln"
 
-#: src/pages/exchange/migrate/index.tsx:334
+#: src/pages/exchange/migrate/index.tsx:336
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
@@ -407,13 +450,17 @@ msgstr "Sicherheiten"
 msgid "Community Approval"
 msgstr "Gemeinschaftliche Genehmigung"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:649
+#: src/pages/exchange/remove/[[...tokens]].tsx:650
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:513
+#: src/pages/exchange/add/[[...tokens]].tsx:515
 msgid "Confirm Adding Liquidity"
 msgstr "Hinzufügen von Liquidität bestätigen"
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:123
+msgid "Confirm Limit Order"
+msgstr ""
 
 #: src/pages/bar/index.tsx:375
 msgid "Confirm Staking"
@@ -428,7 +475,7 @@ msgid "Confirm Swap"
 msgstr "Swap bestätigen"
 
 #: src/pages/bar/index.tsx:376
-#: src/pages/exchange/remove/[[...tokens]].tsx:855
+#: src/pages/exchange/remove/[[...tokens]].tsx:858
 msgid "Confirm Withdrawal"
 msgstr "Auszahlung bestätigen"
 
@@ -440,6 +487,7 @@ msgstr ""
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
+#: src/features/limit-order/LimitOrderButton.tsx:145
 #: src/pages/bar/index.tsx:369
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
@@ -489,7 +537,7 @@ msgstr "Erstellen Sie Pool & Supply"
 #~ msgid "Create a Pair"
 #~ msgstr "Erstellen Sie ein Paar"
 
-#: src/pages/kashi/create/index.tsx:219
+#: src/pages/kashi/create/index.tsx:221
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -500,6 +548,10 @@ msgstr "Erstellen Sie ein Paar"
 #: src/pages/exchange/find/index.tsx:168
 msgid "Create pool"
 msgstr "Pool erstellen"
+
+#: src/features/limit-order/LimitPriceInputPanel.tsx:43
+msgid "Current"
+msgstr ""
 
 #: src/pages/user/balances.tsx:225
 msgid "Deposit"
@@ -513,17 +565,25 @@ msgstr "Zahlen Sie SUSHI in BentoBox ein"
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Zahlen Sie Token für alle Erträge in BentoBox ein"
 
+#: src/features/limit-order/LimitOrderButton.tsx:180
+msgid "Deposit {0} into BentoBox"
+msgstr ""
+
 #: src/pages/Yield/masterchefv1/index.tsx:52
 #: src/pages/Yield/minichefv2/index.tsx:58
 #~ msgid "Deposited"
 #~ msgstr "Eingezahlt"
+
+#: src/features/limit-order/LimitOrderButton.tsx:139
+msgid "Depositing {0} into BentoBox"
+msgstr ""
 
 #: src/components/Header/More.tsx:20
 #: src/components/Menu.tsx:18
 msgid "Dev"
 msgstr "Dev"
 
-#: src/components/Settings/index.tsx:111
+#: src/components/Settings/index.tsx:100
 msgid "Disable Multihops"
 msgstr "Multihops deaktivieren"
 
@@ -564,6 +624,10 @@ msgstr "Dokumentation für Benutzer von Sushi."
 #~ msgid "Dont see a pool you joined?"
 #~ msgstr "Sehen Sie keinen Pool, dem Sie beigetreten sind?"
 
+#: src/guards/Network/index.tsx:36
+msgid "Either return to the {link}, or change to an available network."
+msgstr ""
+
 #: src/components/LanguageSwitch/index.tsx:16
 msgid "English"
 msgstr ""
@@ -579,6 +643,7 @@ msgstr "Eingeben"
 msgid "Enter Amount"
 msgstr "Menge eingeben"
 
+#: src/state/limit-order/hooks.ts:177
 #: src/state/swap/hooks.ts:195
 msgid "Enter a recipient"
 msgstr "Geben Sie einen Empfänger ein"
@@ -588,6 +653,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "Geben Sie einen gültigen Slippage-Prozentsatz ein"
 
 #: src/state/burn/hooks.ts:138
+#: src/state/limit-order/hooks.ts:168
 #: src/state/mint/hooks.ts:202
 #: src/state/swap/hooks.ts:186
 msgid "Enter an amount"
@@ -614,7 +680,11 @@ msgstr ""
 msgid "Expanded results from inactive Token Lists"
 msgstr ""
 
-#: src/components/Settings/index.tsx:171
+#: src/components/ExpertModePanel/index.tsx:19
+msgid "Expert Mode"
+msgstr ""
+
+#: src/components/Settings/index.tsx:160
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
@@ -625,7 +695,12 @@ msgstr ""
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "Der Expertenmodus deaktiviert die Eingabeaufforderung zur Bestätigung der Transaktion und ermöglicht hohe Slippage-Trades, die häufig zu schlechten Kursen und Geldverlust führen."
 
+#: src/features/limit-order/OrderExpirationDropdown.tsx:41
+msgid "Expiration is the time at which the order will become invalid"
+msgstr ""
+
 #: src/components/AccountDetails/Transaction.tsx:125
+#: src/features/open-order/CompletedOrders.tsx:86
 msgid "Expired"
 msgstr ""
 
@@ -638,6 +713,12 @@ msgstr ""
 #: src/pages/Yield/minichefv2/index.tsx:112
 #~ msgid "Fetching Instruments"
 #~ msgstr "Instrumente holen"
+
+#: src/features/open-order/CompletedOrders.tsx:39
+#: src/features/open-order/CompletedOrders.tsx:82
+#: src/features/open-order/OpenOrders.tsx:98
+msgid "Filled"
+msgstr ""
 
 #: src/pages/exchange/find/index.tsx:80
 msgid "Find Pool"
@@ -707,7 +788,7 @@ msgstr ""
 msgid "Go Back"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:135
+#: src/pages/exchange/migrate/index.tsx:136
 msgid "Hardware Wallet"
 msgstr "Hardware-Wallet"
 
@@ -763,7 +844,7 @@ msgstr "Historische Gesamtsumme gesperrt: Gesamtsumme abrufen"
 msgid "Historical Total Locked: {0} SUSHI"
 msgstr "Historische Gesamtsumme gesperrt: {0} SUSHI"
 
-#: src/pages/kashi/create/index.tsx:221
+#: src/pages/kashi/create/index.tsx:223
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
 
@@ -780,6 +861,14 @@ msgstr "Pool importieren"
 #~ msgid "Import it"
 #~ msgstr "Importieren"
 
+#: src/features/limit-order/BalancePanel.tsx:36
+msgid "In Bento:"
+msgstr ""
+
+#: src/features/limit-order/BalancePanel.tsx:44
+msgid "In Wallet:"
+msgstr ""
+
 #: src/features/swap/SwapModalHeader.tsx:106
 msgid "Input is estimated. You will sell at most"
 msgstr ""
@@ -795,7 +884,7 @@ msgstr ""
 
 #: src/features/meowshi/MeowshiButton.tsx:95
 #: src/pages/bar/index.tsx:373
-#: src/pages/exchange/migrate/index.tsx:213
+#: src/pages/exchange/migrate/index.tsx:214
 msgid "Insufficient Balance"
 msgstr "Zu wenig Guthaben"
 
@@ -803,17 +892,18 @@ msgstr "Zu wenig Guthaben"
 #~ msgid "Insufficient WETH balance"
 #~ msgstr "Zu wenig WETH-Guthaben"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:600
+#: src/pages/exchange/swap/[[...tokens]].tsx:599
 msgid "Insufficient liquidity for this trade"
 msgstr "Unzureichende Liquidität für diesen Trade"
 
+#: src/state/limit-order/hooks.ts:199
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
 #: src/state/swap/hooks.ts:212
 msgid "Insufficient {0} balance"
 msgstr "Zu wenig {0} Guthaben"
 
-#: src/components/Settings/index.tsx:80
+#: src/components/Settings/index.tsx:69
 msgid "Interface Settings"
 msgstr "Schnittstelleneinstellungen"
 
@@ -888,6 +978,7 @@ msgstr "Verleihen"
 msgid "Lent"
 msgstr "Verliehen"
 
+#: src/components/ExchangeHeader.tsx:60
 #: src/pages/kashi/borrow/index.tsx:81
 msgid "Limit"
 msgstr ""
@@ -896,7 +987,11 @@ msgstr ""
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Limit <0> Verwendet </0>"
 
-#: src/components/ExchangeHeader.tsx:59
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:213
+msgid "Limit order"
+msgstr ""
+
+#: src/components/ExchangeHeader.tsx:70
 msgid "Liquidity"
 msgstr "Liquidität"
 
@@ -932,7 +1027,7 @@ msgstr "Listen"
 #: src/components/PositionCard/index.tsx:170
 #: src/components/TransactionList.tsx:40
 #: src/pages/exchange/find/index.tsx:176
-#: src/pages/exchange/migrate/index.tsx:215
+#: src/pages/exchange/migrate/index.tsx:216
 #: src/pages/exchange/pool/index.tsx:123
 #: src/pages/user/index.tsx:93
 msgid "Loading"
@@ -942,7 +1037,11 @@ msgstr "Wird geladen"
 msgid "Loading Balance"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:324
+#: src/state/limit-order/hooks.ts:195
+msgid "Loading balance"
+msgstr ""
+
+#: src/pages/exchange/migrate/index.tsx:326
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Laden Ihrer {exchange} Liquiditätspositionen"
 
@@ -957,7 +1056,7 @@ msgstr "Wird geladen ..."
 #: src/features/farm/FarmListItemDetails.tsx:105
 #: src/features/farm/FarmListItemDetails.tsx:162
 #: src/pages/bar/index.tsx:336
-#: src/pages/exchange/migrate/index.tsx:86
+#: src/pages/exchange/migrate/index.tsx:87
 #: src/pages/user/balances.tsx:205
 #: src/pages/user/balances.tsx:269
 msgid "MAX"
@@ -969,7 +1068,7 @@ msgid ""
 "used to vote in special MEOW governor contracts."
 msgstr ""
 
-#: src/components/Settings/index.tsx:125
+#: src/components/Settings/index.tsx:114
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
@@ -982,7 +1081,7 @@ msgstr "Verwalten"
 #~ msgid "Manage Liquidity in Rewards Pool"
 #~ msgstr "Verwalten Sie die Liquidität im Prämienpool"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:231
+#: src/modals/SearchModal/CurrencySearch.tsx:245
 msgid "Manage Token Lists"
 msgstr ""
 
@@ -990,7 +1089,7 @@ msgstr ""
 msgid "Manage this pool"
 msgstr "Verwalten Sie diesen Pool"
 
-#: src/components/Settings/index.tsx:147
+#: src/components/Settings/index.tsx:136
 msgid "Manifold Finance"
 msgstr ""
 
@@ -1018,6 +1117,7 @@ msgid "Matic Bridge"
 msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:149
+#: src/features/limit-order/CurrencyInput.tsx:43
 #: src/features/meowshi/CurrencyInputPanel.tsx:90
 msgid "Max"
 msgstr "Max"
@@ -1037,7 +1137,7 @@ msgstr ""
 
 #: src/components/Header/index.tsx:65
 #: src/components/Header/index.tsx:299
-#: src/pages/exchange/migrate/index.tsx:244
+#: src/pages/exchange/migrate/index.tsx:245
 #: src/pages/exchange/pool/index.tsx:162
 msgid "Migrate"
 msgstr "Migrieren"
@@ -1046,20 +1146,24 @@ msgstr "Migrieren"
 #~ msgid "Migrate Now"
 #~ msgstr "Jetzt migrieren"
 
-#: src/pages/exchange/migrate/index.tsx:317
+#: src/pages/exchange/migrate/index.tsx:318
 msgid "Migrate {exchange} Liquidity"
 msgstr "{exchange} Liquidität migrieren"
 
-#: src/pages/exchange/migrate/index.tsx:244
+#: src/pages/exchange/migrate/index.tsx:245
 msgid "Migrating"
 msgstr "Migration"
 
-#: src/pages/exchange/migrate/index.tsx:131
+#: src/pages/exchange/migrate/index.tsx:132
 msgid "Migration is done in one-click using your signature (permit)"
 msgstr "Die Migration erfolgt mit einem Klick unter Verwendung Ihrer Signatur (Erlaubnis)"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:113
 msgid "Miner Tip"
+msgstr ""
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
+msgid "Minimum Received"
 msgstr ""
 
 #: src/features/lending/TradeReview.tsx:45
@@ -1075,12 +1179,21 @@ msgstr "Minimum erhalten"
 msgid "My Liquidity Positions"
 msgstr ""
 
+#: src/features/limit-order/MyOrders.tsx:18
+msgid "My Orders"
+msgstr ""
+
 #: src/pages/user/index.tsx:75
 msgid "My SUSHI"
 msgstr ""
 
 #: src/features/meowshi/MeowshiButton.tsx:110
 msgid "Network not supported yet"
+msgstr ""
+
+#: src/features/limit-order/OrderExpirationDropdown.tsx:17
+#: src/state/limit-order/hooks.ts:272
+msgid "Never"
 msgstr ""
 
 #: src/pages/Swap/index.tsx:257
@@ -1091,7 +1204,7 @@ msgstr ""
 msgid "New to Ethereum?"
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:272
+#: src/pages/exchange/migrate/index.tsx:273
 msgid "No Liquidity found"
 msgstr "Keine Liquidität gefunden"
 
@@ -1116,15 +1229,19 @@ msgstr "Es wurde keine Liquidität für einen Swap gefunden"
 msgid "No liquidity was found."
 msgstr ""
 
+#: src/features/open-order/CompletedOrders.tsx:102
+msgid "No order history"
+msgstr ""
+
 #: src/pages/exchange/find/index.tsx:166
 msgid "No pool found"
 msgstr "Kein Pool gefunden"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:226
+#: src/modals/SearchModal/CurrencySearch.tsx:239
 msgid "No results found"
 msgstr "Keine Ergebnisse gefunden"
 
-#: src/pages/exchange/migrate/index.tsx:130
+#: src/pages/exchange/migrate/index.tsx:131
 msgid "Non-hardware Wallet"
 msgstr "Non-Hardware Wallet"
 
@@ -1133,7 +1250,7 @@ msgstr "Non-Hardware Wallet"
 msgid "None"
 msgstr "Keiner"
 
-#: src/components/Settings/index.tsx:175
+#: src/components/Settings/index.tsx:164
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "VERWENDEN SIE DIESEN MODUS NUR, WENN SIE WISSEN, WAS SIE TUN."
 
@@ -1144,6 +1261,10 @@ msgstr "VERWENDEN SIE DIESEN MODUS NUR, WENN SIE WISSEN, WAS SIE TUN."
 #: src/components/Web3ReactManager/index.tsx:68
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Hoppla! Ein unbekannter Fehler ist aufgetreten. Bitte aktualisieren Sie die Seite oder besuchen Sie sie von einem anderen Browser oder Gerät aus."
+
+#: src/features/open-order/OpenOrders.tsx:47
+msgid "Open Orders"
+msgstr ""
 
 #: src/components/Header/More.tsx:26
 #: src/components/Menu.tsx:23
@@ -1163,13 +1284,22 @@ msgstr "Hauptmenü öffnen"
 msgid "Oracle"
 msgstr "Orakel"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:242
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:112
+#: src/features/limit-order/OrderExpirationDropdown.tsx:40
+msgid "Order Expiration"
+msgstr ""
+
+#: src/features/open-order/CompletedOrders.tsx:19
+msgid "Order History"
+msgstr ""
+
+#: src/pages/exchange/add/[[...tokens]].tsx:243
 msgid ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
 "will revert."
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:602
+#: src/pages/exchange/remove/[[...tokens]].tsx:603
 msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
 msgstr "Output wird geschätzt. Wenn sich der Preis um mehr als {0} % ändert, wird Ihre Transaktion zurückgesetzt."
 
@@ -1188,6 +1318,15 @@ msgstr ""
 #: src/components/swap/SwapModalHeader.tsx:100
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Output wird an <0> {0} </0> gesendet"
+
+#: src/features/open-order/CompletedOrders.tsx:35
+#: src/features/open-order/OpenOrders.tsx:63
+msgid "Pay"
+msgstr ""
+
+#: src/features/limit-order/PayFromToggle.tsx:23
+msgid "Pay from:"
+msgstr ""
 
 #: src/components/Web3Status/index.tsx:120
 msgid "Pending"
@@ -1209,7 +1348,7 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-#: src/components/Settings/index.tsx:181
+#: src/components/Settings/index.tsx:170
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Bitte geben Sie das Wort „Bestätigen“ ein, um den Expertenmodus zu aktivieren."
 
@@ -1227,7 +1366,7 @@ msgstr "Pool gefunden!"
 #~ msgid "Pool Rewards"
 #~ msgstr "Pool-Belohnungen"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:239
+#: src/pages/exchange/add/[[...tokens]].tsx:240
 msgid "Pool Tokens"
 msgstr "Pool-Token"
 
@@ -1260,11 +1399,11 @@ msgstr "Positionen"
 msgid "Price Impact"
 msgstr "Preisauswirkung"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:645
+#: src/pages/exchange/swap/[[...tokens]].tsx:643
 msgid "Price Impact High"
 msgstr "Preisauswirkung hoch"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:674
+#: src/pages/exchange/swap/[[...tokens]].tsx:672
 msgid "Price Impact Too High"
 msgstr "Preisauswirkung zu hoch"
 
@@ -1272,8 +1411,15 @@ msgstr "Preisauswirkung zu hoch"
 msgid "Price Updated"
 msgstr "Preis aktualisiert"
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:66
+#: src/features/limit-order/LimitPriceInputPanel.tsx:36
+#: src/features/open-order/CompletedOrders.tsx:37
+#: src/features/open-order/OpenOrders.tsx:65
+msgid "Rate"
+msgstr ""
+
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:29
-#: src/pages/exchange/remove/[[...tokens]].tsx:617
+#: src/pages/exchange/remove/[[...tokens]].tsx:618
 msgid "Rates"
 msgstr "Kurse"
 
@@ -1285,10 +1431,20 @@ msgstr "Kurse"
 #~ msgid "Read the contract"
 #~ msgstr "Vertrag lesen"
 
+#: src/features/open-order/CompletedOrders.tsx:34
+#: src/features/open-order/OpenOrders.tsx:62
+msgid "Receive"
+msgstr ""
+
 #: src/components/AccountDetails/index.tsx:169
 msgid "Recent Transactions"
 msgstr ""
 
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
+msgid "Recipient"
+msgstr ""
+
+#: src/components/AddressInputPanel/index.tsx:37
 #: src/components/PositionCard/index.tsx:253
 msgid "Remove"
 msgstr "Entfernen"
@@ -1297,7 +1453,7 @@ msgstr "Entfernen"
 msgid "Remove Liquidity"
 msgstr "Liquidität entfernen"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:527
+#: src/pages/exchange/swap/[[...tokens]].tsx:526
 msgid "Remove recipient"
 msgstr ""
 
@@ -1305,12 +1461,12 @@ msgstr ""
 #~ msgid "Remove send"
 #~ msgstr "Send entfernen"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:276
-#: src/pages/exchange/remove/[[...tokens]].tsx:276
+#: src/pages/exchange/remove/[[...tokens]].tsx:277
+#: src/pages/exchange/remove/[[...tokens]].tsx:277
 msgid "Remove {0} {1} and {2} {3}"
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:656
+#: src/pages/exchange/remove/[[...tokens]].tsx:657
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "Entfernen von {0} {1} und {2} {3}"
 
@@ -1322,12 +1478,20 @@ msgstr "Zurückzahlen"
 #~ msgid "Request Tool"
 #~ msgstr "Tool anfordern"
 
-#: src/components/Settings/index.tsx:113
+#: src/components/Settings/index.tsx:102
 msgid "Restricts swaps to direct pairs only."
 msgstr "Beschränkt Swaps nur auf direkte Paare."
 
+#: src/features/limit-order/LimitOrderButton.tsx:131
+msgid "Review Limit Order"
+msgstr ""
+
 #: src/features/farm/FarmList.tsx:37
 msgid "Rewards"
+msgstr ""
+
+#: src/guards/Network/index.tsx:33
+msgid "Roll it back - this feature is not yet supported on {0}."
 msgstr ""
 
 #: src/components/LanguageSwitch/index.tsx:32
@@ -1371,7 +1535,7 @@ msgstr ""
 #~ msgid "Search by name, symbol, address"
 #~ msgstr "Suche nach Name, Symbol, Adresse"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:187
+#: src/modals/SearchModal/CurrencySearch.tsx:199
 msgid "Search name or paste address"
 msgstr "Suchen Sie den Namen oder fügen Sie die Adresse ein"
 
@@ -1383,8 +1547,14 @@ msgstr ""
 msgid "Select a collateral token"
 msgstr ""
 
+#: src/state/limit-order/hooks.ts:181
+msgid "Select a rate"
+msgstr ""
+
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
+#: src/features/limit-order/CurrencySelect.tsx:74
+#: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:190
 msgid "Select a token"
 msgstr "Wählen Sie einen Token aus"
@@ -1393,11 +1563,19 @@ msgstr "Wählen Sie einen Token aus"
 msgid "Select a token to find your liquidity"
 msgstr "Wählen Sie einen Token aus, um Ihre Liquidität zu ermitteln"
 
-#: src/components/Settings/index.tsx:150
+#: src/state/limit-order/hooks.ts:185
+msgid "Select an order expiration"
+msgstr ""
+
+#: src/components/AddressInputPanel/index.tsx:35
+msgid "Send to:"
+msgstr ""
+
+#: src/components/Settings/index.tsx:139
 msgid "Send transaction privately to avoid front-running and sandwich attacks."
 msgstr ""
 
-#: src/components/Settings/index.tsx:129
+#: src/components/Settings/index.tsx:118
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
 msgstr ""
 
@@ -1424,6 +1602,7 @@ msgid "Slippage tolerance..."
 msgstr ""
 
 #: src/features/lending/Button.tsx:28
+#: src/features/limit-order/LimitOrderButton.tsx:189
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Bei der Unterzeichnung der Genehmigung ist ein Fehler aufgetreten. Dies geschieht häufig bei Hardware-Wallets wie z. B. Trezor und Ledger. Klicken Sie erneut und die Fallback-Methode wird verwendet."
 
@@ -1494,7 +1673,7 @@ msgstr "Staking APR"
 #~ msgid "Supply APR"
 #~ msgstr "APR liefern"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:265
+#: src/pages/exchange/add/[[...tokens]].tsx:266
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Lieferung von {0} {1} und {2} {3}"
 
@@ -1514,36 +1693,36 @@ msgstr "Sushi unterstützt Open Source."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Lassen Sie SUSHI für sich arbeiten"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:437
+#: src/pages/exchange/swap/[[...tokens]].tsx:439
 msgid "SushiSwap"
 msgstr ""
 
 #: src/components/ExchangeHeader.tsx:49
 #: src/components/Header/index.tsx:48
 #: src/components/Header/index.tsx:282
-#: src/pages/exchange/swap/[[...tokens]].tsx:648
-#: src/pages/exchange/swap/[[...tokens]].tsx:677
+#: src/pages/exchange/swap/[[...tokens]].tsx:646
+#: src/pages/exchange/swap/[[...tokens]].tsx:675
 msgid "Swap"
 msgstr "Swap"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:647
-#: src/pages/exchange/swap/[[...tokens]].tsx:676
+#: src/pages/exchange/swap/[[...tokens]].tsx:645
+#: src/pages/exchange/swap/[[...tokens]].tsx:674
 msgid "Swap Anyway"
 msgstr "Dennoch Swap durchführen"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:478
+#: src/pages/exchange/swap/[[...tokens]].tsx:477
 msgid "Swap From (est.):"
 msgstr "Swap von (est.):"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:478
+#: src/pages/exchange/swap/[[...tokens]].tsx:477
 msgid "Swap From:"
 msgstr "Swap von:"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:538
+#: src/pages/exchange/swap/[[...tokens]].tsx:537
 msgid "Swap To (est.):"
 msgstr "Swap To (est.):"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:538
+#: src/pages/exchange/swap/[[...tokens]].tsx:537
 msgid "Swap To:"
 msgstr "Swap zu:"
 
@@ -1602,6 +1781,10 @@ msgstr "Dinge, die Sie mit Ihrem SUSHI tun können"
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
 
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:145
+msgid "This transaction is below market rate"
+msgstr ""
+
 #: src/hooks/useSwapCallback.ts:199
 msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
 msgstr ""
@@ -1614,7 +1797,7 @@ msgstr "Diese Transaktion wird nicht durchgeführt, entweder wegen Preisbewegung
 msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:360
+#: src/pages/exchange/add/[[...tokens]].tsx:361
 #: src/pages/exchange/find/index.tsx:95
 msgid "Tip:"
 msgstr ""
@@ -1631,7 +1814,7 @@ msgstr ""
 #~ msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
 #~ msgstr "Um sich in SUSHI zurückzuziehen, gehen Sie zu Aave und entfernen Sie axSUSHI als Sicherheit und dann zu SushiBar, um es abzustecken. Eine vollständige Entnahme wird bald verfügbar sein."
 
-#: src/components/Settings/index.tsx:86
+#: src/components/Settings/index.tsx:75
 msgid "Toggle Expert Mode"
 msgstr "Expertenmodus umschalten"
 
@@ -1677,7 +1860,7 @@ msgstr "Gesamt"
 msgid "Transaction History {0}"
 msgstr ""
 
-#: src/components/Settings/index.tsx:74
+#: src/components/Settings/index.tsx:63
 msgid "Transaction Settings"
 msgstr "Transaktionseinstellungen"
 
@@ -1693,11 +1876,11 @@ msgstr "Transaktionsfrist"
 #~ msgid "Transactions"
 #~ msgstr "Transaktionen"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:601
+#: src/pages/exchange/swap/[[...tokens]].tsx:600
 msgid "Try enabling multi-hop trades"
 msgstr "Versuchen Sie, Multi-Hop-Trades zu aktivieren."
 
-#: src/components/Settings/index.tsx:188
+#: src/components/Settings/index.tsx:177
 msgid "Turn On Expert Mode"
 msgstr "Expertenmodus aktivieren"
 
@@ -1718,12 +1901,12 @@ msgstr "Unstake"
 msgid "Unstaked"
 msgstr "Unstaked"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:453
-#: src/pages/exchange/swap/[[...tokens]].tsx:585
+#: src/pages/exchange/add/[[...tokens]].tsx:455
+#: src/pages/exchange/swap/[[...tokens]].tsx:584
 msgid "Unsupported Asset"
 msgstr "Nicht unterstütztes Asset"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:595
+#: src/pages/exchange/swap/[[...tokens]].tsx:594
 msgid "Unwrap"
 msgstr "Auspacken"
 
@@ -1775,8 +1958,8 @@ msgstr ""
 msgid "Vietnamese"
 msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:327
-#: src/pages/exchange/remove/[[...tokens]].tsx:721
+#: src/pages/exchange/add/[[...tokens]].tsx:328
+#: src/pages/exchange/remove/[[...tokens]].tsx:722
 msgid "View Liquidity Positions"
 msgstr ""
 
@@ -1813,6 +1996,7 @@ msgstr "Ansicht auf Explorer"
 msgid "Waiting for Confirmation"
 msgstr ""
 
+#: src/features/limit-order/PayFromToggle.tsx:45
 #: src/pages/user/balances.tsx:67
 msgid "Wallet"
 msgstr "Wallet"
@@ -1830,7 +2014,7 @@ msgstr ""
 #~ msgid "Welcome to Sushi on Polygon (Matic)"
 #~ msgstr "Willkommen bei Sushi on Polygon (Matic)"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:356
+#: src/pages/exchange/add/[[...tokens]].tsx:357
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "Beim Erstellen eines Paares sind Sie der erste Liquiditätsanbieter. Das Verhältnis der von Ihnen hinzugefügten Token bestimmt den Preis für diesen Pool. Wenn Sie mit dem Kurs zufrieden sind, klicken Sie auf „Bereitstellen“, um ihn zu überprüfen."
 
@@ -1842,7 +2026,7 @@ msgstr "Abheben"
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "{assetSymbol} entnehmen"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:593
+#: src/pages/exchange/swap/[[...tokens]].tsx:592
 msgid "Wrap"
 msgstr "Wrap"
 
@@ -1870,7 +2054,11 @@ msgstr "Der gestrige APR"
 #~ msgid "Yield Instruments"
 #~ msgstr "Ertragsinstrumente"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:388
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:55
+msgid "You Pay:"
+msgstr ""
+
+#: src/pages/exchange/add/[[...tokens]].tsx:390
 msgid "You are creating a pool"
 msgstr "Sie erstellen einen Pool"
 
@@ -1882,12 +2070,24 @@ msgstr "Sie befinden sich im falschen Netzwerk"
 msgid "You don’t have liquidity in this pool yet"
 msgstr "Sie haben noch keine Liquidität in diesem Pool"
 
-#: src/pages/exchange/migrate/index.tsx:136
+#: src/pages/exchange/migrate/index.tsx:137
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Sie müssen zuerst LP-Token genehmigen und dann migrieren"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:388
-#: src/pages/exchange/remove/[[...tokens]].tsx:749
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:244
+msgid "You pay"
+msgstr ""
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
+msgid "You receive <0>(at least):</0>"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:294
+msgid "You receive:"
+msgstr ""
+
+#: src/pages/exchange/add/[[...tokens]].tsx:390
+#: src/pages/exchange/remove/[[...tokens]].tsx:752
 msgid "You will receive"
 msgstr "Sie werden erhalten"
 
@@ -1900,7 +2100,7 @@ msgstr ""
 msgid "Your Claimable SUSHI this Week"
 msgstr "Ihr Claimable SUSHI in dieser Woche"
 
-#: src/pages/exchange/migrate/index.tsx:332
+#: src/pages/exchange/migrate/index.tsx:334
 msgid "Your Liquidity"
 msgstr "Ihre Liquidität"
 
@@ -1934,7 +2134,7 @@ msgstr "Ihre SushiBar-Statistiken"
 #~ msgid "Your Transaction History on {0}"
 #~ msgstr "Ihr Transaktionsverlauf auf {0}"
 
-#: src/pages/exchange/migrate/index.tsx:328
+#: src/pages/exchange/migrate/index.tsx:330
 msgid "Your Wallet"
 msgstr "Deine Geldbörse"
 
@@ -1981,16 +2181,24 @@ msgstr "Ihre Transaktion wird bei einer großen, ungünstigen Preisbewegung rüc
 msgid "Your transactions will appear here..."
 msgstr ""
 
-#: src/pages/exchange/migrate/index.tsx:252
+#: src/pages/exchange/migrate/index.tsx:253
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "Ihre {exchange} {0} / {1} Liquidität wird zu SushiSwap {2} / {3} Liquidität."
 
-#: src/pages/zap/index.tsx:261
+#: src/pages/zap/index.tsx:262
 msgid "Zap"
+msgstr ""
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:165
+msgid "above"
 msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "auf das Jahr umgerechnet"
+
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:165
+msgid "below"
+msgstr ""
 
 #: src/components/Gas/index.tsx:14
 #: src/pages/user/index.tsx:60
@@ -2003,6 +2211,10 @@ msgstr ""
 
 #: src/pages/vesting/index.tsx:131
 msgid "forum discussion"
+msgstr ""
+
+#: src/guards/Network/index.tsx:24
+msgid "home page"
 msgstr ""
 
 #: src/pages/Positions/LiquidityPositions.tsx:43
@@ -2069,6 +2281,10 @@ msgstr "{0} Strategie"
 msgid "{0} {1} per {2}"
 msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:637
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:167
+msgid "{0} {sign} market rate"
+msgstr ""
+
+#: src/pages/exchange/remove/[[...tokens]].tsx:638
 msgid "{0}/{1} Burned"
 msgstr ""

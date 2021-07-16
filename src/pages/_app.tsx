@@ -8,7 +8,6 @@ import * as plurals from 'make-plural/plurals'
 
 import { Fragment, FunctionComponent } from 'react'
 import { NextComponentType, NextPageContext } from 'next'
-import store, { persistor } from '../state'
 
 import type { AppProps } from 'next/app'
 import ApplicationUpdater from '../state/application/updater'
@@ -27,6 +26,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import dynamic from 'next/dynamic'
 import getLibrary from '../functions/getLibrary'
 import { i18n } from '@lingui/core'
+import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
@@ -41,6 +41,7 @@ function MyApp({
   pageProps,
 }: AppProps & {
   Component: NextComponentType<NextPageContext> & {
+    Guard: FunctionComponent
     Layout: FunctionComponent
     Provider: FunctionComponent
   }
@@ -83,6 +84,9 @@ function MyApp({
 
   // Allows for conditionally setting a layout to be hoisted per page
   const Layout = Component.Layout || DefaultLayout
+
+  // Allows for conditionally setting a guard to be hoisted per page
+  const Guard = Component.Guard || Fragment
 
   return (
     <Fragment>
@@ -138,20 +142,20 @@ function MyApp({
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                  <>
-                    <ListsUpdater />
-                    <UserUpdater />
-                    <ApplicationUpdater />
-                    <TransactionUpdater />
-                    <MulticallUpdater />
-                  </>
-                  <Provider>
-                    <Layout>
+                <>
+                  <ListsUpdater />
+                  <UserUpdater />
+                  <ApplicationUpdater />
+                  <TransactionUpdater />
+                  <MulticallUpdater />
+                </>
+                <Provider>
+                  <Layout>
+                    <Guard>
                       <Component {...pageProps} />
-                    </Layout>
-                  </Provider>
-                </PersistGate>
+                    </Guard>
+                  </Layout>
+                </Provider>
               </ReduxProvider>
             </Web3ReactManager>
           </Web3ProviderNetwork>

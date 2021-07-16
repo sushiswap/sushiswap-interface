@@ -5,12 +5,7 @@ import Link from 'next/link'
 import Main from '../../components/Main'
 import NavLink from '../../components/NavLink'
 import React from 'react'
-import { Zero } from '@ethersproject/constants'
-import { formatNumber } from '../../functions/format'
-import { getCurrency } from '../../functions/currency'
 import kashiLogo from '../../../public/kashi-logo.png'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { useBentoBalances } from '../../state/bentobox/hooks'
 import { useRouter } from 'next/router'
 
 interface LayoutProps {
@@ -25,9 +20,6 @@ export default function Layout({
   right = undefined,
 }: LayoutProps): JSX.Element {
   const router = useRouter()
-  // TODO: Fix, causing infinite loop
-  // const balances = useBentoBalances()
-  const { chainId } = useActiveWeb3React()
   return (
     <div className="z-0 flex flex-col items-start w-full h-full overflow-x-hidden overflow-y-auto">
       <Header />
