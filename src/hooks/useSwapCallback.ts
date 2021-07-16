@@ -11,26 +11,27 @@ import {
   Trade as V2Trade,
 } from '@sushiswap/sdk'
 import { isAddress, isZero } from '../functions/validate'
+import { useFactoryContract, useRouterContract } from './useContract'
 
 import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
+import Common from '@ethereumjs/common'
 import { SignatureData } from './useERC20Permit'
+import { TransactionFactory } from '@ethereumjs/tx'
+import { TransactionRequest } from '@ethersproject/abstract-provider'
 import approveAmountCalldata from '../functions/approveAmountCalldata'
 import { calculateGasMargin } from '../functions/trade'
+import { ethers } from 'ethers'
 import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useArgentWalletContract } from './useArgentWalletContract'
+import { useBlockNumber } from '../state/application/hooks'
 import useENS from './useENS'
 import { useMemo } from 'react'
-import { useFactoryContract, useRouterContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 import { useUserArcherETHTip } from '../state/user/hooks'
-import Common from '@ethereumjs/common'
-import { ethers } from 'ethers'
-import { TransactionFactory } from '@ethereumjs/tx'
-import { TransactionRequest } from '@ethersproject/abstract-provider'
 
 export enum SwapCallbackState {
   INVALID,
@@ -140,6 +141,7 @@ export function useSwapCallArguments(
             value: '0x0',
           }
         } else {
+          // console.log({ methodName, args })
           return {
             address: routerContract.address,
             calldata: routerContract.interface.encodeFunctionData(methodName, args),
@@ -156,6 +158,7 @@ export function useSwapCallArguments(
     chainId,
     deadline,
     library,
+    factoryContract,
     recipient,
     routerContract,
     trade,
@@ -170,6 +173,7 @@ export function useSwapCallArguments(
  */
 export function swapErrorToUserReadableMessage(error: any): string {
   let reason: string | undefined
+
   while (Boolean(error)) {
     reason = error.reason ?? error.message ?? reason
     error = error.error ?? error.data?.originalError
@@ -219,9 +223,16 @@ export function useSwapCallback(
 } {
   const { account, chainId, library } = useActiveWeb3React()
 
+  const blockNumber = useBlockNumber()
+
+  const eip1559 =
+    EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
+
   const useArcher = archerRelayDeadline !== undefined
 
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useArcher)
+
+  // console.log({ swapCalls, trade })
 
   const addTransaction = useTransactionAdder()
 
@@ -271,6 +282,10 @@ export function useSwapCallback(
                     data: calldata,
                     value,
                   }
+
+            // console.log('Estimate gas for valid swap')
+
+            // library.getGasPrice().then((gasPrice) => console.log({ gasPrice }))
 
             return library
               .estimateGas(tx)
@@ -324,7 +339,13 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
+        // console.log({ bestCallOption })
+
         if (!useArcher) {
+          console.log('SWAP WITHOUT ARCHER')
+          console.log(
+            'gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}
+          )
           return library
             .getSigner()
             .sendTransaction({
@@ -333,6 +354,7 @@ export function useSwapCallback(
               data: calldata,
               // let the wallet try if we can't estimate the gas
               ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
+              gasPrice: !eip1559 && chainId === ChainId.HARMONY ? BigNumber.from('2000000000') : undefined,
               ...(value && !isZero(value) ? { value } : {}),
             })
             .then((response) => {
@@ -401,10 +423,6 @@ export function useSwapCallback(
           }
 
           const fullTxPromise = library.getBlockNumber().then((blockNumber) => {
-            const eip1559 =
-              EIP_1559_ACTIVATION_BLOCK[chainId] == undefined
-                ? false
-                : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
             return library.getSigner().populateTransaction({
               from: account,
               to: address,
@@ -457,7 +475,7 @@ export function useSwapCallback(
                 common,
               })
               const unsignedTx = tx.getMessageToSign()
-              console.log('unsignedTx', unsignedTx)
+              // console.log('unsignedTx', unsignedTx)
 
               return library.provider
                 .request({ method: 'eth_sign', params: [account, ethers.utils.hexlify(unsignedTx)] })
@@ -513,7 +531,7 @@ export function useSwapCallback(
                       ethTip: archerETHTip,
                     }
                   : undefined
-              console.log('archer', archer)
+              // console.log('archer', archer)
               addTransaction(
                 { hash },
                 {

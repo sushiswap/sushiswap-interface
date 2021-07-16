@@ -1,10 +1,9 @@
-import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from '@ethersproject/providers'
+import { Web3Provider } from '@ethersproject/providers'
 
 import { BscConnector } from '@binance-chain/bsc-connector'
 import { ChainId } from '@sushiswap/sdk'
 import { FortmaticConnector } from './Fortmatic'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { LatticeConnector } from '@web3-react/lattice-connector'
 import { NetworkConnector } from './NetworkConnector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
@@ -46,7 +45,7 @@ export const network = new NetworkConnector({
 let networkLibrary: Web3Provider | undefined
 
 export function getNetworkLibrary(): Web3Provider {
-  return (networkLibrary = networkLibrary ?? new Web3Provider(network.provider as ExternalProvider | JsonRpcFetchFunc))
+  return (networkLibrary = networkLibrary ?? new Web3Provider(network.provider as any))
 }
 
 export const injected = new InjectedConnector({
@@ -86,21 +85,14 @@ export const walletconnect = new WalletConnectConnector({
 })
 
 // mainnet only
-export const lattice = new LatticeConnector({
-  chainId: 1,
-  url: RPC[ChainId.MAINNET],
-  appName: 'SushiSwap',
-})
-
-// mainnet only
 export const fortmatic = new FortmaticConnector({
-  apiKey: process.env.REACT_APP_FORTMATIC_API_KEY ?? '',
+  apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
   chainId: 1,
 })
 
 // mainnet only
 export const portis = new PortisConnector({
-  dAppId: process.env.REACT_APP_PORTIS_ID ?? '',
+  dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
   networks: [1],
 })
 

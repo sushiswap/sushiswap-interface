@@ -1,10 +1,12 @@
-import { Currency, CurrencyAmount, Ether, JSBI, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Ether, JSBI, NATIVE, Token } from '@sushiswap/sdk'
 import { PairState, useV2Pair } from '../../../hooks/useV2Pairs'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import Alert from '../../../components/Alert'
 import { AutoColumn } from '../../../components/Column'
 import { AutoRow } from '../../../components/Row'
+import Back from '../../../components/Back'
+import Container from '../../../components/Container'
 import CurrencySelectPanel from '../../../components/CurrencySelectPanel'
 import Dots from '../../../components/Dots'
 import { ExtendedEther } from '../../../constants'
@@ -13,6 +15,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { MinimalPositionCard } from '../../../components/PositionCard'
 import { Plus } from 'react-feather'
+import Typography from '../../../components/Typography'
 import Web3Connect from '../../../components/Web3Connect'
 import { currencyId } from '../../../functions/currency'
 import { t } from '@lingui/macro'
@@ -30,10 +33,9 @@ export default function PoolFinder() {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
 
-  const [showSearch, setShowSearch] = useState<boolean>(false)
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
-  const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? ExtendedEther.onChain(chainId) : null))
+  const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? NATIVE[chainId] : null))
   const [currency1, setCurrency1] = useState<Currency | null>(null)
 
   const [pairState, pair] = useV2Pair(currency0 ?? undefined, currency1 ?? undefined)
@@ -57,24 +59,6 @@ export default function PoolFinder() {
 
   const hasPosition = Boolean(position && JSBI.greaterThan(position.quotient, JSBI.BigInt(0)))
 
-  // const switchTokens = useCallback(() => {
-  //   setCurrency0(currency1);
-  //   setCurrency1(currency0);
-  // }, [currency0, currency1]);
-
-  // const handleCurrencySelect = useCallback(
-  //   (currency: Currency) => {
-  //     if (activeField === Fields.TOKEN0) {
-  //       if (currency === currency1) switchTokens();
-  //       else setCurrency0(currency);
-  //     } else {
-  //       if (currency === currency0) switchTokens();
-  //       else setCurrency1(currency);
-  //     }
-  //   },
-  //   [activeField, currency0, currency1, switchTokens]
-  // );
-
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
       if (activeField === Fields.TOKEN0) {
@@ -86,10 +70,6 @@ export default function PoolFinder() {
     [activeField]
   )
 
-  const handleSearchDismiss = useCallback(() => {
-    setShowSearch(false)
-  }, [setShowSearch])
-
   const prerequisiteMessage = (
     <div className="p-5 text-center rounded bg-dark-800">{i18n._(t`Select a token to find your liquidity`)}</div>
   )
@@ -98,22 +78,28 @@ export default function PoolFinder() {
     <>
       <Head>
         <title>{i18n._(t`Find Pool`)} | Sushi</title>
-        <meta name="description" content="Find pool" />
+        <meta key="description" name="description" content="Find pool" />
       </Head>
-      <div className="relative w-full max-w-2xl rounded bg-dark-900 shadow-liquidity">
-        <FindPoolTabs />
-        <div className="p-4 space-y-6">
-          <Alert
-            showIcon={false}
-            message={
-              <>
-                <b>{i18n._(t`Tip:`)}</b>{' '}
-                {i18n._(t`Use this tool to find pairs that don&apos;t automatically appear in the interface`)}
-              </>
-            }
-            type="information"
-          />
 
+      <Container maxWidth="2xl" className="space-y-6">
+        <div className="p-4 mb-3 space-y-3">
+          <Back />
+
+          <Typography component="h1" variant="h2">
+            {i18n._(t`Import Pool`)}
+          </Typography>
+        </div>
+        <Alert
+          message={
+            <>
+              <b>{i18n._(t`Tip:`)}</b>{' '}
+              {i18n._(t`Use this tool to find pairs that don't automatically appear in the interface`)}
+            </>
+          }
+          type="information"
+        />
+
+        <div className="relative p-4 space-y-4 rounded bg-dark-900 shadow-liquidity">
           <AutoColumn gap={'md'}>
             <CurrencySelectPanel
               currency={currency0}
@@ -196,7 +182,7 @@ export default function PoolFinder() {
             prerequisiteMessage
           )}
         </div>
-      </div>
+      </Container>
     </>
   )
 }

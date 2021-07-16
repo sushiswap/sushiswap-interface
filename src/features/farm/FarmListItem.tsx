@@ -1,11 +1,12 @@
-import { PairType } from './enum'
-import { Disclosure } from '@headlessui/react'
-import React from 'react'
 import { classNames, formatNumber, formatPercent } from '../../functions'
+
+import { Disclosure } from '@headlessui/react'
 import DoubleLogo from '../../components/DoubleLogo'
-import Image from '../../components/Image'
-import { useCurrency } from '../../hooks/Tokens'
 import FarmListItemDetails from './FarmListItemDetails'
+import Image from '../../components/Image'
+import { PairType } from './enum'
+import React from 'react'
+import { useCurrency } from '../../hooks/Tokens'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
@@ -65,14 +66,15 @@ const FarmListItem = ({ farm, ...rest }) => {
               </div>
               <div className="flex flex-col items-end justify-center">
                 <div className="font-bold text-righttext-high-emphesis">
-                  {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)}
+                  {formatPercent(farm?.roiPerYear * 100)}
+                  {/* {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)} */}
                 </div>
                 <div className="text-xs text-right md:text-base text-secondary">annualized</div>
               </div>
             </div>
           </Disclosure.Button>
 
-          <FarmListItemDetails farm={farm} open={open} />
+          {open && <FarmListItemDetails farm={farm} />}
         </>
       )}
     </Disclosure>

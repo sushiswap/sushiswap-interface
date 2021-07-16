@@ -62,6 +62,7 @@ import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
+import ZENKO_ABI from '../constants/abis/zenko.json'
 import { getContract } from '../functions'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
@@ -641,4 +642,8 @@ export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | n
 
 export function useInariContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0x99B4019705444eB0F21aa6CcB71B996a0A4e8764', INARI_ABI, withSignerIfPossible)
+}
+
+export function useZenkoContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
 }

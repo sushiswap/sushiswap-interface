@@ -17,7 +17,7 @@ export default function Status({ initialData }) {
     <>
       <Head>
         <title>Status | Sushi</title>
-        <meta name="description" content="Sushi Status..." />
+        <meta key="description" name="description" content="Sushi Status..." />
       </Head>
       {/* <div className="w-full max-w-6xl mx-auto">
                 <Typography component="h1" variant="h1" className="w-full mb-4">

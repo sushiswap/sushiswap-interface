@@ -1,4 +1,4 @@
-import { Currency, WNATIVE, NATIVE, currencyEquals } from '@sushiswap/sdk'
+import { Currency, NATIVE, WNATIVE, currencyEquals } from '@sushiswap/sdk'
 
 import { AutoColumn } from '../../components/Column'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -38,7 +38,7 @@ export default function RemoveLiquidityReceiveDetails({
             <RowBetween className="text-sm">
               {hasWETH ? (
                 <Link href={`/remove/${currencyId(currencyA)}/${currencyId(currencyB)}`}>
-                  <a>Receive WETH</a>
+                  <a>Receive {WNATIVE[chainId].symbol}</a>
                 </Link>
               ) : hasETH ? (
                 <Link

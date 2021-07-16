@@ -5,7 +5,7 @@ export default function Vaults() {
     <>
       <Head>
         <title>Vaults | Sushi</title>
-        <meta name="description" content="Sushi vaults..." />
+        <meta key="description" name="description" content="Sushi vaults..." />
       </Head>
     </>
   )

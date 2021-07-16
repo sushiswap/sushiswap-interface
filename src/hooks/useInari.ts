@@ -1,4 +1,4 @@
-import { useInariContract } from './useContract'
+import { useInariContract, useZenkoContract } from './useContract'
 import { CurrencyAmount } from '@sushiswap/sdk'
 import { ethers } from 'ethers'
 import { useDerivedInariState, useInariState } from '../state/inari/hooks'

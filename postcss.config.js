@@ -1,6 +1,3 @@
 module.exports = {
-  plugins: [
-    '@tailwindcss/jit',
-    ['postcss-preset-env', { stage: 1 }]
-  ]
+  plugins: ['tailwindcss', ['postcss-preset-env', { stage: 1 }]],
 }

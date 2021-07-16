@@ -154,7 +154,7 @@ const BSC_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   '0xE188A9875af525d25334d75F3327863B2b8cd0F1': {
-    from: '0x47bead2563dcbf3bf2c9407fea4dc236faba485a',
+    from: '0x47BEAd2563dCBf3bF2c9407fEa4dC236fAbA485A',
     to: '0x0000000000000000000000000000000000000001',
     decimals: 8,
     fromDecimals: 18,

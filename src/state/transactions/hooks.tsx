@@ -1,4 +1,5 @@
 import { AppDispatch, AppState } from '../index'
+import { useAppDispatch, useAppSelector } from '../hooks'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -27,7 +28,7 @@ export function useTransactionAdder(): (
   }
 ) => void {
   const { chainId, account } = useActiveWeb3React()
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   return useCallback(
     (
@@ -76,7 +77,7 @@ export function useTransactionAdder(): (
 export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
   const { chainId } = useActiveWeb3React()
 
-  const state = useSelector<AppState, AppState['transactions']>((state) => state.transactions)
+  const state = useAppSelector((state) => state.transactions)
 
   return chainId ? state[chainId] ?? {} : {}
 }

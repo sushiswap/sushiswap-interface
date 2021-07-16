@@ -19,9 +19,9 @@ export default function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
   const [tabIndex, setTabIndex] = useState(0)
-  const info = useKashiInfo()
 
   const pair = useKashiPair(router.query.pair as string)
+  const info = useKashiInfo()
 
   if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
 
@@ -29,7 +29,7 @@ export default function Pair() {
     <>
       <Head>
         <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
-        <meta name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
+        <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
       </Head>
       <Card
         className="h-full bg-dark-900"

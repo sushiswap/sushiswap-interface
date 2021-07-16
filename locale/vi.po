@@ -14,12 +14,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/pages/vesting/index.tsx:236
-msgid ""
-"(COMING SOON) Accrue automatic yield through flash loans and\n"
-"SUSHI strategies"
-msgstr ""
-"(SẮP RA MẮT) Tích lũy lợi suất tự động thông qua các khoản vay nhanh và chiến lược\n"
-"SUSHI"
+#~ msgid ""
+#~ "(COMING SOON) Accrue automatic yield through flash loans and\n"
+#~ "SUSHI strategies"
+#~ msgstr ""
+#~ "(SẮP RA MẮT) Tích lũy lợi suất tự động thông qua các khoản vay nhanh và chiến lược\n"
+#~ "SUSHI"
 
 #~ msgid "(COMING SOON) Accrue automatic yield through flash loans andSUSHI strategies"
 #~ msgstr ""
@@ -67,13 +67,13 @@ msgstr ""
 #~ msgstr "<0>Vị thế</0> của bạn"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:94
-msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
-msgstr ""
+#~ msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
+#~ msgstr ""
 
 #: src/features/lending/TradeReview.tsx:72
 #: src/features/swap/AdvancedSwapDetails.tsx:80
-msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
-msgstr "Một phần của mỗi giao dịch (0,25%) được chuyển đến các nhà cung cấp thanh khoản như một biện pháp khuyến khích giao thức."
+#~ msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
+#~ msgstr "Một phần của mỗi giao dịch (0,25%) được chuyển đến các nhà cung cấp thanh khoản như một biện pháp khuyến khích giao thức."
 
 #: src/pages/kashi/borrow/[pair].tsx:123
 #: src/pages/kashi/borrow/[pair].tsx:187
@@ -82,191 +82,182 @@ msgstr "Một phần của mỗi giao dịch (0,25%) được chuyển đến c�
 #: src/pages/kashi/lend/[pair].tsx:148
 #: src/pages/kashi/lend/index.tsx:83
 #: src/pages/kashi/lend/index.tsx:171
-msgid "APR"
-msgstr "Lãi suất phần trăm hàng năm - APR"
+#~ msgid "APR"
+#~ msgstr "Lãi suất phần trăm hàng năm - APR"
 
 #~ msgid "APR (incl. Fees)"
 #~ msgstr "Lãi suất phần trăm hàng năm - APR (bao gồm phí)"
 
 #: src/features/farm/FarmList.tsx:42
-msgid "APY"
-msgstr ""
+#~ msgid "APY"
+#~ msgstr ""
 
 #~ msgid "APY (incl. Fees)"
 #~ msgstr "Tỷ suất lợi nhuận hàng năm - APY (bao gồm phí)"
 
 #: src/features/swap/SwapModalHeader.tsx:91
-msgid "Accept"
-msgstr "Chấp nhận"
+#~ msgid "Accept"
+#~ msgstr "Chấp nhận"
 
 #: src/components/PositionCard/index.tsx:232
-#: src/pages/exchange/pool/index.tsx:151
-msgid "Add"
-msgstr "Thêm"
+#: src/pages/exchange/pool/index.tsx:153
+#~ msgid "Add"
+#~ msgstr "Thêm"
 
 #: src/components/NavigationTabs/index.tsx:69
-msgid "Add Liquidity"
-msgstr "Thêm thanh khoản"
+#~ msgid "Add Liquidity"
+#~ msgstr "Thêm thanh khoản"
 
 #: src/components/Header/index.tsx:171
-msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
+#~ msgid "Add SUSHI to your MetaMask wallet"
+#~ msgstr ""
 
 #: src/components/AppBar.tsx:138
 #~ msgid "Add Sushi to your Metamask wallet"
 #~ msgstr "Thêm Sushi vào ví Metamask của bạn"
 
 #: src/pages/kashi/borrow/[pair].tsx:174
-msgid "Add collateral in order to borrow assets"
-msgstr "Thêm tài sản thế chấp để vay tài sản"
+#~ msgid "Add collateral in order to borrow assets"
+#~ msgstr "Thêm tài sản thế chấp để vay tài sản"
 
-#: src/pages/exchange/find/index.tsx:171
-msgid "Add liquidity"
-msgstr "Thêm thanh khoản"
+#: src/pages/exchange/find/index.tsx:157
+#~ msgid "Add liquidity"
+#~ msgstr "Thêm thanh khoản"
 
 #: src/components/Header/index.tsx:125
-msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
+#~ msgid "Add xSUSHI to your MetaMask wallet"
+#~ msgstr ""
 
 #: src/components/AppBar.tsx:94
 #~ msgid "Add xSushi to your Metamask wallet"
 #~ msgstr "Thêm xSushi vào ví Metamask của bạn"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:197
-#: src/pages/exchange/add/[[...tokens]].tsx:197
-msgid "Add {0} {1} and {2} {3}"
-msgstr ""
+#: src/pages/exchange/add/[[...tokens]].tsx:195
+#: src/pages/exchange/add/[[...tokens]].tsx:195
+#~ msgid "Add {0} {1} and {2} {3}"
+#~ msgstr ""
 
 #: src/pages/vesting/index.tsx:136
-msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
+#~ msgid "Additional records and weekly merkle updates can be found on"
+#~ msgstr ""
 
 #: src/pages/exchange/migrate/index.tsx:69
-msgid "Amount of Tokens"
-msgstr "Số lượng token"
+#~ msgid "Amount of Tokens"
+#~ msgstr "Số lượng token"
 
-#: src/hooks/useSwapCallback.ts:201
-msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:205
+#~ msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
+#~ msgstr ""
 
 #: src/components/Footer/index.tsx:23
 #: src/components/Header/index.tsx:353
-msgid "Analytics"
-msgstr "Phân tích"
+#~ msgid "Analytics"
+#~ msgstr "Phân tích"
 
 #: src/features/lending/Button.tsx:64
-#: src/features/tools/meowshi/MeowshiButton.tsx:125
-#: src/pages/bar/index.tsx:335
+#: src/features/meowshi/MeowshiButton.tsx:124
+#: src/pages/bar/index.tsx:334
 #: src/pages/exchange/migrate/index.tsx:234
-#: src/pages/exchange/remove/[[...tokens]].tsx:838
+#: src/pages/exchange/remove/[[...tokens]].tsx:836
 #: src/pages/user/balances.tsx:212
-msgid "Approve"
-msgstr "Phê duyệt"
-
-#: src/features/inari/Button.tsx:68
-msgid "Approve Inari"
-msgstr ""
+#~ msgid "Approve"
+#~ msgstr "Phê duyệt"
 
 #: src/features/lending/Button.tsx:36
-msgid "Approve Kashi"
-msgstr "Phê duyệt Kashi"
-
-#: src/pages/exchange/add/[[...tokens]].tsx:469
-#: src/pages/exchange/add/[[...tokens]].tsx:486
-#: src/pages/exchange/swap/[[...tokens]].tsx:625
-msgid "Approve {0}"
-msgstr "Phê duyệt {0}"
-
-#: src/pages/exchange/migrate/index.tsx:232
-#: src/pages/exchange/remove/[[...tokens]].tsx:836
-#: src/pages/exchange/swap/[[...tokens]].tsx:623
-msgid "Approved"
-msgstr "Đã phê duyệt"
-
-#: src/features/tools/meowshi/MeowshiButton.tsx:118
-#: src/pages/bar/index.tsx:333
-#: src/pages/exchange/migrate/index.tsx:230
-#: src/pages/exchange/remove/[[...tokens]].tsx:834
-#: src/pages/user/balances.tsx:212
-msgid "Approving"
-msgstr "Đang phê duyệt"
-
-#: src/features/inari/Button.tsx:61
-msgid "Approving Inari"
-msgstr ""
+#~ msgid "Approve Kashi"
+#~ msgstr "Phê duyệt Kashi"
 
 #: src/pages/exchange/add/[[...tokens]].tsx:467
 #: src/pages/exchange/add/[[...tokens]].tsx:484
-msgid "Approving {0}"
-msgstr "Đang phê duyệt {0}"
+#: src/pages/exchange/swap/[[...tokens]].tsx:607
+#~ msgid "Approve {0}"
+#~ msgstr "Phê duyệt {0}"
+
+#: src/pages/exchange/migrate/index.tsx:232
+#: src/pages/exchange/remove/[[...tokens]].tsx:834
+#: src/pages/exchange/swap/[[...tokens]].tsx:605
+#~ msgid "Approved"
+#~ msgstr "Đã phê duyệt"
+
+#: src/features/meowshi/MeowshiButton.tsx:117
+#: src/pages/bar/index.tsx:332
+#: src/pages/exchange/migrate/index.tsx:230
+#: src/pages/exchange/remove/[[...tokens]].tsx:832
+#: src/pages/user/balances.tsx:212
+#~ msgid "Approving"
+#~ msgstr "Đang phê duyệt"
+
+#: src/pages/exchange/add/[[...tokens]].tsx:465
+#: src/pages/exchange/add/[[...tokens]].tsx:482
+#~ msgid "Approving {0}"
+#~ msgstr "Đang phê duyệt {0}"
 
 #: src/components/Settings/index.tsx:157
-msgid "Are you sure?"
-msgstr "Bạn có chắc không?"
+#~ msgid "Are you sure?"
+#~ msgstr "Bạn có chắc không?"
 
 #: src/components/TransactionSettings/index.tsx:191
-msgid "Auto"
-msgstr ""
+#~ msgid "Auto"
+#~ msgstr ""
 
 #: src/pages/kashi/borrow/[pair].tsx:203
 #: src/pages/kashi/borrow/index.tsx:184
 #: src/pages/kashi/lend/[pair].tsx:161
-msgid "Available"
-msgstr "Có sẵn"
+#~ msgid "Available"
+#~ msgstr "Có sẵn"
 
 #: src/components/WalletModal/index.tsx:306
 #~ msgid "Back"
 #~ msgstr ""
 
-#: src/pages/bar/index.tsx:313
-#: src/pages/bar/index.tsx:371
+#: src/pages/bar/index.tsx:312
+#: src/pages/bar/index.tsx:370
 #: src/pages/exchange/migrate/index.tsx:219
-msgid "Balance"
-msgstr "Số dư"
+#~ msgid "Balance"
+#~ msgstr "Số dư"
 
 #: src/components/CurrencyInputPanel/index.tsx:166
-#: src/features/inari/BalancePanel.tsx:68
-msgid "Balance:"
-msgstr ""
+#~ msgid "Balance:"
+#~ msgstr ""
 
 #: src/pages/user/balances.tsx:247
-msgid "Bento Balance: {0}"
-msgstr "Số dư Bento: {0}"
+#~ msgid "Bento Balance: {0}"
+#~ msgstr "Số dư Bento: {0}"
 
 #: src/pages/kashi/borrow/[pair].tsx:227
 #: src/pages/kashi/lend/[pair].tsx:199
 #: src/pages/user/balances.tsx:55
 #: src/pages/user/balances.tsx:68
-msgid "BentoBox"
-msgstr "BentoBox"
+#~ msgid "BentoBox"
+#~ msgstr "BentoBox"
 
 #: src/pages/bentobox/index.tsx:47
-msgid "BentoBox Apps"
-msgstr "Ứng dụng BentoBox"
+#~ msgid "BentoBox Apps"
+#~ msgstr "Ứng dụng BentoBox"
 
 #: src/pages/bentobox/index.tsx:49
-msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr "BentoBox là một cách sáng tạo để sử dụng hiệu quả khí các ứng dụng phi tập trung và tăng thêm lợi suất."
+#~ msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
+#~ msgstr "BentoBox là một cách sáng tạo để sử dụng hiệu quả khí các ứng dụng phi tập trung và tăng thêm lợi suất."
 
 #: src/pages/user/balances.tsx:89
-msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
-msgstr "BentoBox cung cấp thêm lợi suất ký quỹ với cho vay nhanh, chiến lược và chuyển khoản cố định, tiết kiệm giữa các ứng dụng phi tập trung được tích hợp, như thị trường Kashi"
+#~ msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
+#~ msgstr "BentoBox cung cấp thêm lợi suất ký quỹ với cho vay nhanh, chiến lược và chuyển khoản cố định, tiết kiệm giữa các ứng dụng phi tập trung được tích hợp, như thị trường Kashi"
 
 #: src/pages/kashi/borrow/[pair].tsx:235
-msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
-msgstr "Các chiến lược BentoBox có thể tạo ra lợi suất cho các token thế chấp của bạn. Token này chưa có chiến lược trong BentoBox."
+#~ msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
+#~ msgstr "Các chiến lược BentoBox có thể tạo ra lợi suất cho các token thế chấp của bạn. Token này chưa có chiến lược trong BentoBox."
 
 #: src/pages/kashi/lend/[pair].tsx:207
-msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
-msgstr "Chiến lược BentoBox có thể tạo ra lợi suất cho thanh khoản của bạn trong khi không được cho vay. Token này chưa có chiến lược trong BentoBox."
+#~ msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
+#~ msgstr "Chiến lược BentoBox có thể tạo ra lợi suất cho thanh khoản của bạn trong khi không được cho vay. Token này chưa có chiến lược trong BentoBox."
 
 #: src/components/Header/index.tsx:94
 #: src/components/Header/index.tsx:331
 #: src/pages/kashi/borrow/[pair].tsx:134
 #: src/pages/kashi/borrow/index.tsx:37
 #: src/pages/kashi/borrow/index.tsx:162
-msgid "Borrow"
-msgstr "Vay"
+#~ msgid "Borrow"
+#~ msgstr "Vay"
 
 #: src/pages/kashi/borrow/[pair].tsx:207
 #: src/pages/kashi/lend/[pair].tsx:172
@@ -274,16 +265,16 @@ msgstr "Vay"
 #~ msgstr "Lãi suất phần trăm hàng năm của khoản vay"
 
 #: src/pages/kashi/borrow/index.tsx:286
-msgid "Borrow assets and leverage up"
-msgstr "Vay tài sản và sử dụng đòn bẩy"
+#~ msgid "Borrow assets and leverage up"
+#~ msgstr "Vay tài sản và sử dụng đòn bẩy"
 
 #: src/pages/kashi/borrow/[pair].tsx:90
-msgid "Borrow {0}"
-msgstr "Vay {0}"
+#~ msgid "Borrow {0}"
+#~ msgstr "Vay {0}"
 
 #: src/pages/kashi/borrow/[pair].tsx:54
-msgid "Borrow {0}-{1}"
-msgstr "Vay {0} - {1}"
+#~ msgid "Borrow {0}-{1}"
+#~ msgstr "Vay {0} - {1}"
 
 #: src/pages/kashi/borrow/[pair].tsx:112
 #: src/pages/kashi/borrow/[pair].tsx:211
@@ -292,27 +283,27 @@ msgstr "Vay {0} - {1}"
 #: src/pages/kashi/lend/[pair].tsx:167
 #: src/pages/kashi/lend/index.tsx:75
 #: src/pages/kashi/lend/index.tsx:179
-msgid "Borrowed"
-msgstr "Đã vay"
+#~ msgid "Borrowed"
+#~ msgstr "Đã vay"
 
 #: src/pages/kashi/borrow/index.tsx:288
-msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
-msgstr "Việc đi vay cho phép bạn có được tính thanh khoản mà không cần bán. Hạn mức vào phụ thuộc vào số tiền thế chấp ký quỹ. Bạn sẽ có thể vay đến 75% tài sản thế chấp của mình và hoàn trả bất kỳ lúc nào với lãi suất cộng dồn."
+#~ msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
+#~ msgstr "Việc đi vay cho phép bạn có được tính thanh khoản mà không cần bán. Hạn mức vào phụ thuộc vào số tiền thế chấp ký quỹ. Bạn sẽ có thể vay đến 75% tài sản thế chấp của mình và hoàn trả bất kỳ lúc nào với lãi suất cộng dồn."
 
 #~ msgid "Bridge Assets"
 #~ msgstr "Tài sản bắc cầu"
 
 #: src/features/ramp/index.tsx:44
 #: src/features/transak/index.tsx:68
-msgid "Buy"
-msgstr ""
+#~ msgid "Buy"
+#~ msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:352
-msgid ""
-"By adding liquidity you&apos;ll earn 0.25% of all trades on this pair\n"
-"proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
-"claimed by withdrawing your liquidity."
-msgstr ""
+#: src/pages/exchange/add/[[...tokens]].tsx:350
+#~ msgid ""
+#~ "By adding liquidity you&apos;ll earn 0.25% of all trades on this pair\n"
+#~ "proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
+#~ "claimed by withdrawing your liquidity."
+#~ msgstr ""
 
 #: src/components/PositionCard/index.tsx:91
 #~ msgid ""
@@ -331,12 +322,8 @@ msgstr ""
 #~ "thanh khoản của bạn."
 
 #: src/components/Settings/index.tsx:100
-msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
-msgstr "Bỏ qua các phương thức xác nhận và cho phép các giao dịch có độ trượt giá cao. Bạn phải tự chịu rủi ro khi sử dụng."
-
-#: src/features/inari/Button.tsx:32
-msgid "Chain not supported yet"
-msgstr ""
+#~ msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
+#~ msgstr "Bỏ qua các phương thức xác nhận và cho phép các giao dịch có độ trượt giá cao. Bạn phải tự chịu rủi ro khi sử dụng."
 
 #: src/pages/Swap/index.tsx:399
 #~ msgid "Check out Sushi on Polygon (Matic)"
@@ -344,8 +331,8 @@ msgstr ""
 
 #: src/components/LanguageSwitch/index.tsx:40
 #: src/components/LanguageSwitch/index.tsx:45
-msgid "Chinese"
-msgstr ""
+#~ msgid "Chinese"
+#~ msgstr ""
 
 #: src/pages/Yield/masterchefv1/index.tsx:55
 #: src/pages/Yield/minichefv2/index.tsx:61
@@ -353,26 +340,26 @@ msgstr ""
 #~ msgstr "Yêu cầu"
 
 #: src/pages/vesting/index.tsx:183
-msgid "Claim SUSHI"
-msgstr "Yêu cầu SUSHI"
+#~ msgid "Claim SUSHI"
+#~ msgstr "Yêu cầu SUSHI"
 
 #: src/pages/vesting/index.tsx:183
-msgid "Claimed"
-msgstr "Đã yêu cầu"
+#~ msgid "Claimed"
+#~ msgstr "Đã yêu cầu"
 
 #: src/pages/user/index.tsx:128
-msgid "Clear History"
-msgstr "Xóa lịch sử"
+#~ msgid "Clear History"
+#~ msgstr "Xóa lịch sử"
 
 #: src/pages/Swap/index.tsx:401
 #~ msgid "Click here to switch to Polygon using Metamask"
 #~ msgstr "Nhấp vào đây để chuyển sang Polygon bằng cách sử dụng Metamask"
 
 #: src/pages/exchange/migrate/index.tsx:333
-msgid ""
-"Click on a pool below, input the amount you wish to migrate or select max, and click\n"
-"migrate"
-msgstr "Nhấp vào mạng lưới bên dưới, nhập số tiền bạn muốn di chuyển hoặc chọn tối đa và nhấp vào ndi chuyển"
+#~ msgid ""
+#~ "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
+#~ "migrate"
+#~ msgstr "Nhấp vào mạng lưới bên dưới, nhập số tiền bạn muốn di chuyển hoặc chọn tối đa và nhấp vào ndi chuyển"
 
 #~ msgid "Click on a pool below, input the amount you wish to migrate or select max, and clickmigrate"
 #~ msgstr "Nhấp vào mạng lưới bên dưới, nhập số tiền bạn muốn di chuyển hoặc chọn tối đa và nhấp vào di chuyển"
@@ -384,57 +371,56 @@ msgstr "Nhấp vào mạng lưới bên dưới, nhập số tiền bạn muốn
 #: src/pages/kashi/lend/[pair].tsx:173
 #: src/pages/kashi/lend/index.tsx:56
 #: src/pages/kashi/lend/index.tsx:159
-msgid "Collateral"
-msgstr "Tài sản thế chấp"
+#~ msgid "Collateral"
+#~ msgstr "Tài sản thế chấp"
 
 #: src/pages/vesting/index.tsx:113
-msgid "Community Approval"
-msgstr "Phê duyệt của cộng đồng"
+#~ msgid "Community Approval"
+#~ msgstr "Phê duyệt của cộng đồng"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:651
-msgid "Confirm"
-msgstr "Xác nhận"
+#: src/pages/exchange/remove/[[...tokens]].tsx:649
+#~ msgid "Confirm"
+#~ msgstr "Xác nhận"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:503
-msgid "Confirm Adding Liquidity"
-msgstr "Xác nhận thêm thanh khoản"
+#: src/pages/exchange/add/[[...tokens]].tsx:501
+#~ msgid "Confirm Adding Liquidity"
+#~ msgstr "Xác nhận thêm thanh khoản"
 
-#: src/pages/bar/index.tsx:359
-msgid "Confirm Staking"
-msgstr "Xác nhận đặt cược"
+#: src/pages/bar/index.tsx:358
+#~ msgid "Confirm Staking"
+#~ msgstr "Xác nhận đặt cược"
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:69
-msgid "Confirm Supply"
-msgstr "Xác nhận tổng cung"
+#~ msgid "Confirm Supply"
+#~ msgstr "Xác nhận tổng cung"
 
 #: src/features/swap/SwapModalFooter.tsx:100
-msgid "Confirm Swap"
-msgstr "Xác nhận Hoán đổi"
+#~ msgid "Confirm Swap"
+#~ msgstr "Xác nhận Hoán đổi"
 
-#: src/pages/bar/index.tsx:360
-#: src/pages/exchange/remove/[[...tokens]].tsx:848
-msgid "Confirm Withdrawal"
-msgstr "Xác nhận rút tiền"
+#: src/pages/bar/index.tsx:359
+#: src/pages/exchange/remove/[[...tokens]].tsx:846
+#~ msgid "Confirm Withdrawal"
+#~ msgstr "Xác nhận rút tiền"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:139
-msgid "Confirm convert"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:138
+#~ msgid "Confirm convert"
+#~ msgstr ""
 
-#: src/components/TransactionConfirmationModal/index.tsx:42
-msgid "Confirm this transaction in your wallet"
-msgstr ""
+#: src/modals/TransactionConfirmationModal/index.tsx:42
+#~ msgid "Confirm this transaction in your wallet"
+#~ msgstr ""
 
-#: src/features/inari/Button.tsx:25
-#: src/pages/bar/index.tsx:353
+#: src/pages/bar/index.tsx:352
 #: src/state/burn/hooks.ts:134
 #: src/state/mint/hooks.ts:194
-msgid "Connect Wallet"
-msgstr "Kết nối ví"
+#~ msgid "Connect Wallet"
+#~ msgstr "Kết nối ví"
 
-#: src/components/WalletModal/index.tsx:300
 #: src/components/Web3Connect/index.tsx:40
-msgid "Connect to a wallet"
-msgstr "Kết nối với ví"
+#: src/modals/WalletModal/index.tsx:302
+#~ msgid "Connect to a wallet"
+#~ msgstr "Kết nối với ví"
 
 #: src/pages/PoolFinder/index.tsx:61
 #~ msgid "Connect to a wallet to find pools"
@@ -446,50 +432,49 @@ msgstr "Kết nối với ví"
 #~ msgid "Connect to a wallet to view your liquidity"
 #~ msgstr "Kết nối với ví để xem thanh khoản của bạn"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:104
-msgid "Connect to wallet"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:103
+#~ msgid "Connect to wallet"
+#~ msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:154
-msgid "Convert"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:153
+#~ msgid "Convert"
+#~ msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:146
-msgid "Converting {0} {1} for {2} {3}"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:145
+#~ msgid "Converting {0} {1} for {2} {3}"
+#~ msgstr ""
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:69
-msgid "Create Pool & Supply"
-msgstr "Tạo mạng lưới & tổng cung"
+#~ msgid "Create Pool & Supply"
+#~ msgstr "Tạo mạng lưới & tổng cung"
 
 #: src/pages/Positions/LiquidityPositions.tsx:63
 #~ msgid "Create a Pair"
 #~ msgstr "Tạo một cặp"
 
 #: src/pages/kashi/create/index.tsx:217
-msgid "Create a new Kashi Market"
-msgstr ""
+#~ msgid "Create a new Kashi Market"
+#~ msgstr ""
 
 #: src/components/NavigationTabs/index.tsx:69
-msgid "Create a pair"
-msgstr "Tạo một cặp"
+#~ msgid "Create a pair"
+#~ msgstr "Tạo một cặp"
 
-#: src/pages/exchange/find/index.tsx:182
-msgid "Create pool"
-msgstr "Tạo mạng lưới"
+#: src/pages/exchange/find/index.tsx:168
+#~ msgid "Create pool"
+#~ msgstr "Tạo mạng lưới"
 
-#: src/features/inari/SideSwitch.tsx:38
 #: src/pages/user/balances.tsx:225
-msgid "Deposit"
-msgstr "Ký quỹ"
+#~ msgid "Deposit"
+#~ msgstr "Ký quỹ"
 
 #: src/pages/vesting/index.tsx:234
-msgid "Deposit SUSHI into BentoBox"
-msgstr "Ký quỹ SUSHI vào BentoBox"
+#~ msgid "Deposit SUSHI into BentoBox"
+#~ msgstr "Ký quỹ SUSHI vào BentoBox"
 
 #: src/pages/user/balances.tsx:87
-msgid "Deposit tokens into BentoBox for all the yields"
-msgstr "Ký quỹ token vào BentoBox để nhận tất cả lợi suất"
+#~ msgid "Deposit tokens into BentoBox for all the yields"
+#~ msgstr "Ký quỹ token vào BentoBox để nhận tất cả lợi suất"
 
 #: src/pages/Yield/masterchefv1/index.tsx:52
 #: src/pages/Yield/minichefv2/index.tsx:58
@@ -498,40 +483,40 @@ msgstr "Ký quỹ token vào BentoBox để nhận tất cả lợi suất"
 
 #: src/components/Header/More.tsx:18
 #: src/components/Menu.tsx:18
-msgid "Dev"
-msgstr "Nhà phát triển"
+#~ msgid "Dev"
+#~ msgstr "Nhà phát triển"
 
 #: src/components/Settings/index.tsx:122
-msgid "Disable Multihops"
-msgstr "Tắt giao dịch nhiều bước"
+#~ msgid "Disable Multihops"
+#~ msgstr "Tắt giao dịch nhiều bước"
 
-#: src/components/WalletModal/index.tsx:278
-msgid "Disconnect"
-msgstr ""
+#: src/modals/WalletModal/index.tsx:280
+#~ msgid "Disconnect"
+#~ msgstr ""
 
 #: src/components/Header/More.tsx:33
 #: src/components/Menu.tsx:33
-msgid "Discord"
-msgstr "Discord"
+#~ msgid "Discord"
+#~ msgstr "Discord"
 
 #: src/components/TransactionFailedModal.tsx:34
-msgid "Dismiss"
-msgstr "Bỏ qua"
+#~ msgid "Dismiss"
+#~ msgstr "Bỏ qua"
 
 #: src/components/Header/More.tsx:13
 #: src/components/Menu.tsx:13
-msgid "Docs"
-msgstr "Tài liệu"
+#~ msgid "Docs"
+#~ msgstr "Tài liệu"
 
 #: src/components/Header/More.tsx:19
 #: src/components/Menu.tsx:19
-msgid "Documentation for developers of Sushi."
-msgstr "Tài liệu dành cho các nhà phát triển Sushi."
+#~ msgid "Documentation for developers of Sushi."
+#~ msgstr "Tài liệu dành cho các nhà phát triển Sushi."
 
 #: src/components/Header/More.tsx:14
 #: src/components/Menu.tsx:14
-msgid "Documentation for users of Sushi."
-msgstr "Tài liệu cho người dùng Sushi."
+#~ msgid "Documentation for users of Sushi."
+#~ msgstr "Tài liệu cho người dùng Sushi."
 
 #: src/pages/Pool/index.tsx:133
 #~ msgid "Don't see a pool you joined? <0>Import it.</0>"
@@ -542,97 +527,93 @@ msgstr "Tài liệu cho người dùng Sushi."
 #~ msgstr "Không thấy mạng lưới bạn đã tham gia?"
 
 #: src/components/LanguageSwitch/index.tsx:16
-msgid "English"
-msgstr ""
+#~ msgid "English"
+#~ msgstr ""
 
 #~ msgid "Enjoy the lowest slippage on Polygon"
 #~ msgstr "Tận hưởng mức trượt thấp nhất trên Polygon"
 
 #: src/pages/bentobox/index.tsx:68
-msgid "Enter"
-msgstr "Nhập"
+#~ msgid "Enter"
+#~ msgstr "Nhập"
 
-#: src/pages/bar/index.tsx:355
-msgid "Enter Amount"
-msgstr "Nhập số tiền"
+#: src/pages/bar/index.tsx:354
+#~ msgid "Enter Amount"
+#~ msgstr "Nhập số tiền"
 
-#: src/state/swap/hooks.ts:182
-msgid "Enter a recipient"
-msgstr "Nhập người nhận"
+#: src/state/swap/hooks.ts:186
+#~ msgid "Enter a recipient"
+#~ msgstr "Nhập người nhận"
 
 #: src/components/TransactionSettings/index.tsx:204
-msgid "Enter a valid slippage percentage"
-msgstr "Nhập phần trăm trượt giá hợp lệ"
+#~ msgid "Enter a valid slippage percentage"
+#~ msgstr "Nhập phần trăm trượt giá hợp lệ"
 
 #: src/state/burn/hooks.ts:138
 #: src/state/mint/hooks.ts:202
-#: src/state/swap/hooks.ts:173
-msgid "Enter an amount"
-msgstr "Nhập số tiền"
+#: src/state/swap/hooks.ts:177
+#~ msgid "Enter an amount"
+#~ msgstr "Nhập số tiền"
 
-#: src/features/inari/Button.tsx:39
-msgid "Enter an mount"
-msgstr ""
-
-#: src/components/TransactionConfirmationModal/index.tsx:121
 #: src/components/Web3Connect/index.tsx:28
-msgid "Error"
-msgstr "Lỗi"
+#: src/modals/TransactionConfirmationModal/index.tsx:121
+#~ msgid "Error"
+#~ msgstr "Lỗi"
 
-#: src/components/WalletModal/index.tsx:268
-msgid "Error connecting"
-msgstr ""
+#: src/modals/WalletModal/index.tsx:270
+#~ msgid "Error connecting"
+#~ msgstr ""
 
-#: src/components/WalletModal/index.tsx:274
-msgid "Error connecting. Try refreshing the page."
-msgstr ""
+#: src/modals/WalletModal/index.tsx:276
+#~ msgid "Error connecting. Try refreshing the page."
+#~ msgstr ""
 
 #: src/features/swap/TradePrice.tsx:45
-msgid "Exchange Rate"
-msgstr ""
+#~ msgid "Exchange Rate"
+#~ msgstr ""
 
-#: src/components/SearchModal/CurrencyList.tsx:161
-msgid "Expanded results from inactive Token Lists"
-msgstr ""
+#: src/modals/SearchModal/CurrencyList.tsx:161
+#~ msgid "Expanded results from inactive Token Lists"
+#~ msgstr ""
 
 #: src/components/Settings/index.tsx:159
-msgid ""
-"Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
-"that often result in bad rates and lost funds."
-msgstr ""
-"Chế độ chuyên gia tắt lời nhắc xác nhận giao dịch và cho phép các giao dịch trượt giá cao\n"
-"thường dẫn đến tỷ suất xấu và mất tiền."
+#~ msgid ""
+#~ "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
+#~ "that often result in bad rates and lost funds."
+#~ msgstr ""
+#~ "Chế độ chuyên gia tắt lời nhắc xác nhận giao dịch và cho phép các giao dịch trượt giá cao\n"
+#~ "thường dẫn đến tỷ suất xấu và mất tiền."
 
 #~ msgid "Expert mode turns off the confirm transaction prompt and allows high slippage tradesthat often result in bad rates and lost funds."
 #~ msgstr "Chế độ chuyên gia tắt lời nhắc xác nhận giao dịch và cho phép các giao dịch trượt giá cao thường dẫn đến lãi suất xấu và mất tiền."
 
 #: src/components/Header/index.tsx:75
 #: src/components/Header/index.tsx:310
-msgid "Farm"
-msgstr ""
+#~ msgid "Farm"
+#~ msgstr ""
 
 #: src/pages/Yield/masterchefv1/index.tsx:98
 #: src/pages/Yield/minichefv2/index.tsx:112
 #~ msgid "Fetching Instruments"
 #~ msgstr "Tải công cụ"
 
-#: src/pages/exchange/find/index.tsx:100
-msgid "Find Pool"
-msgstr "Tìm mạng lưới"
+#: src/pages/exchange/find/index.tsx:80
+#~ msgid "Find Pool"
+#~ msgstr "Tìm mạng lưới"
 
-#: src/pages/bar/index.tsx:182
-msgid ""
-"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
-"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
-"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
-"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
-"SUSHI and any additional from fees."
-msgstr ""
-"Đối với mỗi giao dịch hoán đổi trên sàn giao dịch trên mọi chuỗi, 0,05% phí hoán đổi được phân bổ dưới dạng SUSHI\n"
-"tương ứng với cổ phần của bạn trên SushiBar. Khi đặt cược SUSHI vào SushiBar, bạn sẽ nhận được\n"
-"xSUSHI để đổi lại quyền biểu quyết và một token có thể tổng hợp đầy đủ có thể tương tác với các giao thức khác.\n"
-"XSUSHI của bạn được hưởng lãi kép liên tục, khi bạn hủy bỏ hủy đặt cược, bạn sẽ nhận được tất cả số\n"
-"SUSHI đã ký quỹ ban đầu và mọi khoản phí bổ sung."
+#: src/pages/bar/index.tsx:181
+#~ msgid ""
+#~ "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
+#~ "proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
+#~ "xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
+#~ "Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
+#~ "SUSHI and any additional from fees."
+#~ msgstr ""
+#~ "Đối với mỗi giao dịch hoán đổi trên sàn giao dịch trên mọi chuỗi, 0,05% phí hoán đổi được phân bổ dưới dạng SUSHI\n"
+#~ "tương ứng với cổ phần của bạn trên SushiBar. Khi đặt cược SUSHI vào SushiBar, bạn sẽ nhận được\n"
+#~ "xSUSHI để đổi lại quyền biểu quyết và một token có thể tổng hợp đầy đủ có thể tương tác với các giao thức khác.\n"
+#~ "XSUSHI của bạn được hưởng lãi kép liên tục, khi bạn hủy bỏ hủy đặt cược, bạn sẽ nhận được tất cả số\n"
+#~ "SUSHI đã ký quỹ ban đầu và mọi khoản phí bổ sung."
 
 #, fuzzy
 #~ msgid "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHIproportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receivexSUSHI in return for voting rights and a fully composable token that can interact with other protocols.Your xSUSHI is continuously compounding, when you unstake you will receive all the originally depositedSUSHI and any additional from fees."
@@ -652,47 +633,47 @@ msgstr ""
 #~ "SUSHI đã ký quỹ ban đầu và mọi khoản phí bổ sung."
 
 #: src/components/LanguageSwitch/index.tsx:67
-msgid "French"
-msgstr ""
+#~ msgid "French"
+#~ msgstr ""
 
-#: src/pages/inari/index.tsx:60
-msgid "From"
-msgstr "Bên gửi"
+#: src/pages/Swap/direct.tsx:237
+#~ msgid "From"
+#~ msgstr "Bên gửi"
 
 #: src/pages/Swap/direct.tsx:237
 #~ msgid "From (estimated)"
 #~ msgstr "Bên gửi (ước tính)"
 
 #: src/pages/kashi/borrow/[pair].tsx:176
-msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
-msgstr "Có cơ hội tiếp cận với các token mà không làm giảm tài sản của bạn. Đòn bẩy sẽ cho phép bạn thực hiện các vị thế bán đối với tài sản và kiếm tiền từ các biến động giảm giá."
+#~ msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
+#~ msgstr "Có cơ hội tiếp cận với các token mà không làm giảm tài sản của bạn. Đòn bẩy sẽ cho phép bạn thực hiện các vị thế bán đối với tài sản và kiếm tiền từ các biến động giảm giá."
 
 #: src/pages/vesting/index.tsx:206
-msgid ""
-"Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
-"all swaps from all chains)"
-msgstr ""
-"Nhận quyền quản trị với xSUSHI và kiếm 5% lãi suất phần trăm hàng năm (0,05% trong số\n"
-"tất cả các giao dịch hoán đổi từ tất cả các chuỗi)"
+#~ msgid ""
+#~ "Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
+#~ "all swaps from all chains)"
+#~ msgstr ""
+#~ "Nhận quyền quản trị với xSUSHI và kiếm 5% lãi suất phần trăm hàng năm (0,05% trong số\n"
+#~ "tất cả các giao dịch hoán đổi từ tất cả các chuỗi)"
 
 #~ msgid "Gain governance rights with xSUSHI and earn 5% APR (0.05% ofall swaps from all chains)"
 #~ msgstr "Nhận quyền quản trị với xSUSHI và kiếm 5% lãi suất phần trăm hàng năm (0,05% tổng số giao dịch hoán đổi từ tất cả các chuỗi)"
 
 #: src/components/LanguageSwitch/index.tsx:20
-msgid "German"
-msgstr ""
+#~ msgid "German"
+#~ msgstr ""
 
 #: src/components/Back.tsx:23
-msgid "Go Back"
-msgstr ""
+#~ msgid "Go Back"
+#~ msgstr ""
 
 #: src/pages/exchange/migrate/index.tsx:134
-msgid "Hardware Wallet"
-msgstr "Ví cứng"
+#~ msgid "Hardware Wallet"
+#~ msgstr "Ví cứng"
 
 #: src/components/Footer/index.tsx:51
-msgid "Harmony Bridge"
-msgstr ""
+#~ msgid "Harmony Bridge"
+#~ msgstr ""
 
 #: src/pages/Yield/masterchefv1/InputGroup.tsx:126
 #~ msgid "Harvest {0} SUSHI"
@@ -707,60 +688,61 @@ msgstr ""
 #~ msgstr "Thu hoạch {0} SUSHI & {1} MATIC"
 
 #: src/features/farm/FarmListItemDetails.tsx:206
-msgid "Harvest {0} SUSHI {1}"
-msgstr ""
+#~ msgid "Harvest {0} SUSHI {1}"
+#~ msgstr ""
 
 #: src/pages/Pool/index.tsx:162
 #~ msgid "Have Liquidity on {0}?"
 #~ msgstr "Có thanh khoản trên {0} ?"
 
 #: src/pages/kashi/lend/[pair].tsx:137
-msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
-msgstr ""
+#~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
+#~ msgstr ""
 
 #: src/kashi/pages/Pair/Lend/index.tsx:24
 #~ msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
 #~ msgstr "Bạn có tài sản nào mà bạn muốn kiếm thêm tiền lãi không? Cho vay ở những thị trường biệt lập và kiếm lãi từ những người đi vay. Dễ dàng ký quỹ và rút tiền bất cứ khi nào bạn muốn."
 
 #: src/pages/kashi/lend/[pair].tsx:182
-msgid "Health"
-msgstr "Sức khỏe"
+#~ msgid "Health"
+#~ msgstr "Sức khỏe"
 
 #: src/pages/Tools/index.tsx:83
 #~ msgid "Helpful Sushi Tools"
 #~ msgstr "Công cụ Sushi hữu ích"
 
 #: src/pages/vesting/index.tsx:163
-msgid "Historical Total Locked: Connect Wallet"
-msgstr "Tổng số lịch sử đã khóa: Kết nối ví"
+#~ msgid "Historical Total Locked: Connect Wallet"
+#~ msgstr "Tổng số lịch sử đã khóa: Kết nối ví"
 
 #: src/pages/vesting/index.tsx:159
-msgid "Historical Total Locked: Fetching Total"
-msgstr "Tổng số lịch sử đã khóa: Tải tổng số"
+#~ msgid "Historical Total Locked: Fetching Total"
+#~ msgstr "Tổng số lịch sử đã khóa: Tải tổng số"
 
 #: src/pages/vesting/index.tsx:157
-msgid "Historical Total Locked: {0} SUSHI"
-msgstr "Tổng số lịch sử đã khóa: {0} SUSHI"
+#~ msgid "Historical Total Locked: {0} SUSHI"
+#~ msgstr "Tổng số lịch sử đã khóa: {0} SUSHI"
 
 #: src/pages/kashi/create/index.tsx:219
-msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
-msgstr ""
+#~ msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
+#~ msgstr ""
 
-#: src/components/SearchModal/ImportToken.tsx:88
-#: src/pages/exchange/pool/index.tsx:154
-msgid "Import"
-msgstr ""
+#: src/modals/SearchModal/ImportToken.tsx:88
+#: src/pages/exchange/pool/index.tsx:156
+#~ msgid "Import"
+#~ msgstr ""
 
 #: src/components/NavigationTabs/index.tsx:32
-msgid "Import Pool"
-msgstr "Nhập mạng lưới"
+#: src/pages/exchange/find/index.tsx:89
+#~ msgid "Import Pool"
+#~ msgstr "Nhập mạng lưới"
 
 #~ msgid "Import it"
 #~ msgstr "Nhập"
 
 #: src/features/swap/SwapModalHeader.tsx:106
-msgid "Input is estimated. You will sell at most"
-msgstr ""
+#~ msgid "Input is estimated. You will sell at most"
+#~ msgstr ""
 
 #: src/components/swap/SwapModalHeader.tsx:88
 #~ msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
@@ -771,56 +753,55 @@ msgstr ""
 #~ msgid "Instruments"
 #~ msgstr "Công cụ"
 
-#: src/features/inari/Button.tsx:46
-#: src/features/tools/meowshi/MeowshiButton.tsx:96
-#: src/pages/bar/index.tsx:357
+#: src/features/meowshi/MeowshiButton.tsx:95
+#: src/pages/bar/index.tsx:356
 #: src/pages/exchange/migrate/index.tsx:212
-msgid "Insufficient Balance"
-msgstr "Số dư không đủ"
+#~ msgid "Insufficient Balance"
+#~ msgstr "Số dư không đủ"
 
 #: src/hooks/useWrapCallback.ts:81
 #~ msgid "Insufficient WETH balance"
 #~ msgstr "Số dư WETH không đủ"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:608
-msgid "Insufficient liquidity for this trade"
-msgstr "Không đủ thanh khoản cho giao dịch này"
+#: src/pages/exchange/swap/[[...tokens]].tsx:590
+#~ msgid "Insufficient liquidity for this trade"
+#~ msgstr "Không đủ thanh khoản cho giao dịch này"
 
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
-#: src/state/swap/hooks.ts:199
-msgid "Insufficient {0} balance"
-msgstr "Số dư {0} không đủ"
+#: src/state/swap/hooks.ts:203
+#~ msgid "Insufficient {0} balance"
+#~ msgstr "Số dư {0} không đủ"
 
 #: src/components/Settings/index.tsx:91
-msgid "Interface Settings"
-msgstr "Cài đặt giao diện"
+#~ msgid "Interface Settings"
+#~ msgstr "Cài đặt giao diện"
 
-#: src/pages/exchange/find/index.tsx:187
+#: src/pages/exchange/find/index.tsx:173
 #: src/state/mint/hooks.ts:198
-msgid "Invalid pair"
-msgstr "Cặp không hợp lệ"
+#~ msgid "Invalid pair"
+#~ msgstr "Cặp không hợp lệ"
 
-#: src/state/swap/hooks.ts:189
-msgid "Invalid recipient"
-msgstr "Người nhận không hợp lệ"
+#: src/state/swap/hooks.ts:193
+#~ msgid "Invalid recipient"
+#~ msgstr "Người nhận không hợp lệ"
 
 #: src/pages/kashi/lend/index.tsx:266
-msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
-msgstr "Thị trường cho vay biệt lập giúp giảm thiểu rủi ro của bạn với tư cách là người cho vay tài sản. Biết chính xác tài sản thế chấp nào có sẵn cho bạn trong trường hợp đối tác mất khả năng thanh toán."
+#~ msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
+#~ msgstr "Thị trường cho vay biệt lập giúp giảm thiểu rủi ro của bạn với tư cách là người cho vay tài sản. Biết chính xác tài sản thế chấp nào có sẵn cho bạn trong trường hợp đối tác mất khả năng thanh toán."
 
 #: src/components/LanguageSwitch/index.tsx:24
-msgid "Italian"
-msgstr ""
+#~ msgid "Italian"
+#~ msgstr ""
 
 #: src/components/LanguageSwitch/index.tsx:63
-msgid "Japanese"
-msgstr ""
+#~ msgid "Japanese"
+#~ msgstr ""
 
 #: src/components/Header/More.tsx:34
 #: src/components/Menu.tsx:34
-msgid "Join the community on Discord."
-msgstr "Tham gia cộng đồng trên Discord."
+#~ msgid "Join the community on Discord."
+#~ msgstr "Tham gia cộng đồng trên Discord."
 
 #~ msgid "Kashi Lending"
 #~ msgstr "Cho vay Kashi"
@@ -830,29 +811,29 @@ msgstr "Tham gia cộng đồng trên Discord."
 #~ msgstr "Khóa đã đốt: 2022.03.04 lúc 22:05"
 
 #: src/components/LanguageSwitch/index.tsx:59
-msgid "Korean"
-msgstr ""
+#~ msgid "Korean"
+#~ msgstr ""
 
 #: src/pages/kashi/borrow/[pair].tsx:193
-msgid "LTV"
-msgstr ""
+#~ msgid "LTV"
+#~ msgstr ""
 
-#: src/components/WalletModal/index.tsx:318
-msgid "Learn more about wallets"
-msgstr ""
+#: src/modals/WalletModal/index.tsx:320
+#~ msgid "Learn more about wallets"
+#~ msgstr ""
 
 #: src/components/Header/index.tsx:86
 #: src/components/Header/index.tsx:322
-msgid "Lend"
-msgstr "Cho vay"
+#~ msgid "Lend"
+#~ msgstr "Cho vay"
 
 #: src/pages/kashi/lend/[pair].tsx:135
-msgid "Lend assets for interest from borrowers."
-msgstr "Cho khách hàng vay tài sản lấy lãi."
+#~ msgid "Lend assets for interest from borrowers."
+#~ msgstr "Cho khách hàng vay tài sản lấy lãi."
 
 #: src/pages/kashi/lend/index.tsx:264
-msgid "Lend your assets, earn yield with no impermanent loss"
-msgstr "Cho vay tài sản của bạn, kiếm lợi suất mà không phải chịu tổn thất tạm thời"
+#~ msgid "Lend your assets, earn yield with no impermanent loss"
+#~ msgstr "Cho vay tài sản của bạn, kiếm lợi suất mà không phải chịu tổn thất tạm thời"
 
 #: src/pages/Yield/masterchefv1/InputGroup.tsx:57
 #~ msgid "Lend {assetSymbol}"
@@ -860,46 +841,46 @@ msgstr "Cho vay tài sản của bạn, kiếm lợi suất mà không phải ch
 
 #: src/pages/kashi/lend/index.tsx:53
 #: src/pages/kashi/lend/index.tsx:156
-msgid "Lending"
-msgstr "Cho vay"
+#~ msgid "Lending"
+#~ msgstr "Cho vay"
 
 #: src/pages/kashi/lend/index.tsx:67
-msgid "Lent"
-msgstr "Đã cho vay"
+#~ msgid "Lent"
+#~ msgstr "Đã cho vay"
 
 #: src/pages/kashi/borrow/index.tsx:80
-msgid "Limit"
-msgstr ""
+#~ msgid "Limit"
+#~ msgstr ""
 
 #: src/kashi/pages/Markets/Borrow.tsx:40
 #~ msgid "Limit <0>Used</0>"
 #~ msgstr "Giới hạn <0>Đã sử dụng</0>"
 
 #: src/components/ExchangeHeader.tsx:59
-msgid "Liquidity"
-msgstr "Tính thanh khoản"
+#~ msgid "Liquidity"
+#~ msgstr "Tính thanh khoản"
 
 #: src/pages/user/transactions.tsx:93
 #~ msgid "Liquidity Positions"
 #~ msgstr "Trạng thái thanh khoản"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:78
-msgid "Liquidity Provider Fee"
-msgstr "Phí nhà cung cấp thanh khoản"
+#~ msgid "Liquidity Provider Fee"
+#~ msgstr "Phí nhà cung cấp thanh khoản"
 
-#: src/pages/exchange/pool/index.tsx:107
-msgid "Liquidity Provider Rewards"
-msgstr "Phần thưởng của nhà cung cấp thanh khoản"
+#: src/pages/exchange/pool/index.tsx:109
+#~ msgid "Liquidity Provider Rewards"
+#~ msgstr "Phần thưởng của nhà cung cấp thanh khoản"
 
-#: src/pages/exchange/pool/index.tsx:108
-msgid ""
-"Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
-"the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
-"withdrawing your liquidity"
-msgstr ""
-"Các nhà cung cấp tính thanh khoản kiếm được khoản phí 0,25% trên tất cả các giao dịch tỷ lệ với cổ phần của họ trong\n"
-"mạng lưới. Phí được thêm vào mạng lưới, tích lũy theo thời gian thực và có thể được yêu cầu bằng cách\n"
-"rút thanh khoản của bạn"
+#: src/pages/exchange/pool/index.tsx:110
+#~ msgid ""
+#~ "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
+#~ "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
+#~ "withdrawing your liquidity"
+#~ msgstr ""
+#~ "Các nhà cung cấp tính thanh khoản kiếm được khoản phí 0,25% trên tất cả các giao dịch tỷ lệ với cổ phần của họ trong\n"
+#~ "mạng lưới. Phí được thêm vào mạng lưới, tích lũy theo thời gian thực và có thể được yêu cầu bằng cách\n"
+#~ "rút thanh khoản của bạn"
 
 #~ msgid "Liquidity providers earn a 0.25% fee on all trades proportional to their share ofthe pool. Fees are added to the pool, accrue in real time and can be claimed bywithdrawing your liquidity"
 #~ msgstr ""
@@ -907,30 +888,30 @@ msgstr ""
 #~ "trong mạng lưới. Phí được thêm vào mạng lưới, tích lũy theo thời gian thực và có thể được yêu cầu bằng cách\n"
 #~ "rút thanh khoản của bạn"
 
-#: src/components/SearchModal/Manage.tsx:58
-msgid "Lists"
-msgstr "Danh sách"
+#: src/modals/SearchModal/Manage.tsx:58
+#~ msgid "Lists"
+#~ msgstr "Danh sách"
 
 #: src/components/PositionCard/index.tsx:165
 #: src/components/TransactionList.tsx:40
-#: src/pages/exchange/find/index.tsx:190
+#: src/pages/exchange/find/index.tsx:176
 #: src/pages/exchange/migrate/index.tsx:214
-#: src/pages/exchange/pool/index.tsx:120
+#: src/pages/exchange/pool/index.tsx:122
 #: src/pages/user/index.tsx:92
-msgid "Loading"
-msgstr "Đang tải"
+#~ msgid "Loading"
+#~ msgstr "Đang tải"
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:95
-msgid "Loading Balance"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:94
+#~ msgid "Loading Balance"
+#~ msgstr ""
 
 #: src/pages/exchange/migrate/index.tsx:323
-msgid "Loading your {exchange} liquidity positions"
-msgstr "Đang tải trạng thái thanh khoản {exchange}"
+#~ msgid "Loading your {exchange} liquidity positions"
+#~ msgstr "Đang tải trạng thái thanh khoản {exchange}"
 
-#: src/pages/bar/index.tsx:232
-msgid "Loading..."
-msgstr "Đang tải..."
+#: src/pages/bar/index.tsx:231
+#~ msgid "Loading..."
+#~ msgstr "Đang tải..."
 
 #: src/pages/kashi/borrow/[pair].tsx:213
 #~ msgid "Loan to Value"
@@ -938,44 +919,44 @@ msgstr "Đang tải..."
 
 #: src/features/farm/FarmListItemDetails.tsx:105
 #: src/features/farm/FarmListItemDetails.tsx:162
-#: src/pages/bar/index.tsx:320
+#: src/pages/bar/index.tsx:319
 #: src/pages/exchange/migrate/index.tsx:85
 #: src/pages/user/balances.tsx:205
 #: src/pages/user/balances.tsx:269
-msgid "MAX"
-msgstr "TỐI ĐA"
+#~ msgid "MAX"
+#~ msgstr "TỐI ĐA"
 
 #: src/pages/tools/meowshi.tsx:138
-msgid ""
-"MEOW tokens wrap xSUSHI into BentoBox for double yields and can be\n"
-"used to vote in special MEOW governor contracts."
-msgstr ""
+#~ msgid ""
+#~ "MEOW tokens wrap xSUSHI into BentoBox for double yields and can be\n"
+#~ "used to vote in special MEOW governor contracts."
+#~ msgstr ""
 
 #: src/components/Settings/index.tsx:136
-msgid "MEV Shield by Archer DAO"
-msgstr ""
+#~ msgid "MEV Shield by Archer DAO"
+#~ msgstr ""
 
 #: src/components/PositionCard/index.tsx:169
-#: src/components/SearchModal/Manage.tsx:44
-msgid "Manage"
-msgstr "Quản lý"
+#: src/modals/SearchModal/Manage.tsx:44
+#~ msgid "Manage"
+#~ msgstr "Quản lý"
 
 #: src/components/PositionCard/index.tsx:211
 #~ msgid "Manage Liquidity in Rewards Pool"
 #~ msgstr "Quản lý tính thanh khoản trong mạng lưới phần thưởng"
 
-#: src/components/SearchModal/CurrencySearch.tsx:240
-msgid "Manage Token Lists"
-msgstr ""
+#: src/modals/SearchModal/CurrencySearch.tsx:231
+#~ msgid "Manage Token Lists"
+#~ msgstr ""
 
-#: src/pages/exchange/find/index.tsx:156
-msgid "Manage this pool"
-msgstr "Quản lý mạng lưới này"
+#: src/pages/exchange/find/index.tsx:142
+#~ msgid "Manage this pool"
+#~ msgstr "Quản lý mạng lưới này"
 
 #: src/pages/kashi/borrow/[pair].tsx:184
 #: src/pages/kashi/lend/[pair].tsx:145
-msgid "Market"
-msgstr ""
+#~ msgid "Market"
+#~ msgstr ""
 
 #: src/pages/kashi/borrow/[pair].tsx:184
 #: src/pages/kashi/lend/[pair].tsx:145
@@ -988,27 +969,25 @@ msgstr ""
 
 #: src/pages/kashi/borrow/index.tsx:159
 #: src/pages/kashi/lend/index.tsx:153
-msgid "Markets"
-msgstr "Thị trường"
+#~ msgid "Markets"
+#~ msgstr "Thị trường"
 
 #: src/components/Footer/index.tsx:42
-msgid "Matic Bridge"
-msgstr ""
+#~ msgid "Matic Bridge"
+#~ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:149
-#: src/features/inari/BalancePanel.tsx:61
-#: src/features/limit-order/CurrencyInput.tsx:43
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:89
-msgid "Max"
-msgstr "Tối đa"
+#: src/features/meowshi/CurrencyInputPanel.tsx:90
+#~ msgid "Max"
+#~ msgstr "Tối đa"
 
-#: src/pages/bar/index.tsx:175
-msgid "Maximize yield by staking SUSHI for xSUSHI"
-msgstr "Tối đa hóa lợi suất bằng cách đặt cược SUSHI cho xSUSHI"
+#: src/pages/bar/index.tsx:174
+#~ msgid "Maximize yield by staking SUSHI for xSUSHI"
+#~ msgstr "Tối đa hóa lợi suất bằng cách đặt cược SUSHI cho xSUSHI"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:50
-msgid "Maximum sent"
-msgstr ""
+#~ msgid "Maximum sent"
+#~ msgstr ""
 
 #: src/components/swap/AdvancedSwapDetails.tsx:26
 #: src/components/swap/SwapModalFooter.tsx:51
@@ -1018,62 +997,62 @@ msgstr ""
 #: src/components/Header/index.tsx:65
 #: src/components/Header/index.tsx:299
 #: src/pages/exchange/migrate/index.tsx:243
-#: src/pages/exchange/pool/index.tsx:157
-msgid "Migrate"
-msgstr "Di chuyển"
+#: src/pages/exchange/pool/index.tsx:161
+#~ msgid "Migrate"
+#~ msgstr "Di chuyển"
 
 #: src/pages/Pool/index.tsx:164
 #~ msgid "Migrate Now"
 #~ msgstr "Di chuyển ngay"
 
 #: src/pages/exchange/migrate/index.tsx:316
-msgid "Migrate {exchange} Liquidity"
-msgstr "Di chuyển thanh khoản {exchange}"
+#~ msgid "Migrate {exchange} Liquidity"
+#~ msgstr "Di chuyển thanh khoản {exchange}"
 
 #: src/pages/exchange/migrate/index.tsx:243
-msgid "Migrating"
-msgstr "Di chuyển"
+#~ msgid "Migrating"
+#~ msgstr "Di chuyển"
 
 #: src/pages/exchange/migrate/index.tsx:130
-msgid "Migration is done in one-click using your signature (permit)"
-msgstr "Quá trình di chuyển được thực hiện trong một cú nhấp chuột bằng chữ ký của bạn (giấy phép)"
+#~ msgid "Migration is done in one-click using your signature (permit)"
+#~ msgstr "Quá trình di chuyển được thực hiện trong một cú nhấp chuột bằng chữ ký của bạn (giấy phép)"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:113
-msgid "Miner Tip"
-msgstr ""
+#~ msgid "Miner Tip"
+#~ msgstr ""
 
 #: src/features/lending/TradeReview.tsx:45
 #: src/features/swap/AdvancedSwapDetails.tsx:50
-msgid "Minimum received"
-msgstr "Số tiền nhận được tối thiểu"
+#~ msgid "Minimum received"
+#~ msgstr "Số tiền nhận được tối thiểu"
 
 #, fuzzy
 #~ msgid "Missed the Auction?"
 #~ msgstr ""
 
-#: src/pages/exchange/pool/index.tsx:102
-msgid "My Liquidity Positions"
-msgstr ""
+#: src/pages/exchange/pool/index.tsx:104
+#~ msgid "My Liquidity Positions"
+#~ msgstr ""
 
 #: src/pages/user/index.tsx:74
-msgid "My SUSHI"
-msgstr ""
+#~ msgid "My SUSHI"
+#~ msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:111
-msgid "Network not supported yet"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:110
+#~ msgid "Network not supported yet"
+#~ msgstr ""
 
 #: src/pages/Swap/index.tsx:257
 #~ msgid "New network, new features"
 #~ msgstr "Mạng lưới mới, tính năng mới"
 
-#: src/components/WalletModal/index.tsx:316
-msgid "New to Ethereum?"
-msgstr ""
+#: src/modals/WalletModal/index.tsx:318
+#~ msgid "New to Ethereum?"
+#~ msgstr ""
 
 #: src/pages/exchange/migrate/index.tsx:271
-msgid "No Liquidity found"
-msgstr "Không tìm thấy thanh khoản"
+#~ msgid "No Liquidity found"
+#~ msgstr "Không tìm thấy thanh khoản"
 
 #: src/pages/Yield/masterchefv1/index.tsx:97
 #: src/pages/Yield/minichefv2/index.tsx:111
@@ -1085,58 +1064,54 @@ msgstr "Không tìm thấy thanh khoản"
 #~ msgstr "Không tìm thấy thanh khoản"
 
 #: src/features/lending/TradeReview.tsx:94
-msgid "No liquidity found to do swap"
-msgstr "Không tìm thấy thanh khoản để thực hiện hoán đổi"
+#~ msgid "No liquidity found to do swap"
+#~ msgstr "Không tìm thấy thanh khoản để thực hiện hoán đổi"
 
 #: src/pages/Positions/LiquidityPositions.tsx:56
 #~ msgid "No liquidity positions found"
 #~ msgstr "Không tìm thấy trạng thái thanh khoản"
 
-#: src/pages/exchange/pool/index.tsx:141
-msgid "No liquidity was found."
-msgstr ""
+#: src/pages/exchange/pool/index.tsx:143
+#~ msgid "No liquidity was found."
+#~ msgstr ""
 
-#: src/pages/exchange/find/index.tsx:180
-msgid "No pool found"
-msgstr "Không tìm thấy mạng lưới"
+#: src/pages/exchange/find/index.tsx:166
+#~ msgid "No pool found"
+#~ msgstr "Không tìm thấy mạng lưới"
 
-#: src/components/SearchModal/CurrencySearch.tsx:235
-msgid "No results found"
-msgstr "Không tìm thấy kết quả nào"
+#: src/modals/SearchModal/CurrencySearch.tsx:226
+#~ msgid "No results found"
+#~ msgstr "Không tìm thấy kết quả nào"
 
 #: src/pages/exchange/migrate/index.tsx:129
-msgid "Non-hardware Wallet"
-msgstr "Không phải ví cứng"
+#~ msgid "Non-hardware Wallet"
+#~ msgstr "Không phải ví cứng"
 
 #: src/pages/kashi/borrow/[pair].tsx:232
 #: src/pages/kashi/lend/[pair].tsx:204
-msgid "None"
-msgstr "Không có"
+#~ msgid "None"
+#~ msgstr "Không có"
 
 #: src/components/Settings/index.tsx:163
-msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
-msgstr "CHỈ SỬ DỤNG CHẾ ĐỘ NÀY NẾU BẠN BIẾT BẠN ĐANG LÀM GÌ."
+#~ msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
+#~ msgstr "CHỈ SỬ DỤNG CHẾ ĐỘ NÀY NẾU BẠN BIẾT BẠN ĐANG LÀM GÌ."
 
 #: src/pages/Tools/index.tsx:132
 #~ msgid "One click SUSHI → xSUSHI → aXSUSHI"
 #~ msgstr "Một cú nhấp chuột SUSHI → xSUSHI → aXSUSHI"
 
-#: src/pages/inari/index.tsx:37
-msgid "One-Click Strategies"
-msgstr ""
-
 #: src/components/Web3ReactManager/index.tsx:68
-msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
-msgstr "Rất tiếc! Đã xảy ra lỗi không xác định. Vui lòng làm mới trang hoặc truy cập từ trình duyệt hoặc thiết bị khác"
+#~ msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
+#~ msgstr "Rất tiếc! Đã xảy ra lỗi không xác định. Vui lòng làm mới trang hoặc truy cập từ trình duyệt hoặc thiết bị khác"
 
 #: src/components/Header/More.tsx:23
 #: src/components/Menu.tsx:23
-msgid "Open Source"
-msgstr "Mã nguồn mở"
+#~ msgid "Open Source"
+#~ msgstr "Mã nguồn mở"
 
 #: src/components/Header/index.tsx:240
-msgid "Open main menu"
-msgstr "Mở menu chính"
+#~ msgid "Open main menu"
+#~ msgstr "Mở menu chính"
 
 #: src/pages/kashi/borrow/[pair].tsx:94
 #: src/pages/kashi/borrow/[pair].tsx:218
@@ -1144,94 +1119,90 @@ msgstr "Mở menu chính"
 #: src/pages/kashi/lend/[pair].tsx:190
 #: src/pages/kashi/lend/index.tsx:59
 #: src/pages/kashi/lend/index.tsx:162
-msgid "Oracle"
-msgstr "Oracle"
+#~ msgid "Oracle"
+#~ msgstr "Oracle"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:244
-msgid ""
-"Output is estimated. If the price changes by more than {0}% your transaction\n"
-"will revert."
-msgstr ""
+#: src/pages/exchange/add/[[...tokens]].tsx:242
+#~ msgid ""
+#~ "Output is estimated. If the price changes by more than {0}% your transaction\n"
+#~ "will revert."
+#~ msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:604
-msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
-msgstr "Đã ước tính đầu ra. Nếu giá thay đổi hơn {0} % thì giao dịch của bạn sẽ hoàn nguyên."
+#: src/pages/exchange/remove/[[...tokens]].tsx:602
+#~ msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
+#~ msgstr "Đã ước tính đầu ra. Nếu giá thay đổi hơn {0} % thì giao dịch của bạn sẽ hoàn nguyên."
 
 #: src/features/swap/SwapModalHeader.tsx:98
-msgid "Output is estimated. You will receive at least"
-msgstr ""
+#~ msgid "Output is estimated. You will receive at least"
+#~ msgstr ""
 
 #: src/components/swap/SwapModalHeader.tsx:79
 #~ msgid "Output is estimated. You will receive at least <0>{0} {1}</0> or the transaction will revert."
 #~ msgstr "Đã ước tính đầu ra. Bạn sẽ nhận được ít nhất <0>{0} {1}</0> hoặc giao dịch sẽ hoàn nguyên."
 
 #: src/features/swap/SwapModalHeader.tsx:118
-msgid "Output will be sent to"
-msgstr ""
+#~ msgid "Output will be sent to"
+#~ msgstr ""
 
 #: src/components/swap/SwapModalHeader.tsx:100
 #~ msgid "Output will be sent to <0>{0}</0>"
 #~ msgstr "Đầu ra sẽ được gửi đến <0>{0}</0>"
 
 #: src/components/Web3Status/index.tsx:120
-msgid "Pending"
-msgstr "Đang chờ xử lý"
+#~ msgid "Pending"
+#~ msgstr "Đang chờ xử lý"
 
 #: src/pages/vesting/index.tsx:181
-msgid "Pending Treasury Transfer"
-msgstr "Chuyển tiền đang chờ xử lý"
+#~ msgid "Pending Treasury Transfer"
+#~ msgstr "Chuyển tiền đang chờ xử lý"
 
-#: src/components/WalletModal/index.tsx:272
-msgid "Please connect to the appropriate Ethereum network."
-msgstr ""
+#: src/modals/WalletModal/index.tsx:274
+#~ msgid "Please connect to the appropriate Ethereum network."
+#~ msgstr ""
 
-#: src/features/tools/meowshi/MeowshiButton.tsx:97
-msgid "Please enter an amount"
-msgstr ""
+#: src/features/meowshi/MeowshiButton.tsx:96
+#~ msgid "Please enter an amount"
+#~ msgstr ""
 
 #: src/pages/vesting/index.tsx:129
-msgid "Please refer to the"
-msgstr ""
-
-#: src/guards/Network/index.tsx:31
-msgid "Please switch to one of the following supported networks to view this page"
-msgstr ""
+#~ msgid "Please refer to the"
+#~ msgstr ""
 
 #: src/components/Settings/index.tsx:169
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Vui lòng nhập từ \"xác nhận\" để bật chế độ chuyên gia."
+#~ msgid "Please type the word \"confirm\" to enable expert mode."
+#~ msgstr "Vui lòng nhập từ \"xác nhận\" để bật chế độ chuyên gia."
 
 #: src/components/Header/index.tsx:56
 #: src/components/Header/index.tsx:290
 #: src/features/farm/FarmList.tsx:19
-msgid "Pool"
-msgstr "Mạng lưới"
+#~ msgid "Pool"
+#~ msgstr "Mạng lưới"
 
-#: src/pages/exchange/find/index.tsx:154
-msgid "Pool Found!"
-msgstr "Đã tìm thấy mạng lưới!"
+#: src/pages/exchange/find/index.tsx:140
+#~ msgid "Pool Found!"
+#~ msgstr "Đã tìm thấy mạng lưới!"
 
 #: src/pages/Yield/minichefv2/index.tsx:82
 #~ msgid "Pool Rewards"
 #~ msgstr "Phần thưởng mạng lưới"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:241
-msgid "Pool Tokens"
-msgstr "Token mạng lưới"
+#: src/pages/exchange/add/[[...tokens]].tsx:239
+#~ msgid "Pool Tokens"
+#~ msgstr "Token mạng lưới"
 
 #: src/components/PositionCard/index.tsx:187
-msgid "Pool tokens in rewards pool"
-msgstr "Token mạng lưới trong mạng lưới phần thưởng"
+#~ msgid "Pool tokens in rewards pool"
+#~ msgstr "Token mạng lưới trong mạng lưới phần thưởng"
 
 #: src/components/PositionCard/index.tsx:192
 #: src/components/PositionCard/index.tsx:204
-msgid "Pooled {0}"
-msgstr "Đã gộp chung {0}"
+#~ msgid "Pooled {0}"
+#~ msgstr "Đã gộp chung {0}"
 
 #: src/pages/kashi/borrow/index.tsx:54
 #: src/pages/kashi/lend/index.tsx:49
-msgid "Positions"
-msgstr "Vị thế"
+#~ msgid "Positions"
+#~ msgstr "Vị thế"
 
 #, fuzzy
 #~ msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
@@ -1245,25 +1216,25 @@ msgstr "Vị thế"
 
 #: src/features/lending/TradeReview.tsx:59
 #: src/features/swap/AdvancedSwapDetails.tsx:68
-msgid "Price Impact"
-msgstr "Tác động giá"
+#~ msgid "Price Impact"
+#~ msgstr "Tác động giá"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:653
-msgid "Price Impact High"
-msgstr "Tác động giá cao"
+#: src/pages/exchange/swap/[[...tokens]].tsx:635
+#~ msgid "Price Impact High"
+#~ msgstr "Tác động giá cao"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:682
-msgid "Price Impact Too High"
-msgstr "Tác động giá quá cao"
+#: src/pages/exchange/swap/[[...tokens]].tsx:664
+#~ msgid "Price Impact Too High"
+#~ msgstr "Tác động giá quá cao"
 
 #: src/features/swap/SwapModalHeader.tsx:88
-msgid "Price Updated"
-msgstr "Đã cập nhật giá"
+#~ msgid "Price Updated"
+#~ msgstr "Đã cập nhật giá"
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:29
-#: src/pages/exchange/remove/[[...tokens]].tsx:619
-msgid "Rates"
-msgstr "Tỷ giá"
+#: src/pages/exchange/remove/[[...tokens]].tsx:617
+#~ msgid "Rates"
+#~ msgstr "Tỷ giá"
 
 #: src/pages/Swap/index.tsx:260
 #~ msgid "Read Tutorial"
@@ -1274,71 +1245,71 @@ msgstr "Tỷ giá"
 #~ msgstr "Đọc hợp đồng"
 
 #: src/components/PositionCard/index.tsx:240
-msgid "Remove"
-msgstr "Xóa"
+#~ msgid "Remove"
+#~ msgstr "Xóa"
 
 #: src/components/NavigationTabs/index.tsx:69
-msgid "Remove Liquidity"
-msgstr "Xóa thanh khoản"
+#~ msgid "Remove Liquidity"
+#~ msgstr "Xóa thanh khoản"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:535
-msgid "Remove recipient"
-msgstr ""
+#: src/pages/exchange/swap/[[...tokens]].tsx:517
+#~ msgid "Remove recipient"
+#~ msgstr ""
 
 #: src/pages/Swap/index.tsx:296
 #~ msgid "Remove send"
 #~ msgstr "Xóa gửi"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
-#: src/pages/exchange/remove/[[...tokens]].tsx:278
-msgid "Remove {0} {1} and {2} {3}"
-msgstr ""
+#: src/pages/exchange/remove/[[...tokens]].tsx:276
+#: src/pages/exchange/remove/[[...tokens]].tsx:276
+#~ msgid "Remove {0} {1} and {2} {3}"
+#~ msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:658
-msgid "Removing {0} {1} and {2} {3}"
-msgstr "Xóa {0} {1} và {2} {3}"
+#: src/pages/exchange/remove/[[...tokens]].tsx:656
+#~ msgid "Removing {0} {1} and {2} {3}"
+#~ msgstr "Xóa {0} {1} và {2} {3}"
 
 #: src/pages/kashi/borrow/[pair].tsx:140
-msgid "Repay"
-msgstr "Hoàn trả"
+#~ msgid "Repay"
+#~ msgstr "Hoàn trả"
 
 #: src/pages/Tools/index.tsx:106
 #~ msgid "Request Tool"
 #~ msgstr "Công cụ yêu cầu"
 
 #: src/components/Settings/index.tsx:124
-msgid "Restricts swaps to direct pairs only."
-msgstr "Chỉ hạn chế hoán đổi đối với các cặp trực tiếp."
+#~ msgid "Restricts swaps to direct pairs only."
+#~ msgstr "Chỉ hạn chế hoán đổi đối với các cặp trực tiếp."
 
 #: src/features/farm/FarmList.tsx:36
-msgid "Rewards"
-msgstr ""
+#~ msgid "Rewards"
+#~ msgstr ""
 
 #: src/components/LanguageSwitch/index.tsx:32
-msgid "Romanian"
-msgstr ""
+#~ msgid "Romanian"
+#~ msgstr ""
 
 #: src/features/lending/TradeReview.tsx:82
 #: src/features/swap/AdvancedSwapDetails.tsx:41
-msgid "Route"
-msgstr "Lộ trình"
+#~ msgid "Route"
+#~ msgstr "Lộ trình"
 
 #: src/features/lending/TradeReview.tsx:84
 #: src/features/swap/AdvancedSwapDetails.tsx:42
-msgid "Routing through these tokens resulted in the best price for your trade."
-msgstr "Việc điều hướng thông qua các token này sẽ giúp giao dịch của bạn đạt mức giá tốt nhất."
+#~ msgid "Routing through these tokens resulted in the best price for your trade."
+#~ msgstr "Việc điều hướng thông qua các token này sẽ giúp giao dịch của bạn đạt mức giá tốt nhất."
 
 #: src/components/LanguageSwitch/index.tsx:28
-msgid "Russian"
-msgstr ""
+#~ msgid "Russian"
+#~ msgstr ""
 
 #: src/pages/Saave/index.tsx:49
 #~ msgid "SAAVE: Stack your yields in one transaction"
 #~ msgstr "SAAVE: Cộng dồn lợi suất của bạn trong một giao dịch"
 
 #: src/pages/kashi/borrow/[pair].tsx:243
-msgid "SLP"
-msgstr ""
+#~ msgid "SLP"
+#~ msgstr ""
 
 #~ msgid "SUSHI Balance"
 #~ msgstr "Số dư SUSHI"
@@ -1355,40 +1326,39 @@ msgstr ""
 #~ msgid "Search by name, symbol, address"
 #~ msgstr "Tìm kiếm theo tên, ký hiệu, địa chỉ"
 
-#: src/components/SearchModal/CurrencySearch.tsx:195
-msgid "Search name or paste address"
-msgstr "Tìm kiếm tên hoặc dán địa chỉ"
+#: src/modals/SearchModal/CurrencySearch.tsx:187
+#~ msgid "Search name or paste address"
+#~ msgstr "Tìm kiếm tên hoặc dán địa chỉ"
 
 #: src/state/create/hook.ts:88
-msgid "Select a asset token"
-msgstr ""
+#~ msgid "Select a asset token"
+#~ msgstr ""
 
 #: src/state/create/hook.ts:84
-msgid "Select a collateral token"
-msgstr ""
+#~ msgid "Select a collateral token"
+#~ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:70
-#: src/state/swap/hooks.ts:177
-msgid "Select a token"
-msgstr "Chọn một token"
+#: src/state/swap/hooks.ts:181
+#~ msgid "Select a token"
+#~ msgstr "Chọn một token"
 
-#: src/pages/exchange/find/index.tsx:94
-msgid "Select a token to find your liquidity"
-msgstr "Chọn một token để tìm thanh khoản của bạn"
+#: src/pages/exchange/find/index.tsx:74
+#~ msgid "Select a token to find your liquidity"
+#~ msgstr "Chọn một token để tìm thanh khoản của bạn"
 
 #: src/components/Settings/index.tsx:140
-msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
-msgstr ""
+#~ msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
+#~ msgstr ""
 
 #: src/features/liquidity/LiquidityPrice.tsx:52
-msgid "Share of Pool"
-msgstr "Cổ phần trong mạng lưới"
+#~ msgid "Share of Pool"
+#~ msgstr "Cổ phần trong mạng lưới"
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:61
-msgid "Share of Pool:"
-msgstr "Cổ phần trong mạng lưới:"
+#~ msgid "Share of Pool:"
+#~ msgstr "Cổ phần trong mạng lưới:"
 
 #: src/pages/Swap/direct.tsx:366
 #: src/pages/Swap/index.tsx:312
@@ -1397,54 +1367,48 @@ msgstr "Cổ phần trong mạng lưới:"
 
 #: src/components/TransactionSettings/index.tsx:149
 #: src/features/swap/AdvancedSwapDetails.tsx:104
-msgid "Slippage tolerance"
-msgstr "Khả năng chịu trượt giá"
+#~ msgid "Slippage tolerance"
+#~ msgstr "Khả năng chịu trượt giá"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:105
-msgid "Slippage tolerance..."
-msgstr ""
+#~ msgid "Slippage tolerance..."
+#~ msgstr ""
 
 #: src/features/lending/Button.tsx:28
-msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
-msgstr "Đã xảy ra sự cố khi ký phê duyệt. Điều này được mong đợi đối với các ví cứng, chẳng hạn như Trezor và Ledger. Nhấp lại và phương pháp dự phòng sẽ được sử dụng"
+#~ msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
+#~ msgstr "Đã xảy ra sự cố khi ký phê duyệt. Điều này được mong đợi đối với các ví cứng, chẳng hạn như Trezor và Ledger. Nhấp lại và phương pháp dự phòng sẽ được sử dụng"
 
 #: src/components/LanguageSwitch/index.tsx:50
 #: src/components/LanguageSwitch/index.tsx:54
-msgid "Spanish"
-msgstr ""
+#~ msgid "Spanish"
+#~ msgstr ""
 
 #: src/pages/vesting/index.tsx:220
-msgid "Stack Yields with SAAVE"
-msgstr "Lợi suất cộng dồn với SAAVE"
+#~ msgid "Stack Yields with SAAVE"
+#~ msgstr "Lợi suất cộng dồn với SAAVE"
 
 #: src/components/Header/index.tsx:113
 #: src/components/Header/index.tsx:342
 #: src/features/farm/FarmListItemDetails.tsx:132
-msgid "Stake"
-msgstr "Đặt cược"
+#~ msgid "Stake"
+#~ msgstr "Đặt cược"
 
-#: src/pages/bar/index.tsx:252
-#: src/pages/bar/index.tsx:270
-msgid "Stake SUSHI"
-msgstr "Đặt cược SUSHI"
+#: src/pages/bar/index.tsx:251
+#: src/pages/bar/index.tsx:269
+#~ msgid "Stake SUSHI"
+#~ msgstr "Đặt cược SUSHI"
 
 #: src/pages/vesting/index.tsx:204
-msgid "Stake SUSHI for xSUSHI"
-msgstr "Đặt cược SUSHI cho xSUSHI"
-
-#: src/state/inari/constants.ts:10
-msgid ""
-"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
-"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
-msgstr ""
+#~ msgid "Stake SUSHI for xSUSHI"
+#~ msgstr "Đặt cược SUSHI cho xSUSHI"
 
 #: src/pages/vesting/index.tsx:222
-msgid ""
-"Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
-"one click"
-msgstr ""
-"Đặt cược vào xSUSHI, thêm tài sản thế chấp là axSUSHI trên Aave tất cả trong\n"
-"một cú nhấp chuột"
+#~ msgid ""
+#~ "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
+#~ "one click"
+#~ msgstr ""
+#~ "Đặt cược vào xSUSHI, thêm tài sản thế chấp là axSUSHI trên Aave tất cả trong\n"
+#~ "một cú nhấp chuột"
 
 #~ msgid "Stake into xSUSHI add collateral as axSUSHI on Aave all inone click"
 #~ msgstr ""
@@ -1468,9 +1432,9 @@ msgstr ""
 #~ "Đặt cược SUSHI của bạn vào xSUSHI với tỷ suất lợi nhuận hàng năm khoảng 5%. Không có tổn thất tạm thời, không mất quyền quản trị. \n"
 #~ "Tận hưởng lãi kép liên tục."
 
-#: src/pages/bar/index.tsx:212
-msgid "Staking APR"
-msgstr "APR đặt cược"
+#: src/pages/bar/index.tsx:211
+#~ msgid "Staking APR"
+#~ msgstr "APR đặt cược"
 
 #: src/pages/Tools/index.tsx:112
 #~ msgid "Submit Tool"
@@ -1481,9 +1445,9 @@ msgstr "APR đặt cược"
 #~ msgid "Supply APR"
 #~ msgstr "Lãi suất phần trăm hàng năm của tổng cung"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:267
-msgid "Supplying {0} {1} and {2} {3}"
-msgstr "Tổng cung {0} {1} và {2} {3}"
+#: src/pages/exchange/add/[[...tokens]].tsx:265
+#~ msgid "Supplying {0} {1} and {2} {3}"
+#~ msgstr "Tổng cung {0} {1} và {2} {3}"
 
 #: src/pages/Trade/index.tsx:9
 #~ msgid "Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
@@ -1491,8 +1455,8 @@ msgstr "Tổng cung {0} {1} và {2} {3}"
 
 #: src/components/Header/More.tsx:24
 #: src/components/Menu.tsx:24
-msgid "Sushi is a supporter of Open Source."
-msgstr "Sushi là người ủng hộ Mã nguồn mở."
+#~ msgid "Sushi is a supporter of Open Source."
+#~ msgstr "Sushi là người ủng hộ Mã nguồn mở."
 
 #~ msgid "SushiBar"
 #~ msgstr "SushiBar"
@@ -1501,126 +1465,114 @@ msgstr "Sushi là người ủng hộ Mã nguồn mở."
 #~ msgid "SushiBar: Make SUSHI work for you"
 #~ msgstr "SushiBar: Tận dụng SUSHI của bạn"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:446
-msgid "SushiSwap"
-msgstr ""
+#: src/pages/exchange/swap/[[...tokens]].tsx:428
+#~ msgid "SushiSwap"
+#~ msgstr ""
 
 #: src/components/ExchangeHeader.tsx:49
 #: src/components/Header/index.tsx:48
 #: src/components/Header/index.tsx:282
-#: src/pages/exchange/swap/[[...tokens]].tsx:656
-#: src/pages/exchange/swap/[[...tokens]].tsx:685
-msgid "Swap"
-msgstr "Hoán đổi"
+#: src/pages/exchange/swap/[[...tokens]].tsx:638
+#: src/pages/exchange/swap/[[...tokens]].tsx:667
+#~ msgid "Swap"
+#~ msgstr "Hoán đổi"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:655
-#: src/pages/exchange/swap/[[...tokens]].tsx:684
-msgid "Swap Anyway"
-msgstr "Vẫn hoán đổi"
+#: src/pages/exchange/swap/[[...tokens]].tsx:637
+#: src/pages/exchange/swap/[[...tokens]].tsx:666
+#~ msgid "Swap Anyway"
+#~ msgstr "Vẫn hoán đổi"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:486
-msgid "Swap From (est.):"
-msgstr "Hoán đổi từ (ước tính):"
+#: src/pages/exchange/swap/[[...tokens]].tsx:468
+#~ msgid "Swap From (est.):"
+#~ msgstr "Hoán đổi từ (ước tính):"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:486
-msgid "Swap From:"
-msgstr "Hoán đổi từ:"
+#: src/pages/exchange/swap/[[...tokens]].tsx:468
+#~ msgid "Swap From:"
+#~ msgstr "Hoán đổi từ:"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:546
-msgid "Swap To (est.):"
-msgstr "Hoán đổi sang (ước tính):"
+#: src/pages/exchange/swap/[[...tokens]].tsx:528
+#~ msgid "Swap To (est.):"
+#~ msgstr "Hoán đổi sang (ước tính):"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:546
-msgid "Swap To:"
-msgstr "Hoán đổi sang:"
+#: src/pages/exchange/swap/[[...tokens]].tsx:528
+#~ msgid "Swap To:"
+#~ msgstr "Hoán đổi sang:"
 
 #, fuzzy
 #~ msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
 #~ msgstr ""
 
-#: src/state/inari/constants.ts:21
-#: src/state/inari/constants.ts:31
-#: src/state/inari/constants.ts:41
-msgid "TODO"
-msgstr ""
-
 #: src/features/farm/FarmList.tsx:29
-msgid "TVL"
-msgstr "TVL"
+#~ msgid "TVL"
+#~ msgstr "TVL"
 
-#: src/pages/inari/index.tsx:40
-msgid ""
-"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
-"collateral on other platforms, and more!"
-msgstr ""
-
-#: src/hooks/useSwapCallback.ts:191
-msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:195
+#~ msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
+#~ msgstr ""
 
 #: src/features/lending/TradeReview.tsx:61
 #: src/features/swap/AdvancedSwapDetails.tsx:70
-msgid "The difference between the market price and estimated price due to trade size."
-msgstr "Sự khác biệt giữa giá thị trường và giá ước tính theo quy mô giao dịch."
+#~ msgid "The difference between the market price and estimated price due to trade size."
+#~ msgstr "Sự khác biệt giữa giá thị trường và giá ước tính theo quy mô giao dịch."
 
 #: src/components/swap/SwapModalFooter.tsx:72
 #~ msgid "The difference between the market price and your price due to trade size."
 #~ msgstr "Sự khác biệt giữa giá thị trường và giá của bạn theo quy mô giao dịch."
 
-#: src/hooks/useSwapCallback.ts:187
-msgid "The input token cannot be transferred. There may be an issue with the input token."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:191
+#~ msgid "The input token cannot be transferred. There may be an issue with the input token."
+#~ msgstr ""
 
 #: src/pages/kashi/lend/index.tsx:163
-msgid "The onchain oracle that tracks the pricing for this pair"
-msgstr "Oracle hợp đồng thông minh theo dõi giá cho cặp tiền tệ này"
+#~ msgid "The onchain oracle that tracks the pricing for this pair"
+#~ msgstr "Oracle hợp đồng thông minh theo dõi giá cho cặp tiền tệ này"
 
-#: src/hooks/useSwapCallback.ts:189
-#: src/hooks/useSwapCallback.ts:197
-msgid "The output token cannot be transferred. There may be an issue with the output token."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:193
+#: src/hooks/useSwapCallback.ts:201
+#~ msgid "The output token cannot be transferred. There may be an issue with the output token."
+#~ msgstr ""
 
 #: src/hooks/useSwapCallback.ts:139
 #: src/hooks/useSwapCallback.ts:139
 #~ msgid "The transaction cannot succeed due to error: {0}. This is probably an issue with one of the tokens you are swapping."
 #~ msgstr "Giao dịch không thể thành công do lỗi: {0} . Đây có thể là sự cố với một trong những token bạn đang hoán đổi."
 
-#: src/hooks/useSwapCallback.ts:182
-msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:186
+#~ msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
+#~ msgstr ""
 
 #: src/pages/vesting/index.tsx:199
-msgid "Things you can do with your SUSHI"
-msgstr "Những điều bạn có thể làm với SUSHI của mình"
+#~ msgid "Things you can do with your SUSHI"
+#~ msgstr "Những điều bạn có thể làm với SUSHI của mình"
 
 #: src/components/SearchModal/ImportToken.tsx:48
 #~ msgid "This token doesn&apos;t appear on the active token list(s). Make sure this is the token that you want to trade."
 #~ msgstr ""
 
-#: src/components/SearchModal/ImportToken.tsx:46
-msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
-msgstr ""
+#: src/modals/SearchModal/ImportToken.tsx:46
+#~ msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
+#~ msgstr ""
 
-#: src/hooks/useSwapCallback.ts:195
-msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:199
+#~ msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
+#~ msgstr ""
 
-#: src/hooks/useSwapCallback.ts:185
-msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
-msgstr "Giao dịch này sẽ không thành công do biến động giá hoặc phí chuyển nhượng. Hãy thử tăng khả năng chịu trượt giá của bạn."
+#: src/hooks/useSwapCallback.ts:189
+#~ msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
+#~ msgstr "Giao dịch này sẽ không thành công do biến động giá hoặc phí chuyển nhượng. Hãy thử tăng khả năng chịu trượt giá của bạn."
 
 #: src/features/swap/AdvancedSwapDetails.tsx:114
-msgid "Tip to encourage miners to select this transaction."
-msgstr ""
+#~ msgid "Tip to encourage miners to select this transaction."
+#~ msgstr ""
 
-#: src/pages/exchange/add/[[...tokens]].tsx:350
-#: src/pages/exchange/find/index.tsx:110
-msgid "Tip:"
-msgstr ""
+#: src/pages/exchange/add/[[...tokens]].tsx:348
+#: src/pages/exchange/find/index.tsx:95
+#~ msgid "Tip:"
+#~ msgstr ""
 
-#: src/pages/inari/index.tsx:68
-msgid "To"
-msgstr "Bên nhận"
+#: src/pages/Swap/direct.tsx:268
+#~ msgid "To"
+#~ msgstr "Bên nhận"
 
 #: src/pages/Swap/direct.tsx:268
 #~ msgid "To (estimated)"
@@ -1631,38 +1583,38 @@ msgstr "Bên nhận"
 #~ msgstr "Để rút tiền vào SUSHI, hãy chuyển đến Aave và xóa một SUSHI làm tài sản thế chấp, sau đó đến SushiBar để hủy đặt cược. Việc hoàn tiền đầy đủ sẽ sớm được thực hiện."
 
 #: src/components/Settings/index.tsx:97
-msgid "Toggle Expert Mode"
-msgstr "Chuyển đổi chế độ Chuyên gia"
+#~ msgid "Toggle Expert Mode"
+#~ msgstr "Chuyển đổi chế độ Chuyên gia"
 
 #: src/pages/user/balances.tsx:66
-msgid "Token"
-msgstr "Token"
+#~ msgid "Token"
+#~ msgstr "Token"
 
-#: src/components/SearchModal/Manage.tsx:64
-msgid "Tokens"
-msgstr "Token"
+#: src/modals/SearchModal/Manage.tsx:64
+#~ msgid "Tokens"
+#~ msgstr "Token"
 
-#: src/components/SearchModal/CurrencyList.tsx:165
-msgid ""
-"Tokens from inactive lists. Import specific tokens below or\n"
-"click Manage to activate more lists."
-msgstr ""
+#: src/modals/SearchModal/CurrencyList.tsx:165
+#~ msgid ""
+#~ "Tokens from inactive lists. Import specific tokens below or\n"
+#~ "click Manage to activate more lists."
+#~ msgstr ""
 
 #: src/components/Header/More.tsx:28
 #: src/components/Menu.tsx:28
-msgid "Tools"
-msgstr "Công cụ"
+#~ msgid "Tools"
+#~ msgstr "Công cụ"
 
 #: src/components/Header/More.tsx:29
 #: src/components/Menu.tsx:29
-msgid "Tools to optimize your workflow."
-msgstr "Công cụ để tối ưu hóa quy trình làm việc của bạn."
+#~ msgid "Tools to optimize your workflow."
+#~ msgstr "Công cụ để tối ưu hóa quy trình làm việc của bạn."
 
 #: src/pages/kashi/borrow/[pair].tsx:197
 #: src/pages/kashi/lend/[pair].tsx:155
 #: src/pages/kashi/lend/index.tsx:187
-msgid "Total"
-msgstr "Tổng cộng"
+#~ msgid "Total"
+#~ msgstr "Tổng cộng"
 
 #: src/pages/Trade/index.tsx:8
 #~ msgid "Trade"
@@ -1673,126 +1625,122 @@ msgstr "Tổng cộng"
 #~ msgstr "Lịch sử giao dịch"
 
 #: src/pages/user/index.tsx:125
-msgid "Transaction History {0}"
-msgstr ""
+#~ msgid "Transaction History {0}"
+#~ msgstr ""
 
 #: src/components/Settings/index.tsx:78
-msgid "Transaction Settings"
-msgstr "Cài đặt giao dịch"
+#~ msgid "Transaction Settings"
+#~ msgstr "Cài đặt giao dịch"
 
-#: src/components/TransactionConfirmationModal/index.tsx:73
-msgid "Transaction Submitted"
-msgstr ""
+#: src/modals/TransactionConfirmationModal/index.tsx:73
+#~ msgid "Transaction Submitted"
+#~ msgstr ""
 
 #: src/components/TransactionSettings/index.tsx:216
-msgid "Transaction deadline"
-msgstr "Thời hạn giao dịch"
+#~ msgid "Transaction deadline"
+#~ msgstr "Thời hạn giao dịch"
 
 #: src/pages/user/transactions.tsx:36
 #~ msgid "Transactions"
 #~ msgstr "Giao dịch"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:609
-msgid "Try enabling multi-hop trades"
-msgstr "Thử bật giao dịch nhiều bước"
+#: src/pages/exchange/swap/[[...tokens]].tsx:591
+#~ msgid "Try enabling multi-hop trades"
+#~ msgstr "Thử bật giao dịch nhiều bước"
 
 #: src/components/Settings/index.tsx:176
-msgid "Turn On Expert Mode"
-msgstr "Bật chế độ Chuyên gia"
+#~ msgid "Turn On Expert Mode"
+#~ msgstr "Bật chế độ Chuyên gia"
 
 #~ msgid "Unknown error"
 #~ msgstr "Lỗi không xác định"
 
-#: src/hooks/useSwapCallback.ts:203
-msgid "Unknown error{0}. Try increasing your slippage tolerance."
-msgstr ""
+#: src/hooks/useSwapCallback.ts:207
+#~ msgid "Unknown error{0}. Try increasing your slippage tolerance."
+#~ msgstr ""
 
 #: src/features/farm/FarmListItemDetails.tsx:185
-#: src/pages/bar/index.tsx:263
-#: src/pages/bar/index.tsx:270
-msgid "Unstake"
-msgstr "Hủy đặt cược"
+#: src/pages/bar/index.tsx:262
+#: src/pages/bar/index.tsx:269
+#~ msgid "Unstake"
+#~ msgstr "Hủy đặt cược"
 
-#: src/pages/bar/index.tsx:393
-msgid "Unstaked"
-msgstr "Đã hủy đặt cược"
+#: src/pages/bar/index.tsx:392
+#~ msgid "Unstaked"
+#~ msgstr "Đã hủy đặt cược"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:443
-#: src/pages/exchange/swap/[[...tokens]].tsx:593
-msgid "Unsupported Asset"
-msgstr "Tài sản không được hỗ trợ"
+#: src/pages/exchange/add/[[...tokens]].tsx:441
+#: src/pages/exchange/swap/[[...tokens]].tsx:575
+#~ msgid "Unsupported Asset"
+#~ msgstr "Tài sản không được hỗ trợ"
 
-#: src/guards/Network/index.tsx:29
-msgid "Unsupported network"
-msgstr ""
-
-#: src/pages/exchange/swap/[[...tokens]].tsx:603
-msgid "Unwrap"
-msgstr "Mở bọc"
+#: src/pages/exchange/swap/[[...tokens]].tsx:585
+#~ msgid "Unwrap"
+#~ msgstr "Mở bọc"
 
 #: src/hooks/useWrapCallback.ts:73
 #~ msgid "Unwrap {0} W{1} to {2}"
 #~ msgstr "Mở gói {0} W {1} thành {2}"
 
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:61
-msgid "Use SUSHI"
-msgstr ""
+#: src/features/meowshi/CurrencyInputPanel.tsx:62
+#~ msgid "Use SUSHI"
+#~ msgstr ""
 
 #: src/pages/Tools/index.tsx:88
 #~ msgid "Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned."
 #~ msgstr "Sử dụng bất kỳ công cụ nào bên dưới để tối ưu hóa quy trình làm việc của bạn. Vui lòng lưu ý: một số công cụ là thử nghiệm nên hãy sử dụng tùy ý. Nếu có một hợp đồng thông minh liên quan đến công cụ, hãy đọc mã và xác nhận các khóa đã được đốt."
 
-#: src/pages/exchange/find/index.tsx:111
-msgid "Use this tool to find pairs that don&apos;t automatically appear in the interface"
-msgstr ""
+#: src/pages/exchange/find/index.tsx:96
+#~ msgid "Use this tool to find pairs that don&apos;t automatically appear in the interface"
+#~ msgstr ""
 
-#: src/features/tools/meowshi/CurrencyInputPanel.tsx:61
-msgid "Use xSUSHI"
-msgstr ""
+#: src/features/meowshi/CurrencyInputPanel.tsx:62
+#~ msgid "Use xSUSHI"
+#~ msgstr ""
 
 #: src/pages/kashi/borrow/index.tsx:80
-msgid "Used"
-msgstr ""
+#~ msgid "Used"
+#~ msgstr ""
 
 #: src/pages/Yield/minichefv2/index.tsx:44
 #~ msgid "V2 Rewarder"
 #~ msgstr "Trình thưởng V2"
 
 #: src/components/Header/More.tsx:38
-msgid "Vesting"
-msgstr "Quyền được hưởng"
+#~ msgid "Vesting"
+#~ msgstr "Quyền được hưởng"
 
 #: src/pages/vesting/index.tsx:122
-msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
+#~ msgid "Vesting is executed within the guidelines selected by the community in"
+#~ msgstr ""
 
 #: src/pages/Vesting/index.tsx:161
 #~ msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
 #~ msgstr "Quyền được hưởng được thực hiện theo các nguyên tắc được cộng đồng lựa chọn trong <0>SIMP3</0>.<1/><2/>Vui lòng tham khảo <3>thảo luận trên diễn đàn</3> để cân nhắc về các điểm bổ sung.<4/><5/>Có thể tìm thấy các bản ghi bổ sung và cập nhật hàng tuần về merkle trên <6>Github</6>"
 
 #: src/components/LanguageSwitch/index.tsx:36
-msgid "Vietnamese"
-msgstr ""
+#~ msgid "Vietnamese"
+#~ msgstr ""
 
-#: src/pages/bar/index.tsx:226
-msgid "View Stats"
-msgstr "Xem số liệu thống kê"
+#: src/pages/bar/index.tsx:225
+#~ msgid "View Stats"
+#~ msgstr "Xem số liệu thống kê"
 
 #: src/pages/SushiBar/legacy/index.tsx:31
 #~ msgid "View SushiBar Stats"
 #~ msgstr "Xem thống kê SushiBar"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:327
-msgid "View Your Liquidity Positions"
-msgstr "Xem trạng thái thanh khoản của bạn"
+#: src/pages/exchange/add/[[...tokens]].tsx:325
+#~ msgid "View Your Liquidity Positions"
+#~ msgstr "Xem trạng thái thanh khoản của bạn"
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:723
-msgid "View Your Liquidity Positions >"
-msgstr "Xem trạng thái thanh khoản của bạn"
+#: src/pages/exchange/remove/[[...tokens]].tsx:721
+#~ msgid "View Your Liquidity Positions >"
+#~ msgstr "Xem trạng thái thanh khoản của bạn"
 
 #: src/pages/user/index.tsx:110
-msgid "View on explorer"
-msgstr "Xem trên explorer"
+#~ msgid "View on explorer"
+#~ msgstr "Xem trên explorer"
 
 #: src/components/swap/AdvancedSwapDetails.tsx:82
 #~ msgid "View pair analytics"
@@ -1802,51 +1750,50 @@ msgstr "Xem trên explorer"
 #~ msgid "View your SushiBar Portfolio"
 #~ msgstr "Xem danh mục SushiBar của bạn"
 
-#: src/components/TransactionConfirmationModal/index.tsx:39
-msgid "Waiting for Confirmation"
-msgstr ""
+#: src/modals/TransactionConfirmationModal/index.tsx:39
+#~ msgid "Waiting for Confirmation"
+#~ msgstr ""
 
 #: src/pages/user/balances.tsx:67
-msgid "Wallet"
-msgstr "Ví tiền"
+#~ msgid "Wallet"
+#~ msgstr "Ví tiền"
 
 #: src/features/farm/FarmListItemDetails.tsx:84
 #: src/pages/user/balances.tsx:184
-msgid "Wallet Balance"
-msgstr "Số dư trên ví"
+#~ msgid "Wallet Balance"
+#~ msgstr "Số dư trên ví"
 
 #: src/components/Header/More.tsx:39
-msgid "Weekly unlocks from the vesting period."
-msgstr ""
+#~ msgid "Weekly unlocks from the vesting period."
+#~ msgstr ""
 
 #: src/pages/Swap/index.tsx:256
 #~ msgid "Welcome to Sushi on Polygon (Matic)"
 #~ msgstr "Chào mừng đến với Sushi trên Polygon (Matic)"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:346
-msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
-msgstr "Khi tạo một cặp, bạn là nhà cung cấp thanh khoản đầu tiên. Tỷ lệ token bạn thêm vào sẽ thiết lập giá của mạng lưới này. Khi bạn hài lòng với tỷ lệ, hãy nhấp vào tổng cung để xem xét"
+#: src/pages/exchange/add/[[...tokens]].tsx:344
+#~ msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
+#~ msgstr "Khi tạo một cặp, bạn là nhà cung cấp thanh khoản đầu tiên. Tỷ lệ token bạn thêm vào sẽ thiết lập giá của mạng lưới này. Khi bạn hài lòng với tỷ lệ, hãy nhấp vào tổng cung để xem xét"
 
-#: src/features/inari/SideSwitch.tsx:22
 #: src/pages/user/balances.tsx:282
-msgid "Withdraw"
-msgstr "Rút tiền"
+#~ msgid "Withdraw"
+#~ msgstr "Rút tiền"
 
 #: src/pages/Yield/masterchefv1/InputGroup.tsx:60
 #~ msgid "Withdraw {assetSymbol}"
 #~ msgstr "Rút tiền {assetSymbol}"
 
-#: src/pages/exchange/swap/[[...tokens]].tsx:601
-msgid "Wrap"
-msgstr "Bọc lại"
+#: src/pages/exchange/swap/[[...tokens]].tsx:583
+#~ msgid "Wrap"
+#~ msgstr "Bọc lại"
 
-#: src/components/WalletModal/index.tsx:268
-msgid "Wrong Network"
-msgstr "Mạng không chính xác"
+#: src/modals/WalletModal/index.tsx:270
+#~ msgid "Wrong Network"
+#~ msgstr "Mạng không chính xác"
 
-#: src/pages/bar/index.tsx:235
-msgid "Yesterday's APR"
-msgstr "Tỷ suất lợi nhuận hàng năm của ngày hôm qua"
+#: src/pages/bar/index.tsx:234
+#~ msgid "Yesterday's APR"
+#~ msgstr "Tỷ suất lợi nhuận hàng năm của ngày hôm qua"
 
 #~ msgid "Yield"
 #~ msgstr "Lợi suất"
@@ -1864,39 +1811,39 @@ msgstr "Tỷ suất lợi nhuận hàng năm của ngày hôm qua"
 #~ msgid "Yield Instruments"
 #~ msgstr "Công cụ lợi suất"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
-msgid "You are creating a pool"
-msgstr "Bạn đang tạo một mạng lưới"
+#: src/pages/exchange/add/[[...tokens]].tsx:376
+#~ msgid "You are creating a pool"
+#~ msgstr "Bạn đang tạo một mạng lưới"
 
 #: src/components/Web3Connect/index.tsx:28
-msgid "You are on the wrong network"
-msgstr "Bạn đang kết nối sai mạng"
+#~ msgid "You are on the wrong network"
+#~ msgstr "Bạn đang kết nối sai mạng"
 
-#: src/pages/exchange/find/index.tsx:168
-msgid "You don’t have liquidity in this pool yet"
-msgstr "Bạn chưa có thanh khoản trong mạng lưới này"
+#: src/pages/exchange/find/index.tsx:154
+#~ msgid "You don’t have liquidity in this pool yet"
+#~ msgstr "Bạn chưa có thanh khoản trong mạng lưới này"
 
 #: src/pages/exchange/migrate/index.tsx:135
-msgid "You need to first approve LP tokens and then migrate it"
-msgstr "Trước tiên, bạn cần phê duyệt token LP và sau đó di chuyển"
+#~ msgid "You need to first approve LP tokens and then migrate it"
+#~ msgstr "Trước tiên, bạn cần phê duyệt token LP và sau đó di chuyển"
 
-#: src/pages/exchange/add/[[...tokens]].tsx:378
-#: src/pages/exchange/remove/[[...tokens]].tsx:742
-msgid "You will receive"
-msgstr "Bạn sẽ nhận được"
+#: src/pages/exchange/add/[[...tokens]].tsx:376
+#: src/pages/exchange/remove/[[...tokens]].tsx:740
+#~ msgid "You will receive"
+#~ msgstr "Bạn sẽ nhận được"
 
 #: src/pages/kashi/borrow/index.tsx:54
 #: src/pages/kashi/lend/index.tsx:49
-msgid "Your"
-msgstr ""
+#~ msgid "Your"
+#~ msgstr ""
 
 #: src/pages/vesting/index.tsx:146
-msgid "Your Claimable SUSHI this Week"
-msgstr "SUSHI có thể yêu cầu của bạn trong tuần này"
+#~ msgid "Your Claimable SUSHI this Week"
+#~ msgstr "SUSHI có thể yêu cầu của bạn trong tuần này"
 
 #: src/pages/exchange/migrate/index.tsx:331
-msgid "Your Liquidity"
-msgstr "Tính thanh khoản của bạn"
+#~ msgid "Your Liquidity"
+#~ msgstr "Tính thanh khoản của bạn"
 
 #: src/pages/Positions/LiquidityPositions.tsx:40
 #~ msgid "Your Liquidity Positions"
@@ -1913,12 +1860,12 @@ msgstr "Tính thanh khoản của bạn"
 #~ msgstr "Số token trên mạng lưới của bạn"
 
 #: src/features/farm/FarmListItemDetails.tsx:139
-msgid "Your Staked"
-msgstr "Đặt cược của bạn"
+#~ msgid "Your Staked"
+#~ msgstr "Đặt cược của bạn"
 
-#: src/pages/bar/index.tsx:437
-msgid "Your SushiBar Stats"
-msgstr "Thống kê SushiBar của bạn"
+#: src/pages/bar/index.tsx:436
+#~ msgid "Your SushiBar Stats"
+#~ msgstr "Thống kê SushiBar của bạn"
 
 #: src/pages/Transactions/TransactionHistory.tsx:12
 #~ msgid "Your Transaction History"
@@ -1929,8 +1876,8 @@ msgstr "Thống kê SushiBar của bạn"
 #~ msgstr "Lịch sử giao dịch của bạn trên {0}"
 
 #: src/pages/exchange/migrate/index.tsx:327
-msgid "Your Wallet"
-msgstr "Ví của bạn"
+#~ msgid "Your Wallet"
+#~ msgstr "Ví của bạn"
 
 #: src/pages/Yield/masterchefv1/index.tsx:49
 #: src/pages/Yield/minichefv2/index.tsx:55
@@ -1939,57 +1886,57 @@ msgstr "Ví của bạn"
 
 #: src/components/PositionCard/index.tsx:80
 #: src/components/PositionCard/index.tsx:216
-msgid "Your pool share"
-msgstr "Cổ phần trên mạng lưới của bạn"
+#~ msgid "Your pool share"
+#~ msgstr "Cổ phần trên mạng lưới của bạn"
 
 #: src/components/PositionCard/index.tsx:182
-msgid "Your total pool tokens"
-msgstr "Tổng số token trên mạng lưới của bạn"
+#~ msgid "Your total pool tokens"
+#~ msgstr "Tổng số token trên mạng lưới của bạn"
 
 #: src/components/TransactionSettings/index.tsx:207
-msgid "Your transaction may be frontrun"
-msgstr "Giao dịch của bạn có thể chạy trước"
+#~ msgid "Your transaction may be frontrun"
+#~ msgstr "Giao dịch của bạn có thể chạy trước"
 
 #: src/components/TransactionSettings/index.tsx:206
-msgid "Your transaction may fail"
-msgstr "Giao dịch của bạn có thể thất bại"
+#~ msgid "Your transaction may fail"
+#~ msgstr "Giao dịch của bạn có thể thất bại"
 
 #: src/components/TransactionSettings/index.tsx:219
-msgid "Your transaction will revert if it is pending for more than this long."
-msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu chờ xử lý quá lâu."
+#~ msgid "Your transaction will revert if it is pending for more than this long."
+#~ msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu chờ xử lý quá lâu."
 
 #: src/components/TransactionSettings/index.tsx:154
-msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
-msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu giá thay đổi bất lợi hơn tỷ lệ phần trăm này."
+#~ msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
+#~ msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu giá thay đổi bất lợi hơn tỷ lệ phần trăm này."
 
 #: src/features/lending/TradeReview.tsx:48
 #: src/features/swap/AdvancedSwapDetails.tsx:54
-msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
-msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu có một biến động giá lớn, bất lợi trước khi được xác nhận."
+#~ msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
+#~ msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu có một biến động giá lớn, bất lợi trước khi được xác nhận."
 
 #: src/pages/exchange/migrate/index.tsx:251
-msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
-msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh khoản SushiSwap {2}/{3} ."
+#~ msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
+#~ msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh khoản SushiSwap {2}/{3} ."
 
 #: src/pages/zap/index.tsx:261
-msgid "Zap"
-msgstr ""
+#~ msgid "Zap"
+#~ msgstr ""
 
 #~ msgid "annualized"
 #~ msgstr "hàng năm"
 
 #: src/components/Gas/index.tsx:14
 #: src/pages/user/index.tsx:59
-msgid "failed to load"
-msgstr "Tải không thành công"
+#~ msgid "failed to load"
+#~ msgstr "Tải không thành công"
 
 #: src/pages/vesting/index.tsx:133
-msgid "for deliberations on additional points."
-msgstr ""
+#~ msgid "for deliberations on additional points."
+#~ msgstr ""
 
 #: src/pages/vesting/index.tsx:131
-msgid "forum discussion"
-msgstr ""
+#~ msgid "forum discussion"
+#~ msgstr ""
 
 #: src/pages/Positions/LiquidityPositions.tsx:43
 #~ msgid "import it"
@@ -1997,17 +1944,17 @@ msgstr ""
 
 #: src/components/Gas/index.tsx:15
 #: src/pages/user/index.tsx:60
-msgid "loading..."
-msgstr "Đang tải..."
+#~ msgid "loading..."
+#~ msgstr "Đang tải..."
 
 #: src/components/TransactionSettings/index.tsx:240
-msgid "minutes"
-msgstr "phút"
+#~ msgid "minutes"
+#~ msgstr "phút"
 
 #: src/features/swap/SwapModalHeader.tsx:102
 #: src/features/swap/SwapModalHeader.tsx:110
-msgid "or the transaction will revert."
-msgstr ""
+#~ msgid "or the transaction will revert."
+#~ msgstr ""
 
 #: src/pages/Yield/minichefv2/index.tsx:177
 #~ msgid "per month"
@@ -2017,8 +1964,8 @@ msgstr ""
 #~ msgstr "Số dư xSUSHI"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:92
-msgid "xSUSHI Fee"
-msgstr ""
+#~ msgid "xSUSHI Fee"
+#~ msgstr ""
 
 #: src/pages/SushiBar/legacy/index.tsx:25
 #~ msgid ""
@@ -2031,19 +1978,19 @@ msgstr ""
 #~ msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportionalto your share of the SushiBar."
 #~ msgstr "xSUSHI tự động thu phí (0,05% của tất cả các giao dịch hoán đổi, bao gồm cả các giao dịch hoán đổi đa chuỗi) tỷ lệ thuận với cổ phần của bạn trên SushiBar."
 
-#: src/components/SearchModal/ImportToken.tsx:42
-msgid "{0, plural, one {Token} many {Tokens}}"
-msgstr ""
+#: src/modals/SearchModal/ImportToken.tsx:42
+#~ msgid "{0, plural, one {Token} many {Tokens}}"
+#~ msgstr ""
 
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:47
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:54
-msgid "{0} Deposited"
-msgstr "{0} Đã ký quỹ"
+#~ msgid "{0} Deposited"
+#~ msgstr "{0} Đã ký quỹ"
 
 #: src/pages/kashi/borrow/[pair].tsx:230
 #: src/pages/kashi/lend/[pair].tsx:202
-msgid "{0} Strategy"
-msgstr "{0} Chiến lược"
+#~ msgid "{0} Strategy"
+#~ msgstr "{0} Chiến lược"
 
 #: src/pages/AddLiquidity/PoolPriceBar.tsx:20
 #: src/pages/AddLiquidity/PoolPriceBar.tsx:26
@@ -2052,9 +1999,9 @@ msgstr "{0} Chiến lược"
 
 #: src/features/liquidity/LiquidityPrice.tsx:30
 #: src/features/liquidity/LiquidityPrice.tsx:37
-msgid "{0} {1} per {2}"
-msgstr ""
+#~ msgid "{0} {1} per {2}"
+#~ msgstr ""
 
-#: src/pages/exchange/remove/[[...tokens]].tsx:639
-msgid "{0}/{1} Burned"
-msgstr ""
+#: src/pages/exchange/remove/[[...tokens]].tsx:637
+#~ msgid "{0}/{1} Burned"
+#~ msgstr ""

@@ -1,7 +1,7 @@
 import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
 
 import Image from 'next/image'
-import NetworkModel from '../NetworkModal'
+import NetworkModel from '../../modals/NetworkModal'
 import React from 'react'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useNetworkModalToggle } from '../../state/application/hooks'

@@ -1,10 +1,15 @@
 import {
+  dayDatasQuery,
   ethPriceQuery,
+  factoryQuery,
   liquidityPositionsQuery,
   pairsQuery,
+  tokenPairsQuery,
   tokenPriceQuery,
+  tokenQuery,
   tokenSubsetQuery,
   tokensQuery,
+  transactionsQuery,
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -19,6 +24,8 @@ export const EXCHANGE = {
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
+  [ChainId.CELO]: 'sushiswap/celo-exchange',
 }
 
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
@@ -35,10 +42,16 @@ export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
   return tokens
 }
 
-export const getTokens = async (chainId = ChainId.MAINNET, variables) => {
+export const getTokens = async (chainId = ChainId.MAINNET, query = tokensQuery, variables) => {
   // console.log('getTokens')
-  const { tokens } = await exchange(chainId, tokensQuery, variables)
+  const { tokens } = await exchange(chainId, query, variables)
   return tokens
+}
+
+export const getToken = async (chainId = ChainId.MAINNET, query = tokenQuery, variables) => {
+  // console.log('getTokens')
+  const { token } = await exchange(chainId, query, variables)
+  return token
 }
 
 export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
@@ -49,15 +62,15 @@ export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
 
 export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables) => {
   // console.log('getTokenPrice')
-  const ethPrice = await getEthPrice()
+  const ethPrice = await getEthPrice(chainId)
 
   const { token } = await exchange(chainId, query, variables)
   return token?.derivedETH * ethPrice
 }
 
-export const getEthPrice = async () => {
+export const getEthPrice = async (chainId = ChainId.MAINNET, variables = undefined) => {
   // console.log('getEthPrice')
-  const data = await getBundle()
+  const data = await getBundle(chainId, undefined, variables)
   return data?.bundles?.[0]?.ethPrice
 }
 
@@ -113,4 +126,24 @@ export const getBundle = async (
 export const getLiquidityPositions = async (chainId = ChainId.MAINNET, variables) => {
   const { liquidityPositions } = await exchange(chainId, liquidityPositionsQuery, variables)
   return liquidityPositions
+}
+
+export const getDayData = async (chainId = ChainId.MAINNET, query = dayDatasQuery, variables = undefined) => {
+  const { dayDatas } = await exchange(chainId, query, variables)
+  return dayDatas
+}
+
+export const getFactory = async (chainId = ChainId.MAINNET, variables = undefined) => {
+  const { factory } = await exchange(chainId, factoryQuery, variables)
+  return factory
+}
+
+export const getTransactions = async (chainId = ChainId.MAINNET, query = transactionsQuery, variables = undefined) => {
+  const { swaps } = await exchange(chainId, query, variables)
+  return swaps
+}
+
+export const getTokenPairs = async (chainId = ChainId.MAINNET, query = tokenPairsQuery, variables = undefined) => {
+  const { pairs1, pairs2 } = await exchange(chainId, query, variables)
+  return pairs1 || pairs2 ? [...(pairs1 ? pairs1 : []), ...(pairs2 ? pairs2 : [])] : undefined
 }

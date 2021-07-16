@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
+import React, { FC, Fragment } from 'react'
 import { useActiveWeb3React } from '../../hooks'
 import { ChainId } from '@sushiswap/sdk'
-import Modal from '../../components/Modal'
 import Typography from '../../components/Typography'
 import Image from 'next/image'
 import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
-import { SUPPORTED_NETWORKS } from '../../components/NetworkModal'
+import { SUPPORTED_NETWORKS } from '../../modals/NetworkModal'
 import cookie from 'cookie-cutter'
-import { classNames } from '../../functions'
-import { useLingui } from '@lingui/react'
+import { useLingui, Trans } from '@lingui/react'
 import { t } from '@lingui/macro'
+import HeadlessUIModal from '../../components/Modal/HeadlessUIModal'
+import NavLink from '../../components/NavLink'
 
 interface NetworkGuardProps {
   networks: ChainId[]
@@ -19,60 +19,39 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
 
-  if (networks.includes(chainId)) return <>{children}</>
+  const link = (
+    <NavLink href="/swap">
+      <a className="text-blue focus:outline-none">{i18n._(t`home page`)}</a>
+    </NavLink>
+  )
 
   return (
-    <Modal isOpen={true} onDismiss={() => null} maxWidth={768}>
-      <div className="flex flex-col gap-5">
-        <div className="flex gap-5">
-          <div className="flex flex-col gap-3">
-            <Typography variant="h3">{i18n._(t`Unsupported network`)}</Typography>
-            <Typography>
-              {i18n._(t`Please switch to one of the following supported networks to view this page`)}
-            </Typography>
-          </div>
-        </div>
-        <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
-          {[
-            ChainId.MAINNET,
-            ChainId.MATIC,
-            ChainId.FANTOM,
-            ChainId.ARBITRUM,
-            ChainId.OKEX,
-            ChainId.HECO,
-            ChainId.BSC,
-            ChainId.XDAI,
-            ChainId.HARMONY,
-            ChainId.AVALANCHE,
-            ChainId.CELO,
-          ].map((key: ChainId, i: number) => {
-            const disabled = !networks.includes(key)
-
-            if (chainId === key) {
-              return (
-                <button
-                  key={i}
-                  disabled={disabled}
-                  className="disabled:cursor-not-allowed disabled:opacity-40 w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink"
-                >
-                  <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
-                    <Image
-                      src={NETWORK_ICON[key]}
-                      alt="Switch Network"
-                      className="rounded-md"
-                      width="32px"
-                      height="32px"
-                    />
-                    <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
-                  </div>
-                </button>
-              )
-            }
-
-            return (
+    <>
+      <HeadlessUIModal isOpen={!!account && !networks.includes(chainId)} onDismiss={() => null}>
+        <div className="flex flex-col gap-7 justify-center">
+          <Typography variant="h1" className="max-w-2xl text-white text-center" weight={700}>
+            {i18n._(t`Roll it back - this feature is not yet supported on ${NETWORK_LABEL[chainId]}.`)}
+          </Typography>
+          <Typography className="text-center">
+            <Trans
+              id="Either return to the {link}, or change to an available network."
+              values={{ link }}
+              components={Fragment}
+            />
+          </Typography>
+          <Typography className="uppercase text-white text-center text-lg tracking-[.2rem]" weight={700}>
+            {i18n._(t`Available Networks`)}
+          </Typography>
+          <div
+            className={`grid gap-5 md:gap-10 md:grid-cols-[${Math.min(6, networks.length)}] grid-cols-[${Math.min(
+              3,
+              networks.length
+            )}]`}
+          >
+            {networks.map((key: ChainId, idx: number) => (
               <button
-                key={i}
-                disabled={disabled}
+                className="text-primary hover:text-white flex items-center flex-col gap-2 justify-start"
+                key={idx}
                 onClick={() => {
                   const params = SUPPORTED_NETWORKS[key]
                   cookie.set('chainId', key)
@@ -82,19 +61,24 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
                     library?.send('wallet_addEthereumChain', [params, account])
                   }
                 }}
-                className={classNames(
-                  disabled ? '' : 'cursor-pointer hover:bg-dark-700',
-                  'disabled:opacity-40 disabled:cursor-not-allowed flex items-center w-full col-span-1 p-3 space-x-3 rounded bg-dark-800'
-                )}
               >
-                <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
-                <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
+                <div className="w-[40px] h-[40px]">
+                  <Image
+                    src={NETWORK_ICON[key]}
+                    alt="Switch Network"
+                    className="rounded-md filter drop-shadow-currencyLogo"
+                    width="40px"
+                    height="40px"
+                  />
+                </div>
+                <Typography className="text-sm">{NETWORK_LABEL[key]}</Typography>
               </button>
-            )
-          })}
+            ))}
+          </div>
         </div>
-      </div>
-    </Modal>
+      </HeadlessUIModal>
+      {children}
+    </>
   )
 }
 

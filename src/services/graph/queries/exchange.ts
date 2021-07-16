@@ -5,6 +5,7 @@ export const factoryQuery = gql`
     factory(id: $id, block: $block) {
       id
       volumeUSD
+      liquidityUSD
     }
   }
 `
@@ -45,8 +46,8 @@ export const bundleFields = gql`
 `
 
 export const ethPriceQuery = gql`
-  query ethPriceQuery($id: Int! = 1) {
-    bundles(id: $id) {
+  query ethPriceQuery($id: Int! = 1, $block: Block_height) {
+    bundles(id: $id, block: $block) {
       ...bundleFields
     }
   }
@@ -86,8 +87,8 @@ export const dayDataFieldsQuery = gql`
 
 // Dashboard...
 export const dayDatasQuery = gql`
-  query dayDatasQuery($first: Int! = 1000, $date: Int! = 0) {
-    dayDatas(first: $first, orderBy: date, orderDirection: desc) {
+  query dayDatasQuery($first: Int! = 1000, $date: Int! = 0, $where: DayData_filter) {
+    dayDatas(first: $first, orderBy: date, orderDirection: desc, where: $where) {
       ...dayDataFields
     }
   }
@@ -257,8 +258,8 @@ export const tokenFieldsQuery = gql`
 `
 
 export const tokenQuery = gql`
-  query tokenQuery($id: String!) {
-    token(id: $id) {
+  query tokenQuery($id: String!, $block: Block_height) {
+    token(id: $id, block: $block) {
       ...tokenFields
     }
   }
@@ -311,8 +312,8 @@ export const tokenPairsQuery = gql`
 `
 
 export const tokensQuery = gql`
-  query tokensQuery($first: Int! = 1000) {
-    tokens(first: $first, orderBy: volumeUSD, orderDirection: desc) {
+  query tokensQuery($first: Int! = 1000, $block: Block_height) {
+    tokens(first: $first, orderBy: volumeUSD, orderDirection: desc, block: $block) {
       ...tokenFields
       dayData(first: 7, skip: 0, orderBy: date, order: asc) {
         id

@@ -17,6 +17,7 @@ export default function BenotBox() {
       <Head>
         <title>BentoBox | Sushi</title>
         <meta
+          key="description"
           name="description"
           content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
         />

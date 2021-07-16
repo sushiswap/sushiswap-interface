@@ -7,7 +7,7 @@ import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } f
 
 import { Contract } from '@ethersproject/contracts'
 import { Zero } from '@ethersproject/constants'
-import { concat } from 'lodash'
+import concat from 'lodash/concat'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import zip from 'lodash/zip'
 
@@ -23,7 +23,9 @@ export function useChefContract(chef: Chef) {
     }),
     [masterChefContract, masterChefV2Contract, miniChefContract]
   )
-  return useMemo(() => contracts[chef], [contracts, chef])
+  return useMemo(() => {
+    return contracts[chef]
+  }, [contracts, chef])
 }
 
 const CHEFS = {
@@ -52,7 +54,7 @@ export function useUserInfo(farm, token) {
   const contract = useChefContract(farm.chef)
 
   const args = useMemo(() => {
-    if (!account || !farm) {
+    if (!account) {
       return
     }
     return [String(farm.id), String(account)]
@@ -73,7 +75,7 @@ export function usePendingSushi(farm) {
   const contract = useChefContract(farm.chef)
 
   const args = useMemo(() => {
-    if (!account || !farm) {
+    if (!account) {
       return
     }
     return [String(farm.id), String(account)]
