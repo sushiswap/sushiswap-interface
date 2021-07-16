@@ -88,7 +88,7 @@ function MyApp({
   const Guard = Component.Guard || Fragment
 
   // temporarily force redux persist clear
-  if (localStorage.getItem('persist:root')) {
+  if (typeof localStorage !== 'undefined' && localStorage.getItem('persist:root')) {
     localStorage.removeItem('persist:root')
   }
 
