@@ -367,7 +367,7 @@ function LimitOrder() {
             </div>
 
             <div className="flex">
-              <LimitOrderButton color="gradient" currency={currencies[Field.INPUT]} />
+              <LimitOrderButton color="gradient" className="font-bold" currency={currencies[Field.INPUT]} />
             </div>
           </div>
         </DoubleGlowShadow>

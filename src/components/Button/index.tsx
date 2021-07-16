@@ -74,7 +74,7 @@ function Button({
       className={classNames(
         VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
-        'rounded font-medium disabled:cursor-not-allowed focus:outline-none',
+        'rounded disabled:cursor-not-allowed focus:outline-none',
         // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}

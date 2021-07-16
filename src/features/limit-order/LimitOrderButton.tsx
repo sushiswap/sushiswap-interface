@@ -176,7 +176,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     (!permit && approvalState === BentoApprovalState.APPROVED && !fromBentoBalance)
   )
     button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={deposit} {...rest}>
+      <Button disabled={disabled} color={disabled ? 'gray' : 'blue'} onClick={deposit} {...rest}>
         {i18n._(t`Deposit ${currency.symbol} into BentoBox`)}
       </Button>
     )

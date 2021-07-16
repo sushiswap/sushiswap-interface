@@ -283,7 +283,7 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:356
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:358
 msgid "Change Recipient"
 msgstr ""
 
@@ -799,7 +799,7 @@ msgstr ""
 msgid "Manage"
 msgstr ""
 
-#: src/modals/SearchModal/CurrencySearch.tsx:242
+#: src/modals/SearchModal/CurrencySearch.tsx:245
 msgid "Manage Token Lists"
 msgstr ""
 
@@ -912,7 +912,7 @@ msgstr ""
 msgid "No pool found"
 msgstr ""
 
-#: src/modals/SearchModal/CurrencySearch.tsx:237
+#: src/modals/SearchModal/CurrencySearch.tsx:239
 msgid "No results found"
 msgstr ""
 
@@ -1145,7 +1145,7 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
-#: src/modals/SearchModal/CurrencySearch.tsx:197
+#: src/modals/SearchModal/CurrencySearch.tsx:199
 msgid "Search name or paste address"
 msgstr ""
 
@@ -1163,7 +1163,7 @@ msgstr ""
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:72
+#: src/features/limit-order/CurrencySelect.tsx:74
 #: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
@@ -1530,7 +1530,7 @@ msgstr ""
 msgid "You receive <0>(at least):</0>"
 msgstr ""
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:294
 msgid "You receive:"
 msgstr ""
 

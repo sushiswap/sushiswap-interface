@@ -288,7 +288,7 @@ msgstr "Cancel Order"
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:356
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:358
 msgid "Change Recipient"
 msgstr "Change Recipient"
 
@@ -820,7 +820,7 @@ msgstr "MEV Shield by Archer DAO"
 msgid "Manage"
 msgstr "Manage"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:242
+#: src/modals/SearchModal/CurrencySearch.tsx:245
 msgid "Manage Token Lists"
 msgstr "Manage Token Lists"
 
@@ -933,7 +933,7 @@ msgstr "No order history"
 msgid "No pool found"
 msgstr "No pool found"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:237
+#: src/modals/SearchModal/CurrencySearch.tsx:239
 msgid "No results found"
 msgstr "No results found"
 
@@ -1168,7 +1168,7 @@ msgstr "Russian"
 msgid "SLP"
 msgstr "SLP"
 
-#: src/modals/SearchModal/CurrencySearch.tsx:197
+#: src/modals/SearchModal/CurrencySearch.tsx:199
 msgid "Search name or paste address"
 msgstr "Search name or paste address"
 
@@ -1186,7 +1186,7 @@ msgstr "Select a rate"
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:72
+#: src/features/limit-order/CurrencySelect.tsx:74
 #: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
@@ -1557,7 +1557,7 @@ msgstr "You pay"
 msgid "You receive <0>(at least):</0>"
 msgstr "You receive <0>(at least):</0>"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:294
 msgid "You receive:"
 msgstr "You receive:"
 
