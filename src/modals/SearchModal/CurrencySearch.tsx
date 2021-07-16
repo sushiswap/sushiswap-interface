@@ -49,6 +49,7 @@ interface CurrencySearchProps {
   setImportToken: (token: Token) => void
   currencyList?: string[]
   includeNativeCurrency?: boolean
+  allowManageTokenList?: boolean
 }
 
 export function CurrencySearch({
@@ -63,6 +64,7 @@ export function CurrencySearch({
   setImportToken,
   currencyList,
   includeNativeCurrency = true,
+  allowManageTokenList = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -237,11 +239,13 @@ export function CurrencySearch({
           <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
         </Column>
       )}
-      <div className="mt-3">
-        <Button id="list-token-manage-button" onClick={showManageView} color="gray">
-          {i18n._(t`Manage Token Lists`)}
-        </Button>
-      </div>
+      {allowManageTokenList && (
+        <div className="mt-3">
+          <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+            {i18n._(t`Manage Token Lists`)}
+          </Button>
+        </div>
+      )}
     </ContentWrapper>
   )
 }

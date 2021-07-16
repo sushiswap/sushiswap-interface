@@ -288,7 +288,7 @@ msgstr "Cancel Order"
 msgid "Cancelled"
 msgstr "Cancelled"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:357
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:356
 msgid "Change Recipient"
 msgstr "Change Recipient"
 
@@ -485,7 +485,7 @@ msgstr "Enter"
 msgid "Enter Amount"
 msgstr "Enter Amount"
 
-#: src/state/limit-order/hooks.ts:173
+#: src/state/limit-order/hooks.ts:177
 #: src/state/swap/hooks.ts:192
 msgid "Enter a recipient"
 msgstr "Enter a recipient"
@@ -495,7 +495,7 @@ msgid "Enter a valid slippage percentage"
 msgstr "Enter a valid slippage percentage"
 
 #: src/state/burn/hooks.ts:138
-#: src/state/limit-order/hooks.ts:164
+#: src/state/limit-order/hooks.ts:168
 #: src/state/mint/hooks.ts:202
 #: src/state/swap/hooks.ts:183
 msgid "Enter an amount"
@@ -663,7 +663,7 @@ msgstr "Insufficient Balance"
 msgid "Insufficient liquidity for this trade"
 msgstr "Insufficient liquidity for this trade"
 
-#: src/state/limit-order/hooks.ts:195
+#: src/state/limit-order/hooks.ts:199
 #: src/state/mint/hooks.ts:208
 #: src/state/mint/hooks.ts:212
 #: src/state/swap/hooks.ts:209
@@ -739,7 +739,7 @@ msgstr "Lent"
 msgid "Limit"
 msgstr "Limit"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:214
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:213
 msgid "Limit order"
 msgstr "Limit order"
 
@@ -782,7 +782,7 @@ msgstr "Loading"
 msgid "Loading Balance"
 msgstr "Loading Balance"
 
-#: src/state/limit-order/hooks.ts:191
+#: src/state/limit-order/hooks.ts:195
 msgid "Loading balance"
 msgstr "Loading balance"
 
@@ -905,7 +905,7 @@ msgid "Network not supported yet"
 msgstr "Network not supported yet"
 
 #: src/features/limit-order/OrderExpirationDropdown.tsx:17
-#: src/state/limit-order/hooks.ts:268
+#: src/state/limit-order/hooks.ts:272
 msgid "Never"
 msgstr "Never"
 
@@ -1180,14 +1180,14 @@ msgstr "Select a asset token"
 msgid "Select a collateral token"
 msgstr "Select a collateral token"
 
-#: src/state/limit-order/hooks.ts:177
+#: src/state/limit-order/hooks.ts:181
 msgid "Select a rate"
 msgstr "Select a rate"
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
 #: src/features/limit-order/CurrencySelect.tsx:72
-#: src/state/limit-order/hooks.ts:168
+#: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
 msgstr "Select a token"
@@ -1196,7 +1196,7 @@ msgstr "Select a token"
 msgid "Select a token to find your liquidity"
 msgstr "Select a token to find your liquidity"
 
-#: src/state/limit-order/hooks.ts:181
+#: src/state/limit-order/hooks.ts:185
 msgid "Select an order expiration"
 msgstr "Select an order expiration"
 
@@ -1549,7 +1549,7 @@ msgstr "You don’t have liquidity in this pool yet"
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "You need to first approve LP tokens and then migrate it"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:245
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:244
 msgid "You pay"
 msgstr "You pay"
 
@@ -1557,7 +1557,7 @@ msgstr "You pay"
 msgid "You receive <0>(at least):</0>"
 msgstr "You receive <0>(at least):</0>"
 
-#: src/pages/exchange/limit-order/[[...tokens]].tsx:294
+#: src/pages/exchange/limit-order/[[...tokens]].tsx:293
 msgid "You receive:"
 msgstr "You receive:"
 

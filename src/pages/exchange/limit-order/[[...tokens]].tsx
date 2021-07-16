@@ -244,6 +244,7 @@ function LimitOrder() {
                     label={i18n._(t`You pay`)}
                     onSelect={handleInputSelect}
                     currencyList={inputTokenList}
+                    allowManageTokenList={false}
                   />
                 }
                 inputComponent={
@@ -294,6 +295,7 @@ function LimitOrder() {
                     onSelect={handleOutputSelect}
                     currencyList={outputTokenList}
                     includeNativeCurrency={false}
+                    allowManageTokenList={false}
                   />
                 }
                 inputComponent={

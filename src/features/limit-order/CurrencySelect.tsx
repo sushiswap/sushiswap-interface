@@ -18,6 +18,7 @@ interface CurrencySelectProps {
   label: string
   currencyList?: string[]
   includeNativeCurrency?: boolean
+  allowManageTokenList?: boolean
 }
 
 const CurrencySelect: FC<CurrencySelectProps> = ({
@@ -29,6 +30,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
   currencyList,
   disabled = false,
   includeNativeCurrency = true,
+  allowManageTokenList = true,
 }) => {
   const { i18n } = useLingui()
   const [modalOpen, setModalOpen] = useState(false)
@@ -89,6 +91,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
           showCommonBases={showCommonBases}
           currencyList={currencyList}
           includeNativeCurrency={includeNativeCurrency}
+          allowManageTokenList={allowManageTokenList}
         />
       )}
     </>
