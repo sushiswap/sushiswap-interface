@@ -46,9 +46,9 @@ const store = configureStore({
   },
   middleware: [
     ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),
-    ...(typeof localStorage !== 'undefined' ? [save({ states: PERSISTED_KEYS })] : []),
+    // ...(typeof localStorage !== 'undefined' ? [save({ states: PERSISTED_KEYS })] : []),
   ],
-  preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {},
+  // preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {},
   devTools: process.env.NODE_ENV === 'development',
   // middleware: getDefaultMiddleware({
   //   thunk: true,
@@ -57,6 +57,10 @@ const store = configureStore({
   // devTools: process.env.NODE_ENV === 'development',
   // preloadedState: load({ states: PERSISTED_KEYS }),
 })
+
+if (typeof localStorage !== 'undefined') {
+  localStorage.clear()
+}
 
 store.dispatch(updateVersion())
 
