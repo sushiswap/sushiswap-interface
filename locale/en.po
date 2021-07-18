@@ -172,7 +172,7 @@ msgstr "Amount of Tokens"
 
 #: src/hooks/useSwapCallback.ts:205
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
-msgstr "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
+msgstr "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading."
 
 #: src/components/Footer/index.tsx:23
 #: src/components/Header/index.tsx:353
@@ -1561,7 +1561,7 @@ msgstr "Search name or paste address"
 
 #: src/state/create/hook.ts:88
 msgid "Select a asset token"
-msgstr "Select a asset token"
+msgstr "Select an asset token"
 
 #: src/state/create/hook.ts:84
 msgid "Select a collateral token"
