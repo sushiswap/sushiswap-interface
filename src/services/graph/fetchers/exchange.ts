@@ -94,6 +94,12 @@ export const getAlcxPrice = async () => {
   })
 }
 
+export const getPicklePrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x429881672B9AE42b8EbA0E26cD9C73711b891Ca5',
+  })
+}
+
 export const getSushiPrice = async () => {
   // console.log('getSushiPrice')
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {

@@ -15,6 +15,7 @@ import {
   useStakePrice,
   useSushiPairs,
   useSushiPrice,
+  usePicklePrice,
 } from '../../services/graph'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -62,7 +63,7 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice] = [
+  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice, picklePrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -70,6 +71,7 @@ export default function Farm(): JSX.Element {
     useCvxPrice(),
     useStakePrice(),
     useOnePrice(),
+    usePicklePrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -137,6 +139,13 @@ export default function Farm(): JSX.Element {
             rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
             rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
+          },
+          {
+            token: 'PICKLE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: picklePrice,
           },
         ]
 

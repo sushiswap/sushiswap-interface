@@ -3,6 +3,7 @@ import {
   getAlcxPrice,
   getBundle,
   getCvxPrice,
+  getPicklePrice,
   getLiquidityPositions,
   getMaticPrice,
   getOnePrice,
@@ -75,6 +76,16 @@ export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
 export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'cvxPrice' : null, () => getCvxPrice(), swrConfig)
+  return data
+}
+
+export function usePicklePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? 'picklePrice' : null,
+    () => getPicklePrice(),
+    swrConfig
+  )
   return data
 }
 
