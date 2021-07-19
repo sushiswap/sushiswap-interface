@@ -225,7 +225,7 @@ msgstr ""
 msgid "Approving {0}"
 msgstr "{0} 승인"
 
-#: src/components/Settings/index.tsx:132
+#: src/components/Settings/index.tsx:131
 msgid "Are you sure?"
 msgstr "확실합니까?"
 
@@ -257,7 +257,7 @@ msgstr ""
 msgid "Balance"
 msgstr "잔액"
 
-#: src/components/CurrencyInputPanel/index.tsx:166
+#: src/components/CurrencyInputPanel/index.tsx:171
 msgid "Balance:"
 msgstr ""
 
@@ -366,7 +366,7 @@ msgstr ""
 #~ msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your shareof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawingyour liquidity."
 #~ msgstr "유동성 공급 시 귀하는 해당 거래쌍에 대해 풀의 지분에 따라 0.25%의 거래수수료의 일부를 받게 됩니다. 수수료는 풀에 추가되고 실시간으로 발생하며 유동성 출금 시 원금과 함께 수령하게 됩니다."
 
-#: src/components/Settings/index.tsx:75
+#: src/components/Settings/index.tsx:74
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "확인 양식을 우회하고 높은 슬리피지 거래를 허용합니다. 위험을 감수하고 사용하세요."
 
@@ -458,7 +458,7 @@ msgstr "확인"
 msgid "Confirm Adding Liquidity"
 msgstr "유동성 추가 확인"
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:123
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
 msgid "Confirm Limit Order"
 msgstr ""
 
@@ -583,7 +583,7 @@ msgstr ""
 msgid "Dev"
 msgstr "개발자"
 
-#: src/components/Settings/index.tsx:97
+#: src/components/Settings/index.tsx:96
 msgid "Disable Multihops"
 msgstr "멀티 홉 비활성화"
 
@@ -684,7 +684,7 @@ msgstr ""
 msgid "Expert Mode"
 msgstr ""
 
-#: src/components/Settings/index.tsx:134
+#: src/components/Settings/index.tsx:133
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
@@ -893,7 +893,7 @@ msgstr "이 거래를 위한 유동성 부족"
 msgid "Insufficient {0} balance"
 msgstr "{0} 잔액 부족"
 
-#: src/components/Settings/index.tsx:66
+#: src/components/Settings/index.tsx:65
 msgid "Interface Settings"
 msgstr "인터페이스 설정"
 
@@ -1058,7 +1058,7 @@ msgid ""
 "used to vote in special MEOW governor contracts."
 msgstr ""
 
-#: src/components/Settings/index.tsx:111
+#: src/components/Settings/index.tsx:110
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
@@ -1102,7 +1102,7 @@ msgstr "마켓"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:149
+#: src/components/CurrencyInputPanel/index.tsx:154
 #: src/features/limit-order/CurrencyInput.tsx:43
 #: src/features/meowshi/CurrencyInputPanel.tsx:90
 msgid "Max"
@@ -1148,7 +1148,7 @@ msgstr "귀하의 서명(허가)과  한 번의 클릭으로 마이그레이션�
 msgid "Miner Tip"
 msgstr ""
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:100
 msgid "Minimum Received"
 msgstr ""
 
@@ -1165,7 +1165,7 @@ msgstr "최소 수령"
 msgid "My Liquidity Positions"
 msgstr ""
 
-#: src/features/limit-order/MyOrders.tsx:18
+#: src/features/limit-order/MyOrders.tsx:17
 msgid "My Orders"
 msgstr ""
 
@@ -1236,7 +1236,7 @@ msgstr "비-하드웨어 지갑"
 msgid "None"
 msgstr "없음"
 
-#: src/components/Settings/index.tsx:138
+#: src/components/Settings/index.tsx:137
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 
@@ -1270,7 +1270,7 @@ msgstr "메인 메뉴 열기"
 msgid "Oracle"
 msgstr "오라클"
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:112
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
 #: src/features/limit-order/OrderExpirationDropdown.tsx:40
 msgid "Order Expiration"
 msgstr ""
@@ -1334,7 +1334,7 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-#: src/components/Settings/index.tsx:144
+#: src/components/Settings/index.tsx:143
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입력하세요."
 
@@ -1426,7 +1426,7 @@ msgstr ""
 msgid "Recent Transactions"
 msgstr ""
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:111
 msgid "Recipient"
 msgstr ""
 
@@ -1464,7 +1464,7 @@ msgstr "상환"
 #~ msgid "Request Tool"
 #~ msgstr "도구 요청"
 
-#: src/components/Settings/index.tsx:99
+#: src/components/Settings/index.tsx:98
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
 
@@ -1537,9 +1537,9 @@ msgstr ""
 msgid "Select a rate"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:121
-#: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:74
+#: src/components/CurrencyInputPanel/index.tsx:126
+#: src/components/CurrencySelectPanel/index.tsx:100
+#: src/features/limit-order/CurrencySelect.tsx:79
 #: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
@@ -1557,7 +1557,7 @@ msgstr ""
 msgid "Send to:"
 msgstr ""
 
-#: src/components/Settings/index.tsx:115
+#: src/components/Settings/index.tsx:114
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
 msgstr ""
 
@@ -1792,7 +1792,7 @@ msgstr ""
 #~ msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
 #~ msgstr "SUSHI로 출금하려면 Aave에서 axSUSHI를 담보로 제거한 다음 SushiBar로 이동하여 지분을 제거하세요. 곧 풀릴 수 있습니다."
 
-#: src/components/Settings/index.tsx:72
+#: src/components/Settings/index.tsx:71
 msgid "Toggle Expert Mode"
 msgstr "전문가 모드 전환"
 
@@ -1838,7 +1838,7 @@ msgstr "합계"
 msgid "Transaction History {0}"
 msgstr ""
 
-#: src/components/Settings/index.tsx:60
+#: src/components/Settings/index.tsx:59
 msgid "Transaction Settings"
 msgstr "거래 설정"
 
@@ -1858,7 +1858,7 @@ msgstr "거래 제한시간"
 msgid "Try enabling multi-hop trades"
 msgstr "멀티홉 거래 활성화하기"
 
-#: src/components/Settings/index.tsx:151
+#: src/components/Settings/index.tsx:150
 msgid "Turn On Expert Mode"
 msgstr "전문가 모드 켜기"
 
@@ -2056,9 +2056,13 @@ msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다
 msgid "You pay"
 msgstr ""
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
-msgid "You receive <0>(at least):</0>"
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:72
+msgid "You receive"
 msgstr ""
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
+#~ msgid "You receive <0>(at least):</0>"
+#~ msgstr ""
 
 #: src/pages/exchange/limit-order/[[...tokens]].tsx:294
 msgid "You receive:"

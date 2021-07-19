@@ -227,7 +227,7 @@ msgstr ""
 msgid "Approving {0}"
 msgstr "Approvazione {0}"
 
-#: src/components/Settings/index.tsx:132
+#: src/components/Settings/index.tsx:131
 msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Balance"
 msgstr "Saldo"
 
-#: src/components/CurrencyInputPanel/index.tsx:166
+#: src/components/CurrencyInputPanel/index.tsx:171
 msgid "Balance:"
 msgstr ""
 
@@ -368,7 +368,7 @@ msgstr ""
 #~ msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your shareof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawingyour liquidity."
 #~ msgstr "Aggiungendo liquidità guadagnerai lo 0,25% di tutte le operazioni in questa coppia in proporzione alla tua quota del pool. Le commissioni vengono aggiunte al pool, maturano in tempo reale e possono essere riscattate prelevando la tua liquidità."
 
-#: src/components/Settings/index.tsx:75
+#: src/components/Settings/index.tsx:74
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Bypassa i modali di conferma e consente operazioni con uno slippage elevato. Usare a proprio rischio."
 
@@ -462,7 +462,7 @@ msgstr "Conferma"
 msgid "Confirm Adding Liquidity"
 msgstr "Conferma aggiunta di liquidità"
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:123
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
 msgid "Confirm Limit Order"
 msgstr ""
 
@@ -587,7 +587,7 @@ msgstr ""
 msgid "Dev"
 msgstr "Dev"
 
-#: src/components/Settings/index.tsx:97
+#: src/components/Settings/index.tsx:96
 msgid "Disable Multihops"
 msgstr "Disattiva multihop"
 
@@ -688,7 +688,7 @@ msgstr ""
 msgid "Expert Mode"
 msgstr ""
 
-#: src/components/Settings/index.tsx:134
+#: src/components/Settings/index.tsx:133
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
@@ -913,7 +913,7 @@ msgstr "Liquidità insufficiente per questa operazione"
 msgid "Insufficient {0} balance"
 msgstr "Saldo {0} insufficiente"
 
-#: src/components/Settings/index.tsx:66
+#: src/components/Settings/index.tsx:65
 msgid "Interface Settings"
 msgstr "Impostazioni interfaccia"
 
@@ -1075,7 +1075,7 @@ msgid ""
 "used to vote in special MEOW governor contracts."
 msgstr ""
 
-#: src/components/Settings/index.tsx:111
+#: src/components/Settings/index.tsx:110
 msgid "MEV Shield by Archer DAO"
 msgstr ""
 
@@ -1119,7 +1119,7 @@ msgstr "Mercati"
 msgid "Matic Bridge"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:149
+#: src/components/CurrencyInputPanel/index.tsx:154
 #: src/features/limit-order/CurrencyInput.tsx:43
 #: src/features/meowshi/CurrencyInputPanel.tsx:90
 msgid "Max"
@@ -1165,7 +1165,7 @@ msgstr "La migrazione viene eseguita in un click usando la tua firma (permesso)"
 msgid "Miner Tip"
 msgstr ""
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:100
 msgid "Minimum Received"
 msgstr ""
 
@@ -1182,7 +1182,7 @@ msgstr "Minimo ricevuto"
 msgid "My Liquidity Positions"
 msgstr ""
 
-#: src/features/limit-order/MyOrders.tsx:18
+#: src/features/limit-order/MyOrders.tsx:17
 msgid "My Orders"
 msgstr ""
 
@@ -1253,7 +1253,7 @@ msgstr "Non-hardware Wallet"
 msgid "None"
 msgstr "Nessuno"
 
-#: src/components/Settings/index.tsx:138
+#: src/components/Settings/index.tsx:137
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "USA QUESTA MODALITÀ SOLO SE SAI COSA STAI FACENDO."
 
@@ -1287,7 +1287,7 @@ msgstr "Apri menu principale"
 msgid "Oracle"
 msgstr "Oracolo"
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:112
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:106
 #: src/features/limit-order/OrderExpirationDropdown.tsx:40
 msgid "Order Expiration"
 msgstr ""
@@ -1351,7 +1351,7 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-#: src/components/Settings/index.tsx:144
+#: src/components/Settings/index.tsx:143
 msgid "Please type the word \"confirm\" to enable expert mode."
 msgstr "Digita \"conferma\" per attivare la modalità esperto."
 
@@ -1443,7 +1443,7 @@ msgstr ""
 msgid "Recent Transactions"
 msgstr ""
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:117
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:111
 msgid "Recipient"
 msgstr ""
 
@@ -1481,7 +1481,7 @@ msgstr "Rimborsa"
 #~ msgid "Request Tool"
 #~ msgstr "Richiedi strumento"
 
-#: src/components/Settings/index.tsx:99
+#: src/components/Settings/index.tsx:98
 msgid "Restricts swaps to direct pairs only."
 msgstr "Limita gli scambi solo alle coppie dirette."
 
@@ -1554,9 +1554,9 @@ msgstr ""
 msgid "Select a rate"
 msgstr ""
 
-#: src/components/CurrencyInputPanel/index.tsx:121
-#: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:74
+#: src/components/CurrencyInputPanel/index.tsx:126
+#: src/components/CurrencySelectPanel/index.tsx:100
+#: src/features/limit-order/CurrencySelect.tsx:79
 #: src/state/limit-order/hooks.ts:172
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
@@ -1574,7 +1574,7 @@ msgstr ""
 msgid "Send to:"
 msgstr ""
 
-#: src/components/Settings/index.tsx:115
+#: src/components/Settings/index.tsx:114
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
 msgstr ""
 
@@ -1811,7 +1811,7 @@ msgstr ""
 #~ msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
 #~ msgstr "Per prelevare in SUSHI, visita Aave e rimuovi axSUSHI come collaterale, quindi visita SushiBar per togliere dallo staking. Un processo completo sarà presto disponibile."
 
-#: src/components/Settings/index.tsx:72
+#: src/components/Settings/index.tsx:71
 msgid "Toggle Expert Mode"
 msgstr "Attiva modalità esperto"
 
@@ -1857,7 +1857,7 @@ msgstr "Totale"
 msgid "Transaction History {0}"
 msgstr ""
 
-#: src/components/Settings/index.tsx:60
+#: src/components/Settings/index.tsx:59
 msgid "Transaction Settings"
 msgstr "Impostazioni transazione"
 
@@ -1877,7 +1877,7 @@ msgstr "Scadenza transazione"
 msgid "Try enabling multi-hop trades"
 msgstr "Prova ad abilitare le operazioni multi-hop"
 
-#: src/components/Settings/index.tsx:151
+#: src/components/Settings/index.tsx:150
 msgid "Turn On Expert Mode"
 msgstr "Attiva modalità esperto"
 
@@ -2075,9 +2075,13 @@ msgstr "Devi prima approvare i token LP e poi migrarli"
 msgid "You pay"
 msgstr ""
 
-#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
-msgid "You receive <0>(at least):</0>"
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:72
+msgid "You receive"
 msgstr ""
+
+#: src/features/limit-order/ConfirmLimitOrderModal.tsx:73
+#~ msgid "You receive <0>(at least):</0>"
+#~ msgstr ""
 
 #: src/pages/exchange/limit-order/[[...tokens]].tsx:294
 msgid "You receive:"
