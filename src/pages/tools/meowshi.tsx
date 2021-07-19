@@ -1,7 +1,7 @@
 import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid'
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
-import { MEOW, SUSHI } from '../../constants'
-import React, { useCallback, useMemo, useState } from 'react'
+import { ChainId, Currency, Fraction, Token } from '@sushiswap/sdk'
+import { MEOW, SUSHI, XSUSHI } from '../../constants'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import CurrencyInputPanel from '../../features/meowshi/CurrencyInputPanel'
 import Head from 'next/head'
@@ -9,19 +9,11 @@ import HeaderToggle from '../../features/meowshi/HeaderToggle'
 import Image from 'next/image'
 import MeowshiButton from '../../features/meowshi/MeowshiButton'
 import Typography from '../../components/Typography'
-import { request } from 'graphql-request'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions'
+import { e10, tryParseAmount } from '../../functions'
 import { useLingui } from '@lingui/react'
-import useSWR from 'swr'
-
-const QUERY = `{
-    bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {
-      ratio
-    }
-}`
-
-const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
+import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
+import useMeowshiPerXSushi from '../../hooks/useMeowshiPerXSushi'
 
 export enum Field {
   INPUT = 'INPUT',
@@ -35,6 +27,7 @@ export interface MeowshiState {
   }
   setCurrency: (x: Token, field: Field) => void
   fields: {
+    independentField: Field
     [Field.INPUT]: string | null
     [Field.OUTPUT]: string | null
   }
@@ -45,9 +38,17 @@ export interface MeowshiState {
 
 export default function Meowshi() {
   const { i18n } = useLingui()
-  const { data } = useSWR(QUERY, fetcher)
-  const MeowPerSushi = parseFloat(data?.bar?.ratio)
+  const sushiPerXSushi = useSushiPerXSushi()
+  const meowshiPerXSushi = useMeowshiPerXSushi()
+  const sushiPerMeowshi = sushiPerXSushi
+    .toString()
+    .toBigNumber(XSUSHI.decimals)
+    .mulDiv(meowshiPerXSushi.toString().toBigNumber(XSUSHI.decimals), e10(18))
+    .toFixed(18)
+  console.log(sushiPerXSushi.toFixed(18), sushiPerMeowshi)
+
   const [fields, setFields] = useState({
+    independentField: Field.INPUT,
     [Field.INPUT]: '',
     [Field.OUTPUT]: '',
   })
@@ -59,38 +60,58 @@ export default function Meowshi() {
 
   const handleInput = useCallback(
     (val, field) => {
-      const inputCurrency = currencies[Field.INPUT]
-      const outputCurrency = currencies[Field.OUTPUT]
-      const inputRate = inputCurrency === SUSHI[ChainId.MAINNET] ? (100000 / MeowPerSushi).toFixed(0) : '100000'
-      const outputRate = outputCurrency === SUSHI[ChainId.MAINNET] ? (100000 / MeowPerSushi).toFixed(0) : '100000'
+      setFields((prevState) => {
+        const inputCurrency = currencies[Field.INPUT]
+        const outputCurrency = currencies[Field.OUTPUT]
+        // const inputRate = inputCurrency === SUSHI[ChainId.MAINNET] ? (100000 / sushiPerXSushi).toFixed(0) : '100000'
+        // const outputRate = outputCurrency === SUSHI[ChainId.MAINNET] ? (100000 / sushiPerXSushi).toFixed(0) : '100000'
+        const inputRate = '100000'
+        const outputRate = '100000'
 
-      if (field === Field.INPUT) {
-        if (currencies[Field.OUTPUT] === MEOW) {
-          setFields({
-            [Field.INPUT]: val,
-            [Field.OUTPUT]: tryParseAmount(val, outputCurrency)?.multiply(inputRate).toFixed(6) || '0',
-          })
+        if (field === Field.INPUT) {
+          if (currencies[Field.OUTPUT] === MEOW) {
+            return {
+              independentField: Field.INPUT,
+              [Field.INPUT]: val || prevState[Field.INPUT],
+              [Field.OUTPUT]:
+                tryParseAmount(val || prevState[Field.INPUT], outputCurrency)
+                  ?.multiply(inputRate)
+                  .toFixed(6) || '0',
+            }
+          } else {
+            return {
+              independentField: Field.INPUT,
+              [Field.INPUT]: val || prevState[Field.INPUT],
+              [Field.OUTPUT]:
+                tryParseAmount(val || prevState[Field.INPUT], outputCurrency)
+                  ?.divide(outputRate)
+                  .toFixed(6) || '0',
+            }
+          }
         } else {
-          setFields({
-            [Field.INPUT]: val,
-            [Field.OUTPUT]: tryParseAmount(val, outputCurrency)?.divide(inputRate).toFixed(6) || '0',
-          })
+          if (currencies[Field.OUTPUT] === MEOW) {
+            return {
+              independentField: Field.OUTPUT,
+              [Field.INPUT]:
+                tryParseAmount(val || prevState[Field.OUTPUT], inputCurrency)
+                  ?.divide(inputRate)
+                  .toFixed(6) || '0',
+              [Field.OUTPUT]: val || prevState[Field.OUTPUT],
+            }
+          } else {
+            return {
+              independentField: Field.OUTPUT,
+              [Field.INPUT]:
+                tryParseAmount(val || prevState[Field.OUTPUT], inputCurrency)
+                  ?.multiply(outputRate)
+                  .toFixed(6) || '0',
+              [Field.OUTPUT]: val || prevState[Field.OUTPUT],
+            }
+          }
         }
-      } else {
-        if (currencies[Field.OUTPUT] === MEOW) {
-          setFields({
-            [Field.INPUT]: tryParseAmount(val, inputCurrency)?.divide(outputRate).toFixed(6) || '0',
-            [Field.OUTPUT]: val,
-          })
-        } else {
-          setFields({
-            [Field.INPUT]: tryParseAmount(val, inputCurrency)?.multiply(outputRate).toFixed(6) || '0',
-            [Field.OUTPUT]: val,
-          })
-        }
-      }
+      })
     },
-    [MeowPerSushi, currencies]
+    [currencies]
   )
 
   const setCurrency = useCallback((currency: Currency, field: Field) => {
@@ -99,6 +120,10 @@ export default function Meowshi() {
       [field]: currency,
     }))
   }, [])
+
+  useEffect(() => {
+    handleInput(null, fields.independentField)
+  }, [fields.independentField, handleInput])
 
   const switchCurrencies = useCallback(() => {
     setCurrencies((prevState) => ({
