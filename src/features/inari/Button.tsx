@@ -47,14 +47,6 @@ const InariButton: FC<ButtonProps> = ({ children, ...rest }) => {
       </Button>
     )
 
-  // if (erc20Permit.state === UseERC20PermitState.NOT_SIGNED)
-  //   return (
-  //     <Button {...buttonProps} color="pink" onClick={erc20Permit.gatherPermitSignature}>
-  //       {i18n._(t`Approve Inari`)}
-  //     </Button>
-  //   )
-
-  // IF USING APPROVE CALLBACK -------------------------------------------------
   if (approveCallback[0] === ApprovalState.PENDING)
     return (
       <Button {...rest} disabled color="gray">

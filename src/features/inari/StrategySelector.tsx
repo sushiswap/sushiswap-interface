@@ -2,18 +2,18 @@ import React, { FC } from 'react'
 import { classNames } from '../../functions'
 import { useAppDispatch } from '../../state/hooks'
 import { setStrategy } from '../../state/inari/actions'
-import { INARI_STRATEGIES } from '../../state/inari/constants'
-import { useInariState } from '../../state/inari/hooks'
+import { useDerivedInariState, useInariState } from '../../state/inari/hooks'
 
 interface StrategySelectorProps {}
 
 const StrategySelector: FC<StrategySelectorProps> = () => {
   const { strategy } = useInariState()
+  const { strategies } = useDerivedInariState()
   const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col gap-4 z-10 relative">
-      {Object.entries(INARI_STRATEGIES).map(([k, v]) => {
+      {Object.entries(strategies).map(([k, v]) => {
         return (
           <div
             key={k}

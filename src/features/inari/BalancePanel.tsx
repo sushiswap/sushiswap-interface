@@ -1,37 +1,31 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import Typography from '../../components/Typography'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens } from '../../hooks/Tokens'
-import { maxAmountSpend } from '../../functions'
 import { useAppDispatch } from '../../state/hooks'
 import { setZapInValue } from '../../state/inari/actions'
-import { useInariState } from '../../state/inari/hooks'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Input as NumericalInput } from '../../components/NumericalInput'
-import { Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
 
 interface BalancePanelProps {
   label: string
   token: Token
+  value: string
+  balance: CurrencyAmount<Token>
   showMax?: boolean
   symbol?: string
 }
 
-const BalancePanel: FC<BalancePanelProps> = ({ label, token, showMax = false, symbol }) => {
+const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = false, symbol, balance }) => {
   const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
-  const { zapInValue } = useInariState()
   const dispatch = useAppDispatch()
-  const balance = useTokenBalance(account, token)
   const tokens = useAllTokens()
-  const maxAmountInput = maxAmountSpend(balance)
 
   const onMax = useCallback(() => {
-    maxAmountInput && dispatch(setZapInValue(maxAmountInput?.toExact()))
-  }, [dispatch, maxAmountInput])
+    dispatch(setZapInValue(balance.toExact()))
+  }, [balance, dispatch])
 
   const handleInput = useCallback(
     (val) => {
@@ -52,7 +46,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, token, showMax = false, sy
         <div className="rounded-full overflow-hidden">
           <CurrencyLogo size={40} currency={tokens[token.address]} />
         </div>
-        <NumericalInput value={zapInValue} onUserInput={handleInput} />
+        <NumericalInput value={value} onUserInput={handleInput} />
         {showMax && (
           <span
             onClick={onMax}
@@ -68,7 +62,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, token, showMax = false, sy
             {i18n._(t`Balance:`)}
           </Typography>
           <Typography variant="sm">
-            {balance?.toSignificant(6) || '0'} {token.symbol}
+            {balance || '0'} {token.symbol}
           </Typography>
         </div>
       </div>

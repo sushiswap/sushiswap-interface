@@ -1443,7 +1443,7 @@ msgstr "Select a collateral token"
 
 #: src/components/CurrencyInputPanel/index.tsx:121
 #: src/components/CurrencySelectPanel/index.tsx:95
-#: src/features/limit-order/CurrencySelect.tsx:70
+#: src/features/limit-order/CurrencySelect.tsx:68
 #: src/state/swap/hooks.ts:187
 msgid "Select a token"
 msgstr "Select a token"

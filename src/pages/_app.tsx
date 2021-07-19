@@ -41,6 +41,7 @@ function MyApp({
   pageProps,
 }: AppProps & {
   Component: NextComponentType<NextPageContext> & {
+    Guard: FunctionComponent
     Layout: FunctionComponent
     Provider: FunctionComponent
   }
@@ -83,6 +84,9 @@ function MyApp({
 
   // Allows for conditionally setting a layout to be hoisted per page
   const Layout = Component.Layout || DefaultLayout
+
+  // Allows for conditionally setting a guard to be hoisted per page
+  const Guard = Component.Guard || Fragment
 
   return (
     <Fragment>
@@ -148,7 +152,9 @@ function MyApp({
                   </>
                   <Provider>
                     <Layout>
-                      <Component {...pageProps} />
+                      <Guard>
+                        <Component {...pageProps} />
+                      </Guard>
                     </Layout>
                   </Provider>
                 </PersistGate>
