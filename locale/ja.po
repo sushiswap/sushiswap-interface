@@ -1075,7 +1075,7 @@ msgstr "まずLPトークンを承認してから、移行する必要があり�
 msgid "You pay"
 msgstr ""
 
-msgid "You receive <0>(at least):</0>"
+msgid "You receive"
 msgstr ""
 
 msgid "You receive:"

@@ -1073,7 +1073,7 @@ msgstr "Trước tiên, bạn cần phê duyệt token LP và sau đó di chuy�
 msgid "You pay"
 msgstr ""
 
-msgid "You receive <0>(at least):</0>"
+msgid "You receive"
 msgstr ""
 
 msgid "You receive:"

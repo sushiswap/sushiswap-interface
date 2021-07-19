@@ -1072,7 +1072,7 @@ msgstr "Devi prima approvare i token LP e poi migrarli"
 msgid "You pay"
 msgstr ""
 
-msgid "You receive <0>(at least):</0>"
+msgid "You receive"
 msgstr ""
 
 msgid "You receive:"

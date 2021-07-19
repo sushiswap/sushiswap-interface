@@ -1061,7 +1061,7 @@ msgstr "您需要首先批準LP代幣，然後遷移它"
 msgid "You pay"
 msgstr ""
 
-msgid "You receive <0>(at least):</0>"
+msgid "You receive"
 msgstr ""
 
 msgid "You receive:"

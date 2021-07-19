@@ -1084,8 +1084,8 @@ msgstr "You need to first approve LP tokens and then migrate it"
 msgid "You pay"
 msgstr "You pay"
 
-msgid "You receive <0>(at least):</0>"
-msgstr "You receive <0>(at least):</0>"
+msgid "You receive"
+msgstr "You receive"
 
 msgid "You receive:"
 msgstr "You receive:"

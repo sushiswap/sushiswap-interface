@@ -1073,7 +1073,7 @@ msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다
 msgid "You pay"
 msgstr ""
 
-msgid "You receive <0>(at least):</0>"
+msgid "You receive"
 msgstr ""
 
 msgid "You receive:"
