@@ -4,8 +4,7 @@ import useLimitOrders from '../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import NavLink from '../../components/NavLink'
-import HoverLottie from '../../components/HoverLottie'
-import orderHistoryJson from '../../animation/order-history.json'
+import { ClipboardListIcon } from '@heroicons/react/outline'
 
 const MyOrders: FC = () => {
   const { i18n } = useLingui()
@@ -18,8 +17,8 @@ const MyOrders: FC = () => {
           <div>{i18n._(t`My Orders`)}</div>
           <Badge color="blue">{pending.totalOrders}</Badge>
         </div>
-        <div className="flex md:hidden">
-          <HoverLottie animationData={orderHistoryJson} className="w-[32px] h-[32px]" />
+        <div className="flex md:hidden text-primary">
+          <ClipboardListIcon className="w-[26px] h-[26px]" />
         </div>
       </a>
     </NavLink>
