@@ -1,71 +1,83 @@
-import { Action, ThunkAction, combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { load, save } from 'redux-localstorage-simple'
+import { Action, ThunkAction, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist'
 
-import application from './application/reducer'
-import burn from './burn/reducer'
-import create from './create/reducer'
-import limitOrder from './limit-order/reducer'
-import lists from './lists/reducer'
-import mint from './mint/reducer'
-import multicall from './multicall/reducer'
-import swap from './swap/reducer'
-import transactions from './transactions/reducer'
+import reducer from './reducer'
+import storage from 'redux-persist/lib/storage'
 import { updateVersion } from './global/actions'
-import user from './user/reducer'
-import zap from './zap/reducer'
+import { useMemo } from 'react'
 
-const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
+let store
 
-// const reducer = combineReducers({
-//   application,
-//   user,
-//   transactions,
-//   swap,
-//   mint,
-//   burn,
-//   multicall,
-//   lists,
-//   zap,
-//   limitOrder,
-//   create,
-// })
+const PERSISTED_KEYS: string[] = ['user', 'transactions']
 
-const store = configureStore({
-  reducer: {
-    application,
-    user,
-    transactions,
-    swap,
-    mint,
-    burn,
-    multicall,
-    lists,
-    zap,
-    limitOrder,
-    create,
-  },
-  middleware: [
-    ...getDefaultMiddleware({ thunk: false, immutableCheck: false }),
-    // ...(typeof localStorage !== 'undefined' ? [save({ states: PERSISTED_KEYS })] : []),
-  ],
-  // preloadedState: typeof localStorage !== 'undefined' ? load({ states: PERSISTED_KEYS }) : {},
-  devTools: process.env.NODE_ENV === 'development',
-  // middleware: getDefaultMiddleware({
-  //   thunk: true,
-  //   immutableCheck: true,
-  // }).concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),
-  // devTools: process.env.NODE_ENV === 'development',
-  // preloadedState: load({ states: PERSISTED_KEYS }),
-})
-
-if (typeof localStorage !== 'undefined') {
-  localStorage.clear()
+const persistConfig = {
+  key: 'root',
+  whitelist: PERSISTED_KEYS,
+  storage,
 }
 
-store.dispatch(updateVersion())
+function makeStore(preloadedState = undefined) {
+  return configureStore({
+    reducer: persistReducer(persistConfig, reducer),
+    middleware: getDefaultMiddleware({
+      thunk: true,
+      immutableCheck: true,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+    devTools: process.env.NODE_ENV === 'development',
+    preloadedState,
+  })
+
+  // return createStore(
+  //   persistedReducer,
+  //   initialState,
+  //   composeWithDevTools(applyMiddleware())
+  // )
+}
+
+export const getOrCreateStore = (preloadedState = undefined) => {
+  let _store = store ?? makeStore(preloadedState)
+
+  // After navigating to a page with an initial Redux state, merge that state
+  // with the current state in the store, and create a new store
+  if (preloadedState && store) {
+    _store = makeStore({
+      ...store.getState(),
+      ...preloadedState,
+    })
+    // Reset the current store
+    store = undefined
+  }
+
+  // For SSG and SSR always create a new store
+  if (typeof window === 'undefined') return _store
+  
+  // Create the store once in the client
+  if (!store) store = _store
+
+  return _store
+}
+
+store = getOrCreateStore()
+
+// export function useStore(preloadedState) {
+//   const store = useMemo(() => getOrCreateStore(preloadedState), [preloadedState])
+//   return store
+// }
 
 export type AppState = ReturnType<typeof store.getState>
+
 export type AppDispatch = typeof store.dispatch
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  AppState,
+  unknown,
+  Action<string>
+>
 
 export default store
+
+export const persistor = persistStore(store)
