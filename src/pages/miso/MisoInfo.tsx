@@ -130,7 +130,7 @@ function MisoInfo({
           </div>}
         </div>
         <div className="ml-5 md:ml-8 cursor-pointer">
-          <a href="https://miso.sushi.com"><Image src="/images/miso/trident/trident_view_auction.png" width={91} height={88}/></a>
+          <a href="https://miso.sushi.com/auctions/0x15c5E87Ce788F0dEBcAF70cF1dde69E3Bc3E6Ad1" target="_blank"><Image src="/images/miso/trident/trident_view_auction.png" width={91} height={88}/></a>
         </div>
       </div>
       <div className="flex flex-col mt-6">
