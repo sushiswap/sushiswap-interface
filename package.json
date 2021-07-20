@@ -140,8 +140,5 @@
     "entrypoints": [
       "src/pages"
     ]
-  },
-  "dependencies": {
-    "moment": "^2.29.1"
   }
 }
