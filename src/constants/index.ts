@@ -184,6 +184,16 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#F0B90B',
     mobile: true,
   },
+  TokenPocket: {
+    connector: injected,
+    name: 'TokenPocket',
+    iconName: 'tokenpocket.png',
+    description: 'Login using TokenPocket wallet',
+    href: null,
+    color: '#2980FE',
+    mobile: true,
+    mobileOnly: true,
+  },
 }
 
 export const NetworkContextName = 'NETWORK'

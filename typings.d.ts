@@ -18,6 +18,7 @@ declare global {
   interface Window {
     ethereum?: {
       isMetaMask?: true
+      isTokenPocket?: false
       on?: (...args: any[]) => void
       removeListener?: (...args: any[]) => void
       autoRefreshOnNetworkChange?: boolean

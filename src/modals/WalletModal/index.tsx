@@ -176,6 +176,7 @@ export default function WalletModal({
   // get wallets user can switch too, depending on device/browser
   function getOptions() {
     const isMetamask = window.ethereum && window.ethereum.isMetaMask
+    const isTokenPocket = window.ethereum && window.ethereum.isTokenPocket
     return Object.keys(SUPPORTED_WALLETS).map((key) => {
       const option = SUPPORTED_WALLETS[key]
 
@@ -184,6 +185,26 @@ export default function WalletModal({
         // disable portis on mobile for now
         if (option.connector === portis) {
           return null
+        }
+
+        if (isTokenPocket && option.name === 'TokenPocket') {
+          return (
+            <Option
+              id={`connect-${key}`}
+              onClick={() => {
+                option.connector === connector
+                  ? setWalletView(WALLET_VIEWS.ACCOUNT)
+                  : !option.href && tryActivation(option.connector)
+              }}
+              key={key}
+              active={option.connector === connector}
+              color={option.color}
+              link={option.href}
+              header={option.name}
+              subheader={null} // use option.descriptio to bring back multi-line
+              icon={'/images/wallets/' + option.iconName}
+            />
+          )
         }
 
         if (!window.web3 && !window.ethereum && option.mobile) {
