@@ -10,7 +10,7 @@ function MisoInfo({
   minRaised = 1380,
   minRaisedUsd = 11040,
   tokenForSale = 20,
-  auctionStartDate = 1626782400000,
+  auctionEndDate = 1627044000000,
 }: {
   name?: any
   symbol?: any
@@ -18,7 +18,7 @@ function MisoInfo({
   minRaised?: any
   minRaisedUsd?: any
   tokenForSale?: any
-  auctionStartDate?: any
+  auctionEndDate?: any
 }) {
 
   const [remainingTime, setRemainingTime] = useState('');
@@ -29,7 +29,7 @@ function MisoInfo({
 
       const now = new Date().getTime()
       // Set the date counting down to
-      const countDownDate = new Date(auctionStartDate).getTime()
+      const countDownDate = new Date(auctionEndDate).getTime()
       // Find the distance between now and the count down time
       const distance = countDownDate - now
       // If the count down is finished, write some text
@@ -73,10 +73,10 @@ function MisoInfo({
       clearInterval(intervalId);
     };
 
-  }, [auctionStartDate])
+  }, [auctionEndDate])
 
   const formatDate = (date) => {
-    return format(addMinutes(date, date.getTimezoneOffset()), 'MMMM do yyyy, h a')
+    return format(addMinutes(date, date.getTimezoneOffset()), 'MMMM do yyyy, h:mm a')
   }
 
 
@@ -119,8 +119,8 @@ function MisoInfo({
       </div>
       <div className="flex flex-row mt-6">
         <div className="flex flex-col">
-          <div className="text-sm sm:text-lg">{'Auction starts on'}</div>
-          <div className="text-base md:text-xl font-bold text-white">{formatDate(new Date(auctionStartDate))} GMT</div>
+          <div className="text-sm sm:text-lg">{'Auction ends on'}</div>
+          <div className="text-base md:text-xl font-bold text-white">{formatDate(new Date(auctionEndDate))} GMT</div>
           {remainingTime != '' && <div className="flex flex-row items-center text-base">
             
             <Image src="/images/miso/trident/trident_timer.png" width={15} height={15}/>
