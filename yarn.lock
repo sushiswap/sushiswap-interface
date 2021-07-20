@@ -2324,10 +2324,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.0.tgz#083eb43850bcfcc67576f4a79b3e3b455548854a"
   integrity sha512-iLg3UR6hh8AXfyjB4qIMO0/fXZcNi9IpzKbaZ/m7IN2mSTO/3iABPYP9epU906b1s/GJfXhUn0DA2L11WuDLEw==
 
-"@sushiswap/sdk@5.0.0-canary.24":
-  version "5.0.0-canary.24"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.24.tgz#cf49e506cc223003f0243a31852567f43ae09577"
-  integrity sha512-VP0mGKYe7hCTCCrKIhGlgiNEjMTv6+QqlRswDb0YGuu77woZCKVT5KkX1dfR1hCutZduujO+O/iyK4mWovczUA==
+"@sushiswap/sdk@5.0.0-canary.25":
+  version "5.0.0-canary.25"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.25.tgz#c849943778f6bdd58ba03c6b812d8fd12df34d6f"
+  integrity sha512-pLu3Patq4T6vI89HAY/FsDf2o7vVogv3lze0gLmUqnyhsG78NQKcSX7Eob/gVOKy9OX/Ofv7IC4Sp8G/mQ0dSw==
   dependencies:
     "@sushiswap/core" "^2.0.0-canary.0"
     big.js "^5.2.2"
