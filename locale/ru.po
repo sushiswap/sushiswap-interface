@@ -718,9 +718,6 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Введите слово «подтвердить», чтобы включить экспертный режим."
-
 msgid "Pool"
 msgstr "Пул"
 

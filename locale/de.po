@@ -718,9 +718,6 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Bitte geben Sie das Wort „Bestätigen“ ein, um den Expertenmodus zu aktivieren."
-
 msgid "Pool"
 msgstr "Pool"
 

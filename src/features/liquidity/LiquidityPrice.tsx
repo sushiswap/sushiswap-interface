@@ -27,7 +27,7 @@ export default function LiquidityPrice({
       <div className="flex flex-col w-full text-secondary">
         <Typography variant="sm" className="select-none">
           {i18n._(
-            t`${price?.invert()?.toSignificant(6) ?? '-'} ${currencies[Field.CURRENCY_B]?.symbol} per ${
+            t`${price?.toSignificant(6) ?? '-'} ${currencies[Field.CURRENCY_B]?.symbol} per ${
               currencies[Field.CURRENCY_A]?.symbol
             }`
           )}

@@ -718,9 +718,6 @@ msgstr ""
 msgid "Please refer to the"
 msgstr ""
 
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Vă rugăm să tastați cuvântul „confirmare” pentru a activa modul expert."
-
 msgid "Pool"
 msgstr "Fond comun"
 

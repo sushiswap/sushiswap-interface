@@ -1,3 +1,4 @@
+import { ChainId, Percent } from '@sushiswap/sdk'
 import React, { useRef, useState } from 'react'
 import {
   useExpertModeManager,
@@ -8,20 +9,19 @@ import {
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
+import { AdjustmentsIcon } from '@heroicons/react/outline'
 import { ApplicationModal } from '../../state/application/actions'
 import Button from '../Button'
 import Modal from '../Modal'
 import ModalHeader from '../ModalHeader'
-import { ChainId, Percent } from '@sushiswap/sdk'
 import QuestionHelper from '../QuestionHelper'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
 import Typography from '../Typography'
 import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useActiveWeb3React } from '../../hooks'
-import { AdjustmentsIcon } from '@heroicons/react/outline'
 import { MANIFOLD_FINANCE_SUPPORTED_NETWORKS } from '../../constants'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
@@ -47,9 +47,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
   const [userUseManifoldFinance, setUserUseManifoldFinance] = useUserManifoldFinanceRelay()
 
   return (
-    <div className="flex relative" ref={node}>
+    <div className="relative flex" ref={node}>
       <div
-        className="rounded h-8 w-8 flex items-center justify-center cursor-pointer"
+        className="flex items-center justify-center w-8 h-8 rounded cursor-pointer"
         onClick={toggle}
         id="open-settings-dialog-button"
       >
@@ -68,7 +68,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               {i18n._(t`Interface Settings`)}
             </Typography>
 
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Toggle Expert Mode`)}
@@ -93,7 +93,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 }
               />
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Typography variant="sm" className="text-primary">
                   {i18n._(t`Disable Multihops`)}
@@ -107,7 +107,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               />
             </div>
             {chainId == ChainId.MAINNET && (
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
                     {i18n._(t`MEV Shield by Archer DAO`)}
@@ -166,10 +166,12 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
             color="red"
             size="lg"
             onClick={() => {
-              if (window.prompt(i18n._(t`Please type the word "confirm" to enable expert mode.`)) === 'confirm') {
-                toggleExpertMode()
-                setShowConfirmation(false)
-              }
+              // if (window.prompt(i18n._(t`Please type the word "confirm" to enable expert mode.`)) === 'confirm') {
+              //   toggleExpertMode()
+              //   setShowConfirmation(false)
+              // }
+              toggleExpertMode()
+              setShowConfirmation(false)
             }}
           >
             <Typography variant="lg" id="confirm-expert-mode">

@@ -725,9 +725,6 @@ msgstr "Please enter an amount"
 msgid "Please refer to the"
 msgstr "Please refer to the"
 
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Please type the word \"confirm\" to enable expert mode."
-
 msgid "Pool"
 msgstr "Pool"
 
