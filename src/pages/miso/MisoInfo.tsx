@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import Image from 'next/image'
-import moment from 'moment'
+import { addMinutes, format } from 'date-fns'
 
 function MisoInfo({
   name = 'Bad Trip',
@@ -75,6 +75,10 @@ function MisoInfo({
 
   }, [auctionStartDate])
 
+  const formatDate = (date) => {
+    return format(addMinutes(date, date.getTimezoneOffset()), 'MMMM do yyyy, h a')
+  }
+
 
   return (
     <div className="flex flex-col">
@@ -116,14 +120,14 @@ function MisoInfo({
       <div className="flex flex-row mt-6">
         <div className="flex flex-col">
           <div className="text-sm sm:text-lg">{'Auction starts on'}</div>
-          <div className="text-base md:text-xl font-bold text-white">{moment(auctionStartDate).utc().format('MMMM Do YYYY, h A')} GMT</div>
-          <div className="flex flex-row items-center text-base">
+          <div className="text-base md:text-xl font-bold text-white">{formatDate(new Date(auctionStartDate))} GMT</div>
+          {remainingTime != '' && <div className="flex flex-row items-center text-base">
             
             <Image src="/images/miso/trident/trident_timer.png" width={15} height={15}/>
             <div className="text-sm sm:text-lg ml-2">
               {remainingTime}
             </div>
-          </div>
+          </div>}
         </div>
         <div className="ml-5 md:ml-8 cursor-pointer">
           <a href="https://miso.sushi.com"><Image src="/images/miso/trident/trident_view_auction.png" width={91} height={88}/></a>
