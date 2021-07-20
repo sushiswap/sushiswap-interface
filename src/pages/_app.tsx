@@ -90,16 +90,6 @@ function MyApp({
   // Allows for conditionally setting a guard to be hoisted per page
   const Guard = Component.Guard || Fragment
 
-  // const store = useStore(pageProps.initialReduxState)
-  
-  // console.log({ pageProps })
-
-  // const persistor = persistStore(store, {}, function () {
-  //   persistor.persist()
-  // })
-  
-  // useEffect(() => persistor.persist(), [persistor])
-
   return (
     <Fragment>
       <Head>
