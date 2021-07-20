@@ -71,9 +71,10 @@ function MISO() {
 
               <MisoArticles 
                 title={`Learn more about MISO`}
-                content={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
-                          ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
+                content={`MISO is a suite of open-source smart contracts created to ease the process of launching 
+                          a new project on the SushiSwap exchange. MISO aims to drive new capital and trade to the exchange 
+                          by increasing the attractiveness of SushiSwap as a place for token creators and communities to launch 
+                          new project tokens.`}
               />
             </div>
             
