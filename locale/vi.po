@@ -612,6 +612,9 @@ msgstr ""
 msgid "Minimum received"
 msgstr "Số tiền nhận được tối thiểu"
 
+msgid "Miso"
+msgstr ""
+
 msgid "My Liquidity Positions"
 msgstr ""
 
@@ -712,9 +715,6 @@ msgstr ""
 
 msgid "Please refer to the"
 msgstr ""
-
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Vui lòng nhập từ \"xác nhận\" để bật chế độ chuyên gia."
 
 msgid "Pool"
 msgstr "Mạng lưới"
