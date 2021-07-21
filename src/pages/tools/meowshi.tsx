@@ -14,6 +14,8 @@ import { e10, tryParseAmount } from '../../functions'
 import { useLingui } from '@lingui/react'
 import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
 import useMeowshiPerXSushi from '../../hooks/useMeowshiPerXSushi'
+import { BigNumber } from 'ethers'
+import { useBentoBoxContract } from '../../hooks'
 
 export enum Field {
   INPUT = 'INPUT',
@@ -39,13 +41,7 @@ export interface MeowshiState {
 export default function Meowshi() {
   const { i18n } = useLingui()
   const sushiPerXSushi = useSushiPerXSushi()
-  const meowshiPerXSushi = useMeowshiPerXSushi()
-  const sushiPerMeowshi = sushiPerXSushi
-    .toString()
-    .toBigNumber(XSUSHI.decimals)
-    .mulDiv(meowshiPerXSushi.toString().toBigNumber(XSUSHI.decimals), e10(18))
-    .toFixed(18)
-  console.log(sushiPerXSushi.toFixed(18), sushiPerMeowshi)
+  const [meowshiPerXSushi, xSushiPerMeowshi] = useMeowshiPerXSushi()
 
   const [fields, setFields] = useState({
     independentField: Field.INPUT,
@@ -59,59 +55,49 @@ export default function Meowshi() {
   })
 
   const handleInput = useCallback(
-    (val, field) => {
+    async (val, field) => {
       setFields((prevState) => {
-        const inputCurrency = currencies[Field.INPUT]
-        const outputCurrency = currencies[Field.OUTPUT]
-        // const inputRate = inputCurrency === SUSHI[ChainId.MAINNET] ? (100000 / sushiPerXSushi).toFixed(0) : '100000'
-        // const outputRate = outputCurrency === SUSHI[ChainId.MAINNET] ? (100000 / sushiPerXSushi).toFixed(0) : '100000'
-        const inputRate = '100000'
-        const outputRate = '100000'
+        const inputRate =
+          currencies[Field.INPUT] === XSUSHI
+            ? meowshiPerXSushi.mul(e10(5))
+            : meowshiPerXSushi.mul(e10(5)).mulDiv(e10(18), sushiPerXSushi.toString().toBigNumber(18))
+        const outputRate =
+          currencies[Field.OUTPUT] === XSUSHI
+            ? xSushiPerMeowshi.div(e10(5))
+            : xSushiPerMeowshi.mulDiv(sushiPerXSushi.toString().toBigNumber(18), e10(18)).div(e10(5))
 
         if (field === Field.INPUT) {
           if (currencies[Field.OUTPUT] === MEOW) {
             return {
               independentField: Field.INPUT,
               [Field.INPUT]: val || prevState[Field.INPUT],
-              [Field.OUTPUT]:
-                tryParseAmount(val || prevState[Field.INPUT], outputCurrency)
-                  ?.multiply(inputRate)
-                  .toFixed(6) || '0',
+              [Field.OUTPUT]: inputRate.mulDiv((val || prevState[Field.INPUT]).toBigNumber(18), e10(18))?.toFixed(18),
             }
           } else {
             return {
               independentField: Field.INPUT,
               [Field.INPUT]: val || prevState[Field.INPUT],
-              [Field.OUTPUT]:
-                tryParseAmount(val || prevState[Field.INPUT], outputCurrency)
-                  ?.divide(outputRate)
-                  .toFixed(6) || '0',
+              [Field.OUTPUT]: outputRate.mulDiv((val || prevState[Field.INPUT]).toBigNumber(18), e10(18))?.toFixed(18),
             }
           }
         } else {
           if (currencies[Field.OUTPUT] === MEOW) {
             return {
               independentField: Field.OUTPUT,
-              [Field.INPUT]:
-                tryParseAmount(val || prevState[Field.OUTPUT], inputCurrency)
-                  ?.divide(inputRate)
-                  .toFixed(6) || '0',
+              [Field.INPUT]: (val || prevState[Field.OUTPUT]).toBigNumber(18).mulDiv(e10(18), inputRate)?.toFixed(18),
               [Field.OUTPUT]: val || prevState[Field.OUTPUT],
             }
           } else {
             return {
               independentField: Field.OUTPUT,
-              [Field.INPUT]:
-                tryParseAmount(val || prevState[Field.OUTPUT], inputCurrency)
-                  ?.multiply(outputRate)
-                  .toFixed(6) || '0',
+              [Field.INPUT]: (val || prevState[Field.OUTPUT]).toBigNumber(18).mulDiv(e10(18), outputRate)?.toFixed(18),
               [Field.OUTPUT]: val || prevState[Field.OUTPUT],
             }
           }
         }
       })
     },
-    [currencies]
+    [currencies, meowshiPerXSushi, sushiPerXSushi, xSushiPerMeowshi]
   )
 
   const setCurrency = useCallback((currency: Currency, field: Field) => {
