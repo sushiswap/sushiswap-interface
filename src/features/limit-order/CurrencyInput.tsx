@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useCallback } from 'react'
+import React, { FC, ReactNode } from 'react'
 import { classNames } from '../../functions'
 import Button from '../../components/Button'
 import { t } from '@lingui/macro'
@@ -29,8 +29,8 @@ const CurrencyInput: FC<CurrencyInputProps> = ({
   return (
     <div
       className={classNames(
-        error ? 'border-red border-opacity-40 hover:border-opacity-100' : '',
-        'border border-transparent flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 px-3 sm:w-3/5'
+        error ? 'border-red border-opacity-40 hover:border-opacity-100' : 'border-transparent',
+        'border flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 p-3 sm:w-3/5'
       )}
     >
       <>
@@ -43,7 +43,13 @@ const CurrencyInput: FC<CurrencyInputProps> = ({
             {i18n._(t`Max`)}
           </Button>
         )}
-        <NumericalInput id={id} value={value} onUserInput={onUserInput} />
+        <NumericalInput
+          id={id}
+          value={value}
+          onUserInput={(val) => {
+            onUserInput(val)
+          }}
+        />
         {endAdornment && endAdornment}
       </>
     </div>

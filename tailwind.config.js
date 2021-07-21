@@ -104,6 +104,9 @@ module.exports = {
         cardContent: '230px',
         fitContent: 'fit-content',
       },
+      dropShadow: {
+        currencyLogo: '0px 3px 6px rgba(15, 15, 15, 0.25)',
+      },
     },
   },
   variants: {

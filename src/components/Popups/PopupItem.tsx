@@ -1,22 +1,12 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { PopupContent } from '../../state/application/actions'
 import TransactionPopup from './TransactionPopup'
-import { X } from 'react-feather'
-import { animated } from 'react-spring'
+import { XIcon } from '@heroicons/react/outline'
+import { animated, useSpring } from 'react-spring'
 import styled from 'styled-components'
 import { useRemovePopup } from '../../state/application/hooks'
-import { useSpring } from 'react-spring/web'
 
-export const StyledClose = styled(X)`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-
-  :hover {
-    cursor: pointer;
-  }
-`
 export const Popup = styled.div`
   display: inline-block;
   width: 100%;
@@ -35,16 +25,14 @@ export const Popup = styled.div`
     }
   `}
 `
-const Fader = styled.div`
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  height: 2px;
-  // background-color: ${({ theme }) => theme.bg3};
-`
 
-const AnimatedFader = animated(Fader)
+const AnimatedFader = animated(({ children, ...rest }) => (
+  <div className="h-[3px] bg-dark-800 w-full">
+    <div className="h-[3px] bg-gradient-to-r from-blue to-pink " {...rest}>
+      {children}
+    </div>
+  </div>
+))
 
 export default function PopupItem({
   removeAfterMs,
@@ -84,10 +72,16 @@ export default function PopupItem({
   })
 
   return (
-    <Popup>
-      <StyledClose onClick={removeThisPopup} />
-      {popupContent}
-      {removeAfterMs !== null ? <AnimatedFader style={faderStyle} /> : null}
-    </Popup>
+    <div className="mb-4">
+      <div className="w-full relative rounded overflow-hidden bg-dark-700">
+        <div className="flex flex-row p-4">
+          {popupContent}
+          <div className="hover:text-white cursor-pointer">
+            <XIcon width={24} height={24} onClick={removeThisPopup} />
+          </div>
+        </div>
+        {removeAfterMs !== null ? <AnimatedFader style={faderStyle} /> : null}
+      </div>
+    </div>
   )
 }

@@ -7,6 +7,7 @@ import NavLink from '../../components/NavLink'
 import React from 'react'
 import kashiLogo from '../../../public/kashi-logo.png'
 import { useRouter } from 'next/router'
+import Popups from '../../components/Popups'
 
 interface LayoutProps {
   left?: JSX.Element
@@ -127,6 +128,7 @@ export default function Layout({
           </div>
         </div>
       </Main>
+      <Popups />
       <Footer />
     </div>
   )
