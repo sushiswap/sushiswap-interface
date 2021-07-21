@@ -611,6 +611,9 @@ msgstr ""
 msgid "Minimum received"
 msgstr "Minimo ricevuto"
 
+msgid "Miso"
+msgstr ""
+
 msgid "My Liquidity Positions"
 msgstr ""
 
@@ -711,9 +714,6 @@ msgstr ""
 
 msgid "Please refer to the"
 msgstr ""
-
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "Digita \"conferma\" per attivare la modalità esperto."
 
 msgid "Pool"
 msgstr "Pool"

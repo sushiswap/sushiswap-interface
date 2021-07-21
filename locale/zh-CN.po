@@ -600,6 +600,9 @@ msgstr ""
 msgid "Minimum received"
 msgstr "最少可获得的数量"
 
+msgid "Miso"
+msgstr ""
+
 msgid "My Liquidity Positions"
 msgstr ""
 
@@ -700,9 +703,6 @@ msgstr ""
 
 msgid "Please refer to the"
 msgstr ""
-
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "请输入“确认”以开启专家模式。"
 
 msgid "Pool"
 msgstr "资金池"
