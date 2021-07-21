@@ -612,6 +612,9 @@ msgstr ""
 msgid "Minimum received"
 msgstr "최소 수령"
 
+msgid "Miso"
+msgstr ""
+
 msgid "My Liquidity Positions"
 msgstr ""
 
@@ -712,9 +715,6 @@ msgstr ""
 
 msgid "Please refer to the"
 msgstr ""
-
-msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr "전문가 모드를 사용하려면 \"confirm\"이라는 단어를 입력하세요."
 
 msgid "Pool"
 msgstr "풀"
