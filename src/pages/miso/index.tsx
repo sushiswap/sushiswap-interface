@@ -37,11 +37,34 @@ function MISO() {
                   </div>
                 </div>
                 <div style={{marginLeft: 30, marginTop: 70}}>
-                    <video autoPlay loop style={{width: 408, height: 408, zIndex: 100}}>
-                      <source src="/images/miso/trident/trident_video.mp4" />
-                    </video>
-                    {/* <Image src="/images/miso/trident/trident_gif.png" width={408} height={408}/> */}
+                  <div className="flex flex-row">
+                    <div>
+                      <div style={{width: 2, height: '70%', backgroundColor: '#888'}}></div>
+                    </div>
+                    <div className="flex-1 flex flex-col">
+                      <div className="flex flex-row">
+                        <div className="flex-1" style={{height: 2, backgroundColor: '#888'}}></div>
+                        <div className="flex flex-row" style={{marginTop: '-12px'}}>
+                          <div className="ml-1 text-sm text-white">Artist</div>
+                          <div className="ml-1 text-sm font-bold text-white"> Chew Stoll</div>
+                          <div className="ml-1" style={{width: 12, height:10}}>
+                          <a href="https://twitter.com/chowzuh" target="_blank" rel="noreferrer noopener">
+                            <Image src="/images/miso/trident/trident_twitter.png" width={12} height={10}/>
+                          </a>
+                          </div>
+                          <div className="ml-1" style={{width: 10, height:10}}>
+                            <a href="https://www.instagram.com/chewystoll/?hl=en" target="_blank" rel="noreferrer noopener">
+                              <Image src="/images/miso/trident/trident_instagram.png" width={10} height={10}/>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <video className="flex-1 mt-1 ml-2" autoPlay loop style={{width: 408, height: 408, zIndex: 100}}>
+                        <source src="/images/miso/trident/trident_video.mp4" />
+                      </video>
+                    </div>
                   </div>
+                </div>
               </div>
               
               <div className="col-span-12 lg:col-span-6 max-w-xl">
@@ -51,7 +74,7 @@ function MISO() {
             <div className="gap-4 grid grid-cols-12 min-h-1/2 mb-6">
 
               <div className="col-span-12 flex flex-row items-center xl:mx-8 my-8">
-                <div>{'Related Articles'}</div>
+                <div>{'FAQ'}</div>
                 <div className="flex-1 mx-3" style={{marginTop: '5px', marginBottom: '5px', height: '1px', background: 'repeating-linear-gradient(to right,rgba(255,255,255,0.45) 0,rgba(255,255,255,0.45) 5px,transparent 5px,transparent 7px)'}}></div>
               </div>
               <MisoArticles 

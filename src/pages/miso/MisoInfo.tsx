@@ -100,21 +100,25 @@ function MisoInfo({
         </div>
       </div>
       {/* Type, rasied, for sale */}
-      <div className="gap-4 grid grid-cols-12 mt-6">
+      <div className="grid grid-cols-12 mt-6 divide-x divide-white divide-opacity-50">
         <div className="col-span-4 flex flex-col">
           <div className="text-sm sm:text-lg">{'Auction Type'}</div>
           <div className="text-base md:text-xl font-bold text-white">{auctionType}</div>
           <div><Image src="/images/miso/trident/trident_auction_type.png" width={25} height={25}/></div>
         </div>
-        <div className="col-span-4 flex flex-col mx-auto">
-          <div className="text-sm sm:text-lg">{'MIN Raised'}</div>
-          <div className="text-base md:text-xl font-bold text-white">{`${minRaised} $SUSHI`}</div>
-          <div className="text-sm sm:text-base">{`$${minRaisedUsd} USD`}</div>
+        <div className="col-span-4 flex flex-col">
+          <div className="mx-auto">
+            <div className="text-sm sm:text-lg">{'MIN Raised'}</div>
+            <div className="text-base md:text-xl font-bold text-white">{`${minRaised} $SUSHI`}</div>
+            <div className="text-sm sm:text-base">{`$${minRaisedUsd} USD`}</div>
+          </div>
         </div>
-        <div className="col-span-4 flex flex-col ml-auto">
-          <div className="text-sm sm:text-lg">{'Token For Sale'}</div>
-          <div className="text-base md:text-xl font-bold text-white">{tokenForSale}</div>
-          <div className="text-sm sm:text-base">{symbol}</div>
+        <div className="col-span-4 flex flex-col">
+          <div className="ml-auto">
+            <div className="text-sm sm:text-lg">{'Token For Sale'}</div>
+            <div className="text-base md:text-xl font-bold text-white">{tokenForSale}</div>
+            <div className="text-sm sm:text-base">{symbol}</div>
+          </div>
         </div>
       </div>
       <div className="flex flex-row mt-6">
@@ -130,7 +134,7 @@ function MisoInfo({
           </div>}
         </div>
         <div className="ml-5 md:ml-8 cursor-pointer">
-          <a href="https://miso.sushi.com/auctions/0x15c5E87Ce788F0dEBcAF70cF1dde69E3Bc3E6Ad1" target="_blank" rel="noreferrer noopener"><Image src="/images/miso/trident/trident_view_auction.png" width={91} height={88}/></a>
+          <a href="https://miso.sushi.com/auctions/0x15c5E87Ce788F0dEBcAF70cF1dde69E3Bc3E6Ad1" target="_blank" rel="noreferrer noopener"><Image src="/images/miso/trident/trident_view_auction.svg" width={91} height={88}/></a>
         </div>
       </div>
       <div className="flex flex-col mt-6">
