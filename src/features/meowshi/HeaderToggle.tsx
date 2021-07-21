@@ -45,7 +45,7 @@ const HeaderToggle: FC<HeaderToggleProps> = ({ meowshiState }) => {
         </RadioGroup.Option>
       </RadioGroup>
       <div className="my-1.5 items-center flex border-gradient-r-blue-pink-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-base md:font-normal">
-        1 xSUSHI = 100k MEOW
+        1 xSUSHI ≈ 100k MEOW
       </div>
     </div>
   )
