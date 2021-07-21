@@ -22,6 +22,7 @@ import useSushiBar from '../../hooks/useSushiBar'
 import { useSushiPrice } from '../../services/graph'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -68,7 +69,7 @@ export default function Stake() {
 
   const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher)
 
-  const xSushiPerSushi = parseFloat(data?.bar?.ratio)
+  const sushiPerXSushi = useSushiPerXSushi()
 
   const walletConnected = !!account
   const toggleWalletModal = useWalletModalToggle()
@@ -286,7 +287,7 @@ export default function Stake() {
                     {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
                   </p>
                   <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-base md:font-normal">
-                    {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
+                    {`1 xSUSHI = ${sushiPerXSushi.toFixed(4)} SUSHI`}
                   </div>
                 </div>
 
