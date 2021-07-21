@@ -22,7 +22,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors https://gnosis-safe.io/* https://polygon.gnosis-safe.io/* https://xdai.gnosis-safe.io/* https://bsc.gnosis-safe.io/* https://rinkeby.gnosis-safe.io/* https://coinmarketcap.com/earn/videos/*"
+          "value": "frame-ancestors 'self' https://gnosis-safe.io/* https://polygon.gnosis-safe.io/* https://xdai.gnosis-safe.io/* https://bsc.gnosis-safe.io/* https://rinkeby.gnosis-safe.io/* https://coinmarketcap.com/earn/videos/complete-a-swap-on-sushi-com"
         }
       ]
     }
