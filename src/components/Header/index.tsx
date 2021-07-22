@@ -76,7 +76,7 @@ function AppBar(): JSX.Element {
                           </a>
                         </NavLink>
                       )}
-                      {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
+                      {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(chainId) && (
                         <>
                           <NavLink href={'/lend'}>
                             <a
@@ -94,14 +94,6 @@ function AppBar(): JSX.Element {
                               {i18n._(t`Borrow`)}
                             </a>
                           </NavLink>
-                          {/* <Link href={'/bento'}>
-                                                            <a
-                                                                id={`bento-nav-link`}
-                                                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                                                            >
-                                                                {i18n._(t`BentoBox`)}
-                                                            </a>
-                                                        </Link> */}
                         </>
                       )}
                       {chainId === ChainId.MAINNET && (
@@ -117,7 +109,7 @@ function AppBar(): JSX.Element {
                       {chainId === ChainId.MAINNET && (
                         <Link href={'/miso'}>
                           <a
-                            id={`stake-nav-link`}
+                            id={`miso-nav-link`}
                             className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                           >
                             {i18n._(t`Miso`)}
