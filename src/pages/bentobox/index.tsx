@@ -17,7 +17,7 @@ export default function BenotBox() {
   return (
     <Container
       id="bentobox-page"
-      className="z-0 flex flex-col justify-center text-center y-4 md:py-8 lg:py-12"
+      className="relative z-0 flex flex-col justify-center py-4 text-center md:py-8 lg:py-12"
       maxWidth="full"
     >
       <Head>
@@ -32,7 +32,7 @@ export default function BenotBox() {
         <Image
           src={bentoBoxHero}
           alt="BentoBox Hero"
-          layout="responsive"
+          layout="fill"
           objectFit="contain"
           objectPosition="top"
           className="opacity-50"
