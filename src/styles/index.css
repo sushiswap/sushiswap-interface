@@ -44,9 +44,6 @@ body {
   min-height: 100%;
   margin: 0;
   overflow-y: scroll;
-
-  /* For safari and chrome */
-  overflow-y: overlay;
 }
 
 a {
