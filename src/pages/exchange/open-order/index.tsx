@@ -1,16 +1,18 @@
-import Head from 'next/head'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
-import NavLink from '../../../components/NavLink'
+import { useActiveWeb3React, useContract } from '../../../hooks'
+
 import { ArrowLeftIcon } from '@heroicons/react/solid'
-import OpenOrders from '../../../features/open-order/OpenOrders'
-import CompletedOrders from '../../../features/open-order/CompletedOrders'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import NetworkGuard from '../../../guards/Network'
-import { ChainId } from '@sushiswap/sdk'
-import { useContract, useActiveWeb3React } from '../../../hooks'
 import { BigNumber } from 'ethers'
+import { ChainId } from '@sushiswap/sdk'
+import CompletedOrders from '../../../features/open-order/CompletedOrders'
+import Container from '../../../components/Container'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
+import Head from 'next/head'
+import NavLink from '../../../components/NavLink'
+import NetworkGuard from '../../../guards/Network'
+import OpenOrders from '../../../features/open-order/OpenOrders'
+import { t } from '@lingui/macro'
 import { useEffect } from 'react'
+import { useLingui } from '@lingui/react'
 
 const abi = [
   {
@@ -347,28 +349,28 @@ function OpenOrdersPage() {
   const { i18n } = useLingui()
 
   return (
-    <>
+    <Container id="open-order-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Open Orders | Sushi</title>
         <meta name="description" content="Open orders..." />
       </Head>
-      <div className="max-w-2xl min-w-0 md:min-w-[672px]">
-        <div className="flex items-center gap-2 justify-start py-3">
+      <div className="min-w-0 md:min-w-[672px]">
+        <div className="flex items-center justify-start gap-2 py-3">
           <NavLink href="/limit-order">
-            <a className="text-sm text-secondary flex gap-2">
+            <a className="flex gap-2 text-sm text-secondary">
               <ArrowLeftIcon width={20} height={20} className="text-high-emphesis" />
               {i18n._(t`Back to Limit Orders`)}
             </a>
           </NavLink>
         </div>
         <DoubleGlowShadow>
-          <div id="limit-order-page" className="flex flex-col w-full p-3 md:p-5 rounded bg-dark-900 gap-4">
+          <div id="limit-order-page" className="flex flex-col w-full gap-4 p-3 rounded md:p-5 bg-dark-900">
             <OpenOrders />
             <CompletedOrders />
           </div>
         </DoubleGlowShadow>
       </div>
-    </>
+    </Container>
   )
 }
 

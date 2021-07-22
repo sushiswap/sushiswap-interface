@@ -1,3 +1,4 @@
+import Container from '../../components/Container'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Image from '../../components/Image'
@@ -25,7 +26,7 @@ export default function Layout({
     <div className="z-0 flex flex-col items-start w-full h-screen">
       <Header />
       <Main>
-        <div className="container px-0 mx-auto">
+        <Container className="px-4 py-4 md:py-8 lg:py-12" maxWidth="full">
           <div className={`mb-2 grid grid-cols-12 gap-4`}>
             <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
               <Link href="/borrow">
@@ -126,7 +127,7 @@ export default function Layout({
               </div>
             )}
           </div>
-        </div>
+        </Container>
       </Main>
       <Popups />
       <Footer />

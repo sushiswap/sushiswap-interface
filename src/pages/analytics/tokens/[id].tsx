@@ -1,16 +1,4 @@
-import { times } from 'lodash'
-import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
-import Container from '../../../components/Container'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import LineGraph from '../../../components/LineGraph'
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
-import CurrencyCard from '../../../features/analytics/Tokens/CurrencyCard'
-import InfoCard from '../../../features/analytics/Tokens/InfoCard'
-import TopFarmsList from '../../../features/analytics/Tokens/TopFarmsList'
-import TransactionList from '../../../features/analytics/Tokens/TransactionList'
 import { classNames, formatNumber } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
 import {
   useCustomDayBlock,
   useEthPrice,
@@ -21,7 +9,20 @@ import {
   useTokenPairs,
   useTransactions,
 } from '../../../services/graph'
+import { useMemo, useState } from 'react'
+
+import ColoredNumber from '../../../features/analytics/ColoredNumber'
+import Container from '../../../components/Container'
+import CurrencyCard from '../../../features/analytics/Tokens/CurrencyCard'
+import CurrencyLogo from '../../../components/CurrencyLogo'
+import InfoCard from '../../../features/analytics/Tokens/InfoCard'
+import LineGraph from '../../../components/LineGraph'
+import TopFarmsList from '../../../features/analytics/Tokens/TopFarmsList'
+import TransactionList from '../../../features/analytics/Tokens/TransactionList'
+import { times } from 'lodash'
 import { tokenDayDatasQuery } from '../../../services/graph/queries'
+import { useCurrency } from '../../../hooks/Tokens'
+import { useRouter } from 'next/router'
 
 const socialsPlaceholder = [
   {

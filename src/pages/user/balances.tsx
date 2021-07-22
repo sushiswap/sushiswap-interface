@@ -9,6 +9,7 @@ import Back from '../../components/Back'
 import Button from '../../components/Button'
 import Card from '../../components/Card'
 import CardHeader from '../../components/CardHeader'
+import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Image from '../../components/Image'
@@ -41,7 +42,7 @@ function Balances() {
   const { items, requestSort, sortConfig } = useSortableData(result)
 
   return (
-    <>
+    <Container id="balances-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Balances | Sushi</title>
         <meta key="description" name="description" content="" />
@@ -72,7 +73,7 @@ function Balances() {
             items.map((token, i: number) => <TokenBalance key={token.address + '_' + i} token={token} />)}
         </div>
       </Card>
-    </>
+    </Container>
   )
 }
 
