@@ -23,7 +23,7 @@ export const miniChef = async (query, chainId = ChainId.MAINNET) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query)
 
 export const MASTERCHEF_V2 = {
-  [ChainId.MAINNET]: 'jiro-ono/sushitestsubgraph',
+  [ChainId.MAINNET]: 'sushiswap/master-chefv2',
 }
 
 export const masterChefV2 = async (query, chainId = ChainId.MAINNET) =>
