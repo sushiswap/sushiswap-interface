@@ -28,12 +28,12 @@ export default function BenotBox() {
           content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
         />
       </Head>
-      <div className="absolute top-0 left-0 right-0 z-0 w-full h-full" style={{ maxHeight: 700 }}>
+      <div className="absolute top-0 left-0 right-0 z-0 w-full h-full" style={{ maxHeight: 500 }}>
         <Image
           src={bentoBoxHero}
           alt="BentoBox Hero"
           layout="fill"
-          objectFit="contain"
+          // objectFit="cover"
           objectPosition="top"
           className="opacity-50"
           priority
@@ -48,6 +48,7 @@ export default function BenotBox() {
           layout="responsive"
           height={150}
           width={240}
+          priority
         />
       </div>
 
