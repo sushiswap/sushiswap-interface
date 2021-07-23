@@ -144,14 +144,14 @@ export default function Farm(): JSX.Element {
           },
           {
             token: 'PICKLE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/pickle.jpg',
             rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
             rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: picklePrice,
           },
           {
             token: 'MPH',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/88mph.jpg',
             rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
             rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: mphPrice,
