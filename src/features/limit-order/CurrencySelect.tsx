@@ -6,8 +6,8 @@ import { t } from '@lingui/macro'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Currency } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
-import CurrencyLogo from '../../components/CurrencyLogo'
 import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
+import CurrencyLogo from '../../components/CurrencyLogo'
 
 interface CurrencySelectProps {
   currency: Currency
@@ -16,6 +16,9 @@ interface CurrencySelectProps {
   onSelect: (x: Currency) => void
   disabled?: boolean
   label: string
+  currencyList?: string[]
+  includeNativeCurrency?: boolean
+  allowManageTokenList?: boolean
 }
 
 const CurrencySelect: FC<CurrencySelectProps> = ({
@@ -24,7 +27,10 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
   showCommonBases,
   onSelect,
   label,
+  currencyList,
   disabled = false,
+  includeNativeCurrency = true,
+  allowManageTokenList = true,
 }) => {
   const { i18n } = useLingui()
   const [modalOpen, setModalOpen] = useState(false)
@@ -83,6 +89,9 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          currencyList={currencyList}
+          includeNativeCurrency={includeNativeCurrency}
+          allowManageTokenList={allowManageTokenList}
         />
       )}
     </>

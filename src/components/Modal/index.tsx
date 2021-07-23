@@ -12,6 +12,7 @@ import { useGesture } from 'react-use-gesture'
 const AnimatedDialogOverlay = animated(DialogOverlay)
 
 const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
+  backdrop-filter: blur(10px);
   &[data-reach-dialog-overlay] {
     z-index: 10;
     background-color: transparent;

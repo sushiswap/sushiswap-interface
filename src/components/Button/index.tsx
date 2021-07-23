@@ -54,13 +54,12 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 
 export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
-export type ButtonProps = {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ButtonColor
   size?: ButtonSize
   variant?: ButtonVariant
-} & {
   ref?: React.Ref<HTMLButtonElement>
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+}
 
 function Button({
   children,
@@ -75,7 +74,7 @@ function Button({
       className={classNames(
         VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
-        'rounded font-medium disabled:cursor-not-allowed focus:outline-none',
+        'rounded disabled:cursor-not-allowed focus:outline-none',
         // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}
