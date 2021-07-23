@@ -192,7 +192,7 @@ export function CurrencySearch({
     <ContentWrapper>
       <ModalHeader onClose={onDismiss} title="Select a token" />
       {!currencyList && (
-        <div className="mt-3 mb-8">
+        <div className="mt-0 sm:mt-3 mb-3 sm:mb-8">
           <input
             type="text"
             id="token-search-input"
