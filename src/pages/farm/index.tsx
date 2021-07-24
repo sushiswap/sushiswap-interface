@@ -13,6 +13,8 @@ import {
   useMaticPrice,
   useOnePrice,
   useStakePrice,
+  usePicklePrice,
+  useMphPrice,
   useSushiPairs,
   useSushiPrice,
 } from '../../services/graph'
@@ -62,7 +64,7 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice] = [
+  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice, picklePrice, mphPrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -70,6 +72,8 @@ export default function Farm(): JSX.Element {
     useCvxPrice(),
     useStakePrice(),
     useOnePrice(),
+    usePicklePrice(),
+    useMphPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -120,23 +124,37 @@ export default function Farm(): JSX.Element {
           {
             token: 'ALCX',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
-            rewardPerBlock: pool.rewarder.rewardPerBlock / 1e18,
-            rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * blocksPerDay,
+            rewardPerBlock: pool.rewarder.rewardPerSecond / 1e18,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * blocksPerDay,
             rewardPrice: alcxPrice,
           },
           {
             token: 'CVX',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-            rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
           },
           {
             token: 'CVX',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-            rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
+          },
+          {
+            token: 'PICKLE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/pickle.jpg',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: picklePrice,
+          },
+          {
+            token: 'MPH',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/88mph.jpg',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: mphPrice,
           },
         ]
 
