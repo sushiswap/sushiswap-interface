@@ -36,7 +36,7 @@ export default function Farm(): JSX.Element {
 
   const router = useRouter()
 
-  const type = router.query.filter as string
+  const type = router.query.filter == null ? 'all' : (router.query.filter as string)
 
   const pairAddresses = useFarmPairAddresses()
 
@@ -245,10 +245,11 @@ export default function Farm(): JSX.Element {
   }
 
   const FILTER = {
+    all: (farm) => farm.allocPoint !== '0',
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
-    sushi: (farm) => farm.pair.type === PairType.SWAP,
-    kashi: (farm) => farm.pair.type === PairType.KASHI,
-    '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
+    sushi: (farm) => farm.pair.type === PairType.SWAP && farm.allocPoint !== '0',
+    kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
+    '2x': (farm) => (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) && farm.allocPoint !== '0',
   }
 
   const data = farms
