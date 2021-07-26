@@ -29,8 +29,10 @@ import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { remoteLoader } from '@lingui/remote-loader'
+import { nanoid } from '@reduxjs/toolkit'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
+const sessionId = nanoid()
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
@@ -72,8 +74,8 @@ function MyApp({
       i18n.loadLocaleData(locale, { plurals: plurals[locale] })
 
       try {
-        // Load messages from AWS
-        const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json`)
+        // Load messages from AWS, use q session param to get latest version from cache
+        const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json?q=${sessionId}`)
         const remoteMessages = await resp.json()
 
         const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })
@@ -88,6 +90,7 @@ function MyApp({
     }
 
     load(locale)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale])
 
   // Allows for conditionally setting a provider to be hoisted per page
