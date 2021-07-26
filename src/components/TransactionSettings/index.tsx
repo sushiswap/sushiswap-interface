@@ -96,7 +96,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
 
           <QuestionHelper
             text={i18n._(
-              t`Your transaction will revert 23if the price changes unfavorably by more than this percentage.`
+              t`Your transaction will revert if the price changes unfavorably by more than this percentage.`
             )}
           />
         </div>

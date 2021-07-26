@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { classNames } from '../../functions'
 import { t } from '@lingui/macro'
 import { useRouter } from 'next/router'
+import cookieCutter from 'cookie-cutter'
 
 const LANGUAGES: {
   [x: string]: { flag: string; language: string; dialect?: string }
@@ -35,12 +36,12 @@ const LANGUAGES: {
     flag: '/images/flags/vi-flag.png',
     language: t`Vietnamese`,
   },
-  'zh-CN': {
+  zh_CN: {
     flag: '/images/flags/ch-flag.png',
     language: t`Chinese`,
     dialect: '简',
   },
-  'zh-TW': {
+  zh_TW: {
     flag: '/images/flags/ch-flag.png',
     language: t`Chinese`,
     dialect: '繁',
@@ -49,7 +50,7 @@ const LANGUAGES: {
     flag: '/images/flags/es-flag.png',
     language: t`Spanish`,
   },
-  'es-AR': {
+  es_AR: {
     flag: '/images/flags/es-flag.png',
     language: t`Spanish`,
     dialect: 'AR',
@@ -105,6 +106,7 @@ export default function LangSwitcher() {
                               active ? 'bg-dark-700 text-high-emphesis' : 'text-primary',
                               'group flex items-center px-4 py-2 text-sm hover:bg-dark-700 focus:bg-dark-700 rounded'
                             )}
+                            onClick={() => cookieCutter.set('NEXT_LOCALE', locale)}
                           >
                             <Image
                               className="inline w-3 h-3 mr-1 align-middle"

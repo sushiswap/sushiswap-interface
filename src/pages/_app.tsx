@@ -16,7 +16,6 @@ import Head from 'next/head'
 import { I18nProvider } from '@lingui/react'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
-import { PersistGate } from 'redux-persist/integration/react'
 import ReactGA from 'react-ga'
 import { Provider as ReduxProvider } from 'react-redux'
 import TransactionUpdater from '../state/transactions/updater'
@@ -29,6 +28,7 @@ import { i18n } from '@lingui/core'
 import store from '../state'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { remoteLoader } from '@lingui/remote-loader'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
@@ -46,9 +46,7 @@ function MyApp({
     Provider: FunctionComponent
   }
 }) {
-  const router = useRouter()
-
-  const { pathname, query, locale } = router
+  const { pathname, query, locale } = useRouter()
 
   useEffect(() => {
     ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, { testMode: process.env.NODE_ENV === 'development' })
@@ -71,11 +69,19 @@ function MyApp({
 
   useEffect(() => {
     async function load(locale) {
-      const { messages } = await import(`@lingui/loader!./../../locale/${locale}.po`)
+      // Load fallback messages
+      const { messages: fallbackMessages } = await import(`@lingui/loader!./../../locale/${locale}.json?raw-lingui`)
+
+      // Load messages from AWS
+      const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json`)
+      const remoteMessages = await resp.json()
+
+      const compiledMessages = remoteLoader({ messages: remoteMessages, fallbackMessages, format: 'minimal' })
       i18n.loadLocaleData(locale, { plurals: plurals[locale] })
-      i18n.load(locale, messages)
+      i18n.load(locale, compiledMessages)
       i18n.activate(locale)
     }
+
     load(locale)
   }, [locale])
 
