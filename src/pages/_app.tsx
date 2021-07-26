@@ -69,16 +69,21 @@ function MyApp({
 
   useEffect(() => {
     async function load(locale) {
-      // Load fallback messages
-      const { messages: fallbackMessages } = await import(`@lingui/loader!./../../locale/${locale}.json?raw-lingui`)
-
-      // Load messages from AWS
-      const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json`)
-      const remoteMessages = await resp.json()
-
-      const compiledMessages = remoteLoader({ messages: remoteMessages, fallbackMessages, format: 'minimal' })
       i18n.loadLocaleData(locale, { plurals: plurals[locale] })
-      i18n.load(locale, compiledMessages)
+
+      try {
+        // Load messages from AWS
+        const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json`)
+        const remoteMessages = await resp.json()
+
+        const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })
+        i18n.load(locale, messages)
+      } catch {
+        // Load fallback messages
+        const { messages } = await import(`@lingui/loader!./../../locale/${locale}.json?raw-lingui`)
+        i18n.load(locale, messages)
+      }
+
       i18n.activate(locale)
     }
 
