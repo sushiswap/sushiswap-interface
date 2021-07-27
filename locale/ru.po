@@ -86,9 +86,6 @@ msgstr "Аналитика"
 msgid "Approve"
 msgstr "Утвердить"
 
-msgid "Approve Inari"
-msgstr ""
-
 msgid "Approve Kashi"
 msgstr "Утвердить Kashi"
 
@@ -103,9 +100,6 @@ msgstr "Утверждено"
 
 msgid "Approving"
 msgstr "Утверждение"
-
-msgid "Approving Inari"
-msgstr ""
 
 msgid "Approving Limit Order"
 msgstr ""
@@ -351,9 +345,6 @@ msgstr "Введите допустимый процент проскальзы�
 msgid "Enter an amount"
 msgstr "Введите сумму"
 
-msgid "Enter an mount"
-msgstr ""
-
 msgid "Error"
 msgstr "Ошибка"
 
@@ -408,9 +399,6 @@ msgstr ""
 "SUSHI и любые дополнительные комиссии."
 
 msgid "French"
-msgstr ""
-
-msgid "From"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -491,6 +479,11 @@ msgstr "Недействительный получатель"
 
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Изолированные рынки кредитования снижают ваши риски как кредитора активов. Точно знайте, какое обеспечение доступно вам в случае неплатежеспособности контрагента."
+
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
 
 msgid "Italian"
 msgstr ""
@@ -671,11 +664,11 @@ msgstr "Неаппаратный кошелек"
 msgid "None"
 msgstr "Нет"
 
+msgid "Not approved"
+msgstr ""
+
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ИСПОЛЬЗУЙТЕ ЭТОТ РЕЖИМ ТОЛЬКО, ЕСЛИ ЗНАЕТЕ, ЧТО ВЫ ДЕЛАЕТЕ."
-
-msgid "One-Click Strategies"
-msgstr ""
 
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Ой! Произошла неизвестная ошибка. Обновите страницу или перейдите в другой браузер или устройство"
@@ -881,11 +874,6 @@ msgid "Stake SUSHI for xSUSHI"
 msgstr "Ставка SUSHI на xSUSHI"
 
 msgid ""
-"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
-"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
-msgstr ""
-
-msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
@@ -922,16 +910,8 @@ msgstr "Обменять на (прибл.):"
 msgid "Swap To:"
 msgstr "Обменять на:"
 
-msgid "TODO"
-msgstr ""
-
 msgid "TVL"
 msgstr "TVL"
-
-msgid ""
-"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
-"collateral on other platforms, and more!"
-msgstr ""
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
@@ -970,9 +950,6 @@ msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
 msgid "Tip:"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "Toggle Expert Mode"
@@ -1188,6 +1165,9 @@ msgid "minutes"
 msgstr "минут"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

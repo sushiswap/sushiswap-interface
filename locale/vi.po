@@ -86,9 +86,6 @@ msgstr "Phân tích"
 msgid "Approve"
 msgstr "Phê duyệt"
 
-msgid "Approve Inari"
-msgstr ""
-
 msgid "Approve Kashi"
 msgstr "Phê duyệt Kashi"
 
@@ -103,9 +100,6 @@ msgstr "Đã phê duyệt"
 
 msgid "Approving"
 msgstr "Đang phê duyệt"
-
-msgid "Approving Inari"
-msgstr ""
 
 msgid "Approving Limit Order"
 msgstr ""
@@ -349,9 +343,6 @@ msgstr "Nhập phần trăm trượt giá hợp lệ"
 msgid "Enter an amount"
 msgstr "Nhập số tiền"
 
-msgid "Enter an mount"
-msgstr ""
-
 msgid "Error"
 msgstr "Lỗi"
 
@@ -406,9 +397,6 @@ msgstr ""
 "SUSHI đã ký quỹ ban đầu và mọi khoản phí bổ sung."
 
 msgid "French"
-msgstr ""
-
-msgid "From"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -489,6 +477,11 @@ msgstr "Người nhận không hợp lệ"
 
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Thị trường cho vay biệt lập giúp giảm thiểu rủi ro của bạn với tư cách là người cho vay tài sản. Biết chính xác tài sản thế chấp nào có sẵn cho bạn trong trường hợp đối tác mất khả năng thanh toán."
+
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
 
 msgid "Italian"
 msgstr ""
@@ -669,11 +662,11 @@ msgstr "Không phải ví cứng"
 msgid "None"
 msgstr "Không có"
 
+msgid "Not approved"
+msgstr ""
+
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "CHỈ SỬ DỤNG CHẾ ĐỘ NÀY NẾU BẠN BIẾT BẠN ĐANG LÀM GÌ."
-
-msgid "One-Click Strategies"
-msgstr ""
 
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Rất tiếc! Đã xảy ra lỗi không xác định. Vui lòng làm mới trang hoặc truy cập từ trình duyệt hoặc thiết bị khác"
@@ -879,11 +872,6 @@ msgid "Stake SUSHI for xSUSHI"
 msgstr "Đặt cược SUSHI cho xSUSHI"
 
 msgid ""
-"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
-"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
-msgstr ""
-
-msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
@@ -920,16 +908,8 @@ msgstr "Hoán đổi sang (ước tính):"
 msgid "Swap To:"
 msgstr "Hoán đổi sang:"
 
-msgid "TODO"
-msgstr ""
-
 msgid "TVL"
 msgstr "TVL"
-
-msgid ""
-"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
-"collateral on other platforms, and more!"
-msgstr ""
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
@@ -968,9 +948,6 @@ msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
 msgid "Tip:"
-msgstr ""
-
-msgid "To"
 msgstr ""
 
 msgid "Toggle Expert Mode"
@@ -1186,6 +1163,9 @@ msgid "minutes"
 msgstr "phút"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

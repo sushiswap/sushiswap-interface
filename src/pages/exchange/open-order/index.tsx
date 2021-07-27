@@ -34,8 +34,8 @@ function OpenOrdersPage() {
             </a>
           </NavLink>
         </div>
-        <div className="flex pb-6">
-          {pending.totalOrders > 0 && approvalState === BentoApprovalState.NOT_APPROVED && (
+        {pending.totalOrders > 0 && approvalState === BentoApprovalState.NOT_APPROVED && (
+          <div className="flex pb-6">
             <Alert
               type="error"
               title={i18n._(t`Not approved`)}
@@ -43,8 +43,8 @@ function OpenOrdersPage() {
           sure you have approved the limit order master contract or the order will not execute`)}
               dismissable={false}
             />
-          )}
-        </div>
+          </div>
+        )}
         <DoubleGlowShadow>
           <div id="limit-order-page" className="flex flex-col w-full gap-4 p-3 rounded md:p-5 bg-dark-900">
             <OpenOrders />
