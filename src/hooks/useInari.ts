@@ -3,6 +3,7 @@ import { useDerivedInariState, useInariState } from '../state/inari/hooks'
 import { useActiveWeb3React, useApproveCallback } from './index'
 import { toHex } from '../functions/approveAmountCalldata'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { calculateGasMargin } from '../functions'
 
 const useInari = () => {
   const { account } = useActiveWeb3React()
@@ -17,7 +18,9 @@ const useInari = () => {
 
     try {
       const method = zapIn ? strategy.zapMethod : strategy.unzapMethod
-      const tx = await inariContract[method](account, toHex(zapInValue.quotient))
+      const val = strategy.transformZapInValue ? await strategy.transformZapInValue(zapInValue) : zapInValue
+
+      const tx = await inariContract[method](account, toHex(val.quotient))
 
       return addTransaction(tx, {
         summary: `${zapIn ? 'Deposit' : 'Withdraw'} ${strategy.outputSymbol}`,

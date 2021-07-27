@@ -1,30 +1,29 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
-import CurrencyLogo from '../../components/CurrencyLogo'
+import React, { FC, ReactNode, useCallback } from 'react'
 import Typography from '../../components/Typography'
-import { useAllTokens } from '../../hooks/Tokens'
 import { useAppDispatch } from '../../state/hooks'
 import { setZapInValue } from '../../state/inari/actions'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { useInariState } from '../../state/inari/hooks'
 
 interface BalancePanelProps {
   label: string
   token: Token
+  logo: ReactNode
   value: string
-  balance: CurrencyAmount<Token>
+  balance: CurrencyAmount<Token> | null
   showMax?: boolean
   symbol?: string
 }
 
-const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = false, symbol, balance }) => {
+const BalancePanel: FC<BalancePanelProps> = ({ label, logo, value, token, showMax = false, symbol, balance }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const tokens = useAllTokens()
 
   const onMax = useCallback(() => {
-    dispatch(setZapInValue(balance.toExact()))
+    dispatch(setZapInValue(balance ? balance?.toExact() : '0'))
   }, [balance, dispatch])
 
   const handleInput = useCallback(
@@ -43,9 +42,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = fa
         </Typography>
       </div>
       <div className="flex flex-row bg-dark-800 p-4 rounded gap-4 items-center">
-        <div className="rounded-full overflow-hidden">
-          <CurrencyLogo size={40} currency={tokens[token.address]} />
-        </div>
+        <div className="rounded-full">{logo}</div>
         <NumericalInput value={value} onUserInput={handleInput} />
         {showMax && (
           <span
@@ -62,7 +59,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = fa
             {i18n._(t`Balance:`)}
           </Typography>
           <Typography variant="sm">
-            {balance || '0'} {token.symbol}
+            {balance?.toSignificant(6) || '0'} {token.symbol}
           </Typography>
         </div>
       </div>

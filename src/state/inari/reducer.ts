@@ -1,19 +1,23 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { setStrategy, setZapIn, setZapInValue } from './actions'
+import { ReactNode } from 'react'
 
 export interface InaryStrategy {
   name: string
   steps: string[]
   description: string
-  inputToken: Token
-  outputToken: Token
-  outputSymbol: string
   zapMethod: string
   unzapMethod: string
-  inputBalance: CurrencyAmount<Token>
-  outputBalance: CurrencyAmount<Token>
-  outputValue: string
+  inputToken: Token
+  inputLogo: ReactNode
+  inputTokenBalance: ((zapIn: boolean) => CurrencyAmount<Token>) | CurrencyAmount<Token>
+  outputToken: Token
+  outputLogo: ReactNode
+  outputSymbol: string
+  outputTokenBalance: ((zapIn: boolean) => CurrencyAmount<Token>) | CurrencyAmount<Token>
+  outputValue: (zapIn: boolean, zapInValue: string) => string
+  transformZapInValue?: (val: CurrencyAmount<Token>) => CurrencyAmount<Token>
 }
 
 export interface InariState {

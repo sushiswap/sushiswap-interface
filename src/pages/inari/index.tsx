@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Head from 'next/head'
 import Typography from '../../components/Typography'
 import { useLingui } from '@lingui/react'
@@ -21,6 +21,20 @@ const Inari = () => {
   const { i18n } = useLingui()
   const { zapIn, zapInValue } = useInariState()
   const { strategy } = useDerivedInariState()
+
+  const inputTokenBalance = useMemo(() => {
+    if (!strategy) return null
+
+    if (typeof strategy.inputTokenBalance === 'function') return strategy.inputTokenBalance(zapIn)
+    return strategy.inputTokenBalance
+  }, [strategy, zapIn])
+
+  const outputTokenBalance = useMemo(() => {
+    if (!strategy) return null
+
+    if (typeof strategy.outputTokenBalance === 'function') return strategy.outputTokenBalance(zapIn)
+    return strategy.outputTokenBalance
+  }, [strategy, zapIn])
 
   return (
     <>
@@ -64,9 +78,10 @@ const Inari = () => {
                           label={i18n._(t`From`)}
                           showMax
                           value={zapInValue}
+                          logo={zapIn ? strategy.inputLogo : strategy.outputLogo}
                           token={zapIn ? strategy.inputToken : strategy.outputToken}
                           symbol={zapIn ? '' : strategy.outputSymbol}
-                          balance={zapIn ? strategy.inputBalance : strategy.outputBalance}
+                          balance={zapIn ? inputTokenBalance : outputTokenBalance}
                         />
                       </div>
                       <div className="flex items-center w-[60px] z-1 relative ml-[-16px] mr-[-16px]">
@@ -77,14 +92,17 @@ const Inari = () => {
                       <div className="w-full sm:w-2/5 ml-2">
                         <BalancePanel
                           label={i18n._(t`To`)}
-                          value={strategy.outputValue}
+                          value={strategy.outputValue(zapIn, zapInValue)}
+                          logo={zapIn ? strategy.outputLogo : strategy.inputLogo}
                           token={zapIn ? strategy.outputToken : strategy.inputToken}
                           symbol={zapIn ? strategy.outputSymbol : ''}
-                          balance={zapIn ? strategy.outputBalance : strategy.inputBalance}
+                          balance={zapIn ? outputTokenBalance : inputTokenBalance}
                         />
                       </div>
                     </div>
-                    <InariButton color="gradient">Execute</InariButton>
+                    <InariButton color="gradient" balance={zapIn ? inputTokenBalance : outputTokenBalance}>
+                      Execute
+                    </InariButton>
                     <div className="relative -m-5 p-7 mt-0 bg-dark-700 rounded-b">
                       <InariDescription />
                     </div>

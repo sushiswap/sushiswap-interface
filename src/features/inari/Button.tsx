@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { ApprovalState, useActiveWeb3React } from '../../hooks'
-import { ChainId, ZERO } from '@sushiswap/sdk'
+import { CurrencyAmount, Token, ZERO } from '@sushiswap/sdk'
 import Button, { ButtonProps } from '../../components/Button'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
@@ -8,26 +8,20 @@ import useInari from '../../hooks/useInari'
 import Dots from '../../components/Dots'
 import { useDerivedInariState } from '../../state/inari/hooks'
 
-const InariButton: FC<ButtonProps> = ({ children, ...rest }) => {
+interface InariButtonProps extends ButtonProps {
+  balance: CurrencyAmount<Token>
+}
+
+const InariButton: FC<InariButtonProps> = ({ children, balance, ...rest }) => {
   const { i18n } = useLingui()
-  const { account, chainId } = useActiveWeb3React()
-  const { zapInValue, strategy } = useDerivedInariState()
-
-  const wrongChain = ![ChainId.MAINNET].includes(chainId)
-
+  const { account } = useActiveWeb3React()
+  const { zapInValue } = useDerivedInariState()
   const { approveCallback, inari } = useInari()
 
   if (!account)
     return (
       <Button {...rest} disabled color="gray">
         {i18n._(t`Connect Wallet`)}
-      </Button>
-    )
-
-  if (wrongChain)
-    return (
-      <Button {...rest} disabled color="gray">
-        {i18n._(t`Chain not supported yet`)}
       </Button>
     )
 
@@ -38,7 +32,7 @@ const InariButton: FC<ButtonProps> = ({ children, ...rest }) => {
       </Button>
     )
 
-  if (zapInValue.greaterThan(strategy.inputBalance))
+  if (zapInValue && balance && balance.lessThan(zapInValue))
     return (
       <Button {...rest} disabled color="gray">
         {i18n._(t`Insufficient Balance`)}
@@ -58,7 +52,6 @@ const InariButton: FC<ButtonProps> = ({ children, ...rest }) => {
         {i18n._(t`Approve Inari`)}
       </Button>
     )
-  // ---------------------------------------------------------------------------
 
   return (
     <Button {...rest} onClick={inari}>
