@@ -480,6 +480,11 @@ msgstr "Destinatario non valido"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "I mercati di prestito isolati riducono i tuoi rischi come creditore. Sai esattamente quanto collaterale è a tua disposizione in caso di insolvenza della controparte."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -655,6 +660,9 @@ msgstr "Non-hardware Wallet"
 
 msgid "None"
 msgstr "Nessuno"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "USA QUESTA MODALITÀ SOLO SE SAI COSA STAI FACENDO."
@@ -1154,6 +1162,9 @@ msgid "minutes"
 msgstr "minuti"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

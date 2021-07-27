@@ -480,6 +480,11 @@ msgstr "受領者が無効です"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "孤立した貸出し市場では、資産の貸し手としてのリスクが軽減されます。相手が破産した場合に利用できる担保を正確に把握することができます。"
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -658,6 +663,9 @@ msgstr "非ハードウェアウォレット"
 
 msgid "None"
 msgstr "なし"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "このモードは、自分が行っている内容を分かっている場合のみ使用してください。"
@@ -1157,6 +1165,9 @@ msgid "minutes"
 msgstr "分"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

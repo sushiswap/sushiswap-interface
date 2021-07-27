@@ -469,6 +469,11 @@ msgstr "无效接收人"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "孤立借贷市场降低您作为资产提供人的风险。在对手方破产时确切知道对方的抵押品。"
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -644,6 +649,9 @@ msgstr "非硬件钱包"
 
 msgid "None"
 msgstr "无"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "请了解您在做什么之后再选择该模式。"
@@ -1143,6 +1151,9 @@ msgid "minutes"
 msgstr "分钟"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

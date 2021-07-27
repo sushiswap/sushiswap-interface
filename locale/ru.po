@@ -480,6 +480,11 @@ msgstr "Недействительный получатель"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Изолированные рынки кредитования снижают ваши риски как кредитора активов. Точно знайте, какое обеспечение доступно вам в случае неплатежеспособности контрагента."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -658,6 +663,9 @@ msgstr "Неаппаратный кошелек"
 
 msgid "None"
 msgstr "Нет"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ИСПОЛЬЗУЙТЕ ЭТОТ РЕЖИМ ТОЛЬКО, ЕСЛИ ЗНАЕТЕ, ЧТО ВЫ ДЕЛАЕТЕ."
@@ -1157,6 +1165,9 @@ msgid "minutes"
 msgstr "минут"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

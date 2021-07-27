@@ -480,6 +480,11 @@ msgstr "Destinatar nevalid"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Piețele împrumuturilor izolate vă reduc riscurile în calitate de creditor de active. Aflați exact ce garanție vi se pune la dispoziție în caz de insolvență a contrapărții."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -658,6 +663,9 @@ msgstr "Portofel non-hardware"
 
 msgid "None"
 msgstr "Nimic"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "FOLOSIȚI ACEST MOD DOAR DACĂ SUNTEȚI FAMILIARIZAT CU SITUAȚIA."
@@ -1157,6 +1165,9 @@ msgid "minutes"
 msgstr "minute"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

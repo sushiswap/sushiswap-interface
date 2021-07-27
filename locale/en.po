@@ -483,6 +483,13 @@ msgstr "Invalid recipient"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+
 msgid "Italian"
 msgstr "Italian"
 
@@ -663,6 +670,9 @@ msgstr "Non-hardware Wallet"
 
 msgid "None"
 msgstr "None"
+
+msgid "Not approved"
+msgstr "Not approved"
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
@@ -1167,6 +1177,9 @@ msgstr "minutes"
 
 msgid "or the transaction will revert."
 msgstr "or the transaction will revert."
+
+msgid "xDai Bridge"
+msgstr "xDai Bridge"
 
 msgid "xSUSHI Fee"
 msgstr "xSUSHI Fee"

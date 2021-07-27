@@ -478,6 +478,11 @@ msgstr "잘못된 수신자"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "격리 대출 시장은 자산 대출자에 대한 위험을 완화합니다. 상대방 파산 시 어떤 담보를 사용할 수 있는지 정확히 알아보세요."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -656,6 +661,9 @@ msgstr "비-하드웨어 지갑"
 
 msgid "None"
 msgstr "없음"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
@@ -1155,6 +1163,9 @@ msgid "minutes"
 msgstr "분"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"
