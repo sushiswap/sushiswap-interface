@@ -20,6 +20,7 @@ import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import Dots from '../../../components/Dots'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import ExchangeHeader from '../../../components/ExchangeHeader'
 import { Field } from '../../../state/mint/actions'
 import Head from 'next/head'
@@ -44,7 +45,6 @@ import { useRouterContract } from '../../../hooks'
 import { useTransactionAdder } from '../../../state/transactions/hooks'
 import useTransactionDeadline from '../../../hooks/useTransactionDeadline'
 import { useWalletModalToggle } from '../../../state/application/hooks'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -321,7 +321,7 @@ export default function Add() {
         />
       </Head>
 
-      <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-6">
+      <Container id="add-liquidity-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
         <div className="flex items-center justify-between px-4 mb-5">
           <NavLink href="/pool">
             <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">

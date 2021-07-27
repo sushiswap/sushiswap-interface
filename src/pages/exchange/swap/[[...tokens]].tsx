@@ -32,7 +32,9 @@ import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDeta
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
 import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
+import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/swap/actions'
 import Head from 'next/head'
 import Loader from '../../../components/Loader'
@@ -61,7 +63,6 @@ import { useRouter } from 'next/router'
 import { useSwapCallback } from '../../../hooks/useSwapCallback'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 
 export default function Swap() {
   const { i18n } = useLingui()
@@ -424,7 +425,7 @@ export default function Swap() {
   // }, [chainId, previousChainId, router]);
 
   return (
-    <>
+    <Container id="swap-page" className="py-4 md:py-8 lg:py-12">
       <Head>
         <title>{i18n._(t`SushiSwap`)} | Sushi</title>
         <meta
@@ -439,7 +440,7 @@ export default function Swap() {
         onConfirm={handleConfirmTokenWarning}
       />
       <DoubleGlowShadow>
-        <div id="swap-page" className="w-full max-w-2xl p-4 space-y-4 rounded bg-dark-900 z-1">
+        <div className="p-4 space-y-4 rounded bg-dark-900 z-1">
           <SwapHeader
             input={currencies[Field.INPUT]}
             output={currencies[Field.OUTPUT]}
@@ -686,6 +687,6 @@ export default function Swap() {
           )}
         </div>
       </DoubleGlowShadow>
-    </>
+    </Container>
   )
 }

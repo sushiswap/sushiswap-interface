@@ -1,5 +1,6 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 
+import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Typography from '../../components/Typography'
@@ -14,7 +15,7 @@ export default function Status({ initialData }) {
   // const [tabIndex, setTabIndex] = useState(0)
   // const { data } = res.data
   return (
-    <>
+    <Container id="status-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
       <Head>
         <title>Status | Sushi</title>
         <meta key="description" name="description" content="Sushi Status..." />
@@ -91,7 +92,7 @@ export default function Status({ initialData }) {
             </div> */}
 
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-    </>
+    </Container>
   )
 }
 

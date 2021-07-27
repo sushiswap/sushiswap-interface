@@ -27,6 +27,7 @@ import { MERKLE_DISTRIBUTOR_ADDRESS } from '../constants'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
+import CLONE_REWARDER_ABI from '../constants/abis/clone-rewarder.json'
 import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
@@ -638,6 +639,10 @@ export function useComplexRewarderContract(address, withSignerIfPossible?: boole
 
 export function useAlcxRewarderContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0x7519C93fC5073E15d89131fD38118D73A72370F8', ALCX_REWARDER_ABI, withSignerIfPossible)
+}
+
+export function useCloneRewarderContract(address, withSignerIfPossibe?: boolean): Contract | null {
+  return useContract(address, CLONE_REWARDER_ABI, withSignerIfPossibe)
 }
 
 export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | null {

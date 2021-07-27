@@ -316,22 +316,6 @@ export default function WalletStandalone({
     }
     return (
       <UpperSection>
-        {walletView !== WALLET_VIEWS.ACCOUNT ? (
-          <HeaderRow color="blue">
-            <HoverText
-              onClick={() => {
-                setPendingError(false)
-                setWalletView(WALLET_VIEWS.ACCOUNT)
-              }}
-            >
-              Back
-            </HoverText>
-          </HeaderRow>
-        ) : (
-          <HeaderRow>
-            <HoverText>Connect to a wallet</HoverText>
-          </HeaderRow>
-        )}
         <ContentWrapper>
           {walletView === WALLET_VIEWS.PENDING ? (
             <PendingView

@@ -20,7 +20,7 @@ export const poolsV2Query = gql`
       rewarder {
         id
         rewardToken
-        rewardPerBlock
+        rewardPerSecond
       }
     }
   }

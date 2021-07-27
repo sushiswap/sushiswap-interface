@@ -13,6 +13,8 @@ import {
   useMaticPrice,
   useOnePrice,
   useStakePrice,
+  usePicklePrice,
+  useMphPrice,
   useSushiPairs,
   useSushiPrice,
 } from '../../services/graph'
@@ -34,7 +36,7 @@ export default function Farm(): JSX.Element {
 
   const router = useRouter()
 
-  const type = router.query.filter as string
+  const type = router.query.filter == null ? 'all' : (router.query.filter as string)
 
   const pairAddresses = useFarmPairAddresses()
 
@@ -62,7 +64,7 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice] = [
+  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice, picklePrice, mphPrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -70,6 +72,8 @@ export default function Farm(): JSX.Element {
     useCvxPrice(),
     useStakePrice(),
     useOnePrice(),
+    usePicklePrice(),
+    useMphPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -120,23 +124,37 @@ export default function Farm(): JSX.Element {
           {
             token: 'ALCX',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
-            rewardPerBlock: pool.rewarder.rewardPerBlock / 1e18,
-            rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * blocksPerDay,
+            rewardPerBlock: pool.rewarder.rewardPerSecond / 1e18,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * blocksPerDay,
             rewardPrice: alcxPrice,
           },
           {
             token: 'CVX',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-            rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
           },
           {
             token: 'CVX',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-            rewardPerBlock: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerBlock / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
+          },
+          {
+            token: 'PICKLE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/pickle.jpg',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: picklePrice,
+          },
+          {
+            token: 'MPH',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/88mph.jpg',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: mphPrice,
           },
         ]
 
@@ -227,10 +245,11 @@ export default function Farm(): JSX.Element {
   }
 
   const FILTER = {
+    all: (farm) => farm.allocPoint !== '0',
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
-    sushi: (farm) => farm.pair.type === PairType.SWAP,
-    kashi: (farm) => farm.pair.type === PairType.KASHI,
-    '2x': (farm) => farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF,
+    sushi: (farm) => farm.pair.type === PairType.SWAP && farm.allocPoint !== '0',
+    kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
+    '2x': (farm) => (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) && farm.allocPoint !== '0',
   }
 
   const data = farms
@@ -256,39 +275,37 @@ export default function Farm(): JSX.Element {
   })
 
   return (
-    <>
+    <Container id="farm-page" className="grid h-full grid-cols-4 py-4 mx-auto md:py-8 lg:py-12 gap-9" maxWidth="7xl">
       <Head>
         <title>Farm | Sushi</title>
         <meta key="description" name="description" content="Farm SUSHI" />
       </Head>
-      <Container maxWidth="full" className="grid h-full grid-cols-4 mx-auto gap-9">
-        <div className={classNames('sticky top-0 hidden lg:block md:col-span-1')} style={{ maxHeight: '40rem' }}>
-          <Menu positionsLength={positions.length} />
-        </div>
-        <div className={classNames('space-y-6 col-span-4 lg:col-span-3')}>
-          <Search
-            search={search}
-            term={term}
-            inputProps={{
-              className:
-                'relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5',
-            }}
-          />
+      <div className={classNames('sticky top-0 hidden lg:block md:col-span-1')} style={{ maxHeight: '40rem' }}>
+        <Menu positionsLength={positions.length} />
+      </div>
+      <div className={classNames('space-y-6 col-span-4 lg:col-span-3')}>
+        <Search
+          search={search}
+          term={term}
+          inputProps={{
+            className:
+              'relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5',
+          }}
+        />
 
-          {/* <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
+        {/* <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
             Ready to Stake{' '}
             <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
           </div>
           <FarmList farms={filtered} term={term} /> */}
 
-          <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
-            Farms{' '}
-            <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
-          </div>
-
-          <FarmList farms={result} term={term} />
+        <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
+          Farms{' '}
+          <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
         </div>
-      </Container>
-    </>
+
+        <FarmList farms={result} term={term} />
+      </div>
+    </Container>
   )
 }

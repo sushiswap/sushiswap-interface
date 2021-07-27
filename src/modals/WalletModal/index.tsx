@@ -298,11 +298,6 @@ export default function WalletModal({
     return (
       <div className="flex flex-col space-y-4">
         <ModalHeader title="Select a Wallet" onClose={toggleWalletModal} />
-        {walletView === WALLET_VIEWS.ACCOUNT && (
-          <HeaderRow>
-            <HoverText>{i18n._(t`Connect to a wallet`)}</HoverText>
-          </HeaderRow>
-        )}
         <div className="flex flex-col space-y-6">
           {walletView === WALLET_VIEWS.PENDING ? (
             <PendingView

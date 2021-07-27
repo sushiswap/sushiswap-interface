@@ -94,6 +94,18 @@ export const getAlcxPrice = async () => {
   })
 }
 
+export const getPicklePrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x429881672b9ae42b8eba0e26cd9c73711b891ca5',
+  })
+}
+
+export const getMphPrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x8888801af4d980682e47f1a9036e589479e835c5',
+  })
+}
+
 export const getSushiPrice = async () => {
   // console.log('getSushiPrice')
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {

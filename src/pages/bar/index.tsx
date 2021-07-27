@@ -5,6 +5,7 @@ import { SUSHI, XSUSHI } from '../../constants'
 
 import Button from '../../components/Button'
 import { ChainId } from '@sushiswap/sdk'
+import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -158,7 +159,7 @@ export default function Stake() {
   }, [data?.bar?.ratio, data?.bar?.totalSupply, sushiPrice])
 
   return (
-    <>
+    <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
       <Head>
         <title key="title">Stake | Sushi</title>
         <meta
@@ -459,6 +460,6 @@ export default function Stake() {
           </div>
         </div>
       </div>
-    </>
+    </Container>
   )
 }

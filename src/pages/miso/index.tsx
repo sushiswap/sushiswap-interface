@@ -24,8 +24,8 @@ function MISO() {
         }}
       >
         <div className="flex justify-center my-6">
-          <div className="flex flex-col w-full max-w-6xl items-center mx-8">
-            <div className="gap-4 grid grid-cols-12 min-h-1/2 mb-6">
+          <div className="flex flex-col w-full max-w-5xl items-center mx-8">
+            <div className="gap-4 grid grid-cols-12 min-h-1/2 mb-6 w-full">
               <div className="col-span-12 lg:col-span-6 mx-auto">
                 <div className="mx-auto" style={{ position: 'relative' }}>
                   <div className="flex flex-col" style={{ position: 'absolute', left: '0px', top: '0px' }}>
@@ -41,20 +41,52 @@ function MISO() {
                   </div>
                 </div>
                 <div style={{ marginLeft: 30, marginTop: 70 }}>
-                  <video autoPlay loop style={{ width: 408, height: 408, zIndex: 100 }}>
-                    <source src="/images/miso/trident/trident_video.mp4" />
-                  </video>
-                  {/* <Image src="/images/miso/trident/trident_gif.png" width={408} height={408}/> */}
+                  <div className="flex flex-row">
+                    <div>
+                      <div style={{ width: 2, height: '70%', backgroundColor: '#888' }}></div>
+                    </div>
+                    <div className="flex-1 flex flex-col">
+                      <div className="flex flex-row">
+                        <div className="flex-1" style={{ height: 2, backgroundColor: '#888' }}></div>
+                        <div className="flex flex-row" style={{ marginTop: '-12px' }}>
+                          <div className="ml-1 text-sm text-white">Artist</div>
+                          <div className="ml-1 text-sm font-bold text-white"> Chew Stoll</div>
+                          <div className="ml-1" style={{ width: 12, height: 10 }}>
+                            <a href="https://twitter.com/chowzuh" target="_blank" rel="noreferrer noopener">
+                              <Image src="/images/miso/trident/trident_twitter.svg" width={12} height={10} />
+                            </a>
+                          </div>
+                          <div className="ml-1" style={{ width: 10, height: 10 }}>
+                            <a
+                              href="https://www.instagram.com/chewystoll/?hl=en"
+                              target="_blank"
+                              rel="noreferrer noopener"
+                            >
+                              <Image src="/images/miso/trident/trident_instagram.svg" width={10} height={10} />
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <video
+                        className="flex-1 mt-1 ml-2"
+                        autoPlay
+                        loop
+                        style={{ width: 408, height: 408, zIndex: 100 }}
+                      >
+                        <source src="/images/miso/trident/trident_video.mp4" />
+                      </video>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="col-span-12 lg:col-span-6 max-w-xl">
+              <div className="col-span-12 lg:col-span-6 max-w-md mx-auto">
                 <MisoInfo />
               </div>
             </div>
             <div className="gap-4 grid grid-cols-12 min-h-1/2 mb-6">
               <div className="col-span-12 flex flex-row items-center xl:mx-8 my-8">
-                <div>{'Related Articles'}</div>
+                <div>{'FAQ'}</div>
                 <div
                   className="flex-1 mx-3"
                   style={{
@@ -77,7 +109,7 @@ function MISO() {
               <MisoArticles
                 title={`How do I participate?`}
                 content={`The auction receives $SUSHI as its payment token currency. Go to auction page, 
-                          commit the amount of $SUHI you’d like and claim your purchase after the 
+                          commit the amount of $SUSHI you’d like and claim your purchase after the 
                           auction finishes.`}
               />
 
