@@ -10,7 +10,7 @@ const StrategyStepDisplay: FC<StrategyStepDisplayProps> = () => {
 
   return (
     <div className="flex gap-3 items-center text-high-emphesis">
-      {strategy.steps
+      {strategy?.steps
         .map<React.ReactNode>((el) => (
           <Typography weight={700} variant="lg" key={el}>
             {el}

@@ -9,10 +9,14 @@ const InariDescription: FC<InariHeaderProps> = () => {
 
   return (
     <div className="grid gap-2">
-      <Typography variant="lg" className="text-high-emphesis" weight={700}>
-        {strategy.name}
-      </Typography>
-      <Typography>{strategy.description}</Typography>
+      {strategy && (
+        <>
+          <Typography variant="lg" className="text-high-emphesis" weight={700}>
+            {strategy.name}
+          </Typography>
+          <Typography>{strategy.description}</Typography>
+        </>
+      )}
     </div>
   )
 }

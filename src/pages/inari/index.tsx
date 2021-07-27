@@ -29,7 +29,6 @@ const Inari = () => {
         <meta name="description" content="Inari..." />
       </Head>
       <Container maxWidth="5xl" className="space-y-6">
-        {/*TODO*/}
         {strategy && (
           <>
             <div className="flex gap-8 items-center">

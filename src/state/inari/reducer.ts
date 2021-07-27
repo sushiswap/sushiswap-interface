@@ -19,13 +19,13 @@ export interface InaryStrategy {
 export interface InariState {
   readonly zapIn: boolean
   readonly zapInValue: string
-  readonly strategy: string
+  readonly strategy: number
 }
 
 const initialState: InariState = {
   zapIn: true,
   zapInValue: '',
-  strategy: '0',
+  strategy: 0,
 }
 
 export default createReducer<InariState>(initialState, (builder) =>

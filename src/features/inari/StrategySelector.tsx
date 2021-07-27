@@ -13,13 +13,13 @@ const StrategySelector: FC<StrategySelectorProps> = () => {
 
   return (
     <div className="flex flex-col gap-4 z-10 relative">
-      {Object.entries(strategies).map(([k, v]) => {
+      {strategies?.map((v, index) => {
         return (
           <div
-            key={k}
-            onClick={() => dispatch(setStrategy(k))}
+            key={index}
+            onClick={() => dispatch(setStrategy(index))}
             className={classNames(
-              k === strategy ? 'border-gradient-r-blue-pink-dark-800' : 'bg-dark-900',
+              index === strategy ? 'border-gradient-r-blue-pink-dark-800' : 'bg-dark-900',
               'cursor-pointer border border-transparent pl-5 py-2 rounded whitespace-nowrap w-full font-bold h-[48px] flex items-center text-sm'
             )}
           >

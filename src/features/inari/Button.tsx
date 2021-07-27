@@ -7,13 +7,11 @@ import { t } from '@lingui/macro'
 import useInari from '../../hooks/useInari'
 import Dots from '../../components/Dots'
 import { useDerivedInariState } from '../../state/inari/hooks'
-import { useTokenBalance } from '../../state/wallet/hooks'
 
 const InariButton: FC<ButtonProps> = ({ children, ...rest }) => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
   const { zapInValue, strategy } = useDerivedInariState()
-  const balance = useTokenBalance(account, strategy.inputToken)
 
   const wrongChain = ![ChainId.MAINNET].includes(chainId)
 
@@ -40,7 +38,7 @@ const InariButton: FC<ButtonProps> = ({ children, ...rest }) => {
       </Button>
     )
 
-  if (zapInValue.greaterThan(balance))
+  if (zapInValue.greaterThan(strategy.inputBalance))
     return (
       <Button {...rest} disabled color="gray">
         {i18n._(t`Insufficient Balance`)}

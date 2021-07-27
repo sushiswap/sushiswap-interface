@@ -1,19 +1,15 @@
-import { AppState } from '../index'
 import { useAppSelector } from '../hooks'
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
-import { InaryStrategy } from './reducer'
-import { tryParseAmount } from '../../functions'
+import { InariState, InaryStrategy } from './reducer'
+import { e10, tryParseAmount } from '../../functions'
 import { useActiveWeb3React, useZenkoContract } from '../../hooks'
 import { useTokenBalances } from '../wallet/hooks'
 import { AXSUSHI, CREAM, CRXSUSHI, SUSHI, XSUSHI } from '../../constants'
 import { t } from '@lingui/macro'
-import useSWR from 'swr'
-import { request } from 'graphql-request'
 import { useEffect, useState } from 'react'
+import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
 
-const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
-
-export function useInariState(): AppState['inari'] {
+export function useInariState(): InariState {
   return useAppSelector((state) => state.inari)
 }
 
@@ -22,16 +18,21 @@ export const useInariStrategies = () => {
   const { zapInValue, zapIn } = useInariState()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], XSUSHI, CRXSUSHI, AXSUSHI])
   const zenkoContract = useZenkoContract()
-  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher)
-  const xSushiPerSushi = parseFloat(data?.bar?.ratio)
-  const [strategies, setStrategies] = useState({})
+  const sushiPerXSushi = useSushiPerXSushi()
+  const [strategies, setStrategies] = useState<InaryStrategy[]>([])
 
   useEffect(() => {
-    if (!balances || !zenkoContract || !xSushiPerSushi) return
+    if (!balances || !zenkoContract || !sushiPerXSushi) return
+    const val = zapInValue || '0'
+    const outputValue = (
+      zapIn
+        ? val.toBigNumber(18).mulDiv(e10(18), sushiPerXSushi.toString().toBigNumber(18))
+        : val.toBigNumber(18).mulDiv(sushiPerXSushi.toString().toBigNumber(18), e10(18))
+    )?.toFixed(18)
 
     const main = async () => {
-      return {
-        '0': {
+      return [
+        {
           name: 'SUSHI → Bento',
           steps: ['SUSHI', 'xSUSHI', 'BentoBox'],
           zapMethod: 'stakeSushiToBento',
@@ -42,10 +43,10 @@ export const useInariStrategies = () => {
           inputBalance: balances[SUSHI[ChainId.MAINNET].address],
           outputToken: XSUSHI,
           outputSymbol: 'xSUSHI in BentoBox',
-          outputBalance: balances[XSUSHI.address]?.toSignificant(6),
-          outputValue: zapIn ? +zapInValue / xSushiPerSushi : +zapInValue * xSushiPerSushi,
+          outputBalance: balances[XSUSHI.address],
+          outputValue,
         },
-        '1': {
+        {
           name: 'SUSHI → Cream',
           steps: ['SUSHI', 'xSUSHI', 'Cream'],
           zapMethod: 'stakeSushiToCream',
@@ -55,16 +56,17 @@ export const useInariStrategies = () => {
           inputBalance: balances[SUSHI[ChainId.MAINNET].address],
           outputToken: XSUSHI,
           outputSymbol: 'xSUSHI in Cream',
-          outputBalance: await (async () => {
-            return (
-              await (zapIn
-                ? zenkoContract.toCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact())
-                : zenkoContract.fromCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact()))
-            )?.toSignificant(6)
-          })(),
-          outputValue: zapIn ? +zapInValue / xSushiPerSushi : +zapInValue * xSushiPerSushi,
+          // outputBalance: await (async () => {
+          //   const toRet = await (zapIn
+          //     ? zenkoContract.toCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact())
+          //     : zenkoContract.fromCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact()))
+          //
+          //   return tryParseAmount(CRXSUSHI.address, toRet)
+          // })(),
+          outputBalance: balances[XSUSHI.address],
+          outputValue,
         },
-        '2': {
+        {
           name: 'Cream → Bento',
           steps: ['SUSHI', 'crSUSHI', 'BentoBox'],
           zapMethod: 'stakeSushiToCreamToBento',
@@ -74,15 +76,17 @@ export const useInariStrategies = () => {
           inputBalance: balances[SUSHI[ChainId.MAINNET].address],
           outputToken: CREAM,
           outputSymbol: 'crSUSHI in BentoBox',
-          outputBalance: await (async () => {
-            return (
-              await (zapIn
-                ? zenkoContract.toCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact())
-                : zenkoContract.fromCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact()))
-            )?.toSignificant(6)
-          })(),
+          // outputBalance: await (async () => {
+          //   const toRet = await (zapIn
+          //     ? zenkoContract.toCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact())
+          //     : zenkoContract.fromCtoken(CRXSUSHI.address, balances[CRXSUSHI.address]?.toExact()))
+          //
+          //   return tryParseAmount(CRXSUSHI.address, toRet)
+          // })(),
+          outputBalance: balances[XSUSHI.address],
+          outputValue,
         },
-        '3': {
+        {
           name: 'SUSHI → Aave',
           steps: ['SUSHI', 'xSUSHI', 'Aave'],
           zapMethod: 'stakeSushiToAave',
@@ -92,24 +96,22 @@ export const useInariStrategies = () => {
           inputBalance: balances[SUSHI[ChainId.MAINNET].address],
           outputToken: XSUSHI,
           outputSymbol: 'xSUSHI in Aave',
-          outputBalance: balances[AXSUSHI.address]?.toSignificant(6),
-          outputValue: zapIn ? +zapInValue / xSushiPerSushi : +zapInValue * xSushiPerSushi,
+          outputBalance: balances[AXSUSHI.address],
+          outputValue,
         },
-      }
+      ] as InaryStrategy[]
     }
 
-    main().then((strategies) => setStrategies(strategies))
-  }, [balances, xSushiPerSushi, zapIn, zapInValue, zenkoContract])
+    main().then((strategies) => {
+      console.log(strategies[0].outputBalance)
+      setStrategies(strategies)
+    })
+  }, [balances, sushiPerXSushi, zapIn, zapInValue, zenkoContract])
 
-  console.log(strategies)
   return strategies
 }
 
-export function useDerivedInariState(): {
-  strategy: InaryStrategy
-  strategies: { [x: string]: InaryStrategy }
-  zapInValue: CurrencyAmount<Token>
-} {
+export function useDerivedInariState() {
   const { strategy, zapInValue } = useInariState()
   const strategies = useInariStrategies()
 
