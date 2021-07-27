@@ -86,6 +86,9 @@ msgstr "Analítica"
 msgid "Approve"
 msgstr "Aprobar"
 
+msgid "Approve Inari"
+msgstr ""
+
 msgid "Approve Kashi"
 msgstr "Aprobar Kashi"
 
@@ -100,6 +103,9 @@ msgstr "Aprobado"
 
 msgid "Approving"
 msgstr "Aprobatorio"
+
+msgid "Approving Inari"
+msgstr ""
 
 msgid "Approving Limit Order"
 msgstr ""
@@ -345,6 +351,9 @@ msgstr "Ingrese un porcentaje de deslizamiento válido"
 msgid "Enter an amount"
 msgstr "Ingrese una cantidad"
 
+msgid "Enter an mount"
+msgstr ""
+
 msgid "Error"
 msgstr "Error"
 
@@ -399,6 +408,9 @@ msgstr ""
 " y cualquier cargo adicional."
 
 msgid "French"
+msgstr ""
+
+msgid "From"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -662,6 +674,9 @@ msgstr "Ninguno"
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "UTILICE ESTE MODO ÚNICAMENTE SI SABE LO QUE ESTÁ HACIENDO."
 
+msgid "One-Click Strategies"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "¡UPS! Un error desconocido ocurrió. Actualiza la página o visita desde otro navegador o dispositivo."
 
@@ -866,6 +881,11 @@ msgid "Stake SUSHI for xSUSHI"
 msgstr "Estaca SUSHI para xSUSHI"
 
 msgid ""
+"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
@@ -902,8 +922,16 @@ msgstr "Cambiar a (est.):"
 msgid "Swap To:"
 msgstr "Cambiar a:"
 
+msgid "TODO"
+msgstr ""
+
 msgid "TVL"
 msgstr "TVL"
+
+msgid ""
+"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
+"collateral on other platforms, and more!"
+msgstr ""
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
@@ -942,6 +970,9 @@ msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
 msgid "Tip:"
+msgstr ""
+
+msgid "To"
 msgstr ""
 
 msgid "Toggle Expert Mode"
