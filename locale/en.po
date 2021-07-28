@@ -86,6 +86,9 @@ msgstr "Analytics"
 msgid "Approve"
 msgstr "Approve"
 
+msgid "Approve Inari"
+msgstr "Approve Inari"
+
 msgid "Approve Kashi"
 msgstr "Approve Kashi"
 
@@ -100,6 +103,9 @@ msgstr "Approved"
 
 msgid "Approving"
 msgstr "Approving"
+
+msgid "Approving Inari"
+msgstr "Approving Inari"
 
 msgid "Approving Limit Order"
 msgstr "Approving Limit Order"
@@ -348,6 +354,9 @@ msgstr "Enter a valid slippage percentage"
 msgid "Enter an amount"
 msgstr "Enter an amount"
 
+msgid "Enter an mount"
+msgstr "Enter an mount"
+
 msgid "Error"
 msgstr "Error"
 
@@ -403,6 +412,9 @@ msgstr ""
 
 msgid "French"
 msgstr "French"
+
+msgid "From"
+msgstr "From"
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -667,6 +679,9 @@ msgstr "None"
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 
+msgid "One-Click Strategies"
+msgstr "One-Click Strategies"
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 
@@ -873,6 +888,13 @@ msgid "Stake SUSHI for xSUSHI"
 msgstr "Stake SUSHI for xSUSHI"
 
 msgid ""
+"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+
+msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
@@ -909,8 +931,18 @@ msgstr "Swap To (est.):"
 msgid "Swap To:"
 msgstr "Swap To:"
 
+msgid "TODO"
+msgstr "TODO"
+
 msgid "TVL"
 msgstr "TVL"
+
+msgid ""
+"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
+"collateral on other platforms, and more!"
+msgstr ""
+"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
+"collateral on other platforms, and more!"
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
@@ -950,6 +982,9 @@ msgstr "Tip to encourage miners to select this transaction."
 
 msgid "Tip:"
 msgstr "Tip:"
+
+msgid "To"
+msgstr "To"
 
 msgid "Toggle Expert Mode"
 msgstr "Toggle Expert Mode"
@@ -1167,6 +1202,9 @@ msgstr "minutes"
 
 msgid "or the transaction will revert."
 msgstr "or the transaction will revert."
+
+msgid "xDai Bridge"
+msgstr "xDai Bridge"
 
 msgid "xSUSHI Fee"
 msgstr "xSUSHI Fee"

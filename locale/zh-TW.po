@@ -86,6 +86,9 @@ msgstr "分析界面"
 msgid "Approve"
 msgstr "批准"
 
+msgid "Approve Inari"
+msgstr ""
+
 msgid "Approve Kashi"
 msgstr "批準Kashi"
 
@@ -100,6 +103,9 @@ msgstr "已批準"
 
 msgid "Approving"
 msgstr "批準中"
+
+msgid "Approving Inari"
+msgstr ""
 
 msgid "Approving Limit Order"
 msgstr ""
@@ -343,6 +349,9 @@ msgstr "輸入有效的滑點百分比"
 msgid "Enter an amount"
 msgstr "輸入金額"
 
+msgid "Enter an mount"
+msgstr ""
+
 msgid "Error"
 msgstr "錯誤"
 
@@ -390,6 +399,9 @@ msgid ""
 msgstr "每條鏈上每筆交易手續費的0.05%都分給SushiBar（以SUSHI的形式）。當您的SUSHI質押在SushiBar的時候，您將會收到xSUSHI，它有治理權及可以與其它協議交互。xSUSHI可持續復利，當您解除質押時，您將收到質押時的SUSHI及手續費。"
 
 msgid "French"
+msgstr ""
+
+msgid "From"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -648,6 +660,9 @@ msgstr "無"
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "只有当您知道自己在做什么时，才会使用此模式。"
 
+msgid "One-Click Strategies"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "糟糕！出現未知錯誤。請刷新頁面，或從其他瀏覽器或設備訪問"
 
@@ -852,6 +867,11 @@ msgid "Stake SUSHI for xSUSHI"
 msgstr "將SUSHI質押成xSUSHI"
 
 msgid ""
+"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
@@ -888,8 +908,16 @@ msgstr "交換至（估算）："
 msgid "Swap To:"
 msgstr "交換至："
 
+msgid "TODO"
+msgstr ""
+
 msgid "TVL"
 msgstr "TVL"
+
+msgid ""
+"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
+"collateral on other platforms, and more!"
+msgstr ""
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
@@ -928,6 +956,9 @@ msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
 msgid "Tip:"
+msgstr ""
+
+msgid "To"
 msgstr ""
 
 msgid "Toggle Expert Mode"
@@ -1143,6 +1174,9 @@ msgid "minutes"
 msgstr "分鐘"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

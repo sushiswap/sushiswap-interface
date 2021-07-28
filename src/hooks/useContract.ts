@@ -659,7 +659,7 @@ export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Con
 }
 
 export function useInariContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0x99B4019705444eB0F21aa6CcB71B996a0A4e8764', INARI_ABI, withSignerIfPossible)
+  return useContract('0x195E8262AA81Ba560478EC6Ca4dA73745547073f', INARI_ABI, withSignerIfPossible)
 }
 
 export function useZenkoContract(withSignerIfPossible?: boolean): Contract | null {

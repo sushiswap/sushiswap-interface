@@ -42,14 +42,14 @@ const InariButton: FC<InariButtonProps> = ({ children, balance, ...rest }) => {
   if (approveCallback[0] === ApprovalState.PENDING)
     return (
       <Button {...rest} disabled color="gray">
-        <Dots>{i18n._(t`Approving Inari`)}</Dots>
+        <Dots>{i18n._(t`Approving Inari to spend ${zapInValue.currency.symbol}`)}</Dots>
       </Button>
     )
 
   if (approveCallback[0] === ApprovalState.NOT_APPROVED)
     return (
       <Button {...rest} color="pink" onClick={approveCallback[1]}>
-        {i18n._(t`Approve Inari`)}
+        {i18n._(t`Approve Inari to spend ${zapInValue.currency.symbol}`)}
       </Button>
     )
 

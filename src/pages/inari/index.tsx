@@ -16,6 +16,7 @@ import BalancePanel from '../../features/inari/BalancePanel'
 import { useDerivedInariState, useInariState } from '../../state/inari/hooks'
 import NetworkGuard from '../../guards/Network'
 import { ChainId } from '@sushiswap/sdk'
+import { XSUSHI } from '../../constants'
 
 const Inari = () => {
   const { i18n } = useLingui()
@@ -79,7 +80,7 @@ const Inari = () => {
                           showMax
                           value={zapInValue}
                           logo={zapIn ? strategy.inputLogo : strategy.outputLogo}
-                          token={zapIn ? strategy.inputToken : strategy.outputToken}
+                          token={zapIn ? strategy.inputToken : XSUSHI}
                           symbol={zapIn ? '' : strategy.outputSymbol}
                           balance={zapIn ? inputTokenBalance : outputTokenBalance}
                         />
@@ -94,7 +95,7 @@ const Inari = () => {
                           label={i18n._(t`To`)}
                           value={strategy.outputValue(zapIn, zapInValue)}
                           logo={zapIn ? strategy.outputLogo : strategy.inputLogo}
-                          token={zapIn ? strategy.outputToken : strategy.inputToken}
+                          token={zapIn ? XSUSHI : strategy.inputToken}
                           symbol={zapIn ? strategy.outputSymbol : ''}
                           balance={zapIn ? outputTokenBalance : inputTokenBalance}
                         />
