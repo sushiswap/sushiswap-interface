@@ -478,6 +478,11 @@ msgstr "Người nhận không hợp lệ"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Thị trường cho vay biệt lập giúp giảm thiểu rủi ro của bạn với tư cách là người cho vay tài sản. Biết chính xác tài sản thế chấp nào có sẵn cho bạn trong trường hợp đối tác mất khả năng thanh toán."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -656,6 +661,9 @@ msgstr "Không phải ví cứng"
 
 msgid "None"
 msgstr "Không có"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "CHỈ SỬ DỤNG CHẾ ĐỘ NÀY NẾU BẠN BIẾT BẠN ĐANG LÀM GÌ."
@@ -1155,6 +1163,9 @@ msgid "minutes"
 msgstr "phút"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

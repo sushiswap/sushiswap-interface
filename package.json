@@ -74,7 +74,7 @@
     "@web3-react/portis-connector": "^6.1.9",
     "@web3-react/torus-connector": "^6.1.9",
     "@web3-react/walletconnect-connector": "^6.2.0",
-    "@web3-react/walletlink-connector": "^6.2.2",
+    "@web3-react/walletlink-connector": "^6.2.3",
     "@welldone-software/why-did-you-render": "^6.2.0",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-styled-components": "^1.13.1",
