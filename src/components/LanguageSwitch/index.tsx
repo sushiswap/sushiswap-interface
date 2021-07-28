@@ -9,6 +9,9 @@ import { t } from '@lingui/macro'
 import { useRouter } from 'next/router'
 import cookieCutter from 'cookie-cutter'
 
+// Use https://onlineunicodetools.com/convert-unicode-to-image to convert
+// Unicode flags (https://emojipedia.org/flags/) to png as Windows does not support Unicode flags
+// Use 24px as unicode characters font size
 const LANGUAGES: {
   [x: string]: { flag: string; language: string; dialect?: string }
 } = {
@@ -66,6 +69,19 @@ const LANGUAGES: {
   fr: {
     flag: '/images/flags/fr-flag.png',
     language: t`French`,
+  },
+  fa: {
+    flag: '/images/flags/fa-flag.png',
+    language: t`Farsi`,
+  },
+  hi: {
+    flag: '/images/flags/hi-flag.png',
+    language: t`Hindi`,
+  },
+  pt_BR: {
+    flag: '/images/flags/br-flag.png',
+    language: t`Portuguese`,
+    dialect: 'BR',
   },
 }
 
