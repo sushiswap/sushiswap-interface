@@ -52,12 +52,13 @@ const Footer = () => {
           </ExternalLink>
         )}
         {chainId && chainId === ChainId.XDAI && (
-          <ExternalLink
-            id={`xdai-bridge-link`}
-            href=" https://omni.xdaichain.com/"
-            className="text-low-emphesis"
-          >
+          <ExternalLink id={`xdai-bridge-link`} href=" https://omni.xdaichain.com/" className="text-low-emphesis">
             {i18n._(t`xDai Bridge`)}
+          </ExternalLink>
+        )}
+        {chainId && (chainId === ChainId.XDAI || chainId === ChainId.MATIC || chainId === ChainId.MAINNET) && (
+          <ExternalLink id={`hop-bridge-link`} href=" https://app.hop.exchange/" className="text-low-emphesis">
+            {i18n._(t`Hop Bridge`)}
           </ExternalLink>
         )}
         <Polling />

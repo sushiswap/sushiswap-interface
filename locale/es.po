@@ -441,6 +441,9 @@ msgstr "Total histórico bloqueado: total recuperado"
 msgid "Historical Total Locked: {0} SUSHI"
 msgstr "Total histórico bloqueado: {0} SUSHI"
 
+msgid "Hop Bridge"
+msgstr ""
+
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
 

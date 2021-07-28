@@ -444,6 +444,9 @@ msgstr "Historical Total Locked: Fetching Total"
 msgid "Historical Total Locked: {0} SUSHI"
 msgstr "Historical Total Locked: {0} SUSHI"
 
+msgid "Hop Bridge"
+msgstr "Hop Bridge"
+
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 
