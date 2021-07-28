@@ -22,8 +22,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "node_modules/eslint-plugin-react/lib/types.d.ts"
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules"

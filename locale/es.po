@@ -86,7 +86,7 @@ msgstr "Análisis"
 msgid "Approve"
 msgstr "Aprobar"
 
-msgid "Approve Inari"
+msgid "Approve Inari to spend {0}"
 msgstr ""
 
 msgid "Approve Kashi"
@@ -104,7 +104,7 @@ msgstr "Aprobado"
 msgid "Approving"
 msgstr "Aprobando"
 
-msgid "Approving Inari"
+msgid "Approving Inari to spend {0}"
 msgstr ""
 
 msgid "Approving Limit Order"

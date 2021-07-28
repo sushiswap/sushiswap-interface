@@ -86,7 +86,7 @@ msgstr "Phân tích"
 msgid "Approve"
 msgstr "Phê duyệt"
 
-msgid "Approve Inari"
+msgid "Approve Inari to spend {0}"
 msgstr ""
 
 msgid "Approve Kashi"
@@ -104,7 +104,7 @@ msgstr "Đã phê duyệt"
 msgid "Approving"
 msgstr "Đang phê duyệt"
 
-msgid "Approving Inari"
+msgid "Approving Inari to spend {0}"
 msgstr ""
 
 msgid "Approving Limit Order"

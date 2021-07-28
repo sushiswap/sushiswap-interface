@@ -86,7 +86,7 @@ msgstr "分析界面"
 msgid "Approve"
 msgstr "批准"
 
-msgid "Approve Inari"
+msgid "Approve Inari to spend {0}"
 msgstr ""
 
 msgid "Approve Kashi"
@@ -104,7 +104,7 @@ msgstr "已批準"
 msgid "Approving"
 msgstr "批準中"
 
-msgid "Approving Inari"
+msgid "Approving Inari to spend {0}"
 msgstr ""
 
 msgid "Approving Limit Order"

@@ -86,7 +86,7 @@ msgstr "애널리틱스"
 msgid "Approve"
 msgstr "승인"
 
-msgid "Approve Inari"
+msgid "Approve Inari to spend {0}"
 msgstr ""
 
 msgid "Approve Kashi"
@@ -104,7 +104,7 @@ msgstr "승인됨"
 msgid "Approving"
 msgstr "승인"
 
-msgid "Approving Inari"
+msgid "Approving Inari to spend {0}"
 msgstr ""
 
 msgid "Approving Limit Order"

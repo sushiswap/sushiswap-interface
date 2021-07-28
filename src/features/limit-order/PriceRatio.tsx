@@ -1,10 +1,19 @@
 import { FC, useState } from 'react'
-import { useDerivedLimitOrderInfo } from '../../state/limit-order/hooks'
+import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../state/limit-order/hooks'
+import { Currency, Price } from '@sushiswap/sdk'
+import { Field } from '../../state/limit-order/actions'
 
 const PriceRatio: FC = () => {
-  const { currencies } = useDerivedLimitOrderInfo()
+  const { currencies, currentPrice, parsedAmounts } = useDerivedLimitOrderInfo()
   const [inverted, setInverted] = useState(false)
-  const { currentPrice } = useDerivedLimitOrderInfo()
+
+  const price =
+    parsedAmounts[Field.INPUT] && parsedAmounts[Field.OUTPUT]
+      ? new Price<Currency, Currency>({
+          baseAmount: parsedAmounts[Field.INPUT],
+          quoteAmount: parsedAmounts[Field.OUTPUT],
+        })
+      : currentPrice
 
   return (
     <div className="flex flex-row font-bold text-sm ">
@@ -12,7 +21,7 @@ const PriceRatio: FC = () => {
         <div className="py-2 px-4">
           <span className="whitespace-nowrap">
             1 {inverted ? currencies.OUTPUT?.symbol : currencies.INPUT?.symbol} ={' '}
-            {inverted ? currentPrice?.invert().toSignificant(6) : currentPrice?.toSignificant(6)}{' '}
+            {inverted ? price?.invert().toSignificant(6) : price?.toSignificant(6)}{' '}
             {inverted ? currencies.INPUT?.symbol : currencies.OUTPUT?.symbol}
           </span>
         </div>
