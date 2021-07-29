@@ -8,6 +8,7 @@ import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../
 import useBaseInariStrategy from './useBaseInariStrategy'
 import { useCallback, useEffect } from 'react'
 import { useDerivedInariState } from '../hooks'
+import { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
 
 export const general: StrategyGeneralInfo = {
   name: 'SUSHI → Cream',
@@ -66,11 +67,11 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
   // Run before executing transaction creation by transforming from xSUSHI value to crXSUSHI value
   // As you will be spending crXSUSHI when unzapping from this strategy
   const preExecute = useCallback(
-    async (val: CurrencyAmount<Token>) => {
+    async (val: CurrencyAmount<Token>, bentoPermit?: BentoPermit) => {
       if (zapIn) return execute(val)
 
       const bal = await zenkoContract.toCtoken(CRXSUSHI.address, val.toExact().toBigNumber(XSUSHI.decimals))
-      return execute(CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString()))
+      return execute(CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString()), bentoPermit)
     },
     [execute, zapIn, zenkoContract]
   )

@@ -1,8 +1,6 @@
 import { t } from '@lingui/macro'
-import { SUSHI, XSUSHI } from '../../../constants'
+import { AXSUSHI, SUSHI } from '../../../constants'
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
-import { tryParseAmount } from '../../../functions'
-import { useBentoBalance } from '../../bentobox/hooks'
 import { useActiveWeb3React } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
@@ -10,14 +8,13 @@ import useBaseInariStrategy from './useBaseInariStrategy'
 import { useEffect } from 'react'
 
 export const general: StrategyGeneralInfo = {
-  name: 'SUSHI → Bento',
-  steps: ['SUSHI', 'xSUSHI', 'BentoBox'],
-  zapMethod: 'stakeSushiToBento',
-  unzapMethod: 'unstakeSushiFromBento',
-  description: t`Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically
-                invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi.`,
+  name: 'SUSHI → Aave',
+  steps: ['SUSHI', 'xSUSHI', 'Aave'],
+  zapMethod: 'stakeSushiToAave',
+  unzapMethod: 'unstakeSushiFromAave',
+  description: t`TODO`,
   inputSymbol: 'SUSHI',
-  outputSymbol: 'xSUSHI in BentoBox',
+  outputSymbol: 'xSUSHI in Aave',
 }
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
@@ -29,21 +26,19 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
   },
   outputToken: {
     chainId: ChainId.MAINNET,
-    address: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
+    address: '0xf256cc7847e919fac9b808cc216cac87ccf2f47a',
     decimals: 18,
-    symbol: 'XSUSHI',
+    symbol: 'aXSUSHI',
   },
 }
 
 const useStakeSushiToBentoStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
-  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], XSUSHI])
-  const xSushiBentoBalance = useBentoBalance(XSUSHI.address)
+  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], AXSUSHI])
   const { setBalances, ...baseStrategy } = useBaseInariStrategy({
-    id: 'stakeSushiToBentoStrategy',
+    id: 'stakeSushiToAaveStrategy',
     general,
     tokenDefinitions,
-    usesBentoBox: true,
   })
 
   useEffect(() => {
@@ -51,13 +46,13 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
 
     setBalances({
       inputTokenBalance: balances[SUSHI[ChainId.MAINNET].address],
-      outputTokenBalance: tryParseAmount(xSushiBentoBalance?.value?.toFixed(18) || '0', XSUSHI),
+      outputTokenBalance: balances[AXSUSHI.address],
     })
-  }, [balances, setBalances, xSushiBentoBalance?.value])
+  }, [balances, setBalances])
 
   return {
-    setBalances,
     ...baseStrategy,
+    setBalances,
   }
 }
 

@@ -1,5 +1,6 @@
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
 import { ApprovalState } from '../../hooks'
+import { BentoMasterApproveCallback, BentoPermit } from '../../hooks/useBentoMasterApproveCallback'
 
 export interface Strategy {
   id: string
@@ -37,7 +38,7 @@ export interface StrategyBalances {
 }
 
 export interface BaseStrategyHook extends Strategy {
-  execute: (val: CurrencyAmount<Token>) => Promise<any>
+  execute: (val: CurrencyAmount<Token>, permit?: BentoPermit) => Promise<any>
   approveCallback: [ApprovalState, () => Promise<void>]
   getStrategy: () => Strategy
   calculateOutputFromInput: (
@@ -54,6 +55,7 @@ export interface BaseStrategyHook extends Strategy {
     inputTokenBalance?: CurrencyAmount<Token>
     outputTokenBalance?: CurrencyAmount<Token>
   }) => void
+  bentoApproveCallback?: BentoMasterApproveCallback
 }
 
 export interface StrategyHook extends BaseStrategyHook {}

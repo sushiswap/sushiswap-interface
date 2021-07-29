@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
-import { CRXSUSHI, SUSHI, XSUSHI } from '../../../constants'
-import { ChainId, CurrencyAmount, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
+import { CRXSUSHI, SUSHI } from '../../../constants'
+import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
 import { e10, tryParseAmount } from '../../../functions'
 import { useBentoBalance } from '../../bentobox/hooks'
 import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
@@ -8,7 +8,6 @@ import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseInariStrategy from './useBaseInariStrategy'
 import { useCallback, useEffect } from 'react'
-import { useDerivedInariState } from '../hooks'
 import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
 import { BigNumber } from 'ethers'
 
@@ -39,13 +38,11 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 
 const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
-  const { zapIn } = useDerivedInariState()
   const zenkoContract = useZenkoContract()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET]])
   const sushiPerXSushi = useSushiPerXSushi(true)
   const crxSushiBentoBalance = useBentoBalance(CRXSUSHI.address)
   const {
-    execute,
     setBalances,
     calculateOutputFromInput: _,
     ...baseStrategy
@@ -53,6 +50,7 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
     id: 'stakeSushiToCreamToBentoStrategy',
     general,
     tokenDefinitions,
+    usesBentoBox: true,
   })
 
   useEffect(() => {
@@ -83,21 +81,21 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
 
   // Run before executing transaction creation by transforming from xSUSHI value to crXSUSHI value
   // As you will be spending crXSUSHI when unzapping from this strategy
-  const preExecute = useCallback(
-    async (val: CurrencyAmount<Token>) => {
-      if (zapIn) return execute(val)
-
-      const bal = await zenkoContract.toCtoken(CRXSUSHI.address, val.toExact().toBigNumber(XSUSHI.decimals))
-      return execute(CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString()))
-    },
-    [execute, zapIn, zenkoContract]
-  )
+  // const preExecute = useCallback(
+  //   async (val: CurrencyAmount<Token>) => {
+  //     if (zapIn) return execute(val)
+  //
+  //     const bal = await zenkoContract.toCtoken(CRXSUSHI.address, val.toExact().toBigNumber(XSUSHI.decimals))
+  //     return execute(CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString()))
+  //   },
+  //   [execute, zapIn, zenkoContract]
+  // )
 
   return {
     ...baseStrategy,
     setBalances,
     calculateOutputFromInput,
-    execute: preExecute,
+    // execute: preExecute,
   }
 }
 
