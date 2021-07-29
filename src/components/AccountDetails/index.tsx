@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
+import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink, keystone } from '../../connectors'
 
 import { AppDispatch } from '../../state'
 import Button from '../Button'
@@ -109,7 +109,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
           <div className="flex items-center justify-between">
             {formatConnectorName()}
             <div className="flex space-x-3">
-              {connector !== injected && connector !== walletlink && connector !== binance && (
+              {connector !== injected && connector !== walletlink && connector !== binance && connector !== keystone && (
                 <Button
                   variant="outlined"
                   color="gray"

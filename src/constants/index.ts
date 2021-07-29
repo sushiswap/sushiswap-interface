@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../connectors'
+import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink, keystone } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -112,6 +112,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     name: 'WalletConnect',
     iconName: 'wallet-connect.svg',
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+    href: null,
+    color: '#4196FC',
+    mobile: true,
+  },
+  KEYSTONE: {
+    connector: keystone,
+    name: 'Keystone',
+    iconName: 'keystone.png',
+    description: 'Connect to Keystone hardware wallet.',
     href: null,
     color: '#4196FC',
     mobile: true,
