@@ -73,7 +73,7 @@
     "@web3-react/lattice-connector": "^6.1.9",
     "@web3-react/portis-connector": "^6.1.9",
     "@web3-react/torus-connector": "^6.1.9",
-    "@keystonehq/keystone-connector": "^0.5.5",
+    "@keystonehq/keystone-connector": "0.5.6",
     "@web3-react/walletconnect-connector": "^6.2.0",
     "@web3-react/walletlink-connector": "^6.2.2",
     "@welldone-software/why-did-you-render": "^6.2.0",

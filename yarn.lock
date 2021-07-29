@@ -1914,10 +1914,10 @@
     "@json-rpc-tools/types" "^2.0.0-beta.12"
     "@pedrouid/environment" "^1.0.1"
 
-"@keystonehq/bc-ur-registry-eth@^0.5.3":
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-eth/-/bc-ur-registry-eth-0.5.3.tgz#3ee5cebdf1c4038dcf28eddc8321c9492532eede"
-  integrity sha512-Vo/01/wh+J2L7d/WgZFt43SRZRX9s68YWvHjFG8i+aqweKSrxmAnbtovTxOWbISMpM03BntCwZm2OtT667cDPw==
+"@keystonehq/bc-ur-registry-eth@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@keystonehq/bc-ur-registry-eth/-/bc-ur-registry-eth-0.5.4.tgz#d243362584e288fd8ce356f24f312f572c0e52cb"
+  integrity sha512-uggT4Bn2r7DUqKUavJVkL0y+70/R4gqxsXzbwytlINrEBLXe5tYzp4HbcRjQTeCYMw+z5WL2zeDq9TdYaUE/Mg==
   dependencies:
     "@keystonehq/bc-ur-registry" "^0.4.4"
     bip32 "^2.0.6"
@@ -1936,34 +1936,34 @@
     base58check "^2.0.0"
     tslib "^2.3.0"
 
-"@keystonehq/keystone-connector@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@keystonehq/keystone-connector/-/keystone-connector-0.5.5.tgz#820aed26ccb7eca17e5b20616e230f50841990d3"
-  integrity sha512-RbBY0sCtZLVw/I04+3x+nzd7/Gn521Swp74Qy1ZPFtg8tiIoAN0jAg1LW+nX/ryldlpbcG58jcWqgzaowzWn8A==
+"@keystonehq/keystone-connector@0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@keystonehq/keystone-connector/-/keystone-connector-0.5.6.tgz#5b7a97548afbc7220a2a11cb6e0aafe93fe6efc1"
+  integrity sha512-WZMhbSNh0QyrEOrPCVep7FGqhXew0fIvYbD2ONRC6Gg3yOVkds6YoX6AdmU/2dd+emhfJ3HULSAQsWrOIQBVLA==
   dependencies:
     "@0x/subproviders" "^6.5.4"
-    "@keystonehq/keystone-subprovider" "^0.5.5"
+    "@keystonehq/keystone-subprovider" "^0.5.6"
     "@web3-react/abstract-connector" "^6.0.7"
     "@web3-react/types" "^6.0.7"
     web3-provider-engine "^16.0.3"
 
-"@keystonehq/keystone-subprovider@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@keystonehq/keystone-subprovider/-/keystone-subprovider-0.5.5.tgz#024c1d58010230454e34057dee54836db0cf8b3a"
-  integrity sha512-L1eCX4p/lWqYlYxqGd5Zv104GcL8W7c+7cTwqqD5xqvjDSJ7xK0xQf5qtRAloCMN2obU0ljf4kobRvTO8zOMMQ==
+"@keystonehq/keystone-subprovider@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@keystonehq/keystone-subprovider/-/keystone-subprovider-0.5.6.tgz#cd72a4e71a15d2c40fe585b89598072c65dfdea8"
+  integrity sha512-nBOURmvjVY2Y67Oi4fEfsc/u0gef8me1g4mFGklMC7JahY0RR79AnOR8CjQgkseSUx1nzRLAPWKW8Z8Jp3VyXw==
   dependencies:
     "@0x/subproviders" "^6.5.4"
     "@ethereumjs/common" "2.0.0"
     "@ethereumjs/tx" "3.0.0"
-    "@keystonehq/bc-ur-registry-eth" "^0.5.3"
-    "@keystonehq/sdk" "^0.5.5"
+    "@keystonehq/bc-ur-registry-eth" "^0.5.4"
+    "@keystonehq/sdk" "^0.5.6"
     ethereumjs-util "^7.0.8"
     uuid "^8.3.2"
 
-"@keystonehq/sdk@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@keystonehq/sdk/-/sdk-0.5.5.tgz#fe27363d86665df20bc492585aef1320a46a652e"
-  integrity sha512-PCpiZtLrUo8qwVj0WLpl3O6MmGOen0/I5KQiK1Tsy4YCP4c26qyvFwTlN4kI44vS7dlN4WMbxR1EzrCa0TTLMQ==
+"@keystonehq/sdk@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@keystonehq/sdk/-/sdk-0.5.6.tgz#edccc1d546971aca8f6241429f99b9e2d6651529"
+  integrity sha512-hdut8FvbaH1KQegNGsJSAn9le2vrz7TG+A9XkPdFstOe3uOlkGY5EVMrTrVZiwqdB9GJx+MAlo6pR73XhWr7Ag==
   dependencies:
     "@ngraveio/bc-ur" "^1.0.0"
     "@types/qrcode.react" "^1.0.1"
