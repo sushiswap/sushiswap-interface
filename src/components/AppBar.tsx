@@ -66,37 +66,37 @@ function AppBar(): JSX.Element {
                                             >
                                                 {i18n._(t`Pool`)}
                                             </NavLink>
-                                            {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                                            {/* {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                                 <NavLink id={`yield-nav-link`} to={'/yield'}>
                                                     {i18n._(t`Yield`)}
                                                 </NavLink>
-                                            )}
-                                            {chainId === ChainId.MAINNET && (
+                                            )} */}
+                                            {/* {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`sushibar-nav-link`} to={'/sushibar'}>
                                                     {i18n._(t`SushiBar`)}
                                                 </NavLink>
-                                            )}
-                                            {chainId &&
+                                            )} */}
+                                            {/* {chainId &&
                                                 [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
                                                         {i18n._(t`Lend`)}
                                                     </NavLink>
-                                                )}
-                                            {chainId &&
+                                                )} */}
+                                            {/* {chainId &&
                                                 [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(
                                                     chainId
                                                 ) && (
                                                     <NavLink id={`bento-nav-link`} to={'/bento'}>
                                                         {i18n._(t`BentoBox`)}
                                                     </NavLink>
-                                                )}
-                                            {chainId === ChainId.MAINNET && (
+                                                )} */}
+                                            {/* {chainId === ChainId.MAINNET && (
                                                 <NavLink id={`vesting-nav-link`} to={'/vesting'}>
                                                     {i18n._(t`Vesting`)}
                                                 </NavLink>
-                                            )}
+                                            )} */}
                                             {chainId &&
                                                 [
                                                     ChainId.MAINNET,
@@ -341,33 +341,33 @@ function AppBar(): JSX.Element {
                                     {i18n._(t`Pool`)}
                                 </NavLink>
 
-                                {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
+                                {/* {chainId && [ChainId.MAINNET, ChainId.MATIC].includes(chainId) && (
                                     <NavLink id={`yield-nav-link`} to={'/yield'}>
                                         {i18n._(t`Yield`)}
                                     </NavLink>
-                                )}
+                                )} */}
                                 {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`kashi-nav-link`} to={'/bento/kashi/lend'}>
                                             {i18n._(t`Kashi Lending`)}
                                         </NavLink>
                                     )}
-                                {chainId &&
+                                {/* {chainId &&
                                     [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
                                         <NavLink id={`bento-nav-link`} to={'/bento'}>
                                             {i18n._(t`BentoBox`)}
                                         </NavLink>
-                                    )}
-                                {chainId === ChainId.MAINNET && (
+                                    )} */}
+                                {/* {chainId === ChainId.MAINNET && (
                                     <NavLink id={`stake-nav-link`} to={'/sushibar'}>
                                         {i18n._(t`SushiBar`)}
                                     </NavLink>
-                                )}
-                                {chainId === ChainId.MAINNET && (
+                                )} */}
+                                {/* {chainId === ChainId.MAINNET && (
                                     <NavLink id={`vesting-nav-link`} to={'/vesting'}>
                                         {i18n._(t`Vesting`)}
                                     </NavLink>
-                                )}
+                                )} */}
                                 {chainId &&
                                     [
                                         ChainId.MAINNET,
