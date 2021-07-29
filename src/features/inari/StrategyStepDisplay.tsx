@@ -6,11 +6,11 @@ import { useDerivedInariState } from '../../state/inari/hooks'
 interface StrategyStepDisplayProps {}
 
 const StrategyStepDisplay: FC<StrategyStepDisplayProps> = () => {
-  const { strategy } = useDerivedInariState()
+  const { general } = useDerivedInariState()
 
   return (
     <div className="flex gap-3 items-center text-high-emphesis">
-      {strategy?.steps
+      {general?.steps
         .map<React.ReactNode>((el) => (
           <Typography weight={700} variant="lg" key={el}>
             {el}

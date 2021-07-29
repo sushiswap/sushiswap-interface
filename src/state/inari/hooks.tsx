@@ -1,19 +1,19 @@
 import { useAppSelector } from '../hooks'
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
-import { InariState, InaryStrategy } from './reducer'
+import { InaryStrategy } from './reducer'
 import { e10, tryParseAmount } from '../../functions'
 import { useActiveWeb3React, useZenkoContract } from '../../hooks'
 import { useTokenBalancesWithLoadingIndicator } from '../wallet/hooks'
 import { AXSUSHI, CREAM, CRXSUSHI, SUSHI, XSUSHI } from '../../constants'
 import { t } from '@lingui/macro'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useBentoBalance } from '../bentobox/hooks'
-
-export function useInariState(): InariState {
-  return useAppSelector((state) => state.inari)
-}
+import useStakeSushiToBentoStrategy from './strategies/useStakeSushiToBentoStrategy'
+import { DerivedInariState, InariState } from './types'
+import useStakeSushiToCreamStrategy from './strategies/useStakeSushiToCreamStrategy'
+import useStakeSushiToCreamToBentoStrategy from './strategies/useStakeSushiToCreamToBentoStrategy'
 
 const TOKENS = [SUSHI[ChainId.MAINNET], XSUSHI, CRXSUSHI, AXSUSHI]
 
@@ -135,41 +135,56 @@ export const useInariStrategies = () => {
   return strategies
 }
 
-export function useDerivedInariState() {
-  const { strategy, zapInValue, zapIn } = useInariState()
-  const strategies = useInariStrategies()
-  const [allowanceValue, setAllowanceValue] = useState<CurrencyAmount<Token>>(null)
+export function useInariState(): InariState {
+  return useAppSelector((state) => state.inari)
+}
 
-  useEffect(() => {
-    const main = async () => {
-      if (!zapInValue || !strategies[strategy]) return
+// Redux doesn't allow for non-serializable classes so use a derived state hook
+// Derived state may not use any of the strategy hooks
+export function useDerivedInariState(): DerivedInariState {
+  const { id, zapIn, inputValue, outputValue, tokens, general } = useInariState()
 
-      let val = tryParseAmount(zapInValue, zapIn ? strategies[strategy].inputToken : XSUSHI)
-      if (strategies[strategy].transformZapInValue) {
-        val = await strategies[strategy].transformZapInValue(val)
-      } else {
-        val = tryParseAmount(zapInValue, zapIn ? strategies[strategy].inputToken : strategies[strategy].outputToken)
-      }
+  const inputToken = new Token(
+    tokens.inputToken.chainId,
+    tokens.inputToken.address,
+    tokens.inputToken.decimals,
+    tokens.inputToken.symbol
+  )
 
-      setAllowanceValue(val)
-    }
+  const outputToken = new Token(
+    tokens.outputToken.chainId,
+    tokens.outputToken.address,
+    tokens.outputToken.decimals,
+    tokens.outputToken.symbol
+  )
 
-    main()
-  }, [strategies, strategy, zapIn, zapInValue])
+  return {
+    zapIn,
+    inputValue: tryParseAmount(inputValue, inputToken),
+    outputValue: tryParseAmount(outputValue, outputToken),
+    id,
+    general,
+    tokens: {
+      inputToken,
+      outputToken,
+    },
+  }
+}
 
-  return useMemo(() => {
-    return {
-      strategy: strategies[strategy],
-      strategies,
+export function useSelectedInariStrategy() {
+  const { id: selectedStrategy } = useInariState()
+  const strategies = useInariStrategies2()
+  return strategies[selectedStrategy]
+}
 
-      // CurrencyAmount with the inputToken (currently only SUSHI)
-      // OutputToken is set to XSUSHI to display the amount of XSUSHI in a strategy
-      zapInValue: strategies[strategy]
-        ? tryParseAmount(zapInValue, zapIn ? strategies[strategy].inputToken : XSUSHI)
-        : null,
+export function useInariStrategies2() {
+  const stakeSushiToBentoStrategy = useStakeSushiToBentoStrategy()
+  const stakeSushiToCreamStrategy = useStakeSushiToCreamStrategy()
+  const stakeSushiToCreamToBentoStrategy = useStakeSushiToCreamToBentoStrategy()
 
-      // CurrencyAmount transformed to the token that will be spent
-      allowanceValue,
-    }
-  }, [allowanceValue, strategies, strategy, zapIn, zapInValue])
+  return {
+    [stakeSushiToBentoStrategy.id]: stakeSushiToBentoStrategy,
+    [stakeSushiToCreamStrategy.id]: stakeSushiToCreamStrategy,
+    [stakeSushiToCreamToBentoStrategy.id]: stakeSushiToCreamToBentoStrategy,
+  }
 }

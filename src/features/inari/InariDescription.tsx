@@ -5,14 +5,14 @@ import { useDerivedInariState } from '../../state/inari/hooks'
 interface InariHeaderProps {}
 
 const InariDescription: FC<InariHeaderProps> = () => {
-  const { strategy } = useDerivedInariState()
+  const { general } = useDerivedInariState()
 
   return (
     <div className="grid gap-2">
       <Typography variant="lg" className="text-high-emphesis" weight={700}>
-        {strategy?.name}
+        {general?.name}
       </Typography>
-      <Typography>{strategy?.description}</Typography>
+      <Typography>{general?.description}</Typography>
     </div>
   )
 }

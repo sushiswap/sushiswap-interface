@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
+import { Strategy } from './types'
 
-export const setStrategy = createAction<number>('inari/setStrategy')
+export const setStrategy = createAction<Strategy>('inari/setStrategy')
 export const setZapIn = createAction<boolean>('inari/setZapIn')
-export const setZapInValue = createAction<string>('inari/setZapInValue')
+export const setValues = createAction<{ inputValue: string; outputValue: string }>('inari/setInputValue')

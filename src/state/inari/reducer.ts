@@ -1,35 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { setStrategy, setZapIn, setZapInValue } from './actions'
-import { ReactNode } from 'react'
-
-export interface InaryStrategy {
-  name: string
-  steps: string[]
-  description: string
-  zapMethod: string
-  unzapMethod: string
-  inputToken: Token
-  inputLogo: ReactNode
-  inputTokenBalance: ((zapIn: boolean) => CurrencyAmount<Token>) | CurrencyAmount<Token>
-  outputToken: Token
-  outputLogo: ReactNode
-  outputSymbol: string
-  outputTokenBalance: ((zapIn: boolean) => CurrencyAmount<Token>) | CurrencyAmount<Token>
-  outputValue: (zapIn: boolean, zapInValue: string) => string
-  transformZapInValue?: (val: CurrencyAmount<Token>) => CurrencyAmount<Token>
-}
-
-export interface InariState {
-  readonly zapIn: boolean
-  readonly zapInValue: string
-  readonly strategy: number
-}
+import { setStrategy, setValues, setZapIn } from './actions'
+import { InariState } from './types'
+import { general, tokenDefinitions } from './strategies/useStakeSushiToBentoStrategy'
 
 const initialState: InariState = {
+  id: 'stakeSushiToBentoStrategy',
   zapIn: true,
-  zapInValue: '',
-  strategy: 0,
+  inputValue: '',
+  outputValue: '',
+  general,
+  tokens: tokenDefinitions,
 }
 
 export default createReducer<InariState>(initialState, (builder) =>
@@ -37,19 +17,44 @@ export default createReducer<InariState>(initialState, (builder) =>
     .addCase(setStrategy, (state, { payload: strategy }) => {
       return {
         ...state,
-        strategy,
+        ...strategy,
+        general: {
+          ...strategy.general,
+          inputSymbol: state.zapIn ? strategy.general.inputSymbol : strategy.general.outputSymbol,
+          outputSymbol: state.zapIn ? strategy.general.outputSymbol : strategy.general.inputSymbol,
+        },
+        tokens: {
+          ...strategy.tokenDefinitions,
+          inputToken: state.zapIn ? strategy.tokenDefinitions.inputToken : strategy.tokenDefinitions.outputToken,
+          outputToken: state.zapIn ? strategy.tokenDefinitions.outputToken : strategy.tokenDefinitions.inputToken,
+        },
+        inputValue: '',
+        outputValue: '',
       }
     })
     .addCase(setZapIn, (state, { payload: zapIn }) => {
       return {
         ...state,
         zapIn,
+        general: {
+          ...state.general,
+          inputSymbol: state.general.outputSymbol,
+          outputSymbol: state.general.inputSymbol,
+        },
+        tokens: {
+          ...state.tokens,
+          inputToken: state.tokens.outputToken,
+          outputToken: state.tokens.inputToken,
+        },
+        inputValue: state.outputValue,
+        outputValue: state.inputValue,
       }
     })
-    .addCase(setZapInValue, (state, { payload: zapInValue }) => {
+    .addCase(setValues, (state, { payload: { inputValue, outputValue } }) => {
       return {
         ...state,
-        zapInValue,
+        inputValue,
+        outputValue,
       }
     })
 )

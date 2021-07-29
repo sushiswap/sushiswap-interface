@@ -1,36 +1,50 @@
-import React, { FC, ReactNode, useCallback } from 'react'
+import React, { FC, useCallback } from 'react'
 import Typography from '../../components/Typography'
 import { useAppDispatch } from '../../state/hooks'
-import { setZapInValue } from '../../state/inari/actions'
+import { setValues } from '../../state/inari/actions'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { useInariState } from '../../state/inari/hooks'
+import CurrencyLogo from '../../components/CurrencyLogo'
+import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
 
 interface BalancePanelProps {
   label: string
   token: Token
-  logo: ReactNode
   value: string
+  symbol: string
   balance: CurrencyAmount<Token> | null
   showMax?: boolean
-  symbol?: string
 }
 
-const BalancePanel: FC<BalancePanelProps> = ({ label, logo, value, token, showMax = false, symbol, balance }) => {
+const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = false, symbol, balance }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
+  const { zapIn } = useInariState()
+  const { tokens } = useDerivedInariState()
+  const { calculateOutputFromInput } = useSelectedInariStrategy()
 
-  const onMax = useCallback(() => {
-    dispatch(setZapInValue(balance ? balance?.toExact() : '0'))
-  }, [balance, dispatch])
+  const onMax = useCallback(async () => {
+    const val = balance ? balance?.toExact() : '0'
+    dispatch(
+      setValues({
+        inputValue: val,
+        outputValue: await calculateOutputFromInput(zapIn, val, tokens.inputToken, tokens.outputToken),
+      })
+    )
+  }, [balance, calculateOutputFromInput, dispatch, tokens.inputToken, tokens.outputToken, zapIn])
 
   const handleInput = useCallback(
-    (val) => {
-      dispatch(setZapInValue(val))
+    async (val) => {
+      dispatch(
+        setValues({
+          inputValue: val,
+          outputValue: await calculateOutputFromInput(zapIn, val, tokens.inputToken, tokens.outputToken),
+        })
+      )
     },
-    [dispatch]
+    [calculateOutputFromInput, dispatch, tokens.inputToken, tokens.outputToken, zapIn]
   )
 
   return (
@@ -38,11 +52,13 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, logo, value, token, showMa
       <div className="inline">
         <Typography component="span">{label}</Typography>{' '}
         <Typography component="span" weight={700}>
-          {symbol || token.symbol}
+          {symbol}
         </Typography>
       </div>
       <div className="flex flex-row bg-dark-800 p-4 rounded gap-4 items-center">
-        <div className="rounded-full">{logo}</div>
+        <div className="rounded-full">
+          <CurrencyLogo currency={token} size={40} />
+        </div>
         <NumericalInput value={value} onUserInput={handleInput} />
         {showMax && (
           <span
@@ -59,7 +75,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, logo, value, token, showMa
             {i18n._(t`Balance:`)}
           </Typography>
           <Typography variant="sm">
-            {balance?.toSignificant(6) || '0'} {token.symbol}
+            {balance?.toSignificant(6) || '0'} {symbol}
           </Typography>
         </div>
       </div>
