@@ -724,6 +724,9 @@ msgstr "处理中"
 msgid "Pending Treasury Transfer"
 msgstr "等待金库转账"
 
+msgid "Pending transaction"
+msgstr ""
+
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 

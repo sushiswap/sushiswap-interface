@@ -747,6 +747,9 @@ msgstr "Pending"
 msgid "Pending Treasury Transfer"
 msgstr "Pending Treasury Transfer"
 
+msgid "Pending transaction"
+msgstr "Pending transaction"
+
 msgid "Please connect to the appropriate Ethereum network."
 msgstr "Please connect to the appropriate Ethereum network."
 

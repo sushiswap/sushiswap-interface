@@ -738,6 +738,9 @@ msgstr "Ausstehend"
 msgid "Pending Treasury Transfer"
 msgstr "Ausstehender Treasury-Transfer"
 
+msgid "Pending transaction"
+msgstr ""
+
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
