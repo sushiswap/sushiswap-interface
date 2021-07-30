@@ -1,5 +1,5 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
-import React, { FunctionComponent, useCallback, useMemo } from 'react'
+import React, { FunctionComponent, useMemo } from 'react'
 
 import Logo from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
@@ -101,55 +101,38 @@ interface CurrencyLogoProps {
   style?: React.CSSProperties
   className?: string
   squared?: boolean
-  badgeCurrency?: Currency
 }
 
 const unknown = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'
 
 const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
   currency,
-  badgeCurrency,
   size = '24px',
   style,
+  className = '',
   ...rest
 }) => {
   const uriLocations = useHttpLocations(
     currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
   )
 
-  const srcFinder = useCallback(
-    (currency) => {
-      if (!currency) {
-        return [unknown]
+  const srcs = useMemo(() => {
+    if (!currency) {
+      return [unknown]
+    }
+
+    if (currency.isNative || currency.equals(WNATIVE[currency.chainId])) {
+      return [logo[currency.chainId], unknown]
+    }
+
+    if (currency.isToken) {
+      const defaultUrls = [...getCurrencyLogoUrls(currency)]
+      if (currency instanceof WrappedTokenInfo) {
+        return [...uriLocations, ...defaultUrls, unknown]
       }
-
-      if (currency.isNative || currency.equals(WNATIVE[currency.chainId])) {
-        return [logo[currency.chainId], unknown]
-      }
-
-      if (currency.isToken) {
-        const defaultUrls = [...getCurrencyLogoUrls(currency)]
-        if (currency instanceof WrappedTokenInfo) {
-          return [...uriLocations, ...defaultUrls, unknown]
-        }
-        return defaultUrls
-      }
-    },
-    [uriLocations]
-  )
-
-  const srcs = useMemo(() => srcFinder(currency), [currency, srcFinder])
-  const badgeSrcs = useMemo(() => srcFinder(badgeCurrency), [badgeCurrency, srcFinder])
-
-  if (badgeCurrency)
-    return (
-      <div className="relative">
-        <div className={`rounded-full absolute z-10 -right-2 -top-2 shadow-lg`}>
-          <Logo srcs={badgeSrcs} width={+size / 2} height={+size / 2} alt={currency?.symbol} {...rest} />
-        </div>
-        <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} {...rest} />
-      </div>
-    )
+      return defaultUrls
+    }
+  }, [currency, uriLocations])
 
   return <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} {...rest} />
 }
